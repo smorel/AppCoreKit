@@ -1,0 +1,6 @@
+build/*
+Crash Reports/*
+*.pbxuser
+*.mode1v3
+.DS_Store
+profile

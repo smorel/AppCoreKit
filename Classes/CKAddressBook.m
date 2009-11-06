@@ -1,0 +1,195 @@
+//
+//  CKAddressBook.m
+//
+//  Created by Fred Brunel on 07/08/09.
+//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//
+
+#import "CKAddressBook.h"
+#import <AddressBook/AddressBook.h>
+
+#import "CKNSArrayAdditions.h"
+
+@implementation CKAddressBookPerson
+
++ (id)personWithRecord:(ABRecordRef)record {
+	return [[[CKAddressBookPerson alloc] initWithRecord:record] autorelease];
+}
+
+- (id)initWithRecord:(ABRecordRef)record {
+	if (self = [super init]) {
+		_record = CFRetain(record);
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[_fullName release];
+	[_email release];
+	[_image release];
+	[_phoneNumbers release];
+	CFRelease(_record);
+	[super dealloc];
+}
+
+// This methods returns the full name of a user (firstname, space, lastname) or the company name 
+// if the record was tagged as a company.
+
+- (NSString *)fullName {
+	if (_fullName) { return _fullName; }
+	
+	CFStringRef firstName, lastName, companyName;
+	NSMutableString *fullName = [NSMutableString string];
+	
+	firstName = ABRecordCopyValue(_record, kABPersonFirstNameProperty);
+	lastName  = ABRecordCopyValue(_record, kABPersonLastNameProperty);
+	companyName = ABRecordCopyValue(_record, kABPersonOrganizationProperty);
+	
+	// Add the firstname if it is provided
+	if (firstName != nil) {
+		[fullName appendString:(NSString *)firstName];
+	}
+	
+	// Add the last name if it is specified
+	if (lastName != nil) {
+		(firstName != nil) ? [fullName appendString: @" "] : [fullName appendString: @""]; // Separate with a space if the firstname was provided
+		[fullName appendString:(NSString *)lastName];
+	}
+	
+	// Used the company name if we are unable to find the first and lastname
+	if ([fullName length] == 0) { 
+		// Use company name or email if none.
+		if (companyName != nil) {
+			[fullName appendString:(NSString *)companyName];
+		}
+		else {
+			[fullName appendString:self.email];
+		}
+	}
+	
+	_fullName = [fullName retain];
+	
+	return _fullName;
+}
+
+- (NSString *)email {
+	if (_email) { return _email; }
+	
+	ABMultiValueRef personEmails = ABRecordCopyValue(_record, kABPersonEmailProperty);
+	
+	if (ABMultiValueGetCount(personEmails) > 0) {
+		CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, 0);
+		_email = [(NSString *)personEmail retain];
+	} else {
+		_email = [[NSString string] retain];
+	}
+
+	return _email;
+}
+
+//
+
+- (UIImage *)image {
+	if (_image) { return _image; }
+	
+	if (ABPersonHasImageData(_record)) {
+		CFDataRef data = ABPersonCopyImageData(_record);
+		_image = [[UIImage imageWithData:(NSData *)data] retain];
+		CFRelease(data);
+	}
+	
+	return _image;
+}
+
+- (NSArray *)phoneNumbers {
+	if (_phoneNumbers) { return _phoneNumbers; }
+	
+	NSMutableArray *phoneNumbers = [NSMutableArray array];
+	
+	ABMultiValueRef thePhoneNumbers = ABRecordCopyValue(_record, kABPersonPhoneProperty);
+	for (CFIndex i = 0; i < ABMultiValueGetCount(thePhoneNumbers); i++) {
+		CFStringRef aLabel = ABMultiValueCopyLabelAtIndex(thePhoneNumbers, i);
+		CFStringRef aLocalizedLabel = ABAddressBookCopyLocalizedLabel(aLabel);
+		CFStringRef aNumber = ABMultiValueCopyValueAtIndex(thePhoneNumbers, i);
+		
+		NSMutableArray *array = [NSMutableArray arrayWithCapacity:2];
+		[array insertObject:(NSString *)aLocalizedLabel atIndex:0];
+		[array insertObject:(NSString *)aNumber atIndex:1];
+
+		[phoneNumbers addObject:array];
+	}
+
+	_phoneNumbers = [phoneNumbers retain];
+	
+	return _phoneNumbers;
+}
+
+@end
+
+//
+
+@implementation CKAddressBook
+
++ (CKAddressBook *)defaultAddressBook {
+	static CKAddressBook *_instance = nil;
+	@synchronized(self) {
+		if (! _instance) {
+			_instance = [[CKAddressBook alloc] init];
+		}
+	}
+	return _instance;
+}
+
+- (id)init {
+	if (self = [super init]) {
+		_addressBook = ABAddressBookCreate();
+	}
+	return self;
+}
+
+- (void)dealloc {
+	CFRelease(_addressBook);
+	[super dealloc];
+}
+
+//
+// Public API
+//
+
+- (NSArray *)findAllPeopleWithAnyEmails {
+	NSMutableArray *match = [NSMutableArray array];
+	CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+	
+	for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
+		ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+		ABMultiValueRef personEmails = ABRecordCopyValue(person, kABPersonEmailProperty);
+		if (ABMultiValueGetCount(personEmails) > 0) {
+			[match addObject:[CKAddressBookPerson personWithRecord:person]];
+		}
+	}
+	
+	return match;
+}
+
+- (NSArray *)findPeopleWithEmails:(NSArray *)emails {
+	NSMutableArray *match = [NSMutableArray array];
+	CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+	
+	for (CFIndex i = 0; i < CFArrayGetCount(people); i++) {
+		ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+		ABMultiValueRef personEmails = ABRecordCopyValue(person, kABPersonEmailProperty);
+		
+		for (CFIndex j = 0; j < ABMultiValueGetCount(personEmails); j++) {
+			CFStringRef personEmail = ABMultiValueCopyValueAtIndex(personEmails, j);
+			
+			if ([emails containsString:(NSString *)personEmail]) {
+				[match addObject:[CKAddressBookPerson personWithRecord:person]];
+				break;
+			}
+		}
+	}
+	
+	return match;
+}
+
+@end

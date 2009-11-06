@@ -1,0 +1,33 @@
+CloudKit
+========
+
+CloudKit is a collection of iPhone utility classes and 3rd party libraries.
+
+Adding CloudKit to your project
+===============================
+
+CloudKit is compiled as a static library. Use Xcode's "dependent project" facilities to add it to your project
+
+2. Drag CloudKit.xcodeproj and drop it onto the root of your Xcode project's "Groups and Files" sidebar. A dialog will appear --
+   make sure "Copy items" is unchecked and "Reference Type" is "Relative to Project" before clicking "Add".
+
+3. Click the "CloudKit.xcodeproj" item that has just been added to the sidebar. Under the "Details" table, you will 
+   see a single item: libCloudKit.a. Check the checkbox on the far right of libCloudKit.a.
+
+4. Add CloudKit as a dependency of your project, so Xcode compiles it whenever you compile your project. 
+   Expand the "Targets" section of the sidebar and double-click your application's target. Under the "General" 
+   tab you will see a "Direct Dependencies" section. Click the "+" button, select "CloudKit", and click "Add Target".
+
+7. Add CloudKit headers. Open your "Project Settings" and go to the "Build" tab. Look for "Header Search Paths" 
+   and double-click it. Add the relative path from your project's directory to the "CloudKit/Headers" directory.
+
+8. Go to "Other Linker Flags" under the "Linker" section, and add "-ObjC" and "-all_load" to the list of flags.
+
+9. Add the following frameworks and libraries to your project
+   * AddressBook.framework
+   * CFNetwork.framework
+   * SystemConfiguration.framework
+   * libz.1.2.3.dylib
+   * libxml2.dylib
+   * libicucore.dylib
+   
