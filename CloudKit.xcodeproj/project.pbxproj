@@ -7,10 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; };
+		712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6710A35F4500C88903 /* CKAddressBook.m */; };
+		712E100E10A4C83100DF6562 /* libCloudKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB518D /* libCloudKit.a */; };
+		712E100F10A4C83100DF6562 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DE410A3629300C88903 /* AddressBook.framework */; };
+		712E101010A4C83100DF6562 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9EEA10A36F6D00C88903 /* CFNetwork.framework */; };
+		712E101110A4C83100DF6562 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
+		712E101210A4C83100DF6562 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DF110A362C200C88903 /* SystemConfiguration.framework */; };
+		712E101310A4C83100DF6562 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DFB10A362E100C88903 /* UIKit.framework */; };
+		712E101410A4C83100DF6562 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9F1710A36FFE00C88903 /* libicucore.dylib */; };
+		712E101510A4C83100DF6562 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9EEE10A36F9200C88903 /* libz.1.2.3.dylib */; };
+		712E109910A4CB0000DF6562 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 712E109810A4CB0000DF6562 /* libxml2.dylib */; };
+		712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */; };
 		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; };
 		7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */; };
-		71AD9D7610A35F4500C88903 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71AD9D7710A35F4600C88903 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6710A35F4500C88903 /* CKAddressBook.m */; };
+		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		71AD9D7810A35F4600C88903 /* CKNSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */; };
 		71AD9D7A10A35F4600C88903 /* CKNSDataAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -94,9 +105,26 @@
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		712E104210A4C99300DF6562 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D /* CloudKit */;
+			remoteInfo = CloudKit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		712E100310A4C7E700DF6562 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		712E100410A4C7E700DF6562 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
+		712E109810A4CB0000DF6562 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		712E10A110A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
+		712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSArrayAdditionsTestCase.m; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.m; sourceTree = SOURCE_ROOT; };
 		7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSSetAdditions.h; path = ../cloudkit/Classes/CKNSSetAdditions.h; sourceTree = SOURCE_ROOT; };
 		7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSSetAdditions.m; path = ../cloudkit/Classes/CKNSSetAdditions.m; sourceTree = SOURCE_ROOT; };
+		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		7173D29B10A4BDC9004E9621 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		71AD9D6610A35F4500C88903 /* CKAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAddressBook.h; path = Classes/CKAddressBook.h; sourceTree = "<group>"; };
 		71AD9D6710A35F4500C88903 /* CKAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAddressBook.m; path = Classes/CKAddressBook.m; sourceTree = "<group>"; };
 		71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditions.h; path = Classes/CKNSArrayAdditions.h; sourceTree = "<group>"; };
@@ -184,6 +212,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		712E100010A4C7E700DF6562 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				712E100E10A4C83100DF6562 /* libCloudKit.a in Frameworks */,
+				712E100F10A4C83100DF6562 /* AddressBook.framework in Frameworks */,
+				712E101010A4C83100DF6562 /* CFNetwork.framework in Frameworks */,
+				712E101110A4C83100DF6562 /* Foundation.framework in Frameworks */,
+				712E101210A4C83100DF6562 /* SystemConfiguration.framework in Frameworks */,
+				712E101310A4C83100DF6562 /* UIKit.framework in Frameworks */,
+				712E101410A4C83100DF6562 /* libicucore.dylib in Frameworks */,
+				712E101510A4C83100DF6562 /* libz.1.2.3.dylib in Frameworks */,
+				712E109910A4CB0000DF6562 /* libxml2.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC07C0554694100DB518D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,6 +239,7 @@
 				71AD9EEB10A36F6D00C88903 /* CFNetwork.framework in Frameworks */,
 				71AD9EEF10A36F9200C88903 /* libz.1.2.3.dylib in Frameworks */,
 				71AD9F1810A36FFE00C88903 /* libicucore.dylib in Frameworks */,
+				7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				D2AAC07E0554694100DB518D /* libCloudKit.a */,
+				712E100310A4C7E700DF6562 /* UnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -214,10 +260,14 @@
 			children = (
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
 				71AD9D5F10A35EED00C88903 /* Foundation */,
+				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
+				7173D29B10A4BDC9004E9621 /* Unit Tests-Info.plist */,
+				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
+				712E109810A4CB0000DF6562 /* libxml2.dylib */,
 			);
 			name = CloudKit;
 			sourceTree = "<group>";
@@ -232,6 +282,7 @@
 				71AD9EEA10A36F6D00C88903 /* CFNetwork.framework */,
 				71AD9EEE10A36F9200C88903 /* libz.1.2.3.dylib */,
 				71AD9F1710A36FFE00C88903 /* libicucore.dylib */,
+				7173D28F10A4BD98004E9621 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -243,6 +294,15 @@
 				71AD9D6710A35F4500C88903 /* CKAddressBook.m */,
 			);
 			name = AddressBook;
+			sourceTree = "<group>";
+		};
+		7173D2A510A4BE45004E9621 /* Test Cases */ = {
+			isa = PBXGroup;
+			children = (
+				712E10A110A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.h */,
+				712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */,
+			);
+			name = "Test Cases";
 			sourceTree = "<group>";
 		};
 		71AD9D5F10A35EED00C88903 /* Foundation */ = {
@@ -408,7 +468,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71AD9D7610A35F4500C88903 /* CKAddressBook.h in Headers */,
 				71AD9D7810A35F4600C88903 /* CKNSArrayAdditions.h in Headers */,
 				71AD9D7A10A35F4600C88903 /* CKNSDataAdditions.h in Headers */,
 				71AD9D7B10A35F4600C88903 /* CKNSDateAdditions.h in Headers */,
@@ -449,12 +508,32 @@
 				71ADA07E10A3740400C88903 /* CXMLNode.h in Headers */,
 				71ADA08210A3740400C88903 /* TouchXML.h in Headers */,
 				7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */,
+				712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		712E100210A4C7E700DF6562 /* UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 712E100710A4C7E800DF6562 /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildPhases = (
+				712E0FFE10A4C7E700DF6562 /* Resources */,
+				712E0FFF10A4C7E700DF6562 /* Sources */,
+				712E100010A4C7E700DF6562 /* Frameworks */,
+				712E100110A4C7E700DF6562 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				712E104310A4C99300DF6562 /* PBXTargetDependency */,
+			);
+			name = UnitTests;
+			productName = UnitTests;
+			productReference = 712E100310A4C7E700DF6562 /* UnitTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		D2AAC07D0554694100DB518D /* CloudKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "CloudKit" */;
@@ -486,16 +565,50 @@
 			projectRoot = "";
 			targets = (
 				D2AAC07D0554694100DB518D /* CloudKit */,
+				712E100210A4C7E700DF6562 /* UnitTests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		712E0FFE10A4C7E700DF6562 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		712E100110A4C7E700DF6562 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		712E0FFF10A4C7E700DF6562 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC07B0554694100DB518D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71AD9D7710A35F4600C88903 /* CKAddressBook.m in Sources */,
 				71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */,
 				71AD9D7C10A35F4600C88903 /* CKNSDateAdditions.m in Sources */,
 				71AD9D7E10A35F4600C88903 /* CKNSStringAdditions.m in Sources */,
@@ -532,10 +645,19 @@
 				71ADA07D10A3740400C88903 /* CXMLNode_XPathExtensions.m in Sources */,
 				71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */,
 				7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */,
+				712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		712E104310A4C99300DF6562 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC07D0554694100DB518D /* CloudKit */;
+			targetProxy = 712E104210A4C99300DF6562 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB921F08733DC00010E9CD /* Debug */ = {
@@ -545,6 +667,10 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/CloudKit.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -562,6 +688,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CloudKit.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudKit_Prefix.pch;
@@ -601,6 +731,66 @@
 			};
 			name = Release;
 		};
+		712E100510A4C7E800DF6562 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "UnitTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = UnitTests;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		712E100610A4C7E800DF6562 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INFOPLIST_FILE = "UnitTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = UnitTests;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -618,6 +808,15 @@
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		712E100710A4C7E800DF6562 /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				712E100510A4C7E800DF6562 /* Debug */,
+				712E100610A4C7E800DF6562 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
