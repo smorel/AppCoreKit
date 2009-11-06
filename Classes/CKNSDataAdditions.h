@@ -5,5 +5,5 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import "NSData+Base64.h"
-#import "NSData+SHA1.h"
+#import "CKNSData+Base64.h"
+#import "CKNSData+SHA1.h"

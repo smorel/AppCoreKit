@@ -1,14 +1,15 @@
 //
-//  NSString+URIQuery.m
+//  CKNSString+URIQuery.m
 //
 //  Created by Fred Brunel on 12/08/09.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 //  by Jerry Krinock.
+//
 
-#import "NSString+URIQuery.h"
+#import "CKNSString+URIQuery.h"
 
-@implementation NSString (URIQuery)
+@implementation NSString (CKNSStringURIQueryAdditions)
 
 - (NSString*)encodePercentEscapesPerRFC2396 {
 	return (NSString*)[(NSString*)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self, NULL, NULL, kCFStringEncodingUTF8) autorelease] ;

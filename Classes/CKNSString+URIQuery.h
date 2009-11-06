@@ -1,5 +1,5 @@
 //
-//  NSString+URIQuery.h
+//  CKNSString+URIQuery.h
 //
 //  Created by Fred Brunel on 12/08/09.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (URIQuery)
+@interface NSString (CKNSStringURIQueryAdditions)
 
 // Encode percent escapes
 

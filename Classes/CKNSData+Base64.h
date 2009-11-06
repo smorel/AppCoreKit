@@ -1,5 +1,5 @@
 //
-//  NSData+Base64.h
+//  CKNSData+Base64.h
 //
 //  Created by Matt Gallagher on 2009/06/03.
 //  Copyright 2009 Matt Gallagher. All rights reserved.
@@ -11,7 +11,7 @@
 //  appreciated but not required.
 //
 
-@interface NSData (Base64)
+@interface NSData (CKNSDataBase64Additions)
 
 + (NSData *)dataFromBase64String:(NSString *)aString;
 - (NSString *)base64EncodedString;

@@ -1,5 +1,5 @@
 //
-//  NSData+Base64.m
+//  CKNSData+Base64.m
 //
 //  Created by Matt Gallagher on 2009/06/03.
 //  Copyright 2009 Matt Gallagher. All rights reserved.
@@ -11,7 +11,7 @@
 //  appreciated but not required.
 //
 
-#import "NSData+Base64.h"
+#import "CKNSData+Base64.h"
 
 void *NewBase64Decode(
 					  const char *inputBuffer,
@@ -257,7 +257,7 @@ char *NewBase64Encode(
 	return outputBuffer;
 }
 
-@implementation NSData (Base64)
+@implementation NSData (CKNSDataBase64Additions)
 
 //
 // dataFromBase64String:
