@@ -19,6 +19,8 @@
 		712E101510A4C83100DF6562 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9EEE10A36F9200C88903 /* libz.1.2.3.dylib */; };
 		712E109910A4CB0000DF6562 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 712E109810A4CB0000DF6562 /* libxml2.dylib */; };
 		712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */; };
+		712E10F510A4D9BF00DF6562 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
+		712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 712E109810A4CB0000DF6562 /* libxml2.dylib */; };
 		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; };
 		7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */; };
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
@@ -106,11 +108,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		712E104210A4C99300DF6562 /* PBXContainerItemProxy */ = {
+		712E118010A4DC9000DF6562 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D /* CloudKit */;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CloudKit;
 		};
 /* End PBXContainerItemProxy section */
@@ -124,7 +126,6 @@
 		7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSSetAdditions.h; path = ../cloudkit/Classes/CKNSSetAdditions.h; sourceTree = SOURCE_ROOT; };
 		7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSSetAdditions.m; path = ../cloudkit/Classes/CKNSSetAdditions.m; sourceTree = SOURCE_ROOT; };
 		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		7173D29B10A4BDC9004E9621 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		71AD9D6610A35F4500C88903 /* CKAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAddressBook.h; path = Classes/CKAddressBook.h; sourceTree = "<group>"; };
 		71AD9D6710A35F4500C88903 /* CKAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAddressBook.m; path = Classes/CKAddressBook.m; sourceTree = "<group>"; };
 		71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditions.h; path = Classes/CKNSArrayAdditions.h; sourceTree = "<group>"; };
@@ -225,6 +226,7 @@
 				712E101410A4C83100DF6562 /* libicucore.dylib in Frameworks */,
 				712E101510A4C83100DF6562 /* libz.1.2.3.dylib in Frameworks */,
 				712E109910A4CB0000DF6562 /* libxml2.dylib in Frameworks */,
+				712E10F510A4D9BF00DF6562 /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +242,7 @@
 				71AD9EEF10A36F9200C88903 /* libz.1.2.3.dylib in Frameworks */,
 				71AD9F1810A36FFE00C88903 /* libicucore.dylib in Frameworks */,
 				7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */,
+				712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,9 +268,7 @@
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
-				7173D29B10A4BDC9004E9621 /* Unit Tests-Info.plist */,
 				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
-				712E109810A4CB0000DF6562 /* libxml2.dylib */,
 			);
 			name = CloudKit;
 			sourceTree = "<group>";
@@ -282,6 +283,7 @@
 				71AD9EEA10A36F6D00C88903 /* CFNetwork.framework */,
 				71AD9EEE10A36F9200C88903 /* libz.1.2.3.dylib */,
 				71AD9F1710A36FFE00C88903 /* libicucore.dylib */,
+				712E109810A4CB0000DF6562 /* libxml2.dylib */,
 				7173D28F10A4BD98004E9621 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
@@ -527,7 +529,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				712E104310A4C99300DF6562 /* PBXTargetDependency */,
+				712E118110A4DC9000DF6562 /* PBXTargetDependency */,
 			);
 			name = UnitTests;
 			productName = UnitTests;
@@ -541,6 +543,7 @@
 				D2AAC07A0554694100DB518D /* Headers */,
 				D2AAC07B0554694100DB518D /* Sources */,
 				D2AAC07C0554694100DB518D /* Frameworks */,
+				712E113B10A4DA7200DF6562 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -593,6 +596,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		712E113B10A4DA7200DF6562 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -652,10 +668,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		712E104310A4C99300DF6562 /* PBXTargetDependency */ = {
+		712E118110A4DC9000DF6562 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D2AAC07D0554694100DB518D /* CloudKit */;
-			targetProxy = 712E104210A4C99300DF6562 /* PBXContainerItemProxy */;
+			targetProxy = 712E118010A4DC9000DF6562 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -704,6 +720,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -711,6 +728,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
 				SDKROOT = iphoneos3.1.2;
 			};
@@ -720,12 +738,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
 				SDKROOT = iphoneos3.1.2;
 			};
