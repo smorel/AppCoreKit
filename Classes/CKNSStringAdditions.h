@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "CKNSString+URIQuery.h"
+
 @interface NSString (CKNSStringAdditions)
 
 // Returns a new string containing an UUID
