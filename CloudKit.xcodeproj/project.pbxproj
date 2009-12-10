@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; };
+		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6710A35F4500C88903 /* CKAddressBook.m */; };
 		712E100E10A4C83100DF6562 /* libCloudKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB518D /* libCloudKit.a */; };
 		712E100F10A4C83100DF6562 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DE410A3629300C88903 /* AddressBook.framework */; };
@@ -21,7 +21,35 @@
 		712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */; };
 		712E10F510A4D9BF00DF6562 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 712E109810A4CB0000DF6562 /* libxml2.dylib */; };
-		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; };
+		712E7C6410D199A7008DC18C /* IFButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4810D199A7008DC18C /* IFButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6510D199A7008DC18C /* IFButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4910D199A7008DC18C /* IFButtonCellController.m */; };
+		712E7C6610D199A7008DC18C /* IFCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4A10D199A7008DC18C /* IFCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6710D199A7008DC18C /* IFCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4B10D199A7008DC18C /* IFCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6810D199A7008DC18C /* IFChoiceCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6910D199A7008DC18C /* IFChoiceCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */; };
+		712E7C6A10D199A7008DC18C /* IFChoiceTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6B10D199A7008DC18C /* IFChoiceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */; };
+		712E7C6C10D199A7008DC18C /* IFControlTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6D10D199A7008DC18C /* IFControlTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */; };
+		712E7C6E10D199A7008DC18C /* IFGenericTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C6F10D199A7008DC18C /* IFGenericTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */; };
+		712E7C7010D199A7008DC18C /* IFLinkCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5410D199A7008DC18C /* IFLinkCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7110D199A7008DC18C /* IFLinkCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5510D199A7008DC18C /* IFLinkCellController.m */; };
+		712E7C7210D199A7008DC18C /* IFNamedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5610D199A7008DC18C /* IFNamedImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7310D199A7008DC18C /* IFNamedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5710D199A7008DC18C /* IFNamedImage.m */; };
+		712E7C7410D199A7008DC18C /* IFPreferencesModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5810D199A7008DC18C /* IFPreferencesModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7510D199A7008DC18C /* IFPreferencesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5910D199A7008DC18C /* IFPreferencesModel.m */; };
+		712E7C7610D199A7008DC18C /* IFSwitchCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7710D199A7008DC18C /* IFSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */; };
+		712E7C7810D199A7008DC18C /* IFTemporaryModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7910D199A7008DC18C /* IFTemporaryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */; };
+		712E7C7A10D199A7008DC18C /* IFTextCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5E10D199A7008DC18C /* IFTextCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7B10D199A7008DC18C /* IFTextCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5F10D199A7008DC18C /* IFTextCellController.m */; };
+		712E7C7C10D199A7008DC18C /* IFTextViewTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C6010D199A7008DC18C /* IFTextViewTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7D10D199A7008DC18C /* IFTextViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C6110D199A7008DC18C /* IFTextViewTableView.m */; };
+		712E7C7E10D199A7008DC18C /* IFValueCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C6210D199A7008DC18C /* IFValueCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		712E7C7F10D199A7008DC18C /* IFValueCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C6310D199A7008DC18C /* IFValueCellController.m */; };
+		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */; };
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		71AD9D7810A35F4600C88903 /* CKNSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -123,6 +151,34 @@
 		712E109810A4CB0000DF6562 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		712E10A110A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
 		712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSArrayAdditionsTestCase.m; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.m; sourceTree = SOURCE_ROOT; };
+		712E7C4810D199A7008DC18C /* IFButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFButtonCellController.h; sourceTree = "<group>"; };
+		712E7C4910D199A7008DC18C /* IFButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFButtonCellController.m; sourceTree = "<group>"; };
+		712E7C4A10D199A7008DC18C /* IFCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFCellController.h; sourceTree = "<group>"; };
+		712E7C4B10D199A7008DC18C /* IFCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFCellModel.h; sourceTree = "<group>"; };
+		712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFChoiceCellController.h; sourceTree = "<group>"; };
+		712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFChoiceCellController.m; sourceTree = "<group>"; };
+		712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFChoiceTableViewController.h; sourceTree = "<group>"; };
+		712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFChoiceTableViewController.m; sourceTree = "<group>"; };
+		712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFControlTableViewCell.h; sourceTree = "<group>"; };
+		712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFControlTableViewCell.m; sourceTree = "<group>"; };
+		712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFGenericTableViewController.h; sourceTree = "<group>"; };
+		712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFGenericTableViewController.m; sourceTree = "<group>"; };
+		712E7C5410D199A7008DC18C /* IFLinkCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFLinkCellController.h; sourceTree = "<group>"; };
+		712E7C5510D199A7008DC18C /* IFLinkCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFLinkCellController.m; sourceTree = "<group>"; };
+		712E7C5610D199A7008DC18C /* IFNamedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFNamedImage.h; sourceTree = "<group>"; };
+		712E7C5710D199A7008DC18C /* IFNamedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFNamedImage.m; sourceTree = "<group>"; };
+		712E7C5810D199A7008DC18C /* IFPreferencesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFPreferencesModel.h; sourceTree = "<group>"; };
+		712E7C5910D199A7008DC18C /* IFPreferencesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFPreferencesModel.m; sourceTree = "<group>"; };
+		712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFSwitchCellController.h; sourceTree = "<group>"; };
+		712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFSwitchCellController.m; sourceTree = "<group>"; };
+		712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTemporaryModel.h; sourceTree = "<group>"; };
+		712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTemporaryModel.m; sourceTree = "<group>"; };
+		712E7C5E10D199A7008DC18C /* IFTextCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTextCellController.h; sourceTree = "<group>"; };
+		712E7C5F10D199A7008DC18C /* IFTextCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTextCellController.m; sourceTree = "<group>"; };
+		712E7C6010D199A7008DC18C /* IFTextViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTextViewTableView.h; sourceTree = "<group>"; };
+		712E7C6110D199A7008DC18C /* IFTextViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTextViewTableView.m; sourceTree = "<group>"; };
+		712E7C6210D199A7008DC18C /* IFValueCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFValueCellController.h; sourceTree = "<group>"; };
+		712E7C6310D199A7008DC18C /* IFValueCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFValueCellController.m; sourceTree = "<group>"; };
 		7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSSetAdditions.h; path = ../cloudkit/Classes/CKNSSetAdditions.h; sourceTree = SOURCE_ROOT; };
 		7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSSetAdditions.m; path = ../cloudkit/Classes/CKNSSetAdditions.m; sourceTree = SOURCE_ROOT; };
 		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -289,6 +345,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		712E7C4710D199A7008DC18C /* IFGenericTableViews */ = {
+			isa = PBXGroup;
+			children = (
+				712E7C4810D199A7008DC18C /* IFButtonCellController.h */,
+				712E7C4910D199A7008DC18C /* IFButtonCellController.m */,
+				712E7C4A10D199A7008DC18C /* IFCellController.h */,
+				712E7C4B10D199A7008DC18C /* IFCellModel.h */,
+				712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */,
+				712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */,
+				712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */,
+				712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */,
+				712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */,
+				712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */,
+				712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */,
+				712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */,
+				712E7C5410D199A7008DC18C /* IFLinkCellController.h */,
+				712E7C5510D199A7008DC18C /* IFLinkCellController.m */,
+				712E7C5610D199A7008DC18C /* IFNamedImage.h */,
+				712E7C5710D199A7008DC18C /* IFNamedImage.m */,
+				712E7C5810D199A7008DC18C /* IFPreferencesModel.h */,
+				712E7C5910D199A7008DC18C /* IFPreferencesModel.m */,
+				712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */,
+				712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */,
+				712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */,
+				712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */,
+				712E7C5E10D199A7008DC18C /* IFTextCellController.h */,
+				712E7C5F10D199A7008DC18C /* IFTextCellController.m */,
+				712E7C6010D199A7008DC18C /* IFTextViewTableView.h */,
+				712E7C6110D199A7008DC18C /* IFTextViewTableView.m */,
+				712E7C6210D199A7008DC18C /* IFValueCellController.h */,
+				712E7C6310D199A7008DC18C /* IFValueCellController.m */,
+			);
+			name = IFGenericTableViews;
+			path = ../cloudkit/Vendor/IFGenericTableViews;
+			sourceTree = SOURCE_ROOT;
+		};
 		7173D25E10A4B1AA004E9621 /* AddressBook */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +425,7 @@
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				712E7C4710D199A7008DC18C /* IFGenericTableViews */,
 				71ADA04D10A372F400C88903 /* TouchXML */,
 				71ADA02410A372BD00C88903 /* TouchJSON */,
 				71ADA01A10A3725800C88903 /* RegexKitLite */,
@@ -511,6 +604,21 @@
 				71ADA08210A3740400C88903 /* TouchXML.h in Headers */,
 				7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */,
 				712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */,
+				712E7C6410D199A7008DC18C /* IFButtonCellController.h in Headers */,
+				712E7C6610D199A7008DC18C /* IFCellController.h in Headers */,
+				712E7C6710D199A7008DC18C /* IFCellModel.h in Headers */,
+				712E7C6810D199A7008DC18C /* IFChoiceCellController.h in Headers */,
+				712E7C6A10D199A7008DC18C /* IFChoiceTableViewController.h in Headers */,
+				712E7C6C10D199A7008DC18C /* IFControlTableViewCell.h in Headers */,
+				712E7C6E10D199A7008DC18C /* IFGenericTableViewController.h in Headers */,
+				712E7C7010D199A7008DC18C /* IFLinkCellController.h in Headers */,
+				712E7C7210D199A7008DC18C /* IFNamedImage.h in Headers */,
+				712E7C7410D199A7008DC18C /* IFPreferencesModel.h in Headers */,
+				712E7C7610D199A7008DC18C /* IFSwitchCellController.h in Headers */,
+				712E7C7810D199A7008DC18C /* IFTemporaryModel.h in Headers */,
+				712E7C7A10D199A7008DC18C /* IFTextCellController.h in Headers */,
+				712E7C7C10D199A7008DC18C /* IFTextViewTableView.h in Headers */,
+				712E7C7E10D199A7008DC18C /* IFValueCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +770,19 @@
 				71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */,
 				7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */,
 				712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */,
+				712E7C6510D199A7008DC18C /* IFButtonCellController.m in Sources */,
+				712E7C6910D199A7008DC18C /* IFChoiceCellController.m in Sources */,
+				712E7C6B10D199A7008DC18C /* IFChoiceTableViewController.m in Sources */,
+				712E7C6D10D199A7008DC18C /* IFControlTableViewCell.m in Sources */,
+				712E7C6F10D199A7008DC18C /* IFGenericTableViewController.m in Sources */,
+				712E7C7110D199A7008DC18C /* IFLinkCellController.m in Sources */,
+				712E7C7310D199A7008DC18C /* IFNamedImage.m in Sources */,
+				712E7C7510D199A7008DC18C /* IFPreferencesModel.m in Sources */,
+				712E7C7710D199A7008DC18C /* IFSwitchCellController.m in Sources */,
+				712E7C7910D199A7008DC18C /* IFTemporaryModel.m in Sources */,
+				712E7C7B10D199A7008DC18C /* IFTextCellController.m in Sources */,
+				712E7C7D10D199A7008DC18C /* IFTextViewTableView.m in Sources */,
+				712E7C7F10D199A7008DC18C /* IFValueCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
