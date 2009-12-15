@@ -33,6 +33,16 @@
 }
 #endif
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	_tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	[self.view addSubview:_tableView];
+}
+
+
 //
 // constructTableGroups
 //
@@ -41,10 +51,10 @@
 //
 - (void)constructTableGroups
 {
-	tableGroups = [[NSArray arrayWithObject:[NSArray array]] retain];
+	tableGroups = [[NSMutableArray array] retain];
 
-	tableHeaders = nil;
-	tableFooters = nil;
+	tableHeaders = [[NSMutableArray array] retain];
+	tableFooters = [[NSMutableArray array] retain];
 }
 
 //
@@ -72,7 +82,7 @@
 {
 	[self clearTableGroups];
 	[self constructTableGroups];
-	[self.tableView reloadData];
+	[_tableView reloadData];
 }
 
 //
@@ -215,6 +225,7 @@
 
 	self.model = nil;
 
+	[_tableView release];
 	[self clearTableGroups];
 	[super dealloc];
 }
@@ -247,9 +258,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	// rows (such as choices) that were updated in child view controllers need to be updated
-	[self.tableView reloadData];
+	[_tableView reloadData];
 	
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 }
 
 #if FIRMWARE_21_COMPATIBILITY
@@ -259,10 +270,10 @@
 	CGRect keyboardBounds;
 	[[[notification userInfo] valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&keyboardBounds];
 	
-	CGRect tableViewFrame = [self.tableView frame];
+	CGRect tableViewFrame = [_tableView frame];
 	tableViewFrame.size.height -= keyboardBounds.size.height;
 
-	[self.tableView setFrame:tableViewFrame];
+	[_tableView setFrame:tableViewFrame];
 }
 
 - (void)keyboardHidden:(NSNotification *)notification
@@ -270,13 +281,29 @@
 	CGRect keyboardBounds;
 	[[[notification userInfo] valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&keyboardBounds];
 	
-	CGRect tableViewFrame = [self.tableView frame];
+	CGRect tableViewFrame = [_tableView frame];
 	tableViewFrame.size.height += keyboardBounds.size.height;
 
-	[self.tableView setFrame:tableViewFrame];
+	[_tableView setFrame:tableViewFrame];
 }
 
 #endif
+
+
+// Section Methods
+
+- (void)addSection:(NSArray *)rows withHeaderText:(NSString *)headerText andFooterText:(NSString *)footerText {
+	if (!tableGroups) [self constructTableGroups];
+
+	if (!rows) rows = [NSArray array];
+	[tableGroups addObject:rows];
+	
+	if (!headerText) [tableHeaders addObject:[NSNull null]];
+	else [tableHeaders addObject:headerText];
+	
+	if (!footerText) [tableFooters addObject:[NSNull null]];
+	else [tableFooters addObject:footerText];
+}
 
 @end
 
