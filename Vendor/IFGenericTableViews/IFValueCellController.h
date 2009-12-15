@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-#import "IFCellController.h"
-#import "IFCellModel.h"
+#import "CKBasicCellController.h"
 
-@interface IFValueCellController : NSObject <IFCellController>
+@interface IFValueCellController : CKBasicCellController
 {
 	NSString *label;
 	id<IFCellModel> model;

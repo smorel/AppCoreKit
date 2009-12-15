@@ -55,6 +55,7 @@
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
 
 //
@@ -75,7 +76,8 @@
 	
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
 	cell.accessoryType = UITableViewCellAccessoryNone;
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	if (self.isSelectable == YES) cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+	else cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	cell.indentationLevel = indentationLevel;
 	
 	// NOTE: The documentation states that the indentation width is 10 "points". It's more like 20
