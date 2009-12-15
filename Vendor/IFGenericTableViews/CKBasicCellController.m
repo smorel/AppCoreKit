@@ -11,25 +11,36 @@
 
 @implementation CKBasicCellController
 
-@synthesize isSelectable;
+@synthesize target = _target;
+@synthesize action = _action;
+@synthesize selectable = _selectable;
+
+
+- (id)init {
+	self = [super init];
+	if (self != nil) {
+		_selectable = YES;
+	}
+	return self;
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSAssert(@"This method should be implemented in each subclass.", @"");
+	return nil;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (_selectable == YES) return indexPath;
 	return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:isSelectable];
-	if (_target && [_target respondsToSelector:_action]) {
+	[tableView deselectRowAtIndexPath:indexPath animated:_selectable];
+	if (_selectable == YES && _target && [_target respondsToSelector:_action]) {
 		[_target performSelector:_action];
 	}
 }
 
-
-- (void)setAction:(SEL)action onTarget:(id)target {
-	_target = target;
-	_action = action;
-	isSelectable = YES;
-}
 
 @end

@@ -133,11 +133,25 @@
 			cellForRowAtIndexPath:indexPath];
 }
 
+
 //
 // tableView:didSelectRowAtIndexPath:
 //
 // Handle row selection
 //
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (!tableGroups) {
+		[self constructTableGroups];
+	}
+	
+	NSObject<IFCellController> *cellData =
+	[[tableGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	if ([cellData respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)]) {
+		return [cellData tableView:tableView willSelectRowAtIndexPath:indexPath];
+	}
+	return nil;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (!tableGroups)

@@ -15,11 +15,11 @@
 	id _target;
 	SEL _action;
 	
-	BOOL isSelectable;
+	BOOL _selectable;
 }
 
-@property (nonatomic, assign) BOOL isSelectable;
-
-- (void)setAction:(SEL)action onTarget:(id)target;
+@property (nonatomic, retain) id target;
+@property (nonatomic, assign) SEL action;
+@property (nonatomic, getter=isSelectable) BOOL selectable;
 
 @end
