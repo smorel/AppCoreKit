@@ -10,61 +10,6 @@
 @implementation NSDate (CKNSDateAdditions)
 
 //
-// Date manipulations
-//
-
-+ (NSDate*)dateWithToday {
-	NSString *time = [[NSDate date] stringWithDateFormat:@"yyyy-d-M"];
-	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
-	return date;
-}
-
-- (NSDate*)dateAtMidnight {
-	NSString *time = [self stringWithDateFormat:@"yyyy-d-M"];
-	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
-	return date;	
-}
-
-- (NSDate *)dateAtYesterday {
-	return [self dateByAddingDays:-1];
-}
-
-- (NSDate *)dateAtTomorrow {
-	return [self dateByAddingDays:1];
-}
-
-- (NSDate *)dateAtPreviousWeek {
-	return [self dateByAddingWeeks:-1];
-}
-
-- (NSDate *)dateAtNextWeek {
-	return [self dateByAddingWeeks:1];
-}
-
-- (NSDate *)dateByAddingDays:(NSInteger)days {
-	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
-	[comps setDay:days];
-	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
-}
-
-- (NSDate *)dateByAddingWeeks:(NSInteger)weeks {
-	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
-	[comps setWeek:weeks];
-	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
-}
-
-+ (NSDate *)dateFromISO8601TimePointString:(NSString *)time {
-	// ISO8601: Format the date as 20090301T235959
-	// NOTE: this format must be dependant on the US locale (i.e. en_US).
-	// TODO: append 'Z' if the time zone is UTC
-	return [NSDate dateFromString:time withDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
-}
-
-+ (NSDate *)dateFromTimeString:(NSString *)time {
-	return [NSDate dateFromString:time withDateFormat:@"HH:mm"];
-}
-
-//
 // Date string formatters
 //
 
@@ -117,11 +62,11 @@
 	return [NSDate stringFromDate:self withDateFormat:dateFormat];
 }
 
-- (NSString *)stringWithISO8601TimePointFormat {
-	// ISO8601: Parse the date as 20090301T235959
-	// See -dateFromISO8601String
-	return [self stringWithDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
-}
+//
+// Date formats
+//
+
+// DEPRECATED
 
 - (NSString *)stringWithDateShortFormat {
 	return [self stringWithDateFormat:@"yy-MM-dd"];
@@ -141,6 +86,67 @@
 
 - (NSString *)stringWithDayFormat {
 	return [self stringWithDateFormat:@"EEEE"];
+}
+
+//
+// Date minimal ISO8601
+//
+
++ (NSDate *)dateFromISO8601TimePointString:(NSString *)time {
+	// ISO8601: Format the date as 20090301T235959
+	// NOTE: this format must be dependant on the US locale (i.e. en_US).
+	// TODO: append 'Z' if the time zone is UTC
+	return [NSDate dateFromString:time withDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
+}
+
+- (NSString *)stringWithISO8601TimePointFormat {
+	// ISO8601: Parse the date as 20090301T235959
+	// See -dateFromISO8601String
+	return [self stringWithDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
+}
+
+//
+// Date manipulations
+//
+
++ (NSDate*)dateWithToday {
+	NSString *time = [[NSDate date] stringWithDateFormat:@"yyyy-d-M"];
+	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
+	return date;
+}
+
+- (NSDate*)dateAtMidnight {
+	NSString *time = [self stringWithDateFormat:@"yyyy-d-M"];
+	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
+	return date;	
+}
+
+- (NSDate *)dateAtYesterday {
+	return [self dateByAddingDays:-1];
+}
+
+- (NSDate *)dateAtTomorrow {
+	return [self dateByAddingDays:1];
+}
+
+- (NSDate *)dateAtPreviousWeek {
+	return [self dateByAddingWeeks:-1];
+}
+
+- (NSDate *)dateAtNextWeek {
+	return [self dateByAddingWeeks:1];
+}
+
+- (NSDate *)dateByAddingDays:(NSInteger)days {
+	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
+	[comps setDay:days];
+	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
+}
+
+- (NSDate *)dateByAddingWeeks:(NSInteger)weeks {
+	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
+	[comps setWeek:weeks];
+	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
 }
 
 //
