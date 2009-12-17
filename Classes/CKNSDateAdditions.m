@@ -14,13 +14,13 @@
 //
 
 + (NSDate*)dateWithToday {
-	NSString *time = [NSDate stringFromDate:[NSDate date] withDateFormat:@"yyyy-d-M"];
+	NSString *time = [[NSDate date] stringWithDateFormat:@"yyyy-d-M"];
 	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
 	return date;
 }
 
 - (NSDate*)dateAtMidnight {
-	NSString *time = [NSDate stringFromDate:self withDateFormat:@"yyyy-d-M"];
+	NSString *time = [self stringWithDateFormat:@"yyyy-d-M"];
 	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
 	return date;	
 }
@@ -53,15 +53,14 @@
 	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
 }
 
-+ (NSDate *)dateFromRFC2445:(NSString *)time {
-	// RFC2445: Format the date as 20090301T235959
-	// TODO IMPORTANT: The parsing is dependant from the locale currently 
-	// setup (in the system or in the NSDateFormatter), this format must be dependant
-	// on the US locale (i.e. en_US).
-	return [NSDate dateFromString:time withDateFormat:@"yyyyMMdd'T'HHmmss"];
++ (NSDate *)dateFromISO8601TimePointString:(NSString *)time {
+	// ISO8601: Format the date as 20090301T235959
+	// NOTE: this format must be dependant on the US locale (i.e. en_US).
+	// TODO: append 'Z' if the time zone is UTC
+	return [NSDate dateFromString:time withDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
 }
 
-+ (NSDate *)dateFromTime:(NSString *)time {
++ (NSDate *)dateFromTimeString:(NSString *)time {
 	return [NSDate dateFromString:time withDateFormat:@"HH:mm"];
 }
 
@@ -69,62 +68,79 @@
 // Date string formatters
 //
 
-+ (NSDateFormatter *)formatterWithDateFormat:(NSString *)dateFormat {
+// TODO: Move this in a NSDateFormatter Addition
+// NOTE: This method maintains a cache of NSDateFormatters
+
++ (NSDateFormatter *)formatterWithDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
 	static NSMutableDictionary *formatters = nil;
 	if (formatters == nil) { formatters = [[NSMutableDictionary dictionary] retain]; }
 	
-	NSDateFormatter *formatter;
-	formatter = [formatters objectForKey:dateFormat];
-		
+	NSLocale *locale = localeIdentifier 
+	  ? [[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier]
+	  : [NSLocale currentLocale];
+	
+	NSString *key = [NSString stringWithFormat:@"%@-%@", dateFormat, locale.localeIdentifier];
+	NSDateFormatter *formatter = [formatters objectForKey:key];
+	
 	if (formatter == nil) { 
 		formatter = [[[NSDateFormatter alloc] init] autorelease];
+		formatter.formatterBehavior = NSDateFormatterBehavior10_4;
 		formatter.dateFormat = dateFormat;
-		
-		// Setup the default locale of the formatter
-		// FIXME: It should be configurable at the clas level
-		NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-		[formatter setLocale:usLocale];
-		
-		[formatters setObject:formatter forKey:dateFormat];
+		formatter.locale = locale;
+		[formatters setObject:formatter forKey:key];
 	}
 	
 	return formatter;
 }
 
++ (NSDate *)dateFromString:(NSString *)string withDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
+	return [[NSDate formatterWithDateFormat:dateFormat forLocaleIdentifier:localeIdentifier] dateFromString:string];
+}
+
 + (NSDate *)dateFromString:(NSString *)string withDateFormat:(NSString *)dateFormat {
-	return [[NSDate formatterWithDateFormat:dateFormat] dateFromString:string];
+	return [NSDate dateFromString:string withDateFormat:dateFormat forLocaleIdentifier:nil];
+}
+
++ (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
+	return [[NSDate formatterWithDateFormat:dateFormat forLocaleIdentifier:localeIdentifier] stringFromDate:date];
 }
 
 + (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat {
-	return [[NSDate formatterWithDateFormat:dateFormat] stringFromDate:date];
+	return [NSDate stringFromDate:date withDateFormat:dateFormat forLocaleIdentifier:nil];
 }
 
-- (NSString *)stringFromDateFormat:(NSString *)dateFormat {
+- (NSString *)stringWithDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
+	return [NSDate stringFromDate:self withDateFormat:dateFormat forLocaleIdentifier:localeIdentifier];
+}
+
+- (NSString *)stringWithDateFormat:(NSString *)dateFormat {
 	return [NSDate stringFromDate:self withDateFormat:dateFormat];
 }
 
-- (NSString *)formatRFC2445 {
-	return [self stringFromDateFormat:@"yyyyMMdd'T'HHmmss"]; // RFC2445: Format the date as 20090301T235959
+- (NSString *)stringWithISO8601TimePointFormat {
+	// ISO8601: Parse the date as 20090301T235959
+	// See -dateFromISO8601String
+	return [self stringWithDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
 }
 
-- (NSString *)formatDateShort {
-	return [self stringFromDateFormat:@"yy-MM-dd"];
+- (NSString *)stringWithDateShortFormat {
+	return [self stringWithDateFormat:@"yy-MM-dd"];
 }
 
-- (NSString *)formatDate {
-	return [self stringFromDateFormat:@"MMM dd yyyy"]; 
+- (NSString *)stringWithDateFormat {
+	return [self stringWithDateFormat:@"MMM dd yyyy"]; 
 }
 
-- (NSString *)formatTime {
-	return [self stringFromDateFormat:@"HH:mm"];
+- (NSString *)stringWithTimeFormat {
+	return [self stringWithDateFormat:@"HH:mm"];
 }
 
-- (NSString *)formatTimeRaw {
-	return [self stringFromDateFormat:@"HHmmss"];
+- (NSString *)stringWithRawTimeFormat {
+	return [self stringWithDateFormat:@"HHmmss"];
 }
 
-- (NSString *)formatDay {
-	return [self stringFromDateFormat:@"EEEE"];
+- (NSString *)stringWithDayFormat {
+	return [self stringWithDateFormat:@"EEEE"];
 }
 
 //
@@ -132,7 +148,7 @@
 //
 
 - (BOOL)isAtMidnight {
-	NSString *time = [self stringFromDateFormat:@"HHmmss"];
+	NSString *time = [self stringWithDateFormat:@"HHmmss"];
 	return [time isEqualToString:@"000000"];
 }
 

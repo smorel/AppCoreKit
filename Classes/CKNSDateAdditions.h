@@ -31,47 +31,57 @@
 // Returns a copy of the date with the time set to 1 week later.
 - (NSDate *)dateAtNextWeek;
 
-
+// Returns a copy of the date with days added
 - (NSDate *)dateByAddingDays:(NSInteger)days;
-- (NSDate *)dateByAddingWeeks:(NSInteger)weeks;
-	
 
-// Returns a date from a RFC2445 compliant string
-+ (NSDate *)dateFromRFC2445:(NSString *)time;
+// Returns a copy of the date with weeks added
+- (NSDate *)dateByAddingWeeks:(NSInteger)weeks;
+
+// Returns a date from a ISO8601 "time point" string
++ (NSDate *)dateFromISO8601TimePointString:(NSString *)date;
 
 // Returns a date from a time as "HH:mm"
-+ (NSDate *)dateFromTime:(NSString *)time;
++ (NSDate *)dateFromTimeString:(NSString *)time;
 
-// Returns a date from a string according to a format
+// Returns a date from a string according to a date format and the default locale
 + (NSDate *)dateFromString:(NSString *)string withDateFormat:(NSString *)dateFormat;
+
+// Returns a date from a string according to a date format and a specified locale identifier
++ (NSDate *)dateFromString:(NSString *)string withDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier;
 
 //
 // Date string formatters
 //
 
-// Formats the date according to a format
+// Formats the date according to a format and in specified locale identifier
++ (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier;
+
+// Formats the date according to a format and in default locale
 + (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat;
 
-// TODO
-- (NSString *)stringFromDateFormat:(NSString *)dateFormat;
+// Formats the date as string using the specified "date format" in the specified locale identifier
+- (NSString *)stringWithDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier;
 
-// Formats the date as a RFC2445 compliant string
-- (NSString *)formatRFC2445;
+// Formats the date as string using the specified "date format" in the current locale
+- (NSString *)stringWithDateFormat:(NSString *)dateFormat;
+
+// Formats the date as a ISO8601 "time point" string
+- (NSString *)stringWithISO8601TimePointFormat;
 
 // Formats the date as "yy-dd-mm"
-- (NSString *)formatDateShort;
+- (NSString *)stringWithDateShortFormat;
 
 // Formats the date as "MMM dd yyyy"
-- (NSString *)formatDate;
+- (NSString *)stringWithDateFormat;
 
 // Formats the date as "HH:mm"
-- (NSString*)formatTime;
+- (NSString*)stringWithTimeFormat;
 
 // Formats the date as "HHmmss"
-- (NSString *)formatTimeRaw;
+- (NSString *)stringWithRawTimeFormat;
 
 // Formats the name of the day
-- (NSString *)formatDay;
+- (NSString *)stringWithDayFormat;
 
 //
 // Date comparisons
