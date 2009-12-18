@@ -109,53 +109,47 @@
 // Date calculations
 //
 
-+ (NSDate*)dateWithToday {
-	NSString *time = [[NSDate date] stringWithDateFormat:@"yyyy-d-M"];
-	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
-	return date;
-}
-
-- (NSDate*)dateAtMidnight {
+- (NSDate*)dateAtBeginningOfDay {
 	NSString *time = [self stringWithDateFormat:@"yyyy-d-M"];
 	NSDate *date = [NSDate dateFromString:time withDateFormat:@"yyyy-d-M"];
 	return date;	
 }
 
 - (NSDate *)dateAtYesterday {
-	return [self dateByAddingDays:-1];
+	return [self dateByAdvancingDays:-1];
 }
 
 - (NSDate *)dateAtTomorrow {
-	return [self dateByAddingDays:1];
+	return [self dateByAdvancingDays:1];
 }
 
-- (NSDate *)dateAtPreviousWeek {
-	return [self dateByAddingWeeks:-1];
+- (NSDate *)dateAtLastWeek {
+	return [self dateByAdvancingWeeks:-1];
 }
 
 - (NSDate *)dateAtNextWeek {
-	return [self dateByAddingWeeks:1];
+	return [self dateByAdvancingWeeks:1];
 }
 
-- (NSDate *)dateByAddingDays:(NSInteger)days {
+- (NSDate *)dateByAdvancingDays:(NSInteger)days {
 	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
 	[comps setDay:days];
-	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
+	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self options:0];
 }
 
-- (NSDate *)dateByAddingWeeks:(NSInteger)weeks {
+- (NSDate *)dateByAdvancingWeeks:(NSInteger)weeks {
 	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
 	[comps setWeek:weeks];
-	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
+	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self options:0];
 }
 
-- (BOOL)isAtMidnight {
+- (BOOL)isAtBeginningOfDay {
 	NSString *time = [self stringWithDateFormat:@"HHmmss"];
 	return [time isEqualToString:@"000000"];
 }
 
-- (BOOL)isEarlier:(NSDate *)anotherDate {
-	return ([self timeIntervalSinceDate:anotherDate] < 0);
+- (BOOL)isBefore:(NSDate *)date {
+	return ([self timeIntervalSinceDate:date] < 0);
 }
 
 - (double)timeIntervalSinceDateInHours:(NSDate *)anotherDate {

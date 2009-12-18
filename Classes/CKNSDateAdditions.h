@@ -71,11 +71,8 @@
 // Date calculations
 //
 
-// Returns the current date with the time set to midnight.
-+ (NSDate *)dateWithToday;
-
 // Returns a copy of the date with the time set to midnight on the same day.
-- (NSDate *)dateAtMidnight;
+- (NSDate *)dateAtBeginningOfDay;
 
 // Returns a copy of the date with the time set to 24h earlier.
 - (NSDate *)dateAtYesterday;
@@ -84,22 +81,22 @@
 - (NSDate *)dateAtTomorrow;
 
 // Returns a copy of the date with the time set to 1 week earlier.
-- (NSDate *)dateAtPreviousWeek;
+- (NSDate *)dateAtLastWeek;
 
 // Returns a copy of the date with the time set to 1 week later.
 - (NSDate *)dateAtNextWeek;
 
 // Returns a copy of the date with days added
-- (NSDate *)dateByAddingDays:(NSInteger)days;
+- (NSDate *)dateByAdvancingDays:(NSInteger)days;
 
 // Returns a copy of the date with weeks added
-- (NSDate *)dateByAddingWeeks:(NSInteger)weeks;
+- (NSDate *)dateByAdvancingWeeks:(NSInteger)weeks;
 
 // Returns TRUE is the date time is set at midnight
-- (BOOL)isAtMidnight;
+- (BOOL)isAtBeginningOfDay;
 
-// Returns TRUE if the receiver is earlier another given date
-- (BOOL)isEarlier:(NSDate *)anotherDate;
+// Returns TRUE if the receiver is before another given date
+- (BOOL)isBefore:(NSDate *)date;
 
 // Returns the interval between the receiver and another given date expressed in hours.
 - (double)timeIntervalSinceDateInHours:(NSDate *)anotherDate;
