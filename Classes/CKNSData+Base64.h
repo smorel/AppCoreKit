@@ -13,7 +13,7 @@
 
 @interface NSData (CKNSDataBase64Additions)
 
-+ (NSData *)dataFromBase64String:(NSString *)aString;
++ (NSData *)dataWithBase64EncodedString:(NSString *)aString;
 - (NSString *)base64EncodedString;
 
 @end

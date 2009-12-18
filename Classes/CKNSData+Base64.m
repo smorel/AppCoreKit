@@ -270,7 +270,7 @@ char *NewBase64Encode(
 //
 // returns the autoreleased NSData representation of the base64 string
 //
-+ (NSData *)dataFromBase64String:(NSString *)aString
++ (NSData *)dataWithBase64EncodedString:(NSString *)aString
 {
 	NSData *data = [aString dataUsingEncoding:NSASCIIStringEncoding];
 	size_t outputLength;
