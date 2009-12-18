@@ -53,13 +53,13 @@
 		715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
 		715E0B3010DADFE100AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
 		715E0CBB10DB063000AA4B07 /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */; };
-		715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CB910DB063000AA4B07 /* CKNSDate+Calculations.h */; };
+		715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CB910DB063000AA4B07 /* CKNSDate+Calculations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0CBD10DB069100AA4B07 /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */; };
 		715E0CC610DB073C00AA4B07 /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */; };
-		715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CC410DB073C00AA4B07 /* CKNSDate+Conversions.h */; };
+		715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CC410DB073C00AA4B07 /* CKNSDate+Conversions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0CCF10DB07B100AA4B07 /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */; };
 		715E0CF510DB0AB300AA4B07 /* CKNSString+Validations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */; };
-		715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */; };
+		715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */; };
 		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */; };
@@ -77,7 +77,7 @@
 		71AD9D8310A35F4600C88903 /* CKNSData+SHA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D7310A35F4500C88903 /* CKNSData+SHA1.m */; };
 		71AD9D8410A35F4600C88903 /* CKNSString+URIQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D7410A35F4500C88903 /* CKNSString+URIQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D8510A35F4600C88903 /* CKNSString+URIQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D7510A35F4500C88903 /* CKNSString+URIQuery.m */; };
-		71AD9D9410A361EE00C88903 /* CloudKit_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */; settings = {ATTRIBUTES = (); }; };
+		71AD9D9410A361EE00C88903 /* CloudKit_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9DE510A3629300C88903 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DE410A3629300C88903 /* AddressBook.framework */; };
 		71AD9DF210A362C200C88903 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DF110A362C200C88903 /* SystemConfiguration.framework */; };
 		71AD9DFC10A362E100C88903 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DFB10A362E100C88903 /* UIKit.framework */; };

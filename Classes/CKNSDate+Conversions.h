@@ -27,38 +27,15 @@
 // Formats the date as string using the specified "date format" in the current locale
 - (NSString *)stringWithDateFormat:(NSString *)dateFormat;
 
-// TODO: These formats should be deprecated, it's up to the application to define the formats
-// TODO: These formats should be replaced by the locale-specific defaults formats from the OS
-//       NSDateFormatterStyle & NSDateFormatterStyle
+// Formats the date and time using NSDateFormatterStyle
+- (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle andTimeStyle:(NSDateFormatterStyle)inTimeStyle;
 
 //
-// Date formats
+// ISO8601 UTC Basic Format
+// TODO: Put in a separate category
 //
 
-// Formats the date as "yy-dd-mm"
-- (NSString *)stringWithDateShortFormat DEPRECATED_ATTRIBUTE; 
-
-// Formats the date as "MMM dd yyyy"
-- (NSString *)stringWithDateFormat DEPRECATED_ATTRIBUTE;
-
-// Formats the date as "HH:mm"
-- (NSString*)stringWithTimeFormat DEPRECATED_ATTRIBUTE;
-
-// Formats the date as "HHmmss"
-- (NSString *)stringWithRawTimeFormat DEPRECATED_ATTRIBUTE;
-
-// Formats the name of the day
-- (NSString *)stringWithDayFormat DEPRECATED_ATTRIBUTE;
-
-//
-// Date minimal ISO8601
-//
-
-// Returns a date from a ISO8601 "time point" string
-+ (NSDate *)dateFromISO8601TimePointString:(NSString *)date;
-
-// TODO: This format should be put in a separate addition
-// Formats the date as a ISO8601 "time point" string
+// Formats the date as a ISO8601 UTC "time point" string
 - (NSString *)stringWithISO8601TimePointFormat;
 
 @end

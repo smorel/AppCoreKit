@@ -58,47 +58,22 @@
 	return [NSDate stringFromDate:self withDateFormat:dateFormat];
 }
 
-//
-// Date formats
-//
-
-// DEPRECATED
-
-- (NSString *)stringWithDateShortFormat {
-	return [self stringWithDateFormat:@"yy-MM-dd"];
-}
-
-- (NSString *)stringWithDateFormat {
-	return [self stringWithDateFormat:@"MMM dd yyyy"]; 
-}
-
-- (NSString *)stringWithTimeFormat {
-	return [self stringWithDateFormat:@"HH:mm"];
-}
-
-- (NSString *)stringWithRawTimeFormat {
-	return [self stringWithDateFormat:@"HHmmss"];
-}
-
-- (NSString *)stringWithDayFormat {
-	return [self stringWithDateFormat:@"EEEE"];
+- (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle andTimeStyle:(NSDateFormatterStyle)timeStyle {
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	formatter.dateStyle = dateStyle;
+	formatter.timeStyle = timeStyle;
+	return [formatter stringFromDate:self];
 }
 
 //
 // Date minimal ISO8601
 //
 
-+ (NSDate *)dateFromISO8601TimePointString:(NSString *)time {
-	// ISO8601: Format the date as 20090301T235959
-	// NOTE: this format must be dependant on the US locale (i.e. en_US).
-	// TODO: append 'Z' if the time zone is UTC
-	return [NSDate dateFromString:time withDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
-}
-
 - (NSString *)stringWithISO8601TimePointFormat {
-	// ISO8601: Parse the date as 20090301T235959
-	// See -dateFromISO8601String
-	return [self stringWithDateFormat:@"yyyyMMdd'T'HHmmss" forLocaleIdentifier:@"en_US"];
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	formatter.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+	formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	return [formatter stringFromDate:self];
 }
 
 @end
