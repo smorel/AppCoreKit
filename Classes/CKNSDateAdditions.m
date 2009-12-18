@@ -10,7 +10,7 @@
 @implementation NSDate (CKNSDateAdditions)
 
 //
-// Date string formatters
+// Date conversions
 //
 
 // TODO: Move this in a NSDateFormatter Addition
@@ -106,7 +106,7 @@
 }
 
 //
-// Date manipulations
+// Date calculations
 //
 
 + (NSDate*)dateWithToday {
@@ -148,10 +148,6 @@
 	[comps setWeek:weeks];
 	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self  options:0];
 }
-
-//
-// Date comparisons
-//
 
 - (BOOL)isAtMidnight {
 	NSString *time = [self stringWithDateFormat:@"HHmmss"];

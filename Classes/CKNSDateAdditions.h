@@ -7,10 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
+// TODO: Create a separate file for (1) Conversions and (2) Calculations
+
 @interface NSDate (NSDateAdditions)
 
 //
-// Date construction
+// Date conversions
 //
 
 // Returns a date from a string according to a date format and the default locale
@@ -66,7 +68,7 @@
 - (NSString *)stringWithISO8601TimePointFormat;
 
 //
-// Date manipulations
+// Date calculations
 //
 
 // Returns the current date with the time set to midnight.
@@ -92,10 +94,6 @@
 
 // Returns a copy of the date with weeks added
 - (NSDate *)dateByAddingWeeks:(NSInteger)weeks;
-
-//
-// Date comparisons
-//
 
 // Returns TRUE is the date time is set at midnight
 - (BOOL)isAtMidnight;
