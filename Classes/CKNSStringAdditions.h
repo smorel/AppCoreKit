@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 #import "CKNSString+URIQuery.h"
+#import "CKNSString+Validations.h"
 
 @interface NSString (CKNSStringAdditions)
 
@@ -15,9 +16,6 @@
 + (NSString *)stringWithNewUUID;
 
 // Returns a new string truncated to a specified length, adding an ellipsis at the end
-- (NSString *)stringTruncatedToLength:(NSUInteger)length withEllipsisString:(NSString *)ellipsis;
-
-// Returns TRUE if this string is compliant with an Email format specification
-- (BOOL)stringIsValidAsEmail:(BOOL)allowEmptyString;
+- (NSString *)stringByTruncatingToLength:(NSUInteger)length withEllipsisString:(NSString *)ellipsis;
 
 @end

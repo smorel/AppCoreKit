@@ -52,6 +52,15 @@
 		715E0A7E10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */; };
 		715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
 		715E0B3010DADFE100AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
+		715E0CBB10DB063000AA4B07 /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */; };
+		715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CB910DB063000AA4B07 /* CKNSDate+Calculations.h */; };
+		715E0CBD10DB069100AA4B07 /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */; };
+		715E0CC610DB073C00AA4B07 /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */; };
+		715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CC410DB073C00AA4B07 /* CKNSDate+Conversions.h */; };
+		715E0CCF10DB07B100AA4B07 /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */; };
+		715E0CF510DB0AB300AA4B07 /* CKNSString+Validations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */; };
+		715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */ = {isa = PBXBuildFile; fileRef = 715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */; };
+		715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */; };
 		7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */; };
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
@@ -59,7 +68,6 @@
 		71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */; };
 		71AD9D7A10A35F4600C88903 /* CKNSDataAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D7B10A35F4600C88903 /* CKNSDateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6B10A35F4500C88903 /* CKNSDateAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71AD9D7C10A35F4600C88903 /* CKNSDateAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6C10A35F4500C88903 /* CKNSDateAdditions.m */; };
 		71AD9D7D10A35F4600C88903 /* CKNSStringAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6D10A35F4500C88903 /* CKNSStringAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D7E10A35F4600C88903 /* CKNSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6E10A35F4500C88903 /* CKNSStringAdditions.m */; };
 		71AD9D7F10A35F4600C88903 /* CKDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6F10A35F4500C88903 /* CKDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -185,6 +193,12 @@
 		715E0A7C10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
 		715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSDateAdditionsTestCase.m; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.m; sourceTree = SOURCE_ROOT; };
 		715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		715E0CB910DB063000AA4B07 /* CKNSDate+Calculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDate+Calculations.h"; path = "../cloudkit/Classes/CKNSDate+Calculations.h"; sourceTree = "<group>"; };
+		715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDate+Calculations.m"; path = "../cloudkit/Classes/CKNSDate+Calculations.m"; sourceTree = "<group>"; };
+		715E0CC410DB073C00AA4B07 /* CKNSDate+Conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDate+Conversions.h"; path = "../cloudkit/Classes/CKNSDate+Conversions.h"; sourceTree = "<group>"; };
+		715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDate+Conversions.m"; path = "../cloudkit/Classes/CKNSDate+Conversions.m"; sourceTree = "<group>"; };
+		715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSString+Validations.h"; path = "../cloudkit/Classes/CKNSString+Validations.h"; sourceTree = "<group>"; };
+		715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSString+Validations.m"; path = "../cloudkit/Classes/CKNSString+Validations.m"; sourceTree = "<group>"; };
 		7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSSetAdditions.h; path = ../cloudkit/Classes/CKNSSetAdditions.h; sourceTree = SOURCE_ROOT; };
 		7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSSetAdditions.m; path = ../cloudkit/Classes/CKNSSetAdditions.m; sourceTree = SOURCE_ROOT; };
 		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -194,7 +208,6 @@
 		71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSArrayAdditions.m; path = Classes/CKNSArrayAdditions.m; sourceTree = "<group>"; };
 		71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDataAdditions.h; path = Classes/CKNSDataAdditions.h; sourceTree = "<group>"; };
 		71AD9D6B10A35F4500C88903 /* CKNSDateAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditions.h; path = Classes/CKNSDateAdditions.h; sourceTree = "<group>"; };
-		71AD9D6C10A35F4500C88903 /* CKNSDateAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSDateAdditions.m; path = Classes/CKNSDateAdditions.m; sourceTree = "<group>"; };
 		71AD9D6D10A35F4500C88903 /* CKNSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSStringAdditions.h; path = Classes/CKNSStringAdditions.h; sourceTree = "<group>"; };
 		71AD9D6E10A35F4500C88903 /* CKNSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSStringAdditions.m; path = Classes/CKNSStringAdditions.m; sourceTree = "<group>"; };
 		71AD9D6F10A35F4500C88903 /* CKDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDebug.h; path = Classes/CKDebug.h; sourceTree = "<group>"; };
@@ -419,7 +432,6 @@
 				71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */,
 				71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */,
 				71AD9D6B10A35F4500C88903 /* CKNSDateAdditions.h */,
-				71AD9D6C10A35F4500C88903 /* CKNSDateAdditions.m */,
 				71AD9D6D10A35F4500C88903 /* CKNSStringAdditions.h */,
 				71AD9D6E10A35F4500C88903 /* CKNSStringAdditions.m */,
 				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
@@ -429,6 +441,12 @@
 				71AD9D7310A35F4500C88903 /* CKNSData+SHA1.m */,
 				71AD9D7410A35F4500C88903 /* CKNSString+URIQuery.h */,
 				71AD9D7510A35F4500C88903 /* CKNSString+URIQuery.m */,
+				715E0CB910DB063000AA4B07 /* CKNSDate+Calculations.h */,
+				715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */,
+				715E0CC410DB073C00AA4B07 /* CKNSDate+Conversions.h */,
+				715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */,
+				715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */,
+				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -630,6 +648,9 @@
 				712E7C7A10D199A7008DC18C /* IFTextCellController.h in Headers */,
 				712E7C7C10D199A7008DC18C /* IFTextViewTableView.h in Headers */,
 				712E7C7E10D199A7008DC18C /* IFValueCellController.h in Headers */,
+				715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */,
+				715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */,
+				715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,6 +759,9 @@
 			files = (
 				712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */,
 				715E0A7E10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m in Sources */,
+				715E0CBB10DB063000AA4B07 /* CKNSDate+Calculations.m in Sources */,
+				715E0CC610DB073C00AA4B07 /* CKNSDate+Conversions.m in Sources */,
+				715E0CF510DB0AB300AA4B07 /* CKNSString+Validations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,7 +770,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */,
-				71AD9D7C10A35F4600C88903 /* CKNSDateAdditions.m in Sources */,
 				71AD9D7E10A35F4600C88903 /* CKNSStringAdditions.m in Sources */,
 				71AD9D8110A35F4600C88903 /* CKNSData+Base64.m in Sources */,
 				71AD9D8310A35F4600C88903 /* CKNSData+SHA1.m in Sources */,
@@ -795,6 +818,9 @@
 				712E7C7B10D199A7008DC18C /* IFTextCellController.m in Sources */,
 				712E7C7D10D199A7008DC18C /* IFTextViewTableView.m in Sources */,
 				712E7C7F10D199A7008DC18C /* IFValueCellController.m in Sources */,
+				715E0CBD10DB069100AA4B07 /* CKNSDate+Calculations.m in Sources */,
+				715E0CCF10DB07B100AA4B07 /* CKNSDate+Conversions.m in Sources */,
+				715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
