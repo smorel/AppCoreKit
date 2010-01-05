@@ -16,6 +16,10 @@
 	return [[[CKAddressBookPerson alloc] initWithRecord:record] autorelease];
 }
 
++ (id)person {
+	return [CKAddressBookPerson personWithRecord:ABPersonCreate()];
+}
+
 - (id)initWithRecord:(ABRecordRef)record {
 	if (self = [super init]) {
 		_record = CFRetain(record);
@@ -83,7 +87,7 @@
 	} else {
 		_email = [[NSString string] retain];
 	}
-
+	
 	return _email;
 }
 
@@ -115,13 +119,67 @@
 		NSMutableArray *array = [NSMutableArray arrayWithCapacity:2];
 		[array insertObject:(NSString *)aLocalizedLabel atIndex:0];
 		[array insertObject:(NSString *)aNumber atIndex:1];
-
+		
 		[phoneNumbers addObject:array];
 	}
-
+	
 	_phoneNumbers = [phoneNumbers retain];
 	
 	return _phoneNumbers;
+}
+
+
+//
+- (ABRecordRef)record {
+	return _record;
+}
+
+- (CFTypeRef)valueForProperty:(ABPropertyID)property {
+	return ABRecordCopyValue(_record, property);
+}
+
+- (CFErrorRef)setValue:(CFTypeRef)value forProperty:(ABPropertyID)property {
+	CFErrorRef error = NULL;
+	ABRecordSetValue(_record, property, value, &error);
+	return error;
+}
+
+- (CFErrorRef)setMultiValue:(CFTypeRef)value ofType:(ABPropertyType)type withLabel:(NSString *)label forProperty:(ABPropertyID)property {
+	CFErrorRef error = NULL;
+	
+	ABMutableMultiValueRef multiStringProperty = ABRecordCopyValue(_record, property);
+	if (multiStringProperty == nil) {
+		multiStringProperty = ABMultiValueCreateMutable(type);
+	}
+	
+	ABMultiValueIdentifier multivalueIdentifier;
+	ABMultiValueAddValueAndLabel(multiStringProperty, value, (CFStringRef)label, &multivalueIdentifier);
+	error = [self setValue:multiStringProperty forProperty:property];
+	CFRelease(multiStringProperty);
+	
+	return error;
+}
+
+- (void)setFirstName:(NSString *)name {
+	[self setValue:name forProperty:kABPersonFirstNameProperty];
+}
+- (void)setLastName:(NSString *)name {
+	[self setValue:name forProperty:kABPersonLastNameProperty];
+}
+- (void)setOrganizationName:(NSString *)name {
+	[self setValue:name forProperty:kABPersonOrganizationProperty];
+}
+
+- (void)setPhone:(NSString *)phone forLabel:(NSString *)label {
+	[self setMultiValue:phone ofType:kABMultiStringPropertyType withLabel:label forProperty:kABPersonPhoneProperty];
+}
+
+- (void)setAddress:(NSDictionary *)address forLabel:(NSString *)label {
+	[self setMultiValue:address ofType:kABDictionaryPropertyType withLabel:label forProperty:kABPersonAddressProperty];
+}
+
+- (void)setWebsite:(NSString *)url forLabel:(NSString *)label {
+	[self setMultiValue:url ofType:kABMultiStringPropertyType withLabel:label forProperty:kABPersonURLProperty];
 }
 
 @end

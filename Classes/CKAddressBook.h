@@ -24,9 +24,18 @@
 @property (nonatomic, readonly) NSString *email;
 @property (nonatomic, readonly) UIImage *image;
 @property (nonatomic, readonly) NSArray *phoneNumbers;
+@property (nonatomic, readonly) ABRecordRef record;
 
 + (id)personWithRecord:(ABRecordRef)record;
++ (id)person;
 - (id)initWithRecord:(ABRecordRef)record;
+
+- (void)setFirstName:(NSString *)name;
+- (void)setLastName:(NSString *)name;
+- (void)setOrganizationName:(NSString *)name;
+- (void)setPhone:(NSString *)phone forLabel:(NSString *)label;
+- (void)setAddress:(NSDictionary *)address forLabel:(NSString *)label;
+- (void)setWebsite:(NSString *)url forLabel:(NSString *)label;
 
 @end
 
