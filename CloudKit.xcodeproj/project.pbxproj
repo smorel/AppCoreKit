@@ -143,6 +143,10 @@
 		71ADA07E10A3740400C88903 /* CXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA06610A3740400C88903 /* CXMLNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA06710A3740400C88903 /* CXMLNode.m */; };
 		71ADA08210A3740400C88903 /* TouchXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA06B10A3740400C88903 /* TouchXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71B1975910F3EC26007F551A /* CKCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1975710F3EC26007F551A /* CKCoreDataManager.h */; };
+		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
+		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; };
+		71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -282,6 +286,10 @@
 		71ADA06610A3740400C88903 /* CXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode.h; path = "Vendor/TouchXML-1.0.6/Common/Source/CXMLNode.h"; sourceTree = "<group>"; };
 		71ADA06710A3740400C88903 /* CXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode.m; path = "Vendor/TouchXML-1.0.6/Common/Source/CXMLNode.m"; sourceTree = "<group>"; };
 		71ADA06B10A3740400C88903 /* TouchXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchXML.h; path = "Vendor/TouchXML-1.0.6/Common/Source/TouchXML.h"; sourceTree = "<group>"; };
+		71B1975710F3EC26007F551A /* CKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCoreDataManager.h; path = Classes/CKCoreDataManager.h; sourceTree = "<group>"; };
+		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
+		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
+		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSManagedObjectContext+Requests.m"; path = "Classes/CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libCloudKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -339,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
+				71B1974910F3EC01007F551A /* CoreData */,
 				71AD9D5F10A35EED00C88903 /* Extensions */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
@@ -585,6 +594,17 @@
 			path = "Vendor/TouchXML-1.0.6/Common/Source/Creation";
 			sourceTree = "<group>";
 		};
+		71B1974910F3EC01007F551A /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				71B1975710F3EC26007F551A /* CKCoreDataManager.h */,
+				71B1975810F3EC26007F551A /* CKCoreDataManager.m */,
+				71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */,
+				71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -651,6 +671,8 @@
 				715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */,
 				715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */,
 				715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */,
+				71B1975910F3EC26007F551A /* CKCoreDataManager.h in Headers */,
+				71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +843,8 @@
 				715E0CBD10DB069100AA4B07 /* CKNSDate+Calculations.m in Sources */,
 				715E0CCF10DB07B100AA4B07 /* CKNSDate+Conversions.m in Sources */,
 				715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */,
+				71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */,
+				71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
