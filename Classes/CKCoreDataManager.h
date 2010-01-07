@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "CKNSManagedObjectContext+Requests.h"
 
 @interface CKCoreDataManager : NSObject {
 	NSURL *_storeURL;
@@ -26,24 +27,13 @@
 @property (retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 + (CKCoreDataManager *)sharedManager;
++ (void)setSharedManager:(CKCoreDataManager *)manager;
 
 //
 
+- (CKCoreDataManager *)initWithDefault;
 - (CKCoreDataManager *)initWithPersistentStoreURL:(NSURL *)storeURL storeType:(NSString *)storeType storeOptions:(NSDictionary *)storeOptions;
 
 - (void)save;
-
-// NSManagedObjectContext Additions
-
-- (id)findOrCreateObjectForEntityForName:(NSString *)entityName withIdentifier:(NSString *)identifier;
-- (id)findFirstObjectForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedBy:(NSString *)sortKey;
-- (id)insertNewObjectForEntityForName:(NSString *)entityName;
-
-- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedBy:(NSString *)key limit:(NSUInteger)limit;
-- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedByKeys:(NSArray *)keys limit:(NSUInteger)limit;
-- (NSUInteger)countObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate;
-
-- (void)deleteObject:(NSManagedObject *)object;
-- (void)deleteObjects:(NSArray *)objects;
 
 @end

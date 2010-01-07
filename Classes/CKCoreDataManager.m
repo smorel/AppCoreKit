@@ -12,12 +12,13 @@
 
 // Private Interface
 
-@interface CKCoreDataManager (Private)
+@interface CKCoreDataManager ()
 
 @property (retain, readwrite) NSURL *storeURL;
 @property (retain, readwrite) NSString *storeType;
 @property (retain, readwrite) NSDictionary *storeOptions;
 
+- (CKCoreDataManager *)initWithDefault;
 - (NSString *)_applicationDocumentsDirectory;
 - (NSURL *)_storeURLForName:(NSString *)name storeType:(NSString *)storeType;
 
@@ -37,19 +38,26 @@
 
 //
 
+static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
+
 + (CKCoreDataManager *)sharedManager {
-	static CKCoreDataManager *_instance = nil;
+
 	@synchronized(self) {
-		if (! _instance) {
-			_instance = [[CKCoreDataManager alloc] init];
+		if (! _ckCoreDataManagerInstance) {
+			_ckCoreDataManagerInstance = [[CKCoreDataManager alloc] initWithDefault];
 		}
 	}
-	return _instance;
+	return _ckCoreDataManagerInstance;
+}
+
++ (void)setSharedManager:(CKCoreDataManager *)manager {
+	[_ckCoreDataManagerInstance release];
+	_ckCoreDataManagerInstance = [manager retain];
 }
 
 //
 
-- (CKCoreDataManager *)init {
+- (CKCoreDataManager *)initWithDefault {
 	NSURL *storeURL = [self _storeURLForName:[[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey] storeType:NSSQLiteStoreType];
 	NSDictionary *storeOptions = [NSDictionary dictionaryWithObjectsAndKeys:
 								    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
@@ -62,142 +70,32 @@
 		self.storeURL = storeURL;
 		self.storeType = storeType;
 		self.storeOptions = storeOptions;
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(applicationWillTerminate:) 
+													 name:UIApplicationWillTerminateNotification 
+												   object:[UIApplication sharedApplication]];		
 	}
 	return self;
 }
 
-- (void)dealloc {	
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:UIApplicationWillTerminateNotification
+												  object:[UIApplication sharedApplication]];
     [_managedObjectContext release];
     [_managedObjectModel release];
     [_persistentStoreCoordinator release];    
 	[super dealloc];
 }
 
-// // NSManagedObjectContext Additions
+// Notifications
 
-- (id)findOrCreateObjectForEntityForName:(NSString *)entityName withIdentifier:(NSString *)identifier {
-	NSPredicate *predicate = identifier
-		? [NSPredicate predicateWithFormat:@"identifier == %@", identifier]
-		: nil;
-	
-	id entity = [self findFirstObjectForEntityForName:entityName 
-											predicate:predicate 
-											 sortedBy:nil];
-		
-	if (entity == nil) {
-		entity = [self insertNewObjectForEntityForName:entityName];
-		//[entity setCreatedAt:[NSDate date]];
-		//[entity setUpdatedAt:[NSDate date]];
-	} else {
-		//[entity setUpdatedAt:[NSDate date]];
-	}
-	
-	if (identifier) { [entity setIdentifier:identifier]; }
-
-	return entity;
+- (void)applicationWillTerminate:(NSNotification *)notification {
+	[self save];
 }
 
-- (id)findFirstObjectForEntityForName:(NSString *)entityName 
-							predicate:(NSPredicate *)predicate 
-							 sortedBy:(NSString *)sortKey {
-	
-	NSArray *results = [self fetchObjectsForEntityForName:entityName 
-												predicate:predicate 
-												 sortedBy:sortKey 
-													limit:0];
-	return (results.count == 0) ? nil : [results objectAtIndex:0];
-}
-
-- (id)insertNewObjectForEntityForName:(NSString *)entityName {
-	return [NSEntityDescription insertNewObjectForEntityForName:entityName
-										 inManagedObjectContext:self.managedObjectContext];
-}
-
-- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName 
-								predicate:(NSPredicate *)predicate 
-							 sortedByKeys:(NSArray *)sortKeys
-									limit:(NSUInteger)limit {
-	
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-	
-	// Set the entity name
-	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName 
-											  inManagedObjectContext:self.managedObjectContext];
-	[request setEntity:entity];
-	
-	// Set the predicate
-	if (predicate) {
-		[request setPredicate:predicate];
-	}
-	
-	// Set the sort description
-	if (sortKeys) {
-		NSMutableArray *sortDescriptors = [NSMutableArray array];
-		
-		for (NSString *key in sortKeys) {
-			[sortDescriptors addObject:[[[NSSortDescriptor alloc] initWithKey:key ascending:YES] autorelease]];
-		}
-		
-		[request setSortDescriptors:sortDescriptors];
-	}
-	
-	// Set the limites
-	if (limit != 0) {
-		[request setFetchLimit:limit];
-	}
-	
-	NSError *error;
-	NSMutableArray *fetchResults = [[self.managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
-	if (fetchResults == nil) {
-		// FIXME: Handle the error.
-	}
-	
-	CKDebugLog(@"%d result(s) [%@]", fetchResults.count, predicate);
-	
-	return fetchResults;
-}
-
-- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName 
-								predicate:(NSPredicate *)predicate 
-								 sortedBy:(NSString *)sortKey
-									limit:(NSUInteger)limit {
-	return [self fetchObjectsForEntityForName:entityName 
-									predicate:predicate 
-								 sortedByKeys:(sortKey == nil) ? nil : [NSArray arrayWithObject:sortKey]
-										limit:limit];
-}
-
-- (NSUInteger)countObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate {
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-	
-	// Set the entity name
-	NSEntityDescription *entity = [NSEntityDescription entityForName:entityName 
-											  inManagedObjectContext:self.managedObjectContext];
-	[request setEntity:entity];
-	
-	// Set the predicate
-	if (predicate) {
-		[request setPredicate:predicate];
-	}
-	
-	NSError *error = nil;
-	NSUInteger count = [self.managedObjectContext countForFetchRequest:request error:&error];
-	if (error) {
-		// FIXME: Handle the error.
-	}
-
-	return count;
-}
-
-- (void)deleteObject:(NSManagedObject *)object {
-	if (_managedObjectContext != nil) { [_managedObjectContext deleteObject:object]; }
-}
-
-- (void)deleteObjects:(NSArray *)objects {
-	for (id object in objects) { [self deleteObject:object]; }
-}
-
-// Saves changes in the application's managed object context
+// Saves changes in the managed object context
 
 - (BOOL)save:(NSError **)error {
 	if ([self.managedObjectContext hasChanges]) {
@@ -230,7 +128,6 @@
 	
     return _managedObjectContext;
 }
-
 
 // Returns the managed object model.
 // If the model doesn't already exist, it is created by merging all of the 
@@ -281,7 +178,7 @@
 	} else if ([storeType isEqualToString:NSBinaryStoreType]) {
 		extension = @"db";
 	} else {
-		NSAssert1(NO, @"Unsupported store type %@", storeType);
+		NSAssert1(NO, @"Unsupported %@", storeType);
 	}
 	
 	return [NSURL fileURLWithPath:[[self _applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", name, extension]]];
