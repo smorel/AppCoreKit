@@ -32,8 +32,8 @@
 @synthesize storeType = _storeType;
 @synthesize storeOptions = _storeOptions;
 
-@synthesize managedObjectModel = _managedObjectModel;
-@synthesize managedObjectContext = _managedObjectContext;
+@synthesize objectModel = _objectModel;
+@synthesize objectContext = _objectContext;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 //
@@ -83,8 +83,8 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:UIApplicationWillTerminateNotification
 												  object:[UIApplication sharedApplication]];
-    [_managedObjectContext release];
-    [_managedObjectModel release];
+    [_objectContext release];
+    [_objectModel release];
     [_persistentStoreCoordinator release];    
 	[super dealloc];
 }
@@ -98,8 +98,8 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 // Saves changes in the managed object context
 
 - (BOOL)save:(NSError **)error {
-	if ([self.managedObjectContext hasChanges]) {
-		return [self.managedObjectContext save:error]; 
+	if ([self.objectContext hasChanges]) {
+		return [self.objectContext save:error]; 
 	} else {
 		return YES;
 	}
@@ -115,30 +115,26 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 // If the context doesn't already exist, it is created and bound to the 
 // persistent store coordinator.
 
-- (NSManagedObjectContext *)managedObjectContext {	
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
-    }
+- (NSManagedObjectContext *)objectContext {	
+    if (_objectContext != nil) { return _objectContext; }
 	
     NSPersistentStoreCoordinator *coordinator = self.persistentStoreCoordinator;
     if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+        _objectContext = [[NSManagedObjectContext alloc] init];
+        [_objectContext setPersistentStoreCoordinator:coordinator];
     }
 	
-    return _managedObjectContext;
+    return _objectContext;
 }
 
 // Returns the managed object model.
 // If the model doesn't already exist, it is created by merging all of the 
 // models found in the application bundle.
 
-- (NSManagedObjectModel *)managedObjectModel {	
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
-    }
-    _managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
-    return _managedObjectModel;
+- (NSManagedObjectModel *)objectModel {	
+    if (_objectModel != nil) { return _objectModel; }
+    _objectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
+    return _objectModel;
 }
 
 // Returns the persistent store coordinator.
@@ -146,19 +142,16 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 // application's store added to it.
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {	
-    if (_persistentStoreCoordinator != nil) {
-        return _persistentStoreCoordinator;
-    }
+    if (_persistentStoreCoordinator != nil) { return _persistentStoreCoordinator; }
 	
 	NSError *error;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.objectModel];
     NSPersistentStore *store = [_persistentStoreCoordinator addPersistentStoreWithType:self.storeType 
 																		 configuration:nil 
 																				   URL:self.storeURL
 																			   options:self.storeOptions
 																				 error:&error];
 	NSAssert2(store, @"Unresolved error %@, %@", error, error.userInfo);
-	
     return _persistentStoreCoordinator;
 }
 

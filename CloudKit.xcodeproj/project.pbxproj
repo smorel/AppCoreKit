@@ -66,6 +66,12 @@
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		719F05CE10F6A818002955C0 /* CKAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F05CC10F6A818002955C0 /* CKAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F05CD10F6A818002955C0 /* CKAttribute.m */; };
+		719F062B10F6E749002955C0 /* CKDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F062710F6E749002955C0 /* CKDomain.h */; };
+		719F062C10F6E749002955C0 /* CKDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F062810F6E749002955C0 /* CKDomain.m */; };
+		719F062D10F6E749002955C0 /* CKItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F062910F6E749002955C0 /* CKItem.h */; };
+		719F062E10F6E749002955C0 /* CKItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F062A10F6E749002955C0 /* CKItem.m */; };
+		719F063B10F6ED27002955C0 /* CKStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F063910F6ED27002955C0 /* CKStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		719F067A10F6F39E002955C0 /* CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F063A10F6ED27002955C0 /* CKStore.m */; };
 		71AD9D7810A35F4600C88903 /* CKNSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */; };
 		71AD9D7A10A35F4600C88903 /* CKNSDataAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -211,6 +217,12 @@
 		719F056B10F6A68F002955C0 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = ../cloudkit/CloudKit.bundle; sourceTree = SOURCE_ROOT; };
 		719F05CC10F6A818002955C0 /* CKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttribute.h; path = ../cloudkit/Classes/CKAttribute.h; sourceTree = "<group>"; };
 		719F05CD10F6A818002955C0 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttribute.m; path = ../cloudkit/Classes/CKAttribute.m; sourceTree = "<group>"; };
+		719F062710F6E749002955C0 /* CKDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDomain.h; path = ../cloudkit/Classes/CKDomain.h; sourceTree = SOURCE_ROOT; };
+		719F062810F6E749002955C0 /* CKDomain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDomain.m; path = ../cloudkit/Classes/CKDomain.m; sourceTree = SOURCE_ROOT; };
+		719F062910F6E749002955C0 /* CKItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItem.h; path = ../cloudkit/Classes/CKItem.h; sourceTree = SOURCE_ROOT; };
+		719F062A10F6E749002955C0 /* CKItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItem.m; path = ../cloudkit/Classes/CKItem.m; sourceTree = SOURCE_ROOT; };
+		719F063910F6ED27002955C0 /* CKStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStore.h; path = ../cloudkit/Classes/CKStore.h; sourceTree = SOURCE_ROOT; };
+		719F063A10F6ED27002955C0 /* CKStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStore.m; path = ../cloudkit/Classes/CKStore.m; sourceTree = SOURCE_ROOT; };
 		71AD9D6610A35F4500C88903 /* CKAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAddressBook.h; path = Classes/CKAddressBook.h; sourceTree = "<group>"; };
 		71AD9D6710A35F4500C88903 /* CKAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAddressBook.m; path = Classes/CKAddressBook.m; sourceTree = "<group>"; };
 		71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditions.h; path = Classes/CKNSArrayAdditions.h; sourceTree = "<group>"; };
@@ -442,8 +454,14 @@
 		719F05CB10F6A804002955C0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				719F062710F6E749002955C0 /* CKDomain.h */,
+				719F062810F6E749002955C0 /* CKDomain.m */,
+				719F062910F6E749002955C0 /* CKItem.h */,
+				719F062A10F6E749002955C0 /* CKItem.m */,
 				719F05CC10F6A818002955C0 /* CKAttribute.h */,
 				719F05CD10F6A818002955C0 /* CKAttribute.m */,
+				719F063910F6ED27002955C0 /* CKStore.h */,
+				719F063A10F6ED27002955C0 /* CKStore.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -690,6 +708,9 @@
 				71B1975910F3EC26007F551A /* CKCoreDataManager.h in Headers */,
 				71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */,
 				719F05CE10F6A818002955C0 /* CKAttribute.h in Headers */,
+				719F062B10F6E749002955C0 /* CKDomain.h in Headers */,
+				719F062D10F6E749002955C0 /* CKItem.h in Headers */,
+				719F063B10F6ED27002955C0 /* CKStore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,6 +884,9 @@
 				71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */,
 				71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */,
 				719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */,
+				719F062C10F6E749002955C0 /* CKDomain.m in Sources */,
+				719F062E10F6E749002955C0 /* CKItem.m in Sources */,
+				719F067A10F6F39E002955C0 /* CKStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

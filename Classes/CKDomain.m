@@ -1,17 +1,17 @@
 //
-//  CKAttribute.m
+//  CKDomain.m
 //
 //  Created by Fred Brunel on 10-01-07.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKAttribute.h"
+#import "CKDomain.h"
 
-@implementation CKAttribute
+@implementation CKDomain
 
 @dynamic name;
 @dynamic value;
 @dynamic createdAt;
-@dynamic item;
+@dynamic items;
 
 @end

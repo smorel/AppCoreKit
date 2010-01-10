@@ -31,9 +31,8 @@
 - (id)insertNewObjectForEntityForName:(NSString *)entityName {
 	id object = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self];
 	
-	if ([object respondsToSelector:@selector(setIdentifier:)]) { [object setIdentifier:[NSString stringWithNewUUID]]; }
+	// FIXME
 	if ([object respondsToSelector:@selector(setCreatedAt:)]) { [object setCreatedAt:[NSDate date]]; }
-	if ([object respondsToSelector:@selector(setUpdatedAt:)]) { [object setUpdatedAt:[NSDate date]]; }
 	
 	return object;
 }
@@ -61,7 +60,7 @@
 	}
 	
 	NSError *error = nil;
-	NSMutableArray *fetchResults = [[self executeFetchRequest:request error:&error] mutableCopy];
+	NSArray *fetchResults = [self executeFetchRequest:request error:&error];
 	
 	if (error) {
 		// FIXME: Send the error back to the client with via a parameter (NSError **)error
@@ -100,18 +99,23 @@
 
 //
 
-- (id)fetchObjectForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate createIfNotFound:(BOOL)createIfNotFound{
+- (id)fetchObjectForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL *)wasCreated {
 	NSArray *fetchResults = [self fetchObjectsForEntityForName:entityName predicate:predicate sortedBy:nil limit:0];	
-	NSAssert3(fetchResults.count > 1, @"Expected 1 object of type %@ but got %d [%@]", entityName, fetchResults.count, predicate);
-
-	if (fetchResults.count == 1) { return [fetchResults objectAtIndex:0]; }
-	if ((fetchResults.count == 0) && createIfNotFound) { return [self insertNewObjectForEntityForName:entityName]; }
+	BOOL created = NO;
+	id object = nil;
 	
-	return nil;
-}
-
-- (id)fetchObjectWithIdentifier:(NSString *)identifier forEntityForName:(NSString *)entityName createIfNotFound:(BOOL)createIfNotFound {
-	return [self fetchObjectForEntityForName:entityName predicate:[NSPredicate predicateWithFormat:@"identifier == %@", identifier] createIfNotFound:createIfNotFound];
+	if ((fetchResults.count == 0) && createIfNotFound) {
+		created = YES;
+		object =  [self insertNewObjectForEntityForName:entityName]; 
+	} else if (fetchResults.count == 1) { 
+		created = NO;
+		object = [fetchResults objectAtIndex:0]; 
+	} else {
+		NSAssert3(fetchResults.count > 1, @"Expected 1 object of type %@ but got %d [%@]", entityName, fetchResults.count, predicate);
+	}
+	
+	if (wasCreated) { *wasCreated = created; }
+	return object;
 }
 
 - (id)fetchFirstObjectForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedBy:(NSString *)sortKey {

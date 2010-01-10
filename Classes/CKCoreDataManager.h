@@ -13,8 +13,8 @@
 	NSURL *_storeURL;
 	NSString *_storeType;
 	NSDictionary *_storeOptions;
-    NSManagedObjectModel *_managedObjectModel;
-    NSManagedObjectContext *_managedObjectContext;	    
+    NSManagedObjectModel *_objectModel;
+    NSManagedObjectContext *_objectContext;	    
     NSPersistentStoreCoordinator *_persistentStoreCoordinator;	
 }
 
@@ -22,8 +22,8 @@
 @property (retain, readonly) NSString *storeType;
 @property (retain, readonly) NSDictionary *storeOptions;
 
-@property (retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (retain, readonly) NSManagedObjectModel *objectModel;
+@property (retain, readonly) NSManagedObjectContext *objectContext;
 @property (retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 + (CKCoreDataManager *)sharedManager;

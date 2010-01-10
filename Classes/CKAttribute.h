@@ -7,14 +7,14 @@
 
 #import <CoreData/CoreData.h>
 
+@class CKItem;
+
 @interface CKAttribute : NSManagedObject {
 }
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *value;
-@property (nonatomic, retain) NSString *identifier;
 @property (nonatomic, retain) NSDate *createdAt;
-@property (nonatomic, retain) NSDate *updatedAt;
-
+@property (nonatomic, retain) CKItem *item;
 
 @end
