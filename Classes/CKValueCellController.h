@@ -11,12 +11,12 @@
 
 
 @interface CKValueCellController : CKAbstractCellController {
-	UITableViewCellStyle style;
-	NSString *label;
-	id<IFCellModel> model;
-	NSString *key;
+	UITableViewCellStyle _style;
+	NSString *_label;
+	id<IFCellModel> _model;
+	NSString *_key;
 }
 
-- (id)initWithStyle:(UITableViewCellStyle)newStyle withLabel:(NSString *)newLabel atKey:(NSString *)newKey inModel:(id<IFCellModel>)newModel;
+- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model;
 
 @end

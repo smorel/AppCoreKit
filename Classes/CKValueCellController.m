@@ -12,32 +12,32 @@
 
 @implementation CKValueCellController
 
-- (id)initWithStyle:(UITableViewCellStyle)newStyle withLabel:(NSString *)newLabel atKey:(NSString *)newKey inModel:(id<IFCellModel>)newModel {
+- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
 	self = [super init];
 	if (self != nil) {
-		style = newStyle;
-		label = [newLabel retain];
-		key = [newKey retain];
-		model = [newModel retain];
+		_style = style;
+		_label = [label retain];
+		_key = [key retain];
+		_model = [model retain];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[label release];
-	[key release];
-	[model release];
+	[_label release];
+	[_key release];
+	[_model release];
 	
 	[super dealloc];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    UITableViewCell *cell = [self tableView:tableView cellWithStyle:style];
+    UITableViewCell *cell = [self tableView:tableView cellWithStyle:_style];
 
-	cell.textLabel.text = label;
+	cell.textLabel.text = _label;
 	cell.textLabel.numberOfLines = 0;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [model objectForKey:key]];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [_model objectForKey:_key]];
 	cell.detailTextLabel.numberOfLines = 0;
 	cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 

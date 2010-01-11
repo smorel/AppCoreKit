@@ -11,14 +11,15 @@
 
 
 @interface CKImageCellController : CKAbstractCellController {
-	UIImage *image;
-	UIImageView *imageView;
-	NSString *label;
-	id<IFCellModel> model;
-	NSString *key;
+	UIImage *_image;
+	UIImageView *_imageView;
+	NSString *_label;
+	id<IFCellModel> _model;
+	NSString *_key;
 }
 
-- (id)initWithImage:(UIImage *)newImage withLabel:(NSString *)newLabel atKey:(NSString *)newKey inModel:(id<IFCellModel>)newModel;
-- (void)setNewImage:(UIImage *)newImage;
+@property (retain, readwrite) UIImage *image;
+
+- (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model;
 
 @end

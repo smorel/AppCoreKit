@@ -11,18 +11,18 @@
 
 @implementation CKButtonCellController
 
-- (id)initWithLabel:(NSString *)newLabel withAction:(SEL)newAction onTarget:(id)newTarget {
+- (id)initWithLabel:(NSString *)label withAction:(SEL)action onTarget:(id)target {
 	self = [super init];
 	if (self != nil) {
-		label = [newLabel retain];
-		self.target = newTarget;
-		self.action = newAction;
+		_label = [label retain];
+		self.target = target;
+		self.action = action;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[label release];
+	[_label release];
 	
 	[super dealloc];
 }
@@ -34,7 +34,7 @@
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
 	cell.textLabel.textAlignment = UITextAlignmentCenter;
 	cell.textLabel.textColor = [UIColor colorWithRed:82.0/255.0 green:102.0/255.0 blue:145.0/255.0 alpha:1.0];
-	cell.textLabel.text = label;
+	cell.textLabel.text = _label;
 
     return cell;
 }

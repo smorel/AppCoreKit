@@ -11,9 +11,9 @@
 
 
 @interface CKButtonCellController : CKAbstractCellController {
-	NSString *label;
+	NSString *_label;
 }
 
-- (id)initWithLabel:(NSString *)newLabel withAction:(SEL)newAction onTarget:(id)newTarget;
+- (id)initWithLabel:(NSString *)label withAction:(SEL)action onTarget:(id)target;
 
 @end

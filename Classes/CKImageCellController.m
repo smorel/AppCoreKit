@@ -12,23 +12,27 @@
 
 @implementation CKImageCellController
 
-- (id)initWithImage:(UIImage *)newImage withLabel:(NSString *)newLabel atKey:(NSString *)newKey inModel:(id<IFCellModel>)newModel {
+@synthesize image = _image;
+
+- (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
 	self = [super init];
 	if (self != nil) {
-		image = [newImage retain];
-		imageView = nil;
-		label = [newLabel retain];
-		key = [newKey retain];
-		model = [newModel retain];
+		self.image = image;
+		_imageView = nil;
+		_label = [label retain];
+		_key = [key retain];
+		_model = [model retain];
 	}
 	return self;
 }
 
 
 - (void)dealloc {
-	[label release];
-	[key release];
-	[model release];
+	[_label release];
+	[_key release];
+	[_model release];
+	[_image release];
+	[_imageView release];
 	
 	[super dealloc];
 }
@@ -37,13 +41,13 @@
 
 	UITableViewCell *cell = [self tableView:tableView cellWithStyle:UITableViewCellStyleDefault];
 	
-	if (image) {
-		cell.imageView.image = image;
+	if (_image) {
+		cell.imageView.image = _image;
 		cell.imageView.frame = CGRectOffset(cell.imageView.frame, 20, 10);
 	}
-	if (label) cell.textLabel.text = [model objectForKey:key];
+	if (_label) cell.textLabel.text = [_model objectForKey:_key];
 	cell.textLabel.numberOfLines = 0;
-	imageView = [cell.imageView retain];
+	_imageView = [cell.imageView retain];
 	
     return cell;
 }
@@ -54,15 +58,18 @@
 	
 	// Calculate the heights
 	// FIXME: Calculate labels width dynamically ! ONLY WORKS IN PORTRAIT !
-	CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] constrainedToSize:CGSizeMake(70, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
+	CGFloat imageWidth = 0;
+	if (_image) imageWidth = _image.size.width;
+	CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] constrainedToSize:CGSizeMake(260-imageWidth, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
 	
-	CGFloat imageHeight = image.size.height;
+	CGFloat imageHeight = _image.size.height;
 	return MAX(labelHeight, imageHeight)+20;
 }
 
-- (void)setNewImage:(UIImage *)newImage {
-	image = [newImage retain];
-	imageView.image = image;
+- (void)setImage:(UIImage *)image {
+	[_image release];
+	_image = [image retain];
+	_imageView.image = _image;
 }
 
 

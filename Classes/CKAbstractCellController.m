@@ -24,12 +24,12 @@
 	return self;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellWithStyle:(UITableViewStyle)newStyle {
-	NSString *cellIdentifier = [[self class] description];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellWithStyle:(UITableViewStyle)style {
+	NSString *cellIdentifier = [NSString stringWithFormat:@"%@-%d", [[self class] description], style];
 	
 	UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:newStyle reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier] autorelease];
 	}
 	
 	// Set the selection style
