@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F3B443C10D803E100F39328 /* CKBasicCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F3B443A10D803E100F39328 /* CKBasicCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F3B443D10D803E100F39328 /* CKBasicCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B443B10D803E100F39328 /* CKBasicCellController.m */; };
+		4F13638C10FB9AA6004470EC /* CKButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F13638A10FB9AA6004470EC /* CKButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F13638D10FB9AA6004470EC /* CKButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F13638B10FB9AA6004470EC /* CKButtonCellController.m */; };
+		4F3B443C10D803E100F39328 /* CKAbstractCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F3B443A10D803E100F39328 /* CKAbstractCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F3B443D10D803E100F39328 /* CKAbstractCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3B443B10D803E100F39328 /* CKAbstractCellController.m */; };
+		4F4429B610F68D9100CC60EA /* CKValueCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4429B410F68D9100CC60EA /* CKValueCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4429B710F68D9100CC60EA /* CKValueCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4429B510F68D9100CC60EA /* CKValueCellController.m */; };
+		4F4BA92A10F78679009F345F /* CKImageCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4BA92810F78679009F345F /* CKImageCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4BA92B10F78679009F345F /* CKImageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BA92910F78679009F345F /* CKImageCellController.m */; };
 		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6710A35F4500C88903 /* CKAddressBook.m */; };
 		712E100E10A4C83100DF6562 /* libCloudKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB518D /* libCloudKit.a */; };
@@ -159,8 +165,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4F3B443A10D803E100F39328 /* CKBasicCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBasicCellController.h; sourceTree = "<group>"; };
-		4F3B443B10D803E100F39328 /* CKBasicCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKBasicCellController.m; sourceTree = "<group>"; };
+		4F13638A10FB9AA6004470EC /* CKButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKButtonCellController.h; sourceTree = "<group>"; };
+		4F13638B10FB9AA6004470EC /* CKButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKButtonCellController.m; sourceTree = "<group>"; };
+		4F3B443A10D803E100F39328 /* CKAbstractCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAbstractCellController.h; sourceTree = "<group>"; };
+		4F3B443B10D803E100F39328 /* CKAbstractCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAbstractCellController.m; sourceTree = "<group>"; };
+		4F4429B410F68D9100CC60EA /* CKValueCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKValueCellController.h; sourceTree = "<group>"; };
+		4F4429B510F68D9100CC60EA /* CKValueCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKValueCellController.m; sourceTree = "<group>"; };
+		4F4BA92810F78679009F345F /* CKImageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageCellController.h; sourceTree = "<group>"; };
+		4F4BA92910F78679009F345F /* CKImageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageCellController.m; sourceTree = "<group>"; };
 		712E100310A4C7E700DF6562 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712E100410A4C7E700DF6562 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		712E109810A4CB0000DF6562 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -402,8 +414,14 @@
 				712E7C6110D199A7008DC18C /* IFTextViewTableView.m */,
 				712E7C6210D199A7008DC18C /* IFValueCellController.h */,
 				712E7C6310D199A7008DC18C /* IFValueCellController.m */,
-				4F3B443A10D803E100F39328 /* CKBasicCellController.h */,
-				4F3B443B10D803E100F39328 /* CKBasicCellController.m */,
+				4F3B443A10D803E100F39328 /* CKAbstractCellController.h */,
+				4F3B443B10D803E100F39328 /* CKAbstractCellController.m */,
+				4F4429B410F68D9100CC60EA /* CKValueCellController.h */,
+				4F4429B510F68D9100CC60EA /* CKValueCellController.m */,
+				4F4BA92810F78679009F345F /* CKImageCellController.h */,
+				4F4BA92910F78679009F345F /* CKImageCellController.m */,
+				4F13638A10FB9AA6004470EC /* CKButtonCellController.h */,
+				4F13638B10FB9AA6004470EC /* CKButtonCellController.m */,
 			);
 			name = IFGenericTableViews;
 			path = ../cloudkit/Vendor/IFGenericTableViews;
@@ -657,7 +675,10 @@
 				715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */,
 				715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */,
 				715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */,
-				4F3B443C10D803E100F39328 /* CKBasicCellController.h in Headers */,
+				4F3B443C10D803E100F39328 /* CKAbstractCellController.h in Headers */,
+				4F4429B610F68D9100CC60EA /* CKValueCellController.h in Headers */,
+				4F4BA92A10F78679009F345F /* CKImageCellController.h in Headers */,
+				4F13638C10FB9AA6004470EC /* CKButtonCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,7 +849,10 @@
 				715E0CBD10DB069100AA4B07 /* CKNSDate+Calculations.m in Sources */,
 				715E0CCF10DB07B100AA4B07 /* CKNSDate+Conversions.m in Sources */,
 				715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */,
-				4F3B443D10D803E100F39328 /* CKBasicCellController.m in Sources */,
+				4F3B443D10D803E100F39328 /* CKAbstractCellController.m in Sources */,
+				4F4429B710F68D9100CC60EA /* CKValueCellController.m in Sources */,
+				4F4BA92B10F78679009F345F /* CKImageCellController.m in Sources */,
+				4F13638D10FB9AA6004470EC /* CKButtonCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

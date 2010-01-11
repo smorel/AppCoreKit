@@ -2,8 +2,8 @@
 //  CKBasicCellController.h
 //  CloudKit
 //
-//  Created by Oli Kenobi on 09-12-15.
-//  Copyright 2009 Kenobi Studios. All rights reserved.
+//  Created by Olivier Collet on 09-12-15.
+//  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,7 +11,7 @@
 #import "IFCellController.h"
 #import "IFCellModel.h"
 
-@interface CKBasicCellController : NSObject <IFCellController> {
+@interface CKAbstractCellController : NSObject <IFCellController> {
 	id _target;
 	SEL _action;
 	
@@ -21,5 +21,7 @@
 @property (nonatomic, retain) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, getter=isSelectable) BOOL selectable;
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellWithStyle:(UITableViewStyle)newStyle;
 
 @end

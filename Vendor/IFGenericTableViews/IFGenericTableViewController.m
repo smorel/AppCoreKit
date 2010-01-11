@@ -11,9 +11,9 @@
 //
 
 #import "IFGenericTableViewController.h"
-
 #import "IFCellController.h"
 #import "IFTextViewTableView.h"
+
 
 // NOTE: this code requires iPhone SDK 2.2. If you need to use it with SDK 2.1, you can enable
 // it here. The table view resizing isn't very smooth, but at least it works :-)
@@ -131,6 +131,19 @@
 		[[[tableGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]
 			tableView:(UITableView *)tableView
 			cellForRowAtIndexPath:indexPath];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (!tableGroups) {
+		[self constructTableGroups];
+	}
+	
+	NSObject<IFCellController> *cellData =
+	[[tableGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	if ([cellData respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
+		return [cellData tableView:tableView heightForRowAtIndexPath:indexPath];
+	}
+	return 44.0f;
 }
 
 
@@ -251,7 +264,7 @@
 
 - (void)loadView
 {
-#if 1
+#if 0
 	// NOTE: This code circumvents the normal loading of the UITableView and replaces it with an instance
 	// of IFTextViewTableView (which includes a workaround for the hit testing problems in a UITextField.)
 	// Check the header file for IFTextViewTableView to see why this is important.

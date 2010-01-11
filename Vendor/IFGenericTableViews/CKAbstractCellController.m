@@ -2,14 +2,14 @@
 //  CKBasicCellController.m
 //  CloudKit
 //
-//  Created by Oli Kenobi on 09-12-15.
-//  Copyright 2009 Kenobi Studios. All rights reserved.
+//  Created by Olivier Collet on 09-12-15.
+//  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKBasicCellController.h"
+#import "CKAbstractCellController.h"
 
 
-@implementation CKBasicCellController
+@implementation CKAbstractCellController
 
 @synthesize target = _target;
 @synthesize action = _action;
@@ -24,6 +24,20 @@
 	return self;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellWithStyle:(UITableViewStyle)newStyle {
+	NSString *cellIdentifier = [[self class] description];
+	
+	UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithStyle:newStyle reuseIdentifier:cellIdentifier] autorelease];
+	}
+	
+	// Set the selection style
+	if (_selectable == YES) cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+	else cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	
+	return cell;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSAssert(@"This method should be implemented in each subclass.", @"");
