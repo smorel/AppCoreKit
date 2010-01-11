@@ -123,4 +123,10 @@
 	return (results.count == 0) ? nil : [results objectAtIndex:0];
 }
 
+//
+
+- (void)deleteObjects:(NSArray *)objects {
+	for (NSManagedObject *object in objects) { [self deleteObject:object]; }
+}
+
 @end

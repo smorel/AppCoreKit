@@ -367,7 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
-				719F05CB10F6A804002955C0 /* Models */,
+				719F05CB10F6A804002955C0 /* Store */,
 				71B1974910F3EC01007F551A /* CoreData */,
 				71AD9D5F10A35EED00C88903 /* Extensions */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
@@ -457,7 +457,7 @@
 			name = "Test Cases";
 			sourceTree = "<group>";
 		};
-		719F05CB10F6A804002955C0 /* Models */ = {
+		719F05CB10F6A804002955C0 /* Store */ = {
 			isa = PBXGroup;
 			children = (
 				719F062710F6E749002955C0 /* CKDomain.h */,
@@ -469,7 +469,7 @@
 				719F063910F6ED27002955C0 /* CKStore.h */,
 				719F063A10F6ED27002955C0 /* CKStore.m */,
 			);
-			name = Models;
+			name = Store;
 			sourceTree = "<group>";
 		};
 		71AD9D5F10A35EED00C88903 /* Extensions */ = {
