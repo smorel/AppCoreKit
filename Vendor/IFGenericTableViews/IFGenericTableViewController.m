@@ -11,9 +11,9 @@
 //
 
 #import "IFGenericTableViewController.h"
-
 #import "IFCellController.h"
 #import "IFTextViewTableView.h"
+
 
 // NOTE: this code requires iPhone SDK 2.2. If you need to use it with SDK 2.1, you can enable
 // it here. The table view resizing isn't very smooth, but at least it works :-)
@@ -33,6 +33,16 @@
 }
 #endif
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	_tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	[self.view addSubview:_tableView];
+}
+
+
 //
 // constructTableGroups
 //
@@ -41,10 +51,10 @@
 //
 - (void)constructTableGroups
 {
-	tableGroups = [[NSArray arrayWithObject:[NSArray array]] retain];
+	tableGroups = [[NSMutableArray array] retain];
 
-	tableHeaders = nil;
-	tableFooters = nil;
+	tableHeaders = [[NSMutableArray array] retain];
+	tableFooters = [[NSMutableArray array] retain];
 }
 
 //
@@ -72,7 +82,7 @@
 {
 	[self clearTableGroups];
 	[self constructTableGroups];
-	[self.tableView reloadData];
+	[_tableView reloadData];
 }
 
 //
@@ -123,11 +133,38 @@
 			cellForRowAtIndexPath:indexPath];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (!tableGroups) {
+		[self constructTableGroups];
+	}
+	
+	NSObject<IFCellController> *cellData =
+	[[tableGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	if ([cellData respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
+		return [cellData tableView:tableView heightForRowAtIndexPath:indexPath];
+	}
+	return 44.0f;
+}
+
+
 //
 // tableView:didSelectRowAtIndexPath:
 //
 // Handle row selection
 //
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (!tableGroups) {
+		[self constructTableGroups];
+	}
+	
+	NSObject<IFCellController> *cellData =
+	[[tableGroups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+	if ([cellData respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)]) {
+		return [cellData tableView:tableView willSelectRowAtIndexPath:indexPath];
+	}
+	return nil;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (!tableGroups)
@@ -215,6 +252,7 @@
 
 	self.model = nil;
 
+	[_tableView release];
 	[self clearTableGroups];
 	[super dealloc];
 }
@@ -226,7 +264,7 @@
 
 - (void)loadView
 {
-#if 1
+#if 0
 	// NOTE: This code circumvents the normal loading of the UITableView and replaces it with an instance
 	// of IFTextViewTableView (which includes a workaround for the hit testing problems in a UITextField.)
 	// Check the header file for IFTextViewTableView to see why this is important.
@@ -247,9 +285,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	// rows (such as choices) that were updated in child view controllers need to be updated
-	[self.tableView reloadData];
+	[_tableView reloadData];
 	
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 }
 
 #if FIRMWARE_21_COMPATIBILITY
@@ -259,10 +297,10 @@
 	CGRect keyboardBounds;
 	[[[notification userInfo] valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&keyboardBounds];
 	
-	CGRect tableViewFrame = [self.tableView frame];
+	CGRect tableViewFrame = [_tableView frame];
 	tableViewFrame.size.height -= keyboardBounds.size.height;
 
-	[self.tableView setFrame:tableViewFrame];
+	[_tableView setFrame:tableViewFrame];
 }
 
 - (void)keyboardHidden:(NSNotification *)notification
@@ -270,13 +308,29 @@
 	CGRect keyboardBounds;
 	[[[notification userInfo] valueForKey:UIKeyboardBoundsUserInfoKey] getValue:&keyboardBounds];
 	
-	CGRect tableViewFrame = [self.tableView frame];
+	CGRect tableViewFrame = [_tableView frame];
 	tableViewFrame.size.height += keyboardBounds.size.height;
 
-	[self.tableView setFrame:tableViewFrame];
+	[_tableView setFrame:tableViewFrame];
 }
 
 #endif
+
+
+// Section Methods
+
+- (void)addSection:(NSArray *)rows withHeaderText:(NSString *)headerText andFooterText:(NSString *)footerText {
+	if (!tableGroups) [self constructTableGroups];
+
+	if (!rows) rows = [NSArray array];
+	[tableGroups addObject:rows];
+	
+	if (!headerText) [tableHeaders addObject:[NSNull null]];
+	else [tableHeaders addObject:headerText];
+	
+	if (!footerText) [tableFooters addObject:[NSNull null]];
+	else [tableFooters addObject:footerText];
+}
 
 @end
 

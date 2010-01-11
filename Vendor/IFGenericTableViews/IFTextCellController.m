@@ -70,8 +70,8 @@
 		cell = [[[IFControlTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier] autorelease];
     }
 	
-	cell.font = [UIFont boldSystemFontOfSize:17.0f];
-	cell.text = label;
+	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+	cell.textLabel.text = label;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	cell.indentationLevel = indentationLevel;
 

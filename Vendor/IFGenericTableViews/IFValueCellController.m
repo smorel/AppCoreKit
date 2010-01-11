@@ -55,6 +55,7 @@
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
 
 //
@@ -73,18 +74,19 @@
 		
     }
 	
-	cell.font = [UIFont boldSystemFontOfSize:17.0f];
+	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
 	cell.accessoryType = UITableViewCellAccessoryNone;
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	if (self.isSelectable == YES) cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+	else cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	cell.indentationLevel = indentationLevel;
 	
 	// NOTE: The documentation states that the indentation width is 10 "points". It's more like 20
 	// pixels and changing the property has no effect on the indentation. We'll use 20.0f here
 	// and cross our fingers that this doesn't screw things up in the future.
 	
-	cell.text = label;
+	cell.textLabel.text = label;
 
-	CGSize labelSize = [label sizeWithFont:cell.font];
+	CGSize labelSize = [label sizeWithFont:cell.textLabel.font];
 	CGFloat viewWidth = 255.0f - (labelSize.width + (20.0f * indentationLevel));
 	
 	id value = [model objectForKey:key];

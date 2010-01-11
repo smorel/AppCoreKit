@@ -78,8 +78,8 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 	
-	cell.text = label;
-	cell.font = [UIFont boldSystemFontOfSize:17.0f];
+	cell.textLabel.text = label;
+	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
 	
     return cell;
 }

@@ -14,16 +14,19 @@
 
 #import "IFCellModel.h"
 
-@interface IFGenericTableViewController : UITableViewController
+@interface IFGenericTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
-	NSArray *tableGroups;
-
-	NSArray *tableHeaders;
-	NSArray *tableFooters;
+	UITableView *_tableView;
+	
+	NSMutableArray *tableGroups;
+	NSMutableArray *tableHeaders;
+	NSMutableArray *tableFooters;
 
 	NSObject<IFCellModel> *model;
 }
 
 @property (nonatomic, retain) NSObject<IFCellModel> *model;
+
+- (void)addSection:(NSArray *)rows withHeaderText:(NSString *)headerText andFooterText:(NSString *)footerText;
 
 @end
