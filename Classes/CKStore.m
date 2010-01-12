@@ -85,7 +85,7 @@
 		
 		BOOL created = NO;
 		CKAttribute *attribute = [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
-																			   predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (value == %@) AND (item == %@) AND (domain == %@)", key, value, item, self.domain]
+																			   predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (value == %@) AND (item == %@)", key, value, item]
 																		createIfNotFound:YES 
 																			  wasCreated:&created];
 		if (created) {
