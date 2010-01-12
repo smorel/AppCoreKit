@@ -5,6 +5,8 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <stdarg.h>
+
 #import "CKStore.h"
 #import "CKCoreDataManager.h"
 
@@ -24,7 +26,7 @@
 @synthesize manager = _manager;
 @synthesize domain = _domain;
 
-//
+#pragma mark CKStore Initialization
 
 + (id)storeWithDomainName:(NSString *)domainName {
 	return [[[CKStore alloc] initWithDomainName:domainName] autorelease];
@@ -47,21 +49,41 @@
 	return self;
 }
 
-// Items
+#pragma mark CKStore Fetch Items
 
-- (NSArray *)fetchItemsUsingPredicate:(NSPredicate *)predicate {
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:0];
+- (NSArray *)fetchItems {
+	return [self fetchItemsWithPredicateFormat:nil arguments:nil];
 }
 
 - (NSArray *)fetchItemsWithNames:(NSArray *)names {
-	return [self fetchItemsUsingPredicate:[NSPredicate predicateWithFormat:@"name IN %@", names]];
+	return (names ? [self fetchItemsWithPredicateFormat:@"(name IN %@)" arguments:[NSArray arrayWithObject:names]] : [self fetchItems]);	
+}
+
+- (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {	
+	// Adds the "domain scope" for the predicate, equivalent to the format string
+	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
+
+	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	[predicateArguments addObjectsFromArray:arguments];
+		
+	NSMutableString *scopedPredicateFormat = [NSMutableString stringWithString:@"(domain == %@)"];
+	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
+	
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:0];
+}
+
+#pragma mark CKStore Delete Items
+
+- (void)deleteItems:(NSArray *)items {
+	[self.manager.objectContext deleteObjects:items];
 }
 
 - (void)deleteItemsWithNames:(NSArray *)names {
-	[self.manager.objectContext deleteObjects:[self fetchItemsWithNames:names]];
+	[self deleteItems:[self fetchItemsWithNames:names]];
 }
 
-// Attributes
+#pragma mark CKStore Insert Attributes
 
 - (void)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName {
 	BOOL created;
@@ -95,6 +117,8 @@
 		}
 	}
 }
+
+#pragma mark CKStore Fetch Attributes
 
 - (NSArray *)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName {
 	return [self fetchAttributesWithNames:names forItemNamed:itemName resultType:CKStoreAttributeResultType];
