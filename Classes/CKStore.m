@@ -53,8 +53,12 @@
 	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:0];
 }
 
+- (NSArray *)fetchItemsWithNames:(NSArray *)names {
+	return [self fetchItemsUsingPredicate:[NSPredicate predicateWithFormat:@"name IN %@", names]];
+}
+
 - (void)deleteItemsWithNames:(NSArray *)names {
-	[self.manager.objectContext deleteObjects:[self fetchItemsUsingPredicate:[NSPredicate predicateWithFormat:@"name IN %@", names]]];
+	[self.manager.objectContext deleteObjects:[self fetchItemsWithNames:names]];
 }
 
 // Attributes

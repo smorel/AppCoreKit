@@ -170,7 +170,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D /* CloudKit */;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CloudKit;
 		};
 /* End PBXContainerItemProxy section */
@@ -927,7 +927,6 @@
 				713F4B0B10FB7C78005367AB /* CKNSDate+Calculations.m in Sources */,
 				713F4B0C10FB7C78005367AB /* CKNSDate+Conversions.m in Sources */,
 				713F4B0D10FB7C7A005367AB /* CKNSString+Validations.m in Sources */,
-				715E0CF910DB0BDE00AA4B07 /* CKNSString+Validations.m in Sources */,
 				4FE162E410FBD6D5002F5B37 /* CKAbstractCellController.m in Sources */,
 				4FE162E610FBD6D5002F5B37 /* CKButtonCellController.m in Sources */,
 				4FE162E810FBD6D5002F5B37 /* CKImageCellController.m in Sources */,

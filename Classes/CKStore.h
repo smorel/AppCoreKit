@@ -52,6 +52,7 @@ typedef enum {
 // Items
 
 - (NSArray *)fetchItemsUsingPredicate:(NSPredicate *)predicate;
+- (NSArray *)fetchItemsWithNames:(NSArray *)names;
 - (void)deleteItemsWithNames:(NSArray *)names;
 
 // Attributes
