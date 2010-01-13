@@ -9,12 +9,16 @@
 //
 // Usage:
 //
-// (1) Insert an item and its attributes (key/value pairs)
+// (1) Instanciate a store on a domain (ie. database); the domain will be created if needed.
+//
+// CKStore *store = [CKStore storeWithDomainName:@"test"];
+//
+// (2) Insert an item and its attributes (key/value pairs)
 //
 // [store insertAttributesWithValuesForNames:[NSDictionary dictionaryWithObjectsAndKeys:@"square", @"shape", @"green", @"color", nil] forItemNamed:@"object1"];
 // NSDictionary *res = [store fetchAttributesWithNames:nil forItemNamed:@"object1" resultType:CKStoreNSDictionaryResultType];
 //
-// (2) Insert a multi-values on an attribute
+// (3) Insert a multi-values on an attribute
 //
 // [store insertAttributesWithValuesForNames:[NSDictionary dictionaryWithObjectsAndKeys:@"blue", @"color", nil] forItemNamed:@"object2"];
 // NSDictionary *res = [store fetchAttributesWithNames:[NSArray arrayWithObject:@"color"] forItemNamed:@"object2" resultType:CKStoreNSDictionaryResultType];
@@ -22,11 +26,11 @@
 // [store insertAttributesWithValuesForNames:[NSDictionary dictionaryWithObjectsAndKeys:@"yellow", @"color", nil] forItemNamed:@"object2"];
 // NSArray *res = [store fetchAttributesWithNames:[NSArray arrayWithObject:@"color"] forItemNamed:@"object2" resultType:CKStoreNSDictionaryResultType];
 //
-// (3) Query for items by selecting values on attributes
+// (4) Query for items by selecting values on attributes
 //
 // NSArray *res = [store fetchItemsWithPredicateFormat:@"(ANY attributes.name == 'color') AND (ANY attributes.value IN {'green', 'blue'})" arguments:nil];
 //
-// (4) Delete items with names
+// (5) Delete items with names
 //
 // [store deleteItemsWithNames:[NSArray arrayWithObjects:@"object1", @"object2", @"object3", nil]];
 //
