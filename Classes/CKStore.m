@@ -88,12 +88,18 @@
 - (void)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName {
 	BOOL created;
 	
+	// Generate an item name automatically, if not provided.
+	
+	NSString *name = itemName ? itemName : [NSString stringWithNewUUID];
+	
+	// Fetch the item
+	
 	CKItem *item = [self.manager.objectContext fetchObjectForEntityForName:@"CKItem" 
-																 predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", itemName, self.domain]
+																 predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", name, self.domain]
 														  createIfNotFound:YES
 																wasCreated:&created];
 	if (created) {
-		item.name = itemName;
+		item.name = name;
 		item.domain = self.domain;
 		[self.domain addItemsObject:item];
 	}
