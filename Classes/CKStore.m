@@ -14,6 +14,8 @@
 #import "CKItem.h"
 #import "CKAttribute.h"
 
+#import "CKNSStringAdditions.h"
+
 @interface CKStore ()
 
 @property (retain, readwrite) CKCoreDataManager *manager;
