@@ -162,6 +162,7 @@
 		71ADA07E10A3740400C88903 /* CXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA06610A3740400C88903 /* CXMLNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA06710A3740400C88903 /* CXMLNode.m */; };
 		71ADA08210A3740400C88903 /* TouchXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA06B10A3740400C88903 /* TouchXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71AE060D1105107300F39258 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713F4B1410FB7CB4005367AB /* CoreData.framework */; };
 		71B1975910F3EC26007F551A /* CKCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1975710F3EC26007F551A /* CKCoreDataManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
 		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -372,6 +373,7 @@
 				7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */,
 				712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */,
 				715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */,
+				71AE060D1105107300F39258 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +405,6 @@
 				719F056B10F6A68F002955C0 /* CloudKit.bundle */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
 				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
-				713F4B1410FB7CB4005367AB /* CoreData.framework */,
 			);
 			name = CloudKit;
 			sourceTree = "<group>";
@@ -411,6 +412,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				713F4B1410FB7CB4005367AB /* CoreData.framework */,
 				71AD9DFB10A362E100C88903 /* UIKit.framework */,
 				71AD9DE410A3629300C88903 /* AddressBook.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,

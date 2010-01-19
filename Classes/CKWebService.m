@@ -10,6 +10,7 @@
 
 #import "ASIHTTPRequest.h"
 #import "CJSONDeserializer.h"
+#import "CXMLDocument.h"
 #import "RegexKitLite.h"
 #import "CKDebug.h"
 
@@ -51,24 +52,34 @@
 	
 	// TODO: Trigger the "error" delegate when the status code > 400
 	
-	NSInteger responseStatusCode = [httpRequest responseStatusCode];
-	NSString *responseStatusMessage = [httpRequest responseStatusMessage];
+	//NSInteger responseStatusCode = [httpRequest responseStatusCode];
+	//NSString *responseStatusMessage = [httpRequest responseStatusMessage];
 		
-	 // TODO: Create a NSDictionary according to the Content-Type (e.g., XML, JSON).
+	// TODO: process the response according to the Content-Type (e.g., XML, JSON).
 	
 	NSError *error = nil;
-	id content;
+	id responseContent;
 
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
 	if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/xml"]) {
-		content = [httpRequest responseString];
+		responseContent = [[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil];
 	} else if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/json"]) {
-		content = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
+		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
 	} else {
-		content = [httpRequest responseString];
+		responseContent = [httpRequest responseString];
 	}
+
+	// Process the content
 	
-	CKDebugLog(@"Response Content %@", content);
+	id content = responseContent;
+	
+	if (request.transformer) {
+		content = [request.transformer request:request transformContent:responseContent];
+	}
+
+	CKDebugLog(@"Response Content %@", content);	
+	
+	// Notifies the delegate
 	
 	if (error && [request.delegate respondsToSelector:@selector(request:didFailWithError:)]) {
 		[request.delegate request:request didFailWithError:error];

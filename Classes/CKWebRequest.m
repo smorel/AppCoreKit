@@ -12,12 +12,14 @@
 @implementation CKWebRequest
 
 @synthesize delegate = _delegate;
+@synthesize transformer = _transformer;
 @synthesize timestamp = _timestamp;
 @synthesize url = _url;
 
-- (id)initWithURL:(NSURL *)url delegate:(id<CKWebRequestDelegate>)delegate {
+- (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
-		_delegate = delegate;
+		_delegate = nil;
+		_transformer = nil;
 		_url = [url retain];
 		_timestamp = [[NSDate date] retain];		
 	}
@@ -32,9 +34,9 @@
 
 //
 
-+ (CKWebRequest *)requestWithMethod:(NSString *)method params:(NSDictionary *)params delegate:(id<CKWebRequestDelegate>)delegate {
-	NSURL *url = params ? [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", method, [NSString stringWithQueryDictionary:params]]] : method;
-	return [[[CKWebRequest alloc] initWithURL:url delegate:delegate] autorelease];
++ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
+	NSURL *theURL = params ? [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]]] : url;
+	return [[[CKWebRequest alloc] initWithURL:theURL] autorelease];
 }
 
 @end
