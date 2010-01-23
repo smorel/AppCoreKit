@@ -21,6 +21,7 @@
 
 @implementation IFGenericTableViewController
 
+@synthesize tableView = _tableView;
 @synthesize model;
 
 #if FIRMWARE_21_COMPATIBILITY

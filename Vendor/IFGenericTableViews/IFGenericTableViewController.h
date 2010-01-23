@@ -25,8 +25,12 @@
 	NSObject<IFCellModel> *model;
 }
 
+@property (nonatomic, readonly) UITableView *tableView;
 @property (nonatomic, retain) NSObject<IFCellModel> *model;
 
+- (void)constructTableGroups;
+- (void)clearTableGroups;
+- (void)updateAndReload;
 - (void)addSection:(NSArray *)rows withHeaderText:(NSString *)headerText andFooterText:(NSString *)footerText;
 
 @end
