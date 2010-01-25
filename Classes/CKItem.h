@@ -27,4 +27,6 @@
 - (void)addAttributes:(NSSet *)value;
 - (void)removeAttributes:(NSSet *)value;
 
+- (NSDictionary *)attributesAsDictionary;
+
 @end
