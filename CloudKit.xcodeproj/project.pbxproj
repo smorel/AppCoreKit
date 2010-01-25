@@ -62,6 +62,8 @@
 		713F4B0C10FB7C78005367AB /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */; };
 		713F4B0D10FB7C7A005367AB /* CKNSString+Validations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */; };
 		713F4B1510FB7CB4005367AB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713F4B1410FB7CB4005367AB /* CoreData.framework */; };
+		715CA159110E374300593672 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 715CA157110E374300593672 /* CKPickerView.m */; };
+		715CA15A110E374300593672 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 715CA158110E374300593672 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0A7E10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */; };
 		715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
 		715E0B3010DADFE100AA4B07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */; };
@@ -220,6 +222,8 @@
 		713F4AB910FB79C7005367AB /* CKStoreTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreTestCase.h; path = ../cloudkit/TestCases/CKStoreTestCase.h; sourceTree = SOURCE_ROOT; };
 		713F4ABA10FB79C7005367AB /* CKStoreTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreTestCase.m; path = ../cloudkit/TestCases/CKStoreTestCase.m; sourceTree = SOURCE_ROOT; };
 		713F4B1410FB7CB4005367AB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		715CA157110E374300593672 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = ../cloudkit/Classes/CKPickerView.m; sourceTree = SOURCE_ROOT; };
+		715CA158110E374300593672 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = ../cloudkit/Classes/CKPickerView.h; sourceTree = SOURCE_ROOT; };
 		715E0A7C10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
 		715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSDateAdditionsTestCase.m; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.m; sourceTree = SOURCE_ROOT; };
 		715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -382,6 +386,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				715CA152110E36F700593672 /* UI */,
 				4FE162DA10FBD6BC002F5B37 /* Forms */,
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
 				719F05CB10F6A804002955C0 /* Store */,
@@ -466,6 +471,15 @@
 			name = IFGenericTableViews;
 			path = ../cloudkit/Vendor/IFGenericTableViews;
 			sourceTree = SOURCE_ROOT;
+		};
+		715CA152110E36F700593672 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				715CA157110E374300593672 /* CKPickerView.m */,
+				715CA158110E374300593672 /* CKPickerView.h */,
+			);
+			name = UI;
+			sourceTree = "<group>";
 		};
 		7173D25E10A4B1AA004E9621 /* AddressBook */ = {
 			isa = PBXGroup;
@@ -753,6 +767,7 @@
 				4FE162E510FBD6D5002F5B37 /* CKButtonCellController.h in Headers */,
 				4FE162E710FBD6D5002F5B37 /* CKImageCellController.h in Headers */,
 				4FE162E910FBD6D5002F5B37 /* CKValueCellController.h in Headers */,
+				715CA15A110E374300593672 /* CKPickerView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,6 +946,7 @@
 				4FE162E610FBD6D5002F5B37 /* CKButtonCellController.m in Sources */,
 				4FE162E810FBD6D5002F5B37 /* CKImageCellController.m in Sources */,
 				4FE162EA10FBD6D5002F5B37 /* CKValueCellController.m in Sources */,
+				715CA159110E374300593672 /* CKPickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
