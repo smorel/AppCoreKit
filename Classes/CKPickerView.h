@@ -10,11 +10,16 @@
 
 @class CKPickerView;
 
+//
+
 @protocol CKPickerViewDelegate
 
 @required
 - (NSInteger)numberOfRowsInPickerView:(CKPickerView *)pickerView;
+
+@optional
 - (UIView *)pickerView:(CKPickerView *)pickerView viewForRow:(NSInteger)row reusingView:(UIView *)view;
+- (NSString *)pickerView:(CKPickerView *)pickerView titleForRow:(NSInteger)row;
 
 @optional
 - (void)pickerView:(CKPickerView *)pickerView didSelectRow:(NSInteger)row;
@@ -43,7 +48,7 @@
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, assign) CGFloat rowHeight;
 @property (nonatomic, assign) BOOL showsSelection;
-@property (nonatomic, assign) NSObject<CKPickerViewDelegate> *delegate;
+@property (nonatomic, assign) IBOutlet NSObject<CKPickerViewDelegate> *delegate;
 
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated;
 - (void)insertRow:(NSUInteger)row animated:(BOOL)animated;

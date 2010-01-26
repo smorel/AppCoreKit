@@ -11,6 +11,7 @@
 // Private API
 
 @interface CKPickerView (Private)
+- (void)setupView;
 - (NSInteger)selectNearestRow;
 - (BOOL)isValidDelegateForSelector:(SEL)selector;
 - (void)delegateDidSelectRow:(NSInteger)row;
@@ -36,23 +37,29 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 
 //
 
+- (void)awakeFromNib {
+	[self setupView];
+}
+
 - (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-		// Setup the table
-		
-		_tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
-		_tableView.showsVerticalScrollIndicator = NO;
-		_tableView.delegate = self;
-		_tableView.dataSource = self;
-		
-		[self addSubview:_tableView];
-		
-		// Default values
-		
-		self.rowHeight = 44.0f;
-		self.showsSelection = NO;
-    }
+    if (self = [super initWithFrame:frame]) { [self setupView]; }
     return self;
+}
+
+- (void)setupView {
+	// Setup the table
+	
+	_tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+	_tableView.showsVerticalScrollIndicator = NO;
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	
+	[self addSubview:_tableView];
+	
+	// Default values
+	
+	self.rowHeight = 44.0f;
+	self.showsSelection = NO;	
 }
 
 - (void)dealloc {
@@ -201,7 +208,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *bufferCellIdentifier = @"CKPickerViewBufferCellIdentifier";
+	static NSString *bufferCellIdentifier = @"CKPickerViewBufferCell";
 	static NSString *cellIdentifier = @"CKPickerViewCell";
 	
 	// Buffer cell
@@ -219,28 +226,25 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	// Standard cell
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	UIView *view;
+	NSUInteger row = (indexPath.row - 1);
 	
-	if (!cell) { 
+	if (cell == nil) { 
 		cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier];
-		view = [_delegate pickerView:self viewForRow:(indexPath.row - 1) reusingView:nil];
-		
-		// FIXME: This calculus should be simpler, the tableCell should have the right size.
-		// On the principle, the frame of the cell should be inversed before the rotation happens.
-//		CGRect cellFrame = CGRectMake(0, 0, _slotWidth, self.frame.size.height);
-//		slotCell.frame = CGRectMake((self.frame.size.height / 2) - (cellFrame.size.width / 2), 
-//									(_slotWidth / 2) - (cellFrame.size.height / 2), 
-//									cellFrame.size.width, cellFrame.size.height);
-//		
-//		slotCell.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(90));
-		
-		view.frame = CGRectMake(0, 0, self.frame.size.width, _rowHeight);
-		[cell.contentView addSubview:view];
-	} else {
+
+		if ([_delegate respondsToSelector:@selector(pickerView:viewForRow:reusingView:)]) {
+			UIView *view = [_delegate pickerView:self viewForRow:row reusingView:nil];
+			view.frame = CGRectMake(0, 0, self.frame.size.width, _rowHeight);
+			[cell.contentView addSubview:view];
+		}
+	} else if ([_delegate respondsToSelector:@selector(pickerView:viewForRow:reusingView:)]) {
 		UIView *reusedView = [cell.contentView.subviews objectAtIndex:0];
 		// TODO: implement a protocol for the views - [reusedCell prepareForReuse];
-		view = [_delegate pickerView:self viewForRow:(indexPath.row - 1) reusingView:reusedView];
+		UIView *view = [_delegate pickerView:self viewForRow:row reusingView:reusedView];
 		NSAssert((view == reusedView), @"The reused view must be returned");
+	}
+	
+	if ([_delegate respondsToSelector:@selector(pickerView:titleForRow:)]) {
+		cell.textLabel.text = [_delegate pickerView:self titleForRow:row];
 	}
 	
 	cell.selectionStyle = self.showsSelection ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
