@@ -36,6 +36,7 @@
 - (void)setPhone:(NSString *)phone forLabel:(NSString *)label;
 - (void)setAddress:(NSDictionary *)address forLabel:(NSString *)label;
 - (void)setWebsite:(NSString *)url forLabel:(NSString *)label;
+- (void)setImage:(UIImage *)image;
 
 @end
 
