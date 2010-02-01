@@ -16,6 +16,8 @@
 
 @interface IFGenericTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
+	UITableViewStyle _style;
+
 	UITableView *_tableView;
 	
 	NSMutableArray *tableGroups;

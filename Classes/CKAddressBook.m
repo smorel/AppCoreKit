@@ -182,6 +182,12 @@
 	[self setMultiValue:url ofType:kABMultiStringPropertyType withLabel:label forProperty:kABPersonURLProperty];
 }
 
+- (void)setImage:(UIImage *)image {
+	if (!image) return;
+	NSData *imageData = UIImagePNGRepresentation(image);
+	ABPersonSetImageData(_record, (CFDataRef)imageData, nil);
+}
+
 @end
 
 //

@@ -45,15 +45,19 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	// Retrieve the cell
-	UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-	
-	// Calculate the heights
-	// FIXME: Calculate labels width dynamically ! ONLY WORKS IN PORTRAIT !
-	CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] constrainedToSize:CGSizeMake(70, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
-	CGFloat detailedLabelHeight = [cell.detailTextLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:17] constrainedToSize:CGSizeMake(240, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
-	
-	return MAX(labelHeight, detailedLabelHeight)+20;
+
+	if (_style == UITableViewCellStyleValue2) {
+		// Retrieve the cell
+		UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+		
+		// Calculate the heights
+		// FIXME: Calculate labels width dynamically ! ONLY WORKS IN PORTRAIT !
+		CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] constrainedToSize:CGSizeMake(70, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
+		CGFloat detailedLabelHeight = [cell.detailTextLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:17] constrainedToSize:CGSizeMake(240, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
+		
+		return MAX(labelHeight, detailedLabelHeight)+20;		
+	}
+	return 44.0f;
 }
 
 @end

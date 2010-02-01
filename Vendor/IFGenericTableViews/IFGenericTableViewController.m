@@ -34,12 +34,29 @@
 }
 #endif
 
+- (id)init {
+    if (self = [super init]) {
+		_style = UITableViewStyleGrouped;
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewStyle)style {
+    if (self = [super init]) {
+		_style = style;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	_tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+	_tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:_style];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
+	_tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | 
+	UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+	UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	[self.view addSubview:_tableView];
 }
 
