@@ -36,6 +36,7 @@
 	
 	NSInteger _numberOfRows;
 	CGFloat _rowHeight;
+	UITableViewCellSelectionStyle _selectionStyle;
 	NSInteger _bufferCellHeight;
 	BOOL _showsSelection;
 	NSObject<CKPickerViewDelegate> *_delegate;
@@ -47,7 +48,7 @@
 @property (nonatomic, retain) UIColor *backgroundColor;
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, assign) CGFloat rowHeight;
-@property (nonatomic, assign) BOOL showsSelection;
+@property (nonatomic, assign) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic, assign) IBOutlet NSObject<CKPickerViewDelegate> *delegate;
 
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated;

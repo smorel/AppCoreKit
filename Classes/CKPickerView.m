@@ -32,7 +32,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 @synthesize backgroundView = _backgroundView;
 @synthesize selectionView = _selectionView;
 @synthesize overlayView = _overlayView;
-@synthesize showsSelection = _showsSelection;
+@synthesize selectionStyle = _selectionStyle;
 @synthesize delegate = _delegate;
 
 //
@@ -59,7 +59,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	// Default values
 	
 	self.rowHeight = 44.0f;
-	self.showsSelection = NO;	
+	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
 }
 
 - (void)dealloc {
@@ -247,7 +247,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 		cell.textLabel.text = [_delegate pickerView:self titleForRow:row];
 	}
 	
-	cell.selectionStyle = self.showsSelection ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+	cell.selectionStyle = self.selectionStyle;
 	
 	return cell;
 }
@@ -270,7 +270,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 
 // Delegates
 
-- (BOOL) isValidDelegateForSelector:(SEL)selector {
+- (BOOL)isValidDelegateForSelector:(SEL)selector {
 	return ((_delegate != nil) && [_delegate respondsToSelector:selector]);
 }
 
