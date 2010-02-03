@@ -12,7 +12,6 @@
 #import "CJSONDeserializer.h"
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
-#import "CKDebug.h"
 
 @implementation CKWebRequest
 
@@ -106,8 +105,6 @@
 	if (_transformer) {
 		content = [_transformer request:self transformContent:responseContent];
 	}
-	
-	CKDebugLog(@"Response Content %@", content);	
 	
 	// Notifies the delegate
 	
