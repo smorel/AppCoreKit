@@ -19,6 +19,8 @@
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11510FFBC030063FB2C /* CKWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF11110FFBC030063FB2C /* CKWebService.m */; };
+		7123DD76111A393F00F5DFB9 /* CKUIImage+Transformations.h in Headers */ = {isa = PBXBuildFile; fileRef = 7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7123DD77111A393F00F5DFB9 /* CKUIImage+Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */; };
 		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6710A35F4500C88903 /* CKAddressBook.m */; };
 		712E100F10A4C83100DF6562 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9DE410A3629300C88903 /* AddressBook.framework */; };
@@ -195,6 +197,8 @@
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
 		710DF11110FFBC030063FB2C /* CKWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebService.m; path = Classes/CKWebService.m; sourceTree = "<group>"; };
+		7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIImage+Transformations.h"; path = "../cloudkit/Classes/CKUIImage+Transformations.h"; sourceTree = SOURCE_ROOT; };
+		7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIImage+Transformations.m"; path = "../cloudkit/Classes/CKUIImage+Transformations.m"; sourceTree = SOURCE_ROOT; };
 		712E100310A4C7E700DF6562 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712E100410A4C7E700DF6562 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		712E109810A4CB0000DF6562 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -402,7 +406,7 @@
 				719F05CB10F6A804002955C0 /* Store */,
 				71B1974910F3EC01007F551A /* CoreData */,
 				710DF0F810FFBB820063FB2C /* WebService */,
-				71AD9D5F10A35EED00C88903 /* Extensions */,
+				71AD9D5F10A35EED00C88903 /* Support */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -497,6 +501,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */,
+				7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */,
 				715CA157110E374300593672 /* CKPickerView.m */,
 				715CA158110E374300593672 /* CKPickerView.h */,
 			);
@@ -540,7 +546,7 @@
 			name = Store;
 			sourceTree = "<group>";
 		};
-		71AD9D5F10A35EED00C88903 /* Extensions */ = {
+		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */,
@@ -565,7 +571,7 @@
 				715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */,
 				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
 			);
-			name = Extensions;
+			name = Support;
 			sourceTree = "<group>";
 		};
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
@@ -792,6 +798,7 @@
 				715CA15A110E374300593672 /* CKPickerView.h in Headers */,
 				710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */,
 				710DF11410FFBC030063FB2C /* CKWebService.h in Headers */,
+				7123DD76111A393F00F5DFB9 /* CKUIImage+Transformations.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,6 +980,7 @@
 				715CA159110E374300593672 /* CKPickerView.m in Sources */,
 				710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */,
 				710DF11510FFBC030063FB2C /* CKWebService.m in Sources */,
+				7123DD77111A393F00F5DFB9 /* CKUIImage+Transformations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
