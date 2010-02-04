@@ -114,7 +114,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
 	if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/xml"]) {
-		responseContent = [[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil];
+		responseContent = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
 	} else if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/json"]) {
 		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
 	} else {
