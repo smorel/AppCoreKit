@@ -7,11 +7,21 @@
 //
 
 #import "CKWebRequest.h"
-#import "CKNSStringAdditions.h"
 #import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
+#import "CKNSStringAdditions.h"
 #import "CJSONDeserializer.h"
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
+
+static ASINetworkQueue *_sharedQueue = nil;
+
+#pragma mark Private Interface
+
+@interface CKWebRequest (Private)
+@end
+
+#pragma mark Implementation
 
 @implementation CKWebRequest
 
@@ -63,6 +73,19 @@
 	}
 }
 
+#pragma mark Private Implementation
+
+- (ASINetworkQueue *)sharedQueue {
+	if (!_sharedQueue) {
+		_sharedQueue = [[ASINetworkQueue queue] retain];
+		[_sharedQueue setShowAccurateProgress:NO];
+		[_sharedQueue setShouldCancelAllRequestsOnFailure:NO];
+		[_sharedQueue setSuspended:NO];
+		[_sharedQueue setMaxConcurrentOperationCount:4];
+	}
+	return _sharedQueue;
+}
+
 // Connect the request (called by CKWebService)
 // TODO: Username and password should be part of the CKWebService and queried here
 
@@ -73,7 +96,7 @@
 	_httpRequest.delegate = self;
 	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
 	_timestamp = [[NSDate date] retain];
-	[_httpRequest startAsynchronous];	
+	[[self sharedQueue] addOperation:_httpRequest];
 }
 
 #pragma mark ASIHTTPRequest Delegate
