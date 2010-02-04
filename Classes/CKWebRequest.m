@@ -14,6 +14,8 @@
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
 
+NSString* const CKWebRequestErrorDomain = @"CKWebRequestErrorDomain";
+
 static ASINetworkQueue *_sharedQueue = nil;
 
 #pragma mark Private Interface
@@ -102,29 +104,35 @@ static ASINetworkQueue *_sharedQueue = nil;
 #pragma mark ASIHTTPRequest Delegate
 
 - (void)requestFinished:(ASIHTTPRequest *)httpRequest {
-	// TODO: Trigger the "error" delegate when the status code > 400
 	
-	//NSInteger responseStatusCode = [httpRequest responseStatusCode];
-	//NSString *responseStatusMessage = [httpRequest responseStatusMessage];
+	if ([httpRequest responseStatusCode] > 400) {
+		NSError *error = [NSError errorWithDomain:CKWebRequestErrorDomain
+									code:[httpRequest responseStatusCode] 
+								userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[httpRequest responseStatusMessage], NSLocalizedDescriptionKey, nil]];
+		if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
+			[_delegate request:self didFailWithError:error];
+		}
+		return;
+	}
 	
-	// TODO: process the response according to the Content-Type (e.g., XML, JSON).
+	// Try to process the response according to the Content-Type (e.g., XML, JSON).
+	// TODO: to be refactored
 	
-	NSError *error = nil;
 	id responseContent;
-	
+	NSError *error = nil;
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
-	if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/xml"]) {
+	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
+	
+	if ([contentType isMatchedByRegex:@"application/xml"]) {
 		responseContent = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
-	} else if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/json"]) {
+	} else if ([contentType isMatchedByRegex:@"application/json"]) {
 		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
 	} else {
 		responseContent = [httpRequest responseString];
 	}
 	
-	// Process the content
-	
+	// Process the content wih the user specified CKWebResponseTransformer
 	id content = responseContent;
-	
 	if (_transformer) {
 		content = [_transformer request:self transformContent:responseContent];
 	}
