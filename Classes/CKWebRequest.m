@@ -127,6 +127,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 		responseContent = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
 		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
+	} else if ([contentType isMatchedByRegex:@"image/"]) {
+		responseContent = [UIImage imageWithData:[httpRequest responseData]];
 	} else {
 		responseContent = [httpRequest responseString];
 	}
