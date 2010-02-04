@@ -14,6 +14,7 @@
 
 @protocol CKWebRequestDelegate;
 @protocol CKWebResponseTransformer;
+
 @class ASIHTTPRequest;
 
 @interface CKWebRequest : NSObject {
