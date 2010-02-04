@@ -7,12 +7,24 @@
 //
 
 #import "CKWebRequest.h"
-#import "CKNSStringAdditions.h"
 #import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
+#import "CKNSStringAdditions.h"
 #import "CJSONDeserializer.h"
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
-#import "CKDebug.h"
+
+NSString* const CKWebRequestErrorDomain = @"CKWebRequestErrorDomain";
+
+static ASINetworkQueue *_sharedQueue = nil;
+
+#pragma mark Private Interface
+
+@interface CKWebRequest (Private)
+- (void)connect:(NSString *)username password:(NSString *)password;
+@end
+
+//
 
 @implementation CKWebRequest
 
@@ -21,6 +33,8 @@
 @synthesize userInfo = _userInfo;
 @synthesize url = _url;
 @synthesize timestamp = _timestamp;
+
+#pragma mark Initialization
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
@@ -43,14 +57,22 @@
 	[super dealloc];
 }
 
-//
+#pragma mark Public API
 
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
-	NSURL *theURL = params ? [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]]] : url;
+	NSURL *theURL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]] : url)];
 	return [[[CKWebRequest alloc] initWithURL:theURL] autorelease];
 }
 
-//
++ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate {
+	CKWebRequest *request = [CKWebRequest requestWithURLString:url params:params];
+	request.delegate = delegate;
+	return request;
+}
+
+- (void)start {
+	[self connect:nil password:nil];
+}
 
 - (void)cancel {
 	if (_httpRequest) {
@@ -64,6 +86,19 @@
 	}
 }
 
+#pragma mark Private
+
+- (ASINetworkQueue *)sharedQueue {
+	if (!_sharedQueue) {
+		_sharedQueue = [[ASINetworkQueue queue] retain];
+		[_sharedQueue setShowAccurateProgress:NO];
+		[_sharedQueue setShouldCancelAllRequestsOnFailure:NO];
+		[_sharedQueue setSuspended:NO];
+		[_sharedQueue setMaxConcurrentOperationCount:4];
+	}
+	return _sharedQueue;
+}
+
 // Connect the request (called by CKWebService)
 // TODO: Username and password should be part of the CKWebService and queried here
 
@@ -74,40 +109,46 @@
 	_httpRequest.delegate = self;
 	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
 	_timestamp = [[NSDate date] retain];
-	[_httpRequest startAsynchronous];	
+	[[self sharedQueue] addOperation:_httpRequest];
 }
 
 #pragma mark ASIHTTPRequest Delegate
 
 - (void)requestFinished:(ASIHTTPRequest *)httpRequest {
-	// TODO: Trigger the "error" delegate when the status code > 400
 	
-	//NSInteger responseStatusCode = [httpRequest responseStatusCode];
-	//NSString *responseStatusMessage = [httpRequest responseStatusMessage];
+	if ([httpRequest responseStatusCode] > 400) {
+		NSError *error = [NSError errorWithDomain:CKWebRequestErrorDomain
+									code:[httpRequest responseStatusCode] 
+								userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[httpRequest responseStatusMessage], NSLocalizedDescriptionKey, nil]];
+		if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
+			[_delegate request:self didFailWithError:error];
+		}
+		return;
+	}
 	
-	// TODO: process the response according to the Content-Type (e.g., XML, JSON).
+	// Try to process the response according to the Content-Type (e.g., XML, JSON).
+	// TODO: to be refactored
 	
-	NSError *error = nil;
 	id responseContent;
-	
+	NSError *error = nil;
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
-	if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/xml"]) {
-		responseContent = [[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil];
-	} else if ([[responseHeaders objectForKey:@"Content-Type"] isMatchedByRegex:@"application/json"]) {
+	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
+	
+	if ([contentType isMatchedByRegex:@"application/xml"]) {
+		responseContent = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
+	} else if ([contentType isMatchedByRegex:@"application/json"]) {
 		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
+	} else if ([contentType isMatchedByRegex:@"image/"]) {
+		responseContent = [UIImage imageWithData:[httpRequest responseData]];
 	} else {
 		responseContent = [httpRequest responseString];
 	}
 	
-	// Process the content
-	
+	// Process the content wih the user specified CKWebResponseTransformer
 	id content = responseContent;
-	
 	if (_transformer) {
 		content = [_transformer request:self transformContent:responseContent];
 	}
-	
-	CKDebugLog(@"Response Content %@", content);	
 	
 	// Notifies the delegate
 	
