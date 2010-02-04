@@ -37,7 +37,9 @@
 // <params> is the query as a key/value NSDictionary; it will be appended as a query string to the URL (e.g., <url>?q="example")
 
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params;
++ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
 
+- (void)start;
 - (void)cancel;
 
 @end

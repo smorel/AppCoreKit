@@ -21,9 +21,10 @@ static ASINetworkQueue *_sharedQueue = nil;
 #pragma mark Private Interface
 
 @interface CKWebRequest (Private)
+- (void)connect:(NSString *)username password:(NSString *)password;
 @end
 
-#pragma mark Implementation
+//
 
 @implementation CKWebRequest
 
@@ -32,6 +33,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 @synthesize userInfo = _userInfo;
 @synthesize url = _url;
 @synthesize timestamp = _timestamp;
+
+#pragma mark Initialization
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
@@ -54,14 +57,22 @@ static ASINetworkQueue *_sharedQueue = nil;
 	[super dealloc];
 }
 
-//
+#pragma mark Public API
 
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
-	NSURL *theURL = params ? [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]]] : url;
+	NSURL *theURL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]] : url)];
 	return [[[CKWebRequest alloc] initWithURL:theURL] autorelease];
 }
 
-//
++ (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate {
+	CKWebRequest *request = [CKWebRequest requestWithURLString:url params:params];
+	request.delegate = delegate;
+	return request;
+}
+
+- (void)start {
+	[self connect:nil password:nil];
+}
 
 - (void)cancel {
 	if (_httpRequest) {
@@ -75,7 +86,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	}
 }
 
-#pragma mark Private Implementation
+#pragma mark Private
 
 - (ASINetworkQueue *)sharedQueue {
 	if (!_sharedQueue) {
