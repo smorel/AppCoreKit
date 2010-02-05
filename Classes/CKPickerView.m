@@ -15,6 +15,7 @@
 - (NSInteger)selectNearestRow;
 - (BOOL)isValidDelegateForSelector:(SEL)selector;
 - (void)delegateDidSelectRow:(NSInteger)row;
+- (void)delegateWillBeginDragging;
 @end
 
 // Helpers
@@ -179,6 +180,10 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	[self delegateDidSelectRow:[_tableView indexPathForSelectedRow].row - 1];
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+	[self delegateWillBeginDragging];
+}
+
 - (NSInteger)selectNearestRow {
 	CGFloat stepHeight = _rowHeight;
 	CGFloat offset = _tableView.contentOffset.y;
@@ -277,6 +282,12 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 - (void)delegateDidSelectRow:(NSInteger)row {
 	if ([self isValidDelegateForSelector:@selector(pickerView:didSelectRow:)]) {
 		[_delegate pickerView:self didSelectRow:row];
+	}
+}
+
+- (void)delegateWillBeginDragging {
+	if ([self isValidDelegateForSelector:@selector(pickerViewWillBeginDragging:)]) {
+		[_delegate pickerViewWillBeginDragging:self];
 	}
 }
 
