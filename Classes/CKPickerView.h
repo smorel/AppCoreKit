@@ -23,6 +23,7 @@
 
 @optional
 - (void)pickerView:(CKPickerView *)pickerView didSelectRow:(NSInteger)row;
+- (void)pickerViewWillBeginDragging:(CKPickerView *)pickerView;
 
 @end
 
