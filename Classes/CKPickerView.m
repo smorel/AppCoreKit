@@ -221,8 +221,8 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	if ((indexPath.row == 0) || (indexPath.row == (_numberOfRows + 1))) {
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:bufferCellIdentifier];
 		if (!cell) { 
-			cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, _bufferCellHeight)
-										  reuseIdentifier:bufferCellIdentifier];
+			cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, _bufferCellHeight)
+										   reuseIdentifier:bufferCellIdentifier] autorelease];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
 		return cell;
@@ -234,7 +234,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	NSUInteger row = (indexPath.row - 1);
 	
 	if (cell == nil) { 
-		cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier];
+		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier] autorelease];
 
 		if ([_delegate respondsToSelector:@selector(pickerView:viewForRow:reusingView:)]) {
 			UIView *view = [_delegate pickerView:self viewForRow:row reusingView:nil];
