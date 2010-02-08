@@ -20,14 +20,17 @@
 @interface CKWebRequest : NSObject {
 	id<CKWebRequestDelegate> _delegate;
 	id<CKWebResponseTransformer> _transformer;
-	id _userInfo;
+	id _valueTarget;
+	NSString *_valueTargetKeyPath;
+	
+	id _userInfo;	
 	NSURL *_url;
 	NSDate *_timestamp;
-	ASIHTTPRequest *_httpRequest;
+	ASIHTTPRequest *_httpRequest; // Weak reference
 }
 
 @property (nonatomic, assign) id<CKWebRequestDelegate> delegate;
-@property (nonatomic, assign) id<CKWebResponseTransformer> transformer;
+@property (nonatomic, assign) id<CKWebResponseTransformer> transformer; // FIXME: assign or retain?
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSDate *timestamp;
 @property (nonatomic, retain) id userInfo;
@@ -39,6 +42,7 @@
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params;
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
 
+- (id)setValueTarget:(id)target forKeyPath:(NSString *)keyPath;
 - (void)start;
 - (void)cancel;
 
@@ -47,9 +51,8 @@
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
-- (void)request:(CKWebRequest *)request didReceiveContent:(id)content;
+- (void)request:(CKWebRequest *)request didReceiveValue:(id)value;
 - (void)request:(CKWebRequest *)request didFailWithError:(NSError *)error;
-//- (void)requestWasCancelled:(CKWebRequest *)request;
 @end
 
 //

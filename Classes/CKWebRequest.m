@@ -20,6 +20,13 @@ static ASINetworkQueue *_sharedQueue = nil;
 
 #pragma mark Private Interface
 
+@interface CKWebRequest ()
+
+@property (nonatomic, assign) id valueTarget;
+@property (nonatomic, retain) NSString *valueTargetKeyPath;
+
+@end
+
 @interface CKWebRequest (Private)
 - (void)connect:(NSString *)username password:(NSString *)password;
 @end
@@ -30,6 +37,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 
 @synthesize delegate = _delegate;
 @synthesize transformer = _transformer;
+@synthesize valueTarget = _valueTarget;
+@synthesize valueTargetKeyPath = _valueTargetKeyPath;
 @synthesize userInfo = _userInfo;
 @synthesize url = _url;
 @synthesize timestamp = _timestamp;
@@ -40,6 +49,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 	if (self = [super init]) {
 		_delegate = nil;
 		_transformer = nil;
+		_valueTarget = nil;
+		_valueTargetKeyPath = nil;
 		_userInfo = nil;
 		_httpRequest = nil;
 		_url = [url retain];
@@ -49,11 +60,16 @@ static ASINetworkQueue *_sharedQueue = nil;
 }
 
 - (void)dealloc {
+	[_valueTargetKeyPath release];
 	[_userInfo release];
 	[_url release];
 	[_timestamp release];
-	[_httpRequest cancel];
-	[_httpRequest release];
+	
+	_valueTargetKeyPath = nil;
+	_userInfo = nil;
+	_timestamp = nil;
+	_httpRequest = nil;
+	
 	[super dealloc];
 }
 
@@ -70,6 +86,13 @@ static ASINetworkQueue *_sharedQueue = nil;
 	return request;
 }
 
+- (id)setValueTarget:(id)target forKeyPath:(NSString *)keyPath {
+	NSAssert(target && keyPath, @"Target and key path must not be NIL");
+	self.valueTarget = target;
+	self.valueTargetKeyPath = keyPath;
+	return self;
+}
+
 - (void)start {
 	[self connect:nil password:nil];
 }
@@ -77,12 +100,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 - (void)cancel {
 	if (_httpRequest) {
 		[_httpRequest cancel];
-		[_httpRequest release];
 		_httpRequest = nil;
-		
-//		if ([_delegate respondsToSelector:@selector(requestWasCancelled:)]) {
-//			[_delegate requestWasCancelled:self];
-//		}
 	}
 }
 
@@ -103,7 +121,16 @@ static ASINetworkQueue *_sharedQueue = nil;
 // TODO: Username and password should be part of the CKWebService and queried here
 
 - (void)connect:(NSString *)username password:(NSString *)password {
-	_httpRequest = [[ASIHTTPRequest requestWithURL:self.url] retain];
+	
+	// Create an ASIHTTPRequest and keep it as a *weak* reference in the CKWebRequest
+	// and implement the following retain cycle,
+	//
+	// CKWebRequest > retained by > ASIHTTPRequest > retained by > ASINetworkQueue
+	//
+	// As soon as the queue is done by the request, objects will be released in the
+	// inverse cascade.
+	
+	_httpRequest = [ASIHTTPRequest requestWithURL:self.url];
 	_httpRequest.username = username;
 	_httpRequest.password = password;
 	_httpRequest.delegate = self;
@@ -129,25 +156,26 @@ static ASINetworkQueue *_sharedQueue = nil;
 	// Try to process the response according to the Content-Type (e.g., XML, JSON).
 	// TODO: to be refactored
 	
-	id responseContent;
+	id responseValue;
 	NSError *error = nil;
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
 	
 	if ([contentType isMatchedByRegex:@"application/xml"]) {
-		responseContent = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
+		responseValue = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseContent = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
+		responseValue = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
 	} else if ([contentType isMatchedByRegex:@"image/"]) {
-		responseContent = [UIImage imageWithData:[httpRequest responseData]];
+		responseValue = [UIImage imageWithData:[httpRequest responseData]];
 	} else {
-		responseContent = [httpRequest responseString];
+		responseValue = [httpRequest responseString]; // FIXME: Risky! The content might not be a string!
 	}
 	
 	// Process the content wih the user specified CKWebResponseTransformer
-	id content = responseContent;
+	
+	id value = responseValue;
 	if (_transformer) {
-		content = [_transformer request:self transformContent:responseContent];
+		value = [_transformer request:self transformContent:responseValue];
 	}
 	
 	// Notifies the delegate
@@ -157,8 +185,14 @@ static ASINetworkQueue *_sharedQueue = nil;
 		return;
 	}
 	
-	if ([_delegate respondsToSelector:@selector(request:didReceiveContent:)]) {
-		[_delegate request:self didReceiveContent:content];
+	if ([_delegate respondsToSelector:@selector(request:didReceiveValue:)]) {
+		[_delegate request:self didReceiveValue:value];
+	}
+	
+	// Notifies the target
+	
+	if (_valueTarget) {
+		[_valueTarget setValue:value forKeyPath:_valueTargetKeyPath];
 	}
 }
 
