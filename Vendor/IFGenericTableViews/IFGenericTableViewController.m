@@ -180,7 +180,7 @@
 	if ([cellData respondsToSelector:@selector(tableView:willSelectRowAtIndexPath:)]) {
 		return [cellData tableView:tableView willSelectRowAtIndexPath:indexPath];
 	}
-	return nil;
+	return indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

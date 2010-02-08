@@ -89,82 +89,100 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"ChoiceDataCell";
-
+	
     IFControlTableViewCell *cell = (IFControlTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	if (cell == nil)
-	{
-		cell = [[[IFControlTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier] autorelease];
+	if (cell == nil) {
+		cell = [[[IFControlTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] autorelease];
 		
     }
 	
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	cell.indentationLevel = indentationLevel;
-	
-	// NOTE: The documentation states that the indentation width is 10 "points". It's more like 20
-	// pixels and changing the property has no effect on the indentation. We'll use 20.0f here
-	// and cross our fingers that this doesn't screw things up in the future.
-	
-	if (! label || [label length] == 0)
-	{
-		// choice acts as label
+	cell.textLabel.text = label;
+	cell.detailTextLabel.text = NSLocalizedString([choices objectAtIndex:[[model objectForKey:key] intValue]], @"");
 
-		id choice = [choices objectAtIndex:[[model objectForKey:key] intValue]];
-		if ([choice isKindOfClass:[NSString class]])
-		{
-			cell.textLabel.text = choice;
-		}
-		else if ([choice isKindOfClass:[IFNamedImage class]])
-		{
-			cell.textLabel.text = [choice name];
-			cell.imageView.image = [choice image];
-		}
-	}
-	else
-	{
-		// choice is subview in cell
-
-		cell.textLabel.text = label;
-
-		CGSize labelSize = [label sizeWithFont:cell.textLabel.font];
-		CGFloat viewWidth = 255.0f - (labelSize.width + (20.0f * indentationLevel));
-		
-		NSUInteger choiceIndex = [[model objectForKey:key] intValue];
-		if (choiceIndex >= [choices count])
-		{
-			choiceIndex = 0;
-			[model setObject:[NSNumber numberWithInt:choiceIndex] forKey:key];
-		}
-		id choice = [choices objectAtIndex:choiceIndex];
-		if ([choice isKindOfClass:[NSString class]])
-		{
-			CGRect frame = CGRectMake(0.0f, 0.0f, viewWidth, 22.0f);
-			UILabel *choiceLabel = [[UILabel alloc] initWithFrame:frame];
-			[choiceLabel setText:choice];
-			[choiceLabel setFont:[UIFont systemFontOfSize:17.0f]];
-			[choiceLabel setBackgroundColor:[UIColor whiteColor]];
-			[choiceLabel setHighlightedTextColor:[UIColor whiteColor]];
-			[choiceLabel setTextAlignment:UITextAlignmentRight];
-			[choiceLabel setTextColor:[UIColor colorWithRed:0.20f green:0.31f blue:0.52f alpha:1.0f]];
-			cell.view = choiceLabel;
-			[choiceLabel release];
-		}
-		else if ([choice isKindOfClass:[IFNamedImage class]])
-		{
-			CGRect frame = CGRectMake(0.0f, 0.0f, viewWidth, 22.0f);
-			UILabel *choiceLabel = [[UILabel alloc] initWithFrame:frame];
-			[choiceLabel setText:[choice name]];
-			[choiceLabel setFont:[UIFont systemFontOfSize:17.0f]];
-			[choiceLabel setBackgroundColor:[UIColor whiteColor]];
-			[choiceLabel setHighlightedTextColor:[UIColor whiteColor]];
-			[choiceLabel setTextAlignment:UITextAlignmentRight];
-			[choiceLabel setTextColor:[UIColor colorWithRed:0.20f green:0.31f blue:0.52f alpha:1.0f]];
-			cell.view = choiceLabel;
-			[choiceLabel release];
-		}
-	}
-	
-    return cell;
+	return cell;
 }
 
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//	static NSString *cellIdentifier = @"ChoiceDataCell";
+//
+//    IFControlTableViewCell *cell = (IFControlTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//	if (cell == nil)
+//	{
+//		cell = [[[IFControlTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier] autorelease];
+//		
+//    }
+//	
+//	cell.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+//	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//	cell.indentationLevel = indentationLevel;
+//	
+//	// NOTE: The documentation states that the indentation width is 10 "points". It's more like 20
+//	// pixels and changing the property has no effect on the indentation. We'll use 20.0f here
+//	// and cross our fingers that this doesn't screw things up in the future.
+//	
+//	if (! label || [label length] == 0)
+//	{
+//		// choice acts as label
+//
+//		id choice = [choices objectAtIndex:[[model objectForKey:key] intValue]];
+//		if ([choice isKindOfClass:[NSString class]])
+//		{
+//			cell.textLabel.text = choice;
+//		}
+//		else if ([choice isKindOfClass:[IFNamedImage class]])
+//		{
+//			cell.textLabel.text = [choice name];
+//			cell.imageView.image = [choice image];
+//		}
+//	}
+//	else
+//	{
+//		// choice is subview in cell
+//
+//		cell.textLabel.text = label;
+//
+//		CGSize labelSize = [label sizeWithFont:cell.textLabel.font];
+//		CGFloat viewWidth = 255.0f - (labelSize.width + (20.0f * indentationLevel));
+//		
+//		NSUInteger choiceIndex = [[model objectForKey:key] intValue];
+//		if (choiceIndex >= [choices count])
+//		{
+//			choiceIndex = 0;
+//			[model setObject:[NSNumber numberWithInt:choiceIndex] forKey:key];
+//		}
+//		id choice = [choices objectAtIndex:choiceIndex];
+//		if ([choice isKindOfClass:[NSString class]])
+//		{
+//			CGRect frame = CGRectMake(0.0f, 0.0f, viewWidth, 22.0f);
+//			UILabel *choiceLabel = [[UILabel alloc] initWithFrame:frame];
+//			[choiceLabel setText:choice];
+//			[choiceLabel setFont:[UIFont systemFontOfSize:17.0f]];
+//			[choiceLabel setBackgroundColor:[UIColor whiteColor]];
+//			[choiceLabel setHighlightedTextColor:[UIColor whiteColor]];
+//			[choiceLabel setTextAlignment:UITextAlignmentRight];
+//			[choiceLabel setTextColor:[UIColor colorWithRed:0.20f green:0.31f blue:0.52f alpha:1.0f]];
+//			cell.view = choiceLabel;
+//			[choiceLabel release];
+//		}
+//		else if ([choice isKindOfClass:[IFNamedImage class]])
+//		{
+//			CGRect frame = CGRectMake(0.0f, 0.0f, viewWidth, 22.0f);
+//			UILabel *choiceLabel = [[UILabel alloc] initWithFrame:frame];
+//			[choiceLabel setText:[choice name]];
+//			[choiceLabel setFont:[UIFont systemFontOfSize:17.0f]];
+//			[choiceLabel setBackgroundColor:[UIColor whiteColor]];
+//			[choiceLabel setHighlightedTextColor:[UIColor whiteColor]];
+//			[choiceLabel setTextAlignment:UITextAlignmentRight];
+//			[choiceLabel setTextColor:[UIColor colorWithRed:0.20f green:0.31f blue:0.52f alpha:1.0f]];
+//			cell.view = choiceLabel;
+//			[choiceLabel release];
+//		}
+//	}
+//	
+//    return cell;
+//}
+//
 @end

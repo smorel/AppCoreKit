@@ -13,11 +13,25 @@
 @implementation CKImageCellController
 
 @synthesize image = _image;
+@synthesize highlightedImage = _highlightedImage;
 
 - (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
 	self = [super init];
 	if (self != nil) {
 		self.image = image;
+		_imageView = nil;
+		_label = [label retain];
+		_key = [key retain];
+		_model = [model retain];
+	}
+	return self;
+}
+
+- (id)initWithImage:(UIImage *)image highlight:(UIImage *)highlightedImage withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
+	self = [super init];
+	if (self != nil) {
+		self.image = image;
+		self.highlightedImage = highlightedImage;
 		_imageView = nil;
 		_label = [label retain];
 		_key = [key retain];
@@ -44,7 +58,9 @@
 	if (_image) {
 		cell.imageView.image = _image;
 		cell.imageView.frame = CGRectOffset(cell.imageView.frame, 20, 10);
+		if (_highlightedImage) cell.imageView.highlightedImage = _highlightedImage;
 	}
+
 	if (_label) cell.textLabel.text = [_model objectForKey:_key];
 	cell.textLabel.numberOfLines = 0;
 	_imageView = [cell.imageView retain];
