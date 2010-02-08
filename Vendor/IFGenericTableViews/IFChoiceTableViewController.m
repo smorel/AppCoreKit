@@ -76,7 +76,7 @@
 	id choice = [choices objectAtIndex:row];
 	if ([choice isKindOfClass:[NSString class]])
 	{
-		cell.textLabel.text = choice;
+		cell.textLabel.text = NSLocalizedString(choice, @"");
 		cell.imageView.image = nil;
 	}
 	else if ([choice isKindOfClass:[IFNamedImage class]])
@@ -87,7 +87,7 @@
 		cell.imageView.image = image;
 		if (imageSize.width < 44.0f)
 		{
-			cell.textLabel.text = [choice name];
+			cell.textLabel.text = NSLocalizedString([choice name], @"");
 		}
 		else
 		{
