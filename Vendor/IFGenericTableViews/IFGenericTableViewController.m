@@ -14,25 +14,14 @@
 #import "IFCellController.h"
 #import "IFTextViewTableView.h"
 
-
-// NOTE: this code requires iPhone SDK 2.2. If you need to use it with SDK 2.1, you can enable
-// it here. The table view resizing isn't very smooth, but at least it works :-)
-#define FIRMWARE_21_COMPATIBILITY 0
-
 @implementation IFGenericTableViewController
 
 @synthesize tableView = _tableView;
 @synthesize model;
 
-#if FIRMWARE_21_COMPATIBILITY
-- (void)awakeFromNib
-{
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShown:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHidden:) name:UIKeyboardWillHideNotification object:nil];
-
-	[super awakeFromNib];
+- (void)awakeFromNib {
+	_style = UITableViewStyleGrouped;
 }
-#endif
 
 - (id)init {
     if (self = [super init]) {
