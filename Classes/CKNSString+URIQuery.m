@@ -95,6 +95,7 @@
 			[pairs setObject:value forKey:key] ;
 		}
 	}
+	[scanner release];
 	
 	return [NSDictionary dictionaryWithDictionary:pairs] ;
 }

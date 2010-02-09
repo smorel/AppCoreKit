@@ -17,7 +17,7 @@
 	if (formatters == nil) { formatters = [[NSMutableDictionary dictionary] retain]; }
 	
 	NSLocale *locale = localeIdentifier 
-	? [[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier]
+	? [[[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier] autorelease]
 	: [NSLocale currentLocale];
 	
 	NSString *key = [NSString stringWithFormat:@"%@-%@", dateFormat, locale.localeIdentifier];

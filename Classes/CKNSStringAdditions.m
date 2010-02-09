@@ -18,7 +18,7 @@
 
 - (NSString *)stringByTruncatingToLength:(NSUInteger)length withEllipsisString:(NSString *)ellipsis {
 	if(self.length <= length) { return self; }
-	NSMutableString *result = [[NSMutableString alloc] initWithString:self];
+	NSMutableString *result = [NSMutableString stringWithString:self];
 	[result insertString:ellipsis atIndex:length - [ellipsis length]];
 	return [[[result substringToIndex:length] copy] autorelease];
 }
