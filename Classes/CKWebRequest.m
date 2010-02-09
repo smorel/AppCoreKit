@@ -153,12 +153,18 @@ static ASINetworkQueue *_sharedQueue = nil;
 		return;
 	}
 	
+	// Notifies the delegate data has been received with the HTTP headers
+	
+	if ([_delegate respondsToSelector:@selector(request:didReceiveData:withResponseHeaders:)]) {
+		[_delegate request:self didReceiveData:[httpRequest responseData] withResponseHeaders:[httpRequest responseHeaders]];
+	}
+	
 	// Try to process the response according to the Content-Type (e.g., XML, JSON).
 	// TODO: to be refactored
 	
 	id responseValue;
-	NSError *error = nil;
 	NSDictionary *responseHeaders = [httpRequest responseHeaders];
+	NSError *error = nil;
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
 	
 	if ([contentType isMatchedByRegex:@"application/xml"]) {

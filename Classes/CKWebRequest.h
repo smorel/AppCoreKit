@@ -51,6 +51,7 @@
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
+- (void)request:(CKWebRequest *)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(CKWebRequest *)request didReceiveValue:(id)value;
 - (void)request:(CKWebRequest *)request didFailWithError:(NSError *)error;
 @end
