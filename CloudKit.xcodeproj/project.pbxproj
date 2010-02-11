@@ -106,6 +106,8 @@
 		719F062E10F6E749002955C0 /* CKItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F062A10F6E749002955C0 /* CKItem.m */; };
 		719F063B10F6ED27002955C0 /* CKStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F063910F6ED27002955C0 /* CKStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F067A10F6F39E002955C0 /* CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F063A10F6ED27002955C0 /* CKStore.m */; };
+		71ACFEB811237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ACFEB611237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h */; };
+		71ACFEB911237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ACFEB711237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m */; };
 		71AD9D7810A35F4600C88903 /* CKNSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AD9D7910A35F4600C88903 /* CKNSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AD9D6910A35F4500C88903 /* CKNSArrayAdditions.m */; };
 		71AD9D7A10A35F4600C88903 /* CKNSDataAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6A10A35F4500C88903 /* CKNSDataAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -278,6 +280,8 @@
 		719F062A10F6E749002955C0 /* CKItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItem.m; path = ../cloudkit/Classes/CKItem.m; sourceTree = SOURCE_ROOT; };
 		719F063910F6ED27002955C0 /* CKStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStore.h; path = ../cloudkit/Classes/CKStore.h; sourceTree = SOURCE_ROOT; };
 		719F063A10F6ED27002955C0 /* CKStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStore.m; path = ../cloudkit/Classes/CKStore.m; sourceTree = SOURCE_ROOT; };
+		71ACFEB611237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDictionaryFromAttributesTransformer.h; path = Classes/CKDictionaryFromAttributesTransformer.h; sourceTree = "<group>"; };
+		71ACFEB711237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDictionaryFromAttributesTransformer.m; path = Classes/CKDictionaryFromAttributesTransformer.m; sourceTree = "<group>"; };
 		71AD9D6610A35F4500C88903 /* CKAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAddressBook.h; path = Classes/CKAddressBook.h; sourceTree = "<group>"; };
 		71AD9D6710A35F4500C88903 /* CKAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAddressBook.m; path = Classes/CKAddressBook.m; sourceTree = "<group>"; };
 		71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditions.h; path = Classes/CKNSArrayAdditions.h; sourceTree = "<group>"; };
@@ -544,6 +548,8 @@
 				719F05CD10F6A818002955C0 /* CKAttribute.m */,
 				719F063910F6ED27002955C0 /* CKStore.h */,
 				719F063A10F6ED27002955C0 /* CKStore.m */,
+				71ACFEB611237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h */,
+				71ACFEB711237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -803,6 +809,7 @@
 				7141A34D111A601500CB74CA /* ASIS3BucketObject.h in Headers */,
 				7141A34F111A601500CB74CA /* ASIS3ListRequest.h in Headers */,
 				7141A351111A601500CB74CA /* ASIS3Request.h in Headers */,
+				71ACFEB811237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -985,6 +992,7 @@
 				7141A34E111A601500CB74CA /* ASIS3BucketObject.m in Sources */,
 				7141A350111A601500CB74CA /* ASIS3ListRequest.m in Sources */,
 				7141A352111A601500CB74CA /* ASIS3Request.m in Sources */,
+				71ACFEB911237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,6 +1054,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

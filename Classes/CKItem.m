@@ -8,6 +8,8 @@
 #import "CKItem.h"
 #import "CKAttribute.h"
 
+#import "CKDictionaryFromAttributesTransformer.h"
+
 @implementation CKItem
 
 @dynamic name;
@@ -17,24 +19,10 @@
 
 @end
 
-@implementation CKItem (CKItemsAccessors)
+@implementation CKItem (CKItemsAttributes)
 
-- (NSDictionary *)attributesAsDictionary {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	
-	for (CKAttribute *attribute in self.attributes) {
-		id object = [result objectForKey:attribute.name];
-		
-		if (object && [object isKindOfClass:[NSArray class]]) {
-			[(NSMutableArray *)object addObject:attribute.value];
-		} else if (object) {
-			[result setObject:[NSMutableArray arrayWithObjects:object, attribute.value, nil] forKey:attribute.name];
-		} else {
-			[result setObject:attribute.value forKey:attribute.name];
-		}
-	}
-	
-	return [NSDictionary dictionaryWithDictionary:result];
+- (NSDictionary *)attributesDictionary {
+	return [[NSValueTransformer valueTransformerForName:@"CKDictionaryFromAttributesTransformer"] transformedValue:self.attributes];
 }
 
 @end

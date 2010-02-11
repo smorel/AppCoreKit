@@ -20,6 +20,8 @@
 
 @end
 
+//
+
 @interface CKItem (CKItemAccessors)
 
 - (void)addAttributesObject:(CKAttribute *)value;
@@ -27,6 +29,12 @@
 - (void)addAttributes:(NSSet *)value;
 - (void)removeAttributes:(NSSet *)value;
 
-- (NSDictionary *)attributesAsDictionary;
+@end
+
+//
+
+@interface CKItem (CKItemAttributes)
+
+- (NSDictionary *)attributesDictionary;
 
 @end
