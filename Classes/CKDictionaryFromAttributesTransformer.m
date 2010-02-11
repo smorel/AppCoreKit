@@ -20,7 +20,6 @@
 }
 
 - (id)transformedValue:(id)value {
-	NSAssert([value isKindOfClass:[NSSet class]], @"Value must be of class NSSet");
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	
 	for (CKAttribute *attribute in ((NSArray *)value)) {
