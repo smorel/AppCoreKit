@@ -7,8 +7,7 @@
 
 #import "CKItem.h"
 #import "CKAttribute.h"
-
-#import "CKDictionaryFromAttributesTransformer.h"
+#import "CKAttributesDictionary.h"
 
 @implementation CKItem
 
@@ -22,7 +21,7 @@
 @implementation CKItem (CKItemsAttributes)
 
 - (NSDictionary *)attributesDictionary {
-	return [[NSValueTransformer valueTransformerForName:@"CKDictionaryFromAttributesTransformer"] transformedValue:self.attributes];
+	return [[[CKAttributesDictionary alloc] initWithItem:self] autorelease];
 }
 
 @end

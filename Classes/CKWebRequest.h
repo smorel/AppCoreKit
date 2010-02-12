@@ -18,22 +18,24 @@
 @class ASIHTTPRequest;
 
 @interface CKWebRequest : NSObject {
+	NSURL *_url;
 	id<CKWebRequestDelegate> _delegate;
 	id<CKWebResponseTransformer> _transformer;
 	id _valueTarget;
 	NSString *_valueTargetKeyPath;
+	id _userInfo;
 	
-	id _userInfo;	
-	NSURL *_url;
-	NSDate *_timestamp;
+	// FIXME: Username & password should be in a "authentication class"
+	NSString *_username;
+	NSString *_password;
+
 	ASIHTTPRequest *_httpRequest; // Weak reference
 }
 
+@property (nonatomic, readonly) NSURL *url;
+@property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) id<CKWebRequestDelegate> delegate;
 @property (nonatomic, assign) id<CKWebResponseTransformer> transformer; // FIXME: assign or retain?
-@property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, retain) id userInfo;
 
 // Create a request from a URL string
 // <url> is an URL as a string with an optional base path (e.g., http://google.com/search)
@@ -43,6 +45,8 @@
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
 
 - (id)setValueTarget:(id)target forKeyPath:(NSString *)keyPath;
+- (void)setBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
+
 - (void)start;
 - (void)cancel;
 
@@ -51,9 +55,9 @@
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
-- (void)request:(CKWebRequest *)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
-- (void)request:(CKWebRequest *)request didReceiveValue:(id)value;
-- (void)request:(CKWebRequest *)request didFailWithError:(NSError *)error;
+- (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
+- (void)request:(id)request didReceiveValue:(id)value;
+- (void)request:(id)request didFailWithError:(NSError *)error;
 @end
 
 //

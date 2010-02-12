@@ -24,11 +24,14 @@ static ASINetworkQueue *_sharedQueue = nil;
 
 @property (nonatomic, assign) id valueTarget;
 @property (nonatomic, retain) NSString *valueTargetKeyPath;
+@property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSString *password;
 
 @end
 
 @interface CKWebRequest (Private)
-- (void)connect:(NSString *)username password:(NSString *)password;
+- (ASINetworkQueue *)sharedQueue;
+- (ASIHTTPRequest *)connect;
 @end
 
 //
@@ -41,7 +44,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 @synthesize valueTargetKeyPath = _valueTargetKeyPath;
 @synthesize userInfo = _userInfo;
 @synthesize url = _url;
-@synthesize timestamp = _timestamp;
+@synthesize username = _username;
+@synthesize password = _password;
 
 #pragma mark Initialization
 
@@ -54,7 +58,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 		_userInfo = nil;
 		_httpRequest = nil;
 		_url = [url retain];
-		_timestamp = nil;		
+		_username = nil;
+		_password = nil;
 	}
 	return self;
 }
@@ -63,12 +68,14 @@ static ASINetworkQueue *_sharedQueue = nil;
 	[_valueTargetKeyPath release];
 	[_userInfo release];
 	[_url release];
-	[_timestamp release];
+	[_username release];
+	[_password release];
 	
 	_valueTargetKeyPath = nil;
 	_userInfo = nil;
-	_timestamp = nil;
 	_httpRequest = nil;
+	_username = nil;
+	_password = nil;
 	
 	[super dealloc];
 }
@@ -93,8 +100,17 @@ static ASINetworkQueue *_sharedQueue = nil;
 	return self;
 }
 
+- (void)setBasicAuthWithUsername:(NSString *)username password:(NSString *)password {
+	self.username = username;
+	self.password = password;
+}
+
+//
+
 - (void)start {
-	[self connect:nil password:nil];
+	// Adds the configured ASIHTTPRequest to the (default) shared queue 
+	// to start immediately.
+	[[self sharedQueue] addOperation:[self connect]];
 }
 
 - (void)cancel {
@@ -120,7 +136,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 // Connect the request (called by CKWebService)
 // TODO: Username and password should be part of the CKWebService and queried here
 
-- (void)connect:(NSString *)username password:(NSString *)password {
+- (ASIHTTPRequest *)connect {
 	
 	// Create an ASIHTTPRequest and keep it as a *weak* reference in the CKWebRequest
 	// and implement the following retain cycle,
@@ -131,12 +147,12 @@ static ASINetworkQueue *_sharedQueue = nil;
 	// inverse cascade.
 	
 	_httpRequest = [ASIHTTPRequest requestWithURL:self.url];
-	_httpRequest.username = username;
-	_httpRequest.password = password;
+	_httpRequest.username = self.username;
+	_httpRequest.password = self.password;
 	_httpRequest.delegate = self;
 	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
-	_timestamp = [[NSDate date] retain];
-	[[self sharedQueue] addOperation:_httpRequest];
+	
+	return _httpRequest;
 }
 
 #pragma mark ASIHTTPRequest Delegate
@@ -200,12 +216,16 @@ static ASINetworkQueue *_sharedQueue = nil;
 	if (_valueTarget) {
 		[_valueTarget setValue:value forKeyPath:_valueTargetKeyPath];
 	}
+	
+	// Cleanup
+	_httpRequest = nil;
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)httpRequest {
 	if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
 		[_delegate request:self didFailWithError:[httpRequest error]];
 	}
+	_httpRequest = nil;
 }
 
 @end

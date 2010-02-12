@@ -15,13 +15,19 @@
 #import "CKWebRequest.h"
 
 @interface CKWebService : NSObject {
+	NSURL *_baseURL;
+	NSDictionary *_defaultParams;
+	NSDictionary *_defaultHeaders;
 	NSString *_username;
 	NSString *_password;
 }
 
-@property (retain, readwrite) NSString *username;
-@property (retain, readwrite) NSString *password;
+- (void)setDefaultBaseURL:(NSURL *)url;
+- (void)setDefaultHeaders:(NSDictionary *)headers;
+- (void)setDefaultParams:(NSDictionary *)params;
+- (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
 
-- (CKWebRequest *)performRequest:(CKWebRequest *)request;
+- (id)performRequest:(CKWebRequest *)request;
+- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate;
 
 @end
