@@ -176,6 +176,8 @@
 		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
 		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */; };
+		71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -352,6 +354,8 @@
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSManagedObjectContext+Requests.m"; path = "Classes/CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
+		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIColorAdditions.h; path = Classes/CKUIColorAdditions.h; sourceTree = "<group>"; };
+		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIColorAdditions.m; path = Classes/CKUIColorAdditions.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libCloudKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -584,6 +588,8 @@
 				715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */,
 				715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */,
 				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
+				71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */,
+				71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -817,6 +823,7 @@
 				7141A351111A601500CB74CA /* ASIS3Request.h in Headers */,
 				71ACFEB811237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h in Headers */,
 				719093F1112474CD003489BB /* CKAttributesDictionary.h in Headers */,
+				71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1001,6 +1008,7 @@
 				7141A352111A601500CB74CA /* ASIS3Request.m in Sources */,
 				71ACFEB911237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m in Sources */,
 				719093F2112474CD003489BB /* CKAttributesDictionary.m in Sources */,
+				71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
