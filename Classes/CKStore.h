@@ -59,6 +59,10 @@ typedef enum {
 - (NSArray *)fetchItemsWithNames:(NSArray *)names;
 - (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments;
 
+//
+
+- (NSUInteger)countItems;
+
 // Delete Items
 
 - (void)deleteItems:(NSArray *)items;
@@ -66,7 +70,7 @@ typedef enum {
 
 // Insert Attributes
 
-- (void)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName;
+- (NSString *)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName;
 
 // Fetch Attributes
 

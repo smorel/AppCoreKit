@@ -59,6 +59,9 @@
 		[request setFetchLimit:limit];
 	}
 	
+	// Set batch size
+	[request setFetchBatchSize:20];
+	
 	NSError *error = nil;
 	NSArray *fetchResults = [self executeFetchRequest:request error:&error];
 	

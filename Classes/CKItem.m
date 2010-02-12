@@ -6,6 +6,9 @@
 //
 
 #import "CKItem.h"
+#import "CKAttribute.h"
+
+#import "CKDictionaryFromAttributesTransformer.h"
 
 @implementation CKItem
 
@@ -13,5 +16,13 @@
 @dynamic createdAt;
 @dynamic domain;
 @dynamic attributes;
+
+@end
+
+@implementation CKItem (CKItemsAttributes)
+
+- (NSDictionary *)attributesDictionary {
+	return [[NSValueTransformer valueTransformerForName:@"CKDictionaryFromAttributesTransformer"] transformedValue:self.attributes];
+}
 
 @end

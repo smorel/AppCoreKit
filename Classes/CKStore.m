@@ -75,6 +75,13 @@
 	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:0];
 }
 
+#pragma mark CKStore Count Items
+
+- (NSUInteger)countItems {
+	return [self.manager.objectContext countObjectsForEntityForName:@"CKItem" 
+														  predicate:[NSPredicate predicateWithFormat:@"(domain == %@)", self.domain]];
+}
+
 #pragma mark CKStore Delete Items
 
 - (void)deleteItems:(NSArray *)items {
@@ -87,7 +94,7 @@
 
 #pragma mark CKStore Insert Attributes
 
-- (void)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName {
+- (NSString *)insertAttributesWithValuesForNames:(NSDictionary *)attributes forItemNamed:(NSString *)itemName {
 	BOOL created;
 	
 	// Generate an item name automatically, if not provided.
@@ -124,6 +131,8 @@
 			[item addAttributesObject:attribute];
 		}
 	}
+	
+	return name;
 }
 
 #pragma mark CKStore Fetch Attributes
@@ -145,27 +154,12 @@
 																		 predicate:predicate 
 																	  sortedByKeys:nil 
 																			 limit:0];
+	
 	if (resultType == CKStoreAttributeResultType) {
 		return attributes;
+	} else {
+		return [[NSValueTransformer valueTransformerForName:@"CKDictionaryFromAttributesTransformer"] transformedValue:attributes];
 	}
-	
-	// Create a NSDictionary from the list of attributes
-	
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	
-	for (CKAttribute *attribute in attributes) {
-		id object = [result objectForKey:attribute.name];
-		
-		if (object && [object isKindOfClass:[NSArray class]]) {
-			[(NSMutableArray *)object addObject:attribute.value];
-		} else if (object) {
-			[result setObject:[NSMutableArray arrayWithObjects:object, attribute.value, nil] forKey:attribute.name];
-		} else {
-			[result setObject:attribute.value forKey:attribute.name];
-		}
-	}
-	
-	return [NSDictionary dictionaryWithDictionary:result];
 }
 
 @end
