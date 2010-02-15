@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const CKSpecialURLCharacters;
+
 @interface NSString (CKNSStringURIQueryAdditions)
 
 // Encode percent escapes
