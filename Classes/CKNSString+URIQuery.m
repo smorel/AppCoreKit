@@ -9,6 +9,8 @@
 
 #import "CKNSString+URIQuery.h"
 
+NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
+
 @implementation NSString (CKNSStringURIQueryAdditions)
 
 - (NSString*)encodePercentEscapesPerRFC2396 {
@@ -48,13 +50,10 @@
 + stringWithQueryDictionary:(NSDictionary*)dictionary {
 	NSMutableString* string = [NSMutableString string] ;
 	NSUInteger countdown = [dictionary count] ;
-	NSString* additionsToRFC2396 = @"+=;" ;
 	for (NSString* key in dictionary) {
 		[string appendFormat:@"%@=%@",
-		 [key encodePercentEscapesPerRFC2396ButNot:nil
-										   butAlso:additionsToRFC2396],
-		 [[dictionary valueForKey:key] encodePercentEscapesPerRFC2396ButNot:nil
-																	butAlso:additionsToRFC2396]
+		 [key encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters],
+		 [[dictionary valueForKey:key] encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters]
 		 ] ;
 		countdown-- ;
 		if (countdown > 0) {
