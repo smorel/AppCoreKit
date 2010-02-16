@@ -12,11 +12,12 @@
 
 @interface CKValueCellController : CKAbstractCellController {
 	UITableViewCellStyle _style;
-	NSString *_label;
-	id<IFCellModel> _model;
-	NSString *_key;
+	NSString *_text;
+	id _value;
 }
 
-- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model;
+- (id)initWithStyle:(UITableViewCellStyle)style text:(NSString *)text value:(id)value;
+
+- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model DEPRECATED_ATTRIBUTE;
 
 @end

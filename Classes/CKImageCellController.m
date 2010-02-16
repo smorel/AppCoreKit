@@ -14,15 +14,22 @@
 
 @synthesize image = _image;
 @synthesize highlightedImage = _highlightedImage;
+@synthesize accessoryType = _accessoryType;
+
+- (id)initWithImage:(UIImage *)image title:(NSString *)title {
+	if (self = [super init]) {
+		self.image = image;
+		_label = [title retain];
+	}
+	return self;
+	
+}
 
 - (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
 	self = [super init];
 	if (self != nil) {
 		self.image = image;
-		_imageView = nil;
-		_label = [label retain];
-		_key = [key retain];
-		_model = [model retain];
+		_label = [[model objectForKey:key] retain];
 	}
 	return self;
 }
@@ -32,10 +39,7 @@
 	if (self != nil) {
 		self.image = image;
 		self.highlightedImage = highlightedImage;
-		_imageView = nil;
-		_label = [label retain];
-		_key = [key retain];
-		_model = [model retain];
+		_label = [[model objectForKey:key] retain];
 	}
 	return self;
 }
@@ -43,11 +47,7 @@
 
 - (void)dealloc {
 	[_label release];
-	[_key release];
-	[_model release];
 	[_image release];
-	[_imageView release];
-	
 	[super dealloc];
 }
 
@@ -58,12 +58,12 @@
 	if (_image) {
 		cell.imageView.image = _image;
 		cell.imageView.frame = CGRectOffset(cell.imageView.frame, 20, 10);
-		if (_highlightedImage) cell.imageView.highlightedImage = _highlightedImage;
+		cell.imageView.highlightedImage = _highlightedImage;
 	}
 
-	if (_label) cell.textLabel.text = [_model objectForKey:_key];
+	cell.textLabel.text = _label;
 	cell.textLabel.numberOfLines = 0;
-	_imageView = [cell.imageView retain];
+	cell.accessoryType = _accessoryType;
 	
     return cell;
 }
@@ -83,10 +83,7 @@
 }
 
 - (void)setImage:(UIImage *)image {
-	[_image release];
-	_image = [image retain];
-	_imageView.image = _image;
+	[_image release]; _image = [image retain];
 }
-
 
 @end

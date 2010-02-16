@@ -13,16 +13,17 @@
 @interface CKImageCellController : CKAbstractCellController {
 	UIImage *_image;
 	UIImage *_highlightedImage;
-	UIImageView *_imageView;
 	NSString *_label;
-	id<IFCellModel> _model;
-	NSString *_key;
+	UITableViewCellAccessoryType _accessoryType;
 }
 
 @property (retain, readwrite) UIImage *image;
 @property (retain, readwrite) UIImage *highlightedImage;
+@property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 
-- (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model;
-- (id)initWithImage:(UIImage *)image highlight:(UIImage *)highlightedImage withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model;
+- (id)initWithImage:(UIImage *)image title:(NSString *)title;
+
+- (id)initWithImage:(UIImage *)image withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model DEPRECATED_ATTRIBUTE;
+- (id)initWithImage:(UIImage *)image highlight:(UIImage *)highlightedImage withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model DEPRECATED_ATTRIBUTE;
 
 @end
