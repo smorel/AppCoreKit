@@ -14,6 +14,7 @@
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize selectable = _selectable;
+@synthesize accessoryType = _accessoryType;
 
 
 - (id)init {
@@ -35,7 +36,9 @@
 	// Set the selection style
 	if (_selectable == YES) cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 	else cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	
+
+	cell.accessoryType = _accessoryType;
+
 	return cell;
 }
 

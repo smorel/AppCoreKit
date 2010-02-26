@@ -16,11 +16,13 @@
 	SEL _action;
 	
 	BOOL _selectable;
+	UITableViewCellAccessoryType _accessoryType;
 }
 
 @property (nonatomic, retain) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, getter=isSelectable) BOOL selectable;
+@property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellWithStyle:(UITableViewStyle)newStyle;
 
