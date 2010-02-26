@@ -12,22 +12,27 @@
 
 @implementation CKValueCellController
 
-- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
-	self = [super init];
-	if (self != nil) {
+- (id)initWithStyle:(UITableViewCellStyle)style text:(NSString *)text value:(id)value {
+	if (self = [super init]) {
 		_style = style;
-		_label = [label retain];
-		_key = [key retain];
-		_model = [model retain];
+		_text = [text retain];
+		_value = [value retain];
+	}
+	return self;
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style withLabel:(NSString *)label atKey:(NSString *)key inModel:(id<IFCellModel>)model {
+	if (self = [super init]) {
+		_style = style;
+		_text = [label retain];
+		_value = [[model objectForKey:key] retain];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[_label release];
-	[_key release];
-	[_model release];
-	
+	[_text release];
+	[_value release];
 	[super dealloc];
 }
 
@@ -35,9 +40,9 @@
 	
     UITableViewCell *cell = [self tableView:tableView cellWithStyle:_style];
 
-	cell.textLabel.text = _label;
+	cell.textLabel.text = _text;
 	cell.textLabel.numberOfLines = 0;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [_model objectForKey:_key]];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", _value];
 	cell.detailTextLabel.numberOfLines = 0;
 	cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 
