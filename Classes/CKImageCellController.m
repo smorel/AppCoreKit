@@ -14,7 +14,6 @@
 
 @synthesize image = _image;
 @synthesize highlightedImage = _highlightedImage;
-@synthesize accessoryType = _accessoryType;
 
 - (id)initWithImage:(UIImage *)image title:(NSString *)title {
 	if (self = [super init]) {
@@ -63,7 +62,6 @@
 
 	cell.textLabel.text = _label;
 	cell.textLabel.numberOfLines = 0;
-	cell.accessoryType = _accessoryType;
 	
     return cell;
 }

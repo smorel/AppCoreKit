@@ -14,12 +14,10 @@
 	UIImage *_image;
 	UIImage *_highlightedImage;
 	NSString *_label;
-	UITableViewCellAccessoryType _accessoryType;
 }
 
 @property (retain, readwrite) UIImage *image;
 @property (retain, readwrite) UIImage *highlightedImage;
-@property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 
 - (id)initWithImage:(UIImage *)image title:(NSString *)title;
 
