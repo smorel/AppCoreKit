@@ -14,6 +14,8 @@
 
 @synthesize image = _image;
 @synthesize highlightedImage = _highlightedImage;
+@synthesize adjustsFontSizeToFitWidth = _adjustsFontSizeToFitWidth;
+@synthesize fontSize = _fontSize;
 
 - (id)initWithImage:(UIImage *)image title:(NSString *)title {
 	if (self = [super init]) {
@@ -29,6 +31,8 @@
 	if (self != nil) {
 		self.image = image;
 		_label = [[model objectForKey:key] retain];
+		_adjustsFontSizeToFitWidth = NO;
+		_fontSize = 17.0f;
 	}
 	return self;
 }
@@ -61,7 +65,9 @@
 	}
 
 	cell.textLabel.text = _label;
-	cell.textLabel.numberOfLines = 0;
+	cell.textLabel.numberOfLines = _adjustsFontSizeToFitWidth ? 1 : 0;
+	cell.textLabel.font = [UIFont boldSystemFontOfSize:_fontSize];
+	cell.textLabel.adjustsFontSizeToFitWidth = _adjustsFontSizeToFitWidth;
 	
     return cell;
 }
@@ -74,7 +80,7 @@
 	// FIXME: Calculate labels width dynamically ! ONLY WORKS IN PORTRAIT !
 	CGFloat imageWidth = 0;
 	if (_image) imageWidth = _image.size.width;
-	CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] constrainedToSize:CGSizeMake(260-imageWidth, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
+	CGFloat labelHeight = [cell.textLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:_fontSize] constrainedToSize:CGSizeMake(260-imageWidth, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
 	
 	CGFloat imageHeight = _image.size.height;
 	return MAX(labelHeight, imageHeight)+20;

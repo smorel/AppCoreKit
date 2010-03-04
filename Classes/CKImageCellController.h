@@ -14,10 +14,14 @@
 	UIImage *_image;
 	UIImage *_highlightedImage;
 	NSString *_label;
+	BOOL _adjustsFontSizeToFitWidth;
+	CGFloat _fontSize;
 }
 
 @property (retain, readwrite) UIImage *image;
 @property (retain, readwrite) UIImage *highlightedImage;
+@property (assign, readwrite) BOOL adjustsFontSizeToFitWidth;
+@property (assign, readwrite) CGFloat fontSize;
 
 - (id)initWithImage:(UIImage *)image title:(NSString *)title;
 
