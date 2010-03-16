@@ -22,10 +22,13 @@
 	NSString *_password;
 }
 
-- (void)setDefaultBaseURL:(NSURL *)url;
-- (void)setDefaultHeaders:(NSDictionary *)headers;
-- (void)setDefaultParams:(NSDictionary *)params;
+@property (nonatomic, retain, readwrite) NSURL *baseURL;
+@property (nonatomic, retain, readwrite) NSDictionary *defaultParams;
+@property (nonatomic, retain, readwrite) NSDictionary *defaultHeaders;
+
 - (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
+
+//
 
 - (id)performRequest:(CKWebRequest *)request;
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate;

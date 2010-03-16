@@ -13,14 +13,10 @@
 
 @interface CKWebService ()
 
-@property (nonatomic, retain) NSURL *baseURL;
-@property (nonatomic, retain) NSDictionary *defaultParams;
-@property (nonatomic, retain) NSDictionary *defaultHeaders;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
 
 @end
-
 
 //
 
@@ -41,27 +37,15 @@
 }
 
 - (void)dealloc {
-	[_baseURL release];
-	[_defaultParams release];
-	[_defaultHeaders release];
-	[_username release];
-	[_password release];
+	self.baseURL = nil;
+	self.defaultParams = nil;
+	self.defaultHeaders = nil;
+	self.username = nil;
+	self.password = nil;
 	[super dealloc];
 }
 
 #pragma mark Properties
-
-- (void)setDefaultBaseURL:(NSURL *)url {
-	self.baseURL = url;
-}
-
-- (void)setDefaultParams:(NSDictionary *)params {
-	self.defaultParams = params;
-}
-
-- (void)setDefaultHeaders:(NSDictionary *)headers {
-	self.defaultHeaders = headers;
-}
 
 - (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password {
 	self.username = username;
