@@ -66,12 +66,13 @@
 
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
 	// TODO: We should check the validity of the URL somewhere, maybe in CKWebRequest
-	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingPathComponent:path] : path;
+	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingString:path] : path;
 	
-	NSDictionary *theParams;
+	NSDictionary *theParams = nil;
 	if (self.defaultParams) {
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.defaultParams];
 		[dic addEntriesFromDictionary:params];
+		theParams = dic;
 	} else {
 		theParams = params;
 	}
