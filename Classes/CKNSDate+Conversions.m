@@ -69,10 +69,19 @@
 // Date minimal ISO8601
 //
 
-- (NSString *)stringWithISO8601TimePointFormat {
++ (NSDate *)dateFromStringWithISO8601TimePointFormat:(NSString *)string {
 	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-	formatter.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
+	formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
 	formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+	return [formatter dateFromString:string];
+}
+
+- (NSString *)stringWithISO8601TimePointMinimalFormat {
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+	formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	formatter.dateFormat = @"yyyyMMdd'T'HHmmss'Z'";
 	return [formatter stringFromDate:self];
 }
 
