@@ -356,6 +356,7 @@
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSManagedObjectContext+Requests.m"; path = "Classes/CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
+		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
 		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIColorAdditions.h; path = Classes/CKUIColorAdditions.h; sourceTree = "<group>"; };
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIColorAdditions.m; path = Classes/CKUIColorAdditions.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -429,6 +430,7 @@
 				034768DFFF38A50411DB9C8B /* Products */,
 				719F056B10F6A68F002955C0 /* CloudKit.bundle */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
+				71D6C00B115440AA004C779E /* CloudKit-Info.plist */,
 				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
 			);
 			name = CloudKit;
@@ -1044,6 +1046,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudKit_Prefix.pch;
+				INFOPLIST_FILE = "CloudKit-Info.plist";
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = CloudKit;
 			};
@@ -1062,6 +1065,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudKit_Prefix.pch;
+				INFOPLIST_FILE = "CloudKit-Info.plist";
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = CloudKit;
 			};
@@ -1072,6 +1076,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 5;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
@@ -1083,7 +1088,8 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos3.1.3;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -1092,6 +1098,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 5;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1100,7 +1107,8 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos3.1.3;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
