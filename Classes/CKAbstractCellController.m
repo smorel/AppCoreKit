@@ -55,9 +55,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:_selectable];
 	if (_selectable == YES && _target && [_target respondsToSelector:_action]) {
-		[_target performSelector:_action];
+		[_target performSelector:_action withObject:self];
 	}
 }
-
 
 @end
