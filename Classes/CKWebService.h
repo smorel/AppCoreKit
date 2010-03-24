@@ -31,6 +31,8 @@
 //
 
 - (id)performRequest:(CKWebRequest *)request;
+
+- (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params;
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate;
 
 @end

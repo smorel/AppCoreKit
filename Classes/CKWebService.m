@@ -55,16 +55,16 @@
 #pragma mark Create Requests
 
 - (id)performRequest:(CKWebRequest *)request {
-	// TODO put the request in a different queue than the shared queue (default)	
-	//ASIHTTPRequest *httpRequest = [request performSelector:@selector(connect)];
-	//[httpRequest start];
+	// TODO: put the request in a different queue than the shared queue (default)	
+	// ASIHTTPRequest *httpRequest = [request performSelector:@selector(connect)];
+	// [httpRequest start];
 	[request start];
 	return request;
 }
 
 #pragma mark Request Facade
 
-- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
+- (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params {
 	// TODO: We should check the validity of the URL somewhere, maybe in CKWebRequest
 	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingString:path] : path;
 	
@@ -76,11 +76,16 @@
 	} else {
 		theParams = params;
 	}
-		
-	CKWebRequest *request = [CKWebRequest requestWithURLString:theURL params:theParams delegate:delegate];
-	[request setBasicAuthWithUsername:self.username password:self.password];
-	[request setDelegate:delegate];
 	
+	CKWebRequest *request = [CKWebRequest requestWithURLString:theURL params:theParams];
+	[request setBasicAuthWithUsername:self.username password:self.password];
+	
+	return request;
+}
+
+- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
+	CKWebRequest *request = [self getRequestForPath:path params:params];
+	[request setDelegate:delegate];
 	return [self performRequest:request];
 }
 
