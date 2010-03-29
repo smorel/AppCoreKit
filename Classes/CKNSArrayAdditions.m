@@ -54,14 +54,20 @@
 	return NO;
 }
 
-- (NSArray *)arrayByApplyingSelector:(SEL)selector {
-	NSMutableArray *array = [NSMutableArray array];
-	for (NSObject *object in self) {
-		if ([object respondsToSelector:selector]) {
-			[array addObject:[object performSelector:selector]];
+- (NSArray *)arrayWithValuesByMakingObjectsPerformSelector:(SEL)selector withObject:(id)object {
+	NSMutableArray *result = [NSMutableArray array];
+	for (id anObject in self) {
+		id value = nil;
+		if ([anObject respondsToSelector:selector]) {
+			value = [anObject performSelector:selector withObject:object];
+		}
+		if (value == nil) {
+			[result addObject:[NSNull null]];
+		} else {
+			[result addObject:value];
 		}
 	}
-	return array;
+	return result;
 }
 
 @end
