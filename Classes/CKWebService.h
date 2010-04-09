@@ -16,15 +16,15 @@
 
 @interface CKWebService : NSObject {
 	NSURL *_baseURL;
-	NSDictionary *_defaultParams;
-	NSDictionary *_defaultHeaders;
+	NSMutableDictionary *_defaultParams;
+	NSMutableDictionary *_defaultHeaders;
 	NSString *_username;
 	NSString *_password;
 }
 
 @property (nonatomic, retain, readwrite) NSURL *baseURL;
-@property (nonatomic, retain, readwrite) NSDictionary *defaultParams;
-@property (nonatomic, retain, readwrite) NSDictionary *defaultHeaders;
+@property (nonatomic, retain, readonly) NSMutableDictionary *defaultParams;
+@property (nonatomic, retain, readonly) NSMutableDictionary *defaultHeaders;
 
 - (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password;
 

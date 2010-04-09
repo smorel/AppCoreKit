@@ -13,8 +13,10 @@
 
 @interface CKWebService ()
 
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, retain, readwrite) NSString *username;
+@property (nonatomic, retain, readwrite) NSString *password;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *defaultParams;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *defaultHeaders;
 
 @end
 
@@ -32,6 +34,8 @@
 
 - (id)init {
 	if (self = [super init]) {
+		self.defaultParams = [NSMutableDictionary dictionary];
+		self.defaultHeaders = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
