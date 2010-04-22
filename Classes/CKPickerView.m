@@ -168,7 +168,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	// FIXME: This code is duplicated from line 257
 	
 	UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(row + 1) inSection:0]];
-	if ((cell != nil) || ([_delegate respondsToSelector:@selector(pickerView:viewForRow:reusingView:)])) {
+	if ((cell != nil) && ([_delegate respondsToSelector:@selector(pickerView:viewForRow:reusingView:)])) {
 		UIView *reusedView = [cell.contentView.subviews objectAtIndex:0];
 		UIView *view = [_delegate pickerView:self viewForRow:row reusingView:reusedView];
 		NSAssert((view == reusedView), @"The reused view must be returned");
