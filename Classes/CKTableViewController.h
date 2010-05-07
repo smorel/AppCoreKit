@@ -17,12 +17,14 @@
 // Implements -setEditing:animated: to toggle the editing state of the table.
 
 @interface CKTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+	UIView *_backgroundView;
 	UITableView *_tableView;
 	UITableViewStyle _style;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, assign) UITableViewStyle style;
+@property (nonatomic, retain) UIView *backgroundView;
 
 - (id)initWithStyle:(UITableViewStyle)style;
 
