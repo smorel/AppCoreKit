@@ -70,6 +70,20 @@
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		719093F1112474CD003489BB /* CKAttributesDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 719093EF112474CD003489BB /* CKAttributesDictionary.h */; };
 		719093F2112474CD003489BB /* CKAttributesDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 719093F0112474CD003489BB /* CKAttributesDictionary.m */; };
+		71917AA91199C33100386EB5 /* CKConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AA71199C33100386EB5 /* CKConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AAA1199C33100386EB5 /* CKLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AA81199C33100386EB5 /* CKLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC21199C49A00386EB5 /* CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AC01199C49A00386EB5 /* CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC31199C49A00386EB5 /* CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC11199C49A00386EB5 /* CKLayout.m */; };
+		71917AC61199C4C300386EB5 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AC41199C4C300386EB5 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC71199C4C300386EB5 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC51199C4C300386EB5 /* CKLocationManager.m */; };
+		71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B281199E7D700386EB5 /* CoreLocation.framework */; };
+		71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B2A1199E7E300386EB5 /* MapKit.framework */; };
+		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; };
+		71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */; };
+		71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B3A1199E89300386EB5 /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B3B1199E89300386EB5 /* CKWebViewController.m */; };
+		71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917BAD1199ED6A00386EB5 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917BAE1199ED6A00386EB5 /* CKBundle.m */; };
 		719F05CE10F6A818002955C0 /* CKAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F05CC10F6A818002955C0 /* CKAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F05CD10F6A818002955C0 /* CKAttribute.m */; };
 		719F062B10F6E749002955C0 /* CKDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F062710F6E749002955C0 /* CKDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -217,6 +231,20 @@
 		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		719093EF112474CD003489BB /* CKAttributesDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttributesDictionary.h; path = Classes/CKAttributesDictionary.h; sourceTree = "<group>"; };
 		719093F0112474CD003489BB /* CKAttributesDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttributesDictionary.m; path = Classes/CKAttributesDictionary.m; sourceTree = "<group>"; };
+		71917AA71199C33100386EB5 /* CKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKConstants.h; path = Classes/CKConstants.h; sourceTree = "<group>"; };
+		71917AA81199C33100386EB5 /* CKLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalization.h; path = Classes/CKLocalization.h; sourceTree = "<group>"; };
+		71917AC01199C49A00386EB5 /* CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayout.h; path = Classes/CKLayout.h; sourceTree = "<group>"; };
+		71917AC11199C49A00386EB5 /* CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLayout.m; path = Classes/CKLayout.m; sourceTree = "<group>"; };
+		71917AC41199C4C300386EB5 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager.h; path = Classes/CKLocationManager.h; sourceTree = "<group>"; };
+		71917AC51199C4C300386EB5 /* CKLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager.m; path = Classes/CKLocationManager.m; sourceTree = "<group>"; };
+		71917B281199E7D700386EB5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		71917B2A1199E7E300386EB5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUINavigationControllerAdditions.h; path = Classes/CKUINavigationControllerAdditions.h; sourceTree = "<group>"; };
+		71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUINavigationControllerAdditions.m; path = Classes/CKUINavigationControllerAdditions.m; sourceTree = "<group>"; };
+		71917B3A1199E89300386EB5 /* CKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewController.h; path = Classes/CKWebViewController.h; sourceTree = "<group>"; };
+		71917B3B1199E89300386EB5 /* CKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewController.m; path = Classes/CKWebViewController.m; sourceTree = "<group>"; };
+		71917BAD1199ED6A00386EB5 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
+		71917BAE1199ED6A00386EB5 /* CKBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBundle.m; path = Classes/CKBundle.m; sourceTree = "<group>"; };
 		719F056B10F6A68F002955C0 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = ../cloudkit/CloudKit.bundle; sourceTree = SOURCE_ROOT; };
 		719F05CC10F6A818002955C0 /* CKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttribute.h; path = ../cloudkit/Classes/CKAttribute.h; sourceTree = "<group>"; };
 		719F05CD10F6A818002955C0 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttribute.m; path = ../cloudkit/Classes/CKAttribute.m; sourceTree = "<group>"; };
@@ -337,6 +365,8 @@
 				712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */,
 				715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */,
 				71AE060D1105107300F39258 /* CoreData.framework in Frameworks */,
+				71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */,
+				71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,7 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				715CA152110E36F700593672 /* UI */,
-				4FE162DA10FBD6BC002F5B37 /* Tables */,
+				71917AB01199C3D800386EB5 /* Location */,
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
 				719F05CB10F6A804002955C0 /* Store */,
 				71B1974910F3EC01007F551A /* CoreData */,
@@ -377,6 +407,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				71917B281199E7D700386EB5 /* CoreLocation.framework */,
 				713F4B1410FB7CB4005367AB /* CoreData.framework */,
 				71AD9DFB10A362E100C88903 /* UIKit.framework */,
 				71AD9DE410A3629300C88903 /* AddressBook.framework */,
@@ -388,21 +419,9 @@
 				712E109810A4CB0000DF6562 /* libxml2.dylib */,
 				7173D28F10A4BD98004E9621 /* SenTestingKit.framework */,
 				715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */,
+				71917B2A1199E7E300386EB5 /* MapKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4FE162DA10FBD6BC002F5B37 /* Tables */ = {
-			isa = PBXGroup;
-			children = (
-				71428BBC1194B8CF0059D4BA /* CKManagedTableViewController.h */,
-				71428BBD1194B8CF0059D4BA /* CKManagedTableViewController.m */,
-				71428BBE1194B8CF0059D4BA /* CKTableViewCellController.h */,
-				71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */,
-				711CA2B6112A05A60084660F /* CKTableViewController.h */,
-				711CA2B7112A05A60084660F /* CKTableViewController.m */,
-			);
-			name = Tables;
 			sourceTree = "<group>";
 		};
 		710DF0F810FFBB820063FB2C /* WebService */ = {
@@ -419,10 +438,20 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				71917B3A1199E89300386EB5 /* CKWebViewController.h */,
+				71917B3B1199E89300386EB5 /* CKWebViewController.m */,
+				71917AC01199C49A00386EB5 /* CKLayout.h */,
+				71917AC11199C49A00386EB5 /* CKLayout.m */,
 				7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */,
 				7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */,
 				715CA157110E374300593672 /* CKPickerView.m */,
 				715CA158110E374300593672 /* CKPickerView.h */,
+				71428BBC1194B8CF0059D4BA /* CKManagedTableViewController.h */,
+				71428BBD1194B8CF0059D4BA /* CKManagedTableViewController.m */,
+				71428BBE1194B8CF0059D4BA /* CKTableViewCellController.h */,
+				71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */,
+				711CA2B6112A05A60084660F /* CKTableViewController.h */,
+				711CA2B7112A05A60084660F /* CKTableViewController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -449,6 +478,15 @@
 			name = "Test Cases";
 			sourceTree = "<group>";
 		};
+		71917AB01199C3D800386EB5 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				71917AC41199C4C300386EB5 /* CKLocationManager.h */,
+				71917AC51199C4C300386EB5 /* CKLocationManager.m */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
 		719F05CB10F6A804002955C0 /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -471,6 +509,11 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				71917BAD1199ED6A00386EB5 /* CKBundle.h */,
+				71917BAE1199ED6A00386EB5 /* CKBundle.m */,
+				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
+				71917AA71199C33100386EB5 /* CKConstants.h */,
+				71917AA81199C33100386EB5 /* CKLocalization.h */,
 				7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */,
 				7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */,
 				71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */,
@@ -479,7 +522,6 @@
 				71AD9D6B10A35F4500C88903 /* CKNSDateAdditions.h */,
 				71AD9D6D10A35F4500C88903 /* CKNSStringAdditions.h */,
 				71AD9D6E10A35F4500C88903 /* CKNSStringAdditions.m */,
-				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
 				71AD9D7010A35F4500C88903 /* CKNSData+Base64.h */,
 				71AD9D7110A35F4500C88903 /* CKNSData+Base64.m */,
 				71AD9D7210A35F4500C88903 /* CKNSData+SHA1.h */,
@@ -494,6 +536,8 @@
 				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
 				71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */,
 				71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */,
+				71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */,
+				71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -711,6 +755,13 @@
 				71428BB21194B8AB0059D4BA /* CKTableViewController.h in Headers */,
 				71428BC01194B8CF0059D4BA /* CKManagedTableViewController.h in Headers */,
 				71428BC21194B8CF0059D4BA /* CKTableViewCellController.h in Headers */,
+				71917AA91199C33100386EB5 /* CKConstants.h in Headers */,
+				71917AAA1199C33100386EB5 /* CKLocalization.h in Headers */,
+				71917AC21199C49A00386EB5 /* CKLayout.h in Headers */,
+				71917AC61199C4C300386EB5 /* CKLocationManager.h in Headers */,
+				71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */,
+				71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */,
+				71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -882,6 +933,11 @@
 				71428BB31194B8AB0059D4BA /* CKTableViewController.m in Sources */,
 				71428BC11194B8CF0059D4BA /* CKManagedTableViewController.m in Sources */,
 				71428BC31194B8CF0059D4BA /* CKTableViewCellController.m in Sources */,
+				71917AC31199C49A00386EB5 /* CKLayout.m in Sources */,
+				71917AC71199C4C300386EB5 /* CKLocationManager.m in Sources */,
+				71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */,
+				71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */,
+				71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
