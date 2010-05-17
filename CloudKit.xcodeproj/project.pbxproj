@@ -59,6 +59,8 @@
 		71428BC31194B8CF0059D4BA /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */; };
 		7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */; };
 		7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */; };
+		7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */; };
+		7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */; };
 		715CA159110E374300593672 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 715CA157110E374300593672 /* CKPickerView.m */; };
 		715CA15A110E374300593672 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 715CA158110E374300593672 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0A7E10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */; };
@@ -80,7 +82,7 @@
 		71917AC71199C4C300386EB5 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC51199C4C300386EB5 /* CKLocationManager.m */; };
 		71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B281199E7D700386EB5 /* CoreLocation.framework */; };
 		71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B2A1199E7E300386EB5 /* MapKit.framework */; };
-		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; };
+		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; settings = {ATTRIBUTES = (); }; };
 		71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */; };
 		71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B3A1199E89300386EB5 /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B3B1199E89300386EB5 /* CKWebViewController.m */; };
@@ -219,6 +221,8 @@
 		71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewCellController.m; path = Classes/CKTableViewCellController.m; sourceTree = "<group>"; };
 		7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIToolbarAdditions.h; path = Classes/CKUIToolbarAdditions.h; sourceTree = "<group>"; };
 		7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIToolbarAdditions.m; path = Classes/CKUIToolbarAdditions.m; sourceTree = "<group>"; };
+		7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewControllerRef.h; path = Classes/CKWebViewControllerRef.h; sourceTree = "<group>"; };
+		7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewControllerRef.m; path = Classes/CKWebViewControllerRef.m; sourceTree = "<group>"; };
 		715CA157110E374300593672 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = ../cloudkit/Classes/CKPickerView.m; sourceTree = SOURCE_ROOT; };
 		715CA158110E374300593672 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = ../cloudkit/Classes/CKPickerView.h; sourceTree = SOURCE_ROOT; };
 		715E0A7C10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
@@ -396,6 +400,7 @@
 				71B1974910F3EC01007F551A /* CoreData */,
 				710DF0F810FFBB820063FB2C /* WebService */,
 				71AD9D5F10A35EED00C88903 /* Support */,
+				7150E29D11A1E4450050E284 /* Refactorings */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -437,6 +442,15 @@
 				710DF11110FFBC030063FB2C /* CKWebService.m */,
 			);
 			name = WebService;
+			sourceTree = "<group>";
+		};
+		7150E29D11A1E4450050E284 /* Refactorings */ = {
+			isa = PBXGroup;
+			children = (
+				7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */,
+				7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */,
+			);
+			name = Refactorings;
 			sourceTree = "<group>";
 		};
 		715CA152110E36F700593672 /* UI */ = {
@@ -769,6 +783,7 @@
 				71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */,
 				71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */,
 				7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */,
+				7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -946,6 +961,7 @@
 				71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */,
 				71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */,
 				7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */,
+				7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
