@@ -35,7 +35,10 @@
 // TODO: Put in a separate category
 //
 
-// Formats the date as a ISO8601 UTC "time point" string
-- (NSString *)stringWithISO8601TimePointFormat;
+// Returns a date from an ISO8601 UTC "time point" string (yyyy-MM-dd'T'HH:mm:ss'Z')
++ (NSDate *)dateFromStringWithISO8601TimePointFormat:(NSString *)string;
+
+// Formats the date as a ISO8601 UTC "time point" minimal string (yyyyMMdd'T'HHmmss'Z')
+- (NSString *)stringWithISO8601TimePointMinimalFormat;
 
 @end

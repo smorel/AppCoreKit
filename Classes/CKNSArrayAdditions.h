@@ -30,7 +30,8 @@
 // Returns true if an object of the array validate the given predicate
 - (BOOL)containsObjectWithPredicate:(NSPredicate *)predicate;
 
-// Returns a new array with the result of applying the given selector to each element of the array
-- (NSArray *)arrayByApplyingSelector:(SEL)selector;
+// Returns an array containing the return values from applying a given selector to 
+// each element of the receiver
+- (NSArray *)arrayWithValuesByMakingObjectsPerformSelector:(SEL)selector withObject:(id)object;
 
 @end

@@ -7,14 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4FE162E310FBD6D5002F5B37 /* CKAbstractCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE162DB10FBD6D5002F5B37 /* CKAbstractCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FE162E410FBD6D5002F5B37 /* CKAbstractCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE162DC10FBD6D5002F5B37 /* CKAbstractCellController.m */; };
-		4FE162E510FBD6D5002F5B37 /* CKButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE162DD10FBD6D5002F5B37 /* CKButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FE162E610FBD6D5002F5B37 /* CKButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE162DE10FBD6D5002F5B37 /* CKButtonCellController.m */; };
-		4FE162E710FBD6D5002F5B37 /* CKImageCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE162DF10FBD6D5002F5B37 /* CKImageCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FE162E810FBD6D5002F5B37 /* CKImageCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE162E010FBD6D5002F5B37 /* CKImageCellController.m */; };
-		4FE162E910FBD6D5002F5B37 /* CKValueCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FE162E110FBD6D5002F5B37 /* CKValueCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FE162EA10FBD6D5002F5B37 /* CKValueCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FE162E210FBD6D5002F5B37 /* CKValueCellController.m */; };
 		710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF10E10FFBC030063FB2C /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,34 +26,6 @@
 		712E10A310A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */; };
 		712E10F510A4D9BF00DF6562 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 712E109810A4CB0000DF6562 /* libxml2.dylib */; };
-		712E7C6410D199A7008DC18C /* IFButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4810D199A7008DC18C /* IFButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6510D199A7008DC18C /* IFButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4910D199A7008DC18C /* IFButtonCellController.m */; };
-		712E7C6610D199A7008DC18C /* IFCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4A10D199A7008DC18C /* IFCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6710D199A7008DC18C /* IFCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4B10D199A7008DC18C /* IFCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6810D199A7008DC18C /* IFChoiceCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6910D199A7008DC18C /* IFChoiceCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */; };
-		712E7C6A10D199A7008DC18C /* IFChoiceTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6B10D199A7008DC18C /* IFChoiceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */; };
-		712E7C6C10D199A7008DC18C /* IFControlTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6D10D199A7008DC18C /* IFControlTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */; };
-		712E7C6E10D199A7008DC18C /* IFGenericTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C6F10D199A7008DC18C /* IFGenericTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */; };
-		712E7C7010D199A7008DC18C /* IFLinkCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5410D199A7008DC18C /* IFLinkCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7110D199A7008DC18C /* IFLinkCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5510D199A7008DC18C /* IFLinkCellController.m */; };
-		712E7C7210D199A7008DC18C /* IFNamedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5610D199A7008DC18C /* IFNamedImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7310D199A7008DC18C /* IFNamedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5710D199A7008DC18C /* IFNamedImage.m */; };
-		712E7C7410D199A7008DC18C /* IFPreferencesModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5810D199A7008DC18C /* IFPreferencesModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7510D199A7008DC18C /* IFPreferencesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5910D199A7008DC18C /* IFPreferencesModel.m */; };
-		712E7C7610D199A7008DC18C /* IFSwitchCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7710D199A7008DC18C /* IFSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */; };
-		712E7C7810D199A7008DC18C /* IFTemporaryModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7910D199A7008DC18C /* IFTemporaryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */; };
-		712E7C7A10D199A7008DC18C /* IFTextCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C5E10D199A7008DC18C /* IFTextCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7B10D199A7008DC18C /* IFTextCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C5F10D199A7008DC18C /* IFTextCellController.m */; };
-		712E7C7C10D199A7008DC18C /* IFTextViewTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C6010D199A7008DC18C /* IFTextViewTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7D10D199A7008DC18C /* IFTextViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C6110D199A7008DC18C /* IFTextViewTableView.m */; };
-		712E7C7E10D199A7008DC18C /* IFValueCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 712E7C6210D199A7008DC18C /* IFValueCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		712E7C7F10D199A7008DC18C /* IFValueCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 712E7C6310D199A7008DC18C /* IFValueCellController.m */; };
 		713F4ABB10FB79C7005367AB /* CKStoreTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 713F4ABA10FB79C7005367AB /* CKStoreTestCase.m */; };
 		713F4AF410FB7BC9005367AB /* libCloudKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB518D /* libCloudKit.a */; };
 		713F4B0B10FB7C78005367AB /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0CBA10DB063000AA4B07 /* CKNSDate+Calculations.m */; };
@@ -87,6 +51,16 @@
 		7141A350111A601500CB74CA /* ASIS3ListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7141A33D111A601500CB74CA /* ASIS3ListRequest.m */; };
 		7141A351111A601500CB74CA /* ASIS3Request.h in Headers */ = {isa = PBXBuildFile; fileRef = 7141A33E111A601500CB74CA /* ASIS3Request.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7141A352111A601500CB74CA /* ASIS3Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 7141A33F111A601500CB74CA /* ASIS3Request.m */; };
+		71428BB21194B8AB0059D4BA /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CA2B6112A05A60084660F /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71428BB31194B8AB0059D4BA /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CA2B7112A05A60084660F /* CKTableViewController.m */; };
+		71428BC01194B8CF0059D4BA /* CKManagedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71428BBC1194B8CF0059D4BA /* CKManagedTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71428BC11194B8CF0059D4BA /* CKManagedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71428BBD1194B8CF0059D4BA /* CKManagedTableViewController.m */; };
+		71428BC21194B8CF0059D4BA /* CKTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71428BBE1194B8CF0059D4BA /* CKTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71428BC31194B8CF0059D4BA /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */; };
+		7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */; };
+		7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */; };
+		7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */; };
+		7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */; };
 		715CA159110E374300593672 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 715CA157110E374300593672 /* CKPickerView.m */; };
 		715CA15A110E374300593672 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 715CA158110E374300593672 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		715E0A7E10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 715E0A7D10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.m */; };
@@ -100,6 +74,20 @@
 		7173D29010A4BD98004E9621 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7173D28F10A4BD98004E9621 /* SenTestingKit.framework */; };
 		719093F1112474CD003489BB /* CKAttributesDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 719093EF112474CD003489BB /* CKAttributesDictionary.h */; };
 		719093F2112474CD003489BB /* CKAttributesDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 719093F0112474CD003489BB /* CKAttributesDictionary.m */; };
+		71917AA91199C33100386EB5 /* CKConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AA71199C33100386EB5 /* CKConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AAA1199C33100386EB5 /* CKLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AA81199C33100386EB5 /* CKLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC21199C49A00386EB5 /* CKLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AC01199C49A00386EB5 /* CKLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC31199C49A00386EB5 /* CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC11199C49A00386EB5 /* CKLayout.m */; };
+		71917AC61199C4C300386EB5 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917AC41199C4C300386EB5 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917AC71199C4C300386EB5 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC51199C4C300386EB5 /* CKLocationManager.m */; };
+		71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B281199E7D700386EB5 /* CoreLocation.framework */; };
+		71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B2A1199E7E300386EB5 /* MapKit.framework */; };
+		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; settings = {ATTRIBUTES = (); }; };
+		71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */; };
+		71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B3A1199E89300386EB5 /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B3B1199E89300386EB5 /* CKWebViewController.m */; };
+		71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917BAD1199ED6A00386EB5 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917BAE1199ED6A00386EB5 /* CKBundle.m */; };
 		719F05CE10F6A818002955C0 /* CKAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F05CC10F6A818002955C0 /* CKAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F05CD10F6A818002955C0 /* CKAttribute.m */; };
 		719F062B10F6E749002955C0 /* CKDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F062710F6E749002955C0 /* CKDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -192,14 +180,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4FE162DB10FBD6D5002F5B37 /* CKAbstractCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAbstractCellController.h; path = Classes/CKAbstractCellController.h; sourceTree = "<group>"; };
-		4FE162DC10FBD6D5002F5B37 /* CKAbstractCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAbstractCellController.m; path = Classes/CKAbstractCellController.m; sourceTree = "<group>"; };
-		4FE162DD10FBD6D5002F5B37 /* CKButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKButtonCellController.h; path = Classes/CKButtonCellController.h; sourceTree = "<group>"; };
-		4FE162DE10FBD6D5002F5B37 /* CKButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKButtonCellController.m; path = Classes/CKButtonCellController.m; sourceTree = "<group>"; };
-		4FE162DF10FBD6D5002F5B37 /* CKImageCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageCellController.h; path = Classes/CKImageCellController.h; sourceTree = "<group>"; };
-		4FE162E010FBD6D5002F5B37 /* CKImageCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageCellController.m; path = Classes/CKImageCellController.m; sourceTree = "<group>"; };
-		4FE162E110FBD6D5002F5B37 /* CKValueCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKValueCellController.h; path = Classes/CKValueCellController.h; sourceTree = "<group>"; };
-		4FE162E210FBD6D5002F5B37 /* CKValueCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKValueCellController.m; path = Classes/CKValueCellController.m; sourceTree = "<group>"; };
 		710DF10E10FFBC030063FB2C /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
@@ -213,34 +193,6 @@
 		712E109810A4CB0000DF6562 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		712E10A110A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
 		712E10A210A4CB6B00DF6562 /* CKNSArrayAdditionsTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSArrayAdditionsTestCase.m; path = ../cloudkit/TestCases/CKNSArrayAdditionsTestCase.m; sourceTree = SOURCE_ROOT; };
-		712E7C4810D199A7008DC18C /* IFButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFButtonCellController.h; sourceTree = "<group>"; };
-		712E7C4910D199A7008DC18C /* IFButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFButtonCellController.m; sourceTree = "<group>"; };
-		712E7C4A10D199A7008DC18C /* IFCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFCellController.h; sourceTree = "<group>"; };
-		712E7C4B10D199A7008DC18C /* IFCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFCellModel.h; sourceTree = "<group>"; };
-		712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFChoiceCellController.h; sourceTree = "<group>"; };
-		712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFChoiceCellController.m; sourceTree = "<group>"; };
-		712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFChoiceTableViewController.h; sourceTree = "<group>"; };
-		712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFChoiceTableViewController.m; sourceTree = "<group>"; };
-		712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFControlTableViewCell.h; sourceTree = "<group>"; };
-		712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFControlTableViewCell.m; sourceTree = "<group>"; };
-		712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFGenericTableViewController.h; sourceTree = "<group>"; };
-		712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFGenericTableViewController.m; sourceTree = "<group>"; };
-		712E7C5410D199A7008DC18C /* IFLinkCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFLinkCellController.h; sourceTree = "<group>"; };
-		712E7C5510D199A7008DC18C /* IFLinkCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFLinkCellController.m; sourceTree = "<group>"; };
-		712E7C5610D199A7008DC18C /* IFNamedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFNamedImage.h; sourceTree = "<group>"; };
-		712E7C5710D199A7008DC18C /* IFNamedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFNamedImage.m; sourceTree = "<group>"; };
-		712E7C5810D199A7008DC18C /* IFPreferencesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFPreferencesModel.h; sourceTree = "<group>"; };
-		712E7C5910D199A7008DC18C /* IFPreferencesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFPreferencesModel.m; sourceTree = "<group>"; };
-		712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFSwitchCellController.h; sourceTree = "<group>"; };
-		712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFSwitchCellController.m; sourceTree = "<group>"; };
-		712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTemporaryModel.h; sourceTree = "<group>"; };
-		712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTemporaryModel.m; sourceTree = "<group>"; };
-		712E7C5E10D199A7008DC18C /* IFTextCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTextCellController.h; sourceTree = "<group>"; };
-		712E7C5F10D199A7008DC18C /* IFTextCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTextCellController.m; sourceTree = "<group>"; };
-		712E7C6010D199A7008DC18C /* IFTextViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFTextViewTableView.h; sourceTree = "<group>"; };
-		712E7C6110D199A7008DC18C /* IFTextViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFTextViewTableView.m; sourceTree = "<group>"; };
-		712E7C6210D199A7008DC18C /* IFValueCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFValueCellController.h; sourceTree = "<group>"; };
-		712E7C6310D199A7008DC18C /* IFValueCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFValueCellController.m; sourceTree = "<group>"; };
 		713F4AB910FB79C7005367AB /* CKStoreTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreTestCase.h; path = ../cloudkit/TestCases/CKStoreTestCase.h; sourceTree = SOURCE_ROOT; };
 		713F4ABA10FB79C7005367AB /* CKStoreTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreTestCase.m; path = ../cloudkit/TestCases/CKStoreTestCase.m; sourceTree = SOURCE_ROOT; };
 		713F4B1410FB7CB4005367AB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -263,6 +215,14 @@
 		7141A33D111A601500CB74CA /* ASIS3ListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIS3ListRequest.m; path = "../cloudkit/Vendor/ASIHTTPRequest-1.5/Classes/ASIS3ListRequest.m"; sourceTree = SOURCE_ROOT; };
 		7141A33E111A601500CB74CA /* ASIS3Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIS3Request.h; path = "../cloudkit/Vendor/ASIHTTPRequest-1.5/Classes/ASIS3Request.h"; sourceTree = SOURCE_ROOT; };
 		7141A33F111A601500CB74CA /* ASIS3Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIS3Request.m; path = "../cloudkit/Vendor/ASIHTTPRequest-1.5/Classes/ASIS3Request.m"; sourceTree = SOURCE_ROOT; };
+		71428BBC1194B8CF0059D4BA /* CKManagedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKManagedTableViewController.h; path = Classes/CKManagedTableViewController.h; sourceTree = "<group>"; };
+		71428BBD1194B8CF0059D4BA /* CKManagedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKManagedTableViewController.m; path = Classes/CKManagedTableViewController.m; sourceTree = "<group>"; };
+		71428BBE1194B8CF0059D4BA /* CKTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewCellController.h; path = Classes/CKTableViewCellController.h; sourceTree = "<group>"; };
+		71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewCellController.m; path = Classes/CKTableViewCellController.m; sourceTree = "<group>"; };
+		7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIToolbarAdditions.h; path = Classes/CKUIToolbarAdditions.h; sourceTree = "<group>"; };
+		7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIToolbarAdditions.m; path = Classes/CKUIToolbarAdditions.m; sourceTree = "<group>"; };
+		7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewControllerRef.h; path = Classes/CKWebViewControllerRef.h; sourceTree = "<group>"; };
+		7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewControllerRef.m; path = Classes/CKWebViewControllerRef.m; sourceTree = "<group>"; };
 		715CA157110E374300593672 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = ../cloudkit/Classes/CKPickerView.m; sourceTree = SOURCE_ROOT; };
 		715CA158110E374300593672 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = ../cloudkit/Classes/CKPickerView.h; sourceTree = SOURCE_ROOT; };
 		715E0A7C10DADE5900AA4B07 /* CKNSDateAdditionsTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditionsTestCase.h; path = ../cloudkit/TestCases/CKNSDateAdditionsTestCase.h; sourceTree = SOURCE_ROOT; };
@@ -279,6 +239,20 @@
 		7173D28F10A4BD98004E9621 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		719093EF112474CD003489BB /* CKAttributesDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttributesDictionary.h; path = Classes/CKAttributesDictionary.h; sourceTree = "<group>"; };
 		719093F0112474CD003489BB /* CKAttributesDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttributesDictionary.m; path = Classes/CKAttributesDictionary.m; sourceTree = "<group>"; };
+		71917AA71199C33100386EB5 /* CKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKConstants.h; path = Classes/CKConstants.h; sourceTree = "<group>"; };
+		71917AA81199C33100386EB5 /* CKLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalization.h; path = Classes/CKLocalization.h; sourceTree = "<group>"; };
+		71917AC01199C49A00386EB5 /* CKLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayout.h; path = Classes/CKLayout.h; sourceTree = "<group>"; };
+		71917AC11199C49A00386EB5 /* CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLayout.m; path = Classes/CKLayout.m; sourceTree = "<group>"; };
+		71917AC41199C4C300386EB5 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager.h; path = Classes/CKLocationManager.h; sourceTree = "<group>"; };
+		71917AC51199C4C300386EB5 /* CKLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager.m; path = Classes/CKLocationManager.m; sourceTree = "<group>"; };
+		71917B281199E7D700386EB5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		71917B2A1199E7E300386EB5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUINavigationControllerAdditions.h; path = Classes/CKUINavigationControllerAdditions.h; sourceTree = "<group>"; };
+		71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUINavigationControllerAdditions.m; path = Classes/CKUINavigationControllerAdditions.m; sourceTree = "<group>"; };
+		71917B3A1199E89300386EB5 /* CKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewController.h; path = Classes/CKWebViewController.h; sourceTree = "<group>"; };
+		71917B3B1199E89300386EB5 /* CKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewController.m; path = Classes/CKWebViewController.m; sourceTree = "<group>"; };
+		71917BAD1199ED6A00386EB5 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
+		71917BAE1199ED6A00386EB5 /* CKBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBundle.m; path = Classes/CKBundle.m; sourceTree = "<group>"; };
 		719F056B10F6A68F002955C0 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = ../cloudkit/CloudKit.bundle; sourceTree = SOURCE_ROOT; };
 		719F05CC10F6A818002955C0 /* CKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttribute.h; path = ../cloudkit/Classes/CKAttribute.h; sourceTree = "<group>"; };
 		719F05CD10F6A818002955C0 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttribute.m; path = ../cloudkit/Classes/CKAttribute.m; sourceTree = "<group>"; };
@@ -356,6 +330,7 @@
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSManagedObjectContext+Requests.m"; path = "Classes/CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
+		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
 		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIColorAdditions.h; path = Classes/CKUIColorAdditions.h; sourceTree = "<group>"; };
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUIColorAdditions.m; path = Classes/CKUIColorAdditions.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -398,6 +373,8 @@
 				712E116210A4DBAB00DF6562 /* libxml2.dylib in Frameworks */,
 				715E0B2B10DADFD300AA4B07 /* CoreGraphics.framework in Frameworks */,
 				71AE060D1105107300F39258 /* CoreData.framework in Frameworks */,
+				71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */,
+				71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,18 +394,20 @@
 			isa = PBXGroup;
 			children = (
 				715CA152110E36F700593672 /* UI */,
-				4FE162DA10FBD6BC002F5B37 /* Tables */,
+				71917AB01199C3D800386EB5 /* Location */,
 				7173D25E10A4B1AA004E9621 /* AddressBook */,
 				719F05CB10F6A804002955C0 /* Store */,
 				71B1974910F3EC01007F551A /* CoreData */,
 				710DF0F810FFBB820063FB2C /* WebService */,
 				71AD9D5F10A35EED00C88903 /* Support */,
+				7150E29D11A1E4450050E284 /* Refactorings */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				719F056B10F6A68F002955C0 /* CloudKit.bundle */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
+				71D6C00B115440AA004C779E /* CloudKit-Info.plist */,
 				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
 			);
 			name = CloudKit;
@@ -437,6 +416,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				71917B281199E7D700386EB5 /* CoreLocation.framework */,
 				713F4B1410FB7CB4005367AB /* CoreData.framework */,
 				71AD9DFB10A362E100C88903 /* UIKit.framework */,
 				71AD9DE410A3629300C88903 /* AddressBook.framework */,
@@ -448,25 +428,9 @@
 				712E109810A4CB0000DF6562 /* libxml2.dylib */,
 				7173D28F10A4BD98004E9621 /* SenTestingKit.framework */,
 				715E0B2A10DADFD300AA4B07 /* CoreGraphics.framework */,
+				71917B2A1199E7E300386EB5 /* MapKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4FE162DA10FBD6BC002F5B37 /* Tables */ = {
-			isa = PBXGroup;
-			children = (
-				711CA2B6112A05A60084660F /* CKTableViewController.h */,
-				711CA2B7112A05A60084660F /* CKTableViewController.m */,
-				4FE162DB10FBD6D5002F5B37 /* CKAbstractCellController.h */,
-				4FE162DC10FBD6D5002F5B37 /* CKAbstractCellController.m */,
-				4FE162DD10FBD6D5002F5B37 /* CKButtonCellController.h */,
-				4FE162DE10FBD6D5002F5B37 /* CKButtonCellController.m */,
-				4FE162DF10FBD6D5002F5B37 /* CKImageCellController.h */,
-				4FE162E010FBD6D5002F5B37 /* CKImageCellController.m */,
-				4FE162E110FBD6D5002F5B37 /* CKValueCellController.h */,
-				4FE162E210FBD6D5002F5B37 /* CKValueCellController.m */,
-			);
-			name = Tables;
 			sourceTree = "<group>";
 		};
 		710DF0F810FFBB820063FB2C /* WebService */ = {
@@ -480,49 +444,32 @@
 			name = WebService;
 			sourceTree = "<group>";
 		};
-		712E7C4710D199A7008DC18C /* IFGenericTableViews */ = {
+		7150E29D11A1E4450050E284 /* Refactorings */ = {
 			isa = PBXGroup;
 			children = (
-				712E7C4810D199A7008DC18C /* IFButtonCellController.h */,
-				712E7C4910D199A7008DC18C /* IFButtonCellController.m */,
-				712E7C4A10D199A7008DC18C /* IFCellController.h */,
-				712E7C4B10D199A7008DC18C /* IFCellModel.h */,
-				712E7C4C10D199A7008DC18C /* IFChoiceCellController.h */,
-				712E7C4D10D199A7008DC18C /* IFChoiceCellController.m */,
-				712E7C4E10D199A7008DC18C /* IFChoiceTableViewController.h */,
-				712E7C4F10D199A7008DC18C /* IFChoiceTableViewController.m */,
-				712E7C5010D199A7008DC18C /* IFControlTableViewCell.h */,
-				712E7C5110D199A7008DC18C /* IFControlTableViewCell.m */,
-				712E7C5210D199A7008DC18C /* IFGenericTableViewController.h */,
-				712E7C5310D199A7008DC18C /* IFGenericTableViewController.m */,
-				712E7C5410D199A7008DC18C /* IFLinkCellController.h */,
-				712E7C5510D199A7008DC18C /* IFLinkCellController.m */,
-				712E7C5610D199A7008DC18C /* IFNamedImage.h */,
-				712E7C5710D199A7008DC18C /* IFNamedImage.m */,
-				712E7C5810D199A7008DC18C /* IFPreferencesModel.h */,
-				712E7C5910D199A7008DC18C /* IFPreferencesModel.m */,
-				712E7C5A10D199A7008DC18C /* IFSwitchCellController.h */,
-				712E7C5B10D199A7008DC18C /* IFSwitchCellController.m */,
-				712E7C5C10D199A7008DC18C /* IFTemporaryModel.h */,
-				712E7C5D10D199A7008DC18C /* IFTemporaryModel.m */,
-				712E7C5E10D199A7008DC18C /* IFTextCellController.h */,
-				712E7C5F10D199A7008DC18C /* IFTextCellController.m */,
-				712E7C6010D199A7008DC18C /* IFTextViewTableView.h */,
-				712E7C6110D199A7008DC18C /* IFTextViewTableView.m */,
-				712E7C6210D199A7008DC18C /* IFValueCellController.h */,
-				712E7C6310D199A7008DC18C /* IFValueCellController.m */,
+				7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */,
+				7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */,
 			);
-			name = IFGenericTableViews;
-			path = ../cloudkit/Vendor/IFGenericTableViews;
-			sourceTree = SOURCE_ROOT;
+			name = Refactorings;
+			sourceTree = "<group>";
 		};
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				71917B3A1199E89300386EB5 /* CKWebViewController.h */,
+				71917B3B1199E89300386EB5 /* CKWebViewController.m */,
+				71917AC01199C49A00386EB5 /* CKLayout.h */,
+				71917AC11199C49A00386EB5 /* CKLayout.m */,
 				7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */,
 				7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */,
 				715CA157110E374300593672 /* CKPickerView.m */,
 				715CA158110E374300593672 /* CKPickerView.h */,
+				71428BBC1194B8CF0059D4BA /* CKManagedTableViewController.h */,
+				71428BBD1194B8CF0059D4BA /* CKManagedTableViewController.m */,
+				71428BBE1194B8CF0059D4BA /* CKTableViewCellController.h */,
+				71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */,
+				711CA2B6112A05A60084660F /* CKTableViewController.h */,
+				711CA2B7112A05A60084660F /* CKTableViewController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -549,6 +496,15 @@
 			name = "Test Cases";
 			sourceTree = "<group>";
 		};
+		71917AB01199C3D800386EB5 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				71917AC41199C4C300386EB5 /* CKLocationManager.h */,
+				71917AC51199C4C300386EB5 /* CKLocationManager.m */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
 		719F05CB10F6A804002955C0 /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -571,6 +527,11 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				71917BAD1199ED6A00386EB5 /* CKBundle.h */,
+				71917BAE1199ED6A00386EB5 /* CKBundle.m */,
+				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
+				71917AA71199C33100386EB5 /* CKConstants.h */,
+				71917AA81199C33100386EB5 /* CKLocalization.h */,
 				7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */,
 				7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */,
 				71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */,
@@ -579,7 +540,6 @@
 				71AD9D6B10A35F4500C88903 /* CKNSDateAdditions.h */,
 				71AD9D6D10A35F4500C88903 /* CKNSStringAdditions.h */,
 				71AD9D6E10A35F4500C88903 /* CKNSStringAdditions.m */,
-				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
 				71AD9D7010A35F4500C88903 /* CKNSData+Base64.h */,
 				71AD9D7110A35F4500C88903 /* CKNSData+Base64.m */,
 				71AD9D7210A35F4500C88903 /* CKNSData+SHA1.h */,
@@ -594,6 +554,10 @@
 				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
 				71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */,
 				71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */,
+				71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */,
+				71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */,
+				7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */,
+				7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -601,7 +565,6 @@
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				712E7C4710D199A7008DC18C /* IFGenericTableViews */,
 				71ADA04D10A372F400C88903 /* TouchXML */,
 				71ADA02410A372BD00C88903 /* TouchJSON */,
 				71ADA01A10A3725800C88903 /* RegexKitLite */,
@@ -783,21 +746,6 @@
 				71ADA08210A3740400C88903 /* TouchXML.h in Headers */,
 				7173D28310A4B2FA004E9621 /* CKNSSetAdditions.h in Headers */,
 				712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */,
-				712E7C6410D199A7008DC18C /* IFButtonCellController.h in Headers */,
-				712E7C6610D199A7008DC18C /* IFCellController.h in Headers */,
-				712E7C6710D199A7008DC18C /* IFCellModel.h in Headers */,
-				712E7C6810D199A7008DC18C /* IFChoiceCellController.h in Headers */,
-				712E7C6A10D199A7008DC18C /* IFChoiceTableViewController.h in Headers */,
-				712E7C6C10D199A7008DC18C /* IFControlTableViewCell.h in Headers */,
-				712E7C6E10D199A7008DC18C /* IFGenericTableViewController.h in Headers */,
-				712E7C7010D199A7008DC18C /* IFLinkCellController.h in Headers */,
-				712E7C7210D199A7008DC18C /* IFNamedImage.h in Headers */,
-				712E7C7410D199A7008DC18C /* IFPreferencesModel.h in Headers */,
-				712E7C7610D199A7008DC18C /* IFSwitchCellController.h in Headers */,
-				712E7C7810D199A7008DC18C /* IFTemporaryModel.h in Headers */,
-				712E7C7A10D199A7008DC18C /* IFTextCellController.h in Headers */,
-				712E7C7C10D199A7008DC18C /* IFTextViewTableView.h in Headers */,
-				712E7C7E10D199A7008DC18C /* IFValueCellController.h in Headers */,
 				715E0CBC10DB069000AA4B07 /* CKNSDate+Calculations.h in Headers */,
 				715E0CCE10DB07B100AA4B07 /* CKNSDate+Conversions.h in Headers */,
 				715E0CF810DB0BDE00AA4B07 /* CKNSString+Validations.h in Headers */,
@@ -807,10 +755,6 @@
 				719F062B10F6E749002955C0 /* CKDomain.h in Headers */,
 				719F062D10F6E749002955C0 /* CKItem.h in Headers */,
 				719F063B10F6ED27002955C0 /* CKStore.h in Headers */,
-				4FE162E310FBD6D5002F5B37 /* CKAbstractCellController.h in Headers */,
-				4FE162E510FBD6D5002F5B37 /* CKButtonCellController.h in Headers */,
-				4FE162E710FBD6D5002F5B37 /* CKImageCellController.h in Headers */,
-				4FE162E910FBD6D5002F5B37 /* CKValueCellController.h in Headers */,
 				715CA15A110E374300593672 /* CKPickerView.h in Headers */,
 				710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */,
 				710DF11410FFBC030063FB2C /* CKWebService.h in Headers */,
@@ -828,6 +772,18 @@
 				71ACFEB811237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h in Headers */,
 				719093F1112474CD003489BB /* CKAttributesDictionary.h in Headers */,
 				71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */,
+				71428BB21194B8AB0059D4BA /* CKTableViewController.h in Headers */,
+				71428BC01194B8CF0059D4BA /* CKManagedTableViewController.h in Headers */,
+				71428BC21194B8CF0059D4BA /* CKTableViewCellController.h in Headers */,
+				71917AA91199C33100386EB5 /* CKConstants.h in Headers */,
+				71917AAA1199C33100386EB5 /* CKLocalization.h in Headers */,
+				71917AC21199C49A00386EB5 /* CKLayout.h in Headers */,
+				71917AC61199C4C300386EB5 /* CKLocationManager.h in Headers */,
+				71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */,
+				71917B3C1199E89300386EB5 /* CKWebViewController.h in Headers */,
+				71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */,
+				7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */,
+				7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -971,19 +927,6 @@
 				71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */,
 				7173D28410A4B2FA004E9621 /* CKNSSetAdditions.m in Sources */,
 				712E0FE210A4C74A00DF6562 /* CKAddressBook.m in Sources */,
-				712E7C6510D199A7008DC18C /* IFButtonCellController.m in Sources */,
-				712E7C6910D199A7008DC18C /* IFChoiceCellController.m in Sources */,
-				712E7C6B10D199A7008DC18C /* IFChoiceTableViewController.m in Sources */,
-				712E7C6D10D199A7008DC18C /* IFControlTableViewCell.m in Sources */,
-				712E7C6F10D199A7008DC18C /* IFGenericTableViewController.m in Sources */,
-				712E7C7110D199A7008DC18C /* IFLinkCellController.m in Sources */,
-				712E7C7310D199A7008DC18C /* IFNamedImage.m in Sources */,
-				712E7C7510D199A7008DC18C /* IFPreferencesModel.m in Sources */,
-				712E7C7710D199A7008DC18C /* IFSwitchCellController.m in Sources */,
-				712E7C7910D199A7008DC18C /* IFTemporaryModel.m in Sources */,
-				712E7C7B10D199A7008DC18C /* IFTextCellController.m in Sources */,
-				712E7C7D10D199A7008DC18C /* IFTextViewTableView.m in Sources */,
-				712E7C7F10D199A7008DC18C /* IFValueCellController.m in Sources */,
 				71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */,
 				71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */,
 				719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */,
@@ -993,10 +936,6 @@
 				713F4B0B10FB7C78005367AB /* CKNSDate+Calculations.m in Sources */,
 				713F4B0C10FB7C78005367AB /* CKNSDate+Conversions.m in Sources */,
 				713F4B0D10FB7C7A005367AB /* CKNSString+Validations.m in Sources */,
-				4FE162E410FBD6D5002F5B37 /* CKAbstractCellController.m in Sources */,
-				4FE162E610FBD6D5002F5B37 /* CKButtonCellController.m in Sources */,
-				4FE162E810FBD6D5002F5B37 /* CKImageCellController.m in Sources */,
-				4FE162EA10FBD6D5002F5B37 /* CKValueCellController.m in Sources */,
 				715CA159110E374300593672 /* CKPickerView.m in Sources */,
 				710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */,
 				710DF11510FFBC030063FB2C /* CKWebService.m in Sources */,
@@ -1013,6 +952,16 @@
 				71ACFEB911237CD200E6F938 /* CKDictionaryFromAttributesTransformer.m in Sources */,
 				719093F2112474CD003489BB /* CKAttributesDictionary.m in Sources */,
 				71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */,
+				71428BB31194B8AB0059D4BA /* CKTableViewController.m in Sources */,
+				71428BC11194B8CF0059D4BA /* CKManagedTableViewController.m in Sources */,
+				71428BC31194B8CF0059D4BA /* CKTableViewCellController.m in Sources */,
+				71917AC31199C49A00386EB5 /* CKLayout.m in Sources */,
+				71917AC71199C4C300386EB5 /* CKLocationManager.m in Sources */,
+				71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */,
+				71917B3D1199E89300386EB5 /* CKWebViewController.m in Sources */,
+				71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */,
+				7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */,
+				7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1031,7 +980,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/CloudKit.dst;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1044,6 +993,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudKit_Prefix.pch;
+				INFOPLIST_FILE = "CloudKit-Info.plist";
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = CloudKit;
 			};
@@ -1053,7 +1003,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				DSTROOT = /tmp/CloudKit.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1062,6 +1012,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudKit_Prefix.pch;
+				INFOPLIST_FILE = "CloudKit-Info.plist";
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = CloudKit;
 			};
@@ -1072,6 +1023,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 6;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
@@ -1083,7 +1035,9 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -1092,15 +1046,19 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 6;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

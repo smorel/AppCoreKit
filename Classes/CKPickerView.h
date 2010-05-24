@@ -54,6 +54,7 @@
 
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated;
 - (void)insertRow:(NSUInteger)row animated:(BOOL)animated;
+- (void)reloadRowAtIndex:(NSUInteger)row;
 - (void)reloadData;
 
 @end

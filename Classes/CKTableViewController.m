@@ -12,6 +12,7 @@
 
 @implementation CKTableViewController
 
+@synthesize backgroundView = _backgroundView;
 @synthesize tableView = _tableView;
 @synthesize style = _style;
 
@@ -29,11 +30,12 @@
 }
 
 - (void)dealloc {
+	self.backgroundView = nil;
 	self.tableView = nil;
 	[super dealloc];
 }
 
-#pragma mark Load View
+#pragma mark View Management
 
 - (void)loadView {
 	[super loadView];
@@ -47,6 +49,7 @@
 
 	if (self.tableView == nil) {
 		if ([self.view isKindOfClass:[UITableView class]]) {
+			// TODO: Assert - Should not be allowed
 			self.tableView = (UITableView *)self.view;
 		} else {
 			CGRect theViewFrame = self.view.bounds;
@@ -60,7 +63,9 @@
 	}
 }
 
-#pragma mark View Management
+- (void)viewDidUnload {
+	self.tableView = nil;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -78,8 +83,21 @@
 	[self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
 }
 
+#pragma mark Setters
+
 - (void)setEditing:(BOOL)inEditing animated:(BOOL)animated {
 	[self.tableView setEditing:inEditing animated:animated];
+}
+
+- (void)setBackgroundView:(UIView *)backgroundView {
+	[_backgroundView removeFromSuperview];
+	[_backgroundView release];
+	if (backgroundView) {
+		_backgroundView = [backgroundView retain];
+		[self.view insertSubview:backgroundView belowSubview:self.tableView];
+		self.tableView.backgroundColor = [UIColor clearColor];
+	}
+	else _backgroundView = nil;
 }
 
 #pragma mark UITableView Delegate
