@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F4E0BB911ADA15A00CB220D /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4E0BB711ADA15A00CB220D /* CKKeypadView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4E0BBA11ADA15A00CB220D /* CKKeypadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4E0BB811ADA15A00CB220D /* CKKeypadView.m */; };
+		4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */; };
 		710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF10E10FFBC030063FB2C /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -182,6 +186,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F4E0BB711ADA15A00CB220D /* CKKeypadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKKeypadView.h; path = Classes/CKKeypadView.h; sourceTree = "<group>"; };
+		4F4E0BB811ADA15A00CB220D /* CKKeypadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKKeypadView.m; path = Classes/CKKeypadView.m; sourceTree = "<group>"; };
+		4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+Layout.h"; path = "Classes/CKUIView+Layout.h"; sourceTree = "<group>"; };
+		4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+Layout.m"; path = "Classes/CKUIView+Layout.m"; sourceTree = "<group>"; };
 		710DF10E10FFBC030063FB2C /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
@@ -476,6 +484,8 @@
 				71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */,
 				711CA2B6112A05A60084660F /* CKTableViewController.h */,
 				711CA2B7112A05A60084660F /* CKTableViewController.m */,
+				4F4E0BB711ADA15A00CB220D /* CKKeypadView.h */,
+				4F4E0BB811ADA15A00CB220D /* CKKeypadView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -533,6 +543,8 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */,
+				4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */,
 				71917BAD1199ED6A00386EB5 /* CKBundle.h */,
 				71917BAE1199ED6A00386EB5 /* CKBundle.m */,
 				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
@@ -791,6 +803,8 @@
 				7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */,
 				7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */,
 				71AE450211ADCE2700BD23B6 /* CKMapCellController.h in Headers */,
+				4F4E0BB911ADA15A00CB220D /* CKKeypadView.h in Headers */,
+				4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,6 +984,8 @@
 				7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */,
 				7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */,
 				71AE450311ADCE2700BD23B6 /* CKMapCellController.m in Sources */,
+				4F4E0BBA11ADA15A00CB220D /* CKKeypadView.m in Sources */,
+				4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
