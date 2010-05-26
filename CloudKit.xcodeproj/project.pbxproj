@@ -59,7 +59,7 @@
 		71428BC31194B8CF0059D4BA /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71428BBF1194B8CF0059D4BA /* CKTableViewCellController.m */; };
 		7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */; };
 		7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */; };
-		7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */; };
+		7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7150E29E11A1E4650050E284 /* CKWebViewControllerRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7150E29F11A1E4650050E284 /* CKWebViewControllerRef.m */; };
 		715CA159110E374300593672 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 715CA157110E374300593672 /* CKPickerView.m */; };
 		715CA15A110E374300593672 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 715CA158110E374300593672 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
