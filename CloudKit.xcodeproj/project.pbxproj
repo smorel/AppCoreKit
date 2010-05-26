@@ -164,6 +164,8 @@
 		71ADA07F10A3740400C88903 /* CXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA06710A3740400C88903 /* CXMLNode.m */; };
 		71ADA08210A3740400C88903 /* TouchXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA06B10A3740400C88903 /* TouchXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71AE060D1105107300F39258 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713F4B1410FB7CB4005367AB /* CoreData.framework */; };
+		71AE450211ADCE2700BD23B6 /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AE450011ADCE2700BD23B6 /* CKMapCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71AE450311ADCE2700BD23B6 /* CKMapCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE450111ADCE2700BD23B6 /* CKMapCellController.m */; };
 		71B1975910F3EC26007F551A /* CKCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1975710F3EC26007F551A /* CKCoreDataManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
 		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -334,6 +336,8 @@
 		71ADA06610A3740400C88903 /* CXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode.h; path = "Vendor/TouchXML-1.0.6/Common/Source/CXMLNode.h"; sourceTree = "<group>"; };
 		71ADA06710A3740400C88903 /* CXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode.m; path = "Vendor/TouchXML-1.0.6/Common/Source/CXMLNode.m"; sourceTree = "<group>"; };
 		71ADA06B10A3740400C88903 /* TouchXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchXML.h; path = "Vendor/TouchXML-1.0.6/Common/Source/TouchXML.h"; sourceTree = "<group>"; };
+		71AE450011ADCE2700BD23B6 /* CKMapCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapCellController.h; path = Classes/CKMapCellController.h; sourceTree = "<group>"; };
+		71AE450111ADCE2700BD23B6 /* CKMapCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapCellController.m; path = Classes/CKMapCellController.m; sourceTree = "<group>"; };
 		71B1975710F3EC26007F551A /* CKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCoreDataManager.h; path = Classes/CKCoreDataManager.h; sourceTree = "<group>"; };
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
@@ -464,6 +468,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				71AE450011ADCE2700BD23B6 /* CKMapCellController.h */,
+				71AE450111ADCE2700BD23B6 /* CKMapCellController.m */,
 				71917B3A1199E89300386EB5 /* CKWebViewController.h */,
 				71917B3B1199E89300386EB5 /* CKWebViewController.m */,
 				71917AC01199C49A00386EB5 /* CKLayout.h */,
@@ -796,6 +802,7 @@
 				71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */,
 				7150DF8811A1C0AF0050E284 /* CKUIToolbarAdditions.h in Headers */,
 				7150E2A011A1E4650050E284 /* CKWebViewControllerRef.h in Headers */,
+				71AE450211ADCE2700BD23B6 /* CKMapCellController.h in Headers */,
 				4F4E0BB911ADA15A00CB220D /* CKKeypadView.h in Headers */,
 				4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */,
 			);
@@ -976,6 +983,7 @@
 				71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */,
 				7150DF8911A1C0AF0050E284 /* CKUIToolbarAdditions.m in Sources */,
 				7150E2A111A1E4650050E284 /* CKWebViewControllerRef.m in Sources */,
+				71AE450311ADCE2700BD23B6 /* CKMapCellController.m in Sources */,
 				4F4E0BBA11ADA15A00CB220D /* CKKeypadView.m in Sources */,
 				4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */,
 			);
