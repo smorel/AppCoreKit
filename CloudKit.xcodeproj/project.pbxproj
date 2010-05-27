@@ -15,6 +15,8 @@
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11510FFBC030063FB2C /* CKWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF11110FFBC030063FB2C /* CKWebService.m */; };
+		711ADC4011AF186C0082C064 /* CKMoviePlayerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 711ADC3E11AF186C0082C064 /* CKMoviePlayerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		711ADC4111AF186C0082C064 /* CKMoviePlayerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 711ADC3F11AF186C0082C064 /* CKMoviePlayerCellController.m */; };
 		7123DD76111A393F00F5DFB9 /* CKUIImage+Transformations.h in Headers */ = {isa = PBXBuildFile; fileRef = 7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7123DD77111A393F00F5DFB9 /* CKUIImage+Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */; };
 		712E0FE110A4C74900DF6562 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AD9D6610A35F4500C88903 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -194,6 +196,8 @@
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
 		710DF11110FFBC030063FB2C /* CKWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebService.m; path = Classes/CKWebService.m; sourceTree = "<group>"; };
+		711ADC3E11AF186C0082C064 /* CKMoviePlayerCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMoviePlayerCellController.h; path = Classes/CKMoviePlayerCellController.h; sourceTree = "<group>"; };
+		711ADC3F11AF186C0082C064 /* CKMoviePlayerCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMoviePlayerCellController.m; path = Classes/CKMoviePlayerCellController.m; sourceTree = "<group>"; };
 		711CA2B6112A05A60084660F /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewController.h; path = Classes/CKTableViewController.h; sourceTree = "<group>"; };
 		711CA2B7112A05A60084660F /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewController.m; path = Classes/CKTableViewController.m; sourceTree = "<group>"; };
 		7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIImage+Transformations.h"; path = "../cloudkit/Classes/CKUIImage+Transformations.h"; sourceTree = SOURCE_ROOT; };
@@ -468,6 +472,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				711ADC3E11AF186C0082C064 /* CKMoviePlayerCellController.h */,
+				711ADC3F11AF186C0082C064 /* CKMoviePlayerCellController.m */,
 				71AE450011ADCE2700BD23B6 /* CKMapCellController.h */,
 				71AE450111ADCE2700BD23B6 /* CKMapCellController.m */,
 				71917B3A1199E89300386EB5 /* CKWebViewController.h */,
@@ -805,6 +811,7 @@
 				71AE450211ADCE2700BD23B6 /* CKMapCellController.h in Headers */,
 				4F4E0BB911ADA15A00CB220D /* CKKeypadView.h in Headers */,
 				4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */,
+				711ADC4011AF186C0082C064 /* CKMoviePlayerCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,6 +993,7 @@
 				71AE450311ADCE2700BD23B6 /* CKMapCellController.m in Sources */,
 				4F4E0BBA11ADA15A00CB220D /* CKKeypadView.m in Sources */,
 				4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */,
+				711ADC4111AF186C0082C064 /* CKMoviePlayerCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
