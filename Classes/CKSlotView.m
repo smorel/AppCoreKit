@@ -58,17 +58,18 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 	CGRect rotFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.height, frame.size.width);
     if (self = [super initWithFrame:rotFrame]) {
 
-		NSLog(@"orig f: %@", NSStringFromCGRect(_originFrame));
-		NSLog(@"orig r: %@", NSStringFromCGRect(rotFrame));
-		NSLog(@"orig a: %@", NSStringFromCGPoint(self.layer.anchorPoint));
-		NSLog(@"orig c: %@", NSStringFromCGPoint(self.layer.position));
+//		NSLog(@"orig f: %@", NSStringFromCGRect(_originFrame));
+//		NSLog(@"orig r: %@", NSStringFromCGRect(rotFrame));
+//		NSLog(@"orig b: %@", NSStringFromCGRect(self.bounds));
+//		NSLog(@"orig a: %@", NSStringFromCGPoint(self.layer.anchorPoint));
+//		NSLog(@"orig p: %@", NSStringFromCGPoint(self.layer.position));
+//		NSLog(@"--");
 		
 		// Rotate the view so that the table will be horizontal
 		
-		self.layer.anchorPoint = CGPointMake(0.0, 0.0);		
-		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
-		self.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(-90));
-		//self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+//		self.layer.anchorPoint = CGPointMake(0.0, 0.0);		
+//		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
+//		self.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(-90));
 		
 		// Setup the table
 		
@@ -190,14 +191,29 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
+	// HACK, HACK: There is a problem of reframing the view when it's updated. This is a temporaty hack.
+	
+	static BOOL flag = NO;
+	
 	// Rotate the view so that the table will be horizontal
 		
 	self.layer.anchorPoint = CGPointMake(0.0, 0.0);		
-	self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
+	//self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
+	
+	if (flag == NO) {
+		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + self.bounds.size.height - 20);
+		flag = YES;
+	} else {
+		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
+	}
+	
 	self.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(-90));	
 	
-	NSLog(@"f: %@", NSStringFromCGRect(self.frame));
-	NSLog(@"b: %@", NSStringFromCGRect(self.bounds));	
+//	NSLog(@"p: %@", NSStringFromCGPoint(self.layer.position));
+//	NSLog(@"o: %@", NSStringFromCGRect(_originFrame));
+//	NSLog(@"f: %@", NSStringFromCGRect(self.frame));
+//	NSLog(@"b: %@", NSStringFromCGRect(self.bounds));	
+//	NSLog(@"-");
 }
 
 #pragma mark UIScrollViewDelegate Protocol
