@@ -10,6 +10,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
 
+CGRect __CGRectCenter(CGRect rect, CGRect target) {
+	return CGRectMake((target.size.width / 2) - (rect.size.width / 2), 
+					  (target.size.height / 2) - (rect.size.height / 2), 
+					  rect.size.width, rect.size.height);
+}
+
 @interface CKMoviePlayerCellController ()
 @property (nonatomic, retain) MPMoviePlayerController *playerController;
 @end
@@ -52,7 +58,14 @@
 	self.playerController.view.frame = CGRectInset(cell.contentView.bounds, 10, 10);
 	self.playerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;;
 	self.playerController.scalingMode = MPMovieScalingModeAspectFit;
-	cell.backgroundColor = [UIColor blackColor];	
+	cell.backgroundColor = [UIColor blackColor];
+	
+	UIActivityIndicatorView *spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+	[spinner startAnimating];
+	spinner.center = cell.contentView.center;
+	spinner.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+	
+	[cell.contentView addSubview:spinner];
 	[cell.contentView addSubview:self.playerController.view];
 	
 	return cell;
