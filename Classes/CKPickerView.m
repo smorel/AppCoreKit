@@ -51,6 +51,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	// Setup the table
 	
 	_tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+	_tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	_tableView.showsVerticalScrollIndicator = NO;
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
@@ -60,7 +61,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	// Default values
 	
 	self.rowHeight = 44.0f;
-	self.selectionStyle = UITableViewCellSelectionStyleBlue;	
+	self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
 - (void)dealloc {
@@ -68,11 +69,16 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
     [super dealloc];
 }
 
+// Layout subviews
+
+- (void)layoutSubviews {
+	_bufferCellHeight = (self.frame.size.height / 2) - (_rowHeight / 2);
+}
+
 // Public Properties
 
 - (void)setRowHeight:(CGFloat)height {
 	_rowHeight = height;
-	_bufferCellHeight = (self.frame.size.height / 2) - (_rowHeight / 2);
 }
 
 - (CGFloat)rowHeight {

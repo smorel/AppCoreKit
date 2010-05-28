@@ -37,7 +37,6 @@
 
 @interface CKMapCellController ()
 @property (nonatomic, retain) CKMapCellAnnotation *annotation;
-@property (nonatomic, retain) MKMapView *mapView;
 @end
 
 @implementation CKMapCellController
