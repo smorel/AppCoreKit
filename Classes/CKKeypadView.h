@@ -31,7 +31,8 @@ typedef enum {
 
 @protocol CKKeypadViewDelegate
 @optional
-- (void)keypadView:(CKKeypadView *)keypadView didPressKey:(CKKeypadViewKey)key;
+- (BOOL)keypadView:(CKKeypadView *)keypadView shouldSelectKey:(CKKeypadViewKey)key;
+- (void)keypadView:(CKKeypadView *)keypadView didSelectKey:(CKKeypadViewKey)key;
 @end
 
 
