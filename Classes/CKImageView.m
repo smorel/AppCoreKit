@@ -60,7 +60,6 @@
 	UIImage *image = [[CKCache sharedCache] imageForKey:self.imageURL];
 	if (image != nil) {
 		self.image = image;
-		[self setNeedsDisplay];
 		return;
 	}
 	
@@ -73,7 +72,6 @@
 - (void)reset {
 	[self cancel];
 	self.image = nil;
-	[self setNeedsDisplay];
 }
 
 - (void)cancel {
@@ -85,7 +83,8 @@
 
 - (void)setImage:(UIImage *)theImage {
 	[_image release];
-	_image = theImage ? [[theImage imageThatFits:self.bounds.size crop:self.aspectFill] retain] : nil;
+	_image = theImage ? [theImage retain] : nil;
+	[self setNeedsDisplay];
 }
 
 #pragma mark Draw Image
@@ -105,9 +104,10 @@
 
 - (void)request:(id)request didReceiveValue:(id)value {
 	if ([value isKindOfClass:[UIImage class]]) {
-		[[CKCache sharedCache] setImage:value forKey:self.imageURL];
-		self.image = value;
-		[self setNeedsDisplay];
+		// FIXME: We should cache both the source and the modified image
+		UIImage *resized = [value imageThatFits:self.bounds.size crop:self.aspectFill];
+		[[CKCache sharedCache] setImage:resized forKey:self.imageURL];
+		self.image = resized;
 		[self.delegate imageViewDidFinishLoading:self];
 	}
 	// FIXME: Should throw an error is the value is not an image
