@@ -82,6 +82,10 @@ static ASINetworkQueue *_sharedQueue = nil;
 
 #pragma mark Public API
 
++ (CKWebRequest *)requestWithURL:(NSURL *)url {
+	return [[[CKWebRequest alloc] initWithURL:url] autorelease];
+}
+
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
 	NSURL *theURL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]] : url)];
 	return [[[CKWebRequest alloc] initWithURL:theURL] autorelease];

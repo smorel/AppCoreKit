@@ -41,6 +41,7 @@
 // <url> is an URL as a string with an optional base path (e.g., http://google.com/search)
 // <params> is the query as a key/value NSDictionary; it will be appended as a query string to the URL (e.g., <url>?q="example")
 
++ (CKWebRequest *)requestWithURL:(NSURL *)url;
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params;
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
 
