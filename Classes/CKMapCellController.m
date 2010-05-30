@@ -89,7 +89,7 @@
 }
 
 - (CGFloat)heightForRow {
-	return 400.0f;
+	return 260.0f;
 }
 
 #pragma mark MKMapViewDelegate Protocol
