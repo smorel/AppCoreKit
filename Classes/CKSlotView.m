@@ -7,8 +7,9 @@
 //
 
 #import "CKSlotView.h"
-#import "QuartzCore/QuartzCore.h"
+#import <QuartzCore/QuartzCore.h>
 #import <CloudKit/CKConstants.h>
+#import <math.h>
 
 //
 
@@ -30,10 +31,6 @@
 
 // Helpers
 
-CGFloat MathDegreesToRadians(CGFloat degrees) {
-	return degrees / 57.2958;
-}
-
 CGRect CGRectCenter(CGRect rect, CGRect target) {
 	return CGRectMake((target.size.width / 2) - (rect.size.width / 2), 
 					  (target.size.height / 2) - (rect.size.height / 2), 
@@ -46,7 +43,6 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 
 @synthesize tableView			= _tableView;
 @synthesize delegate			= _delegate;
-@synthesize identifier			= _identifier;
 @synthesize highlightSelection	= _highlightSelection;
 @synthesize snapEnabled			= _snapEnabled;
 @synthesize autoCenterEnabled	= _autoCenterEnabled;
@@ -54,26 +50,11 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 //
 
 - (id)initWithFrame:(CGRect)frame {
-	_originFrame = frame;
-	CGRect rotFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.height, frame.size.width);
-    if (self = [super initWithFrame:rotFrame]) {
+    if (self = [super initWithFrame:frame]) {
 
-//		NSLog(@"orig f: %@", NSStringFromCGRect(_originFrame));
-//		NSLog(@"orig r: %@", NSStringFromCGRect(rotFrame));
-//		NSLog(@"orig b: %@", NSStringFromCGRect(self.bounds));
-//		NSLog(@"orig a: %@", NSStringFromCGPoint(self.layer.anchorPoint));
-//		NSLog(@"orig p: %@", NSStringFromCGPoint(self.layer.position));
-//		NSLog(@"--");
-		
-		// Rotate the view so that the table will be horizontal
-		
-//		self.layer.anchorPoint = CGPointMake(0.0, 0.0);		
-//		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
-//		self.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(-90));
-		
 		// Setup the table
 		
-		_tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+		_tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
 		_tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;		
 		_tableView.showsVerticalScrollIndicator = NO;
 		_tableView.delegate = self;
@@ -95,7 +76,7 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 }
 
 - (void)dealloc {
-	[_tableView release];
+	self.tableView = nil;
     [super dealloc];
 }
 
@@ -107,30 +88,14 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 	// FIXME: This code should be moved elsewhere, otherwise, the computation is only done when setting
 	// the width and flags set after this call will be ignored.
 	
+	// FIXME: Also, does not work when the view is autoresizing.
+	
 	if (self.autoCenterEnabled == YES) _bufferCellWidth = (self.frame.size.width / 2) - (_slotWidth / 2);
 	else _bufferCellWidth = 0;
 }
 
 - (CGFloat)slotWidth {
 	return _slotWidth;
-}
-
-- (void)setBackgroundView:(UIView *)view {
-	[_backgroundView removeFromSuperview];
-	[_backgroundView release];
-	_backgroundView = [view retain];
-	_backgroundView.userInteractionEnabled = NO;
-	_backgroundView.opaque = YES;
-	
-	_backgroundView.frame = CGRectCenter(view.frame, self.bounds);
-	_backgroundView.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(90));
-	
-	self.backgroundColor = [UIColor clearColor];
-	[self insertSubview:_backgroundView belowSubview:_tableView];
-}
-
-- (UIView *)backgroundView {
-	return _backgroundView;
 }
 
 - (void)setBackgroundColor:(UIColor *)color {
@@ -190,30 +155,8 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-
-	// HACK, HACK: There is a problem of reframing the view when it's updated. This is a temporaty hack.
-	
-	static BOOL flag = NO;
-	
-	// Rotate the view so that the table will be horizontal
-		
-	self.layer.anchorPoint = CGPointMake(0.0, 0.0);		
-	//self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
-	
-	if (flag == NO) {
-		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + self.bounds.size.height - 20);
-		flag = YES;
-	} else {
-		self.layer.position = CGPointMake(_originFrame.origin.x, _originFrame.origin.y + _originFrame.size.height);
-	}
-	
-	self.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(-90));	
-	
-//	NSLog(@"p: %@", NSStringFromCGPoint(self.layer.position));
-//	NSLog(@"o: %@", NSStringFromCGRect(_originFrame));
-//	NSLog(@"f: %@", NSStringFromCGRect(self.frame));
-//	NSLog(@"b: %@", NSStringFromCGRect(self.bounds));	
-//	NSLog(@"-");
+	self.tableView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+	self.tableView.frame = self.bounds;
 }
 
 #pragma mark UIScrollViewDelegate Protocol
@@ -289,15 +232,8 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 	if (!tableCell) { 
 		tableCell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:cellIdentifier] autorelease];
 		slotCell = [self delegateCellForSlot:(indexPath.row - 1) reusedCell:nil];
-		
-		// FIXME: This calculus should be simpler, the tableCell should have the right size.
-		// On the principle, the frame of the cell should be inversed before the rotation happens.
-		CGRect cellFrame = CGRectMake(0, 0, _slotWidth, self.frame.size.height);
-		slotCell.frame = CGRectMake((self.frame.size.height / 2) - (cellFrame.size.width / 2), 
-									(_slotWidth / 2) - (cellFrame.size.height / 2), 
-									cellFrame.size.width, cellFrame.size.height);
-		
-		slotCell.transform = CGAffineTransformMakeRotation(MathDegreesToRadians(90));
+		slotCell.transform = CGAffineTransformMakeRotation(M_PI/2);
+		slotCell.frame = CGRectMake(0, 0, _slotWidth, self.frame.size.height);
 		[tableCell.contentView addSubview:slotCell];
 	} else {
 		CKSlotViewCell *reusedCell = [tableCell.contentView.subviews objectAtIndex:0];

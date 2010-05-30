@@ -47,9 +47,6 @@
 @interface CKSlotView : UIView <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate> {
 	CGRect _originFrame;
 	UITableView	*_tableView;
-	UIView *_backgroundView;
-	
-	NSUInteger _identifier;
 	NSUInteger _selectedRow;
 	NSInteger _numberOfSlots;
 	CGFloat _slotWidth;
@@ -63,9 +60,7 @@
 }
 
 @property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, retain) UIColor *backgroundColor;
-@property (nonatomic, assign) NSUInteger identifier;
 @property (nonatomic, assign) CGFloat slotWidth;
 @property (nonatomic, assign) BOOL highlightSelection;
 @property (nonatomic, assign) BOOL snapEnabled;
