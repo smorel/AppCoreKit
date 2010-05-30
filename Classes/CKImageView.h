@@ -22,23 +22,23 @@
 
 @interface CKImageView : UIView <CKWebRequestDelegate> {
 	CKWebRequest *_request;
-	NSString *_imageURL;
+	NSURL *_imageURL;
+	UIImage *_defaultImage;
 	UIImage *_image;
 	BOOL _aspectFill;
-	UIColor *_borderColor;
-	CGFloat _cornerRadius;
 	
 	id<CKImageViewDelegate> _delegate;
 }
 
-@property (nonatomic, retain) NSString *imageURL;
+@property (nonatomic, retain, readonly) NSURL *imageURL;
+@property (nonatomic, retain) UIImage *defaultImage;
 @property (nonatomic, retain, readonly) UIImage *image;
 @property (nonatomic, assign) BOOL aspectFill;
-@property (nonatomic, retain) UIColor *borderColor;
-@property (nonatomic, assign) CGFloat cornerRadius;
 @property (nonatomic, assign) id<CKImageViewDelegate> delegate;
 
+- (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;
+- (void)reset;
 - (void)cancel;
 
 @end

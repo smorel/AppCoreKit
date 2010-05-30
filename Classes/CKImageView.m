@@ -13,6 +13,7 @@
 @interface CKImageView ()
 
 @property (nonatomic, retain, readwrite) CKWebRequest *request;
+@property (nonatomic, retain, readwrite) NSURL *imageURL;
 @property (nonatomic, retain, readwrite) UIImage *image;
 
 @end
@@ -23,10 +24,9 @@
 
 @synthesize request = _request;
 @synthesize imageURL = _imageURL;
+@synthesize defaultImage = _defaultImage;
 @synthesize image = _image;
 @synthesize aspectFill = _aspectFill;
-@synthesize borderColor = _borderColor;
-@synthesize cornerRadius = _cornerRadius;
 @synthesize delegate = _delegate;
 
 - (id)initWithFrame:(CGRect)frame {
@@ -37,20 +37,20 @@
 
 - (void)dealloc {
 	[self cancel];
-	[_imageURL release];
-	[_image release];
+	self.imageURL = nil;
+	self.image = nil;
+	self.defaultImage = nil;
 	self.delegate = nil;
 	[super dealloc];
 }
 
 #pragma mark Public API
 
-- (void)setImageURL:(NSString *)theImageURL {
-	if (self.image && [self.imageURL isEqualToString:theImageURL])
+- (void)loadImageWithContentOfURL:(NSURL *)url {
+	if (self.image && [self.imageURL isEqual:url])
 		return;
-	
-	[_imageURL release];
-	_imageURL = [theImageURL retain];
+
+	self.imageURL = url;
 	[self reload];
 }
 
@@ -60,13 +60,20 @@
 	UIImage *image = [[CKCache sharedCache] imageForKey:self.imageURL];
 	if (image != nil) {
 		self.image = image;
+		[self setNeedsDisplay];
 		return;
 	}
 	
 	self.image = nil;
-	self.request = [CKWebRequest requestWithURLString:self.imageURL params:nil];
+	self.request = [CKWebRequest requestWithURL:self.imageURL];
 	self.request.delegate = self;
 	[self.request start];
+}
+
+- (void)reset {
+	[self cancel];
+	self.image = nil;
+	[self setNeedsDisplay];
 }
 
 - (void)cancel {
@@ -74,11 +81,23 @@
 	self.request = nil;
 }
 
+#pragma mark Image
+
+- (void)setImage:(UIImage *)theImage {
+	[_image release];
+	_image = theImage ? [[theImage imageThatFits:self.bounds.size crop:self.aspectFill] retain] : nil;
+}
+
 #pragma mark Draw Image
 
 - (void)drawRect:(CGRect)rect {
 	if (self.image) {
 		[self.image drawInRect:rect];
+	} else if (self.defaultImage) {
+		[self.defaultImage drawInRect:rect];
+	} else {
+		CGContextRef ctx = UIGraphicsGetCurrentContext();
+		CGContextClearRect(ctx, rect);
 	}
 }
 
@@ -86,18 +105,8 @@
 
 - (void)request:(id)request didReceiveValue:(id)value {
 	if ([value isKindOfClass:[UIImage class]]) {
-		UIImage *source = [(UIImage *)value imageThatFits:self.bounds.size crop:self.aspectFill];
-		
-		if (self.borderColor && (self.cornerRadius == 0)) {
-			self.image = source;
-		} else {
-			self.image = [source imageByAddingBorderWithColor:self.borderColor cornerRadius:self.cornerRadius];
-		}
-		
-		// FIXME: Here we cache the modified image, maybe we should instead cache the source image.
-		
-		[[CKCache sharedCache] setImage:self.image forKey:self.imageURL];
-		
+		[[CKCache sharedCache] setImage:value forKey:self.imageURL];
+		self.image = value;
 		[self setNeedsDisplay];
 		[self.delegate imageViewDidFinishLoading:self];
 	}
@@ -105,8 +114,8 @@
 }
 
 - (void)request:(id)request didFailLoadingWithError:(NSError *)error {
-	self.request = nil;
-	[self.delegate imageView:self didFailLoadingWithError:error];	
+	[self reset];
+	[self.delegate imageView:self didFailLoadingWithError:error];
 }
 
 @end
