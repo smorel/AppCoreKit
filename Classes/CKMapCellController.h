@@ -14,7 +14,12 @@
 
 @interface CKMapCellController : CKTableViewCellController <MKMapViewDelegate> {
 	CKMapCellAnnotation *_annotation;
+	UIImage *_annotationImage;
+	CGPoint _annotationImageOffset;
 }
+
+@property (nonatomic, retain) UIImage *annotationImage;
+@property (nonatomic, assign) CGPoint annotationImageOffset;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
 

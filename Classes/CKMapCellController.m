@@ -42,17 +42,21 @@
 @implementation CKMapCellController
 
 @synthesize annotation = _annotation;
+@synthesize annotationImage = _annotationImage;
+@synthesize annotationImageOffset = _annotationImageOffset;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate {
 	if (self = [super init]) {
 		self.annotation = [[[CKMapCellAnnotation alloc] initWithCoordinate:coordinate] autorelease];
 		self.selectable = NO;
+		self.annotationImageOffset = CGPointMake(0, 0);
 	}
 	return self;
 }
 
 - (void)dealloc {
 	self.annotation = nil;
+	self.annotationImage = nil;
 	[super dealloc];
 }
 
@@ -67,6 +71,7 @@
 	mapView.layer.cornerRadius = 10.0f;
 	mapView.showsUserLocation = NO;
 	mapView.userInteractionEnabled = NO;
+	mapView.delegate = self;
 	
 	[cell.contentView addSubview:mapView];
 
@@ -99,10 +104,15 @@
 	
 	MKAnnotationView *view = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
 	if (!view) {
-		view = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
+		if (self.annotationImage) {
+			view = [[[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
+			view.image = self.annotationImage;
+			view.centerOffset = self.annotationImageOffset;
+		} else {
+			view = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier] autorelease];
+		}
 		view.canShowCallout = NO;
-	}
-	else {
+	} else {
 		view.annotation = annotation;
 	}
 	
