@@ -18,4 +18,7 @@
 // Returns a new string truncated to a specified length, adding an ellipsis at the end
 - (NSString *)stringByTruncatingToLength:(NSUInteger)length withEllipsisString:(NSString *)ellipsis;
 
+// Returns a new string using a lossy convertion of the receiver to ASCIIStringEncoding
+- (NSString *)stringUsingASCIIEncoding;
+
 @end
