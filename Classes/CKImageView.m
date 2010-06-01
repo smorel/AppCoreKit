@@ -60,7 +60,7 @@
 	UIImage *image = [[CKCache sharedCache] imageForKey:self.imageURL];
 	if (image != nil) {
 		self.image = image;
-		[self.delegate imageViewDidFinishLoading:self];
+		[self.delegate imageView:self didLoadImage:image cached:YES];
 		return;
 	}
 	
@@ -110,14 +110,14 @@
 		UIImage *resized = [value imageThatFits:self.bounds.size crop:self.aspectFill];
 		[[CKCache sharedCache] setImage:resized forKey:self.imageURL];
 		self.image = resized;
-		[self.delegate imageViewDidFinishLoading:self];
+		[self.delegate imageView:self didLoadImage:value cached:NO];
 	}
 	// FIXME: Should throw an error is the value is not an image
 }
 
 - (void)request:(id)request didFailLoadingWithError:(NSError *)error {
 	[self reset];
-	[self.delegate imageView:self didFailLoadingWithError:error];
+	[self.delegate imageView:self didFailLoadWithError:error];
 }
 
 @end

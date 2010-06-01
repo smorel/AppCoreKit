@@ -13,8 +13,8 @@
 
 @protocol CKImageViewDelegate
 
-- (void)imageViewDidFinishLoading:(CKImageView *)imageView;
-- (void)imageView:(CKImageView *)imageView didFailLoadingWithError:(NSError *)error;
+- (void)imageView:(CKImageView *)imageView didLoadImage:(UIImage *)image cached:(BOOL)cached;
+- (void)imageView:(CKImageView *)imageView didFailLoadWithError:(NSError *)error;
 
 @end
 
