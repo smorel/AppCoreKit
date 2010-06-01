@@ -60,6 +60,7 @@
 	UIImage *image = [[CKCache sharedCache] imageForKey:self.imageURL];
 	if (image != nil) {
 		self.image = image;
+		[self.delegate imageViewDidFinishLoading:self];
 		return;
 	}
 	
@@ -90,6 +91,7 @@
 #pragma mark Draw Image
 
 - (void)drawRect:(CGRect)rect {
+	[super drawRect:rect];
 	if (self.image) {
 		[self.image drawInRect:rect];
 	} else if (self.defaultImage) {
