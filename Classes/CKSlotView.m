@@ -251,7 +251,11 @@ CGRect CGRectCenter(CGRect rect, CGRect target) {
 	// We don't want to select the same cell again. It also handle the case where buffer cells are
 	// selected.
 	
-	if (_selectedRow == indexPath.row) {
+	// FIXME: The first test was for a special case (in Reportage) to disable the multiple-selection
+	// of the "snapped" cell. This is a quick fix (test for snapEnabled), but it needs to be handled
+	// more gracefully.
+	
+	if ((_selectedRow == indexPath.row) && (_snapEnabled == YES)) {
 		return nil;
 	} else if ((_selectedRow == 1) && (indexPath.row == 0)) {
 		return nil;
