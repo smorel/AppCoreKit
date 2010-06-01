@@ -34,6 +34,7 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 }
 
 - (void)dealloc {
+	[self.playerController stop];
 	self.playerController = nil;
 	[super dealloc];
 }
