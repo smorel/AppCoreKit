@@ -118,7 +118,7 @@
 - (void)reload {
 	[self clear];
 	[self setup];
-	[self.tableView reloadData];
+	[super reload];
 }
 
 #pragma mark Accessors
@@ -167,6 +167,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
 	[[self cellControllerForIndexPath:indexPath] didSelectRow];
 }
 
