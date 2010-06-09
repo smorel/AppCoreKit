@@ -10,6 +10,8 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
+
 CGRect __CGRectCenter(CGRect rect, CGRect target) {
 	return CGRectMake((target.size.width / 2) - (rect.size.width / 2), 
 					  (target.size.height / 2) - (rect.size.height / 2), 
@@ -77,3 +79,5 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 }
 
 @end
+
+#endif
