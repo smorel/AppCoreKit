@@ -47,6 +47,7 @@
 
 @implementation CKManagedTableViewController
 
+@synthesize delegate = _delegate;
 @synthesize sections = _sections;
 
 - (void)awakeFromNib {
@@ -74,6 +75,7 @@
 
 - (void)viewDidUnload {
 	[super viewDidUnload];
+	// FIXME: Controllers should not be deallocated when the view is unloaded
 	[self clear];
 }
 
@@ -110,6 +112,11 @@
 // Releases the table group data (it will be recreated when next needed)
 
 - (void)clear {
+	for (CKTableSection *section in self.sections) {
+		for (CKTableViewCellController *cellController in section.cellControllers) {
+			[cellController removeObserver:self forKeyPath:@"value"];
+		}
+	}
 	self.sections = nil;
 }
 
@@ -226,6 +233,10 @@
 	// Add *self* as a weak reference for all cell controllers
 	[section.cellControllers makeObjectsPerformSelector:@selector(setParentController:) withObject:self];
 	[self.sections addObject:section];
+
+	for (CKTableViewCellController *cell in section.cellControllers) {
+		[cell addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionNew context:nil];
+	}
 }
 
 - (void)addSectionWithCellControllers:(NSArray *)cellControllers {
@@ -237,6 +248,16 @@
 	section.headerTitle = headerTitle;
 	section.footerTitle = footerTitle;
 	[self addSection:section];
+}
+
+#pragma mark Cell Value Observer
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	CKTableViewCellController *cellController = (CKTableViewCellController *)object;
+	if (cellController.key) {
+		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
+			[self.delegate tableViewController:self cellControllerValueDidChange:cellController];
+	}
 }
 
 @end

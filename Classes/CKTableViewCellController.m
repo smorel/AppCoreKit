@@ -11,6 +11,8 @@
 
 @implementation CKTableViewCellController
 
+@synthesize key = _key;
+@synthesize value = _value;
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize selectable = _selectable;

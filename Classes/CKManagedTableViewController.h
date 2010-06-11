@@ -32,8 +32,11 @@
 //
 
 @interface CKManagedTableViewController : CKTableViewController <UIScrollViewDelegate> {
+	id _delegate;
 	NSMutableArray *_sections;
 }
+
+@property (nonatomic, assign) id delegate;
 
 - (void)setup;
 - (void)clear;
@@ -44,5 +47,13 @@
 - (void)addSection:(CKTableSection *)section;
 - (void)addSectionWithCellControllers:(NSArray *)cellControllers;
 - (void)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
+
+@end
+
+//
+
+@protocol CKManagedTableViewControllerDelegate
+
+- (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerValueDidChange:(CKTableViewCellController *)cellController;
 
 @end

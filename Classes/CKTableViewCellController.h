@@ -10,6 +10,8 @@
 #import "CKManagedTableViewController.h"
 
 @interface CKTableViewCellController : NSObject {
+	NSString *_key;
+	id _value;
 	id _target;
 	SEL _action;
 	BOOL _selectable;
@@ -18,6 +20,8 @@
 	CKManagedTableViewController *_parentController;
 }
 
+@property (nonatomic, retain) NSString *key;
+@property (nonatomic, retain) id value;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKManagedTableViewController *parentController;
