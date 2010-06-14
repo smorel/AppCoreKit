@@ -33,7 +33,7 @@
 
 - (id)initWithStyle:(UITableViewStyle)style { 
 	[self init];
-	self.style = _style;
+	self.style = style;
 	return self;
 }
 
