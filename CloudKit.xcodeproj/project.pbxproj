@@ -15,25 +15,25 @@
 		4FAD0E5E11C2B8110071C7BF /* CKOptionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */; };
 		4FAD0E6911C2BA720071C7BF /* CKOptionTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0E6A11C2BA720071C7BF /* CKOptionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0E6811C2BA720071C7BF /* CKOptionTableViewController.m */; };
-		4FAD0F7C11C2D54D0071C7BF /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7011C2D54D0071C7BF /* CKImageView.h */; };
+		4FAD0F7C11C2D54D0071C7BF /* CKImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7011C2D54D0071C7BF /* CKImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F7D11C2D54D0071C7BF /* CKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F7111C2D54D0071C7BF /* CKImageView.m */; };
-		4FAD0F7E11C2D54D0071C7BF /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7211C2D54D0071C7BF /* CKMapCellController.h */; };
+		4FAD0F7E11C2D54D0071C7BF /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7211C2D54D0071C7BF /* CKMapCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F7F11C2D54D0071C7BF /* CKMapCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F7311C2D54D0071C7BF /* CKMapCellController.m */; };
-		4FAD0F8011C2D54D0071C7BF /* CKMoviePlayerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7411C2D54D0071C7BF /* CKMoviePlayerCellController.h */; };
+		4FAD0F8011C2D54D0071C7BF /* CKMoviePlayerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7411C2D54D0071C7BF /* CKMoviePlayerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F8111C2D54D0071C7BF /* CKMoviePlayerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F7511C2D54D0071C7BF /* CKMoviePlayerCellController.m */; };
-		4FAD0F8411C2D54D0071C7BF /* CKSlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7811C2D54D0071C7BF /* CKSlotView.h */; };
+		4FAD0F8411C2D54D0071C7BF /* CKSlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7811C2D54D0071C7BF /* CKSlotView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F8511C2D54D0071C7BF /* CKSlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F7911C2D54D0071C7BF /* CKSlotView.m */; };
-		4FAD0F8611C2D54D0071C7BF /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7A11C2D54D0071C7BF /* CKWebViewController.h */; };
+		4FAD0F8611C2D54D0071C7BF /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F7A11C2D54D0071C7BF /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F8711C2D54D0071C7BF /* CKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F7B11C2D54D0071C7BF /* CKWebViewController.m */; };
-		4FAD0F9211C2D5810071C7BF /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */; };
+		4FAD0F9211C2D5810071C7BF /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9311C2D5810071C7BF /* CKKeypadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8911C2D5810071C7BF /* CKKeypadView.m */; };
-		4FAD0F9411C2D5810071C7BF /* CKManagedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8A11C2D5810071C7BF /* CKManagedTableViewController.h */; };
+		4FAD0F9411C2D5810071C7BF /* CKManagedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8A11C2D5810071C7BF /* CKManagedTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9511C2D5810071C7BF /* CKManagedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8B11C2D5810071C7BF /* CKManagedTableViewController.m */; };
-		4FAD0F9611C2D5810071C7BF /* CKStandardCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8C11C2D5810071C7BF /* CKStandardCellController.h */; };
+		4FAD0F9611C2D5810071C7BF /* CKStandardCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8C11C2D5810071C7BF /* CKStandardCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9711C2D5810071C7BF /* CKStandardCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8D11C2D5810071C7BF /* CKStandardCellController.m */; };
-		4FAD0F9811C2D5810071C7BF /* CKTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8E11C2D5810071C7BF /* CKTableViewCellController.h */; };
+		4FAD0F9811C2D5810071C7BF /* CKTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F8E11C2D5810071C7BF /* CKTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9911C2D5810071C7BF /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8F11C2D5810071C7BF /* CKTableViewCellController.m */; };
-		4FAD0F9A11C2D5810071C7BF /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */; };
+		4FAD0F9A11C2D5810071C7BF /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9B11C2D5810071C7BF /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F9111C2D5810071C7BF /* CKTableViewController.m */; };
 		710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF10E10FFBC030063FB2C /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
@@ -1081,7 +1081,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/CloudKit.dst;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1104,7 +1103,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				DSTROOT = /tmp/CloudKit.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1136,8 +1134,9 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1157,8 +1156,9 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
