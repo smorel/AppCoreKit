@@ -1,6 +1,6 @@
 //
 //  CKManagedTableViewController.h
-//  Urbanizer
+//  CloudKit
 //
 //  Created by Olivier Collet on 10-03-02.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
