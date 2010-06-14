@@ -169,15 +169,10 @@
 		return;
 	}
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200	
-	if ((_cachedLocation == nil) || ([newLocation distanceFromLocation:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
-		[self findAddressWithLocation:newLocation];
-	}
-#else
+	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2	
 	if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
 		[self findAddressWithLocation:newLocation];
 	}
-#endif
 	
 	[self setCachedLocation:newLocation];
 
