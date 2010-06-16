@@ -36,6 +36,8 @@
 
 - (id)initWithDomainName:(NSString *)domainName {
 	if (self = [super init]) {
+		// FIXME: There should be 1 specific CoreDataManager for the CKStore, 
+		// separated from the CoreDataManager of the application.
 		self.manager = [CKCoreDataManager sharedManager];
 		
 		// Fetch the domain, creating it if necessary
