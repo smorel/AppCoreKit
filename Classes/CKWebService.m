@@ -62,6 +62,7 @@
 	// TODO: put the request in a different queue than the shared queue (default)	
 	// ASIHTTPRequest *httpRequest = [request performSelector:@selector(connect)];
 	// [httpRequest start];
+	[request setHeaders:self.defaultHeaders];
 	[request start];
 	return request;
 }
