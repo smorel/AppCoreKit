@@ -11,6 +11,7 @@
 		4F27102411C187C2007F584E /* CKToggleSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */; };
 		4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */; };
+		4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F95B7BB11C805120002E71E /* CKLocalization.m */; };
 		4FAD0E5D11C2B8110071C7BF /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0E5E11C2B8110071C7BF /* CKOptionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */; };
 		4FAD0E6911C2BA720071C7BF /* CKOptionTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -206,6 +207,7 @@
 		4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKToggleSwitchCellController.m; sourceTree = "<group>"; };
 		4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+Layout.h"; path = "Classes/CKUIView+Layout.h"; sourceTree = "<group>"; };
 		4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+Layout.m"; path = "Classes/CKUIView+Layout.m"; sourceTree = "<group>"; };
+		4F95B7BB11C805120002E71E /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalization.m; path = Classes/CKLocalization.m; sourceTree = "<group>"; };
 		4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionCellController.h; sourceTree = "<group>"; };
 		4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKOptionCellController.m; sourceTree = "<group>"; };
 		4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionTableViewController.h; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				71AD9D6F10A35F4500C88903 /* CKDebug.h */,
 				71917AA71199C33100386EB5 /* CKConstants.h */,
 				71917AA81199C33100386EB5 /* CKLocalization.h */,
+				4F95B7BB11C805120002E71E /* CKLocalization.m */,
 				7173D28110A4B2FA004E9621 /* CKNSSetAdditions.h */,
 				7173D28210A4B2FA004E9621 /* CKNSSetAdditions.m */,
 				71AD9D6810A35F4500C88903 /* CKNSArrayAdditions.h */,
@@ -1063,6 +1066,7 @@
 				4FAD0F9711C2D5810071C7BF /* CKStandardCellController.m in Sources */,
 				4FAD0F9911C2D5810071C7BF /* CKTableViewCellController.m in Sources */,
 				4FAD0F9B11C2D5810071C7BF /* CKTableViewController.m in Sources */,
+				4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
