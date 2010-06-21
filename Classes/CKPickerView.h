@@ -38,7 +38,6 @@
 	NSInteger _numberOfRows;
 	CGFloat _rowHeight;
 	UITableViewCellSelectionStyle _selectionStyle;
-	NSInteger _bufferCellHeight;
 	BOOL _showsSelection;
 	NSObject<CKPickerViewDelegate> *_delegate;
 }
