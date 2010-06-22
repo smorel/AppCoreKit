@@ -11,6 +11,8 @@
 		4F27102411C187C2007F584E /* CKToggleSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */; };
 		4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */; };
+		4F59F0CD11D00DD6003B4CA8 /* MKNumberBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F59F0CE11D00DD6003B4CA8 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */; };
 		4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F95B7BB11C805120002E71E /* CKLocalization.m */; };
 		4FAD0E5D11C2B8110071C7BF /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0E5E11C2B8110071C7BF /* CKOptionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */; };
@@ -207,6 +209,8 @@
 		4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKToggleSwitchCellController.m; sourceTree = "<group>"; };
 		4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+Layout.h"; path = "Classes/CKUIView+Layout.h"; sourceTree = "<group>"; };
 		4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+Layout.m"; path = "Classes/CKUIView+Layout.m"; sourceTree = "<group>"; };
+		4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNumberBadgeView.h; sourceTree = "<group>"; };
+		4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNumberBadgeView.m; sourceTree = "<group>"; };
 		4F95B7BB11C805120002E71E /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalization.m; path = Classes/CKLocalization.m; sourceTree = "<group>"; };
 		4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionCellController.h; sourceTree = "<group>"; };
 		4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKOptionCellController.m; sourceTree = "<group>"; };
@@ -480,6 +484,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4F59F0CA11D00DD6003B4CA8 /* MKNumberBadgeView */ = {
+			isa = PBXGroup;
+			children = (
+				4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */,
+				4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */,
+			);
+			name = MKNumberBadgeView;
+			path = Vendor/MKNumberBadgeView;
+			sourceTree = "<group>";
+		};
 		4FAD0FA111C2D5C80071C7BF /* Tables */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,6 +658,7 @@
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				4F59F0CA11D00DD6003B4CA8 /* MKNumberBadgeView */,
 				71ADA04D10A372F400C88903 /* TouchXML */,
 				71ADA02410A372BD00C88903 /* TouchJSON */,
 				71ADA01A10A3725800C88903 /* RegexKitLite */,
@@ -874,6 +889,7 @@
 				4FAD0F9611C2D5810071C7BF /* CKStandardCellController.h in Headers */,
 				4FAD0F9811C2D5810071C7BF /* CKTableViewCellController.h in Headers */,
 				4FAD0F9A11C2D5810071C7BF /* CKTableViewController.h in Headers */,
+				4F59F0CD11D00DD6003B4CA8 /* MKNumberBadgeView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,6 +1083,7 @@
 				4FAD0F9911C2D5810071C7BF /* CKTableViewCellController.m in Sources */,
 				4FAD0F9B11C2D5810071C7BF /* CKTableViewController.m in Sources */,
 				4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */,
+				4F59F0CE11D00DD6003B4CA8 /* MKNumberBadgeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
