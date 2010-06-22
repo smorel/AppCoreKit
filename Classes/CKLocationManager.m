@@ -99,7 +99,9 @@
 	_timeoutEnabled = NO;
 
 	CLLocation *currentLocation = _locationManager.location;
-
+	[self setCachedLocation:currentLocation];
+	CKDebugLog(@"Location: %@", _cachedLocation);
+	
 	if (currentLocation == nil) {
 		[_locationManager startUpdatingLocation];
 		return;
