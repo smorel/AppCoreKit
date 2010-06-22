@@ -19,6 +19,8 @@
 
 @interface CKWebRequest : NSObject {
 	NSURL *_url;
+	NSDictionary *_headers;
+	
 	id<CKWebRequestDelegate> _delegate;
 	id<CKWebResponseTransformer> _transformer;
 	id _valueTarget;
@@ -28,11 +30,12 @@
 	// FIXME: Username & password should be in a "authentication class"
 	NSString *_username;
 	NSString *_password;
-
+	
 	ASIHTTPRequest *_httpRequest; // Weak reference
 }
 
 @property (nonatomic, readonly) NSURL *url;
+@property (nonatomic, retain, readwrite) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) id<CKWebRequestDelegate> delegate;
 @property (nonatomic, assign) id<CKWebResponseTransformer> transformer; // FIXME: assign or retain?

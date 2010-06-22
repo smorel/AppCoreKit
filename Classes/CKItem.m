@@ -18,10 +18,14 @@
 
 @end
 
-@implementation CKItem (CKItemsAttributes)
+@implementation CKItem (CKItemsRepresentation)
+
+- (NSDictionary *)propertyListRepresentation {
+	return [[[CKAttributesDictionary alloc] initWithItem:self] autorelease];
+}
 
 - (NSDictionary *)attributesDictionary {
-	return [[[CKAttributesDictionary alloc] initWithItem:self] autorelease];
+	return [self propertyListRepresentation];
 }
 
 @end

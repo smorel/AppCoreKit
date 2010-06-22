@@ -10,6 +10,10 @@
 
 // Private API
 
+@interface CKPickerView ()
+@property (nonatomic, readonly) CGFloat bufferCellHeight;
+@end
+
 @interface CKPickerView (Private)
 - (void)setupView;
 - (NSInteger)selectNearestRow;
@@ -33,6 +37,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 @synthesize backgroundView = _backgroundView;
 @synthesize selectionView = _selectionView;
 @synthesize overlayView = _overlayView;
+@synthesize rowHeight = _rowHeight;
 @synthesize selectionStyle = _selectionStyle;
 @synthesize delegate = _delegate;
 
@@ -72,18 +77,10 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 // Layout subviews
 
 - (void)layoutSubviews {
-	_bufferCellHeight = (self.frame.size.height / 2) - (_rowHeight / 2);
+	return;
 }
 
 // Public Properties
-
-- (void)setRowHeight:(CGFloat)height {
-	_rowHeight = height;
-}
-
-- (CGFloat)rowHeight {
-	return _rowHeight;
-}
 
 - (void)setBackgroundView:(UIView *)view {
 	[_backgroundView removeFromSuperview];
@@ -150,6 +147,10 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 }
 
 // Public API
+
+- (CGFloat)bufferCellHeight {
+	return (self.frame.size.height / 2) - (_rowHeight / 2);
+}
 
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated {
 	
@@ -224,7 +225,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ((indexPath.row == 0) || (indexPath.row == (_numberOfRows + 1))) { 
-		return _bufferCellHeight; 
+		return self.bufferCellHeight; 
 	} else {
 		return _rowHeight;
 	}
@@ -239,7 +240,7 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	if ((indexPath.row == 0) || (indexPath.row == (_numberOfRows + 1))) {
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:bufferCellIdentifier];
 		if (!cell) { 
-			cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, _bufferCellHeight)
+			cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.bufferCellHeight)
 										   reuseIdentifier:bufferCellIdentifier] autorelease];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
