@@ -23,7 +23,9 @@
 @end
 
 
-@interface CKWebViewController (Private)
+@interface CKWebViewController ()
+@property (nonatomic, retain) NSString *HTMLString;
+@property (nonatomic, retain) NSURL *baseURL;
 - (void)generateToolbar;
 - (void)updateToolbar;
 @end
@@ -33,6 +35,8 @@
 @implementation CKWebViewController
 
 @synthesize homeURL = _homeURL;
+@synthesize HTMLString = _HTMLString;
+@synthesize baseURL = _baseURL;
 @synthesize backButton = _backButton;
 @synthesize forwardButton = _forwardButton;
 @synthesize reloadButton = _reloadButton;
@@ -40,19 +44,31 @@
 @synthesize toolbarButtonsLoading = _toolbarButtonsLoading;
 @synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
 
+- (void)setup {
+	_showURLInTitle = YES;
+	
+	// Create the toolbar buttons
+	[self setImage:[UIImage imageNamed:@"CKWebViewController-goBack.png"] forButton:CKWebViewButtonBack];
+	[self setImage:[UIImage imageNamed:@"CKWebViewController-goForward.png"] forButton:CKWebViewButtonForward];
+	self.reloadButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
+	self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+	
+	[self generateToolbar];	
+}
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
 		self.homeURL = url;
-		_showURLInTitle = YES;
+		[self setup];
+	}
+    return self;	
+}
 
-		// Create the toolbar buttons
-		[self setImage:[UIImage imageNamed:@"CKWebViewController-goBack.png"] forButton:CKWebViewButtonBack];
-		[self setImage:[UIImage imageNamed:@"CKWebViewController-goForward.png"] forButton:CKWebViewButtonForward];
-		self.reloadButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
-		self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-		
-		[self generateToolbar];
+- (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL {
+	if (self = [super init]) {
+		self.HTMLString = string;
+		self.baseURL = baseURL;
+		[self setup];
 	}
     return self;	
 }
@@ -70,10 +86,16 @@
 	[self.view addSubview:_webView];
 
 	// Load the URL
-	if (!_homeURL) return;
-	NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
-	[_webView loadRequest:request];
-	[request release];
+	if (_homeURL) {
+		NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
+		[_webView loadRequest:request];
+		[request release];
+	}
+	
+	// Load the HTML string
+	if (self.HTMLString) {
+		[_webView loadHTMLString:self.HTMLString baseURL:self.baseURL];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -130,6 +152,8 @@
 }
 
 - (void)dealloc {
+	self.HTMLString = nil;
+	self.baseURL = nil;
 	[_webView release];
 	[_homeURL release];
 	[_backButton release];
@@ -218,6 +242,11 @@
 
 #pragma mark -
 #pragma mark WebView Delegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+	if([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
+	return YES;
+}
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
 	[self updateToolbar];

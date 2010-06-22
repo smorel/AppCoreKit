@@ -18,6 +18,9 @@ typedef enum {
 	UIWebView *_webView;
 	
 	NSURL *_homeURL;
+	NSString *_HTMLString;
+	NSURL *_baseURL;
+
 	BOOL _showURLInTitle;
 	
 	UIBarButtonItem *_backButton;
@@ -36,6 +39,7 @@ typedef enum {
 @property (nonatomic, assign, getter=isURLInTitle, setter=showURLInTitle) BOOL _showURLInTitle;
 
 - (id)initWithURL:(NSURL *)url;
+- (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
 
 - (void)setActionButtonWithStyle:(UIBarButtonSystemItem)style action:(SEL)action target:(id)target;
 - (void)setImage:(UIImage *)image forButton:(CKWebViewButton)button;
