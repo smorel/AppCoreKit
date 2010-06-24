@@ -13,6 +13,8 @@
 		4F07A6BF11D295A20099F51B /* CKOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F07A6BB11D295A20099F51B /* CKOverlayView.m */; };
 		4F27102311C187C2007F584E /* CKToggleSwitchCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F27102411C187C2007F584E /* CKToggleSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */; };
+		4F497E5F11D404F700680E06 /* CKTextFieldCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F497E6011D404F700680E06 /* CKTextFieldCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */; };
 		4F4E0BF711ADB3A500CB220D /* CKUIView+Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4E0BF811ADB3A500CB220D /* CKUIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */; };
 		4F59F0CD11D00DD6003B4CA8 /* MKNumberBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -215,6 +217,8 @@
 		4F07A6BB11D295A20099F51B /* CKOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKOverlayView.m; sourceTree = "<group>"; };
 		4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKToggleSwitchCellController.h; sourceTree = "<group>"; };
 		4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKToggleSwitchCellController.m; sourceTree = "<group>"; };
+		4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTextFieldCellController.h; sourceTree = "<group>"; };
+		4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTextFieldCellController.m; sourceTree = "<group>"; };
 		4F4E0BF511ADB3A500CB220D /* CKUIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+Layout.h"; path = "Classes/CKUIView+Layout.h"; sourceTree = "<group>"; };
 		4F4E0BF611ADB3A500CB220D /* CKUIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+Layout.m"; path = "Classes/CKUIView+Layout.m"; sourceTree = "<group>"; };
 		4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNumberBadgeView.h; sourceTree = "<group>"; };
@@ -519,6 +523,8 @@
 				4FAD0F7511C2D54D0071C7BF /* CKMoviePlayerCellController.m */,
 				4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */,
 				4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */,
+				4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */,
+				4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */,
 				4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */,
 				4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */,
 				4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */,
@@ -904,6 +910,7 @@
 				4F59F0CD11D00DD6003B4CA8 /* MKNumberBadgeView.h in Headers */,
 				4F07A6BC11D295A20099F51B /* CKCalloutView.h in Headers */,
 				4F07A6BE11D295A20099F51B /* CKOverlayView.h in Headers */,
+				4F497E5F11D404F700680E06 /* CKTextFieldCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1100,6 +1107,7 @@
 				4F59F0CE11D00DD6003B4CA8 /* MKNumberBadgeView.m in Sources */,
 				4F07A6BD11D295A20099F51B /* CKCalloutView.m in Sources */,
 				4F07A6BF11D295A20099F51B /* CKOverlayView.m in Sources */,
+				4F497E6011D404F700680E06 /* CKTextFieldCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
