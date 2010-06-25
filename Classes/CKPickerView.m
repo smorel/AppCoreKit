@@ -152,6 +152,11 @@ CGRect _CGRectCenter(CGRect rect, CGRect target) {
 	return (self.frame.size.height / 2) - (_rowHeight / 2);
 }
 
+- (NSInteger)indexForSelectedRow {
+	NSIndexPath *indexPath = [_tableView indexPathForSelectedRow];
+	return indexPath ? (indexPath.row - 1) : -1;
+}
+
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated {
 	
 	if (_numberOfRows == 0) {

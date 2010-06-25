@@ -50,6 +50,7 @@
 @property (nonatomic, assign) CGFloat rowHeight;
 @property (nonatomic, assign) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic, assign) IBOutlet NSObject<CKPickerViewDelegate> *delegate;
+@property (nonatomic, readonly) NSInteger indexForSelectedRow;
 
 - (void)selectRow:(NSUInteger)row animated:(BOOL)animated;
 - (void)insertRow:(NSUInteger)row animated:(BOOL)animated;
