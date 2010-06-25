@@ -18,6 +18,7 @@
 	UITableViewCellAccessoryType _accessoryType;
 	NSIndexPath *_indexPath;
 	CKManagedTableViewController *_parentController;
+	CGFloat _rowHeight;
 }
 
 @property (nonatomic, retain) NSString *key;
@@ -31,6 +32,7 @@
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, getter=isSelectable) BOOL selectable;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
+@property (nonatomic, assign) CGFloat rowHeight;
 
 - (UITableViewCell *)cellWithStyle:(UITableViewStyle)style;
 

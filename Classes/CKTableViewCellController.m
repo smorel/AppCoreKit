@@ -19,11 +19,13 @@
 @synthesize accessoryType = _accessoryType;
 @synthesize parentController = _parentController;
 @synthesize indexPath = _indexPath;
+@synthesize rowHeight = _rowHeight;
 
 - (id)init {
 	self = [super init];
 	if (self != nil) {
 		_selectable = YES;
+		self.rowHeight = 44.0f;
 	}
 	return self;
 }
@@ -89,7 +91,7 @@
 }
 
 - (CGFloat)heightForRow {
-	return 44.0f;
+	return self.rowHeight;
 }
 
 // Selection
