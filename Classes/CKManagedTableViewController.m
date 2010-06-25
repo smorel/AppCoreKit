@@ -41,6 +41,7 @@
 
 @interface CKManagedTableViewController ()
 @property (nonatomic, retain, readwrite) NSMutableArray *sections;
+@property (nonatomic, retain) NSMutableDictionary *pValuesForKeys;
 @end
 
 //
@@ -49,6 +50,7 @@
 
 @synthesize delegate = _delegate;
 @synthesize sections = _sections;
+@synthesize pValuesForKeys = _valuesForKeys;
 
 - (void)awakeFromNib {
 	self.style = UITableViewStyleGrouped;
@@ -100,6 +102,13 @@
 	return _sections;
 }
 
+- (NSMutableDictionary *)pValuesForKeys {
+	if (_valuesForKeys == nil) {
+		_valuesForKeys = [[NSMutableDictionary dictionary] retain];
+	}
+	return _valuesForKeys;
+}
+
 #pragma mark Setup Management
 
 // Creates/updates cell data. This method should only be invoked directly if
@@ -118,6 +127,7 @@
 		}
 	}
 	self.sections = nil;
+	self.pValuesForKeys = nil;
 }
 
 // Performs all work needed to refresh the data and the associated display
@@ -178,7 +188,7 @@
 	[[self cellControllerForIndexPath:indexPath] didSelectRow];
 }
 
-#pragma mark UITableView Protocol for Secions
+#pragma mark UITableView Protocol for Sections
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	return [[self.sections objectAtIndex:section] headerTitle];
@@ -250,11 +260,16 @@
 	[self addSection:section];
 }
 
-#pragma mark Cell Value Observer
+#pragma mark Values
+
+- (NSDictionary *)valuesForKeys {
+	return self.pValuesForKeys;
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	CKTableViewCellController *cellController = (CKTableViewCellController *)object;
 	if (cellController.key) {
+		[self.pValuesForKeys setObject:cellController.value forKey:cellController.key];
 		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
 			[self.delegate tableViewController:self cellControllerValueDidChange:cellController];
 	}
