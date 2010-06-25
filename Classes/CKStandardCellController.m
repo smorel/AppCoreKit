@@ -21,6 +21,9 @@
 @synthesize style = _style;
 @synthesize text = _text;
 @synthesize detailedText = _detailedText;
+@synthesize backgroundColor = _backgroundColor;
+@synthesize textColor = _textColor;
+@synthesize detailedTextColor = _detailedTextColor;
 
 - (id)initWithStyle:(UITableViewCellStyle)style {
 	if (self = [super init]) {
@@ -37,6 +40,15 @@
 	return self;
 }
 
+- (void)dealloc {
+	self.text = nil;
+	self.detailedText = nil;
+	self.backgroundColor = nil;
+	self.textColor = nil;
+	self.detailedTextColor = nil;
+	[super dealloc];
+}
+
 //
 
 - (UITableViewCell *)loadCell {
@@ -46,6 +58,10 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
+	if (self.textColor) cell.textLabel.textColor = self.textColor;
+	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;
+	
 	cell.textLabel.text = self.text;
 	cell.detailTextLabel.text = self.detailedText;
 }
