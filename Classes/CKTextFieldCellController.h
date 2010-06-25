@@ -16,8 +16,8 @@
 	CGPoint _tableContentOffset;
 }
 
-- (id)initWithTitle:(NSString *)title value:(NSString *)value placeholder:(NSString *)placeholder;
-
 @property (nonatomic, readonly, retain) UITextField *textField;
+
+- (id)initWithTitle:(NSString *)title value:(NSString *)value placeholder:(NSString *)placeholder;
 
 @end
