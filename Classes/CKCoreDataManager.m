@@ -75,6 +75,10 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 												 selector:@selector(applicationWillTerminate:) 
 													 name:UIApplicationWillTerminateNotification 
 												   object:[UIApplication sharedApplication]];		
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(applicationWillTerminate:) 
+													 name:UIApplicationDidEnterBackgroundNotification 
+												   object:[UIApplication sharedApplication]];		
 	}
 	return self;
 }
@@ -82,6 +86,9 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:UIApplicationWillTerminateNotification
+												  object:[UIApplication sharedApplication]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:UIApplicationDidEnterBackgroundNotification
 												  object:[UIApplication sharedApplication]];
     [_objectContext release];
     [_objectModel release];
