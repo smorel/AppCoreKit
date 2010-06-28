@@ -26,6 +26,14 @@
 	return self;
 }
 
+- (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index {
+	[_cellControllers insertObject:cellController atIndex:index];
+}
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index {
+	[_cellControllers removeObjectAtIndex:index];
+}
+
 - (void)dealloc {
 	[_cellControllers release];
 	self.headerTitle = nil;
@@ -147,6 +155,26 @@
 	return controller;
 }
 
+- (void)removeCellControllerAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
+	CKTableViewCellController *cellController = [section.cellControllers objectAtIndex:indexPath.row];
+	[cellController removeObserver:self forKeyPath:@"value"];
+	[section removeCellControllerAtIndex:indexPath.row];
+	
+	if (section.cellControllers.count == 0) [self.sections removeObjectAtIndex:indexPath.section];
+}
+
+- (void)moveCellControllerFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	CKTableViewCellController *cellController = [[self cellControllerForIndexPath:fromIndexPath] retain];
+	[cellController performSelector:@selector(setIndexPath:) withObject:toIndexPath];
+
+	CKTableSection *fromSection = [self.sections objectAtIndex:fromIndexPath.section];
+	CKTableSection *toSection = [self.sections objectAtIndex:toIndexPath.section];
+	[fromSection removeCellControllerAtIndex:fromIndexPath.row];
+	[toSection insertCellController:cellController atIndex:toIndexPath.row];
+	[cellController release];
+}
+
 #pragma mark UITableView Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -187,6 +215,32 @@
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
 	[[self cellControllerForIndexPath:indexPath] didSelectRow];
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+	return [self cellControllerForIndexPath:indexPath].isEditable;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+
+	if (editingStyle == UITableViewCellEditingStyleDelete && cellController.isEditable) {
+		[self removeCellControllerAtIndexPath:indexPath];
+		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
+			[self.delegate tableViewController:self cellControllerDidDelete:cellController];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+	}	
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+	return [self cellControllerForIndexPath:indexPath].isMovable;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	[self moveCellControllerFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidMoveFromIndexPath:toIndexPath:)])
+		[self.delegate tableViewController:self cellControllerDidMoveFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
+}
+
 
 #pragma mark UITableView Protocol for Sections
 

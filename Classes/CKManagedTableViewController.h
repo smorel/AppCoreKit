@@ -26,6 +26,8 @@
 @property (nonatomic, retain, readwrite) UIView *footerView;
 
 - (id)initWithCellControllers:(NSArray *)cellControllers;
+- (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index;
+- (void)removeCellControllerAtIndex:(NSUInteger)index;
 
 @end
 
@@ -57,5 +59,7 @@
 @protocol CKManagedTableViewControllerDelegate
 
 - (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerValueDidChange:(CKTableViewCellController *)cellController;
+- (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerDidDelete:(CKTableViewCellController *)cellController;
+- (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerDidMoveFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
 @end
