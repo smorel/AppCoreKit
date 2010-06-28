@@ -15,6 +15,8 @@
 	id _target;
 	SEL _action;
 	BOOL _selectable;
+	BOOL _editable;
+	BOOL _movable;
 	UITableViewCellAccessoryType _accessoryType;
 	NSIndexPath *_indexPath;
 	CKManagedTableViewController *_parentController;
@@ -31,6 +33,8 @@
 @property (nonatomic, retain) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, getter=isSelectable) BOOL selectable;
+@property (nonatomic, getter=isEditable) BOOL editable;
+@property (nonatomic, getter=isMovable) BOOL movable;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, assign) CGFloat rowHeight;
 
