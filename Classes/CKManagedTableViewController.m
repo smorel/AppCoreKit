@@ -216,14 +216,16 @@
 	[[self cellControllerForIndexPath:indexPath] didSelectRow];
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [self cellControllerForIndexPath:indexPath].isEditable;
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCellEditingStyle editingStyle = UITableViewCellEditingStyleNone;
+	if ([self cellControllerForIndexPath:indexPath].isRemovable) editingStyle = UITableViewCellEditingStyleDelete;
+	return editingStyle;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
 
-	if (editingStyle == UITableViewCellEditingStyleDelete && cellController.isEditable) {
+	if (editingStyle == UITableViewCellEditingStyleDelete) {
 		[self removeCellControllerAtIndexPath:indexPath];
 		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
 			[self.delegate tableViewController:self cellControllerDidDelete:cellController];
