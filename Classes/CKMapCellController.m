@@ -50,6 +50,7 @@
 		self.annotation = [[[CKMapCellAnnotation alloc] initWithCoordinate:coordinate] autorelease];
 		self.selectable = NO;
 		self.annotationImageOffset = CGPointMake(0, 0);
+		self.rowHeight = 260.0f;
 	}
 	return self;
 }
@@ -91,10 +92,6 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 //	MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
-}
-
-- (CGFloat)heightForRow {
-	return 260.0f;
 }
 
 #pragma mark MKMapViewDelegate Protocol
