@@ -32,6 +32,7 @@
 @synthesize shadowSize = _shadowSize;
 @synthesize shadowOffsetX = _shadowOffsetX;
 @synthesize shadowOffsetY = _shadowOffsetY;
+@synthesize disableUserInteraction = _disableUserInteraction;
 
 - (void)setup {
 	self.backgroundColor = [UIColor clearColor];
@@ -45,7 +46,7 @@
 	self.contentView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 	self.contentView.backgroundColor = [UIColor clearColor];
 	[self addSubview:self.contentView];
-	
+
 	// Initialize the textLabel
 	self.textLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
 	self.textLabel.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
@@ -83,10 +84,28 @@
 		[UIView beginAnimations:nil context:nil];
 		self.alpha = 1;
 		[UIView commitAnimations];		
-	}	
+	}
+	if (self.disableUserInteraction) parentView.userInteractionEnabled = NO;
+}
+
+- (void)presentInView:(UIView *)parentView animated:(BOOL)animated withDelay:(NSTimeInterval)delay {
+	if ([self isDescendantOfView:parentView] == NO) [parentView addSubview:self];
+	
+	// TODO: Put in separate method
+	if (animated) {
+		self.alpha = 0;
+		[UIView beginAnimations:nil context:nil];
+		self.alpha = 1;
+		[UIView commitAnimations];		
+	}
+	if (self.disableUserInteraction) parentView.userInteractionEnabled = NO;
+
+	if (delay > 0) [self performSelector:@selector(dismiss) withObject:nil afterDelay:delay];
 }
 
 - (void)dismiss:(BOOL)animated {
+	if (self.disableUserInteraction) self.superview.userInteractionEnabled = YES;
+
 	if (animated == NO) {
 		[self removeFromSuperview];
 		return;
@@ -96,6 +115,10 @@
 	[UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
 	self.alpha = 0;
 	[UIView commitAnimations];
+}
+
+- (void)dismiss {
+	[self dismiss:YES];
 }
 
 //
