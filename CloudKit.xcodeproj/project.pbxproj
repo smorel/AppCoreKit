@@ -44,6 +44,10 @@
 		4FAD0F9911C2D5810071C7BF /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8F11C2D5810071C7BF /* CKTableViewCellController.m */; };
 		4FAD0F9A11C2D5810071C7BF /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9B11C2D5810071C7BF /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F9111C2D5810071C7BF /* CKTableViewController.m */; };
+		4FB5463311DA8DA000DC7E6A /* CKImageButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FB5463411DA8DA000DC7E6A /* CKImageButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */; };
+		4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */; };
 		710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF10E10FFBC030063FB2C /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -248,6 +252,10 @@
 		4FAD0F8F11C2D5810071C7BF /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTableViewCellController.m; sourceTree = "<group>"; };
 		4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTableViewController.h; sourceTree = "<group>"; };
 		4FAD0F9111C2D5810071C7BF /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTableViewController.m; sourceTree = "<group>"; };
+		4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageButtonCellController.h; sourceTree = "<group>"; };
+		4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageButtonCellController.m; sourceTree = "<group>"; };
+		4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKOverlayView+Factory.h"; sourceTree = "<group>"; };
+		4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKOverlayView+Factory.m"; sourceTree = "<group>"; };
 		710DF10E10FFBC030063FB2C /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
@@ -525,6 +533,8 @@
 				4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */,
 				4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */,
 				4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */,
+				4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */,
+				4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */,
 				4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */,
 				4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */,
 				4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */,
@@ -571,6 +581,8 @@
 				715CA158110E374300593672 /* CKPickerView.h */,
 				4F07A6BA11D295A20099F51B /* CKOverlayView.h */,
 				4F07A6BB11D295A20099F51B /* CKOverlayView.m */,
+				4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */,
+				4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */,
 				4F07A6B811D295A20099F51B /* CKCalloutView.h */,
 				4F07A6B911D295A20099F51B /* CKCalloutView.m */,
 			);
@@ -911,6 +923,8 @@
 				4F07A6BC11D295A20099F51B /* CKCalloutView.h in Headers */,
 				4F07A6BE11D295A20099F51B /* CKOverlayView.h in Headers */,
 				4F497E5F11D404F700680E06 /* CKTextFieldCellController.h in Headers */,
+				4FB5463311DA8DA000DC7E6A /* CKImageButtonCellController.h in Headers */,
+				4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,6 +1122,8 @@
 				4F07A6BD11D295A20099F51B /* CKCalloutView.m in Sources */,
 				4F07A6BF11D295A20099F51B /* CKOverlayView.m in Sources */,
 				4F497E6011D404F700680E06 /* CKTextFieldCellController.m in Sources */,
+				4FB5463411DA8DA000DC7E6A /* CKImageButtonCellController.m in Sources */,
+				4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
