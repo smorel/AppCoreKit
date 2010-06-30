@@ -14,6 +14,7 @@
 - (id)initWithTitle:(NSString *)title value:(BOOL)value {
 	if (self = [super initWithText:title]) {
 		self.value = [NSNumber numberWithBool:value];
+		self.selectable = NO;
 	}
 	return self;
 }
