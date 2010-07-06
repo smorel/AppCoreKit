@@ -74,22 +74,19 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(applicationWillTerminate:) 
 													 name:UIApplicationWillTerminateNotification 
-												   object:[UIApplication sharedApplication]];		
-		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(applicationWillTerminate:) 
-													 name:UIApplicationDidEnterBackgroundNotification 
-												   object:[UIApplication sharedApplication]];		
+												   object:[UIApplication sharedApplication]];
+		if (&UIApplicationDidEnterBackgroundNotification != NULL) {
+			[[NSNotificationCenter defaultCenter] addObserver:self 
+													 selector:@selector(applicationWillTerminate:) 
+														 name:UIApplicationDidEnterBackgroundNotification 
+													   object:[UIApplication sharedApplication]];					
+		}
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:UIApplicationWillTerminateNotification
-												  object:[UIApplication sharedApplication]];
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:UIApplicationDidEnterBackgroundNotification
-												  object:[UIApplication sharedApplication]];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
     [_objectContext release];
     [_objectModel release];
     [_persistentStoreCoordinator release];    
