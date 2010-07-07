@@ -57,9 +57,8 @@
 //
 
 @protocol CKManagedTableViewControllerDelegate
-
+@optional
 - (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerValueDidChange:(CKTableViewCellController *)cellController;
 - (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerDidDelete:(CKTableViewCellController *)cellController;
 - (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerDidMoveFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
-
 @end
