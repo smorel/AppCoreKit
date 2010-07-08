@@ -11,8 +11,10 @@
 
 
 @interface CKToggleSwitchCellController : CKStandardCellController {
-
+	BOOL _enabled;
 }
+
+@property (nonatomic, assign, getter=isEnabled, setter=enable:) BOOL enabled;
 
 - (id)initWithTitle:(NSString *)title value:(BOOL)value;
 
