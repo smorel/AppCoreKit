@@ -11,13 +11,18 @@
 
 @implementation CKToggleSwitchCellController
 
+@synthesize enabled = _enabled;
+
 - (id)initWithTitle:(NSString *)title value:(BOOL)value {
 	if (self = [super initWithText:title]) {
 		self.value = [NSNumber numberWithBool:value];
 		self.selectable = NO;
+		self.enabled = YES;
 	}
 	return self;
 }
+
+
 
 //
 
@@ -33,6 +38,7 @@
 	[super setupCell:cell];
 	UISwitch *toggleSwitch = (UISwitch *)cell.accessoryView;
 	toggleSwitch.on = [self.value boolValue];
+	toggleSwitch.enabled = self.enabled;
 	[toggleSwitch addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
