@@ -20,6 +20,7 @@
 
 #import "MKNumberBadgeView.h"
 
+#import "CKCompatibility.h"
 
 @interface MKNumberBadgeView ()
 
@@ -143,12 +144,9 @@
 	{
 		CGContextSaveGState( curContext );
 
-		CGSize blurSize;
-		blurSize.width = 0;
-		blurSize.height = 3;
 		UIColor* blurColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
 		
-		CGContextSetShadowWithColor( curContext, blurSize, 4, blurColor.CGColor );
+		CGContextSetShadowWithColor( curContext, CKShadowSizeMake(0, 3), 4, blurColor.CGColor );
 		
 		CGContextBeginPath( curContext );
 		CGContextAddPath( curContext, badgePath );
