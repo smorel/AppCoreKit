@@ -171,9 +171,11 @@
 		return;
 	}
 
-	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2	
-	if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
-		[self findAddressWithLocation:newLocation];
+	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2
+	if (_findAddress == YES) {
+		if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
+			[self findAddressWithLocation:newLocation];
+		}
 	}
 	
 	[self setCachedLocation:newLocation];
