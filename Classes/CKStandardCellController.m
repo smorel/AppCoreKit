@@ -55,6 +55,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style imageURL:(NSString *)imageURL text:(NSString *)text {
 	if ([self initWithStyle:style]) {
 		self.imageURL = imageURL;
+		self.fetchedImage = [[CKCache sharedCache] imageForKey:[self cacheKeyForImage]];
 		self.text = text;
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
@@ -93,12 +94,11 @@
 
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [self cellWithStyle:self.style];
-	if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	self.fetchedImage = [[CKCache sharedCache] imageForKey:[self cacheKeyForImage]];
 	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	[super setupCell:cell];
 	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
 	if (self.textColor) cell.textLabel.textColor = self.textColor;
 	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;
