@@ -10,7 +10,6 @@
 #import "CKStandardCellController.h"
 
 @interface CKImageButtonCellController : CKStandardCellController {
-	UIImage *_image;
 	UIImage *_highlightedImage;
 	
 }

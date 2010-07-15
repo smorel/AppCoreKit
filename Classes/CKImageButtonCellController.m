@@ -12,7 +12,6 @@
 
 @interface CKImageButtonCellController ()
 
-@property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) UIImage *highlightedImage;
 
 @end
@@ -20,7 +19,6 @@
 
 @implementation CKImageButtonCellController
 
-@synthesize image = _image;
 @synthesize highlightedImage = _highlightedImage;
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image hightlightedImage:(UIImage *)hightlightedImage {
