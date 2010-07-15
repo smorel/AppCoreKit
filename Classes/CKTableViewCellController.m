@@ -9,6 +9,9 @@
 #import "CKTableViewCellController.h"
 #import "CKManagedTableViewController.h"
 
+#import "CKNSArrayAdditions.h"
+
+
 @implementation CKTableViewCellController
 
 @synthesize key = _key;
@@ -68,7 +71,15 @@
 	
 	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 	cell.accessoryType = _accessoryType;
+	
+	return cell;
+}
 
+- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName {
+	UITableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil] first];
+
+	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+	
 	return cell;
 }
 
@@ -84,11 +95,11 @@
 
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
-	if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return;
 }
 

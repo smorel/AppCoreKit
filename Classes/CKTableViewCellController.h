@@ -39,6 +39,7 @@
 @property (nonatomic, assign) CGFloat rowHeight;
 
 - (UITableViewCell *)cellWithStyle:(UITableViewStyle)style;
+- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;
 
 //
 
