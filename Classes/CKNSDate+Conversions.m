@@ -65,6 +65,23 @@
 	return [formatter stringFromDate:self];
 }
 
+// TimeZone conversions
+
+- (NSDate *)dateFromTimeZone:(NSTimeZone *)sourceTimeZone toTimeZone:(NSTimeZone *)destinationTimeZone {
+	NSInteger sourceOffset = [sourceTimeZone secondsFromGMTForDate:self];
+	NSInteger destinationOffset = [destinationTimeZone secondsFromGMTForDate:self];
+	NSTimeInterval interval = destinationOffset - sourceOffset;
+	return [[[NSDate alloc] initWithTimeInterval:interval sinceDate:self] autorelease];
+}
+
+- (NSDate *)localDate {
+	return [self dateFromTimeZone:[NSTimeZone timeZoneWithName:@"UTC"] toTimeZone:[NSTimeZone systemTimeZone]];
+}
+
+- (NSDate *)UTCDate {
+	return [self dateFromTimeZone:[NSTimeZone systemTimeZone] toTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+}
+
 //
 // Date minimal ISO8601
 //
