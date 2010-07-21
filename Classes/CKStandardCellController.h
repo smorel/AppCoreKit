@@ -24,6 +24,9 @@
 	UIColor *_backgroundColor;
 	UIColor *_textColor;
 	UIColor *_detailedTextColor;
+
+	BOOL _multilineText;
+	BOOL _multilineDetailText;
 }
 
 @property (nonatomic, retain) NSString *text;
@@ -32,6 +35,9 @@
 @property (nonatomic, retain) UIColor *backgroundColor;
 @property (nonatomic, retain) UIColor *textColor;
 @property (nonatomic, retain) UIColor *detailedTextColor;
+
+@property (nonatomic, assign, getter=isTextMultiline) BOOL multilineText;
+@property (nonatomic, assign, getter=isDetailTextMultiline) BOOL multilineDetailText;
 
 - (id)initWithStyle:(UITableViewCellStyle)style;
 - (id)initWithText:(NSString *)text;
