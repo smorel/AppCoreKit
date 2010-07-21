@@ -91,6 +91,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
