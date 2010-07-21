@@ -46,6 +46,8 @@
 		4FAD0F9911C2D5810071C7BF /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F8F11C2D5810071C7BF /* CKTableViewCellController.m */; };
 		4FAD0F9A11C2D5810071C7BF /* CKTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0F9B11C2D5810071C7BF /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0F9111C2D5810071C7BF /* CKTableViewController.m */; };
+		4FB1695611F632D700C1CCD1 /* CKImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB1695411F632D700C1CCD1 /* CKImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FB1695711F632D700C1CCD1 /* CKImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1695511F632D700C1CCD1 /* CKImageLoader.m */; };
 		4FB5463311DA8DA000DC7E6A /* CKImageButtonCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FB5463411DA8DA000DC7E6A /* CKImageButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */; };
 		4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -256,6 +258,8 @@
 		4FAD0F8F11C2D5810071C7BF /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTableViewCellController.m; sourceTree = "<group>"; };
 		4FAD0F9011C2D5810071C7BF /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTableViewController.h; sourceTree = "<group>"; };
 		4FAD0F9111C2D5810071C7BF /* CKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTableViewController.m; sourceTree = "<group>"; };
+		4FB1695411F632D700C1CCD1 /* CKImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKImageLoader.h; path = Classes/CKImageLoader.h; sourceTree = "<group>"; };
+		4FB1695511F632D700C1CCD1 /* CKImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKImageLoader.m; path = Classes/CKImageLoader.m; sourceTree = "<group>"; };
 		4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageButtonCellController.h; sourceTree = "<group>"; };
 		4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageButtonCellController.m; sourceTree = "<group>"; };
 		4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKOverlayView+Factory.h"; sourceTree = "<group>"; };
@@ -687,6 +691,8 @@
 				71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */,
 				7150DF8611A1C0AF0050E284 /* CKUIToolbarAdditions.h */,
 				7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */,
+				4FB1695411F632D700C1CCD1 /* CKImageLoader.h */,
+				4FB1695511F632D700C1CCD1 /* CKImageLoader.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -932,6 +938,7 @@
 				4FB5463311DA8DA000DC7E6A /* CKImageButtonCellController.h in Headers */,
 				4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */,
 				4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */,
+				4FB1695611F632D700C1CCD1 /* CKImageLoader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1139,7 @@
 				4FB5463411DA8DA000DC7E6A /* CKImageButtonCellController.m in Sources */,
 				4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */,
 				4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */,
+				4FB1695711F632D700C1CCD1 /* CKImageLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,7 +2,7 @@
 //  CKOverlayView+Factory.m
 //  CloudKit
 //
-//  Created by Oli Kenobi on 10-06-30.
+//  Created by Olivier Collet on 10-06-30.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
