@@ -104,8 +104,8 @@
 	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
 	if (self.textColor) cell.textLabel.textColor = self.textColor;
 	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;
-	cell.textLabel.numberOfLines = self.isTextMultiline ? 0 : 1;
-	cell.detailTextLabel.numberOfLines = self.isDetailTextMultiline ? 0 : 1;
+	if (self.isTextMultiline) cell.textLabel.numberOfLines = 0;
+	if (self.isDetailTextMultiline) cell.detailTextLabel.numberOfLines = 0;
 
 	cell.imageView.image = self.fetchedImage ? self.fetchedImage : self.image;
 	cell.textLabel.text = self.text;
