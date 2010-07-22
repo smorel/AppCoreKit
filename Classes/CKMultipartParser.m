@@ -108,7 +108,7 @@
 	NSArray *headers = [string componentsSeparatedByString:@"\r\n"];
 	for (NSString *header in headers) {
 		NSArray *kv = [header componentsSeparatedByString:@": "];
-		[dictionary setObject:[kv objectAtIndex:0] forKey:[kv objectAtIndex:1]];
+		[dictionary setObject:[kv objectAtIndex:1] forKey:[kv objectAtIndex:0]];
 	}
 	return dictionary;
 }
