@@ -75,12 +75,15 @@ static CKCoreDataManager *_ckCoreDataManagerInstance = nil;
 												 selector:@selector(applicationWillTerminate:) 
 													 name:UIApplicationWillTerminateNotification 
 												   object:[UIApplication sharedApplication]];
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 		if (&UIApplicationDidEnterBackgroundNotification != NULL) {
 			[[NSNotificationCenter defaultCenter] addObserver:self 
 													 selector:@selector(applicationWillTerminate:) 
 														 name:UIApplicationDidEnterBackgroundNotification 
 													   object:[UIApplication sharedApplication]];					
 		}
+#endif
 	}
 	return self;
 }

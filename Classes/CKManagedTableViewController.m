@@ -50,6 +50,7 @@
 @interface CKManagedTableViewController ()
 @property (nonatomic, retain, readwrite) NSMutableArray *sections;
 @property (nonatomic, retain) NSMutableDictionary *pValuesForKeys;
+- (void)notifiesCellControllersForVisibleRows;
 @end
 
 //

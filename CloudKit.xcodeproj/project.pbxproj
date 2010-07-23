@@ -129,6 +129,10 @@
 		71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */; };
 		71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917BAD1199ED6A00386EB5 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917BAE1199ED6A00386EB5 /* CKBundle.m */; };
+		71993A5311F8C53D0056EC2C /* CKMultipartParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 71993A5111F8C53D0056EC2C /* CKMultipartParser.m */; };
+		71993A5411F8C53D0056EC2C /* CKMultipartParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 71993A5211F8C53D0056EC2C /* CKMultipartParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71993A5711F8C54A0056EC2C /* CKNSData+Matching.m in Sources */ = {isa = PBXBuildFile; fileRef = 71993A5511F8C54A0056EC2C /* CKNSData+Matching.m */; };
+		71993A5811F8C54A0056EC2C /* CKNSData+Matching.h in Headers */ = {isa = PBXBuildFile; fileRef = 71993A5611F8C54A0056EC2C /* CKNSData+Matching.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F05CE10F6A818002955C0 /* CKAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F05CC10F6A818002955C0 /* CKAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		719F05CF10F6A818002955C0 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 719F05CD10F6A818002955C0 /* CKAttribute.m */; };
 		719F062B10F6E749002955C0 /* CKDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = 719F062710F6E749002955C0 /* CKDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -335,6 +339,10 @@
 		71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUINavigationControllerAdditions.m; path = Classes/CKUINavigationControllerAdditions.m; sourceTree = "<group>"; };
 		71917BAD1199ED6A00386EB5 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
 		71917BAE1199ED6A00386EB5 /* CKBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBundle.m; path = Classes/CKBundle.m; sourceTree = "<group>"; };
+		71993A5111F8C53D0056EC2C /* CKMultipartParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultipartParser.m; path = Classes/CKMultipartParser.m; sourceTree = "<group>"; };
+		71993A5211F8C53D0056EC2C /* CKMultipartParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultipartParser.h; path = Classes/CKMultipartParser.h; sourceTree = "<group>"; };
+		71993A5511F8C54A0056EC2C /* CKNSData+Matching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSData+Matching.m"; path = "Classes/CKNSData+Matching.m"; sourceTree = "<group>"; };
+		71993A5611F8C54A0056EC2C /* CKNSData+Matching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSData+Matching.h"; path = "Classes/CKNSData+Matching.h"; sourceTree = "<group>"; };
 		719F056B10F6A68F002955C0 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = ../cloudkit/CloudKit.bundle; sourceTree = SOURCE_ROOT; };
 		719F05CC10F6A818002955C0 /* CKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttribute.h; path = ../cloudkit/Classes/CKAttribute.h; sourceTree = "<group>"; };
 		719F05CD10F6A818002955C0 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttribute.m; path = ../cloudkit/Classes/CKAttribute.m; sourceTree = "<group>"; };
@@ -559,6 +567,8 @@
 		710DF0F810FFBB820063FB2C /* WebService */ = {
 			isa = PBXGroup;
 			children = (
+				71993A5111F8C53D0056EC2C /* CKMultipartParser.m */,
+				71993A5211F8C53D0056EC2C /* CKMultipartParser.h */,
 				710DF10E10FFBC030063FB2C /* CKWebRequest.h */,
 				710DF10F10FFBC030063FB2C /* CKWebRequest.m */,
 				710DF11010FFBC030063FB2C /* CKWebService.h */,
@@ -655,6 +665,8 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				71993A5511F8C54A0056EC2C /* CKNSData+Matching.m */,
+				71993A5611F8C54A0056EC2C /* CKNSData+Matching.h */,
 				71917AC01199C49A00386EB5 /* CKLayout.h */,
 				71917AC11199C49A00386EB5 /* CKLayout.m */,
 				712D6D0C11AF20CB00A92D98 /* CKCache.h */,
@@ -945,6 +957,8 @@
 				4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */,
 				4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */,
 				4FB1695611F632D700C1CCD1 /* CKImageLoader.h in Headers */,
+				71993A5411F8C53D0056EC2C /* CKMultipartParser.h in Headers */,
+				71993A5811F8C54A0056EC2C /* CKNSData+Matching.h in Headers */,
 				4FAB0E3A11F9FEAA00A2042A /* CKUIImage+Factory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,6 +1161,8 @@
 				4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */,
 				4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */,
 				4FB1695711F632D700C1CCD1 /* CKImageLoader.m in Sources */,
+				71993A5311F8C53D0056EC2C /* CKMultipartParser.m in Sources */,
+				71993A5711F8C54A0056EC2C /* CKNSData+Matching.m in Sources */,
 				4FAB0E3B11F9FEAA00A2042A /* CKUIImage+Factory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
