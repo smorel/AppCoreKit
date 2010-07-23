@@ -22,6 +22,8 @@
 		4F59F0CD11D00DD6003B4CA8 /* MKNumberBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F59F0CE11D00DD6003B4CA8 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */; };
 		4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F95B7BB11C805120002E71E /* CKLocalization.m */; };
+		4FAB0E3A11F9FEAA00A2042A /* CKUIImage+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAB0E3811F9FEAA00A2042A /* CKUIImage+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FAB0E3B11F9FEAA00A2042A /* CKUIImage+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB0E3911F9FEAA00A2042A /* CKUIImage+Factory.m */; };
 		4FAD0E5D11C2B8110071C7BF /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FAD0E5E11C2B8110071C7BF /* CKOptionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */; };
 		4FAD0E6911C2BA720071C7BF /* CKOptionTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -234,6 +236,8 @@
 		4F59F0CB11D00DD6003B4CA8 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKNumberBadgeView.h; sourceTree = "<group>"; };
 		4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNumberBadgeView.m; sourceTree = "<group>"; };
 		4F95B7BB11C805120002E71E /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalization.m; path = Classes/CKLocalization.m; sourceTree = "<group>"; };
+		4FAB0E3811F9FEAA00A2042A /* CKUIImage+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIImage+Factory.h"; sourceTree = "<group>"; };
+		4FAB0E3911F9FEAA00A2042A /* CKUIImage+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIImage+Factory.m"; sourceTree = "<group>"; };
 		4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionCellController.h; sourceTree = "<group>"; };
 		4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKOptionCellController.m; sourceTree = "<group>"; };
 		4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionTableViewController.h; sourceTree = "<group>"; };
@@ -693,6 +697,8 @@
 				7150DF8711A1C0AF0050E284 /* CKUIToolbarAdditions.m */,
 				4FB1695411F632D700C1CCD1 /* CKImageLoader.h */,
 				4FB1695511F632D700C1CCD1 /* CKImageLoader.m */,
+				4FAB0E3811F9FEAA00A2042A /* CKUIImage+Factory.h */,
+				4FAB0E3911F9FEAA00A2042A /* CKUIImage+Factory.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -939,6 +945,7 @@
 				4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */,
 				4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */,
 				4FB1695611F632D700C1CCD1 /* CKImageLoader.h in Headers */,
+				4FAB0E3A11F9FEAA00A2042A /* CKUIImage+Factory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,6 +1147,7 @@
 				4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */,
 				4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */,
 				4FB1695711F632D700C1CCD1 /* CKImageLoader.m in Sources */,
+				4FAB0E3B11F9FEAA00A2042A /* CKUIImage+Factory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
