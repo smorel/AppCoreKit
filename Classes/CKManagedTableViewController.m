@@ -197,10 +197,6 @@
 	}
 
 	[controller setupCell:theCell];	
-	
-	if (self.tableView.dragging == NO && self.tableView.decelerating == NO) {
-		[controller cellDidAppear:theCell];
-	}
 
 	return theCell;
 }
@@ -286,9 +282,9 @@
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	if (!decelerate) {
-		[self notifiesCellControllersForVisibleRows];
-	}
+	if (decelerate || scrollView.decelerating)
+		return;
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
