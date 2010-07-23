@@ -52,8 +52,12 @@
 
 #pragma mark Caching
 
++ (NSString *)cacheKeyForURL:(NSURL *)url size:(CGSize)size {
+	return [NSString stringWithFormat:@"%@-%fx%f", url, size.width, size.height];
+}
+
 - (NSString *)resizedImageCacheKey {
-	return [NSString stringWithFormat:@"%@-%fx%f", self.imageURL, self.imageSize.width, self.imageSize.height];
+	return [CKImageLoader cacheKeyForURL:self.imageURL size:self.imageSize];
 }
 
 - (UIImage *)getCachedImage {
@@ -76,6 +80,10 @@
 		UIImage *resized = [image imageThatFits:self.imageSize crop:self.aspectFill];
 		[[CKCache sharedCache] setImage:resized forKey:self.resizedImageCacheKey];
 	}
+}
+
++ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size {
+	return [[CKCache sharedCache] imageForKey:[CKImageLoader cacheKeyForURL:url size:size]];
 }
 
 #pragma mark Public API
