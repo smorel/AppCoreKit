@@ -113,7 +113,9 @@
 - (void)request:(id)request didReceiveValue:(id)value {
 	if ([value isKindOfClass:[UIImage class]]) {
 		[self setCachedImage:value];
-		[self.delegate imageLoader:self didLoadImage:[self getCachedImage] cached:NO];
+		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
+			[self.delegate imageLoader:self didLoadImage:[self getCachedImage] cached:NO];
+		}
 	}
 	// FIXME: Should throw an error is the value is not an image
 }
