@@ -115,7 +115,7 @@
 	// FIXME: Should throw an error is the value is not an image
 }
 
-- (void)request:(id)request didFailLoadingWithError:(NSError *)error {
+- (void)request:(id)request didFailWithError:(NSError *)error {
 	[self reset];
 	[self.delegate imageView:self didFailLoadWithError:error];
 }
