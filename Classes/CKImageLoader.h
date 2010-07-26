@@ -27,6 +27,8 @@
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)cancel;
 
++ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size;
+
 @end
 
 //

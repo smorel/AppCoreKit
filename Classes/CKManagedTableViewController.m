@@ -197,10 +197,6 @@
 	}
 
 	[controller setupCell:theCell];	
-	
-	if (self.tableView.dragging == NO && self.tableView.decelerating == NO) {
-		[controller cellDidAppear:theCell];
-	}
 
 	return theCell;
 }
@@ -279,16 +275,24 @@
 #pragma mark UIScrollView Protocol
 
 - (void)notifiesCellControllersForVisibleRows {
-	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
-	for (NSIndexPath *indexPath in visiblePaths) {
+	// NOTE: We don't use [self.tableView indexPathsForVisibleRows] because it returns nil
+	// the first time the view appears. However, [self.tableView visibleCells] correctly returns
+	// the cells; maybe it's because it "loads" the cell, or maybe there is a bug in the framework.
+	// The documentation doesn't say anything about this.	
+	
+	NSArray *visibleCells = [self.tableView visibleCells];
+	
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+		NSLog(@"%d", indexPath.row);
 		[[self cellControllerForIndexPath:indexPath] cellDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	if (!decelerate) {
-		[self notifiesCellControllersForVisibleRows];
-	}
+	if (decelerate || scrollView.decelerating)
+		return;
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
