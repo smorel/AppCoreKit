@@ -45,14 +45,13 @@
 #pragma mark Public API
 
 - (void)setImage:(UIImage *)image forKey:(id)key {
-	NSData *data = UIImagePNGRepresentation(image);
-	NSAssert(data, @"UIImage has no data.");
-	[self.cachedObjects setObject:UIImagePNGRepresentation(image) forKey:key];
+	NSAssert(image, @"UIImage is nil.");
+	[self.cachedObjects setObject:image forKey:key];
 }
 
 - (UIImage *)imageForKey:(id)key {
-	NSData *data = [self.cachedObjects objectForKey:key];
-	return data ? [UIImage imageWithData:data] : nil;
+	UIImage *image = [self.cachedObjects objectForKey:key];
+	return image;
 }
 
 #pragma mark Low Memory Condition
