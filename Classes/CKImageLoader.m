@@ -120,8 +120,8 @@
 	// FIXME: Should throw an error is the value is not an image
 }
 
-- (void)request:(id)request didFailLoadingWithError:(NSError *)error {
-	[self.delegate imageLoader:self didFailLoadWithError:error];
+- (void)request:(id)request didFailWithError:(NSError *)error {
+	[self.delegate imageLoader:self didFailWithError:error];
 }
 
 @end

@@ -36,6 +36,6 @@
 @protocol CKImageLoaderDelegate
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached;
-- (void)imageLoader:(CKImageLoader *)imageLoader didFailLoadWithError:(NSError *)error;
+- (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error;
 
 @end

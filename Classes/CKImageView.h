@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CloudKit/CKWebRequest.h>
+#import "CKImageLoader.h"
 
 @class CKImageView;
 
@@ -20,8 +20,8 @@
 
 //
 
-@interface CKImageView : UIView <CKWebRequestDelegate> {
-	CKWebRequest *_request;
+@interface CKImageView : UIView <CKImageLoaderDelegate> {
+	CKImageLoader *_imageLoader;
 	NSURL *_imageURL;
 	UIImage *_defaultImage;
 	UIImage *_image;

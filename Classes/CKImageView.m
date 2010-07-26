@@ -12,7 +12,7 @@
 
 @interface CKImageView ()
 
-@property (nonatomic, retain, readwrite) CKWebRequest *request;
+@property (nonatomic, retain, readwrite) CKImageLoader *imageLoader;
 @property (nonatomic, retain, readwrite) NSURL *imageURL;
 @property (nonatomic, retain, readwrite) UIImage *image;
 
@@ -22,7 +22,7 @@
 
 @implementation CKImageView
 
-@synthesize request = _request;
+@synthesize imageLoader = _imageLoader;
 @synthesize imageURL = _imageURL;
 @synthesize defaultImage = _defaultImage;
 @synthesize image = _image;
@@ -57,17 +57,18 @@
 - (void)reload {
 	[self cancel];
 	
-	UIImage *image = [[CKCache sharedCache] imageForKey:self.imageURL];
-	if (image != nil) {
+	UIImage *image = [CKImageLoader imageForURL:self.imageURL withSize:self.bounds.size];
+	if (image) {
 		self.image = image;
 		[self.delegate imageView:self didLoadImage:image cached:YES];
 		return;
 	}
 	
 	self.image = nil;
-	self.request = [CKWebRequest requestWithURL:self.imageURL];
-	self.request.delegate = self;
-	[self.request start];
+	self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
+	self.imageLoader.imageSize = self.bounds.size;
+	self.imageLoader.aspectFill = self.aspectFill;
+	[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 }
 
 - (void)reset {
@@ -76,8 +77,8 @@
 }
 
 - (void)cancel {
-	[self.request cancel];
-	self.request = nil;
+	[self.imageLoader cancel];
+	self.imageLoader = nil;
 }
 
 #pragma mark Image
@@ -104,18 +105,11 @@
 
 #pragma mark CKWebRequestDelegate Protocol
 
-- (void)request:(id)request didReceiveValue:(id)value {
-	if ([value isKindOfClass:[UIImage class]]) {
-		// FIXME: We should cache both the source and the modified image
-		UIImage *resized = [value imageThatFits:self.bounds.size crop:self.aspectFill];
-		[[CKCache sharedCache] setImage:resized forKey:self.imageURL];
-		self.image = resized;
-		[self.delegate imageView:self didLoadImage:value cached:NO];
-	}
-	// FIXME: Should throw an error is the value is not an image
+- (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
+	self.image = image;
+	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
-
-- (void)request:(id)request didFailWithError:(NSError *)error {
+- (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
 	[self reset];
 	[self.delegate imageView:self didFailLoadWithError:error];
 }
