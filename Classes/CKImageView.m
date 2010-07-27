@@ -77,6 +77,7 @@
 }
 
 - (void)cancel {
+	self.imageLoader.delegate = nil;
 	[self.imageLoader cancel];
 	self.imageLoader = nil;
 }
@@ -110,8 +111,8 @@
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
-	[self reset];
 	[self.delegate imageView:self didFailLoadWithError:error];
+	[self reset];
 }
 
 @end

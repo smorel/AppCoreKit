@@ -41,7 +41,7 @@
 }
 
 - (void)dealloc {
-	self.request = nil;
+	[self cancel];
 	self.imageURL = nil;
 	[super dealloc];
 }
@@ -104,6 +104,7 @@
 }
 
 - (void)cancel {
+	self.request.delegate = nil;
 	[self.request cancel];
 	self.request = nil;
 }
