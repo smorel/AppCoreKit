@@ -104,7 +104,7 @@
 
 - (NSDictionary *)readHeaders {
 	NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:2];
-	NSString *string = [[NSString alloc] initWithData:[self readHeadersData] encoding:NSUTF8StringEncoding];
+	NSString *string = [[[NSString alloc] initWithData:[self readHeadersData] encoding:NSUTF8StringEncoding] autorelease];
 	NSArray *headers = [string componentsSeparatedByString:@"\r\n"];
 	for (NSString *header in headers) {
 		NSArray *kv = [header componentsSeparatedByString:@": "];
