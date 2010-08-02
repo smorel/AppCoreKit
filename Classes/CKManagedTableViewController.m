@@ -146,6 +146,7 @@
 	[self clear];
 	[self setup];
 	[super reload];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 #pragma mark Accessors
