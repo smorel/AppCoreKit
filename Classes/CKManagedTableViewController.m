@@ -285,7 +285,6 @@
 	
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		NSLog(@"%d", indexPath.row);
 		[[self cellControllerForIndexPath:indexPath] cellDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
