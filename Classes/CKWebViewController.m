@@ -74,7 +74,7 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 
 	self.view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 
@@ -83,6 +83,7 @@
 	_webView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 	_webView.scalesPageToFit = YES;
 	_webView.delegate = self;
+	self.view.backgroundColor = [UIColor blackColor];
 	[self.view addSubview:_webView];
 
 	// Load the URL
@@ -111,6 +112,8 @@
 
 	// Display the toolbar
 	[self.navigationController setToolbarHidden:NO animated:animated];
+	
+	_webView.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -255,11 +258,13 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
+		
 	[self updateToolbar];
 
 	// Update the title
 	if (_showURLInTitle) self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+	
+	_webView.hidden = NO;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
