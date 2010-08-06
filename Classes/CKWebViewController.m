@@ -43,6 +43,7 @@
 @synthesize spinner = _spinner;
 @synthesize toolbarButtonsLoading = _toolbarButtonsLoading;
 @synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
+@synthesize _showURLInTitle;
 
 - (void)setup {
 	_showURLInTitle = YES;
