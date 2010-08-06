@@ -54,6 +54,7 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	cell.textLabel.text = nil;
+	cell.imageView.image = nil;
 
 	UIButton *button = (UIButton *)[cell.contentView viewWithTag:1000];
 	[button setTitle:self.text forState:UIControlStateNormal];
