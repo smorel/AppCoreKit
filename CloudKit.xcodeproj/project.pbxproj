@@ -17,7 +17,7 @@
 		4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F44569811EE186C0080BC0F /* CKCompatibility.m */; };
 		4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4599C711FCE1AC00438B93 /* CKLocationManager.h */; };
 		4F4599CA11FCE1AC00438B93 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4599C811FCE1AC00438B93 /* CKLocationManager.m */; };
-		4F4599CD11FCE25D00438B93 /* CKUIImage+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4599CB11FCE25D00438B93 /* CKUIImage+Factory.h */; };
+		4F4599CD11FCE25D00438B93 /* CKUIImage+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4599CB11FCE25D00438B93 /* CKUIImage+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4599CE11FCE25D00438B93 /* CKUIImage+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4599CC11FCE25D00438B93 /* CKUIImage+Factory.m */; };
 		4F497E5F11D404F700680E06 /* CKTextFieldCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F497E6011D404F700680E06 /* CKTextFieldCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */; };
