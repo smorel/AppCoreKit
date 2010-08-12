@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E07B5D51214919F00346D3C /* RegexKitLite.h */; };
+		0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E07B5D61214919F00346D3C /* RegexKitLite.m */; };
 		4F07A6BC11D295A20099F51B /* CKCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F07A6B811D295A20099F51B /* CKCalloutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F07A6BD11D295A20099F51B /* CKCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F07A6B911D295A20099F51B /* CKCalloutView.m */; };
 		4F07A6BE11D295A20099F51B /* CKOverlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F07A6BA11D295A20099F51B /* CKOverlayView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -165,8 +167,6 @@
 		71AD9F1810A36FFE00C88903 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AD9F1710A36FFE00C88903 /* libicucore.dylib */; };
 		71ADA00B10A371C900C88903 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA00910A371C900C88903 /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71ADA00C10A371C900C88903 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA00A10A371C900C88903 /* Reachability.m */; };
-		71ADA02010A3727700C88903 /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA01E10A3727700C88903 /* RegexKitLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71ADA02110A3727700C88903 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA01F10A3727700C88903 /* RegexKitLite.m */; };
 		71ADA03710A372D200C88903 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA02510A372D200C88903 /* CDataScanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71ADA03810A372D200C88903 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADA02610A372D200C88903 /* CDataScanner.m */; };
 		71ADA03910A372D200C88903 /* CDataScanner_Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71ADA02810A372D200C88903 /* CDataScanner_Extensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -225,6 +225,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E07B5D51214919F00346D3C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "Vendor/RegexKitLite-4.0/RegexKitLite.h"; sourceTree = "<group>"; };
+		0E07B5D61214919F00346D3C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "Vendor/RegexKitLite-4.0/RegexKitLite.m"; sourceTree = "<group>"; };
 		4F07A6B811D295A20099F51B /* CKCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCalloutView.h; sourceTree = "<group>"; };
 		4F07A6B911D295A20099F51B /* CKCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCalloutView.m; sourceTree = "<group>"; };
 		4F07A6BA11D295A20099F51B /* CKOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOverlayView.h; sourceTree = "<group>"; };
@@ -377,8 +379,6 @@
 		71AD9F1710A36FFE00C88903 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		71ADA00910A371C900C88903 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Vendor/Apple/Reachability.h; sourceTree = "<group>"; };
 		71ADA00A10A371C900C88903 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Vendor/Apple/Reachability.m; sourceTree = "<group>"; };
-		71ADA01E10A3727700C88903 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "Vendor/RegexKitLite-3.2/RegexKitLite.h"; sourceTree = "<group>"; };
-		71ADA01F10A3727700C88903 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "Vendor/RegexKitLite-3.2/RegexKitLite.m"; sourceTree = "<group>"; };
 		71ADA02510A372D200C88903 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDataScanner.h; path = "Vendor/TouchJSON-1.0.6/Source/CDataScanner.h"; sourceTree = "<group>"; };
 		71ADA02610A372D200C88903 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDataScanner.m; path = "Vendor/TouchJSON-1.0.6/Source/CDataScanner.m"; sourceTree = "<group>"; };
 		71ADA02810A372D200C88903 /* CDataScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner_Extensions.h; sourceTree = "<group>"; };
@@ -773,8 +773,8 @@
 		71ADA01A10A3725800C88903 /* RegexKitLite */ = {
 			isa = PBXGroup;
 			children = (
-				71ADA01E10A3727700C88903 /* RegexKitLite.h */,
-				71ADA01F10A3727700C88903 /* RegexKitLite.m */,
+				0E07B5D51214919F00346D3C /* RegexKitLite.h */,
+				0E07B5D61214919F00346D3C /* RegexKitLite.m */,
 			);
 			name = RegexKitLite;
 			sourceTree = "<group>";
@@ -886,7 +886,6 @@
 				71AD9D8410A35F4600C88903 /* CKNSString+URIQuery.h in Headers */,
 				71AD9D9410A361EE00C88903 /* CloudKit_Prefix.pch in Headers */,
 				71ADA00B10A371C900C88903 /* Reachability.h in Headers */,
-				71ADA02010A3727700C88903 /* RegexKitLite.h in Headers */,
 				71ADA03710A372D200C88903 /* CDataScanner.h in Headers */,
 				71ADA03910A372D200C88903 /* CDataScanner_Extensions.h in Headers */,
 				71ADA03B10A372D200C88903 /* NSCharacterSet_Extensions.h in Headers */,
@@ -968,6 +967,7 @@
 				71993A5811F8C54A0056EC2C /* CKNSData+Matching.h in Headers */,
 				4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */,
 				4F4599CD11FCE25D00438B93 /* CKUIImage+Factory.h in Headers */,
+				0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,7 +1093,6 @@
 				71AD9D8310A35F4600C88903 /* CKNSData+SHA1.m in Sources */,
 				71AD9D8510A35F4600C88903 /* CKNSString+URIQuery.m in Sources */,
 				71ADA00C10A371C900C88903 /* Reachability.m in Sources */,
-				71ADA02110A3727700C88903 /* RegexKitLite.m in Sources */,
 				71ADA03810A372D200C88903 /* CDataScanner.m in Sources */,
 				71ADA03A10A372D200C88903 /* CDataScanner_Extensions.m in Sources */,
 				71ADA03C10A372D200C88903 /* NSCharacterSet_Extensions.m in Sources */,
@@ -1172,6 +1171,7 @@
 				71993A5711F8C54A0056EC2C /* CKNSData+Matching.m in Sources */,
 				4F4599CA11FCE1AC00438B93 /* CKLocationManager.m in Sources */,
 				4F4599CE11FCE25D00438B93 /* CKUIImage+Factory.m in Sources */,
+				0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
