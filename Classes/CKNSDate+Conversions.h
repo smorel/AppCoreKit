@@ -30,6 +30,11 @@
 // Formats the date and time using NSDateFormatterStyle
 - (NSString *)stringWithDateStyle:(NSDateFormatterStyle)dateStyle andTimeStyle:(NSDateFormatterStyle)inTimeStyle;
 
+// TimeZone conversions
+- (NSDate *)dateFromTimeZone:(NSTimeZone *)sourceTimeZone toTimeZone:(NSTimeZone *)destinationTimeZone;
+- (NSDate *)localDate;
+- (NSDate *)UTCDate;
+
 //
 // ISO8601 UTC Basic Format
 // TODO: Put in a separate category

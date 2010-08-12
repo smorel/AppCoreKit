@@ -36,6 +36,8 @@
 
 - (id)initWithDomainName:(NSString *)domainName {
 	if (self = [super init]) {
+		// FIXME: There should be 1 specific CoreDataManager for the CKStore, 
+		// separated from the CoreDataManager of the application.
 		self.manager = [CKCoreDataManager sharedManager];
 		
 		// Fetch the domain, creating it if necessary
@@ -57,11 +59,21 @@
 	return [self fetchItemsWithPredicateFormat:nil arguments:nil];
 }
 
+- (NSArray  *)fetchItemsWithLimit:(NSUInteger)limit {
+	return [self fetchItemsWithPredicateFormat:nil arguments:nil limit:limit];
+}
+
 - (NSArray *)fetchItemsWithNames:(NSArray *)names {
 	return (names ? [self fetchItemsWithPredicateFormat:@"(name IN %@)" arguments:[NSArray arrayWithObject:names]] : [self fetchItems]);	
 }
 
-- (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {	
+- (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {
+	return [self fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments limit:0];
+}
+
+// Generic Fetch
+
+- (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments limit:(NSUInteger)limit {	
 	// Adds the "domain scope" for the predicate, equivalent to the format string
 	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
 
@@ -72,7 +84,7 @@
 	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
 	
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:0];
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:limit];
 }
 
 #pragma mark CKStore Count Items

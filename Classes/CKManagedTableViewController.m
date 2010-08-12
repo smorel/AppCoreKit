@@ -1,6 +1,6 @@
 //
 //  CKManagedTableViewController.m
-//  Urbanizer
+//  CloudKit
 //
 //  Created by Olivier Collet on 10-03-02.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
@@ -26,6 +26,14 @@
 	return self;
 }
 
+- (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index {
+	[_cellControllers insertObject:cellController atIndex:index];
+}
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index {
+	[_cellControllers removeObjectAtIndex:index];
+}
+
 - (void)dealloc {
 	[_cellControllers release];
 	self.headerTitle = nil;
@@ -41,13 +49,17 @@
 
 @interface CKManagedTableViewController ()
 @property (nonatomic, retain, readwrite) NSMutableArray *sections;
+@property (nonatomic, retain) NSMutableDictionary *pValuesForKeys;
+- (void)notifiesCellControllersForVisibleRows;
 @end
 
 //
 
 @implementation CKManagedTableViewController
 
+@synthesize delegate = _delegate;
 @synthesize sections = _sections;
+@synthesize pValuesForKeys = _valuesForKeys;
 
 - (void)awakeFromNib {
 	self.style = UITableViewStyleGrouped;
@@ -74,11 +86,13 @@
 
 - (void)viewDidUnload {
 	[super viewDidUnload];
+	// FIXME: Controllers should not be deallocated when the view is unloaded
 	[self clear];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -98,6 +112,13 @@
 	return _sections;
 }
 
+- (NSMutableDictionary *)pValuesForKeys {
+	if (_valuesForKeys == nil) {
+		_valuesForKeys = [[NSMutableDictionary dictionary] retain];
+	}
+	return _valuesForKeys;
+}
+
 #pragma mark Setup Management
 
 // Creates/updates cell data. This method should only be invoked directly if
@@ -110,7 +131,13 @@
 // Releases the table group data (it will be recreated when next needed)
 
 - (void)clear {
+	for (CKTableSection *section in self.sections) {
+		for (CKTableViewCellController *cellController in section.cellControllers) {
+			[cellController removeObserver:self forKeyPath:@"value"];
+		}
+	}
 	self.sections = nil;
+	self.pValuesForKeys = nil;
 }
 
 // Performs all work needed to refresh the data and the associated display
@@ -118,7 +145,8 @@
 - (void)reload {
 	[self clear];
 	[self setup];
-	[self.tableView reloadData];
+	[super reload];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 #pragma mark Accessors
@@ -128,6 +156,26 @@
 	CKTableViewCellController *controller = [section.cellControllers objectAtIndex:indexPath.row];
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	return controller;
+}
+
+- (void)removeCellControllerAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
+	CKTableViewCellController *cellController = [section.cellControllers objectAtIndex:indexPath.row];
+	[cellController removeObserver:self forKeyPath:@"value"];
+	[section removeCellControllerAtIndex:indexPath.row];
+	
+	if (section.cellControllers.count == 0) [self.sections removeObjectAtIndex:indexPath.section];
+}
+
+- (void)moveCellControllerFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	CKTableViewCellController *cellController = [[self cellControllerForIndexPath:fromIndexPath] retain];
+	[cellController performSelector:@selector(setIndexPath:) withObject:toIndexPath];
+
+	CKTableSection *fromSection = [self.sections objectAtIndex:fromIndexPath.section];
+	CKTableSection *toSection = [self.sections objectAtIndex:toIndexPath.section];
+	[fromSection removeCellControllerAtIndex:fromIndexPath.row];
+	[toSection insertCellController:cellController atIndex:toIndexPath.row];
+	[cellController release];
 }
 
 #pragma mark UITableView Protocol
@@ -150,10 +198,6 @@
 	}
 
 	[controller setupCell:theCell];	
-	
-	if (self.tableView.dragging == NO && self.tableView.decelerating == NO) {
-		[controller cellDidAppear:theCell];
-	}
 
 	return theCell;
 }
@@ -167,10 +211,39 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
 	[[self cellControllerForIndexPath:indexPath] didSelectRow];
 }
 
-#pragma mark UITableView Protocol for Secions
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCellEditingStyle editingStyle = UITableViewCellEditingStyleNone;
+	if ([self cellControllerForIndexPath:indexPath].isRemovable) editingStyle = UITableViewCellEditingStyleDelete;
+	return editingStyle;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+
+	if (editingStyle == UITableViewCellEditingStyleDelete) {
+		[self removeCellControllerAtIndexPath:indexPath];
+		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
+			[self.delegate tableViewController:self cellControllerDidDelete:cellController];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+	}	
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+	return [self cellControllerForIndexPath:indexPath].isMovable;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	[self moveCellControllerFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidMoveFromIndexPath:toIndexPath:)])
+		[self.delegate tableViewController:self cellControllerDidMoveFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
+}
+
+
+#pragma mark UITableView Protocol for Sections
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	return [[self.sections objectAtIndex:section] headerTitle];
@@ -203,16 +276,23 @@
 #pragma mark UIScrollView Protocol
 
 - (void)notifiesCellControllersForVisibleRows {
-	NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
-	for (NSIndexPath *indexPath in visiblePaths) {
+	// NOTE: We don't use [self.tableView indexPathsForVisibleRows] because it returns nil
+	// the first time the view appears. However, [self.tableView visibleCells] correctly returns
+	// the cells; maybe it's because it "loads" the cell, or maybe there is a bug in the framework.
+	// The documentation doesn't say anything about this.	
+	
+	NSArray *visibleCells = [self.tableView visibleCells];
+	
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		[[self cellControllerForIndexPath:indexPath] cellDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	if (!decelerate) {
-		[self notifiesCellControllersForVisibleRows];
-	}
+	if (decelerate || scrollView.decelerating)
+		return;
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -225,6 +305,10 @@
 	// Add *self* as a weak reference for all cell controllers
 	[section.cellControllers makeObjectsPerformSelector:@selector(setParentController:) withObject:self];
 	[self.sections addObject:section];
+
+	for (CKTableViewCellController *cell in section.cellControllers) {
+		[cell addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionNew context:nil];
+	}
 }
 
 - (void)addSectionWithCellControllers:(NSArray *)cellControllers {
@@ -236,6 +320,21 @@
 	section.headerTitle = headerTitle;
 	section.footerTitle = footerTitle;
 	[self addSection:section];
+}
+
+#pragma mark Values
+
+- (NSDictionary *)valuesForKeys {
+	return self.pValuesForKeys;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	CKTableViewCellController *cellController = (CKTableViewCellController *)object;
+	if (cellController.key) {
+		[self.pValuesForKeys setObject:cellController.value forKey:cellController.key];
+		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
+			[self.delegate tableViewController:self cellControllerValueDidChange:cellController];
+	}
 }
 
 @end

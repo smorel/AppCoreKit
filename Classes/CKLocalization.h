@@ -7,3 +7,5 @@
 //
 
 #define _(key) NSLocalizedString(key, key)
+
+NSString *CKLocalizationCurrentLocalization(void);

@@ -23,4 +23,8 @@
 	return [[[result substringToIndex:length] copy] autorelease];
 }
 
+- (NSString*)stringUsingASCIIEncoding {
+	return [[[NSString alloc] initWithData:[self dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding] autorelease];
+}
+
 @end

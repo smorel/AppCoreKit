@@ -20,12 +20,17 @@
 	UIView *_backgroundView;
 	UITableView *_tableView;
 	UITableViewStyle _style;
+	BOOL _stickySelection;
+	NSIndexPath *_selectedIndexPath;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, assign) UITableViewStyle style;
 @property (nonatomic, retain) UIView *backgroundView;
+@property (nonatomic, assign) BOOL stickySelection;
 
 - (id)initWithStyle:(UITableViewStyle)style;
+- (void)clearSelection:(BOOL)animated;
+- (void)reload;
 
 @end

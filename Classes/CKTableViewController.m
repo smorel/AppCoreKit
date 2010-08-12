@@ -10,11 +10,19 @@
 
 #import "CKTableViewController.h"
 
+
+@interface CKTableViewController ()
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
+@end
+
+
 @implementation CKTableViewController
 
 @synthesize backgroundView = _backgroundView;
 @synthesize tableView = _tableView;
 @synthesize style = _style;
+@synthesize stickySelection = _stickySelection;
+@synthesize selectedIndexPath = _selectedIndexPath;
 
 - (id)init {
 	if (self = [super initWithNibName:nil bundle:nil]) {
@@ -25,11 +33,12 @@
 
 - (id)initWithStyle:(UITableViewStyle)style { 
 	[self init];
-	self.style = _style;
+	self.style = style;
 	return self;
 }
 
 - (void)dealloc {
+	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
 	self.tableView = nil;
 	[super dealloc];
@@ -70,7 +79,8 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self.tableView reloadData];
-	[self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
+	if (self.stickySelection == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
+	else if (self.selectedIndexPath) [self.tableView selectRowAtIndexPath:self.selectedIndexPath animated:animated scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -80,7 +90,20 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
+	if (self.stickySelection == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
+	else self.selectedIndexPath = [self.tableView indexPathForSelectedRow];
+}
+
+#pragma mark Selection
+
+- (void)clearSelection:(BOOL)animated {
+	if (self.selectedIndexPath) [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:animated];
+	self.selectedIndexPath = nil;
+}
+
+- (void)reload {
+	[self.tableView reloadData];
+	if (self.stickySelection == YES && self.selectedIndexPath) [self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 #pragma mark Setters
@@ -108,6 +131,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	self.selectedIndexPath = indexPath;
 }
 
 @end

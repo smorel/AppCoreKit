@@ -19,6 +19,8 @@
 
 @interface CKWebRequest : NSObject {
 	NSURL *_url;
+	NSDictionary *_headers;
+	
 	id<CKWebRequestDelegate> _delegate;
 	id<CKWebResponseTransformer> _transformer;
 	id _valueTarget;
@@ -28,11 +30,12 @@
 	// FIXME: Username & password should be in a "authentication class"
 	NSString *_username;
 	NSString *_password;
-
+	
 	ASIHTTPRequest *_httpRequest; // Weak reference
 }
 
 @property (nonatomic, readonly) NSURL *url;
+@property (nonatomic, retain, readwrite) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) id<CKWebRequestDelegate> delegate;
 @property (nonatomic, assign) id<CKWebResponseTransformer> transformer; // FIXME: assign or retain?
@@ -41,6 +44,7 @@
 // <url> is an URL as a string with an optional base path (e.g., http://google.com/search)
 // <params> is the query as a key/value NSDictionary; it will be appended as a query string to the URL (e.g., <url>?q="example")
 
++ (CKWebRequest *)requestWithURL:(NSURL *)url;
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params;
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params delegate:(id)delegate;
 

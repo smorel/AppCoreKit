@@ -46,6 +46,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 @synthesize url = _url;
 @synthesize username = _username;
 @synthesize password = _password;
+@synthesize headers = _headers;
 
 #pragma mark Initialization
 
@@ -81,6 +82,10 @@ static ASINetworkQueue *_sharedQueue = nil;
 }
 
 #pragma mark Public API
+
++ (CKWebRequest *)requestWithURL:(NSURL *)url {
+	return [[[CKWebRequest alloc] initWithURL:url] autorelease];
+}
 
 + (CKWebRequest *)requestWithURLString:(NSString *)url params:(NSDictionary *)params {
 	NSURL *theURL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", url, [NSString stringWithQueryDictionary:params]] : url)];
@@ -149,6 +154,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	_httpRequest = [ASIHTTPRequest requestWithURL:self.url];
 	_httpRequest.username = self.username;
 	_httpRequest.password = self.password;
+	_httpRequest.requestHeaders = [self.headers mutableCopy];
 	_httpRequest.delegate = self;
 	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
 	

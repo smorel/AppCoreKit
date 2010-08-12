@@ -99,7 +99,9 @@
 	_timeoutEnabled = NO;
 
 	CLLocation *currentLocation = _locationManager.location;
-
+	[self setCachedLocation:currentLocation];
+	CKDebugLog(@"Location: %@", _cachedLocation);
+	
 	if (currentLocation == nil) {
 		[_locationManager startUpdatingLocation];
 		return;
@@ -169,8 +171,11 @@
 		return;
 	}
 
-	if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
-		[self findAddressWithLocation:newLocation];
+	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2
+	if (_findAddress == YES) {
+		if ((_cachedLocation == nil) || ([newLocation getDistanceFrom:_cachedLocation] > K_LOCATION_ADDRESS_DISTANCE_DELTA)) {
+			[self findAddressWithLocation:newLocation];
+		}
 	}
 	
 	[self setCachedLocation:newLocation];
