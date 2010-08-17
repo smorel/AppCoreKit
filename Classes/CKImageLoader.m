@@ -9,6 +9,7 @@
 #import "CKImageLoader.h"
 #import "CKUIImage+Transformations.h"
 #import "CKCache.h"
+#import "CKLocalization.h"
 
 @interface CKImageLoader ()
 
@@ -117,8 +118,13 @@
 		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
 			[self.delegate imageLoader:self didLoadImage:[self getCachedImage] cached:NO];
 		}
+		return;
 	}
-	// FIXME: Should throw an error is the value is not an image
+
+	// Throws an error if the value is not an image
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:_(@"Did not receive an image") forKey:NSLocalizedDescriptionKey];
+	NSError *error = [NSError errorWithDomain:@"CKImageLoaderDomain" code:0 userInfo:userInfo];
+	[self.delegate imageLoader:self didFailWithError:error];
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {
