@@ -209,6 +209,8 @@
 		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
 		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */; };
+		71BC06981222C3B600C50BF6 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71BC06991222C3B600C50BF6 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */; };
 		71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -420,6 +422,8 @@
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
+		71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
+		71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
 		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
 		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIColorAdditions.h; sourceTree = "<group>"; };
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIColorAdditions.m; sourceTree = "<group>"; };
@@ -591,6 +595,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */,
+				71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */,
 				4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */,
 				4FAD0F8911C2D5810071C7BF /* CKKeypadView.m */,
 				4FAD0F7011C2D54D0071C7BF /* CKImageView.h */,
@@ -968,6 +974,7 @@
 				4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */,
 				4F4599CD11FCE25D00438B93 /* CKUIImage+Factory.h in Headers */,
 				0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */,
+				71BC06981222C3B600C50BF6 /* CKSlideshowViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1172,6 +1179,7 @@
 				4F4599CA11FCE1AC00438B93 /* CKLocationManager.m in Sources */,
 				4F4599CE11FCE25D00438B93 /* CKUIImage+Factory.m in Sources */,
 				0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */,
+				71BC06991222C3B600C50BF6 /* CKSlideshowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
