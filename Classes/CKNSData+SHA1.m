@@ -21,4 +21,13 @@
 	return [NSData dataWithBytes:&bytes length:20];
 }
 
+- (NSString *)hexadecimalRepresentation {
+	const unsigned char *bytes = (const unsigned char *)[self bytes];
+	NSMutableString *string = [NSMutableString stringWithCapacity:[self length]];
+	for (int i = 0; i < [self length]; i++) {
+		[string appendFormat:@"%02X", bytes[i]];
+	}
+	return string;
+}
+
 @end

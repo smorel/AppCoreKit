@@ -10,5 +10,6 @@
 @interface NSData (CKNSDataSHA1Additions)
 
 + (NSData *)dataWithSHA1EncodedString:(NSString *)string;
+- (NSString *)hexadecimalRepresentation;
 
 @end
