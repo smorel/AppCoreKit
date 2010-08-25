@@ -21,6 +21,7 @@
 	NSUInteger currentImageIndex;
 	
 	BOOL swiping;
+	BOOL animating;
 	CGFloat swipeStartX;
 	
 	UIBarButtonItem *previousButton;

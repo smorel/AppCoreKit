@@ -179,10 +179,7 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
-	NSLog(@"Animate: %@ %@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect(self.view.bounds));
-	
 	CGSize contentSize = self.view.bounds.size;
-	
 	UIView *spinner = nil;
 	
 	[UIView beginAnimations:nil context:nil];
@@ -366,6 +363,9 @@
 	[UIView beginAnimations:@"swipe" context:NULL];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	[UIView setAnimationDuration:0.3f];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationWillStartSelector:@selector(scrollingAnimationWillStart:context:)];
+	[UIView setAnimationDidStopSelector:@selector(scrollingAnimationDidStop:context:)];
 	
 	leftImageView.frame = CGRectMake(-contentSize.width, 0.0f, contentSize.width, contentSize.height);
 	currentImageView.frame = CGRectMake(0.0f, 0.0f, contentSize.width, contentSize.height);
@@ -380,6 +380,14 @@
 	else nextButton.enabled = YES;
 }
 
+- (void)scrollingAnimationWillStart:(NSString *)animationID context:(void *)context {
+	animating = YES;
+}
+
+- (void)scrollingAnimationDidStop:(NSString *)animationID context:(void *)context {
+	animating = NO;
+}
+													
 - (void)nextImage:(id)sender {
 	if (sender == nextButton) [self beginScrollImages];
 
@@ -426,6 +434,11 @@
 	if ([touches count] != 1)
 		return;
 	
+	if (animating)
+		return;
+	
+	NSLog(@"touchesBegan");
+	
 	swipeStartX = [[touches anyObject] locationInView:self.view].x;
 
 	[self beginScrollImages];
@@ -433,6 +446,9 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	if ([touches count] != 1)
+		return;
+	
+	if (animating)
 		return;
 	
 	swiping = YES;
@@ -446,6 +462,9 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	if (animating)
+		return;
+	
 	if (!swiping) {
 		SEL selector = nil;
 		
