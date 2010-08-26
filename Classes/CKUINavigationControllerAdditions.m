@@ -24,7 +24,7 @@
 }
 
 - (void)setStyles:(NSDictionary *)styles animated:(BOOL)animated {
-	[UIApplication sharedApplication].statusBarStyle = [[styles objectForKey:@"CKStatusBarStyle"] intValue];
+	[[UIApplication sharedApplication] setStatusBarStyle:[[styles objectForKey:@"CKStatusBarStyle"] intValue] animated:animated];
 	self.navigationBar.barStyle = [[styles objectForKey:@"CKNavigationBarStyle"] intValue];
 	self.toolbar.barStyle = [[styles objectForKey:@"CKToolbarStyle"] intValue];
 	self.navigationBar.translucent = [[styles objectForKey:@"CKNavigationBarTranslucent"] boolValue];
