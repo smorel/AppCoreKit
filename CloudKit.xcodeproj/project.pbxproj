@@ -127,7 +127,7 @@
 		71917AC31199C49A00386EB5 /* CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917AC11199C49A00386EB5 /* CKLayout.m */; };
 		71917B291199E7D700386EB5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B281199E7D700386EB5 /* CoreLocation.framework */; };
 		71917B2B1199E7E300386EB5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71917B2A1199E7E300386EB5 /* MapKit.framework */; };
-		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; settings = {ATTRIBUTES = (); }; };
+		71917B381199E87A00386EB5 /* CKUINavigationControllerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71917B391199E87A00386EB5 /* CKUINavigationControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917B371199E87A00386EB5 /* CKUINavigationControllerAdditions.m */; };
 		71917BAF1199ED6A00386EB5 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 71917BAD1199ED6A00386EB5 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71917BB01199ED6A00386EB5 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71917BAE1199ED6A00386EB5 /* CKBundle.m */; };
@@ -209,10 +209,12 @@
 		71B1975A10F3EC26007F551A /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1975810F3EC26007F551A /* CKCoreDataManager.m */; };
 		71B1980710F40D22007F551A /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71B1980810F40D22007F551A /* CKNSManagedObjectContext+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */; };
-		71BC06981222C3B600C50BF6 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71BC06991222C3B600C50BF6 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */; };
+		71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */ = {isa = PBXBuildFile; fileRef = 71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */; };
 		71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
+		71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -422,11 +424,13 @@
 		71B1975810F3EC26007F551A /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCoreDataManager.m; sourceTree = "<group>"; };
 		71B1980510F40D22007F551A /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		71B1980610F40D22007F551A /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
-		71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
-		71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
+		71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewControllerDep.h; path = Classes/CKSlideshowViewControllerDep.h; sourceTree = "<group>"; };
+		71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewControllerDep.m; path = Classes/CKSlideshowViewControllerDep.m; sourceTree = "<group>"; };
 		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
 		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIColorAdditions.h; sourceTree = "<group>"; };
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIColorAdditions.m; sourceTree = "<group>"; };
+		71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
+		71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libCloudKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCloudKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -496,6 +500,7 @@
 				710DF0F810FFBB820063FB2C /* WebService */,
 				71AD9D5F10A35EED00C88903 /* Support */,
 				7150E29D11A1E4450050E284 /* Refactorings */,
+				71E6D1E71226F6510083D977 /* Deprecated */,
 				7173D2A510A4BE45004E9621 /* Test Cases */,
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -595,8 +600,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				71BC06961222C3B600C50BF6 /* CKSlideshowViewController.h */,
-				71BC06971222C3B600C50BF6 /* CKSlideshowViewController.m */,
+				71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */,
+				71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */,
 				4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */,
 				4FAD0F8911C2D5810071C7BF /* CKKeypadView.m */,
 				4FAD0F7011C2D54D0071C7BF /* CKImageView.h */,
@@ -875,6 +880,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		71E6D1E71226F6510083D977 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */,
+				71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -974,7 +988,8 @@
 				4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */,
 				4F4599CD11FCE25D00438B93 /* CKUIImage+Factory.h in Headers */,
 				0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */,
-				71BC06981222C3B600C50BF6 /* CKSlideshowViewController.h in Headers */,
+				71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */,
+				71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1179,7 +1194,8 @@
 				4F4599CA11FCE1AC00438B93 /* CKLocationManager.m in Sources */,
 				4F4599CE11FCE25D00438B93 /* CKUIImage+Factory.m in Sources */,
 				0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */,
-				71BC06991222C3B600C50BF6 /* CKSlideshowViewController.m in Sources */,
+				71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */,
+				71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

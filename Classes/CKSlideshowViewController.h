@@ -1,6 +1,6 @@
 //
 //  CKSlideshowViewController.h
-//  YellowPages
+//  CloudKit
 //
 //  Created by Olivier Collet on 09-12-01.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
@@ -8,45 +8,48 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CKImageView.h"
+
 @interface CKSlideshowViewController : UIViewController {
-	NSArray *imagesPaths;			// Contains the paths to the images
-	NSMutableDictionary *images;	// Contains the UIImages
-
-	NSOperationQueue *queue;		// To handle asynchronous loading
-
-	UIImageView *leftImageView;
-	UIImageView *currentImageView;
-	UIImageView *rightImageView;
-	
-	NSUInteger currentImageIndex;
-	
+	id _delegate;
+	NSArray *imagesPaths; // Contains the paths to the images
+	IBOutlet UIView *_imageContainerView;
+	CKImageView *leftImageView;
+	CKImageView *currentImageView;
+	CKImageView *rightImageView;	
+	NSUInteger _currentImageIndex;
 	BOOL swiping;
 	BOOL animating;
 	CGFloat swipeStartX;
-	
 	UIBarButtonItem *previousButton;
 	UIBarButtonItem *nextButton;
-	
-	// Save current status and navigation bar styles
-	UIStatusBarStyle savedStatusBarStyle;
-	UIBarStyle savedNavigationBarStyle;
-	UIBarStyle savedToolbarStyle;
-	UIColor	*savedNavigationBarTintColor;
-	UIColor	*savedToolbarTintColor;
-	BOOL savedNavigationBarTranslucent;
-	BOOL savedToolbarTranslucent;
-	BOOL savedNavigationBarHidden;
-	BOOL savedToolbarHidden;
-	
 	BOOL useModalStyle;
-	BOOL shouldHideControls;
+	BOOL canHideControls;
+	NSDictionary *_styles;
 }
 
+@property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) BOOL shouldHideControls;
 @property (nonatomic, assign) BOOL useModalStyle;
-@property (nonatomic, assign) UIViewContentMode contentMode;
+@property (nonatomic, readonly) NSUInteger currentImageIndex;
 
 - (id)initWithImagePaths:(NSArray *)paths startAtIndex:(NSUInteger)index;
 - (id)initWithImagePaths:(NSArray *)paths;
+- (void)showControls;
+- (void)hideControls;
 
 @end
+
+//
+
+@protocol CKSlideshowViewControllerDelegate
+
+- (NSUInteger)numberOfImagesInSlideshowView:(CKSlideshowViewController *)slideshowController;
+- (NSURL *)slideshowViewController:(CKSlideshowViewController *)slideshowController URLForImageAtIndex:(NSUInteger)index;
+
+@optional
+- (void)slideshowViewController:(CKSlideshowViewController *)slideshowController imageDidAppearAtIndex:(NSUInteger)index;
+
+@end
+
+//

@@ -6,47 +6,48 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKSlideshowViewController.h"
-#import "CKUINavigationControllerAdditions.h"
+#import "CKSlideshowViewControllerDep.h"
 #import "CKLocalization.h"
 #import "CKConstants.h"
+#import "ASIHTTPRequest.h"
 #import "CKBundle.h"
 
 #define DELAY_CONTROLS_DISAPPEAR 5
 
-@interface CKSlideshowViewController ()
-@property (nonatomic, retain) UIView *imageContainerView;
+@interface CKSlideshowViewControllerDep ()
 @property (nonatomic, retain) NSArray *imagesPaths;
-@property (nonatomic, retain) CKImageView *leftImageView;
-@property (nonatomic, retain) CKImageView *rightImageView;
-@property (nonatomic, retain) CKImageView *currentImageView;
-@property (nonatomic, retain) NSDictionary *styles;
+@property (nonatomic, retain) NSMutableDictionary *images;
+@property (nonatomic, retain) NSOperationQueue *queue;
+@property (nonatomic, retain) UIImageView *leftImageView;
+@property (nonatomic, retain) UIImageView *rightImageView;
+@property (nonatomic, retain) UIImageView *currentImageView;
 @end
 
-@interface CKSlideshowViewController ()
-- (NSUInteger)numberOfImages;
+@interface CKSlideshowViewControllerDep (Private)
+- (void)saveStyles;
+- (void)restoreStyles;
 - (void)setTitleForIndex:(NSInteger)imageIndex;
-- (CKImageView *)createImageView:(NSUInteger)imageIndex;
+- (void)grabURL:(NSString *)urlString forImageView:(UIImageView *)imageView;
+- (UIImageView *)createImageView:(NSUInteger)imageIndex;
 - (void)previousImage:(id)sender;
 - (void)nextImage:(id)sender;
 @end
 
 //
 
-@implementation CKSlideshowViewController
+@implementation CKSlideshowViewControllerDep
 
-@synthesize delegate = _delegate;
-@synthesize imagesPaths;
-@synthesize currentImageIndex = _currentImageIndex;
-@synthesize imageContainerView = _imageContainerView;
-@synthesize shouldHideControls, useModalStyle;
+@synthesize imagesPaths, images, queue;
 @synthesize leftImageView, rightImageView, currentImageView;
-@synthesize styles = _styles;
+@synthesize shouldHideControls, useModalStyle, contentMode;
 
 - (id)initWithImagePaths:(NSArray *)paths startAtIndex:(NSUInteger)index {
 	if (self = [super init]) {
 		self.imagesPaths = paths;
-		_currentImageIndex = index;
+		self.images = [NSMutableDictionary dictionaryWithCapacity:imagesPaths.count];
+		self.queue = [[[NSOperationQueue alloc] init] autorelease];
+		self.contentMode = UIViewContentModeScaleAspectFit;
+		currentImageIndex = index;
 	}
 	return self;
 }
@@ -57,13 +58,13 @@
 
 - (void)dealloc {
 	[imagesPaths release];
+	[images release];
+	[queue release];
 	[previousButton release];
 	[nextButton release];
 	[leftImageView release];
 	[currentImageView release];
 	[rightImageView release];
-	[_styles release];
-	[_imageContainerView release];
 	[super dealloc];
 }
 
@@ -71,46 +72,28 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-
 	self.view.backgroundColor = [UIColor blackColor];
 	self.view.opaque = YES;
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	self.view.contentMode = UIViewContentModeScaleAspectFit;
-
-	if (self.imageContainerView == nil) {
-		self.imageContainerView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
-		self.imageContainerView.backgroundColor = [UIColor blackColor];
-		self.imageContainerView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
-		[self.view addSubview:self.imageContainerView];
-	}
-}
-
-- (void)viewDidUnload {
-	[super viewDidUnload];
-	self.imageContainerView = nil;
-	self.leftImageView = nil;
-	self.currentImageView = nil;
-	self.rightImageView = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
+	
 	self.wantsFullScreenLayout = NO; // was: YES
 	
 	// Set the view style
 	
 	if (useModalStyle == NO) {
-		self.styles = [self.navigationController getStyles];
+		[self saveStyles];
 	}
 		
-	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES] ;
+	[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.toolbar.barStyle = UIBarStyleBlack;
 	self.navigationController.toolbar.translucent = YES;	
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
-	self.wantsFullScreenLayout = YES;
 
 	if (self.navigationController.viewControllers.count <= 1) {
 		UIBarButtonItem *closeButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Close") 
@@ -120,36 +103,33 @@
 		self.navigationItem.leftBarButtonItem = closeButton;
 	}
 	
-	[self setTitleForIndex:_currentImageIndex];
+	[self setTitleForIndex:currentImageIndex];
 	
 	// Display the toolbar if more than 1 image
-	if ([self numberOfImages] > 1) { 
-		[self.navigationController setToolbarHidden:NO animated:animated];
-	}
+	if (self.imagesPaths.count > 1) [self.navigationController setToolbarHidden:NO animated:animated];
 	
 	// Setup image views
 	
-	if ([self numberOfImages] > 0) {
-		if ((_currentImageIndex - 1) >= 0) {
-			self.leftImageView = [self createImageView:_currentImageIndex - 1];
-			[self.imageContainerView addSubview:leftImageView];
-		}				
+	if (imagesPaths.count > 0) {	
+		if ((currentImageIndex - 1) >= 0) {
+			self.leftImageView = [self createImageView:currentImageIndex - 1];
+			[self.view addSubview:leftImageView];
+		}
 		
-		self.currentImageView = [self createImageView:_currentImageIndex];
-		[self.imageContainerView addSubview:currentImageView];
+		self.currentImageView = [self createImageView:currentImageIndex];
+		[self.view addSubview:currentImageView];
 		
-		if (([self numberOfImages] > 1) && (_currentImageIndex + 1) < [self numberOfImages]) {
-			self.rightImageView = [self createImageView:_currentImageIndex + 1];
-			[self.imageContainerView addSubview:rightImageView];
+		if ((imagesPaths.count > 1) && (currentImageIndex + 1) < imagesPaths.count) {
+			self.rightImageView = [self createImageView:currentImageIndex + 1];
+			[self.view addSubview:rightImageView];
 		}
 	}
 	
 	CGSize contentSize = self.view.bounds.size;
+	
 	leftImageView.frame = CGRectMake(-contentSize.width, 0.0f, contentSize.width, contentSize.height);
 	currentImageView.frame = CGRectMake(0.0f, 0.0f, contentSize.width, contentSize.height);
 	rightImageView.frame = CGRectMake(contentSize.width, 0.0f, contentSize.width, contentSize.height);
-	
-	leftImageView.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -159,15 +139,14 @@
 	previousButton = [[UIBarButtonItem alloc] initWithImage:[CKBundle imageForName:@"CKSlideShowViewControllerArrowLeft.png"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage:)];
 	nextButton = [[UIBarButtonItem alloc] initWithImage:[CKBundle imageForName:@"CKSlideShowViewControllerArrowRight.png"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage:)];
 	[self setToolbarItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
-						   previousButton,
-						   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
-						   nextButton,
-						   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
-						   nil] 
-				 animated:YES];
+																previousButton,
+																[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+																nextButton,
+																[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+																nil] 
+												  animated:YES];
 	
-	if (_currentImageIndex == 0) previousButton.enabled = NO;
-	if (_currentImageIndex >= ([self numberOfImages] - 1)) nextButton.enabled = NO;
+	previousButton.enabled = NO;
 	
 	// Hide the navigationbar and the toolbar after a delay
 	if (shouldHideControls) {
@@ -176,27 +155,21 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[queue cancelAllOperations];
+	
 	if (useModalStyle == NO) {
-		[self.navigationController setStyles:self.styles animated:YES];
+		[self restoreStyles];
+		[self.navigationController setNavigationBarHidden:savedNavigationBarHidden animated:animated];
+		[self.navigationController setToolbarHidden:savedToolbarHidden animated:animated];
+		[self setToolbarItems:[NSArray array] animated:YES];
 	}
 		
 	[super viewWillDisappear:animated];
 }
 
 - (void)setTitleForIndex:(NSInteger)imageIndex {
-	NSUInteger count = [self numberOfImages];
-	if (count == 0 || imageIndex >= count) return;
-	self.title = [NSString stringWithFormat:NSLocalizedString(@"%d of %d", @"X images of X images total"), imageIndex+1, count];
-}
-
-- (NSUInteger)numberOfImages {
-	if (self.imagesPaths) return self.imagesPaths.count;
-
-	if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfImagesInSlideshowView:)]) {
-		return [self.delegate numberOfImagesInSlideshowView:self];
-	}
-
-	return 0;
+	if (self.imagesPaths == nil || [self.imagesPaths count] == 0 || imageIndex >= [self.imagesPaths count]) return;
+	self.title = [NSString stringWithFormat:NSLocalizedString(@"%d of %d", @"X images of X images total"), imageIndex+1, [self.imagesPaths count]];
 }
 
 #pragma mark Rotation
@@ -207,20 +180,76 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
 	CGSize contentSize = self.view.bounds.size;
+	UIView *spinner = nil;
 	
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:duration];
 
+	// FIXME: Does not, this resize the spinner 3 times because of same identifier.
+	// FIXME: Also, there is no need for the computation, just do spinner.center = imageView.center.
+	
 	leftImageView.frame = CGRectMake(-contentSize.width, 0.0f, contentSize.width, contentSize.height);
+	spinner = (UIActivityIndicatorView *)[leftImageView viewWithTag:1000];
+	if (spinner) spinner.frame = CGRectMake(leftImageView.frame.size.width/2 - spinner.frame.size.width/2, 
+														 leftImageView.frame.size.height/2 - spinner.frame.size.height/2,
+														 spinner.frame.size.width,
+														 spinner.frame.size.height);
+	
 	currentImageView.frame = CGRectMake(0.0f, 0.0f, contentSize.width, contentSize.height);
+	spinner = (UIActivityIndicatorView *)[currentImageView viewWithTag:1000];
+	if (spinner) spinner.frame = CGRectMake(currentImageView.frame.size.width/2 - spinner.frame.size.width/2, 
+														 currentImageView.frame.size.height/2 - spinner.frame.size.height/2,
+														 spinner.frame.size.width,
+														 spinner.frame.size.height);
+	
 	rightImageView.frame = CGRectMake(contentSize.width, 0.0f, contentSize.width, contentSize.height);
+	spinner = (UIActivityIndicatorView *)[rightImageView viewWithTag:1000];
+	if (spinner) spinner.frame = CGRectMake(rightImageView.frame.size.width/2 - spinner.frame.size.width/2, 
+														 rightImageView.frame.size.height/2 - spinner.frame.size.height/2,
+														 spinner.frame.size.width,
+														 spinner.frame.size.height);
 	
 	[UIView commitAnimations];
 }
 
+- (void)didReceiveMemoryWarning {
+	[images removeAllObjects];
+    [super didReceiveMemoryWarning];
+}
+
+- (void)viewDidUnload {
+	return;
+}
+
+#pragma mark -
+#pragma mark Styles
+
+- (void)saveStyles {
+	savedStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+	savedNavigationBarStyle = self.navigationController.navigationBar.barStyle;
+	savedToolbarStyle = self.navigationController.toolbar.barStyle;
+	savedNavigationBarTintColor = [self.navigationController.navigationBar.tintColor retain];
+	savedToolbarTintColor = [self.navigationController.toolbar.tintColor retain];
+	savedNavigationBarTranslucent = self.navigationController.navigationBar.translucent;
+	savedToolbarTranslucent = self.navigationController.toolbar.translucent;
+	savedNavigationBarHidden = self.navigationController.navigationBar.hidden;
+	savedToolbarHidden = self.navigationController.toolbar.hidden;
+}
+
+- (void)restoreStyles {
+	[UIApplication sharedApplication].statusBarStyle = savedStatusBarStyle;
+	self.navigationController.navigationBar.barStyle = savedNavigationBarStyle;
+	self.navigationController.toolbar.barStyle = savedToolbarStyle;
+	if (savedNavigationBarTintColor) self.navigationController.navigationBar.tintColor = savedNavigationBarTintColor;
+	if (savedToolbarTintColor) self.navigationController.toolbar.tintColor = savedToolbarTintColor;
+	self.navigationController.navigationBar.translucent = savedNavigationBarTranslucent;
+	self.navigationController.toolbar.translucent = savedToolbarTranslucent;
+}
+
 #pragma mark Controls
 
-- (void)showControls {	
+- (void)showControls {
+	
 	if (self.navigationController.navigationBar.alpha == 0) {
 		[UIView beginAnimations:nil context:nil];
 		self.navigationController.navigationBar.alpha = 1;
@@ -238,6 +267,7 @@
 	[UIView beginAnimations:nil context:nil];
 	self.navigationController.navigationBar.alpha = 0;
 	self.navigationController.toolbar.alpha = 0;
+
 	[UIView commitAnimations];
 }
 
@@ -245,27 +275,73 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark URL Loading
+
+- (void)grabURL:(NSString *)urlString forImageView:(UIImageView *)imageView {
+	
+	// Insert a spinner in the ImageView
+	UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	spinner.tag = 1000;
+	spinner.center = imageView.center;
+	
+	[spinner startAnimating];
+	[imageView addSubview:spinner];
+	[spinner release];
+	
+	// Create a request to grab the data
+	NSURL *url = [NSURL URLWithString:urlString];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+	[request setDelegate:self];
+	[request setDidFinishSelector:@selector(requestDone:)];
+	[request setDidFailSelector:@selector(requestWentWrong:)];
+	request.userInfo = [NSDictionary dictionaryWithObject:imageView forKey:@"ImageView"];
+	[[self queue] addOperation:request];
+}
+
+- (void)requestDone:(ASIHTTPRequest *)request {
+	NSData *imgData = [request responseData];
+	
+	UIImage *image = [UIImage imageWithData:imgData];
+	UIImageView *imageView = [request.userInfo objectForKey:@"ImageView"];
+	[imageView setImage:image];
+	[[imageView viewWithTag:1000] removeFromSuperview];
+	
+	// Store the image in the cache
+	[images setObject:image forKey:[NSNumber numberWithInt:imageView.tag]];
+}
+
+- (void)requestWentWrong:(ASIHTTPRequest *)request {
+	UIImageView *imageView = [request.userInfo objectForKey:@"ImageView"];
+	[[imageView viewWithTag:1000] removeFromSuperview];
+}
+
 #pragma mark UIImageView Management
 
-- (CKImageView *)createImageView:(NSUInteger)imageIndex {
-	if (imageIndex >= [self numberOfImages]) return nil;
+- (UIImageView *)createImageView:(NSUInteger)imageIndex {
+	if (imageIndex >= [imagesPaths count]) return nil;
 
-	CKImageView *imageView = [[[CKImageView alloc] initWithFrame:self.view.bounds] autorelease];
+	UIImageView *imageView = [[[UIImageView alloc] initWithFrame:self.view.bounds] autorelease];
 	imageView.tag = imageIndex;
 	imageView.opaque = YES;
 	imageView.userInteractionEnabled = NO;
 	imageView.backgroundColor = [UIColor blackColor];
+	imageView.contentMode = self.contentMode;
 	imageView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
-	imageView.contentMode = UIViewContentModeScaleAspectFit;
-	imageView.clipsToBounds = YES;	
+	imageView.clipsToBounds = YES;
 	
-	if (self.imagesPaths) { 
-		[imageView loadImageWithContentOfURL:[self.imagesPaths objectAtIndex:imageIndex]];
-	} else if (self.delegate && [self.delegate respondsToSelector:@selector(slideshowViewController:URLForImageAtIndex:)]) {
-		NSURL *url = [self.delegate slideshowViewController:self URLForImageAtIndex:imageIndex];
-		[imageView loadImageWithContentOfURL:url];
+	// Image already in the cache
+	UIImage *image = [images objectForKey:[NSNumber numberWithInt:imageIndex]];
+	if (image) {
+		[imageView setImage:image];
+		return imageView;
 	}
-
+	
+	// Load the image from URL
+	NSString *imagePath = [imagesPaths objectAtIndex:imageIndex];
+	if (imagePath != nil && [imagePath length] >= 7 && [imagePath hasPrefix:@"http://"]) {
+		[self grabURL:imagePath forImageView:imageView];
+	}
+	
 	return imageView;
 }
 
@@ -279,24 +355,17 @@
 	rightImageView.hidden = NO;
 }
 
-- (void)endScrollImage {
-	if (self.delegate && [self.delegate respondsToSelector:@selector(slideshowViewController:imageDidAppearAtIndex:)]) {
-		[self.delegate slideshowViewController:self imageDidAppearAtIndex:_currentImageIndex];
-	}
-}
-
 - (void)scrollImages {
-	[self setTitleForIndex:_currentImageIndex];
+	[self setTitleForIndex:currentImageIndex];
 	
-	CGSize contentSize = self.view.frame.size;
+	CGSize contentSize = self.view.bounds.size;
 	
 	[UIView beginAnimations:@"swipe" context:NULL];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(endScrollImage)];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	[UIView setAnimationDuration:0.3f];
+	[UIView setAnimationDelegate:self];
 	[UIView setAnimationWillStartSelector:@selector(scrollingAnimationWillStart:context:)];
-	[UIView setAnimationDidStopSelector:@selector(scrollingAnimationDidStop:context:)];	
+	[UIView setAnimationDidStopSelector:@selector(scrollingAnimationDidStop:context:)];
 	
 	leftImageView.frame = CGRectMake(-contentSize.width, 0.0f, contentSize.width, contentSize.height);
 	currentImageView.frame = CGRectMake(0.0f, 0.0f, contentSize.width, contentSize.height);
@@ -304,10 +373,10 @@
 	
 	[UIView commitAnimations];
 	
-	if (_currentImageIndex == 0) previousButton.enabled = NO;
+	if (currentImageIndex == 0) previousButton.enabled = NO;
 	else previousButton.enabled = YES;
 	
-	if (_currentImageIndex == [self numberOfImages]-1) nextButton.enabled = NO;
+	if (currentImageIndex == [self.imagesPaths count]-1) nextButton.enabled = NO;
 	else nextButton.enabled = YES;
 }
 
@@ -318,7 +387,7 @@
 - (void)scrollingAnimationDidStop:(NSString *)animationID context:(void *)context {
 	animating = NO;
 }
-
+													
 - (void)nextImage:(id)sender {
 	if (sender == nextButton) [self beginScrollImages];
 
@@ -327,11 +396,11 @@
 	self.leftImageView = self.currentImageView;
 	self.currentImageView = self.rightImageView;
 	
-	_currentImageIndex++;
-	if (_currentImageIndex < [self numberOfImages] - 1) {
-		self.rightImageView = [self createImageView:_currentImageIndex + 1];
+	currentImageIndex++;
+	if (currentImageIndex < [self.imagesPaths count] - 1) {
+		self.rightImageView = [self createImageView:currentImageIndex + 1];
 		self.rightImageView.hidden = YES;
-		[self.imageContainerView addSubview:self.rightImageView];
+		[self.view addSubview:self.rightImageView];
 	} else {
 		self.rightImageView = nil;
 	}
@@ -347,11 +416,11 @@
 	self.rightImageView = self.currentImageView;
 	self.currentImageView = self.leftImageView;
 	
-	_currentImageIndex--;
-	if (_currentImageIndex > 0) {
-		self.leftImageView = [self createImageView:_currentImageIndex - 1];
+	currentImageIndex--;
+	if (currentImageIndex > 0) {
+		self.leftImageView = [self createImageView:currentImageIndex - 1];
 		self.leftImageView.hidden = YES;
-		[self.imageContainerView addSubview:self.leftImageView];
+		[self.view addSubview:self.leftImageView];
 	} else {
 		self.leftImageView = nil;
 	}
@@ -366,7 +435,9 @@
 		return;
 	
 	if (animating)
-		return;	
+		return;
+	
+	NSLog(@"touchesBegan");
 	
 	swipeStartX = [[touches anyObject] locationInView:self.view].x;
 
@@ -378,7 +449,7 @@
 		return;
 	
 	if (animating)
-		return;	
+		return;
 	
 	swiping = YES;
 	CGFloat swipeDistance = [[touches anyObject] locationInView:self.view].x - swipeStartX;
@@ -392,7 +463,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	if (animating)
-		return;	
+		return;
 	
 	if (!swiping) {
 		SEL selector = nil;
@@ -411,12 +482,13 @@
 		if (self.navigationController.navigationBar.alpha == 1) [self hideControls];
 	}
 		
-	NSUInteger count = [self numberOfImages];
+	NSUInteger count = [imagesPaths count];
 	
 	CGFloat swipeDistance = [[touches anyObject] locationInView:self.view].x - swipeStartX;
-	if (_currentImageIndex > 0 && swipeDistance > 50.0f) {
+	if (currentImageIndex > 0 && swipeDistance > 50.0f) {
 		[self previousImage:nil];
-	} else if (_currentImageIndex < count - 1 && swipeDistance < -50.0f) {
+	}
+	else if (currentImageIndex < count - 1 && swipeDistance < -50.0f) {
 		[self nextImage:nil];
 	}
 	
