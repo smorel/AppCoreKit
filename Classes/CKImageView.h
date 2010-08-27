@@ -21,20 +21,17 @@
 //
 
 @interface CKImageView : UIView <CKImageLoaderDelegate> {
+	UIImageView *_imageView;
 	CKImageLoader *_imageLoader;
 	NSURL *_imageURL;
-	UIImage *_defaultImage;
-	UIImage *_image;
-	BOOL _aspectFill;
-	
+	UIImage *_defaultImage;	
 	id<CKImageViewDelegate> _delegate;
 }
 
 @property (nonatomic, retain, readonly) NSURL *imageURL;
-@property (nonatomic, retain) UIImage *defaultImage;
+@property (nonatomic, retain, readwrite) UIImage *defaultImage;
 @property (nonatomic, retain, readonly) UIImage *image;
-@property (nonatomic, assign) BOOL aspectFill;
-@property (nonatomic, assign) id<CKImageViewDelegate> delegate;
+@property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;

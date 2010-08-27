@@ -14,7 +14,7 @@
 
 @property (nonatomic, retain, readwrite) CKImageLoader *imageLoader;
 @property (nonatomic, retain, readwrite) NSURL *imageURL;
-@property (nonatomic, retain, readwrite) UIImage *image;
+@property (nonatomic, retain, readwrite) UIImageView *imageView;
 
 @end
 
@@ -25,12 +25,15 @@
 @synthesize imageLoader = _imageLoader;
 @synthesize imageURL = _imageURL;
 @synthesize defaultImage = _defaultImage;
-@synthesize image = _image;
-@synthesize aspectFill = _aspectFill;
 @synthesize delegate = _delegate;
+@synthesize imageView = _imageView;
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+		self.imageView = [[UIImageView alloc] initWithFrame:frame];
+		self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+		[self addSubview:self.imageView];
     }
     return self;
 }
@@ -38,9 +41,9 @@
 - (void)dealloc {
 	[self cancel];
 	self.imageURL = nil;
-	self.image = nil;
 	self.defaultImage = nil;
 	self.delegate = nil;
+	self.imageView = nil;
 	[super dealloc];
 }
 
@@ -55,25 +58,22 @@
 }
 
 - (void)reload {
-	[self cancel];
+	[self reset];
 	
-	UIImage *image = [CKImageLoader imageForURL:self.imageURL withSize:self.bounds.size];
+	UIImage *image = [CKImageLoader imageForURL:self.imageURL];
 	if (image) {
-		self.image = image;
+		self.imageView.image = image;
 		[self.delegate imageView:self didLoadImage:image cached:YES];
 		return;
 	}
 	
-	self.image = nil;
 	self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
-	self.imageLoader.imageSize = self.bounds.size;
-	self.imageLoader.aspectFill = self.aspectFill;
 	[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 }
 
 - (void)reset {
 	[self cancel];
-	self.image = nil;
+	self.imageView.image = self.defaultImage;
 }
 
 - (void)cancel {
@@ -82,32 +82,20 @@
 	self.imageLoader = nil;
 }
 
-#pragma mark Image
-
-- (void)setImage:(UIImage *)theImage {
-	[_image release];
-	_image = theImage ? [theImage retain] : nil;
-	[self setNeedsDisplay];
+- (void)setDefaultImage:(UIImage *)image {
+	[_defaultImage release];
+	_defaultImage = [image retain];
+	self.imageView.image = image;
 }
 
-#pragma mark Draw Image
-
-- (void)drawRect:(CGRect)rect {
-	[super drawRect:rect];
-	if (self.image) {
-		[self.image drawInRect:rect];
-	} else if (self.defaultImage) {
-		[self.defaultImage drawInRect:rect];
-	} else {
-		CGContextRef ctx = UIGraphicsGetCurrentContext();
-		CGContextClearRect(ctx, rect);
-	}
+- (UIImage *)image {
+	return self.imageView.image;
 }
 
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
-	self.image = image;
+	self.imageView.image = image;
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
