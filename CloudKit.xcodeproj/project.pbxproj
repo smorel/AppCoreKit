@@ -58,6 +58,8 @@
 		4FB5463411DA8DA000DC7E6A /* CKImageButtonCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */; };
 		4FB5479311DBBA4C00DC7E6A /* CKOverlayView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FB5479411DBBA4C00DC7E6A /* CKOverlayView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */; };
+		4FD5BB2B122853B800F65F8A /* CKUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD5BB29122853B800F65F8A /* CKUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FD5BB2C122853B800F65F8A /* CKUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD5BB2A122853B800F65F8A /* CKUnit.m */; };
 		710DF11210FFBC030063FB2C /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF10E10FFBC030063FB2C /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -280,6 +282,8 @@
 		4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageButtonCellController.m; sourceTree = "<group>"; };
 		4FB5479111DBBA4C00DC7E6A /* CKOverlayView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKOverlayView+Factory.h"; sourceTree = "<group>"; };
 		4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKOverlayView+Factory.m"; sourceTree = "<group>"; };
+		4FD5BB29122853B800F65F8A /* CKUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUnit.h; sourceTree = "<group>"; };
+		4FD5BB2A122853B800F65F8A /* CKUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUnit.m; sourceTree = "<group>"; };
 		710DF10E10FFBC030063FB2C /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebRequest.h; sourceTree = "<group>"; };
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebService.h; sourceTree = "<group>"; };
@@ -682,6 +686,8 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				4FD5BB29122853B800F65F8A /* CKUnit.h */,
+				4FD5BB2A122853B800F65F8A /* CKUnit.m */,
 				4F4599CB11FCE25D00438B93 /* CKUIImage+Factory.h */,
 				4F4599CC11FCE25D00438B93 /* CKUIImage+Factory.m */,
 				71993A5511F8C54A0056EC2C /* CKNSData+Matching.m */,
@@ -990,6 +996,7 @@
 				0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */,
 				71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */,
 				71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */,
+				4FD5BB2B122853B800F65F8A /* CKUnit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1196,6 +1203,7 @@
 				0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */,
 				71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */,
 				71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */,
+				4FD5BB2C122853B800F65F8A /* CKUnit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
