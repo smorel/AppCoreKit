@@ -83,6 +83,10 @@
 	}
 }
 
++ (UIImage *)imageForURL:(NSURL *)url {
+	return [[CKCache sharedCache] imageForKey:url];
+}
+
 + (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size {
 	return [[CKCache sharedCache] imageForKey:[CKImageLoader cacheKeyForURL:url size:size]];
 }
