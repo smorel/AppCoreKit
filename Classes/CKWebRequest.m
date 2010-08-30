@@ -77,6 +77,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	_httpRequest = nil;
 	_username = nil;
 	_password = nil;
+	_delegate = nil;
 	
 	[super dealloc];
 }
@@ -164,7 +165,8 @@ static ASINetworkQueue *_sharedQueue = nil;
 #pragma mark ASIHTTPRequest Delegate
 
 - (void)requestFinished:(ASIHTTPRequest *)httpRequest {
-	
+	_httpRequest = nil; // Remove the reference, since after this point the object will be deallocated
+		
 	if ([httpRequest responseStatusCode] > 400) {
 		NSError *error = [NSError errorWithDomain:CKWebRequestErrorDomain
 									code:[httpRequest responseStatusCode] 
@@ -222,16 +224,14 @@ static ASINetworkQueue *_sharedQueue = nil;
 	if (_valueTarget) {
 		[_valueTarget setValue:value forKeyPath:_valueTargetKeyPath];
 	}
-	
-	// Cleanup
-	_httpRequest = nil;
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)httpRequest {
+	_httpRequest = nil;
+	
 	if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
 		[_delegate request:self didFailWithError:[httpRequest error]];
 	}
-	_httpRequest = nil;
 }
 
 @end
