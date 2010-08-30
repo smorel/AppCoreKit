@@ -33,6 +33,7 @@ static NSString *const CKLocationManagerErrorDomain = @"CKLocationManagerErrorDo
 	BOOL _findAddress;
 	BOOL _timeoutEnabled;
 
+	NSTimeInterval _timeToLive;
 	NSTimeInterval _acquisitionTimeout;
 	NSUInteger _accuracyThreshold;
 }
@@ -40,6 +41,7 @@ static NSString *const CKLocationManagerErrorDomain = @"CKLocationManagerErrorDo
 @property (nonatomic, readonly) BOOL isActivated;
 @property (nonatomic, readonly) CLLocation *location;
 @property (nonatomic, readonly) MKPlacemark *placemark;
+@property (nonatomic, assign) NSTimeInterval timeToLive;
 @property (nonatomic, assign) NSTimeInterval acquisitionTimeout;
 @property (nonatomic, assign) NSUInteger accuracyThreshold;
 

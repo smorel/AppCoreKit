@@ -34,6 +34,7 @@
 @synthesize isActivated = _activated;
 @synthesize location = _cachedLocation;
 @synthesize placemark = _cachedPlacemark;
+@synthesize timeToLive = _timeToLive;
 @synthesize acquisitionTimeout = _acquisitionTimeout;
 @synthesize accuracyThreshold = _accuracyThreshold;
 
@@ -55,6 +56,7 @@
 		_activated = _locationManager.locationServicesEnabled;
 		_findAddress = NO;
 		_cachedLocation = nil;
+		self.timeToLive = K_LOCATION_VALID_TIME_THRESHOLD;
 		self.acquisitionTimeout = K_LOCATION_ACQUISITION_TIMEOUT;
 		self.accuracyThreshold = K_LOCATION_ACCURACY_THRESHOLD;
 	}
@@ -74,7 +76,7 @@
 	NSTimeInterval timeElapsed = [[NSDate date] timeIntervalSinceDate:location.timestamp];
 	CLLocationAccuracy accuracy = location.horizontalAccuracy;
 	
-	if ((timeElapsed < (K_LOCATION_VALID_TIME_THRESHOLD)) && (accuracy < self.accuracyThreshold)) return YES;
+	if ((timeElapsed < (self.timeToLive)) && (accuracy < self.accuracyThreshold)) return YES;
 	return NO;
 }
 
