@@ -54,8 +54,9 @@
 		_locationManager.delegate = self;
 		_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 		_activated = _locationManager.locationServicesEnabled;
+		[self setCachedLocation:_locationManager.location];
+		
 		_findAddress = NO;
-		_cachedLocation = nil;
 		self.timeToLive = K_LOCATION_VALID_TIME_THRESHOLD;
 		self.acquisitionTimeout = K_LOCATION_ACQUISITION_TIMEOUT;
 		self.accuracyThreshold = K_LOCATION_ACCURACY_THRESHOLD;
