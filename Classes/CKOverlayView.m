@@ -16,6 +16,9 @@
 #define CKOVERLAYVIEW_SHADOW_OFFSET_Y 0
 
 
+// FIXME: The view is not properly resized when initialized from a NIB and has a shadow.
+// FIXME: Add a customView property to put views inside the contentView.
+
 @interface CKOverlayView ()
 
 @property (nonatomic, readwrite, retain) UILabel *textLabel;
@@ -42,13 +45,14 @@
 	self.shadowOffsetY = CKOVERLAYVIEW_SHADOW_OFFSET_Y;
 
 	// Initialize the contentView
-	self.contentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+	self.contentView = [[[UIView alloc] initWithFrame:self.bounds] autorelease];
 	self.contentView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 	self.contentView.backgroundColor = [UIColor clearColor];
 	[self addSubview:self.contentView];
 
 	// Initialize the textLabel
-	self.textLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
+	self.textLabel = [[[UILabel alloc] initWithFrame:self.contentView.bounds] autorelease];
+	self.textLabel.center = self.contentView.center;
 	self.textLabel.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 	self.textLabel.numberOfLines = 0;
 	self.textLabel.textAlignment = UITextAlignmentCenter;
@@ -168,6 +172,16 @@
 	CGPathRelease(path);
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+	CGSize newSize = size;
+	if (self.textLabel.text) {
+		CGSize labelSize = [self.textLabel sizeThatFits:size];
+		newSize = CGSizeMake(labelSize.width + (self.cornerRadius * 2) + (self.shadowSize * 2) + self.shadowOffsetX, 
+							 labelSize.height + (self.cornerRadius * 2) + (self.shadowSize * 2) + self.shadowOffsetY);
+	}
+
+	return newSize;
+}
 
 
 @end
