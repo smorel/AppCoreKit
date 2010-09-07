@@ -156,6 +156,7 @@
 	[super layoutSubviews];
 	
 	self.contentView.frame = CGRectInset([self boxFrame], self.cornerRadius, self.cornerRadius);
+	[self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
