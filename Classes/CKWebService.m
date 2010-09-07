@@ -131,10 +131,6 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 	return YES;
 }
 
-- (void)reachabilityChanged:(NSNotification *)notification {
-	[self checkReachabilityWithAlert:YES];
-}
-
 #pragma mark UIAlertView Delegate
 
 - (void)alertView:(CKAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
