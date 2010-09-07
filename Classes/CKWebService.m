@@ -1,6 +1,6 @@
 //
-//  YPWebService.m
-//  YellowPages
+//  CKWebService.m
+//  CloudKit
 //
 //  Created by Fred Brunel on 09-11-10.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
@@ -8,15 +8,23 @@
 
 #import "CKWebService.h"
 #import "ASIHTTPRequest.h"
+#import "Reachability.h"
+#import "CKLocalization.h"
+#import "CKAlertView.h"
+
+static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServiceAlertTypeNetworkReachability";
 
 //
 
 @interface CKWebService ()
 
+@property (nonatomic, retain, readwrite) Reachability *reachability;
 @property (nonatomic, retain, readwrite) NSString *username;
 @property (nonatomic, retain, readwrite) NSString *password;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultParams;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultHeaders;
+
+- (BOOL)checkReachabilityWithAlert:(BOOL)showAlert withUserObject:(id)object;
 
 @end
 
@@ -24,6 +32,7 @@
 
 @implementation CKWebService
 
+@synthesize reachability = _reachability;
 @synthesize baseURL = _baseURL;
 @synthesize defaultParams = _defaultParams;
 @synthesize defaultHeaders = _defaultHeaders;
@@ -36,11 +45,15 @@
 	if (self = [super init]) {
 		self.defaultParams = [NSMutableDictionary dictionary];
 		self.defaultHeaders = [NSMutableDictionary dictionary];
+		self.reachability = [Reachability reachabilityForInternetConnection];
+		[self.reachability startNotifer];
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[self.reachability stopNotifer];
+	self.reachability = nil;	
 	self.baseURL = nil;
 	self.defaultParams = nil;
 	self.defaultHeaders = nil;
@@ -59,10 +72,14 @@
 #pragma mark Create Requests
 
 - (id)performRequest:(CKWebRequest *)request {
+	[request setHeaders:self.defaultHeaders];
+	
+	if ([self checkReachabilityWithAlert:YES withUserObject:request] == NO) 
+		return request;
+	
 	// TODO: put the request in a different queue than the shared queue (default)	
 	// ASIHTTPRequest *httpRequest = [request performSelector:@selector(connect)];
 	// [httpRequest start];
-	[request setHeaders:self.defaultHeaders];
 	[request start];
 	return request;
 }
@@ -92,6 +109,39 @@
 	CKWebRequest *request = [self getRequestForPath:path params:params];
 	[request setDelegate:delegate];
 	return [self performRequest:request];
+}
+
+#pragma mark Reachability
+
+- (BOOL)checkReachabilityWithAlert:(BOOL)showAlert withUserObject:(id)object {
+    NetworkStatus netStatus = [_reachability currentReachabilityStatus];
+    if (netStatus == NotReachable) {
+		if (showAlert) {
+			CKAlertView *alertView = 
+			  [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection")
+										  message:_(@"No Internet Message")
+										 delegate:self
+								cancelButtonTitle:_(@"Dismiss")
+								otherButtonTitles:_(@"Retry"), nil] autorelease];
+			alertView.object = object;
+			[alertView show];
+		}
+		return NO;
+	}
+	return YES;
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification {
+	[self checkReachabilityWithAlert:YES];
+}
+
+#pragma mark UIAlertView Delegate
+
+- (void)alertView:(CKAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 1) {
+		CKWebRequest *request = (CKWebRequest *)(alertView.object);
+		if (request) [self performRequest:request];
+	}
 }
 
 @end
