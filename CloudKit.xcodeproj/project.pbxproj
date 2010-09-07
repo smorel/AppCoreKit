@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E07B5D51214919F00346D3C /* RegexKitLite.h */; };
+		0E07B5D71214919F00346D3C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E07B5D51214919F00346D3C /* RegexKitLite.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0E07B5D81214919F00346D3C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E07B5D61214919F00346D3C /* RegexKitLite.m */; };
 		4F07A6BC11D295A20099F51B /* CKCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F07A6B811D295A20099F51B /* CKCalloutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F07A6BD11D295A20099F51B /* CKCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F07A6B911D295A20099F51B /* CKCalloutView.m */; };
@@ -64,6 +64,8 @@
 		710DF11310FFBC030063FB2C /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF10F10FFBC030063FB2C /* CKWebRequest.m */; };
 		710DF11410FFBC030063FB2C /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 710DF11010FFBC030063FB2C /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		710DF11510FFBC030063FB2C /* CKWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DF11110FFBC030063FB2C /* CKWebService.m */; };
+		7120A77A1235E23F00E29AB3 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7120A7781235E23F00E29AB3 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7120A77B1235E23F00E29AB3 /* CKAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7120A7791235E23F00E29AB3 /* CKAlertView.m */; };
 		7123DD76111A393F00F5DFB9 /* CKUIImage+Transformations.h in Headers */ = {isa = PBXBuildFile; fileRef = 7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7123DD77111A393F00F5DFB9 /* CKUIImage+Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */; };
 		712D6D1211AF20CB00A92D98 /* CKCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 712D6D0C11AF20CB00A92D98 /* CKCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -288,6 +290,8 @@
 		710DF10F10FFBC030063FB2C /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebRequest.m; sourceTree = "<group>"; };
 		710DF11010FFBC030063FB2C /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebService.h; sourceTree = "<group>"; };
 		710DF11110FFBC030063FB2C /* CKWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebService.m; sourceTree = "<group>"; };
+		7120A7781235E23F00E29AB3 /* CKAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAlertView.h; sourceTree = "<group>"; };
+		7120A7791235E23F00E29AB3 /* CKAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAlertView.m; sourceTree = "<group>"; };
 		7123DD74111A393F00F5DFB9 /* CKUIImage+Transformations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIImage+Transformations.h"; path = "../cloudkit/Classes/CKUIImage+Transformations.h"; sourceTree = SOURCE_ROOT; };
 		7123DD75111A393F00F5DFB9 /* CKUIImage+Transformations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIImage+Transformations.m"; path = "../cloudkit/Classes/CKUIImage+Transformations.m"; sourceTree = SOURCE_ROOT; };
 		712D6D0C11AF20CB00A92D98 /* CKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCache.h; sourceTree = "<group>"; };
@@ -624,6 +628,8 @@
 				4FB5479211DBBA4C00DC7E6A /* CKOverlayView+Factory.m */,
 				4F07A6B811D295A20099F51B /* CKCalloutView.h */,
 				4F07A6B911D295A20099F51B /* CKCalloutView.m */,
+				7120A7781235E23F00E29AB3 /* CKAlertView.h */,
+				7120A7791235E23F00E29AB3 /* CKAlertView.m */,
 			);
 			name = UI;
 			path = Classes;
@@ -997,6 +1003,7 @@
 				71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */,
 				71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */,
 				4FD5BB2B122853B800F65F8A /* CKUnit.h in Headers */,
+				7120A77A1235E23F00E29AB3 /* CKAlertView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1204,6 +1211,7 @@
 				71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */,
 				71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */,
 				4FD5BB2C122853B800F65F8A /* CKUnit.m in Sources */,
+				7120A77B1235E23F00E29AB3 /* CKAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
