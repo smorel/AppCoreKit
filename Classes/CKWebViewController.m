@@ -44,6 +44,7 @@
 @synthesize toolbarButtonsLoading = _toolbarButtonsLoading;
 @synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
 @synthesize _showURLInTitle;
+@synthesize hidesToolbar = _hidesToolbar;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -112,7 +113,7 @@
 	[self setToolbarItems:_toolbarButtonsStatic animated:animated];
 
 	// Display the toolbar
-	[self.navigationController setToolbarHidden:NO animated:animated];
+	if (self.hidesToolbar == NO) [self.navigationController setToolbarHidden:NO animated:animated];
 	
 	_webView.hidden = YES;
 }
