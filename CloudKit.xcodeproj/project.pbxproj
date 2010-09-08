@@ -13,6 +13,8 @@
 		4F07A6BD11D295A20099F51B /* CKCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F07A6B911D295A20099F51B /* CKCalloutView.m */; };
 		4F07A6BE11D295A20099F51B /* CKOverlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F07A6BA11D295A20099F51B /* CKOverlayView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F07A6BF11D295A20099F51B /* CKOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F07A6BB11D295A20099F51B /* CKOverlayView.m */; };
+		4F1298FD1237E46C00AA2601 /* CKCreditsFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F1298FB1237E46C00AA2601 /* CKCreditsFooterView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F1298FE1237E46C00AA2601 /* CKCreditsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */; };
 		4F27102311C187C2007F584E /* CKToggleSwitchCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F27102411C187C2007F584E /* CKToggleSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */; };
 		4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F44569711EE186C0080BC0F /* CKCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -239,6 +241,8 @@
 		4F07A6B911D295A20099F51B /* CKCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCalloutView.m; sourceTree = "<group>"; };
 		4F07A6BA11D295A20099F51B /* CKOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOverlayView.h; sourceTree = "<group>"; };
 		4F07A6BB11D295A20099F51B /* CKOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKOverlayView.m; sourceTree = "<group>"; };
+		4F1298FB1237E46C00AA2601 /* CKCreditsFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCreditsFooterView.h; sourceTree = "<group>"; };
+		4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCreditsFooterView.m; sourceTree = "<group>"; };
 		4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKToggleSwitchCellController.h; sourceTree = "<group>"; };
 		4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKToggleSwitchCellController.m; sourceTree = "<group>"; };
 		4F44569711EE186C0080BC0F /* CKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCompatibility.h; sourceTree = "<group>"; };
@@ -576,6 +580,8 @@
 				4FAD0E5C11C2B8110071C7BF /* CKOptionCellController.m */,
 				4FAD0E6711C2BA720071C7BF /* CKOptionTableViewController.h */,
 				4FAD0E6811C2BA720071C7BF /* CKOptionTableViewController.m */,
+				4F1298FB1237E46C00AA2601 /* CKCreditsFooterView.h */,
+				4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */,
 			);
 			name = Tables;
 			path = Classes;
@@ -1004,6 +1010,7 @@
 				71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */,
 				4FD5BB2B122853B800F65F8A /* CKUnit.h in Headers */,
 				7120A77A1235E23F00E29AB3 /* CKAlertView.h in Headers */,
+				4F1298FD1237E46C00AA2601 /* CKCreditsFooterView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1212,6 +1219,7 @@
 				71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */,
 				4FD5BB2C122853B800F65F8A /* CKUnit.m in Sources */,
 				7120A77B1235E23F00E29AB3 /* CKAlertView.m in Sources */,
+				4F1298FE1237E46C00AA2601 /* CKCreditsFooterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
