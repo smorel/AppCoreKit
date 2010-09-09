@@ -20,7 +20,7 @@
 		if (title) {
 			UILabel *titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)] autorelease];
 			titleLabel.backgroundColor = [UIColor clearColor];
-			titleLabel.font = [UIFont systemFontOfSize:17];
+			titleLabel.font = [UIFont systemFontOfSize:16];
 			titleLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
 			titleLabel.shadowColor = [UIColor whiteColor];
 			titleLabel.shadowOffset = CGSizeMake(0, 1);
@@ -40,7 +40,7 @@
 
 		UILabel *wherecloudLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(wherecloudLogo.frame) + 5, 320, 25)] autorelease];
 		wherecloudLabel.backgroundColor = [UIColor clearColor];
-		wherecloudLabel.font = [UIFont systemFontOfSize:17];
+		wherecloudLabel.font = [UIFont systemFontOfSize:16];
 		wherecloudLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
 		wherecloudLabel.shadowColor = [UIColor whiteColor];
 		wherecloudLabel.shadowOffset = CGSizeMake(0, 1);
