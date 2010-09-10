@@ -13,8 +13,10 @@
 #import <Foundation/Foundation.h>
 
 #import "CKWebRequest.h"
+#import "Reachability.h"
 
 @interface CKWebService : NSObject {
+	Reachability *_reachability;
 	NSURL *_baseURL;
 	NSMutableDictionary *_defaultParams;
 	NSMutableDictionary *_defaultHeaders;

@@ -34,6 +34,9 @@
 @synthesize isActivated = _activated;
 @synthesize location = _cachedLocation;
 @synthesize placemark = _cachedPlacemark;
+@synthesize timeToLive = _timeToLive;
+@synthesize acquisitionTimeout = _acquisitionTimeout;
+@synthesize accuracyThreshold = _accuracyThreshold;
 
 #pragma mark Init
 
@@ -51,8 +54,12 @@
 		_locationManager.delegate = self;
 		_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 		_activated = _locationManager.locationServicesEnabled;
+		[self setCachedLocation:_locationManager.location];
+		
 		_findAddress = NO;
-		_cachedLocation = nil;
+		self.timeToLive = K_LOCATION_VALID_TIME_THRESHOLD;
+		self.acquisitionTimeout = K_LOCATION_ACQUISITION_TIMEOUT;
+		self.accuracyThreshold = K_LOCATION_ACCURACY_THRESHOLD;
 	}
 	return self;
 }
@@ -70,7 +77,7 @@
 	NSTimeInterval timeElapsed = [[NSDate date] timeIntervalSinceDate:location.timestamp];
 	CLLocationAccuracy accuracy = location.horizontalAccuracy;
 	
-	if ((timeElapsed < (K_LOCATION_VALID_TIME_THRESHOLD)) && (accuracy < K_LOCATION_ACCURACY_THRESHOLD)) return YES;
+	if ((timeElapsed < (self.timeToLive)) && (accuracy < self.accuracyThreshold)) return YES;
 	return NO;
 }
 
@@ -162,7 +169,7 @@
 	CKDebugLog(@"Update Location New: %@ Old: %@", newLocation, oldLocation);
 
 	if (_timeoutEnabled == NO) {
-		[self performSelector:@selector(locationManagerDidTimeout:) withObject:_locationManager afterDelay:K_LOCATION_ACQUISITION_TIMEOUT];
+		[self performSelector:@selector(locationManagerDidTimeout:) withObject:_locationManager afterDelay:self.acquisitionTimeout];
 		_timeoutEnabled = YES;
 	}
 	

@@ -106,8 +106,10 @@
 		
 	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES] ;
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	self.navigationController.navigationBar.tintColor = nil;
 	self.navigationController.navigationBar.translucent = YES;
 	self.navigationController.toolbar.barStyle = UIBarStyleBlack;
+	self.navigationController.toolbar.tintColor = nil;
 	self.navigationController.toolbar.translucent = YES;	
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	self.wantsFullScreenLayout = YES;
@@ -279,12 +281,6 @@
 	rightImageView.hidden = NO;
 }
 
-- (void)endScrollImage {
-	if (self.delegate && [self.delegate respondsToSelector:@selector(slideshowViewController:imageDidAppearAtIndex:)]) {
-		[self.delegate slideshowViewController:self imageDidAppearAtIndex:_currentImageIndex];
-	}
-}
-
 - (void)scrollImages {
 	[self setTitleForIndex:_currentImageIndex];
 	
@@ -292,7 +288,7 @@
 	
 	[UIView beginAnimations:@"swipe" context:NULL];
 	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(endScrollImage)];
+	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	[UIView setAnimationDuration:0.3f];
 	[UIView setAnimationWillStartSelector:@selector(scrollingAnimationWillStart:context:)];
@@ -317,6 +313,9 @@
 
 - (void)scrollingAnimationDidStop:(NSString *)animationID context:(void *)context {
 	animating = NO;
+	if (self.delegate && [self.delegate respondsToSelector:@selector(slideshowViewController:imageDidAppearAtIndex:)]) {
+		[self.delegate slideshowViewController:self imageDidAppearAtIndex:_currentImageIndex];
+	}
 }
 
 - (void)nextImage:(id)sender {
