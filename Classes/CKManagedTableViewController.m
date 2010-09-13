@@ -316,7 +316,7 @@
 }
 
 - (void)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle {
-	CKTableSection *section = [[CKTableSection alloc] initWithCellControllers:cellControllers];
+	CKTableSection *section = [[[CKTableSection alloc] initWithCellControllers:cellControllers] autorelease];
 	section.headerTitle = headerTitle;
 	section.footerTitle = footerTitle;
 	[self addSection:section];
