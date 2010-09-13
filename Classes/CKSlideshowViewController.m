@@ -262,7 +262,7 @@
 	imageView.clipsToBounds = YES;	
 	
 	if (self.imagesPaths) { 
-		[imageView loadImageWithContentOfURL:[self.imagesPaths objectAtIndex:imageIndex]];
+		[imageView loadImageWithContentOfURL:[NSURL URLWithString:[self.imagesPaths objectAtIndex:imageIndex]]];
 	} else if (self.delegate && [self.delegate respondsToSelector:@selector(slideshowViewController:URLForImageAtIndex:)]) {
 		NSURL *url = [self.delegate slideshowViewController:self URLForImageAtIndex:imageIndex];
 		[imageView loadImageWithContentOfURL:url];
@@ -284,7 +284,7 @@
 - (void)scrollImages {
 	[self setTitleForIndex:_currentImageIndex];
 	
-	CGSize contentSize = self.view.frame.size;
+	CGSize contentSize = self.view.bounds.size;
 	
 	[UIView beginAnimations:@"swipe" context:NULL];
 	[UIView setAnimationDelegate:self];
