@@ -30,7 +30,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-		self.imageView = [[UIImageView alloc] initWithFrame:frame];
+		_imageView = [[UIImageView alloc] initWithFrame:frame];
 		self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 		[self addSubview:self.imageView];
