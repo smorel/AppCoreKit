@@ -191,7 +191,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	NSError *error = nil;
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
 	
-	if ([contentType isMatchedByRegex:@"application/xml"]) {
+	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
 		responseValue = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
