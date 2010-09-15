@@ -229,6 +229,12 @@ static ASINetworkQueue *_sharedQueue = nil;
 - (void)requestFailed:(ASIHTTPRequest *)httpRequest {
 	_httpRequest = nil;
 	
+	// Don't call the error delegate when the request has been cancelled.
+	// The delegate may be gone at this point.
+	if ([[httpRequest error] code] == ASIRequestCancelledErrorType) {
+		return;
+	}
+	
 	if ([_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
 		[_delegate request:self didFailWithError:[httpRequest error]];
 	}
