@@ -134,22 +134,22 @@
 					  self.bounds.size.height - (self.shadowSize * 2) - self.shadowOffsetY);
 }
 
-- (CGPathRef)getPath {
-	CGRect frame = self.bounds;
+- (void)buildPath:(CGMutablePathRef)path {
+	CGRect frame = [self boxFrame];
 	CGFloat x = frame.origin.x;
 	CGFloat y = frame.origin.y;
 	CGFloat w = frame.size.width;
 	CGFloat h = frame.size.height;
-
+	
 	// Create a rounded path
-	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathMoveToPoint(path, NULL, w/2 + x, y);
 	CGPathAddArcToPoint(path, NULL, w + x, y, w + x, h/2 + y, self.cornerRadius);
 	CGPathAddArcToPoint(path, NULL, w + x, h + y, w/2 + x, h + y, self.cornerRadius);
 	CGPathAddArcToPoint(path, NULL, x, h + y, x, h/2 + y, self.cornerRadius);
 	CGPathAddArcToPoint(path, NULL, x, y, w/2 + x, y, self.cornerRadius);
 	CGPathCloseSubpath(path);
-	return path;
+	
+	return;
 }
 
 - (void)layoutSubviews {
@@ -163,7 +163,8 @@
 	[super drawRect:rect];
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 
-	CGPathRef path = [self getPath];
+	CGMutablePathRef path = CGPathCreateMutable();
+	[self buildPath:path];
 	
 	CGContextAddPath(gc, path);
 	CGContextSetRGBFillColor(gc, 0, 0, 0, 0.6);

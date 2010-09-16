@@ -34,6 +34,4 @@
 - (void)presentInView:(UIView *)parentView animated:(BOOL)animated withDelay:(NSTimeInterval)delay;
 - (void)dismiss:(BOOL)animated;
 
-- (CGPathRef)getPath;
-
 @end

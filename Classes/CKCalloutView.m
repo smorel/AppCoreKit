@@ -82,7 +82,7 @@
 	return rect;
 }
 
-- (CGPathRef)getPath {
+- (void)buildPath:(CGMutablePathRef)path {
 	CGRect frame = [self boxFrame];
 	CGFloat x = frame.origin.x;
 	CGFloat y = frame.origin.y;
@@ -98,7 +98,6 @@
 	if ((arrowOffsetY - ARROW_DISTANCE) < (y + self.cornerRadius)) arrowOffsetY = y + self.cornerRadius + ARROW_DISTANCE;
 	
 	// Create a rounded path
-	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathMoveToPoint(path, NULL, w/2 + x, y);
 	
 	if (self.arrowDirection == CKCalloutArrowDirectionUp) {
@@ -133,7 +132,6 @@
 	
 	CGPathAddArcToPoint(path, NULL, x, y, w/2 + x, y, self.cornerRadius);
 	CGPathCloseSubpath(path);
-	return path;
 }
 
 //
@@ -179,5 +177,27 @@
 
 	return CGPointMake(arrowDeltaX, arrowDeltaY);
 }
+
+//
+
+- (CGSize)sizeThatFits:(CGSize)size {
+	CGSize newSize = [super sizeThatFits:size];
+	
+	switch (self.arrowDirection) {
+		case CKCalloutArrowDirectionUp:
+		case CKCalloutArrowDirectionDown:
+			newSize.height += ARROW_DISTANCE;
+			break;
+		case CKCalloutArrowDirectionLeft:
+		case CKCalloutArrowDirectionRight:
+			newSize.width += ARROW_DISTANCE;
+			break;
+		default:
+			break;
+	}
+	
+	return newSize;
+}
+
 
 @end
