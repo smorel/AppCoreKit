@@ -17,7 +17,10 @@
 }
 
 + (id)person {
-	return [CKAddressBookPerson personWithRecord:ABPersonCreate()];
+	ABRecordRef ABPerson = ABPersonCreate();
+	CKAddressBookPerson *person = [CKAddressBookPerson personWithRecord:ABPerson];
+	CFRelease(ABPerson);
+	return person;
 }
 
 - (id)initWithRecord:(ABRecordRef)record {
@@ -72,7 +75,11 @@
 	}
 	
 	_fullName = [fullName retain];
-	
+
+	if (firstName) CFRelease(firstName);
+	if (lastName) CFRelease(lastName);
+	if (companyName) CFRelease(companyName);
+
 	return _fullName;
 }
 
@@ -87,7 +94,9 @@
 	} else {
 		_email = [[NSString string] retain];
 	}
-	
+
+	CFRelease(personEmails);
+
 	return _email;
 }
 
@@ -121,9 +130,15 @@
 		[array insertObject:(NSString *)aNumber atIndex:1];
 		
 		[phoneNumbers addObject:array];
+		
+		CFRelease(aLabel);
+		CFRelease(aLocalizedLabel);
+		CFRelease(aNumber);
 	}
 	
 	_phoneNumbers = [phoneNumbers retain];
+	
+	CFRelease(thePhoneNumbers);
 	
 	return _phoneNumbers;
 }
@@ -134,9 +149,10 @@
 	return _record;
 }
 
-- (CFTypeRef)valueForProperty:(ABPropertyID)property {
-	return ABRecordCopyValue(_record, property);
-}
+// NOT USED
+//- (CFTypeRef)valueForProperty:(ABPropertyID)property {
+//	return ABRecordCopyValue(_record, property);
+//}
 
 - (CFErrorRef)setValue:(CFTypeRef)value forProperty:(ABPropertyID)property {
 	CFErrorRef error = NULL;
@@ -230,7 +246,10 @@
 		if (ABMultiValueGetCount(personEmails) > 0) {
 			[match addObject:[CKAddressBookPerson personWithRecord:person]];
 		}
+		CFRelease(personEmails);
 	}
+	
+	CFRelease(people);
 	
 	return match;
 }
@@ -248,10 +267,16 @@
 			
 			if ([emails containsString:(NSString *)personEmail]) {
 				[match addObject:[CKAddressBookPerson personWithRecord:person]];
+				CFRelease(personEmail);
 				break;
 			}
+			CFRelease(personEmail);
 		}
+		
+		CFRelease(personEmails);
 	}
+	
+	CFRelease(people);
 	
 	return match;
 }
