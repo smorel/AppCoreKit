@@ -159,6 +159,7 @@
 - (void)dealloc {
 	self.HTMLString = nil;
 	self.baseURL = nil;
+	self.reloadButton = nil;
 	[_webView release];
 	[_homeURL release];
 	[_backButton release];
@@ -208,10 +209,10 @@
 #pragma mark Toolbar Customization
 
 - (void)generateToolbar {
-	self.toolbarButtonsStatic = [[NSMutableArray alloc] initWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, self.reloadButton, nil];
+	self.toolbarButtonsStatic = [NSMutableArray arrayWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, self.reloadButton, nil];
 	[self.spinner startAnimating];
 	UIBarButtonItem *loadingItem = [[[UIBarButtonItem alloc] initWithCustomView:self.spinner] autorelease];
-	self.toolbarButtonsLoading = [[NSMutableArray alloc] initWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, loadingItem, nil];
+	self.toolbarButtonsLoading = [NSMutableArray arrayWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, loadingItem, nil];
 }
 
 - (void)setImage:(UIImage *)image forButton:(CKWebViewButton)button {
