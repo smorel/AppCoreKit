@@ -7,12 +7,12 @@
 //
 
 #import "CKTextFieldCellController.h"
+#import "CKUIKeyboardInformation.h"
 
 @interface CKTextFieldCellController ()
 
 @property (nonatomic, readwrite, retain) UITextField *textField;
 @property (nonatomic, retain) NSString *placeholder;
-@property (nonatomic, assign) CGPoint tableContentOffset;
 
 @end
 
@@ -22,7 +22,6 @@
 
 @synthesize textField = _textField;
 @synthesize placeholder = _placeholder;
-@synthesize tableContentOffset = _tableContentOffset;
 
 - (id)initWithTitle:(NSString *)title value:(NSString *)value placeholder:(NSString *)placeholder {
 	if (self = [super initWithText:title]) {
@@ -32,7 +31,7 @@
 
 		self.textField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
 		self.textField.delegate = self;
-		self.textField.enablesReturnKeyAutomatically = YES;
+//		self.textField.enablesReturnKeyAutomatically = YES;
 		self.textField.borderStyle = UITextBorderStyleNone;
 		self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 		self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -71,18 +70,25 @@
 	self.textField.text = self.value;
 }
 
+- (void)cellDidAppear:(UITableViewCell *)cell {
+	[super cellDidAppear:cell];
+}
+- (void)cellDidDisappear {
+}
+
 #pragma mark UITextField Delegate
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+	return YES;
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	self.tableContentOffset = self.parentController.tableView.contentOffset;
-	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
-										   atScrollPosition:UITableViewScrollPositionTop 
-												   animated:YES];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[self.parentController.tableView setContentOffset:self.tableContentOffset animated:YES];
 	self.value = textField.text;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -99,6 +105,14 @@
 
 - (void)valueChanged:(id)sender {
 	self.value = ((UITextField *)sender).text;
+}
+
+#pragma mark Keyboard
+
+- (void)keyboardDidShow:(NSNotification *)notification {
+	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+										   atScrollPosition:UITableViewScrollPositionNone 
+												   animated:YES];
 }
 
 @end

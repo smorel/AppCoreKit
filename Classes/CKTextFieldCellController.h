@@ -13,7 +13,6 @@
 @interface CKTextFieldCellController : CKStandardCellController <UITextFieldDelegate> {
 	UITextField *_textField;
 	NSString *_placeholder;
-	CGPoint _tableContentOffset;
 }
 
 @property (nonatomic, readonly, retain) UITextField *textField;

@@ -8,6 +8,7 @@
 
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController.h"
+#import "CKUIKeyboardInformation.h"
 
 #pragma mark CKManagedTableSection
 
@@ -92,7 +93,16 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
 	[self notifiesCellControllersForVisibleRows];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -335,6 +345,36 @@
 		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
 			[self.delegate tableViewController:self cellControllerValueDidChange:cellController];
 	}
+}
+
+#pragma mark Keyboard Notifications
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+	NSDictionary *info = [notification userInfo];
+	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+	
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+	[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+	[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+	CGRect tableViewFrame = self.tableView.frame;
+	tableViewFrame.size.height -= keyboardRect.size.height;
+	self.tableView.frame = tableViewFrame;
+	[UIView commitAnimations];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+	NSDictionary *info = [notification userInfo];
+	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+	
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationBeginsFromCurrentState:YES];
+	[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+	[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+	CGRect tableViewFrame = self.tableView.frame;
+	tableViewFrame.size.height += keyboardRect.size.height;
+	self.tableView.frame = tableViewFrame;
+	[UIView commitAnimations];
 }
 
 @end
