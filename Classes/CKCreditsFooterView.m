@@ -15,7 +15,7 @@
 
 
 - (id)initWithTitle:(NSString *)title {
-    if ((self = [super initWithFrame:CGRectMake(0, 0, 320, (title ? 100 :60))])) {
+    if ((self = [super initWithFrame:CGRectMake(0, 0, 320, (title ? 110 :60))])) {
 		CGFloat yOffset = 0;
 		if (title) {
 			UILabel *titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)] autorelease];
