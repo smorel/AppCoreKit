@@ -50,7 +50,7 @@
 #pragma mark Public API
 
 - (void)loadImageWithContentOfURL:(NSURL *)url {
-	if (self.image && [self.imageURL isEqual:url])
+	if (self.image && [self.imageURL isEqual:url] && (self.image != self.defaultImage))
 		return;
 
 	self.imageURL = url;
