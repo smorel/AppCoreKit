@@ -17,6 +17,8 @@
 		4F1298FE1237E46C00AA2601 /* CKCreditsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */; };
 		4F27102311C187C2007F584E /* CKToggleSwitchCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F27102411C187C2007F584E /* CKToggleSwitchCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */; };
+		4F31C6E2125B7E3F009E08D4 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F31C6E0125B7E3F009E08D4 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F31C6E3125B7E3F009E08D4 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */; };
 		4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F44569711EE186C0080BC0F /* CKCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F44569811EE186C0080BC0F /* CKCompatibility.m */; };
 		4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4599C711FCE1AC00438B93 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -245,6 +247,8 @@
 		4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCreditsFooterView.m; sourceTree = "<group>"; };
 		4F27102111C187C2007F584E /* CKToggleSwitchCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKToggleSwitchCellController.h; sourceTree = "<group>"; };
 		4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKToggleSwitchCellController.m; sourceTree = "<group>"; };
+		4F31C6E0125B7E3F009E08D4 /* CKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMapViewController.h; sourceTree = "<group>"; };
+		4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMapViewController.m; sourceTree = "<group>"; };
 		4F44569711EE186C0080BC0F /* CKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCompatibility.h; sourceTree = "<group>"; };
 		4F44569811EE186C0080BC0F /* CKCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCompatibility.m; sourceTree = "<group>"; };
 		4F4599C711FCE1AC00438B93 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLocationManager.h; sourceTree = "<group>"; };
@@ -616,6 +620,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4F31C6E0125B7E3F009E08D4 /* CKMapViewController.h */,
+				4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */,
 				71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */,
 				71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */,
 				4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */,
@@ -1013,6 +1019,7 @@
 				7160DAAB12417ACD008FF68B /* ASINetworkQueue.h in Headers */,
 				7160DAAD12417ACD008FF68B /* ASIProgressDelegate.h in Headers */,
 				4FA326211247AA3300D78B67 /* CKUIKeyboardInformation.h in Headers */,
+				4F31C6E2125B7E3F009E08D4 /* CKMapViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1227,6 +1234,7 @@
 				7160DAAA12417ACD008FF68B /* ASIInputStream.m in Sources */,
 				7160DAAC12417ACD008FF68B /* ASINetworkQueue.m in Sources */,
 				4FA326221247AA3300D78B67 /* CKUIKeyboardInformation.m in Sources */,
+				4F31C6E3125B7E3F009E08D4 /* CKMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
