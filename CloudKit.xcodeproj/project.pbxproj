@@ -21,6 +21,8 @@
 		4F31C6E3125B7E3F009E08D4 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */; };
 		4F31C72B125B8C76009E08D4 /* CKLocationManager2.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F31C729125B8C76009E08D4 /* CKLocationManager2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F31C72C125B8C76009E08D4 /* CKLocationManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F31C72A125B8C76009E08D4 /* CKLocationManager2.m */; };
+		4F31C75B125BC705009E08D4 /* CKCLLocationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F31C759125BC705009E08D4 /* CKCLLocationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F31C75C125BC705009E08D4 /* CKCLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F31C75A125BC705009E08D4 /* CKCLLocationAdditions.m */; };
 		4F44569911EE186C0080BC0F /* CKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F44569711EE186C0080BC0F /* CKCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F44569A11EE186C0080BC0F /* CKCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F44569811EE186C0080BC0F /* CKCompatibility.m */; };
 		4F4599C911FCE1AC00438B93 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4599C711FCE1AC00438B93 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -253,6 +255,8 @@
 		4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMapViewController.m; sourceTree = "<group>"; };
 		4F31C729125B8C76009E08D4 /* CKLocationManager2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLocationManager2.h; sourceTree = "<group>"; };
 		4F31C72A125B8C76009E08D4 /* CKLocationManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLocationManager2.m; sourceTree = "<group>"; };
+		4F31C759125BC705009E08D4 /* CKCLLocationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCLLocationAdditions.h; sourceTree = "<group>"; };
+		4F31C75A125BC705009E08D4 /* CKCLLocationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCLLocationAdditions.m; sourceTree = "<group>"; };
 		4F44569711EE186C0080BC0F /* CKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCompatibility.h; sourceTree = "<group>"; };
 		4F44569811EE186C0080BC0F /* CKCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCompatibility.m; sourceTree = "<group>"; };
 		4F4599C711FCE1AC00438B93 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLocationManager.h; sourceTree = "<group>"; };
@@ -684,6 +688,8 @@
 				4F4599C811FCE1AC00438B93 /* CKLocationManager.m */,
 				4F31C729125B8C76009E08D4 /* CKLocationManager2.h */,
 				4F31C72A125B8C76009E08D4 /* CKLocationManager2.m */,
+				4F31C759125BC705009E08D4 /* CKCLLocationAdditions.h */,
+				4F31C75A125BC705009E08D4 /* CKCLLocationAdditions.m */,
 			);
 			name = Location;
 			path = Classes;
@@ -1027,6 +1033,7 @@
 				4FA326211247AA3300D78B67 /* CKUIKeyboardInformation.h in Headers */,
 				4F31C6E2125B7E3F009E08D4 /* CKMapViewController.h in Headers */,
 				4F31C72B125B8C76009E08D4 /* CKLocationManager2.h in Headers */,
+				4F31C75B125BC705009E08D4 /* CKCLLocationAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1243,6 +1250,7 @@
 				4FA326221247AA3300D78B67 /* CKUIKeyboardInformation.m in Sources */,
 				4F31C6E3125B7E3F009E08D4 /* CKMapViewController.m in Sources */,
 				4F31C72C125B8C76009E08D4 /* CKLocationManager2.m in Sources */,
+				4F31C75C125BC705009E08D4 /* CKCLLocationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
