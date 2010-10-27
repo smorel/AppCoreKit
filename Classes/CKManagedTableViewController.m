@@ -58,7 +58,7 @@
 
 @implementation CKManagedTableViewController
 
-@synthesize delegate = _delegate;
+@synthesize managedTableViewDelegate = _managedTableViewDelegate;
 @synthesize sections = _sections;
 @synthesize pValuesForKeys = _valuesForKeys;
 
@@ -236,8 +236,8 @@
 
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
 		[self removeCellControllerAtIndexPath:indexPath];
-		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
-			[self.delegate tableViewController:self cellControllerDidDelete:cellController];
+		if (self.managedTableViewDelegate && [self.managedTableViewDelegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
+			[self.managedTableViewDelegate tableViewController:self cellControllerDidDelete:cellController];
 		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 	}	
 }
@@ -248,8 +248,8 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
 	[self moveCellControllerFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
-	if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerDidMoveFromIndexPath:toIndexPath:)])
-		[self.delegate tableViewController:self cellControllerDidMoveFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
+	if (self.managedTableViewDelegate && [self.managedTableViewDelegate respondsToSelector:@selector(tableViewController:cellControllerDidMoveFromIndexPath:toIndexPath:)])
+		[self.managedTableViewDelegate tableViewController:self cellControllerDidMoveFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
 }
 
 
@@ -342,8 +342,8 @@
 	CKTableViewCellController *cellController = (CKTableViewCellController *)object;
 	if (cellController.key) {
 		[self.pValuesForKeys setObject:cellController.value forKey:cellController.key];
-		if (self.delegate && [self.delegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
-			[self.delegate tableViewController:self cellControllerValueDidChange:cellController];
+		if (self.managedTableViewDelegate && [self.managedTableViewDelegate respondsToSelector:@selector(tableViewController:cellControllerValueDidChange:)])
+			[self.managedTableViewDelegate tableViewController:self cellControllerValueDidChange:cellController];
 	}
 }
 

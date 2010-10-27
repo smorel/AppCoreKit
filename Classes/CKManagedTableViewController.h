@@ -34,12 +34,12 @@
 //
 
 @interface CKManagedTableViewController : CKTableViewController <UIScrollViewDelegate> {
-	id _delegate;
+	id _managedTableViewDelegate;
 	NSMutableArray *_sections;
 	NSMutableDictionary *_valuesForKeys;
 }
 
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) id managedTableViewDelegate;
 @property (nonatomic, readonly) NSDictionary *valuesForKeys;
 
 - (void)setup;
