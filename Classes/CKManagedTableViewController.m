@@ -168,13 +168,16 @@
 	return controller;
 }
 
+- (void)removeSectionAtIndex:(NSUInteger)sectionIndex {
+	[self.sections removeObjectAtIndex:sectionIndex];
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationLeft];
+}
+
 - (void)removeCellControllerAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
 	CKTableViewCellController *cellController = [section.cellControllers objectAtIndex:indexPath.row];
 	[cellController removeObserver:self forKeyPath:@"value"];
 	[section removeCellControllerAtIndex:indexPath.row];
-	
-	if (section.cellControllers.count == 0) [self.sections removeObjectAtIndex:indexPath.section];
 }
 
 - (void)moveCellControllerFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
@@ -235,11 +238,14 @@
 	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
 
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
-		[self removeCellControllerAtIndexPath:indexPath];
 		if (self.managedTableViewDelegate && [self.managedTableViewDelegate respondsToSelector:@selector(tableViewController:cellControllerDidDelete:)])
 			[self.managedTableViewDelegate tableViewController:self cellControllerDidDelete:cellController];
+		[self removeCellControllerAtIndexPath:indexPath];
 		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-	}	
+
+		CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
+		if (section.cellControllers.count == 0) [self removeSectionAtIndex:indexPath.section];
+	}
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
