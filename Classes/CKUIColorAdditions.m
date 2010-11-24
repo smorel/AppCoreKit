@@ -17,4 +17,8 @@
 						   alpha:1.0];
 }
 
++ (UIColor *)blueTextColor {
+	return [UIColor colorWithRGBValue:0x385487];
+}
+
 @end

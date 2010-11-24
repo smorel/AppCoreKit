@@ -11,5 +11,6 @@
 @interface UIColor (CKUIColorAdditions)
 
 + (UIColor *)colorWithRGBValue:(NSUInteger)value;
++ (UIColor *)blueTextColor;
 
 @end
