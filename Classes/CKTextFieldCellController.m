@@ -8,6 +8,7 @@
 
 #import "CKTextFieldCellController.h"
 #import "CKUIKeyboardInformation.h"
+#import "CKUIColorAdditions.h"
 
 @interface CKTextFieldCellController ()
 
@@ -36,6 +37,7 @@
 		self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 		self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+		self.textField.textColor = [UIColor blueTextColor];
 		self.textField.tag = 1000;
 		[self.textField addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventEditingChanged];
 	}
@@ -53,10 +55,6 @@
 	cell.accessoryView = nil;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	
-	CGFloat offset = self.text ? (cell.contentView.bounds.size.width/2.55) : 20;
-	CGRect frame = CGRectIntegral(UIEdgeInsetsInsetRect(cell.contentView.bounds, UIEdgeInsetsMake(10, 10 + offset, 10, 10)));
-	self.textField.frame = frame;
-
 	return cell;
 }
 
@@ -65,6 +63,10 @@
 
 	if (self.textColor) self.textField.textColor = self.textColor;
 
+	CGFloat offset = self.text ? (cell.bounds.size.width/2.55) : 20;
+	CGRect frame = CGRectIntegral(UIEdgeInsetsInsetRect(cell.bounds, UIEdgeInsetsMake(10, 10 + offset, 10, 10)));
+	self.textField.frame = frame;
+	
 	cell.accessoryView = self.textField;
 	self.textField.placeholder = self.placeholder;
 	self.textField.text = self.value;
