@@ -19,11 +19,21 @@
 @synthesize footerTitle = _footerTitle;
 @synthesize headerView = _headerView;
 @synthesize footerView = _footerView;
+@synthesize canMoveRowsOut = _canMoveRowsOut;
+@synthesize canMoveRowsIn = _canMoveRowsIn;
+
+- (id)init {
+	if (self = [super init]) {
+		_cellControllers = [[NSMutableArray array] retain];
+		_canMoveRowsIn = YES;
+		_canMoveRowsOut = YES;
+	}
+	return self;
+}
 
 - (id)initWithCellControllers:(NSArray *)theCellControllers {
-	if (self = [super init]) {
-		_cellControllers = [[NSMutableArray arrayWithArray:theCellControllers] retain];
-	}
+	[self init];
+	_cellControllers = [[NSMutableArray arrayWithArray:theCellControllers] retain];
 	return self;
 }
 
@@ -248,8 +258,23 @@
 	}
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+	return [self cellControllerForIndexPath:indexPath].isEditable;
+}
+
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
 	return [self cellControllerForIndexPath:indexPath].isMovable;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
+	// Test if the row can move from the source to the proposed section
+	if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
+		CKTableSection *sourceSection = [self.sections objectAtIndex:sourceIndexPath.section];
+		CKTableSection *proposedSection = [self.sections objectAtIndex:proposedDestinationIndexPath.section];
+		if ((sourceSection.canMoveRowsOut == NO) || (proposedSection.canMoveRowsIn == NO)) return sourceIndexPath;
+	}
+	if ([self cellControllerForIndexPath:proposedDestinationIndexPath].isEditable == NO) return sourceIndexPath;
+	return proposedDestinationIndexPath;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
@@ -327,15 +352,16 @@
 	}
 }
 
-- (void)addSectionWithCellControllers:(NSArray *)cellControllers {
-	[self addSectionWithCellControllers:cellControllers headerTitle:nil footerTitle:nil];
+- (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers {
+	return [self addSectionWithCellControllers:cellControllers headerTitle:nil footerTitle:nil];
 }
 
-- (void)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle {
+- (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle {
 	CKTableSection *section = [[[CKTableSection alloc] initWithCellControllers:cellControllers] autorelease];
 	section.headerTitle = headerTitle;
 	section.footerTitle = footerTitle;
 	[self addSection:section];
+	return section;
 }
 
 #pragma mark Values

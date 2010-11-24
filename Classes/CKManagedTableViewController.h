@@ -17,6 +17,8 @@
 	NSString *_footerTitle;
 	UIView *_headerView;
 	UIView *_footerView;
+	BOOL _canMoveRowsOut;
+	BOOL _canMoveRowsIn;
 }
 
 @property (nonatomic, retain, readonly) NSArray *cellControllers;
@@ -24,6 +26,8 @@
 @property (nonatomic, retain, readwrite) NSString *footerTitle;
 @property (nonatomic, retain, readwrite) UIView *headerView;
 @property (nonatomic, retain, readwrite) UIView *footerView;
+@property (nonatomic, assign) BOOL canMoveRowsOut;
+@property (nonatomic, assign) BOOL canMoveRowsIn;
 
 - (id)initWithCellControllers:(NSArray *)cellControllers;
 - (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index;
@@ -49,8 +53,8 @@
 // Cell Controllers Management
 
 - (void)addSection:(CKTableSection *)section;
-- (void)addSectionWithCellControllers:(NSArray *)cellControllers;
-- (void)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
+- (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers;
+- (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
 
 @end
 

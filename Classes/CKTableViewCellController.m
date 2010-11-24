@@ -19,6 +19,7 @@
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize selectable = _selectable;
+@synthesize editable = _editable;
 @synthesize removable = _removable;
 @synthesize movable = _movable;
 @synthesize accessoryType = _accessoryType;
@@ -31,6 +32,7 @@
 	if (self != nil) {
 		_selectable = YES;
 		self.rowHeight = 44.0f;
+		self.editable = YES;
 	}
 	return self;
 }
