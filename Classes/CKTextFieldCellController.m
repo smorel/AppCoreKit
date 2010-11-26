@@ -9,10 +9,10 @@
 #import "CKTextFieldCellController.h"
 #import "CKUIKeyboardInformation.h"
 #import "CKUIColorAdditions.h"
+#import "CKConstants.h"
 
 @interface CKTextFieldCellController ()
 
-@property (nonatomic, readwrite, retain) UITextField *textField;
 @property (nonatomic, retain) NSString *placeholder;
 
 @end
@@ -21,31 +21,19 @@
 
 @implementation CKTextFieldCellController
 
-@synthesize textField = _textField;
 @synthesize placeholder = _placeholder;
+@synthesize secureTextEntry = _secureTextEntry;
 
 - (id)initWithTitle:(NSString *)title value:(NSString *)value placeholder:(NSString *)placeholder {
 	if (self = [super initWithText:title]) {
 		self.value = value;
 		self.placeholder = placeholder;
 		self.selectable = NO;
-
-		self.textField = [[[UITextField alloc] initWithFrame:CGRectZero] autorelease];
-		self.textField.delegate = self;
-//		self.textField.enablesReturnKeyAutomatically = YES;
-		self.textField.borderStyle = UITextBorderStyleNone;
-		self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-		self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-		self.textField.textColor = [UIColor blueTextColor];
-		self.textField.tag = 1000;
-		[self.textField addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventEditingChanged];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	self.textField = nil;
 	self.placeholder = nil;
 	[super dealloc];
 }
@@ -55,27 +43,32 @@
 	cell.accessoryView = nil;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	
+	UITableView *tableView = self.parentController.tableView;
+	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+	CGFloat offset = self.text ? (width/2.55) : 0;
+	CGRect frame = CGRectMake(0, 10, width - offset, self.rowHeight - 20);
+	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
+	textField.borderStyle = UITextBorderStyleNone;
+	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	textField.textColor = [UIColor blueTextColor];
+	cell.accessoryView = textField;
+	
 	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 
-	if (self.textColor) self.textField.textColor = self.textColor;
-
-	CGFloat offset = self.text ? (cell.bounds.size.width/2.55) : 20;
-	CGRect frame = CGRectIntegral(UIEdgeInsetsInsetRect(cell.bounds, UIEdgeInsetsMake(10, 10 + offset, 10, 10)));
-	self.textField.frame = frame;
-	
-	cell.accessoryView = self.textField;
-	self.textField.placeholder = self.placeholder;
-	self.textField.text = self.value;
+	UITextField *textField = (UITextField *)cell.accessoryView;
+	textField.delegate = self;
+	textField.text = self.value;
+	textField.placeholder = self.placeholder;
 }
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
 	[super cellDidAppear:cell];
-}
-- (void)cellDidDisappear {
 }
 
 #pragma mark UITextField Delegate

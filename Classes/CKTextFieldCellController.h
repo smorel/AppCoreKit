@@ -11,11 +11,12 @@
 
 
 @interface CKTextFieldCellController : CKStandardCellController <UITextFieldDelegate> {
-	UITextField *_textField;
 	NSString *_placeholder;
+
+	BOOL _secureTextEntry;
 }
 
-@property (nonatomic, readonly, retain) UITextField *textField;
+@property(nonatomic, getter=isSecureTextEntry) BOOL secureTextEntry;
 
 - (id)initWithTitle:(NSString *)title value:(NSString *)value placeholder:(NSString *)placeholder;
 
