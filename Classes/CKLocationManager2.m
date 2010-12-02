@@ -11,6 +11,9 @@
 #import "CKDebug.h"
 
 NSString * const CKLocationManagerUserDeniedNotification = @"CKLocationManagerUserDeniedNotification";
+NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationManagerServiceDidDisableNotification";
+
+#define kAlertViewNoLocationServicesMessage 1
 
 @interface CKLocationManager2 ()
 @property (nonatomic, retain, readwrite) NSMutableSet *delegates;
@@ -175,7 +178,14 @@ NSString * const CKLocationManagerUserDeniedNotification = @"CKLocationManagerUs
 								 delegate:self
 						cancelButtonTitle:_(@"Dismiss")
 						otherButtonTitles:nil] autorelease];
+	alertView.tag = kAlertViewNoLocationServicesMessage;
 	[alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (alertView.tag == kAlertViewNoLocationServicesMessage) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:CKLocationManagerServiceDidDisableNotification object:self];
+	}
 }
 
 #pragma mark Multitasking Notifications

@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 extern NSString * const CKLocationManagerUserDeniedNotification;
+extern NSString * const CKLocationManagerServiceDidDisableNotification;
 
 @class CKLocationManager2;
 
@@ -22,7 +23,7 @@ extern NSString * const CKLocationManagerUserDeniedNotification;
 
 //
 
-@interface CKLocationManager2 : NSObject <CLLocationManagerDelegate> {
+@interface CKLocationManager2 : NSObject <CLLocationManagerDelegate, UIAlertViewDelegate> {
 	NSMutableSet *_delegates;
 	CLLocationManager *_locationManager;
 	CLHeading *_heading;
