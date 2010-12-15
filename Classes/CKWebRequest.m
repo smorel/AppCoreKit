@@ -201,18 +201,18 @@ static ASINetworkQueue *_sharedQueue = nil;
 		responseValue = [httpRequest responseString]; // FIXME: Risky! The content might not be a string!
 	}
 	
-	// Process the content wih the user specified CKWebResponseTransformer
-	
-	id value = responseValue;
-	if (_transformer) {
-		value = [_transformer request:self transformContent:responseValue];
-	}
-	
 	// Notifies the delegate
 	
 	if (error && [_delegate respondsToSelector:@selector(request:didFailWithError:)]) {
 		[_delegate request:self didFailWithError:error];
 		return;
+	}
+	
+	// Process the content wih the user specified CKWebResponseTransformer
+	
+	id value = responseValue;
+	if (_transformer) {
+		value = [_transformer request:self transformContent:responseValue];
 	}
 	
 	if ([_delegate respondsToSelector:@selector(request:didReceiveValue:)]) {
