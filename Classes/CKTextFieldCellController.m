@@ -46,7 +46,7 @@
 	UITableView *tableView = self.parentController.tableView;
 	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
 	CGFloat offset = self.text ? (width/2.55) : 0;
-	CGRect frame = CGRectMake(0, 10, width - offset, self.rowHeight - 20);
+	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
 	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
