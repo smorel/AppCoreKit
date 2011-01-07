@@ -7,14 +7,12 @@
 //
 
 #import "CKWebRequest2.h"
-#import <CloudKit/CKNSStringAdditions.h>
-#import <CloudKit/CKDebug.h>
-
-#import <CloudKit/CJSONDeserializer.h>
-//#import <CloudKit/CXMLDocument.h>
-#import <CloudKit/RegexKitLite.h>
-
+#import "CKNSStringAdditions.h"
 #import "CKNSObject+Invocation.h"
+#import "CJSONDeserializer.h"
+#import "CXMLDocument.h"
+#import "RegexKitLite.h"
+#import "CKDebug.h"
 
 //
 
@@ -224,7 +222,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 							   waitUntilDone:NO];
 	
 	// Try to process the response according to the Content-Type (e.g., XML, JSON).
-	// TODO: to be refactored
+	// FIXME: The processing should happen in a different class (a default transformer).
 	
 	id responseValue;
 	NSDictionary *responseHeaders = [theResponse allHeaderFields];
@@ -232,7 +230,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
 	
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
-//		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
+		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
 		responseValue = [[CJSONDeserializer deserializer] deserialize:theReceivedData error:&error];
 	} else if ([contentType isMatchedByRegex:@"image/"]) {
