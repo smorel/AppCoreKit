@@ -38,6 +38,22 @@
     return array;
 }
 
+- (NSArray *)shuffledArray {
+	NSMutableArray *array = [NSMutableArray arrayWithCapacity:[self count]];
+	NSMutableArray *copy = [self mutableCopy];
+
+	while ([copy count] > 0) {
+		NSUInteger index = arc4random() % [copy count];
+		id object = [copy objectAtIndex:index];
+		[array addObject:object];
+		[copy removeObjectAtIndex:index];
+	}
+		
+	[copy release];
+	
+	return array;
+}
+
 - (BOOL)containsString:(NSString *)string {
 	for (NSObject *object in self) {
 		if ([object isKindOfClass:[NSString class]]) {

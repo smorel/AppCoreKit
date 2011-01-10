@@ -24,6 +24,9 @@
 // Returns a copy of the array with elements in reverse order 
 - (NSArray *)reversedArray;
 
+// Returns a copy of the array with elements in random order
+- (NSArray *)shuffledArray;
+
 // Returns true if the array contains a given string
 - (BOOL)containsString:(NSString *)string;
 
