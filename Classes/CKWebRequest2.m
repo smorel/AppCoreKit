@@ -71,6 +71,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theReceivedData release];
 	[theResponse release];
 	[theUserInfo release];
+	[theConnection release];
 	[super dealloc];
 }
 
@@ -154,9 +155,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	}
 	
 	[self markAsExecuting];
+
+	NSMutableData *data = [[NSMutableData alloc] init];	
+	self.receivedData = data;
+	[data release];
 	
-	self.receivedData = [NSMutableData data];
-	self.connection = [[[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO] autorelease];
+	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO];
+	self.connection = conn;
+	[conn release];
 	
 	[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 	[self.connection start];
@@ -164,6 +170,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
 	[theConnection cancel];
+	[theConnection release];
 	[self markAsCancelled];
 }
 

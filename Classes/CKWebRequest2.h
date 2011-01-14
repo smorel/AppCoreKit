@@ -44,6 +44,8 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 //
 
+- (id)initWithURL:(NSURL *)URL;
+
 + (CKWebRequest2 *)requestWithURL:(NSURL *)URL;
 + (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params;
 + (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
