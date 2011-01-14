@@ -170,12 +170,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark URL Loading
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-	CKDebugLog(@"willCacheResponse: %@ (%d bytes)", cachedResponse, [[cachedResponse data] length]);
+//	CKDebugLog(@"willCacheResponse: %@ (%d bytes)", cachedResponse, [[cachedResponse data] length]);
 	return cachedResponse;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	CKDebugLog(@"didReceiveResponse %@", response);
+//	CKDebugLog(@"didReceiveResponse %@", response);
 	
     // It can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
@@ -184,7 +184,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
+//	CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
 	
 	// Append the new available data
 	// TODO: provide an delegate to notify for the progress of the URL loading
@@ -196,7 +196,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	CKDebugLog(@"didFinishLoading");
+//	CKDebugLog(@"didFinishLoading");
 	
 	if ([theResponse statusCode] > 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
