@@ -223,6 +223,10 @@
 		71B1BF6D123A9F6B002D7A9A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71B1BF6C123A9F6B002D7A9A /* MobileCoreServices.framework */; };
 		71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */ = {isa = PBXBuildFile; fileRef = 71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */; };
+		71E49B6F12D784960034594E /* CKWebRequest2.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E49B6D12D784960034594E /* CKWebRequest2.m */; };
+		71E49B7012D784960034594E /* CKWebRequest2.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E49B6E12D784960034594E /* CKWebRequest2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71E49B7412D784AD0034594E /* CKNSObject+Invocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E49B7212D784AD0034594E /* CKNSObject+Invocation.m */; };
+		71E49B7512D784AD0034594E /* CKNSObject+Invocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E49B7312D784AD0034594E /* CKNSObject+Invocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6660D1125D037005E6CEC /* CKUIColorAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
 		71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -451,6 +455,10 @@
 		71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewControllerDep.h; path = Classes/CKSlideshowViewControllerDep.h; sourceTree = "<group>"; };
 		71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewControllerDep.m; path = Classes/CKSlideshowViewControllerDep.m; sourceTree = "<group>"; };
 		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
+		71E49B6D12D784960034594E /* CKWebRequest2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebRequest2.m; sourceTree = "<group>"; };
+		71E49B6E12D784960034594E /* CKWebRequest2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebRequest2.h; sourceTree = "<group>"; };
+		71E49B7212D784AD0034594E /* CKNSObject+Invocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSObject+Invocation.m"; sourceTree = "<group>"; };
+		71E49B7312D784AD0034594E /* CKNSObject+Invocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSObject+Invocation.h"; sourceTree = "<group>"; };
 		71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIColorAdditions.h; sourceTree = "<group>"; };
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIColorAdditions.m; sourceTree = "<group>"; };
 		71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
@@ -608,6 +616,8 @@
 				71993A5211F8C53D0056EC2C /* CKMultipartParser.h */,
 				710DF10E10FFBC030063FB2C /* CKWebRequest.h */,
 				710DF10F10FFBC030063FB2C /* CKWebRequest.m */,
+				71E49B6E12D784960034594E /* CKWebRequest2.h */,
+				71E49B6D12D784960034594E /* CKWebRequest2.m */,
 				710DF11010FFBC030063FB2C /* CKWebService.h */,
 				710DF11110FFBC030063FB2C /* CKWebService.m */,
 			);
@@ -760,6 +770,8 @@
 				715E0CC510DB073C00AA4B07 /* CKNSDate+Conversions.m */,
 				715E0CF310DB0AB300AA4B07 /* CKNSString+Validations.h */,
 				715E0CF410DB0AB300AA4B07 /* CKNSString+Validations.m */,
+				71E49B7312D784AD0034594E /* CKNSObject+Invocation.h */,
+				71E49B7212D784AD0034594E /* CKNSObject+Invocation.m */,
 				71E6660B1125D037005E6CEC /* CKUIColorAdditions.h */,
 				71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */,
 				71917B361199E87A00386EB5 /* CKUINavigationControllerAdditions.h */,
@@ -1034,6 +1046,8 @@
 				4F31C6E2125B7E3F009E08D4 /* CKMapViewController.h in Headers */,
 				4F31C72B125B8C76009E08D4 /* CKLocationManager2.h in Headers */,
 				4F31C75B125BC705009E08D4 /* CKCLLocationAdditions.h in Headers */,
+				71E49B7012D784960034594E /* CKWebRequest2.h in Headers */,
+				71E49B7512D784AD0034594E /* CKNSObject+Invocation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,6 +1265,8 @@
 				4F31C6E3125B7E3F009E08D4 /* CKMapViewController.m in Sources */,
 				4F31C72C125B8C76009E08D4 /* CKLocationManager2.m in Sources */,
 				4F31C75C125BC705009E08D4 /* CKCLLocationAdditions.m in Sources */,
+				71E49B6F12D784960034594E /* CKWebRequest2.m in Sources */,
+				71E49B7412D784AD0034594E /* CKNSObject+Invocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
