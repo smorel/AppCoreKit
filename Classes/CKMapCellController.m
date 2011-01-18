@@ -56,6 +56,9 @@
 }
 
 - (void)dealloc {
+	MKMapView *mapView = (MKMapView *)[self.tableViewCell.contentView viewWithTag:1000];
+	mapView.delegate = nil;
+
 	self.annotation = nil;
 	self.annotationImage = nil;
 	[super dealloc];
@@ -72,7 +75,6 @@
 	mapView.layer.cornerRadius = 10.0f;
 	mapView.showsUserLocation = NO;
 	mapView.userInteractionEnabled = NO;
-	mapView.delegate = self;
 	
 	[cell.contentView addSubview:mapView];
 
@@ -91,7 +93,8 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
-//	MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
+	MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
+	mapView.delegate = self;
 }
 
 #pragma mark MKMapViewDelegate Protocol

@@ -348,7 +348,10 @@
 	[self.sections addObject:section];
 
 	for (CKTableViewCellController *cell in section.cellControllers) {
-		[cell addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionNew context:nil];
+		if (cell.key && cell.value) {
+			[self.pValuesForKeys setObject:cell.value forKey:cell.key];
+			[cell addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionNew context:nil];
+		}
 	}
 }
 
