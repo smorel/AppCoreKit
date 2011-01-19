@@ -9,6 +9,7 @@
 #import "CKWebViewController.h"
 #import "CKUINavigationControllerAdditions.h"
 #import "CKConstants.h"
+#import "CKBundle.h"
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
 
@@ -50,8 +51,8 @@
 	_showURLInTitle = YES;
 	
 	// Create the toolbar buttons
-	[self setImage:[UIImage imageNamed:@"CKWebViewController-goBack.png"] forButton:CKWebViewButtonBack];
-	[self setImage:[UIImage imageNamed:@"CKWebViewController-goForward.png"] forButton:CKWebViewButtonForward];
+	[self setImage:[CKBundle imageForName:@"CKWebViewControllerGoBack.png"] forButton:CKWebViewButtonBack];
+	[self setImage:[CKBundle imageForName:@"CKWebViewControllerGoForward.png"] forButton:CKWebViewButtonForward];
 	self.reloadButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
 	self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
 	
@@ -120,19 +121,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
-}
-
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -190,8 +182,8 @@
 	_forwardButton.enabled = _webView.canGoForward;
 	
 	[self generateToolbar];
-	if ([_webView isLoading]) [self setToolbarItems:self.toolbarButtonsLoading animated:NO];
-	else [self setToolbarItems:self.toolbarButtonsStatic animated:NO];
+	if ([_webView isLoading]) [self setToolbarItems:self.toolbarButtonsLoading animated:YES];
+	else [self setToolbarItems:self.toolbarButtonsStatic animated:YES];
 }
 
 - (void)goBack {
