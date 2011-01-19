@@ -153,7 +153,14 @@
 - (void)clear {
 	for (CKTableSection *section in self.sections) {
 		for (CKTableViewCellController *cellController in section.cellControllers) {
-			[cellController removeObserver:self forKeyPath:@"value"];
+			// Ensure to remove the observer on a controller that was previously observed.
+			// Otherwise, removeObserver:forKeyPath: will crash with the message
+			//   Cannot remove an observer <WLSettingsViewController 0xX> for the key path 
+			//   "value" from <CKStandardCellController 0xX> because it is not registered as 
+			//   an observer.'
+			if (cellController.key) {
+				[cellController removeObserver:self forKeyPath:@"value"];
+			}
 		}
 	}
 	self.sections = nil;
@@ -348,8 +355,8 @@
 	[self.sections addObject:section];
 
 	for (CKTableViewCellController *cell in section.cellControllers) {
-		if (cell.key && cell.value) {
-			[self.pValuesForKeys setObject:cell.value forKey:cell.key];
+		if (cell.key) {
+			if (cell.value) { [self.pValuesForKeys setObject:cell.value forKey:cell.key]; }
 			[cell addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionNew context:nil];
 		}
 	}
