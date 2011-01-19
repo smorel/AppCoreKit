@@ -70,6 +70,9 @@
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)theNetServiceBrowser didRemoveService:(NSNetService *)theNetService moreComing:(BOOL)more {
+	if (self.nameRegex && ([theNetService.name isValidFormat:self.nameRegex] == NO))
+		return;
+	
 	[self.delegate bonjourResolver:self didRemoveServiceNamed:theNetService.name];
 	[_unresolvedServices removeObject:theNetService];
 }
