@@ -111,7 +111,8 @@
 		[items addObject:self.refreshButtonItem];
 	}
 	
-	[self setToolbarItems:items];
+	// FIXME: Should be set in viewWillAppear
+	[self setToolbarItems:items animated:YES];
 	
 	//[NSArray arrayWithObjects:self.backButtonItem, fixedSpace, self.forwardButtonItem, flexiSpace, self.refreshButtonItem, nil] animated:NO];
 	
