@@ -38,9 +38,11 @@
 		4F69540212E8F0530085881D /* CKCoreGraphicsAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F69540012E8F0530085881D /* CKCoreGraphicsAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F69540312E8F0530085881D /* CKCoreGraphicsAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F69540112E8F0530085881D /* CKCoreGraphicsAdditions.m */; };
 		4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F95B7BB11C805120002E71E /* CKLocalization.m */; };
-		4F9B493F12EA5103001AA996 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9B493C12EA5103001AA996 /* CKGridView.h */; };
+		4F9B493F12EA5103001AA996 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9B493C12EA5103001AA996 /* CKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9B494012EA5103001AA996 /* CKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B493D12EA5103001AA996 /* CKGridView.m */; };
 		4F9B494112EA5103001AA996 /* CKGridView+NSIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B493E12EA5103001AA996 /* CKGridView+NSIndexPath.m */; };
+		4F9B495112EA5183001AA996 /* CKPageScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9B494F12EA5183001AA996 /* CKPageScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F9B495212EA5183001AA996 /* CKPageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B495012EA5183001AA996 /* CKPageScrollView.m */; };
 		4FA326211247AA3300D78B67 /* CKUIKeyboardInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FA3261F1247AA3300D78B67 /* CKUIKeyboardInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FA326221247AA3300D78B67 /* CKUIKeyboardInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA326201247AA3300D78B67 /* CKUIKeyboardInformation.m */; };
 		4FAD0E5D11C2B8110071C7BF /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -296,6 +298,8 @@
 		4F9B493C12EA5103001AA996 /* CKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGridView.h; sourceTree = "<group>"; };
 		4F9B493D12EA5103001AA996 /* CKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKGridView.m; sourceTree = "<group>"; };
 		4F9B493E12EA5103001AA996 /* CKGridView+NSIndexPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKGridView+NSIndexPath.m"; sourceTree = "<group>"; };
+		4F9B494F12EA5183001AA996 /* CKPageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPageScrollView.h; sourceTree = "<group>"; };
+		4F9B495012EA5183001AA996 /* CKPageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPageScrollView.m; sourceTree = "<group>"; };
 		4FA3261F1247AA3300D78B67 /* CKUIKeyboardInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIKeyboardInformation.h; sourceTree = "<group>"; };
 		4FA326201247AA3300D78B67 /* CKUIKeyboardInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIKeyboardInformation.m; sourceTree = "<group>"; };
 		4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKOptionCellController.h; sourceTree = "<group>"; };
@@ -672,6 +676,8 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4F9B494F12EA5183001AA996 /* CKPageScrollView.h */,
+				4F9B495012EA5183001AA996 /* CKPageScrollView.m */,
 				4F9B493C12EA5103001AA996 /* CKGridView.h */,
 				4F9B493D12EA5103001AA996 /* CKGridView.m */,
 				4F9B493E12EA5103001AA996 /* CKGridView+NSIndexPath.m */,
@@ -1107,6 +1113,7 @@
 				7119A73212E64BC0003A46B0 /* CKUIImage+Transformations.h in Headers */,
 				4F69540212E8F0530085881D /* CKCoreGraphicsAdditions.h in Headers */,
 				4F9B493F12EA5103001AA996 /* CKGridView.h in Headers */,
+				4F9B495112EA5183001AA996 /* CKPageScrollView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1335,6 +1342,7 @@
 				4F69540312E8F0530085881D /* CKCoreGraphicsAdditions.m in Sources */,
 				4F9B494012EA5103001AA996 /* CKGridView.m in Sources */,
 				4F9B494112EA5103001AA996 /* CKGridView+NSIndexPath.m in Sources */,
+				4F9B495212EA5183001AA996 /* CKPageScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
