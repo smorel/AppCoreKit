@@ -33,7 +33,7 @@
 
 - (id)initWithCellControllers:(NSArray *)theCellControllers {
 	[self init];
-	_cellControllers = [[NSMutableArray arrayWithArray:theCellControllers] retain];
+	[_cellControllers addObjectsFromArray:theCellControllers];
 	return self;
 }
 

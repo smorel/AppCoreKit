@@ -38,6 +38,11 @@
 }
 
 - (void)dealloc {
+	[_key release];
+	[_value release];
+	[_indexPath release];
+	[_target release];
+	
 	_target = nil;
 	_action = nil;
 	_parentController = nil;
