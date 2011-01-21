@@ -1,0 +1,284 @@
+//
+//  CKGridView.m
+//  CloudKit
+//
+//  Created by Olivier Collet on 11-01-19.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
+//
+
+#import "CKGridView.h"
+#import <QuartzCore/QuartzCore.h>
+#import <CloudKit/CKCoreGraphicsAdditions.h>
+#import <CloudKit/CKConstants.h>
+
+#define DEFAULT_DRAGGEDVIEW_ZOOM_SCALE 4
+
+@interface CKGridView ()
+
+@property (nonatomic, retain) NSMutableArray *views;
+@property (nonatomic, retain) UIView *draggedView;
+@property (nonatomic, retain) NSIndexPath *fromIndexPath;
+@property (nonatomic, retain) NSIndexPath *toIndexPath;
+
+@property (nonatomic, readonly) CGFloat columnWidth;
+@property (nonatomic, readonly) CGFloat rowHeight;
+
+- (NSInteger)indexForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForIndex:(NSInteger)index;
+- (CGPoint)pointForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForPoint:(CGPoint)point;
+- (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
+- (UIView *)viewAtPoint:(CGPoint)point;
+- (void)deleteDraggedView;
+
+@end
+
+
+@implementation CKGridView
+
+@synthesize dataSource = _dataSource;
+@synthesize delegate = _delegate;
+@synthesize editing = _editing;
+@synthesize minimumPressDuration = _minimumPressDuration;
+@synthesize views = _views;
+@synthesize draggedView = _draggedView;
+@synthesize fromIndexPath = _fromIndexPath;
+@synthesize toIndexPath = _toIndexPath;
+
+- (void)postInit {
+	self.views = [NSMutableArray array];
+	_minimumPressDuration = 0;
+	self.editing = NO;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self postInit];
+    }
+    return self;
+}
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (void)dealloc {
+	self.views = nil;
+	self.draggedView = nil;
+	self.fromIndexPath = nil;
+	self.toIndexPath = nil;
+    [super dealloc];
+}
+
+- (void)willMoveToWindow:(UIWindow *)newWindow {
+	[super willMoveToWindow:newWindow];
+	[self reloadData];
+}
+
+//
+
+- (void)setEditing:(BOOL)edit {
+	_editing = edit;
+	if (_editing) {
+		UILongPressGestureRecognizer *gesture = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)] autorelease];
+		gesture.minimumPressDuration = _minimumPressDuration;
+		[self addGestureRecognizer:gesture];		
+	}
+	else {
+		for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+			if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+				[self removeGestureRecognizer:recognizer];
+			}
+		}
+	}
+}
+
+//
+
+- (void)setMinimumPressDuration:(CFTimeInterval)duration {
+	_minimumPressDuration = duration;
+	for (UIGestureRecognizer *recognizer in self.gestureRecognizers) {
+		if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
+			[(UILongPressGestureRecognizer *)recognizer setMinimumPressDuration:_minimumPressDuration];
+		}
+	}
+}
+
+//
+
+- (void)clear {
+	for (UIView *view in self.views) [view removeFromSuperview];
+	self.views = [NSMutableArray array];
+}
+
+- (void)reloadData {
+	[self clear];
+	_rows = [self.dataSource numberOfRowsForGridView:self];
+	_columns = [self.dataSource numberOfColumnsForGridView:self];
+
+	for (int row=0 ; row<_rows ; row++) {
+		for (int column=0 ; column<_columns ; column++) {
+			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
+			UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
+			if (view) {
+				CGPoint position = [self pointForIndexPath:indexPath];
+				view.frame = CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight);
+				view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+				if ([view isDescendantOfView:self] == NO) [self addSubview:view];
+			}
+			if ([self.views containsObject:view] == NO) 
+				[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
+		}
+	}
+}
+
+// Conversion methods
+
+- (NSInteger)indexForIndexPath:(NSIndexPath *)indexPath {
+	return (indexPath.row * _columns) + indexPath.column;
+}
+- (NSIndexPath *)indexPathForIndex:(NSInteger)index {
+	NSInteger row = floor(index / _rows);
+	NSInteger column = index % _columns;
+	return [NSIndexPath indexPathForRow:row column:column];
+}
+
+- (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath {
+	NSInteger index = [self indexForIndexPath:indexPath];
+	id view = (index < self.views.count) ? [self.views objectAtIndex:index] : nil;
+	if ([view isKindOfClass:[UIView class]]) return view;
+	return nil;
+}
+- (NSIndexPath *)indexPathForView:(UIView *)view {
+	NSUInteger index = [self.views indexOfObject:view];
+	if (index == NSNotFound) return nil;
+	return [self indexPathForIndex:index];
+}
+
+- (CGPoint)pointForIndexPath:(NSIndexPath *)indexPath {
+	return CGPointMake((indexPath.column * self.columnWidth), (indexPath.row * self.rowHeight));
+}
+- (NSIndexPath *)indexPathForPoint:(CGPoint)point {
+	NSInteger row = point.y / self.rowHeight;
+	NSInteger column = point.x / self.columnWidth;
+	return [NSIndexPath indexPathForRow:row column:column];	
+}
+- (UIView *)viewAtPoint:(CGPoint)point {
+	return [self viewAtIndexPath:[self indexPathForPoint:point]];
+}
+
+// Dimensions
+
+- (CGFloat)columnWidth { return self.bounds.size.width / _columns; }
+- (CGFloat)rowHeight { return self.bounds.size.height / _rows; }
+
+// Gestures
+
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer *)sender {
+	NSIndexPath *indexPath = [self indexPathForPoint:[sender locationInView:self]];
+
+	if (sender.state == UIGestureRecognizerStateBegan) {
+		if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canEditViewAtIndexPath:)]) {
+			if ([self.dataSource gridView:self canEditViewAtIndexPath:indexPath] == NO) return;
+		}
+		else return;
+
+		if (self.draggedView == nil) {
+			self.fromIndexPath = indexPath;
+			UIView *touchedView = [self viewAtPoint:[sender locationInView:self]];
+			
+			UIGraphicsBeginImageContext(touchedView.bounds.size);
+			CGContextRef gc = UIGraphicsGetCurrentContext();
+			[touchedView.layer renderInContext:gc];
+			UIImage *tmpImage = UIGraphicsGetImageFromCurrentImageContext();
+			UIGraphicsEndImageContext();
+			self.draggedView = [[[UIImageView alloc] initWithImage:tmpImage] autorelease];
+			CGRect draggedViewRect = self.draggedView.bounds;
+			draggedViewRect.size.width *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
+			draggedViewRect.size.height *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
+			[self addSubview:self.draggedView];
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.1];
+			self.draggedView.bounds = draggedViewRect;
+			[UIView commitAnimations];
+		}
+	}
+
+	if (self.draggedView) {
+
+		// Notify the delegate that the dragged view moved
+		if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:canMoveViewAtIndexPath:toPoint:)]) {
+			if ([self.delegate gridView:self canMoveViewAtIndexPath:self.fromIndexPath toPoint:[sender locationInView:self]] == NO) return;
+		}
+
+		// NOTE: Retain self in case it is released in a delegate method
+		// to avoid a crash while completing the animations
+		[self retain];
+
+		self.draggedView.center = CGPointOffset([sender locationInView:self], 0, -22);
+
+		UIView *fromView = [[self viewAtIndexPath:self.fromIndexPath] retain];
+		if ((_animating == NO) && [self.fromIndexPath isEqual:indexPath] == NO) {
+			UIView *toView = [self viewAtIndexPath:indexPath];
+			if (toView && self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canMoveViewFromIndexPath:toIndexPath:)]) {
+				if ([self.dataSource gridView:self canMoveViewFromIndexPath:self.fromIndexPath toIndexPath:indexPath]) {
+					self.toIndexPath = indexPath;
+					_animating = YES;
+					[UIView beginAnimations:nil context:nil];
+					[UIView setAnimationDelegate:self];
+					[UIView setAnimationDidStopSelector:@selector(swapAnimationDidStop:finished:context:)];
+					CGRect destframe = toView.frame;
+					toView.frame = fromView.frame;
+					fromView.frame = destframe;
+					[UIView commitAnimations];
+				}
+			}			
+		}
+		
+		if (sender.state == UIGestureRecognizerStateEnded) {
+
+			// Notify the delegate that the dragged view moved
+			if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:didMoveViewAtIndexPath:toPoint:)]) {
+				[self.delegate gridView:self didMoveViewAtIndexPath:self.fromIndexPath toPoint:[sender locationInView:self]];
+			}
+
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationDidStopSelector:@selector(deleteDraggedView)];
+			if (self.delegate &&
+				[(id)self.delegate respondsToSelector:@selector(gridView:shouldMoveDraggedViewToOriginFromPoint:)] &&
+				([self.delegate gridView:self shouldMoveDraggedViewToOriginFromPoint:[sender locationInView:self]] == NO)) {
+				self.draggedView.alpha = 0;
+				self.draggedView.bounds = CGRectInset(self.draggedView.bounds, self.draggedView.bounds.size.width/2, self.draggedView.bounds.size.height/2);
+			}
+			else self.draggedView.frame = fromView.frame;
+			[UIView commitAnimations];
+		}
+		[fromView release];
+		
+		// NOTE: Release self following [self retain] above
+		[self release];
+	}
+}
+
+- (void)swapAnimationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+	if (finished == NO) return;
+
+	if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:didMoveViewFromIndexPath:toIndexPath:)]) {
+		[self.dataSource gridView:self didMoveViewFromIndexPath:self.fromIndexPath toIndexPath:self.toIndexPath];
+	}
+	[self.views exchangeObjectAtIndex:[self indexForIndexPath:self.fromIndexPath] withObjectAtIndex:[self indexForIndexPath:self.toIndexPath]];
+	self.fromIndexPath = self.toIndexPath;
+	self.toIndexPath = nil;
+	_animating = NO;
+}
+
+- (void)deleteDraggedView {
+	[self.draggedView removeFromSuperview];
+	self.draggedView = nil;
+	self.fromIndexPath = nil;
+}
+
+@end
