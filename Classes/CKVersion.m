@@ -14,3 +14,7 @@ NSString *CKApplicationVersion() {
 	NSString *appVersion = [NSString stringWithFormat:@"%@ (%@)", versionNumber, buildNumber];
 	return appVersion;
 }
+
+NSString *CKOSVersion() {
+	return [[UIDevice currentDevice] systemVersion];
+}
