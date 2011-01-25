@@ -28,6 +28,9 @@
 	BOOL _editing;
 	BOOL _animating;
 	CFTimeInterval _minimumPressDuration;
+
+	// Gesture Compatibilty with iOS 3.x
+	BOOL _longPressRecognized;
 }
 
 @property (nonatomic, retain) IBOutlet id<CKGridViewDataSource> dataSource;

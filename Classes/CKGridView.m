@@ -7,9 +7,10 @@
 //
 
 #import "CKGridView.h"
+#import "CKCoreGraphicsAdditions.h"
+#import "CKVersion.h"
+#import "CKConstants.h"
 #import <QuartzCore/QuartzCore.h>
-#import <CloudKit/CKCoreGraphicsAdditions.h>
-#import <CloudKit/CKConstants.h>
 
 #define DEFAULT_DRAGGEDVIEW_ZOOM_SCALE 4
 
@@ -77,11 +78,18 @@
 	[self reloadData];
 }
 
+// 
+
+- (BOOL)supportsGestureRecognizers {
+	NSString *osVersion = CKOSVersion();
+	return ([osVersion hasPrefix:@"4"] || [osVersion hasPrefix:@"3.2"]);
+}
+
 //
 
 - (void)setEditing:(BOOL)edit {
 	_editing = edit;
-	if (_editing) {
+	if ([self supportsGestureRecognizers] && _editing) {
 		UILongPressGestureRecognizer *gesture = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)] autorelease];
 		gesture.minimumPressDuration = _minimumPressDuration;
 		[self addGestureRecognizer:gesture];		
@@ -174,92 +182,111 @@
 - (CGFloat)columnWidth { return self.bounds.size.width / _columns; }
 - (CGFloat)rowHeight { return self.bounds.size.height / _rows; }
 
+// Touch events handling
+
+- (void)longPressBeganAtPoint:(CGPoint)point {
+	NSIndexPath *indexPath = [self indexPathForPoint:point];
+
+	if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canEditViewAtIndexPath:)]) {
+		if ([self.dataSource gridView:self canEditViewAtIndexPath:indexPath] == NO) return;
+	}
+	else return;
+
+	if (self.draggedView == nil) {
+		self.fromIndexPath = indexPath;
+		UIView *touchedView = [self viewAtPoint:point];
+		
+		UIGraphicsBeginImageContext(touchedView.bounds.size);
+		CGContextRef gc = UIGraphicsGetCurrentContext();
+		[touchedView.layer renderInContext:gc];
+		UIImage *tmpImage = UIGraphicsGetImageFromCurrentImageContext();
+		UIGraphicsEndImageContext();
+		self.draggedView = [[[UIImageView alloc] initWithImage:tmpImage] autorelease];
+		self.draggedView.center = CGPointOffset(point, 0, -22);
+		CGRect draggedViewRect = self.draggedView.bounds;
+		draggedViewRect.size.width *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
+		draggedViewRect.size.height *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
+		[self addSubview:self.draggedView];
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:0.1];
+		self.draggedView.bounds = draggedViewRect;
+		[UIView commitAnimations];
+	}
+}
+
+- (void)longPresshMovedToPoint:(CGPoint)point {
+	if (self.draggedView == nil) return;
+	
+	NSIndexPath *indexPath = [self indexPathForPoint:point];
+
+	// Notify the delegate that the dragged view moved
+	if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:canMoveViewAtIndexPath:toPoint:)]) {
+		if ([self.delegate gridView:self canMoveViewAtIndexPath:self.fromIndexPath toPoint:point] == NO) return;
+	}
+	
+	self.draggedView.center = CGPointOffset(point, 0, -22);
+	
+	UIView *fromView = [self viewAtIndexPath:self.fromIndexPath];
+	if ((_animating == NO) && [self.fromIndexPath isEqual:indexPath] == NO) {
+		UIView *toView = [self viewAtIndexPath:indexPath];
+		if (toView && self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canMoveViewFromIndexPath:toIndexPath:)]) {
+			if ([self.dataSource gridView:self canMoveViewFromIndexPath:self.fromIndexPath toIndexPath:indexPath]) {
+				self.toIndexPath = indexPath;
+				_animating = YES;
+				[UIView beginAnimations:nil context:nil];
+				[UIView setAnimationDelegate:self];
+				[UIView setAnimationDidStopSelector:@selector(swapAnimationDidStop:finished:context:)];
+				CGRect destframe = toView.frame;
+				toView.frame = fromView.frame;
+				fromView.frame = destframe;
+				[UIView commitAnimations];
+			}
+		}			
+	}		
+}
+
+- (void)longPressEndedToPoint:(CGPoint)point {
+
+	// Notify the delegate that the dragged view moved
+	if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:didMoveViewAtIndexPath:toPoint:)]) {
+		[self.delegate gridView:self didMoveViewAtIndexPath:self.fromIndexPath toPoint:point];
+	}
+	
+	UIView *fromView = [self viewAtIndexPath:self.fromIndexPath];
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(deleteDraggedView)];
+	if (self.delegate &&
+		[(id)self.delegate respondsToSelector:@selector(gridView:shouldMoveDraggedViewToOriginFromPoint:)] &&
+		([self.delegate gridView:self shouldMoveDraggedViewToOriginFromPoint:point] == NO)) {
+		self.draggedView.alpha = 0;
+		self.draggedView.bounds = CGRectInset(self.draggedView.bounds, self.draggedView.bounds.size.width/2, self.draggedView.bounds.size.height/2);
+	}
+	else self.draggedView.frame = fromView.frame;
+	[UIView commitAnimations];
+}
+
 // Gestures
 
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)sender {
-	NSIndexPath *indexPath = [self indexPathForPoint:[sender locationInView:self]];
 
 	if (sender.state == UIGestureRecognizerStateBegan) {
-		if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canEditViewAtIndexPath:)]) {
-			if ([self.dataSource gridView:self canEditViewAtIndexPath:indexPath] == NO) return;
-		}
-		else return;
-
-		if (self.draggedView == nil) {
-			self.fromIndexPath = indexPath;
-			UIView *touchedView = [self viewAtPoint:[sender locationInView:self]];
-			
-			UIGraphicsBeginImageContext(touchedView.bounds.size);
-			CGContextRef gc = UIGraphicsGetCurrentContext();
-			[touchedView.layer renderInContext:gc];
-			UIImage *tmpImage = UIGraphicsGetImageFromCurrentImageContext();
-			UIGraphicsEndImageContext();
-			self.draggedView = [[[UIImageView alloc] initWithImage:tmpImage] autorelease];
-			CGRect draggedViewRect = self.draggedView.bounds;
-			draggedViewRect.size.width *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
-			draggedViewRect.size.height *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
-			[self addSubview:self.draggedView];
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDuration:0.1];
-			self.draggedView.bounds = draggedViewRect;
-			[UIView commitAnimations];
-		}
+		[self longPressBeganAtPoint:[sender locationInView:self]];
 	}
 
 	if (self.draggedView) {
-
-		// Notify the delegate that the dragged view moved
-		if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:canMoveViewAtIndexPath:toPoint:)]) {
-			if ([self.delegate gridView:self canMoveViewAtIndexPath:self.fromIndexPath toPoint:[sender locationInView:self]] == NO) return;
-		}
-
-		// NOTE: Retain self in case it is released in a delegate method
-		// to avoid a crash while completing the animations
-		[self retain];
-
-		self.draggedView.center = CGPointOffset([sender locationInView:self], 0, -22);
-
-		UIView *fromView = [[self viewAtIndexPath:self.fromIndexPath] retain];
-		if ((_animating == NO) && [self.fromIndexPath isEqual:indexPath] == NO) {
-			UIView *toView = [self viewAtIndexPath:indexPath];
-			if (toView && self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:canMoveViewFromIndexPath:toIndexPath:)]) {
-				if ([self.dataSource gridView:self canMoveViewFromIndexPath:self.fromIndexPath toIndexPath:indexPath]) {
-					self.toIndexPath = indexPath;
-					_animating = YES;
-					[UIView beginAnimations:nil context:nil];
-					[UIView setAnimationDelegate:self];
-					[UIView setAnimationDidStopSelector:@selector(swapAnimationDidStop:finished:context:)];
-					CGRect destframe = toView.frame;
-					toView.frame = fromView.frame;
-					fromView.frame = destframe;
-					[UIView commitAnimations];
-				}
-			}			
-		}
+		[self longPresshMovedToPoint:[sender locationInView:self]];
 		
 		if (sender.state == UIGestureRecognizerStateEnded) {
+			// NOTE: Retain self in case it is released in a delegate method
+			// to avoid a crash while completing the animations
+			[self retain];
 
-			// Notify the delegate that the dragged view moved
-			if (self.delegate && [(id)self.delegate respondsToSelector:@selector(gridView:didMoveViewAtIndexPath:toPoint:)]) {
-				[self.delegate gridView:self didMoveViewAtIndexPath:self.fromIndexPath toPoint:[sender locationInView:self]];
-			}
+			[self longPressEndedToPoint:[sender locationInView:self]];
 
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(deleteDraggedView)];
-			if (self.delegate &&
-				[(id)self.delegate respondsToSelector:@selector(gridView:shouldMoveDraggedViewToOriginFromPoint:)] &&
-				([self.delegate gridView:self shouldMoveDraggedViewToOriginFromPoint:[sender locationInView:self]] == NO)) {
-				self.draggedView.alpha = 0;
-				self.draggedView.bounds = CGRectInset(self.draggedView.bounds, self.draggedView.bounds.size.width/2, self.draggedView.bounds.size.height/2);
-			}
-			else self.draggedView.frame = fromView.frame;
-			[UIView commitAnimations];
+			// NOTE: Release self following [self retain] above
+			[self release];
 		}
-		[fromView release];
-		
-		// NOTE: Release self following [self retain] above
-		[self release];
 	}
 }
 
@@ -279,6 +306,70 @@
 	[self.draggedView removeFromSuperview];
 	self.draggedView = nil;
 	self.fromIndexPath = nil;
+}
+
+// Gesture Compatibilty with iOS 3.x
+
+- (void)recognizedLongPress:(UITouch *)touch {
+	_longPressRecognized = YES;
+	self.exclusiveTouch = YES;
+
+	// NOTE: Hack to ensure a proper behavior in a UIScrollView
+	if ([self.superview isKindOfClass:[UIScrollView class]]) {
+		[(UIScrollView *)self.superview setCanCancelContentTouches:NO];
+	}
+	// --
+
+	[self longPressBeganAtPoint:[touch locationInView:self]];
+}
+
+- (void)finishedLongPress:(UITouch *)touch {
+	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+
+	// NOTE: Hack to ensure a proper behavior in a UIScrollView
+	if ([self.superview isKindOfClass:[UIScrollView class]]) {
+		[(UIScrollView *)self.superview setCanCancelContentTouches:YES];
+	}
+	// --
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	self.exclusiveTouch = NO;
+	if (_longPressRecognized == NO) return;
+	[self longPressEndedToPoint:[touch locationInView:self]];
+	_longPressRecognized = NO;	
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	[super touchesBegan:touches withEvent:event];
+	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+
+	UITouch *touch = [touches anyObject];
+    if (([touch view] != self) || ([touch tapCount] != 1)) return;
+	if (_minimumPressDuration == 0) {
+		[self recognizedLongPress:touch];
+		return;
+	}
+	[self performSelector:@selector(recognizedLongPress:) withObject:touch afterDelay:_minimumPressDuration];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	[super touchesMoved:touches withEvent:event];
+	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+
+	if (_longPressRecognized) {
+		UITouch *touch = [touches anyObject];
+		[self longPresshMovedToPoint:[touch locationInView:self]];
+	}
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	[super touchesEnded:touches withEvent:event];
+	[self finishedLongPress:[touches anyObject]];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[super touchesCancelled:touches withEvent:event];
+	[self finishedLongPress:[touches anyObject]];
 }
 
 @end
