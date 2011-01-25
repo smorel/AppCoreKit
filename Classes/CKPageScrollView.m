@@ -40,6 +40,7 @@
 - (void)postInit {
 	self.backgroundColor = [UIColor clearColor];
 	self.scrollView = [[[UIScrollView alloc] initWithFrame:self.bounds] autorelease];
+	self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.scrollView.backgroundColor = [UIColor clearColor];
 	self.scrollView.delegate = self;
 	self.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
