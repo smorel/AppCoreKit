@@ -104,7 +104,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)setHeaders:(NSDictionary *)headers {
-	NSMutableDictionary *fields = [[theRequest allHTTPHeaderFields] mutableCopy];
+	NSMutableDictionary *fields = [[[theRequest allHTTPHeaderFields] mutableCopy] autorelease];
 	[fields addEntriesFromDictionary:headers];	
 	[theRequest setAllHTTPHeaderFields:fields];
 }
@@ -246,7 +246,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 		// TODO: Check for the encoding
 		responseValue = [[[NSString alloc] initWithData:theReceivedData encoding:NSASCIIStringEncoding] autorelease];
 	} else {
-		responseValue = [theReceivedData copy];
+		responseValue = [[theReceivedData copy] autorelease];
 	}
 	
 	// Notifies the delegate if a parsing error has occured
