@@ -28,7 +28,6 @@
 - (NSIndexPath *)indexPathForIndex:(NSInteger)index;
 - (CGPoint)pointForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point;
-- (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (UIView *)viewAtPoint:(CGPoint)point;
 - (void)deleteDraggedView;
 
@@ -73,9 +72,28 @@
     [super dealloc];
 }
 
-- (void)willMoveToWindow:(UIWindow *)newWindow {
-	[super willMoveToWindow:newWindow];
-	[self reloadData];
+-(void)layoutSubviews{
+	[super layoutSubviews];
+	
+	if ([self.views count] == 0) {
+		[self reloadData];
+	}
+	
+	if (_needsLayout) {
+		int index = 0;
+		for (int row=0 ; row<_rows ; row++) {
+			for (int column=0 ; column<_columns ; ++column, ++index) {
+				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
+				UIView *view = [self.views objectAtIndex:index];
+				if (view) {
+					CGPoint position = [self pointForIndexPath:indexPath];
+					view.frame = CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight);
+					view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+				}
+			}
+		}
+		_needsLayout = NO;
+	}
 }
 
 // 
@@ -135,15 +153,14 @@
 			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
 			UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
 			if (view) {
-				CGPoint position = [self pointForIndexPath:indexPath];
-				view.frame = CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight);
-				view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 				if ([view isDescendantOfView:self] == NO) [self addSubview:view];
 			}
 			if ([self.views containsObject:view] == NO) 
 				[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
 		}
 	}
+	_needsLayout = YES;
+	[self setNeedsLayout];
 }
 
 // Conversion methods

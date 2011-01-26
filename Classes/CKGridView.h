@@ -26,6 +26,7 @@
 	NSIndexPath *_toIndexPath;
 
 	BOOL _editing;
+	unsigned int _needsLayout:1;
 	unsigned int _animating:1;
 	CFTimeInterval _minimumPressDuration;
 
@@ -41,6 +42,7 @@
 
 - (void)reloadData;
 
+- (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point;
 
 @end
