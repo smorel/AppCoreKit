@@ -26,11 +26,12 @@
 	NSIndexPath *_toIndexPath;
 
 	BOOL _editing;
-	BOOL _animating;
+	unsigned int _animating:1;
 	CFTimeInterval _minimumPressDuration;
 
 	// Gesture Compatibilty with iOS 3.x
-	BOOL _longPressRecognized;
+	unsigned int _longPressRecognized:1;
+	NSTimeInterval _longPressStartTime;
 }
 
 @property (nonatomic, retain) IBOutlet id<CKGridViewDataSource> dataSource;

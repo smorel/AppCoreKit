@@ -117,7 +117,11 @@
 //
 
 - (void)clear {
-	for (UIView *view in self.views) [view removeFromSuperview];
+	for (id view in self.views) {
+		if ([view isKindOfClass:[UIView class]]) {
+			[(UIView *)view removeFromSuperview];
+		}
+	}
 	self.views = [NSMutableArray array];
 }
 
@@ -214,7 +218,7 @@
 	}
 }
 
-- (void)longPresshMovedToPoint:(CGPoint)point {
+- (void)longPressMovedToPoint:(CGPoint)point {
 	if (self.draggedView == nil) return;
 	
 	NSIndexPath *indexPath = [self indexPathForPoint:point];
@@ -275,7 +279,7 @@
 	}
 
 	if (self.draggedView) {
-		[self longPresshMovedToPoint:[sender locationInView:self]];
+		[self longPressMovedToPoint:[sender locationInView:self]];
 		
 		if (sender.state == UIGestureRecognizerStateEnded) {
 			// NOTE: Retain self in case it is released in a delegate method
@@ -312,7 +316,6 @@
 
 - (void)recognizedLongPress:(UITouch *)touch {
 	_longPressRecognized = YES;
-	self.exclusiveTouch = YES;
 
 	// NOTE: Hack to ensure a proper behavior in a UIScrollView
 	if ([self.superview isKindOfClass:[UIScrollView class]]) {
@@ -320,11 +323,12 @@
 	}
 	// --
 
+	_longPressStartTime = touch.timestamp;
 	[self longPressBeganAtPoint:[touch locationInView:self]];
 }
 
 - (void)finishedLongPress:(UITouch *)touch {
-	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+	_longPressRecognized = NO;
 
 	// NOTE: Hack to ensure a proper behavior in a UIScrollView
 	if ([self.superview isKindOfClass:[UIScrollView class]]) {
@@ -332,43 +336,61 @@
 	}
 	// --
 	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	self.exclusiveTouch = NO;
-	if (_longPressRecognized == NO) return;
-	[self longPressEndedToPoint:[touch locationInView:self]];
-	_longPressRecognized = NO;	
+	_longPressStartTime = touch.timestamp;
+
+	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+	
+	if (self.draggedView) {
+		[self longPressEndedToPoint:[touch locationInView:self]];
+	}
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesBegan:touches withEvent:event];
+
 	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
 
 	UITouch *touch = [touches anyObject];
     if (([touch view] != self) || ([touch tapCount] != 1)) return;
+	_longPressStartTime = touch.timestamp;
+
 	if (_minimumPressDuration == 0) {
 		[self recognizedLongPress:touch];
-		return;
 	}
-	[self performSelector:@selector(recognizedLongPress:) withObject:touch afterDelay:_minimumPressDuration];
+	else {
+		[self performSelector:@selector(recognizedLongPress:) withObject:touch afterDelay:_minimumPressDuration];
+	}
+
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesMoved:touches withEvent:event];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
 	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
 
-	if (_longPressRecognized) {
-		UITouch *touch = [touches anyObject];
-		[self longPresshMovedToPoint:[touch locationInView:self]];
+	UITouch *touch = [touches anyObject];
+	if (_longPressRecognized == NO) {
+		if ((touch.timestamp - _longPressStartTime) < _minimumPressDuration) return;
+		[self recognizedLongPress:touch];
+		return;
+	}
+	if (self.draggedView) {
+		[self longPressMovedToPoint:[touch locationInView:self]];
 	}
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesEnded:touches withEvent:event];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
 	[self finishedLongPress:[touches anyObject]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesCancelled:touches withEvent:event];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
 	[self finishedLongPress:[touches anyObject]];
 }
 
