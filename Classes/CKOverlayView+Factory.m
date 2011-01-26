@@ -30,11 +30,11 @@
 
 	view.center = contentView.center;
 	textLabel.center = contentView.center;
-	view.frame = CGRectIntegral(CGRectOffset(view.frame, 0, -10));
+	view.frame = CGRectIntegral(CGRectOffset(view.frame, 0, (text) ? -10 : 0));
 	textLabel.frame = CGRectIntegral(CGRectOffset(textLabel.frame, 0, view.frame.size.height/2 + 10));
 
 	[contentView addSubview:view];
-	[contentView addSubview:textLabel];
+	if (text) [contentView addSubview:textLabel];
 	
 	contentView.center = overlayView.contentView.center;
 	[overlayView.contentView addSubview:contentView];
