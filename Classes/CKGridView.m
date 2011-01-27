@@ -12,7 +12,7 @@
 #import "CKConstants.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define DEFAULT_DRAGGEDVIEW_ZOOM_SCALE 4
+#define DEFAULT_DRAGGEDVIEW_SCALE 2
 
 @interface CKGridView ()
 
@@ -42,6 +42,7 @@
 @synthesize minimumPressDuration = _minimumPressDuration;
 @synthesize views = _views;
 @synthesize draggedView = _draggedView;
+@synthesize draggedViewScale = _draggedViewScale;
 @synthesize fromIndexPath = _fromIndexPath;
 @synthesize toIndexPath = _toIndexPath;
 
@@ -49,6 +50,7 @@
 	self.views = [NSMutableArray array];
 	_minimumPressDuration = 0;
 	self.editing = NO;
+	self.draggedViewScale = DEFAULT_DRAGGEDVIEW_SCALE;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -87,7 +89,7 @@
 				UIView *view = [self.views objectAtIndex:index];
 				if (view) {
 					CGPoint position = [self pointForIndexPath:indexPath];
-					view.frame = CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight);
+					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
 					view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
 				}
 			}
@@ -163,15 +165,25 @@
 	[self setNeedsLayout];
 }
 
+- (NSUInteger)viewCount {
+	NSUInteger count = 0;
+	for(id object in self.views){
+		if([object isKindOfClass:[UIView class]])
+			++count;
+	}
+	return count;
+}
+
 // Conversion methods
 
 - (NSInteger)indexForIndexPath:(NSIndexPath *)indexPath {
 	return (indexPath.row * _columns) + indexPath.column;
 }
 - (NSIndexPath *)indexPathForIndex:(NSInteger)index {
-	NSInteger row = floor(index / _rows);
-	NSInteger column = index % _columns;
-	return [NSIndexPath indexPathForRow:row column:column];
+	int r = index / _columns;
+	int c = index - r * _columns;
+	NSAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
+	return [NSIndexPath indexPathForRow:r column:c];
 }
 
 - (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath {
@@ -225,8 +237,8 @@
 		self.draggedView = [[[UIImageView alloc] initWithImage:tmpImage] autorelease];
 		self.draggedView.center = CGPointOffset(point, 0, -22);
 		CGRect draggedViewRect = self.draggedView.bounds;
-		draggedViewRect.size.width *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
-		draggedViewRect.size.height *= DEFAULT_DRAGGEDVIEW_ZOOM_SCALE;
+		draggedViewRect.size.width *= self.draggedViewScale;
+		draggedViewRect.size.height *= self.draggedViewScale;
 		[self addSubview:self.draggedView];
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.1];
@@ -365,7 +377,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesBegan:touches withEvent:event];
 
-	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+	if ((_editing == NO) || [self supportsGestureRecognizers]) return;
 
 	UITouch *touch = [touches anyObject];
     if (([touch view] != self) || ([touch tapCount] != 1)) return;
@@ -384,7 +396,7 @@
 	[super touchesMoved:touches withEvent:event];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
-	if ([self supportsGestureRecognizers] || (_editing == NO)) return;
+	if ((_editing == NO) || [self supportsGestureRecognizers]) return;
 
 	UITouch *touch = [touches anyObject];
 	if (_longPressRecognized == NO) {
@@ -401,12 +413,16 @@
 	[super touchesEnded:touches withEvent:event];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 
+	if ((_editing == NO) || [self supportsGestureRecognizers]) return;
+
 	[self finishedLongPress:[touches anyObject]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	[super touchesCancelled:touches withEvent:event];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+
+	if ((_editing == NO) || [self supportsGestureRecognizers]) return;
 
 	[self finishedLongPress:[touches anyObject]];
 }

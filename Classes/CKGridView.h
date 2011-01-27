@@ -22,6 +22,7 @@
 	NSMutableArray *_views;
 
 	UIView *_draggedView;
+	CGFloat _draggedViewScale;
 	NSIndexPath *_fromIndexPath;
 	NSIndexPath *_toIndexPath;
 
@@ -37,8 +38,10 @@
 
 @property (nonatomic, retain) IBOutlet id<CKGridViewDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<CKGridViewDelegate> delegate;
+@property (nonatomic, readonly) NSUInteger viewCount;
 @property (nonatomic, assign, getter=isEditing) BOOL editing;
 @property (nonatomic, assign) CFTimeInterval minimumPressDuration;
+@property (nonatomic, assign) CGFloat draggedViewScale;
 
 - (void)reloadData;
 
