@@ -34,6 +34,7 @@
 		self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 		[self addSubview:self.imageView];
+		
     }
     return self;
 }
@@ -49,11 +50,16 @@
 
 #pragma mark Public API
 
+- (void)setImageURL:(NSURL *)url {
+	[self loadImageWithContentOfURL:url];
+}
+
 - (void)loadImageWithContentOfURL:(NSURL *)url {
 	if (self.image && [self.imageURL isEqual:url] && (self.image != self.defaultImage))
 		return;
 
-	self.imageURL = url;
+	[_imageURL release];
+	_imageURL = [url retain];
 	[self reload];
 }
 
