@@ -45,6 +45,8 @@
 @synthesize draggedViewScale = _draggedViewScale;
 @synthesize fromIndexPath = _fromIndexPath;
 @synthesize toIndexPath = _toIndexPath;
+@synthesize rows = _rows;
+@synthesize columns = _columns;
 
 - (void)postInit {
 	self.views = [NSMutableArray array];
