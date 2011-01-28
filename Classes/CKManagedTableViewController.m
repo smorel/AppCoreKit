@@ -208,6 +208,18 @@
 	[cellController release];
 }
 
+// FIXME: The table should watch the section for insertion/deletion instead
+- (void)insertCellController:(CKTableViewCellController*)cellController atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex{
+	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
+	[section insertCellController:cellController atIndex:index];
+	[cellController performSelector:@selector(setParentController:) withObject:self];
+	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (CKTableSection *)sectionAtIndex:(NSUInteger)index {
+	return [_sections objectAtIndex:index];
+}
+
 #pragma mark UITableView Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
