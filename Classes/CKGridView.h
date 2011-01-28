@@ -49,6 +49,7 @@
 
 - (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point;
+- (NSIndexPath *)indexPathForIndex:(NSInteger)index;
 
 @end
 

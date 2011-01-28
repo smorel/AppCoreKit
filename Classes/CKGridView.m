@@ -25,7 +25,6 @@
 @property (nonatomic, readonly) CGFloat rowHeight;
 
 - (NSInteger)indexForIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *)indexPathForIndex:(NSInteger)index;
 - (CGPoint)pointForIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point;
 - (UIView *)viewAtPoint:(CGPoint)point;
@@ -89,7 +88,7 @@
 			for (int column=0 ; column<_columns ; ++column, ++index) {
 				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
 				UIView *view = [self.views objectAtIndex:index];
-				if (view) {
+				if (view && [view isKindOfClass:[UIView class]]) {
 					CGPoint position = [self pointForIndexPath:indexPath];
 					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
 					view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
