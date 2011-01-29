@@ -13,7 +13,7 @@
 
 @interface CKImageLoader ()
 
-@property (nonatomic, retain) CKWebRequest *request;
+@property (nonatomic, retain) CKWebRequest2 *request;
 @property (nonatomic, retain) NSURL *imageURL;
 @property (nonatomic, readonly) NSString *resizedImageCacheKey;
 @property (nonatomic, readonly) BOOL hasSize;
@@ -103,7 +103,7 @@
 		return;
 	}
 	
-	self.request = [CKWebRequest requestWithURL:self.imageURL];
+	self.request = [CKWebRequest2 requestWithURL:self.imageURL];
 	self.request.delegate = self;
 	[self.request start];
 }

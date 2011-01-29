@@ -8,12 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CKWebRequest.h"
-
+#import "CKWebRequest2.h"
 
 @interface CKImageLoader : NSObject <CKWebRequestDelegate> {
 	id _delegate;
-	CKWebRequest *_request;
+	CKWebRequest2 *_request;
 	NSURL *_imageURL;
 	CGSize _imageSize;
 	BOOL _aspectFill;
