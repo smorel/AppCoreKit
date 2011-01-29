@@ -170,7 +170,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
 	[theConnection cancel];
-	[theConnection release];
+	//[theConnection release];
 	[self markAsCancelled];
 }
 
