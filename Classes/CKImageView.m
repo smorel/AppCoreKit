@@ -28,13 +28,22 @@
 @synthesize delegate = _delegate;
 @synthesize imageView = _imageView;
 
+- (void)postInit{
+	_imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+	self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+	[self addSubview:self.imageView];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder{
+	[super initWithCoder:decoder];
+	[self postInit];
+	return self;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-		_imageView = [[UIImageView alloc] initWithFrame:frame];
-		self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-		[self addSubview:self.imageView];
-		
+		[self postInit];
     }
     return self;
 }
