@@ -81,7 +81,7 @@
 	if ([self.views count] == 0) {
 		[self reloadData];
 	}
-	
+
 	if (_needsLayout) {
 		int index = 0;
 		for (int row=0 ; row<_rows ; row++) {
@@ -91,7 +91,7 @@
 				if (view && [view isKindOfClass:[UIView class]]) {
 					CGPoint position = [self pointForIndexPath:indexPath];
 					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
-					view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+					view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
 				}
 			}
 		}
@@ -220,8 +220,8 @@
 
 // Dimensions
 
-- (CGFloat)columnWidth { return self.bounds.size.width / _columns; }
-- (CGFloat)rowHeight { return self.bounds.size.height / _rows; }
+- (CGFloat)columnWidth { return (float)self.bounds.size.width / (float)_columns; }
+- (CGFloat)rowHeight { return (float)self.bounds.size.height / (float)_rows; }
 
 // Touch events handling
 
