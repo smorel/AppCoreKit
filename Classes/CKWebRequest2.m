@@ -142,6 +142,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)start {
+	// TODO: Prevent the request from being started twice.
+	
 	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
 	
 	if ([self isCancelled])
@@ -170,7 +172,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
 	[theConnection cancel];
-	//[theConnection release];
 	[self markAsCancelled];
 }
 
@@ -191,7 +192,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-//	CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
+	//CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
 	
 	// Append the new available data
 	// TODO: provide an delegate to notify for the progress of the URL loading
@@ -203,7 +204,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-//	CKDebugLog(@"didFinishLoading");
+//	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
 	
 	if ([theResponse statusCode] > 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
@@ -295,6 +296,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)markAsExecuting {
+	if (executing) return;
+	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = YES;
 	[self didChangeValueForKey:@"isExecuting"];
@@ -311,6 +314,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)markAsFinished {
+	if (finished) return;
+	
 	[self willChangeValueForKey:@"isFinished"];
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = NO;
