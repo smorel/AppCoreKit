@@ -7,6 +7,7 @@
 //
 
 #import "CKView.h"
+#import <CloudKit/CKConstants.h>
 
 @implementation CKUIViewBinderTemplate
 
@@ -146,8 +147,14 @@
 	}
 	
 	self.subView = viewTemplate.viewCreationBlock();
-	self.subView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	self.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+	self.subView.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
 	[self addSubview:self.subView];
+}
+
+- (void)layoutSubviews{
+	[super layoutSubviews];
+	self.subView.frame = self.bounds;
 }
 
 @end
