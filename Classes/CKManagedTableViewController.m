@@ -245,7 +245,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [[self cellControllerForIndexPath:indexPath] heightForRow];
+	CGFloat height = [[self cellControllerForIndexPath:indexPath] heightForRow];
+	return (height == 0) ? tableView.rowHeight : height;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {

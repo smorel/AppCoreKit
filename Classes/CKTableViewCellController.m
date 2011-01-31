@@ -31,7 +31,7 @@
 	self = [super init];
 	if (self != nil) {
 		_selectable = YES;
-		self.rowHeight = 44.0f;
+		self.rowHeight = 0.0f;
 		self.editable = YES;
 	}
 	return self;
