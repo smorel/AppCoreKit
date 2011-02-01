@@ -1510,7 +1510,7 @@
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
