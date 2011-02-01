@@ -108,6 +108,14 @@
 	return self.imageView.image;
 }
 
+- (void)setImageViewContentMode:(UIViewContentMode)theContentMode {
+	self.imageView.contentMode = theContentMode;
+}
+
+- (UIViewContentMode)imageViewContentMode {
+	return self.imageView.contentMode;
+}
+
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
