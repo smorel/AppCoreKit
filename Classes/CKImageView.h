@@ -31,6 +31,7 @@
 @property (nonatomic, retain, readonly) NSURL *imageURL;
 @property (nonatomic, retain, readwrite) UIImage *defaultImage;
 @property (nonatomic, retain, readonly) UIImage *image;
+@property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
 @property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
