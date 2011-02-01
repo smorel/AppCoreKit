@@ -146,6 +146,20 @@
 	self.views = [NSMutableArray array];
 }
 
+
+- (void)insertViewAtIndexPath:(NSIndexPath*)indexPath{
+	UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
+	if (view) {
+		if ([view isDescendantOfView:self] == NO) [self addSubview:view];
+	}
+	if ([self.views containsObject:view] == NO) {
+		[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
+	}
+	
+	_needsLayout = YES;
+	[self setNeedsLayout];
+}
+
 - (void)reloadData {
 	[self clear];
 	_rows = [self.dataSource numberOfRowsForGridView:self];
@@ -154,16 +168,9 @@
 	for (int row=0 ; row<_rows ; row++) {
 		for (int column=0 ; column<_columns ; column++) {
 			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
-			UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
-			if (view) {
-				if ([view isDescendantOfView:self] == NO) [self addSubview:view];
-			}
-			if ([self.views containsObject:view] == NO) 
-				[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
+			[self insertViewAtIndexPath:indexPath];
 		}
 	}
-	_needsLayout = YES;
-	[self setNeedsLayout];
 }
 
 - (NSUInteger)viewCount {
