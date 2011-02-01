@@ -250,6 +250,22 @@
 		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
 		71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */; };
+		75A2A2FE12F7F2DD00E71451 /* CKFeedSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A2FF12F7F2DD00E71451 /* CKFeedSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */; };
+		75A2A30012F7F2DD00E71451 /* CKWebSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A30112F7F2DD00E71451 /* CKWebSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A2FD12F7F2DD00E71451 /* CKWebSource.m */; };
+		75A2A30F12F7F31000E71451 /* CKNSObject+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30312F7F31000E71451 /* CKNSObject+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31012F7F31000E71451 /* CKNSObject+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30412F7F31000E71451 /* CKNSObject+Introspection.m */; };
+		75A2A31112F7F31000E71451 /* CKSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30512F7F31000E71451 /* CKSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31212F7F31000E71451 /* CKSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30612F7F31000E71451 /* CKSignal.m */; };
+		75A2A31312F7F31000E71451 /* CKUIControlActionBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30712F7F31000E71451 /* CKUIControlActionBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31412F7F31000E71451 /* CKUIControlActionBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30812F7F31000E71451 /* CKUIControlActionBlockBinder.m */; };
+		75A2A31512F7F31000E71451 /* CKUIViewDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30912F7F31000E71451 /* CKUIViewDataBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31612F7F31000E71451 /* CKUIViewDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30A12F7F31000E71451 /* CKUIViewDataBinder.m */; };
+		75A2A31712F7F31000E71451 /* CKValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30B12F7F31000E71451 /* CKValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31812F7F31000E71451 /* CKValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30C12F7F31000E71451 /* CKValueTransformer.m */; };
+		75A2A31912F7F31000E71451 /* CKView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30D12F7F31000E71451 /* CKView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
 		8566B72112F079E900277972 /* CKUIView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8566B71F12F079E900277972 /* CKUIView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8566B72212F079E900277972 /* CKUIView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8566B72012F079E900277972 /* CKUIView+Factory.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -503,6 +519,22 @@
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIColorAdditions.m; sourceTree = "<group>"; };
 		71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
 		71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
+		75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedSource.h; sourceTree = "<group>"; };
+		75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedSource.m; sourceTree = "<group>"; };
+		75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebSource.h; sourceTree = "<group>"; };
+		75A2A2FD12F7F2DD00E71451 /* CKWebSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebSource.m; sourceTree = "<group>"; };
+		75A2A30312F7F31000E71451 /* CKNSObject+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSObject+Introspection.h"; sourceTree = "<group>"; };
+		75A2A30412F7F31000E71451 /* CKNSObject+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSObject+Introspection.m"; sourceTree = "<group>"; };
+		75A2A30512F7F31000E71451 /* CKSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSignal.h; sourceTree = "<group>"; };
+		75A2A30612F7F31000E71451 /* CKSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSignal.m; sourceTree = "<group>"; };
+		75A2A30712F7F31000E71451 /* CKUIControlActionBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIControlActionBlockBinder.h; sourceTree = "<group>"; };
+		75A2A30812F7F31000E71451 /* CKUIControlActionBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIControlActionBlockBinder.m; sourceTree = "<group>"; };
+		75A2A30912F7F31000E71451 /* CKUIViewDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIViewDataBinder.h; sourceTree = "<group>"; };
+		75A2A30A12F7F31000E71451 /* CKUIViewDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIViewDataBinder.m; sourceTree = "<group>"; };
+		75A2A30B12F7F31000E71451 /* CKValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKValueTransformer.h; sourceTree = "<group>"; };
+		75A2A30C12F7F31000E71451 /* CKValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKValueTransformer.m; sourceTree = "<group>"; };
+		75A2A30D12F7F31000E71451 /* CKView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKView.h; sourceTree = "<group>"; };
+		75A2A30E12F7F31000E71451 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKView.m; sourceTree = "<group>"; };
 		8566B71F12F079E900277972 /* CKUIView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Factory.h"; sourceTree = "<group>"; };
 		8566B72012F079E900277972 /* CKUIView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Factory.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -654,6 +686,10 @@
 		710DF0F810FFBB820063FB2C /* WebService */ = {
 			isa = PBXGroup;
 			children = (
+				75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */,
+				75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */,
+				75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */,
+				75A2A2FD12F7F2DD00E71451 /* CKWebSource.m */,
 				71993A5111F8C53D0056EC2C /* CKMultipartParser.m */,
 				71993A5211F8C53D0056EC2C /* CKMultipartParser.h */,
 				710DF10E10FFBC030063FB2C /* CKWebRequest.h */,
@@ -777,6 +813,18 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				75A2A30312F7F31000E71451 /* CKNSObject+Introspection.h */,
+				75A2A30412F7F31000E71451 /* CKNSObject+Introspection.m */,
+				75A2A30512F7F31000E71451 /* CKSignal.h */,
+				75A2A30612F7F31000E71451 /* CKSignal.m */,
+				75A2A30712F7F31000E71451 /* CKUIControlActionBlockBinder.h */,
+				75A2A30812F7F31000E71451 /* CKUIControlActionBlockBinder.m */,
+				75A2A30912F7F31000E71451 /* CKUIViewDataBinder.h */,
+				75A2A30A12F7F31000E71451 /* CKUIViewDataBinder.m */,
+				75A2A30B12F7F31000E71451 /* CKValueTransformer.h */,
+				75A2A30C12F7F31000E71451 /* CKValueTransformer.m */,
+				75A2A30D12F7F31000E71451 /* CKView.h */,
+				75A2A30E12F7F31000E71451 /* CKView.m */,
 				7119A72312E64B6C003A46B0 /* CKVersion.m */,
 				7119A72412E64B6C003A46B0 /* CKVersion.h */,
 				7119A72512E64B6C003A46B0 /* CKHost.m */,
@@ -1121,6 +1169,14 @@
 				8566B72112F079E900277972 /* CKUIView+Factory.h in Headers */,
 				4F9B493F12EA5103001AA996 /* CKGridView.h in Headers */,
 				4F9B495112EA5183001AA996 /* CKPageScrollView.h in Headers */,
+				75A2A2FE12F7F2DD00E71451 /* CKFeedSource.h in Headers */,
+				75A2A30012F7F2DD00E71451 /* CKWebSource.h in Headers */,
+				75A2A30F12F7F31000E71451 /* CKNSObject+Introspection.h in Headers */,
+				75A2A31112F7F31000E71451 /* CKSignal.h in Headers */,
+				75A2A31312F7F31000E71451 /* CKUIControlActionBlockBinder.h in Headers */,
+				75A2A31512F7F31000E71451 /* CKUIViewDataBinder.h in Headers */,
+				75A2A31712F7F31000E71451 /* CKValueTransformer.h in Headers */,
+				75A2A31912F7F31000E71451 /* CKView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1351,6 +1407,14 @@
 				4F9B494012EA5103001AA996 /* CKGridView.m in Sources */,
 				4F9B494112EA5103001AA996 /* CKGridView+NSIndexPath.m in Sources */,
 				4F9B495212EA5183001AA996 /* CKPageScrollView.m in Sources */,
+				75A2A2FF12F7F2DD00E71451 /* CKFeedSource.m in Sources */,
+				75A2A30112F7F2DD00E71451 /* CKWebSource.m in Sources */,
+				75A2A31012F7F31000E71451 /* CKNSObject+Introspection.m in Sources */,
+				75A2A31212F7F31000E71451 /* CKSignal.m in Sources */,
+				75A2A31412F7F31000E71451 /* CKUIControlActionBlockBinder.m in Sources */,
+				75A2A31612F7F31000E71451 /* CKUIViewDataBinder.m in Sources */,
+				75A2A31812F7F31000E71451 /* CKValueTransformer.m in Sources */,
+				75A2A31A12F7F31000E71451 /* CKView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
