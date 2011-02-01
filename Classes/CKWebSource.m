@@ -41,11 +41,13 @@
 	self.request = _requestBlock(NSMakeRange(_currentIndex, batchSize));
 	//[_requestBlock release];
 	
-	self.request.delegate = self;
-	[self.request start];
-	_fetching = YES;
-	
-	return YES;
+	if(self.request){
+		self.request.delegate = self;
+		[self.request start];
+		_fetching = YES;
+		return YES;
+	}
+	return NO;
 }
 
 - (void)cancelFetch {
