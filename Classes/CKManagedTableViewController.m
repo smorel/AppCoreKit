@@ -27,6 +27,7 @@
 		_cellControllers = [[NSMutableArray array] retain];
 		_canMoveRowsIn = YES;
 		_canMoveRowsOut = YES;
+		
 	}
 	return self;
 }
@@ -71,14 +72,17 @@
 @synthesize managedTableViewDelegate = _managedTableViewDelegate;
 @synthesize sections = _sections;
 @synthesize pValuesForKeys = _valuesForKeys;
+@synthesize orientation = _orientation;
 
 - (void)awakeFromNib {
 	self.style = UITableViewStyleGrouped;
+	_orientation = CKManagedTableViewOrientationVertical;
 }
 
 - (id)init {
     if (self = [super init]) {
 		self.style = UITableViewStyleGrouped;
+		_orientation = CKManagedTableViewOrientationVertical;
     }
     return self;
 }
@@ -230,6 +234,11 @@
 	return [[[self.sections objectAtIndex:section] cellControllers] count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	CGFloat height = [[self cellControllerForIndexPath:indexPath] heightForRow];
+	return (height == 0) ? tableView.rowHeight : height;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableViewCellController *controller = [self cellControllerForIndexPath:indexPath];
 	NSString *identifier = controller.identifier;
@@ -238,16 +247,19 @@
 	if (theCell == nil) {
 		theCell = [controller loadCell];
 	}
+	
+	//TODO
+	//We have to see how to resize the tableView to fit correctly in the right side ...
+	//for instance we have to disable the resizing masks on the table view and set its size for the wanted orientation in the nib ...
+	UIView *rotatedView	= theCell.contentView;
+	if (_orientation == CKManagedTableViewOrientationHorizontal) {
+		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
+	}
 
 	[controller setupCell:theCell];	
-
 	return theCell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = [[self cellControllerForIndexPath:indexPath] heightForRow];
-	return (height == 0) ? tableView.rowHeight : height;
-}
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	return [[self cellControllerForIndexPath:indexPath] willSelectRow];
@@ -431,5 +443,18 @@
 	self.tableView.frame = tableViewFrame;
 	[UIView commitAnimations];
 }
+
+
+#pragma mark Orientation Management
+
+- (void)setOrientation:(CKManagedTableViewOrientation)orientation {
+	_orientation = orientation;
+	if(orientation == CKManagedTableViewOrientationHorizontal) {
+		self.tableView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+	} else {
+		self.tableView.transform = CGAffineTransformIdentity;
+	}
+}
+
 
 @end

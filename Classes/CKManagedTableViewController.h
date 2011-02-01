@@ -35,16 +35,25 @@
 
 @end
 
+
+
+typedef enum {
+	CKManagedTableViewOrientationHorizontal,
+	CKManagedTableViewOrientationVertical
+}CKManagedTableViewOrientation;
+
 //
 
 @interface CKManagedTableViewController : CKTableViewController <UIScrollViewDelegate> {
 	id _managedTableViewDelegate;
 	NSMutableArray *_sections;
 	NSMutableDictionary *_valuesForKeys;
+	CKManagedTableViewOrientation _orientation;
 }
 
 @property (nonatomic, assign) id managedTableViewDelegate;
 @property (nonatomic, readonly) NSDictionary *valuesForKeys;
+@property (nonatomic, assign, readwrite) CKManagedTableViewOrientation orientation;
 
 - (void)setup;
 - (void)clear;
