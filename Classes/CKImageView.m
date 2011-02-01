@@ -50,7 +50,8 @@
 
 - (void)dealloc {
 	[self cancel];
-	self.imageURL = nil;
+	[_imageURL release];
+	_imageURL = nil;
 	self.defaultImage = nil;
 	self.delegate = nil;
 	self.imageView = nil;
