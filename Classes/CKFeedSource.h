@@ -25,7 +25,6 @@
 - (BOOL)fetchNextItems:(NSUInteger)batchSize;
 - (void)cancelFetch;
 - (void)reset;
-- (void)addItems:(NSArray *)theItems;
 
 @end
 
