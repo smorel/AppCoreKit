@@ -17,6 +17,12 @@
 @synthesize isObject;
 @synthesize isSelector;
 
+- (void)dealloc{
+	self.name = nil;
+	self.attributes = nil;
+	[super dealloc];
+}
+
 - (NSString*) description{
 	return [NSString stringWithFormat:@"%@",name];
 }
@@ -56,7 +62,7 @@
 
 @end
 
-static const char *getPropertyType(objc_property_t property) {
+static NSString* getPropertyType(objc_property_t property) {
 	if(property){
 		const char *attributes = property_getAttributes(property);
 		char buffer[1 + strlen(attributes)];
@@ -65,14 +71,12 @@ static const char *getPropertyType(objc_property_t property) {
 		while ((attribute = strsep(&state, ",")) != NULL) {
 			if(strlen(attribute) > 4){
 				if (attribute[0] == 'T' && attribute[1] == '@') {
-					//ca ca chie !!!!
-					NSString* type = [[NSString stringWithUTF8String:attribute] substringWithRange: NSMakeRange (3, strlen(attribute)-4)];
-					return [type UTF8String];
+					return [[NSString stringWithUTF8String:attribute] substringWithRange: NSMakeRange(3, strlen(attribute)-4)];
 				}
 			}
 		}
 	}
-    return "";
+    return @"";
 }
 
 /* Default predicate helpers
@@ -153,8 +157,8 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 		objectProperty.isObject = [objectProperty.attributes hasPrefix:@"T@"];
 		objectProperty.isSelector = [objectProperty.attributes hasPrefix:@"T:"];
 		
-		const char *propType = getPropertyType(descriptor);
-		Class returnType = NSClassFromString([NSString stringWithCString:propType encoding:NSASCIIStringEncoding ]);
+		NSString *propType = getPropertyType(descriptor);
+		Class returnType = NSClassFromString(propType);
 		objectProperty.type = returnType;
 		return objectProperty;
 	}
