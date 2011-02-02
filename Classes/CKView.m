@@ -9,80 +9,12 @@
 #import "CKView.h"
 #import <CloudKit/CKConstants.h>
 
-@implementation CKUIViewBinderTemplate
-
-- (id)createBinderForView:(UIView*)view withTarget:(id)target{
-	NSAssert(NO,@"Not Implemented");
-	return nil;
-}
-
-@end;
-
-@implementation CKUIViewDataBinderTemplate
-@synthesize targetKeyPath;
-@synthesize viewTag;
-@synthesize keyPath;
-
-+(CKUIViewDataBinderTemplate*)templateForViewTag:(int)viewTag viewKeyPath:(NSString*)viewKeyPath targetKeyPath:(NSString*)targetKeyPath{
-	CKUIViewDataBinderTemplate* template = [[[CKUIViewDataBinderTemplate alloc]init]autorelease];
-	template.targetKeyPath = targetKeyPath;
-	template.viewTag = viewTag;
-	template.keyPath = viewKeyPath;
-	return template;
-}
-
-
-- (id)createBinderForView:(UIView*)view withTarget:(id)target{
-	CKUIViewDataBinder* binder = [[[CKUIViewDataBinder alloc]init]autorelease];
-	binder.viewTag = [NSNumber numberWithInt:self.viewTag];
-	binder.keyPath = self.keyPath;
-	binder.targetKeyPath = self.targetKeyPath;
-	binder.target = target;
-	[binder bindViewInView:view];
-	return binder;
-}
-
-@end
-
-
-@implementation CKUIControlActionBlockBinderTemplate
-@synthesize actionBlockBuilder;
-@synthesize viewTag;
-@synthesize controlEvents;
-
--(void)dealloc{
-	self.actionBlockBuilder = nil;
-	[super dealloc];
-}
-
-+(CKUIControlActionBlockBinderTemplate*)templateForViewTag:(int)viewTag forControlEvents:(UIControlEvents)controlEvents actionBlockBuilder:(CKUIControlActionBlockBuilder)actionBlockBuilder{
-	CKUIControlActionBlockBinderTemplate* template = [[[CKUIControlActionBlockBinderTemplate alloc]init]autorelease];
-	template.actionBlockBuilder = actionBlockBuilder;
-	template.viewTag = viewTag;
-	template.controlEvents = controlEvents;
-	return template;
-}
-
-
-- (id)createBinderForView:(UIView*)view withTarget:(id)target{
-	CKUIControlActionBlockBinder* binder = [[[CKUIControlActionBlockBinder alloc]init]autorelease];
-	binder.viewTag = [NSNumber numberWithInt:self.viewTag];
-	CKUIControlActionBlock block = self.actionBlockBuilder(target);
-	binder.actionBlock = block;
-	binder.controllEvents = self.controlEvents;
-	[binder bindControlInView:view];
-	return binder;
-}
-
-@end
-
-
 @implementation CKViewTemplate
 @synthesize viewCreationBlock;
-@synthesize bindingTemplates;
+@synthesize viewSetupBlock;
 
 -(void)dealloc{
-	self.bindingTemplates = nil;
+	self.viewSetupBlock = nil;
 	self.viewCreationBlock = nil;
 	[super dealloc];
 }
@@ -109,35 +41,16 @@
 	[super dealloc];
 }
 
--(void)unbind{
-	self.internal = nil;
-}
-
 -(void)setViewTemplate:(CKViewTemplate*)template{
 	[viewTemplate release];
 	viewTemplate = [template retain];
-	//[template release];
 	
-	[self unbind];
+	self.internal = nil;//delete previous setup objects
 	[self createInternalView];
 }
 
 -(void)bind:(id)object{
-	[self unbind];
-	
-	NSMutableArray* ar = [[NSMutableArray alloc]init];
-	self.internal = ar;
-	[ar release];
-	
-	//Generate bindings between view controls and data to the model and execution blocks
-	for(id binderTemplate in viewTemplate.bindingTemplates){
-		if([binderTemplate isKindOfClass:[CKUIViewBinderTemplate class]]){
-			if([binderTemplate respondsToSelector:@selector(createBinderForView:withTarget:)]){
-				id binder = [binderTemplate createBinderForView:self withTarget:object];
-				[internal addObject:binder];
-			}
-		}
-	}
+	self.internal = viewTemplate.viewSetupBlock(self.subView,object);
 }
 
 -(void)createInternalView{

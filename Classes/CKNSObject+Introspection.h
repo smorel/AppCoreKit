@@ -46,6 +46,7 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll();
 - (SEL)typeCheckSelectorForProperty : (NSString*)propertyName;
 - (SEL)setSelectorForProperty : (NSString*)propertyName;
 
-+(CKObjectProperty*) property:(Class)c name:(NSString*)name;
++(CKObjectProperty*) property:(Class)c forKey:(NSString*)name;
++(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath;
 
 @end

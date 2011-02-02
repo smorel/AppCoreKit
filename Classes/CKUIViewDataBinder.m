@@ -23,13 +23,14 @@
 @synthesize target;
 @synthesize targetKeyPath;
 @synthesize view;
-@synthesize controllEvents;
+@synthesize controlEvents;
 
 #pragma mark Initialization
 
 -(id)init{
 	[super init];
-	controllEvents = UIControlEventValueChanged;
+	controlEvents = UIControlEventValueChanged;
+	viewTag = -1;
 	return self;
 }
 
@@ -42,12 +43,39 @@
 	return [NSString stringWithFormat:@"CKUIViewDataBinder count=%d %@ %@",[self retainCount],target,targetKeyPath];
 }
 
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+						   target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+						   target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:viewTag keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:controlEvents target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	CKUIViewDataBinder* binder = [[[CKUIViewDataBinder alloc]init]autorelease];
+	binder.viewTag = viewTag;
+	binder.keyPath = keyPath;
+	binder.controlEvents = controlEvents;
+	binder.target = target;
+	binder.targetKeyPath = targetKeyPath;
+	[binder bindViewInView:view];
+	return binder;
+}
+
 #pragma mark Private API
 
 -(void)unbind{
 	if(self.view && [self.view isKindOfClass:[UIControl class]]){
 		UIControl* control = (UIControl*)self.view;
-		[control removeTarget:self action:@selector(controlChange) forControlEvents:controllEvents];
+		[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 		[target removeObserver:self forKeyPath:targetKeyPath];
 	}
 	
@@ -57,7 +85,7 @@
 
 //Update data in model
 -(void)controlChange{
-	id subView = [self.view viewWithTag:[viewTag intValue]];
+	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view ;
 	if(!subView){
 		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
 	}
@@ -79,14 +107,14 @@
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 	
-	id subView = [self.view viewWithTag:[viewTag intValue]];
+	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
 	if(!subView){
 		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
 	}
 	else{
 		id subViewValue = [subView valueForKeyPath:keyPath];
 		if(![newValue isEqual:subViewValue]){
-			CKObjectProperty* propertyDescriptor = [NSObject property:[subView class] name:keyPath];
+			CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
 			[subView setValue:[CKValueTransformer transformValue:newValue toClass:propertyDescriptor.type] forKeyPath:keyPath];
 		}
 	}
@@ -98,19 +126,19 @@
 	[self unbind];
 	self.view = theView;
 	
-	id subView = [self.view viewWithTag:[viewTag intValue]];
+	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
 	if(!subView){
 		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
 	}
 	
 	id dataValue = [target valueForKeyPath:targetKeyPath];
 	
-	CKObjectProperty* propertyDescriptor = [NSObject property:[subView class] name:keyPath];
+	CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
 	[subView setValue:[CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type] forKeyPath:keyPath];
 	
 	if([subView isKindOfClass:[UIControl class]]){
 		UIControl* control = (UIControl*)subView;
-		[control addTarget:self action:@selector(controlChange) forControlEvents:controllEvents];
+		[control addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 	}
 	
 	[target addObserver:self

@@ -7,7 +7,7 @@
 //
 
 @interface CKUIViewDataBinder : NSObject{
-	NSNumber* viewTag;
+	NSInteger viewTag;
 	NSString* keyPath;
 	UIControlEvents controlEvents;
 	
@@ -18,11 +18,24 @@
 	UIView* view;
 }
 
-@property (nonatomic, retain) NSNumber *viewTag;
+@property (nonatomic, assign) NSInteger viewTag;
 @property (nonatomic, retain) NSString *keyPath;
 @property (nonatomic, retain) id target;
 @property (nonatomic, retain) NSString *targetKeyPath;
-@property (nonatomic, assign) UIControlEvents controllEvents;
+@property (nonatomic, assign) UIControlEvents controlEvents;
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath;
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath;
+
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+						   target:(id)target targetKeyPath:(NSString*)targetKeyPath;
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+						   target:(id)target targetKeyPath:(NSString*)targetKeyPath;
 
 -(void)bindViewInView:(UIView*)theView;
 

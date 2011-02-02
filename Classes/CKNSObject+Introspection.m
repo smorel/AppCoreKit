@@ -161,7 +161,19 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	return nil;
 }
 
-+(CKObjectProperty*) property:(Class)c name:(NSString*)name{
++(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath{
+	id subObject = object;
+	
+	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+	for(int i=0;i<[ar count]-1;++i){
+		NSString* path = [ar objectAtIndex:i];
+		subObject = [subObject valueForKey:path];
+	}
+	NSAssert(subObject,@"unable to find property %@ in %@",keyPath,object);
+	return [self property:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+}
+
++(CKObjectProperty*) property:(Class)c forKey:(NSString*)name{
 	objc_property_t property = class_getProperty(c, [name UTF8String]);
 	return [NSObject propertyForDescriptor:property];
 }

@@ -10,16 +10,28 @@ typedef void(^CKUIControlActionBlock)();
 
 
 @interface CKUIControlActionBlockBinder : NSObject{
-	NSNumber* viewTag;
+	NSInteger viewTag;
+	NSString* keyPath;
 	UIControlEvents controlEvents;
 	CKUIControlActionBlock actionBlock;
 	
 	UIControl* control;
 }
 
-@property (nonatomic, retain) NSNumber *viewTag;
-@property (nonatomic, assign) UIControlEvents controllEvents;
+@property (nonatomic, assign) NSInteger viewTag;
+@property (nonatomic, assign) UIControlEvents controlEvents;
 @property (nonatomic, retain) CKUIControlActionBlock actionBlock;
+@property (nonatomic, retain) NSString *keyPath;
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag keyPath:(NSString*)keyPath 
+											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock;
+
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag
+											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock;
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock;
 
 -(void)bindControlInView:(UIView*)controlView;
 
