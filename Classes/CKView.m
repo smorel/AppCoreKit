@@ -50,7 +50,9 @@
 }
 
 -(void)bind:(id)object{
-	self.internal = viewTemplate.viewSetupBlock(self.subView,object);
+	if(viewTemplate){
+		self.internal = viewTemplate.viewSetupBlock(self.subView,object);
+	}
 }
 
 -(void)createInternalView{
@@ -59,10 +61,12 @@
 		self.subView = nil;
 	}
 	
-	self.subView = viewTemplate.viewCreationBlock();
-	self.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
-	self.subView.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
-	[self addSubview:self.subView];
+	if(viewTemplate){
+		self.subView = viewTemplate.viewCreationBlock();
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+		self.subView.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+		[self addSubview:self.subView];
+	}
 }
 
 - (void)layoutSubviews{
