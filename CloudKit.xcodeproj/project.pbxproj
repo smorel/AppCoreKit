@@ -266,6 +266,8 @@
 		75A2A31812F7F31000E71451 /* CKValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30C12F7F31000E71451 /* CKValueTransformer.m */; };
 		75A2A31912F7F31000E71451 /* CKView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A30D12F7F31000E71451 /* CKView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
+		75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */; };
 		8566B72112F079E900277972 /* CKUIView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8566B71F12F079E900277972 /* CKUIView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8566B72212F079E900277972 /* CKUIView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8566B72012F079E900277972 /* CKUIView+Factory.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -535,6 +537,8 @@
 		75A2A30C12F7F31000E71451 /* CKValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKValueTransformer.m; sourceTree = "<group>"; };
 		75A2A30D12F7F31000E71451 /* CKView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKView.h; sourceTree = "<group>"; };
 		75A2A30E12F7F31000E71451 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKView.m; sourceTree = "<group>"; };
+		75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKViewTemplateManager.h; sourceTree = "<group>"; };
+		75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKViewTemplateManager.m; sourceTree = "<group>"; };
 		8566B71F12F079E900277972 /* CKUIView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Factory.h"; sourceTree = "<group>"; };
 		8566B72012F079E900277972 /* CKUIView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Factory.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -891,6 +895,8 @@
 				4FB1695511F632D700C1CCD1 /* CKImageLoader.m */,
 				4F69540012E8F0530085881D /* CKCoreGraphicsAdditions.h */,
 				4F69540112E8F0530085881D /* CKCoreGraphicsAdditions.m */,
+				75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */,
+				75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */,
 			);
 			name = Support;
 			path = Classes;
@@ -1177,6 +1183,7 @@
 				75A2A31512F7F31000E71451 /* CKUIViewDataBinder.h in Headers */,
 				75A2A31712F7F31000E71451 /* CKValueTransformer.h in Headers */,
 				75A2A31912F7F31000E71451 /* CKView.h in Headers */,
+				75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,6 +1422,7 @@
 				75A2A31612F7F31000E71451 /* CKUIViewDataBinder.m in Sources */,
 				75A2A31812F7F31000E71451 /* CKValueTransformer.m in Sources */,
 				75A2A31A12F7F31000E71451 /* CKView.m in Sources */,
+				75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
