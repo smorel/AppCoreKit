@@ -99,6 +99,11 @@
 	[self setup];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+	//[self setup];
+	[super viewWillAppear:animated];
+}
+
 - (void)viewDidUnload {
 	[super viewDidUnload];
 	// FIXME: Controllers should not be deallocated when the view is unloaded
@@ -450,9 +455,13 @@
 #pragma mark Orientation Management
 
 - (void)setOrientation:(CKManagedTableViewOrientation)orientation {
+	CGRect f = self.tableView.frame;
+	CGRect b = self.tableView.bounds;
+	
 	_orientation = orientation;
 	if(orientation == CKManagedTableViewOrientationLandscape) {
 		self.tableView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+		self.tableView.frame = CGRectMake(f.origin.x,f.origin.y,b.size.width,b.size.height);
 	} else {
 		self.tableView.transform = CGAffineTransformIdentity;
 	}
