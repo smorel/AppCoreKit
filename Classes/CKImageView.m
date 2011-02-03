@@ -61,7 +61,12 @@
 #pragma mark Public API
 
 - (void)setImageURL:(NSURL *)url {
-	[self loadImageWithContentOfURL:url];
+	if (url == nil) {
+		[_imageURL release];
+		_imageURL = nil;
+	} else {
+		[self loadImageWithContentOfURL:url];
+	}
 }
 
 - (void)loadImageWithContentOfURL:(NSURL *)url {
