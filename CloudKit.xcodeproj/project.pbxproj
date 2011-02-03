@@ -268,6 +268,10 @@
 		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
 		75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */; };
+		75DA8CB512FB2008003DC43F /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8CB312FB2008003DC43F /* CKDataBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
+		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */; };
 		8566B72112F079E900277972 /* CKUIView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8566B71F12F079E900277972 /* CKUIView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8566B72212F079E900277972 /* CKUIView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8566B72012F079E900277972 /* CKUIView+Factory.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -539,6 +543,10 @@
 		75A2A30E12F7F31000E71451 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKView.m; sourceTree = "<group>"; };
 		75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKViewTemplateManager.h; sourceTree = "<group>"; };
 		75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKViewTemplateManager.m; sourceTree = "<group>"; };
+		75DA8CB312FB2008003DC43F /* CKDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDataBinder.h; sourceTree = "<group>"; };
+		75DA8CB412FB2008003DC43F /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBinder.m; sourceTree = "<group>"; };
+		75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNotificationBlockBinder.h; sourceTree = "<group>"; };
+		75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNotificationBlockBinder.m; sourceTree = "<group>"; };
 		8566B71F12F079E900277972 /* CKUIView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Factory.h"; sourceTree = "<group>"; };
 		8566B72012F079E900277972 /* CKUIView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Factory.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -725,10 +733,10 @@
 				4F9B493C12EA5103001AA996 /* CKGridView.h */,
 				4F9B493D12EA5103001AA996 /* CKGridView.m */,
 				4F9B493E12EA5103001AA996 /* CKGridView+NSIndexPath.m */,
+				71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */,
 				4F31C6E0125B7E3F009E08D4 /* CKMapViewController.h */,
 				4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */,
 				71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */,
-				71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */,
 				4FAD0F8811C2D5810071C7BF /* CKKeypadView.h */,
 				4FAD0F8911C2D5810071C7BF /* CKKeypadView.m */,
 				4FAD0F7011C2D54D0071C7BF /* CKImageView.h */,
@@ -897,6 +905,10 @@
 				4F69540112E8F0530085881D /* CKCoreGraphicsAdditions.m */,
 				75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */,
 				75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */,
+				75DA8CB312FB2008003DC43F /* CKDataBinder.h */,
+				75DA8CB412FB2008003DC43F /* CKDataBinder.m */,
+				75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */,
+				75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */,
 			);
 			name = Support;
 			path = Classes;
@@ -1184,6 +1196,8 @@
 				75A2A31712F7F31000E71451 /* CKValueTransformer.h in Headers */,
 				75A2A31912F7F31000E71451 /* CKView.h in Headers */,
 				75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */,
+				75DA8CB512FB2008003DC43F /* CKDataBinder.h in Headers */,
+				75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1423,6 +1437,8 @@
 				75A2A31812F7F31000E71451 /* CKValueTransformer.m in Sources */,
 				75A2A31A12F7F31000E71451 /* CKView.m in Sources */,
 				75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */,
+				75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */,
+				75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
