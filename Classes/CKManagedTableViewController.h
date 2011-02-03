@@ -38,9 +38,9 @@
 
 
 typedef enum {
-	CKManagedTableViewOrientationHorizontal,
-	CKManagedTableViewOrientationVertical
-}CKManagedTableViewOrientation;
+	CKManagedTableViewOrientationPortrait,
+	CKManagedTableViewOrientationLandscape
+} CKManagedTableViewOrientation;
 
 //
 

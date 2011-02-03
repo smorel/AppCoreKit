@@ -76,13 +76,13 @@
 
 - (void)awakeFromNib {
 	self.style = UITableViewStyleGrouped;
-	_orientation = CKManagedTableViewOrientationVertical;
+	_orientation = CKManagedTableViewOrientationPortrait;
 }
 
 - (id)init {
     if (self = [super init]) {
 		self.style = UITableViewStyleGrouped;
-		_orientation = CKManagedTableViewOrientationVertical;
+		_orientation = CKManagedTableViewOrientationPortrait;
     }
     return self;
 }
@@ -254,7 +254,7 @@
 	//We have to see how to resize the tableView to fit correctly in the right side ...
 	//for instance we have to disable the resizing masks on the table view and set its size for the wanted orientation in the nib ...
 	UIView *rotatedView	= theCell.contentView;
-	if (_orientation == CKManagedTableViewOrientationHorizontal) {
+	if (_orientation == CKManagedTableViewOrientationLandscape) {
 		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
 	}
 
@@ -451,7 +451,7 @@
 
 - (void)setOrientation:(CKManagedTableViewOrientation)orientation {
 	_orientation = orientation;
-	if(orientation == CKManagedTableViewOrientationHorizontal) {
+	if(orientation == CKManagedTableViewOrientationLandscape) {
 		self.tableView.transform = CGAffineTransformMakeRotation(-M_PI/2);
 	} else {
 		self.tableView.transform = CGAffineTransformIdentity;
