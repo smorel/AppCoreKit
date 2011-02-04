@@ -26,6 +26,8 @@
 	NSURL *_imageURL;
 	UIImage *_defaultImage;	
 	id<CKImageViewDelegate> _delegate;
+	
+	NSTimeInterval _fadeInDuration;
 }
 
 @property (nonatomic, retain, readonly) NSURL *imageURL;
@@ -33,6 +35,7 @@
 @property (nonatomic, retain, readonly) UIImage *image;
 @property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
 @property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
+@property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;

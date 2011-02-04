@@ -27,11 +27,13 @@
 @synthesize defaultImage = _defaultImage;
 @synthesize delegate = _delegate;
 @synthesize imageView = _imageView;
+@synthesize fadeInDuration = _fadeInDuration;
 
 - (void)postInit{
 	_imageView = [[UIImageView alloc] initWithFrame:self.bounds];
 	self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+	self.fadeInDuration = 0;
 	[self addSubview:self.imageView];
 }
 
@@ -122,6 +124,13 @@
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
 	self.imageView.image = image;
+	if(_fadeInDuration > 0){
+		self.imageView.alpha = 0;
+		[UIView beginAnimations:@"FadeInImage" context:nil];
+		[UIView setAnimationDuration:_fadeInDuration];
+		self.imageView.alpha = 1;
+		[UIView commitAnimations];
+	}
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
