@@ -1,6 +1,7 @@
 build/*
 Crash Reports/*
 *.pbxuser
+*xcuserdata
 *.mode1v3
 .DS_Store
 profile
