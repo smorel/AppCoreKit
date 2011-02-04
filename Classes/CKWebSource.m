@@ -53,6 +53,7 @@
 
 - (void)cancelFetch {
 	[self.request cancel];
+	self.request.delegate = nil;
 	self.request = nil;
 	[super cancelFetch];
 }

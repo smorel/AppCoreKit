@@ -142,11 +142,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)start {
-	// TODO: Prevent the request from being started twice.
-	
 	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
 	
-	if ([self isCancelled])
+	if ([self isCancelled] || [self isExecuting] || [self isFinished])
 		return;
 	
 	// If the request was started in the main thrad, start it in 
