@@ -41,16 +41,20 @@
 	[super dealloc];
 }
 
+-(void)unbind{
+	self.internal = nil;//delete previous setup objects
+}
+
 -(void)setViewTemplate:(CKViewTemplate*)template{
 	[viewTemplate release];
 	viewTemplate = [template retain];
-	
-	self.internal = nil;//delete previous setup objects
+	[self unbind];
 	[self createInternalView];
 }
 
 -(void)bind:(id)object{
 	if(viewTemplate){
+		[self unbind];
 		self.internal = viewTemplate.viewSetupBlock(self.subView,object);
 	}
 }

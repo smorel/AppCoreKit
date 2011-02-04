@@ -73,9 +73,11 @@
 #pragma mark Private API
 
 -(void)unbind{
-	if(self.view && [self.view isKindOfClass:[UIControl class]]){
-		UIControl* control = (UIControl*)self.view;
-		[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+	if(self.view){
+		if( [self.view isKindOfClass:[UIControl class]]){
+			UIControl* control = (UIControl*)self.view;
+			[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+		}
 		[target removeObserver:self forKeyPath:targetKeyPath];
 	}
 	

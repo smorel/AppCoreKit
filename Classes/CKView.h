@@ -33,5 +33,6 @@ typedef NSMutableArray*(^CKViewSetupBlock)(UIView* view,id mordel);
 @property (nonatomic, retain) CKViewTemplate *viewTemplate;
 
 -(void)bind:(id)object;
+-(void)unbind;
 
 @end
