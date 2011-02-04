@@ -61,12 +61,7 @@
 #pragma mark Public API
 
 - (void)setImageURL:(NSURL *)url {
-	if (url == nil) {
-		[_imageURL release];
-		_imageURL = nil;
-	} else {
-		[self loadImageWithContentOfURL:url];
-	}
+	[self loadImageWithContentOfURL:url];
 }
 
 - (void)loadImageWithContentOfURL:(NSURL *)url {
@@ -81,15 +76,17 @@
 - (void)reload {
 	[self reset];
 	
-	UIImage *image = [CKImageLoader imageForURL:self.imageURL];
-	if (image) {
-		self.imageView.image = image;
-		[self.delegate imageView:self didLoadImage:image cached:YES];
-		return;
+	if(self.imageURL){
+		UIImage *image = [CKImageLoader imageForURL:self.imageURL];
+		if (image) {
+			self.imageView.image = image;
+			[self.delegate imageView:self didLoadImage:image cached:YES];
+			return;
+		}
+		
+		self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
+		[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 	}
-	
-	self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
-	[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 }
 
 - (void)reset {
