@@ -136,7 +136,8 @@
 	id dataValue = [target valueForKeyPath:targetKeyPath];
 	
 	CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
-	[subView setValue:[CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type] forKeyPath:keyPath];
+	id transformedValue = [CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type];
+	[subView setValue:transformedValue forKeyPath:keyPath];
 	
 	if([subView isKindOfClass:[UIControl class]]){
 		UIControl* control = (UIControl*)subView;

@@ -11,22 +11,26 @@
 
 @implementation CKValueTransformer
 
+static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
+
 + (id)transformValue:(id)value toClass:(Class)type{
 	if([value isKindOfClass:type])
 		return value;
+	
+	if(CKValueTransformerNumberFormatter == nil){
+		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+	}
 	
 	//Handle Number to string and String to number 
 	if([value isKindOfClass:[NSNumber class]]
 		&& [NSObject isKindOf:type parentType:[NSString class]])
 	{
-			NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init]autorelease];
-			NSString* n = [numberFormatter stringFromNumber:value]; 
+			NSString* n = [CKValueTransformerNumberFormatter stringFromNumber:value]; 
 		    return n;
 	}
 	else if([value isKindOfClass:[NSString class]]
 		&& [NSObject isKindOf:type parentType:[NSNumber class]]){
-			NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init]autorelease];
-			NSNumber* s = [numberFormatter numberFromString:value];  
+			NSNumber* s = [CKValueTransformerNumberFormatter numberFromString:value];  
 			return s;
 	}
 
