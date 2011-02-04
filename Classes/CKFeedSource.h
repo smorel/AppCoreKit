@@ -12,6 +12,7 @@
 	id _delegate;
 	NSMutableArray *_items;
 	NSUInteger _currentIndex;
+	NSUInteger _limit;
 	BOOL _hasMore;
 	BOOL _fetching;
 }
@@ -19,6 +20,7 @@
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, retain, readonly) NSArray *items;
 @property (nonatomic, readonly) NSUInteger currentIndex;
+@property (nonatomic, readwrite) NSUInteger limit;
 @property (nonatomic, readonly) BOOL hasMore;
 @property (nonatomic, readonly) BOOL isFetching;
 

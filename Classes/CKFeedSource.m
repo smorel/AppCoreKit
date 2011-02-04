@@ -14,6 +14,7 @@
 @synthesize delegate = _delegate;
 @synthesize items = _items;
 @synthesize currentIndex = _currentIndex;
+@synthesize limit = _limit;
 @synthesize hasMore = _hasMore;
 @synthesize isFetching = _isFetching;
 
@@ -55,9 +56,16 @@
 #pragma mark KVO
 
 - (void)addItems:(NSArray *)theItems {
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_currentIndex, [theItems count])];
+	NSArray *newItems = theItems;
+	
+	if ((_limit > 0) && (_items.count + theItems.count) > _limit) {
+		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _items.count))];
+		_hasMore = NO;
+	}
+	
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_currentIndex, [newItems count])];
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
-    [_items addObjectsFromArray:theItems];
+    [_items addObjectsFromArray:newItems];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
 }
 
