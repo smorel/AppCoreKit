@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+
 @interface CKUIViewDataBinder : NSObject{
 	NSInteger viewTag;
 	NSString* keyPath;
@@ -39,4 +40,10 @@
 
 -(void)bindViewInView:(UIView*)theView;
 
+@end
+
+
+@interface UIView (CKUIViewDataBinder)
++ (void)setValueForView : (UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath target:(id)target targetKeyPath:(NSString*)targetKeyPath;
++ (void)setValueForView : (UIView*)view keyPath:(NSString*)keyPath  target:(id)target targetKeyPath:(NSString*)targetKeyPath;
 @end

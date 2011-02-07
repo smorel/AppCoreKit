@@ -123,7 +123,6 @@
 }
 
 #pragma mark Public API
-
 -(void)bindViewInView:(UIView*)theView{
 	[self unbind];
 	self.view = theView;
@@ -145,13 +144,33 @@
 	}
 	
 	[target addObserver:self
-				   forKeyPath:targetKeyPath
-					  options:(NSKeyValueObservingOptionNew)
-					  context:nil];
+			 forKeyPath:targetKeyPath
+				options:(NSKeyValueObservingOptionNew)
+				context:nil];
+	
 }
-
-
 
 @end
 
+
+@implementation UIView (CKUIViewDataBinder)
+
++ (void)setValueForView : (UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	id subView = (viewTag >= 0) ? [view viewWithTag:viewTag] : view;
+	if(!subView){
+		NSAssert(NO,@"Invalid subView object in setValueForView");
+	}
+	
+	id dataValue = [target valueForKeyPath:targetKeyPath];
+	
+	CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
+	id transformedValue = [CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type];
+	[subView setValue:transformedValue forKeyPath:keyPath];
+}
+
++ (void)setValueForView : (UIView*)view keyPath:(NSString*)keyPath  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	[UIView setValueForView:view viewTag:-1 keyPath:keyPath target:target targetKeyPath:targetKeyPath];
+}
+
+@end
 
