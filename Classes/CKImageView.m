@@ -13,7 +13,6 @@
 @interface CKImageView ()
 
 @property (nonatomic, retain, readwrite) CKImageLoader *imageLoader;
-@property (nonatomic, retain, readwrite) NSURL *imageURL;
 @property (nonatomic, retain, readwrite) UIImageView *imageView;
 
 @end
