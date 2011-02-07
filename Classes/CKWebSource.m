@@ -35,7 +35,8 @@
 //
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize {
-	if (_fetching == YES) return NO;
+	if ((_fetching == YES) || (_hasMore == NO)) 
+		return NO;
 	
 	_requestedBatchSize = batchSize;
 	self.request = _requestBlock(NSMakeRange(_currentIndex, batchSize));
@@ -78,7 +79,7 @@
 	}
 	
 	_currentIndex += [items count];
-	_hasMore = ([items count] == _requestedBatchSize);
+	_hasMore = ([items count] < _requestedBatchSize) ? NO : YES;
 	_fetching = NO;
 	self.request = nil;
 }
