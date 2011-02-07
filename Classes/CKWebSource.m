@@ -7,7 +7,9 @@
 //
 
 #import "CKWebSource.h"
-#import <CloudKit/CKDebug.h>
+#import "CKDebug.h"
+#import "CKAlertView.h"
+#import "CKLocalization.h"
 
 @interface CKWebSource ()
 @property (nonatomic, retain) CKWebRequest2 *request;
@@ -88,6 +90,17 @@
 	CKDebugLog(@"%@", error);
 	_fetching = NO;
 	self.request = nil;
+	
+	// TODO: Makes the alert optional and allow the request to be restarted.
+	if (YES) {
+		CKAlertView *alertView = 
+		[[[CKAlertView alloc] initWithTitle:@"Fetching Error"
+									message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
+								   delegate:self
+						  cancelButtonTitle:_(@"Dismiss")
+						  otherButtonTitles:nil] autorelease];
+		[alertView show];
+	}
 }
 
 @end
