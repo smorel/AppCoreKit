@@ -49,4 +49,6 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll();
 +(CKObjectProperty*) property:(Class)c forKey:(NSString*)name;
 +(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath;
 
+- (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects;
+
 @end
