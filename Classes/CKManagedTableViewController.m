@@ -73,16 +73,29 @@
 @synthesize sections = _sections;
 @synthesize pValuesForKeys = _valuesForKeys;
 @synthesize orientation = _orientation;
+@synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 
-- (void)awakeFromNib {
+- (void)postInit {
 	self.style = UITableViewStyleGrouped;
 	_orientation = CKManagedTableViewOrientationPortrait;
+	_resizeOnKeyboardNotification = YES;
 }
+
+- (void)awakeFromNib {
+	[self postInit];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+	[super initWithCoder:decoder];
+	[self postInit];
+	return self;
+}
+
+//
 
 - (id)init {
     if (self = [super init]) {
-		self.style = UITableViewStyleGrouped;
-		_orientation = CKManagedTableViewOrientationPortrait;
+		[self postInit];
     }
     return self;
 }
@@ -424,6 +437,8 @@
 #pragma mark Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+	if (_resizeOnKeyboardNotification == NO) return;
+	
 	NSDictionary *info = [notification userInfo];
 	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
 	
@@ -438,6 +453,8 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
+	if (_resizeOnKeyboardNotification == NO) return;
+	
 	NSDictionary *info = [notification userInfo];
 	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
 	

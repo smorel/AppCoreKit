@@ -49,11 +49,13 @@ typedef enum {
 	NSMutableArray *_sections;
 	NSMutableDictionary *_valuesForKeys;
 	CKManagedTableViewOrientation _orientation;
+	BOOL _resizeOnKeyboardNotification;
 }
 
 @property (nonatomic, assign) id managedTableViewDelegate;
 @property (nonatomic, readonly) NSDictionary *valuesForKeys;
 @property (nonatomic, assign, readwrite) CKManagedTableViewOrientation orientation;
+@property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
 
 - (void)setup;
 - (void)clear;

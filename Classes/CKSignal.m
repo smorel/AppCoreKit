@@ -49,6 +49,7 @@
 
 @synthesize methodSignature;
 @synthesize slotArray;
+@synthesize disable;
 
 +(CKSignal*)signalWithSignature:(NSMethodSignature*)signature{
 	CKSignal* signal = [[[CKSignal alloc]init]autorelease];
@@ -79,6 +80,7 @@
 -(id)init{
 	[super init];
 	slotArray = [[NSMutableArray array]retain];
+	disable = NO;
 	return self;
 }
 
@@ -106,6 +108,9 @@
 }
 
 -(void)send:(NSArray*)arguments{
+	if(disable)
+		return;
+	
 	for(CKSlot* slot in slotArray){
 		if(slot && [slot valid]){
 			NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[slot getSignature]];

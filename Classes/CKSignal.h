@@ -27,6 +27,7 @@
 @interface CKSignal : NSObject {
 	NSMethodSignature* methodSignature;
 	NSMutableArray* slotArray;
+	BOOL disable;
 }
 
 +(CKSignal*)signalWithSignature:(NSMethodSignature*)signature;
@@ -39,6 +40,7 @@
 
 @property (nonatomic, retain, readwrite) NSMethodSignature*  methodSignature;
 @property (nonatomic, retain, readwrite) NSArray*  slotArray;
+@property (nonatomic, assign, readwrite) BOOL  disable;
 
 //[[NSString stringWithFormat:@"%s%s%s%s", @encode(id), @encode(id), @encode(SEL), @encode(int)] UTF8String]
 
