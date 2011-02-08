@@ -47,6 +47,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark Initialization
 
+
++ (NSURLRequest*) createRequestForURL:(NSURL*)url{
+	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url
+											  cachePolicy:NSURLRequestUseProtocolCachePolicy
+										  timeoutInterval:60.0];
+	[request addValue:[CKWebRequest2 defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
+	return [request autorelease];
+}
+
 + (void)initialize {
 	if (self == [CKWebRequest2 class]) {
 		theSharedQueue = [[NSOperationQueue alloc] init];
@@ -57,10 +66,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (id)initWithURL:(NSURL *)URL {
 	if (self = [super init]) {
-		theRequest = [[NSMutableURLRequest alloc] initWithURL:URL
-												  cachePolicy:NSURLRequestUseProtocolCachePolicy
-											  timeoutInterval:60.0];
-		[theRequest addValue:[CKWebRequest2 defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
+		theRequest = [[CKWebRequest2 createRequestForURL:URL]retain];
 	}
 	return self;
 }

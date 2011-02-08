@@ -37,6 +37,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) NSObject<CKWebRequestDelegate> *delegate;
 
++ (NSURLRequest*) createRequestForURL:(NSURL*)url;
 + (NSString *)defaultUserAgentString;
 
 - (void)setMethod:(NSString *)method;

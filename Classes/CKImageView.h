@@ -21,11 +21,14 @@
 //
 
 @interface CKImageView : UIView <CKImageLoaderDelegate> {
-	UIImageView *_imageView;
+	//UIImageView *_imageView;
 	CKImageLoader *_imageLoader;
 	NSURL *_imageURL;
 	UIImage *_defaultImage;	
 	id<CKImageViewDelegate> _delegate;
+	
+	UIButton* _button;
+	BOOL _interactive;
 	
 	NSTimeInterval _fadeInDuration;
 }
@@ -36,6 +39,7 @@
 @property (nonatomic, assign, readwrite) UIViewContentMode imageViewContentMode;
 @property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
+@property (nonatomic, assign, readwrite) BOOL interactive;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;

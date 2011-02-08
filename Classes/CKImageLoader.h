@@ -14,20 +14,25 @@
 	id _delegate;
 	CKWebRequest2 *_request;
 	NSURL *_imageURL;
-	CGSize _imageSize;
-	BOOL _aspectFill;
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, assign) CGSize imageSize;
-@property (nonatomic, assign) BOOL aspectFill;
+@property (nonatomic, retain) NSURL *imageURL;
+
+@property (nonatomic, assign) CGSize imageSize DEPRECATED_ATTRIBUTE; 
+@property (nonatomic, assign) BOOL aspectFill DEPRECATED_ATTRIBUTE; 
 
 - (id)initWithDelegate:(id)delegate;
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)cancel;
 
-+ (UIImage *)imageForURL:(NSURL *)url;
-+ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size;
+@end
+
+
+@interface CKImageLoader (Deprecated)
+
++ (UIImage *)imageForURL:(NSURL *)url DEPRECATED_ATTRIBUTE;
++ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size DEPRECATED_ATTRIBUTE;
 
 @end
 
