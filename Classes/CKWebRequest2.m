@@ -47,6 +47,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark Initialization
 
++ (NSURLRequest *)defaultURLRequestForURL:(NSURL*)anURL{
+	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:anURL
+																cachePolicy:NSURLRequestUseProtocolCachePolicy
+															timeoutInterval:60.0];
+	[request addValue:[CKWebRequest2 defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
+	return [request autorelease];
+}
+
 + (void)initialize {
 	if (self == [CKWebRequest2 class]) {
 		theSharedQueue = [[NSOperationQueue alloc] init];
@@ -55,12 +63,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	}
 }
 
-- (id)initWithURL:(NSURL *)URL {
+- (id)initWithURL:(NSURL *)anURL {
 	if (self = [super init]) {
-		theRequest = [[NSMutableURLRequest alloc] initWithURL:URL
-												  cachePolicy:NSURLRequestUseProtocolCachePolicy
-											  timeoutInterval:60.0];
-		[theRequest addValue:[CKWebRequest2 defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
+		theRequest = [[CKWebRequest2 defaultURLRequestForURL:anURL] retain];
 	}
 	return self;
 }
@@ -140,6 +145,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[request setMethod:method];
 	return request;
 }
+
++ (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL {
+	NSURLRequest *request = [CKWebRequest2 defaultURLRequestForURL:anURL];
+	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+}
+
+//
 
 - (void)start {
 	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");

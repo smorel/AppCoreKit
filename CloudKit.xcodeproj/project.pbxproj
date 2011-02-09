@@ -271,6 +271,10 @@
 		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
 		75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */; };
+		75B01F521301A923005A22F7 /* CKImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B01F501301A923005A22F7 /* CKImageTransformer.h */; };
+		75B01F531301A923005A22F7 /* CKImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F511301A923005A22F7 /* CKImageTransformer.m */; };
+		75B01F851301AF13005A22F7 /* CKThumbnailImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */; };
+		75B01F861301AF13005A22F7 /* CKThumbnailImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */; };
 		75DA8CB512FB2008003DC43F /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8CB312FB2008003DC43F /* CKDataBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -549,6 +553,10 @@
 		75A2A30E12F7F31000E71451 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKView.m; sourceTree = "<group>"; };
 		75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKViewTemplateManager.h; sourceTree = "<group>"; };
 		75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKViewTemplateManager.m; sourceTree = "<group>"; };
+		75B01F501301A923005A22F7 /* CKImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageTransformer.h; sourceTree = "<group>"; };
+		75B01F511301A923005A22F7 /* CKImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageTransformer.m; sourceTree = "<group>"; };
+		75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKThumbnailImageTransformer.h; sourceTree = "<group>"; };
+		75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKThumbnailImageTransformer.m; sourceTree = "<group>"; };
 		75DA8CB312FB2008003DC43F /* CKDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDataBinder.h; sourceTree = "<group>"; };
 		75DA8CB412FB2008003DC43F /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBinder.m; sourceTree = "<group>"; };
 		75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNotificationBlockBinder.h; sourceTree = "<group>"; };
@@ -915,6 +923,10 @@
 				75DA8CB412FB2008003DC43F /* CKDataBinder.m */,
 				75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */,
 				75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */,
+				75B01F501301A923005A22F7 /* CKImageTransformer.h */,
+				75B01F511301A923005A22F7 /* CKImageTransformer.m */,
+				75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */,
+				75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */,
 			);
 			name = Support;
 			path = Classes;
@@ -1206,6 +1218,8 @@
 				75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */,
 				75DA8CB512FB2008003DC43F /* CKDataBinder.h in Headers */,
 				75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */,
+				75B01F521301A923005A22F7 /* CKImageTransformer.h in Headers */,
+				75B01F851301AF13005A22F7 /* CKThumbnailImageTransformer.h in Headers */,
 				71D1854A1301EAEE000AD883 /* CDataScanner.h in Headers */,
 				71D1854C1301EAEE000AD883 /* CFilteringJSONSerializer.h in Headers */,
 				71D1854E1301EAEE000AD883 /* CJSONDeserializer_BlocksExtensions.h in Headers */,
@@ -1449,6 +1463,8 @@
 				75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */,
 				75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */,
 				75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */,
+				75B01F531301A923005A22F7 /* CKImageTransformer.m in Sources */,
+				75B01F861301AF13005A22F7 /* CKThumbnailImageTransformer.m in Sources */,
 				71D1854B1301EAEE000AD883 /* CDataScanner.m in Sources */,
 				71D1854D1301EAEE000AD883 /* CFilteringJSONSerializer.m in Sources */,
 				71D1854F1301EAEE000AD883 /* CJSONDeserializer_BlocksExtensions.m in Sources */,

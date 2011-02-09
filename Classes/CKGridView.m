@@ -87,7 +87,7 @@
 		for (int row=0 ; row<_rows ; row++) {
 			for (int column=0 ; column<_columns ; ++column, ++index) {
 				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
-				UIView *view = [self.views objectAtIndex:index];
+				UIView *view = (index < [self.views count]) ? [self.views objectAtIndex:index] : nil;
 				if (view && [view isKindOfClass:[UIView class]]) {
 					CGPoint position = [self pointForIndexPath:indexPath];
 					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));

@@ -9,6 +9,7 @@
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
 #import <Foundation/NSKeyValueCoding.h>
+#import <malloc/malloc.h>
 
 @implementation CKObjectProperty
 @synthesize name;
@@ -272,7 +273,15 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	NSMutableArray* results = [NSMutableArray array];
 	[self filterObjects:results explored:objectsExplored instance:self expandWith:expandWith insertWith:insertWith addInstance:includeSelf];
 	return results;
+}
 
+- (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects{
+	NSMutableArray* objects = [self subObjects:CKObjectPredicateMakeIsOfType([NSObject class],nil) insertWith:CKObjectPredicateMakeIsOfType([NSObject class],nil) includeSelf:YES];
+	int total = 0;
+	for(NSObject* obj in objects){
+		total += malloc_size(obj);
+	}
+	return total;
 }
 
 - (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{

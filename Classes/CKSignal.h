@@ -27,11 +27,14 @@
 @interface CKSignal : NSObject {
 	NSMethodSignature* methodSignature;
 	NSMutableArray* slotArray;
+	BOOL disable;
 }
 
 +(CKSignal*)signalWithSignature:(NSMethodSignature*)signature;
 +(CKSignal*)signalWithTypes:(char*)argType0,...;
 
+- (BOOL)addSlot:(id)object selector:(SEL)selector;
+- (BOOL)removeSlot:(id)object selector:(SEL)selector;
 
 -(BOOL)addSlotArrayObject:(id)object;
 -(BOOL)removeSlot:(id)slot;
@@ -39,6 +42,7 @@
 
 @property (nonatomic, retain, readwrite) NSMethodSignature*  methodSignature;
 @property (nonatomic, retain, readwrite) NSArray*  slotArray;
+@property (nonatomic, assign, readwrite) BOOL  disable;
 
 //[[NSString stringWithFormat:@"%s%s%s%s", @encode(id), @encode(id), @encode(SEL), @encode(int)] UTF8String]
 
