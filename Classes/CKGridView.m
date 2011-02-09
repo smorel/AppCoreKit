@@ -54,6 +54,14 @@
 	self.draggedViewScale = DEFAULT_DRAGGEDVIEW_SCALE;
 }
 
+
+- (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size{
+	[self initWithFrame:frame];
+	_rows = size.height;
+	_columns = size.width;
+	return self;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self postInit];

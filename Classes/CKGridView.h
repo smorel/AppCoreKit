@@ -42,8 +42,10 @@
 @property (nonatomic, assign, getter=isEditing) BOOL editing;
 @property (nonatomic, assign) CFTimeInterval minimumPressDuration;
 @property (nonatomic, assign) CGFloat draggedViewScale;
-@property (nonatomic, assign, readwrite) NSUInteger rows;
-@property (nonatomic, assign, readwrite) NSUInteger columns;
+@property (nonatomic, assign, readonly) NSUInteger rows;
+@property (nonatomic, assign, readonly) NSUInteger columns;
+
+- (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size;
 
 - (void)reloadData;
 
