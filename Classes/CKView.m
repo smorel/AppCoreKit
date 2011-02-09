@@ -36,7 +36,8 @@
 
 -(void)dealloc{
 	self.internal = nil;
-	self.viewTemplate = nil;
+	[viewTemplate release];
+	viewTemplate = nil;
 	self.subView = nil;
 	[super dealloc];
 }
