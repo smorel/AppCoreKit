@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "CKImageLoader.h"
+#import "CKSignal.h"
+
+
+
+/* COMMENT :
+     In interactive mode, we replace the imageView by a UIButton to handle touchs.
+     This has limitations :
+       * the contentMode in the button does not respect the one we set for all states.
+     We'll have to implements touchs and feedback drawing if we want to handle it correctly.
+ */
+
 
 @class CKImageView;
 
@@ -27,6 +38,7 @@
 	UIImage *_defaultImage;	
 	id<CKImageViewDelegate> _delegate;
 	
+	UIImageView* _imageView;
 	UIButton* _button;
 	BOOL _interactive;
 	
