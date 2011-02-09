@@ -8,10 +8,11 @@
 
 #import "CKUIControlActionBlockBinder.h"
 #import "CKNSObject+Introspection.h"
+#import "CKImageView.h"
 
 
 @interface CKUIControlActionBlockBinder()
-@property (nonatomic, retain) UIControl *control;
+@property (nonatomic, retain) UIView *view;
 -(void)unbind;
 -(void)controlChange;
 @end
@@ -19,7 +20,7 @@
 
 @implementation CKUIControlActionBlockBinder
 @synthesize viewTag;
-@synthesize control;
+@synthesize view;
 @synthesize controlEvents;
 @synthesize actionBlock;
 @synthesize keyPath;
@@ -36,12 +37,29 @@
 -(void)dealloc{
 	[self unbind];
 	self.actionBlock = nil;
-	self.control = nil;
+	self.view = nil;
 	[super dealloc];
 }
 
 -(NSString*)description{
 	return [NSString stringWithFormat:@"CKUIControlActionBlockBinder count=%d %d",[self retainCount],viewTag];
+}
+
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag keyPath:(NSString*)keyPath 
+											  actionBlock:(CKUIControlActionBlock)actionBlock{
+	return [self actionBlockBinderForView:view viewTag:viewTag keyPath:keyPath controlEvents:UIControlEventTouchUpInside actionBlock:actionBlock];
+}
+
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag
+											  actionBlock:(CKUIControlActionBlock)actionBlock{
+	return [self actionBlockBinderForView:view viewTag:viewTag keyPath:@"" controlEvents:UIControlEventTouchUpInside actionBlock:actionBlock];
+}
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+											  actionBlock:(CKUIControlActionBlock)actionBlock{
+	return [self actionBlockBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventTouchUpInside actionBlock:actionBlock];
 }
 
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag
@@ -68,9 +86,13 @@
 #pragma mark Private API
 
 -(void)unbind{
-	if(self.control){
-		[self.control removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
-		self.control = nil;
+	if(self.view){
+		if([view isKindOfClass:[UIControl class]]){
+			UIControl* ctrl = (UIControl*)self.view;
+			[ctrl removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
+		}
+		
+		self.view = nil;
 	}
 }
 
@@ -87,15 +109,15 @@
 	id subView = (viewTag >= 0) ? [controlView viewWithTag:viewTag] : controlView;
 	
 	id controlId = (keyPath == nil || [keyPath isEqualToString:@""]) ? subView : [subView valueForKeyPath:keyPath];
+	self.view = controlId;
 	if(!controlId){
 		NSAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
 	}
 	
 	if([controlId isKindOfClass:[UIControl class]]){
-		self.control = (UIControl*)controlId;
-		[self.control addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+		UIControl* ctrl = (UIControl*)controlId;
+		[ctrl addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 	}
-	
 }
 
 

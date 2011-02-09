@@ -33,6 +33,8 @@
 +(CKSignal*)signalWithSignature:(NSMethodSignature*)signature;
 +(CKSignal*)signalWithTypes:(char*)argType0,...;
 
+- (BOOL)addSlot:(id)object selector:(SEL)selector;
+- (BOOL)removeSlot:(id)object selector:(SEL)selector;
 
 -(BOOL)addSlotArrayObject:(id)object;
 -(BOOL)removeSlot:(id)slot;
