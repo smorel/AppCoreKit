@@ -63,6 +63,9 @@
 		_hasMore = NO;
 	}
 	
+	if([newItems count] <= 0)
+		return;
+	
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_currentIndex, [newItems count])];
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
     [_items addObjectsFromArray:newItems];
