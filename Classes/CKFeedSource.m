@@ -69,7 +69,23 @@
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_currentIndex, [newItems count])];
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
     [_items addObjectsFromArray:newItems];
+	_currentIndex = [_items count];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
 }
+
+
+- (void)removeItemObjects:(NSArray *)theItems {
+	NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+	for(id item in theItems){
+		NSUInteger index = [_items indexOfObject:item];
+		[indexSet addIndex:index];
+	}
+	
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"items"];
+    [_items removeObjectsInArray:theItems];
+	_currentIndex = [_items count];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
+}
+
 
 @end

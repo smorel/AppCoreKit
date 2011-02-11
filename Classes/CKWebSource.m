@@ -80,7 +80,8 @@
 		[self performSelector:@selector(addItems:) withObject:items];
 	}
 	
-	_currentIndex += [items count];
+	//Commented as we do adjust the _currentIndex when adding or removing items
+	//_currentIndex += [items count];
 	_hasMore = ([items count] < _requestedBatchSize) ? NO : YES;
 	_fetching = NO;
 	self.request = nil;
