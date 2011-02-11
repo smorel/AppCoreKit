@@ -156,11 +156,38 @@
 
 
 - (void)insertViewAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+	//Ensure we have the right number of views when inserting at random indexPath
+	/*int viewsCount = [self.views count];
+	int viewIndex = [self indexForIndexPath:indexPath];
+	while(viewIndex > viewsCount){
+		[self.views addObject:[NSNull null]];
+	}
+	
+	UIView *previousView = [self viewAtIndexPath:indexPath];
+	UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
+	if(view != previousView){
+		[self.views removeObject:previousView];
+		[self.views insertObject:view atIndex:viewIndex];
+		[previousView removeFromSuperview];
+		[self addSubview:view];
+	}
+	
+	if(view && animated && !view.hidden){
+		view.alpha = 0;
+		[UIView beginAnimations:@"FadeInView" context:nil];
+		//[UIView setAnimationDuration:1];
+		view.alpha = 1;
+		[UIView commitAnimations];
+	}*/
+
+	
+	int index = [self indexForIndexPath:indexPath];
+	UIView* previousView = (index < [self.views count]) ? [self.views objectAtIndex:index] : [NSNull null];
 	UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
 	if (view) {
 		if ([view isDescendantOfView:self] == NO) [self addSubview:view];
 		
-		if(animated){
+		if(!view.hidden && animated){
 			view.alpha = 0;
 			[UIView beginAnimations:@"FadeInView" context:nil];
 			//[UIView setAnimationDuration:1];
@@ -168,9 +195,14 @@
 			[UIView commitAnimations];
 		}
 	}
-	if ([self.views containsObject:view] == NO) {
-		[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
+	
+	if(previousView && index < [self.views count]){
+		[self.views removeObjectAtIndex:index];
 	}
+	NSAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
+	[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:index];
+		
+	NSLog(@"CKGridView insert View %d at '%d,%d' hidden=%@ viewsCount=%d",(int)view,indexPath.column,indexPath.row,(view && view.hidden) ? @"YES" : @"NO",[self.views count]);
 	
 	_needsLayout = YES;
 	[self setNeedsLayout];
