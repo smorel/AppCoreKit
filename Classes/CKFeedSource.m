@@ -75,14 +75,21 @@
 
 
 - (void)removeItemObjects:(NSArray *)theItems {
+	NSMutableArray* toRemove = [NSMutableArray array];   
 	NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
 	for(id item in theItems){
 		NSUInteger index = [_items indexOfObject:item];
-		[indexSet addIndex:index];
+		if(index == NSNotFound){
+			NSLog(@"invalid object when remove");
+		}
+		else{
+			[indexSet addIndex:index];
+			[toRemove addObject:item];
+		}
 	}
 	
     [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"items"];
-    [_items removeObjectsInArray:theItems];
+    [_items removeObjectsInArray:toRemove];
 	_currentIndex = [_items count];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
 }
