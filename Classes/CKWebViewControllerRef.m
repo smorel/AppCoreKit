@@ -84,6 +84,8 @@
 	self.webView.scalesPageToFit = YES;
 	self.webView.delegate = self;
 	
+	self.webView.hidden = YES;
+	
 	[self.view addSubview:self.webView];
 
 	// Setup the bar button items
@@ -242,6 +244,8 @@
 	
 	self.backButtonItem.enabled = self.webView.canGoBack;
 	self.forwardButtonItem.enabled = self.webView.canGoForward;	
+	
+	self.webView.hidden = NO;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
