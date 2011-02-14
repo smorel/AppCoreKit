@@ -18,8 +18,8 @@ typedef NSMutableArray*(^CKViewSetupBlock)(UIView* view,id mordel);
 	CKViewSetupBlock viewSetupBlock;
 }
 
-@property (nonatomic, retain) CKViewCreationBlock viewCreationBlock;
-@property (nonatomic, retain) CKViewSetupBlock viewSetupBlock;
+@property (nonatomic, copy) CKViewCreationBlock viewCreationBlock;
+@property (nonatomic, copy) CKViewSetupBlock viewSetupBlock;
 
 @end
 

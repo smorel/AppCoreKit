@@ -20,7 +20,7 @@ typedef void(^CKUIControlActionBlock)();
 
 @property (nonatomic, assign) NSInteger viewTag;
 @property (nonatomic, assign) UIControlEvents controlEvents;
-@property (nonatomic, retain) CKUIControlActionBlock actionBlock;
+@property (nonatomic, copy) CKUIControlActionBlock actionBlock;
 @property (nonatomic, retain) NSString *keyPath;
 
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag keyPath:(NSString*)keyPath 
