@@ -58,18 +58,17 @@
 - (void)addItems:(NSArray *)theItems {
 	NSArray *newItems = theItems;
 	
-	if ((_limit > 0) && (_items.count + theItems.count) > _limit) {
-		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _items.count))];
+	if ((_limit > 0) && (_currentIndex + theItems.count) > _limit) {
+		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _currentIndex))];
 		_hasMore = NO;
 	}
 	
 	if([newItems count] <= 0)
 		return;
 	
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_currentIndex, [newItems count])];
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([_items count], [newItems count])];
     [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
     [_items addObjectsFromArray:newItems];
-	_currentIndex = [_items count];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
 }
 
@@ -90,7 +89,6 @@
 	
     [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"items"];
     [_items removeObjectsInArray:toRemove];
-	_currentIndex = [_items count];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"items"];
 }
 
