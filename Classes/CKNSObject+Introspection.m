@@ -11,6 +11,8 @@
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>
 
+
+
 @implementation CKObjectProperty
 @synthesize name;
 @synthesize type;
@@ -59,9 +61,8 @@
 -(NSString*)getTypeDescriptor{
 	return [attributes substringWithRange: NSMakeRange(1,2)];
 }
-
-
 @end
+
 
 static NSString* getPropertyType(objc_property_t property) {
 	if(property){
@@ -200,10 +201,8 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	
 }
 
-- (NSMutableArray*)allProperties{
-	NSMutableArray* ar = [NSMutableArray array];
-	[self introspection:[self class] array:ar];
-	return ar;
+- (NSArray*)allProperties{
+	return [[CKObjectPropertyManager defaultManager]allPropertiesForClass:[self class]];
 }
 
 
@@ -325,3 +324,46 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 }
 
 @end
+
+
+@interface CKObjectPropertyManager ()
+@property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
+@end
+
+static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
+@implementation CKObjectPropertyManager
+@synthesize propertiesByClassName = _propertiesByClassName;
+
++ (CKObjectPropertyManager*)defaultManager{
+	if(CKObjectPropertyManagerDefault == nil){
+		CKObjectPropertyManagerDefault = [[CKObjectPropertyManager alloc]init];
+	}
+	return CKObjectPropertyManagerDefault;
+}
+
+- (id)init{
+	[super init];
+	self.propertiesByClassName = [NSMutableDictionary dictionary];
+	return self;
+}
+
+- (void)dealloc{
+	self.propertiesByClassName = nil;
+	[super dealloc];
+}
+
+- (NSArray*)allPropertiesForClass:(Class)class{
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+	if(allProperties == nil){
+		allProperties = [NSMutableArray array];
+		[NSObject introspection:class array:allProperties];
+		[_propertiesByClassName setObject:allProperties forKey:className];
+	}
+	
+	return allProperties;
+}
+
+@end
+
+

@@ -33,13 +33,25 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll();
 @end
 
 
+@interface CKObjectPropertyManager : NSObject{
+	NSMutableDictionary* _propertiesByClassName;
+}
+
++ (CKObjectPropertyManager*)defaultManager;
+- (NSArray*)allPropertiesForClass:(Class)class;
+
+@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
+
+@end
+
+
 @interface NSObject (CKNSObjectIntrospection)
 
 - (NSString*)className;
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType;
 + (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType;
 
-- (NSMutableArray*)allProperties;
+- (NSArray*)allProperties;
 
 - (NSMutableArray*)subObjects :(CKObjectPredicate)expandWith insertWith:(CKObjectPredicate)insertWith includeSelf:(BOOL)includeSelf;
 
