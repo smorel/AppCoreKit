@@ -35,8 +35,10 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll();
 
 @interface NSObject (CKNSObjectIntrospection)
 
-
+- (NSString*)className;
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType;
++ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType;
+
 - (NSMutableArray*)allProperties;
 
 - (NSMutableArray*)subObjects :(CKObjectPredicate)expandWith insertWith:(CKObjectPredicate)insertWith includeSelf:(BOOL)includeSelf;

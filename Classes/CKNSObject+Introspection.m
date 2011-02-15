@@ -194,7 +194,7 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
     free(ps);	
 	
 	Class f = class_getSuperclass(c);
-	if(f){
+	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
 		[self introspection:f array:array];
 	}
 	
@@ -206,15 +206,29 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	return ar;
 }
 
+
+- (NSString*)className{
+	return [NSString stringWithUTF8String:class_getName([self class])];
+}
+
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
+	if(parentType){
+		if([NSObject isExactKindOf:type parentType:parentType])
+			return YES;
+		Class p = class_getSuperclass(type);
+		if(p)
+			return [NSObject isKindOf:p parentType:parentType];
+		return NO;
+	}
+	return YES;
+}
+
++ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
 	if(parentType){
 		const char* t1 = class_getName(type);
 		const char* t2 = class_getName(parentType);
 		if(strcmp(t1,t2) == 0)
 			return YES;
-		Class p = class_getSuperclass(type);
-		if(p)
-			return [NSObject isKindOf:p parentType:parentType];
 		return NO;
 	}
 	return YES;
