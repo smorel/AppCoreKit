@@ -59,9 +59,19 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 	if (image) {
 		[self.delegate imageLoader:self didLoadImage:image cached:YES];
 	} else {
-		self.request = [CKWebRequest2 requestWithURL:self.imageURL];
-		self.request.delegate = self;
-		[self.request start];
+		//CHECK if url is web or disk and load from disk if needed ...
+		BOOL isFileOnDisk = [[NSFileManager defaultManager] fileExistsAtPath:[self.imageURL absoluteString]];
+		if(isFileOnDisk){
+			image = [UIImage imageWithContentsOfFile:[self.imageURL absoluteString]];
+			if (image) {
+				[self.delegate imageLoader:self didLoadImage:image cached:YES];
+			}
+		}
+		else{
+			self.request = [CKWebRequest2 requestWithURL:self.imageURL];
+			self.request.delegate = self;
+			[self.request start];
+		}
 	}
 }
 
