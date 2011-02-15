@@ -83,4 +83,12 @@
 - (void)removeObjects:(NSArray*)items forKey:(NSString*)key{
 }
 
+- (void)registerAsObserver:(id)object forKey:(NSString*)key{
+	[self.objects addObserver:object forKeyPath:key options:(NSKeyValueObservingOptionNew) context:nil];
+}
+
+- (void)unregisterAsObserver:(id)object forKey:(NSString*)key{
+	[self.objects removeObserver:object forKeyPath:key];	
+}
+
 @end

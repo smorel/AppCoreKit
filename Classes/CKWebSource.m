@@ -73,15 +73,15 @@
 }
 
 - (void)request:(id)request didReceiveValue:(id)value {
-	id items = _transformBlock(value);
+	id newItems = _transformBlock(value);
 	
-	if (items) {	
-		NSAssert([items isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
-		[self performSelector:@selector(addItems:) withObject:items];
+	if (newItems) {	
+		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
+		[self performSelector:@selector(addItems:) withObject:newItems];
 	}
 	
-	_currentIndex += [items count];
-	_hasMore = ([items count] < _requestedBatchSize) ? NO : YES;
+	_currentIndex += [newItems count];
+	_hasMore = ([newItems count] < _requestedBatchSize) ? NO : YES;
 	_fetching = NO;
 	self.request = nil;
 }
