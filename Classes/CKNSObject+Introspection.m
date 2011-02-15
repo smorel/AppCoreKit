@@ -61,6 +61,11 @@
 -(NSString*)getTypeDescriptor{
 	return [attributes substringWithRange: NSMakeRange(1,2)];
 }
+
+- (NSString*)className{
+	return [NSString stringWithUTF8String:class_getName(self.type)];
+}
+
 @end
 
 
@@ -205,6 +210,10 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	return [[CKObjectPropertyManager defaultManager]allPropertiesForClass:[self class]];
 }
 
+- (NSArray*)allPropertyNames{
+	return [[CKObjectPropertyManager defaultManager]allPropertieNamesForClass:[self class]];
+}
+
 
 - (NSString*)className{
 	return [NSString stringWithUTF8String:class_getName([self class])];
@@ -328,11 +337,13 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 
 @interface CKObjectPropertyManager ()
 @property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
+@property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
 @end
 
 static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 @implementation CKObjectPropertyManager
 @synthesize propertiesByClassName = _propertiesByClassName;
+@synthesize propertyNamesByClassName = _propertyNamesByClassName;
 
 + (CKObjectPropertyManager*)defaultManager{
 	if(CKObjectPropertyManagerDefault == nil){
@@ -344,6 +355,7 @@ static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 - (id)init{
 	[super init];
 	self.propertiesByClassName = [NSMutableDictionary dictionary];
+	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
 	return self;
 }
 
@@ -359,9 +371,26 @@ static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 		allProperties = [NSMutableArray array];
 		[NSObject introspection:class array:allProperties];
 		[_propertiesByClassName setObject:allProperties forKey:className];
+		
+		NSMutableArray* allPropertyNames = [NSMutableArray array];
+		for(CKObjectProperty* property in allProperties){
+			[allPropertyNames addObject:property.name];
+		}
+		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
 	}
 	
 	return allProperties;
+}
+
+
+- (NSArray*)allPropertieNamesForClass:(Class)class{
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:className];
+	if(allPropertyNames == nil){
+		[self allPropertiesForClass:class];
+		allPropertyNames = [_propertyNamesByClassName objectForKey:className];
+	}
+	return allPropertyNames;
 }
 
 @end

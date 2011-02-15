@@ -47,11 +47,19 @@
     if (self) {
 		[self executeForAllProperties:^(CKObjectProperty* property,id object){
 			if([aDecoder containsValueForKey:property.name]){
-				[self setValue:[aDecoder decodeObjectForKey:property.name] forKey:property.name];
+				id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
+				if([NSObject isKindOf:[objectFromDecoder class] parentType:property.type]){
+					[self setValue:objectFromDecoder forKey:property.name];
+				}
+				else if(objectFromDecoder){
+					[self propertyClassChanged:property serializedObject:objectFromDecoder];
+				}
 			}else{
-				NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
+				[self propertyAdded:property];
 			}
 		}];
+		
+		//find keys in aDecoder that are no more in self and call propertyDisappear
 	}
 	return self;
 }
@@ -92,6 +100,18 @@
 		id obj = [self valueForKey:property.name];
 		block(property,obj);
 	}
+}
+
+//For Migration
+- (void)propertyClassChanged:(CKObjectProperty*)property serializedObject:(id)object{
+	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
+}
+
+- (void)propertyDisappear:(NSString*)propertyName serializedObject:(id)object{
+}
+
+- (void)propertyAdded:(CKObjectProperty*)property{
+	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
 }
 
 @end

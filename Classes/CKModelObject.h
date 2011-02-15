@@ -10,7 +10,13 @@
 
 typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
 
-@interface CKModelObject : NSObject<NSCoding,NSCopying> {
+@protocol CKMigrating
+- (void)propertyClassChanged:(CKObjectProperty*)property serializedObject:(id)object;
+- (void)propertyDisappear:(NSString*)propertyName serializedObject:(id)object;
+- (void)propertyAdded:(CKObjectProperty*)property;
+@end
+
+@interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 
 }
 
