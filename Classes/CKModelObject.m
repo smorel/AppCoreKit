@@ -14,15 +14,15 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @implementation CKModelObjectPropertyMetaData
 @synthesize comparable;
 @synthesize serializable;
-@synthesize includeToHash;
-@synthesize createAtInit;
+@synthesize creatable;
+@synthesize hashable;
 @synthesize copiable;
 
 - (void)reset{
 	comparable = YES;
 	serializable = YES;
-	includeToHash = YES;
-	createAtInit = NO;
+	creatable = YES;
+	hashable = NO;
 	copiable = YES;
 }
 
@@ -51,7 +51,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
 		if(property.isObject){
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-			if(metaData.createAtInit){
+			if(metaData.creatable){
 				id p = [[[property.type alloc]init]autorelease];
 				[self setValue:p forKey:property.name];
 			}
@@ -109,7 +109,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 					[self setValue:objectFromDecoder forKey:property.name];
 				}
 				else if(objectFromDecoder){
-					if(metaData.createAtInit){
+					if(metaData.creatable){
 						id p = [self valueForKey:property.name];
 						if(p == nil){
 							p = [[[property.type alloc]init]autorelease];
@@ -119,7 +119,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 					[self propertyChanged:property serializedObject:objectFromDecoder];
 				}
 			}else{
-				if(metaData.createAtInit){
+				if(metaData.creatable){
 					id p = [self valueForKey:property.name];
 					if(p == nil){
 						p = [[[property.type alloc]init]autorelease];
@@ -178,7 +178,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSMutableArray* allValues = [NSMutableArray array];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(metaData.includeToHash){
+		if(metaData.hashable){
 			[allValues addObject:object];
 		}
 	}];

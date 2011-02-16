@@ -20,15 +20,15 @@
 	BOOL comparable;
 	BOOL serializable;
 	BOOL copiable;
-	BOOL includeToHash;
-	BOOL createAtInit;
+	BOOL hashable;
+	BOOL creatable;
 }
 
 @property (nonatomic, assign) BOOL comparable;
 @property (nonatomic, assign) BOOL serializable;
 @property (nonatomic, assign) BOOL copiable;
-@property (nonatomic, assign) BOOL includeToHash;
-@property (nonatomic, assign) BOOL createAtInit;
+@property (nonatomic, assign) BOOL hashable;
+@property (nonatomic, assign) BOOL creatable;
 
 - (void)reset;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property;
