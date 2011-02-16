@@ -280,10 +280,6 @@
 		75B01F531301A923005A22F7 /* CKImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F511301A923005A22F7 /* CKImageTransformer.m */; };
 		75B01F851301AF13005A22F7 /* CKThumbnailImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */; };
 		75B01F861301AF13005A22F7 /* CKThumbnailImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */; };
-		75D795E9130B35BB00E4416E /* CKImageResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D795E7130B35BB00E4416E /* CKImageResource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75D795EA130B35BB00E4416E /* CKImageResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D795E8130B35BB00E4416E /* CKImageResource.m */; };
-		75D79911130C5AF800E4416E /* CKUrlResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75D7990F130C5AF800E4416E /* CKUrlResource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75D79912130C5AF800E4416E /* CKUrlResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D79910130C5AF800E4416E /* CKUrlResource.m */; };
 		75DA8CB512FB2008003DC43F /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8CB312FB2008003DC43F /* CKDataBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -571,10 +567,6 @@
 		75B01F511301A923005A22F7 /* CKImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageTransformer.m; sourceTree = "<group>"; };
 		75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKThumbnailImageTransformer.h; sourceTree = "<group>"; };
 		75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKThumbnailImageTransformer.m; sourceTree = "<group>"; };
-		75D795E7130B35BB00E4416E /* CKImageResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageResource.h; sourceTree = "<group>"; };
-		75D795E8130B35BB00E4416E /* CKImageResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageResource.m; sourceTree = "<group>"; };
-		75D7990F130C5AF800E4416E /* CKUrlResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUrlResource.h; sourceTree = "<group>"; };
-		75D79910130C5AF800E4416E /* CKUrlResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUrlResource.m; sourceTree = "<group>"; };
 		75DA8CB312FB2008003DC43F /* CKDataBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDataBinder.h; sourceTree = "<group>"; };
 		75DA8CB412FB2008003DC43F /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBinder.m; sourceTree = "<group>"; };
 		75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNotificationBlockBinder.h; sourceTree = "<group>"; };
@@ -1117,25 +1109,12 @@
 		7531425B130B0C4F006F4F60 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				75D795E5130B35AE00E4416E /* Resources */,
 				75314260130B0C6C006F4F60 /* CKModelObject.h */,
 				75314262130B0C79006F4F60 /* CKModelObject.m */,
 				7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */,
 				7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */,
 				75314264130B0CB6006F4F60 /* CKDocument.h */,
 			);
-			path = Classes;
-			sourceTree = SOURCE_ROOT;
-		};
-		75D795E5130B35AE00E4416E /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				75D795E7130B35BB00E4416E /* CKImageResource.h */,
-				75D795E8130B35BB00E4416E /* CKImageResource.m */,
-				75D7990F130C5AF800E4416E /* CKUrlResource.h */,
-				75D79910130C5AF800E4416E /* CKUrlResource.m */,
-			);
-			name = Resources;
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -1277,8 +1256,6 @@
 				7531425E130B0C5D006F4F60 /* CKPersistentDocument.h in Headers */,
 				75314261130B0C6C006F4F60 /* CKModelObject.h in Headers */,
 				75314265130B0CB6006F4F60 /* CKDocument.h in Headers */,
-				75D795E9130B35BB00E4416E /* CKImageResource.h in Headers */,
-				75D79911130C5AF800E4416E /* CKUrlResource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1525,8 +1502,6 @@
 				71D1855B1301EAEE000AD883 /* CJSONSerializer.m in Sources */,
 				7531425F130B0C5D006F4F60 /* CKPersistentDocument.m in Sources */,
 				75314263130B0C79006F4F60 /* CKModelObject.m in Sources */,
-				75D795EA130B35BB00E4416E /* CKImageResource.m in Sources */,
-				75D79912130C5AF800E4416E /* CKUrlResource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
