@@ -9,8 +9,8 @@
 #import "CKFeedSource.h"
 
 @interface CKFeedSource ()
-@property (nonatomic, retain, readwrite) id<CKDocument> externalModel;
-@property (nonatomic, retain, readwrite) NSString *externalModelKey;
+@property (nonatomic, retain, readwrite) id<CKDocument> document;
+@property (nonatomic, retain, readwrite) NSString *objectsKey;
 @end
 
 @implementation CKFeedSource
@@ -21,14 +21,14 @@
 @synthesize hasMore = _hasMore;
 @synthesize isFetching = _isFetching;
 
-@synthesize externalModel = _externalModel;
-@synthesize externalModelKey = _externalModelKey;
+@synthesize document = _document;
+@synthesize objectsKey = _objectsKey;
 #pragma mark Initialization
 
-- (id)initWithExternalModel:(id<CKDocument>)model forKey:(NSString*)key{
+- (id)initWithDocument:(id<CKDocument>)theDocument forKey:(NSString*)key{
 	if (self = [super init]) {
-		self.externalModel = model;
-		self.externalModelKey = key;
+		self.document = theDocument;
+		self.objectsKey = key;
 		[self reset];
 		_currentIndex = [self.items count];
 	}
@@ -43,11 +43,9 @@
 }
 
 - (void)dealloc {
-	[_items release]; 
-	_items = nil;
 	_delegate = nil;
-	self.externalModel = nil;
-	self.externalModelKey = nil;
+	self.document = nil;
+	self.objectsKey = nil;
 	[super dealloc];
 }
 
@@ -69,18 +67,18 @@
 }
 
 - (NSArray*)items{
-	NSAssert(_externalModel,@"Model is not assigned");
-	return [_externalModel objectsForKey:_externalModelKey];
+	NSAssert(_document,@"Model is not assigned");
+	return [_document objectsForKey:_objectsKey];
 }
 
 - (void)addObserver:(id)object{
-	NSAssert(_externalModel,@"Model is not assigned");
-	[_externalModel addObserver:object forKey:_externalModelKey];
+	NSAssert(_document,@"Model is not assigned");
+	[_document addObserver:object forKey:_objectsKey];
 }
 
 - (void)removeObserver:(id)object{
-	NSAssert(_externalModel,@"Model is not assigned");
-	[_externalModel removeObserver:object forKey:_externalModelKey];	
+	NSAssert(_document,@"Model is not assigned");
+	[_document removeObserver:object forKey:_objectsKey];	
 }
 
 #pragma mark KVO
@@ -88,13 +86,13 @@
 - (void)addItems:(NSArray *)theItems {
 	NSArray *newItems = theItems;
 	
-	if ((_limit > 0) && (_items.count + theItems.count) > _limit) {
-		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _items.count))];
+	if ((_limit > 0) && ([self.items count] + theItems.count) > _limit) {
+		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - [self.items count]))];
 		_hasMore = NO;
 	}
 	
-	NSAssert(_externalModel,@"Model is not assigned");
-	[_externalModel addObjects:newItems forKey:_externalModelKey];
+	NSAssert(_document,@"Model is not assigned");
+	[_document addObjects:newItems forKey:_objectsKey];
 }
 
 @end

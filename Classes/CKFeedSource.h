@@ -16,10 +16,8 @@
 	BOOL _hasMore;
 	BOOL _fetching;
 	
-	//We can choose wheter to use an external model via this protocol or the items if the external model is not set
-	id<CKDocument> _externalModel;
-	NSString* _externalModelKey;
-	NSMutableArray *_items;
+	id<CKDocument> _document;
+	NSString* _objectsKey;
 }
 
 @property (nonatomic, assign) id delegate;
@@ -29,10 +27,10 @@
 @property (nonatomic, readonly) BOOL isFetching;
 
 @property (nonatomic, retain, readonly) NSArray *items;
-@property (nonatomic, retain, readonly) id<CKDocument> externalModel;
-@property (nonatomic, retain, readonly) NSString *externalModelKey;
+@property (nonatomic, retain, readonly) id<CKDocument> document;
+@property (nonatomic, retain, readonly) NSString *objectsKey;
 
-- (id)initWithExternalModel:(id<CKDocument>)model forKey:(NSString*)key;
+- (id)initWithDocument:(id<CKDocument>)document forKey:(NSString*)key;
 - (void)addObserver:(id)object;
 - (void)removeObserver:(id)object;
 
