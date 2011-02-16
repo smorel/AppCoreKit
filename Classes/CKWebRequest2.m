@@ -51,6 +51,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:anURL
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
 															timeoutInterval:60.0];
+	// NSURLConnection automatically supports the decompression of gzipped HTTP bodies.
+	// As of iOS 3.2, NSURLRequest automatically accepts a gzipped encoding when issuing requests.
+	// We force the encoding to ensure it's supported on previous iOS versions.
+	[request addValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 	[request addValue:[CKWebRequest2 defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
 	return [request autorelease];
 }
