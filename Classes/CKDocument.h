@@ -1,5 +1,5 @@
 //
-//  CKModelObjectsProtocol.h
+//  CKDocument.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-02-15.
