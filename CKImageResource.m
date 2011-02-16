@@ -51,6 +51,16 @@ static NSString* isWebUrlRegexString = nil;
 	//Save images if we have http urls, modify the url and store http urls in temporary variables
 }
 
+//If 1 of the 2 urls are equal => the resource is considered as the same.
+- (BOOL) isEqual:(id)other {
+	if ([other isKindOfClass:[self class]]) {
+		CKImageResource* otherResource = other;
+		return ([self.url isEqual:otherResource.url] || [self.distantURL isEqual:otherResource.distantURL]
+				|| [otherResource.url isEqual:self.url] || [otherResource.distantURL isEqual:self.distantURL]);
+	}
+	return NO;
+}
+
 
 @end
 
