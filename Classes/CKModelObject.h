@@ -8,16 +8,36 @@
 
 #import "CKNSObject+Introspection.h"
 
-typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
 
 @protocol CKMigrating
-- (void)propertyClassChanged:(CKObjectProperty*)property serializedObject:(id)object;
-- (void)propertyDisappear:(NSString*)propertyName serializedObject:(id)object;
+- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object;
+- (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object;
 - (void)propertyAdded:(CKObjectProperty*)property;
 @end
 
-@interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 
+@interface CKModelObjectPropertyMetaData : NSObject{
+	BOOL comparable;
+	BOOL serializable;
+	BOOL copiable;
+	BOOL includeToHash;
+	BOOL createAtInit;
+}
+
+@property (nonatomic, assign) BOOL comparable;
+@property (nonatomic, assign) BOOL serializable;
+@property (nonatomic, assign) BOOL copiable;
+@property (nonatomic, assign) BOOL includeToHash;
+@property (nonatomic, assign) BOOL createAtInit;
+
+- (void)reset;
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property;
+
+@end
+
+
+typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
+@interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 }
 
 - (void)executeForAllProperties:(CKModelObjectBlock)block;

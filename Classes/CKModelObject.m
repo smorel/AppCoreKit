@@ -9,7 +9,56 @@
 #import "CKModelObject.h"
 #import <objc/runtime.h>
 
+static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
+
+@implementation CKModelObjectPropertyMetaData
+@synthesize comparable;
+@synthesize serializable;
+@synthesize includeToHash;
+@synthesize createAtInit;
+@synthesize copiable;
+
+- (void)reset{
+	comparable = YES;
+	serializable = YES;
+	includeToHash = YES;
+	createAtInit = NO;
+	copiable = YES;
+}
+
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property{
+	if(CKModelObjectPropertyMetaDataSingleton == nil){
+		CKModelObjectPropertyMetaDataSingleton = [[CKModelObjectPropertyMetaData alloc]init];
+	}
+	[CKModelObjectPropertyMetaDataSingleton reset];
+	
+	SEL metaDataSelector = property.metaDataSelector;
+	if([object respondsToSelector:metaDataSelector]){
+		[object performSelector:metaDataSelector withObject:CKModelObjectPropertyMetaDataSingleton];
+	}
+	
+	return CKModelObjectPropertyMetaDataSingleton;
+}
+
+@end
+
+static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKey";
+
 @implementation CKModelObject
+
+- (id)init{
+	[super init];
+	[self executeForAllProperties:^(CKObjectProperty* property,id object){
+		if(property.isObject){
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+			if(metaData.createAtInit){
+				id p = [[[property.type alloc]init]autorelease];
+				[self setValue:p forKey:property.name];
+			}
+		}
+	}];
+	return self;
+}
 
 - (void)dealloc{
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
@@ -35,7 +84,10 @@
 	id copied = [[[self class] alloc] init];
 	
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
-		[copied setValue:[self valueForKey:property.name] forKey:property.name];
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+		if(metaData.copiable){
+			[copied setValue:[self valueForKey:property.name] forKey:property.name];
+		}
 	}];
 	
 	return copied;
@@ -45,40 +97,76 @@
 	NSAssert([aDecoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
     self = [super init];
     if (self) {
+		//FUCK names est mal serialize !!!!!!!!!
+		NSArray* names = [aDecoder decodeObjectForKey:CKModelObjectAllPropertyNamesKey];
+		NSMutableArray* allPropertiesInDecoder = [NSMutableArray arrayWithArray:names];
+		
 		[self executeForAllProperties:^(CKObjectProperty* property,id object){
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 			if([aDecoder containsValueForKey:property.name]){
 				id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
 				if([NSObject isKindOf:[objectFromDecoder class] parentType:property.type]){
 					[self setValue:objectFromDecoder forKey:property.name];
 				}
 				else if(objectFromDecoder){
-					[self propertyClassChanged:property serializedObject:objectFromDecoder];
+					if(metaData.createAtInit){
+						id p = [self valueForKey:property.name];
+						if(p == nil){
+							p = [[[property.type alloc]init]autorelease];
+							[self setValue:p forKey:property.name];
+						}
+					}
+					[self propertyChanged:property serializedObject:objectFromDecoder];
 				}
 			}else{
+				if(metaData.createAtInit){
+					id p = [self valueForKey:property.name];
+					if(p == nil){
+						p = [[[property.type alloc]init]autorelease];
+						[self setValue:p forKey:property.name];
+					}
+				}
+				
 				[self propertyAdded:property];
 			}
+			
+			[allPropertiesInDecoder removeObject:property.name];
 		}];
 		
-		//find keys in aDecoder that are no more in self and call propertyDisappear
+		for(NSString* propertyName in allPropertiesInDecoder){
+			id objectFromDecoder = [aDecoder decodeObjectForKey:propertyName];
+			[self propertyRemoved:propertyName serializedObject:objectFromDecoder];
+		}
 	}
 	return self;
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
 	NSAssert([aCoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
+	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
-		[aCoder encodeObject:object forKey:property.name];
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+		if(metaData.serializable){
+			[aCoder encodeObject:object forKey:property.name];
+		}
+		else{
+			[names removeObject:property.name];
+		}
 	}];
+	[aCoder encodeObject:names forKey:CKModelObjectAllPropertyNamesKey];
 }
 
 - (BOOL) isEqual:(id)other {
 	if ([other isKindOfClass:[self class]]) {
 		__block BOOL result = YES;
 		[self executeForAllProperties:^(CKObjectProperty* property,id object){
-			id otherObject = [other valueForKey:property.name];
-			BOOL propertyEqual = ((object == nil && otherObject == nil) || [object isEqual:otherObject]);;
-			if(!propertyEqual){
-				result = NO;
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+			if(metaData.comparable){
+				id otherObject = [other valueForKey:property.name];
+				BOOL propertyEqual = ((object == nil && otherObject == nil) || [object isEqual:otherObject]);;
+				if(!propertyEqual){
+					result = NO;
+				}
 			}
 		}];
 		return result;
@@ -89,7 +177,10 @@
 - (NSUInteger)hash {
 	NSMutableArray* allValues = [NSMutableArray array];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
-		[allValues addObject:object];
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+		if(metaData.includeToHash){
+			[allValues addObject:object];
+		}
 	}];
 	return (NSUInteger)[allValues hash];
 }
@@ -103,11 +194,12 @@
 }
 
 //For Migration
-- (void)propertyClassChanged:(CKObjectProperty*)property serializedObject:(id)object{
+- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object{
 	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
 }
 
-- (void)propertyDisappear:(NSString*)propertyName serializedObject:(id)object{
+- (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object{
+	NSLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
 }
 
 - (void)propertyAdded:(CKObjectProperty*)property{

@@ -19,6 +19,7 @@
 @synthesize attributes;
 @synthesize isObject;
 @synthesize isSelector;
+@synthesize metaDataSelector;
 
 - (void)dealloc{
 	self.name = nil;
@@ -145,7 +146,7 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 				    insertWith:(CKObjectPredicate)insertWith 
 				    addInstance:(BOOL)addInstance;
 
-- (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
 @end
 
 
@@ -167,6 +168,8 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 		NSString *propType = getPropertyType(descriptor);
 		Class returnType = NSClassFromString(propType);
 		objectProperty.type = returnType;
+		
+		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
 		return objectProperty;
 	}
 	return nil;
@@ -306,29 +309,34 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	return total;
 }
 
-- (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
 	NSString* firstChar = [input substringWithRange: NSMakeRange (0, 1)];
 	NSString* rest = [input substringWithRange: NSMakeRange (1, [input length] - 1)];
 	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
 }
 
-- (SEL)insertorForProperty : (NSString*)propertyName{
++ (SEL)insertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
++ (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:forKey:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
++ (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"is" suffix:@"CompatibleWith:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)setSelectorForProperty : (NSString*)propertyName{
++ (SEL)setSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"set" suffix:@":"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
 	return NSSelectorFromString(selectorName);
 }
 
