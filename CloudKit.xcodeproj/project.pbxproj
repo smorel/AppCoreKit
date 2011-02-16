@@ -544,10 +544,10 @@
 		71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIColorAdditions.m; sourceTree = "<group>"; };
 		71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSlideshowViewController.h; sourceTree = "<group>"; };
 		71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
-		7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPersistentDocument.h; path = Classes/CKPersistentDocument.h; sourceTree = "<group>"; };
-		7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPersistentDocument.m; path = Classes/CKPersistentDocument.m; sourceTree = "<group>"; };
-		75314260130B0C6C006F4F60 /* CKModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKModelObject.h; path = Classes/CKModelObject.h; sourceTree = "<group>"; };
-		75314262130B0C79006F4F60 /* CKModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKModelObject.m; path = Classes/CKModelObject.m; sourceTree = "<group>"; };
+		7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPersistentDocument.h; sourceTree = "<group>"; };
+		7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPersistentDocument.m; sourceTree = "<group>"; };
+		75314260130B0C6C006F4F60 /* CKModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObject.h; sourceTree = "<group>"; };
+		75314262130B0C79006F4F60 /* CKModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKModelObject.m; sourceTree = "<group>"; };
 		75314264130B0CB6006F4F60 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDocument.h; sourceTree = "<group>"; };
 		75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedSource.h; sourceTree = "<group>"; };
 		75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedSource.m; sourceTree = "<group>"; };
@@ -642,7 +642,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
-				7531425B130B0C4F006F4F60 /* Document */,
+				7531425B130B0C4F006F4F60 /* Classes */,
 				4FAD0FA111C2D5C80071C7BF /* Tables */,
 				715CA152110E36F700593672 /* UI */,
 				71917AB01199C3D800386EB5 /* Location */,
@@ -1114,7 +1114,7 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
-		7531425B130B0C4F006F4F60 /* Document */ = {
+		7531425B130B0C4F006F4F60 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				75D795E5130B35AE00E4416E /* Resources */,
@@ -1124,8 +1124,8 @@
 				7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */,
 				75314264130B0CB6006F4F60 /* CKDocument.h */,
 			);
-			name = Document;
-			sourceTree = "<group>";
+			path = Classes;
+			sourceTree = SOURCE_ROOT;
 		};
 		75D795E5130B35AE00E4416E /* Resources */ = {
 			isa = PBXGroup;
@@ -1136,7 +1136,8 @@
 				75D79910130C5AF800E4416E /* CKUrlResource.m */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
+			path = Classes;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
