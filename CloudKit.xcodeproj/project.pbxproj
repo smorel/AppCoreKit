@@ -255,6 +255,11 @@
 		71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */; };
 		71FD630E130C46E4007EA1B2 /* CKNSData+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 71FD630C130C46E4007EA1B2 /* CKNSData+Compression.h */; };
 		71FD630F130C46E4007EA1B2 /* CKNSData+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */; };
+		7531425E130B0C5D006F4F60 /* CKPersistentDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7531425F130B0C5D006F4F60 /* CKPersistentDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */; };
+		75314261130B0C6C006F4F60 /* CKModelObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75314260130B0C6C006F4F60 /* CKModelObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75314263130B0C79006F4F60 /* CKModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75314262130B0C79006F4F60 /* CKModelObject.m */; };
+		75314265130B0CB6006F4F60 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 75314264130B0CB6006F4F60 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A2A2FE12F7F2DD00E71451 /* CKFeedSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A2A2FF12F7F2DD00E71451 /* CKFeedSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */; };
 		75A2A30012F7F2DD00E71451 /* CKWebSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -539,6 +544,11 @@
 		71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
 		71FD630C130C46E4007EA1B2 /* CKNSData+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSData+Compression.h"; sourceTree = "<group>"; };
 		71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSData+Compression.m"; sourceTree = "<group>"; };
+		7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPersistentDocument.h; sourceTree = "<group>"; };
+		7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPersistentDocument.m; sourceTree = "<group>"; };
+		75314260130B0C6C006F4F60 /* CKModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObject.h; sourceTree = "<group>"; };
+		75314262130B0C79006F4F60 /* CKModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKModelObject.m; sourceTree = "<group>"; };
+		75314264130B0CB6006F4F60 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDocument.h; sourceTree = "<group>"; };
 		75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedSource.h; sourceTree = "<group>"; };
 		75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedSource.m; sourceTree = "<group>"; };
 		75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebSource.h; sourceTree = "<group>"; };
@@ -628,6 +638,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				7531425B130B0C4F006F4F60 /* Classes */,
 				4FAD0FA111C2D5C80071C7BF /* Tables */,
 				715CA152110E36F700593672 /* UI */,
 				71917AB01199C3D800386EB5 /* Location */,
@@ -1101,6 +1112,18 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
+		7531425B130B0C4F006F4F60 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				75314260130B0C6C006F4F60 /* CKModelObject.h */,
+				75314262130B0C79006F4F60 /* CKModelObject.m */,
+				7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */,
+				7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */,
+				75314264130B0CB6006F4F60 /* CKDocument.h */,
+			);
+			path = Classes;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1237,6 +1260,9 @@
 				71D1855A1301EAEE000AD883 /* CJSONSerializer.h in Headers */,
 				71D1855C1301EAEE000AD883 /* JSONRepresentation.h in Headers */,
 				71FD630E130C46E4007EA1B2 /* CKNSData+Compression.h in Headers */,
+				7531425E130B0C5D006F4F60 /* CKPersistentDocument.h in Headers */,
+				75314261130B0C6C006F4F60 /* CKModelObject.h in Headers */,
+				75314265130B0CB6006F4F60 /* CKDocument.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1482,6 +1508,8 @@
 				71D185591301EAEE000AD883 /* CJSONScanner.m in Sources */,
 				71D1855B1301EAEE000AD883 /* CJSONSerializer.m in Sources */,
 				71FD630F130C46E4007EA1B2 /* CKNSData+Compression.m in Sources */,
+				7531425F130B0C5D006F4F60 /* CKPersistentDocument.m in Sources */,
+				75314263130B0C79006F4F60 /* CKModelObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

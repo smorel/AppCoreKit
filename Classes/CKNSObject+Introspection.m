@@ -11,12 +11,15 @@
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>
 
+
+
 @implementation CKObjectProperty
 @synthesize name;
 @synthesize type;
 @synthesize attributes;
 @synthesize isObject;
 @synthesize isSelector;
+@synthesize metaDataSelector;
 
 - (void)dealloc{
 	self.name = nil;
@@ -60,8 +63,12 @@
 	return [attributes substringWithRange: NSMakeRange(1,2)];
 }
 
+- (NSString*)className{
+	return [NSString stringWithUTF8String:class_getName(self.type)];
+}
 
 @end
+
 
 static NSString* getPropertyType(objc_property_t property) {
 	if(property){
@@ -139,7 +146,7 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 				    insertWith:(CKObjectPredicate)insertWith 
 				    addInstance:(BOOL)addInstance;
 
-- (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
 @end
 
 
@@ -161,6 +168,8 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 		NSString *propType = getPropertyType(descriptor);
 		Class returnType = NSClassFromString(propType);
 		objectProperty.type = returnType;
+		
+		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
 		return objectProperty;
 	}
 	return nil;
@@ -194,27 +203,43 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
     free(ps);	
 	
 	Class f = class_getSuperclass(c);
-	if(f){
+	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
 		[self introspection:f array:array];
 	}
 	
 }
 
-- (NSMutableArray*)allProperties{
-	NSMutableArray* ar = [NSMutableArray array];
-	[self introspection:[self class] array:ar];
-	return ar;
+- (NSArray*)allProperties{
+	return [[CKObjectPropertyManager defaultManager]allPropertiesForClass:[self class]];
+}
+
+- (NSArray*)allPropertyNames{
+	return [[CKObjectPropertyManager defaultManager]allPropertieNamesForClass:[self class]];
+}
+
+
+- (NSString*)className{
+	return [NSString stringWithUTF8String:class_getName([self class])];
 }
 
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
+	if(parentType){
+		if([NSObject isExactKindOf:type parentType:parentType])
+			return YES;
+		Class p = class_getSuperclass(type);
+		if(p)
+			return [NSObject isKindOf:p parentType:parentType];
+		return NO;
+	}
+	return YES;
+}
+
++ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
 	if(parentType){
 		const char* t1 = class_getName(type);
 		const char* t2 = class_getName(parentType);
 		if(strcmp(t1,t2) == 0)
 			return YES;
-		Class p = class_getSuperclass(type);
-		if(p)
-			return [NSObject isKindOf:p parentType:parentType];
 		return NO;
 	}
 	return YES;
@@ -284,30 +309,98 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	return total;
 }
 
-- (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
 	NSString* firstChar = [input substringWithRange: NSMakeRange (0, 1)];
 	NSString* rest = [input substringWithRange: NSMakeRange (1, [input length] - 1)];
 	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
 }
 
-- (SEL)insertorForProperty : (NSString*)propertyName{
++ (SEL)insertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
++ (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:forKey:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
++ (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"is" suffix:@"CompatibleWith:"];
 	return NSSelectorFromString(selectorName);
 }
 
-- (SEL)setSelectorForProperty : (NSString*)propertyName{
++ (SEL)setSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"set" suffix:@":"];
 	return NSSelectorFromString(selectorName);
 }
 
++ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
 @end
+
+
+@interface CKObjectPropertyManager ()
+@property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
+@property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
+@end
+
+static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
+@implementation CKObjectPropertyManager
+@synthesize propertiesByClassName = _propertiesByClassName;
+@synthesize propertyNamesByClassName = _propertyNamesByClassName;
+
++ (CKObjectPropertyManager*)defaultManager{
+	if(CKObjectPropertyManagerDefault == nil){
+		CKObjectPropertyManagerDefault = [[CKObjectPropertyManager alloc]init];
+	}
+	return CKObjectPropertyManagerDefault;
+}
+
+- (id)init{
+	[super init];
+	self.propertiesByClassName = [NSMutableDictionary dictionary];
+	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
+	return self;
+}
+
+- (void)dealloc{
+	self.propertiesByClassName = nil;
+	[super dealloc];
+}
+
+- (NSArray*)allPropertiesForClass:(Class)class{
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+	if(allProperties == nil){
+		allProperties = [NSMutableArray array];
+		[NSObject introspection:class array:allProperties];
+		[_propertiesByClassName setObject:allProperties forKey:className];
+		
+		NSMutableArray* allPropertyNames = [NSMutableArray array];
+		for(CKObjectProperty* property in allProperties){
+			[allPropertyNames addObject:property.name];
+		}
+		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
+	}
+	
+	return allProperties;
+}
+
+
+- (NSArray*)allPropertieNamesForClass:(Class)class{
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:className];
+	if(allPropertyNames == nil){
+		[self allPropertiesForClass:class];
+		allPropertyNames = [_propertyNamesByClassName objectForKey:className];
+	}
+	return allPropertyNames;
+}
+
+@end
+
+

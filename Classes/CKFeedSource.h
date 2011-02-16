@@ -7,22 +7,32 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKDocument.h"
 
 @interface CKFeedSource : NSObject {
 	id _delegate;
-	NSMutableArray *_items;
 	NSUInteger _currentIndex;
 	NSUInteger _limit;
 	BOOL _hasMore;
 	BOOL _fetching;
+	
+	id<CKDocument> _document;
+	NSString* _objectsKey;
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, retain, readonly) NSArray *items;
 @property (nonatomic, readonly) NSUInteger currentIndex;
 @property (nonatomic, readwrite) NSUInteger limit;
 @property (nonatomic, readonly) BOOL hasMore;
 @property (nonatomic, readonly) BOOL isFetching;
+
+@property (nonatomic, retain, readonly) NSArray *items;
+@property (nonatomic, retain, readonly) id<CKDocument> document;
+@property (nonatomic, retain, readonly) NSString *objectsKey;
+
+- (id)initWithDocument:(id<CKDocument>)document forKey:(NSString*)key;
+- (void)addObserver:(id)object;
+- (void)removeObserver:(id)object;
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize;
 - (void)cancelFetch;
