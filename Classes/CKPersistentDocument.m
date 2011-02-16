@@ -6,16 +6,22 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocument.h"
+#import "CKPersistentDocument.h"
 
+@interface CKPersistentDocument ()
+- (void)saveObjectsForKey:(NSString*)key;
+- (NSMutableArray*)loadObjectsForKey:(NSString*)key;
+@end
 
-@implementation CKDocument
+@implementation CKPersistentDocument
 @synthesize objects;
-@synthesize onDiskStorageKeys;
+@synthesize persistentKeys;
+@synthesize autoSave;
 
 - (id)init{
 	[super init];
 	self.objects = [NSMutableDictionary dictionary];
+	autoSave = NO;
 	return self;
 }
 
@@ -24,10 +30,10 @@
 	[super dealloc];
 }
 
-- (NSMutableArray*)objectsForKey:(NSString*)key{
+- (NSMutableArray*)mutableObjectsForKey:(NSString*)key{
 	NSMutableArray* objectsForKey = [objects objectForKey:key];
 	if(objectsForKey == nil){
-		if(onDiskStorageKeys && [onDiskStorageKeys containsObject:key]){
+		if(persistentKeys && [persistentKeys containsObject:key]){
 			objectsForKey = [self loadObjectsForKey:key];
 		}
 		else{
@@ -36,6 +42,10 @@
 		}
 	}
 	return objectsForKey;
+}
+
+- (NSArray*)objectsForKey:(NSString*)key{
+	return [self mutableObjectsForKey:key];
 }
 
 - (void)saveObjectsForKey:(NSString*)key{
@@ -68,14 +78,20 @@
 }
 
 - (void)addObjects:(NSArray*)newItems forKey:(NSString*)key{
-	NSMutableArray* objectsForKey = [self objectsForKey:key];
+	NSMutableArray* objectsForKey = [self mutableObjectsForKey:key];
 	
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([objectsForKey count], [newItems count])];
     [self.objects willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:key];
     [objectsForKey addObjectsFromArray:newItems];
     [self.objects didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:key];	
 	
-	if(onDiskStorageKeys && [onDiskStorageKeys containsObject:key]){
+	if(autoSave && persistentKeys && [persistentKeys containsObject:key]){
+		[self saveObjectsForKey:key];
+	}
+}
+
+- (void)save{
+	for(NSString* key in persistentKeys){
 		[self saveObjectsForKey:key];
 	}
 }
@@ -83,11 +99,11 @@
 - (void)removeObjects:(NSArray*)items forKey:(NSString*)key{
 }
 
-- (void)registerAsObserver:(id)object forKey:(NSString*)key{
+- (void)addObserver:(id)object forKey:(NSString*)key{
 	[self.objects addObserver:object forKeyPath:key options:(NSKeyValueObservingOptionNew) context:nil];
 }
 
-- (void)unregisterAsObserver:(id)object forKey:(NSString*)key{
+- (void)removeObserver:(id)object forKey:(NSString*)key{
 	[self.objects removeObserver:object forKeyPath:key];	
 }
 

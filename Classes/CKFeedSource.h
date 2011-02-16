@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKModelObjectsProtocol.h"
+#import "CKDocument.h"
 
 @interface CKFeedSource : NSObject {
 	id _delegate;
@@ -17,7 +17,7 @@
 	BOOL _fetching;
 	
 	//We can choose wheter to use an external model via this protocol or the items if the external model is not set
-	id<CKModelObjectsProtocol> _externalModel;
+	id<CKDocument> _externalModel;
 	NSString* _externalModelKey;
 	NSMutableArray *_items;
 }
@@ -29,12 +29,12 @@
 @property (nonatomic, readonly) BOOL isFetching;
 
 @property (nonatomic, retain, readonly) NSArray *items;
-@property (nonatomic, retain, readonly) id<CKModelObjectsProtocol> externalModel;
+@property (nonatomic, retain, readonly) id<CKDocument> externalModel;
 @property (nonatomic, retain, readonly) NSString *externalModelKey;
 
-- (id)initWithExternalModel:(id<CKModelObjectsProtocol>)model forKey:(NSString*)key;
-- (void)registerAsModelObserver:(id)object;
-- (void)unregisterAsModelObserver:(id)object;
+- (id)initWithExternalModel:(id<CKDocument>)model forKey:(NSString*)key;
+- (void)addObserver:(id)object;
+- (void)removeObserver:(id)object;
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize;
 - (void)cancelFetch;
