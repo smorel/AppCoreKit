@@ -6,14 +6,9 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKModelObject.h"
+#import "CKUrlResource.h"
 
-
-@interface CKImageResource : CKModelObject{
-	NSURL* distantURL;
-	NSURL* url;
+@interface CKImageResource : CKUrlResource{
 }
-
-@property (nonatomic, retain) NSURL *url;
 
 @end;
