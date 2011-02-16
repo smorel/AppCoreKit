@@ -52,6 +52,7 @@
 @property (nonatomic, assign, readwrite) id<CKImageViewDelegate> delegate;
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
 @property (nonatomic, assign, readwrite) BOOL interactive;
+@property (nonatomic, retain, readonly) UIButton *button;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;
