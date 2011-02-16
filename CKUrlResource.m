@@ -36,12 +36,27 @@ static NSString* isWebUrlRegexString = nil;
 }
 
 - (void)setUrl:(NSURL *)theUrl{
+	//If the resource has already been sotred on disk, continue to use it ...
+	if(![self isRemoteUrl:url]
+	   && [self.remoteURL isEqual:theUrl]){
+		return;
+	}
+	
 	[url release];
 	url = [theUrl retain];
 	
 	if([self isRemoteUrl:url]){
 		self.remoteURL = url;
 	}
+}
+
+- (NSURL*)url{
+	//if the local resource has been deleted, switch to the remote url
+	if(![self isRemoteUrl:url] && ![[NSFileManager defaultManager] fileExistsAtPath:[url absoluteString]] ){
+		[url release];
+		url = [remoteURL retain];
+	}
+	return url;
 }
 
 - (void)urlMetaData:(CKModelObjectPropertyMetaData*)metaData{
