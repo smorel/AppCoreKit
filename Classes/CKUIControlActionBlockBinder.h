@@ -33,6 +33,8 @@ typedef void(^CKUIControlActionBlock)();
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
 											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock;
 
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view 
+											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock;
 
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag keyPath:(NSString*)keyPath 
 											actionBlock:(CKUIControlActionBlock)actionBlock;
@@ -43,6 +45,9 @@ typedef void(^CKUIControlActionBlock)();
 
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
 											actionBlock:(CKUIControlActionBlock)actionBlock;
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view 
+											  actionBlock:(CKUIControlActionBlock)actionBlock;
 
 -(void)bindControlInView:(UIView*)controlView;
 

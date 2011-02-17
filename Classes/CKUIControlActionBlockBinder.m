@@ -62,6 +62,11 @@
 	return [self actionBlockBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventTouchUpInside actionBlock:actionBlock];
 }
 
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view 
+											  actionBlock:(CKUIControlActionBlock)actionBlock{
+	return [self actionBlockBinderForView:view viewTag:-1 keyPath:@"" controlEvents:UIControlEventTouchUpInside actionBlock:actionBlock];
+}
+
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag
 											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock{
 	return [self actionBlockBinderForView:view viewTag:viewTag keyPath:@"" controlEvents:controlEvents actionBlock:actionBlock];
@@ -70,6 +75,11 @@
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
 											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock{
 	return [self actionBlockBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:controlEvents actionBlock:actionBlock];
+}
+
++ (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view
+											controlEvents:(UIControlEvents)controlEvents actionBlock:(CKUIControlActionBlock)actionBlock{
+	return [self actionBlockBinderForView:view viewTag:-1 keyPath:@"" controlEvents:controlEvents actionBlock:actionBlock];
 }
 
 + (CKUIControlActionBlockBinder*)actionBlockBinderForView:(UIView*)view viewTag:(NSUInteger)viewTag keyPath:(NSString*)keyPath 
