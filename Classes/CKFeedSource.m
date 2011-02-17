@@ -86,8 +86,8 @@
 - (void)addItems:(NSArray *)theItems {
 	NSArray *newItems = theItems;
 	
-	if ((_limit > 0) && ([self.items count] + theItems.count) > _limit) {
-		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - [self.items count]))];
+	if ((_limit > 0) && (_currentIndex + theItems.count) > _limit) {
+		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _currentIndex))];
 		_hasMore = NO;
 	}
 	

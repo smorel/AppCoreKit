@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKPersistentDocument.h"
 
 @interface CKPersistentDocument ()
@@ -97,10 +98,28 @@
 }
 
 - (void)removeObjects:(NSArray*)items forKey:(NSString*)key{
+	NSMutableArray* objectsForKey = [self mutableObjectsForKey:key];  
+	
+	NSMutableArray* toRemove = [NSMutableArray array];
+	NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+	for(id item in items){
+		NSUInteger index = [objectsForKey indexOfObject:item];
+		if(index == NSNotFound){
+			NSLog(@"invalid object when remove");
+		}
+		else{
+			[indexSet addIndex:index];
+			[toRemove addObject:item];
+		}
+	}
+	
+	[self.objects willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
+	[objectsForKey removeObjectsInArray:toRemove];
+	[self.objects didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
 }
 
 - (void)addObserver:(id)object forKey:(NSString*)key{
-	[self.objects addObserver:object forKeyPath:key options:(NSKeyValueObservingOptionNew) context:nil];
+	[self.objects addObserver:object forKeyPath:key options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 }
 
 - (void)removeObserver:(id)object forKey:(NSString*)key{

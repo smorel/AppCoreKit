@@ -67,6 +67,7 @@ typedef enum {
 - (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers;
 - (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
 - (void)insertCellController:(CKTableViewCellController*)cellController atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
+- (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
 - (CKTableSection*)sectionAtIndex:(NSUInteger)index;
 
 @end

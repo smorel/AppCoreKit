@@ -155,15 +155,30 @@
 }
 
 
-- (void)insertViewAtIndexPath:(NSIndexPath*)indexPath{
+- (void)insertViewAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+	int index = [self indexForIndexPath:indexPath];
+	UIView* previousView = (index < [self.views count]) ? [self.views objectAtIndex:index] : [NSNull null];
 	UIView *view = [self.dataSource gridView:self viewAtIndexPath:indexPath];
 	if (view) {
 		if ([view isDescendantOfView:self] == NO) [self addSubview:view];
-	}
-	if ([self.views containsObject:view] == NO) {
-		[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:[self indexForIndexPath:indexPath]];
+		
+		if(animated){
+			view.alpha = 0;
+			[UIView beginAnimations:@"FadeInView" context:nil];
+			//[UIView setAnimationDuration:1];
+			view.alpha = 1;
+			[UIView commitAnimations];
+		}
 	}
 	
+	if(previousView && index < [self.views count]){
+		if(previousView != view && [previousView isKindOfClass:[UIView class]])
+			[previousView removeFromSuperview];
+		[self.views removeObjectAtIndex:index];
+	}
+	NSAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
+	[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:index];
+		
 	_needsLayout = YES;
 	[self setNeedsLayout];
 }
@@ -176,7 +191,7 @@
 	for (int row=0 ; row<_rows ; row++) {
 		for (int column=0 ; column<_columns ; column++) {
 			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
-			[self insertViewAtIndexPath:indexPath];
+			[self insertViewAtIndexPath:indexPath animated:NO];
 		}
 	}
 }

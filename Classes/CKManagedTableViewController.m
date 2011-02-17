@@ -235,7 +235,16 @@
 	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
 	[section insertCellController:cellController atIndex:index];
 	[cellController performSelector:@selector(setParentController:) withObject:self];
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
+	NSIndexPath* indexPath = [NSIndexPath indexPathForRow:index inSection:sectionIndex];
+	[cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
+}
+
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
+	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
+	[section removeCellControllerAtIndex:index];
+	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
 }
 
 - (CKTableSection *)sectionAtIndex:(NSUInteger)index {

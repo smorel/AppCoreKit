@@ -49,7 +49,7 @@
 
 - (void)reloadData;
 
-- (void)insertViewAtIndexPath:(NSIndexPath*)indexPath;
+- (void)insertViewAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 - (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForPoint:(CGPoint)point;

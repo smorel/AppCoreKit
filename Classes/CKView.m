@@ -8,6 +8,7 @@
 
 #import "CKView.h"
 #import <CloudKit/CKConstants.h>
+#import <QuartzCore/QuartzCore.h>
 
 @implementation CKViewTemplate
 @synthesize viewCreationBlock;
@@ -77,6 +78,18 @@
 - (void)layoutSubviews{
 	[super layoutSubviews];
 	self.subView.frame = self.bounds;
+}
+
+- (UIImage*)snapshot{
+	if(self.subView && self.subView.hidden == NO && self.hidden == NO){
+		UIGraphicsBeginImageContext(subView.bounds.size);
+		CGContextRef ctx = UIGraphicsGetCurrentContext();
+		[subView.layer renderInContext:ctx];
+		UIImage* image  = UIGraphicsGetImageFromCurrentImageContext();
+		UIGraphicsEndImageContext();
+		return image;
+	}
+	return nil;
 }
 
 @end

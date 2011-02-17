@@ -81,7 +81,7 @@
 	}
 	
 	_currentIndex += [newItems count];
-	_hasMore = ([newItems count] < _requestedBatchSize) ? NO : YES;
+	_hasMore = (_currentIndex < _requestedBatchSize) ? NO : YES;
 	_fetching = NO;
 	self.request = nil;
 }
