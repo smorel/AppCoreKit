@@ -52,8 +52,12 @@
 - (void)saveObjectsForKey:(NSString*)key{
 	NSMutableArray* objectsForKey = [objects objectForKey:key];
 	if(objectsForKey){
-		NSString *archivePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.archive",key]];
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString* documentPath = [paths objectAtIndex:0];
+		
+		NSString *archivePath = [NSString stringWithFormat:@"%@/%@.archive",documentPath,key];
 		BOOL result = [NSKeyedArchiver archiveRootObject:objectsForKey toFile:archivePath];
+		
 		NSAssert(result,@"Unable to save objects for key %@ in %@",key,archivePath);
 	}
 	else{
@@ -62,7 +66,10 @@
 }
 
 - (NSMutableArray*)loadObjectsForKey:(NSString*)key{
-	NSString *archivePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.archive",key]];
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString* documentPath = [paths objectAtIndex:0];
+	
+	NSString *archivePath = [NSString stringWithFormat:@"%@/%@.archive",documentPath,key];
 	BOOL bo = [[NSFileManager defaultManager] fileExistsAtPath:archivePath];
 	
 	NSMutableArray* objectsForKey = nil;
