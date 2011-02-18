@@ -28,6 +28,7 @@ extern NSString * const CKDownloaderErrorDomain;
 - (id)initWithDelegate:(id)delegate;
 - (void)downloadContentOfURL:(NSURL *)url toLocalURL:(NSURL*)local;
 - (void)cancel;
+- (void)retry;
 
 @end
 

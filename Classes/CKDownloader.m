@@ -48,7 +48,7 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 
 #pragma mark Public API
 
-- (void)downloadContentOfURL:(NSURL *)url toLocalURL:(NSURL*)local{
+- (void)downloadContentOfURL:(NSURL *)url toLocalURL:(NSURL*)local allowOverwrite:(BOOL)allowOverwrite{
 	[self cancel];
 	
 	self.progress = [NSNumber numberWithFloat:0];
@@ -63,16 +63,26 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 	}
 	else{
 		self.request = [CKWebRequest2 requestWithURL:self.remoteURL];
-		[self.request setDestination:[self.localURL path] allowOverwrite:YES];
+		[self.request setDestination:[self.localURL path] allowOverwrite:allowOverwrite];
 		self.request.delegate = self;
 		[self.request start];
 	}
+} 
+
+- (void)downloadContentOfURL:(NSURL *)url toLocalURL:(NSURL*)local{
+	[self downloadContentOfURL:url toLocalURL:local allowOverwrite:YES];
 }
+
 
 - (void)cancel {
 	self.request.delegate = nil;
 	[self.request cancel];
 	self.request = nil;
+}
+
+- (void)retry{
+	[self cancel];
+	[self downloadContentOfURL:self.remoteURL toLocalURL:self.localURL allowOverwrite:NO];
 }
 
 #pragma mark CKWebRequestDelegate Protocol
