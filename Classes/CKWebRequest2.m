@@ -202,11 +202,28 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     // It can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
     [theReceivedData setLength:0];
+	byteReceived = 0;
+	
+	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
+								  withObject:self 
+								  withObject:[NSNumber numberWithFloat:0]
+							   waitUntilDone:NO];
+	
 	self.response = response;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	//CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
+	
+	long long expectedLength = [self.response expectedContentLength];
+	NSAssert(expectedLength != 0,@"Expected length for request is 0.");
+	byteReceived += [data length];
+	float progress = (float)byteReceived / (float)expectedLength;
+	
+	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
+								  withObject:self 
+								  withObject:[NSNumber numberWithFloat:progress]
+							   waitUntilDone:NO];
 	
 	// Append the new available data
 	// TODO: provide an delegate to notify for the progress of the URL loading
@@ -219,6 +236,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
+	
+	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
+								  withObject:self 
+								  withObject:[NSNumber numberWithFloat:1]
+							   waitUntilDone:NO];
 	
 	if ([theResponse statusCode] > 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];

@@ -26,6 +26,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 	NSMutableData *theReceivedData;
 	id theUserInfo;
 	NSObject<CKWebRequestDelegate> *theDelegate;
+	long long byteReceived;
 	
 	BOOL executing;
 	BOOL finished;
@@ -58,6 +59,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
+- (void)request:(id)request progress:(NSNumber*)normalizedProgress;
 - (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(id)request didReceiveValue:(id)value;
 - (void)request:(id)request didFailWithError:(NSError *)error;
