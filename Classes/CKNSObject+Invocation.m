@@ -10,6 +10,10 @@
 
 @implementation NSObject (CKNSObjectInvocation)
 
+- (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg  waitUntilDone:(BOOL)wait {
+	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, nil] waitUntilDone:wait];
+}
+
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 waitUntilDone:(BOOL)wait {
 	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, arg2, nil] waitUntilDone:wait];
 }

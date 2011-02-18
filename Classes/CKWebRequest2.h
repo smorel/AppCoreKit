@@ -28,6 +28,10 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 	NSObject<CKWebRequestDelegate> *theDelegate;
 	long long byteReceived;
 	
+	NSString* destinationPath;
+	BOOL allowDestinationOverwrite;
+	NSOutputStream* destinationStream;
+	
 	BOOL executing;
 	BOOL finished;
 	BOOL cancelled;
@@ -42,6 +46,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 - (void)setMethod:(NSString *)method;
 - (void)setBodyData:(NSData *)bodyData;
+- (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite;
 
 //
 
@@ -59,7 +64,9 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
-- (void)request:(id)request progress:(NSNumber*)normalizedProgress;
+- (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber*)progress;
+- (void)requestDidFinishLoading:(id)request;
+
 - (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(id)request didReceiveValue:(id)value;
 - (void)request:(id)request didFailWithError:(NSError *)error;

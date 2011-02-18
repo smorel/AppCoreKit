@@ -51,6 +51,8 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 - (void)downloadContentOfURL:(NSURL *)url toLocalURL:(NSURL*)local{
 	[self cancel];
 	
+	self.progress = [NSNumber numberWithFloat:0];
+	
 	NSAssert([local isFileURL],@"%@ : Try to donwload %@ to %@ wich is not a file URL.",CKDownloaderErrorDomain,url,local);
 	self.remoteURL = url;
 	self.localURL = local;
@@ -61,7 +63,7 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 	}
 	else{
 		self.request = [CKWebRequest2 requestWithURL:self.remoteURL];
-		//self.request init with local url for direct to disk access.
+		[self.request setDestination:[self.localURL path] allowOverwrite:YES];
 		self.request.delegate = self;
 		[self.request start];
 	}
@@ -75,10 +77,18 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 
 #pragma mark CKWebRequestDelegate Protocol
 
+- (void)requestDidFinishLoading:(id)request{
+	self.progress = [NSNumber numberWithFloat:1];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(downloader:didDownloadContent:)]) {
+		[self.delegate downloader:self didDownloadContent:nil];
+	}	
+}
+
 - (void)request:(id)request didReceiveValue:(id)value {
+	self.progress = [NSNumber numberWithFloat:1];
 	if (self.delegate && [self.delegate respondsToSelector:@selector(downloader:didDownloadContent:)]) {
 		[self.delegate downloader:self didDownloadContent:(NSData*)value];
-	}
+	}	
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {
@@ -87,10 +97,10 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 	}
 }
 
-- (void)request:(id)request progress:(NSNumber*)normalizedProgress{
-	self.progress = normalizedProgress;
+- (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber*)progress{
+	self.progress = progress;
 	if (self.delegate && [self.delegate respondsToSelector:@selector(downloader:progress:)]) {
-		[self.delegate downloader:self progress:normalizedProgress];
+		[self.delegate downloader:self progress:progress];
 	}
 }
 

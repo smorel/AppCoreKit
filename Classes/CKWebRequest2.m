@@ -27,6 +27,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @property (nonatomic, retain) NSURLResponse *response;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, retain) NSMutableData *receivedData;
+@property (nonatomic, retain, readwrite) NSString *destinationPath;
+@property (nonatomic, assign, readwrite) BOOL allowDestinationOverwrite;
+@property (nonatomic, retain, readwrite) NSOutputStream *destinationStream;
 
 - (void)markAsExecuting;
 - (void)markAsFinished;
@@ -44,6 +47,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize response = theResponse;
 @synthesize userInfo = theUserInfo;
 @synthesize delegate = theDelegate;
+@synthesize destinationPath;
+@synthesize allowDestinationOverwrite;
+@synthesize destinationStream;
 
 #pragma mark Initialization
 
@@ -81,6 +87,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theResponse release];
 	[theUserInfo release];
 	[theConnection release];
+	self.destinationPath = nil;
+	self.destinationStream = nil;
 	[super dealloc];
 }
 
@@ -100,6 +108,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 		userAgent = [[NSString stringWithFormat:@"%@/%@ (%@; %@; %@)", appName, appVersion, model, systemName, systemVersion, locale] retain];
 	}
 	return userAgent;
+}
+
+
+- (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite{
+	self.destinationPath = path;
+	self.allowDestinationOverwrite = allowOverwrite;
 }
 
 #pragma mark Public API
@@ -155,7 +169,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
 }
 
-//
+- (void)openFileStream{
+	if(self.allowDestinationOverwrite){
+		//NSError* error = [[[NSError alloc]init]autorelease];
+		[[NSFileManager defaultManager] removeItemAtPath:self.destinationPath error:nil];
+	}
+	
+	self.destinationStream = [[[NSOutputStream alloc] initToFileAtPath:self.destinationPath append:YES] autorelease];
+	[self.destinationStream open];
+}
 
 - (void)start {
 	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
@@ -168,6 +190,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	if ([NSThread isMainThread]) {
 		[theSharedQueue addOperation:self];
 		return;
+	}
+	
+	self.destinationStream = nil;
+	if(self.destinationPath){
+		[self openFileStream];
 	}
 	
 	[self markAsExecuting];
@@ -185,6 +212,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)cancel {
+	if(self.destinationStream){
+		[self.destinationStream close];
+	}
 	[theConnection cancel];
 	[self markAsCancelled];
 }
@@ -204,11 +234,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     [theReceivedData setLength:0];
 	byteReceived = 0;
 	
-	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
-								  withObject:self 
-								  withObject:[NSNumber numberWithFloat:0]
-							   waitUntilDone:NO];
-	
 	self.response = response;
 }
 
@@ -220,14 +245,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	byteReceived += [data length];
 	float progress = (float)byteReceived / (float)expectedLength;
 	
-	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
+	[theDelegate performSelectorOnMainThread:@selector(request:didReceivePartialData:progress:) 
 								  withObject:self 
+								  withObject:data 
 								  withObject:[NSNumber numberWithFloat:progress]
 							   waitUntilDone:NO];
 	
-	// Append the new available data
-	// TODO: provide an delegate to notify for the progress of the URL loading
-    [theReceivedData appendData:data];
+	if(self.destinationStream){
+		[self.destinationStream write:[data bytes] maxLength:[data length]];
+	}
+	else{
+		// Append the new available data
+		[theReceivedData appendData:data];
+	}
 }
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
@@ -236,11 +266,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
-	
-	[theDelegate performSelectorOnMainThread:@selector(request:progress:) 
-								  withObject:self 
-								  withObject:[NSNumber numberWithFloat:1]
-							   waitUntilDone:NO];
 	
 	if ([theResponse statusCode] > 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
@@ -253,6 +278,17 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 									  withObject:error 
 								   waitUntilDone:NO];
 
+		[self markAsFinished];
+		return;
+	}
+	
+	[theDelegate performSelectorOnMainThread:@selector(requestDidFinishLoading:) 
+								  withObject:self 
+							   waitUntilDone:NO];
+	
+	//Direct to disk
+	if(self.destinationStream){
+		[self.destinationStream close];
 		[self markAsFinished];
 		return;
 	}
