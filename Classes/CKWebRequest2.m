@@ -171,8 +171,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)openFileStream{
 	if(self.allowDestinationOverwrite){
-		//NSError* error = [[[NSError alloc]init]autorelease];
-		[[NSFileManager defaultManager] removeItemAtPath:self.destinationPath error:nil];
+		NSError* error;
+		[[NSFileManager defaultManager] removeItemAtPath:self.destinationPath error:&error];
+		//TODO : HANDLE ERROR
 	}
 	
 	self.destinationStream = [[[NSOutputStream alloc] initToFileAtPath:self.destinationPath append:YES] autorelease];
