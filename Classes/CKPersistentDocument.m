@@ -18,6 +18,7 @@
 @synthesize objects;
 @synthesize persistentKeys;
 @synthesize autoSave;
+@synthesize delegate = _delegate;
 
 - (id)init{
 	[super init];
@@ -59,6 +60,10 @@
 		BOOL result = [NSKeyedArchiver archiveRootObject:objectsForKey toFile:archivePath];
 		
 		NSAssert(result,@"Unable to save objects for key %@ in %@",key,archivePath);
+		
+		if(_delegate){
+			[_delegate document:self didSaveObjects:objectsForKey forKey:key];
+		}
 	}
 	else{
 		NSAssert(NO,@"Document try to save unexistant objects %@",key);
@@ -82,10 +87,18 @@
 		objectsForKey = [NSMutableArray array];
 	}
 	[objects setObject:objectsForKey forKey:key];
+	
+	if(_delegate){
+		[_delegate document:self didLoadObjects:objectsForKey forKey:key];
+	}
+	
 	return objectsForKey;
 }
 
 - (void)addObjects:(NSArray*)newItems forKey:(NSString*)key{
+	if([newItems count] <= 0)
+		return;
+	
 	NSMutableArray* objectsForKey = [self mutableObjectsForKey:key];
 	
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([objectsForKey count], [newItems count])];
@@ -120,9 +133,16 @@
 		}
 	}
 	
+	if([toRemove count] <= 0)
+		return;
+	
 	[self.objects willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
 	[objectsForKey removeObjectsInArray:toRemove];
 	[self.objects didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
+	
+	if(autoSave && persistentKeys && [persistentKeys containsObject:key]){
+		[self saveObjectsForKey:key];
+	}
 }
 
 - (void)addObserver:(id)object forKey:(NSString*)key{
