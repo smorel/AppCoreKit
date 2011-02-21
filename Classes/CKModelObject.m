@@ -21,8 +21,8 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 - (void)reset{
 	comparable = YES;
 	serializable = YES;
-	creatable = YES;
-	hashable = NO;
+	creatable = NO;
+	hashable = YES;
 	copiable = YES;
 }
 
@@ -178,7 +178,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSMutableArray* allValues = [NSMutableArray array];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(metaData.hashable){
+		if(object && metaData.hashable){
 			[allValues addObject:object];
 		}
 	}];
