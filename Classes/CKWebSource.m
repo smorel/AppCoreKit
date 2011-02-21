@@ -37,7 +37,8 @@
 //
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize {
-	if ((_fetching == YES) || (_hasMore == NO)) 
+	if ((_fetching == YES) || (_hasMore == NO)
+		|| (_limit > 0 && _currentIndex >= _limit) ) 
 		return NO;
 	
 	_requestedBatchSize = batchSize;
@@ -81,7 +82,7 @@
 	}
 	
 	_currentIndex += [newItems count];
-	_hasMore = (_currentIndex < _requestedBatchSize) ? NO : YES;
+	_hasMore = _hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
 	_fetching = NO;
 	self.request = nil;
 }
