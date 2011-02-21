@@ -61,11 +61,13 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (void)dealloc{
-	[self executeForAllProperties:^(CKObjectProperty* property,id object){
-		if(object && property.isObject){
-			[object release];
+	NSArray* allProperties = [self allProperties];
+	for(CKObjectProperty* property in allProperties){
+		if(property.isObject){
+			[self setValue:nil forKey:property.name];
 		}
-	}];
+	}
+	
 	[super dealloc];
 }
 
