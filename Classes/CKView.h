@@ -9,9 +9,10 @@
 #import "CKUIViewDataBinder.h"
 #import "CKUIControlActionBlockBinder.h"
 
+@class CKView;
 
 typedef UIView*(^CKViewCreationBlock)();
-typedef NSMutableArray*(^CKViewSetupBlock)(UIView* view,id mordel);
+typedef void(^CKViewSetupBlock)(UIView* view,id model, CKView* ownerView);
 
 @interface CKViewTemplate : NSObject{
 	CKViewCreationBlock viewCreationBlock;
@@ -34,6 +35,11 @@ typedef NSMutableArray*(^CKViewSetupBlock)(UIView* view,id mordel);
 
 - (void)bind:(id)object;
 - (void)unbind;
-- (UIImage*)snapshot;
+- (void)addObject:(id)object;
 
+@end
+
+
+@interface UIView (Snapshot)
+- (UIImage*)snapshot;
 @end

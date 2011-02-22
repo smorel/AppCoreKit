@@ -47,6 +47,11 @@
 	self.internal = nil;//delete previous setup objects
 }
 
+- (void)addObject:(id)object{
+	NSAssert(self.internal != nil, @"Try to insert an object outside the setupBlock");
+	[self.internal addObject:object];
+}
+
 -(void)setViewTemplate:(CKViewTemplate*)template{
 	[viewTemplate release];
 	viewTemplate = [template retain];
@@ -57,7 +62,8 @@
 -(void)bind:(id)object{
 	if(viewTemplate){
 		[self unbind];
-		self.internal = viewTemplate.viewSetupBlock(self.subView,object);
+		self.internal = [NSMutableArray array];
+		viewTemplate.viewSetupBlock(self.subView,object,self);
 	}
 }
 
@@ -80,16 +86,17 @@
 	self.subView.frame = self.bounds;
 }
 
+@end
+
+@implementation UIView (Snapshot)
+
 - (UIImage*)snapshot{
-	if(self.subView && self.subView.hidden == NO && self.hidden == NO){
-		UIGraphicsBeginImageContext(subView.bounds.size);
-		CGContextRef ctx = UIGraphicsGetCurrentContext();
-		[subView.layer renderInContext:ctx];
-		UIImage* image  = UIGraphicsGetImageFromCurrentImageContext();
-		UIGraphicsEndImageContext();
-		return image;
-	}
-	return nil;
+	UIGraphicsBeginImageContext(self.bounds.size);
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	[self.layer renderInContext:ctx];
+	UIImage* image  = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	return image;
 }
 
 @end
