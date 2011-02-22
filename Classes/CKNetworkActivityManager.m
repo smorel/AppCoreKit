@@ -40,7 +40,7 @@ static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
 	}
 	[self.objects addObject:[NSValue valueWithNonretainedObject:object]];
 	
-	NSLog(@"Network Activity Count = %d",[self.objects count]);
+	//NSLog(@"Network Activity Count = %d",[self.objects count]);
 }
 
 - (void)removeNetworkActivityForObject:(id)object{
@@ -49,7 +49,7 @@ static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	}
 	
-	NSLog(@"Network Activity Count = %d",[self.objects count]);
+	//NSLog(@"Network Activity Count = %d",[self.objects count]);
 }
 
 - (NSString*)description{
