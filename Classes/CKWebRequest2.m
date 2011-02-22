@@ -13,6 +13,7 @@
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
 #import "CKDebug.h"
+#import "CKNetworkActivityManager.h"
 
 //
 
@@ -376,7 +377,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[self didChangeValueForKey:@"isExecuting"];
 	
 	theNumberOfRequestRunning++;
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	[[CKNetworkActivityManager defaultManager]addNetworkActivityForObject:self];
+	//[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 - (void)markAsCancelled {
@@ -397,9 +399,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[self didChangeValueForKey:@"isFinished"];
 	
 	theNumberOfRequestRunning--;
-	if (theNumberOfRequestRunning == 0) {
+	[[CKNetworkActivityManager defaultManager]removeNetworkActivityForObject:self];
+	
+	/*if (theNumberOfRequestRunning == 0) {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	}
+	}*/
+}
+
+- (NSString*)description{
+	return [NSString stringWithFormat:@"CKWebRequest2 Url='%@' destinationPath='%@' allowOverwrite='%@'",self.URL,self.destinationPath,self.allowDestinationOverwrite ? @"YES" : @"NO"];
 }
 
 @end
