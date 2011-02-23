@@ -67,6 +67,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 - (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber*)progress;
 - (void)requestDidFinishLoading:(id)request;
 
+- (void)request:(id)request didReceiveResponse:(NSURLResponse *)response;
 - (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(id)request didReceiveValue:(id)value;
 - (void)request:(id)request didFailWithError:(NSError *)error;
