@@ -231,6 +231,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 //	CKDebugLog(@"didReceiveResponse %@", response);
 	
+	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveResponse:) 
+								  withObject:self 
+								  withObject:response 
+							   waitUntilDone:NO];
+	
     // It can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
     [theReceivedData setLength:0];
