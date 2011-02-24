@@ -262,6 +262,10 @@
 		75314265130B0CB6006F4F60 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 75314264130B0CB6006F4F60 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		756834811314139E0039004D /* CKNetworkActivityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7568347F1314139E0039004D /* CKNetworkActivityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		756834821314139E0039004D /* CKNetworkActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 756834801314139E0039004D /* CKNetworkActivityManager.m */; };
+		759B3AD413172064006C41D9 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AD213172064006C41D9 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		759B3AD513172064006C41D9 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AD313172064006C41D9 /* CKMapping.m */; };
+		759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */; };
+		759B3AEE131720E5006C41D9 /* CKNSString+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AEC131720E5006C41D9 /* CKNSString+Parsing.m */; };
 		75A2A2FE12F7F2DD00E71451 /* CKFeedSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A2A2FF12F7F2DD00E71451 /* CKFeedSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */; };
 		75A2A30012F7F2DD00E71451 /* CKWebSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -555,6 +559,10 @@
 		75314264130B0CB6006F4F60 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDocument.h; sourceTree = "<group>"; };
 		7568347F1314139E0039004D /* CKNetworkActivityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNetworkActivityManager.h; sourceTree = "<group>"; };
 		756834801314139E0039004D /* CKNetworkActivityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNetworkActivityManager.m; sourceTree = "<group>"; };
+		759B3AD213172064006C41D9 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMapping.h; sourceTree = "<group>"; };
+		759B3AD313172064006C41D9 /* CKMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMapping.m; sourceTree = "<group>"; };
+		759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSString+Parsing.h"; sourceTree = "<group>"; };
+		759B3AEC131720E5006C41D9 /* CKNSString+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSString+Parsing.m"; sourceTree = "<group>"; };
 		75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedSource.h; sourceTree = "<group>"; };
 		75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedSource.m; sourceTree = "<group>"; };
 		75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebSource.h; sourceTree = "<group>"; };
@@ -646,7 +654,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
-				7531425B130B0C4F006F4F60 /* Classes */,
+				7531425B130B0C4F006F4F60 /* Document */,
 				4FAD0FA111C2D5C80071C7BF /* Tables */,
 				715CA152110E36F700593672 /* UI */,
 				71917AB01199C3D800386EB5 /* Location */,
@@ -862,6 +870,8 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				759B3AD213172064006C41D9 /* CKMapping.h */,
+				759B3AD313172064006C41D9 /* CKMapping.m */,
 				75A2A30512F7F31000E71451 /* CKSignal.h */,
 				75A2A30612F7F31000E71451 /* CKSignal.m */,
 				75A2A30D12F7F31000E71451 /* CKView.h */,
@@ -879,6 +889,8 @@
 				7119A72412E64B6C003A46B0 /* CKVersion.h */,
 				7119A72512E64B6C003A46B0 /* CKHost.m */,
 				7119A72612E64B6C003A46B0 /* CKHost.h */,
+				759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */,
+				759B3AEC131720E5006C41D9 /* CKNSString+Parsing.m */,
 				7119A71312E64B5C003A46B0 /* CKNSObject+Notifications.m */,
 				7119A71412E64B5C003A46B0 /* CKNSObject+Notifications.h */,
 				7119A71512E64B5C003A46B0 /* CKNSObject+JSON.m */,
@@ -1115,7 +1127,7 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
-		7531425B130B0C4F006F4F60 /* Classes */ = {
+		7531425B130B0C4F006F4F60 /* Document */ = {
 			isa = PBXGroup;
 			children = (
 				75314260130B0C6C006F4F60 /* CKModelObject.h */,
@@ -1124,6 +1136,7 @@
 				7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */,
 				75314264130B0CB6006F4F60 /* CKDocument.h */,
 			);
+			name = Document;
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -1285,6 +1298,8 @@
 				75314265130B0CB6006F4F60 /* CKDocument.h in Headers */,
 				75A4B5E4130D71CC0099256C /* CKDataBlockBinder.h in Headers */,
 				756834811314139E0039004D /* CKNetworkActivityManager.h in Headers */,
+				759B3AD413172064006C41D9 /* CKMapping.h in Headers */,
+				759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1534,6 +1549,8 @@
 				75314263130B0C79006F4F60 /* CKModelObject.m in Sources */,
 				75A4B5E5130D71CC0099256C /* CKDataBlockBinder.m in Sources */,
 				756834821314139E0039004D /* CKNetworkActivityManager.m in Sources */,
+				759B3AD513172064006C41D9 /* CKMapping.m in Sources */,
+				759B3AEE131720E5006C41D9 /* CKNSString+Parsing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
