@@ -9,6 +9,7 @@
 #import "CKMapping.h"
 #import "CKNSString+Parsing.h"
 #import "RegexKitLite.h"
+#import "CKDebug.h"
 
 
 @implementation CKMapping
@@ -35,11 +36,10 @@
 - (void)mapWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
 	if(![sourceDictionary isKindOfClass:[NSDictionary class]]){
 		//TODO : fill error
-		NSLog(NO,@"source for mapping is not a dictionary but %@",sourceDictionary);
+		CKDebugLog(@"source for mapping is not a dictionary but a %@ when mapping on object %@",sourceDictionary,self);
 		return;
 	}
 	
-	NSMutableString* errorLog = [NSMutableString string];
 	[mappings enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
 		NSAssert([obj isKindOfClass:[CKMapping class]],@"The mapper object is not a CKMapping");
 		NSAssert([key isKindOfClass:[NSString class]],@"The mapper key is not a string");
@@ -48,7 +48,7 @@
 		id sourceObject = [sourceDictionary objectForKey:mappingObject.key];
 		if(sourceObject == nil){
 			//TODO : fill error
-			[errorLog appendFormat:@"Could not find %@ key in source\n",mappingObject.key];
+			CKDebugLog(@"Could not find %@ key in source\n",mappingObject.key);
 			if(mappingObject.policy == CKMappingPolicyRequired){
 				NSAssert(NO,@"Field %@ not found in dataSource for object %@",mappingObject.key,self);
 			}
@@ -57,7 +57,6 @@
 			mappingObject.mapperBlock(sourceObject,self,key,error);
 		}
 	}];
-	NSLog(@"%@",errorLog);
 }
 
 @end
@@ -87,6 +86,7 @@
 			[object setValue:url forKeyPath:keyPath];
 		}
 		else{
+			CKDebugLog(@"%@ is not an httpUrl from %@ to %@",url,keyPath,destination);
 			//TODO : fill error
 		}
 	}];
