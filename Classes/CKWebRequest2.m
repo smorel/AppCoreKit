@@ -150,7 +150,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 + (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params {
 	NSURL *URL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", URLString, [NSString stringWithQueryDictionary:params]] : URLString)];
-	return [[[CKWebRequest2 alloc] initWithURL:URL] autorelease];
+	if(URL != nil){
+		return [[[CKWebRequest2 alloc] initWithURL:URL] autorelease];
+	}
+	return nil;
 }
 
 + (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
