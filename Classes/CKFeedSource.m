@@ -7,9 +7,10 @@
 //
 
 #import "CKFeedSource.h"
+#import "CKNSObject+Invocation.h"
 
 @interface CKFeedSource ()
-@property (nonatomic, retain, readwrite) id<CKDocument> document;
+@property (nonatomic, retain, readwrite) NSObject<CKDocument>* document;
 @property (nonatomic, retain, readwrite) NSString *objectsKey;
 @end
 
@@ -25,7 +26,7 @@
 @synthesize objectsKey = _objectsKey;
 #pragma mark Initialization
 
-- (id)initWithDocument:(id<CKDocument>)theDocument forKey:(NSString*)key{
+- (id)initWithDocument:(NSObject<CKDocument>*)theDocument forKey:(NSString*)key{
 	if (self = [super init]) {
 		self.document = theDocument;
 		self.objectsKey = key;
@@ -92,7 +93,11 @@
 	}
 	
 	NSAssert(_document,@"Model is not assigned");
-	[_document addObjects:newItems forKey:_objectsKey];
+	
+	[_document performSelectorOnMainThread:@selector(addObjects:forKey:) 
+								  withObject:newItems 
+								  withObject:_objectsKey 
+							   waitUntilDone:NO];
 }
 
 @end

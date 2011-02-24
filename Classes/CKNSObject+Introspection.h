@@ -13,22 +13,41 @@ CKObjectPredicate CKObjectPredicateMakeIsNotOfType(Class type1,...);
 CKObjectPredicate CKObjectPredicateMakeExpandAll();
 
 
+typedef enum{
+	CKObjectPropertyTypeChar,
+	CKObjectPropertyTypeInt,
+	CKObjectPropertyTypeShort,
+	CKObjectPropertyTypeLong,
+	CKObjectPropertyTypeLongLong,
+	CKObjectPropertyTypeUnsignedChar,
+	CKObjectPropertyTypeUnsignedInt,
+	CKObjectPropertyTypeUnsignedShort,
+	CKObjectPropertyTypeUnsignedLong,
+	CKObjectPropertyTypeUnsignedLongLong,
+	CKObjectPropertyTypeFloat,
+	CKObjectPropertyTypeDouble,
+	CKObjectPropertyTypeCppBool,
+	CKObjectPropertyTypeVoid,
+	CKObjectPropertyTypeCharString,
+	CKObjectPropertyTypeObject,
+	CKObjectPropertyTypeClass,
+	CKObjectPropertyTypeSelector,
+	CKObjectPropertyTypeUnknown
+}CKObjectPropertyType;
 
 @interface CKObjectProperty : NSObject{
 	NSString* name;
 	Class type;
-	BOOL isObject;
-	BOOL isSelector;
 	NSString* attributes;
 	SEL metaDataSelector;
+	CKObjectPropertyType propertyType;
 }
 
 @property (nonatomic, retain, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) Class type;
 @property (nonatomic, retain, readwrite) NSString *attributes;
-@property (nonatomic, assign, readwrite) BOOL isObject;
-@property (nonatomic, assign, readwrite) BOOL isSelector;
 @property (nonatomic, assign, readwrite) SEL metaDataSelector;
+@property (nonatomic, assign, readwrite) CKObjectPropertyType propertyType;
 
 -(NSString*)getTypeDescriptor;
 - (NSString*)className;

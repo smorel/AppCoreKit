@@ -16,7 +16,7 @@
 	BOOL _hasMore;
 	BOOL _fetching;
 	
-	id<CKDocument> _document;
+	NSObject<CKDocument>* _document;
 	NSString* _objectsKey;
 }
 
@@ -27,10 +27,10 @@
 @property (nonatomic, readonly) BOOL isFetching;
 
 @property (nonatomic, retain, readonly) NSArray *items;
-@property (nonatomic, retain, readonly) id<CKDocument> document;
+@property (nonatomic, retain, readonly) NSObject<CKDocument>* document;
 @property (nonatomic, retain, readonly) NSString *objectsKey;
 
-- (id)initWithDocument:(id<CKDocument>)document forKey:(NSString*)key;
+- (id)initWithDocument:(NSObject<CKDocument>*)document forKey:(NSString*)key;
 - (void)addObserver:(id)object;
 - (void)removeObserver:(id)object;
 

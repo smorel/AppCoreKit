@@ -49,7 +49,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (id)init{
 	[super init];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
-		if(property.isObject){
+		if(property.propertyType == CKObjectPropertyTypeObject){
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 			if(metaData.creatable){
 				id p = [[[property.type alloc]init]autorelease];
@@ -63,7 +63,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void)dealloc{
 	NSArray* allProperties = [self allProperties];
 	for(CKObjectProperty* property in allProperties){
-		if(property.isObject){
+		if(property.propertyType == CKObjectPropertyTypeObject){
 			[self setValue:nil forKey:property.name];
 		}
 	}
@@ -206,6 +206,10 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (void)propertyAdded:(CKObjectProperty*)property{
 	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
+}
+
+- (id)valueForUndefinedKey:(NSString *)key{
+	return nil;
 }
 
 @end
