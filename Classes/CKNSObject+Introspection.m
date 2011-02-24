@@ -217,13 +217,13 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 }
 
 +(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath{
-	NSLog(@"finding property:'%@' in '%@'",keyPath,object);
+	//NSLog(@"finding property:'%@' in '%@'",keyPath,object);
 	id subObject = object;
 	
 	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
 	for(int i=0;i<[ar count]-1;++i){
 		NSString* path = [ar objectAtIndex:i];
-		NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
+		//NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}
 	NSAssert(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
