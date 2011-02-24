@@ -17,9 +17,8 @@
 @synthesize name;
 @synthesize type;
 @synthesize attributes;
-@synthesize isObject;
-@synthesize isSelector;
 @synthesize metaDataSelector;
+@synthesize propertyType;
 
 - (void)dealloc{
 	self.name = nil;
@@ -31,40 +30,84 @@
 	return [NSString stringWithFormat:@"%@",name];
 }
 
-/*
- c : char
- i : int
- s : short
- l : long
- l is treated as a 32-bit quantity on 64-bit programs.
- q : long long
- C : unsigned char
- I : unsigned int
- S : unsigned short
- L : unsigned long
- Q : unsigned long long
- f : float
- d : double
- B : C++ bool or a C99 _Bool
- v : void
- * : character string (char *)
- @ : object (whether statically typed or typed id)
- # : class object (Class)
- : : method selector (SEL)
- [array type] : array
- {name=type...} : structure
- (name=type...) : union
- bnum : bit field of num bits
- ^type : pointer to type
- ? : unknown type (among other things, this code is used for function pointers)
-*/ 
-
 -(NSString*)getTypeDescriptor{
 	return [attributes substringWithRange: NSMakeRange(1,2)];
 }
 
 - (NSString*)className{
 	return [NSString stringWithUTF8String:class_getName(self.type)];
+}
+
+- (void)setAttributes:(NSString *)att{
+	[attributes release];
+	attributes = [att retain];
+	
+	if([attributes hasPrefix:@"T@"]){
+		self.propertyType = CKObjectPropertyTypeObject;
+	}
+	else if([attributes hasPrefix:@"Tc"]){
+		self.propertyType = CKObjectPropertyTypeChar;
+	}
+	else if([attributes hasPrefix:@"Ti"]){
+		self.propertyType = CKObjectPropertyTypeInt;
+	}
+	else if([attributes hasPrefix:@"Ts"]){
+		self.propertyType = CKObjectPropertyTypeShort;
+	}
+	else if([attributes hasPrefix:@"Tl"]){
+		self.propertyType = CKObjectPropertyTypeLong;
+	}
+	else if([attributes hasPrefix:@"Tq"]){
+		self.propertyType = CKObjectPropertyTypeLongLong;
+	}
+	else if([attributes hasPrefix:@"TC"]){
+		self.propertyType = CKObjectPropertyTypeUnsignedChar;
+	}
+	else if([attributes hasPrefix:@"TI"]){
+		self.propertyType = CKObjectPropertyTypeUnsignedInt;
+	}
+	else if([attributes hasPrefix:@"TS"]){
+		self.propertyType = CKObjectPropertyTypeUnsignedShort;
+	}
+	else if([attributes hasPrefix:@"TL"]){
+		self.propertyType = CKObjectPropertyTypeUnsignedLong;
+	}
+	else if([attributes hasPrefix:@"TQ"]){
+		self.propertyType = CKObjectPropertyTypeUnsignedLongLong;
+	}
+	else if([attributes hasPrefix:@"Tf"]){
+		self.propertyType = CKObjectPropertyTypeFloat;
+	}
+	else if([attributes hasPrefix:@"Td"]){
+		self.propertyType = CKObjectPropertyTypeDouble;
+	}
+	else if([attributes hasPrefix:@"TB"]){
+		self.propertyType = CKObjectPropertyTypeCppBool;
+	}
+	else if([attributes hasPrefix:@"Tv"]){
+		self.propertyType = CKObjectPropertyTypeVoid;
+	}
+	else if([attributes hasPrefix:@"T*"]){
+		self.propertyType = CKObjectPropertyTypeCharString;
+	}
+	else if([attributes hasPrefix:@"T#"]){
+		self.propertyType = CKObjectPropertyTypeClass;
+	}
+	else if([attributes hasPrefix:@"T:"]){
+		self.propertyType = CKObjectPropertyTypeSelector;
+	}
+	else{
+		/*
+		 [array type] : array
+		 {name=type...} : structure
+		 (name=type...) : union
+		 bnum : bit field of num bits
+		 ^type : pointer to type
+		 ? : unknown type (among other things, this code is used for function pointers)
+		 */ 
+		
+		self.propertyType = CKObjectPropertyTypeUnknown;
+	}
 }
 
 @end
@@ -162,8 +205,6 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 		objectProperty.name = [NSString stringWithUTF8String:propName];
 		//objectProperty.type = [NSString stringWithUTF8String:propType];
 		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
-		objectProperty.isObject = [objectProperty.attributes hasPrefix:@"T@"];
-		objectProperty.isSelector = [objectProperty.attributes hasPrefix:@"T:"];
 		
 		NSString *propType = getPropertyType(descriptor);
 		Class returnType = NSClassFromString(propType);
@@ -176,14 +217,16 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 }
 
 +(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath{
+	NSLog(@"finding property:'%@' in '%@'",keyPath,object);
 	id subObject = object;
 	
 	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
 	for(int i=0;i<[ar count]-1;++i){
 		NSString* path = [ar objectAtIndex:i];
+		NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}
-	NSAssert(subObject,@"unable to find property %@ in %@",keyPath,object);
+	NSAssert(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 	return [self property:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 }
 
@@ -254,7 +297,7 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 	if(instance && [instance conformsToProtocol:@protocol(NSObject)]){
 		NSArray* properties = [instance allProperties];
 		for(CKObjectProperty* property in properties){
-			if(property && property.isObject){
+			if(property && property.propertyType == CKObjectPropertyTypeObject){
 				id instanceProperty = [instance valueForKey:property.name];
 				if(instanceProperty){
 					[self filterObjects:results explored:explored instance:instanceProperty expandWith:expandWith insertWith:insertWith addInstance:YES];
