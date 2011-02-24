@@ -8,6 +8,7 @@
 
 #import "CKMapping.h"
 #import "CKNSString+Parsing.h"
+#import "RegexKitLite.h"
 
 
 @implementation CKMapping
@@ -76,6 +77,18 @@
 	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
 		NSURL* url = [NSURL URLWithString:[sourceObject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		[object setValue:url forKeyPath:keyPath];
+	}];
+}
+
+- (void)mapHttpURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+		NSURL* url = [NSURL URLWithString:[sourceObject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		if([[url scheme] isMatchedByRegex:@"^(http|https)$"]){
+			[object setValue:url forKeyPath:keyPath];
+		}
+		else{
+			//TODO : fill error
+		}
 	}];
 }
 
