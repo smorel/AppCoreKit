@@ -14,7 +14,7 @@ typedef enum{
 	CKMappingPolicyOptional
 }CKMappingPolicy;
 
-typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* keyPath,NSError** error);
+typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NSError** error);
 @interface CKMapping : NSObject{
 	NSString* key;
 	CKMappingBlock mapperBlock;

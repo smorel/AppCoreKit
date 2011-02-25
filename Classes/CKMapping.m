@@ -73,17 +73,17 @@
 }
 
 - (void)mapURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSURL* url = [NSURL URLWithString:[sourceObject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-		[object setValue:url forKeyPath:keyPath];
+		[object setValue:url forKeyPath:destination];
 	}];
 }
 
 - (void)mapHttpURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSURL* url = [NSURL URLWithString:[sourceObject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		if([[url scheme] isMatchedByRegex:@"^(http|https)$"]){
-			[object setValue:url forKeyPath:keyPath];
+			[object setValue:url forKeyPath:destination];
 		}
 		else{
 			CKDebugLog(@"%@ is not an httpUrl from %@ to %@",url,keyPath,destination);
@@ -93,30 +93,30 @@
 }
 
 - (void)mapStringForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSString* str = sourceObject;
-		[object setValue:str forKeyPath:keyPath];
+		[object setValue:str forKeyPath:destination];
 	}];
 }
 
 - (void)mapStringWithoutHTMLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSString* str = [sourceObject stringByDeletingHTMLTags];
-		[object setValue:str forKeyPath:keyPath];
+		[object setValue:str forKeyPath:destination];
 	}];
 }
 
 - (void)mapTrimmedStringForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSString* str = [sourceObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-		[object setValue:str forKeyPath:keyPath];
+		[object setValue:str forKeyPath:destination];
 	}];
 }
 
 - (void)mapIntForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
-	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* keyPath,NSError** error){
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withBlock:^(id sourceObject,id object,NSString* destination,NSError** error){
 		NSInteger i = [sourceObject intValue];
-		[object setValue:[NSNumber numberWithInt:i] forKeyPath:keyPath];
+		[object setValue:[NSNumber numberWithInt:i] forKeyPath:destination];
 	}];
 }
 
