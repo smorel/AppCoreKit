@@ -17,6 +17,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize creatable;
 @synthesize hashable;
 @synthesize copiable;
+@synthesize deepCopy;
 
 - (void)reset{
 	comparable = YES;
@@ -24,6 +25,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	creatable = NO;
 	hashable = YES;
 	copiable = YES;
+	deepCopy = NO;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property{
@@ -88,7 +90,11 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 		if(metaData.copiable){
-			[copied setValue:[self valueForKey:property.name] forKey:property.name];
+			id value = [self valueForKey:property.name];
+			if(metaData.deepCopy){
+				value = [value copy];
+			}
+			[copied setValue:value forKey:property.name];
 		}
 	}];
 	

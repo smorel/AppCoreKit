@@ -20,6 +20,7 @@
 	BOOL comparable;
 	BOOL serializable;
 	BOOL copiable;
+	BOOL deepCopy;
 	BOOL hashable;
 	BOOL creatable;
 }
@@ -27,6 +28,7 @@
 @property (nonatomic, assign) BOOL comparable;
 @property (nonatomic, assign) BOOL serializable;
 @property (nonatomic, assign) BOOL copiable;
+@property (nonatomic, assign) BOOL deepCopy;
 @property (nonatomic, assign) BOOL hashable;
 @property (nonatomic, assign) BOOL creatable;
 
