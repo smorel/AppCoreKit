@@ -10,6 +10,7 @@
 #import "CKUIImage+Transformations.h"
 #import "CKCache.h"
 #import "CKLocalization.h"
+#import "CKDebug.h"
 
 NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
@@ -61,9 +62,19 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 	} else {
 		//CHECK if url is web or disk and load from disk if needed ...
 		if([self.imageURL isFileURL]){
-			image = [UIImage imageWithContentsOfFile:[self.imageURL path]];
-			if (image) {
-				[self.delegate imageLoader:self didLoadImage:image cached:YES];
+			if(![[NSFileManager defaultManager] fileExistsAtPath:[self.imageURL path]] ){
+				NSDictionary *userInfo = [NSDictionary dictionaryWithObject:_(@"Could not find image file on disk") forKey:NSLocalizedDescriptionKey];
+				NSError *error = [NSError errorWithDomain:CKImageLoaderErrorDomain code:1 userInfo:userInfo];
+				if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
+					[self.delegate imageLoader:self didFailWithError:error];
+				}
+				CKDebugLog(@"Could not find image file on disk %@",self.imageURL);
+			}
+			else{
+				image = [UIImage imageWithContentsOfFile:[self.imageURL path]];
+				if (image) {
+					[self.delegate imageLoader:self didLoadImage:image cached:YES];
+				}
 			}
 		}
 		else{
