@@ -56,6 +56,7 @@
 #pragma mark Public API
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize {
+	self.hasMore = NO;
 	return NO;
 }
 
