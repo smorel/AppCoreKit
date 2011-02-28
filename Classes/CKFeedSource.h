@@ -14,7 +14,7 @@
 	NSUInteger _currentIndex;
 	NSUInteger _limit;
 	BOOL _hasMore;
-	BOOL _fetching;
+	BOOL _isFetching;
 	
 	NSObject<CKDocument>* _document;
 	NSString* _objectsKey;

@@ -12,6 +12,9 @@
 @interface CKFeedSource ()
 @property (nonatomic, retain, readwrite) NSObject<CKDocument>* document;
 @property (nonatomic, retain, readwrite) NSString *objectsKey;
+
+@property (nonatomic, assign) BOOL hasMore;
+@property (nonatomic, assign) BOOL isFetching;
 @end
 
 @implementation CKFeedSource
@@ -57,14 +60,14 @@
 }
 
 - (void)cancelFetch {
-	_fetching = NO;
+	self.isFetching = NO;
 	return;
 }
 
 - (void)reset {
 	_currentIndex = 0;
-	_hasMore = YES;
-	_fetching = NO;
+	self.hasMore = YES;
+	self.isFetching = NO;
 }
 
 - (NSArray*)items{
@@ -89,7 +92,7 @@
 	
 	if ((_limit > 0) && (_currentIndex + theItems.count) > _limit) {
 		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _currentIndex))];
-		_hasMore = NO;
+		self.hasMore = NO;
 	}
 	
 	NSAssert(_document,@"Model is not assigned");

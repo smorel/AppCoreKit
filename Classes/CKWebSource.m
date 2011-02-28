@@ -13,6 +13,8 @@
 
 @interface CKWebSource ()
 @property (nonatomic, retain) CKWebRequest2 *request;
+@property (nonatomic, assign) BOOL hasMore;
+@property (nonatomic, assign) BOOL isFetching;
 @end
 
 @implementation CKWebSource
@@ -20,6 +22,8 @@
 @synthesize request = _request;
 @synthesize requestBlock = _requestBlock;
 @synthesize transformBlock = _transformBlock;
+@dynamic hasMore;
+@dynamic isFetching;
 
 - (id)init {
 	if (self = [super init]) {
@@ -37,7 +41,7 @@
 //
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize {
-	if ((_fetching == YES) || (_hasMore == NO)
+	if ((self.isFetching == YES) || (self.hasMore == NO)
 		|| (_limit > 0 && _currentIndex >= _limit) ) 
 		return NO;
 	
@@ -48,7 +52,7 @@
 	if (self.request) {
 		self.request.delegate = self;
 		[self.request start];
-		_fetching = YES;
+		self.isFetching = YES;
 		return YES;
 	}
 
@@ -82,14 +86,14 @@
 	}
 	
 	_currentIndex += [newItems count];
-	_hasMore = _hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
-	_fetching = NO;
+	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
+	self.isFetching = NO;
 	self.request = nil;
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {
 	CKDebugLog(@"%@", error);
-	_fetching = NO;
+	self.isFetching = NO;
 	self.request = nil;
 	
 	// TODO: Makes the alert optional and allow the request to be restarted.
