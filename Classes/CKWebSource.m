@@ -11,6 +11,8 @@
 #import "CKAlertView.h"
 #import "CKLocalization.h"
 
+NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
+
 @interface CKWebSource ()
 @property (nonatomic, retain) CKWebRequest2 *request;
 @property (nonatomic, assign) BOOL hasMore;
@@ -22,6 +24,7 @@
 @synthesize request = _request;
 @synthesize requestBlock = _requestBlock;
 @synthesize transformBlock = _transformBlock;
+@synthesize failureBlock = _failureBlock;
 @dynamic hasMore;
 @dynamic isFetching;
 
@@ -35,6 +38,7 @@
 	[self cancelFetch];
 	[_requestBlock release];
 	[_transformBlock release];
+	[_failureBlock release];
 	[super dealloc];
 }
 
@@ -96,16 +100,22 @@
 	self.isFetching = NO;
 	self.request = nil;
 	
+	if(_failureBlock){
+		_failureBlock(error);
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:CKWebSourceErrorNotification object:self];
+	
 	// TODO: Makes the alert optional and allow the request to be restarted.
-	if (YES) {
-		CKAlertView *alertView = 
+#ifdef DEBUG
+		/*CKAlertView *alertView = 
 		[[[CKAlertView alloc] initWithTitle:@"Fetching Error"
 									message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
 								   delegate:self
 						  cancelButtonTitle:_(@"Dismiss")
 						  otherButtonTitles:nil] autorelease];
-		[alertView show];
-	}
+		[alertView show];*/
+#endif
 }
 
 @end
