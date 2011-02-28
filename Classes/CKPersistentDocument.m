@@ -66,7 +66,7 @@
 		}
 	}
 	else{
-		NSAssert(NO,@"Document try to save unexistant objects %@",key);
+		//NSAssert(NO,@"Document try to save unexistant objects %@",key);
 	}
 }
 
