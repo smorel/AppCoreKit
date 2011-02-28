@@ -32,6 +32,7 @@ typedef void(^CKViewSetupBlock)(UIView* view,id model, CKView* ownerView);
 }
 
 @property (nonatomic, retain) CKViewTemplate *viewTemplate;
+@property (nonatomic, retain, readonly) NSMutableArray *internal;
 
 - (void)bind:(id)object;
 - (void)unbind;
