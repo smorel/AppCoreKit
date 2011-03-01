@@ -92,7 +92,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		if(metaData.copiable){
 			id value = [self valueForKey:property.name];
 			if(metaData.deepCopy){
-				value = [value copy];
+				value = [[value copy] autorelease];
 			}
 			[copied setValue:value forKey:property.name];
 		}
