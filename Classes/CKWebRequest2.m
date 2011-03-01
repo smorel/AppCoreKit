@@ -228,12 +228,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark URL Loading
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-	CKDebugLog(@"willCacheResponse: %@ (%d bytes)", cachedResponse, [[cachedResponse data] length]);
+//	CKDebugLog(@"willCacheResponse: %@ (%d bytes)", cachedResponse, [[cachedResponse data] length]);
 	return cachedResponse;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 //	CKDebugLog(@"didReceiveResponse %@", response);
+//	NSURLCache *cache = [NSURLCache sharedURLCache];
+//	CKDebugLog(@"Cache mem %d (%d), disk %d (%d)", [cache currentMemoryUsage], [cache memoryCapacity], [cache currentDiskUsage], [cache diskCapacity]);
 	
 	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveResponse:) 
 								  withObject:self 
