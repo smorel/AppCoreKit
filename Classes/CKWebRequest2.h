@@ -46,6 +46,10 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 - (void)setMethod:(NSString *)method;
 - (void)setBodyData:(NSData *)bodyData;
+
+// Configure the request to send the params as a <application/x-www-form-urlencoded> POST
+- (void)setBodyParams:(NSDictionary *)params;
+
 - (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite;
 
 //

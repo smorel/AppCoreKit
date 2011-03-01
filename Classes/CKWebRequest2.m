@@ -8,6 +8,7 @@
 
 #import "CKWebRequest2.h"
 #import "CKNSStringAdditions.h"
+#import "CKNSString+URIQuery.h"
 #import "CKNSObject+Invocation.h"
 #import "CJSONDeserializer.h"
 #import "CXMLDocument.h"
@@ -136,6 +137,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)setBodyData:(NSData *)bodyData {
 	[theRequest setHTTPBody:bodyData];
 	[theRequest setValue:[NSString stringWithFormat:@"%llu", [bodyData length]] forHTTPHeaderField:@"Content-Length"];
+}
+
+- (void)setBodyParams:(NSDictionary *)params {
+	[self setBodyData:[[NSString stringWithQueryDictionary:params] dataUsingEncoding:NSUTF8StringEncoding]];
+	[self setMethod:@"POST"];
+	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 }
 
 //
