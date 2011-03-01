@@ -38,10 +38,9 @@
 @synthesize isScrolling = _isScrolling;
 
 - (void)postInit {
-	self.backgroundColor = [UIColor clearColor];
 	self.scrollView = [[[UIScrollView alloc] initWithFrame:self.bounds] autorelease];
-	self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.scrollView.backgroundColor = [UIColor clearColor];
+	self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.scrollView.delegate = self;
 	self.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
 	self.scrollView.pagingEnabled = YES;
@@ -56,6 +55,7 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
 		[self postInit];
+		self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
