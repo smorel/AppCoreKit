@@ -36,7 +36,7 @@
 	NSTimeInterval _longPressStartTime;
 }
 
-@property (nonatomic, retain) IBOutlet id<CKGridViewDataSource> dataSource;
+@property (nonatomic, assign) IBOutlet id<CKGridViewDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<CKGridViewDelegate> delegate;
 @property (nonatomic, readonly) NSUInteger viewCount;
 @property (nonatomic, assign, getter=isEditing) BOOL editing;
