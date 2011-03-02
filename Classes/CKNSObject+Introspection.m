@@ -19,6 +19,7 @@
 @synthesize attributes;
 @synthesize metaDataSelector;
 @synthesize propertyType;
+@synthesize assignementType;
 
 - (void)dealloc{
 	self.name = nil;
@@ -41,6 +42,21 @@
 - (void)setAttributes:(NSString *)att{
 	[attributes release];
 	attributes = [att retain];
+	
+	assignementType = CKObjectPropertyAssignementTypeAssign;
+	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
+	if([subStrings count] > 2){
+		NSString* assignementAttribute = [subStrings objectAtIndex:1];
+		if([assignementAttribute isEqual:@"&"]){
+			assignementType = CKObjectPropertyAssignementTypeRetain;
+		}
+		else if([assignementAttribute isEqual:@"C"]){
+			assignementType = CKObjectPropertyAssignementTypeCopy;
+		}
+		else if([assignementAttribute isEqual:@"W"]){
+			assignementType = CKObjectPropertyAssignementTypeWeak;
+		}
+	}	
 	
 	if([attributes hasPrefix:@"T@"]){
 		self.propertyType = CKObjectPropertyTypeObject;
@@ -107,8 +123,10 @@
 		 */ 
 		
 		self.propertyType = CKObjectPropertyTypeUnknown;
-	}
+	}	
 }
+
+
 
 @end
 
@@ -128,50 +146,6 @@ static NSString* getPropertyType(objc_property_t property) {
 		}
 	}
     return @"";
-}
-
-/* Default predicate helpers
- */
-#define CKMakeArrayFromArguments(obj1)\
-    va_list ArgumentList;\
-    va_start(ArgumentList,obj1);\
-    NSMutableArray* types = [[NSMutableArray array]autorelease];\
-    [types addObject:type1];\
-    Class type = nil;\
-    while (type = va_arg(ArgumentList, Class)){\
-        [types addObject:type];\
-    }\
-    va_end(ArgumentList);
-
-CKObjectPredicate CKObjectPredicateMakeIsOfType(Class type1,...) {
-	CKMakeArrayFromArguments(type1);
-	CKObjectPredicate block =  ^(id object) {
-		for(Class c in types){
-			if([object isKindOfClass:c])
-				return YES;
-		}
-		return NO;
-	};
-	return Block_copy(block);
-}
-
-CKObjectPredicate CKObjectPredicateMakeIsNotOfType(Class type1,...) {
-	CKMakeArrayFromArguments(type1);
-	CKObjectPredicate block =  ^(id object) {
-		for(Class c in types){
-			if([object isKindOfClass:c])
-				return NO;
-		}
-		return YES;
-	};
-	return Block_copy(block);
-}
-
-CKObjectPredicate CKObjectPredicateMakeExpandAll() {
-	CKObjectPredicate block = ^(id object){
-		return YES;
-	};
-	return Block_copy(block);
 }
 
 
@@ -344,7 +318,9 @@ CKObjectPredicate CKObjectPredicateMakeExpandAll() {
 }
 
 - (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects{
-	NSMutableArray* objects = [self subObjects:CKObjectPredicateMakeIsOfType([NSObject class],nil) insertWith:CKObjectPredicateMakeIsOfType([NSObject class],nil) includeSelf:YES];
+	NSMutableArray* objects = [self subObjects:^(id object){return [object isKindOfClass:[NSObject class]];} 
+									insertWith:^(id object){return [object isKindOfClass:[NSObject class]];} 
+								    includeSelf:YES];
 	int total = 0;
 	for(NSObject* obj in objects){
 		total += malloc_size(obj);

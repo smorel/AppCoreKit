@@ -91,10 +91,15 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 		if(metaData.copiable){
 			id value = [self valueForKey:property.name];
-			if(metaData.deepCopy){
+			if(metaData.deepCopy && property.assignementType != CKObjectPropertyAssignementTypeCopy){
 				value = [value copy];
+				if(property.assignementType == CKObjectPropertyAssignementTypeCopy
+				   || property.assignementType == CKObjectPropertyAssignementTypeRetain){
+					[value autorelease];
+				}
 			}
 			[copied setValue:value forKey:property.name];
+			
 		}
 	}];
 	

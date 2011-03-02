@@ -7,11 +7,27 @@
 //
 
 
-typedef BOOL(^CKObjectPredicate)(id);
-CKObjectPredicate CKObjectPredicateMakeIsOfType(Class type1,...);
-CKObjectPredicate CKObjectPredicateMakeIsNotOfType(Class type1,...);
-CKObjectPredicate CKObjectPredicateMakeExpandAll();
+/*
+ The property is read-only (readonly).
+ C
+ The property is a copy of the value last assigned (copy).
+ &
+ The property is a reference to the value last assigned (retain).
+ N
+ The property is non-atomic (nonatomic).
+ G<name>
+ The property defines a custom getter selector name. The name follows the G (for example, GcustomGetter,).
+ S<name>
+ The property defines a custom setter selector name. The name follows the S (for example, ScustomSetter:,).
+ D
+ The property is dynamic (@dynamic).
+ W
+ The property is a weak reference (__weak).
+ P
+ The property is eligible for garbage collection.
+ */
 
+typedef BOOL(^CKObjectPredicate)(id);
 
 typedef enum{
 	CKObjectPropertyTypeChar,
@@ -35,12 +51,20 @@ typedef enum{
 	CKObjectPropertyTypeUnknown
 }CKObjectPropertyType;
 
+typedef enum{
+	CKObjectPropertyAssignementTypeCopy,
+	CKObjectPropertyAssignementTypeRetain,
+	CKObjectPropertyAssignementTypeWeak,
+	CKObjectPropertyAssignementTypeAssign
+}CKObjectPropertyAssignementType;
+
 @interface CKObjectProperty : NSObject{
 	NSString* name;
 	Class type;
 	NSString* attributes;
 	SEL metaDataSelector;
 	CKObjectPropertyType propertyType;
+	CKObjectPropertyAssignementType assignementType;
 }
 
 @property (nonatomic, retain, readwrite) NSString *name;
@@ -48,6 +72,7 @@ typedef enum{
 @property (nonatomic, retain, readwrite) NSString *attributes;
 @property (nonatomic, assign, readwrite) SEL metaDataSelector;
 @property (nonatomic, assign, readwrite) CKObjectPropertyType propertyType;
+@property (nonatomic, assign, readwrite) CKObjectPropertyAssignementType assignementType;
 
 -(NSString*)getTypeDescriptor;
 - (NSString*)className;
