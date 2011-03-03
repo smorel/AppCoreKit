@@ -12,6 +12,7 @@
 - (NSArray*)objectsForKey:(NSString*)key;
 - (void)addObjects:(NSArray*)newItems forKey:(NSString*)key;
 - (void)removeObjects:(NSArray*)items forKey:(NSString*)key;
+- (void)removeAllObjectsForKey:(NSString*)key;
 - (void)addObserver:(id)object forKey:(NSString*)key;
 - (void)removeObserver:(id)object forKey:(NSString*)key;
 

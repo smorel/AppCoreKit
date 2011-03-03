@@ -145,6 +145,20 @@
 	}
 }
 
+- (void)removeAllObjectsForKey:(NSString*)key{
+	NSMutableArray* objectsForKey = [self mutableObjectsForKey:key];
+	
+	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[objectsForKey count])];
+	[self.objects willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
+	[objectsForKey removeAllObjects];
+	[self.objects didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:key];
+	
+	if(autoSave && persistentKeys && [persistentKeys containsObject:key]){
+		[self saveObjectsForKey:key];
+	}
+	
+}
+
 - (void)addObserver:(id)object forKey:(NSString*)key{
 	[self.objects addObserver:object forKeyPath:key options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 }
