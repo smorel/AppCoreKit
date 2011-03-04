@@ -12,7 +12,7 @@
 	int priority;
 }
 
-@property (nonatomic, retain, readwrite) id  instance;
+@property (nonatomic, assign, readwrite) id  instance;
 @property (nonatomic, assign,readwrite) SEL selector;
 @property (nonatomic, assign,readwrite) int priority;
 
