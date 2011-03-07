@@ -29,6 +29,10 @@
 	[super dealloc];
 }
 
+- (id)retain{
+	return [super retain];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change
@@ -41,11 +45,13 @@
 
 - (void) bind{
 	[self unbind];
-	[instance addObserver:self
-				forKeyPath:keyPath
-				   options:(NSKeyValueObservingOptionNew)
-				  context:nil];
-	binded = YES;
+	if(instance){
+		[instance addObserver:self
+				   forKeyPath:keyPath
+					  options:(NSKeyValueObservingOptionNew)
+					  context:nil];
+		binded = YES;
+	}
 }
 
 -(void)unbind{
