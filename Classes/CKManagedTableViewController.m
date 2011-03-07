@@ -244,7 +244,10 @@
 - (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
 	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
 	[section removeCellControllerAtIndex:index];
-	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
+	
+	NSIndexPath* indexPath = [NSIndexPath indexPathForRow:index inSection:sectionIndex];
+	NSArray* rows = [NSArray arrayWithObject:indexPath];
+	[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
 }
 
 - (CKTableSection *)sectionAtIndex:(NSUInteger)index {

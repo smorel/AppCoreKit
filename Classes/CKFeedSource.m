@@ -31,10 +31,16 @@
 
 - (id)initWithDocument:(NSObject<CKDocument>*)theDocument forKey:(NSString*)key{
 	if (self = [super init]) {
+		if(self.document){
+			[self.document removeObserver:self forKey:self.objectsKey];
+		}
+		
 		self.document = theDocument;
 		self.objectsKey = key;
 		[self reset];
 		_currentIndex = [self.items count];
+		
+		[self.document addObserver:self forKey:key];
 	}
 	return self;
 }
@@ -47,10 +53,20 @@
 }
 
 - (void)dealloc {
+	if(self.document){
+		[self.document removeObserver:self forKey:self.objectsKey];
+	}
 	_delegate = nil;
 	self.document = nil;
 	self.objectsKey = nil;
 	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)theKeyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context {
+	_currentIndex = [self.items count];
 }
 
 #pragma mark Public API

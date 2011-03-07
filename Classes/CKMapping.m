@@ -11,6 +11,7 @@
 #import "RegexKitLite.h"
 #import "CKDebug.h"
 
+#define DebugLog 0
 
 @implementation CKMapping
 @synthesize key;
@@ -36,7 +37,9 @@
 - (void)mapWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
 	if(![sourceDictionary isKindOfClass:[NSDictionary class]]){
 		//TODO : fill error
-		CKDebugLog(@"source for mapping is not a dictionary but a %@ when mapping on object %@",sourceDictionary,self);
+		if(DebugLog){
+			CKDebugLog(@"source for mapping is not a dictionary but a %@ when mapping on object %@",sourceDictionary,self);
+		}
 		return;
 	}
 	
@@ -48,7 +51,9 @@
 		id sourceObject = [sourceDictionary objectForKey:mappingObject.key];
 		if(sourceObject == nil){
 			//TODO : fill error
-			CKDebugLog(@"Could not find %@ key in source\n",mappingObject.key);
+			if(DebugLog){
+				CKDebugLog(@"Could not find %@ key in source\n",mappingObject.key);
+			}
 			if(mappingObject.policy == CKMappingPolicyRequired){
 				NSAssert(NO,@"Field %@ not found in dataSource for object %@",mappingObject.key,self);
 			}
@@ -86,7 +91,9 @@
 			[object setValue:url forKeyPath:destination];
 		}
 		else{
-			CKDebugLog(@"%@ is not an httpUrl from %@ to %@",url,keyPath,destination);
+			if(DebugLog){
+				CKDebugLog(@"%@ is not an httpUrl from %@ to %@",url,keyPath,destination);
+			}
 			//TODO : fill error
 		}
 	}];

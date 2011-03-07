@@ -15,8 +15,14 @@
 @synthesize notification;
 @synthesize executionBlock;
 
+- (id)init{
+	[super init];
+	binded = NO;
+	return self;
+}
+
 - (void) dealloc{
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:notification object:target];
+	[self unbind];
 	self.target = nil;
 	self.notification = nil;
 	self.executionBlock = nil;
@@ -30,7 +36,16 @@
 }
 
 - (void) bind{
+	[self unbind];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notification object:target];
+	binded = YES;
+}
+
+-(void)unbind{
+	if(binded){
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:notification object:target];
+		binded = NO;
+	}
 }
 
 +(CKNotificationBlockBinder*) notificationBlockBinder:(id)target notification:(NSString*)notification executionBlock:(CKNotificationExecutionBlock)executionBlock{

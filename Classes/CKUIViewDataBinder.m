@@ -31,6 +31,7 @@
 	[super init];
 	controlEvents = UIControlEventValueChanged;
 	viewTag = -1;
+	binded = NO;
 	return self;
 }
 
@@ -43,47 +44,7 @@
 	return [NSString stringWithFormat:@"CKUIViewDataBinder count=%d %@ %@",[self retainCount],target,targetKeyPath];
 }
 
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-						   target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-						   target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:viewTag keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:controlEvents target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	CKUIViewDataBinder* binder = [[[CKUIViewDataBinder alloc]init]autorelease];
-	binder.viewTag = viewTag;
-	binder.keyPath = keyPath;
-	binder.controlEvents = controlEvents;
-	binder.target = target;
-	binder.targetKeyPath = targetKeyPath;
-	[binder bindViewInView:view];
-	return binder;
-}
-
 #pragma mark Private API
-
--(void)unbind{
-	if(self.view){
-		if( [self.view isKindOfClass:[UIControl class]]){
-			UIControl* control = (UIControl*)self.view;
-			[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
-		}
-		[target removeObserver:self forKeyPath:targetKeyPath];
-	}
-	
-	self.view = nil;
-}
-
 
 //Update data in model
 -(void)controlChange{
@@ -148,7 +109,51 @@
 				options:(NSKeyValueObservingOptionNew)
 				context:nil];
 	
+	binded = YES;
 }
+
+-(void)unbind{
+	if(binded){
+		if(self.view){
+			if( [self.view isKindOfClass:[UIControl class]]){
+				UIControl* control = (UIControl*)self.view;
+				[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+			}
+			[target removeObserver:self forKeyPath:targetKeyPath];
+		}
+		
+		self.view = nil;
+		binded = NO;
+	}
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+								  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+								  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:viewTag keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:controlEvents target:target targetKeyPath:targetKeyPath];
+}
+
++ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
+						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
+	CKUIViewDataBinder* binder = [[[CKUIViewDataBinder alloc]init]autorelease];
+	binder.viewTag = viewTag;
+	binder.keyPath = keyPath;
+	binder.controlEvents = controlEvents;
+	binder.target = target;
+	binder.targetKeyPath = targetKeyPath;
+	[binder bindViewInView:view];
+	return binder;
+}
+
 
 @end
 

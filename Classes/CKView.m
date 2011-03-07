@@ -36,6 +36,7 @@
 
 
 -(void)dealloc{
+	NSLog(@"CKView dealloc");
 	[self unbind];
 	[viewTemplate release];
 	viewTemplate = nil;
@@ -44,7 +45,14 @@
 }
 
 -(void)unbind{
+	for(id object in self.internal){
+		if([object respondsToSelector:@selector(unbind)]){
+			[object unbind];
+		}
+	}
+	
 	self.internal = nil;//delete previous setup objects
+	
 }
 
 - (void)addObject:(id)object{
