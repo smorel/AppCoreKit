@@ -16,11 +16,10 @@
 @synthesize instance2;
 @synthesize keyPath2;
 
-- (void)unbind{
-	[instance1 removeObserver:self
-				forKeyPath:keyPath1];
-	[instance2 removeObserver:self
-				forKeyPath:keyPath2];
+- (id)init{
+	[super init];
+	binded = NO;
+	return self;
 }
 
 - (void)dealloc{
@@ -32,18 +31,9 @@
 	[super dealloc];
 }
 
-
-+(CKDataBinder*)binderForObject:(id)object1 keyPath:(NSString*)keyPath object2:(id)object2 keyPath2:(NSString*)keyPath2{
-	CKDataBinder* binder = [[[CKDataBinder alloc]init]autorelease];
-	binder.instance1 = object1;
-	binder.keyPath1 = keyPath;
-	binder.instance2 = object2;
-	binder.keyPath2 = keyPath2;
-	[binder bind];
-	return binder;
-}
-
 -(void)bind{
+	[self unbind];
+	
 	id value = [instance1 valueForKey:keyPath1];
 	[instance2 setValue:value forKeyPath:keyPath2];
 	
@@ -55,6 +45,17 @@
 				forKeyPath:keyPath2
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
+	binded = YES;
+}
+
+- (void)unbind{
+	if(binded){
+		[instance1 removeObserver:self
+					   forKeyPath:keyPath1];
+		[instance2 removeObserver:self
+					   forKeyPath:keyPath2];
+		binded = NO;
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -74,5 +75,16 @@
 		[instance2 setValue:[CKValueTransformer transformValue:newValue toClass:[dataValue2 class]] forKeyPath:keyPath2];
 	}
 }
+
++(CKDataBinder*)binderForObject:(id)object1 keyPath:(NSString*)keyPath object2:(id)object2 keyPath2:(NSString*)keyPath2{
+	CKDataBinder* binder = [[[CKDataBinder alloc]init]autorelease];
+	binder.instance1 = object1;
+	binder.keyPath1 = keyPath;
+	binder.instance2 = object2;
+	binder.keyPath2 = keyPath2;
+	[binder bind];
+	return binder;
+}
+
 
 @end

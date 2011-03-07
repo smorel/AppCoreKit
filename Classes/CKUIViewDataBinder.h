@@ -17,11 +17,12 @@
 	
 	//Internal
 	UIView* view;
+	BOOL binded;
 }
 
 @property (nonatomic, assign) NSInteger viewTag;
 @property (nonatomic, retain) NSString *keyPath;
-@property (nonatomic, retain) id target;
+@property (nonatomic, assign) id target;
 @property (nonatomic, retain) NSString *targetKeyPath;
 @property (nonatomic, assign) UIControlEvents controlEvents;
 
@@ -39,6 +40,7 @@
 						   target:(id)target targetKeyPath:(NSString*)targetKeyPath;
 
 -(void)bindViewInView:(UIView*)theView;
+-(void)unbind;
 
 @end
 

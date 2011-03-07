@@ -12,13 +12,15 @@ typedef void(^CKNotificationExecutionBlock)();
 	id target;
 	NSString* notification;
 	CKNotificationExecutionBlock executionBlock;
+	BOOL binded;
 }
 
-@property (nonatomic, retain) id target;
+@property (nonatomic, assign) id target;
 @property (nonatomic, retain) NSString* notification;
 @property (nonatomic, copy)   CKNotificationExecutionBlock executionBlock;
 
 +(CKNotificationBlockBinder*) notificationBlockBinder:(id)target notification:(NSString*)notification executionBlock:(CKNotificationExecutionBlock)executionBlock;
 - (void) bind;
+-(void)unbind;
 
 @end

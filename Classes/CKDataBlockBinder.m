@@ -7,6 +7,7 @@
 //
 
 #import "CKDataBlockBinder.h"
+#import "CKNSObject+Introspection.h"
 
 @implementation CKDataBlockBinder
 
@@ -14,9 +15,14 @@
 @synthesize keyPath;
 @synthesize executionBlock;
 
+- (id)init{
+	[super init];
+	binded = NO;
+	return self;
+}
+
 - (void) dealloc{
-	[instance removeObserver:self
-				   forKeyPath:keyPath];
+	[self unbind];
 	self.instance = nil;
 	self.keyPath = nil;
 	self.executionBlock = nil;
@@ -34,10 +40,20 @@
 
 
 - (void) bind{
+	[self unbind];
 	[instance addObserver:self
 				forKeyPath:keyPath
 				   options:(NSKeyValueObservingOptionNew)
-				   context:nil];
+				  context:nil];
+	binded = YES;
+}
+
+-(void)unbind{
+	if(binded){
+		[instance removeObserver:self
+					  forKeyPath:keyPath];
+		binded = NO;
+	}
 }
 
 +(CKDataBlockBinder*) dataBlockBinder:(id)instance keyPath:(NSString*)keyPath executionBlock:(CKDataExecutionBlock)executionBlock{

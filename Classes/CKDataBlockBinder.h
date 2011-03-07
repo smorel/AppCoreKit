@@ -14,13 +14,15 @@ typedef void(^CKDataExecutionBlock)(id value);
 	id instance;
 	NSString* keyPath;
 	CKDataExecutionBlock executionBlock;
+	BOOL binded;
 }
 
-@property (nonatomic, retain) id instance;
+@property (nonatomic, assign) id instance;
 @property (nonatomic, retain) NSString* keyPath;
 @property (nonatomic, copy)   CKDataExecutionBlock executionBlock;
 
 +(CKDataBlockBinder*) dataBlockBinder:(id)instance keyPath:(NSString*)keyPath executionBlock:(CKDataExecutionBlock)executionBlock;
 - (void) bind;
+-(void)unbind;
 
 @end

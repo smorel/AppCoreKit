@@ -16,6 +16,7 @@ typedef void(^CKUIControlActionBlock)();
 	CKUIControlActionBlock actionBlock;
 	
 	UIView* view;
+	BOOL binded;
 }
 
 @property (nonatomic, assign) NSInteger viewTag;
@@ -50,5 +51,6 @@ typedef void(^CKUIControlActionBlock)();
 											  actionBlock:(CKUIControlActionBlock)actionBlock;
 
 -(void)bindControlInView:(UIView*)controlView;
+-(void)unbind;
 
 @end

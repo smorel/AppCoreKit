@@ -31,6 +31,7 @@
 	[super init];
 	controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	self.viewTag = -1;
+	binded = NO;
 	return self;
 }
 
@@ -43,6 +44,45 @@
 
 -(NSString*)description{
 	return [NSString stringWithFormat:@"CKUIControlActionBlockBinder count=%d %d",[self retainCount],viewTag];
+}
+
+//Update data in model
+-(void)controlChange{
+	actionBlock();
+}
+
+#pragma mark Public API
+
+-(void)bindControlInView:(UIView*)controlView{
+	[self unbind];
+	
+	id subView = (viewTag >= 0) ? [controlView viewWithTag:viewTag] : controlView;
+	
+	id controlId = (keyPath == nil || [keyPath isEqualToString:@""]) ? subView : [subView valueForKeyPath:keyPath];
+	self.view = controlId;
+	if(!controlId){
+		NSAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
+	}
+	
+	if([controlId isKindOfClass:[UIControl class]]){
+		UIControl* ctrl = (UIControl*)controlId;
+		[ctrl addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+	}
+	binded = YES;
+}
+
+-(void)unbind{
+	if(binded){
+		if(self.view){
+			if([view isKindOfClass:[UIControl class]]){
+				UIControl* ctrl = (UIControl*)self.view;
+				[ctrl removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
+			}
+			
+			self.view = nil;
+			binded = NO;
+		}
+	}
 }
 
 
@@ -91,43 +131,6 @@
 	binder.actionBlock = actionBlock;
 	[binder bindControlInView:view];
 	return binder;
-}
-
-#pragma mark Private API
-
--(void)unbind{
-	if(self.view){
-		if([view isKindOfClass:[UIControl class]]){
-			UIControl* ctrl = (UIControl*)self.view;
-			[ctrl removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
-		}
-		
-		self.view = nil;
-	}
-}
-
-//Update data in model
--(void)controlChange{
-	actionBlock();
-}
-
-#pragma mark Public API
-
--(void)bindControlInView:(UIView*)controlView{
-	[self unbind];
-	
-	id subView = (viewTag >= 0) ? [controlView viewWithTag:viewTag] : controlView;
-	
-	id controlId = (keyPath == nil || [keyPath isEqualToString:@""]) ? subView : [subView valueForKeyPath:keyPath];
-	self.view = controlId;
-	if(!controlId){
-		NSAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
-	}
-	
-	if([controlId isKindOfClass:[UIControl class]]){
-		UIControl* ctrl = (UIControl*)controlId;
-		[ctrl addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
-	}
 }
 
 
