@@ -36,7 +36,7 @@
 
 
 -(void)dealloc{
-	NSLog(@"CKView dealloc");
+	//NSLog(@"CKView %p dealloc",self);
 	[self unbind];
 	[viewTemplate release];
 	viewTemplate = nil;
@@ -45,18 +45,22 @@
 }
 
 -(void)unbind{
-	for(id object in self.internal){
-		if([object respondsToSelector:@selector(unbind)]){
-			[object unbind];
+	//NSLog(@"CKView %p unbind",self);
+	if(self.internal){
+		for(id object in self.internal){
+			if([object respondsToSelector:@selector(unbind)]){
+				//NSLog(@"CKView %p unbind %@",self,object);
+				[object unbind];
+			}
 		}
 	}
 	
 	self.internal = nil;//delete previous setup objects
-	
 }
 
 - (void)addObject:(id)object{
 	NSAssert(self.internal != nil, @"Try to insert an object outside the setupBlock");
+	NSAssert(object != nil,@"try to add a nil object");
 	[self.internal addObject:object];
 }
 
@@ -68,8 +72,8 @@
 }
 
 -(void)bind:(id)object{
+	[self unbind];
 	if(viewTemplate){
-		[self unbind];
 		self.internal = [NSMutableArray array];
 		viewTemplate.viewSetupBlock(self.subView,object,self);
 	}
