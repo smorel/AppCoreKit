@@ -118,3 +118,7 @@ typedef enum{
 - (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects;
 
 @end
+
+@interface NSObject (CKNSObjectDebugStack)
++ (void)logCallStack;
+@end
