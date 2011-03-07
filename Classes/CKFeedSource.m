@@ -15,6 +15,7 @@
 
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
+@property (nonatomic, assign) NSUInteger currentIndex;
 @end
 
 @implementation CKFeedSource
@@ -66,7 +67,7 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-	_currentIndex = [self.items count];
+	self.currentIndex = [self.items count];
 }
 
 #pragma mark Public API
@@ -82,7 +83,7 @@
 }
 
 - (void)reset {
-	_currentIndex = 0;
+	self.currentIndex = 0;
 	self.hasMore = YES;
 	self.isFetching = NO;
 }

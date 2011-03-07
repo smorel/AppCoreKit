@@ -17,6 +17,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @property (nonatomic, retain) CKWebRequest2 *request;
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
+@property (nonatomic, assign) NSUInteger currentIndex;
 @end
 
 @implementation CKWebSource
@@ -27,6 +28,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @synthesize failureBlock = _failureBlock;
 @dynamic hasMore;
 @dynamic isFetching;
+@dynamic currentIndex;
 
 - (id)init {
 	if (self = [super init]) {
@@ -46,11 +48,11 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
 - (BOOL)fetchNextItems:(NSUInteger)batchSize {
 	if ((self.isFetching == YES) || (self.hasMore == NO)
-		|| (_limit > 0 && _currentIndex >= _limit) ) 
+		|| (_limit > 0 && self.currentIndex >= _limit) ) 
 		return NO;
 	
 	_requestedBatchSize = batchSize;
-	self.request = _requestBlock(NSMakeRange(_currentIndex, batchSize));
+	self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));
 	//[_requestBlock release];
 	
 	if (self.request) {
@@ -89,7 +91,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		[self performSelector:@selector(addItems:) withObject:newItems];
 	}
 	
-	_currentIndex += [newItems count];
+	self.currentIndex += [newItems count];
 	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
 	self.isFetching = NO;
 	self.request = nil;
