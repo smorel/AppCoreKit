@@ -17,11 +17,13 @@
 
 - (id)init{
 	[super init];
+	//NSLog(@"CKNotificationBlockBinder init %p",self);
 	binded = NO;
 	return self;
 }
 
 - (void) dealloc{
+	//NSLog(@"CKNotificationBlockBinder dealloc %p",self);
 	[self unbind];
 	self.target = nil;
 	self.notification = nil;
@@ -37,12 +39,14 @@
 
 - (void) bind{
 	[self unbind];
+	//NSLog(@"CKNotificationBlockBinder bind %p %@",self,notification);
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notification object:target];
 	binded = YES;
 }
 
 -(void)unbind{
 	if(binded){
+		//NSLog(@"CKNotificationBlockBinder unbind %p %@",self,notification);
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:notification object:target];
 		binded = NO;
 	}
