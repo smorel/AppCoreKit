@@ -120,5 +120,7 @@ typedef enum{
 @end
 
 @interface NSObject (CKNSObjectDebugStack)
++ (NSString*)callStack;
 + (void)logCallStack;
++ (void)logCallStackIfBlockCopy;
 @end
