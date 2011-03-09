@@ -15,5 +15,7 @@
 - (void)removeAllObjectsForKey:(NSString*)key;
 - (void)addObserver:(id)object forKey:(NSString*)key;
 - (void)removeObserver:(id)object forKey:(NSString*)key;
+- (void)retainObjectsForKey:(NSString*)key;
+- (void)releaseObjectsForKey:(NSString*)key;
 
 @end

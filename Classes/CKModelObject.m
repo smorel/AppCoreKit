@@ -48,6 +48,9 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 @implementation CKModelObject
 
+- (void)postInit{
+}
+
 - (id)init{
 	[super init];
 	[self executeForAllProperties:^(CKObjectProperty* property,id object){
@@ -59,6 +62,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			}
 		}
 	}];
+	[self postInit];
 	return self;
 }
 
@@ -151,6 +155,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			[self propertyRemoved:propertyName serializedObject:objectFromDecoder];
 		}
 	}
+	[self postInit];
 	return self;
 }
 

@@ -33,6 +33,7 @@
 - (id)initWithDocument:(NSObject<CKDocument>*)theDocument forKey:(NSString*)key{
 	if (self = [super init]) {
 		if(self.document){
+			[self.document releaseObjectsForKey:self.objectsKey];
 			[self.document removeObserver:self forKey:self.objectsKey];
 		}
 		
@@ -42,6 +43,7 @@
 		_currentIndex = [self.items count];
 		
 		[self.document addObserver:self forKey:key];
+		[self.document retainObjectsForKey:self.objectsKey];
 	}
 	return self;
 }
@@ -55,6 +57,7 @@
 
 - (void)dealloc {
 	if(self.document){
+		[self.document releaseObjectsForKey:self.objectsKey];
 		[self.document removeObserver:self forKey:self.objectsKey];
 	}
 	_delegate = nil;

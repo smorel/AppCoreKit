@@ -16,6 +16,7 @@
 
 @interface CKPersistentDocument : NSObject<CKDocument> {
 	NSMutableDictionary* objects;
+	NSMutableDictionary* objectsRefCount;
 	NSMutableArray* persistentKeys;
 	BOOL autoSave;
 	

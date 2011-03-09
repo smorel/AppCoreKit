@@ -10,6 +10,7 @@
 #import "CKPersistentDocument.h"
 
 @interface CKPersistentDocument ()
+@property (nonatomic, retain) NSMutableDictionary *objectsRefCount;
 - (void)saveObjectsForKey:(NSString*)key;
 - (NSMutableArray*)loadObjectsForKey:(NSString*)key;
 @end
@@ -19,16 +20,19 @@
 @synthesize persistentKeys;
 @synthesize autoSave;
 @synthesize delegate = _delegate;
+@synthesize objectsRefCount;
 
 - (id)init{
 	[super init];
 	self.objects = [NSMutableDictionary dictionary];
+	self.objectsRefCount = [NSMutableDictionary dictionary];
 	autoSave = NO;
 	return self;
 }
 
 - (void)dealloc{
 	self.objects = nil;
+	self.objectsRefCount = nil;
 	[super dealloc];
 }
 
@@ -165,6 +169,31 @@
 
 - (void)removeObserver:(id)object forKey:(NSString*)key{
 	[self.objects removeObserver:object forKeyPath:key];	
+}
+
+- (void)retainObjectsForKey:(NSString*)key{
+	NSNumber* refCountForKey = [objectsRefCount objectForKey:key];
+	refCountForKey = refCountForKey ? [NSNumber numberWithInt:[refCountForKey intValue] +1] : [NSNumber numberWithInt:1];
+	[objectsRefCount setValue:refCountForKey forKey:key];
+	//NSLog(@"Retain Objects for key '%@' refCount = %d",key,[refCountForKey intValue]);
+}
+
+- (void)releaseObjectsForKey:(NSString*)key{
+	NSNumber* refCountForKey = [objectsRefCount objectForKey:key];
+	NSAssert(refCountForKey != nil,@"Try to release a non retained key '%@'",key);
+	refCountForKey = [NSNumber numberWithInt:[refCountForKey intValue] - 1];
+	if([refCountForKey intValue] <= 0){
+		[objectsRefCount removeObjectForKey:key];
+		if(persistentKeys && [persistentKeys containsObject:key]){
+			[self saveObjectsForKey:key];
+		}
+		[objects removeObjectForKey:key];
+		NSLog(@"Removed Objects for key '%@'",key);
+	}
+	else{
+		//NSLog(@"Release Objects for key '%@' refCount = %d",key,[refCountForKey intValue]);
+		[objectsRefCount setValue:refCountForKey forKey:key];
+	}
 }
 
 @end
