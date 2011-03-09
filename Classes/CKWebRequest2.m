@@ -271,7 +271,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 								  withObject:[NSNumber numberWithFloat:progress]
 							   waitUntilDone:NO];
 	
-	if(self.destinationStream){
+	if(self.destinationStream && ([theResponse statusCode] == 200 || [theResponse statusCode] == 206)){
 		[self.destinationStream write:[data bytes] maxLength:[data length]];
 	}
 	else{
