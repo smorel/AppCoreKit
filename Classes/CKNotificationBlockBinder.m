@@ -7,13 +7,16 @@
 //
 
 #import "CKNotificationBlockBinder.h"
+#import "CKBindingsManager.h"
 
 
 @implementation CKNotificationBlockBinder
 
+@synthesize instance;
+@synthesize notificationName;
+@synthesize block;
 @synthesize target;
-@synthesize notification;
-@synthesize executionBlock;
+@synthesize selector;
 
 - (id)init{
 	[super init];
@@ -25,41 +28,40 @@
 - (void) dealloc{
 	//NSLog(@"CKNotificationBlockBinder dealloc %p",self);
 	[self unbind];
+	self.instance = nil;
+	self.notificationName = nil;
+	self.block = nil;
 	self.target = nil;
-	self.notification = nil;
-	self.executionBlock = nil;
+	self.selector = nil;
 	[super dealloc];
 }
 
 - (void)onNotification:(NSNotification*)notification{
-	if(executionBlock){
-		executionBlock();
+	if(block){
+		block(notification);
+	}
+	else if(target && [target respondsToSelector:self.selector]){
+		[target performSelector:self.selector withObject:notification];
+	}
+	else{
+		NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
 	}
 }
 
 - (void) bind{
 	[self unbind];
 	//NSLog(@"CKNotificationBlockBinder bind %p %@",self,notification);
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notification object:target];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notificationName object:instance];
 	binded = YES;
 }
 
 -(void)unbind{
 	if(binded){
 		//NSLog(@"CKNotificationBlockBinder unbind %p %@",self,notification);
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:notification object:target];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:instance];
+		[[CKBindingsManager defaultManager]unbind:self];
 		binded = NO;
 	}
 }
-
-+(CKNotificationBlockBinder*) notificationBlockBinder:(id)target notification:(NSString*)notification executionBlock:(CKNotificationExecutionBlock)executionBlock{
-	CKNotificationBlockBinder* binder = [[[CKNotificationBlockBinder alloc]init]autorelease];
-	binder.target = target;
-	binder.notification = notification;
-	binder.executionBlock = executionBlock;
-	[binder bind];
-	return binder;
-}
-
 
 @end

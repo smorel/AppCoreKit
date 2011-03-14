@@ -6,8 +6,6 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKUIViewDataBinder.h"
-#import "CKUIControlActionBlockBinder.h"
 
 @class CKView;
 

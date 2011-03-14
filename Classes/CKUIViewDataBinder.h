@@ -6,46 +6,23 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import "CKBinding.h"
 
-@interface CKUIViewDataBinder : NSObject{
-	NSInteger viewTag;
-	NSString* keyPath;
+@interface CKUIViewDataBinder : NSObject<CKBinding>{
 	UIControlEvents controlEvents;
-	
+	NSString* keyPath;
 	id target;
 	NSString* targetKeyPath;
 	
 	//Internal
-	UIView* view;
+	UIControl* control;
 	BOOL binded;
 }
 
-@property (nonatomic, assign) NSInteger viewTag;
 @property (nonatomic, retain) NSString *keyPath;
 @property (nonatomic, assign) id target;
 @property (nonatomic, retain) NSString *targetKeyPath;
 @property (nonatomic, assign) UIControlEvents controlEvents;
+@property (nonatomic, retain) UIControl *control;
 
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath;
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath;
-
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-						   target:(id)target targetKeyPath:(NSString*)targetKeyPath;
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-						   target:(id)target targetKeyPath:(NSString*)targetKeyPath;
-
--(void)bindViewInView:(UIView*)theView;
--(void)unbind;
-
-@end
-
-
-@interface UIView (CKUIViewDataBinder)
-+ (void)setValueForView : (UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath target:(id)target targetKeyPath:(NSString*)targetKeyPath;
-+ (void)setValueForView : (UIView*)view keyPath:(NSString*)keyPath  target:(id)target targetKeyPath:(NSString*)targetKeyPath;
 @end

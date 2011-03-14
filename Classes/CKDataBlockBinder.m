@@ -8,12 +8,15 @@
 
 #import "CKDataBlockBinder.h"
 #import "CKNSObject+Introspection.h"
+#import "CKBindingsManager.h"
 
 @implementation CKDataBlockBinder
 
 @synthesize instance;
 @synthesize keyPath;
-@synthesize executionBlock;
+@synthesize block;
+@synthesize target;
+@synthesize selector;
 
 - (id)init{
 	[super init];
@@ -25,7 +28,9 @@
 	[self unbind];
 	self.instance = nil;
 	self.keyPath = nil;
-	self.executionBlock = nil;
+	self.block = nil;
+	self.target = nil;
+	self.selector = nil;
 	[super dealloc];
 }
 
@@ -39,7 +44,16 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	executionBlock(newValue);
+	if(block){
+		block(newValue);
+	}
+	else if(target && [target respondsToSelector:self.selector]){
+		[target performSelector:self.selector withObject:newValue];
+	}
+	else{
+		NSAssert(NO,@"CKDataBlockBinder no action plugged");
+	}
+	
 }
 
 
@@ -58,18 +72,9 @@
 	if(binded){
 		[instance removeObserver:self
 					  forKeyPath:keyPath];
+		[[CKBindingsManager defaultManager]unbind:self];
 		binded = NO;
 	}
 }
-
-+(CKDataBlockBinder*) dataBlockBinder:(id)instance keyPath:(NSString*)keyPath executionBlock:(CKDataExecutionBlock)executionBlock{
-	CKDataBlockBinder* binder = [[[CKDataBlockBinder alloc]init]autorelease];
-	binder.instance = instance;
-	binder.keyPath = keyPath;
-	binder.executionBlock = executionBlock;
-	[binder bind];
-	return binder;
-}
-
 
 @end
