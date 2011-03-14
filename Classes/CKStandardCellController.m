@@ -70,6 +70,7 @@
 	self.imageURL = nil;
 	self.fetchedImage = nil;
 	self.image = nil;
+	[self.request cancel];
 	self.request = nil;
 	self.backgroundColor = nil;
 	self.textColor = nil;
