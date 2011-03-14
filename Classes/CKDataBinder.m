@@ -9,6 +9,7 @@
 #import "CKDataBinder.h"
 #import "CKValueTransformer.h"
 #import "CKBindingsManager.h"
+#import "CKNSObject+Introspection.h"
 
 
 @implementation CKDataBinder
@@ -36,7 +37,8 @@
 	[self unbind];
 	
 	id value = [instance1 valueForKey:keyPath1];
-	[instance2 setValue:value forKeyPath:keyPath2];
+	CKObjectProperty* property = [NSObject property:instance2 forKeyPath:keyPath2];
+	[instance2 setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
 	
 	[instance1 addObserver:self
 				forKeyPath:keyPath1
@@ -55,7 +57,8 @@
 					   forKeyPath:keyPath1];
 		[instance2 removeObserver:self
 					   forKeyPath:keyPath2];
-		[[CKBindingsManager defaultManager]unbind:self];
+		//Unregister only when the binding is invalidated with weakRefs
+		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
 }
@@ -68,14 +71,27 @@
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 	
 	id dataValue1 = [instance1 valueForKeyPath:keyPath1];
-	if(![newValue isEqual:dataValue1]){
-		[instance1 setValue:[CKValueTransformer transformValue:newValue toClass:[dataValue1 class]] forKeyPath:keyPath1];
+	{
+		CKObjectProperty* property = [NSObject property:instance1 forKeyPath:keyPath1];
+		id newValue1 = [CKValueTransformer transformValue:newValue toClass:property.type];
+		if(![newValue1 isEqual:dataValue1]){
+			[instance1 setValue:newValue1 forKeyPath:keyPath1];
+		}
 	}
 	
 	id dataValue2 = [instance2 valueForKeyPath:keyPath2];
-	if(![newValue isEqual:dataValue2]){
-		[instance2 setValue:[CKValueTransformer transformValue:newValue toClass:[dataValue2 class]] forKeyPath:keyPath2];
+	{
+		CKObjectProperty* property = [NSObject property:instance2 forKeyPath:keyPath2];
+		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
+		if(![newValue2 isEqual:dataValue2]){
+			[instance2 setValue:newValue2 forKeyPath:keyPath2];
+		}
 	}
+}
+
+//Shallow copy for references in dictionaries
+- (id) copyWithZone:(NSZone *)zone {
+	return self;
 }
 
 @end

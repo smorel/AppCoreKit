@@ -88,6 +88,7 @@ typedef enum{
 + (CKObjectPropertyManager*)defaultManager;
 - (NSArray*)allPropertiesForClass:(Class)class;
 - (NSArray*)allPropertieNamesForClass:(Class)class;
+- (CKObjectProperty*)property:(NSString*)name forClass:(Class)class;
 
 @property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
 @property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;

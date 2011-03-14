@@ -20,8 +20,8 @@
 
 - (id)dequeueReusableBindingWithClass:(Class)bindingClass;
 - (void)bind:(id)binding withContext:(id)context;
-- (void)unbind:(id)binding withContext:(id)context;
 - (void)unbind:(id)binding;
+- (void)unregister:(id)binding;
 - (void)unbindAllBindingsWithContext:(id)context;
 
 @end

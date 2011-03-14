@@ -52,6 +52,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	return [_bindingsForContext description];
 }
 
+//The client should release the object returned !
 - (id)dequeueReusableBindingWithClass:(Class)bindingClass{
 	NSString* className = [NSString stringWithUTF8String:class_getName(bindingClass)];
 	NSMutableArray* bindings = [_bindingsPoolForClass valueForKey:className];
@@ -61,12 +62,12 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	}
 	
 	if([bindings count] > 0){
-		id binding = [bindings lastObject];
+		id binding = [[bindings lastObject]retain];
 		[bindings removeLastObject];
 		return binding;
 	}
 	
-	return [[[bindingClass alloc]init]autorelease];
+	return [[bindingClass alloc]init];
 }
 
 - (void)bind:(id)binding withContext:(id)context{
@@ -74,35 +75,25 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[binding performSelector:@selector(bind)];
 	}
 	
-	NSMutableArray* bindings = [_bindingsForContext valueForKey:context];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
 	if(!bindings){
-		[_contexts addObject:context];
+		[_contexts addObject:[NSValue valueWithNonretainedObject:context]];
 		bindings = [NSMutableArray array];
-		[_bindingsForContext setValue:bindings forKey:context];
+		[_bindingsForContext setObject:bindings forKey:[NSValue valueWithNonretainedObject:context]];
 	}
 	[bindings addObject:binding];
-	[_bindingsToContext setObject:context forKey:binding];
+	[_bindingsToContext setObject:context forKey:[NSValue valueWithNonretainedObject:binding]];
 }
 
 
-- (void)unbind:(id)binding{
-	id context = [_bindingsToContext valueForKey:binding];
-	if(context){
-		[self unbind:binding withContext:context];
-	}
-}
-
-- (void)unbind:(id)binding withContext:(id)context{
-	if([binding conformsToProtocol:@protocol(CKBinding)]){
-		[binding performSelector:@selector(unbind)];
-	}
+- (void)unregister:(id)binding{
+	id context = [_bindingsToContext objectForKey:[NSValue valueWithNonretainedObject:binding]];
 	
-	NSMutableArray* bindings = [_bindingsForContext valueForKey:context];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
 	if(!bindings){
 		NSAssert(NO,@"Should not unbind a non binded item");
 		return;
 	}
-	[bindings removeObject:binding];
 	
 	//Put the binding in the reusable queue
 	NSString* className = [NSString stringWithUTF8String:class_getName([binding class])];
@@ -112,16 +103,24 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 	}
 	[queuedBindings addObject:binding];
-	[_bindingsToContext removeObjectForKey:binding];
+	[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
 	
 	if([bindings count] <= 0){
-		[_bindingsForContext removeObjectForKey:context];
+		[_bindingsForContext removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
 		[_contexts removeObject:context];
+	}	
+	[bindings removeObject:binding];
+}
+
+- (void)unbind:(id)binding{
+	if([binding conformsToProtocol:@protocol(CKBinding)]){
+		[binding performSelector:@selector(unbind)];
 	}
+	[self unregister:binding];
 }
 
 - (void)unbindAllBindingsWithContext:(id)context{
-	NSMutableArray* bindings = [_bindingsForContext valueForKey:context];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
 	if(!bindings){
 		return;
 	}
@@ -138,10 +137,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 			[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 		}
 		[queuedBindings addObject:binding];
-		[_bindingsToContext removeObjectForKey:binding];
+		[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
 	}
 	
-	[_bindingsForContext removeObjectForKey:context];
+	[_bindingsForContext removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
 	[_contexts removeObject:context];
 }
 

@@ -59,9 +59,15 @@
 	if(binded){
 		//NSLog(@"CKNotificationBlockBinder unbind %p %@",self,notification);
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:instance];
-		[[CKBindingsManager defaultManager]unbind:self];
+		//Unregister only when the binding is invalidated with weakRefs
+		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
+}
+
+//Shallow copy for references in dictionaries
+- (id) copyWithZone:(NSZone *)zone {
+	return self;
 }
 
 @end

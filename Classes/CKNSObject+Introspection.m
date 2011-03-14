@@ -206,8 +206,7 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 +(CKObjectProperty*) property:(Class)c forKey:(NSString*)name{
-	objc_property_t property = class_getProperty(c, [name UTF8String]);
-	return [NSObject propertyForDescriptor:property];
+	return [[CKObjectPropertyManager defaultManager]property:name forClass:[c class]];
 }
 
 - (void)introspection:(Class)c array:(NSMutableArray*)array{
@@ -419,6 +418,16 @@ static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 		allPropertyNames = [_propertyNamesByClassName objectForKey:className];
 	}
 	return allPropertyNames;
+}
+
+- (CKObjectProperty*)property:(NSString*)name forClass:(Class)class{
+	NSArray* properties = [self allPropertiesForClass:class];
+	//TODO : Optimize this by getting a dictionary of properties instead of an array !
+	for(CKObjectProperty* p in properties){
+		if([p.name isEqual:name])
+			return p;
+	}
+	return nil;
 }
 
 @end

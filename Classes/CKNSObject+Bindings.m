@@ -57,6 +57,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.instance2 = object;
 	binder.keyPath2 = keyPath2;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block{
@@ -65,6 +66,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.keyPath = keyPath;
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector{
@@ -74,6 +76,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.target = target;
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
@@ -82,6 +85,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.notificationName = notification;
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
@@ -91,6 +95,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.target = target;
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 @end
@@ -105,6 +110,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.block = block;
 	binder.control = self;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector{
@@ -114,6 +120,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.target = target;
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 @end
@@ -128,6 +135,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.notificationName = notification;
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
@@ -136,6 +144,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.notificationName = notification;
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector{
@@ -145,6 +154,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.target = target;
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 - (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
@@ -154,6 +164,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.target = target;
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[binder release];
 }
 
 @end

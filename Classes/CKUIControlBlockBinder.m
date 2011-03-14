@@ -70,9 +70,15 @@
 			[self.control removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
 		}
 		
-		[[CKBindingsManager defaultManager]unbind:self];
+		//Unregister only when the binding is invalidated with weakRefs
+		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
+}
+
+//Shallow copy for references in dictionaries
+- (id) copyWithZone:(NSZone *)zone {
+	return self;
 }
 
 @end
