@@ -7,6 +7,8 @@
 //
 
 #import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
+
 typedef void(^CKUIControlBlock)();
 
 
@@ -15,18 +17,18 @@ typedef void(^CKUIControlBlock)();
 	
 	//We can use block or target/selector
 	CKUIControlBlock block;
-	id target;
+	MAZeroingWeakRef* targetRef;
 	SEL selector;
 	
-	UIControl* control;
+	MAZeroingWeakRef* controlRef;
 	BOOL binded;
 }
 
 @property (nonatomic, assign) UIControlEvents controlEvents;
 @property (nonatomic, copy) CKUIControlBlock block;
-@property (nonatomic, retain) UIControl *control;
-
-@property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL selector;
+
+- (void)setTarget:(id)instance;
+- (void)setControl:(UIControl*)control;
 
 @end

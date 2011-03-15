@@ -11,30 +11,64 @@
 #import "CKImageView.h"
 #import "CKBindingsManager.h"
 
+@interface CKUIControlBlockBinder ()
+@property (nonatomic, retain) MAZeroingWeakRef *controlRef;
+@property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+@end
+
 
 @implementation CKUIControlBlockBinder
 @synthesize controlEvents;
 @synthesize block;
-@synthesize control;
-@synthesize target;
+@synthesize controlRef;
+@synthesize targetRef;
 @synthesize selector;
 
 #pragma mark Initialization
 
 -(id)init{
 	[super init];
-	controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	binded = NO;
+	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	return self;
 }
 
 -(void)dealloc{
 	[self unbind];
-	self.block = nil;
-	self.control = nil;
-	self.target = nil;
-	self.selector = nil;
+	[self reset];
 	[super dealloc];
+}
+
+- (void)reset{
+	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
+	self.block = nil;
+	self.controlRef = nil;
+	self.targetRef = nil;
+	self.selector = nil;
+}
+
+- (void)setTarget:(id)instance{
+	if(instance){
+		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		[targetRef setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.targetRef = nil;
+	}
+}
+
+- (void)setControl:(UIControl*)control{
+	if(control){
+		self.controlRef = [[[MAZeroingWeakRef alloc] initWithTarget:control]autorelease];
+		[controlRef setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.controlRef = nil;
+	}
 }
 
 -(NSString*)description{
@@ -46,8 +80,8 @@
 	if(block){
 		block();
 	}
-	else if(target && [target respondsToSelector:self.selector]){
-		[target performSelector:self.selector];
+	else if(targetRef.target && [targetRef.target respondsToSelector:self.selector]){
+		[targetRef.target performSelector:self.selector];
 	}
 	else{
 		NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
@@ -58,27 +92,19 @@
 - (void)bind{
 	[self unbind];
 
-	if(self.control){
-		[self.control addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+	if(self.controlRef.target){
+		[(UIControl*)self.controlRef.target addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 	}
 	binded = YES;
 }
 
 -(void)unbind{
 	if(binded){
-		if(self.control){
-			[self.control removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
+		if(self.controlRef.target){
+			[(UIControl*)self.controlRef.target removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
 		}
-		
-		//Unregister only when the binding is invalidated with weakRefs
-		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
-}
-
-//Shallow copy for references in dictionaries
-- (id) copyWithZone:(NSZone *)zone {
-	return self;
 }
 
 @end

@@ -7,25 +7,28 @@
 //
 
 #import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
 
 typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 
 @interface CKNotificationBlockBinder : NSObject<CKBinding> {
-	id instance;
+	MAZeroingWeakRef* instanceRef;
 	NSString* notificationName;
 	
 	//We can use block or target/selector
 	CKNotificationExecutionBlock block;
-	id target;
+	MAZeroingWeakRef* targetRef;
 	SEL selector;
 	
 	BOOL binded;
 }
 
-@property (nonatomic, assign) id instance;
 @property (nonatomic, retain) NSString* notificationName;
 @property (nonatomic, copy)   CKNotificationExecutionBlock block;
-@property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL selector;
+
+
+- (void)setTarget:(id)instance;
+- (void)setInstance:(id)instance;
 
 @end

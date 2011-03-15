@@ -77,7 +77,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	
 	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
 	if(!bindings){
-		[_contexts addObject:[NSValue valueWithNonretainedObject:context]];
+		[_contexts addObject:context];
 		bindings = [NSMutableArray array];
 		[_bindingsForContext setObject:bindings forKey:[NSValue valueWithNonretainedObject:context]];
 	}
@@ -91,7 +91,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	
 	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
 	if(!bindings){
-		NSAssert(NO,@"Should not unbind a non binded item");
+		//Already unbinded
 		return;
 	}
 	
@@ -115,6 +115,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)unbind:(id)binding{
 	if([binding conformsToProtocol:@protocol(CKBinding)]){
 		[binding performSelector:@selector(unbind)];
+		[binding performSelector:@selector(reset)];
 	}
 	[self unregister:binding];
 }
@@ -128,6 +129,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	for(id binding in bindings){
 		if([binding conformsToProtocol:@protocol(CKBinding)]){
 			[binding performSelector:@selector(unbind)];
+			[binding performSelector:@selector(reset)];
 		}
 		
 		NSString* className = [NSString stringWithUTF8String:class_getName([binding class])];

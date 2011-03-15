@@ -12,10 +12,15 @@
 #import "CKNSObject+Introspection.h"
 
 
+@interface CKDataBinder ()
+@property (nonatomic, retain) MAZeroingWeakRef *instance1Ref;
+@property (nonatomic, retain) MAZeroingWeakRef *instance2Ref;
+@end
+
 @implementation CKDataBinder
-@synthesize instance1;
+@synthesize instance1Ref;
 @synthesize keyPath1;
-@synthesize instance2;
+@synthesize instance2Ref;
 @synthesize keyPath2;
 
 - (id)init{
@@ -26,25 +31,53 @@
 
 - (void)dealloc{
 	[self unbind];
-	self.instance1 = nil;
-	self.keyPath1 = nil;
-	self.instance2 = nil;
-	self.keyPath2 = nil;
+	[self reset];
 	[super dealloc];
+}
+
+- (void)reset{
+	self.instance1Ref = nil;
+	self.keyPath1 = nil;
+	self.instance2Ref = nil;
+	self.keyPath2 = nil;
+}
+
+- (void)setInstance1:(id)instance{
+	if(instance){
+		self.instance1Ref = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		[instance1Ref setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.instance1Ref = nil;
+	}
+}
+
+- (void)setInstance2:(id)instance{
+	if(instance){
+		self.instance2Ref = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		[instance2Ref setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.instance2Ref = nil;
+	}
 }
 
 -(void)bind{
 	[self unbind];
 	
-	id value = [instance1 valueForKey:keyPath1];
-	CKObjectProperty* property = [NSObject property:instance2 forKeyPath:keyPath2];
-	[instance2 setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
+	id value = [instance1Ref.target valueForKey:keyPath1];
+	CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
+	[instance2Ref.target setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
 	
-	[instance1 addObserver:self
+	[instance1Ref.target addObserver:self
 				forKeyPath:keyPath1
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
-	[instance2 addObserver:self
+	[instance2Ref.target addObserver:self
 				forKeyPath:keyPath2
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
@@ -53,12 +86,10 @@
 
 - (void)unbind{
 	if(binded){
-		[instance1 removeObserver:self
+		[instance1Ref.target removeObserver:self
 					   forKeyPath:keyPath1];
-		[instance2 removeObserver:self
+		[instance2Ref.target removeObserver:self
 					   forKeyPath:keyPath2];
-		//Unregister only when the binding is invalidated with weakRefs
-		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
 }
@@ -70,28 +101,23 @@
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 	
-	id dataValue1 = [instance1 valueForKeyPath:keyPath1];
+	id dataValue1 = [instance1Ref.target valueForKeyPath:keyPath1];
 	{
-		CKObjectProperty* property = [NSObject property:instance1 forKeyPath:keyPath1];
+		CKObjectProperty* property = [NSObject property:instance1Ref.target forKeyPath:keyPath1];
 		id newValue1 = [CKValueTransformer transformValue:newValue toClass:property.type];
 		if(![newValue1 isEqual:dataValue1]){
-			[instance1 setValue:newValue1 forKeyPath:keyPath1];
+			[instance1Ref.target setValue:newValue1 forKeyPath:keyPath1];
 		}
 	}
 	
-	id dataValue2 = [instance2 valueForKeyPath:keyPath2];
+	id dataValue2 = [instance2Ref.target valueForKeyPath:keyPath2];
 	{
-		CKObjectProperty* property = [NSObject property:instance2 forKeyPath:keyPath2];
+		CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
 		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
 		if(![newValue2 isEqual:dataValue2]){
-			[instance2 setValue:newValue2 forKeyPath:keyPath2];
+			[instance2Ref.target setValue:newValue2 forKeyPath:keyPath2];
 		}
 	}
-}
-
-//Shallow copy for references in dictionaries
-- (id) copyWithZone:(NSZone *)zone {
-	return self;
 }
 
 @end

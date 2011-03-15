@@ -253,8 +253,10 @@
 		71E6660E1125D037005E6CEC /* CKUIColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6660C1125D037005E6CEC /* CKUIColorAdditions.m */; };
 		71E6D1F81226F6B40083D977 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E6D1F61226F6B40083D977 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E6D1F91226F6B40083D977 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */; };
-		71FD630E130C46E4007EA1B2 /* CKNSData+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 71FD630C130C46E4007EA1B2 /* CKNSData+Compression.h */; };
+		71FD630E130C46E4007EA1B2 /* CKNSData+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 71FD630C130C46E4007EA1B2 /* CKNSData+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71FD630F130C46E4007EA1B2 /* CKNSData+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */; };
+		7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
 		7531425E130B0C5D006F4F60 /* CKPersistentDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7531425F130B0C5D006F4F60 /* CKPersistentDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */; };
 		75314261130B0C6C006F4F60 /* CKModelObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75314260130B0C6C006F4F60 /* CKModelObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,7 +268,7 @@
 		758EC4B3132A985D000280FE /* CKNSObject+Bindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 758EC4B1132A985D000280FE /* CKNSObject+Bindings.m */; };
 		758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC4B4132A98F1000280FE /* CKBindingsManager.h */; settings = {ATTRIBUTES = (); }; };
 		758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 758EC4B5132A98F1000280FE /* CKBindingsManager.m */; };
-		758EC58D132ADE7C000280FE /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC58C132ADE7C000280FE /* CKBinding.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		758EC58D132ADE7C000280FE /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC58C132ADE7C000280FE /* CKBinding.h */; settings = {ATTRIBUTES = (); }; };
 		759B3AD413172064006C41D9 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AD213172064006C41D9 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		759B3AD513172064006C41D9 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AD313172064006C41D9 /* CKMapping.m */; };
 		759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */; };
@@ -555,6 +557,8 @@
 		71E6D1F71226F6B40083D977 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSlideshowViewController.m; sourceTree = "<group>"; };
 		71FD630C130C46E4007EA1B2 /* CKNSData+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSData+Compression.h"; sourceTree = "<group>"; };
 		71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSData+Compression.m"; sourceTree = "<group>"; };
+		7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAZeroingWeakRef.h; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.h; sourceTree = "<group>"; };
+		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
 		7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPersistentDocument.h; sourceTree = "<group>"; };
 		7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPersistentDocument.m; sourceTree = "<group>"; };
 		75314260130B0C6C006F4F60 /* CKModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObject.h; sourceTree = "<group>"; };
@@ -973,6 +977,7 @@
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				7506BB32132EB8DD001CC8CC /* MAZeroingWeakRef */,
 				4F59F0CA11D00DD6003B4CA8 /* MKNumberBadgeView */,
 				71ADA04D10A372F400C88903 /* TouchXML */,
 				71D185331301EAEE000AD883 /* TouchJSON */,
@@ -1131,6 +1136,15 @@
 				71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */,
 			);
 			name = Deprecated;
+			sourceTree = "<group>";
+		};
+		7506BB32132EB8DD001CC8CC /* MAZeroingWeakRef */ = {
+			isa = PBXGroup;
+			children = (
+				7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */,
+				7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */,
+			);
+			name = MAZeroingWeakRef;
 			sourceTree = "<group>";
 		};
 		7531425B130B0C4F006F4F60 /* Document */ = {
@@ -1327,6 +1341,7 @@
 				758EC4B2132A985D000280FE /* CKNSObject+Bindings.h in Headers */,
 				758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */,
 				758EC58D132ADE7C000280FE /* CKBinding.h in Headers */,
+				7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1579,6 +1594,7 @@
 				759B3AEE131720E5006C41D9 /* CKNSString+Parsing.m in Sources */,
 				758EC4B3132A985D000280FE /* CKNSObject+Bindings.m in Sources */,
 				758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */,
+				7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,18 +7,20 @@
 //
 
 #import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
 
 @interface CKDataBinder : NSObject<CKBinding> {
-	id instance1;
+	MAZeroingWeakRef* instance1Ref;
 	NSString* keyPath1;
-	id instance2;
+	MAZeroingWeakRef* instance2Ref;
 	NSString* keyPath2;
 	BOOL binded;
 }
 
-@property (nonatomic, assign) id instance1;
 @property (nonatomic, retain) NSString *keyPath1;
-@property (nonatomic, assign) id instance2;
 @property (nonatomic, retain) NSString *keyPath2;
+
+- (void)setInstance1:(id)instance;
+- (void)setInstance2:(id)instance;
 
 @end

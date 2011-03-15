@@ -10,28 +10,62 @@
 #import "CKNSObject+Introspection.h"
 #import "CKBindingsManager.h"
 
+@interface CKDataBlockBinder ()
+@property (nonatomic, retain) MAZeroingWeakRef* instanceRef;
+@property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+@end
+
 @implementation CKDataBlockBinder
 
-@synthesize instance;
+@synthesize instanceRef;
 @synthesize keyPath;
 @synthesize block;
-@synthesize target;
+@synthesize targetRef;
 @synthesize selector;
 
 - (id)init{
 	[super init];
 	binded = NO;
+	
 	return self;
 }
 
 - (void) dealloc{
 	[self unbind];
-	self.instance = nil;
+	[self reset];
+	[super dealloc];
+}
+
+- (void)reset{
+	self.instanceRef = nil;
 	self.keyPath = nil;
 	self.block = nil;
-	self.target = nil;
+	self.targetRef = nil;
 	self.selector = nil;
-	[super dealloc];
+}
+
+- (void)setTarget:(id)instance{
+	if(instance){
+		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		[targetRef setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.targetRef = nil;
+	}
+}
+
+- (void)setInstance:(id)instance{
+	if(instance){
+		self.instanceRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		[instanceRef setCleanupBlock: ^(id target) {
+			[[CKBindingsManager defaultManager]unbind:self];
+		}];
+	}
+	else{
+		self.instanceRef = nil;
+	}
 }
 
 - (id)retain{
@@ -47,8 +81,8 @@
 	if(block){
 		block(newValue);
 	}
-	else if(target && [target respondsToSelector:self.selector]){
-		[target performSelector:self.selector withObject:newValue];
+	else if(targetRef.target && [targetRef.target respondsToSelector:self.selector]){
+		[targetRef.target performSelector:self.selector withObject:newValue];
 	}
 	else{
 		NSAssert(NO,@"CKDataBlockBinder no action plugged");
@@ -59,8 +93,8 @@
 
 - (void) bind{
 	[self unbind];
-	if(instance){
-		[instance addObserver:self
+	if(instanceRef.target){
+		[instanceRef.target addObserver:self
 				   forKeyPath:keyPath
 					  options:(NSKeyValueObservingOptionNew)
 					  context:nil];
@@ -70,17 +104,10 @@
 
 -(void)unbind{
 	if(binded){
-		[instance removeObserver:self
+		[instanceRef.target removeObserver:self
 					  forKeyPath:keyPath];
-		//Unregister only when the binding is invalidated with weakRefs
-		//[[CKBindingsManager defaultManager]unregister:self];
 		binded = NO;
 	}
-}
-
-//Shallow copy for references in dictionaries
-- (id) copyWithZone:(NSZone *)zone {
-	return self;
 }
 
 @end

@@ -11,4 +11,5 @@
 @protocol CKBinding
 - (void)bind;
 - (void)unbind;
+- (void)reset;
 @end
