@@ -10,6 +10,11 @@
 
 static int countCmd = 0;
 
+@interface CKModelObserverCommand ()
+- (void)lanchAnimation;
+- (void)updateSubControllers;
+@end
+
 @implementation CKModelObserverCommand
 @synthesize index;
 @synthesize model;
@@ -87,17 +92,30 @@ static int countCmd = 0;
 @implementation CKModelObserverInsertCommand
 
 - (void)lanchAnimation{
-	if(self.modelObserver.insertAnimationBlock){
-		self.modelObserver.insertAnimationBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:animateInsertCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:animateInsertCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			[self animationEnded];
+		}
 	}
 	else{
-		[self animationEnded];
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
 - (void)updateSubControllers{
-	if(self.modelObserver.insertBlock){
-		self.modelObserver.insertBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:executeInsertCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:executeInsertCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			NSAssert(NO,@"delegate do not implement modelObserver:executeInsertCommand:");
+		}
+	}
+	else{
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
@@ -106,17 +124,30 @@ static int countCmd = 0;
 @implementation CKModelObserverRemoveCommand
 
 - (void)lanchAnimation{
-	if(self.modelObserver.removeAnimationBlock){
-		self.modelObserver.removeAnimationBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:animateRemoveCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:animateRemoveCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			[self animationEnded];
+		}
 	}
 	else{
-		[self animationEnded];
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
 - (void)updateSubControllers{
-	if(self.modelObserver.removeBlock){
-		self.modelObserver.removeBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:executeRemoveCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:executeRemoveCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			NSAssert(NO,@"delegate do not implement modelObserver:executeRemoveCommand:");
+		}
+	}
+	else{
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
@@ -126,17 +157,30 @@ static int countCmd = 0;
 @synthesize initialIndex;
 
 - (void)lanchAnimation{
-	if(self.modelObserver.moveAnimationBlock){
-		self.modelObserver.moveAnimationBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:animateMoveCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:animateMoveCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			[self animationEnded];
+		}
 	}
 	else{
-		[self animationEnded];
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
 - (void)updateSubControllers{
-	if(self.modelObserver.moveBlock){
-		self.modelObserver.moveBlock(self);
+	if(self.modelObserver.delegate && [self.modelObserver.delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([self.modelObserver.delegate respondsToSelector:@selector(modelObserver:executeMoveCommand:)]){
+			[self.modelObserver.delegate performSelector:@selector(modelObserver:executeMoveCommand:) withObject:self.modelObserver withObject:self];
+		}
+		else{
+			NSAssert(NO,@"delegate do not implement modelObserver:executeMoveCommand:");
+		}
+	}
+	else{
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 	}
 }
 
@@ -144,6 +188,9 @@ static int countCmd = 0;
 
 
 @interface CKModelObserver ()
+@property (nonatomic, retain) NSMutableDictionary *changeList;
+@property (nonatomic, retain) NSMutableDictionary *toExecuteList;
+
 @property (nonatomic, retain) id<CKDocument> document;
 @property (nonatomic, retain) NSString* objectsKey;
 @end
@@ -152,16 +199,8 @@ static int countCmd = 0;
 @synthesize changeList;
 @synthesize document;
 @synthesize objectsKey;
-@synthesize insertAnimationBlock;
-@synthesize removeAnimationBlock;
-@synthesize moveAnimationBlock;
-@synthesize insertBlock;
-@synthesize removeBlock;
-@synthesize moveBlock;
-@synthesize preChangeNotificationBlock;
-@synthesize postChangeNotificationBlock;
-@synthesize clearAllBlock;
 @synthesize toExecuteList;
+@synthesize delegate;
 
 - (void) dealloc{
 	if(self.document){
@@ -172,16 +211,8 @@ static int countCmd = 0;
 	self.changeList = nil;
 	self.document = nil;
 	self.objectsKey = nil;
-	self.insertAnimationBlock = nil;
-	self.removeAnimationBlock = nil;
-	self.moveAnimationBlock = nil;
-	self.insertBlock = nil;
-	self.removeBlock = nil;
-	self.moveBlock = nil;
-	self.preChangeNotificationBlock = nil;
-	self.postChangeNotificationBlock = nil;
 	self.toExecuteList = nil;
-	self.clearAllBlock = nil;
+	self.delegate = nil;
 	[super dealloc];
 }
 
@@ -193,9 +224,9 @@ static int countCmd = 0;
 	return self;
 }
 
-- (id)initWithDocument:(id<CKDocument>) theDocument key:(NSString*)key{
+- (id)initWithDocument:(id<CKDocument>) theDocument key:(NSString*)key delegate:(id)thedelegate{
 	[super init];
-	
+	self.delegate = thedelegate;
 	if(self.document){
 		[self.document releaseObjectsForKey:self.objectsKey];
 		[self.document removeObserver:self forKey:self.objectsKey];
@@ -216,11 +247,6 @@ static int countCmd = 0;
 - (void)moveModel:(id)model fromIndex:(int)fromIndex toIndex:(int)toIndex{
 	if(model == nil){
 		NSLog(@"CKModelObserver Try to move a nil model Object. Ignoring this command");
-		return;
-	}
-	
-	if(self.moveBlock == nil){
-		NSAssert(NO,@"Model Observer do not implements moveBlock");
 		return;
 	}
 	
@@ -253,11 +279,6 @@ static int countCmd = 0;
 - (void)insertModel:(id)model atIndex:(int)index{
 	if(model == nil){
 		NSLog(@"CKModelObserver Try to insert a nil model Object. Ignoring this command");
-		return;
-	}
-	
-	if(self.insertBlock == nil){
-		NSAssert(NO,@"Model Observer do not implements insertBlock");
 		return;
 	}
 	
@@ -295,11 +316,6 @@ static int countCmd = 0;
 - (void)removeModel:(id)model atIndex:(int)index{
 	if(model == nil){
 		NSLog(@"CKModelObserver Try to remove a nil model Object. Ignoring this command");
-		return;
-	}
-	
-	if(self.removeBlock == nil){
-		NSAssert(NO,@"Model Observer do not implements removeBlock");
 		return;
 	}
 	
@@ -359,8 +375,17 @@ static int countCmd = 0;
 	
 	if(state == CKModelObserverStateExecuting){
 		state = CKModelObserverStateWaiting;
-		if(self.postChangeNotificationBlock){
-			self.postChangeNotificationBlock(self);
+		
+		if(delegate && [delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+			if([delegate respondsToSelector:@selector(modelObserverDidChange:)]){
+				[delegate performSelector:@selector(modelObserverDidChange:) withObject:self];
+			}
+			else{
+				NSAssert(NO,@"delegate do not implement modelObserverDidChange:");
+			}
+		}
+		else{
+			NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 		}
 	}
 }
@@ -399,10 +424,18 @@ static int countCmd = 0;
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-	
-	if(self.preChangeNotificationBlock){
-		self.preChangeNotificationBlock(self);
+	if(delegate && [delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+		if([delegate respondsToSelector:@selector(modelObserverWillChange:)]){
+			[delegate performSelector:@selector(modelObserverWillChange:) withObject:self];
+		}
+		else{
+			NSAssert(NO,@"delegate do not implement modelObserverWillChange:");
+		}
 	}
+	else{
+		NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
+	}
+	
 	
 	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
 	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
@@ -444,18 +477,33 @@ static int countCmd = 0;
 			break;
 		}
 		case NSKeyValueChangeRemoval:{
-			if([items count] <= 0 && self.clearAllBlock != nil){
-				if(self.clearAllBlock){
-					self.clearAllBlock(self);
+			if([items count] <= 0){
+				if(delegate && [delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+					if([delegate respondsToSelector:@selector(modelObserverClearAll:)]){
+						[delegate performSelector:@selector(modelObserverClearAll:) withObject:self];
+					}
+					else{
+						NSAssert(NO,@"delegate do not implement modelObserverClearAll:");
+					}
 				}
 				else{
-					NSAssert(NO,@"Model Observer do not implements clearAllBlock");
+					NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
 				}
 				
 				state = CKModelObserverStateWaiting;
-				if(self.postChangeNotificationBlock){
-					self.postChangeNotificationBlock(self);
+				
+				if(delegate && [delegate conformsToProtocol:@protocol(CKModelObserverDelegate)]){
+					if([delegate respondsToSelector:@selector(modelObserverDidChange:)]){
+						[delegate performSelector:@selector(modelObserverDidChange:) withObject:self];
+					}
+					else{
+						NSAssert(NO,@"delegate do not implement modelObserverDidChange:");
+					}
 				}
+				else{
+					NSAssert(NO,@"delegate is nil or cot conforms to CKModelObserverDelegate");
+				}
+				
 				return;
 			}
 			else{
@@ -496,19 +544,8 @@ static int countCmd = 0;
 
 @implementation CKModelObserver (CKFeedSourceHelper)
 
-- (void)setDataSource:(CKFeedSource*)theSource{
-	if(self.document){
-		[self.document releaseObjectsForKey:self.objectsKey];
-		[self.document removeObserver:self forKey:self.objectsKey];
-	}
-	
-	self.document = theSource.document;
-	self.objectsKey = theSource.objectsKey;
-	
-	if(self.document){
-		[self.document addObserver:self forKey:self.objectsKey];
-		[self.document retainObjectsForKey:self.objectsKey];
-	}
+- (void)initWithFeedSource:(CKFeedSource *)source delegate:(id)thedelegate{
+	[self initWithDocument:source.document key:source.objectsKey delegate:thedelegate];
 }
 
 @end
