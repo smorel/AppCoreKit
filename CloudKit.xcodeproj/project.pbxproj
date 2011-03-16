@@ -257,6 +257,8 @@
 		71FD630F130C46E4007EA1B2 /* CKNSData+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */; };
 		7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
+		7523697A13310251009D59FB /* CKModelObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7523697813310251009D59FB /* CKModelObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7523697B13310251009D59FB /* CKModelObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7523697913310251009D59FB /* CKModelObserver.m */; };
 		7531425E130B0C5D006F4F60 /* CKPersistentDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7531425F130B0C5D006F4F60 /* CKPersistentDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */; };
 		75314261130B0C6C006F4F60 /* CKModelObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75314260130B0C6C006F4F60 /* CKModelObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -559,6 +561,8 @@
 		71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSData+Compression.m"; sourceTree = "<group>"; };
 		7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAZeroingWeakRef.h; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.h; sourceTree = "<group>"; };
 		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
+		7523697813310251009D59FB /* CKModelObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObserver.h; sourceTree = "<group>"; };
+		7523697913310251009D59FB /* CKModelObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKModelObserver.m; sourceTree = "<group>"; };
 		7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPersistentDocument.h; sourceTree = "<group>"; };
 		7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPersistentDocument.m; sourceTree = "<group>"; };
 		75314260130B0C6C006F4F60 /* CKModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObject.h; sourceTree = "<group>"; };
@@ -1155,6 +1159,8 @@
 				7531425C130B0C5D006F4F60 /* CKPersistentDocument.h */,
 				7531425D130B0C5D006F4F60 /* CKPersistentDocument.m */,
 				75314264130B0CB6006F4F60 /* CKDocument.h */,
+				7523697813310251009D59FB /* CKModelObserver.h */,
+				7523697913310251009D59FB /* CKModelObserver.m */,
 			);
 			name = Document;
 			path = Classes;
@@ -1342,6 +1348,7 @@
 				758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */,
 				758EC58D132ADE7C000280FE /* CKBinding.h in Headers */,
 				7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */,
+				7523697A13310251009D59FB /* CKModelObserver.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1595,6 +1602,7 @@
 				758EC4B3132A985D000280FE /* CKNSObject+Bindings.m in Sources */,
 				758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */,
 				7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */,
+				7523697B13310251009D59FB /* CKModelObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
