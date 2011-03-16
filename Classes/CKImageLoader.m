@@ -11,6 +11,7 @@
 #import "CKCache.h"
 #import "CKLocalization.h"
 #import "CKDebug.h"
+#import "RegexKitLite.h"
 
 NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
@@ -77,7 +78,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 				}
 			}
 		}
-		else{
+		else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
 			self.request = [CKWebRequest2 requestWithURL:self.imageURL];
 			self.request.delegate = self;
 			[self.request start];
