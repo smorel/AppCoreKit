@@ -12,6 +12,7 @@
 @interface CKNotificationBlockBinder ()
 @property (nonatomic, retain) MAZeroingWeakRef* instanceRef;
 @property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+- (void)unbindInstance:(id)instance;
 @end
 
 
@@ -38,6 +39,11 @@
 	[super dealloc];
 }
 
+- (NSString*)description{
+	return [NSString stringWithFormat:@"<CKNotificationBlockBinder : %p>{\ninstanceRef = %@\nNotificationName = %@}",
+			self,instanceRef ? instanceRef.target : @"(null)",notificationName];
+}
+
 - (void)reset{
 	self.instanceRef = nil;
 	self.notificationName = nil;
@@ -49,8 +55,10 @@
 - (void)setTarget:(id)instance{
 	if(instance){
 		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		__block CKNotificationBlockBinder* bself = self;
 		[targetRef setCleanupBlock: ^(id target) {
-			[[CKBindingsManager defaultManager]unbind:self];
+			[self unbindInstance:instanceRef.target];
+			[[CKBindingsManager defaultManager]unregister:bself];
 		}];
 	}
 	else{
@@ -61,8 +69,10 @@
 - (void)setInstance:(id)instance{
 	if(instance){
 		self.instanceRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		__block CKNotificationBlockBinder* bself = self;
 		[instanceRef setCleanupBlock: ^(id target) {
-			[[CKBindingsManager defaultManager]unbind:self];
+			[self unbindInstance:target];
+			[[CKBindingsManager defaultManager]unregister:bself];
 		}];
 	}
 	else {
@@ -90,9 +100,13 @@
 }
 
 -(void)unbind{
+	[self unbindInstance:instanceRef.target];
+}
+
+- (void)unbindInstance:(id)instance{
 	if(binded){
 		//NSLog(@"CKNotificationBlockBinder unbind %p %@",self,notification);
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:instanceRef.target];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:instance];
 		binded = NO;
 	}
 }

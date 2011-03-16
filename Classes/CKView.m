@@ -47,7 +47,7 @@
 
 -(void)unbind{
 	//NSLog(@"CKView %p unbind",self);
-	[NSObject removeAllBindingsForContext:self];
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	/*if(self.internal){
 		for(id object in self.internal){
 			if([object respondsToSelector:@selector(unbind)]){
