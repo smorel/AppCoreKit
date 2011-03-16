@@ -148,6 +148,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 //
 
 + (CKWebRequest2 *)requestWithURL:(NSURL *)URL {
+	NSAssert(URL != nil && [[URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
 	return [[[CKWebRequest2 alloc] initWithURL:URL] autorelease];
 }
 
@@ -188,8 +189,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)start {
-	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
-	
 	if ([self isCancelled] || [self isExecuting] || [self isFinished])
 		return;
 	
