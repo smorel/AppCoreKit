@@ -14,12 +14,18 @@
 #import "CKDataBlockBinder.h"
 
 
-static id CKBindingsCurrentContext = nil;
-static id CKBindingsPreviousContext = nil;
+static NSMutableArray* CKBindingsContextStack = nil;
 static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 
 
 @implementation NSObject (CKBindings)
+
++ (id)currentBindingContext{
+	if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
+		return [CKBindingsContextStack lastObject];
+	}
+	return CKBindingsNoContext;
+}
 
 + (NSString *)allBindingsDescription{
 	return [[CKBindingsManager defaultManager]description];
@@ -30,8 +36,11 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 }
 
 + (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy{
-	CKBindingsPreviousContext = CKBindingsCurrentContext;
-	CKBindingsCurrentContext = context;
+	if(CKBindingsContextStack == nil){
+		CKBindingsContextStack = [[NSMutableArray alloc]init];
+	}
+	
+	[CKBindingsContextStack addObject:context];
 	
 	if(policy == CKBindingsContextPolicyRemovePreviousBindings){
 		[[CKBindingsManager defaultManager] unbindAllBindingsWithContext:context];
@@ -39,7 +48,8 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 }
 
 + (void)endBindingsContext{
-	CKBindingsCurrentContext = CKBindingsPreviousContext;
+	NSAssert(CKBindingsContextStack != nil && [CKBindingsContextStack count] > 0,@"No context opened");
+	[CKBindingsContextStack removeLastObject];
 }
 
 + (void)removeAllBindingsForContext:(id)context{
@@ -56,7 +66,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.keyPath1 = keyPath;
 	[binder setInstance2:object];
 	binder.keyPath2 = keyPath2;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -65,7 +75,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder setInstance:self];
 	binder.keyPath = keyPath;
 	binder.block = block;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -75,26 +85,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.keyPath = keyPath;
 	[binder setTarget:target];
 	binder.selector = selector;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
-	[binder release];
-}
-
-- (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
-	[binder setInstance:self];
-	binder.block = block;
-	binder.notificationName = notification;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
-	[binder release];
-}
-
-- (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
-	[binder setInstance:self];
-	[binder setTarget:target];
-	binder.selector = selector;
-	binder.notificationName = notification;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -109,7 +100,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.controlEvents = controlEvents;
 	binder.block = block;
 	[binder setControl:self];
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -119,7 +110,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder setControl:self];
 	[binder setTarget:target];
 	binder.selector = selector;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -134,7 +125,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder setInstance:notificationSender];
 	binder.notificationName = notification;
 	binder.block = block;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -142,7 +133,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
 	binder.notificationName = notification;
 	binder.block = block;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -152,7 +143,7 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder setTarget:target];
 	binder.notificationName = notification;
 	binder.selector = selector;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -161,8 +152,23 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[binder setTarget:target];
 	binder.notificationName = notification;
 	binder.selector = selector;
-	[[CKBindingsManager defaultManager]bind:binder withContext:CKBindingsCurrentContext ? CKBindingsCurrentContext : CKBindingsNoContext];
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
+}
+
+
++ (void)bindNotificationName:(NSString *)notification object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block{
+	[[NSNotificationCenter defaultCenter]bindNotificationName:notification object:notificationSender withBlock:block];
+}
++ (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
+	[[NSNotificationCenter defaultCenter]bindNotificationName:notification withBlock:block];
+}
+
++ (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector{
+	[[NSNotificationCenter defaultCenter]bindNotificationName:notification object:notificationSender target:target action:selector];
+}
++ (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
+	[[NSNotificationCenter defaultCenter]bindNotificationName:notification target:target action:selector];
 }
 
 @end

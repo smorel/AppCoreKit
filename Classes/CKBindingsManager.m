@@ -75,11 +75,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[binding performSelector:@selector(bind)];
 	}
 	
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		[_contexts addObject:context];
 		bindings = [NSMutableArray array];
-		[_bindingsForContext setObject:bindings forKey:[NSValue valueWithNonretainedObject:context]];
+		[_bindingsForContext setObject:bindings forKey:context];
 	}
 	[bindings addObject:binding];
 	[_bindingsToContext setObject:context forKey:[NSValue valueWithNonretainedObject:binding]];
@@ -89,7 +89,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)unregister:(id)binding{
 	id context = [_bindingsToContext objectForKey:[NSValue valueWithNonretainedObject:binding]];
 	
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		//Already unbinded
 		return;
@@ -106,7 +106,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
 	
 	if([bindings count] <= 0){
-		[_bindingsForContext removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
+		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
 	}	
 	[bindings removeObject:binding];
@@ -121,7 +121,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 }
 
 - (void)unbindAllBindingsWithContext:(id)context{
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:[NSValue valueWithNonretainedObject:context]];
+	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		return;
 	}
@@ -142,7 +142,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
 	}
 	
-	[_bindingsForContext removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
+	[_bindingsForContext removeObjectForKey:context];
 	[_contexts removeObject:context];
 }
 

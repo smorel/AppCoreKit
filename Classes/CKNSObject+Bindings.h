@@ -28,9 +28,6 @@ typedef enum {
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block;
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
 
-- (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block;
-- (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector;
-
 @end
 
 //
@@ -51,5 +48,12 @@ typedef enum {
 
 - (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector;
 - (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector;
+
+
++ (void)bindNotificationName:(NSString *)notification object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block;
++ (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block;
+
++ (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector;
++ (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector;
 
 @end

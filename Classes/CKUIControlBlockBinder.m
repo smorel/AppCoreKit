@@ -14,6 +14,7 @@
 @interface CKUIControlBlockBinder ()
 @property (nonatomic, retain) MAZeroingWeakRef *controlRef;
 @property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+- (void)unbindInstance:(id)instance;
 @end
 
 
@@ -39,6 +40,11 @@
 	[super dealloc];
 }
 
+- (NSString*)description{
+	return [NSString stringWithFormat:@"<CKUIControlBlockBinder : %p>{\ncontrolRef = %@\ncontrolEvents = %d}",
+			self,controlRef ? controlRef.target : @"(null)",controlEvents];
+}
+
 - (void)reset{
 	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	self.block = nil;
@@ -50,8 +56,10 @@
 - (void)setTarget:(id)instance{
 	if(instance){
 		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		__block CKUIControlBlockBinder* bself = self;
 		[targetRef setCleanupBlock: ^(id target) {
-			[[CKBindingsManager defaultManager]unbind:self];
+			[self unbindInstance:controlRef.target];
+			[[CKBindingsManager defaultManager]unregister:bself];
 		}];
 	}
 	else{
@@ -62,17 +70,15 @@
 - (void)setControl:(UIControl*)control{
 	if(control){
 		self.controlRef = [[[MAZeroingWeakRef alloc] initWithTarget:control]autorelease];
+		__block CKUIControlBlockBinder* bself = self;
 		[controlRef setCleanupBlock: ^(id target) {
-			[[CKBindingsManager defaultManager]unbind:self];
+			[self unbindInstance:target];
+			[[CKBindingsManager defaultManager]unregister:bself];
 		}];
 	}
 	else{
 		self.controlRef = nil;
 	}
-}
-
--(NSString*)description{
-	return [NSString stringWithFormat:@"CKUIControlBlockBinder count=%d",[self retainCount]];
 }
 
 //Update data in model
@@ -99,9 +105,13 @@
 }
 
 -(void)unbind{
+	[self unbindInstance:controlRef.target];
+}
+
+- (void)unbindInstance:(id)instance{
 	if(binded){
-		if(self.controlRef.target){
-			[(UIControl*)self.controlRef.target removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
+		if(instance){
+			[(UIControl*)instance removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
 		}
 		binded = NO;
 	}
