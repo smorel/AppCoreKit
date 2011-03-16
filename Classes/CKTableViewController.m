@@ -32,8 +32,10 @@
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
-	[self init];
-	self.style = style;
+	self = [super init];
+	if (self) {
+		self.style = style;
+	}
 	return self;
 }
 
