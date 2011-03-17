@@ -115,6 +115,24 @@
 	}
 }
 
+
+- (void)addObjects:(NSArray*)newItems atIndex:(NSUInteger)index forKey:(NSString*)key{
+	if([newItems count] <= 0)
+		return;
+	
+	NSMutableArray* objectsForKey = [self mutableObjectsForKey:key];
+	
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index, [newItems count])];
+    [self.objects willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:key];
+    [objectsForKey insertObjects:newItems atIndexes:indexSet];
+    [self.objects didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:key];	
+	
+	if(autoSave && persistentKeys && [persistentKeys containsObject:key]){
+		[self saveObjectsForKey:key];
+	}
+	
+}
+
 - (void)save{
 	for(NSString* key in persistentKeys){
 		[self saveObjectsForKey:key];
