@@ -215,7 +215,9 @@
 - (void)removeCellControllerAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
 	CKTableViewCellController *cellController = [section.cellControllers objectAtIndex:indexPath.row];
-	[cellController removeObserver:self forKeyPath:@"value"];
+	if (cellController.key) {
+		[cellController removeObserver:self forKeyPath:@"value"];
+	}
 	[section removeCellControllerAtIndex:indexPath.row];
 }
 
