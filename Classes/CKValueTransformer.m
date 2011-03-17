@@ -33,6 +33,24 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 			NSNumber* s = [CKValueTransformerNumberFormatter numberFromString:value];  
 			return s;
 	}
+	else if([value isKindOfClass:[NSURL class]]
+			&& [NSObject isKindOf:type parentType:[NSString class]]){
+		NSURL* url = (NSURL*)value;
+		return [NSString stringWithFormat:@"%@:%@",[url scheme], [url resourceSpecifier]];
+	}
+	else if([value isKindOfClass:[NSString class]]
+			&& [NSObject isKindOf:type parentType:[NSURL class]]){
+		NSString* str = (NSString*)value;
+		return [NSURL URLWithString:str];
+	}
+	else if(value == nil){
+		if([NSObject isKindOf:type parentType:[NSURL class]])
+			return [NSURL URLWithString:@""];
+		else if ([NSObject isKindOf:type parentType:[NSString class]])
+			return @"";
+		else if([NSObject isKindOf:type parentType:[NSNumber class]])
+			return [NSNumber numberWithInt:0];
+	}
 
 	//return the object hopping there is autoConversion :)
 	return value;

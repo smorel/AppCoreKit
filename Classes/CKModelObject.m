@@ -70,7 +70,11 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSArray* allProperties = [self allProperties];
 	for(CKObjectProperty* property in allProperties){
 		if(property.propertyType == CKObjectPropertyTypeObject){
-			[self setValue:nil forKey:property.name];
+			id object = [self valueForKey:property.name];
+			if(object){
+				[object release];
+			}
+			//[self setValue:nil forKey:property.name];
 		}
 	}
 	

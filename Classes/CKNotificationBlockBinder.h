@@ -6,21 +6,29 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-typedef void(^CKNotificationExecutionBlock)();
+#import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
 
-@interface CKNotificationBlockBinder : NSObject {
-	id target;
-	NSString* notification;
-	CKNotificationExecutionBlock executionBlock;
+typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
+
+@interface CKNotificationBlockBinder : NSObject<CKBinding> {
+	MAZeroingWeakRef* instanceRef;
+	NSString* notificationName;
+	
+	//We can use block or target/selector
+	CKNotificationExecutionBlock block;
+	MAZeroingWeakRef* targetRef;
+	SEL selector;
+	
 	BOOL binded;
 }
 
-@property (nonatomic, assign) id target;
-@property (nonatomic, retain) NSString* notification;
-@property (nonatomic, copy)   CKNotificationExecutionBlock executionBlock;
+@property (nonatomic, retain) NSString* notificationName;
+@property (nonatomic, copy)   CKNotificationExecutionBlock block;
+@property (nonatomic, assign) SEL selector;
 
-+(CKNotificationBlockBinder*) notificationBlockBinder:(id)target notification:(NSString*)notification executionBlock:(CKNotificationExecutionBlock)executionBlock;
-- (void) bind;
--(void)unbind;
+
+- (void)setTarget:(id)instance;
+- (void)setInstance:(id)instance;
 
 @end

@@ -8,25 +8,74 @@
 
 #import "CKDataBlockBinder.h"
 #import "CKNSObject+Introspection.h"
+#import "CKBindingsManager.h"
+
+@interface CKDataBlockBinder ()
+@property (nonatomic, retain) MAZeroingWeakRef* instanceRef;
+@property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+- (void)unbindInstance:(id)instance;
+@end
 
 @implementation CKDataBlockBinder
 
-@synthesize instance;
+@synthesize instanceRef;
 @synthesize keyPath;
-@synthesize executionBlock;
+@synthesize block;
+@synthesize targetRef;
+@synthesize selector;
 
 - (id)init{
 	[super init];
 	binded = NO;
+	
 	return self;
 }
 
 - (void) dealloc{
 	[self unbind];
-	self.instance = nil;
-	self.keyPath = nil;
-	self.executionBlock = nil;
+	[self reset];
 	[super dealloc];
+}
+
+- (NSString*)description{
+	return [NSString stringWithFormat:@"<CKDataBlockBinder : %p>{\ninstanceRef = %@\nkeyPath = %@}",
+			self,instanceRef ? instanceRef.target : @"(null)",keyPath];
+}
+
+- (void)reset{
+	self.instanceRef = nil;
+	self.keyPath = nil;
+	self.block = nil;
+	self.targetRef = nil;
+	self.selector = nil;
+}
+
+- (void)setTarget:(id)instance{
+	if(instance){
+		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		__block CKDataBlockBinder* bself = self;
+		[targetRef setCleanupBlock: ^(id target) {
+			[self unbindInstance:instanceRef.target];
+			[[CKBindingsManager defaultManager]unregister:bself];
+		}];
+	}
+	else{
+		self.targetRef = nil;
+	}
+}
+
+- (void)setInstance:(id)instance{
+	if(instance){
+		self.instanceRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
+		__block CKDataBlockBinder* bself = self;
+		[instanceRef setCleanupBlock: ^(id target) {
+			[self unbindInstance:target];
+			[[CKBindingsManager defaultManager]unregister:bself];
+		}];
+	}
+	else{
+		self.instanceRef = nil;
+	}
 }
 
 - (id)retain{
@@ -39,14 +88,23 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	executionBlock(newValue);
+	if(block){
+		block(newValue);
+	}
+	else if(targetRef.target && [targetRef.target respondsToSelector:self.selector]){
+		[targetRef.target performSelector:self.selector withObject:newValue];
+	}
+	else{
+		NSAssert(NO,@"CKDataBlockBinder no action plugged");
+	}
+	
 }
 
 
 - (void) bind{
 	[self unbind];
-	if(instance){
-		[instance addObserver:self
+	if(instanceRef.target){
+		[instanceRef.target addObserver:self
 				   forKeyPath:keyPath
 					  options:(NSKeyValueObservingOptionNew)
 					  context:nil];
@@ -55,21 +113,15 @@
 }
 
 -(void)unbind{
+	[self unbindInstance:instanceRef.target];
+}
+
+- (void)unbindInstance:(id)instance{
 	if(binded){
 		[instance removeObserver:self
-					  forKeyPath:keyPath];
+								forKeyPath:keyPath];
 		binded = NO;
 	}
 }
-
-+(CKDataBlockBinder*) dataBlockBinder:(id)instance keyPath:(NSString*)keyPath executionBlock:(CKDataExecutionBlock)executionBlock{
-	CKDataBlockBinder* binder = [[[CKDataBlockBinder alloc]init]autorelease];
-	binder.instance = instance;
-	binder.keyPath = keyPath;
-	binder.executionBlock = executionBlock;
-	[binder bind];
-	return binder;
-}
-
 
 @end

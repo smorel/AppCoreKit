@@ -9,20 +9,14 @@
 #import "CKUIViewDataBinder.h"
 #import "CKNSObject+Introspection.h"
 #import "CKValueTransformer.h"
+#import "CKBindingsManager.h"
 
-
-@interface CKUIViewDataBinder()
-@property (nonatomic, retain) UIView *view;
--(void)unbind;
--(void)controlChange;
-@end
 
 @implementation CKUIViewDataBinder
-@synthesize viewTag;
 @synthesize keyPath;
 @synthesize target;
 @synthesize targetKeyPath;
-@synthesize view;
+@synthesize control;
 @synthesize controlEvents;
 
 #pragma mark Initialization
@@ -30,13 +24,16 @@
 -(id)init{
 	[super init];
 	controlEvents = UIControlEventValueChanged;
-	viewTag = -1;
 	binded = NO;
 	return self;
 }
 
 -(void)dealloc{
 	[self unbind];
+	self.target = nil;
+	self.targetKeyPath = nil;
+	self.control = nil;
+	self.keyPath = nil;
 	[super dealloc];
 }
 
@@ -48,13 +45,7 @@
 
 //Update data in model
 -(void)controlChange{
-	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view ;
-	if(!subView){
-		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
-	}
-	
-	id newValue = [subView valueForKeyPath:keyPath];
-	
+	id newValue = [self.control valueForKeyPath:keyPath];
 	id dataValue = [target valueForKeyPath:targetKeyPath];
 	if(![newValue isEqual:dataValue]){
 		[target setValue:[CKValueTransformer transformValue:newValue toClass:[dataValue class]] forKeyPath:targetKeyPath];
@@ -69,113 +60,46 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	
-	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
-	if(!subView){
-		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
-	}
-	else{
-		id subViewValue = [subView valueForKeyPath:keyPath];
-		if(![newValue isEqual:subViewValue]){
-			CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
-			[subView setValue:[CKValueTransformer transformValue:newValue toClass:propertyDescriptor.type] forKeyPath:keyPath];
-		}
+
+	if(self.control){
+		CKObjectProperty* propertyDescriptor = [NSObject property:self.control forKeyPath:keyPath];
+		[self.control setValue:[CKValueTransformer transformValue:newValue toClass:propertyDescriptor.type] forKeyPath:keyPath];
 	}
 }
 
 #pragma mark Public API
--(void)bindViewInView:(UIView*)theView{
+- (void)bind{
 	[self unbind];
-	self.view = theView;
-	
-	id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
-	if(!subView){
-		NSAssert(NO,@"Invalid subView object in CKUIViewDataBinder");
-	}
-	
-	id dataValue = [target valueForKeyPath:targetKeyPath];
-	
-	CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
-	id transformedValue = [CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type];
-	[subView setValue:transformedValue forKeyPath:keyPath];
-	
-	if([subView isKindOfClass:[UIControl class]]){
+	if(self.control){
+		id dataValue = [target valueForKeyPath:targetKeyPath];
+		
+		CKObjectProperty* propertyDescriptor = [NSObject property:self.control forKeyPath:keyPath];
+		id transformedValue = [CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type];
+		[self.control setValue:transformedValue forKeyPath:keyPath];
+		
 		UIControl* control = (UIControl*)subView;
 		[control addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+		
+		[target addObserver:self
+				 forKeyPath:targetKeyPath
+					options:(NSKeyValueObservingOptionNew)
+					context:nil];
+		
+		binded = YES;
 	}
-	
-	[target addObserver:self
-			 forKeyPath:targetKeyPath
-				options:(NSKeyValueObservingOptionNew)
-				context:nil];
-	
-	binded = YES;
 }
 
 -(void)unbind{
 	if(binded){
-		if(self.view){
-			if( [self.view isKindOfClass:[UIControl class]]){
-				UIControl* control = (UIControl*)self.view;
-				[control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
-			}
-			[target removeObserver:self forKeyPath:targetKeyPath];
+		if(self.control){
+			[self.control removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+			[self.target removeObserver:self forKeyPath:targetKeyPath];
 		}
 		
-		self.view = nil;
+		[[CKBindingsManager defaultManager]unbind:self];
 		binded = NO;
 	}
 }
 
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-								  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-								  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:viewTag keyPath:keyPath controlEvents:UIControlEventValueChanged target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	return [self dataBinderForView:view viewTag:-1 keyPath:keyPath controlEvents:controlEvents target:target targetKeyPath:targetKeyPath];
-}
-
-+ (CKUIViewDataBinder*)dataBinderForView:(UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath 
-						   controlEvents:(UIControlEvents)controlEvents target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	CKUIViewDataBinder* binder = [[[CKUIViewDataBinder alloc]init]autorelease];
-	binder.viewTag = viewTag;
-	binder.keyPath = keyPath;
-	binder.controlEvents = controlEvents;
-	binder.target = target;
-	binder.targetKeyPath = targetKeyPath;
-	[binder bindViewInView:view];
-	return binder;
-}
-
 
 @end
-
-
-@implementation UIView (CKUIViewDataBinder)
-
-+ (void)setValueForView : (UIView*)view viewTag:(NSInteger)viewTag keyPath:(NSString*)keyPath target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	id subView = (viewTag >= 0) ? [view viewWithTag:viewTag] : view;
-	if(!subView){
-		NSAssert(NO,@"Invalid subView object in setValueForView");
-	}
-	
-	id dataValue = [target valueForKeyPath:targetKeyPath];
-	
-	CKObjectProperty* propertyDescriptor = [NSObject property:subView forKeyPath:keyPath];
-	id transformedValue = [CKValueTransformer transformValue:dataValue toClass:propertyDescriptor.type];
-	[subView setValue:transformedValue forKeyPath:keyPath];
-}
-
-+ (void)setValueForView : (UIView*)view keyPath:(NSString*)keyPath  target:(id)target targetKeyPath:(NSString*)targetKeyPath{
-	[UIView setValueForView:view viewTag:-1 keyPath:keyPath target:target targetKeyPath:targetKeyPath];
-}
-
-@end
-

@@ -9,6 +9,7 @@
 #import "CKView.h"
 #import <CloudKit/CKConstants.h>
 #import <QuartzCore/QuartzCore.h>
+#import "CKNSObject+Bindings.h"
 
 @implementation CKViewTemplate
 @synthesize viewCreationBlock;
@@ -46,14 +47,15 @@
 
 -(void)unbind{
 	//NSLog(@"CKView %p unbind",self);
-	if(self.internal){
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	/*if(self.internal){
 		for(id object in self.internal){
 			if([object respondsToSelector:@selector(unbind)]){
 				//NSLog(@"CKView %p unbind %@",self,object);
 				[object unbind];
 			}
 		}
-	}
+	}*/
 	
 	self.internal = nil;//delete previous setup objects
 }

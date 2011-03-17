@@ -6,23 +6,27 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
 
-
-typedef void(^CKDataExecutionBlock)(id value);
-@interface CKDataBlockBinder : NSObject {
-	id instance;
+typedef void(^CKDataBlockBinderExecutionBlock)(id value);
+@interface CKDataBlockBinder : NSObject<CKBinding> {
+	MAZeroingWeakRef* instanceRef;
 	NSString* keyPath;
-	CKDataExecutionBlock executionBlock;
+	
+	//We can use block or target/selector
+	CKDataBlockBinderExecutionBlock block;
+	MAZeroingWeakRef* targetRef;
+	SEL selector;
+	
 	BOOL binded;
 }
 
-@property (nonatomic, assign) id instance;
 @property (nonatomic, retain) NSString* keyPath;
-@property (nonatomic, copy)   CKDataExecutionBlock executionBlock;
+@property (nonatomic, copy)   CKDataBlockBinderExecutionBlock block;
+@property (nonatomic, assign) SEL selector;
 
-+(CKDataBlockBinder*) dataBlockBinder:(id)instance keyPath:(NSString*)keyPath executionBlock:(CKDataExecutionBlock)executionBlock;
-- (void) bind;
--(void)unbind;
+- (void)setTarget:(id)instance;
+- (void)setInstance:(id)instance;
 
 @end

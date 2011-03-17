@@ -6,24 +6,21 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import "CKBinding.h"
+#import "MAZeroingWeakRef.h"
 
-@interface CKDataBinder : NSObject {
-	id instance1;
+@interface CKDataBinder : NSObject<CKBinding> {
+	MAZeroingWeakRef* instance1Ref;
 	NSString* keyPath1;
-	id instance2;
+	MAZeroingWeakRef* instance2Ref;
 	NSString* keyPath2;
 	BOOL binded;
 }
 
-@property (nonatomic, assign) id instance1;
 @property (nonatomic, retain) NSString *keyPath1;
-@property (nonatomic, assign) id instance2;
 @property (nonatomic, retain) NSString *keyPath2;
 
-+(CKDataBinder*)binderForObject:(id)object1 keyPath:(NSString*)keyPath object2:(id)object2 keyPath2:(NSString*)keyPath2;
-
--(void)bind;
--(void)unbind;
-
+- (void)setInstance1:(id)instance;
+- (void)setInstance2:(id)instance;
 
 @end
