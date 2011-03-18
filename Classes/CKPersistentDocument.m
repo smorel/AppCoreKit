@@ -214,4 +214,9 @@
 	}
 }
 
+- (void)fetchRange:(NSRange)range forKey:(NSString*)key{
+	NSLog(@"CKPersistentDocument fetchRange:%d,%d forKey:%@",range.location,range.length,key);
+	//NSAssert(NO,@"Not Implemented");
+}
+
 @end
