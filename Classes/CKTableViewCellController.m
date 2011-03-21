@@ -60,7 +60,7 @@
 	_indexPath = [indexPath retain];
 }
 
-- (void)setParentController:(CKManagedTableViewController *)parentController {
+- (void)setParentController:(CKTableViewController *)parentController {
 	// Set a *weak* reference to the parent controller
 	// This method is hidden from the public interface and is called by the CKManagedTableViewController
 	// when adding the CKTableViewCellController.
@@ -108,6 +108,9 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return;
+}
+
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
 }
 
 - (CGFloat)heightForRow {

@@ -257,6 +257,15 @@
 		71FD630F130C46E4007EA1B2 /* CKNSData+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */; };
 		7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
+		751004B61337BB1C008B0E7B /* CKDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AB1337BB1C008B0E7B /* CKDocumentController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751004B71337BB1C008B0E7B /* CKDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004AC1337BB1C008B0E7B /* CKDocumentController.m */; };
+		751004B81337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751004B91337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */; };
+		751004BA1337BB1C008B0E7B /* CKObjectController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AF1337BB1C008B0E7B /* CKObjectController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751004BB1337BB1C008B0E7B /* CKObjectTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */; };
+		751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */; };
 		7523697A13310251009D59FB /* CKModelObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7523697813310251009D59FB /* CKModelObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7523697B13310251009D59FB /* CKModelObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7523697913310251009D59FB /* CKModelObserver.m */; };
 		75236A0813310E77009D59FB /* CKModelObserverBlockDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 75236A0613310E77009D59FB /* CKModelObserverBlockDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -563,6 +572,15 @@
 		71FD630D130C46E4007EA1B2 /* CKNSData+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSData+Compression.m"; sourceTree = "<group>"; };
 		7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAZeroingWeakRef.h; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.h; sourceTree = "<group>"; };
 		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
+		751004AB1337BB1C008B0E7B /* CKDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocumentController.h; path = Classes/CKDocumentController.h; sourceTree = "<group>"; };
+		751004AC1337BB1C008B0E7B /* CKDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocumentController.m; path = Classes/CKDocumentController.m; sourceTree = "<group>"; };
+		751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDictionary+TableViewAttributes.h"; path = "Classes/CKNSDictionary+TableViewAttributes.h"; sourceTree = "<group>"; };
+		751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDictionary+TableViewAttributes.m"; path = "Classes/CKNSDictionary+TableViewAttributes.m"; sourceTree = "<group>"; };
+		751004AF1337BB1C008B0E7B /* CKObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectController.h; path = Classes/CKObjectController.h; sourceTree = "<group>"; };
+		751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectTableViewController.h; path = Classes/CKObjectTableViewController.h; sourceTree = "<group>"; };
+		751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectTableViewController.m; path = Classes/CKObjectTableViewController.m; sourceTree = "<group>"; };
+		751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectViewControllerFactory.h; path = Classes/CKObjectViewControllerFactory.h; sourceTree = "<group>"; };
+		751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectViewControllerFactory.m; path = Classes/CKObjectViewControllerFactory.m; sourceTree = "<group>"; };
 		7523697813310251009D59FB /* CKModelObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObserver.h; sourceTree = "<group>"; };
 		7523697913310251009D59FB /* CKModelObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKModelObserver.m; sourceTree = "<group>"; };
 		75236A0613310E77009D59FB /* CKModelObserverBlockDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObserverBlockDelegate.h; sourceTree = "<group>"; };
@@ -672,6 +690,8 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				751004C41337BB38008B0E7B /* ObjectTableView */,
+				751004C31337BB28008B0E7B /* Controllers */,
 				7531425B130B0C4F006F4F60 /* Document */,
 				4FAD0FA111C2D5C80071C7BF /* Tables */,
 				715CA152110E36F700593672 /* UI */,
@@ -1155,6 +1175,29 @@
 			name = MAZeroingWeakRef;
 			sourceTree = "<group>";
 		};
+		751004C31337BB28008B0E7B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				751004AB1337BB1C008B0E7B /* CKDocumentController.h */,
+				751004AC1337BB1C008B0E7B /* CKDocumentController.m */,
+				751004AF1337BB1C008B0E7B /* CKObjectController.h */,
+				751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */,
+				751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		751004C41337BB38008B0E7B /* ObjectTableView */ = {
+			isa = PBXGroup;
+			children = (
+				751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */,
+				751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */,
+				751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */,
+				751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */,
+			);
+			name = ObjectTableView;
+			sourceTree = "<group>";
+		};
 		7531425B130B0C4F006F4F60 /* Document */ = {
 			isa = PBXGroup;
 			children = (
@@ -1356,6 +1399,11 @@
 				7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */,
 				7523697A13310251009D59FB /* CKModelObserver.h in Headers */,
 				75236A0813310E77009D59FB /* CKModelObserverBlockDelegate.h in Headers */,
+				751004B61337BB1C008B0E7B /* CKDocumentController.h in Headers */,
+				751004B81337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h in Headers */,
+				751004BA1337BB1C008B0E7B /* CKObjectController.h in Headers */,
+				751004BB1337BB1C008B0E7B /* CKObjectTableViewController.h in Headers */,
+				751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1611,6 +1659,10 @@
 				7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */,
 				7523697B13310251009D59FB /* CKModelObserver.m in Sources */,
 				75236A0913310E77009D59FB /* CKModelObserverBlockDelegate.m in Sources */,
+				751004B71337BB1C008B0E7B /* CKDocumentController.m in Sources */,
+				751004B91337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m in Sources */,
+				751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */,
+				751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

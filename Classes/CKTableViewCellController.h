@@ -20,7 +20,7 @@
 	BOOL _movable;
 	UITableViewCellAccessoryType _accessoryType;
 	NSIndexPath *_indexPath;
-	CKManagedTableViewController *_parentController;
+	CKTableViewController *_parentController;
 	CGFloat _rowHeight;
 }
 
@@ -28,7 +28,7 @@
 @property (nonatomic, retain) id value;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) CKManagedTableViewController *parentController;
+@property (nonatomic, assign, readonly) CKTableViewController *parentController;
 @property (nonatomic, assign, readonly) UITableViewCell *tableViewCell;
 
 @property (nonatomic, retain) id target;
@@ -50,6 +50,7 @@
 
 - (UITableViewCell *)loadCell;
 - (void)setupCell:(UITableViewCell *)cell;
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
 - (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;
