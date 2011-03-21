@@ -314,7 +314,6 @@
 						[_weakCells removeObject:cellRef];
 					}];
 					[_weakCells addObject:cellRef];
-				 
 					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				else{
