@@ -79,7 +79,7 @@
 -(void)bind{
 	[self unbind];
 	
-	id value = [instance1Ref.target valueForKey:keyPath1];
+	id value = [instance1Ref.target valueForKeyPath:keyPath1];
 	CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
 	[instance2Ref.target setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
 	
@@ -87,10 +87,10 @@
 				forKeyPath:keyPath1
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
-	[instance2Ref.target addObserver:self
+	/*[instance2Ref.target addObserver:self
 				forKeyPath:keyPath2
 				   options:(NSKeyValueObservingOptionNew)
-				   context:nil];
+				   context:nil];*/
 	binded = YES;
 }
 
@@ -102,8 +102,8 @@
 	if(binded){
 		[instance1 removeObserver:self
 								 forKeyPath:keyPath1];
-		[instance2 removeObserver:self
-								 forKeyPath:keyPath2];
+		/*[instance2 removeObserver:self
+								 forKeyPath:keyPath2];*/
 		binded = NO;
 	}
 }
@@ -115,7 +115,7 @@
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 	
-	id dataValue1 = [instance1Ref.target valueForKeyPath:keyPath1];
+	/*id dataValue1 = [instance1Ref.target valueForKeyPath:keyPath1];
 	{
 		CKObjectProperty* property = [NSObject property:instance1Ref.target forKeyPath:keyPath1];
 		id newValue1 = [CKValueTransformer transformValue:newValue toClass:property.type];
@@ -128,7 +128,7 @@
 									 options:(NSKeyValueObservingOptionNew)
 									 context:nil];
 		}
-	}
+	}*/
 	
 	id dataValue2 = [instance2Ref.target valueForKeyPath:keyPath2];
 	{

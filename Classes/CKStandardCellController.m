@@ -84,7 +84,7 @@
 //
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
-	if (self.imageURL && (self.fetchedImage == nil) && (self.request == nil)) {
+	if (self.imageURL && [self.imageURL length] > 0 && (self.fetchedImage == nil) && (self.request == nil)) {
 		self.request = [CKWebRequest requestWithURLString:self.imageURL params:nil delegate:self];
 		[self.request start];
 	}
@@ -101,6 +101,8 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	[self.request cancel];
+	
 	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
 	if (self.textColor) cell.textLabel.textColor = self.textColor;
 	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;

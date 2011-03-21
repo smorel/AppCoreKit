@@ -43,11 +43,11 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 		NSString* str = (NSString*)value;
 		return [NSURL URLWithString:str];
 	}
-	else if(value == nil){
+	else if(value == nil || [value isKindOfClass:[NSNull class]]){
 		if([NSObject isKindOf:type parentType:[NSURL class]])
 			return [NSURL URLWithString:@""];
 		else if ([NSObject isKindOf:type parentType:[NSString class]])
-			return @"";
+			return [NSString string];
 		else if([NSObject isKindOf:type parentType:[NSNumber class]])
 			return [NSNumber numberWithInt:0];
 	}

@@ -314,6 +314,7 @@
 						[_weakCells removeObject:cellRef];
 					}];
 					[_weakCells addObject:cellRef];
+				 
 					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				else{
@@ -381,7 +382,6 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[self.tableView setEditing:YES animated:YES];
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	return (controller != nil) ? [controller willSelectRow] : nil;
 }
@@ -400,7 +400,6 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete){
-		[self.tableView setEditing:NO animated:YES];
 		if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 			if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 				[_objectController removeObjectAtIndexPath:indexPath];
