@@ -50,6 +50,7 @@
 
 - (UITableViewCell *)loadCell;
 - (void)setupCell:(UITableViewCell *)cell;
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
 - (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;

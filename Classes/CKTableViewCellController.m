@@ -110,6 +110,9 @@
 	return;
 }
 
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+}
+
 - (CGFloat)heightForRow {
 	return self.rowHeight;
 }
