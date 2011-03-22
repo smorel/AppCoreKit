@@ -55,10 +55,15 @@
 	return self;
 }
 
-- (void)dealloc {
-	MKMapView *mapView = (MKMapView *)[self.tableViewCell.contentView viewWithTag:1000];
-	mapView.delegate = nil;
+- (void)cellDidDisappear {
+	UITableViewCell *cell = self.tableViewCell;
+	if (cell) {
+		MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
+		mapView.delegate = nil;
+	}
+}
 
+- (void)dealloc {
 	self.annotation = nil;
 	self.annotationImage = nil;
 	[super dealloc];
