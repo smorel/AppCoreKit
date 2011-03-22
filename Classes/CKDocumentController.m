@@ -71,6 +71,10 @@
 	return 0;
 }
 
+- (NSString*)headerTitleForSection:(NSInteger)section{
+	return nil;
+}
+
 - (id)objectAtIndexPath:(NSIndexPath*)indexPath{
 	if(indexPath.length != 2)
 		return nil;
@@ -83,16 +87,6 @@
 		}
 	}
 	return nil;
-}
-
-- (NSIndexPath *)indexPathForObject:(id)object{
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(objectsForKey:)]){
-			NSArray* objects = [_document objectsForKey:_key];
-			return [NSIndexPath indexPathForRow:[objects indexOfObject:object] inSection:0];
-		}
-	}
-	return [NSIndexPath indexPathForRow:0 inSection:-1];
 }
 
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath{
@@ -130,6 +124,9 @@
 	}
 }
 
+- (NSIndexPath*)indexPathForDocumentObjectAtIndex:(NSInteger)index{
+	return [NSIndexPath indexPathForRow:index inSection:0];
+}
 
 - (void)observeValueForKeyPath:(NSString *)theKeyPath
 					  ofObject:(id)object
@@ -155,7 +152,7 @@
 				NSAssert(count < [newModels count],@"Problem with observer change newModels");
 				if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
-						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[NSIndexPath indexPathForRow:currentIndex inSection:0]];
+						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
 				}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
@@ -168,7 +165,7 @@
 				NSAssert(count < [oldModels count],@"Problem with observer change newModels");
 				if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
-						[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[NSIndexPath indexPathForRow:currentIndex inSection:0]];
+						[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
 				}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];

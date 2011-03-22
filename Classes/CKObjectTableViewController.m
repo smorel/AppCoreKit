@@ -314,7 +314,6 @@
 						[_weakCells removeObject:cellRef];
 					}];
 					[_weakCells addObject:cellRef];
-				 
 					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				else{
@@ -456,7 +455,11 @@
 #pragma mark UITableView Protocol for Sections
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
+	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+		if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
+			return [_objectController headerTitleForSection:section];
+		}
+	}
 	return @"";
 }
 
@@ -466,7 +469,13 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
+	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+		if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
+			if( [_objectController headerTitleForSection:section] != nil ){
+				return 30;
+			}
+		}
+	}
 	return 0;
 }
 
