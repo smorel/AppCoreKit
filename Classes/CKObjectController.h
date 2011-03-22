@@ -13,6 +13,7 @@
 //Sections
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
+- (NSString*)headerTitleForSection:(NSInteger)section;
 
 //Objects Management
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
