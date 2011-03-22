@@ -46,7 +46,7 @@
 	
 	if (self.request) {
 		self.request.delegate = self;
-		[self.request start];
+		[self.request startAsynchronous];
 		_fetching = YES;
 		return YES;
 	}

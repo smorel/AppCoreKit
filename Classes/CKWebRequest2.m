@@ -62,7 +62,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 + (void)initialize {
 	if (self == [CKWebRequest2 class]) {
 		theSharedQueue = [[NSOperationQueue alloc] init];
-		[theSharedQueue setName:@"CKWebRequest"];
+		//[theSharedQueue setName:@"CKWebRequest"]; Does not work on iOS 3.x
 		[theSharedQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
 	}
 }
@@ -127,6 +127,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theRequest setValue:[NSString stringWithFormat:@"%llu", [bodyData length]] forHTTPHeaderField:@"Content-Length"];
 }
 
+- (void)startAsynchronous {
+	[theSharedQueue addOperation:self];
+}
+
 //
 
 + (CKWebRequest2 *)requestWithURL:(NSURL *)URL {
@@ -155,20 +159,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
 }
 
-//
+#pragma mark NSOperation Methods
 
 - (void)start {
 	NSAssert([[theRequest.URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
 	
 	if ([self isCancelled] || [self isExecuting] || [self isFinished])
 		return;
-	
-	// If the request was started in the main thrad, start it in 
-	// the shared queue instead.
-	if ([NSThread isMainThread]) {
-		[theSharedQueue addOperation:self];
-		return;
-	}
 	
 	[self markAsExecuting];
 

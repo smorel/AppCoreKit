@@ -69,7 +69,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 		else{
 			self.request = [CKWebRequest2 requestWithURL:self.imageURL];
 			self.request.delegate = self;
-			[self.request start];
+			[self.request startAsynchronous];
 		}
 	}
 }

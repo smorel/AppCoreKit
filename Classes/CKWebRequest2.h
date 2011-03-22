@@ -41,6 +41,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 - (void)setMethod:(NSString *)method;
 - (void)setBodyData:(NSData *)bodyData;
+- (void)startAsynchronous;
 
 //
 
