@@ -85,16 +85,6 @@
 	return nil;
 }
 
-- (NSIndexPath *)indexPathForObject:(id)object{
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(objectsForKey:)]){
-			NSArray* objects = [_document objectsForKey:_key];
-			return [NSIndexPath indexPathForRow:[objects indexOfObject:object] inSection:0];
-		}
-	}
-	return [NSIndexPath indexPathForRow:0 inSection:-1];
-}
-
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath{
 	if(indexPath.length != 2)
 		return;
