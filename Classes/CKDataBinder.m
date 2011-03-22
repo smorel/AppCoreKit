@@ -135,13 +135,13 @@
 		CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
 		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
 		if(![newValue2 isEqual:dataValue2]){
-			[instance2Ref.target removeObserver:self
-									 forKeyPath:keyPath2];
+			/*[instance2Ref.target removeObserver:self
+									 forKeyPath:keyPath2];*/
 			[instance2Ref.target setValue:newValue2 forKeyPath:keyPath2];
-			[instance2Ref.target addObserver:self
+			/*[instance2Ref.target addObserver:self
 								  forKeyPath:keyPath2
 									 options:(NSKeyValueObservingOptionNew)
-									 context:nil];
+									 context:nil];*/
 		}
 	}
 }
