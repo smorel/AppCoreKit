@@ -78,6 +78,10 @@
 	[super dealloc];
 }
 
+- (NSString *)identifier {
+	return [NSString stringWithFormat:@"%@-%d", [super identifier], self.style];
+}
+
 - (NSString *)cacheKeyForImage {
 	return [NSString stringWithFormat:@"cell-%@", self.imageURL];
 }
