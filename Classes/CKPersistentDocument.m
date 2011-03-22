@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "CKPersistentDocument.h"
+#import "CKFeedSource.h"
 
 @interface CKPersistentDocument ()
 @property (nonatomic, retain) NSMutableDictionary *objectsRefCount;
+@property (nonatomic, retain) NSMutableDictionary *dataSources;
+
 - (void)saveObjectsForKey:(NSString*)key;
 - (NSMutableArray*)loadObjectsForKey:(NSString*)key;
 @end
@@ -18,6 +21,7 @@
 @implementation CKPersistentDocument
 @synthesize objects;
 @synthesize persistentKeys;
+@synthesize dataSources;
 @synthesize autoSave;
 @synthesize delegate = _delegate;
 @synthesize objectsRefCount;
@@ -26,12 +30,14 @@
 	[super init];
 	self.objects = [NSMutableDictionary dictionary];
 	self.objectsRefCount = [NSMutableDictionary dictionary];
+	self.dataSources = [NSMutableDictionary dictionary];
 	autoSave = NO;
 	return self;
 }
 
 - (void)dealloc{
 	self.objects = nil;
+	self.dataSources = nil;
 	self.objectsRefCount = nil;
 	[super dealloc];
 }
@@ -206,6 +212,7 @@
 			[self saveObjectsForKey:key];
 		}
 		[objects removeObjectForKey:key];
+		[dataSources removeObjectForKey:key];
 		NSLog(@"Removed Objects for key '%@'",key);
 	}
 	else{
@@ -214,9 +221,16 @@
 	}
 }
 
+- (void)setDataSource:(id)source forKey:(NSString*)key{
+	[dataSources setObject:source forKey:key];
+	[(CKFeedSource*)source fetchNextItems:10];
+}
+
 - (void)fetchRange:(NSRange)range forKey:(NSString*)key{
-	NSLog(@"CKPersistentDocument fetchRange:%d,%d forKey:%@",range.location,range.length,key);
-	//NSAssert(NO,@"Not Implemented");
+	CKFeedSource* source = (CKFeedSource*)[dataSources objectForKey:key];
+	if(source){
+		[source fetchNextItems:range.length];
+	}
 }
 
 @end
