@@ -6,7 +6,6 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-
 @protocol CKDocument
 
 - (NSArray*)objectsForKey:(NSString*)key;
@@ -19,5 +18,6 @@
 - (void)retainObjectsForKey:(NSString*)key;
 - (void)releaseObjectsForKey:(NSString*)key;
 - (void)fetchRange:(NSRange)range forKey:(NSString*)key;
+- (void)setDataSource:(id)source forKey:(NSString*)key;
 
 @end
