@@ -16,7 +16,6 @@
 
 //Objects Management
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *)indexPathForObject:(id)object;
 
 //remove
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath;
