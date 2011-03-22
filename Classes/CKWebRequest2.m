@@ -301,12 +301,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 		return;
 	}
 	
-	[theDelegate performSelectorOnMainThread:@selector(requestDidFinishLoading:) 
-								  withObject:self 
-							   waitUntilDone:NO];
+	// FIXME: This perform needs to be tested before called because its the one from the framework.
+	// The other calls are implemented in CKNSObject+Invocation and test that the receiver responds to the
+	// message
 	
-	//Direct to disk
-	if(self.destinationStream){
+	if ([theDelegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
+		[theDelegate performSelectorOnMainThread:@selector(requestDidFinishLoading:) 
+									  withObject:self 
+								   waitUntilDone:NO];
+	}
+	
+	// Direct to disk
+	
+	if (self.destinationStream) {
 		[self.destinationStream close];
 		[self markAsFinished];
 		return;
