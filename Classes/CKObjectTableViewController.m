@@ -45,10 +45,6 @@
 	_scrolling = NO;
 }
 
-- (void)awakeFromNib {
-	[self postInit];
-}
-
 - (id)initWithCoder:(NSCoder *)decoder {
 	[super initWithCoder:decoder];
 	[self postInit];
@@ -359,8 +355,9 @@
 				if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
 					int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
 					if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-						int count = (_numberOfObjectsToprefetch + indexPath.row) - numberOfRows;
-						[_objectController fetchRange:NSMakeRange(numberOfRows, count) forSection:indexPath.section];
+						//int count = (_numberOfObjectsToprefetch + indexPath.row) - numberOfRows;
+						//[_objectController fetchRange:NSMakeRange(numberOfRows, count) forSection:indexPath.section];
+						[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 					}
 				}
 				
