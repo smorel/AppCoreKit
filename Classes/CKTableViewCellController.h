@@ -22,6 +22,9 @@
 	NSIndexPath *_indexPath;
 	CKTableViewController *_parentController;
 	CGFloat _rowHeight;
+	
+	//Set when reusing controllers via CKObjectTableViewController
+	UITableViewCell* _tableViewCell;
 }
 
 @property (nonatomic, retain) NSString *key;

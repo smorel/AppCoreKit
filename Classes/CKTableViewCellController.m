@@ -67,7 +67,13 @@
 	_parentController = parentController;
 }
 
+- (void)setTableViewCell:(UITableViewCell*)cell{
+	_tableViewCell = cell;
+}
+
 - (UITableViewCell *)tableViewCell {
+	if(_tableViewCell)
+		return _tableViewCell;
 	return [_parentController.tableView cellForRowAtIndexPath:self.indexPath];
 }
 
