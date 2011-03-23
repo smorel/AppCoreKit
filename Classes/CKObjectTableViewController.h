@@ -22,6 +22,11 @@
 	int _numberOfObjectsToprefetch;
 	
 	BOOL _scrolling;
+	BOOL _editable;
+	
+	//for editable tables
+	UIBarButtonItem *editButton;
+	UIBarButtonItem *doneButton;
 	
 	//internal
 	NSMutableDictionary* _cellsToControllers;
@@ -39,6 +44,10 @@
 @property (nonatomic, assign) int currentPage;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 @property (nonatomic, assign, readonly) BOOL scrolling;
+@property (nonatomic, assign) BOOL editable;
+
+@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
 
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
 

@@ -37,12 +37,17 @@
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
+@synthesize editable = _editable;
+
+@synthesize editButton;
+@synthesize doneButton;
 
 - (void)postInit{
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
 	_scrolling = NO;
+	_editable = NO;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -86,6 +91,10 @@
 	_indexPathToCells = nil;
 	[_weakCells release];
 	_weakCells = nil;
+	[editButton release];
+	editButton = nil;
+	[doneButton release];
+	doneButton = nil;
     [super dealloc];
 }
 
@@ -131,11 +140,22 @@
     [super viewDidLoad];
 }
 
+- (IBAction)edit:(id)sender{
+	[self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	if(_editable){
+		self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+		self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+	}
 }
 
 
