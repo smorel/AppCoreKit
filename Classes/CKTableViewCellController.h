@@ -22,10 +22,16 @@
 	NSIndexPath *_indexPath;
 	CKTableViewController *_parentController;
 	CGFloat _rowHeight;
+	
+	id _controllerStyle;
+	
+	//Set when reusing controllers via CKObjectTableViewController
+	UITableViewCell* _tableViewCell;
 }
 
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) id value;
+@property (nonatomic, retain) id controllerStyle;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKTableViewController *parentController;

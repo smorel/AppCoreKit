@@ -52,6 +52,9 @@
 	NSAssert(section == 0,@"Invalid section");
 	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(fetchRange:forKey:)]){
+			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
+				range.location--;
+			}
 			[_document fetchRange:range forKey:_key];
 		}
 	}
@@ -65,7 +68,13 @@
 	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
-			return [objects count];
+			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
+				return [objects count] + 1;
+			}
+			else {
+				return [objects count];
+			}
+
 		}
 	}
 	return 0;
@@ -82,8 +91,14 @@
 	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
-			NSInteger index = indexPath.row;
-			return [objects objectAtIndex:index];
+			if(indexPath.row < [objects count]){
+				NSInteger index = indexPath.row;
+				return [objects objectAtIndex:index];
+			}
+			else if([_document respondsToSelector:@selector(dataSourceForKey:)]){
+				return [_document dataSourceForKey:_key];
+			}
+
 		}
 	}
 	return nil;

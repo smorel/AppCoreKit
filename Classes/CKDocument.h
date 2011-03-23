@@ -19,5 +19,6 @@
 - (void)releaseObjectsForKey:(NSString*)key;
 - (void)fetchRange:(NSRange)range forKey:(NSString*)key;
 - (void)setDataSource:(id)source forKey:(NSString*)key;
+- (id)dataSourceForKey:(NSString*)key;
 
 @end

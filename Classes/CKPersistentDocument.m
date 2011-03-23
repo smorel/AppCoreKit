@@ -226,6 +226,10 @@
 	[(CKFeedSource*)source fetchNextItems:10];
 }
 
+- (id)dataSourceForKey:(NSString*)key{
+	return [dataSources objectForKey:key];
+}
+
 - (void)fetchRange:(NSRange)range forKey:(NSString*)key{
 	CKFeedSource* source = (CKFeedSource*)[dataSources objectForKey:key];
 	if(source){

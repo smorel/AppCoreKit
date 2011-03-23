@@ -106,12 +106,19 @@
 	[_document removeObserver:object forKey:_objectsKey];	
 }
 
+- (void)setLimit:(NSUInteger)l{
+	_limit = l;
+	if(_limit > 0){
+		self.hasMore = (_currentIndex  < _limit);
+	}
+}
+
 #pragma mark KVO
 
 - (void)addItems:(NSArray *)theItems {
 	NSArray *newItems = theItems;
 	
-	if ((_limit > 0) && (_currentIndex + theItems.count) > _limit) {
+	if ((_limit > 0) && (_currentIndex + theItems.count) >= _limit) {
 		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _currentIndex))];
 		self.hasMore = NO;
 	}
