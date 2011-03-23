@@ -312,6 +312,10 @@
 		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */; };
+		75E71A83133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E71A7F133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E71A84133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E71A80133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m */; };
+		75E71A85133A6A1C00CAAE66 /* CKFeedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E71A81133A6A1C00CAAE66 /* CKFeedTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E71A86133A6A1C00CAAE66 /* CKFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E71A82133A6A1C00CAAE66 /* CKFeedTableViewController.m */; };
 		8566B72112F079E900277972 /* CKUIView+Factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8566B71F12F079E900277972 /* CKUIView+Factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8566B72212F079E900277972 /* CKUIView+Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8566B72012F079E900277972 /* CKUIView+Factory.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -627,6 +631,10 @@
 		75DA8CB412FB2008003DC43F /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBinder.m; sourceTree = "<group>"; };
 		75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNotificationBlockBinder.h; sourceTree = "<group>"; };
 		75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNotificationBlockBinder.m; sourceTree = "<group>"; };
+		75E71A7F133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedSourceViewCellController.h; sourceTree = "<group>"; };
+		75E71A80133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedSourceViewCellController.m; sourceTree = "<group>"; };
+		75E71A81133A6A1C00CAAE66 /* CKFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFeedTableViewController.h; path = Classes/CKFeedTableViewController.h; sourceTree = "<group>"; };
+		75E71A82133A6A1C00CAAE66 /* CKFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFeedTableViewController.m; path = Classes/CKFeedTableViewController.m; sourceTree = "<group>"; };
 		8566B71F12F079E900277972 /* CKUIView+Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Factory.h"; sourceTree = "<group>"; };
 		8566B72012F079E900277972 /* CKUIView+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Factory.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKit_Prefix.pch; sourceTree = "<group>"; };
@@ -749,6 +757,8 @@
 		4FAD0FA111C2D5C80071C7BF /* Tables */ = {
 			isa = PBXGroup;
 			children = (
+				75E71A7F133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h */,
+				75E71A80133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m */,
 				4FAD0F8A11C2D5810071C7BF /* CKManagedTableViewController.h */,
 				4FAD0F8B11C2D5810071C7BF /* CKManagedTableViewController.m */,
 				4FAD0F8C11C2D5810071C7BF /* CKStandardCellController.h */,
@@ -1190,6 +1200,8 @@
 		751004C41337BB38008B0E7B /* ObjectTableView */ = {
 			isa = PBXGroup;
 			children = (
+				75E71A81133A6A1C00CAAE66 /* CKFeedTableViewController.h */,
+				75E71A82133A6A1C00CAAE66 /* CKFeedTableViewController.m */,
 				751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */,
 				751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */,
 				751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */,
@@ -1404,6 +1416,8 @@
 				751004BA1337BB1C008B0E7B /* CKObjectController.h in Headers */,
 				751004BB1337BB1C008B0E7B /* CKObjectTableViewController.h in Headers */,
 				751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */,
+				75E71A83133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h in Headers */,
+				75E71A85133A6A1C00CAAE66 /* CKFeedTableViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1663,6 +1677,8 @@
 				751004B91337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m in Sources */,
 				751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */,
 				751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */,
+				75E71A84133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m in Sources */,
+				75E71A86133A6A1C00CAAE66 /* CKFeedTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
