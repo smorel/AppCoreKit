@@ -341,8 +341,6 @@
 				if(![controller.value isEqual:object]){
 					[controller setValue:object];
 					[controller setupCell:cell];	
-					
-					NSString* objectType = [NSString stringWithUTF8String:class_getName([object class])];
 				}
 				
 				if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
