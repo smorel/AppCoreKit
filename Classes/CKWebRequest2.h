@@ -52,6 +52,8 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 - (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite;
 
+- (void)startAsynchronous;
+
 //
 
 - (id)initWithURL:(NSURL *)URL;

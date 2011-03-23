@@ -216,15 +216,15 @@
 	switch (button) {
 		case CKWebViewButtonBack:
 			[btn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-			self.backButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.backButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		case CKWebViewButtonForward:
 			[btn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
-			self.forwardButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.forwardButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		case CKWebViewButtonReload:
 			[btn addTarget:self action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
-			self.reloadButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.reloadButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		default:
 			break;

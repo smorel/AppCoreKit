@@ -155,7 +155,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	_httpRequest = [ASIHTTPRequest requestWithURL:self.url];
 	_httpRequest.username = self.username;
 	_httpRequest.password = self.password;
-	_httpRequest.requestHeaders = [self.headers mutableCopy];
+	_httpRequest.requestHeaders = [[self.headers mutableCopy] autorelease];
 	_httpRequest.delegate = self;
 	_httpRequest.userInfo = [NSDictionary dictionaryWithObject:self forKey:@"CKWebRequestKey"];
 	

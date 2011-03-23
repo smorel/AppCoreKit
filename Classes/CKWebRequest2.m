@@ -66,7 +66,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 + (void)initialize {
 	if (self == [CKWebRequest2 class]) {
 		theSharedQueue = [[NSOperationQueue alloc] init];
-		[theSharedQueue setName:@"CKWebRequest"];
+		//[theSharedQueue setName:@"CKWebRequest"]; Does not work on iOS 3.x
 		[theSharedQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
 	}
 }
@@ -145,6 +145,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 }
 
+- (void)startAsynchronous {
+	[theSharedQueue addOperation:self];
+}
+
 //
 
 + (CKWebRequest2 *)requestWithURL:(NSURL *)URL {
@@ -188,16 +192,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[self.destinationStream open];
 }
 
+#pragma mark NSOperation Methods
+
 - (void)start {
 	if ([self isCancelled] || [self isExecuting] || [self isFinished])
 		return;
-	
-	// If the request was started in the main thrad, start it in 
-	// the shared queue instead.
-	if ([NSThread isMainThread]) {
-		[theSharedQueue addOperation:self];
-		return;
-	}
 	
 	self.destinationStream = nil;
 	if(self.destinationPath){

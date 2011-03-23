@@ -70,11 +70,16 @@
 	self.imageURL = nil;
 	self.fetchedImage = nil;
 	self.image = nil;
+	[self.request cancel];
 	self.request = nil;
 	self.backgroundColor = nil;
 	self.textColor = nil;
 	self.detailedTextColor = nil;
 	[super dealloc];
+}
+
+- (NSString *)identifier {
+	return [NSString stringWithFormat:@"%@-%d", [super identifier], self.style];
 }
 
 - (NSString *)cacheKeyForImage {

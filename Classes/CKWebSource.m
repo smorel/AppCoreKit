@@ -57,7 +57,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	
 	if (self.request) {
 		self.request.delegate = self;
-		[self.request start];
+		[self.request startAsynchronous];
 		self.isFetching = YES;
 		return YES;
 	}

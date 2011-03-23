@@ -32,8 +32,10 @@
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
-	[self init];
-	self.style = style;
+	self = [super init];
+	if (self) {
+		self.style = style;
+	}
 	return self;
 }
 
@@ -108,8 +110,9 @@
 
 #pragma mark Setters
 
-- (void)setEditing:(BOOL)inEditing animated:(BOOL)animated {
-	[self.tableView setEditing:inEditing animated:animated];
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+	[super setEditing:editing animated:animated];
+	[self.tableView setEditing:editing animated:animated];
 }
 
 - (void)setBackgroundView:(UIView *)backgroundView {
