@@ -22,9 +22,9 @@
 	[super dealloc];
 }
 
-- (id)initWithFeedSource:(CKFeedSource*)source controllerFactoryMappings:(NSDictionary*)mappings{
+- (id)initWithFeedSource:(CKFeedSource*)source mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
 	[super init];
-	[self setFeedSource:source controllerFactoryMappings:mappings];
+	[self setFeedSource:source mappings:mappings styles:styles];
 	return self;
 }
 
@@ -35,8 +35,8 @@
 	[source release];
 }
 
-- (void)setFeedSource:(CKFeedSource*)source controllerFactoryMappings:(NSDictionary*)mappings{
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];	
+- (void)setFeedSource:(CKFeedSource*)source mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];	
 	self.feedSource = source;
 }
 

@@ -15,17 +15,21 @@
 @implementation CKObjectViewControllerFactory
 @synthesize mappings = _mappings;
 @synthesize objectController = _objectController;
+@synthesize styles = _styles;
 
 - (void)dealloc{
 	[_mappings release];
 	_mappings = nil;
+	[_styles release];
+	_styles = nil;
 	_objectController = nil;
 	[super dealloc];
 }
 
-+ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings{
++ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles{
 	CKObjectViewControllerFactory* factory = [[[CKObjectViewControllerFactory alloc]init]autorelease];
 	factory.mappings = mappings;
+	factory.styles = styles;
 	return factory;
 }
 
@@ -40,6 +44,11 @@
 		}
 	}
 	return nil;
+}
+
+- (id)styleForIndexPath:(NSIndexPath*)indexPath{
+	Class controllerClass = [self controllerClassForIndexPath:indexPath];
+	return _styles ? [_styles objectForKey:controllerClass] : nil;
 }
 
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{

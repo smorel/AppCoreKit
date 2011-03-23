@@ -12,6 +12,25 @@
 #import <CloudKit/CKLocalization.h>
 #import "CKNSDictionary+TableViewAttributes.h"
 
+static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaultStyle = nil;
+
+@implementation CKFeedSourceViewCellControllerStyle
+@synthesize message,backgroundColor,textColor,indicatorStyle;
+
++ (CKFeedSourceViewCellControllerStyle*)defaultStyle{
+	if(CKFeedSourceViewCellControllerDefaultStyle == nil){
+		[CKFeedSourceViewCellControllerDefaultStyle = [CKFeedSourceViewCellControllerStyle alloc]init];
+		CKFeedSourceViewCellControllerDefaultStyle.message = @"Objects";
+		CKFeedSourceViewCellControllerDefaultStyle.backgroundColor = [UIColor clearColor];
+		CKFeedSourceViewCellControllerDefaultStyle.textColor = [UIColor whiteColor];
+		CKFeedSourceViewCellControllerDefaultStyle.indicatorStyle = UIActivityIndicatorViewStyleWhite;
+	}
+	return CKFeedSourceViewCellControllerDefaultStyle;
+}
+
+@end
+
+
 #define ActivityIndicatorTag 1
 #define LabelTag 2
 
@@ -25,11 +44,13 @@
 - (UITableViewCell *)loadCell{
 	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
 	
+	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
+	
 	UIView* view = [[[UIView alloc]initWithFrame:cell.contentView.bounds]autorelease];
 	view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
-	view.backgroundColor = [UIColor clearColor];
+	view.backgroundColor = theStyle.backgroundColor;
 	
-	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite]autorelease];
+	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:theStyle.indicatorStyle]autorelease];
 	activityView.frame = CGRectMake(view.bounds.size.width / 2 - activityView.bounds.size.width /2,
 									view.bounds.size.height / 2 - activityView.bounds.size.height / 2,
 									activityView.bounds.size.width,activityView.bounds.size.height);
@@ -40,7 +61,7 @@
 	label.textAlignment = UITextAlignmentCenter;
 	label.tag = LabelTag;
 	label.backgroundColor = [UIColor clearColor];
-	label.textColor = [UIColor whiteColor];
+	label.textColor = theStyle.textColor;
 	label.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
 	[view addSubview:label];
 	
@@ -61,9 +82,11 @@
 		[activityIndicator stopAnimating];
 	}
 	
+	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
+	
 	UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
 	label.hidden = source.hasMore;	
-	label.text = [NSString stringWithFormat:@"%d %@",source.currentIndex,_(@"Objects")];
+	label.text = [NSString stringWithFormat:@"%d %@",source.currentIndex,_(theStyle.message)];
 }
 
 - (void)internalUpdate:(id)value{

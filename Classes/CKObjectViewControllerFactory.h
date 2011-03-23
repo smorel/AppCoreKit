@@ -11,15 +11,18 @@
 
 @interface CKObjectViewControllerFactory : NSObject {
 	NSMutableDictionary* _mappings;
+	NSMutableDictionary* _styles;
 	id _objectController;
 }
 
 @property (nonatomic, retain) id mappings;
+@property (nonatomic, retain) id styles;
 @property (nonatomic, assign) id objectController;
 
-+ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings;
++ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles;
 
 - (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath;
+- (id)styleForIndexPath:(NSIndexPath*)indexPath;
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath;
 
 @end

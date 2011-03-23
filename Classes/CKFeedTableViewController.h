@@ -18,7 +18,7 @@
 @property (nonatomic, retain) CKFeedSource *feedSource;
 @property (nonatomic, retain) NSString *emptyMessage;
 
-- (id)initWithFeedSource:(CKFeedSource*)source controllerFactoryMappings:(NSDictionary*)mappings;
-- (void)setFeedSource:(CKFeedSource*)source controllerFactoryMappings:(NSDictionary*)mappings;
+- (id)initWithFeedSource:(CKFeedSource*)source mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
+- (void)setFeedSource:(CKFeedSource*)source mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
 
 @end

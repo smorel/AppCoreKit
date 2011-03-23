@@ -295,6 +295,7 @@
 				CKTableViewCellController* controller = nil;
 				if(cell == nil){
 					controller = [[[controllerClass alloc]init]autorelease];
+					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
 					cell = [controller loadCell];
 					
 					//Register cell to controller

@@ -26,6 +26,7 @@
 @synthesize parentController = _parentController;
 @synthesize indexPath = _indexPath;
 @synthesize rowHeight = _rowHeight;
+@synthesize controllerStyle = _controllerStyle;
 
 - (id)init {
 	self = [super init];
@@ -42,6 +43,7 @@
 	[_value release];
 	[_indexPath release];
 	[_target release];
+	[_controllerStyle release];
 	
 	_target = nil;
 	_action = nil;
