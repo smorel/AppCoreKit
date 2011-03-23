@@ -248,6 +248,14 @@
 	return 0;
 }
 
+- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath{
+	UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	if(cell){
+		return (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
+	}
+	return nil;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
@@ -269,16 +277,10 @@
 			}
 		}
 	}
-	return (height == 0) ? tableView.rowHeight : height;
+	
+	return (height < 0) ? 0 : ((height == 0) ? tableView.rowHeight : height);
 }
 
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath{
-	UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	if(cell){
-		return (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-	}
-	return nil;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
@@ -319,8 +321,10 @@
 					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				
+				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 				
 				[_controllerFactory initializeController:controller atIndexPath:indexPath];
 				
@@ -336,6 +340,8 @@
 				if(![controller.value isEqual:object]){
 					[controller setValue:object];
 					[controller setupCell:cell];	
+					
+					NSString* objectType = [NSString stringWithUTF8String:class_getName([object class])];
 				}
 				
 				if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
