@@ -324,6 +324,17 @@
 	return CKTableViewCellFlagNone;
 }
 
+- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
+	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
+		int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
+		if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
+			//int count = (_numberOfObjectsToprefetch + indexPath.row) - numberOfRows;
+			//[_objectController fetchRange:NSMakeRange(numberOfRows, count) forSection:indexPath.section];
+			[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
+		}
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -406,14 +417,7 @@
 					rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
 				}
 				
-				if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
-					int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
-					if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-						//int count = (_numberOfObjectsToprefetch + indexPath.row) - numberOfRows;
-						//[_objectController fetchRange:NSMakeRange(numberOfRows, count) forSection:indexPath.section];
-						[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
-					}
-				}
+				[self fetchMoreIfNeededAtIndexPath:indexPath];
 				
 				return cell;
 			}
@@ -459,6 +463,7 @@
 		if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 			if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 				[_objectController removeObjectAtIndexPath:indexPath];
+				[self fetchMoreIfNeededAtIndexPath:indexPath];
 			}
 		}
 	}
@@ -509,6 +514,7 @@
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+	[self fetchMoreIfNeededAtIndexPath:indexPath];
 }
 
 #pragma mark UITableView Protocol for Sections
