@@ -95,6 +95,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 
 - (void)setupCell:(UITableViewCell *)cell{
 	[super setupCell:cell];
+	self.selectable = NO;
 	
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	[self update:cell.contentView];
@@ -110,6 +111,11 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	if([params pagingEnabled])
 		return [NSValue valueWithCGSize:CGSizeMake(-1,-1)];
 	return [NSValue valueWithCGSize:CGSizeMake(320,44)];
+}
+
+
++ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKTableViewCellFlagNone;
 }
 
 @end

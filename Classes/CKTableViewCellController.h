@@ -9,6 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "CKManagedTableViewController.h"
 
+enum{
+	CKTableViewCellFlagNone = 1UL << 0,
+	CKTableViewCellFlagSelectable = 1UL << 1,
+	CKTableViewCellFlagEditable = 1UL << 2,
+	CKTableViewCellFlagRemovable = 1UL << 3,
+	CKTableViewCellFlagMovable = 1UL << 4,
+	CKTableViewCellFlagAll = CKTableViewCellFlagSelectable | CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable
+};
+typedef NSUInteger CKTableViewCellFlags;
+
 @interface CKTableViewCellController : NSObject {
 	NSString *_key;
 	id _value;

@@ -37,12 +37,17 @@
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
+@synthesize editable = _editable;
+
+@synthesize editButton;
+@synthesize doneButton;
 
 - (void)postInit{
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
 	_scrolling = NO;
+	_editable = NO;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -86,6 +91,10 @@
 	_indexPathToCells = nil;
 	[_weakCells release];
 	_weakCells = nil;
+	[editButton release];
+	editButton = nil;
+	[doneButton release];
+	doneButton = nil;
     [super dealloc];
 }
 
@@ -131,11 +140,22 @@
     [super viewDidLoad];
 }
 
+- (IBAction)edit:(id)sender{
+	[self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	if(_editable){
+		self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+		self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+	}
 }
 
 
@@ -281,6 +301,28 @@
 	return (height < 0) ? 0 : ((height == 0) ? tableView.rowHeight : height);
 }
 
+- (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
+	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
+			id object = [_objectController objectAtIndexPath:indexPath];
+			
+			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
+			if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
+				
+				NSMutableDictionary* params = [NSMutableDictionary dictionary];
+				[params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
+				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+				[params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
+				
+				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
+				return flags;
+			}
+		}
+	}
+	return CKTableViewCellFlagNone;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
@@ -322,6 +364,13 @@
 					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				
+				/*if(self.editing){
+					[self setEditing:YES animated:NO];
+				}*/
+				
+				CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
+				BOOL bo = flags & CKTableViewCellFlagSelectable;
+				cell.selectionStyle = bo ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
@@ -374,6 +423,7 @@
 	return nil;
 }
 
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
 	CKTableViewCellController* controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 	if(controller){
@@ -382,8 +432,13 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	return (controller != nil) ? [controller willSelectRow] : nil;
+	BOOL bo = flags & CKTableViewCellFlagSelectable;
+	if(controller && bo){
+		[controller willSelectRow];
+	}
+	return (bo) ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -394,8 +449,9 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	return (controller != nil && controller.isRemovable) ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
+	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKTableViewCellFlagRemovable;
+	return bo ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -409,13 +465,15 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	return (controller != nil) ? controller.isEditable : NO;
+	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKTableViewCellFlagEditable;
+	return bo;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	return (controller != nil) ? controller.isMovable : NO;
+	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKTableViewCellFlagMovable;
+	return bo;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {

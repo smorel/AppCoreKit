@@ -13,6 +13,7 @@ extern NSString * const CKTableViewAttributePagingEnabled;
 extern NSString * const CKTableViewAttributeInterfaceOrientation;
 extern NSString * const CKTableViewAttributeOrientation;
 extern NSString * const CKTableViewAttributeAnimationDuration;
+extern NSString * const CKTableViewAttributeEditable;
 
 typedef enum {
 	CKTableViewOrientationPortrait,
@@ -26,5 +27,6 @@ typedef enum {
 - (CGSize)bounds;
 - (CKTableViewOrientation)tableOrientation;
 - (NSTimeInterval)animationDuration;
+- (BOOL)editable;
 
 @end
