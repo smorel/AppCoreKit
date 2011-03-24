@@ -243,6 +243,10 @@
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
+			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
+			if(controllerStyle){
+				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+			}
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 		}
@@ -290,6 +294,10 @@
 				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+				if(controllerStyle){
+					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+				}
 				
 				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
 				CGSize size = [v CGSizeValue];
@@ -315,6 +323,10 @@
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 				[params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
+				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+				if(controllerStyle){
+					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+				}
 				
 				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
 				return flags;
@@ -409,6 +421,11 @@
 					[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 					[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 					[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+					id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+					if(controllerStyle){
+						[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+					}
+					
 					[controller rotateCell:cell withParams:params animated:NO];
 				}	
 				
