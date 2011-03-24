@@ -13,6 +13,7 @@ NSString* const CKTableViewAttributePagingEnabled = @"CKTableViewAttributePaging
 NSString* const CKTableViewAttributeInterfaceOrientation = @"CKTableViewAttributeInterfaceOrientation";
 NSString* const CKTableViewAttributeOrientation = @"CKTableViewAttributeOrientation";
 NSString* const CKTableViewAttributeAnimationDuration = @"CKTableViewAttributeAnimationDuration";
+NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
 
 @implementation NSDictionary (CKTableViewAttributes)
 
@@ -39,6 +40,11 @@ NSString* const CKTableViewAttributeAnimationDuration = @"CKTableViewAttributeAn
 - (NSTimeInterval)animationDuration{
 	NSNumber* v = (NSNumber*)[self objectForKey:CKTableViewAttributeAnimationDuration];
 	return (NSTimeInterval) (v ? [v doubleValue] : 0.0);
+}
+
+- (BOOL)editable{
+	NSNumber* v = (NSNumber*)[self objectForKey:CKTableViewAttributeEditable];
+	return v ? [v boolValue] : NO;
 }
 
 @end

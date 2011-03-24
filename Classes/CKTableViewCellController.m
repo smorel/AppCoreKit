@@ -11,7 +11,6 @@
 
 #import "CKNSArrayAdditions.h"
 
-
 @implementation CKTableViewCellController
 
 @synthesize key = _key;
@@ -145,6 +144,10 @@
 - (void)setNeedsSetup {
 	if (self.tableViewCell)
 		[self setupCell:self.tableViewCell];
+}
+
++ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKTableViewCellFlagAll;
 }
 
 @end
