@@ -156,6 +156,11 @@
 		self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
 		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
 	}
+	
+	if(_indexPathToReachAfterRotation){
+		[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		_indexPathToReachAfterRotation = nil;
+	}
 }
 
 
@@ -166,6 +171,16 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	_indexPathToReachAfterRotation = nil;
+	NSArray* visible = [self.tableView indexPathsForVisibleRows];
+	for(NSIndexPath* indexPath in visible){
+		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
+		if(f.origin.y >= self.tableView.contentOffset.y){
+			_indexPathToReachAfterRotation = indexPath;
+			break;
+		}
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -221,9 +236,9 @@
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
-	if(_indexPathToReachAfterRotation){
+	/*if(_indexPathToReachAfterRotation){
 		[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
-	}
+	}*/
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
@@ -340,8 +355,6 @@
 	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
 		int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
 		if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-			//int count = (_numberOfObjectsToprefetch + indexPath.row) - numberOfRows;
-			//[_objectController fetchRange:NSMakeRange(numberOfRows, count) forSection:indexPath.section];
 			[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 		}
 	}
