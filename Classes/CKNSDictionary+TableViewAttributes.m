@@ -14,6 +14,7 @@ NSString* const CKTableViewAttributeInterfaceOrientation = @"CKTableViewAttribut
 NSString* const CKTableViewAttributeOrientation = @"CKTableViewAttributeOrientation";
 NSString* const CKTableViewAttributeAnimationDuration = @"CKTableViewAttributeAnimationDuration";
 NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
+NSString* const CKTableViewAttributeStyle = @"CKTableViewAttributeStyle";
 
 @implementation NSDictionary (CKTableViewAttributes)
 
@@ -45,6 +46,10 @@ NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
 - (BOOL)editable{
 	NSNumber* v = (NSNumber*)[self objectForKey:CKTableViewAttributeEditable];
 	return v ? [v boolValue] : NO;
+}
+
+- (id)style{
+	return [self objectForKey:CKTableViewAttributeStyle];
 }
 
 @end
