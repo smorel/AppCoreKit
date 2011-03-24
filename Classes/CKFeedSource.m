@@ -71,6 +71,12 @@
 						change:(NSDictionary *)change
 					   context:(void *)context {
 	self.currentIndex = [self.items count];
+	if(_limit > 0){
+		self.hasMore = (_currentIndex  < _limit);
+	}
+	else{
+		self.hasMore = YES;
+	}
 }
 
 #pragma mark Public API
