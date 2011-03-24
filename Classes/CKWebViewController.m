@@ -23,15 +23,12 @@
 @property (nonatomic, readwrite, retain) NSMutableArray *toolbarButtonsStatic;
 @end
 
-
 @interface CKWebViewController ()
 @property (nonatomic, retain) NSString *HTMLString;
 @property (nonatomic, retain) NSURL *baseURL;
 - (void)generateToolbar;
 - (void)updateToolbar;
 @end
-
-
 
 @implementation CKWebViewController
 
@@ -46,6 +43,7 @@
 @synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
 @synthesize _showURLInTitle;
 @synthesize hidesToolbar = _hidesToolbar;
+@synthesize onLoadScript = _onLoadScript;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -159,6 +157,7 @@
 	[_toolbarButtonsStatic release];
 	[_toolbarButtonsLoading release];
 	[_navigationControllerStyles release];
+	[_onLoadScript release];
     [super dealloc];
 }
 
@@ -242,7 +241,7 @@
 #pragma mark WebView Delegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-	if([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
+	if ([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
 	return YES;
 }
 
@@ -258,6 +257,9 @@
 
 	// Update the title
 	if (_showURLInTitle) self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+	
+	// Run the optional after the view has finished loading
+	if (_onLoadScript) [_webView stringByEvaluatingJavaScriptFromString:_onLoadScript];
 	
 	_webView.hidden = NO;
 }

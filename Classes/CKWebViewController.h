@@ -33,12 +33,15 @@ typedef enum {
 	NSMutableArray *_toolbarButtonsStatic;
 
 	NSDictionary *_navigationControllerStyles;
+	
+	NSString *_onLoadScript;
 }
 
 @property (readonly, nonatomic, retain) NSURL *homeURL;
 @property (readonly, nonatomic) NSURL *currentURL;
 @property (nonatomic, assign, getter=isURLInTitle, setter=showURLInTitle:) BOOL _showURLInTitle;
 @property (nonatomic, assign) BOOL hidesToolbar;
+@property (nonatomic, retain) NSString *onLoadScript;
 
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
