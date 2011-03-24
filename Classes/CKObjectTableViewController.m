@@ -399,6 +399,7 @@
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 				
+				[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
 				[_controllerFactory initializeController:controller atIndexPath:indexPath];
 				
 				if(_cellsToIndexPath == nil){
