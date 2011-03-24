@@ -15,12 +15,14 @@
 static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaultStyle = nil;
 
 @implementation CKFeedSourceViewCellControllerStyle
-@synthesize message,backgroundColor,textColor,indicatorStyle;
+@synthesize noItemsMessage, oneItemMessage, manyItemsMessage, backgroundColor, textColor, indicatorStyle;
 
 + (CKFeedSourceViewCellControllerStyle*)defaultStyle{
 	if(CKFeedSourceViewCellControllerDefaultStyle == nil){
 		[CKFeedSourceViewCellControllerDefaultStyle = [CKFeedSourceViewCellControllerStyle alloc]init];
-		CKFeedSourceViewCellControllerDefaultStyle.message = @"Objects";
+		CKFeedSourceViewCellControllerDefaultStyle.noItemsMessage = @"No Object";
+		CKFeedSourceViewCellControllerDefaultStyle.oneItemMessage = @"1 Object";
+		CKFeedSourceViewCellControllerDefaultStyle.manyItemsMessage = @"Objects";
 		CKFeedSourceViewCellControllerDefaultStyle.backgroundColor = [UIColor clearColor];
 		CKFeedSourceViewCellControllerDefaultStyle.textColor = [UIColor whiteColor];
 		CKFeedSourceViewCellControllerDefaultStyle.indicatorStyle = UIActivityIndicatorViewStyleWhite;
@@ -86,7 +88,20 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	
 	UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
 	label.hidden = source.hasMore;	
-	label.text = [NSString stringWithFormat:@"%d %@",source.currentIndex,_(theStyle.message)];
+	switch(source.currentIndex){
+		case 0:{
+			label.text = theStyle.noItemsMessage;
+			break;
+		}
+		case 1:{
+			label.text = theStyle.oneItemMessage;
+			break;
+		}
+		default:{
+			label.text = [NSString stringWithFormat:@"%d %@",source.currentIndex,_(theStyle.manyItemsMessage)];
+			break;
+		}
+	}
 }
 
 - (void)internalUpdate:(id)value{

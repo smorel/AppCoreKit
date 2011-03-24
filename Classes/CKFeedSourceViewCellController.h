@@ -13,7 +13,9 @@
 @interface CKFeedSourceViewCellControllerStyle : CKModelObject{
 }
 
-@property (nonatomic, retain) NSString* message;
+@property (nonatomic, copy) NSString* noItemsMessage;
+@property (nonatomic, copy) NSString* oneItemMessage;
+@property (nonatomic, copy) NSString* manyItemsMessage;
 @property (nonatomic, retain) UIColor* backgroundColor;
 @property (nonatomic, retain) UIColor* textColor;
 @property (nonatomic, assign) UIActivityIndicatorViewStyle indicatorStyle;
