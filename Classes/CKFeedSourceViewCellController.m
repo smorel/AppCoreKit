@@ -53,10 +53,9 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	view.backgroundColor = theStyle.backgroundColor;
 	
 	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:theStyle.indicatorStyle]autorelease];
-	activityView.frame = CGRectMake(view.bounds.size.width / 2 - activityView.bounds.size.width /2,
-									view.bounds.size.height / 2 - activityView.bounds.size.height / 2,
-									activityView.bounds.size.width,activityView.bounds.size.height);
+	activityView.center = view.center;
 	activityView.tag = ActivityIndicatorTag;
+	activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	[view addSubview:activityView];
 	
 	UILabel* label = [[[UILabel alloc]initWithFrame:view.bounds]autorelease];
