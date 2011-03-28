@@ -69,7 +69,8 @@
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
-				return [objects count] + 1;
+				id dataSource = [_document dataSourceForKey:_key];
+				return [objects count] + ((dataSource != nil) ? 1 : 0);
 			}
 			else {
 				return [objects count];
@@ -116,6 +117,7 @@
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
+	//TODO : if moving on dataSource, propose the last document item instead
 	return proposedDestinationIndexPath;
 }
 
