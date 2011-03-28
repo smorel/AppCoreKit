@@ -406,7 +406,7 @@
 				
 				CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
 				BOOL bo = flags & CKTableViewCellFlagSelectable;
-				cell.selectionStyle = bo ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+				cell.selectionStyle = bo ? (cell.selectionStyle) ? cell.selectionStyle : UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
