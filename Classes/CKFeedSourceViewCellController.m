@@ -48,26 +48,27 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	
 	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
 	
-	UIView* view = [[[UIView alloc]initWithFrame:cell.contentView.bounds]autorelease];
-	view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
+	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	view.backgroundColor = theStyle.backgroundColor;
 	
-	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:theStyle.indicatorStyle]autorelease];
-	activityView.center = view.center;
+	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
+	activityView.center = cell.center;
 	activityView.tag = ActivityIndicatorTag;
-	activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	[view addSubview:activityView];
+	activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	
-	UILabel* label = [[[UILabel alloc]initWithFrame:view.bounds]autorelease];
+	[view addSubview:activityView];
+		
+	UILabel* label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 	label.textAlignment = UITextAlignmentCenter;
 	label.tag = LabelTag;
 	label.backgroundColor = [UIColor clearColor];
 	label.textColor = theStyle.textColor;
-	label.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+	label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[view addSubview:label];
 	
 	[cell.contentView addSubview:view];
-	
+
 	return cell;
 }
 
@@ -75,7 +76,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = !source.hasMore || view.frame.size.width <= 0|| view.frame.size.height <= 0;
+	activityIndicator.hidden = !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
 	if(source.hasMore){
 		[activityIndicator startAnimating];
 	}
