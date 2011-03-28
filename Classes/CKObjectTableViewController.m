@@ -13,6 +13,7 @@
 #import <CloudKit/CKUIKeyboardInformation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CloudKit/MAZeroingWeakRef.h>
+#import <CloudKit/CKNSObject+bindings.h>
 
 //
 
@@ -21,6 +22,7 @@
 @property (nonatomic, retain) NSMutableDictionary* cellsToIndexPath;
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
+- (void)updateNumberOfPages;
 @end
 
 //
@@ -33,6 +35,7 @@
 @synthesize indexPathToCells = _indexPathToCells;
 @synthesize weakCells = _weakCells;
 @synthesize currentPage = _currentPage;
+@synthesize numberOfPages = _numberOfPages;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
@@ -46,6 +49,7 @@
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
+	_numberOfPages = 0;
 	_scrolling = NO;
 	_editable = NO;
 }
@@ -161,6 +165,8 @@
 		[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
 		_indexPathToReachAfterRotation = nil;
 	}
+	
+	[self updateNumberOfPages];
 }
 
 
@@ -245,9 +251,7 @@
 			offset = r.origin.y + r.size.height;
 		}
 		_indexPathToReachAfterRotation = toReach;
-		//CGFloat offset = _indexPathToReachAfterRotation.row * height;
 		self.tableView.contentOffset = CGPointMake(0,offset);
-		NSLog(@"set contentOffset %f while rotating for %d",offset,toReach.row);
 	}
 	
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
@@ -337,6 +341,7 @@
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	_indexPathToReachAfterRotation = nil;
+	[self updateNumberOfPages];
 }
 
 #pragma mark UITableView DataSource
@@ -496,9 +501,7 @@
 				}
 				
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
-				
-				NSLog(@"cellForRowAtIndexPath:%d,%d =<%p> controller=<%p>",indexPath.row,indexPath.section,cell,controller);
-				
+				[self updateNumberOfPages];
 				return cell;
 			}
 		}
@@ -513,6 +516,7 @@
 	if(controller){
 		[controller cellDidAppear:cell];
 	}
+	[self updateNumberOfPages];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -586,6 +590,10 @@
 
 - (void)objectControllerDidEndUpdating:(id)controller{
 	[self.tableView endUpdates];
+	
+	//bad solution because the contentsize is updated at the end of insert animation ....
+	//could be better if we could observe or be notified that the contentSize has changed.
+	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:0.4];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -682,15 +690,34 @@
 	//TODO : scroll to the right controller ???
 }
 
+- (void)setNumberOfPages:(int)pages{
+	_numberOfPages = pages;
+	NSLog(@"number of pages = %d",_numberOfPages);
+	//TODO : scroll to the right controller ???
+}
+
 //Scroll callbacks : update self.currentPage
 - (void)updateCurrentPage{
 	CGFloat scrollPosition = self.tableView.contentOffset.y;
-	CGFloat width = self.tableView.bounds.size.height;
-	int page = (width != 0) ? scrollPosition / width : 0;
-	if(page < 0) page = 0;
+	CGFloat height = self.tableView.bounds.size.height;
+	int page = (height != 0) ? scrollPosition / height : 0;
+	if(page < 0) 
+		page = 0;
 	
 	if(_currentPage != page){
 		self.currentPage = page;
+	}
+}
+
+- (void)updateNumberOfPages{
+	CGFloat totalSize = self.tableView.contentSize.height;
+	CGFloat height = self.tableView.bounds.size.height;
+	int pages = (height != 0) ? totalSize / height : 0;
+	if(pages < 0) 
+		pages = 0;
+	
+	if(_numberOfPages != pages){
+		self.numberOfPages = pages;
 	}
 }
 

@@ -19,6 +19,7 @@
 	BOOL _resizeOnKeyboardNotification;
 	
 	int _currentPage;
+	int _numberOfPages;
 	int _numberOfObjectsToprefetch;
 	
 	BOOL _scrolling;
@@ -42,6 +43,7 @@
 @property (nonatomic, assign) CKTableViewOrientation orientation;
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
 @property (nonatomic, assign) int currentPage;
+@property (nonatomic, assign) int numberOfPages;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
