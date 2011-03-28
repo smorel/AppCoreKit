@@ -181,6 +181,10 @@
 			break;
 		}
 	}
+	
+	if(!_indexPathToReachAfterRotation && [visible count] > 0){
+		_indexPathToReachAfterRotation = [visible objectAtIndex:0];
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -227,11 +231,23 @@
 		}
 	}
 	
+	NSIndexPath* toReach = [_indexPathToReachAfterRotation copy];
 	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
 		//that means the view is rotating and needs to be updated with the future cells size
-		CGFloat offset = _indexPathToReachAfterRotation.row * height;
+		_indexPathToReachAfterRotation = nil;
+		CGFloat offset = 0;
+		if(toReach.row > 0){
+			CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
+			offset = r.origin.y + r.size.height;
+		}
+		else{
+			CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
+			offset = r.origin.y + r.size.height;
+		}
+		_indexPathToReachAfterRotation = toReach;
+		//CGFloat offset = _indexPathToReachAfterRotation.row * height;
 		self.tableView.contentOffset = CGPointMake(0,offset);
-		NSLog(@"set contentOffset %f while rotating for %d",offset,_indexPathToReachAfterRotation.row);
+		NSLog(@"set contentOffset %f while rotating for %d",offset,toReach.row);
 	}
 	
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
@@ -260,7 +276,7 @@
 }
 
 - (void)printDebug:(NSString*)txt{
-	NSLog(@"%@",txt);
+	/*NSLog(@"%@",txt);
 	NSLog(@"tableView frame=%f,%f,%f,%f",self.tableView.frame.origin.x,self.tableView.frame.origin.y,self.tableView.frame.size.width,self.tableView.frame.size.height);
 	NSLog(@"tableView contentOffset=%f,%f",self.tableView.contentOffset.x,self.tableView.contentOffset.y);
 	NSLog(@"tableView contentSize=%f,%f",self.tableView.contentSize.width,self.tableView.contentSize.height);
@@ -269,10 +285,13 @@
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		NSLog(@"cell frame=%f,%f,%f,%f",cell.frame.origin.x,cell.frame.origin.y,cell.frame.size.width,cell.frame.size.height);
-	}
+	}*/
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+	//stop scrolling
+	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
+	
 	_indexPathToReachAfterRotation = nil;
 	NSArray* visible = [self.tableView indexPathsForVisibleRows];
 	for(NSIndexPath* indexPath in visible){
@@ -282,47 +301,13 @@
 			break;
 		}
 	}
-	
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	//TODO set self.tableView.contentOffset as if the view is already rotated
-	//self.tableView.contentOffset = CGPointMake(0,_indexPathToReachAfterRotation.row * /*(UIInterfaceOrientationIsPortrait( self.interfaceOrientation ) ? 320 : */480);
-	[self printDebug:@"end of willRotateToInterfaceOrientation"];
-}
-
-		 /*
-- (void)willAnimateFirstHalfOfRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-	[self printDebug:@"willAnimateFirstHalfOfRotationToInterfaceOrientation"];
-}
-
-- (void)didAnimateFirstHalfOfRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
-	[self printDebug:@"didAnimateFirstHalfOfRotationToInterfaceOrientation"];
-}
-
-- (void)willAnimateSecondHalfOfRotationFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation duration:(NSTimeInterval)duration{
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		cell.autoresizingMask = UIViewAutoresizingNone;
-		
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
-			
-			[controller rotateCell:cell withParams:params animated:YES];
-		}
+	if(!_indexPathToReachAfterRotation && [visible count] > 0){
+		_indexPathToReachAfterRotation = [visible objectAtIndex:0];
 	}
 	
-	[self printDebug:@"willAnimateSecondHalfOfRotationFromInterfaceOrientation"];
-}*/
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self printDebug:@"end of willRotateToInterfaceOrientation"];
+}
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
@@ -347,7 +332,6 @@
 			[controller rotateCell:cell withParams:params animated:YES];
 		}
 	}
-	//[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	[self printDebug:@"end of willAnimateRotationToInterfaceOrientation"];
 }
  
@@ -384,7 +368,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.tableView.bounds.size];
-	NSLog(@"heightForRowAtIndexPath:%d,%d =%f",indexPath.row,indexPath.section,height);
 	return height;
 }
 
