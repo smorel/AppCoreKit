@@ -44,6 +44,7 @@
 @synthesize _showURLInTitle;
 @synthesize hidesToolbar = _hidesToolbar;
 @synthesize onLoadScript = _onLoadScript;
+@synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -98,6 +99,8 @@
 	if (self.HTMLString) {
 		[_webView loadHTMLString:self.HTMLString baseURL:self.baseURL];
 	}
+	
+	self.contentSizeForViewInPopover = self.minContentSizeForViewInPopover;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -261,6 +264,12 @@
 	// Run the optional after the view has finished loading
 	if (_onLoadScript) [_webView stringByEvaluatingJavaScriptFromString:_onLoadScript];
 	
+	// Change the size of the popover according to the size of the body
+	CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString: @"document.body.offsetHeight"] floatValue];
+	if (height > self.minContentSizeForViewInPopover.height) {
+		self.contentSizeForViewInPopover = CGSizeMake(self.contentSizeForViewInPopover.width, height);
+	}
+		
 	_webView.hidden = NO;
 }
 
@@ -269,6 +278,5 @@
 	
 	[self updateToolbar];
 }
-
 
 @end

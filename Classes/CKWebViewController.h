@@ -35,6 +35,8 @@ typedef enum {
 	NSDictionary *_navigationControllerStyles;
 	
 	NSString *_onLoadScript;
+	
+	CGSize _minContentSizeForViewInPopover;
 }
 
 @property (readonly, nonatomic, retain) NSURL *homeURL;
@@ -42,6 +44,7 @@ typedef enum {
 @property (nonatomic, assign, getter=isURLInTitle, setter=showURLInTitle:) BOOL _showURLInTitle;
 @property (nonatomic, assign) BOOL hidesToolbar;
 @property (nonatomic, retain) NSString *onLoadScript;
+@property (nonatomic, assign) CGSize minContentSizeForViewInPopover;
 
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
