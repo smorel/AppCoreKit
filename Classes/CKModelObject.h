@@ -42,6 +42,4 @@ typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 }
 
-- (void)executeForAllProperties:(CKModelObjectBlock)block;
-
 @end
