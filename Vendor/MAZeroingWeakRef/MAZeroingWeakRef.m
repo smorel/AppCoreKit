@@ -62,6 +62,8 @@
 
 
 @implementation MAZeroingWeakRef
+@synthesize delegate;
+@synthesize action;
 
 #if COREFOUNDATION_HACK_LEVEL >= 2
 
@@ -520,6 +522,7 @@ static void UnregisterRef(MAZeroingWeakRef *ref)
 #if NS_BLOCKS_AVAILABLE
     [_cleanupBlock release];
 #endif
+    [_cleanupBlock release];
     [super dealloc];
 }
 
@@ -564,6 +567,11 @@ static void UnregisterRef(MAZeroingWeakRef *ref)
 
 - (void)_executeCleanupBlockWithTarget: (id)target
 {
+	if(_delegate && _action){
+		[_delegate performSelector:_action withObject:self withObject:target];
+		return;
+	}
+	
 #if NS_BLOCKS_AVAILABLE
     if(_cleanupBlock)
     {
@@ -572,6 +580,12 @@ static void UnregisterRef(MAZeroingWeakRef *ref)
         _cleanupBlock = nil;
     }
 #endif
+}
+
+
+- (void)setDelegate:(id)theDelegate action:(SEL)theAction{
+	self.delegate = theDelegate;
+	self.action = theAction;
 }
 
 @end

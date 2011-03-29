@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @protocol CKObjectController 
+//State Management
+- (void)viewWillAppear;
+- (void)viewWillDisappear;
 
 //Sections
 - (NSInteger)numberOfSections;

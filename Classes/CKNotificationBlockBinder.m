@@ -52,28 +52,30 @@
 	self.selector = nil;
 }
 
+- (void)releaseTarget:(id)sender target:(id)target{
+	[self unbindInstance:instanceRef.target];
+	[[CKBindingsManager defaultManager]unregister:self];
+}
+
 - (void)setTarget:(id)instance{
 	if(instance){
 		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		__block CKNotificationBlockBinder* bself = self;
-		[targetRef setCleanupBlock: ^(id target) {
-			[self unbindInstance:instanceRef.target];
-			[[CKBindingsManager defaultManager]unregister:bself];
-		}];
+		[targetRef setDelegate:self action:@selector(releaseTarget:target:)];
 	}
 	else{
 		self.targetRef = nil;
 	}
 }
 
+- (void)releaseInstance:(id)sender target:(id)target{
+	[self unbindInstance:target];
+	[[CKBindingsManager defaultManager]unregister:self];
+}
+
 - (void)setInstance:(id)instance{
 	if(instance){
 		self.instanceRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		__block CKNotificationBlockBinder* bself = self;
-		[instanceRef setCleanupBlock: ^(id target) {
-			[self unbindInstance:target];
-			[[CKBindingsManager defaultManager]unregister:bself];
-		}];
+		[instanceRef setDelegate:self action:@selector(releaseInstance:target:)];
 	}
 	else {
 		self.instanceRef = nil;

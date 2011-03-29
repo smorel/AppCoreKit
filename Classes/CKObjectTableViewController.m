@@ -152,6 +152,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
+	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+		[_objectController viewWillAppear];
+	}
+	
+	[self.tableView reloadData];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	
@@ -176,6 +182,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+		[_objectController viewWillDisappear];
+	}
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	_indexPathToReachAfterRotation = nil;
@@ -412,6 +422,14 @@
 	}
 }
 
+- (void)releaseCell:(id)sender target:(id)target{
+	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
+	[_indexPathToCells removeObjectForKey:previousPath];
+	
+	[_cellsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
+	[_weakCells removeObject:sender];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -434,13 +452,7 @@
 					}
 					
 					MAZeroingWeakRef* cellRef = [[[MAZeroingWeakRef alloc]initWithTarget:cell]autorelease];
-					[cellRef setCleanupBlock:^(id target){
-						NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
-						[_indexPathToCells removeObjectForKey:previousPath];
-						
-						[_cellsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
-						[_weakCells removeObject:cellRef];
-					}];
+					[cellRef setDelegate:self action:@selector(releaseCell:target:)];
 					[_weakCells addObject:cellRef];
 					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
 				}

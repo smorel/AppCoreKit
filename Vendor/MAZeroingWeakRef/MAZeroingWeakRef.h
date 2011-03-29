@@ -14,7 +14,12 @@
 #if NS_BLOCKS_AVAILABLE
     void (^_cleanupBlock)(id target);
 #endif
+	id _delegate;
+	SEL _action;
 }
+
+@property (nonatomic,assign) id delegate;
+@property (nonatomic,assign) SEL action;
 
 + (BOOL)canRefCoreFoundationObjects;
 
@@ -34,6 +39,7 @@
 // note that you must not resurrect the target at this point!
 - (void)setCleanupBlock: (void (^)(id target))block;
 #endif
+- (void)setDelegate:(id)target action:(SEL)action;
 
 - (id)target;
 - (void)setTarget:(id)instance;

@@ -15,6 +15,7 @@
 	id _document;
 	NSString* _key;
 	id _delegate;
+	BOOL observing;
 }
 
 @property (nonatomic, assign) id document;
