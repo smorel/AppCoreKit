@@ -127,7 +127,7 @@ static NSOperationQueue *gCFDelayedDestructionQueue;
     }
 }
 
-#define USE_BLOCKS_BASED_LOCKING 1
+#define USE_BLOCKS_BASED_LOCKING 0
 #if USE_BLOCKS_BASED_LOCKING
 #define BLOCK_QUALIFIER __block
 static void WhileLocked(void (^block)(void))

@@ -43,9 +43,13 @@
 		self.document = theDocument;
 		self.objectsKey = key;
 		[self reset];
-		_currentIndex = [self.items count];
 		
-		[self.document addObserver:self forKey:key];
+		if(self.document){
+			NSArray* objects =  [self.document objectsForKey:self.objectsKey];
+			_currentIndex = (objects != nil) ? [objects count] : 0;
+			[self.document addObserver:self forKey:key];
+		}
+		
 		//[self.document retainObjectsForKey:self.objectsKey];
 		[self postInit];
 	}
