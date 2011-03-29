@@ -18,7 +18,9 @@
 - (void)dealloc{
 	if(_document){
 		[_document releaseObjectsForKey:_key];
-		[_document removeObserver:self forKey:_key];
+		if(observing){
+			[_document removeObserver:self forKey:_key];
+		}
 	}
 	
 	_document = nil;
@@ -30,23 +32,32 @@
 
 - (id)initWithDocument:(id)theDocument key:(NSString*)theKey{
 	[super init];
-	
-	if(_document){
-		[_document releaseObjectsForKey:_key];
-		[_document removeObserver:self forKey:_key];
-	}
-	
+
 	self.document = theDocument;
 	self.key = theKey;
 	
 	if(_document){
-		[_document addObserver:self forKey:_key];
 		[_document retainObjectsForKey:_key];
 	}
+	observing = NO;
 	
 	return self;
 }
 
+
+- (void)viewWillAppear{
+	if(_document && !observing){
+		observing = YES;
+		[_document addObserver:self forKey:_key];
+	}
+}
+
+- (void)viewWillDisappear{
+	if(_document && observing){
+		observing = NO;
+		[_document removeObserver:self forKey:_key];
+	}
+}
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	NSAssert(section == 0,@"Invalid section");

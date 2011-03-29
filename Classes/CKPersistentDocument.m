@@ -211,6 +211,7 @@
 		if(persistentKeys && [persistentKeys containsObject:key]){
 			[self saveObjectsForKey:key];
 		}
+		[self removeAllObjectsForKey:key];//to notify the observing views to flush their data ...
 		[objects removeObjectForKey:key];
 		[dataSources removeObjectForKey:key];
 		NSLog(@"Removed Objects for key '%@'",key);
