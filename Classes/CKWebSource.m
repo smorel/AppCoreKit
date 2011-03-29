@@ -26,6 +26,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @synthesize requestBlock = _requestBlock;
 @synthesize transformBlock = _transformBlock;
 @synthesize failureBlock = _failureBlock;
+@synthesize webSourceDelegate = _webSourceDelegate;
 @dynamic hasMore;
 @dynamic isFetching;
 @dynamic currentIndex;
@@ -41,6 +42,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[_requestBlock release];
 	[_transformBlock release];
 	[_failureBlock release];
+	_webSourceDelegate = nil;
 	[super dealloc];
 }
 
@@ -52,8 +54,15 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		return NO;
 	
 	_requestedBatchSize = batchSize;
-	self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));
-	//[_requestBlock release];
+	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
+		self.request = [_webSourceDelegate webSourceCreateWebRequest:self withRange:NSMakeRange(self.currentIndex, batchSize)];
+	}
+	else if(_requestBlock){
+		self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));
+	}
+	else{
+		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+	}
 	
 	if (self.request) {
 		self.request.delegate = self;
@@ -84,7 +93,17 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 }
 
 - (void)request:(id)request didReceiveValue:(id)value {
-	id newItems = _transformBlock(value);
+	
+	id newItems = nil;
+	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
+		newItems = [_webSourceDelegate webSource:self transform:value];
+	}
+	else if(_transformBlock){
+		newItems = _transformBlock(value);
+	}
+	else{
+		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+	}
 	
 	if (newItems) {	
 		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
@@ -102,8 +121,15 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	self.isFetching = NO;
 	self.request = nil;
 	
-	if(_failureBlock){
+	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]
+	   && [_webSourceDelegate respondsToSelector:@selector(webSource:didFailWithError:)]){
+		[_webSourceDelegate webSource:self didFailWithError:error];
+	}
+	else if(_failureBlock){
 		_failureBlock(error);
+	}
+	else{
+		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:CKWebSourceErrorNotification object:self];

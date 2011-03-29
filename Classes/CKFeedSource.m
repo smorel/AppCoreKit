@@ -30,6 +30,9 @@
 @synthesize objectsKey = _objectsKey;
 #pragma mark Initialization
 
+-(void)postInit{
+}
+
 - (id)initWithDocument:(NSObject<CKDocument>*)theDocument forKey:(NSString*)key{
 	if (self = [super init]) {
 		if(self.document){
@@ -44,6 +47,7 @@
 		
 		[self.document addObserver:self forKey:key];
 		[self.document retainObjectsForKey:self.objectsKey];
+		[self postInit];
 	}
 	return self;
 }
@@ -51,6 +55,7 @@
 - (id)init {
 	if (self = [super init]) {
 		[self reset];
+		[self postInit];
 	}
 	return self;
 }

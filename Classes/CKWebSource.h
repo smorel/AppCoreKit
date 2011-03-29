@@ -24,10 +24,26 @@ typedef void (^CKWebSourceFailureBlock)(NSError *error);
 	CKWebSourceRequestBlock _requestBlock;
 	CKWebSourceTransformBlock _transformBlock;
 	CKWebSourceFailureBlock _failureBlock;
+	
+	id _webSourceDelegate;
 }
 
 @property (nonatomic, copy) CKWebSourceRequestBlock requestBlock;
 @property (nonatomic, copy) CKWebSourceTransformBlock transformBlock;
 @property (nonatomic, copy) CKWebSourceFailureBlock failureBlock;
+@property (nonatomic, assign) id webSourceDelegate;
+
+@end
+
+
+
+@protocol CKWebSourceDelegate
+
+@required
+- (CKWebRequest2*)webSourceCreateWebRequest:(CKWebSource*) webSource withRange:(NSRange)range;
+- (id)webSource:(CKWebSource*)webSource transform:(id)value;
+
+@optional
+- (void)webSource:(CKWebSource*)webSource didFailWithError:(NSError*)error;
 
 @end
