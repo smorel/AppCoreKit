@@ -55,7 +55,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	
 	_requestedBatchSize = batchSize;
 	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
-		self.request = [_webSourceDelegate webSourceCreateWebRequest:self withRange:NSMakeRange(self.currentIndex, batchSize)];
+		self.request = [_webSourceDelegate webSource:self requestForRange:NSMakeRange(self.currentIndex, batchSize)];
 	}
 	else if(_requestBlock){
 		self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));

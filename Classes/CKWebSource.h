@@ -40,7 +40,7 @@ typedef void (^CKWebSourceFailureBlock)(NSError *error);
 @protocol CKWebSourceDelegate
 
 @required
-- (CKWebRequest2*)webSourceCreateWebRequest:(CKWebSource*) webSource withRange:(NSRange)range;
+- (CKWebRequest2*)webSource:(CKWebSource*)webSource requestForRange:(NSRange)range;
 - (id)webSource:(CKWebSource*)webSource transform:(id)value;
 
 @optional
