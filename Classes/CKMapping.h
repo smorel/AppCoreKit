@@ -19,11 +19,15 @@ typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NS
 	NSString* key;
 	CKMappingBlock mapperBlock;
 	CKMappingPolicy policy;
+	Class transformerClass;
 }
 
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, copy) CKMappingBlock mapperBlock;
 @property (nonatomic, assign) CKMappingPolicy policy;
+@property (nonatomic, assign) Class transformerClass;
+
+- (NSValueTransformer*)valueTransformer;
 
 @end
 
@@ -37,7 +41,11 @@ typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NS
 
 
 @interface NSMutableDictionary (CKMapping)
+//Standard mapping with block for os4 and later
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withBlock:(CKMappingBlock)block;
+//Standard mapping with block for os3
+- (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withValueTransformerClass:(Class)valueTransformerClass;
+
 - (void)mapURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapHttpURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapStringForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
