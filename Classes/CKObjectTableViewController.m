@@ -421,7 +421,6 @@
 		}
 	}
 }
-
 - (void)releaseCell:(id)sender target:(id)target{
 	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_indexPathToCells removeObjectForKey:previousPath];
@@ -451,10 +450,15 @@
 						self.cellsToControllers = [NSMutableDictionary dictionary];
 					}
 					
-					MAZeroingWeakRef* cellRef = [[[MAZeroingWeakRef alloc]initWithTarget:cell]autorelease];
+					if(_weakCells == nil){
+						self.weakCells = [NSMutableArray array];
+					}
+					
+					MAZeroingWeakRef* cellRef = [[MAZeroingWeakRef alloc]initWithTarget:cell];
 					[cellRef setDelegate:self action:@selector(releaseCell:target:)];
 					[_weakCells addObject:cellRef];
 					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
+					[cellRef release];
 				}
 				else{
 					NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:cell]];

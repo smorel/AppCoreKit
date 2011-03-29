@@ -62,8 +62,8 @@
 
 
 @implementation MAZeroingWeakRef
-@synthesize delegate;
-@synthesize action;
+@synthesize delegate = _delegate;
+@synthesize action = _action;
 
 #if COREFOUNDATION_HACK_LEVEL >= 2
 
@@ -529,6 +529,14 @@ static void UnregisterRef(MAZeroingWeakRef *ref)
 - (NSString *)description
 {
     return [NSString stringWithFormat: @"<%@: %p -> %@>", [self class], self, [self target]];
+}
+
+- (id)retain{
+	return [super retain];
+}
+
+- (void)release{
+	[super release];
 }
 
 #if NS_BLOCKS_AVAILABLE
