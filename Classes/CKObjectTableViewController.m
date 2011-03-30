@@ -357,11 +357,13 @@
 			[controller rotateCell:cell withParams:params animated:YES];
 		}
 	}
+	[self notifiesCellControllersForVisibleRows];
 	[self printDebug:@"end of willAnimateRotationToInterfaceOrientation"];
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	_indexPathToReachAfterRotation = nil;
+	[self notifiesCellControllersForVisibleRows];
 	[self updateNumberOfPages];
 }
 
