@@ -23,6 +23,8 @@
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
 - (void)updateNumberOfPages;
+- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)notifiesCellControllersForVisibleRows;
 @end
 
 //
@@ -178,6 +180,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -219,6 +222,14 @@
 }
 
 - (void)viewDidUnload {
+}
+
+- (void)notifiesCellControllersForVisibleRows {
+	NSArray *visibleCells = [self.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+		[[self controllerForRowAtIndexPath:indexPath] cellDidAppear:cell];
+	}
 }
 
 - (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation size:(CGSize)size{
@@ -528,10 +539,10 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-	CKTableViewCellController* controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
+	/*CKTableViewCellController* controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 	if(controller){
 		[controller cellDidAppear:cell];
-	}
+	}*/
 	[self updateNumberOfPages];
 }
 
@@ -610,6 +621,7 @@
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
 	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:0.4];
+	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:0.4];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -745,12 +757,19 @@
 	[self updateCurrentPage];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	if (decelerate || scrollView.decelerating)
+		return;
+	[self notifiesCellControllersForVisibleRows];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
+	[self notifiesCellControllersForVisibleRows];
 }
 
 @end
