@@ -151,6 +151,19 @@
 	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
 }
 
+- (void)focusOnStoredRow{
+	if(_indexPathToReachAfterRotation){
+		NSInteger sectionCount = [self numberOfSectionsInTableView:self.tableView];
+		if(_indexPathToReachAfterRotation.section < sectionCount){
+			NSInteger rowCount = [self tableView:self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section];
+			if(_indexPathToReachAfterRotation.row < rowCount){
+				[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
+			}
+		}
+		_indexPathToReachAfterRotation = nil;
+	}
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
@@ -168,12 +181,8 @@
 		self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
 		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
 	}
-	
-	if(_indexPathToReachAfterRotation){
-		[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
-		_indexPathToReachAfterRotation = nil;
-	}
-	
+
+	[self focusOnStoredRow];
 	[self updateNumberOfPages];
 }
 
@@ -339,8 +348,6 @@
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		cell.autoresizingMask = UIViewAutoresizingNone;
-		
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
 			
 			NSMutableDictionary* params = [NSMutableDictionary dictionary];
@@ -457,6 +464,8 @@
 					controller = [[[controllerClass alloc]init]autorelease];
 					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
 					cell = [controller loadCell];
+					
+					//cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 					
 					//Register cell to controller
 					if(_cellsToControllers == nil){
@@ -631,6 +640,9 @@
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
+		_indexPathToReachAfterRotation = nil;
+	}
 	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	[self fetchMoreIfNeededAtIndexPath:indexPath];
 }
