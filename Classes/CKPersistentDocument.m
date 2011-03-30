@@ -224,7 +224,7 @@
 
 - (void)setDataSource:(id)source forKey:(NSString*)key{
 	[dataSources setObject:source forKey:key];
-	[(CKFeedSource*)source fetchNextItems:10];
+	//[(CKFeedSource*)source fetchNextItems:10];
 }
 
 - (id)dataSourceForKey:(NSString*)key{
