@@ -87,9 +87,11 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 }
 
 - (void)cancel {
-	self.request.delegate = nil;
-	[self.request cancel];
-	self.request = nil;
+	if(self.request){
+		self.request.delegate = nil;
+		[self.request cancel];
+		self.request = nil;
+	}
 }
 
 #pragma mark CKWebRequestDelegate Protocol
@@ -105,10 +107,17 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 		NSError *error = [NSError errorWithDomain:CKImageLoaderErrorDomain code:0 userInfo:userInfo];
 		[self.delegate imageLoader:self didFailWithError:error];
 	}
+	
+	//Delete the request not to cancel it later
+	//self.request.delegate = nil;
+	//self.request = nil;
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {
 	[self.delegate imageLoader:self didFailWithError:error];
+	//Delete the request not to cancel it later
+	//self.request.delegate = nil;
+	//elf.request = nil;
 }
 
 @end

@@ -195,8 +195,18 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark NSOperation Methods
 
 - (void)start {
-	if ([self isCancelled] || [self isExecuting] || [self isFinished])
+	if([self isCancelled]){
+		//NSLog(@"start but already cancelled <%p>",self);
+		[self markAsFinished];
 		return;
+	}
+	
+	if ( [self isExecuting] || [self isFinished]){
+		//NSLog(@"start aborted <%p>",self);
+		return;
+	}
+	
+	//NSLog(@"start request <%p>",self);
 	
 	self.destinationStream = nil;
 	if(self.destinationPath){
@@ -373,7 +383,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	CKDebugLog(@"ERR Connection failed! %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+	//NSURLErrorFailingURLStringErrorKey incompatible os3
+	//CKDebugLog(@"ERR Connection failed! %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 	[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
 	[self markAsFinished];
 }
@@ -392,8 +403,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	return finished;
 }
 
+- (BOOL)isCancelled {
+	return cancelled;
+}
+
 - (void)markAsExecuting {
 	if (executing) return;
+	
+	//NSLog(@"executing request <%p>",self);
 	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = YES;
@@ -405,15 +422,22 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)markAsCancelled {
+	if(cancelled)return;
+	
+	//NSLog(@"cancelling request <%p>",self);
 	[self willChangeValueForKey:@"isCancelled"];
 	cancelled = YES;
 	[self didChangeValueForKey:@"isCancelled"];
-	[self markAsFinished];
+	
+	if(executing){
+		[self markAsFinished];
+	}
 }
 
 - (void)markAsFinished {
 	if (finished) return;
 	
+	//NSLog(@"finishing request <%p>",self);
 	[self willChangeValueForKey:@"isFinished"];
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = NO;
@@ -430,7 +454,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"CKWebRequest2 Url='%@' destinationPath='%@' allowOverwrite='%@'",self.URL,self.destinationPath,self.allowDestinationOverwrite ? @"YES" : @"NO"];
+	return [NSString stringWithFormat:@"CKWebRequest2 <%p> Url='%@' destinationPath='%@' allowOverwrite='%@'",self,self.URL,self.destinationPath,self.allowDestinationOverwrite ? @"YES" : @"NO"];
 }
 
 @end
