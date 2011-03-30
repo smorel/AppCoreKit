@@ -39,18 +39,4 @@
 	self.feedSource = source;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	if(_feedSource){
-		[_feedSource fetchNextItems:10];
-	}
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-	[super viewWillDisappear:animated];
-	if(_feedSource){
-		[_feedSource cancelFetch];
-	}
-}
-
 @end

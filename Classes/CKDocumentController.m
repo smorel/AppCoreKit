@@ -49,6 +49,14 @@
 	if(_document && !observing){
 		observing = YES;
 		[_document addObserver:self forKey:_key];
+		
+		NSArray* objects = [_document objectsForKey:_key];
+		if([objects count] <= 0){
+			CKFeedSource* feedSource = [_document dataSourceForKey:_key];
+			if(feedSource){
+				[feedSource fetchNextItems:10];
+			}
+		}
 	}
 }
 
@@ -56,6 +64,11 @@
 	if(_document && observing){
 		observing = NO;
 		[_document removeObserver:self forKey:_key];
+		
+		CKFeedSource* feedSource = [_document dataSourceForKey:_key];
+		if(feedSource){
+			[feedSource cancelFetch];
+		}
 	}
 }
 
