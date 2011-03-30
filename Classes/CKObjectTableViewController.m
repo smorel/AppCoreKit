@@ -170,7 +170,12 @@
 	}
 	
 	if(_indexPathToReachAfterRotation){
-		[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		
+		if (_indexPathToReachAfterRotation.row < [self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section])
+			[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		else 
+			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+
 		_indexPathToReachAfterRotation = nil;
 	}
 	
