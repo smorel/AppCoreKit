@@ -197,8 +197,35 @@
 		_indexPathToReachAfterRotation = nil;
 	}
 	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		[self adjustTableView];
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+		
+		for(NSValue* cellValue in [_cellsToControllers allKeys]){
+			CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
+			UITableViewCell* cell = [cellValue nonretainedObjectValue];
+			
+			if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+				
+				NSMutableDictionary* params = [NSMutableDictionary dictionary];
+				[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+				[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+				id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
+				if(controllerStyle){
+					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+				}
+				
+				[controller rotateCell:cell withParams:params animated:YES];
+				
+				[self rotateSubViewsForCell:cell];
+			}
+		}		
+	}
 	[self updateNumberOfPages];
-	[self adjustTableView];//for OS3
 	[self printDebug:@"viewWillAppear"];
 }
 
@@ -309,14 +336,11 @@
 
 #pragma mark Orientation Management
 - (void)adjustView{
-	CGRect b = self.view.bounds;
-	BOOL needRotation = (_orientation == CKTableViewOrientationLandscape);
-	if(needRotation) {
+	if(_orientation == CKTableViewOrientationLandscape) {
+		CGRect frame = self.view.frame;
 		self.view.transform = CGAffineTransformMakeRotation(-M_PI/2);
-	} else {
-		self.view.transform = CGAffineTransformIdentity;
+		self.view.frame = frame;
 	}
-	self.view.frame = CGRectMake(0,0,b.size.width,b.size.height);
 }
 
 
@@ -341,7 +365,8 @@
 }
 
 - (void)adjustTableView{
-	self.tableView.frame = CGRectMake(0,0, self.view.frame.size.height, self.view.frame.size.width);
+	[self adjustView];
+	self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
