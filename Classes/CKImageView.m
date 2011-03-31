@@ -9,12 +9,17 @@
 #import "CKImageView.h"
 #import "CKCache.h"
 #import <CloudKit/CKUIImage+Transformations.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface CKImageView ()
 
 @property (nonatomic, retain, readwrite) CKImageLoader *imageLoader;
 @property (nonatomic, retain, readwrite) UIImageView *imageView;
 @property (nonatomic, retain, readwrite) UIButton *button;
+@property (nonatomic, retain, readwrite) UIImageView *defaultImageView;
+@property (nonatomic, retain, readwrite) UIActivityIndicatorView *activityIndicator;
+
+- (void)updateViews:(BOOL)animated;
 
 @end
 
@@ -30,6 +35,8 @@
 @synthesize fadeInDuration = _fadeInDuration;
 @synthesize interactive = _interactive;
 @synthesize button = _button;
+@synthesize defaultImageView = _defaultImageView;
+@synthesize activityIndicator = _activityIndicator;
 
 
 - (void)postInit{
@@ -37,6 +44,13 @@
 	self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 	
+	self.defaultImageView = [[[UIImageView alloc] initWithFrame:self.bounds]autorelease];
+	self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
+	
+	//Activity indicator should start/stop and be added with the request ...
+	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+
 	self.button = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.button.frame = self.bounds;
 	self.button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -46,6 +60,7 @@
 	
 	self.fadeInDuration = 0;
 	self.interactive = NO;
+	_currentState = CKImageViewStateNone;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder{
@@ -65,6 +80,10 @@
 	[self cancel];
 	[_imageURL release];
 	_imageURL = nil;
+	[_activityIndicator release];
+	_activityIndicator = nil;
+	[_defaultImageView release];
+	_defaultImageView = nil;
 	self.defaultImage = nil;
 	self.delegate = nil;
 	self.imageView = nil;
@@ -75,21 +94,17 @@
 
 #pragma mark Public API
 
-- (void)setImage:(UIImage*)image{
+- (void)setImage:(UIImage*)image updateAllViews:(BOOL)updateAllViews{
 	self.imageView.image = image;
 	[self.button setBackgroundImage:image forState:UIControlStateNormal];
+	if(updateAllViews){
+		[self updateViews:YES];
+	}
 }
 
 - (void)setInteractive:(BOOL)bo{
 	_interactive = bo;
-	if(bo){
-		[self.imageView removeFromSuperview];
-		[self addSubview:self.button];
-	}
-	else{
-		[self.button removeFromSuperview];
-		[self addSubview:self.imageView];
-	}
+	[self updateViews:YES];
 }
 
 - (void)setImageURL:(NSURL *)url {
@@ -112,31 +127,37 @@
 		self.imageLoader = [[[CKImageLoader alloc] initWithDelegate:self] autorelease];
 		[self.imageLoader loadImageWithContentOfURL:self.imageURL];
 	}
+	
+	[self updateViews:YES];
 }
 
 - (void)reset {
+	[self setImage:nil updateAllViews:NO];
 	[self cancel];
-	[self setImage:self.defaultImage];
 }
 
 - (void)cancel {
 	self.imageLoader.delegate = nil;
 	[self.imageLoader cancel];
 	self.imageLoader = nil;
-}
-
-- (void)setDefaultImage:(UIImage *)image {
-	[_defaultImage release];
-	_defaultImage = [image retain];
-	[self setImage:image];
+	[self updateViews:YES];
 }
 
 - (UIImage *)image {
 	return self.imageView.image;
 }
 
+- (void)setDefaultImage:(UIImage *)image {
+	[_defaultImage release];
+	_defaultImage = [image retain];
+	self.defaultImageView.image = image;
+	
+	[self updateViews:YES];
+}
+
 - (void)setImageViewContentMode:(UIViewContentMode)theContentMode {
 	self.imageView.contentMode = theContentMode;
+	self.defaultImageView.contentMode = theContentMode;
 }
 
 - (UIViewContentMode)imageViewContentMode {
@@ -146,20 +167,87 @@
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached {
-	[self setImage:image];
-	if(!cached && _fadeInDuration > 0){
-		UIView* fadeView = _interactive ? (UIView*)self.button : (UIView*)self.imageView;
-		fadeView.alpha = 0;
-		[UIView beginAnimations:@"FadeInImage" context:nil];
-		[UIView setAnimationDuration:_fadeInDuration];
-		fadeView.alpha = 1;
-		[UIView commitAnimations];
-	}
+	[self setImage:image updateAllViews:YES];
 	[self.delegate imageView:self didLoadImage:image cached:NO];
 }
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
 	[self.delegate imageView:self didFailLoadWithError:error];
 	[self reset];
+}
+
+- (void)removeCurrentView{
+	switch(_currentState){
+		case CKImageViewStateSpinner:{
+			[self.activityIndicator stopAnimating];
+			[self.activityIndicator removeFromSuperview];
+			break;
+		}
+		case CKImageViewStateDefaultImage:{
+			[self.defaultImageView removeFromSuperview];
+			break;
+		}
+		case CKImageViewStateImage:{
+			if(_interactive){
+				[self.imageView removeFromSuperview];
+			}
+			else{
+				[self.button removeFromSuperview];
+			}
+			break;
+		}
+	}
+}
+
+- (void)updateViews:(BOOL)animated{
+	[self.layer removeAllAnimations];
+	UIImage* image = [self image];
+	if(!_defaultImage && !image){//spinner
+		if(self.imageLoader){
+			if(_currentState != CKImageViewStateSpinner){
+				[self removeCurrentView];
+				self.activityIndicator.center = self.center;
+				self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+				self.activityIndicator.frame = CGRectMake(self.bounds.size.width / 2 - self.activityIndicator.bounds.size.width / 2,
+														  self.bounds.size.height / 2 - self.activityIndicator.bounds.size.height / 2,
+														  self.activityIndicator.bounds.size.width,
+														  self.activityIndicator.bounds.size.height);
+				[self addSubview:self.activityIndicator];
+				[self.activityIndicator startAnimating];
+				_currentState = CKImageViewStateSpinner;
+			}
+		}
+	}
+	else if(_defaultImage && !image){//_defaultImageView
+		if(_currentState != CKImageViewStateDefaultImage){
+			[self removeCurrentView];
+			self.defaultImageView.frame = self.bounds;
+			[self addSubview:self.defaultImageView];
+			_currentState = CKImageViewStateDefaultImage;
+		}
+	}
+	else if(image){//image or button
+		if(_currentState != CKImageViewStateImage){
+			if(animated && _fadeInDuration > 0 ){
+				CATransition *animation = [CATransition animation];
+				animation.duration = _fadeInDuration;	
+				[self.layer addAnimation:animation forKey:nil];
+			}
+			
+			[self removeCurrentView];
+			if(_interactive){
+				self.button.frame = self.bounds;
+				[self addSubview:self.button];
+			}
+			else{
+				self.imageView.frame = self.bounds;
+				[self addSubview:self.imageView];
+			}
+			_currentState = CKImageViewStateImage;
+		}
+	}
+	else{
+		[self removeCurrentView];
+	}
 }
 
 @end
