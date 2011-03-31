@@ -745,14 +745,24 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+	CGFloat height = 0;
 	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-		if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
-			if( [_objectController headerTitleForSection:section] != nil ){
-				return 30;
+		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
+			UIView* view = [_objectController headerViewForSection:section];
+			height = view.frame.size.height;
+		}
+	}
+
+	if(height <= 0){
+		if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+			if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
+				if( [_objectController headerTitleForSection:section] != nil ){
+					height = 30;
+				}
 			}
 		}
 	}
-	return 0;
+	return height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -761,7 +771,11 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
+	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
+			return [_objectController headerViewForSection:section];
+		}
+	}
 	return nil;
 }
 

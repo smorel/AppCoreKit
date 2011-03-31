@@ -16,7 +16,12 @@
 //Sections
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
+
+@optional
 - (NSString*)headerTitleForSection:(NSInteger)section;
+- (UIView*)headerViewForSection:(NSInteger)section;
+
+@required
 
 //Objects Management
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
