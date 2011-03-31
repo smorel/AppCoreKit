@@ -46,6 +46,7 @@
 @synthesize onLoadScript = _onLoadScript;
 @synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
 @synthesize maxContentSizeForViewInPopover = _maxContentSizeForViewInPopover;
+@synthesize canBeDismissed = _canBeDismissed;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -102,6 +103,14 @@
 	}
 	
 	self.contentSizeForViewInPopover = self.minContentSizeForViewInPopover;
+	
+	if (_canBeDismissed) {
+		UIBarButtonItem *cancelButton = 
+		  [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+														 target:self
+														 action:@selector(dismiss)] autorelease];
+		self.navigationItem.leftBarButtonItem = cancelButton;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -199,7 +208,6 @@
 	[_webView reload];
 }
 
-
 #pragma mark -
 #pragma mark Toolbar Customization
 
@@ -240,7 +248,6 @@
 	_spinner.activityIndicatorViewStyle = style;
 }
 
-
 #pragma mark -
 #pragma mark WebView Delegate
 
@@ -279,9 +286,15 @@
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;	
 	[self updateToolbar];
+}
+
+#pragma mark -
+#pragma mark Dismiss
+
+- (void)dismiss {
+	[self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 @end

@@ -38,6 +38,8 @@ typedef enum {
 	
 	CGSize _minContentSizeForViewInPopover;
 	CGSize _maxContentSizeForViewInPopover;
+	
+	BOOL _canBeDismissed;
 }
 
 @property (readonly, nonatomic, retain) NSURL *homeURL;
@@ -47,6 +49,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *onLoadScript;
 @property (nonatomic, assign) CGSize minContentSizeForViewInPopover;
 @property (nonatomic, assign) CGSize maxContentSizeForViewInPopover;
+@property (nonatomic, assign) BOOL canBeDismissed;
 
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
