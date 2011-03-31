@@ -136,6 +136,10 @@
 	[_objectController release];
 	_objectController = [controller retain];
 	
+	if([self.view window]){
+		[_objectController viewWillAppear];
+	}
+	
 	if(controller && [controller conformsToProtocol:@protocol(CKObjectController)]){
 		if([controller respondsToSelector:@selector(setDelegate:)]){
 			[controller performSelector:@selector(setDelegate:) withObject:self];

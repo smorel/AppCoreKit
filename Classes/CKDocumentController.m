@@ -48,9 +48,8 @@
 - (void)viewWillAppear{
 	if(_document && !observing){
 		observing = YES;
-		[_document addObserver:self forKey:_key];
-		
 		NSArray* objects = [_document objectsForKey:_key];
+		[_document addObserver:self forKey:_key];
 		if([objects count] <= 0){
 			CKFeedSource* feedSource = [_document dataSourceForKey:_key];
 			if(feedSource){

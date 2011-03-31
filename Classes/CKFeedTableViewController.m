@@ -32,6 +32,7 @@
 	[_feedSource release];
 	_feedSource = [source retain];
 	self.objectController = [[[CKDocumentController alloc]initWithDocument:source.document key:source.objectsKey]autorelease];
+	[_feedSource fetchNextItems:10];
 }
 
 - (void)setFeedSource:(CKFeedSource*)source mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{

@@ -52,5 +52,6 @@
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
+- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
