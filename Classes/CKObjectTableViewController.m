@@ -25,6 +25,9 @@
 - (void)updateNumberOfPages;
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
+- (void)adjustView;
+- (void)adjustTableView;
+- (void)rotateSubViewsForCell:(UITableViewCell*)cell;
 @end
 
 //
@@ -46,6 +49,21 @@
 
 @synthesize editButton;
 @synthesize doneButton;
+
+- (void)printDebug:(NSString*)txt{
+	/*NSLog(@"%@",txt);
+	NSLog(@"view frame=%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
+	NSLog(@"tableView frame=%f,%f,%f,%f",self.tableView.frame.origin.x,self.tableView.frame.origin.y,self.tableView.frame.size.width,self.tableView.frame.size.height);
+	NSLog(@"tableView contentOffset=%f,%f",self.tableView.contentOffset.x,self.tableView.contentOffset.y);
+	NSLog(@"tableView contentSize=%f,%f",self.tableView.contentSize.width,self.tableView.contentSize.height);
+	NSLog(@"interfaceOrientation=%@",UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"Portrait" : @"Landscape");
+	
+	for(NSValue* cellValue in [_cellsToControllers allKeys]){
+		UITableViewCell* cell = [cellValue nonretainedObjectValue];
+		NSLog(@"cell frame=%f,%f,%f,%f",cell.frame.origin.x,cell.frame.origin.y,cell.frame.size.width,cell.frame.size.height);
+	}*/
+}
+
 
 - (void)postInit{
 	_orientation = CKTableViewOrientationPortrait;
@@ -158,7 +176,7 @@
 		[_objectController viewWillAppear];
 	}
 	
-	[self.tableView reloadData];
+	//[self.tableView reloadData];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -180,12 +198,15 @@
 	}
 	
 	[self updateNumberOfPages];
+	[self adjustTableView];//for OS3
+	[self printDebug:@"viewWillAppear"];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 	[self notifiesCellControllersForVisibleRows];
+	[self printDebug:@"viewDidAppear"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -258,6 +279,7 @@
 				
 				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
 				CGSize size = [v CGSizeValue];
+				//NSLog(@"Size for row : %d,%d =%f,%f",indexPath.row,indexPath.section,size.width,size.height);
 				height = (_orientation == CKTableViewOrientationLandscape) ? size.width : size.height;
 			}
 		}
@@ -280,11 +302,13 @@
 		self.tableView.contentOffset = CGPointMake(0,offset);
 	}
 	
+	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
+	
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
 }
 
 #pragma mark Orientation Management
-- (void)adjustViewToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+- (void)adjustView{
 	CGRect b = self.view.bounds;
 	BOOL needRotation = (_orientation == CKTableViewOrientationLandscape);
 	if(needRotation) {
@@ -292,30 +316,46 @@
 	} else {
 		self.view.transform = CGAffineTransformIdentity;
 	}
-	self.view.frame = CGRectMake(0,0,b.size.width - 10,b.size.height-10);
+	self.view.frame = CGRectMake(0,0,b.size.width,b.size.height);
+}
+
+
+- (void)rotateSubViewsForCell:(UITableViewCell*)cell{
+	if(_orientation == CKTableViewOrientationLandscape){
+		UIView* view = cell.contentView;
+		CGRect frame = view.frame;
+		view.transform = CGAffineTransformMakeRotation(M_PI/2);
+		
+		if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+			view.frame = frame;
+			
+			for(UIView* v in view.subviews){
+				//UIViewAutoresizing resizingMasks = v.autoresizingMask;
+				v.autoresizingMask = UIViewAutoresizingNone;
+				v.center = CGPointMake(cell.contentView.bounds.size.width / 2,cell.contentView.bounds.size.height / 2);
+				v.frame = cell.contentView.bounds;
+				//v.autoresizingMask = resizingMasks; //reizing masks break the layout on os 3
+			}
+		}
+	}
+}
+
+- (void)adjustTableView{
+	self.tableView.frame = CGRectMake(0,0, self.view.frame.size.height, self.view.frame.size.width);
+	
+	for(NSValue* cellValue in [_cellsToControllers allKeys]){
+		UITableViewCell* cell = [cellValue nonretainedObjectValue];
+		[self rotateSubViewsForCell:cell];
+	}
 }
 
 - (void)setOrientation:(CKTableViewOrientation)orientation {
 	_orientation = orientation;
-	[self adjustViewToInterfaceOrientation:self.interfaceOrientation];
+	[self adjustView];
 }
    
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	//[self adjustViewToInterfaceOrientation:interfaceOrientation];
 	return YES;
-}
-
-- (void)printDebug:(NSString*)txt{
-	/*NSLog(@"%@",txt);
-	NSLog(@"tableView frame=%f,%f,%f,%f",self.tableView.frame.origin.x,self.tableView.frame.origin.y,self.tableView.frame.size.width,self.tableView.frame.size.height);
-	NSLog(@"tableView contentOffset=%f,%f",self.tableView.contentOffset.x,self.tableView.contentOffset.y);
-	NSLog(@"tableView contentSize=%f,%f",self.tableView.contentSize.width,self.tableView.contentSize.height);
-	NSLog(@"interfaceOrientation=%@",UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"Portrait" : @"Landscape");
-
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		NSLog(@"cell frame=%f,%f,%f,%f",cell.frame.origin.x,cell.frame.origin.y,cell.frame.size.width,cell.frame.size.height);
-	}*/
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
@@ -340,16 +380,25 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		[self adjustTableView];
+	}
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+	}
+	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		cell.autoresizingMask = UIViewAutoresizingNone;
 		
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
 			
 			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
+			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
 			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -360,6 +409,10 @@
 			}
 			
 			[controller rotateCell:cell withParams:params animated:YES];
+			
+			if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+				[self rotateSubViewsForCell:cell];
+			}
 		}
 	}
 	[self notifiesCellControllersForVisibleRows];
@@ -370,6 +423,7 @@
 	_indexPathToReachAfterRotation = nil;
 	[self notifiesCellControllersForVisibleRows];
 	[self updateNumberOfPages];
+	[self printDebug:@"end of didRotateFromInterfaceOrientation"];
 }
 
 #pragma mark UITableView DataSource
@@ -400,7 +454,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.tableView.bounds.size];
+	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.view.bounds.size];
 	return height;
 }
 
@@ -413,7 +467,7 @@
 			if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
 				
 				NSMutableDictionary* params = [NSMutableDictionary dictionary];
-				[params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
+				[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
 				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -462,6 +516,7 @@
 					controller = [[[controllerClass alloc]init]autorelease];
 					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
 					cell = [controller loadCell];
+					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 					
 					//Register cell to controller
 					if(_cellsToControllers == nil){
@@ -515,27 +570,12 @@
 					[controller setupCell:cell];	
 				}
 				
-				if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-					NSMutableDictionary* params = [NSMutableDictionary dictionary];
-					[params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
-					[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-					[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-					[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-					id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-					if(controllerStyle){
-						[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-					}
-					
-					[controller rotateCell:cell withParams:params animated:NO];
-				}	
-				
-				UIView *rotatedView	= cell.contentView;
-				if (_orientation == CKTableViewOrientationLandscape) {
-					rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
-				}
-				
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
 				[self updateNumberOfPages];
+				
+				
+				[self printDebug:[NSString stringWithFormat:@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section]];
+				
 				return cell;
 			}
 		}
@@ -546,10 +586,23 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-	/*CKTableViewCellController* controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-	if(controller){
-		[controller cellDidAppear:cell];
-	}*/
+	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+	if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+		NSMutableDictionary* params = [NSMutableDictionary dictionary];
+		[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+		[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+		[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+		[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+		id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+		if(controllerStyle){
+			[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+		}
+		
+		[controller rotateCell:cell withParams:params animated:NO];
+	}	
+	
+	[self rotateSubViewsForCell:cell];
+	
 	[self updateNumberOfPages];
 }
 
@@ -721,13 +774,13 @@
 
 - (void)setCurrentPage:(int)page{
 	_currentPage = page;
-	NSLog(@"currentPage = %d",_currentPage);
+	//NSLog(@"currentPage = %d",_currentPage);
 	//TODO : scroll to the right controller ???
 }
 
 - (void)setNumberOfPages:(int)pages{
 	_numberOfPages = pages;
-	NSLog(@"number of pages = %d",_numberOfPages);
+	//NSLog(@"number of pages = %d",_numberOfPages);
 	//TODO : scroll to the right controller ???
 }
 
