@@ -56,6 +56,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	activityView.center = cell.center;
 	activityView.tag = ActivityIndicatorTag;
 	activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	activityView.hidden = YES;
 	
 	[view addSubview:activityView];
 		
@@ -76,8 +77,8 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
-	if(source.hasMore){
+	activityIndicator.hidden = self.parentController.tableView.pagingEnabled || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	if(!activityIndicator.hidden){
 		[activityIndicator startAnimating];
 	}
 	else{
@@ -114,6 +115,9 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	[self update:cell.contentView];
+	
+	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ActivityIndicatorTag];
+	activityIndicator.hidden = self.parentController.tableView.pagingEnabled;
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
