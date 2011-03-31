@@ -187,44 +187,49 @@
 		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
 	}
 	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+	}
+	
+	for(NSValue* cellValue in [_cellsToControllers allKeys]){
+		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
+		UITableViewCell* cell = [cellValue nonretainedObjectValue];
+		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+			
+			NSMutableDictionary* params = [NSMutableDictionary dictionary];
+			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+			[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
+			if(controllerStyle){
+				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+			}
+			
+			[controller rotateCell:cell withParams:params animated:YES];
+			
+			if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+				[self rotateSubViewsForCell:cell];
+			}
+		}
+	}	
+	
+	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		[self adjustTableView];
+	}
+	
 	if(_indexPathToReachAfterRotation){
 		
 		if (_indexPathToReachAfterRotation.row < [self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section])
 			[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
 		else 
 			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-
+		
 		_indexPathToReachAfterRotation = nil;
 	}
 	
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
-		[self adjustTableView];
-		[self.tableView beginUpdates];
-		[self.tableView endUpdates];
-		
-		for(NSValue* cellValue in [_cellsToControllers allKeys]){
-			CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-			UITableViewCell* cell = [cellValue nonretainedObjectValue];
-			
-			if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-				
-				NSMutableDictionary* params = [NSMutableDictionary dictionary];
-				[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-				[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-				id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-				if(controllerStyle){
-					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-				}
-				
-				[controller rotateCell:cell withParams:params animated:YES];
-				
-				[self rotateSubViewsForCell:cell];
-			}
-		}		
-	}
 	[self updateNumberOfPages];
 	[self printDebug:@"viewWillAppear"];
 }
@@ -366,6 +371,7 @@
 
 - (void)adjustTableView{
 	[self adjustView];
+	self.tableView.autoresizingMask = UIViewAutoresizingNone;
 	self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
