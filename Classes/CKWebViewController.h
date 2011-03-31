@@ -37,6 +37,7 @@ typedef enum {
 	NSString *_onLoadScript;
 	
 	CGSize _minContentSizeForViewInPopover;
+	CGSize _maxContentSizeForViewInPopover;
 }
 
 @property (readonly, nonatomic, retain) NSURL *homeURL;
@@ -45,6 +46,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL hidesToolbar;
 @property (nonatomic, retain) NSString *onLoadScript;
 @property (nonatomic, assign) CGSize minContentSizeForViewInPopover;
+@property (nonatomic, assign) CGSize maxContentSizeForViewInPopover;
 
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;

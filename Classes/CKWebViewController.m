@@ -45,6 +45,7 @@
 @synthesize hidesToolbar = _hidesToolbar;
 @synthesize onLoadScript = _onLoadScript;
 @synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
+@synthesize maxContentSizeForViewInPopover = _maxContentSizeForViewInPopover;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -265,8 +266,12 @@
 	if (_onLoadScript) [_webView stringByEvaluatingJavaScriptFromString:_onLoadScript];
 	
 	// Change the size of the popover according to the size of the body
-	CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString: @"document.body.offsetHeight"] floatValue];
-	if (height > self.minContentSizeForViewInPopover.height) {
+	CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
+	
+	if (height > 0) {
+		if (height < self.minContentSizeForViewInPopover.height) height = self.minContentSizeForViewInPopover.height;
+		if (height > self.maxContentSizeForViewInPopover.height) height = self.maxContentSizeForViewInPopover.height;
+		
 		self.contentSizeForViewInPopover = CGSizeMake(self.contentSizeForViewInPopover.width, height);
 	}
 		
