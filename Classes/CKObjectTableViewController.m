@@ -16,6 +16,7 @@
 #import <CloudKit/CKNSObject+bindings.h>
 
 //
+static int countUpdates = 0;
 
 @interface CKObjectTableViewController ()
 @property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
@@ -133,10 +134,14 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
 	}
 	
+	if(_objectController && [self.view window]){
+		[_objectController viewWillDisappear];
+	}
+	
 	[_objectController release];
 	_objectController = [controller retain];
 	
-	if([self.view window]){
+	if(_objectController && [self.view window]){
 		[_objectController viewWillAppear];
 	}
 	
@@ -708,9 +713,13 @@
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
 	[self.tableView beginUpdates];
+	countUpdates++;
+	NSLog(@"objectControllerDidBeginUpdating <%p> count=%d",self,countUpdates);
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
+	countUpdates--;
+	NSLog(@"objectControllerDidEndUpdating <%p> count=%d",self,countUpdates);
 	[self.tableView endUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -725,7 +734,7 @@
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	[self fetchMoreIfNeededAtIndexPath:indexPath];
+	//[self fetchMoreIfNeededAtIndexPath:indexPath];
 }
 
 #pragma mark UITableView Protocol for Sections
