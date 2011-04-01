@@ -37,6 +37,10 @@
 		4F59F0CE11D00DD6003B4CA8 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */; };
 		4F69540212E8F0530085881D /* CKCoreGraphicsAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F69540012E8F0530085881D /* CKCoreGraphicsAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F69540312E8F0530085881D /* CKCoreGraphicsAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F69540112E8F0530085881D /* CKCoreGraphicsAdditions.m */; };
+		4F7305D713467730001677B7 /* CKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7305D513467730001677B7 /* CKTextView.h */; };
+		4F7305D813467730001677B7 /* CKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7305D613467730001677B7 /* CKTextView.m */; };
+		4F7305E4134677A7001677B7 /* CKTextViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7305E2134677A7001677B7 /* CKTextViewCellController.h */; };
+		4F7305E5134677A7001677B7 /* CKTextViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7305E3134677A7001677B7 /* CKTextViewCellController.m */; };
 		4F95B7BC11C805120002E71E /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F95B7BB11C805120002E71E /* CKLocalization.m */; };
 		4F9B493F12EA5103001AA996 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F9B493C12EA5103001AA996 /* CKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9B494012EA5103001AA996 /* CKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B493D12EA5103001AA996 /* CKGridView.m */; };
@@ -362,6 +366,10 @@
 		4F59F0CC11D00DD6003B4CA8 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKNumberBadgeView.m; sourceTree = "<group>"; };
 		4F69540012E8F0530085881D /* CKCoreGraphicsAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCoreGraphicsAdditions.h; sourceTree = "<group>"; };
 		4F69540112E8F0530085881D /* CKCoreGraphicsAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCoreGraphicsAdditions.m; sourceTree = "<group>"; };
+		4F7305D513467730001677B7 /* CKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTextView.h; sourceTree = "<group>"; };
+		4F7305D613467730001677B7 /* CKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTextView.m; sourceTree = "<group>"; };
+		4F7305E2134677A7001677B7 /* CKTextViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTextViewCellController.h; sourceTree = "<group>"; };
+		4F7305E3134677A7001677B7 /* CKTextViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTextViewCellController.m; sourceTree = "<group>"; };
 		4F95B7BB11C805120002E71E /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLocalization.m; sourceTree = "<group>"; };
 		4F9B493C12EA5103001AA996 /* CKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGridView.h; sourceTree = "<group>"; };
 		4F9B493D12EA5103001AA996 /* CKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKGridView.m; sourceTree = "<group>"; };
@@ -775,6 +783,8 @@
 				4F27102211C187C2007F584E /* CKToggleSwitchCellController.m */,
 				4F497E5D11D404F700680E06 /* CKTextFieldCellController.h */,
 				4F497E5E11D404F700680E06 /* CKTextFieldCellController.m */,
+				4F7305E2134677A7001677B7 /* CKTextViewCellController.h */,
+				4F7305E3134677A7001677B7 /* CKTextViewCellController.m */,
 				4FB5463111DA8DA000DC7E6A /* CKImageButtonCellController.h */,
 				4FB5463211DA8DA000DC7E6A /* CKImageButtonCellController.m */,
 				4FAD0E5B11C2B8110071C7BF /* CKOptionCellController.h */,
@@ -852,6 +862,8 @@
 				7119A73012E64BC0003A46B0 /* CKUIImage+Transformations.h */,
 				8566B71F12F079E900277972 /* CKUIView+Factory.h */,
 				8566B72012F079E900277972 /* CKUIView+Factory.m */,
+				4F7305D513467730001677B7 /* CKTextView.h */,
+				4F7305D613467730001677B7 /* CKTextView.m */,
 			);
 			name = UI;
 			path = Classes;
@@ -1418,6 +1430,8 @@
 				751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */,
 				75E71A83133A6A1C00CAAE66 /* CKFeedSourceViewCellController.h in Headers */,
 				75E71A85133A6A1C00CAAE66 /* CKFeedTableViewController.h in Headers */,
+				4F7305D713467730001677B7 /* CKTextView.h in Headers */,
+				4F7305E4134677A7001677B7 /* CKTextViewCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1679,6 +1693,8 @@
 				751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */,
 				75E71A84133A6A1C00CAAE66 /* CKFeedSourceViewCellController.m in Sources */,
 				75E71A86133A6A1C00CAAE66 /* CKFeedTableViewController.m in Sources */,
+				4F7305D813467730001677B7 /* CKTextView.m in Sources */,
+				4F7305E5134677A7001677B7 /* CKTextViewCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
