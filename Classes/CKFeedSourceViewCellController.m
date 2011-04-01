@@ -77,7 +77,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = self.parentController.tableView.pagingEnabled || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	activityIndicator.hidden = self.parentController.tableView.pagingEnabled || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
 	if(!activityIndicator.hidden){
 		[activityIndicator startAnimating];
 	}
@@ -88,7 +88,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
 	
 	UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
-	label.hidden = source.hasMore;	
+	label.hidden = !activityIndicator.hidden;	
 	switch(source.currentIndex){
 		case 0:{
 			label.text = theStyle.noItemsMessage;
@@ -117,7 +117,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	[self update:cell.contentView];
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = self.parentController.tableView.pagingEnabled;
+	activityIndicator.hidden = activityIndicator.hidden || self.parentController.tableView.pagingEnabled;
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
