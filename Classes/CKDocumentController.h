@@ -16,11 +16,13 @@
 	NSString* _key;
 	id _delegate;
 	BOOL observing;
+	BOOL animateFirstInsertion;
 }
 
 @property (nonatomic, assign) id document;
 @property (nonatomic, retain) NSString* key;
 @property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) BOOL animateFirstInsertion;
 
 - (id)initWithDocument:(id)document key:(NSString*)key;
 

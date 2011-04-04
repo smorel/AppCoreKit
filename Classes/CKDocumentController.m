@@ -9,6 +9,7 @@
 #import "CKDocumentController.h"
 #import <CloudKit/CKDocument.h>
 #import <UIKit/UITableView.h>
+#import "CKVersion.h"
 
 @implementation CKDocumentController
 @synthesize document = _document;
@@ -27,6 +28,7 @@
 	_delegate = nil;
 	[_key release];
 	_key = nil;
+	
 	[super dealloc];
 }
 
@@ -40,6 +42,8 @@
 		[_document retainObjectsForKey:_key];
 	}
 	observing = NO;
+	
+	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
 	
 	return self;
 }
@@ -180,7 +184,7 @@
 	NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
 	
 	id objects = [_document objectsForKey:_key];
-	if(kind == NSKeyValueChangeInsertion && ([newModels count] == [objects count])){
+	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [objects count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
 			[_delegate objectControllerReloadData:self];
 			return;
