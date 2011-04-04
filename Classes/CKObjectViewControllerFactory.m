@@ -29,21 +29,35 @@
 + (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles{
 	CKObjectViewControllerFactory* factory = [[[CKObjectViewControllerFactory alloc]init]autorelease];
 	factory.mappings = mappings;
+	if(factory.mappings){
+		[factory.mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
+	}
 	factory.styles = styles;
 	return factory;
 }
 
+- (void)setMappings:(id)theMappings{
+	[_mappings release];
+	_mappings = [theMappings retain];
+	if(_mappings){
+		[_mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
+	}
+}
+
 - (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath{
-	[_mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
 	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		id object = [_objectController objectAtIndexPath:indexPath];
-		for(Class c in [_mappings allKeys]){
-			if([object isKindOfClass:c]){
-				return [_mappings objectForKey:c];
-			}
-		}
-	//}
-	return nil;
+	id object = [_objectController objectAtIndexPath:indexPath];
+	Class returnClass = [_mappings objectForKey:[object class]];
+	if(returnClass == nil){
+	   for(Class c in [_mappings allKeys]){
+		   if([object isKindOfClass:c]){
+			   returnClass = [_mappings objectForKey:c];
+			   [_mappings setObject:returnClass forKey:[object class]];
+			   break;
+		   }
+	   }
+	}
+	return returnClass;
 }
 
 - (id)styleForIndexPath:(NSIndexPath*)indexPath{
