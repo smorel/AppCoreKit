@@ -223,6 +223,10 @@
 }
 
 - (void)setDataSource:(id)source forKey:(NSString*)key{
+	CKFeedSource* oldSource = [dataSources objectForKey:key];
+	if(oldSource){
+		[oldSource cancelFetch];
+	}
 	[dataSources setObject:source forKey:key];
 	//[(CKFeedSource*)source fetchNextItems:10];
 }
