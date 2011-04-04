@@ -24,6 +24,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 @property (nonatomic, retain) NSMutableDictionary* cellsToIndexPath;
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
+@property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
+
 - (void)updateNumberOfPages;
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
@@ -51,6 +53,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
+@synthesize headerViewsForSections = _headerViewsForSections;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -124,6 +127,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	editButton = nil;
 	[doneButton release];
 	doneButton = nil;
+	[_headerViewsForSections release];
+	_headerViewsForSections = nil;
     [super dealloc];
 }
 
@@ -775,13 +780,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	CGFloat height = 0;
-	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-			UIView* view = [_objectController headerViewForSection:section];
-			height = view.frame.size.height;
-		}
+	UIView* view = [self tableView:self.tableView viewForHeaderInSection:section];
+	if(view){
+		height = view.frame.size.height;
 	}
-
+	
 	if(height <= 0){
 		if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
 			if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
@@ -800,12 +803,22 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	UIView* view = _headerViewsForSections ? [_headerViewsForSections objectForKey:[NSNumber numberWithInt:section]] : nil;
+	if(view){
+		return view;
+	}
+	
 	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
 		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-			return [_objectController headerViewForSection:section];
+			view = [_objectController headerViewForSection:section];
+			if(_headerViewsForSections == nil){
+				self.headerViewsForSections = [NSMutableDictionary dictionary];
+				[_headerViewsForSections setObject:view forKey:[NSNumber numberWithInt:section]];
+				 return view;
+			}
 		}
 	}
-	return nil;
+	return view;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {

@@ -35,6 +35,7 @@
 	NSMutableDictionary* _indexPathToCells;
 	NSMutableArray* _weakCells;
 	NSIndexPath* _indexPathToReachAfterRotation;
+	NSMutableDictionary* _headerViewsForSections;
 }
 
 @property (nonatomic, retain) id objectController;
