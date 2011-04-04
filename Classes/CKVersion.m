@@ -15,6 +15,10 @@ NSString *CKApplicationVersion() {
 	return appVersion;
 }
 
+static NSString* osVersion = nil;
 NSString *CKOSVersion() {
-	return [[UIDevice currentDevice] systemVersion];
+	if(osVersion == nil){
+		osVersion = [[UIDevice currentDevice] systemVersion];
+	}
+	return osVersion;
 }

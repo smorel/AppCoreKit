@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CloudKit/MAZeroingWeakRef.h>
 #import <CloudKit/CKNSObject+bindings.h>
+#import "CKVersion.h"
 
 static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
@@ -205,7 +206,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
 	}
 	
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+	if ([CKOSVersion() floatValue] < 3.2) {
 		[self.tableView beginUpdates];
 		[self.tableView endUpdates];
 	}
@@ -228,13 +229,13 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 			
-			if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
 			}
 		}
 	}	
 	
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+	if ([CKOSVersion() floatValue] < 3.2) {
 		[self adjustTableView];
 	}
 	
@@ -373,7 +374,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		CGRect frame = view.frame;
 		view.transform = CGAffineTransformMakeRotation(M_PI/2);
 		
-		if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+		if ([CKOSVersion() floatValue] < 3.2) {
 			view.frame = frame;
 			
 			for(UIView* v in view.subviews){
@@ -430,12 +431,12 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
 	
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+	if ([CKOSVersion() floatValue] < 3.2) {
 		[self adjustTableView];
 	}
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 	
-	if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+	if ([CKOSVersion() floatValue] < 3.2) {
 		[self.tableView beginUpdates];
 		[self.tableView endUpdates];
 	}
@@ -459,7 +460,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 			
-			if ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
 			}
 		}

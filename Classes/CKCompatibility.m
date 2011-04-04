@@ -7,9 +7,10 @@
 //
 
 #import "CKCompatibility.h"
+#import <CloudKit/CKVersion.h>
 
 
 CGSize CKShadowSizeMake(CGFloat width, CGFloat height) {
-	height = ([[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) ? -height : height;
+	height = ([CKOSVersion() floatValue] < 3.2) ? -height : height;
 	return CGSizeMake(width, height);
 }
