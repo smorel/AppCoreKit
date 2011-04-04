@@ -66,7 +66,7 @@
 		NSAssert([key isKindOfClass:[NSString class]],@"The mapper key is not a string");
 		
 		CKMapping* mappingObject = (CKMapping*)obj;
-		id sourceObject = [sourceDictionary objectForKey:mappingObject.key];
+		id sourceObject = [sourceDictionary valueForKeyPath:mappingObject.key];
 		if(sourceObject == nil){
 			//TODO : fill error
 			if(DebugLog){

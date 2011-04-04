@@ -271,8 +271,13 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	_indexPathToReachAfterRotation = nil;
-	NSArray* visible = [self.tableView indexPathsForVisibleRows];
-	for(NSIndexPath* indexPath in visible){
+	
+	NSArray *visibleCells = [self.tableView visibleCells];
+	
+	//NSArray* visible = [self.tableView indexPathsForVisibleRows];
+	//for(NSIndexPath* indexPath in visible){
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			_indexPathToReachAfterRotation = indexPath;
@@ -280,8 +285,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		}
 	}
 	
-	if(!_indexPathToReachAfterRotation && [visible count] > 0){
-		_indexPathToReachAfterRotation = [visible objectAtIndex:0];
+	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
+		_indexPathToReachAfterRotation = [visibleCells objectAtIndex:0];
 	}
 }
 
@@ -418,16 +423,19 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
 	
 	_indexPathToReachAfterRotation = nil;
-	NSArray* visible = [self.tableView indexPathsForVisibleRows];
-	for(NSIndexPath* indexPath in visible){
+	//NSArray* visible = [self.tableView indexPathsForVisibleRows];
+	//for(NSIndexPath* indexPath in visible){
+	NSArray *visibleCells = [self.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			_indexPathToReachAfterRotation = indexPath;
 			break;
 		}
 	}
-	if(!_indexPathToReachAfterRotation && [visible count] > 0){
-		_indexPathToReachAfterRotation = [visible objectAtIndex:0];
+	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
+		_indexPathToReachAfterRotation = [visibleCells objectAtIndex:0];
 	}
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
