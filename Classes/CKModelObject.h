@@ -10,9 +10,9 @@
 
 
 @protocol CKMigrating
-- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object;
+- (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object;
 - (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object;
-- (void)propertyAdded:(CKObjectProperty*)property;
+- (void)propertyAdded:(CKClassPropertyDescriptor*)property;
 @end
 
 
@@ -33,12 +33,12 @@
 @property (nonatomic, assign) BOOL creatable;
 
 - (void)reset;
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property;
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end
 
 
-typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
+typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 }
 

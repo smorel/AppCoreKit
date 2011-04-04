@@ -82,7 +82,7 @@
 	[self unbind];
 	
 	id value = [instance1Ref.target valueForKeyPath:keyPath1];
-	CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
+	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
 	[instance2Ref.target setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
 	
 	[instance1Ref.target addObserver:self
@@ -134,7 +134,7 @@
 	
 	id dataValue2 = [instance2Ref.target valueForKeyPath:keyPath2];
 	{
-		CKObjectProperty* property = [NSObject property:instance2Ref.target forKeyPath:keyPath2];
+		CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
 		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
 		if(![newValue2 isEqual:dataValue2]){
 			/*[instance2Ref.target removeObserver:self

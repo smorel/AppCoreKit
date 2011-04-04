@@ -27,7 +27,11 @@
 }
 
 + (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles{
-	CKObjectViewControllerFactory* factory = [[[CKObjectViewControllerFactory alloc]init]autorelease];
+	return [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles withFactoryClass:[CKObjectViewControllerFactory class]];
+}
+
++ (id)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles withFactoryClass:(Class)type{
+	CKObjectViewControllerFactory* factory = (CKObjectViewControllerFactory*)[[[type alloc]init]autorelease];
 	factory.mappings = mappings;
 	if(factory.mappings){
 		[factory.mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];

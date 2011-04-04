@@ -20,6 +20,7 @@
 @property (nonatomic, assign) id objectController;
 
 + (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles;
++ (id)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles withFactoryClass:(Class)type;
 
 - (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath;
 - (id)styleForIndexPath:(NSIndexPath*)indexPath;

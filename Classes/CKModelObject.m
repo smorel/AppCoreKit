@@ -28,7 +28,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	deepCopy = NO;
 }
 
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property{
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
 	if(CKModelObjectPropertyMetaDataSingleton == nil){
 		CKModelObjectPropertyMetaDataSingleton = [[CKModelObjectPropertyMetaData alloc]init];
 	}
@@ -53,9 +53,9 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (id)init{
 	[super init];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		if(property.propertyType == CKObjectPropertyTypeObject){
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.propertyType == CKClassPropertyDescriptorTypeObject){
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 			if(metaData.creatable){
 				id p = [[[property.type alloc]init]autorelease];
@@ -69,9 +69,9 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (void)dealloc{
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		if(property.propertyType == CKObjectPropertyTypeObject){
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.propertyType == CKClassPropertyDescriptorTypeObject){
 			id object = [self valueForKey:property.name];
 			if(object){
 				[object release];
@@ -85,8 +85,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (NSString*)description{
 	NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
 		id object = [self valueForKey:property.name];
 		NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
 		[desc appendString:propertyString];
@@ -98,15 +98,15 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (id) copyWithZone:(NSZone *)zone {
 	id copied = [[[self class] alloc] init];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
+	NSArray* allProperties = [self allPropertyDescriptors ];
+	for(CKClassPropertyDescriptor* property in allProperties){
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 		if(metaData.copiable){
 			id value = [self valueForKey:property.name];
-			if(metaData.deepCopy && property.assignementType != CKObjectPropertyAssignementTypeCopy){
+			if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
 				value = [value copy];
-				if(property.assignementType == CKObjectPropertyAssignementTypeCopy
-				   || property.assignementType == CKObjectPropertyAssignementTypeRetain){
+				if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
+				   || property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain){
 					[value autorelease];
 				}
 			}
@@ -126,8 +126,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		NSArray* names = [aDecoder decodeObjectForKey:CKModelObjectAllPropertyNamesKey];
 		NSMutableArray* allPropertiesInDecoder = [NSMutableArray arrayWithArray:names];
 		
-		NSArray* allProperties = [self allProperties];
-		for(CKObjectProperty* property in allProperties){
+		NSArray* allProperties = [self allPropertyDescriptors];
+		for(CKClassPropertyDescriptor* property in allProperties){
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 			if([aDecoder containsValueForKey:property.name]){
 				id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
@@ -171,8 +171,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void) encodeWithCoder:(NSCoder *)aCoder {
 	NSAssert([aCoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
 	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
 		id object = [self valueForKey:property.name];
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 		if(metaData.serializable){
@@ -188,8 +188,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (BOOL) isEqual:(id)other {
 	if ([other isKindOfClass:[self class]]) {
 		BOOL result = YES;
-		NSArray* allProperties = [self allProperties];
-		for(CKObjectProperty* property in allProperties){
+		NSArray* allProperties = [self allPropertyDescriptors];
+		for(CKClassPropertyDescriptor* property in allProperties){
 			id object = [self valueForKey:property.name];
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 			if(metaData.comparable){
@@ -207,8 +207,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (NSUInteger)hash {
 	NSMutableArray* allValues = [NSMutableArray array];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
 		id object = [self valueForKey:property.name];
 		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
 		if(object && metaData.hashable){
@@ -220,7 +220,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 
 //For Migration
-- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object{
+- (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object{
 	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
 }
 
@@ -228,7 +228,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
 }
 
-- (void)propertyAdded:(CKObjectProperty*)property{
+- (void)propertyAdded:(CKClassPropertyDescriptor*)property{
 	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
 }
 

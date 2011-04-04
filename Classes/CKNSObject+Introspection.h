@@ -27,73 +27,9 @@
  The property is eligible for garbage collection.
  */
 
+#import "CKClassPropertyDescriptor.h"
+
 typedef BOOL(^CKObjectPredicate)(id);
-
-typedef enum{
-	CKObjectPropertyTypeChar,
-	CKObjectPropertyTypeInt,
-	CKObjectPropertyTypeShort,
-	CKObjectPropertyTypeLong,
-	CKObjectPropertyTypeLongLong,
-	CKObjectPropertyTypeUnsignedChar,
-	CKObjectPropertyTypeUnsignedInt,
-	CKObjectPropertyTypeUnsignedShort,
-	CKObjectPropertyTypeUnsignedLong,
-	CKObjectPropertyTypeUnsignedLongLong,
-	CKObjectPropertyTypeFloat,
-	CKObjectPropertyTypeDouble,
-	CKObjectPropertyTypeCppBool,
-	CKObjectPropertyTypeVoid,
-	CKObjectPropertyTypeCharString,
-	CKObjectPropertyTypeObject,
-	CKObjectPropertyTypeClass,
-	CKObjectPropertyTypeSelector,
-	CKObjectPropertyTypeUnknown
-}CKObjectPropertyType;
-
-typedef enum{
-	CKObjectPropertyAssignementTypeCopy,
-	CKObjectPropertyAssignementTypeRetain,
-	CKObjectPropertyAssignementTypeWeak,
-	CKObjectPropertyAssignementTypeAssign
-}CKObjectPropertyAssignementType;
-
-@interface CKObjectProperty : NSObject{
-	NSString* name;
-	Class type;
-	NSString* attributes;
-	SEL metaDataSelector;
-	CKObjectPropertyType propertyType;
-	CKObjectPropertyAssignementType assignementType;
-}
-
-@property (nonatomic, retain, readwrite) NSString *name;
-@property (nonatomic, assign, readwrite) Class type;
-@property (nonatomic, retain, readwrite) NSString *attributes;
-@property (nonatomic, assign, readwrite) SEL metaDataSelector;
-@property (nonatomic, assign, readwrite) CKObjectPropertyType propertyType;
-@property (nonatomic, assign, readwrite) CKObjectPropertyAssignementType assignementType;
-
--(NSString*)getTypeDescriptor;
-- (NSString*)className;
-
-@end
-
-
-@interface CKObjectPropertyManager : NSObject{
-	NSMutableDictionary* _propertiesByClassName;
-	NSMutableDictionary* _propertyNamesByClassName;
-}
-
-+ (CKObjectPropertyManager*)defaultManager;
-- (NSArray*)allPropertiesForClass:(Class)class;
-- (NSArray*)allPropertieNamesForClass:(Class)class;
-- (CKObjectProperty*)property:(NSString*)name forClass:(Class)class;
-
-@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;
-
-@end
 
 
 @interface NSObject (CKNSObjectIntrospection)
@@ -102,7 +38,7 @@ typedef enum{
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType;
 + (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType;
 
-- (NSArray*)allProperties;
+- (NSArray*)allPropertyDescriptors;
 - (NSArray*)allPropertyNames;
 
 - (NSMutableArray*)subObjects :(CKObjectPredicate)expandWith insertWith:(CKObjectPredicate)insertWith includeSelf:(BOOL)includeSelf;
@@ -113,10 +49,11 @@ typedef enum{
 + (SEL)setSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName;
 
-+(CKObjectProperty*) property:(Class)c forKey:(NSString*)name;
-+(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath;
++(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name;
++(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath;
 
 - (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects;
+- (void)introspection:(Class)c array:(NSMutableArray*)array;
 
 @end
 
