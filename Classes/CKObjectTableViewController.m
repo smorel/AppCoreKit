@@ -101,11 +101,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	self.objectController = controller;
 	self.controllerFactory = factory;
 	
-	if([controller conformsToProtocol:@protocol(CKObjectController)]){
+	//if([controller conformsToProtocol:@protocol(CKObjectController)]){
 		if([controller respondsToSelector:@selector(setDelegate:)]){
 			[controller performSelector:@selector(setDelegate:) withObject:self];
 		}
-	}
+	//}
 	[self postInit];
 	return self;
 }
@@ -134,11 +134,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (void)setObjectController:(id)controller{
-	if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(setDelegate:)]){
 			[_objectController performSelector:@selector(setDelegate:) withObject:nil];
 		}
-	}
+	//}
 	
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
@@ -155,11 +155,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		[_objectController viewWillAppear];
 	}
 	
-	if(controller && [controller conformsToProtocol:@protocol(CKObjectController)]){
+	//if(controller && [controller conformsToProtocol:@protocol(CKObjectController)]){
 		if([controller respondsToSelector:@selector(setDelegate:)]){
 			[controller performSelector:@selector(setDelegate:) withObject:self];
 		}
-	}
+	//}
 	
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
@@ -191,7 +191,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	if([_objectController respondsToSelector:@selector(viewWillAppear)]){
 		[_objectController viewWillAppear];
 	}
 	
@@ -262,7 +262,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	if([_objectController respondsToSelector:@selector(viewWillDisappear)]){
 		[_objectController viewWillDisappear];
 	}
 	
@@ -311,7 +311,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation size:(CGSize)size{
 	CGFloat height = 0;
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:indexPath];
 			
@@ -334,7 +334,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				height = (_orientation == CKTableViewOrientationLandscape) ? size.width : size.height;
 			}
 		}
-	}
+	//}
 	
 	NSIndexPath* toReach = [_indexPathToReachAfterRotation copy];
 	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
@@ -478,20 +478,20 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 #pragma mark UITableView DataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(numberOfSections)]){
 			return [_objectController numberOfSections];
 		}
-	}
+	//}
 	return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
 			return [_objectController numberOfObjectsForSection:section];
 		}
-	}
+	//}
 	return 0;
 }
 
@@ -509,7 +509,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:indexPath];
 			
@@ -531,7 +531,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				return flags;
 			}
 		}
-	}
+	//}
 	return CKTableViewCellFlagNone;
 }
 
@@ -568,7 +568,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:indexPath];
 			
@@ -649,7 +649,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				return cell;
 			}
 		}
-	}
+	//}
 	
 	return nil;
 }
@@ -701,12 +701,12 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete){
-		if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+		//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 			if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 				[_objectController removeObjectAtIndexPath:indexPath];
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
 			}
-		}
+		//}
 	}
 }
 
@@ -723,20 +723,20 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(targetIndexPathForMoveFromRowAtIndexPath:toProposedIndexPath:)]){
 			return [_objectController targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
 		}
-	}
+	//}
 	return [NSIndexPath indexPathForRow:0 inSection:-1];
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(moveObjectFromIndexPath:toIndexPath:)]){
 			[_objectController moveObjectFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
 		}
-	}
+	//}
 }
 
 #pragma mark CKFeedDataSourceDelegate
@@ -766,11 +766,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 #pragma mark UITableView Protocol for Sections
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
 		if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
 			return [_objectController headerTitleForSection:section];
 		}
-	}
+	//}
 	return @"";
 }
 
@@ -787,13 +787,13 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	}
 	
 	if(height <= 0){
-		if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+		//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
 			if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
 				if( [_objectController headerTitleForSection:section] != nil ){
 					height = 30;
 				}
 			}
-		}
+		//}
 	}
 	return height;
 }
@@ -809,7 +809,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		return view;
 	}
 	
-	if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
+	//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
 		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
 			view = [_objectController headerViewForSection:section];
 			if(_headerViewsForSections == nil){
@@ -818,7 +818,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				 return view;
 			}
 		}
-	}
+	//}
 	return view;
 }
 
