@@ -37,7 +37,7 @@
 }
 
 - (NSString*)className{
-	return [NSString stringWithUTF8String:class_getName(self.type)];
+	return  NSStringFromClass(self.type);//[NSString stringWithUTF8String:class_getName(self.type)];
 }
 
 - (void)setAttributes:(NSString *)att{
@@ -236,7 +236,7 @@ static NSString* getPropertyType(objc_property_t property) {
 
 
 - (NSString*)className{
-	return [NSString stringWithUTF8String:class_getName([self class])];
+	return NSStringFromClass([self class]);//[NSString stringWithUTF8String:class_getName([self class])];
 }
 
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
@@ -392,7 +392,7 @@ static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 }
 
 - (NSArray*)allPropertiesForClass:(Class)class{
-	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSString* className =  NSStringFromClass(class);//[NSString stringWithUTF8String:class_getName(class)];
 	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
 	if(allProperties == nil){
 		allProperties = [NSMutableArray array];
@@ -411,7 +411,7 @@ static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
 
 
 - (NSArray*)allPropertieNamesForClass:(Class)class{
-	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSString* className =  NSStringFromClass(class);//[NSString stringWithUTF8String:class_getName(class)];
 	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:className];
 	if(allPropertyNames == nil){
 		[self allPropertiesForClass:class];

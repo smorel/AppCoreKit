@@ -54,7 +54,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 
 //The client should release the object returned !
 - (id)dequeueReusableBindingWithClass:(Class)bindingClass{
-	NSString* className = [NSString stringWithUTF8String:class_getName(bindingClass)];
+	NSString* className = NSStringFromClass(bindingClass);//[NSString stringWithUTF8String:class_getName(bindingClass)];
 	NSMutableArray* bindings = [_bindingsPoolForClass valueForKey:className];
 	if(!bindings){
 		bindings = [NSMutableArray array];
@@ -71,7 +71,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 }
 
 - (void)bind:(id)binding withContext:(id)context{
-	if([binding conformsToProtocol:@protocol(CKBinding)]){
+	if([binding respondsToSelector:@selector(bind)]){
 		[binding performSelector:@selector(bind)];
 	}
 	
@@ -96,7 +96,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	}
 	
 	//Put the binding in the reusable queue
-	NSString* className = [NSString stringWithUTF8String:class_getName([binding class])];
+	NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
 	NSMutableArray* queuedBindings = [_bindingsPoolForClass valueForKey:className];
 	if(!queuedBindings){
 		queuedBindings = [NSMutableArray array];
@@ -113,9 +113,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 }
 
 - (void)unbind:(id)binding{
-	if([binding conformsToProtocol:@protocol(CKBinding)]){
+	if([binding respondsToSelector:@selector(unbind)]){
 		[binding performSelector:@selector(unbind)];
-		[binding performSelector:@selector(reset)];
+		if([binding respondsToSelector:@selector(reset)]){
+			[binding performSelector:@selector(reset)];
+		}
 	}
 	[self unregister:binding];
 }
@@ -127,12 +129,14 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	}
 	
 	for(id binding in bindings){
-		if([binding conformsToProtocol:@protocol(CKBinding)]){
+		if([binding respondsToSelector:@selector(unbind)]){
 			[binding performSelector:@selector(unbind)];
-			[binding performSelector:@selector(reset)];
+			if([binding respondsToSelector:@selector(reset)]){
+				[binding performSelector:@selector(reset)];
+			}
 		}
 		
-		NSString* className = [NSString stringWithUTF8String:class_getName([binding class])];
+		NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
 		NSMutableArray* queuedBindings = [_bindingsPoolForClass valueForKey:className];
 		if(!queuedBindings){
 			queuedBindings = [NSMutableArray array];
