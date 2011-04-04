@@ -15,6 +15,8 @@
 #import <CloudKit/MAZeroingWeakRef.h>
 #import <CloudKit/CKNSObject+bindings.h>
 
+static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
+
 //
 
 @interface CKObjectTableViewController ()
@@ -28,6 +30,9 @@
 - (void)adjustView;
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
+
++ (NSString*)identifierForClass:(Class)theClass;
+
 @end
 
 //
@@ -540,6 +545,22 @@
 	[_weakCells removeObject:sender];
 }
 
+/* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
+          as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
+ */
++ (NSString*)identifierForClass:(Class)theClass{
+	if(CKObjectTableViewControllerClassToIdentifier == nil){
+		CKObjectTableViewControllerClassToIdentifier = [[NSMutableDictionary alloc]init];
+	}
+	NSString* identifier = [CKObjectTableViewControllerClassToIdentifier objectForKey:theClass];
+	if(identifier)
+		return identifier;
+	
+	identifier = [theClass description];//NSStringFromClass(theClass);
+	[CKObjectTableViewControllerClassToIdentifier setObject:identifier forKey:theClass];
+	return identifier;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -547,14 +568,17 @@
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass){
-				NSString* identifier = [NSString stringWithUTF8String:class_getName(controllerClass)];
+				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass];
 				
+				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
 				CKTableViewCellController* controller = nil;
 				if(cell == nil){
+					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 					controller = [[[controllerClass alloc]init]autorelease];
 					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
 					cell = [controller loadCell];
+					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 					
 					//Register cell to controller
@@ -573,6 +597,7 @@
 					[cellRef release];
 				}
 				else{
+					//NSLog(@"reusing cell for identifier:%@ adress=%p",identifier,identifier);
 					NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:cell]];
 					[_indexPathToCells removeObjectForKey:previousPath];
 					

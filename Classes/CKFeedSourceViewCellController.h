@@ -24,7 +24,7 @@
 
 @end
 
-@interface CKFeedSourceViewCellController : CKStandardCellController {
+@interface CKFeedSourceViewCellController : CKTableViewCellController {
 }
 
 @end

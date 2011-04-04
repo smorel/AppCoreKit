@@ -706,8 +706,8 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
-				751004C41337BB38008B0E7B /* ObjectTableView */,
-				751004C31337BB28008B0E7B /* Controllers */,
+				751004C41337BB38008B0E7B /* Object TableViews */,
+				751004C31337BB28008B0E7B /* Object Controllers */,
 				7531425B130B0C4F006F4F60 /* Document */,
 				4FAD0FA111C2D5C80071C7BF /* Tables */,
 				715CA152110E36F700593672 /* UI */,
@@ -1197,7 +1197,7 @@
 			name = MAZeroingWeakRef;
 			sourceTree = "<group>";
 		};
-		751004C31337BB28008B0E7B /* Controllers */ = {
+		751004C31337BB28008B0E7B /* Object Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				751004AB1337BB1C008B0E7B /* CKDocumentController.h */,
@@ -1206,10 +1206,10 @@
 				751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */,
 				751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */,
 			);
-			name = Controllers;
+			name = "Object Controllers";
 			sourceTree = "<group>";
 		};
-		751004C41337BB38008B0E7B /* ObjectTableView */ = {
+		751004C41337BB38008B0E7B /* Object TableViews */ = {
 			isa = PBXGroup;
 			children = (
 				75E71A81133A6A1C00CAAE66 /* CKFeedTableViewController.h */,
@@ -1219,7 +1219,7 @@
 				751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */,
 				751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */,
 			);
-			name = ObjectTableView;
+			name = "Object TableViews";
 			sourceTree = "<group>";
 		};
 		7531425B130B0C4F006F4F60 /* Document */ = {
