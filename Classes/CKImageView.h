@@ -38,6 +38,13 @@ typedef enum {
 	CKImageViewStateImage
 }CKImageViewState;
 
+typedef enum{
+	CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
+    CKImageViewSpinnerStyleWhite = UIActivityIndicatorViewStyleWhite,
+    CKImageViewSpinnerStyleGray = UIActivityIndicatorViewStyleGray,
+	CKImageViewSpinnerStyleNone
+}CKImageViewSpinnerStyle;
+
 @interface CKImageView : UIView <CKImageLoaderDelegate> {
 	//Image Management
 	CKImageLoader *_imageLoader;
@@ -48,6 +55,7 @@ typedef enum {
 	UIImage *_defaultImage;	
 	UIImageView* _defaultImageView;
 	UIActivityIndicatorView* _activityIndicator;
+	CKImageViewSpinnerStyle _spinnerStyle;
 	
 	//View Management
 	UIImageView* _imageView;
@@ -66,6 +74,7 @@ typedef enum {
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
 @property (nonatomic, assign, readwrite) BOOL interactive;
 @property (nonatomic, retain, readonly) UIButton *button;
+@property (nonatomic, assign, readwrite) CKImageViewSpinnerStyle spinnerStyle;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;

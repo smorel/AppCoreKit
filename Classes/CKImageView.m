@@ -37,6 +37,7 @@
 @synthesize button = _button;
 @synthesize defaultImageView = _defaultImageView;
 @synthesize activityIndicator = _activityIndicator;
+@synthesize spinnerStyle = _spinnerStyle;
 
 
 - (void)postInit{
@@ -47,9 +48,6 @@
 	self.defaultImageView = [[[UIImageView alloc] initWithFrame:self.bounds]autorelease];
 	self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
-	
-	//Activity indicator should start/stop and be added with the request ...
-	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
 
 	self.button = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.button.frame = self.bounds;
@@ -61,6 +59,7 @@
 	self.fadeInDuration = 0;
 	self.interactive = NO;
 	_currentState = CKImageViewStateNone;
+	_spinnerStyle = CKImageViewSpinnerStyleNone;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder{
@@ -178,8 +177,10 @@
 - (void)removeCurrentView{
 	switch(_currentState){
 		case CKImageViewStateSpinner:{
-			[self.activityIndicator stopAnimating];
-			[self.activityIndicator removeFromSuperview];
+			if(self.activityIndicator){
+				[self.activityIndicator stopAnimating];
+				[self.activityIndicator removeFromSuperview];
+			}
 			break;
 		}
 		case CKImageViewStateDefaultImage:{
@@ -205,14 +206,17 @@
 		if(self.imageLoader){
 			if(_currentState != CKImageViewStateSpinner){
 				[self removeCurrentView];
-				self.activityIndicator.center = self.center;
-				self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-				self.activityIndicator.frame = CGRectMake(self.bounds.size.width / 2 - self.activityIndicator.bounds.size.width / 2,
-														  self.bounds.size.height / 2 - self.activityIndicator.bounds.size.height / 2,
-														  self.activityIndicator.bounds.size.width,
-														  self.activityIndicator.bounds.size.height);
-				[self addSubview:self.activityIndicator];
-				[self.activityIndicator startAnimating];
+				if(_spinnerStyle != CKImageViewSpinnerStyleNone){
+					self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)_spinnerStyle] autorelease];
+					self.activityIndicator.center = self.center;
+					self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+					self.activityIndicator.frame = CGRectMake(self.bounds.size.width / 2 - self.activityIndicator.bounds.size.width / 2,
+															  self.bounds.size.height / 2 - self.activityIndicator.bounds.size.height / 2,
+															  self.activityIndicator.bounds.size.width,
+															  self.activityIndicator.bounds.size.height);
+					[self addSubview:self.activityIndicator];
+					[self.activityIndicator startAnimating];
+				}
 				_currentState = CKImageViewStateSpinner;
 			}
 		}
