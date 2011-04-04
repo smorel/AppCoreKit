@@ -172,17 +172,27 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-		if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-			[_delegate objectControllerDidBeginUpdating:self];
-		}
-	//}
-	
+		
 	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
 	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
 	NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
 	
 	NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+	
+	id objects = [_document objectsForKey:_key];
+	if(kind == NSKeyValueChangeInsertion && ([newModels count] == [objects count])){
+		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+			[_delegate objectControllerReloadData:self];
+			return;
+		}
+	}
+	
+	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+	if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
+		[_delegate objectControllerDidBeginUpdating:self];
+	}
+	//}
+	
 
 	int count = 0;
 	unsigned currentIndex = [indexs firstIndex];

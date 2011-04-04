@@ -75,6 +75,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 
 - (void)postInit{
+	_rowInsertAnimation = UITableViewRowAnimationFade;
+	_rowRemoveAnimation = UITableViewRowAnimationFade;
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
@@ -644,7 +646,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				[self updateNumberOfPages];
 				
 				
-				[self printDebug:[NSString stringWithFormat:@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section]];
+				//NSLog(@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section);
 				
 				return cell;
 			}
@@ -741,11 +743,17 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 #pragma mark CKFeedDataSourceDelegate
 
+- (void)objectControllerReloadData:(id)controller{
+	[self.tableView reloadData];
+}
+
 - (void)objectControllerDidBeginUpdating:(id)controller{
 	[self.tableView beginUpdates];
+//	NSLog(@"beginUpdates");
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
+//	NSLog(@"endUpdates");
 	[self.tableView endUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -755,12 +763,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:_rowInsertAnimation];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	//[self fetchMoreIfNeededAtIndexPath:indexPath];
+	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:_rowRemoveAnimation];
 }
 
 #pragma mark UITableView Protocol for Sections

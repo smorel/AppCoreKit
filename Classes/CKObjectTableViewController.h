@@ -25,6 +25,9 @@
 	BOOL _scrolling;
 	BOOL _editable;
 	
+	UITableViewRowAnimation _rowInsertAnimation;
+	UITableViewRowAnimation _rowRemoveAnimation;
+	
 	//for editable tables
 	UIBarButtonItem *editButton;
 	UIBarButtonItem *doneButton;
@@ -42,6 +45,8 @@
 @property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
 
 @property (nonatomic, assign) CKTableViewOrientation orientation;
+@property (nonatomic, assign) UITableViewRowAnimation rowInsertAnimation;
+@property (nonatomic, assign) UITableViewRowAnimation rowRemoveAnimation;
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
 @property (nonatomic, assign) int currentPage;
 @property (nonatomic, assign) int numberOfPages;

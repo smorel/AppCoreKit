@@ -43,6 +43,7 @@
 
 @protocol CKObjectControllerDelegate
 
+- (void)objectControllerReloadData:(id)controller;
 - (void)objectControllerDidBeginUpdating:(id)controller;
 - (void)objectControllerDidEndUpdating:(id)controller;  
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
