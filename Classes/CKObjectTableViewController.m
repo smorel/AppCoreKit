@@ -392,8 +392,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (void)adjustTableView{
 	[self adjustView];
-	self.tableView.autoresizingMask = UIViewAutoresizingNone;
-	self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
+	
+	if(_orientation == CKTableViewOrientationLandscape) {
+		self.tableView.autoresizingMask = UIViewAutoresizingNone;
+		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
+	}
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
