@@ -35,14 +35,14 @@
 
 - (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath{
 	[_mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
-	if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
+	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
 		for(Class c in [_mappings allKeys]){
 			if([object isKindOfClass:c]){
 				return [_mappings objectForKey:c];
 			}
 		}
-	}
+	//}
 	return nil;
 }
 

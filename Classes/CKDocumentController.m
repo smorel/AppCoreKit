@@ -73,14 +73,14 @@
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	NSAssert(section == 0,@"Invalid section");
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
+	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(fetchRange:forKey:)]){
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
 				range.location--;
 			}
 			[_document fetchRange:range forKey:_key];
 		}
-	}
+	//}
 }
 
 - (NSInteger)numberOfSections{
@@ -88,7 +88,7 @@
 }
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
+	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
@@ -100,7 +100,7 @@
 			}
 
 		}
-	}
+	//}
 	return 0;
 }
 
@@ -112,7 +112,7 @@
 	if(indexPath.length != 2)
 		return nil;
 	
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
+	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
 			if(indexPath.row < [objects count]){
@@ -124,7 +124,7 @@
 			}
 
 		}
-	}
+	//}
 	return nil;
 }
 
@@ -132,11 +132,11 @@
 	if(indexPath.length != 2)
 		return;
 	
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
+	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(removeObjects:forKey:)]){
 			[_document removeObjects:[NSArray arrayWithObject:[self objectAtIndexPath:indexPath]] forKey:_key];
 		}
-	}
+	//}
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
@@ -152,13 +152,13 @@
 		[_document removeObserver:self forKey:_key];
 	}
 	
-	if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
+	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(removeObjects:forKey:)]){
 			id object = [self objectAtIndexPath:indexPath];
 			[_document removeObjects:[NSArray arrayWithObject:object] forKey:_key];
 			[_document addObjects:[NSArray arrayWithObject:object] atIndex:indexPath2.row forKey:_key];
 		}
-	}
+	//}
 	if(_document){
 		[_document addObserver:self forKey:_key];
 	}
@@ -172,11 +172,11 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-	if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 		if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
 			[_delegate objectControllerDidBeginUpdating:self];
 		}
-	}
+	//}
 	
 	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
 	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
@@ -190,11 +190,11 @@
 		case NSKeyValueChangeInsertion:{
 			while (currentIndex != NSNotFound) {
 				NSAssert(count < [newModels count],@"Problem with observer change newModels");
-				if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
 						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
-				}
+				//}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
 				++count;
 			}
@@ -203,11 +203,11 @@
 		case NSKeyValueChangeRemoval:{
 			while (currentIndex != NSNotFound) {
 				NSAssert(count < [oldModels count],@"Problem with observer change newModels");
-				if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
 						[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
-				}
+				//}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
 				++count;
 			}
@@ -215,11 +215,11 @@
 		}
 	}	
 	
-	if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 		if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
 			[_delegate objectControllerDidEndUpdating:self];
 		}
-	}
+	//}
 }
 
 
