@@ -24,9 +24,29 @@
 @synthesize stickySelection = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
 
+- (void)postInit {
+	self.style = UITableViewStylePlain;
+}
+
 - (id)init {
 	if (self = [super initWithNibName:nil bundle:nil]) {
-		self.style = UITableViewStylePlain;
+		[self postInit];
+	}
+	return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		[self postInit];
 	}
 	return self;
 }
@@ -34,6 +54,7 @@
 - (id)initWithStyle:(UITableViewStyle)style { 
 	self = [super init];
 	if (self) {
+		[self postInit];
 		self.style = style;
 	}
 	return self;

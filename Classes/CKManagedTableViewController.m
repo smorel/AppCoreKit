@@ -76,6 +76,7 @@
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 
 - (void)postInit {
+	[super postInit];
 	self.style = UITableViewStyleGrouped;
 	_orientation = CKManagedTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
@@ -92,13 +93,6 @@
 }
 
 //
-
-- (id)init {
-    if (self = [super init]) {
-		[self postInit];
-    }
-    return self;
-}
 
 - (void)dealloc {
 	[self clear];

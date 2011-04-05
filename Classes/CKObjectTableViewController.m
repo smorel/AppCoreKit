@@ -75,6 +75,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 
 - (void)postInit{
+	[super postInit];
 	_rowInsertAnimation = UITableViewRowAnimationFade;
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
 	_orientation = CKTableViewOrientationPortrait;
@@ -83,19 +84,6 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	_numberOfPages = 0;
 	_scrolling = NO;
 	_editable = NO;
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
-	[super initWithCoder:decoder];
-	[self postInit];
-	return self;
-}
-
-- (id)init {
-    if (self = [super init]) {
-		[self postInit];
-    }
-    return self;
 }
 
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
@@ -108,7 +96,6 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			[controller performSelector:@selector(setDelegate:) withObject:self];
 		}
 	//}
-	[self postInit];
 	return self;
 }
 
