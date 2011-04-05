@@ -756,6 +756,11 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 - (void)objectControllerReloadData:(id)controller{
 	[self.tableView reloadData];
+	
+	//bad solution because the contentsize is updated at the end of insert animation ....
+	//could be better if we could observe or be notified that the contentSize has changed.
+	NSTimeInterval delay = 0.4;
+	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:delay];
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
@@ -769,8 +774,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
-	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:0.4];
-	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:0.4];
+	NSTimeInterval delay = 0.4;
+	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
+	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:delay];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
