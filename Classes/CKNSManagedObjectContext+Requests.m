@@ -71,7 +71,7 @@
 		return [NSArray array];
 	}
 	
-	CKDebugLog(@"Success fetching %d result(s) for [%@]", fetchResults.count, predicate);
+//	CKDebugLog(@"Success fetching %d result(s) for [%@]", fetchResults.count, predicate);
 	
 	return fetchResults;
 }

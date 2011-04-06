@@ -16,9 +16,11 @@
 
 - (id)initWithTitle:(NSString *)title {
     if ((self = [super initWithFrame:CGRectMake(0, 0, 320, (title ? 110 :60))])) {
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		CGFloat yOffset = 0;
 		if (title) {
 			UILabel *titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)] autorelease];
+			titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			titleLabel.backgroundColor = [UIColor clearColor];
 			titleLabel.font = [UIFont systemFontOfSize:16];
 			titleLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
@@ -32,6 +34,8 @@
 		}
 		
 		UIImageView *wherecloudLogo = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"CKCreditsFooterViewWCLogo.png"]] autorelease];
+		wherecloudLogo.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		wherecloudLogo.contentMode = UIViewContentModeCenter;
 		wherecloudLogo.center = self.center;
 		CGRect logoFrame = wherecloudLogo.frame;
 		logoFrame.origin.y = yOffset;
@@ -39,6 +43,7 @@
 		[self addSubview:wherecloudLogo];
 
 		UILabel *wherecloudLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(wherecloudLogo.frame) + 5, 320, 25)] autorelease];
+		wherecloudLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		wherecloudLabel.backgroundColor = [UIColor clearColor];
 		wherecloudLabel.font = [UIFont systemFontOfSize:16];
 		wherecloudLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
@@ -58,6 +63,5 @@
 - (void)dealloc {
     [super dealloc];
 }
-
 
 @end

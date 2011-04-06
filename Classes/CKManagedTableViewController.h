@@ -35,16 +35,27 @@
 
 @end
 
+
+
+typedef enum {
+	CKManagedTableViewOrientationPortrait,
+	CKManagedTableViewOrientationLandscape
+} CKManagedTableViewOrientation;
+
 //
 
 @interface CKManagedTableViewController : CKTableViewController <UIScrollViewDelegate> {
 	id _managedTableViewDelegate;
 	NSMutableArray *_sections;
 	NSMutableDictionary *_valuesForKeys;
+	CKManagedTableViewOrientation _orientation;
+	BOOL _resizeOnKeyboardNotification;
 }
 
 @property (nonatomic, assign) id managedTableViewDelegate;
 @property (nonatomic, readonly) NSDictionary *valuesForKeys;
+@property (nonatomic, assign, readwrite) CKManagedTableViewOrientation orientation;
+@property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
 
 - (void)setup;
 - (void)clear;
@@ -55,6 +66,9 @@
 - (void)addSection:(CKTableSection *)section;
 - (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers;
 - (CKTableSection *)addSectionWithCellControllers:(NSArray *)cellControllers headerTitle:(NSString *)headerTitle footerTitle:(NSString *)footerTitle;
+- (void)insertCellController:(CKTableViewCellController*)cellController atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
+- (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
+- (CKTableSection*)sectionAtIndex:(NSUInteger)index;
 
 @end
 

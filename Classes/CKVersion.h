@@ -7,3 +7,4 @@
 //
 
 NSString *CKApplicationVersion();
+NSString *CKOSVersion();

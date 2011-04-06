@@ -9,6 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "CKManagedTableViewController.h"
 
+enum{
+	CKTableViewCellFlagNone = 1UL << 0,
+	CKTableViewCellFlagSelectable = 1UL << 1,
+	CKTableViewCellFlagEditable = 1UL << 2,
+	CKTableViewCellFlagRemovable = 1UL << 3,
+	CKTableViewCellFlagMovable = 1UL << 4,
+	CKTableViewCellFlagAll = CKTableViewCellFlagSelectable | CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable
+};
+typedef NSUInteger CKTableViewCellFlags;
+
 @interface CKTableViewCellController : NSObject {
 	NSString *_key;
 	id _value;
@@ -20,15 +30,21 @@
 	BOOL _movable;
 	UITableViewCellAccessoryType _accessoryType;
 	NSIndexPath *_indexPath;
-	CKManagedTableViewController *_parentController;
+	CKTableViewController *_parentController;
 	CGFloat _rowHeight;
+	
+	id _controllerStyle;
+	
+	//Set when reusing controllers via CKObjectTableViewController
+	UITableViewCell* _tableViewCell;
 }
 
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) id value;
+@property (nonatomic, retain) id controllerStyle;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) CKManagedTableViewController *parentController;
+@property (nonatomic, assign, readonly) CKTableViewController *parentController;
 @property (nonatomic, assign, readonly) UITableViewCell *tableViewCell;
 
 @property (nonatomic, retain) id target;
@@ -50,6 +66,7 @@
 
 - (UITableViewCell *)loadCell;
 - (void)setupCell:(UITableViewCell *)cell;
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
 - (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;

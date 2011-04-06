@@ -9,13 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "CKStandardCellController.h"
 
+typedef enum {
+	CKToggleSwitchCellStyleSwitch = 0,
+	CKToggleSwitchCellStyleCheckmark
+} CKToggleSwitchCellStyle;
 
 @interface CKToggleSwitchCellController : CKStandardCellController {
+	CKToggleSwitchCellStyle _switchCellStyle;
 	BOOL _enabled;
 }
 
 @property (nonatomic, assign, getter=isEnabled, setter=enable:) BOOL enabled;
 
 - (id)initWithTitle:(NSString *)title value:(BOOL)value;
+- (id)initWithTitle:(NSString *)title value:(BOOL)value style:(CKToggleSwitchCellStyle)style;
 
 @end

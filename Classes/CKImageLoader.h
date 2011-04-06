@@ -7,28 +7,35 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKWebRequest2.h"
 
-#import "CKWebRequest.h"
-
+extern NSString * const CKImageLoaderErrorDomain;
 
 @interface CKImageLoader : NSObject <CKWebRequestDelegate> {
 	id _delegate;
-	CKWebRequest *_request;
+	CKWebRequest2 *_request;
 	NSURL *_imageURL;
-	CGSize _imageSize;
-	BOOL _aspectFill;
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, assign) CGSize imageSize;
-@property (nonatomic, assign) BOOL aspectFill;
+@property (nonatomic, retain) NSURL *imageURL;
 
 - (id)initWithDelegate:(id)delegate;
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)cancel;
 
-+ (UIImage *)imageForURL:(NSURL *)url;
-+ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size;
++ (UIImage *)imageForURL:(NSURL *)URL;
+
+@end
+
+//
+
+@interface CKImageLoader (Deprecated)
+
+@property (nonatomic, assign) CGSize imageSize DEPRECATED_ATTRIBUTE; 
+@property (nonatomic, assign) BOOL aspectFill DEPRECATED_ATTRIBUTE; 
+
++ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size DEPRECATED_ATTRIBUTE;
 
 @end
 

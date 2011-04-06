@@ -33,11 +33,15 @@
 - (id)init {
 	if (self = [super init]) {
 		self.cachedObjects = [NSMutableDictionary dictionaryWithCapacity:20];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification:) 
+													 name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 	}
 	return self;
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 	self.cachedObjects = nil;
     [super dealloc];
 }

@@ -16,6 +16,7 @@
 
 @interface CKLocationManager (Private)
 
+- (void)registerNotifications;
 - (void)findCurrentCoordinateWithAddress:(BOOL)findAddress;
 - (void)findAddressAtCurrentCoordinate;
 - (BOOL)isAccurateLocation:(CLLocation *)location;
@@ -60,7 +61,9 @@
 		self.timeToLive = K_LOCATION_VALID_TIME_THRESHOLD;
 		self.acquisitionTimeout = K_LOCATION_ACQUISITION_TIMEOUT;
 		self.accuracyThreshold = K_LOCATION_ACCURACY_THRESHOLD;
-	}
+
+		[self registerNotifications];
+}
 	return self;
 }
 
@@ -269,6 +272,25 @@
 	// Post a notification
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:error forKey:@"error"];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kLocationManagerDidFailAddressNotification object:nil userInfo:userInfo];
+}
+
+#pragma mark Multitasking Notifications
+
+- (void)registerNotifications {
+	if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)] && [UIDevice currentDevice].multitaskingSupported) {
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(applicationWillEnterForeground:)
+													 name:UIApplicationWillEnterForegroundNotification
+												   object:nil];
+	}
+}
+
+// Workaround to detect location availability after the application enters foreground, it seems that the
+// property -locationServicesEnabled is not reliable at this step. So, we'll do another run of update to 
+// check if it will fail.
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification {
+	[self findCurrentAddress];
 }
 
 @end

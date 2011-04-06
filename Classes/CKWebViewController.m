@@ -23,15 +23,12 @@
 @property (nonatomic, readwrite, retain) NSMutableArray *toolbarButtonsStatic;
 @end
 
-
 @interface CKWebViewController ()
 @property (nonatomic, retain) NSString *HTMLString;
 @property (nonatomic, retain) NSURL *baseURL;
 - (void)generateToolbar;
 - (void)updateToolbar;
 @end
-
-
 
 @implementation CKWebViewController
 
@@ -46,6 +43,10 @@
 @synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
 @synthesize _showURLInTitle;
 @synthesize hidesToolbar = _hidesToolbar;
+@synthesize onLoadScript = _onLoadScript;
+@synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
+@synthesize maxContentSizeForViewInPopover = _maxContentSizeForViewInPopover;
+@synthesize canBeDismissed = _canBeDismissed;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -99,6 +100,16 @@
 	// Load the HTML string
 	if (self.HTMLString) {
 		[_webView loadHTMLString:self.HTMLString baseURL:self.baseURL];
+	}
+	
+	self.contentSizeForViewInPopover = self.minContentSizeForViewInPopover;
+	
+	if (_canBeDismissed) {
+		UIBarButtonItem *cancelButton = 
+		  [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+														 target:self
+														 action:@selector(dismiss)] autorelease];
+		self.navigationItem.leftBarButtonItem = cancelButton;
 	}
 }
 
@@ -159,6 +170,7 @@
 	[_toolbarButtonsStatic release];
 	[_toolbarButtonsLoading release];
 	[_navigationControllerStyles release];
+	[_onLoadScript release];
     [super dealloc];
 }
 
@@ -196,7 +208,6 @@
 	[_webView reload];
 }
 
-
 #pragma mark -
 #pragma mark Toolbar Customization
 
@@ -216,15 +227,15 @@
 	switch (button) {
 		case CKWebViewButtonBack:
 			[btn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-			self.backButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.backButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		case CKWebViewButtonForward:
 			[btn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
-			self.forwardButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.forwardButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		case CKWebViewButtonReload:
 			[btn addTarget:self action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
-			self.reloadButton = [[UIBarButtonItem alloc] initWithCustomView:btn];
+			self.reloadButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
 			break;
 		default:
 			break;
@@ -237,12 +248,11 @@
 	_spinner.activityIndicatorViewStyle = style;
 }
 
-
 #pragma mark -
 #pragma mark WebView Delegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-	if([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
+	if ([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
 	return YES;
 }
 
@@ -259,14 +269,32 @@
 	// Update the title
 	if (_showURLInTitle) self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 	
+	// Run the optional after the view has finished loading
+	if (_onLoadScript) [_webView stringByEvaluatingJavaScriptFromString:_onLoadScript];
+	
+	// Change the size of the popover according to the size of the body
+	CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
+	
+	if (height > 0) {
+		if (height < self.minContentSizeForViewInPopover.height) height = self.minContentSizeForViewInPopover.height;
+		if (height > self.maxContentSizeForViewInPopover.height) height = self.maxContentSizeForViewInPopover.height;
+		
+		self.contentSizeForViewInPopover = CGSizeMake(self.contentSizeForViewInPopover.width, height);
+	}
+		
 	_webView.hidden = NO;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;	
 	[self updateToolbar];
 }
 
+#pragma mark -
+#pragma mark Dismiss
+
+- (void)dismiss {
+	[self.navigationController dismissModalViewControllerAnimated:YES];
+}
 
 @end

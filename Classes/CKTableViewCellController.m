@@ -11,7 +11,6 @@
 
 #import "CKNSArrayAdditions.h"
 
-
 @implementation CKTableViewCellController
 
 @synthesize key = _key;
@@ -26,12 +25,13 @@
 @synthesize parentController = _parentController;
 @synthesize indexPath = _indexPath;
 @synthesize rowHeight = _rowHeight;
+@synthesize controllerStyle = _controllerStyle;
 
 - (id)init {
 	self = [super init];
 	if (self != nil) {
 		_selectable = YES;
-		self.rowHeight = 44.0f;
+		self.rowHeight = 0.0f;
 		self.editable = YES;
 	}
 	return self;
@@ -42,6 +42,7 @@
 	[_value release];
 	[_indexPath release];
 	[_target release];
+	[_controllerStyle release];
 	
 	_target = nil;
 	_action = nil;
@@ -60,14 +61,20 @@
 	_indexPath = [indexPath retain];
 }
 
-- (void)setParentController:(CKManagedTableViewController *)parentController {
+- (void)setParentController:(CKTableViewController *)parentController {
 	// Set a *weak* reference to the parent controller
 	// This method is hidden from the public interface and is called by the CKManagedTableViewController
 	// when adding the CKTableViewCellController.
 	_parentController = parentController;
 }
 
+- (void)setTableViewCell:(UITableViewCell*)cell{
+	_tableViewCell = cell;
+}
+
 - (UITableViewCell *)tableViewCell {
+	if(_tableViewCell)
+		return _tableViewCell;
 	return [_parentController.tableView cellForRowAtIndexPath:self.indexPath];
 }
 
@@ -110,6 +117,9 @@
 	return;
 }
 
+- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+}
+
 - (CGFloat)heightForRow {
 	return self.rowHeight;
 }
@@ -134,6 +144,10 @@
 - (void)setNeedsSetup {
 	if (self.tableViewCell)
 		[self setupCell:self.tableViewCell];
+}
+
++ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKTableViewCellFlagAll;
 }
 
 @end

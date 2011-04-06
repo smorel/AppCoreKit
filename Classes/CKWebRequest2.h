@@ -26,6 +26,11 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 	NSMutableData *theReceivedData;
 	id theUserInfo;
 	NSObject<CKWebRequestDelegate> *theDelegate;
+	long long byteReceived;
+	
+	NSString* destinationPath;
+	BOOL allowDestinationOverwrite;
+	NSOutputStream* destinationStream;
 	
 	BOOL executing;
 	BOOL finished;
@@ -42,6 +47,13 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 - (void)setMethod:(NSString *)method;
 - (void)setBodyData:(NSData *)bodyData;
 
+// Configure the request to send the params as a <application/x-www-form-urlencoded> POST
+- (void)setBodyParams:(NSDictionary *)params;
+
+- (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite;
+
+- (void)startAsynchronous;
+
 //
 
 - (id)initWithURL:(NSURL *)URL;
@@ -51,11 +63,17 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 + (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
 + (CKWebRequest2 *)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
 
++ (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)URL;
+
 @end
 
 //
 
 @protocol CKWebRequestDelegate <NSObject> @optional
+- (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber*)progress;
+- (void)requestDidFinishLoading:(id)request;
+
+- (void)request:(id)request didReceiveResponse:(NSURLResponse *)response;
 - (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(id)request didReceiveValue:(id)value;
 - (void)request:(id)request didFailWithError:(NSError *)error;

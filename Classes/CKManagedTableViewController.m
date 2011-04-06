@@ -27,6 +27,7 @@
 		_cellControllers = [[NSMutableArray array] retain];
 		_canMoveRowsIn = YES;
 		_canMoveRowsOut = YES;
+		
 	}
 	return self;
 }
@@ -71,17 +72,27 @@
 @synthesize managedTableViewDelegate = _managedTableViewDelegate;
 @synthesize sections = _sections;
 @synthesize pValuesForKeys = _valuesForKeys;
+@synthesize orientation = _orientation;
+@synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
+
+- (void)postInit {
+	[super postInit];
+	self.style = UITableViewStyleGrouped;
+	_orientation = CKManagedTableViewOrientationPortrait;
+	_resizeOnKeyboardNotification = YES;
+}
 
 - (void)awakeFromNib {
-	self.style = UITableViewStyleGrouped;
+	[self postInit];
 }
 
-- (id)init {
-    if (self = [super init]) {
-		self.style = UITableViewStyleGrouped;
-    }
-    return self;
+- (id)initWithCoder:(NSCoder *)decoder {
+	[super initWithCoder:decoder];
+	[self postInit];
+	return self;
 }
+
+//
 
 - (void)dealloc {
 	[self clear];
@@ -93,6 +104,11 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[self setup];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+	//[self setup];
+	[super viewWillAppear:animated];
 }
 
 - (void)viewDidUnload {
@@ -193,7 +209,9 @@
 - (void)removeCellControllerAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableSection *section = [self.sections objectAtIndex:indexPath.section];
 	CKTableViewCellController *cellController = [section.cellControllers objectAtIndex:indexPath.row];
-	[cellController removeObserver:self forKeyPath:@"value"];
+	if (cellController.key) {
+		[cellController removeObserver:self forKeyPath:@"value"];
+	}
 	[section removeCellControllerAtIndex:indexPath.row];
 }
 
@@ -208,6 +226,30 @@
 	[cellController release];
 }
 
+// FIXME: The table should watch the section for insertion/deletion instead
+- (void)insertCellController:(CKTableViewCellController*)cellController atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
+	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
+	[section insertCellController:cellController atIndex:index];
+	[cellController performSelector:@selector(setParentController:) withObject:self];
+	NSIndexPath* indexPath = [NSIndexPath indexPathForRow:index inSection:sectionIndex];
+	[cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
+}
+
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
+	CKTableSection* section = [_sections objectAtIndex:sectionIndex];
+	[section removeCellControllerAtIndex:index];
+	
+	NSIndexPath* indexPath = [NSIndexPath indexPathForRow:index inSection:sectionIndex];
+	NSArray* rows = [NSArray arrayWithObject:indexPath];
+	[self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:animated ? UITableViewRowAnimationFade : UITableViewRowAnimationNone];
+}
+
+- (CKTableSection *)sectionAtIndex:(NSUInteger)index {
+	return [_sections objectAtIndex:index];
+}
+
 #pragma mark UITableView Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -218,6 +260,13 @@
 	return [[[self.sections objectAtIndex:section] cellControllers] count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+	CGFloat height = [cellController heightForRow];
+	if (height == 0) cellController.rowHeight = tableView.rowHeight;
+	return [cellController heightForRow];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableViewCellController *controller = [self cellControllerForIndexPath:indexPath];
 	NSString *identifier = controller.identifier;
@@ -226,15 +275,19 @@
 	if (theCell == nil) {
 		theCell = [controller loadCell];
 	}
+	
+	//TODO
+	//We have to see how to resize the tableView to fit correctly in the right side ...
+	//for instance we have to disable the resizing masks on the table view and set its size for the wanted orientation in the nib ...
+	UIView *rotatedView	= theCell.contentView;
+	if (_orientation == CKManagedTableViewOrientationLandscape) {
+		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
+	}
 
 	[controller setupCell:theCell];	
-
 	return theCell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [[self cellControllerForIndexPath:indexPath] heightForRow];
-}
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	return [[self cellControllerForIndexPath:indexPath] willSelectRow];
@@ -392,6 +445,8 @@
 #pragma mark Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+	if (_resizeOnKeyboardNotification == NO) return;
+	
 	NSDictionary *info = [notification userInfo];
 	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
 	
@@ -406,6 +461,8 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
+	if (_resizeOnKeyboardNotification == NO) return;
+	
 	NSDictionary *info = [notification userInfo];
 	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
 	
@@ -418,5 +475,22 @@
 	self.tableView.frame = tableViewFrame;
 	[UIView commitAnimations];
 }
+
+
+#pragma mark Orientation Management
+
+- (void)setOrientation:(CKManagedTableViewOrientation)orientation {
+	CGRect f = self.tableView.frame;
+	CGRect b = self.tableView.bounds;
+	
+	_orientation = orientation;
+	if(orientation == CKManagedTableViewOrientationLandscape) {
+		self.tableView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+		self.tableView.frame = CGRectMake(f.origin.x,f.origin.y,b.size.width,b.size.height);
+	} else {
+		self.tableView.transform = CGAffineTransformIdentity;
+	}
+}
+
 
 @end
