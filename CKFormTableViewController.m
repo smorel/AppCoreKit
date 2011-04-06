@@ -51,7 +51,7 @@
 }
 
 - (void)setDelegate:(id)theDelegate{
-	self.delegate = theDelegate;
+	_delegate = theDelegate;
 }
 
 @end
@@ -105,20 +105,68 @@
 @synthesize headerView = _headerView;
 @synthesize cellDescriptors = _cellDescriptors;
 
-- (id)initWithHeaderTitle:(NSString*)title cellDescriptors:(NSArray*)theCellDescriptors{
+- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerTitle:(NSString*)title{
 	[super init];
 	self.headerTitle = title;
 	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
 	return self;
 }
 
-- (id)initWithHeaderView:(UIView*)view cellDescriptors:(NSArray*)theCellDescriptors{
+- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerView:(UIView*)view{
 	[super init];
 	self.headerView = view;
 	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
 	return self;
 }
 
+- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors{
+	[super init];
+	self.headerTitle = @"";
+	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
+	return self;
+}
+
++ (CKFormSection*)section{
+	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerTitle:@""]autorelease];
+}
+
++ (CKFormSection*)sectionWithHeaderTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithHeaderView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerView:view]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors{
+	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerTitle:@""]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerView:view]autorelease];
+}
+
+- (void)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index{
+	if(_cellDescriptors == nil){
+		self.cellDescriptors = [NSMutableArray array];
+	}
+	[_cellDescriptors insertObject:cellDescriptor atIndex:index];
+}
+
+- (void)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor{
+	if(_cellDescriptors == nil){
+		self.cellDescriptors = [NSMutableArray array];
+	}
+	[_cellDescriptors addObject:cellDescriptor];
+}
+
+- (void)removeCellDescriptorAtIndex:(NSUInteger)index{
+	[_cellDescriptors removeObjectAtIndex:index];
+}
 @end
 
 @implementation CKFormCellDescriptor
@@ -148,6 +196,15 @@
 	return self;
 }
 
+
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle withBlock:initializeBlock]autorelease];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle target:target action:action]autorelease];
+}
+
 @end
 
 @implementation CKFormTableViewController
@@ -168,6 +225,57 @@
 	[super init];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
 	return self;
+}
+
+- (void)addSection:(CKFormSection *)section{
+	if(_sections == nil){
+		self.sections = [NSMutableArray array];
+	}
+	[_sections addObject:section];
+}
+
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
+	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors];
+	if(_sections == nil){
+		self.sections = [NSMutableArray array];
+	}
+	[_sections addObject:section];
+	return section;
+}
+
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
+	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
+	if(_sections == nil){
+		self.sections = [NSMutableArray array];
+	}
+	[_sections addObject:section];
+	return section;
+}
+
+- (void)insertCellDescriptor:(CKFormCellDescriptor*)cellDescriptor atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
+	if(_sections == nil){
+		self.sections = [NSMutableArray array];
+	}
+	
+	while([_sections count] < sectionIndex){
+		CKFormSection* section = [CKFormSection section];
+		[_sections addObject:section];
+	}
+	
+	CKFormSection* section = [_sections objectAtIndex:sectionIndex];
+	[section insertCellDescriptor:cellDescriptor atIndex:index];
+	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? _rowInsertAnimation : UITableViewRowAnimationNone];
+}
+
+- (void)removeCellDescriptorAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
+	CKFormSection* section = [_sections objectAtIndex:sectionIndex];
+	[section removeCellDescriptorAtIndex:index];
+	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+}
+
+- (CKFormSection*)sectionAtIndex:(NSUInteger)index{
+	CKFormSection* section = [_sections objectAtIndex:index];
+	return section;
 }
 
 @end

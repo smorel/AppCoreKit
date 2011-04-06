@@ -286,7 +286,7 @@
 		758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC4B4132A98F1000280FE /* CKBindingsManager.h */; settings = {ATTRIBUTES = (); }; };
 		758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 758EC4B5132A98F1000280FE /* CKBindingsManager.m */; };
 		758EC58D132ADE7C000280FE /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC58C132ADE7C000280FE /* CKBinding.h */; settings = {ATTRIBUTES = (); }; };
-		7599A6CF134D0A79008AADE6 /* CKFormTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */; };
+		7599A6CF134D0A79008AADE6 /* CKFormTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7599A6D0134D0A79008AADE6 /* CKFormTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */; };
 		759B3AD413172064006C41D9 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AD213172064006C41D9 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		759B3AD513172064006C41D9 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AD313172064006C41D9 /* CKMapping.m */; };

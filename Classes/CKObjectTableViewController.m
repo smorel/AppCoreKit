@@ -636,8 +636,6 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 				
-				[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
-				[_controllerFactory initializeController:controller atIndexPath:indexPath];
 				
 				if(_cellsToIndexPath == nil){
 					self.cellsToIndexPath = [NSMutableDictionary dictionary];
@@ -649,6 +647,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				[_indexPathToCells setObject:[NSValue valueWithNonretainedObject:cell] forKey:indexPath];
 				
 				if(![controller.value isEqual:object]){
+					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
+					[_controllerFactory initializeController:controller atIndexPath:indexPath];
+					
 					[controller setValue:object];
 					[controller setupCell:cell];	
 				}
@@ -838,8 +839,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			view = [_objectController headerViewForSection:section];
 			if(_headerViewsForSections == nil){
 				self.headerViewsForSections = [NSMutableDictionary dictionary];
+			}
+			if(view != nil){
 				[_headerViewsForSections setObject:view forKey:[NSNumber numberWithInt:section]];
-				 return view;
 			}
 		}
 	//}

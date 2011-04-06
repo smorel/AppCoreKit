@@ -10,6 +10,7 @@
 #import "CKTableViewCellController.h"
 #import "CKModelObject.h"
 
+@class CKFormCellDescriptor;
 @interface CKFormSection : CKModelObject{
 	NSString* _headerTitle;
 	UIView* _headerView;
@@ -18,10 +19,22 @@
 
 @property (nonatomic,retain) NSString* headerTitle;
 @property (nonatomic,retain) UIView* headerView;
-@property (nonatomic,retain) NSMutableArray* cellDescriptors;
+@property (nonatomic,retain) NSArray* cellDescriptors;
 
-- (id)initWithHeaderTitle:(NSString*)title cellDescriptors:(NSArray*)cellDescriptors;
-- (id)initWithHeaderView:(UIView*)view cellDescriptors:(NSArray*)cellDescriptors;
+- (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
+- (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
+- (id)initWithCellDescriptors:(NSArray*)cellDescriptors;
+
++ (CKFormSection*)section;
++ (CKFormSection*)sectionWithHeaderTitle:(NSString*)title;
++ (CKFormSection*)sectionWithHeaderView:(UIView*)view;
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors;
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
+
+- (void)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
+- (void)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
+- (void)removeCellDescriptorAtIndex:(NSUInteger)index;
 
 @end
 
@@ -48,13 +61,23 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock;
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action;
 
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action;
+
 @end
 
 @interface CKFormTableViewController : CKObjectTableViewController {
 	NSMutableArray* _sections;
 }
-@property (nonatomic,retain) NSMutableArray* sections;
+@property (nonatomic,retain) NSArray* sections;
 
 - (id)initWithSections:(NSArray*)sections;
+
+- (void)addSection:(CKFormSection *)section;
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
+- (void)insertCellDescriptor:(CKFormCellDescriptor*)cellDescriptor atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
+- (void)removeCellDescriptorAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
+- (CKFormSection*)sectionAtIndex:(NSUInteger)index;
 
 @end
