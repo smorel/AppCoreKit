@@ -286,6 +286,8 @@
 		758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC4B4132A98F1000280FE /* CKBindingsManager.h */; settings = {ATTRIBUTES = (); }; };
 		758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 758EC4B5132A98F1000280FE /* CKBindingsManager.m */; };
 		758EC58D132ADE7C000280FE /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC58C132ADE7C000280FE /* CKBinding.h */; settings = {ATTRIBUTES = (); }; };
+		7599A6CF134D0A79008AADE6 /* CKFormTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */; };
+		7599A6D0134D0A79008AADE6 /* CKFormTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */; };
 		759B3AD413172064006C41D9 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AD213172064006C41D9 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		759B3AD513172064006C41D9 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AD313172064006C41D9 /* CKMapping.m */; };
 		759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */; };
@@ -609,6 +611,8 @@
 		758EC4B4132A98F1000280FE /* CKBindingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBindingsManager.h; sourceTree = "<group>"; };
 		758EC4B5132A98F1000280FE /* CKBindingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKBindingsManager.m; sourceTree = "<group>"; };
 		758EC58C132ADE7C000280FE /* CKBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBinding.h; sourceTree = "<group>"; };
+		7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFormTableViewController.h; sourceTree = "<group>"; };
+		7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFormTableViewController.m; sourceTree = "<group>"; };
 		759B3AD213172064006C41D9 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMapping.h; sourceTree = "<group>"; };
 		759B3AD313172064006C41D9 /* CKMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMapping.m; sourceTree = "<group>"; };
 		759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSString+Parsing.h"; sourceTree = "<group>"; };
@@ -1218,6 +1222,8 @@
 				751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */,
 				751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */,
 				751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */,
+				7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */,
+				7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */,
 			);
 			name = "Object TableViews";
 			sourceTree = "<group>";
@@ -1432,6 +1438,7 @@
 				75E71A85133A6A1C00CAAE66 /* CKFeedTableViewController.h in Headers */,
 				4F7305D713467730001677B7 /* CKTextView.h in Headers */,
 				4F7305E4134677A7001677B7 /* CKTextViewCellController.h in Headers */,
+				7599A6CF134D0A79008AADE6 /* CKFormTableViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1695,6 +1702,7 @@
 				75E71A86133A6A1C00CAAE66 /* CKFeedTableViewController.m in Sources */,
 				4F7305D813467730001677B7 /* CKTextView.m in Sources */,
 				4F7305E5134677A7001677B7 /* CKTextViewCellController.m in Sources */,
+				7599A6D0134D0A79008AADE6 /* CKFormTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
