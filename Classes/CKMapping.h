@@ -31,6 +31,18 @@ typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NS
 
 @end
 
+//
+
+typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
+@interface CKCustomMapping : NSObject {
+	CKCustomMappingBlock mapperBlock;
+}
+
+@property (nonatomic, copy) CKCustomMappingBlock mapperBlock;
+
+@end
+
+//
 
 @interface NSObject (CKMapping) 
 
@@ -39,11 +51,16 @@ typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NS
 
 @end
 
+//
 
 @interface NSMutableDictionary (CKMapping)
-//Standard mapping with block for os4 and later
+// Provide a block for a custom mappings
+- (void)mapKeyPath:(NSString *)keyPath withValueFromBlock:(CKCustomMappingBlock)block;
+
+// FIXME: keyPath and destination should be inverted
+// Standard mapping with block for os4 and later
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withBlock:(CKMappingBlock)block;
-//Standard mapping with block for os3
+// Standard mapping with block for os3
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withValueTransformerClass:(Class)valueTransformerClass;
 
 - (void)mapURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
@@ -52,4 +69,5 @@ typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NS
 - (void)mapStringWithoutHTMLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapTrimmedStringForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapIntForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
+// --
 @end

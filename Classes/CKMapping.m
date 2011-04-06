@@ -43,6 +43,20 @@
 
 @end
 
+//
+
+@implementation CKCustomMapping
+@synthesize mapperBlock;
+
+- (void)dealloc{
+	self.mapperBlock = nil;
+	[super dealloc];
+}
+
+@end
+
+//
+
 @implementation NSObject (CKMapping)
 
 - (id)initWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
@@ -62,29 +76,36 @@
 	
 	for (id key in mappings) {
 		id obj = [mappings objectForKey:key];
-		NSAssert([obj isKindOfClass:[CKMapping class]],@"The mapper object is not a CKMapping");
+		NSAssert(([obj isKindOfClass:[CKMapping class]] || [obj isKindOfClass:[CKCustomMapping class]]),@"The mapper object is not a CKMapping");
 		NSAssert([key isKindOfClass:[NSString class]],@"The mapper key is not a string");
-		
-		CKMapping* mappingObject = (CKMapping*)obj;
-		id sourceObject = [sourceDictionary valueForKeyPath:mappingObject.key];
-		if(sourceObject == nil){
-			//TODO : fill error
-			if(DebugLog){
-				CKDebugLog(@"Could not find %@ key in source\n",mappingObject.key);
-			}
-			if(mappingObject.policy == CKMappingPolicyRequired){
-				NSAssert(NO,@"Field %@ not found in dataSource for object %@",mappingObject.key,self);
-			}
-		}
-		else{
-			NSValueTransformer* valueTransformer = [mappingObject valueTransformer];
-			if(valueTransformer){
-				id transformedValue = [valueTransformer transformedValue:sourceObject];
-				[self setValue:transformedValue forKeyPath:key];
+
+		if ([obj isKindOfClass:[CKMapping class]]) {
+			CKMapping* mappingObject = (CKMapping*)obj;
+			id sourceObject = [sourceDictionary valueForKeyPath:mappingObject.key];
+			if(sourceObject == nil){
+				//TODO : fill error
+				if(DebugLog){
+					CKDebugLog(@"Could not find %@ key in source\n",mappingObject.key);
+				}
+				if(mappingObject.policy == CKMappingPolicyRequired){
+					NSAssert(NO,@"Field %@ not found in dataSource for object %@",mappingObject.key,self);
+				}
 			}
 			else{
-				mappingObject.mapperBlock(sourceObject,self,key,error);
+				NSValueTransformer* valueTransformer = [mappingObject valueTransformer];
+				if(valueTransformer){
+					id transformedValue = [valueTransformer transformedValue:sourceObject];
+					[self setValue:transformedValue forKeyPath:key];
+				}
+				else{
+					mappingObject.mapperBlock(sourceObject,self,key,error);
+				}
 			}
+		}
+		if ([obj isKindOfClass:[CKCustomMapping class]]) {
+			CKCustomMapping *mappingObject = (CKCustomMapping *)obj;
+			id value = mappingObject.mapperBlock(sourceDictionary, error);
+			if (value) [self setValue:value forKeyPath:key];
 		}
 	}
 }
@@ -162,6 +183,12 @@
 	mapperObject.transformerClass = valueTransformerClass;
 	mapperObject.policy = bo ? CKMappingPolicyRequired : CKMappingPolicyOptional;
 	[self setObject:mapperObject forKey:destination];
+}
+
+- (void)mapKeyPath:(NSString *)keyPath withValueFromBlock:(CKCustomMappingBlock)block {
+	CKCustomMapping* mapperObject = [[[CKCustomMapping alloc] init] autorelease];
+	mapperObject.mapperBlock = block;
+	[self setObject:mapperObject forKey:keyPath];
 }
 
 - (void)mapURLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
