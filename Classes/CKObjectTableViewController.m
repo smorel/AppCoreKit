@@ -55,6 +55,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
 @synthesize headerViewsForSections = _headerViewsForSections;
+@synthesize cellPagingEnabled = _cellPagingEnabled;
+@synthesize scrollDirection = _scrollDirection;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -83,6 +85,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	_numberOfPages = 0;
 	_scrolling = NO;
 	_editable = NO;
+	_cellPagingEnabled = NO;
+	_scrollDirection = CKObjectTableViewControllerScrollNone;
+	_indexPathToReachAfterDragging = nil;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -219,7 +224,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
 			
 			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+			[params setObject:[NSValue valueWithCGSize:self.tableViewContainer.bounds.size] forKey:CKTableViewAttributeBounds];
 			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -242,13 +247,22 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	}
 	
 	if(_indexPathToReachAfterRotation){
-		
-		if (_indexPathToReachAfterRotation.row < [self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section])
-			[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
-		else 
-			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		//SMOREL TODO : if _cellPagingEnabled UITableViewScrollPositionMiddle
+		if (_indexPathToReachAfterRotation.row < [self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section]){
+			_currentCell = _indexPathToReachAfterRotation;
+			[self.tableView scrollToRowAtIndexPath:_currentCell 
+								  atScrollPosition:_cellPagingEnabled ? UITableViewScrollPositionMiddle : UITableViewScrollPositionTop animated:NO];
+		}
+		else {
+			_currentCell = [NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] ;
+			[self.tableView scrollToRowAtIndexPath:_currentCell
+								  atScrollPosition:_cellPagingEnabled ? UITableViewScrollPositionMiddle : UITableViewScrollPositionTop animated:NO];
+		}
 		
 		_indexPathToReachAfterRotation = nil;
+	}
+	else{
+		_currentCell = [NSIndexPath indexPathForRow:0 inSection:0];
 	}
 	
 	[self updateNumberOfPages];
@@ -368,9 +382,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 #pragma mark Orientation Management
 - (void)adjustView{
 	if(_orientation == CKTableViewOrientationLandscape) {
-		CGRect frame = self.view.frame;
-		self.view.transform = CGAffineTransformMakeRotation(-M_PI/2);
-		self.view.frame = frame;
+		CGRect frame = self.tableViewContainer.frame;
+		self.tableViewContainer.transform = CGAffineTransformMakeRotation(-M_PI/2);
+		self.tableViewContainer.frame = frame;
 	}
 }
 
@@ -400,7 +414,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	
 	if(_orientation == CKTableViewOrientationLandscape) {
 		self.tableView.autoresizingMask = UIViewAutoresizingNone;
-		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
+		self.tableView.frame = CGRectMake(0,0,self.tableViewContainer.bounds.size.width,self.tableViewContainer.bounds.size.height);
 	}
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
@@ -461,7 +475,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
 			
 			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+			[params setObject:[NSValue valueWithCGSize:self.tableViewContainer.bounds.size] forKey:CKTableViewAttributeBounds];
 			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -517,7 +531,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.view.bounds.size];
+	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.tableViewContainer.bounds.size];
 	return height;
 }
 
@@ -530,7 +544,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
 				
 				NSMutableDictionary* params = [NSMutableDictionary dictionary];
-				[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+				[params setObject:[NSValue valueWithCGSize:self.tableViewContainer.bounds.size] forKey:CKTableViewAttributeBounds];
 				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -556,6 +570,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		}
 	}
 }
+
 - (void)releaseCell:(id)sender target:(id)target{
 	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_indexPathToCells removeObjectForKey:previousPath];
@@ -673,7 +688,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
 		NSMutableDictionary* params = [NSMutableDictionary dictionary];
-		[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+		[params setObject:[NSValue valueWithCGSize:self.tableViewContainer.bounds.size] forKey:CKTableViewAttributeBounds];
 		[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 		[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 		[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -928,24 +943,102 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
+	self.scrollDirection = CKObjectTableViewControllerScrollNone;
 	[self updateCurrentPage];
 }
 
+- (void)customScrollToRowAtIndexPath:(NSIndexPath*)indexPath{
+	self.tableView.decelerationRate = 0.0;
+	CGRect rect = [self.tableView rectForRowAtIndexPath:_indexPathToReachAfterDragging];
+	CGPoint offset = CGPointMake(0,rect.origin.y - self.tableView.contentInset.top);
+	[UIView beginAnimations:@"AnimateScroll" context:nil];
+	[UIView setAnimationDuration:0.25];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	self.tableView.contentOffset = offset;
+	[UIView commitAnimations];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	if(_indexPathToReachAfterDragging && _indexPathToReachAfterDragging!= _currentCell){
+		[self customScrollToRowAtIndexPath:_indexPathToReachAfterDragging];
+		//[self.tableView setContentOffset:offset animated:YES];
+		//[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterDragging atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+		_currentCell = _indexPathToReachAfterDragging;
+		_indexPathToReachAfterDragging = nil;
+	}
+	
+	float direction = self.tableView.contentOffset.y - _previousContentOffset.y;
+	if(direction > 0){
+		self.scrollDirection = CKObjectTableViewControllerScrollDown;
+	}
+	else if(direction < 0){
+		self.scrollDirection = CKObjectTableViewControllerScrollUp;
+	}
+	else{
+		self.scrollDirection = CKObjectTableViewControllerScrollNone;
+	}
+	
+	_previousContentOffset = self.tableView.contentOffset;
 	[self updateCurrentPage];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+	self.scrollDirection = CKObjectTableViewControllerScrollNone;
 	[self updateCurrentPage];
 }
 
+- (NSIndexPath*)indexPathForNextCellWithDirection:(CKObjectTableViewControllerScrollDirection)direction{
+	if(direction == CKObjectTableViewControllerScrollNone)
+		return _currentCell;
+	
+	NSInteger currentRow = _currentCell.row;
+	NSInteger currentSection = _currentCell.section;
+	NSInteger nextRow = (direction == CKObjectTableViewControllerScrollDown) ? currentRow + 1 : currentRow - 1;
+	NSInteger nextSection = currentSection;
+	if(nextRow < 0){
+		nextSection = nextSection - 1;
+		if(nextSection < 0){
+			return _currentCell;
+		}
+		nextRow = [_objectController numberOfObjectsForSection:nextSection] - 1;
+	}
+	else if(nextRow >= [_objectController numberOfObjectsForSection:nextSection]){
+		nextRow = 0;
+		nextSection = nextSection +1;
+		if(nextSection >= [_objectController numberOfSections]){
+			return _currentCell;
+		}
+	}
+	return [NSIndexPath indexPathForRow:nextRow inSection:nextSection];
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	if(_cellPagingEnabled){
+		if(decelerate){
+			switch(_scrollDirection){
+				case CKObjectTableViewControllerScrollDown:NSLog(@"ScrollDirection CKObjectTableViewControllerScrollDown");break;
+				case CKObjectTableViewControllerScrollUp:NSLog(@"ScrollDirection CKObjectTableViewControllerScrollUp");break;
+				case CKObjectTableViewControllerScrollNone:NSLog(@"ScrollDirection CKObjectTableViewControllerScrollNone");break;
+			}
+			_indexPathToReachAfterDragging = [self indexPathForNextCellWithDirection:_scrollDirection];
+			
+		}
+		else{
+			_indexPathToReachAfterDragging = [self indexPathForNextCellWithDirection:CKObjectTableViewControllerScrollNone];
+			[self customScrollToRowAtIndexPath:_indexPathToReachAfterDragging];
+			_currentCell = _indexPathToReachAfterDragging;
+			_indexPathToReachAfterDragging = nil;
+		}
+	}
+	
+	//HERE check if we have custom paging enabled and scroll to computed position ...
 	if (decelerate || scrollView.decelerating)
 		return;
 	[self notifiesCellControllersForVisibleRows];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	self.scrollDirection = CKObjectTableViewControllerScrollNone;
 	[self updateCurrentPage];
 	[self notifiesCellControllersForVisibleRows];
 }

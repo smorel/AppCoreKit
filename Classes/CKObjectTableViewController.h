@@ -11,6 +11,12 @@
 #import "CKObjectViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 
+typedef enum {
+	CKObjectTableViewControllerScrollNone,
+	CKObjectTableViewControllerScrollDown,
+	CKObjectTableViewControllerScrollUp
+}CKObjectTableViewControllerScrollDirection;
+
 @interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate> {
 	id _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
@@ -24,6 +30,12 @@
 	
 	BOOL _scrolling;
 	BOOL _editable;
+	
+	CKObjectTableViewControllerScrollDirection _scrollDirection;
+	CGPoint _previousContentOffset;
+	BOOL _cellPagingEnabled;
+	NSIndexPath* _indexPathToReachAfterDragging;
+	NSIndexPath* _currentCell;
 	
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -53,6 +65,8 @@
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
+@property (nonatomic, assign) BOOL cellPagingEnabled;
+@property (nonatomic, assign) CKObjectTableViewControllerScrollDirection scrollDirection;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;

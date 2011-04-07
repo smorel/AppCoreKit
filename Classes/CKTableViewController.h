@@ -18,6 +18,7 @@
 
 @interface CKTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 	UIView *_backgroundView;
+	UIView *_tableViewContainer;
 	UITableView *_tableView;
 	UITableViewStyle _style;
 	BOOL _stickySelection;
@@ -25,6 +26,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, retain) IBOutlet UIView *tableViewContainer;
 @property (nonatomic, assign) UITableViewStyle style;
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, assign) BOOL stickySelection;

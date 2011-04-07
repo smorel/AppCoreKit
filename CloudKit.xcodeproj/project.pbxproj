@@ -270,6 +270,10 @@
 		751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */; };
 		751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */; };
+		751A366D134DEC660011656D /* CKCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A366B134DEC660011656D /* CKCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751A366E134DEC660011656D /* CKCarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A366C134DEC660011656D /* CKCarouselView.m */; };
+		751A3778134DFBAE0011656D /* CKObjectCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		751A3779134DFBAE0011656D /* CKObjectCarouselViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A3777134DFBAE0011656D /* CKObjectCarouselViewController.m */; };
 		7523697A13310251009D59FB /* CKModelObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7523697813310251009D59FB /* CKModelObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7523697B13310251009D59FB /* CKModelObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7523697913310251009D59FB /* CKModelObserver.m */; };
 		75236A0813310E77009D59FB /* CKModelObserverBlockDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 75236A0613310E77009D59FB /* CKModelObserverBlockDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -595,6 +599,10 @@
 		751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectTableViewController.m; path = Classes/CKObjectTableViewController.m; sourceTree = "<group>"; };
 		751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectViewControllerFactory.h; path = Classes/CKObjectViewControllerFactory.h; sourceTree = "<group>"; };
 		751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectViewControllerFactory.m; path = Classes/CKObjectViewControllerFactory.m; sourceTree = "<group>"; };
+		751A366B134DEC660011656D /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCarouselView.h; sourceTree = "<group>"; };
+		751A366C134DEC660011656D /* CKCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCarouselView.m; sourceTree = "<group>"; };
+		751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKObjectCarouselViewController.h; sourceTree = "<group>"; };
+		751A3777134DFBAE0011656D /* CKObjectCarouselViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKObjectCarouselViewController.m; sourceTree = "<group>"; };
 		7523697813310251009D59FB /* CKModelObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObserver.h; sourceTree = "<group>"; };
 		7523697913310251009D59FB /* CKModelObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKModelObserver.m; sourceTree = "<group>"; };
 		75236A0613310E77009D59FB /* CKModelObserverBlockDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKModelObserverBlockDelegate.h; sourceTree = "<group>"; };
@@ -710,6 +718,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				751A366A134DEC560011656D /* Carousel */,
 				751004C41337BB38008B0E7B /* Object TableViews */,
 				751004C31337BB28008B0E7B /* Object Controllers */,
 				7531425B130B0C4F006F4F60 /* Document */,
@@ -1228,6 +1237,17 @@
 			name = "Object TableViews";
 			sourceTree = "<group>";
 		};
+		751A366A134DEC560011656D /* Carousel */ = {
+			isa = PBXGroup;
+			children = (
+				751A366B134DEC660011656D /* CKCarouselView.h */,
+				751A366C134DEC660011656D /* CKCarouselView.m */,
+				751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */,
+				751A3777134DFBAE0011656D /* CKObjectCarouselViewController.m */,
+			);
+			name = Carousel;
+			sourceTree = "<group>";
+		};
 		7531425B130B0C4F006F4F60 /* Document */ = {
 			isa = PBXGroup;
 			children = (
@@ -1439,6 +1459,8 @@
 				4F7305D713467730001677B7 /* CKTextView.h in Headers */,
 				4F7305E4134677A7001677B7 /* CKTextViewCellController.h in Headers */,
 				7599A6CF134D0A79008AADE6 /* CKFormTableViewController.h in Headers */,
+				751A366D134DEC660011656D /* CKCarouselView.h in Headers */,
+				751A3778134DFBAE0011656D /* CKObjectCarouselViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1703,6 +1725,8 @@
 				4F7305D813467730001677B7 /* CKTextView.m in Sources */,
 				4F7305E5134677A7001677B7 /* CKTextViewCellController.m in Sources */,
 				7599A6D0134D0A79008AADE6 /* CKFormTableViewController.m in Sources */,
+				751A366E134DEC660011656D /* CKCarouselView.m in Sources */,
+				751A3779134DFBAE0011656D /* CKObjectCarouselViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,6 +23,7 @@
 @synthesize style = _style;
 @synthesize stickySelection = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
+@synthesize tableViewContainer = _tableViewContainer;
 
 - (id)init {
 	if (self = [super initWithNibName:nil bundle:nil]) {
@@ -43,6 +44,7 @@
 	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
 	self.tableView = nil;
+	self.tableViewContainer = nil;
 	[super dealloc];
 }
 
@@ -57,6 +59,15 @@
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		self.view = theView;
 	}
+	self.view.clipsToBounds = YES;
+	
+	if (self.tableViewContainer == nil) {
+		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
+		UIView *theView = [[[UITableView alloc] initWithFrame:theViewFrame] autorelease];
+		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		self.tableViewContainer = theView;
+		[self.view addSubview:theView];
+	}
 
 	if (self.tableView == nil) {
 		if ([self.view isKindOfClass:[UITableView class]]) {
@@ -68,10 +79,12 @@
 			theTableView.delegate = self;
 			theTableView.dataSource = self;
 			theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-			[self.view addSubview:theTableView];
+			[self.tableViewContainer addSubview:theTableView];
 			self.tableView = theTableView;
 		}
 	}
+	
+	self.tableView.clipsToBounds = NO;
 }
 
 - (void)viewDidUnload {
