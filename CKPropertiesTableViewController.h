@@ -12,6 +12,6 @@
 @interface CKPropertiesTableViewController : CKObjectTableViewController {
 }
 
-- (id)initWithObject:(id)object withStyles:(NSDictionary*)styles;
+- (id)initWithObject:(id)object withMappings:mappings withStyles:(NSDictionary*)styles;
 
 @end

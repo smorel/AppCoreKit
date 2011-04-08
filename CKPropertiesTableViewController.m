@@ -120,11 +120,14 @@
 
 @implementation CKPropertiesTableViewController
 
-- (id)initWithObject:(id)object withStyles:(NSDictionary*)styles{
+- (id)initWithObject:(id)object withMappings:mappings withStyles:(NSDictionary*)styles{
 	[self init];
-	NSMutableDictionary* mappings = [NSMutableDictionary dictionary];
-	[mappings setObject:[CKNSNumberPropertyCellController class] forKey:[NSNumber class]];
-	[mappings setObject:[CKNSStringPropertyCellController class] forKey:[NSString class]];
+	if(mappings == nil){
+		mappings = [NSMutableDictionary dictionary];
+	}
+	
+	if([mappings objectForKey:[NSNumber class]] == nil)[mappings setObject:[CKNSNumberPropertyCellController class] forKey:[NSNumber class]];
+	if([mappings objectForKey:[NSString class]] == nil)[mappings setObject:[CKNSStringPropertyCellController class] forKey:[NSString class]];
 	
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles withFactoryClass:[CKObjectPropertiesControllerFactory class]];
 	self.objectController = [[[CKObjectPropertiesController alloc]initWithObject:object]autorelease];
