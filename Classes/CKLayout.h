@@ -23,7 +23,8 @@
 //
 
 typedef enum {
-	CKLayoutAlignmentJustify = 0
+	CKLayoutAlignmentNone = 0,
+	CKLayoutAlignmentJustify
 } CKLayoutAlignment;
 
 @interface CKLayout : NSObject {

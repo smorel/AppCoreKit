@@ -139,7 +139,7 @@
 													  lineIndex:i 
 													  lineWidth:lineWidth 
 													 lineHeight:lineHeight
-													  justified:YES]];
+													  justified:(alignement == CKLayoutAlignmentJustify)]];
 	}
 	
 	return theBlocks;
