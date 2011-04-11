@@ -80,11 +80,11 @@
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		self.view = theView;
 	}
-	self.view.clipsToBounds = YES;
+	//self.view.clipsToBounds = YES;
 	
 	if (self.tableViewContainer == nil) {
-		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
-		UIView *theView = [[[UITableView alloc] initWithFrame:theViewFrame] autorelease];
+		CGRect theViewFrame = self.view.bounds;
+		UIView *theView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		self.tableViewContainer = theView;
 		[self.view addSubview:theView];
@@ -105,7 +105,7 @@
 		}
 	}
 	
-	self.tableView.clipsToBounds = NO;
+	//self.tableView.clipsToBounds = NO;
 }
 
 - (void)viewDidUnload {
