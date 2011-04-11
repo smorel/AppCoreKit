@@ -15,7 +15,6 @@
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath;
 
 /*Configuring a Table View
-– tableView:cellForRowAtIndexPath:  required method
 – sectionIndexTitlesForTableView:
 – tableView:sectionForSectionIndexTitle:atIndex:
 – tableView:titleForHeaderInSection:
@@ -31,6 +30,12 @@ Reordering Table Rows
 
 
 @protocol CKCarouselViewDelegate
+- (UIView*) carouselView:(CKCarouselView*)carouselView viewForHeaderInSection:(NSInteger)section;
+- (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath;
+- (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath;
+- (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath;
+- (void) carouselViewDidScroll:(CKCarouselView*)carouselView;
+
 /*Configuring Rows for the Table View
 – tableView:heightForRowAtIndexPath:
 – tableView:indentationLevelForRowAtIndexPath:
@@ -65,10 +70,15 @@ typedef enum{
 }CKCarouselViewDisplayType;
 
 @interface CKCarouselView : UIView<UIGestureRecognizerDelegate> {
+	NSMutableArray* _rowSizes;
 	CGFloat _contentOffset;
 	NSInteger _numberOfPages;
 	NSInteger _currentPage;
+	NSInteger _currentSection;
 	
+	CGFloat _spacing;
+	
+	UIView* _headerViewToRemove;
 	UIView* _visibleHeaderView;
 	NSMutableDictionary* _visibleViewsForIndexPaths;
 	
@@ -83,16 +93,27 @@ typedef enum{
 
 @property (nonatomic,assign) NSInteger numberOfPages;
 @property (nonatomic,assign) NSInteger currentPage;
+@property (nonatomic,assign) NSInteger currentSection;
+@property (nonatomic,assign) CGFloat spacing;
 @property (nonatomic,assign) IBOutlet id dataSource;
 @property (nonatomic,assign) IBOutlet id delegate;
 @property (nonatomic,assign) CKCarouselViewDisplayType displayType;
 
 - (void)reloadData;
-- (UIView*)dequeuReusableViewWithIdentifier:(id)identifier;
+- (UIView*)dequeueReusableViewWithIdentifier:(id)identifier;
+
+//Offset is normalized between 0 & numberOfPages
+//contentOffset represents the center of the carousel
 - (void)setContentOffset:(CGFloat)offset animated:(BOOL)animated;
 
 - (NSIndexPath*)indexPathForPage:(NSInteger)page;
 - (NSInteger)pageForIndexPath:(NSIndexPath*)indexPath;
+
+- (NSArray*)visibleIndexPaths;
+- (NSArray*)visibleViews;
+- (UIView*)viewAtIndexPath:(NSIndexPath*)indexPath;
+
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath*)indexPath;
+- (void)updateViewsAnimated:(BOOL)animated;
 
 @end
