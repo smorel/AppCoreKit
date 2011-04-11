@@ -175,6 +175,7 @@ double round(double x)
 	}
 	
 	self.numberOfPages = count;
+	self.currentPage = self.currentPage;
 	[self updateViewsAnimated:NO];
 }
 

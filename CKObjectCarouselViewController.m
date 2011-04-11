@@ -8,6 +8,7 @@
 
 #import "CKObjectCarouselViewController.h"
 #import "CKTableViewCellController.h"
+#import "CKNSObject+Bindings.h"
 
 
 @interface UIViewWithIdentifier : UIView{
@@ -40,6 +41,7 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize cellsToControllers = _cellsToControllers;
 @synthesize headerViewsForSections = _headerViewsForSections;
+@synthesize pageControl = _pageControl;
 
 - (void)postInit{
 	self.cellsToControllers = [NSMutableDictionary dictionary];
@@ -72,6 +74,7 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 }
 
 - (void)dealloc {
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
 	[_carouselView release];
 	_carouselView = nil;
 	[_objectController release];
@@ -82,6 +85,8 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 	_headerViewsForSections = nil;
 	[_cellsToControllers release];
 	_cellsToControllers = nil;
+	[_pageControl release];
+	_pageControl = nil;
 	[super dealloc];
 }
 
@@ -159,12 +164,30 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 	self.carouselView.spacing = 20;
 }
 
+- (void)scrollToPage:(id)page{
+	[self.carouselView setContentOffset:_pageControl.currentPage animated:YES];
+}
+
+- (void)updatePageControlPage:(id)page{
+	_pageControl.currentPage = (_pageControl.currentPage + 1 >= self.carouselView.numberOfPages) ? self.carouselView.currentPage - 1 :  self.carouselView.currentPage +1;
+	_pageControl.currentPage = self.carouselView.currentPage;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	if(_pageControl){
+		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+		[self.carouselView bind:@"currentPage" target:self action:@selector(updatePageControlPage:)];
+		[self.carouselView bind:@"numberOfPages" toObject:_pageControl withKeyPath:@"numberOfPages"];
+		[_pageControl bindEvent:UIControlEventTouchUpInside target:self action:@selector(scrollToPage:)];
+		[NSObject endBindingsContext];
+	}
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

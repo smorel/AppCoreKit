@@ -20,9 +20,12 @@
 	int _numberOfObjectsToprefetch;
 	NSMutableDictionary* _cellsToControllers;
 	NSMutableDictionary* _headerViewsForSections;
+	
+	UIPageControl* _pageControl;
 }
 
 @property (nonatomic,retain) IBOutlet CKCarouselView* carouselView;
+@property (nonatomic,retain) IBOutlet UIPageControl* pageControl;
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
