@@ -47,14 +47,31 @@ NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 
 //
 
-+ stringWithQueryDictionary:(NSDictionary*)dictionary {
++ (NSString *)stringWithQueryDictionary:(NSDictionary*)dictionary {
 	NSMutableString* string = [NSMutableString string] ;
 	NSUInteger countdown = [dictionary count] ;
 	for (NSString* key in dictionary) {
-		[string appendFormat:@"%@=%@",
-		 [key encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters],
-		 [[dictionary valueForKey:key] encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters]
-		 ] ;
+		id value = [dictionary valueForKey:key];
+		NSAssert(([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]]), @"Parameter type not supported: %@", [value class]);
+
+		if ([value isKindOfClass:[NSString class]]) {
+			[string appendFormat:@"%@=%@",
+			 [key encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters],
+			 [[dictionary valueForKey:key] encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters]
+			 ];	
+		}
+		if ([value isKindOfClass:[NSArray class]]) {
+			NSUInteger count = [value count];
+			for (id arrayValue in value) {
+				NSAssert([arrayValue isKindOfClass:[NSString class]], @"Array value not supported: %@", [arrayValue class]);
+				[string appendFormat:@"%@=%@",
+				 [key encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters],
+				 [arrayValue encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters]
+				 ];
+				if (--count > 0) [string appendString:@"&"];
+			}
+		}
+
 		countdown-- ;
 		if (countdown > 0) {
 			[string appendString:@"&"] ;
