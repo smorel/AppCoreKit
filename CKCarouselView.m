@@ -492,6 +492,7 @@ double round(double x)
 - (void)updateOffset:(CGFloat)offset{
 	if(_contentOffset != offset){
 		self.contentOffset = offset;
+		//NSLog(@"offset = %f",offset);
 		NSInteger page = MAX(0,MIN(_numberOfPages-1,(NSInteger)round(self.contentOffset)));
 		if(page != _currentPage){
 			self.currentPage = page;
@@ -518,7 +519,7 @@ double round(double x)
 }
 
 - (void)setContentOffset:(CGFloat)offset animated:(BOOL)animated{
-	CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)[self.layer presentationLayer];
+	CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)self.layer;
 	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"contentOffset"];
 	animation.duration = 0.4;
 	animation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.2 :0.8 :1.0 :1.0];//[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
@@ -532,6 +533,7 @@ double round(double x)
 	animation.removedOnCompletion = NO;
 	animation.fillMode = kCAFillModeForwards;
 	[carouselLayer addAnimation:animation forKey:@"contentOffset"];
+	carouselLayer.contentOffset = offset;
 }
 
 #pragma mark gestures
@@ -567,9 +569,11 @@ double round(double x)
 		_contentOffsetWhenStartPanning = _contentOffset;
 	}
 	else if(recognizer.state != UIGestureRecognizerStateEnded){
+		//NSLog(@"panning");
 		[self setContentOffset:_contentOffsetWhenStartPanning - pageOffset animated:NO];
 	}
 	else{
+		//NSLog(@"swipe");
 		CGFloat offset = round(_contentOffset);
 		if((offset <= 0 && velocity.x >= 0)|| (offset >= _numberOfPages-1 && velocity.x <= 0) || fabs(velocity.x) <= 300){
 			offset = MAX(0,MIN(_numberOfPages-1,offset));
@@ -585,7 +589,7 @@ double round(double x)
 			
 			offset = MAX(0,MIN(_numberOfPages-1,offset));
 			
-			CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)[self.layer presentationLayer];
+			CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)self.layer;
 			
 			CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contentOffset"];
 			animation.calculationMode = kCAAnimationPaced;
@@ -594,13 +598,18 @@ double round(double x)
 			animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
 			
 			NSMutableArray* values = [NSMutableArray array];
+			//NSLog(@"swipe1:%f",_contentOffset);
 			[values addObject: [NSNumber numberWithFloat:_contentOffset]];
-			[values addObject: [NSNumber numberWithFloat:offset - velocity.x / 30000]];
+			CGFloat bouncePos = offset - velocity.x / 30000;
+			//NSLog(@"swipeBounce:%f",bouncePos);
+			[values addObject: [NSNumber numberWithFloat:bouncePos]];
+			//NSLog(@"swipe2:%f",offset);
 			[values addObject: [NSNumber numberWithFloat:offset]];
 			animation.values = values;
 			animation.removedOnCompletion = NO;
 			animation.fillMode = kCAFillModeForwards;
-			[carouselLayer addAnimation:animation forKey:@"contentOffset"];			
+			[carouselLayer addAnimation:animation forKey:@"contentOffset"];		
+			carouselLayer.contentOffset = offset;	
 		}
 	}
 	
