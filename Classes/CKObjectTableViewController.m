@@ -273,7 +273,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	}
 	
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		_indexPathToReachAfterRotation = [visibleCells objectAtIndex:0];
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+		_indexPathToReachAfterRotation = indexPath;
 	}
 }
 
@@ -422,7 +423,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		}
 	}
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		_indexPathToReachAfterRotation = [visibleCells objectAtIndex:0];
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+		_indexPathToReachAfterRotation = indexPath;
 	}
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
