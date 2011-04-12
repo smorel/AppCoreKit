@@ -26,6 +26,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
+@property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
 - (void)updateNumberOfPages;
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -55,6 +56,9 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
 @synthesize headerViewsForSections = _headerViewsForSections;
+@synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
+@synthesize rowInsertAnimation = _rowInsertAnimation;
+@synthesize rowRemoveAnimation = _rowRemoveAnimation;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -101,6 +105,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 
 
 - (void)dealloc {
+	[_indexPathToReachAfterRotation release];
+	_indexPathToReachAfterRotation = nil;
 	[_objectController release];
 	_objectController = nil;
 	[_cellsToControllers release];
@@ -235,7 +241,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		else 
 			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 		
-		_indexPathToReachAfterRotation = nil;
+		self.indexPathToReachAfterRotation = nil;
 	}
 	
 	[self updateNumberOfPages];
@@ -257,7 +263,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	_indexPathToReachAfterRotation = nil;
+	self.indexPathToReachAfterRotation = nil;
 	
 	NSArray *visibleCells = [self.tableView visibleCells];
 	
@@ -267,14 +273,14 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
-			_indexPathToReachAfterRotation = indexPath;
+			self.indexPathToReachAfterRotation = indexPath;
 			break;
 		}
 	}
 	
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
-		_indexPathToReachAfterRotation = indexPath;
+		self.indexPathToReachAfterRotation = indexPath;
 	}
 }
 
@@ -334,7 +340,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	NSIndexPath* toReach = [_indexPathToReachAfterRotation copy];
 	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
 		//that means the view is rotating and needs to be updated with the future cells size
-		_indexPathToReachAfterRotation = nil;
+		self.indexPathToReachAfterRotation = nil;
 		CGFloat offset = 0;
 		if(toReach.row > 0){
 			CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
@@ -344,7 +350,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
 			offset = r.origin.y + r.size.height;
 		}
-		_indexPathToReachAfterRotation = toReach;
+		self.indexPathToReachAfterRotation = toReach;
 		self.tableView.contentOffset = CGPointMake(0,offset);
 	}
 	
@@ -410,7 +416,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	//stop scrolling
 	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
 	
-	_indexPathToReachAfterRotation = nil;
+	self.indexPathToReachAfterRotation = nil;
 	//NSArray* visible = [self.tableView indexPathsForVisibleRows];
 	//for(NSIndexPath* indexPath in visible){
 	NSArray *visibleCells = [self.tableView visibleCells];
@@ -418,13 +424,13 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
-			_indexPathToReachAfterRotation = indexPath;
+			self.indexPathToReachAfterRotation = indexPath;
 			break;
 		}
 	}
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
-		_indexPathToReachAfterRotation = indexPath;
+		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -472,7 +478,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-	_indexPathToReachAfterRotation = nil;
+	self.indexPathToReachAfterRotation = nil;
 	[self notifiesCellControllersForVisibleRows];
 	[self updateNumberOfPages];
 	[self printDebug:@"end of didRotateFromInterfaceOrientation"];
