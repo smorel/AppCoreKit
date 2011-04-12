@@ -15,6 +15,7 @@
 @synthesize document = _document;
 @synthesize key = _key;
 @synthesize delegate = _delegate;
+@synthesize displayFeedSourceCell;
 
 - (void)dealloc{
 	if(_document){
@@ -43,6 +44,7 @@
 	}
 	observing = NO;
 	
+	displayFeedSourceCell = YES;
 	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
 	
 	return self;
@@ -97,7 +99,7 @@
 			NSArray* objects = [_document objectsForKey:_key];
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
 				id dataSource = [_document dataSourceForKey:_key];
-				return [objects count] + ((dataSource != nil) ? 1 : 0);
+				return [objects count] + ((displayFeedSourceCell && dataSource != nil) ? 1 : 0);
 			}
 			else {
 				return [objects count];
@@ -123,7 +125,7 @@
 				NSInteger index = indexPath.row;
 				return [objects objectAtIndex:index];
 			}
-			else if([_document respondsToSelector:@selector(dataSourceForKey:)]){
+			else if(displayFeedSourceCell && [_document respondsToSelector:@selector(dataSourceForKey:)]){
 				return [_document dataSourceForKey:_key];
 			}
 

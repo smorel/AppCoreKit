@@ -17,12 +17,14 @@
 	id _delegate;
 	BOOL observing;
 	BOOL animateFirstInsertion;
+	BOOL displayFeedSourceCell;
 }
 
 @property (nonatomic, assign) id document;
 @property (nonatomic, retain) NSString* key;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) BOOL animateFirstInsertion;
+@property (nonatomic, assign) BOOL displayFeedSourceCell;
 
 - (id)initWithDocument:(id)document key:(NSString*)key;
 

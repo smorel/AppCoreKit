@@ -1,16 +1,16 @@
 //
-//  CKFeedTableViewController.m
-//  NFB
+//  CKFeedCarouselViewController.m
+//  CloudKit
 //
-//  Created by Sebastien Morel on 11-03-23.
+//  Created by Sebastien Morel on 11-04-12.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKFeedTableViewController.h"
-#import <CloudKit/CKDocumentController.h>
+#import "CKFeedCarouselViewController.h"
+#import "CKDocumentController.h"
 
 
-@implementation CKFeedTableViewController
+@implementation CKFeedCarouselViewController
 @synthesize feedSource = _feedSource;
 
 - (void)dealloc{
@@ -29,6 +29,7 @@
 	[_feedSource release];
 	_feedSource = [source retain];
 	self.objectController = [[[CKDocumentController alloc]initWithDocument:source.document key:source.objectsKey]autorelease];
+	[self.objectController setDisplayFeedSourceCell:NO];
 	[_feedSource fetchNextItems:10];
 }
 

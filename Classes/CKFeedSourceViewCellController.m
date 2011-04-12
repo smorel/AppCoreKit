@@ -11,6 +11,7 @@
 #import <CloudKit/CKNSObject+Bindings.h>
 #import <CloudKit/CKLocalization.h>
 #import "CKNSDictionary+TableViewAttributes.h"
+#import "CKObjectCarouselViewController.h"
 
 static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaultStyle = nil;
 
@@ -77,7 +78,8 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	CKFeedSource* source = (CKFeedSource*)self.value;
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = self.parentController.tableView.pagingEnabled || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
+	activityIndicator.hidden = forceHidden || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
 	if(!activityIndicator.hidden){
 		[activityIndicator startAnimating];
 	}
@@ -117,7 +119,8 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	[self update:cell.contentView];
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ActivityIndicatorTag];
-	activityIndicator.hidden = activityIndicator.hidden || self.parentController.tableView.pagingEnabled;
+	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
+	activityIndicator.hidden = activityIndicator.hidden || forceHidden;
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
