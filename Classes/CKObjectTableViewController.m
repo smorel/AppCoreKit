@@ -23,7 +23,7 @@
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
-@property (nonatomic, retain) NSIndexPath * indexPathToReachAfterRotation;
+@property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
 - (void)updateNumberOfPages;
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -54,6 +54,8 @@
 @synthesize editable = _editable;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
+@synthesize rowInsertAnimation = _rowInsertAnimation;
+@synthesize rowRemoveAnimation = _rowRemoveAnimation;
 
 @synthesize editButton;
 @synthesize doneButton;
