@@ -159,6 +159,7 @@
 	}
 	
 	//DEBUG :
+	self.carouselView.clipsToBounds = YES;
 	self.carouselView.spacing = 20;
 }
 
