@@ -103,9 +103,9 @@ double round(double x)
 	self.layer.delegate = self;
 	
 	//add gestures
-    UITapGestureRecognizer* tapRecognizer = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)]autorelease];
+    /*UITapGestureRecognizer* tapRecognizer = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)]autorelease];
     [self addGestureRecognizer:tapRecognizer];
-    tapRecognizer.delegate = self;
+    tapRecognizer.delegate = self;*/
 	
 	UIPanGestureRecognizer* panRecognizer = [[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)]autorelease];
 	[self addGestureRecognizer:panRecognizer];
