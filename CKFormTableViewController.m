@@ -196,6 +196,19 @@
 	return self;
 }
 
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass controllerStyle:(id)theControllerStyle{
+	[super init];
+	self.value = theValue;
+	self.controllerClass = theControllerClass;
+	self.controllerStyle = theControllerStyle;
+	return self;
+}
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
+	[super init];
+	self.value = theValue;
+	self.controllerClass = theControllerClass;
+	return self;
+}
 
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock{
 	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle withBlock:initializeBlock]autorelease];
@@ -203,6 +216,14 @@
 
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action{
 	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle target:target action:action]autorelease];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle]autorelease];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass]autorelease];
 }
 
 @end
