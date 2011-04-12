@@ -23,8 +23,6 @@
 @end
 
 
-static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = nil;
-
 @interface CKObjectCarouselViewController ()
 @property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
@@ -305,19 +303,10 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 /* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
  as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
-+ (NSString*)identifierForClass:(Class)theClass{
-	if(CKObjectCarouselViewControllerClassToIdentifier == nil){
-		CKObjectCarouselViewControllerClassToIdentifier = [[NSMutableDictionary alloc]init];
-	}
-	NSString* identifier = [CKObjectCarouselViewControllerClassToIdentifier objectForKey:theClass];
-	if(identifier)
-		return identifier;
-	
-	identifier = [theClass description];
-	[CKObjectCarouselViewControllerClassToIdentifier setObject:identifier forKey:theClass];
++ (NSString*)identifierForClass:(Class)theClass style:(id)style{
+	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",[theClass description],style];
 	return identifier;
 }
-
 
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -325,7 +314,8 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 		
 		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 		if(controllerClass){
-			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass];
+			id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass style:controllerStyle];
 			
 			//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 			UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
@@ -335,7 +325,7 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 			if(cell == nil){
 				//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 				controller = [[[controllerClass alloc]init]autorelease];
-				[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
+				[controller setControllerStyle:controllerStyle];
 				cell = [controller loadCell];
 				//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 				cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -360,7 +350,7 @@ static NSMutableDictionary* CKObjectCarouselViewControllerClassToIdentifier = ni
 			[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 			
 			if(![controller.value isEqual:object]){
-				[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
+				[controller setControllerStyle:controllerStyle];
 				[_controllerFactory initializeController:controller atIndexPath:indexPath];
 				
 				[controller setValue:object];

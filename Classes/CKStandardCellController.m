@@ -11,6 +11,55 @@
 #import "CKCache.h"
 #import "CKDebug.h"
 
+static CKStandardCellControllerStyle* CKStandardCellControllerDefaultStyle = nil;
+static CKStandardCellControllerStyle* CKStandardCellControllerValue1Style = nil;
+static CKStandardCellControllerStyle* CKStandardCellControllerValue2Style = nil;
+static CKStandardCellControllerStyle* CKStandardCellControllerSubtitleStyle = nil;
+
+@implementation CKStandardCellControllerStyle
+@synthesize cellStyle,image,backgroundColor,textColor,detailedTextColor,isTextMultiline,isDetailTextMultiline,accessoryType;
+
++ (CKStandardCellControllerStyle*)defaultStyle{
+	if(CKStandardCellControllerDefaultStyle == nil){
+		CKStandardCellControllerDefaultStyle = [[CKStandardCellControllerStyle alloc]init];
+		CKStandardCellControllerDefaultStyle.cellStyle = UITableViewCellStyleDefault;
+		CKStandardCellControllerDefaultStyle.textColor = [UIColor blackColor];
+		CKStandardCellControllerDefaultStyle.detailedTextColor = [UIColor blackColor];
+		CKStandardCellControllerDefaultStyle.isTextMultiline = NO;
+		CKStandardCellControllerDefaultStyle.isDetailTextMultiline = NO;
+		//define other default properties
+	}
+	return CKStandardCellControllerDefaultStyle;
+}
+
++ (CKStandardCellControllerStyle*)value1Style{
+	if(CKStandardCellControllerValue1Style == nil){
+		CKStandardCellControllerValue1Style = [[CKStandardCellControllerStyle defaultStyle] copy];
+		CKStandardCellControllerValue1Style.cellStyle = UITableViewCellStyleValue1;
+	}
+	return CKStandardCellControllerValue1Style;
+}
+
++ (CKStandardCellControllerStyle*)value2Style{
+	if(CKStandardCellControllerValue2Style == nil){
+		CKStandardCellControllerValue2Style = [[CKStandardCellControllerStyle defaultStyle] copy];
+		CKStandardCellControllerValue2Style.cellStyle = UITableViewCellStyleValue2;
+	}
+	return CKStandardCellControllerValue1Style;
+}
+
++ (CKStandardCellControllerStyle*)subtitleStyle{
+	if(CKStandardCellControllerSubtitleStyle == nil){
+		CKStandardCellControllerSubtitleStyle = [[CKStandardCellControllerStyle defaultStyle] copy];
+		CKStandardCellControllerSubtitleStyle.cellStyle = UITableViewCellStyleSubtitle;
+	}
+	return CKStandardCellControllerSubtitleStyle;
+}
+
+@end
+
+
+
 @interface CKStandardCellController ()
 
 @property (nonatomic, assign) UITableViewCellStyle style;
@@ -39,6 +88,24 @@
 @synthesize multilineText = _multilineText;
 @synthesize multilineDetailText = _multilineDetailText;
 
+
+- (id)initWithStandardStyle:(CKStandardCellControllerStyle*)style{
+	if (self = [super init]) {
+		self.controllerStyle = style;
+	}
+	return self;
+}
+
+- (id)initWithStandardStyle:(CKStandardCellControllerStyle*)style imageURL:(NSString *)imageURL text:(NSString *)text{
+	if ([self initWithStandardStyle:style]) {
+		self.imageURL = imageURL;
+		self.fetchedImage = [[CKCache sharedCache] imageForKey:[self cacheKeyForImage]];
+		self.text = text;
+		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	}
+	return self;
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style {
 	if (self = [super init]) {
 		self.style = style;
@@ -47,7 +114,7 @@
 }
 
 - (id)initWithText:(NSString *)text {
-	if ([self initWithStyle:UITableViewCellStyleDefault]) {
+	if ([self initWithStandardStyle:[CKStandardCellControllerStyle defaultStyle]]) {
 		self.text = text;
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
@@ -65,20 +132,26 @@
 }
 
 - (void)dealloc {
+	//DEPRECATED ATTRIBUTES
+	self.image = nil;
+	self.backgroundColor = nil;
+	self.textColor = nil;
+	self.detailedTextColor = nil;
+	
 	self.text = nil;
 	self.detailedText = nil;
 	self.imageURL = nil;
 	self.fetchedImage = nil;
-	self.image = nil;
 	[self.request cancel];
 	self.request = nil;
-	self.backgroundColor = nil;
-	self.textColor = nil;
-	self.detailedTextColor = nil;
 	[super dealloc];
 }
 
 - (NSString *)identifier {
+	if(self.controllerStyle){
+		return [NSString stringWithFormat:@"%@-<%p>", [super identifier], self.controllerStyle];
+	}
+	//FIXME DEPRECATED
 	return [NSString stringWithFormat:@"%@-%d", [super identifier], self.style];
 }
 
@@ -100,7 +173,12 @@
 }
 
 - (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:self.style];
+	CKStandardCellControllerStyle* theStyle = (CKStandardCellControllerStyle*)self.controllerStyle;
+	//FIXME When no support for DEPRECATED :
+	//CKStandardCellControllerStyle* theStyle = (self.controllerStyle == nil) ?  [CKStandardCellControllerStyle defaultStyle] : (CKStandardCellControllerStyle*)self.controllerStyle;
+	
+	UITableViewCell *cell = (theStyle != nil) ? [self cellWithStyle:theStyle.cellStyle] : [self cellWithStyle:self.style];
+	cell.accessoryType = (theStyle != nil) ? theStyle.accessoryType : self.accessoryType;
 	return cell;
 }
 
@@ -108,13 +186,17 @@
 	[super setupCell:cell];
 	[self.request cancel];
 	
-	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
-	if (self.textColor) cell.textLabel.textColor = self.textColor;
-	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;
-	if (self.isTextMultiline) cell.textLabel.numberOfLines = 0;
-	if (self.isDetailTextMultiline) cell.detailTextLabel.numberOfLines = 0;
+	CKStandardCellControllerStyle* theStyle = (CKStandardCellControllerStyle*)self.controllerStyle;
+	//FIXME When no support for DEPRECATED :
+	//CKStandardCellControllerStyle* theStyle = (self.controllerStyle == nil) ?  [CKStandardCellControllerStyle defaultStyle] : (CKStandardCellControllerStyle*)self.controllerStyle;
+	
+	if (self.backgroundColor) cell.backgroundColor             = (theStyle != nil) ? theStyle.backgroundColor : self.backgroundColor;
+	if (self.textColor) cell.textLabel.textColor               = (theStyle != nil) ? theStyle.textColor : self.textColor;
+	if (self.detailedTextColor) cell.detailTextLabel.textColor = (theStyle != nil) ? theStyle.detailedTextColor : self.detailedTextColor;
+	if ((theStyle != nil) ? theStyle.isTextMultiline : self.isTextMultiline) cell.textLabel.numberOfLines = 0;
+	if ((theStyle != nil) ? theStyle.isDetailTextMultiline : self.isDetailTextMultiline) cell.detailTextLabel.numberOfLines = 0;
 
-	cell.imageView.image = self.fetchedImage ? self.fetchedImage : self.image;
+	cell.imageView.image = self.fetchedImage ? self.fetchedImage : ((theStyle != nil) ? theStyle.image : self.image);
 	cell.textLabel.text = self.text;
 	cell.detailTextLabel.text = self.detailedText;
 }
@@ -123,7 +205,12 @@
 
 - (void)request:(id)request didReceiveValue:(id)value {
 	self.request = nil;
-	UIImage *image = self.image ? [value imageThatFits:self.image.size crop:YES] : value;
+	
+	CKStandardCellControllerStyle* theStyle = (CKStandardCellControllerStyle*)self.controllerStyle;
+	//FIXME When no support for DEPRECATED :
+	//CKStandardCellControllerStyle* theStyle = (self.controllerStyle == nil) ?  [CKStandardCellControllerStyle defaultStyle] : (CKStandardCellControllerStyle*)self.controllerStyle;
+	UIImage* defaultImage = (theStyle != nil) ? theStyle.image : self.image;
+	UIImage *image = defaultImage ? [value imageThatFits:defaultImage.size crop:YES] : value;
 	[[CKCache sharedCache] setImage:image forKey:[self cacheKeyForImage]];
 	self.fetchedImage = image;
 	[self setNeedsSetup];

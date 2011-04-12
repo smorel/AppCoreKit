@@ -15,9 +15,6 @@
 #import <CloudKit/MAZeroingWeakRef.h>
 #import <CloudKit/CKNSObject+bindings.h>
 #import "CKVersion.h"
-
-static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
-
 //
 
 @interface CKObjectTableViewController ()
@@ -35,7 +32,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
 
-+ (NSString*)identifierForClass:(Class)theClass;
++ (NSString*)identifierForClass:(Class)theClass style:(id)style;
 
 @end
 
@@ -172,10 +169,6 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 	}
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
 - (IBAction)edit:(id)sender{
 	[self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
 	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
@@ -297,7 +290,12 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
     [super didReceiveMemoryWarning];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
 - (void)viewDidUnload {
+    [super viewDidUnload];
 }
 
 - (void)notifiesCellControllersForVisibleRows {
@@ -559,16 +557,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 /* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
           as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
-+ (NSString*)identifierForClass:(Class)theClass{
-	if(CKObjectTableViewControllerClassToIdentifier == nil){
-		CKObjectTableViewControllerClassToIdentifier = [[NSMutableDictionary alloc]init];
-	}
-	NSString* identifier = [CKObjectTableViewControllerClassToIdentifier objectForKey:theClass];
-	if(identifier)
-		return identifier;
-	
-	identifier = [theClass description];//NSStringFromClass(theClass);
-	[CKObjectTableViewControllerClassToIdentifier setObject:identifier forKey:theClass];
++ (NSString*)identifierForClass:(Class)theClass style:(id)style{
+	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",[theClass description],style];
 	return identifier;
 }
 
@@ -579,7 +569,8 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass){
-				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass];
+				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass  style:controllerStyle];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
@@ -587,7 +578,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				if(cell == nil){
 					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 					controller = [[[controllerClass alloc]init]autorelease];
-					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
+					[controller setControllerStyle:controllerStyle];
 					cell = [controller loadCell];
 					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -639,7 +630,7 @@ static NSMutableDictionary* CKObjectTableViewControllerClassToIdentifier = nil;
 				[_indexPathToCells setObject:[NSValue valueWithNonretainedObject:cell] forKey:indexPath];
 				
 				if(![controller.value isEqual:object]){
-					[controller setControllerStyle:[_controllerFactory styleForIndexPath:indexPath]];
+					[controller setControllerStyle:controllerStyle];
 					[_controllerFactory initializeController:controller atIndexPath:indexPath];
 					
 					[controller setValue:object];
