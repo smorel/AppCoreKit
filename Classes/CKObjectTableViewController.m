@@ -425,7 +425,8 @@
 		}
 	}
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		self.indexPathToReachAfterRotation = [visibleCells objectAtIndex:0];
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
