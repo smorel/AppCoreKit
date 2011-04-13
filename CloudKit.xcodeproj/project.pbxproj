@@ -263,6 +263,8 @@
 		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
 		750D723E1354943D0091E5AA /* CKFeedCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 750D723C1354943D0091E5AA /* CKFeedCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		750D723F1354943D0091E5AA /* CKFeedCarouselViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 750D723D1354943D0091E5AA /* CKFeedCarouselViewController.m */; };
+		750D7AB01356365C0091E5AA /* CKNibCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 750D7AAE1356365C0091E5AA /* CKNibCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		750D7AB11356365C0091E5AA /* CKNibCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 750D7AAF1356365C0091E5AA /* CKNibCellController.m */; };
 		751004B61337BB1C008B0E7B /* CKDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AB1337BB1C008B0E7B /* CKDocumentController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751004B71337BB1C008B0E7B /* CKDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004AC1337BB1C008B0E7B /* CKDocumentController.m */; };
 		751004B81337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -604,6 +606,8 @@
 		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
 		750D723C1354943D0091E5AA /* CKFeedCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKFeedCarouselViewController.h; sourceTree = "<group>"; };
 		750D723D1354943D0091E5AA /* CKFeedCarouselViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKFeedCarouselViewController.m; sourceTree = "<group>"; };
+		750D7AAE1356365C0091E5AA /* CKNibCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNibCellController.h; sourceTree = "<group>"; };
+		750D7AAF1356365C0091E5AA /* CKNibCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNibCellController.m; sourceTree = "<group>"; };
 		751004AB1337BB1C008B0E7B /* CKDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocumentController.h; path = Classes/CKDocumentController.h; sourceTree = "<group>"; };
 		751004AC1337BB1C008B0E7B /* CKDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocumentController.m; path = Classes/CKDocumentController.m; sourceTree = "<group>"; };
 		751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDictionary+TableViewAttributes.h"; path = "Classes/CKNSDictionary+TableViewAttributes.h"; sourceTree = "<group>"; };
@@ -831,6 +835,8 @@
 				4FAD0E6811C2BA720071C7BF /* CKOptionTableViewController.m */,
 				4F1298FB1237E46C00AA2601 /* CKCreditsFooterView.h */,
 				4F1298FC1237E46C00AA2601 /* CKCreditsFooterView.m */,
+				750D7AAE1356365C0091E5AA /* CKNibCellController.h */,
+				750D7AAF1356365C0091E5AA /* CKNibCellController.m */,
 			);
 			name = Tables;
 			path = Classes;
@@ -1519,6 +1525,7 @@
 				751A366D134DEC660011656D /* CKCarouselView.h in Headers */,
 				751A3778134DFBAE0011656D /* CKObjectCarouselViewController.h in Headers */,
 				750D723E1354943D0091E5AA /* CKFeedCarouselViewController.h in Headers */,
+				750D7AB01356365C0091E5AA /* CKNibCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1791,6 +1798,7 @@
 				751A366E134DEC660011656D /* CKCarouselView.m in Sources */,
 				751A3779134DFBAE0011656D /* CKObjectCarouselViewController.m in Sources */,
 				750D723F1354943D0091E5AA /* CKFeedCarouselViewController.m in Sources */,
+				750D7AB11356365C0091E5AA /* CKNibCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
