@@ -18,6 +18,7 @@
 	BOOL observing;
 	BOOL animateFirstInsertion;
 	BOOL displayFeedSourceCell;
+	NSInteger numberOfFeedObjectsLimit;
 }
 
 @property (nonatomic, assign) id document;
@@ -25,6 +26,7 @@
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) BOOL animateFirstInsertion;
 @property (nonatomic, assign) BOOL displayFeedSourceCell;
+@property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
 
 - (id)initWithDocument:(id)document key:(NSString*)key;
 

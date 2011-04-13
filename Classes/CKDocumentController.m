@@ -16,6 +16,7 @@
 @synthesize key = _key;
 @synthesize delegate = _delegate;
 @synthesize displayFeedSourceCell;
+@synthesize numberOfFeedObjectsLimit;
 
 - (void)dealloc{
 	if(_document){
@@ -36,6 +37,7 @@
 - (id)initWithDocument:(id)theDocument key:(NSString*)theKey{
 	[super init];
 
+	self.numberOfFeedObjectsLimit = 0;
 	self.document = theDocument;
 	self.key = theKey;
 	
@@ -59,7 +61,7 @@
 		if([objects count] <= 0){
 			CKFeedSource* feedSource = [_document dataSourceForKey:_key];
 			if(feedSource){
-				[feedSource fetchNextItems:10];
+				[feedSource fetchNextItems:(numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,10) : 10];
 			}
 		}
 	}
@@ -84,6 +86,10 @@
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
 				range.location--;
 			}
+			
+			//Adjust range using limit
+			range.location = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,range.location) : range.location;
+			range.length = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit - range.location,range.length - range.location) : range.length;
 			[_document fetchRange:range forKey:_key];
 		}
 	//}
@@ -97,12 +103,13 @@
 	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
+			NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[objects count]) : [objects count];
 			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
 				id dataSource = [_document dataSourceForKey:_key];
-				return [objects count] + ((displayFeedSourceCell && dataSource != nil) ? 1 : 0);
+				return count + ((displayFeedSourceCell && dataSource != nil) ? 1 : 0);
 			}
 			else {
-				return [objects count];
+				return count;
 			}
 
 		}
@@ -121,7 +128,8 @@
 	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
 		if([_document respondsToSelector:@selector(objectsForKey:)]){
 			NSArray* objects = [_document objectsForKey:_key];
-			if(indexPath.row < [objects count]){
+			NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[objects count]) : [objects count];
+			if(indexPath.row < count){
 				NSInteger index = indexPath.row;
 				return [objects objectAtIndex:index];
 			}
@@ -206,11 +214,16 @@
 		case NSKeyValueChangeInsertion:{
 			while (currentIndex != NSNotFound) {
 				NSAssert(count < [newModels count],@"Problem with observer change newModels");
-				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+				
+				//Do not notify add if currentIndex > limit
+				if(numberOfFeedObjectsLimit > 0 && currentIndex >= numberOfFeedObjectsLimit){/*Do nothing*/}
+				else{
+					//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
 						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
-				//}
+					//}
+				}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
 				++count;
 			}
