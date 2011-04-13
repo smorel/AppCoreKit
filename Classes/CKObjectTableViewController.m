@@ -643,6 +643,19 @@
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
 				[self updateNumberOfPages];
 				
+				if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+					NSMutableDictionary* params = [NSMutableDictionary dictionary];
+					[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+					[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+					[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+					[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+					id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
+					if(controllerStyle){
+						[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
+					}
+					
+					[controller rotateCell:cell withParams:params animated:NO];
+				}	
 				
 				//NSLog(@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section);
 				
@@ -657,22 +670,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-		NSMutableDictionary* params = [NSMutableDictionary dictionary];
-		[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-		[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-		[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-		[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-		id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-		if(controllerStyle){
-			[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-		}
-		
-		[controller rotateCell:cell withParams:params animated:NO];
-	}	
-	
 	[self rotateSubViewsForCell:cell];
-	
 	[self updateNumberOfPages];
 }
 
