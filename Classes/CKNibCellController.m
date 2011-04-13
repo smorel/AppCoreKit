@@ -44,6 +44,10 @@
 	return self;
 }
 
++ (NSString*)classIdentifier{
+	return [[self class] description];
+}
+
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [super loadCell];
 	cell.backgroundView = [[[UIView alloc] initWithFrame:cell.bounds] autorelease];

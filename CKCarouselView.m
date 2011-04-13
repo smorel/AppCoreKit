@@ -181,8 +181,8 @@ double round(double x)
 
 - (void)enqueueReusableView:(UIView*)view{
 	id identifier = nil;
-	if([view respondsToSelector:@selector(identifier)]){
-		identifier = [view performSelector:@selector(identifier)];
+	if([view respondsToSelector:@selector(reuseIdentifier)]){
+		identifier = [view performSelector:@selector(reuseIdentifier)];
 	}
 	if(identifier){
 		NSMutableArray* reusable = [_reusableViews objectForKey:identifier];
@@ -225,9 +225,8 @@ double round(double x)
 	for(NSIndexPath* indexPath in toRemove){
 		UIView* view = [_visibleViewsForIndexPaths objectForKey:indexPath];
 		[view removeFromSuperview];
-		[_visibleViewsForIndexPaths removeObjectForKey:indexPath];
 		[self enqueueReusableView:view];
-		
+		[_visibleViewsForIndexPaths removeObjectForKey:indexPath];
 		
 		if(_delegate && [_delegate respondsToSelector:@selector(carouselView:viewDidDisappearAtIndexPath:)]){
 			[_delegate carouselView:self viewDidDisappearAtIndexPath:indexPath];
@@ -558,7 +557,7 @@ double round(double x)
 }
 
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
-	CGPoint location = [recognizer locationInView:self];
+	//CGPoint location = [recognizer locationInView:self];
 	CGPoint translation = [recognizer translationInView:self];
 	CGPoint velocity = [recognizer velocityInView:self];
 	
@@ -613,7 +612,7 @@ double round(double x)
 		}
 	}
 	
-	BOOL ended = (recognizer.state == UIGestureRecognizerStateEnded);
+	//BOOL ended = (recognizer.state == UIGestureRecognizerStateEnded);
 	
 	//NSLog(@"location=%f offset=%f velocity=%f pageOffset=%f pageVelocity=%f ended=%@",location.x,translation.x,velocity.x,pageOffset,pageVelocity,ended ? @"YES" : @"NO");
 }

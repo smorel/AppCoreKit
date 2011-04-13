@@ -54,6 +54,10 @@
 	return [[self class] description];
 }
 
++ (NSString*)classIdentifier{
+	return [[self class] description];
+}
+
 - (void)setIndexPath:(NSIndexPath *)indexPath {
 	// This method is hidden from the public interface and is called by the CKManagedTableViewController
 	// when adding the CKTableViewCellController.	

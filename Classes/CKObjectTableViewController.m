@@ -561,7 +561,11 @@
           as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
 + (NSString*)identifierForClass:(Class)theClass style:(id)style{
-	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",[theClass description],style];
+	NSString* classIdentifier = [theClass description];
+	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
+		classIdentifier = [theClass classIdentifier];
+	}
+	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",classIdentifier,style];
 	return identifier;
 }
 
@@ -669,7 +673,7 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+	//CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	[self rotateSubViewsForCell:cell];
 	[self updateNumberOfPages];
 }

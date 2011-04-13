@@ -12,14 +12,14 @@
 
 
 @interface UIViewWithIdentifier : UIView{
-	id identifier;
+	id reuseIdentifier;
 }
-@property (nonatomic,retain) id identifier;
+@property (nonatomic,retain) id reuseIdentifier;
 @end
 
 @implementation UIViewWithIdentifier
-@synthesize identifier;
-- (void)dealloc{ self.identifier = nil; [super dealloc]; }
+@synthesize reuseIdentifier;
+- (void)dealloc{ self.reuseIdentifier = nil; [super dealloc]; }
 @end
 
 
@@ -313,7 +313,11 @@
  as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
 + (NSString*)identifierForClass:(Class)theClass style:(id)style{
-	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",[theClass description],style];
+	NSString* classIdentifier = [theClass description];
+	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
+		classIdentifier = [theClass classIdentifier];
+	}
+	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",classIdentifier,style];
 	return identifier;
 }
 
