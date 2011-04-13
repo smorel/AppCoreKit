@@ -61,7 +61,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));
 	}
 	else{
-		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+		NSLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	if (self.request) {
