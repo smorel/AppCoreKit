@@ -138,6 +138,14 @@
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
 }
 
+- (void)customizePortraitView:(UIView*)view{
+	//Implement in derived class
+}
+
+- (void)customizeLandscapeView:(UIView*)view{
+	//Implement in derived class
+}
+
 - (void)bindValueInPortraitView:(UIView*)view{
 	//Implement in derived class
 }
