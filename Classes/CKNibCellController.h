@@ -36,5 +36,7 @@ typedef enum{
 - (void)customizeLandscapeView:(UIView*)view;
 - (void)bindValueInPortraitView:(UIView*)view;
 - (void)bindValueInLandscapeView:(UIView*)view;
+- (void)willDeleteLandscapeView:(UIView*)view;
+- (void)willDeletePortraitView:(UIView*)view;
 
 @end

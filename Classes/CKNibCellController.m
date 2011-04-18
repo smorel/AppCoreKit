@@ -26,6 +26,17 @@
 @synthesize autoresizeViewsOnInsertion = _autoresizeViewsOnInsertion;
 
 - (void)dealloc{
+	switch(self.currentMode){
+		case CKNibCellControllerModePortrait:{
+			[self willDeletePortraitView:self.tableViewCell.contentView];
+			break;
+		}
+		case CKNibCellControllerModeLandscape:{
+			[self willDeleteLandscapeView:self.tableViewCell.contentView];
+			break;
+		}
+	}
+	
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_portraitNibName release];
 	[_landscapeNibName release];
@@ -155,6 +166,14 @@
 }
 
 - (void)bindValueInLandscapeView:(UIView*)view{
+	//Implement in derived class
+}
+
+- (void)willDeleteLandscapeView:(UIView*)view{
+	//Implement in derived class
+}
+
+- (void)willDeletePortraitView:(UIView*)view{
 	//Implement in derived class
 }
 
