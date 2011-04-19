@@ -61,7 +61,7 @@
 				NSInteger count = [_collection count];
 				NSInteger requested = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,10) : 10;
 				if(requested > count){
-					[feedSource fetchRange:NSMakeRange(count, count - requested)];
+					[feedSource fetchRange:NSMakeRange(count, requested - count)];
 				}
 			}
 		}
