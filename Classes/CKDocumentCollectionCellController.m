@@ -1,34 +1,35 @@
 //
-//  CKFeedSourceViewCellController.m
+//  CKDocumentCollectionViewCellController.m
 //  NFB
 //
 //  Created by Sebastien Morel on 11-03-23.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKFeedSourceViewCellController.h"
+#import "CKDocumentCollectionCellController.h"
 #import <CloudKit/CKFeedSource.h>
 #import <CloudKit/CKNSObject+Bindings.h>
 #import <CloudKit/CKLocalization.h>
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectCarouselViewController.h"
+#import "CKDocumentCollection.h"
 
-static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaultStyle = nil;
+static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControllerStyleDefaultStyle = nil;
 
-@implementation CKFeedSourceViewCellControllerStyle
+@implementation CKDocumentCollectionCellControllerStyle
 @synthesize noItemsMessage, oneItemMessage, manyItemsMessage, backgroundColor, textColor, indicatorStyle;
 
-+ (CKFeedSourceViewCellControllerStyle*)defaultStyle{
-	if(CKFeedSourceViewCellControllerDefaultStyle == nil){
-		[CKFeedSourceViewCellControllerDefaultStyle = [CKFeedSourceViewCellControllerStyle alloc]init];
-		CKFeedSourceViewCellControllerDefaultStyle.noItemsMessage = @"No Object";
-		CKFeedSourceViewCellControllerDefaultStyle.oneItemMessage = @"1 Object";
-		CKFeedSourceViewCellControllerDefaultStyle.manyItemsMessage = @"Objects";
-		CKFeedSourceViewCellControllerDefaultStyle.backgroundColor = [UIColor clearColor];
-		CKFeedSourceViewCellControllerDefaultStyle.textColor = [UIColor whiteColor];
-		CKFeedSourceViewCellControllerDefaultStyle.indicatorStyle = UIActivityIndicatorViewStyleWhite;
++ (CKDocumentCollectionCellControllerStyle*)defaultStyle{
+	if(CKDocumentCollectionCellControllerStyleDefaultStyle == nil){
+		[CKDocumentCollectionCellControllerStyleDefaultStyle = [CKDocumentCollectionCellControllerStyle alloc]init];
+		CKDocumentCollectionCellControllerStyleDefaultStyle.noItemsMessage = @"No Object";
+		CKDocumentCollectionCellControllerStyleDefaultStyle.oneItemMessage = @"1 Object";
+		CKDocumentCollectionCellControllerStyleDefaultStyle.manyItemsMessage = @"Objects";
+		CKDocumentCollectionCellControllerStyleDefaultStyle.backgroundColor = [UIColor clearColor];
+		CKDocumentCollectionCellControllerStyleDefaultStyle.textColor = [UIColor whiteColor];
+		CKDocumentCollectionCellControllerStyleDefaultStyle.indicatorStyle = UIActivityIndicatorViewStyleWhite;
 	}
-	return CKFeedSourceViewCellControllerDefaultStyle;
+	return CKDocumentCollectionCellControllerStyleDefaultStyle;
 }
 
 @end
@@ -37,7 +38,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 #define ActivityIndicatorTag 1
 #define LabelTag 2
 
-@implementation CKFeedSourceViewCellController
+@implementation CKDocumentCollectionViewCellController
 
 - (void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
@@ -47,7 +48,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 - (UITableViewCell *)loadCell{
 	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
 	
-	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
+	CKDocumentCollectionCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKDocumentCollectionCellControllerStyle defaultStyle];
 	
 	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -75,7 +76,8 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 }
 
 - (void)update:(UIView*)view{
-	CKFeedSource* source = (CKFeedSource*)self.value;
+	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
+	CKFeedSource* source = collection.feedSource;
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
 	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
@@ -87,11 +89,11 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 		[activityIndicator stopAnimating];
 	}
 	
-	CKFeedSourceViewCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKFeedSourceViewCellControllerStyle defaultStyle];
+	CKDocumentCollectionCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKDocumentCollectionCellControllerStyle defaultStyle];
 	
 	UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
 	label.hidden = !activityIndicator.hidden;	
-	switch(source.currentIndex){
+	switch([collection count]){
 		case 0:{
 			label.text = theStyle.noItemsMessage;
 			break;
@@ -101,7 +103,7 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 			break;
 		}
 		default:{
-			label.text = [NSString stringWithFormat:@"%d %@",source.currentIndex,_(theStyle.manyItemsMessage)];
+			label.text = [NSString stringWithFormat:@"%d %@",[collection count],_(theStyle.manyItemsMessage)];
 			break;
 		}
 	}
@@ -115,7 +117,9 @@ static CKFeedSourceViewCellControllerStyle* CKFeedSourceViewCellControllerDefaul
 	[super setupCell:cell];
 	self.selectable = NO;
 	
-	CKFeedSource* source = (CKFeedSource*)self.value;
+	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
+	CKFeedSource* source = collection.feedSource;
+	
 	[self update:cell.contentView];
 	
 	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ActivityIndicatorTag];

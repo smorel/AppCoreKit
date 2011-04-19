@@ -10,50 +10,21 @@
 #import "CKNSObject+Invocation.h"
 
 @interface CKFeedSource ()
-@property (nonatomic, retain, readwrite) NSObject<CKDocument>* document;
-@property (nonatomic, retain, readwrite) NSString *objectsKey;
-
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
-@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, assign) NSRange range;
 @end
 
 @implementation CKFeedSource
 
 @synthesize delegate = _delegate;
-@synthesize currentIndex = _currentIndex;
-@synthesize limit = _limit;
 @synthesize hasMore = _hasMore;
 @synthesize isFetching = _isFetching;
+@synthesize range = _range;
 
-@synthesize document = _document;
-@synthesize objectsKey = _objectsKey;
 #pragma mark Initialization
 
 -(void)postInit{
-}
-
-- (id)initWithDocument:(NSObject<CKDocument>*)theDocument forKey:(NSString*)key{
-	if (self = [super init]) {
-		if(self.document){
-			//[self.document releaseObjectsForKey:self.objectsKey];
-			[self.document removeObserver:self forKey:self.objectsKey];
-		}
-		
-		self.document = theDocument;
-		self.objectsKey = key;
-		[self reset];
-		
-		if(self.document){
-			NSArray* objects =  [self.document objectsForKey:self.objectsKey];
-			_currentIndex = (objects != nil) ? [objects count] : 0;
-			[self.document addObserver:self forKey:key];
-		}
-		
-		//[self.document retainObjectsForKey:self.objectsKey];
-		[self postInit];
-	}
-	return self;
 }
 
 - (id)init {
@@ -65,33 +36,15 @@
 }
 
 - (void)dealloc {
-	if(self.document){
-		//[self.document releaseObjectsForKey:self.objectsKey];
-		[self.document removeObserver:self forKey:self.objectsKey];
-	}
 	_delegate = nil;
-	self.document = nil;
-	self.objectsKey = nil;
 	[super dealloc];
-}
-
-- (void)observeValueForKeyPath:(NSString *)theKeyPath
-					  ofObject:(id)object
-						change:(NSDictionary *)change
-					   context:(void *)context {
-	self.currentIndex = [self.items count];
-	if(_limit > 0){
-		self.hasMore = (_currentIndex  < _limit);
-	}
-	else{
-		self.hasMore = YES;
-	}
 }
 
 #pragma mark Public API
 
-- (BOOL)fetchNextItems:(NSUInteger)batchSize {
+- (BOOL)fetchRange:(NSRange)theRange {
 	self.hasMore = NO;
+	self.range = theRange;
 	return NO;
 }
 
@@ -101,49 +54,16 @@
 }
 
 - (void)reset {
-	self.currentIndex = 0;
 	self.hasMore = YES;
 	self.isFetching = NO;
-}
-
-- (NSArray*)items{
-	NSAssert(_document,@"Model is not assigned");
-	return [_document objectsForKey:_objectsKey];
-}
-
-- (void)addObserver:(id)object{
-	NSAssert(_document,@"Model is not assigned");
-	[_document addObserver:object forKey:_objectsKey];
-}
-
-- (void)removeObserver:(id)object{
-	NSAssert(_document,@"Model is not assigned");
-	[_document removeObserver:object forKey:_objectsKey];	
-}
-
-- (void)setLimit:(NSUInteger)l{
-	_limit = l;
-	if(_limit > 0){
-		self.hasMore = (_currentIndex  < _limit);
-	}
 }
 
 #pragma mark KVO
 
 - (void)addItems:(NSArray *)theItems {
-	NSArray *newItems = theItems;
-	
-	if ((_limit > 0) && (_currentIndex + theItems.count) >= _limit) {
-		newItems = [theItems subarrayWithRange:NSMakeRange(0, abs(_limit - _currentIndex))];
-		self.hasMore = NO;
+	if(_delegate && [_delegate respondsToSelector:@selector(feedSource:didFetchItems:range:)]){
+		[_delegate feedSource:self didFetchItems:theItems range:self.range];
 	}
-	
-	NSAssert(_document,@"Model is not assigned");
-	
-	[_document performSelectorOnMainThread:@selector(addObjects:forKey:) 
-								  withObject:newItems 
-								  withObject:_objectsKey 
-							   waitUntilDone:NO];
 }
 
 @end

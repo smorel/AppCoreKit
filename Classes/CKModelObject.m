@@ -96,13 +96,13 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	return desc;
 }
 
-- (id) copyWithZone:(NSZone *)zone {
-	id copied = [[[self class] alloc] init];
-	NSArray* allProperties = [self allPropertyDescriptors ];
+
+- (void)copy : (id)other{
+	NSArray* allProperties = [other allPropertyDescriptors ];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:other property:property];
 		if(metaData.copiable){
-			id value = [self valueForKey:property.name];
+			id value = [other valueForKey:property.name];
 			if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
 				value = [value copy];
 				if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
@@ -110,11 +110,14 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 					[value autorelease];
 				}
 			}
-			[copied setValue:value forKey:property.name];
-			
+			[self setValue:value forKey:property.name];
 		}
 	}
-	
+}
+
+- (id) copyWithZone:(NSZone *)zone {
+	CKModelObject* copied = [[[self class] alloc] init];
+	[copied copy:self];
 	return copied;
 }
 

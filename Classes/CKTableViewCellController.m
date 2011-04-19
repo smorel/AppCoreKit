@@ -11,6 +11,9 @@
 
 #import "CKNSArrayAdditions.h"
 
+@implementation CKTableViewCellControllerStyle
+@end
+
 @implementation CKTableViewCellController
 
 @synthesize key = _key;

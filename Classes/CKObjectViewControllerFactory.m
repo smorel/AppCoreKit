@@ -8,8 +8,8 @@
 
 #import "CKObjectViewControllerFactory.h"
 #import "CKObjectController.h"
-#import "CKFeedSourceViewCellController.h"
-#import "CKFeedSource.h"
+#import "CKDocumentCollectionCellController.h"
+#import "CKDocumentCollection.h"
 
 
 @implementation CKObjectViewControllerFactory
@@ -34,7 +34,7 @@
 	CKObjectViewControllerFactory* factory = (CKObjectViewControllerFactory*)[[[type alloc]init]autorelease];
 	factory.mappings = mappings;
 	if(factory.mappings){
-		[factory.mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
+		[factory.mappings setObject:[CKDocumentCollectionViewCellController class] forKey:[CKDocumentCollection class]];
 	}
 	factory.styles = styles;
 	return factory;
@@ -44,7 +44,7 @@
 	[_mappings release];
 	_mappings = [theMappings retain];
 	if(_mappings){
-		[_mappings setObject:[CKFeedSourceViewCellController class] forKey:[CKFeedSource class]];
+		[_mappings setObject:[CKDocumentCollectionViewCellController class] forKey:[CKDocumentCollection class]];
 	}
 }
 

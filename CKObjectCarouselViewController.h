@@ -10,6 +10,7 @@
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
+#import "CKDocumentCollection.h"
 
 @interface CKObjectCarouselViewController : UIViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,CKObjectControllerDelegate> {
 	CKCarouselView* _carouselView;
@@ -30,6 +31,7 @@
 @property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 

@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "CKManagedTableViewController.h"
+#import "CKModelObject.h"
+
+@interface CKTableViewCellControllerStyle : CKModelObject{
+}
+@end
 
 enum{
 	CKTableViewCellFlagNone = 1UL << 0,

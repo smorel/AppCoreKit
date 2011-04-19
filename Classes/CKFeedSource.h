@@ -11,30 +11,16 @@
 
 @interface CKFeedSource : NSObject {
 	id _delegate;
-	NSUInteger _currentIndex;
-	NSUInteger _limit;
 	BOOL _hasMore;
 	BOOL _isFetching;
-	
-	NSObject<CKDocument>* _document;
-	NSString* _objectsKey;
+	NSRange _range;
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, readonly) NSUInteger currentIndex;
-@property (nonatomic, readwrite) NSUInteger limit;
 @property (nonatomic, readonly) BOOL hasMore;
 @property (nonatomic, readonly) BOOL isFetching;
 
-@property (nonatomic, retain, readonly) NSArray *items;
-@property (nonatomic, retain, readonly) NSObject<CKDocument>* document;
-@property (nonatomic, retain, readonly) NSString *objectsKey;
-
-- (id)initWithDocument:(NSObject<CKDocument>*)document forKey:(NSString*)key;
-- (void)addObserver:(id)object;
-- (void)removeObserver:(id)object;
-
-- (BOOL)fetchNextItems:(NSUInteger)batchSize;
+- (BOOL)fetchRange:(NSRange)range;
 - (void)cancelFetch;
 - (void)reset;
 
@@ -44,7 +30,7 @@
 
 @protocol CKFeedSourceDelegate
 
-- (void)feedSource:(CKFeedSource *)feedSource didAddItems:(NSArray *)items range:(NSRange)range;
+- (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range;
 - (void)feedSource:(CKFeedSource *)feedSource didFailWithError:(NSError *)error;
 
 @end

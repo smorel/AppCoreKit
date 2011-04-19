@@ -9,6 +9,7 @@
 #import "CKObjectCarouselViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
+#import "CKDocumentController.h"
 
 
 @interface UIViewWithIdentifier : UIView{
@@ -63,6 +64,13 @@
 	if (self) {
 		[self postInit];
 	}
+	return self;
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	[self initWithObjectController:controller withControllerFactory:factory];
 	return self;
 }
 

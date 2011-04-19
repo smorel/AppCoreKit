@@ -10,6 +10,7 @@
 
 @protocol CKObjectController 
 @optional
+
 //State Management
 - (void)viewWillAppear;
 - (void)viewWillDisappear;

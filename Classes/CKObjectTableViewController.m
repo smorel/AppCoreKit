@@ -15,6 +15,8 @@
 #import <CloudKit/MAZeroingWeakRef.h>
 #import <CloudKit/CKNSObject+bindings.h>
 #import "CKVersion.h"
+#import "CKDocumentController.h"
+
 //
 
 @interface CKObjectTableViewController ()
@@ -87,16 +89,18 @@
 	_editable = NO;
 }
 
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	[self initWithObjectController:controller withControllerFactory:factory];
+	return self;
+}
+
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
 	[self init];
 	self.objectController = controller;
 	self.controllerFactory = factory;
-	
-	//if([controller conformsToProtocol:@protocol(CKObjectController)]){
-		if([controller respondsToSelector:@selector(setDelegate:)]){
-			[controller performSelector:@selector(setDelegate:) withObject:self];
-		}
-	//}
 	return self;
 }
 

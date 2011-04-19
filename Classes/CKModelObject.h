@@ -33,6 +33,7 @@
 @property (nonatomic, assign) BOOL creatable;
 
 - (void)reset;
+- (void)copy : (id)other;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end

@@ -6,10 +6,11 @@
 //  Copyright Wherecloud 2011. All rights reserved.
 //
 
-#import <CloudKit/CKTableViewController.h>
+#import "CKTableViewController.h"
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
+#import "CKDocumentCollection.h"
 
 @interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate> {
 	id _objectController;
@@ -57,6 +58,7 @@
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 

@@ -1,5 +1,5 @@
 //
-//  CKFeedSourceViewCellController.h
+//  CKDocumentCollectionViewCellController.h
 //  NFB
 //
 //  Created by Sebastien Morel on 11-03-23.
@@ -7,10 +7,9 @@
 //
 
 #import <CloudKit/CKStandardCellController.h>
-#import "CKModelObject.h"
 
 
-@interface CKFeedSourceViewCellControllerStyle : CKModelObject{
+@interface CKDocumentCollectionCellControllerStyle : CKTableViewCellControllerStyle{
 }
 
 @property (nonatomic, copy) NSString* noItemsMessage;
@@ -20,11 +19,11 @@
 @property (nonatomic, retain) UIColor* textColor;
 @property (nonatomic, assign) UIActivityIndicatorViewStyle indicatorStyle;
 
-+ (CKFeedSourceViewCellControllerStyle*)defaultStyle;
++ (CKDocumentCollectionCellControllerStyle*)defaultStyle;
 
 @end
 
-@interface CKFeedSourceViewCellController : CKTableViewCellController {
+@interface CKDocumentCollectionViewCellController : CKTableViewCellController {
 }
 
 @end

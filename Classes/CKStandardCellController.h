@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
 #import "CKWebRequest.h"
-#import "CKModelObject.h"
 
-@interface CKStandardCellControllerStyle : CKModelObject{}
+@interface CKStandardCellControllerStyle : CKTableViewCellControllerStyle{}
 @property (nonatomic,assign) UITableViewCellStyle cellStyle;
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) UIColor *backgroundColor;
