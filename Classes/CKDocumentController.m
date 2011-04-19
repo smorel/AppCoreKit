@@ -17,6 +17,7 @@
 @synthesize displayFeedSourceCell;
 @synthesize numberOfFeedObjectsLimit;
 @synthesize animateFirstInsertion;
+@synthesize numberOfObjectsToPrefetch;
 
 - (void)dealloc{
 	if(_collection){
@@ -42,6 +43,7 @@
 	[super init];
 
 	self.numberOfFeedObjectsLimit = 0;
+	self.numberOfObjectsToPrefetch = 10;
 	self.collection = theCollection;
 	
 	if(theCollection){
@@ -55,8 +57,7 @@
 	return self;
 }
 
-
-- (void)viewWillAppear{
+- (void)start{
 	if(_collection && !observing){
 		observing = YES;
 		[_collection addObserver:self];
@@ -64,7 +65,7 @@
 			CKFeedSource* feedSource = _collection.feedSource;
 			if(feedSource){
 				NSInteger count = [_collection count];
-				NSInteger requested = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,10) : 10;
+				NSInteger requested = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,numberOfObjectsToPrefetch) : numberOfObjectsToPrefetch;
 				if(requested > count){
 					[feedSource fetchRange:NSMakeRange(count, requested - count)];
 				}
@@ -73,7 +74,7 @@
 	}
 }
 
-- (void)viewWillDisappear{
+- (void)stop{
 	if(_collection && observing){
 		observing = NO;
 		[_collection removeObserver:self];
@@ -84,6 +85,17 @@
 		}
 	}
 }
+
+- (void)setDelegate:(id)theDelegate{
+	_delegate = theDelegate;
+	if(theDelegate){
+		[self start];
+	}
+	else{
+		[self stop];
+	}
+}
+
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	NSAssert(section == 0,@"Invalid section");

@@ -11,17 +11,12 @@
 @protocol CKObjectController 
 @optional
 
-//State Management
-- (void)viewWillAppear;
-- (void)viewWillDisappear;
-
 //Sections
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
 
 - (NSString*)headerTitleForSection:(NSInteger)section;
 - (UIView*)headerViewForSection:(NSInteger)section;
-
 
 //Objects Management
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;

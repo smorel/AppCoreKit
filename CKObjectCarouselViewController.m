@@ -115,22 +115,13 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
 	}
 	
-	if(_objectController && [self.view window]){
-		[_objectController viewWillDisappear];
-	}
 	
 	[_objectController release];
 	_objectController = [controller retain];
 	
-	if(_objectController && [self.view window]){
-		[_objectController viewWillAppear];
-	}
-	
-	//if(controller && [controller conformsToProtocol:@protocol(CKObjectController)]){
-	if([controller respondsToSelector:@selector(setDelegate:)]){
+	if([self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
 	}
-	//}
 	
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
@@ -211,11 +202,11 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-	
-	if([_objectController respondsToSelector:@selector(viewWillAppear)]){
-		[_objectController viewWillAppear];
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
+	
+    [super viewWillAppear:animated];
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
@@ -248,8 +239,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	if([_objectController respondsToSelector:@selector(viewWillDisappear)]){
-		[_objectController viewWillDisappear];
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
 	}
 }
 
