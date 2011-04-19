@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKDocument.h"
 
 @interface CKFeedSource : NSObject {
 	id _delegate;

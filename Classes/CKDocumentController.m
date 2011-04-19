@@ -33,6 +33,11 @@
 	[super dealloc];
 }
 
++ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection{
+	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	return controller;
+}
+
 - (id)initWithCollection:(CKDocumentCollection*)theCollection{
 	[super init];
 
@@ -98,7 +103,7 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
-	if(_collection.feedSource){
+	if(displayFeedSourceCell && _collection.feedSource){
 		return count + 1;
 	}
 	else {

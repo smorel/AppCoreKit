@@ -257,7 +257,7 @@ double round(double x)
 }
 
 - (void)layoutSubviews{
-	
+	[self updateViewsAnimated:NO];
 }
 
 - (NSIndexPath*)indexPathForPage:(NSInteger)page{
@@ -313,7 +313,7 @@ double round(double x)
 	BOOL finished = NO;
 	for(NSInteger i = MIN(MAX((NSInteger)_contentOffset,0),_numberOfPages-1); i >=0 && !finished; --i){
 		NSIndexPath* indexPath = [self indexPathForPage:i];
-		if(indexPath){
+		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
 				if([_visibleViewsForIndexPaths objectForKey:indexPath] == nil){
 					[indexPathToAdd addObject:indexPath];
@@ -328,7 +328,7 @@ double round(double x)
 	finished = NO;
 	for(NSInteger i = MIN(MAX((NSInteger)_contentOffset+1,0),_numberOfPages-1); i < _numberOfPages && !finished; ++i){
 		NSIndexPath* indexPath = [self indexPathForPage:i];
-		if(indexPath){
+		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
 				if([_visibleViewsForIndexPaths objectForKey:indexPath] == nil){
 					[indexPathToAdd addObject:indexPath];
@@ -491,7 +491,6 @@ double round(double x)
 - (void)updateOffset:(CGFloat)offset{
 	if(_contentOffset != offset){
 		self.contentOffset = offset;
-		//NSLog(@"offset = %f",offset);
 		NSInteger page = MAX(0,MIN(_numberOfPages-1,(NSInteger)round(self.contentOffset)));
 		if(page != _currentPage){
 			self.currentPage = page;
@@ -568,11 +567,9 @@ double round(double x)
 		_contentOffsetWhenStartPanning = _contentOffset;
 	}
 	else if(recognizer.state != UIGestureRecognizerStateEnded){
-		//NSLog(@"panning");
 		[self setContentOffset:_contentOffsetWhenStartPanning - pageOffset animated:NO];
 	}
 	else{
-		//NSLog(@"swipe");
 		CGFloat offset = round(_contentOffset);
 		if((offset <= 0 && velocity.x >= 0)|| (offset >= _numberOfPages-1 && velocity.x <= 0) || fabs(velocity.x) <= 300){
 			offset = MAX(0,MIN(_numberOfPages-1,offset));
@@ -597,12 +594,9 @@ double round(double x)
 			animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
 			
 			NSMutableArray* values = [NSMutableArray array];
-			//NSLog(@"swipe1:%f",_contentOffset);
 			[values addObject: [NSNumber numberWithFloat:_contentOffset]];
 			CGFloat bouncePos = offset - velocity.x / 30000;
-			//NSLog(@"swipeBounce:%f",bouncePos);
 			[values addObject: [NSNumber numberWithFloat:bouncePos]];
-			//NSLog(@"swipe2:%f",offset);
 			[values addObject: [NSNumber numberWithFloat:offset]];
 			animation.values = values;
 			animation.removedOnCompletion = NO;
@@ -613,8 +607,6 @@ double round(double x)
 	}
 	
 	//BOOL ended = (recognizer.state == UIGestureRecognizerStateEnded);
-	
-	//NSLog(@"location=%f offset=%f velocity=%f pageOffset=%f pageVelocity=%f ended=%@",location.x,translation.x,velocity.x,pageOffset,pageVelocity,ended ? @"YES" : @"NO");
 }
 
 @end

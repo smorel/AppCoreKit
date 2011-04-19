@@ -26,5 +26,6 @@
 @property (nonatomic, retain) CKDocumentCollection* collection;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection;
++ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection;
 
 @end

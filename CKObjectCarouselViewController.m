@@ -135,6 +135,11 @@
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
+	
+	if(controller && [controller isKindOfClass:[CKDocumentController class]]){
+		CKDocumentController* documentController = (CKDocumentController*)controller;
+		documentController.displayFeedSourceCell = NO;
+	}
 }
 
 - (void)setControllerFactory:(id)factory{
@@ -338,17 +343,14 @@
 			id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
 			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass style:controllerStyle];
 			
-			//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 			UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 			UITableViewCell* cell = (UITableViewCell*)view;
 
 			CKTableViewCellController* controller = nil;
 			if(cell == nil){
-				//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 				controller = [[[controllerClass alloc]init]autorelease];
 				[controller setControllerStyle:controllerStyle];
 				cell = [controller loadCell];
-				//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 				cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 				
 				//Register cell to controller
