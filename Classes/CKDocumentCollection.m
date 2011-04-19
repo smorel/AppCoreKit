@@ -98,7 +98,7 @@
 
 - (BOOL)load{
 	if(_storage == nil)
-		return;
+		return NO;
 	
 	if( [_storage load:self] ){
 		if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidLoad:)]){
@@ -114,7 +114,7 @@
 
 - (BOOL)save{
 	if(_storage == nil)
-		return;
+		return NO;
 	
 	if( [_storage save:self] ){
 		if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidSave:)]){

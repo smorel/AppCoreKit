@@ -116,8 +116,6 @@
 @end
 
 
-
-
 @implementation CKPropertiesTableViewController
 
 - (id)initWithObject:(id)object withMappings:mappings withStyles:(NSDictionary*)styles{

@@ -9,6 +9,7 @@
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h";
+#import "CKStyleManager.h"
 
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
@@ -76,7 +77,7 @@
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
 	CKFormSection* formSection = [formController.sections objectAtIndex:indexPath.section];
 	CKFormCellDescriptor* cellDescriptor = [formSection.cellDescriptors objectAtIndex:indexPath.row];
-	return cellDescriptor.controllerStyle;
+	return (cellDescriptor.styleIdentifier != nil) ? [CKStyleManager styleForKey:cellDescriptor.styleIdentifier] : nil;
 }
 
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{
@@ -172,35 +173,35 @@
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
 @synthesize controllerClass = _controllerClass;
-@synthesize controllerStyle = _controllerStyle;
+@synthesize styleIdentifier = _styleIdentifier;
 @synthesize block = _initializeBlock;
 @synthesize target = _initializeTarget;
 @synthesize action = _initializeAction;
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass controllerStyle:(id)theControllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock{
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.controllerStyle = theControllerStyle;
+	self.styleIdentifier = theStyleIdentifier;
 	self.block = initializeBlock;
 	return self;
 }
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass controllerStyle:(id)theControllerStyle target:(id)theTarget action:(SEL)theAction{
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier target:(id)theTarget action:(SEL)theAction{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.controllerStyle = theControllerStyle;
+	self.styleIdentifier = theStyleIdentifier;
 	self.target = theTarget;
 	self.action = theAction;
 	return self;
 }
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass controllerStyle:(id)theControllerStyle{
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.controllerStyle = theControllerStyle;
+	self.styleIdentifier = theStyleIdentifier;
 	return self;
 }
 - (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
@@ -210,16 +211,16 @@
 	return self;
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle withBlock:initializeBlock]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier withBlock:initializeBlock]autorelease];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle target:target action:action]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier target:target action:action]autorelease];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass controllerStyle:controllerStyle]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier]autorelease];
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass{

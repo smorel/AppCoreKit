@@ -618,6 +618,8 @@
 					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				
+				NSAssert(cell != nil,@"The cell has not been created");
+				
 				/*if(self.editing){
 					[self setEditing:YES animated:NO];
 				}*/

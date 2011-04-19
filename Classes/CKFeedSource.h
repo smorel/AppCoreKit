@@ -28,7 +28,7 @@
 //
 
 @protocol CKFeedSourceDelegate
-
+@optional
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range;
 - (void)feedSource:(CKFeedSource *)feedSource didFailWithError:(NSError *)error;
 

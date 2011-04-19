@@ -10,6 +10,7 @@
 #import "CKObjectController.h"
 #import "CKDocumentCollectionCellController.h"
 #import "CKDocumentCollection.h"
+#import "CKStyleManager.h"
 
 
 @implementation CKObjectViewControllerFactory
@@ -66,7 +67,8 @@
 
 - (id)styleForIndexPath:(NSIndexPath*)indexPath{
 	Class controllerClass = [self controllerClassForIndexPath:indexPath];
-	return _styles ? [_styles objectForKey:controllerClass] : nil;
+	NSString* styleIdentifier = _styles ? [_styles objectForKey:controllerClass] : nil;
+	return (styleIdentifier != nil) ? [CKStyleManager styleForKey:styleIdentifier] : nil;
 }
 
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{

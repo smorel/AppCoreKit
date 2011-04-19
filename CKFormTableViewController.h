@@ -42,7 +42,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 @interface CKFormCellDescriptor : CKModelObject{
 	id _value;
 	Class _controllerClass;
-	id _controllerStyle;
+	NSString* _styleIdentifier;
 	
 	//OS4
 	CKFormCellInitializeBlock _initializeBlock;
@@ -53,19 +53,19 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 @property (nonatomic,retain) id value;
 @property (nonatomic,assign) Class controllerClass;
-@property (nonatomic,retain) id controllerStyle;
+@property (nonatomic,retain) NSString* styleIdentifier;
 @property (nonatomic,copy) CKFormCellInitializeBlock block;
 @property (nonatomic,assign) id target;
 @property (nonatomic,assign) SEL action;
 
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock;
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action;
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle;
+- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock;
+- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action;
+- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier;
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass;
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle withBlock:(CKFormCellInitializeBlock)initializeBlock;
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle target:(id)target action:(SEL)action;
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass controllerStyle:(id)controllerStyle;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier;
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass;
 
 @end

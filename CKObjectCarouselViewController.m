@@ -364,6 +364,9 @@
 				controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 			}
 			
+			
+			NSAssert(cell != nil,@"The cell has not been created");
+			
 			CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
 			BOOL bo = flags & CKTableViewCellFlagSelectable;
 			cell.selectionStyle = bo ? (cell.selectionStyle) ? cell.selectionStyle : UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
