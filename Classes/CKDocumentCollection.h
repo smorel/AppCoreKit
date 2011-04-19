@@ -26,6 +26,7 @@
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
 
 - (NSInteger)count;
+- (NSArray*)allObjects;
 - (id)objectAtIndex:(NSInteger)index;
 - (void)addObjectsFromArray:(NSArray *)otherArray;
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;

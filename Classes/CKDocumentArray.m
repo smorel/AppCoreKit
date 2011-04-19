@@ -23,6 +23,10 @@
 	return [_objects count];
 }
 
+- (NSArray*)allObjects{
+	return [NSArray arrayWithArray:_objects];
+}
+
 - (id)objectAtIndex:(NSInteger)index{
 	return [_objects objectAtIndex:index];
 }

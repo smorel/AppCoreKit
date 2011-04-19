@@ -46,6 +46,11 @@
 	return 0;
 }
 
+- (NSArray*)allObjects{
+	NSAssert(NO,@"Abstract Implementation");
+	return nil;
+}
+
 - (id)objectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Abstract Implementation");
 	return nil;
@@ -76,7 +81,14 @@
 }
 
 - (void)fetchRange:(NSRange)range{
-	[_feedSource fetchRange:range];
+	if(_feedSource == nil)
+		return;
+	//adjust range to existing objects
+	NSInteger count = [self count];
+	NSInteger requested = range.location + range.length;
+	if(requested > count){
+		[_feedSource fetchRange:NSMakeRange(count, requested - count)];
+	}
 }
 
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
