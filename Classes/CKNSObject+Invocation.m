@@ -29,6 +29,10 @@
 	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, arg2, arg3, nil] waitUntilDone:wait];
 }
 
+- (void)performSelector:(SEL)selector withObjects:(NSArray*)objects{
+	[self performSelector:selector onThread:[NSThread currentThread] withObjects:objects waitUntilDone:YES];
+}
+
 - (void)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait {
     if ([self respondsToSelector:selector]) {
         NSMethodSignature *signature = [self methodSignatureForSelector:selector];

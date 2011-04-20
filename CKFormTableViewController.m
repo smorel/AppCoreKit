@@ -10,6 +10,7 @@
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h";
 #import "CKStyleManager.h"
+#import "CKNSObject+Invocation.h"
 
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
@@ -28,27 +29,26 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:section];
-	return [formSection.cellDescriptors count];
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	return [formSection numberOfObjects];
 }
 
 - (NSString*)headerTitleForSection:(NSInteger)section{
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
 	return formSection.headerTitle;
 }
 
 - (UIView*)headerViewForSection:(NSInteger)section{
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
 	return formSection.headerView;
 }
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath{
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:indexPath.section];
-	CKFormCellDescriptor* cellDescriptor = [formSection.cellDescriptors objectAtIndex:indexPath.row];
-	return cellDescriptor.value;
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	return [formSection objectAtIndex:indexPath.row];
 }
 
 - (void)setDelegate:(id)theDelegate{
@@ -67,43 +67,65 @@
 - (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:indexPath.section];
-	CKFormCellDescriptor* cellDescriptor = [formSection.cellDescriptors objectAtIndex:indexPath.row];
-	return cellDescriptor.controllerClass;
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	return [formSection controllerClassForIndex:indexPath.row];
 }
 
 - (id)styleForIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:indexPath.section];
-	CKFormCellDescriptor* cellDescriptor = [formSection.cellDescriptors objectAtIndex:indexPath.row];
-	return (cellDescriptor.styleIdentifier != nil) ? [CKStyleManager styleForKey:cellDescriptor.styleIdentifier] : nil;
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	return [formSection styleForIndex:indexPath.row];
 }
 
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
-	CKFormSection* formSection = [formController.sections objectAtIndex:indexPath.section];
-	CKFormCellDescriptor* cellDescriptor = [formSection.cellDescriptors objectAtIndex:indexPath.row];
-	if(cellDescriptor.block){
-		cellDescriptor.block(controller);
-	}
-	else if(cellDescriptor.target){
-		[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
-	}
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	[formSection initializeController:controller atIndex:indexPath.row];
 }
 
 @end
 
 
+@implementation CKFormSectionBase
+@synthesize headerTitle = _headerTitle;
+@synthesize headerView = _headerView;
+@synthesize parentController = _parentController;
+
+- (NSInteger)sectionIndex{
+	return [_parentController indexOfSection:self];
+}
+
+- (NSInteger)numberOfObjects{
+	NSAssert(NO,@"Base Implementation");
+	return 0;
+}
+
+- (id)objectAtIndex:(NSInteger)index{
+	NSAssert(NO,@"Base Implementation");
+	return nil;
+}
+
+- (Class)controllerClassForIndex:(NSInteger)index{
+	NSAssert(NO,@"Base Implementation");
+	return nil;
+}
+
+- (id)styleForIndex:(NSInteger)index{
+	NSAssert(NO,@"Base Implementation");
+	return nil;
+}
+
+- (void)initializeController:(id)controller atIndex:(NSInteger)index{
+	NSAssert(NO,@"Base Implementation");
+}
 
 
-
+@end
 
 
 @implementation CKFormSection
-@synthesize headerTitle = _headerTitle;
-@synthesize headerView = _headerView;
 @synthesize cellDescriptors = _cellDescriptors;
 
 - (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerTitle:(NSString*)title{
@@ -168,7 +190,118 @@
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index{
 	[_cellDescriptors removeObjectAtIndex:index];
 }
+
+
+- (NSInteger)numberOfObjects{
+	return [_cellDescriptors count];
+}
+
+- (id)objectAtIndex:(NSInteger)index{
+	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+	return cellDescriptor.value;
+}
+
+- (Class)controllerClassForIndex:(NSInteger)index{
+	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+	return cellDescriptor.controllerClass;
+}
+
+- (id)styleForIndex:(NSInteger)index{
+	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+	return (cellDescriptor.styleIdentifier != nil) ? [CKStyleManager styleForKey:cellDescriptor.styleIdentifier] : nil;
+}
+
+- (void)initializeController:(id)controller atIndex:(NSInteger)index{
+	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+	if(cellDescriptor.block){
+		cellDescriptor.block(controller);
+	}
+	else if(cellDescriptor.target){
+		[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
+	}
+}
+
 @end
+
+@interface CKFormDocumentCollectionSection()
+@property (nonatomic,retain) CKDocumentController* objectController;
+@property (nonatomic,retain) CKObjectViewControllerFactory* controllerFactory;
+@end
+
+@implementation CKFormDocumentCollectionSection
+@synthesize objectController = _objectController;
+@synthesize controllerFactory = _controllerFactory;
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	[super init];
+	self.objectController = [CKDocumentController controllerWithCollection:collection];
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:self];
+	}
+
+	
+	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
+		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
+	}
+	return self;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings styles:styles]autorelease];
+	return section;
+}
+
+- (NSInteger)numberOfObjects{
+	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
+		return [_objectController numberOfObjectsForSection:0];
+	}
+	return 0;
+}
+
+- (id)objectAtIndex:(NSInteger)index{
+	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
+		return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+	}
+	return nil;
+}
+
+- (Class)controllerClassForIndex:(NSInteger)index{
+	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
+
+- (id)styleForIndex:(NSInteger)index{
+	return [_controllerFactory styleForIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
+
+- (void)initializeController:(id)controller atIndex:(NSInteger)index{
+	[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+}
+
+- (void)objectControllerReloadData:(id)controller{
+	[self.parentController performSelector:@selector(objectControllerReloadData:) withObject:self.objectController];
+}
+
+- (void)objectControllerDidBeginUpdating:(id)controller{
+	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
+}
+
+- (void)objectControllerDidEndUpdating:(id)controller{
+	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self.objectController];
+}
+
+- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+							   withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:indexPath.row inSection:self.sectionIndex],nil]];
+}
+
+- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+								withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:indexPath.row inSection:self.sectionIndex],nil]];
+}
+
+@end
+
 
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
@@ -246,13 +379,17 @@
 - (id)initWithSections:(NSArray*)theSections{
 	[super init];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
+	for(CKFormSectionBase* section in theSections){
+		section.parentController = self;
+	}
 	return self;
 }
 
-- (void)addSection:(CKFormSection *)section{
+- (void)addSection:(CKFormSectionBase *)section{
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
 	}
+	section.parentController = self;
 	[_sections addObject:section];
 }
 
@@ -261,6 +398,7 @@
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
 	}
+	section.parentController = self;
 	[_sections addObject:section];
 	return section;
 }
@@ -270,9 +408,21 @@
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
 	}
+	section.parentController = self;
 	[_sections addObject:section];
 	return section;
 }
+
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings styles:styles];
+	if(_sections == nil){
+		self.sections = [NSMutableArray array];
+	}
+	section.parentController = self;
+	[_sections addObject:section];
+	return section;
+}
+/*
 
 - (void)insertCellDescriptor:(CKFormCellDescriptor*)cellDescriptor atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
 	if(_sections == nil){
@@ -294,10 +444,15 @@
 	[section removeCellDescriptorAtIndex:index];
 	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 }
+ */
 
-- (CKFormSection*)sectionAtIndex:(NSUInteger)index{
-	CKFormSection* section = [_sections objectAtIndex:index];
+- (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
+	CKFormSectionBase* section = [_sections objectAtIndex:index];
 	return section;
+}
+
+- (NSInteger)indexOfSection:(CKFormSectionBase *)section{
+	return [_sections indexOfObject:section];
 }
 
 @end

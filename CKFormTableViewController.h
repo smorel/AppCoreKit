@@ -9,16 +9,37 @@
 #import "CKObjectTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKModelObject.h"
+#import "CKObjectController.h"
+#import "CKDocumentController.h"
 
-@class CKFormCellDescriptor;
-@interface CKFormSection : CKModelObject{
+@class CKFormTableViewController;
+@interface CKFormSectionBase : CKModelObject
+{
 	NSString* _headerTitle;
 	UIView* _headerView;
-	NSMutableArray* _cellDescriptors;
+	CKFormTableViewController* _parentController;
 }
 
 @property (nonatomic,retain) NSString* headerTitle;
 @property (nonatomic,retain) UIView* headerView;
+@property (nonatomic,assign) CKFormTableViewController* parentController;
+@property (nonatomic,readonly) NSInteger sectionIndex;
+
+- (NSInteger)numberOfObjects;
+- (id)objectAtIndex:(NSInteger)index;
+- (Class)controllerClassForIndex:(NSInteger)index;
+- (id)styleForIndex:(NSInteger)index;
+- (void)initializeController:(id)controller atIndex:(NSInteger)index;
+
+@end
+
+
+@class CKFormCellDescriptor;
+@interface CKFormSection : CKFormSectionBase{
+	
+	NSMutableArray* _cellDescriptors;
+}
+
 @property (nonatomic,retain) NSArray* cellDescriptors;
 
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
@@ -35,6 +56,18 @@
 - (void)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
 - (void)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index;
+
+@end
+
+@interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
+	CKDocumentController* _objectController;
+	CKObjectViewControllerFactory* _controllerFactory;
+}
+
+@property (nonatomic,retain,readonly) CKDocumentController* objectController;
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
 
 @end
 
@@ -77,11 +110,11 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 - (id)initWithSections:(NSArray*)sections;
 
-- (void)addSection:(CKFormSection *)section;
+- (void)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
-- (void)insertCellDescriptor:(CKFormCellDescriptor*)cellDescriptor atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
-- (void)removeCellDescriptorAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
-- (CKFormSection*)sectionAtIndex:(NSUInteger)index;
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
+- (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
+- (NSInteger)indexOfSection:(CKFormSectionBase *)section;
 
 @end
