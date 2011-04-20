@@ -62,8 +62,9 @@
 
 - (void)addItems:(NSArray *)theItems {
 	if(_delegate && [_delegate respondsToSelector:@selector(feedSource:didFetchItems:range:)]){
-		[_delegate feedSource:self didFetchItems:theItems range:self.range];
+		[_delegate feedSource:self didFetchItems:theItems range:NSMakeRange(self.range.location, theItems.count)];
 	}
+	self.hasMore = (theItems.count >= self.range.length);
 }
 
 @end
