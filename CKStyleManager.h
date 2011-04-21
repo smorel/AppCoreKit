@@ -11,9 +11,11 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
+#import "CKUIViewController+Style.h"
+#import "CKUITableView+Style.h"
 
 
-@interface CKStyleManager : NSObject<NSCoding> {
+@interface CKStyleManager : NSObject {
 	NSMutableDictionary* _styles;
 }
 
@@ -25,5 +27,7 @@
 - (NSDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
 
 //Could extend to load style from files ...
+- (void)loadContentOfFileNamed:(NSString*)name;
+- (void)loadContentOfFile:(NSString*)path;
 
 @end

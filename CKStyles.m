@@ -78,7 +78,7 @@ NSString* CKStyleFormats = @"formats";
 
 @implementation NSMutableDictionary (CKStyle)
 
-- (void)setFormat:(CKStyleFormat*)format forClass:(Class)type{
+- (void)setFormat:(CKStyleFormat*)format{
 	NSMutableDictionary* formats = [self objectForKey:CKStyleFormats];
 	if(!formats){
 		formats = [NSMutableDictionary dictionary];
@@ -113,12 +113,23 @@ NSString* CKStyleFormats = @"formats";
 	[self setObject:style forKey:key];
 
 	CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
-	[self setFormat:format forClass:format.objectClass];
+	[self setFormat:format];
 }
 
 
 - (void)initAfterLoading{
-	NSAssert(NO,@"Not Implemented");
+	for(id key in [self allKeys]){
+		id object = [self objectForKey:key];
+		if([object isKindOfClass:[NSDictionary class]]
+		   && [key isEqual:CKStyleFormats] == NO){
+			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
+			[self setObject:dico forKey:key];
+			
+			CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
+			[self setFormat:format];
+			[dico initAfterLoading];
+		}
+	}
 	//iterate on styles key and create formats
 	//call initAfterLoading on subStyles
 }

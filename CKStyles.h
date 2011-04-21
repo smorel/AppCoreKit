@@ -36,7 +36,7 @@ extern NSString* CKStyleStyles;
 @interface NSMutableDictionary (CKStyle)
 
 - (void)initAfterLoading;
-- (void)setFormat:(CKStyleFormat*)format forClass:(Class)type;
+- (void)setFormat:(CKStyleFormat*)format;
 - (void)setStyle:(NSDictionary*)style forKey:(NSString*)key;
 
 @end

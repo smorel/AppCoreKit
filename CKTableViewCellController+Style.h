@@ -7,6 +7,7 @@
 //
 
 #import "CKTableViewCellController.h"
+#import "CKUIViewController+Style.h"
 
 extern NSString* CKStyleCellType;
 extern NSString* CKStyleAccessoryType;
@@ -21,6 +22,5 @@ extern NSString* CKStyleAccessoryType;
 @interface CKTableViewCellController (CKStyle)
 
 - (NSDictionary*)controllerStyle;
-- (void)applyStyle;
 
 @end

@@ -33,6 +33,4 @@ extern NSString* CKStyleNumberOfLines;
  */
 @interface UILabel (CKStyle)
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
-
 @end

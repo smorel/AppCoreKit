@@ -14,6 +14,8 @@
 #import "CKUIView+Style.h"
 #import "CKUITableViewCell+Style.h"
 
+#import "CJSONDeserializer.h"
+
 static CKStyleManager* CKStyleManagerDefault = nil;
 @implementation CKStyleManager
 @synthesize styles = _styles;
@@ -56,19 +58,18 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	return [_styles styleForObject:object propertyName:propertyName];
 }
 
-
-- (id) initWithCoder:(NSCoder *)aDecoder {
-	NSAssert([aDecoder allowsKeyedCoding],@"CKStyleManager does not support sequential archiving.");
-    self = [self init];
-    if (self) {
-		[_styles initWithCoder:aDecoder];
-		[_styles initAfterLoading];
-	}
-	return self;
+- (void)loadContentOfFileNamed:(NSString*)name{
+	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	[self loadContentOfFile:path];
 }
 
-- (void) encodeWithCoder:(NSCoder *)aCoder {
-	[_styles encodeWithCoder:aCoder];
+- (void)loadContentOfFile:(NSString*)path{
+	NSData* data = [NSData dataWithContentsOfFile:path];
+	NSError* error = nil;
+	id responseValue = [[CJSONDeserializer deserializer] deserialize:data error:&error];
+	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
+	self.styles = [NSMutableDictionary dictionaryWithDictionary:responseValue];
+	[_styles initAfterLoading];
 }
 
 @end

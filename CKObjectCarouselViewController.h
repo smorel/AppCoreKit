@@ -6,13 +6,14 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import "CKUIViewController.h"
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
 
-@interface CKObjectCarouselViewController : UIViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,CKObjectControllerDelegate> {
+@interface CKObjectCarouselViewController : CKUIViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,CKObjectControllerDelegate> {
 	CKCarouselView* _carouselView;
 	
 	id _objectController;

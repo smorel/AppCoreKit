@@ -15,6 +15,7 @@
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
 #import "CKGradientView.h"
+#import "CKUITableView+Style.h"
 
 NSString* CKStyleColor = @"color";
 NSString* CKStyleGradientColors = @"gradientColors";
@@ -138,8 +139,9 @@ NSString* CKStyleAlpha = @"alpha";
 		return NO;
 	
 	NSDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
-	if(myViewStyle){
-		if([appliedStack containsObject:view] == NO){
+	if([appliedStack containsObject:view] == NO){
+		if(myViewStyle){
+			NSLog(@"Apply style on view <%p> of type %@",view,[[view class]description]);
 			UIView* backgroundView = view;
 			if([myViewStyle containsObjectForKey:CKStyleGradientColors]
 			   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
@@ -176,25 +178,6 @@ NSString* CKStyleAlpha = @"alpha";
 							roundedCornerType = CKRoundedCornerViewTypeAll;
 							break;
 						}
-							/*case CKViewCornerStyleDefault:{
-							 UIView* parentView = [self parentControllerView:parentController];
-							 if([parentView isKindOfClass:[UITableView class]]){
-							 UITableView* tableView = (UITableView*)parentView;
-							 if(tableView.style == UITableViewStyleGrouped){
-							 NSInteger numberOfRows = [tableView numberOfRowsInSection:indexPath.section];
-							 if(indexPath.row == 0 && numberOfRows > 1){
-							 roundedCornerType = CKRoundedCornerViewTypeTop;
-							 }
-							 else if(indexPath.row == 0){
-							 roundedCornerType = CKRoundedCornerViewTypeAll;
-							 }
-							 else if(indexPath.row == numberOfRows-1){
-							 roundedCornerType = CKRoundedCornerViewTypeBottom;
-							 }
-							 }
-							 }
-							 break;
-							 }*/
 					}
 				}
 				
@@ -228,16 +211,16 @@ NSString* CKStyleAlpha = @"alpha";
 			}
 			
 			[appliedStack addObject:view];
-			return YES;
+			
 		}
+		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
+		return YES;
 	}
-	[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
 	return NO;
 }
 
-
 + (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
-	return [self applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  cornerModifierTarget:nil cornerModifierAction:nil];
+	return [[view class] applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  cornerModifierTarget:nil cornerModifierAction:nil];
 }
 
 - (void)applySubViewsStyle:(NSDictionary*)style appliedStack:(NSMutableSet*)appliedStack{

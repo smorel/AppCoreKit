@@ -83,7 +83,6 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)setNeedsSetup;
 
 //private
-- (NSDictionary*)controllerStyle;
 - (void)initTableViewCell:(UITableViewCell*)cell;
 
 @end
