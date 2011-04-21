@@ -25,6 +25,7 @@
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate;
 
+- (void)panToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 

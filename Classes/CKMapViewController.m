@@ -102,6 +102,14 @@
 	_annotations = [theAnnotations retain];
 }
 
+- (void)panToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated {
+	self.centerCoordinate = coordinate;
+	MKCoordinateRegion region = self.mapView.region;
+	region.center = coordinate;
+	region = [self.mapView regionThatFits:region];
+	[self.mapView setRegion:region animated:animated];
+}
+
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated {
 	self.centerCoordinate = coordinate;
 	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.centerCoordinate, 1000.0f, 1000.0f);
