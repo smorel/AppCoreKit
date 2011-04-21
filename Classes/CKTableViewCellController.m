@@ -9,13 +9,11 @@
 #import "CKTableViewCellController.h"
 #import "CKManagedTableViewController.h"
 
-#import "CKNSArrayAdditions.h"
-
-@implementation CKTableViewCellControllerStyle
-@end
+#import "CKStyleManager.h"
 
 @implementation CKTableViewCellController
 
+@synthesize name = _name;
 @synthesize key = _key;
 @synthesize value = _value;
 @synthesize target = _target;
@@ -28,7 +26,6 @@
 @synthesize parentController = _parentController;
 @synthesize indexPath = _indexPath;
 @synthesize rowHeight = _rowHeight;
-@synthesize controllerStyle = _controllerStyle;
 
 - (id)init {
 	self = [super init];
@@ -45,7 +42,7 @@
 	[_value release];
 	[_indexPath release];
 	[_target release];
-	[_controllerStyle release];
+	[_name release];
 	
 	_target = nil;
 	_action = nil;
@@ -87,15 +84,32 @@
 
 #pragma mark Cell Factory
 
+
+- (void)initTableViewCell:(UITableViewCell*)cell{
+}
+
 - (UITableViewCell *)cellWithStyle:(UITableViewStyle)style {
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:style reuseIdentifier:[self identifier]] autorelease];
+	NSDictionary* controllerStyle = [self controllerStyle];
+	UITableViewStyle cellStyle = style;
+	if([controllerStyle containsObjectForKey:CKStyleCellType])
+		cellStyle = [controllerStyle cellStyle];
+
+	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier]] autorelease];
 	
+	UITableViewCellAccessoryType acType = self.accessoryType;
+	if([controllerStyle containsObjectForKey:CKStyleAccessoryType])
+		acType = [controllerStyle accessoryType];
+	
+	cell.accessoryType = acType;
 	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-	cell.accessoryType = _accessoryType;
+	[self initTableViewCell:cell];
+	
+	//[cell applyStyle:controllerStyle atIndexPath:self.indexPath parentController:self.parentController];
 	
 	return cell;
 }
 
+/*
 - (UITableViewCell *)cellWithNibNamed:(NSString *)nibName {
 	UITableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil] first];
 
@@ -103,6 +117,7 @@
 	
 	return cell;
 }
+ */
 
 #pragma mark CKManagedTableViewController Protocol
 
@@ -120,7 +135,8 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
-	if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	[self applyStyle];
+	//if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return;
 }
 

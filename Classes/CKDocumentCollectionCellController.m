@@ -14,6 +14,9 @@
 #import "CKObjectCarouselViewController.h"
 #import "CKDocumentCollection.h"
 
+#import "CKStyleManager.h"
+
+/*
 static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControllerStyleDefaultStyle = nil;
 
 @implementation CKDocumentCollectionCellControllerStyle
@@ -33,7 +36,7 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 }
 
 @end
-
+*/
 
 #define ActivityIndicatorTag 1
 #define LabelTag 2
@@ -45,15 +48,15 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	[super dealloc];
 }
 
-- (UITableViewCell *)loadCell{
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
-	
-	CKDocumentCollectionCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKDocumentCollectionCellControllerStyle defaultStyle];
+- (void)initTableViewCell:(UITableViewCell*)cell{
+	NSDictionary* controllerStyle = [self controllerStyle];
+	//SEB : TODO !!!! use controllerStyle
 	
 	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	view.backgroundColor = theStyle.backgroundColor;
 	
+	NSAssert(NO,@"TODO");
+	/*
 	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
 	activityView.center = cell.center;
 	activityView.tag = ActivityIndicatorTag;
@@ -61,7 +64,7 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	activityView.hidden = YES;
 	
 	[view addSubview:activityView];
-		
+	
 	UILabel* label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 	label.textAlignment = UITextAlignmentCenter;
 	label.tag = LabelTag;
@@ -69,10 +72,9 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	label.textColor = theStyle.textColor;
 	label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[view addSubview:label];
+	*/
 	
 	[cell.contentView addSubview:view];
-
-	return cell;
 }
 
 - (void)update:(UIView*)view{
@@ -89,9 +91,12 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 		[activityIndicator stopAnimating];
 	}
 	
-	CKDocumentCollectionCellControllerStyle* theStyle = self.controllerStyle ? self.controllerStyle : [CKDocumentCollectionCellControllerStyle defaultStyle];
+	NSDictionary* controllerStyle = [self controllerStyle];
+	//SEB : TODO !!!! use controllerStyle
 	
-	UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
+	NSAssert(NO,@"TODO");
+	
+	/*UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
 	label.hidden = !activityIndicator.hidden;	
 	switch([collection count]){
 		case 0:{
@@ -106,7 +111,7 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 			label.text = [NSString stringWithFormat:@"%d %@",[collection count],_(theStyle.manyItemsMessage)];
 			break;
 		}
-	}
+	}*/
 }
 
 - (void)internalUpdate:(id)value{

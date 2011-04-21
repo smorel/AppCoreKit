@@ -28,7 +28,6 @@
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
 - (Class)controllerClassForIndex:(NSInteger)index;
-- (id)styleForIndex:(NSInteger)index;
 - (void)initializeController:(id)controller atIndex:(NSInteger)index;
 
 @end
@@ -66,8 +65,8 @@
 
 @property (nonatomic,retain,readonly) CKDocumentController* objectController;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 
 @end
 
@@ -75,7 +74,6 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 @interface CKFormCellDescriptor : CKModelObject{
 	id _value;
 	Class _controllerClass;
-	NSString* _styleIdentifier;
 	
 	//OS4
 	CKFormCellInitializeBlock _initializeBlock;
@@ -86,19 +84,16 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 @property (nonatomic,retain) id value;
 @property (nonatomic,assign) Class controllerClass;
-@property (nonatomic,retain) NSString* styleIdentifier;
 @property (nonatomic,copy) CKFormCellInitializeBlock block;
 @property (nonatomic,assign) id target;
 @property (nonatomic,assign) SEL action;
 
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock;
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action;
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier;
+- (id)initWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock;
+- (id)initWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action;
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass;
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock;
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action;
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock;
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action;
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass;
 
 @end
@@ -113,7 +108,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (void)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
 

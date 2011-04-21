@@ -89,6 +89,7 @@
 }
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+	[super rotateCell:cell withParams:params animated:animated];
 }
 
 + (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{

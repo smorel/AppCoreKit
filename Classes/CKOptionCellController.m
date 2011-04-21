@@ -30,6 +30,7 @@
 	if (self = [super initWithText:title]) {
 		self.values = values;
 		self.labels = labels;
+		self.style = UITableViewCellStyleValue1;
 	}
 	return self;
 }
@@ -47,14 +48,9 @@
 
 //
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super cellWithStyle:UITableViewCellStyleValue1];
-	cell.textLabel.text = self.text;
-	return cell;
-}
-
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	cell.textLabel.text = self.text;
 	cell.detailTextLabel.text = [self labelForValue:self.value];
 }
 

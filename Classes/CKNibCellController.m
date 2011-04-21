@@ -59,8 +59,7 @@
 	return [[self class] description];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super loadCell];
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.backgroundView = [[[UIView alloc] initWithFrame:cell.bounds] autorelease];
 	cell.backgroundView.backgroundColor = [UIColor clearColor];
 	cell.clipsToBounds = YES;
@@ -74,11 +73,10 @@
 		self.landscapeView = [[[NSBundle mainBundle] loadNibNamed:_landscapeNibName owner:nil options:nil] objectAtIndex:0];
 		[self customizeLandscapeView:_portraitView];
 	}	
-	
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	[super setupCell:cell];
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	switch(self.currentMode){
 		case CKNibCellControllerModePortrait:{
@@ -94,6 +92,8 @@
 }
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+	[super rotateCell:cell withParams:params animated:animated];
+	
 	CKNibCellControllerMode newMode = self.currentMode;
 	if(_landscapeView && _portraitView){
 		if(animated){

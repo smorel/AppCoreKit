@@ -37,9 +37,7 @@
 	[super dealloc];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super loadCell];
-
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.tag = 1000;
 	button.frame = cell.contentView.frame;
@@ -47,8 +45,6 @@
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	[cell.contentView addSubview:button];
-
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

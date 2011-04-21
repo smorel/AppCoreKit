@@ -51,6 +51,22 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 		else if([NSObject isKindOf:type parentType:[NSNumber class]])
 			return [NSNumber numberWithInt:0];
 	}
+	else if([value isKindOfClass:[NSIndexPath class]]
+			&& [NSObject isKindOf:type parentType:[NSString class]])
+	{
+		NSString* str = @"";
+		NSIndexPath* indexPath = (NSIndexPath*)value;
+		for(int i=0;i<[indexPath length];++i){
+			if(i < [indexPath length] - 1){
+				str = [str stringByAppendingFormat:@"%d ",[indexPath indexAtPosition:i]];
+			}
+			else{
+				str = [str stringByAppendingFormat:@"%d",[indexPath indexAtPosition:i]];
+			}
+		}
+		
+		return str;
+	}
 
 	//return the object hopping there is autoConversion :)
 	return value;

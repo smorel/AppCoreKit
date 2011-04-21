@@ -70,10 +70,7 @@
 }
 
 //
-
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
-	
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	MKMapView *mapView = [[[MKMapView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	mapView.tag = 1000;
 	mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -82,7 +79,7 @@
 	mapView.userInteractionEnabled = NO;
 	
 	[cell.contentView addSubview:mapView];
-
+	
 	MKCoordinateSpan span;
 	span.latitudeDelta = 0.0005;
 	span.longitudeDelta = 0.0005;
@@ -93,8 +90,6 @@
 	
 	[mapView setRegion:region animated:NO];
 	[mapView addAnnotation:self.annotation];
-	
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

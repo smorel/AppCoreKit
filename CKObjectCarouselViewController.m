@@ -67,9 +67,9 @@
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory];
 	return self;
 }
@@ -219,10 +219,6 @@
 			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 		}
@@ -276,10 +272,6 @@
 			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 		}
@@ -316,12 +308,13 @@
 /* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
  as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
-+ (NSString*)identifierForClass:(Class)theClass style:(id)style{
++ (NSString*)identifierForClass:(Class)theClass{
 	NSString* classIdentifier = [theClass description];
 	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
 		classIdentifier = [theClass classIdentifier];
 	}
-	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",classIdentifier,style];
+	//SEB FIXME : append style here
+	NSString* identifier = [NSString stringWithFormat:@"%@",classIdentifier];
 	return identifier;
 }
 
@@ -331,8 +324,7 @@
 		
 		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 		if(controllerClass){
-			id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass style:controllerStyle];
+			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass];
 			
 			UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 			UITableViewCell* cell = (UITableViewCell*)view;
@@ -340,7 +332,10 @@
 			CKTableViewCellController* controller = nil;
 			if(cell == nil){
 				controller = [[[controllerClass alloc]init]autorelease];
-				[controller setControllerStyle:controllerStyle];
+				[controller performSelector:@selector(setParentController:) withObject:self];
+				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+				[controller setValue:object];
+				
 				cell = [controller loadCell];
 				cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 				
@@ -366,13 +361,10 @@
 			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 			[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 			
-			if(![controller.value isEqual:object]){
-				[controller setControllerStyle:controllerStyle];
-				[_controllerFactory initializeController:controller atIndexPath:indexPath];
-				
-				[controller setValue:object];
-				[controller setupCell:cell];	
-			}
+			[_controllerFactory initializeController:controller atIndexPath:indexPath];
+			[controller setValue:object];
+			[controller setupCell:cell];	
+			
 			
 			[self fetchMoreIfNeededAtIndexPath:indexPath];
 			
@@ -417,10 +409,6 @@
 			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-			id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
 			
 			NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
 			return [v CGSizeValue];
@@ -444,10 +432,6 @@
 		[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 		[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 		[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-		id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-		if(controllerStyle){
-			[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-		}
 		
 		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
 		NSAssert([view isKindOfClass:[UITableViewCell class]],@"Works with CKTableViewCellController YET");
@@ -524,10 +508,6 @@
 			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
 			[params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED
-			id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
 			
 			CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
 			return flags;

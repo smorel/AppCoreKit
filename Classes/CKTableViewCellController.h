@@ -10,9 +10,6 @@
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"
 
-@interface CKTableViewCellControllerStyle : CKModelObject{
-}
-@end
 
 enum{
 	CKTableViewCellFlagNone = 1UL << 0,
@@ -25,6 +22,7 @@ enum{
 typedef NSUInteger CKTableViewCellFlags;
 
 @interface CKTableViewCellController : NSObject {
+	NSString *_name;
 	NSString *_key;
 	id _value;
 	id _target;
@@ -38,15 +36,13 @@ typedef NSUInteger CKTableViewCellFlags;
 	CKTableViewController *_parentController;
 	CGFloat _rowHeight;
 	
-	id _controllerStyle;
-	
 	//Set when reusing controllers via CKObjectTableViewController
 	UITableViewCell* _tableViewCell;
 }
 
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) id value;
-@property (nonatomic, retain) id controllerStyle;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKTableViewController *parentController;
@@ -62,7 +58,9 @@ typedef NSUInteger CKTableViewCellFlags;
 @property (nonatomic, assign) CGFloat rowHeight;
 
 - (UITableViewCell *)cellWithStyle:(UITableViewStyle)style;
-- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;
+
+//SEB : use a CKNibCellController instead
+//- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;
 
 //
 
@@ -83,5 +81,9 @@ typedef NSUInteger CKTableViewCellFlags;
 // Calls -setupCell with the cell associated with this controller.
 // Does not call -setupCell if the cell is not visible.
 - (void)setNeedsSetup;
+
+//private
+- (NSDictionary*)controllerStyle;
+- (void)initTableViewCell:(UITableViewCell*)cell;
 
 @end

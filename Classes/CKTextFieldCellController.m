@@ -38,8 +38,8 @@
 	[super dealloc];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
+
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.accessoryView = nil;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	
@@ -54,8 +54,6 @@
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.textColor = [UIColor blueTextColor];
 	cell.accessoryView = textField;
-	
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

@@ -9,7 +9,6 @@
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h";
-#import "CKStyleManager.h"
 #import "CKNSObject+Invocation.h"
 
 
@@ -71,13 +70,6 @@
 	return [formSection controllerClassForIndex:indexPath.row];
 }
 
-- (id)styleForIndexPath:(NSIndexPath*)indexPath{
-	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
-	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
-	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
-	return [formSection styleForIndex:indexPath.row];
-}
-
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
@@ -108,11 +100,6 @@
 }
 
 - (Class)controllerClassForIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
-	return nil;
-}
-
-- (id)styleForIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 	return nil;
 }
@@ -206,11 +193,6 @@
 	return cellDescriptor.controllerClass;
 }
 
-- (id)styleForIndex:(NSInteger)index{
-	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	return (cellDescriptor.styleIdentifier != nil) ? [CKStyleManager styleForKey:cellDescriptor.styleIdentifier] : nil;
-}
-
 - (void)initializeController:(id)controller atIndex:(NSInteger)index{
 	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
 	if(cellDescriptor.block){
@@ -232,7 +214,7 @@
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	[super init];
 	self.objectController = [CKDocumentController controllerWithCollection:collection];
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
@@ -240,15 +222,15 @@
 	}
 
 	
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	return self;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings styles:styles]autorelease];
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
 	return section;
 }
 
@@ -268,10 +250,6 @@
 
 - (Class)controllerClassForIndex:(NSInteger)index{
 	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-}
-
-- (id)styleForIndex:(NSInteger)index{
-	return [_controllerFactory styleForIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
 }
 
 - (void)initializeController:(id)controller atIndex:(NSInteger)index{
@@ -306,37 +284,27 @@
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
 @synthesize controllerClass = _controllerClass;
-@synthesize styleIdentifier = _styleIdentifier;
 @synthesize block = _initializeBlock;
 @synthesize target = _initializeTarget;
 @synthesize action = _initializeAction;
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock{
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.styleIdentifier = theStyleIdentifier;
 	self.block = initializeBlock;
 	return self;
 }
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier target:(id)theTarget action:(SEL)theAction{
+- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass target:(id)theTarget action:(SEL)theAction{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.styleIdentifier = theStyleIdentifier;
 	self.target = theTarget;
 	self.action = theAction;
 	return self;
 }
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass styleIdentifier:(NSString*)theStyleIdentifier{
-	[super init];
-	self.value = theValue;
-	self.controllerClass = theControllerClass;
-	self.styleIdentifier = theStyleIdentifier;
-	return self;
-}
 - (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
 	[super init];
 	self.value = theValue;
@@ -344,16 +312,12 @@
 	return self;
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier withBlock:(CKFormCellInitializeBlock)initializeBlock{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier withBlock:initializeBlock]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass withBlock:initializeBlock]autorelease];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier target:(id)target action:(SEL)action{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier target:target action:action]autorelease];
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass styleIdentifier:(NSString*)styleIdentifier{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass styleIdentifier:styleIdentifier]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action{
+	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass target:target action:action]autorelease];
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass{
@@ -413,8 +377,8 @@
 	return section;
 }
 
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings styles:styles];
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
 	}
@@ -422,29 +386,6 @@
 	[_sections addObject:section];
 	return section;
 }
-/*
-
-- (void)insertCellDescriptor:(CKFormCellDescriptor*)cellDescriptor atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
-	if(_sections == nil){
-		self.sections = [NSMutableArray array];
-	}
-	
-	while([_sections count] < sectionIndex){
-		CKFormSection* section = [CKFormSection section];
-		[_sections addObject:section];
-	}
-	
-	CKFormSection* section = [_sections objectAtIndex:sectionIndex];
-	[section insertCellDescriptor:cellDescriptor atIndex:index];
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? _rowInsertAnimation : UITableViewRowAnimationNone];
-}
-
-- (void)removeCellDescriptorAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated{
-	CKFormSection* section = [_sections objectAtIndex:sectionIndex];
-	[section removeCellDescriptorAtIndex:index];
-	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:sectionIndex]] withRowAnimation:animated ? _rowRemoveAnimation : UITableViewRowAnimationNone];
-}
- */
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
 	CKFormSectionBase* section = [_sections objectAtIndex:index];

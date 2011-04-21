@@ -61,8 +61,7 @@
 
 //
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.accessoryView = nil;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	cell.clipsToBounds = NO;
@@ -77,8 +76,6 @@
 	textView.backgroundColor = [UIColor clearColor];
 	textView.tag = kTextViewTag;
 	[cell.contentView addSubview:textView];
-
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

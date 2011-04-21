@@ -58,7 +58,7 @@
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 

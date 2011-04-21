@@ -10,34 +10,29 @@
 #import "CKObjectController.h"
 #import "CKDocumentCollectionCellController.h"
 #import "CKDocumentCollection.h"
-#import "CKStyleManager.h"
 
 
 @implementation CKObjectViewControllerFactory
 @synthesize mappings = _mappings;
 @synthesize objectController = _objectController;
-@synthesize styles = _styles;
 
 - (void)dealloc{
 	[_mappings release];
 	_mappings = nil;
-	[_styles release];
-	_styles = nil;
 	_objectController = nil;
 	[super dealloc];
 }
 
-+ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles{
-	return [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles withFactoryClass:[CKObjectViewControllerFactory class]];
++ (CKObjectViewControllerFactory*)factoryWithMappings:(NSDictionary*)mappings {
+	return [CKObjectViewControllerFactory factoryWithMappings:mappings withFactoryClass:[CKObjectViewControllerFactory class]];
 }
 
-+ (id)factoryWithMappings:(NSDictionary*)mappings withStyles:(NSDictionary*)styles withFactoryClass:(Class)type{
++ (id)factoryWithMappings:(NSDictionary*)mappings withFactoryClass:(Class)type{
 	CKObjectViewControllerFactory* factory = (CKObjectViewControllerFactory*)[[[type alloc]init]autorelease];
 	factory.mappings = mappings;
 	if(factory.mappings){
 		[factory.mappings setObject:[CKDocumentCollectionViewCellController class] forKey:[CKDocumentCollection class]];
 	}
-	factory.styles = styles;
 	return factory;
 }
 
@@ -63,12 +58,6 @@
 	   }
 	}
 	return returnClass;
-}
-
-- (id)styleForIndexPath:(NSIndexPath*)indexPath{
-	Class controllerClass = [self controllerClassForIndexPath:indexPath];
-	NSString* styleIdentifier = _styles ? [_styles objectForKey:controllerClass] : nil;
-	return (styleIdentifier != nil) ? [CKStyleManager styleForKey:styleIdentifier] : nil;
 }
 
 - (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{

@@ -10,9 +10,9 @@
 #import "CKStandardCellController.h"
 #import "CKDocumentCollectionCellController.h"
 
-@interface CKStyleManager()
-@property (nonatomic,retain) NSMutableDictionary* styles;
-@end
+#import "CKStyles.h"
+#import "CKUIView+Style.h"
+#import "CKUITableViewCell+Style.h"
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 @implementation CKStyleManager
@@ -33,26 +33,42 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	if(CKStyleManagerDefault == nil){
 		CKStyleManager* manager = [[CKStyleManager alloc]init];
 		
-		//Register default styles
-		[manager.styles setObject:[CKStandardCellControllerStyle defaultStyle]            forKey:@"CKStandardCellControllerDefaultStyle"];
-		[manager.styles setObject:[CKStandardCellControllerStyle value1Style]             forKey:@"CKStandardCellControllerValue1Style"];
-		[manager.styles setObject:[CKStandardCellControllerStyle value2Style]             forKey:@"CKStandardCellControllerValue2Style"];
-		[manager.styles setObject:[CKStandardCellControllerStyle subtitleStyle]           forKey:@"CKStandardCellControllerSubtitleStyle"];
-		[manager.styles setObject:[CKDocumentCollectionCellControllerStyle defaultStyle]  forKey:@"CKDocumentCollectionCellControllerDefaultStyle"];
+		//Sample style addition for object of type MyController with property name = theController :
+		/*
+		 NSMutableDictionary* style = [NSMutableDictionary dictionary];
+		NSMutableDictionary* backgroundStyle = [NSMutableDictionary dictionary];
+		[backgroundStyle setObject:[UIColor redColor] forKey:CKStyleColor];
+		[style setObject:backgroundStyle forKey:CKStyleBackgroundStyle];
+		[manager setStyle:style forKey:@"MyController,name=\"theController\"";
+		 */
+		 
 		
 		CKStyleManagerDefault = manager;
 	}
 	return CKStyleManagerDefault;
 }
 
-+ (void)setStyle:(id)style forKey:(NSString*)key{
-	CKStyleManager* manager = [CKStyleManager defaultManager];
-	[manager.styles setObject:style forKey:key];
+- (void)setStyle:(NSDictionary*)style forKey:(NSString*)key{
+	[_styles setStyle:style forKey:key];
 }
 
-+ (id)styleForKey:(NSString*)key{
-	CKStyleManager* manager = [CKStyleManager defaultManager];
-	return [manager.styles objectForKey:key];
+- (NSDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName{
+	return [_styles styleForObject:object propertyName:propertyName];
+}
+
+
+- (id) initWithCoder:(NSCoder *)aDecoder {
+	NSAssert([aDecoder allowsKeyedCoding],@"CKStyleManager does not support sequential archiving.");
+    self = [self init];
+    if (self) {
+		[_styles initWithCoder:aDecoder];
+		[_styles initAfterLoading];
+	}
+	return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+	[_styles encodeWithCoder:aCoder];
 }
 
 @end

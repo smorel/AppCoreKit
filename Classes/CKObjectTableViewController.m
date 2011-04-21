@@ -34,7 +34,7 @@
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
 
-+ (NSString*)identifierForClass:(Class)theClass style:(id)style;
++ (NSString*)identifierForClass:(Class)theClass;
 
 @end
 
@@ -90,9 +90,9 @@
 }
 
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings styles:(NSDictionary*)styles{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings withStyles:styles];
+	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory];
 	return self;
 }
@@ -202,11 +202,6 @@
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 			[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
-			
 			[controller rotateCell:cell withParams:params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
@@ -314,11 +309,7 @@
 				[params setObject:[NSNumber numberWithInt:interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-				if(controllerStyle){
-					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-				}
-				
+		
 				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
 				CGSize size = [v CGSizeValue];
 				//NSLog(@"Size for row : %d,%d =%f,%f",indexPath.row,indexPath.section,size.width,size.height);
@@ -451,10 +442,6 @@
 			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			id controllerStyle = [_controllerFactory styleForIndexPath:[controller indexPath]];
-			if(controllerStyle){
-				[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-			}
 			
 			[controller rotateCell:cell withParams:params animated:YES];
 			
@@ -520,10 +507,6 @@
 				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 				[params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
-				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-				if(controllerStyle){
-					[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-				}
 				
 				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
 				return flags;
@@ -552,12 +535,13 @@
 /* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
           as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
  */
-+ (NSString*)identifierForClass:(Class)theClass style:(id)style{
++ (NSString*)identifierForClass:(Class)theClass{
 	NSString* classIdentifier = [theClass description];
 	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
 		classIdentifier = [theClass classIdentifier];
 	}
-	NSString* identifier = [NSString stringWithFormat:@"%@-<%p>",classIdentifier,style];
+	//SEB FIXME : append style here
+	NSString* identifier = [NSString stringWithFormat:@"%@",classIdentifier];
 	return identifier;
 }
 
@@ -568,8 +552,7 @@
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass){
-				id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass  style:controllerStyle];
+				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
@@ -577,7 +560,10 @@
 				if(cell == nil){
 					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 					controller = [[[controllerClass alloc]init]autorelease];
-					[controller setControllerStyle:controllerStyle];
+					[controller performSelector:@selector(setParentController:) withObject:self];
+					[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+					[controller setValue:object];
+					
 					cell = [controller loadCell];
 					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -614,7 +600,7 @@
 				
 				CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
 				BOOL bo = flags & CKTableViewCellFlagSelectable;
-				cell.selectionStyle = bo ? (cell.selectionStyle) ? cell.selectionStyle : UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+				cell.selectionStyle = bo ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
@@ -630,13 +616,9 @@
 				}
 				[_indexPathToCells setObject:[NSValue valueWithNonretainedObject:cell] forKey:indexPath];
 				
-				if(![controller.value isEqual:object]){
-					[controller setControllerStyle:controllerStyle];
-					[_controllerFactory initializeController:controller atIndexPath:indexPath];
-					
-					[controller setValue:object];
-					[controller setupCell:cell];	
-				}
+				[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				[controller setValue:object];
+				[controller setupCell:cell];	
 				
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
 				[self updateNumberOfPages];
@@ -647,10 +629,6 @@
 					[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 					[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 					[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-					id controllerStyle = [_controllerFactory styleForIndexPath:indexPath];
-					if(controllerStyle){
-						[params setObject:controllerStyle forKey:CKTableViewAttributeStyle];
-					}
 					
 					[controller rotateCell:cell withParams:params animated:NO];
 				}	
