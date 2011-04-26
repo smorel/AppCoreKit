@@ -20,17 +20,32 @@
 
 NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryType = @"accessoryType";
+NSString* CKStyleSelectionStyle = @"selectionStyle";
 
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (UITableViewCellStyle)cellStyle{
 	return (UITableViewCellStyle)[self enumValueForKey:CKStyleCellType 
-									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, UITableViewCellStyleValue1, UITableViewCellStyleValue2,UITableViewCellStyleSubtitle)];
+									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, 
+																	 UITableViewCellStyleValue1, 
+																	 UITableViewCellStyleValue2,
+																	 UITableViewCellStyleSubtitle)];
 }
 
 - (UITableViewCellAccessoryType)accessoryType{
 	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleCellType 
-									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, UITableViewCellAccessoryDisclosureIndicator, UITableViewCellAccessoryDetailDisclosureButton,UITableViewCellAccessoryCheckmark)];
+									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, 
+																	 UITableViewCellAccessoryDisclosureIndicator, 
+																	 UITableViewCellAccessoryDetailDisclosureButton,
+																	 UITableViewCellAccessoryCheckmark)];
+}
+
+- (UITableViewCellSelectionStyle)selectionStyle{
+	return (UITableViewCellSelectionStyle)[self enumValueForKey:CKStyleSelectionStyle 
+												withDictionary:CKEnumDictionary(UITableViewCellSelectionStyleNone,
+																				UITableViewCellSelectionStyleBlue,
+																				UITableViewCellSelectionStyleGray)];
+
 }
 
 @end
@@ -92,20 +107,23 @@ NSString* CKStyleAccessoryType = @"accessoryType";
 		if([style containsObjectForKey:CKStyleAccessoryType]){
 			cell.accessoryType = [style accessoryType];
 		}
+		if([style containsObjectForKey:CKStyleSelectionStyle]){
+			cell.selectionStyle = [style selectionStyle];
+		}
 		[appliedStack addObject:cell];
 		
 		[UILabel applyStyle:style toView:cell.textLabel propertyName:@"textLabel" appliedStack:appliedStack];
 		[UILabel applyStyle:style toView:cell.detailTextLabel propertyName:@"detailTextLabel" appliedStack:appliedStack];
 		[UIImageView applyStyle:style toView:cell.imageView propertyName:@"imageView" appliedStack:appliedStack];
 		
-		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"backgroundView"] && [cell.backgroundView isKindOfClass:[UIView class]] == NO){
-			cell.backgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
+		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"backgroundView"] && [cell.backgroundView isKindOfClass:[CKGradientView class]] == NO){
+			cell.backgroundView = [[[CKGradientView alloc]initWithFrame:cell.bounds]autorelease];
 			cell.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		}
 		[UIView applyStyle:style toView:cell.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 		
-		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"selectedBackgroundView"] && [cell.selectedBackgroundView isKindOfClass:[UIView class]] == NO){
-			cell.selectedBackgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
+		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"selectedBackgroundView"] && [cell.selectedBackgroundView isKindOfClass:[CKGradientView class]] == NO){
+			cell.selectedBackgroundView = [[[CKGradientView alloc]initWithFrame:cell.bounds]autorelease];
 			cell.selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		}
 		[UIView applyStyle:style toView:cell.selectedBackgroundView propertyName:@"selectedBackgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];

@@ -69,6 +69,9 @@ NSString* CKStyleAlpha = @"alpha";
 }
 
 + (CKGradientView*)gradientView:(UIView*)view{
+	if([view isKindOfClass:[CKGradientView class]])
+		return (CKGradientView*)view;
+	
 	for(UIView* subView in [view subviews]){
 		if([subView isKindOfClass:[CKGradientView class]])
 			return (CKGradientView*)subView;

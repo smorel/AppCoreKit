@@ -11,14 +11,13 @@
 
 extern NSString* CKStyleCellType;
 extern NSString* CKStyleAccessoryType;
-
-//TODO adds selection style
-//UITableViewCellSelectionStyleBlue
+extern NSString* CKStyleSelectionStyle;
 
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (UITableViewCellStyle)cellStyle;
 - (UITableViewCellAccessoryType)accessoryType;
+- (UITableViewCellSelectionStyle)selectionStyle;
 
 @end
 
