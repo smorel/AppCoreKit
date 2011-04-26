@@ -11,11 +11,27 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 
+NSString* CKTableViewStyle = @"tableViewStyle";
+
+@implementation NSMutableDictionary (CKUITableViewStyleStyle)
+
+- (UITableViewStyle)tableViewStyle{
+	return (UITableViewStyle)[self enumValueForKey:CKStyleCellType 
+										withDictionary:CKEnumDictionary( UITableViewStylePlain,
+																		UITableViewStyleGrouped  )];
+}
+
+@end
 
 @implementation UITableView (CKStyle)
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
 	UITableView* tableView = (UITableView*)view;
+	/*
+	 //TO SET IF POSSIBLE ...
+	 if([style containsObjectForKey:CKTableViewStyle]){
+		tableView.style = [style tableViewStyle];
+	}*/
 	
 	NSMutableDictionary* myViewStyle = [style styleForObject:tableView propertyName:propertyName];
 	tableView.backgroundView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];

@@ -8,6 +8,14 @@
 
 #import "CKUIView+Style.h"
 
+extern NSString* CKTableViewStyle;
+
+@interface NSMutableDictionary (CKUITableViewStyleStyle)
+
+- (UITableViewStyle)tableViewStyle;
+
+@end
+
 @interface UITableView (CKStyle)
 
 @end

@@ -27,10 +27,16 @@
 @interface CKObjectCarouselViewController ()
 @property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
+@property (nonatomic, retain) NSMutableDictionary* controllersForIdentifier;
+@property (nonatomic, retain) NSMutableDictionary* params;
 
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
 - (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
+
+- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath;
+- (void)updateParams;
+
 @end
 
 @implementation CKObjectCarouselViewController
@@ -41,6 +47,8 @@
 @synthesize cellsToControllers = _cellsToControllers;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
+@synthesize controllersForIdentifier = _controllersForIdentifier;
+@synthesize params = _params;
 
 - (void)postInit{
 	self.cellsToControllers = [NSMutableDictionary dictionary];
@@ -88,7 +96,12 @@
 }
 
 - (void)dealloc {
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	[_params release];
+	_params = nil;
+	[_controllersForIdentifier release];
+	_controllersForIdentifier = nil;
 	[_carouselView release];
 	_carouselView = nil;
 	[_objectController release];
@@ -173,6 +186,24 @@
 	//DEBUG :
 	self.carouselView.clipsToBounds = YES;
 	self.carouselView.spacing = 20;
+	
+	[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[self.carouselView bind:@"frame" target:self action:@selector(updateParams)];
+	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
+	[self.carouselView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
+	[self bind:@"orientation" target:self action:@selector(updateParams)];
+	[NSObject endBindingsContext];	
+}
+
+- (void)updateParams{
+	if(self.params == nil){
+		[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+		[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+		[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
+		[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
+		[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+		[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED
+	}
 }
 
 - (void)scrollToPage:(id)page{
@@ -207,20 +238,13 @@
 	}
 	
     [super viewWillAppear:animated];
+	[self updateParams];
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-			
-			[controller rotateCell:cell withParams:params animated:YES];
+			[controller rotateCell:cell withParams:self.params animated:YES];
 		}
 	}	
 	
@@ -260,20 +284,14 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+	[self updateParams];
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			
-			[controller rotateCell:cell withParams:params animated:YES];
+			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
+			[controller rotateCell:cell withParams:self.params animated:YES];
 		}
 	}
 	[self notifiesCellControllersForVisibleRows];
@@ -305,17 +323,22 @@
 }
 
 
-/* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
- as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
- */
-+ (NSString*)identifierForClass:(Class)theClass{
-	NSString* classIdentifier = [theClass description];
-	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
-		classIdentifier = [theClass classIdentifier];
+- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath {
+	if(self.controllersForIdentifier == nil){
+		self.controllersForIdentifier = [NSMutableDictionary dictionary];
 	}
-	//SEB FIXME : append style here
-	NSString* identifier = [NSString stringWithFormat:@"%@",classIdentifier];
-	return identifier;
+	
+	CKTableViewCellController* controller = [_controllersForIdentifier objectForKey:theClass];
+	if(controller == nil){
+		controller = [[[theClass alloc]init]autorelease];
+		[_controllersForIdentifier setObject:controller forKey:theClass];
+	}
+	
+	[controller performSelector:@selector(setParentController:) withObject:self];
+	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[controller setValue:object];
+	
+	return [controller identifier];
 }
 
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
@@ -324,7 +347,7 @@
 		
 		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 		if(controllerClass){
-			NSString* identifier = [CKObjectCarouselViewController identifierForClass:controllerClass];
+			NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
 			
 			UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 			UITableViewCell* cell = (UITableViewCell*)view;
@@ -353,10 +376,6 @@
 			
 			NSAssert(cell != nil,@"The cell has not been created");
 			
-			CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-			BOOL bo = flags & CKTableViewCellFlagSelectable;
-			cell.selectionStyle = bo ? (cell.selectionStyle) ? cell.selectionStyle : UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-			
 			[controller performSelector:@selector(setParentController:) withObject:self];
 			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 			[controller performSelector:@selector(setTableViewCell:) withObject:cell];
@@ -364,7 +383,6 @@
 			[_controllerFactory initializeController:controller atIndexPath:indexPath];
 			[controller setValue:object];
 			[controller setupCell:cell];	
-			
 			
 			[self fetchMoreIfNeededAtIndexPath:indexPath];
 			
@@ -403,14 +421,7 @@
 		
 		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 		if(controllerClass && [controllerClass respondsToSelector:@selector(rowSizeForObject:withParams:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.carouselView.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-			
-			NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
+			NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:self.params];
 			return [v CGSizeValue];
 		}
 	}
@@ -427,17 +438,11 @@
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath{
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-		NSMutableDictionary* params = [NSMutableDictionary dictionary];
-		[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-		[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-		[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-		[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-		
 		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
 		NSAssert([view isKindOfClass:[UITableViewCell class]],@"Works with CKTableViewCellController YET");
 		UITableViewCell* cell = (UITableViewCell*)view;
 		
-		[controller rotateCell:cell withParams:params animated:NO];
+		[controller rotateCell:cell withParams:self.params animated:NO];
 	}	
 }
 
@@ -501,15 +506,7 @@
 		
 		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 		if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-			[params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED
-			
-			CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
+			CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:self.params];
 			return flags;
 		}
 	}
