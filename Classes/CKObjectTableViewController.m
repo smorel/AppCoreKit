@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
+@property (nonatomic, retain) NSMutableDictionary* controllersForIdentifier;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
 - (void)updateNumberOfPages;
@@ -33,8 +34,7 @@
 - (void)adjustView;
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
-
-+ (NSString*)identifierForClass:(Class)theClass;
+- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath;
 
 @end
 
@@ -58,6 +58,7 @@
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
+@synthesize controllersForIdentifier = _controllersForIdentifier;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -108,6 +109,8 @@
 - (void)dealloc {
 	[_indexPathToReachAfterRotation release];
 	_indexPathToReachAfterRotation = nil;
+	[_controllersForIdentifier release];
+	_controllersForIdentifier = nil;
 	[_objectController release];
 	_objectController = nil;
 	[_cellsToControllers release];
@@ -532,17 +535,22 @@
 	[_weakCells removeObject:sender];
 }
 
-/* NOTE : reusing cells will work only if the cell identifier is the name of the controller class ...
-          as an exemple CKStandardTableViewCell will not work as it concatenate string as identifier.
- */
-+ (NSString*)identifierForClass:(Class)theClass{
-	NSString* classIdentifier = [theClass description];
-	if(theClass && [theClass respondsToSelector:@selector(classIdentifier)]){
-		classIdentifier = [theClass classIdentifier];
+- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath {
+	if(self.controllersForIdentifier == nil){
+		self.controllersForIdentifier = [NSMutableDictionary dictionary];
 	}
-	//SEB FIXME : append style here
-	NSString* identifier = [NSString stringWithFormat:@"%@",classIdentifier];
-	return identifier;
+	
+	CKTableViewCellController* controller = [_controllersForIdentifier objectForKey:theClass];
+	if(controller == nil){
+		controller = [[[theClass alloc]init]autorelease];
+		[_controllersForIdentifier setObject:controller forKey:theClass];
+	}
+	
+	[controller performSelector:@selector(setParentController:) withObject:self];
+	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[controller setValue:object];
+	
+	return [controller identifier];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -552,7 +560,7 @@
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass){
-				NSString* identifier = [CKObjectTableViewController identifierForClass:controllerClass];
+				NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];

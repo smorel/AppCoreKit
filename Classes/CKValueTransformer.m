@@ -54,14 +54,14 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 	else if([value isKindOfClass:[NSIndexPath class]]
 			&& [NSObject isKindOf:type parentType:[NSString class]])
 	{
-		NSString* str = @"";
+		NSMutableString* str = [NSMutableString stringWithCapacity:124];
 		NSIndexPath* indexPath = (NSIndexPath*)value;
 		for(int i=0;i<[indexPath length];++i){
 			if(i < [indexPath length] - 1){
-				str = [str stringByAppendingFormat:@"%d ",[indexPath indexAtPosition:i]];
+				[str appendFormat:@"%d ",[indexPath indexAtPosition:i]];
 			}
 			else{
-				str = [str stringByAppendingFormat:@"%d",[indexPath indexAtPosition:i]];
+				[str appendFormat:@"%d",[indexPath indexAtPosition:i]];
 			}
 		}
 		

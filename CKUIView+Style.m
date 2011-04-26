@@ -25,131 +25,99 @@ NSString* CKStyleCornerStyle = @"cornerStyle";
 NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
 
-@implementation NSDictionary (CKViewStyle)
+@implementation NSMutableDictionary (CKViewStyle)
 
 - (UIColor*)color{
-	id object = [self objectForKey:CKStyleColor];
-	if([object isKindOfClass:[NSString class]]){
-		return [CKStyleParsing parseStringToColor:object];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[UIColor class]],@"invalid class for backgroundColor");
-	return (object == nil) ? [UIColor whiteColor] : (UIColor*)object;
+	return [self colorForKey:CKStyleColor];
 }
 
 - (NSArray*)gradientColors{
-	id object = [self objectForKey:CKStyleGradientColors];
-	NSAssert(object == nil || [object isKindOfClass:[NSArray class]],@"invalid class for backgroundGradientColors");
-	NSMutableArray* values = [NSMutableArray array];
-	for(id value in object){
-		if([value isKindOfClass:[NSString class]]){
-			[values addObject:[CKStyleParsing parseStringToColor:value]];
-		}
-		else{
-			NSAssert([value isKindOfClass:[UIColor class]],@"invalid class for color");
-			[values addObject:value];
-		}
-	}
-	return values;
+	return [self colorArrayForKey:CKStyleGradientColors];
 }
 
 - (NSArray*)gradientLocations{
-	id object = [self objectForKey:CKStyleGradientLocations];
-	NSAssert(object == nil || [object isKindOfClass:[NSArray class]],@"invalid class for backgroundGradientLocations");
-	NSMutableArray* values = [NSMutableArray array];
-	for(id value in object){
-		if([value isKindOfClass:[NSString class]]){
-			[values addObject:[NSNumber numberWithFloat:[value floatValue]]];
-		}
-		else{
-			NSAssert([value isKindOfClass:[NSNumber class]],@"invalid class for color position");
-			[values addObject:value];
-		}
-	}
-	return values;
+	return [self cgFloatArrayForKey:CKStyleGradientLocations];
 }
 
 - (UIImage*)image{
-	id object = [self objectForKey:CKStyleImage];
-	if([object isKindOfClass:[NSString class]]){
-		UIImage* image = [UIImage imageNamed:object];
-		return image;
-	}
-	else if([object isKindOfClass:[NSURL class]]){
-		NSURL* url = (NSURL*)object;
-		if([url isFileURL]){
-			UIImage* image = [UIImage imageWithContentsOfFile:[url path]];
-			return image;
-		}
-		NSAssert(NO,@"Styles only supports file url yet");
-		return nil;
-	}
-	
-	NSAssert(object == nil || [object isKindOfClass:[UIImage class]],@"invalid class for backgroundImage");
-	return (UIImage*)object;
+	return [self imageForKey:CKStyleImage];
 } 
 
 - (CKViewCornerStyle)cornerStyle{
-	id object = [self objectForKey:CKStyleCornerStyle];
-	if([object isKindOfClass:[NSString class]]){
-		NSDictionary* dico = CKEnumDictionary(CKViewCornerStyleDefault, CKViewCornerStyleRounded, CKViewCornerStylePlain);
-		return [CKStyleParsing parseString:object toEnum:dico];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for cornerStyle");
-	return (object == nil) ? CKViewCornerStyleDefault : (CKViewCornerStyle)[object intValue];
+	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
+									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, CKViewCornerStyleRounded, CKViewCornerStylePlain)];
 }
 
 - (CGSize)cornerSize{
-	id object = [self objectForKey:CKStyleCornerSize];
-	if([object isKindOfClass:[NSString class]]){
-		return [CKStyleParsing parseStringToCGSize:object];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cornerSize");
-	return (object == nil) ? CGSizeMake(10,10) : [object CGSizeValue];
+	return [self cgSizeForKey:CKStyleCornerSize];
 }
 
 - (CGFloat)alpha{
-	id object = [self objectForKey:CKStyleAlpha];
-	if([object isKindOfClass:[NSString class]]){
-		return [object floatValue];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for alpha");
-	return (object == nil) ? 11 : [object floatValue];
+	return [self cgFloatForKey:CKStyleAlpha];
 }
 
 @end
 
 @implementation UIView (CKStyle)
 
-+ (NSDictionary*)defaultStyle{
-	NSAssert(NO,@"Not Implemented");
-	return nil;
-}
-
-- (void)applyStyle:(NSDictionary*)style{
+- (void)applyStyle:(NSMutableDictionary*)style{
 	[self applyStyle:style propertyName:@""];
 }
 
-- (void)applyStyle:(NSDictionary*)style propertyName:(NSString*)propertyName{
+- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
 	[[self class] applyStyle:style toView:self propertyName:propertyName appliedStack:[NSMutableSet set]];
 }
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
++ (CKGradientView*)gradientView:(UIView*)view{
+	for(UIView* subView in [view subviews]){
+		if([subView isKindOfClass:[CKGradientView class]])
+			return (CKGradientView*)subView;
+	}
+	return nil;
+}
+
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName{
+	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
+	if([myViewStyle containsObjectForKey:CKStyleGradientColors]
+	   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
+	   || [myViewStyle containsObjectForKey:CKStyleImage]){
+		return YES;
+	}
+	return NO;
+}
+
++ (BOOL)needSubView:(NSMutableDictionary*)style{
+	/*if([style containsObjectForKey:CKStyleGradientColors]
+	  || [style containsObjectForKey:CKStyleCornerStyle]
+	  || [style containsObjectForKey:CKStyleImage]){
+		return YES;
+	}
+	return NO;*/
+	
+	return YES;
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
                    cornerModifierTarget:(id)target cornerModifierAction:(SEL)action {
 	if(view == nil)
 		return NO;
 	
-	NSDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
+	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	if([appliedStack containsObject:view] == NO){
+		//Apply before adding background subView
+		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
+		
 		if(myViewStyle){
 			UIView* backgroundView = view;
-			if([myViewStyle containsObjectForKey:CKStyleGradientColors]
-			   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
-			   || [myViewStyle containsObjectForKey:CKStyleImage]){
-				
-				CKGradientView* gradientView = [[[CKGradientView alloc]initWithFrame:view.bounds]autorelease];
-				gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-				gradientView.backgroundColor = [UIColor clearColor];
-				view.backgroundColor = [UIColor clearColor];
+			if([UIView needSubView:myViewStyle]){
+				CKGradientView* gradientView = [UIView gradientView:view];
+				if(gradientView == nil){
+					gradientView = [[[CKGradientView alloc]initWithFrame:view.bounds]autorelease];
+					gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+					gradientView.backgroundColor = [UIColor clearColor];
+					view.backgroundColor = [UIColor clearColor];
+					[view insertSubview:gradientView atIndex:0];
+				}
 				
 				if([myViewStyle containsObjectForKey:CKStyleImage]){
 					gradientView.image = [myViewStyle image];
@@ -162,6 +130,7 @@ NSString* CKStyleAlpha = @"alpha";
 					gradientView.gradientColorLocations = [myViewStyle gradientLocations];
 				}
 				
+				//Apply corners
 				CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
 				if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
 					cornerStyle = [myViewStyle cornerStyle];
@@ -185,14 +154,18 @@ NSString* CKStyleAlpha = @"alpha";
 				if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 					gradientView.roundedCornerSize = [myViewStyle cornerSize];
 				}
+
 				
 				backgroundView = gradientView;
-				[view insertSubview:gradientView atIndex:0];
 			}
 			
-			if([myViewStyle containsObjectForKey:CKStyleAlpha])
+			//Apply transparency
+			if([myViewStyle containsObjectForKey:CKStyleAlpha]){
 				backgroundView.alpha = [myViewStyle alpha];
+			}
+			backgroundView.opaque = (backgroundView.alpha >= 1) ? YES : NO;
 			
+			//Apply color
 			if([myViewStyle containsObjectForKey:CKStyleColor] == YES
 			   && [myViewStyle containsObjectForKey:CKStyleGradientColors] == NO){
 				if([backgroundView isKindOfClass:[CKGradientView class]]){
@@ -210,19 +183,17 @@ NSString* CKStyleAlpha = @"alpha";
 			}
 			
 			[appliedStack addObject:view];
-			
 		}
-		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
 		return YES;
 	}
 	return NO;
 }
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
 	return [[view class] applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  cornerModifierTarget:nil cornerModifierAction:nil];
 }
 
-- (void)applySubViewsStyle:(NSDictionary*)style appliedStack:(NSMutableSet*)appliedStack{
+- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack{
 	for(UIView* view in [self subviews]){
 		[[view class] applyStyle:style toView:view propertyName:@"" appliedStack:appliedStack];
 	}

@@ -23,8 +23,8 @@
 
 + (CKStyleManager*)defaultManager;
 
-- (void)setStyle:(NSDictionary*)style forKey:(NSString*)key;
-- (NSDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
+- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key;
+- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
 
 //Could extend to load style from files ...
 - (void)loadContentOfFileNamed:(NSString*)name;

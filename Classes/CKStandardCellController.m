@@ -81,15 +81,6 @@
 	[super dealloc];
 }
 
-- (NSString *)identifier {
-	NSDictionary* controllerStyle = [self controllerStyle];
-	if(controllerStyle){
-		return [NSString stringWithFormat:@"%@-<%p>", [super identifier], controllerStyle];
-	}
-	//FIXME DEPRECATED
-	return [NSString stringWithFormat:@"%@-%d", [super identifier], self.style];
-}
-
 - (NSString *)cacheKeyForImage {
 	return [NSString stringWithFormat:@"cell-%@", self.imageURL];
 }

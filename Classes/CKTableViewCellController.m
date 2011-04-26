@@ -8,6 +8,7 @@
 
 #import "CKTableViewCellController.h"
 #import "CKManagedTableViewController.h"
+#import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
 
@@ -51,11 +52,27 @@
 }
 
 - (NSString *)identifier {
-	return [[self class] description];
-}
-
-+ (NSString*)classIdentifier{
-	return [[self class] description];
+	//Different identifier for rows that begins or end a section in grouped tables
+	NSString* groupedTableModifier = @"";
+	UIView* parentView = [self parentControllerView];
+	if([parentView isKindOfClass:[UITableView class]]){
+		UITableView* tableView = (UITableView*)parentView;
+		if(tableView.style == UITableViewStyleGrouped){
+			NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+			if(self.indexPath.row == 0 && numberOfRows > 1){
+				groupedTableModifier = @"BeginGroup";
+			}
+			else if(self.indexPath.row == 0){
+				groupedTableModifier = @"AloneInGroup";
+			}
+			else if(self.indexPath.row == numberOfRows-1){
+				groupedTableModifier = @"EndingGroup";
+			}
+		}
+	}
+	
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
+	return [NSString stringWithFormat:@"%@-<%p>-%@",[[self class] description],controllerStyle,groupedTableModifier];
 }
 
 - (void)setIndexPath:(NSIndexPath *)indexPath {
@@ -89,7 +106,7 @@
 }
 
 - (UITableViewCell *)cellWithStyle:(UITableViewStyle)style {
-	NSDictionary* controllerStyle = [self controllerStyle];
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	UITableViewStyle cellStyle = style;
 	if([controllerStyle containsObjectForKey:CKStyleCellType])
 		cellStyle = [controllerStyle cellStyle];
@@ -104,7 +121,7 @@
 	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 	[self initTableViewCell:cell];
 	
-	//[cell applyStyle:controllerStyle atIndexPath:self.indexPath parentController:self.parentController];
+	[self applyStyle:cell];
 	
 	return cell;
 }
@@ -135,7 +152,6 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
-	[self applyStyle];
 	//if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return;
 }

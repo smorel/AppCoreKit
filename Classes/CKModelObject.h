@@ -33,7 +33,6 @@
 @property (nonatomic, assign) BOOL creatable;
 
 - (void)reset;
-- (void)copy : (id)other;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end
@@ -42,5 +41,7 @@
 typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 }
+
+- (void)copy : (id)other;
 
 @end

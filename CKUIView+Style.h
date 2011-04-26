@@ -23,7 +23,7 @@ extern NSString* CKStyleCornerStyle;
 extern NSString* CKStyleCornerSize;
 extern NSString* CKStyleAlpha;
 
-@interface NSDictionary (CKViewStyle)
+@interface NSMutableDictionary (CKViewStyle)
 
 - (UIColor*)color;
 - (NSArray*)gradientColors;
@@ -42,14 +42,15 @@ extern NSString* CKStyleAlpha;
 
 @interface UIView (CKStyle) 
 
-+ (NSDictionary*)defaultStyle;
-- (void)applyStyle:(NSDictionary*)style;
-- (void)applyStyle:(NSDictionary*)style propertyName:(NSString*)propertyName;
-- (void)applySubViewsStyle:(NSDictionary*)style appliedStack:(NSMutableSet*)appliedStack;
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName;
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
+- (void)applyStyle:(NSMutableDictionary*)style;
+- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
+- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack;
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
 cornerModifierTarget:(id)target cornerModifierAction:(SEL)action;
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
 
 @end

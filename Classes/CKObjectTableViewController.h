@@ -37,6 +37,7 @@
 	NSMutableDictionary* _cellsToControllers;
 	NSMutableDictionary* _cellsToIndexPath;
 	NSMutableDictionary* _indexPathToCells;
+	NSMutableDictionary* _controllersForIdentifier;
 	NSMutableArray* _weakCells;
 	NSIndexPath* _indexPathToReachAfterRotation;
 	NSMutableDictionary* _headerViewsForSections;

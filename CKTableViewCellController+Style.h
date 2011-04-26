@@ -12,7 +12,7 @@
 extern NSString* CKStyleCellType;
 extern NSString* CKStyleAccessoryType;
 
-@interface NSDictionary (CKTableViewCellControllerStyle)
+@interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (UITableViewCellStyle)cellStyle;
 - (UITableViewCellAccessoryType)accessoryType;
@@ -21,6 +21,8 @@ extern NSString* CKStyleAccessoryType;
 
 @interface CKTableViewCellController (CKStyle)
 
-- (NSDictionary*)controllerStyle;
+- (void)applyStyle:(UITableViewCell*)cell;
+- (NSMutableDictionary*)controllerStyle;
+- (UIView*)parentControllerView;
 
 @end

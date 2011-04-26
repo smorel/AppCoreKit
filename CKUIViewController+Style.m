@@ -9,12 +9,13 @@
 #import "CKUIViewController+Style.h"
 #import "CKStyles.h"
 #import "CKStyleManager.h"
+#import "CKStyle+Parsing.h"
 
 
 @implementation CKUIViewController (CKStyle)
 
 - (void)applyStyle{
-	NSDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[[self.view class] applyStyle:controllerStyle toView:self.view propertyName:@"view" appliedStack:appliedStack];

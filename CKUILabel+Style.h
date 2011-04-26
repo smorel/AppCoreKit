@@ -14,7 +14,7 @@ extern NSString* CKStyleFontName;
 extern NSString* CKStyleText;
 extern NSString* CKStyleNumberOfLines;
 
-@interface NSDictionary (CKUILabelStyle)
+@interface NSMutableDictionary (CKUILabelStyle)
 
 - (UIColor*)textColor;
 - (CGFloat)fontSize;

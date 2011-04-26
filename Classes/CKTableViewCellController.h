@@ -71,7 +71,6 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)setupCell:(UITableViewCell *)cell;
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
-+ (NSString*)classIdentifier;
 + (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params;
 
 - (CGFloat)heightForRow;

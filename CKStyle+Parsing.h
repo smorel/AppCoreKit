@@ -19,3 +19,18 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (CGSize)parseStringToCGSize:(NSString*)str;
 
 @end
+
+
+@interface NSMutableDictionary (CKStyleParsing)
+
+- (UIColor*) colorForKey:(NSString*)key;
+- (NSArray*) colorArrayForKey:(NSString*)key;
+- (NSArray*) cgFloatArrayForKey:(NSString*)key;
+- (UIImage*) imageForKey:(NSString*)key;
+- (NSInteger) enumValueForKey:(NSString*)key withDictionary:(NSDictionary*)dictionary;
+- (CGSize) cgSizeForKey:(NSString*)key;
+- (CGFloat) cgFloatForKey:(NSString*)key;
+- (NSString*) stringForKey:(NSString*)key;
+- (NSInteger) integerForKey:(NSString*)key;
+
+@end

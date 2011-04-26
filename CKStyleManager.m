@@ -38,11 +38,11 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	return CKStyleManagerDefault;
 }
 
-- (void)setStyle:(NSDictionary*)style forKey:(NSString*)key{
+- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key{
 	[_styles setStyle:style forKey:key];
 }
 
-- (NSDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName{
+- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName{
 	return [_styles styleForObject:object propertyName:propertyName];
 }
 

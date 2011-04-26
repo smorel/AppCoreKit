@@ -26,17 +26,12 @@
 
 extern NSString* CKStyleStyles;
 
-@interface NSDictionary (CKStyle)
-
-- (NSArray*)styleFormatsForObject:(id)object propertyName:(NSString*)propertyName;
-- (NSDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
-
-@end
-
 @interface NSMutableDictionary (CKStyle)
+
+- (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
 
 - (void)initAfterLoading;
 - (void)setFormat:(CKStyleFormat*)format;
-- (void)setStyle:(NSDictionary*)style forKey:(NSString*)key;
+- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key;
 
 @end

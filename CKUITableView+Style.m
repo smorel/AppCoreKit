@@ -7,14 +7,17 @@
 //
 
 #import "CKUITableView+Style.h"
+#import "CKStyles.h"
+#import "CKStyleManager.h"
+#import "CKStyle+Parsing.h"
 
 
 @implementation UITableView (CKStyle)
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
 	UITableView* tableView = (UITableView*)view;
 	
-	NSDictionary* myViewStyle = [style styleForObject:tableView propertyName:propertyName];
+	NSMutableDictionary* myViewStyle = [style styleForObject:tableView propertyName:propertyName];
 	tableView.backgroundView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];
 	tableView.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[UIView applyStyle:myViewStyle toView:tableView.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack];

@@ -14,42 +14,32 @@
 #import "CKObjectCarouselViewController.h"
 #import "CKTableViewController.h"
 
-#import "CKNSArrayAdditions.h"
 #import "CKGradientView.h"
+#import "CKNSArrayAdditions.h"
 #import "CKStyle+Parsing.h"
 
 NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryType = @"accessoryType";
 
-@implementation NSDictionary (CKTableViewCellControllerStyle)
+@implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (UITableViewCellStyle)cellStyle{
-	id object = [self objectForKey:CKStyleCellType];
-	if([object isKindOfClass:[NSString class]]){
-		NSDictionary* dico = CKEnumDictionary(UITableViewCellStyleDefault, UITableViewCellStyleValue1, UITableViewCellStyleValue2,UITableViewCellStyleSubtitle);
-		return [CKStyleParsing parseString:object toEnum:dico];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for cellStyle");
-	return (object == nil) ? UITableViewCellStyleDefault : (UITableViewCellStyle)[object intValue];
+	return (UITableViewCellStyle)[self enumValueForKey:CKStyleCellType 
+									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, UITableViewCellStyleValue1, UITableViewCellStyleValue2,UITableViewCellStyleSubtitle)];
 }
 
 - (UITableViewCellAccessoryType)accessoryType{
-	id object = [self objectForKey:CKStyleAccessoryType];
-	if([object isKindOfClass:[NSString class]]){
-		NSDictionary* dico = CKEnumDictionary(UITableViewCellAccessoryNone, UITableViewCellAccessoryDisclosureIndicator, UITableViewCellAccessoryDetailDisclosureButton,UITableViewCellAccessoryCheckmark);
-		return [CKStyleParsing parseString:object toEnum:dico];
-	}
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for accessoryType");
-	return (object == nil) ? UITableViewCellAccessoryNone : (UITableViewCellAccessoryType)[object intValue];
+	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleCellType 
+									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, UITableViewCellAccessoryDisclosureIndicator, UITableViewCellAccessoryDetailDisclosureButton,UITableViewCellAccessoryCheckmark)];
 }
 
 @end
 
 @implementation CKTableViewCellController (CKStyle)
 
-- (NSDictionary*)controllerStyle{
-	NSDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:@""];
-	NSDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:@""];
+- (NSMutableDictionary*)controllerStyle{
+	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:@""];
+	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:@""];
 	return controllerStyle;
 }
 
@@ -63,7 +53,7 @@ NSString* CKStyleAccessoryType = @"accessoryType";
 
 //[self controllerStyle] atIndexPath:self.indexPath parentController:self.parentController];
 
-- (NSNumber*)computeCornerStyle:(NSDictionary*)style{
+- (NSNumber*)computeCornerStyle:(NSMutableDictionary*)style{
 	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
 	
 	switch([style cornerStyle]){
@@ -95,11 +85,9 @@ NSString* CKStyleAccessoryType = @"accessoryType";
 	return [NSNumber numberWithInt:roundedCornerType];
 }
 
-- (void)applyStyle{
-	UITableViewCell* cell = self.tableViewCell;
-	
+- (void)applyStyle:(UITableViewCell*)cell{
 	NSMutableSet* appliedStack = [NSMutableSet set];
-	NSDictionary* controllerStyle = [self controllerStyle];
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	if(controllerStyle){
 		//Applying style on UITableViewCell
 		if([controllerStyle containsObjectForKey:CKStyleAccessoryType]){
@@ -111,18 +99,21 @@ NSString* CKStyleAccessoryType = @"accessoryType";
 		[UILabel applyStyle:controllerStyle toView:cell.detailTextLabel propertyName:@"detailTextLabel" appliedStack:appliedStack];
 		[UIImageView applyStyle:controllerStyle toView:cell.imageView propertyName:@"imageView" appliedStack:appliedStack];
 		
-		cell.backgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
-		cell.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		if([cell.backgroundView isKindOfClass:[UIView class]] == NO){
+			cell.backgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
+			cell.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		}
 		[UIView applyStyle:controllerStyle toView:cell.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 		
-		cell.selectedBackgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
-		cell.selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		if([cell.selectedBackgroundView isKindOfClass:[UIView class]] == NO){
+			cell.selectedBackgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
+			cell.selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		}
 		[UIView applyStyle:controllerStyle toView:cell.selectedBackgroundView propertyName:@"selectedBackgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 	}
 	
 	[cell applySubViewsStyle:controllerStyle appliedStack:appliedStack];
 }
-
 
 @end
 

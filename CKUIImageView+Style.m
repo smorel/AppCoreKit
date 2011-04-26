@@ -14,10 +14,10 @@
 
 @implementation UIImageView (CKStyle)
 
-+ (BOOL)applyStyle:(NSDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
 	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack]){
 		UIImageView* imageView = (UIImageView*)view;
-		NSDictionary* myImageViewStyle = [style styleForObject:imageView propertyName:propertyName];
+		NSMutableDictionary* myImageViewStyle = [style styleForObject:imageView propertyName:propertyName];
 		if(myImageViewStyle){
 			if([myImageViewStyle containsObjectForKey:CKStyleImage])
 				imageView.image = [myImageViewStyle image];

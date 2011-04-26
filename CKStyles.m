@@ -14,7 +14,8 @@
 
 #import "CKValueTransformer.h"
 
-static NSDictionary* CKStyleDefaultDictionary = nil;
+static NSMutableDictionary* CKStyleDefaultDictionary = nil;
+static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
 @implementation CKStyleFormat
 @synthesize objectClass,properties,format,propertyName;
@@ -44,26 +45,33 @@ static NSDictionary* CKStyleDefaultDictionary = nil;
 }
 
 - (NSString*)formatForObject:(id)object propertyName:(NSString*)thePropertyName{
-	NSString* str = nil;
+	NSMutableString* str = [NSMutableString stringWithCapacity:1024];
 	if(self.propertyName){
-		str = [NSString stringWithFormat:@"#%@",thePropertyName];
+		[str appendString:@"#"];
+		[str appendString:thePropertyName];
 	}
 	else{
-		NSString* classname = [object className];
-		classname = [classname stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
-		str = [NSString stringWithFormat:@"%@",classname];
+		if(CKStyleClassNamesCache == nil){
+			CKStyleClassNamesCache = [[NSMutableDictionary alloc]init];
+		}
+		NSString* className = [CKStyleClassNamesCache objectForKey:[object class]];
+		if(className == nil){
+			className = [object className];
+			className = [className stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
+			[CKStyleClassNamesCache setObject:className forKey:[object class]];
+		}
+		[str appendString:className];
 	}
 	
 	for(NSString* subPropertyName in properties){
 		id value = [object valueForKeyPath:subPropertyName];
 		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
-		str = [str stringByAppendingFormat:@",%@=%@",subPropertyName,valueString];
+		[str appendFormat:@",%@=%@",subPropertyName,valueString];
 	}
 	return str;
 }
 
 @end
-
 
 @implementation NSDictionary (CKKey)
 
@@ -109,7 +117,7 @@ NSString* CKStyleFormats = @"formats";
 	}
 }
 
-- (void)setStyle:(NSDictionary*)style forKey:(NSString*)key{
+- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key{
 	[self setObject:style forKey:key];
 
 	CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
@@ -134,53 +142,57 @@ NSString* CKStyleFormats = @"formats";
 	//call initAfterLoading on subStyles
 }
 
-@end
-
-@implementation NSDictionary (CKStyle)
-
-- (NSDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
-	NSArray* formatsForObject = [self styleFormatsForObject:object propertyName:propertyName];
-	if(formatsForObject){
-		for(CKStyleFormat* format in formatsForObject){
-			NSString* objectFormatKey = [format formatForObject:object propertyName:propertyName];
-			id style = [self objectForKey:objectFormatKey];
-			if(style){
-				return style;
-			}
-		}
-	}
-	
-	NSDictionary* managerStyles = [CKStyleManager defaultManager].styles;
-	if(managerStyles == self){
-		if(CKStyleDefaultDictionary == nil){
-			CKStyleDefaultDictionary = [NSDictionary dictionary];
-		}
-		return CKStyleDefaultDictionary;
-	}
-	//if not found, search in the root style directory
-	return [managerStyles styleForObject:object propertyName:propertyName];
+- (NSMutableDictionary*)styleForObject:(id)object format:(CKStyleFormat*)format propertyName:(NSString*)propertyName{
+	NSString* objectFormatKey = [format formatForObject:object propertyName:propertyName];
+	return [self objectForKey:objectFormatKey];
 }
 
-- (NSArray*)styleFormatsForObject:(id)object propertyName:(NSString*)propertyName{
-	NSMutableArray* resultFormats = [NSMutableArray array];
+
+- (NSMutableDictionary*)styleForObject:(id)object formats:(NSArray*)formats propertyName:(NSString*)propertyName{
+	for(CKStyleFormat* format in formats){
+		NSMutableDictionary* style = [self styleForObject:object format:format propertyName:propertyName];
+		if(style){
+			return style;
+		}
+	}
+	return nil;
+}
+
+- (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
 	NSDictionary* allFormats = [self objectForKey:CKStyleFormats];
 	if(allFormats){
 		NSArray* propertyformats = [allFormats objectForKey:propertyName];
 		if(propertyformats){
-			[resultFormats addObjectsFromArray:propertyformats];
+			NSMutableDictionary* style = [self styleForObject:object formats:propertyformats propertyName:propertyName];
+			if(style){
+				return style;
+			}
 		}
 		
 		Class type = [object class];
 		while(type != nil){
 			NSArray* formats = [allFormats objectForKey:type];
 			if(formats){
-				[resultFormats addObjectsFromArray:formats];
-				break;
+				NSMutableDictionary* style = [self styleForObject:object formats:formats propertyName:propertyName];
+				if(style){
+					return style;
+				}
 			}
 			type = class_getSuperclass(type);
 		}
 	}
-	return resultFormats;
+	
+	//Look in the manager if there is a style available (SIMPLE CASCADING)
+	NSMutableDictionary* managerStyles = [CKStyleManager defaultManager].styles;
+	if(managerStyles == self){
+		if(CKStyleDefaultDictionary == nil){
+			CKStyleDefaultDictionary = [[NSMutableDictionary alloc]init];
+		}
+		return CKStyleDefaultDictionary;
+	}
+	return [managerStyles styleForObject:object propertyName:propertyName];
 }
+
+
 
 @end
