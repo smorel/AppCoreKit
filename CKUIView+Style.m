@@ -76,6 +76,18 @@ NSString* CKStyleAlpha = @"alpha";
 	return nil;
 }
 
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
+	BOOL isTableViewCell = [[view superview]isKindOfClass:[UITableViewCell class]];
+	
+	if(isTableViewCell
+	   || [style containsObjectForKey:CKStyleGradientColors]
+	   || [style containsObjectForKey:CKStyleCornerStyle]
+	   || [style containsObjectForKey:CKStyleImage]){
+		return YES;
+	}
+	return NO;
+}
+
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName{
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	if([myViewStyle containsObjectForKey:CKStyleGradientColors]
@@ -84,17 +96,6 @@ NSString* CKStyleAlpha = @"alpha";
 		return YES;
 	}
 	return NO;
-}
-
-+ (BOOL)needSubView:(NSMutableDictionary*)style{
-	/*if([style containsObjectForKey:CKStyleGradientColors]
-	  || [style containsObjectForKey:CKStyleCornerStyle]
-	  || [style containsObjectForKey:CKStyleImage]){
-		return YES;
-	}
-	return NO;*/
-	
-	return YES;
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
@@ -108,78 +109,90 @@ NSString* CKStyleAlpha = @"alpha";
 		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
 		
 		if(myViewStyle){
-			UIView* backgroundView = view;
-			if([UIView needSubView:myViewStyle]){
-				CKGradientView* gradientView = [UIView gradientView:view];
-				if(gradientView == nil){
-					gradientView = [[[CKGradientView alloc]initWithFrame:view.bounds]autorelease];
-					gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-					gradientView.backgroundColor = [UIColor clearColor];
-					view.backgroundColor = [UIColor clearColor];
-					[view insertSubview:gradientView atIndex:0];
-				}
-				
-				if([myViewStyle containsObjectForKey:CKStyleImage]){
-					gradientView.image = [myViewStyle image];
-				}
-				
-				if([myViewStyle containsObjectForKey:CKStyleGradientColors]){
-					gradientView.gradientColors = [myViewStyle gradientColors];
-				}
-				if([myViewStyle containsObjectForKey:CKStyleGradientLocations]){
-					gradientView.gradientColorLocations = [myViewStyle gradientLocations];
-				}
-				
-				//Apply corners
-				CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
-				if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
-					cornerStyle = [myViewStyle cornerStyle];
-				}
-				
-				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-				if(target && action){
-					roundedCornerType = [[target performSelector:action withObject:myViewStyle] intValue];
-				}
-				else{
-					switch(cornerStyle){
-						case CKViewCornerStyleRounded:{
-							roundedCornerType = CKRoundedCornerViewTypeAll;
-							break;
+			if([myViewStyle count] > 0){
+				UIView* backgroundView = view;
+				BOOL opaque = YES;
+				if([UIView needSubView:myViewStyle forView:view]){
+					CKGradientView* gradientView = [UIView gradientView:view];
+					if(gradientView == nil){
+						gradientView = [[[CKGradientView alloc]initWithFrame:view.bounds]autorelease];
+						gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+						view.backgroundColor = [UIColor clearColor];
+						[view insertSubview:gradientView atIndex:0];
+					}
+					
+					if([myViewStyle containsObjectForKey:CKStyleImage]){
+						gradientView.image = [myViewStyle image];
+					}
+					
+					if([myViewStyle containsObjectForKey:CKStyleGradientColors]){
+						NSArray* colors = [myViewStyle gradientColors];
+						for(UIColor* color in colors){
+							if(CGColorGetAlpha([color CGColor]) < 1){
+								opaque = NO;
+								break;
+							}
+						}
+						gradientView.gradientColors = colors;
+					}
+					if([myViewStyle containsObjectForKey:CKStyleGradientLocations]){
+						gradientView.gradientColorLocations = [myViewStyle gradientLocations];
+					}
+					
+					//Apply corners
+					CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
+					if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
+						cornerStyle = [myViewStyle cornerStyle];
+					}
+					
+					CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
+					if(target && action){
+						roundedCornerType = [[target performSelector:action withObject:myViewStyle] intValue];
+					}
+					else{
+						switch(cornerStyle){
+							case CKViewCornerStyleRounded:{
+								roundedCornerType = CKRoundedCornerViewTypeAll;
+								break;
+							}
 						}
 					}
+					
+					gradientView.corners = roundedCornerType;
+					gradientView.backgroundColor = (opaque && roundedCornerType == CKRoundedCornerViewTypeNone) ? [UIColor blackColor] : [UIColor clearColor];
+					
+					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
+						gradientView.roundedCornerSize = [myViewStyle cornerSize];
+					}
+					
+					
+					backgroundView = gradientView;
 				}
 				
-				gradientView.corners = roundedCornerType;
+				//Apply transparency
+				if([myViewStyle containsObjectForKey:CKStyleAlpha]){
+					backgroundView.alpha = [myViewStyle alpha];
+				}
 				
-				if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
-					gradientView.roundedCornerSize = [myViewStyle cornerSize];
+				//Apply color
+				if([myViewStyle containsObjectForKey:CKStyleColor] == YES
+				   && [myViewStyle containsObjectForKey:CKStyleGradientColors] == NO){
+					if([backgroundView isKindOfClass:[CKGradientView class]]){
+						CKGradientView* gradientView = (CKGradientView*)backgroundView;
+						UIColor* color = [myViewStyle color];
+						gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
+						gradientView.gradientColorLocations = [NSArray arrayWithObjects:
+															   [NSNumber numberWithInt:0], 
+															   [NSNumber numberWithInt:1], 
+															   nil];	
+						opaque = opaque && (CGColorGetAlpha([color CGColor]) >= 1);				
+					}
+					else{
+						backgroundView.backgroundColor = [myViewStyle color];
+						opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
+					}
 				}
-
-				
-				backgroundView = gradientView;
-			}
-			
-			//Apply transparency
-			if([myViewStyle containsObjectForKey:CKStyleAlpha]){
-				backgroundView.alpha = [myViewStyle alpha];
-			}
-			backgroundView.opaque = (backgroundView.alpha >= 1) ? YES : NO;
-			
-			//Apply color
-			if([myViewStyle containsObjectForKey:CKStyleColor] == YES
-			   && [myViewStyle containsObjectForKey:CKStyleGradientColors] == NO){
-				if([backgroundView isKindOfClass:[CKGradientView class]]){
-					CKGradientView* gradientView = (CKGradientView*)backgroundView;
-					UIColor* color = [myViewStyle color];
-					gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
-					gradientView.gradientColorLocations = [NSArray arrayWithObjects:
-														   [NSNumber numberWithInt:0], 
-														   [NSNumber numberWithInt:1], 
-														   nil];					
-				}
-				else{
-					backgroundView.backgroundColor = [myViewStyle color];
-				}
+				backgroundView.opaque = opaque && (backgroundView.alpha >= 1) ? YES : NO;
 			}
 			
 			[appliedStack addObject:view];

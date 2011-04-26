@@ -85,34 +85,33 @@ NSString* CKStyleAccessoryType = @"accessoryType";
 	return [NSNumber numberWithInt:roundedCornerType];
 }
 
-- (void)applyStyle:(UITableViewCell*)cell{
+- (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell{
 	NSMutableSet* appliedStack = [NSMutableSet set];
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	if(controllerStyle){
+	if(style){
 		//Applying style on UITableViewCell
-		if([controllerStyle containsObjectForKey:CKStyleAccessoryType]){
-			cell.accessoryType = [controllerStyle accessoryType];
+		if([style containsObjectForKey:CKStyleAccessoryType]){
+			cell.accessoryType = [style accessoryType];
 		}
 		[appliedStack addObject:cell];
 		
-		[UILabel applyStyle:controllerStyle toView:cell.textLabel propertyName:@"textLabel" appliedStack:appliedStack];
-		[UILabel applyStyle:controllerStyle toView:cell.detailTextLabel propertyName:@"detailTextLabel" appliedStack:appliedStack];
-		[UIImageView applyStyle:controllerStyle toView:cell.imageView propertyName:@"imageView" appliedStack:appliedStack];
+		[UILabel applyStyle:style toView:cell.textLabel propertyName:@"textLabel" appliedStack:appliedStack];
+		[UILabel applyStyle:style toView:cell.detailTextLabel propertyName:@"detailTextLabel" appliedStack:appliedStack];
+		[UIImageView applyStyle:style toView:cell.imageView propertyName:@"imageView" appliedStack:appliedStack];
 		
-		if([cell.backgroundView isKindOfClass:[UIView class]] == NO){
+		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"backgroundView"] && [cell.backgroundView isKindOfClass:[UIView class]] == NO){
 			cell.backgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
 			cell.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		}
-		[UIView applyStyle:controllerStyle toView:cell.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
+		[UIView applyStyle:style toView:cell.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 		
-		if([cell.selectedBackgroundView isKindOfClass:[UIView class]] == NO){
+		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"selectedBackgroundView"] && [cell.selectedBackgroundView isKindOfClass:[UIView class]] == NO){
 			cell.selectedBackgroundView = [[[UIView alloc]initWithFrame:cell.bounds]autorelease];
 			cell.selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		}
-		[UIView applyStyle:controllerStyle toView:cell.selectedBackgroundView propertyName:@"selectedBackgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
+		[UIView applyStyle:style toView:cell.selectedBackgroundView propertyName:@"selectedBackgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 	}
 	
-	[cell applySubViewsStyle:controllerStyle appliedStack:appliedStack];
+	[cell applySubViewsStyle:style appliedStack:appliedStack];
 }
 
 @end

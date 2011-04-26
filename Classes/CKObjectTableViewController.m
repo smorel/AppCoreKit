@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @property (nonatomic, retain) NSMutableDictionary* controllersForIdentifier;
+@property (nonatomic, retain) NSMutableDictionary* params;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
 - (void)updateNumberOfPages;
@@ -35,6 +36,7 @@
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
 - (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath;
+- (void)updateParams;
 
 @end
 
@@ -59,9 +61,18 @@
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
 @synthesize controllersForIdentifier = _controllersForIdentifier;
+@synthesize params = _params;
 
 @synthesize editButton;
 @synthesize doneButton;
+
+/*
+ [params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+ [params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+ [params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+ [params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+ [params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
+ */
 
 - (void)printDebug:(NSString*)txt{
 	/*NSLog(@"%@",txt);
@@ -77,6 +88,16 @@
 	}*/
 }
 
+- (void)loadView{
+	[super loadView];
+	
+	[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[self.tableView bind:@"frame" target:self action:@selector(updateParams)];
+	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
+	[self.tableView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
+	[self bind:@"orientation" target:self action:@selector(updateParams)];
+	[NSObject endBindingsContext];
+}
 
 - (void)postInit{
 	[super postInit];
@@ -89,7 +110,6 @@
 	_scrolling = NO;
 	_editable = NO;
 }
-
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
@@ -107,8 +127,11 @@
 
 
 - (void)dealloc {
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[_indexPathToReachAfterRotation release];
 	_indexPathToReachAfterRotation = nil;
+	[_params release];
+	_params = nil;
 	[_controllersForIdentifier release];
 	_controllersForIdentifier = nil;
 	[_objectController release];
@@ -173,6 +196,17 @@
 	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
 }
 
+- (void)updateParams{
+	if(self.params == nil){
+		[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+		[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+		[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+		[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+		[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+		[self.params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
+	}
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
@@ -194,18 +228,13 @@
 		[self.tableView endUpdates];
 	}
 	
+	[self updateParams];
+	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-			[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-			[controller rotateCell:cell withParams:params animated:YES];
+			[controller rotateCell:cell withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
@@ -306,14 +335,7 @@
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass && [controllerClass respondsToSelector:@selector(rowSizeForObject:withParams:)]){
-				
-				NSMutableDictionary* params = [NSMutableDictionary dictionary];
-				[params setObject:[NSValue valueWithCGSize:size] forKey:CKTableViewAttributeBounds];
-				[params setObject:[NSNumber numberWithInt:interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-		
-				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
+				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:self.params];
 				CGSize size = [v CGSizeValue];
 				//NSLog(@"Size for row : %d,%d =%f,%f",indexPath.row,indexPath.section,size.width,size.height);
 				height = (_orientation == CKTableViewOrientationLandscape) ? size.width : size.height;
@@ -433,20 +455,14 @@
 		[self.tableView endUpdates];
 	}
 	
+	[self updateParams];
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
 		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		
 		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			
-			NSMutableDictionary* params = [NSMutableDictionary dictionary];
-			[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-			[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-			[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-			[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-			[params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			
-			[controller rotateCell:cell withParams:params animated:YES];
+			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
+			[controller rotateCell:cell withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
@@ -503,15 +519,7 @@
 			
 			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
 			if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-				
-				NSMutableDictionary* params = [NSMutableDictionary dictionary];
-				[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-				[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-				[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-				[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-				[params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
-				
-				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:params];
+				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:self.params];
 				return flags;
 			}
 		}
@@ -606,10 +614,6 @@
 					[self setEditing:YES animated:NO];
 				}*/
 				
-				CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-				BOOL bo = flags & CKTableViewCellFlagSelectable;
-				cell.selectionStyle = bo ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
@@ -632,13 +636,7 @@
 				[self updateNumberOfPages];
 				
 				if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-					NSMutableDictionary* params = [NSMutableDictionary dictionary];
-					[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-					[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-					[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-					[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-					
-					[controller rotateCell:cell withParams:params animated:NO];
+					[controller rotateCell:cell withParams:self.params animated:NO];
 				}	
 				
 				//NSLog(@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section);

@@ -118,10 +118,10 @@
 		acType = [controllerStyle accessoryType];
 	
 	cell.accessoryType = acType;
-	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
+	//cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 	[self initTableViewCell:cell];
 	
-	[self applyStyle:cell];
+	[self applyStyle:controllerStyle forCell:cell];
 	
 	return cell;
 }
