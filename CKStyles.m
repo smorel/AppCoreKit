@@ -57,7 +57,7 @@ static NSDictionary* CKStyleDefaultDictionary = nil;
 	for(NSString* subPropertyName in properties){
 		id value = [object valueForKeyPath:subPropertyName];
 		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
-		str = [str stringByAppendingFormat:@",%@=\"%@\"",subPropertyName,valueString];
+		str = [str stringByAppendingFormat:@",%@=%@",subPropertyName,valueString];
 	}
 	return str;
 }

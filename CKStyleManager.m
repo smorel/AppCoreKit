@@ -33,19 +33,7 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 
 + (CKStyleManager*)defaultManager{
 	if(CKStyleManagerDefault == nil){
-		CKStyleManager* manager = [[CKStyleManager alloc]init];
-		
-		//Sample style addition for object of type MyController with property name = theController :
-		/*
-		 NSMutableDictionary* style = [NSMutableDictionary dictionary];
-		NSMutableDictionary* backgroundStyle = [NSMutableDictionary dictionary];
-		[backgroundStyle setObject:[UIColor redColor] forKey:CKStyleColor];
-		[style setObject:backgroundStyle forKey:CKStyleBackgroundStyle];
-		[manager setStyle:style forKey:@"MyController,name=\"theController\"";
-		 */
-		 
-		
-		CKStyleManagerDefault = manager;
+		CKStyleManagerDefault = [[CKStyleManager alloc]init];
 	}
 	return CKStyleManagerDefault;
 }

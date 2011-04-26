@@ -141,7 +141,6 @@ NSString* CKStyleAlpha = @"alpha";
 	NSDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	if([appliedStack containsObject:view] == NO){
 		if(myViewStyle){
-			NSLog(@"Apply style on view <%p> of type %@",view,[[view class]description]);
 			UIView* backgroundView = view;
 			if([myViewStyle containsObjectForKey:CKStyleGradientColors]
 			   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
