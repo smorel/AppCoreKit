@@ -14,8 +14,6 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
-#import "CKGradientView.h"
-#import "CKUITableView+Style.h"
 
 NSString* CKStyleColor = @"color";
 NSString* CKStyleGradientColors = @"gradientColors";
@@ -102,17 +100,17 @@ NSString* CKStyleAlpha = @"alpha";
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
-                   cornerModifierTarget:(id)target cornerModifierAction:(SEL)action {
+                   delegate:(id)delegate {
 	if(view == nil)
 		return NO;
 	
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	if([appliedStack containsObject:view] == NO){
 		//Apply before adding background subView
-		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack];
+		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
 		
 		if(myViewStyle){
-			if([myViewStyle count] > 0){
+			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
 				if([UIView needSubView:myViewStyle forView:view]){
@@ -149,8 +147,8 @@ NSString* CKStyleAlpha = @"alpha";
 					}
 					
 					CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-					if(target && action){
-						roundedCornerType = [[target performSelector:action withObject:myViewStyle] intValue];
+					if(delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+						roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
 					}
 					else{
 						switch(cornerStyle){
@@ -206,158 +204,47 @@ NSString* CKStyleAlpha = @"alpha";
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
-	return [[view class] applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  cornerModifierTarget:nil cornerModifierAction:nil];
+	return [[view class] applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  delegate:nil];
 }
 
-- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack{
-	for(UIView* view in [self subviews]){
-		[[view class] applyStyle:style toView:view propertyName:@"" appliedStack:appliedStack];
+@end
+
+@implementation NSObject (CKStyle)
+
+- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	//iterate on view properties to apply style using property names
+	NSArray* properties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* descriptor in properties){
+		if([NSObject isKindOf:descriptor.type parentType:[UIView class]]){
+			UIView* view = [self valueForKey:descriptor.name];
+			
+			UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
+			CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
+			
+			BOOL shouldReplaceView = NO;
+			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:)]){
+				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
+			}
+			
+			//ICI ca chie car on remplace toutes les vues qui ont un style ...
+			if([UIView needSubView:style forView:view propertyName:descriptor.name] && (view == nil || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO)) ){
+				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+				[self setValue:view forKey:descriptor.name];
+			}
+			
+			if(view){
+				[descriptor.type applyStyle:style toView:view propertyName:descriptor.name appliedStack:appliedStack delegate:delegate];
+			}
+		}
+	}
+	
+	if([self isKindOfClass:[UIView class]] == YES){
+		UIView* selfView = (UIView*)self;
+		for(UIView* view in [selfView subviews]){
+			[[view class] applyStyle:style toView:view propertyName:@"" appliedStack:appliedStack delegate:delegate];
+		}
 	}
 }
-
-/*
- NSDictionary* backgroundStyle = [myViewStyle backgroundStyle];
- if(backgroundStyle == nil){backgroundStyle = [NSDictionary dictionary];}
- NSDictionary* selectedBackgroundStyle = [myViewStyle selectedBackgroundStyle];
- if(selectedBackgroundStyle == nil){selectedBackgroundStyle = [NSDictionary dictionary];}
- 
- //Applying style on Background view
- {
- //create view
- UIView* view = self.backgroundView;
- CKGradientView* gradientView = nil;
- if([view isKindOfClass:[CKGradientView class]] == NO){
- gradientView = [[[CKGradientView alloc]initWithFrame:self.bounds]autorelease];
- gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
- self.backgroundView = gradientView;
- }
- else{
- gradientView = (CKGradientView*)view;
- }
- //apply colors
- if([backgroundStyle containsObjectForKey:CKStyleGradientColors]){
- gradientView.gradientColors = [backgroundStyle gradientColors];
- gradientView.gradientColorLocations = [NSArray arrayWithObjects:
- [NSNumber numberWithInt:0], 
- [NSNumber numberWithFloat:(1 / self.bounds.size.height)], 
- [NSNumber numberWithFloat:(1 - (1 / self.bounds.size.height))], 
- [NSNumber numberWithInt:1], 
- nil];
- }
- else{
- UIColor* color = [backgroundStyle color];
- gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
- gradientView.gradientColorLocations = [NSArray arrayWithObjects:
- [NSNumber numberWithInt:0], 
- [NSNumber numberWithInt:1], 
- nil];
- }
- 
- gradientView.alpha = [backgroundStyle alpha];
- gradientView.backgroundColor = [self parentControllerView:parentController].backgroundColor;
- 
- CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
- switch([backgroundStyle cornerStyle]){
- case CKViewCornerStyleRounded:{
- roundedCornerType = CKRoundedCornerViewTypeAll;
- break;
- }
- case CKViewCornerStyleDefault:{
- UIView* parentView = [self parentControllerView:parentController];
- if([parentView isKindOfClass:[UITableView class]]){
- UITableView* tableView = (UITableView*)parentView;
- if(tableView.style == UITableViewStyleGrouped){
- NSInteger numberOfRows = [tableView numberOfRowsInSection:indexPath.section];
- if(indexPath.row == 0 && numberOfRows > 1){
- roundedCornerType = CKRoundedCornerViewTypeTop;
- }
- else if(indexPath.row == 0){
- roundedCornerType = CKRoundedCornerViewTypeAll;
- }
- else if(indexPath.row == numberOfRows-1){
- roundedCornerType = CKRoundedCornerViewTypeBottom;
- }
- }
- }
- break;
- }
- }
- 
- gradientView.corners = roundedCornerType;
- gradientView.roundedCornerSize = [backgroundStyle cornerSize];
- }
- 
- [appliedStack addObject:self.backgroundView];
- [self.backgroundView applySubViewsStyle:backgroundStyle appliedStack:appliedStack];
- 
- //Applying style on Selected view
- {
- //create view
- UIView* view = self.selectedBackgroundView;
- CKGradientView* gradientView = nil;
- if([view isKindOfClass:[CKGradientView class]] == NO){
- gradientView = [[[CKGradientView alloc]initWithFrame:self.bounds]autorelease];
- gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
- self.selectedBackgroundView = gradientView;
- }
- else{
- gradientView = (CKGradientView*)view;
- }
- 
- //apply colors
- if([selectedBackgroundStyle containsObjectForKey:CKStyleGradientColors]){
- gradientView.gradientColors = [selectedBackgroundStyle gradientColors];
- gradientView.gradientColorLocations = [NSArray arrayWithObjects:
- [NSNumber numberWithInt:0], 
- [NSNumber numberWithFloat:(1 / self.bounds.size.height)], 
- [NSNumber numberWithFloat:(1 - (1 / self.bounds.size.height))], 
- [NSNumber numberWithInt:1], 
- nil];
- }
- else{
- UIColor* color = [selectedBackgroundStyle color];
- gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
- gradientView.gradientColorLocations = [NSArray arrayWithObjects:
- [NSNumber numberWithInt:0], 
- [NSNumber numberWithInt:1], 
- nil];
- }
- gradientView.alpha = [selectedBackgroundStyle alpha];
- gradientView.backgroundColor = [self parentControllerView:parentController].backgroundColor;
- 
- CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
- switch([selectedBackgroundStyle cornerStyle]){
- case CKViewCornerStyleRounded:{
- roundedCornerType = CKRoundedCornerViewTypeAll;
- break;
- }
- case CKViewCornerStyleDefault:{
- UIView* parentView = [self parentControllerView:parentController];
- if([parentView isKindOfClass:[UITableView class]]){
- UITableView* tableView = (UITableView*)parentView;
- if(tableView.style == UITableViewStyleGrouped){
- NSInteger numberOfRows = [tableView numberOfRowsInSection:indexPath.section];
- if(indexPath.row == 0 && numberOfRows > 1){
- roundedCornerType = CKRoundedCornerViewTypeTop;
- }
- else if(indexPath.row == 0){
- roundedCornerType = CKRoundedCornerViewTypeAll;
- }
- else if(indexPath.row == numberOfRows-1){
- roundedCornerType = CKRoundedCornerViewTypeBottom;
- }
- }
- }
- break;
- }
- }
- 
- gradientView.corners = roundedCornerType;
- gradientView.roundedCornerSize = [selectedBackgroundStyle cornerSize];
- }
- 
- [appliedStack addObject:self.selectedBackgroundView];
- [self.selectedBackgroundView applySubViewsStyle:selectedBackgroundStyle appliedStack:appliedStack];
- */
 
 @end

@@ -18,8 +18,7 @@
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
-	[[self.view class] applyStyle:controllerStyle toView:self.view propertyName:@"view" appliedStack:appliedStack];
-	[self.view applySubViewsStyle:controllerStyle appliedStack:appliedStack];
+	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
 }
 
 @end

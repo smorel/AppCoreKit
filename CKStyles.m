@@ -14,7 +14,6 @@
 
 #import "CKValueTransformer.h"
 
-static NSMutableDictionary* CKStyleDefaultDictionary = nil;
 static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
 @implementation CKStyleFormat
@@ -82,7 +81,9 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
 @end
 
-NSString* CKStyleFormats = @"formats";
+NSString* CKStyleFormats = @"CKStyleFormats";
+NSString* CKStyleParentStyle = @"CKStyleParentStyle";
+NSString* CKStyleEmptyStyle = @"CKStyleEmptyStyle";
 
 @implementation NSMutableDictionary (CKStyle)
 
@@ -129,28 +130,42 @@ NSString* CKStyleFormats = @"formats";
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
-		   && [key isEqual:CKStyleFormats] == NO){
+		   && [key isEqual:CKStyleFormats] == NO
+		   && [key isEqual:CKStyleParentStyle] == NO){
 			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
 			[self setObject:dico forKey:key];
 			
 			CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
 			[self setFormat:format];
 			[dico initAfterLoading];
+			
+			[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
 		}
 	}
-	//iterate on styles key and create formats
-	//call initAfterLoading on subStyles
+	
+	NSMutableDictionary* emptyStyle = [NSMutableDictionary dictionary];
+	[emptyStyle setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
+	[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
+	
+	//ensure we set an empty style in the top hierarchy with no parent
+	/*NSMutableDictionary* emptyStyle = [self objectForKey:CKStyleEmptyStyle];
+	if(emptyStyle == nil){
+		emptyStyle = [NSMutableDictionary dictionary];
+		[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
+	}*/
 }
 
-- (NSMutableDictionary*)styleForObject:(id)object format:(CKStyleFormat*)format propertyName:(NSString*)propertyName{
+//Search a style responding to the format in the current scope
+- (NSMutableDictionary*)_styleForObject:(id)object format:(CKStyleFormat*)format propertyName:(NSString*)propertyName{
 	NSString* objectFormatKey = [format formatForObject:object propertyName:propertyName];
 	return [self objectForKey:objectFormatKey];
 }
 
 
-- (NSMutableDictionary*)styleForObject:(id)object formats:(NSArray*)formats propertyName:(NSString*)propertyName{
+//Search a style responding to the formats in the current scope
+- (NSMutableDictionary*)_styleForObject:(id)object formats:(NSArray*)formats propertyName:(NSString*)propertyName{
 	for(CKStyleFormat* format in formats){
-		NSMutableDictionary* style = [self styleForObject:object format:format propertyName:propertyName];
+		NSMutableDictionary* style = [self _styleForObject:object format:format propertyName:propertyName];
 		if(style){
 			return style;
 		}
@@ -158,12 +173,13 @@ NSString* CKStyleFormats = @"formats";
 	return nil;
 }
 
-- (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
+//Search a style in the current scope
+- (NSMutableDictionary*)_styleForObject:(id)object propertyName:(NSString*)propertyName{
 	NSDictionary* allFormats = [self objectForKey:CKStyleFormats];
 	if(allFormats){
 		NSArray* propertyformats = [allFormats objectForKey:propertyName];
 		if(propertyformats){
-			NSMutableDictionary* style = [self styleForObject:object formats:propertyformats propertyName:propertyName];
+			NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName];
 			if(style){
 				return style;
 			}
@@ -173,26 +189,56 @@ NSString* CKStyleFormats = @"formats";
 		while(type != nil){
 			NSArray* formats = [allFormats objectForKey:type];
 			if(formats){
-				NSMutableDictionary* style = [self styleForObject:object formats:formats propertyName:propertyName];
+				NSMutableDictionary* style = [self _styleForObject:object formats:formats propertyName:propertyName];
 				if(style){
 					return style;
 				}
 			}
 			type = class_getSuperclass(type);
 		}
-	}
-	
-	//Look in the manager if there is a style available (SIMPLE CASCADING)
-	NSMutableDictionary* managerStyles = [CKStyleManager defaultManager].styles;
-	if(managerStyles == self){
-		if(CKStyleDefaultDictionary == nil){
-			CKStyleDefaultDictionary = [[NSMutableDictionary alloc]init];
-		}
-		return CKStyleDefaultDictionary;
-	}
-	return [managerStyles styleForObject:object propertyName:propertyName];
+	}	
+	return nil;
 }
 
+//Search a style in the current scope and its parents
+- (NSMutableDictionary*)_styleForObjectWithCascading:(id)object propertyName:(NSString*)propertyName{
+	NSMutableDictionary* foundStyle = [self _styleForObject:object propertyName:propertyName];
+	if(foundStyle){
+		return foundStyle;
+	}
+	
+	//Cascading
+	NSMutableDictionary* parentStyle = [self parentStyle];
+	if(parentStyle){
+		NSMutableDictionary* foundStyle = [parentStyle _styleForObjectWithCascading:object propertyName:propertyName];
+		if(foundStyle){
+			return foundStyle;
+		}
+	}
+	return nil;
+}	
+
+- (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
+	NSMutableDictionary* foundStyle = [self _styleForObjectWithCascading:object propertyName:propertyName];
+	if(foundStyle){
+		return foundStyle;
+	}
+	
+	id emptyStyle = [self objectForKey:CKStyleEmptyStyle];
+	return (emptyStyle != nil) ? emptyStyle : self;
+}
+
+- (NSMutableDictionary*)parentStyle{
+	return [[self objectForKey:CKStyleParentStyle]nonretainedObjectValue];
+}
+
+- (BOOL)isEmpty{
+	NSInteger count = [self count];
+	if([self containsObjectForKey:CKStyleFormats]) --count;
+	if([self containsObjectForKey:CKStyleParentStyle]) --count;
+	if([self containsObjectForKey:CKStyleEmptyStyle]) --count;
+	return count == 0;
+}
 
 
 @end

@@ -7,6 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKGradientView.h"
+#import "CKNSObject+Introspection.h"
+
+
+/* TODO :
+     utiliser l'introspection pour pouvoir setter n'importe quelle property via les styles avec les types supportes par le style serializer
+     le style serializer aura surement besoin d'un enum manager pour le parsing car c les types qui n'ont rien pour etre introspectes (= int)
+     faudra enregistrer les enums qu'on veut pouvoir utiliser avec l'introspection en utilisant le helper CKEnumDictionary
+ */
+
+
 
 typedef enum{
 	CKViewCornerStyleDefault,//in this case, we set the corner style of the parent controller (table plain or grouped)
@@ -36,21 +47,28 @@ extern NSString* CKStyleAlpha;
 @end
 
 
-/* SUPPORTS :
- * CKStyleBackgroundStyle
- */
-
 @interface UIView (CKStyle) 
-
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName;
 
 - (void)applyStyle:(NSMutableDictionary*)style;
 - (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
-- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack;
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
-cornerModifierTarget:(id)target cornerModifierAction:(SEL)action;
-
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
+
+//private
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName;
+@end
+
+@interface NSObject (CKStyle)
+
+- (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
+
+@end
+
+@protocol CKStyleDelegate
+@optional
+
+- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
+- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor;
 
 @end

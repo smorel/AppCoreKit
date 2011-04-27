@@ -24,8 +24,6 @@
 - (BOOL)containsObjectForKey:(NSString*)key;
 @end
 
-extern NSString* CKStyleStyles;
-
 @interface NSMutableDictionary (CKStyle)
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
@@ -33,5 +31,7 @@ extern NSString* CKStyleStyles;
 - (void)initAfterLoading;
 - (void)setFormat:(CKStyleFormat*)format;
 - (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key;
+- (NSMutableDictionary*)parentStyle;
+- (BOOL)isEmpty;
 
 @end

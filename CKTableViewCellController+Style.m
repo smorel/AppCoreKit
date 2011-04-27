@@ -66,9 +66,7 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 	return view;
 }
 
-//[self controllerStyle] atIndexPath:self.indexPath parentController:self.parentController];
-
-- (NSNumber*)computeCornerStyle:(NSMutableDictionary*)style{
+- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
 	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
 	
 	switch([style cornerStyle]){
@@ -77,19 +75,22 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 			break;
 		}
 		case CKViewCornerStyleDefault:{
-			UIView* parentView = [self parentControllerView];
-			if([parentView isKindOfClass:[UITableView class]]){
-				UITableView* tableView = (UITableView*)parentView;
-				if(tableView.style == UITableViewStyleGrouped){
-					NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-					if(self.indexPath.row == 0 && numberOfRows > 1){
-						roundedCornerType = CKRoundedCornerViewTypeTop;
-					}
-					else if(self.indexPath.row == 0){
-						roundedCornerType = CKRoundedCornerViewTypeAll;
-					}
-					else if(self.indexPath.row == numberOfRows-1){
-						roundedCornerType = CKRoundedCornerViewTypeBottom;
+			if(view == self.tableViewCell.backgroundView
+			   || view == self.tableViewCell.selectedBackgroundView){
+				UIView* parentView = [self parentControllerView];
+				if([parentView isKindOfClass:[UITableView class]]){
+					UITableView* tableView = (UITableView*)parentView;
+					if(tableView.style == UITableViewStyleGrouped){
+						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+						if(self.indexPath.row == 0 && numberOfRows > 1){
+							roundedCornerType = CKRoundedCornerViewTypeTop;
+						}
+						else if(self.indexPath.row == 0){
+							roundedCornerType = CKRoundedCornerViewTypeAll;
+						}
+						else if(self.indexPath.row == numberOfRows-1){
+							roundedCornerType = CKRoundedCornerViewTypeBottom;
+						}
 					}
 				}
 			}
@@ -97,7 +98,17 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 		}
 	}
 	
-	return [NSNumber numberWithInt:roundedCornerType];
+	return roundedCornerType;
+}
+
+- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor{
+	if([object isKindOfClass:[UITableViewCell class]]){
+		if([descriptor.name isEqual:@"backgroundView"]
+		   || [descriptor.name isEqual:@"selectedBackgroundView"]){
+			return YES;
+		}
+	}
+	return NO;
 }
 
 - (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell{
@@ -110,26 +121,9 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 		if([style containsObjectForKey:CKStyleSelectionStyle]){
 			cell.selectionStyle = [style selectionStyle];
 		}
-		[appliedStack addObject:cell];
-		
-		[UILabel applyStyle:style toView:cell.textLabel propertyName:@"textLabel" appliedStack:appliedStack];
-		[UILabel applyStyle:style toView:cell.detailTextLabel propertyName:@"detailTextLabel" appliedStack:appliedStack];
-		[UIImageView applyStyle:style toView:cell.imageView propertyName:@"imageView" appliedStack:appliedStack];
-		
-		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"backgroundView"] && [cell.backgroundView isKindOfClass:[CKGradientView class]] == NO){
-			cell.backgroundView = [[[CKGradientView alloc]initWithFrame:cell.bounds]autorelease];
-			cell.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		}
-		[UIView applyStyle:style toView:cell.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
-		
-		if([UIView needSubView:style forView:cell.backgroundView propertyName:@"selectedBackgroundView"] && [cell.selectedBackgroundView isKindOfClass:[CKGradientView class]] == NO){
-			cell.selectedBackgroundView = [[[CKGradientView alloc]initWithFrame:cell.bounds]autorelease];
-			cell.selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		}
-		[UIView applyStyle:style toView:cell.selectedBackgroundView propertyName:@"selectedBackgroundView" appliedStack:appliedStack cornerModifierTarget:self cornerModifierAction:@selector(computeCornerStyle:)];
 	}
 	
-	[cell applySubViewsStyle:style appliedStack:appliedStack];
+	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
 
 @end

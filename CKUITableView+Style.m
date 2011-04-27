@@ -14,14 +14,14 @@
 
 @implementation UITableView (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	UITableView* tableView = (UITableView*)view;
 	
-	NSMutableDictionary* myViewStyle = [style styleForObject:tableView propertyName:propertyName];
-	tableView.backgroundView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];
-	tableView.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[UIView applyStyle:myViewStyle toView:tableView.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack];
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack]){
+	//NSMutableDictionary* myViewStyle = [style styleForObject:tableView propertyName:propertyName];
+	//tableView.backgroundView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];
+	//tableView.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	//[UIView applyStyle:myViewStyle toView:tableView.backgroundView propertyName:@"backgroundView" appliedStack:appliedStack];
+	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
 		return YES;
 	}
 	return NO;

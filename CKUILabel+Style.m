@@ -45,8 +45,8 @@ NSString* CKStyleNumberOfLines = @"numberOfLines";
 
 @implementation UILabel (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack]){
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
 		UILabel* label = (UILabel*)view;
 		NSMutableDictionary* myLabelStyle = [style styleForObject:label propertyName:propertyName];
 		if(myLabelStyle){

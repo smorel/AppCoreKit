@@ -12,7 +12,6 @@
 
 #import "CKStyles.h"
 #import "CKUIView+Style.h"
-#import "CKUITableViewCell+Style.h"
 
 #import "CJSONDeserializer.h"
 

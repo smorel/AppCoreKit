@@ -112,6 +112,7 @@
 		cellStyle = [controllerStyle cellStyle];
 
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier]] autorelease];
+	self.tableViewCell = cell;
 	
 	UITableViewCellAccessoryType acType = self.accessoryType;
 	if([controllerStyle containsObjectForKey:CKStyleAccessoryType])
