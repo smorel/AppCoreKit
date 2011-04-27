@@ -66,14 +66,6 @@
 @synthesize editButton;
 @synthesize doneButton;
 
-/*
- [params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
- [params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
- [params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
- [params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
- [params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
- */
-
 - (void)printDebug:(NSString*)txt{
 	/*NSLog(@"%@",txt);
 	NSLog(@"view frame=%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
@@ -91,12 +83,14 @@
 - (void)loadView{
 	[super loadView];
 	
-	[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	//FIXME : the bindings here make the application crash. By commenting it we are not sure all the params are updated correctly ... (TO CHECK)
+	
+	/*[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[self.tableView bind:@"frame" target:self action:@selector(updateParams)];
 	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
 	[self.tableView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
 	[self bind:@"orientation" target:self action:@selector(updateParams)];
-	[NSObject endBindingsContext];
+	[NSObject endBindingsContext];*/
 }
 
 - (void)postInit{

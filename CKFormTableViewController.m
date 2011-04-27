@@ -85,6 +85,10 @@
 @synthesize headerView = _headerView;
 @synthesize parentController = _parentController;
 
+- (void)dealloc{
+	[super dealloc];
+}
+
 - (NSInteger)sectionIndex{
 	return [_parentController indexOfSection:self];
 }

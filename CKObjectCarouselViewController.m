@@ -187,12 +187,15 @@
 	self.carouselView.clipsToBounds = YES;
 	self.carouselView.spacing = 20;
 	
+	//FIXME : the bindings here make the application crash. By commenting it we are not sure all the params are updated correctly ... (TO CHECK)
+	/*
 	[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[self.carouselView bind:@"frame" target:self action:@selector(updateParams)];
 	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
 	[self.carouselView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
 	[self bind:@"orientation" target:self action:@selector(updateParams)];
 	[NSObject endBindingsContext];	
+	 */
 }
 
 - (void)updateParams{
