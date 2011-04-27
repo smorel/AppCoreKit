@@ -113,6 +113,9 @@ NSString* CKStyleAlpha = @"alpha";
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
+				
+				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
+				
 				if([UIView needSubView:myViewStyle forView:view]){
 					CKGradientView* gradientView = [UIView gradientView:view];
 					if(gradientView == nil){
@@ -124,6 +127,7 @@ NSString* CKStyleAlpha = @"alpha";
 					
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 						gradientView.image = [myViewStyle backgroundImage];
+						opaque = NO;
 					}
 					
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]){
@@ -146,7 +150,6 @@ NSString* CKStyleAlpha = @"alpha";
 						cornerStyle = [myViewStyle cornerStyle];
 					}
 					
-					CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
 					if(cornerStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
 						roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
 					}
@@ -168,7 +171,6 @@ NSString* CKStyleAlpha = @"alpha";
 					}
 					
 					gradientView.corners = roundedCornerType;
-					gradientView.backgroundColor = (opaque && roundedCornerType == CKRoundedCornerViewTypeNone) ? [UIColor blackColor] : [UIColor clearColor];
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 						gradientView.roundedCornerSize = [myViewStyle cornerSize];
@@ -184,6 +186,7 @@ NSString* CKStyleAlpha = @"alpha";
 				}
 				
 				//Apply color
+				BOOL dontTouchBackgroundColor = NO;
 				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES
 				   && [myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors] == NO){
 					if([backgroundView isKindOfClass:[CKGradientView class]]){
@@ -197,11 +200,17 @@ NSString* CKStyleAlpha = @"alpha";
 						opaque = opaque && (CGColorGetAlpha([color CGColor]) >= 1);				
 					}
 					else{
+						dontTouchBackgroundColor = YES;
 						backgroundView.backgroundColor = [myViewStyle backgroundColor];
 						opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
 					}
 				}
-				backgroundView.opaque = opaque && (backgroundView.alpha >= 1) ? YES : NO;
+				
+				BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
+				if(dontTouchBackgroundColor == NO){
+					backgroundView.backgroundColor = [UIColor clearColor];
+				}
+				backgroundView.opaque = ((colorOpaque == YES) && (backgroundView.alpha >= 1)) ? YES : NO;
 			}
 			
 			[appliedStack addObject:view];
