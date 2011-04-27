@@ -197,9 +197,9 @@ double round(double x)
 - (UIView*)dequeueReusableViewWithIdentifier:(id)identifier{
 	NSMutableArray* reusable = [_reusableViews objectForKey:identifier];
 	if(reusable && [reusable count] > 0){
-		UIView* view = [reusable lastObject];
+		UIView* view = [[reusable lastObject]retain];
 		[reusable removeLastObject];
-		return view;
+		return [view autorelease];
 	}
 	return nil;
 }
