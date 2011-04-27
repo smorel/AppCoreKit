@@ -71,7 +71,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void)dealloc{
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		if(property.propertyType == CKClassPropertyDescriptorTypeObject){
+		if((property.propertyType == CKClassPropertyDescriptorTypeObject) && 
+		   ((property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy) || (property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain))) {
 			id object = [self valueForKey:property.name];
 			if(object){
 				[object release];
