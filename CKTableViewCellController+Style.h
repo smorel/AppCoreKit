@@ -28,3 +28,7 @@ extern NSString* CKStyleSelectionStyle;
 - (UIView*)parentControllerView;
 
 @end
+
+@interface UITableViewCell (CKStyle)
+
+@end

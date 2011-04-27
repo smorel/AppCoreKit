@@ -109,18 +109,32 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 
 - (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell{
 	NSMutableSet* appliedStack = [NSMutableSet set];
-	if(style){
-		//Applying style on UITableViewCell
-		if([style containsObjectForKey:CKStyleAccessoryType]){
-			cell.accessoryType = [style accessoryType];
-		}
-		if([style containsObjectForKey:CKStyleSelectionStyle]){
-			cell.selectionStyle = [style selectionStyle];
-		}
-	}
-	
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
+
+@end
+
+
+@implementation UITableViewCell (CKStyle)
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
+		UITableViewCell* tableViewCell = (UITableViewCell*)view;
+		NSMutableDictionary* myCellStyle = [style styleForObject:tableViewCell propertyName:propertyName];
+		if(myCellStyle){
+			//Applying style on UITableViewCell
+			if([myCellStyle containsObjectForKey:CKStyleAccessoryType]){
+				tableViewCell.accessoryType = [myCellStyle accessoryType];
+			}
+			if([myCellStyle containsObjectForKey:CKStyleSelectionStyle]){
+				tableViewCell.selectionStyle = [myCellStyle selectionStyle];
+			}
+			return YES;
+		}
+	}
+	return NO;
+}
+
 
 @end
 
