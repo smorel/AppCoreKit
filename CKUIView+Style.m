@@ -43,7 +43,7 @@ NSString* CKStyleAlpha = @"alpha";
 
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
-									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, CKViewCornerStyleRounded, CKViewCornerStylePlain)];
+									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, CKViewCornerStyleRounded,CKViewCornerStyleRoundedTop,CKViewCornerStyleRoundedBottom, CKViewCornerStylePlain)];
 }
 
 - (CGSize)cornerSize{
@@ -147,13 +147,21 @@ NSString* CKStyleAlpha = @"alpha";
 					}
 					
 					CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-					if(delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+					if(cornerStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
 						roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
 					}
 					else{
 						switch(cornerStyle){
 							case CKViewCornerStyleRounded:{
 								roundedCornerType = CKRoundedCornerViewTypeAll;
+								break;
+							}
+							case CKViewCornerStyleRoundedTop:{
+								roundedCornerType = CKRoundedCornerViewTypeTop;
+								break;
+							}
+							case CKViewCornerStyleRoundedBottom:{
+								roundedCornerType = CKRoundedCornerViewTypeBottom;
 								break;
 							}
 						}
@@ -216,7 +224,7 @@ NSString* CKStyleAlpha = @"alpha";
 	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
 		UIView* view = [self valueForKey:descriptor.name];
-		
+
 		UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
 		CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
 		
@@ -229,6 +237,10 @@ NSString* CKStyleAlpha = @"alpha";
 			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
 			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self setValue:view forKey:descriptor.name];
+		}
+		
+		if([descriptor.name isEqual:@"contentView"]){
+			int i = 3;
 		}
 		
 		if(view){

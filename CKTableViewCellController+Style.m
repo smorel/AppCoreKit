@@ -70,10 +70,6 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
 	
 	switch([style cornerStyle]){
-		case CKViewCornerStyleRounded:{
-			roundedCornerType = CKRoundedCornerViewTypeAll;
-			break;
-		}
 		case CKViewCornerStyleDefault:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
