@@ -49,13 +49,10 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	NSDictionary* controllerStyle = [self controllerStyle];
-	//SEB : TODO !!!! use controllerStyle
-	
 	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
-	NSAssert(NO,@"TODO");
+	NSLog(@"CKDocumentCollectionCellController initTableViewCell:cell TODO");
 	/*
 	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
 	activityView.center = cell.center;
@@ -91,10 +88,7 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 		[activityIndicator stopAnimating];
 	}
 	
-	NSDictionary* controllerStyle = [self controllerStyle];
-	//SEB : TODO !!!! use controllerStyle
-	
-	NSAssert(NO,@"TODO");
+	NSLog(@"CKDocumentCollectionCellController update:view TODO");
 	
 	/*UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
 	label.hidden = !activityIndicator.hidden;	
