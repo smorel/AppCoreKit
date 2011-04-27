@@ -13,6 +13,14 @@
  * CKStyleImage
  */
 
+extern NSString* CKStyleImage;
+
+@interface NSMutableDictionary (CKUIImageViewStyle)
+
+- (UIImage*)image;
+
+@end
+
 @interface UIImageView (CKStyle)
 
 @end

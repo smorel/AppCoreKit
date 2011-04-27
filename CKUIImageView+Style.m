@@ -11,6 +11,15 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 
+NSString* CKStyleImage = @"image";
+
+@implementation NSMutableDictionary (CKUIImageViewStyle)
+
+- (UIImage*)image{
+	return [self imageForKey:CKStyleImage];
+}
+
+@end
 
 @implementation UIImageView (CKStyle)
 

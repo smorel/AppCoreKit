@@ -15,30 +15,30 @@
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
 
-NSString* CKStyleColor = @"color";
-NSString* CKStyleGradientColors = @"gradientColors";
-NSString* CKStyleGradientLocations = @"gradientLocations";
-NSString* CKStyleImage = @"image";
+NSString* CKStyleBackgroundColor = @"backgroundColor";
+NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
+NSString* CKStyleBackgroundGradientLocations = @"backgroundGradientLocations";
+NSString* CKStyleBackgroundImage = @"backgroundImage";
 NSString* CKStyleCornerStyle = @"cornerStyle";
 NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
 
 @implementation NSMutableDictionary (CKViewStyle)
 
-- (UIColor*)color{
-	return [self colorForKey:CKStyleColor];
+- (UIColor*)backgroundColor{
+	return [self colorForKey:CKStyleBackgroundColor];
 }
 
-- (NSArray*)gradientColors{
-	return [self colorArrayForKey:CKStyleGradientColors];
+- (NSArray*)backgroundGradientColors{
+	return [self colorArrayForKey:CKStyleBackgroundGradientColors];
 }
 
-- (NSArray*)gradientLocations{
-	return [self cgFloatArrayForKey:CKStyleGradientLocations];
+- (NSArray*)backgroundGradientLocations{
+	return [self cgFloatArrayForKey:CKStyleBackgroundGradientLocations];
 }
 
-- (UIImage*)image{
-	return [self imageForKey:CKStyleImage];
+- (UIImage*)backgroundImage{
+	return [self imageForKey:CKStyleBackgroundImage];
 } 
 
 - (CKViewCornerStyle)cornerStyle{
@@ -81,9 +81,9 @@ NSString* CKStyleAlpha = @"alpha";
 	BOOL isTableViewCell = [[view superview]isKindOfClass:[UITableViewCell class]];
 	
 	if(isTableViewCell
-	   || [style containsObjectForKey:CKStyleGradientColors]
+	   || [style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
-	   || [style containsObjectForKey:CKStyleImage]){
+	   || [style containsObjectForKey:CKStyleBackgroundImage]){
 		return YES;
 	}
 	return NO;
@@ -91,9 +91,9 @@ NSString* CKStyleAlpha = @"alpha";
 
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName{
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
-	if([myViewStyle containsObjectForKey:CKStyleGradientColors]
+	if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
-	   || [myViewStyle containsObjectForKey:CKStyleImage]){
+	   || [myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 		return YES;
 	}
 	return NO;
@@ -122,12 +122,12 @@ NSString* CKStyleAlpha = @"alpha";
 						[view insertSubview:gradientView atIndex:0];
 					}
 					
-					if([myViewStyle containsObjectForKey:CKStyleImage]){
-						gradientView.image = [myViewStyle image];
+					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
+						gradientView.image = [myViewStyle backgroundImage];
 					}
 					
-					if([myViewStyle containsObjectForKey:CKStyleGradientColors]){
-						NSArray* colors = [myViewStyle gradientColors];
+					if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]){
+						NSArray* colors = [myViewStyle backgroundGradientColors];
 						for(UIColor* color in colors){
 							if(CGColorGetAlpha([color CGColor]) < 1){
 								opaque = NO;
@@ -136,8 +136,8 @@ NSString* CKStyleAlpha = @"alpha";
 						}
 						gradientView.gradientColors = colors;
 					}
-					if([myViewStyle containsObjectForKey:CKStyleGradientLocations]){
-						gradientView.gradientColorLocations = [myViewStyle gradientLocations];
+					if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientLocations]){
+						gradientView.gradientColorLocations = [myViewStyle backgroundGradientLocations];
 					}
 					
 					//Apply corners
@@ -176,11 +176,11 @@ NSString* CKStyleAlpha = @"alpha";
 				}
 				
 				//Apply color
-				if([myViewStyle containsObjectForKey:CKStyleColor] == YES
-				   && [myViewStyle containsObjectForKey:CKStyleGradientColors] == NO){
+				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES
+				   && [myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors] == NO){
 					if([backgroundView isKindOfClass:[CKGradientView class]]){
 						CKGradientView* gradientView = (CKGradientView*)backgroundView;
-						UIColor* color = [myViewStyle color];
+						UIColor* color = [myViewStyle backgroundColor];
 						gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
 						gradientView.gradientColorLocations = [NSArray arrayWithObjects:
 															   [NSNumber numberWithInt:0], 
@@ -189,7 +189,7 @@ NSString* CKStyleAlpha = @"alpha";
 						opaque = opaque && (CGColorGetAlpha([color CGColor]) >= 1);				
 					}
 					else{
-						backgroundView.backgroundColor = [myViewStyle color];
+						backgroundView.backgroundColor = [myViewStyle backgroundColor];
 						opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
 					}
 				}
@@ -213,29 +213,26 @@ NSString* CKStyleAlpha = @"alpha";
 
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	//iterate on view properties to apply style using property names
-	NSArray* properties = [self allPropertyDescriptors];
+	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
-		if([NSObject isKindOf:descriptor.type parentType:[UIView class]]){
-			UIView* view = [self valueForKey:descriptor.name];
-			
-			UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
-			CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
-			
-			BOOL shouldReplaceView = NO;
-			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:)]){
-				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
-			}
-			
-			//ICI ca chie car on remplace toutes les vues qui ont un style ...
-			if([UIView needSubView:style forView:view propertyName:descriptor.name] && (view == nil || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO)) ){
-				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
-				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-				[self setValue:view forKey:descriptor.name];
-			}
-			
-			if(view){
-				[descriptor.type applyStyle:style toView:view propertyName:descriptor.name appliedStack:appliedStack delegate:delegate];
-			}
+		UIView* view = [self valueForKey:descriptor.name];
+		
+		UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
+		CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
+		
+		BOOL shouldReplaceView = NO;
+		if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:)]){
+			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
+		}
+		
+		if([UIView needSubView:style forView:view propertyName:descriptor.name] && (view == nil || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO)) ){
+			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[self setValue:view forKey:descriptor.name];
+		}
+		
+		if(view){
+			[descriptor.type applyStyle:style toView:view propertyName:descriptor.name appliedStack:appliedStack delegate:delegate];
 		}
 	}
 	

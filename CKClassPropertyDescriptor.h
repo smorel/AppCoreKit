@@ -62,11 +62,13 @@ typedef enum{
 
 @interface CKClassPropertyDescriptorManager : NSObject{
 	NSMutableDictionary* _propertiesByClassName;
+	NSMutableDictionary* _viewPropertiesByClassName;
 	NSMutableDictionary* _propertyNamesByClassName;
 }
 
 + (CKClassPropertyDescriptorManager*)defaultManager;
 - (NSArray*)allPropertiesForClass:(Class)class;
+- (NSArray*)allViewsPropertyForClass:(Class)class;
 - (NSArray*)allPropertieNamesForClass:(Class)class;
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class;
 

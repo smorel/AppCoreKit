@@ -107,6 +107,10 @@ static NSString* getPropertyType(objc_property_t property) {
 	
 }
 
+- (NSArray*)allViewsPropertyDescriptors{
+	return [[CKClassPropertyDescriptorManager defaultManager]allViewsPropertyForClass:[self class]];
+}
+
 - (NSArray*)allPropertyDescriptors{
 	return [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:[self class]];
 }

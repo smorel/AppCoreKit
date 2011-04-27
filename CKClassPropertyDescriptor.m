@@ -130,12 +130,14 @@
 @interface CKClassPropertyDescriptorManager ()
 @property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
 @property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
+@property (nonatomic, retain, readwrite) NSDictionary *viewPropertiesByClassName;
 @end
 
 static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefault = nil;
 @implementation CKClassPropertyDescriptorManager
 @synthesize propertiesByClassName = _propertiesByClassName;
 @synthesize propertyNamesByClassName = _propertyNamesByClassName;
+@synthesize viewPropertiesByClassName = _viewPropertiesByClassName;
 
 + (CKClassPropertyDescriptorManager*)defaultManager{
 	if(CCKClassPropertyDescriptorManagerDefault == nil){
@@ -148,11 +150,14 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 	[super init];
 	self.propertiesByClassName = [NSMutableDictionary dictionary];
 	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
+	self.viewPropertiesByClassName = [NSMutableDictionary dictionary];
 	return self;
 }
 
 - (void)dealloc{
 	self.propertiesByClassName = nil;
+	self.viewPropertiesByClassName = nil;
+	self.propertyNamesByClassName = nil;
 	[super dealloc];
 }
 
@@ -165,13 +170,29 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 		[_propertiesByClassName setObject:allProperties forKey:className];
 		
 		NSMutableArray* allPropertyNames = [NSMutableArray array];
+		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray array];
 		for(CKClassPropertyDescriptor* property in allProperties){
 			[allPropertyNames addObject:property.name];
+			if([NSObject isKindOf:property.type parentType:[UIView class]]){
+				[allViewPropertyDescriptors addObject:property];
+			}
 		}
 		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
+		[_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
 	}
 	
 	return allProperties;
+}
+
+
+- (NSArray*)allViewsPropertyForClass:(Class)class{
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+	NSMutableArray* allViewProperties = [_viewPropertiesByClassName objectForKey:className];
+	if(allViewProperties == nil){
+		[self allPropertiesForClass:class];
+		allViewProperties = [_viewPropertiesByClassName objectForKey:className];
+	}
+	return allViewProperties;
 }
 
 

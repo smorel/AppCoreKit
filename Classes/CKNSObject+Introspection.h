@@ -38,6 +38,7 @@ typedef BOOL(^CKObjectPredicate)(id);
 + (BOOL)isKindOf:(Class)type parentType:(Class)parentType;
 + (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType;
 
+- (NSArray*)allViewsPropertyDescriptors;
 - (NSArray*)allPropertyDescriptors;
 - (NSArray*)allPropertyNames;
 

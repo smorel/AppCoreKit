@@ -26,20 +26,20 @@ typedef enum{
 	CKViewCornerStylePlain
 }CKViewCornerStyle;
 
-extern NSString* CKStyleColor;
-extern NSString* CKStyleGradientColors;
-extern NSString* CKStyleGradientLocations;
-extern NSString* CKStyleImage;
+extern NSString* CKStyleBackgroundColor;
+extern NSString* CKStyleBackgroundGradientColors;
+extern NSString* CKStyleBackgroundGradientLocations;
+extern NSString* CKStyleBackgroundImage;
 extern NSString* CKStyleCornerStyle;
 extern NSString* CKStyleCornerSize;
 extern NSString* CKStyleAlpha;
 
 @interface NSMutableDictionary (CKViewStyle)
 
-- (UIColor*)color;
-- (NSArray*)gradientColors;
-- (NSArray*)gradientLocations;
-- (UIImage*)image;
+- (UIColor*)backgroundColor;
+- (NSArray*)backgroundGradientColors;
+- (NSArray*)backgroundGradientLocations;
+- (UIImage*)backgroundImage;
 - (CKViewCornerStyle)cornerStyle;
 - (CGSize)cornerSize;
 - (CGFloat)alpha;
