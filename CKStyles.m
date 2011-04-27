@@ -84,6 +84,7 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 NSString* CKStyleFormats = @"CKStyleFormats";
 NSString* CKStyleParentStyle = @"CKStyleParentStyle";
 NSString* CKStyleEmptyStyle = @"CKStyleEmptyStyle";
+NSString* CKStyleInherits = @"inherits";
 
 @implementation NSMutableDictionary (CKStyle)
 
@@ -125,34 +126,88 @@ NSString* CKStyleEmptyStyle = @"CKStyleEmptyStyle";
 	[self setFormat:format];
 }
 
+- (NSMutableDictionary*)findStyleInHierarchy:(NSString*)key{
+	NSMutableDictionary* style = self;
+	while(style != nil){
+		NSMutableDictionary* foundStyle = [style objectForKey:key];
+		if(foundStyle){
+			return foundStyle;
+		}
+		style = [self parentStyle];
+	}
+	return nil;
+}
+
+- (void)applyHierarchically:(NSDictionary*)source toDictionary:(NSDictionary*)target forKey:(NSString*)identifier{
+	NSMutableDictionary* mutableTarget = [NSMutableDictionary dictionaryWithDictionary:target];
+	[self setObject:mutableTarget forKey:identifier];
+	
+	for(id key in [source allKeys]){
+		if([key isEqual:CKStyleParentStyle] == NO
+		   && [key isEqual:CKStyleEmptyStyle] == NO
+		   && [key isEqual:CKStyleFormats] == NO){
+			id sourceObject = [source objectForKey:key];
+			if([mutableTarget containsObjectForKey:key] == NO){
+				[mutableTarget setObject:[source objectForKey:key] forKey:key];
+			}
+			else if([sourceObject isKindOfClass:[NSMutableDictionary class]]){
+				[self applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key] forKey:key];
+			}
+		}
+	}
+}
+
+- (void)makeAllInherits{
+	NSArray* inheritsArray = [self objectForKey:CKStyleInherits];
+	if(inheritsArray){
+		for(NSString* key in inheritsArray){
+			NSMutableDictionary* inheritedStyle = [self findStyleInHierarchy:key];
+			if(inheritedStyle != nil){
+				//ensure inherits is threated on inheritedStyle
+				[inheritedStyle makeAllInherits];
+				//Apply inheritedStyle to self
+				for(NSString* obj in [inheritedStyle allKeys]){
+					if([obj isEqual:CKStyleParentStyle] == NO
+					   && [obj isEqual:CKStyleEmptyStyle] == NO
+					   && [obj isEqual:CKStyleFormats] == NO){
+						id inheritedObject = [inheritedStyle objectForKey:obj];
+						if([self containsObjectForKey:obj] == NO){
+							[self setObject:inheritedObject forKey:obj];
+						}
+						else if([inheritedObject isKindOfClass:[NSDictionary class]]){
+							[self applyHierarchically:inheritedObject toDictionary:[self objectForKey:obj] forKey:obj];
+						}
+					}
+				}
+			}
+		}
+		[self removeObjectForKey:CKStyleInherits];
+	}
+}
 
 - (void)initAfterLoading{
+	[self makeAllInherits];
+	
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
 		   && [key isEqual:CKStyleFormats] == NO
-		   && [key isEqual:CKStyleParentStyle] == NO){
+		   && [key isEqual:CKStyleParentStyle] == NO
+		   && [key isEqual:CKStyleEmptyStyle] == NO){
 			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
 			[self setObject:dico forKey:key];
 			
 			CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
 			[self setFormat:format];
-			[dico initAfterLoading];
-			
 			[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
+			[dico initAfterLoading];
 		}
 	}
 	
+	//set the empty style
 	NSMutableDictionary* emptyStyle = [NSMutableDictionary dictionary];
 	[emptyStyle setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
 	[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
-	
-	//ensure we set an empty style in the top hierarchy with no parent
-	/*NSMutableDictionary* emptyStyle = [self objectForKey:CKStyleEmptyStyle];
-	if(emptyStyle == nil){
-		emptyStyle = [NSMutableDictionary dictionary];
-		[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
-	}*/
 }
 
 //Search a style responding to the format in the current scope
