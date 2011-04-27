@@ -33,7 +33,7 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 }
 
 - (UITableViewCellAccessoryType)accessoryType{
-	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleCellType 
+	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleAccessoryType 
 									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, 
 																	 UITableViewCellAccessoryDisclosureIndicator, 
 																	 UITableViewCellAccessoryDetailDisclosureButton,

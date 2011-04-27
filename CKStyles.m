@@ -130,10 +130,10 @@ NSString* CKStyleInherits = @"inherits";
 	NSMutableDictionary* style = self;
 	while(style != nil){
 		NSMutableDictionary* foundStyle = [style objectForKey:key];
-		if(foundStyle){
+		if(foundStyle && foundStyle != self){
 			return foundStyle;
 		}
-		style = [self parentStyle];
+		style = [style parentStyle];
 	}
 	return nil;
 }
