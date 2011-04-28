@@ -16,17 +16,19 @@
 
 @interface CKStyleManager : NSObject {
 	NSMutableDictionary* _styles;
+	NSMutableSet* _loadedFiles;
 }
-
-@property (nonatomic,retain) NSMutableDictionary* styles;
 
 + (CKStyleManager*)defaultManager;
 
-- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key;
 - (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
 
 //Could extend to load style from files ...
 - (void)loadContentOfFileNamed:(NSString*)name;
 - (void)loadContentOfFile:(NSString*)path;
+
+//private
+- (void)importContentOfFileNamed:(NSString*)name;
+- (void)importContentOfFile:(NSString*)path;
 
 @end

@@ -15,9 +15,15 @@
 
 #import "CJSONDeserializer.h"
 
+@interface CKStyleManager()
+@property (nonatomic,retain) NSMutableDictionary* styles;
+@property (nonatomic,retain) NSMutableSet* loadedFiles;
+@end
+
 static CKStyleManager* CKStyleManagerDefault = nil;
 @implementation CKStyleManager
 @synthesize styles = _styles;
+@synthesize loadedFiles = _loadedFiles;
 
 - (void)dealloc{
 	[_styles release];
@@ -26,7 +32,7 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 
 - (id)init{
 	[super init];
-	self.styles = [NSMutableDictionary dictionary];
+	self.loadedFiles = [NSMutableSet set];
 	return self;
 }
 
@@ -35,10 +41,6 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 		CKStyleManagerDefault = [[CKStyleManager alloc]init];
 	}
 	return CKStyleManagerDefault;
-}
-
-- (void)setStyle:(NSMutableDictionary*)style forKey:(NSString*)key{
-	[_styles setStyle:style forKey:key];
 }
 
 - (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName{
@@ -50,14 +52,35 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	[self loadContentOfFile:path];
 }
 
-- (void)loadContentOfFile:(NSString*)path{
+
+- (void)importContentOfFileNamed:(NSString*)name{
+	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
+	[self importContentOfFile:path];
+}
+
+- (void)importContentOfFile:(NSString*)path{
+	if([_loadedFiles containsObject:path])
+		return;
+	
 	NSData* data = [NSData dataWithContentsOfFile:path];
 	NSError* error = nil;
 	id responseValue = [[CJSONDeserializer deserializer] deserialize:data error:&error];
 	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
-	self.styles = [NSMutableDictionary dictionaryWithDictionary:responseValue];
+	[_loadedFiles addObject:path];
+	
+	NSMutableDictionary* result = [NSMutableDictionary dictionaryWithDictionary:responseValue];
+	[_styles addEntriesFromDictionary:result];
+}
+
+- (void)loadContentOfFile:(NSString*)path{
+	self.styles = [NSMutableDictionary dictionary];
+	[self importContentOfFile:path];
 	[_styles initAfterLoading];
 	[_styles postInitAfterLoading];
+}
+
+- (NSString*)description{
+	return [_styles description];
 }
 
 @end

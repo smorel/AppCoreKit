@@ -17,6 +17,7 @@
 
 - (id)initFormatWithFormat:(NSString*)format;
 - (NSString*)formatForObject:(id)object propertyName:(NSString*)propertyName;
++ (NSString*)normalizeFormat:(NSString*)format;
 
 @end
 

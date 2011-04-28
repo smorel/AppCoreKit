@@ -13,32 +13,95 @@
 #import <objc/runtime.h>
 
 #import "CKValueTransformer.h"
+#import "RegexKitLite.h"
 
 static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
 @implementation CKStyleFormat
 @synthesize objectClass,properties,format,propertyName;
 
++ (NSArray*)parseFormat:(NSString*)format{
+	NSMutableArray* components = [NSMutableArray array];
+	
+	NSRange range1 = [format rangeOfString:@"["];
+	if(range1.length > 0){//found "["
+		NSString* identifier = [format substringWithRange:NSMakeRange(0,range1.location)];
+		[components addObject:[identifier stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		
+		NSRange range2 = [format rangeOfString:@"]"];
+		if(range2.length > 0){//found "]"
+			NSString* allPropertyValuePairs = [format substringWithRange:NSMakeRange(range1.location +1,range2.location - range1.location - 1)];
+			NSArray* propertyValuePairComponents = [allPropertyValuePairs componentsSeparatedByString:@";"];
+			for(NSString* propetyValuePair in propertyValuePairComponents){
+				NSArray* propertyValueComponents = [propetyValuePair componentsSeparatedByString:@"="];
+				NSAssert([propertyValueComponents count] == 2,@"Invalid format for '%@' : invalid property value pair '%@'",format,propetyValuePair);
+				
+				NSString* propertyName = [propertyValueComponents objectAtIndex:0];
+				propertyName = [propertyName stringByReplacingOccurrencesOfString:@"'" withString:@""];
+				NSString* propertyValue = [propertyValueComponents objectAtIndex:1];
+				propertyValue = [propertyValue stringByReplacingOccurrencesOfString:@"'" withString:@""];
+				[components addObject:[propertyName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+				[components addObject:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+			}
+		}
+		else{
+			NSLog(@"Invalid format for '%@' : Cannot find end selector character ']'",format);
+		}
+	}
+	else{//no selectors
+		[components addObject:[format stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+	}
+	
+	return components;
+}
+
++ (NSString*)formatFromSplittedFormat:(NSArray*)splittedFormat{
+	NSAssert([splittedFormat count] >= 1,@"no identifier for format");
+	NSMutableString* str = [NSMutableString stringWithCapacity:1024];
+	[str appendString:[splittedFormat objectAtIndex:0]];
+	
+	if([splittedFormat count] > 1){
+		[str appendString:@"["];
+	}
+	
+	for(int i=1;i<[splittedFormat count];i += 2){
+		NSString* propertyName = [splittedFormat objectAtIndex:i];
+		NSString* propertyValue = [splittedFormat objectAtIndex:i+1];
+		[str appendFormat:@"%@%@='%@'",(i >= 3) ? @";" : @"" ,propertyName,propertyValue];
+	}
+	
+	if([splittedFormat count] > 1){
+		[str appendString:@"]"];
+	}
+	
+	return str;
+}
+
++ (NSString*)normalizeFormat:(NSString*)format{
+	NSArray* splittedFormat = [CKStyleFormat parseFormat:format];
+	return [CKStyleFormat formatFromSplittedFormat:splittedFormat];
+}
+
 - (id)initFormatWithFormat:(NSString*)theformat{
 	[super init];
-	self.format = theformat;
 	self.properties = [NSMutableArray array];
-	NSArray* components = [theformat componentsSeparatedByString:@","];
-	NSAssert([components count] > 0,@"invalid format : missing type");
 	
-	NSString* identifier = (NSString*)[components objectAtIndex:0];
-	if([identifier hasPrefix:@"#"]){
-		self.propertyName = [identifier substringWithRange:NSMakeRange(1,[identifier length] - 1)];
+	NSArray* splittedFormat = [CKStyleFormat parseFormat:theformat];
+	self.format = [CKStyleFormat formatFromSplittedFormat:splittedFormat];
+	
+	NSString* identifier = (NSString*)[splittedFormat objectAtIndex:0];
+	Class type = NSClassFromString(identifier);
+	if(type == nil){
+		self.propertyName = identifier;
 	}
 	else{
-		self.objectClass = NSClassFromString(identifier);
+		self.objectClass = type;
 	}
 	
-	for(int i=1;i<[components count];++i){
-		NSString* propertyValueString = [components objectAtIndex:i];
-		NSArray* components2 = [propertyValueString componentsSeparatedByString:@"="];
-		NSAssert([components2 count] == 2,@"invalid format for property");
-		[self.properties addObject:[components2 objectAtIndex:0]];
+	for(int i=1;i<[splittedFormat count];i += 2){
+		NSString* name = [splittedFormat objectAtIndex:i];
+		//NSString* value = [splittedFormat objectAtIndex:i+1];
+		[self.properties addObject:name];
 	}
 	return self;
 }
@@ -46,10 +109,10 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 - (NSString*)formatForObject:(id)object propertyName:(NSString*)thePropertyName{
 	NSMutableString* str = [NSMutableString stringWithCapacity:1024];
 	if(self.propertyName){
-		[str appendString:@"#"];
 		[str appendString:thePropertyName];
 	}
 	else{
+		//TODO : here verify if we really use inheritance for object ...
 		if(CKStyleClassNamesCache == nil){
 			CKStyleClassNamesCache = [[NSMutableDictionary alloc]init];
 		}
@@ -62,10 +125,22 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 		[str appendString:className];
 	}
 	
+	//append subProperties
+	
+	if([properties count] > 0){
+		[str appendString:@"["];
+	}
+	
+	int i =0;
 	for(NSString* subPropertyName in properties){
 		id value = [object valueForKeyPath:subPropertyName];
 		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
-		[str appendFormat:@",%@=%@",subPropertyName,valueString];
+		[str appendFormat:@"%@%@='%@'",(i > 0) ? @"," : @"" ,subPropertyName,valueString];
+		++i;
+	}
+	
+	if([properties count] > 0){
+		[str appendString:@"]"];
 	}
 	return str;
 }
@@ -84,7 +159,8 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 NSString* CKStyleFormats = @"CKStyleFormats";
 NSString* CKStyleParentStyle = @"CKStyleParentStyle";
 NSString* CKStyleEmptyStyle = @"CKStyleEmptyStyle";
-NSString* CKStyleInherits = @"inherits";
+NSString* CKStyleInherits = @"@inherits";
+NSString* CKStyleImport = @"@import";
 
 @implementation NSMutableDictionary (CKStyle)
 
@@ -161,7 +237,8 @@ NSString* CKStyleInherits = @"inherits";
 	NSArray* inheritsArray = [self objectForKey:CKStyleInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
-			NSMutableDictionary* inheritedStyle = [self findStyleInHierarchy:key];
+			NSString* normalizedKey = [CKStyleFormat normalizeFormat:key];
+			NSMutableDictionary* inheritedStyle = [self findStyleInHierarchy:normalizedKey];
 			if(inheritedStyle != nil){
 				//ensure inherits is threated on inheritedStyle
 				[inheritedStyle makeAllInherits];
@@ -185,18 +262,38 @@ NSString* CKStyleInherits = @"inherits";
 	}
 }
 
+- (NSArray*)parseFormatGroups:(NSString*)formats{
+	NSArray* components = [formats componentsSeparatedByString:@","];
+	NSMutableArray* results = [NSMutableArray array];
+	for(NSString* format in components){
+		NSString* result = [CKStyleFormat normalizeFormat:format];
+		[results addObject:result];
+	}
+	return results;
+}
+
 - (void)initAfterLoading{
+	NSArray* importArray = [self objectForKey:CKStyleImport];
+	for(NSString* import in importArray){
+		[[CKStyleManager defaultManager]importContentOfFileNamed:import];
+	}
+	[self removeObjectForKey:CKStyleImport];
+	
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
 		   && [key isEqual:CKStyleFormats] == NO
 		   && [key isEqual:CKStyleParentStyle] == NO
 		   && [key isEqual:CKStyleEmptyStyle] == NO){
-			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
-			[self setObject:dico forKey:key];
+			NSArray* fromatGroups = [self parseFormatGroups:key];
+			[self removeObjectForKey:key];
 			
-			[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
-			[dico initAfterLoading];
+			for(NSString* format in fromatGroups){
+				NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
+				[self setObject:dico forKey:format];
+				[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
+				[dico initAfterLoading];
+			}
 		}
 	}
 	
