@@ -25,6 +25,11 @@
 */
 
 @interface CKDocumentCollectionViewCellController : CKTableViewCellController {
+	UILabel* _label;
+	UIActivityIndicatorView* _activityIndicator;
 }
+
+@property (nonatomic,retain) UILabel* label;
+@property (nonatomic,retain) UIActivityIndicatorView* activityIndicator;
 
 @end

@@ -13,38 +13,18 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectCarouselViewController.h"
 #import "CKDocumentCollection.h"
+#import "CKDocumentCollectionViewCellController+Style.h"
 
 #import "CKStyleManager.h"
 
-/*
-static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControllerStyleDefaultStyle = nil;
-
-@implementation CKDocumentCollectionCellControllerStyle
-@synthesize noItemsMessage, oneItemMessage, manyItemsMessage, backgroundColor, textColor, indicatorStyle;
-
-+ (CKDocumentCollectionCellControllerStyle*)defaultStyle{
-	if(CKDocumentCollectionCellControllerStyleDefaultStyle == nil){
-		[CKDocumentCollectionCellControllerStyleDefaultStyle = [CKDocumentCollectionCellControllerStyle alloc]init];
-		CKDocumentCollectionCellControllerStyleDefaultStyle.noItemsMessage = @"No Object";
-		CKDocumentCollectionCellControllerStyleDefaultStyle.oneItemMessage = @"1 Object";
-		CKDocumentCollectionCellControllerStyleDefaultStyle.manyItemsMessage = @"Objects";
-		CKDocumentCollectionCellControllerStyleDefaultStyle.backgroundColor = [UIColor clearColor];
-		CKDocumentCollectionCellControllerStyleDefaultStyle.textColor = [UIColor whiteColor];
-		CKDocumentCollectionCellControllerStyleDefaultStyle.indicatorStyle = UIActivityIndicatorViewStyleWhite;
-	}
-	return CKDocumentCollectionCellControllerStyleDefaultStyle;
-}
-
-@end
-*/
-
-#define ActivityIndicatorTag 1
-#define LabelTag 2
-
 @implementation CKDocumentCollectionViewCellController
+@synthesize label = _label;
+@synthesize activityIndicator = _activityIndicator;
 
 - (void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[_label release];
+	[_activityIndicator release];
 	[super dealloc];
 }
 
@@ -52,24 +32,19 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
-	NSLog(@"CKDocumentCollectionCellController initTableViewCell:cell TODO");
-	/*
-	UIActivityIndicatorView* activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
-	activityView.center = cell.center;
-	activityView.tag = ActivityIndicatorTag;
-	activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-	activityView.hidden = YES;
+	NSMutableDictionary* theStyle = [self controllerStyle];
 	
-	[view addSubview:activityView];
+	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
+	_activityIndicator.center = cell.center;
+	_activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	_activityIndicator.hidden = YES;
 	
-	UILabel* label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-	label.textAlignment = UITextAlignmentCenter;
-	label.tag = LabelTag;
-	label.backgroundColor = [UIColor clearColor];
-	label.textColor = theStyle.textColor;
-	label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[view addSubview:label];
-	*/
+	[view addSubview:_activityIndicator];
+	
+	self.label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	_label.textAlignment = UITextAlignmentCenter;
+	_label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[view addSubview:_label];
 	
 	[cell.contentView addSubview:view];
 }
@@ -78,34 +53,34 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
-	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ActivityIndicatorTag];
 	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
-	activityIndicator.hidden = forceHidden || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
-	if(!activityIndicator.hidden){
-		[activityIndicator startAnimating];
+	_activityIndicator.hidden = forceHidden || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	if(!_activityIndicator.hidden){
+		[_activityIndicator startAnimating];
 	}
 	else{
-		[activityIndicator stopAnimating];
+		[_activityIndicator stopAnimating];
 	}
 	
 	NSLog(@"CKDocumentCollectionCellController update:view TODO");
 	
-	/*UILabel* label = (UILabel*)[view viewWithTag:LabelTag];
-	label.hidden = !activityIndicator.hidden;	
+	NSMutableDictionary* theStyle = [self controllerStyle];
+	
+	_label.hidden = !_activityIndicator.hidden;	
 	switch([collection count]){
 		case 0:{
-			label.text = theStyle.noItemsMessage;
+			_label.text = theStyle.noItemsMessage;
 			break;
 		}
 		case 1:{
-			label.text = theStyle.oneItemMessage;
+			_label.text = theStyle.oneItemMessage;
 			break;
 		}
 		default:{
-			label.text = [NSString stringWithFormat:@"%d %@",[collection count],_(theStyle.manyItemsMessage)];
+			_label.text = [NSString stringWithFormat:@"%d %@",[collection count],_(theStyle.manyItemsMessage)];
 			break;
 		}
-	}*/
+	}
 }
 
 - (void)internalUpdate:(id)value{
@@ -121,9 +96,8 @@ static CKDocumentCollectionCellControllerStyle* CKDocumentCollectionCellControll
 	
 	[self update:cell.contentView];
 	
-	UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ActivityIndicatorTag];
 	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
-	activityIndicator.hidden = activityIndicator.hidden || forceHidden;
+	_activityIndicator.hidden = _activityIndicator.hidden || forceHidden;
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];

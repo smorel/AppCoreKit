@@ -280,6 +280,8 @@
 		75314263130B0C79006F4F60 /* CKModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75314262130B0C79006F4F60 /* CKModelObject.m */; };
 		753CBBA5135DE432000ADDEE /* CKStyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 753CBBA3135DE432000ADDEE /* CKStyleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		753CBBA6135DE432000ADDEE /* CKStyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 753CBBA4135DE432000ADDEE /* CKStyleManager.m */; };
+		7542533C136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7542533A136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h */; };
+		7542533D136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7542533B136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m */; };
 		754822681346531F00DB0948 /* CKPropertiesTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 754822661346531F00DB0948 /* CKPropertiesTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		754822691346531F00DB0948 /* CKPropertiesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 754822671346531F00DB0948 /* CKPropertiesTableViewController.m */; };
 		75482280134655BB00DB0948 /* CKNSNumberPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7548227E134655BB00DB0948 /* CKNSNumberPropertyCellController.h */; };
@@ -643,6 +645,8 @@
 		75314262130B0C79006F4F60 /* CKModelObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKModelObject.m; path = Classes/CKModelObject.m; sourceTree = "<group>"; };
 		753CBBA3135DE432000ADDEE /* CKStyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKStyleManager.h; sourceTree = "<group>"; };
 		753CBBA4135DE432000ADDEE /* CKStyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKStyleManager.m; sourceTree = "<group>"; };
+		7542533A136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKDocumentCollectionViewCellController+Style.h"; sourceTree = "<group>"; };
+		7542533B136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKDocumentCollectionViewCellController+Style.m"; sourceTree = "<group>"; };
 		754822661346531F00DB0948 /* CKPropertiesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPropertiesTableViewController.h; sourceTree = "<group>"; };
 		754822671346531F00DB0948 /* CKPropertiesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPropertiesTableViewController.m; sourceTree = "<group>"; };
 		7548227E134655BB00DB0948 /* CKNSNumberPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNSNumberPropertyCellController.h; sourceTree = "<group>"; };
@@ -1412,6 +1416,8 @@
 				75BC623F13608C9300E029EA /* CKTableViewCellController+Style.m */,
 				75BC66601360D69D00E029EA /* CKUIViewController+Style.h */,
 				75BC66611360D69D00E029EA /* CKUIViewController+Style.m */,
+				7542533A136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h */,
+				7542533B136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m */,
 			);
 			name = "View style categories";
 			sourceTree = "<group>";
@@ -1611,6 +1617,7 @@
 				75BC624013608C9300E029EA /* CKTableViewCellController+Style.h in Headers */,
 				75BC66511360D5AF00E029EA /* CKUIViewController.h in Headers */,
 				75BC66621360D69D00E029EA /* CKUIViewController+Style.h in Headers */,
+				7542533C136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1894,6 +1901,7 @@
 				75BC624113608C9300E029EA /* CKTableViewCellController+Style.m in Sources */,
 				75BC66521360D5AF00E029EA /* CKUIViewController.m in Sources */,
 				75BC66631360D69D00E029EA /* CKUIViewController+Style.m in Sources */,
+				7542533D136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
