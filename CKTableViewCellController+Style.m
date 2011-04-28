@@ -21,6 +21,7 @@
 NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryType = @"accessoryType";
 NSString* CKStyleSelectionStyle = @"selectionStyle";
+NSString* CKStyleAccessoryImage = @"accessoryImage";
 
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
@@ -46,6 +47,10 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 																				UITableViewCellSelectionStyleBlue,
 																				UITableViewCellSelectionStyleGray)];
 
+}
+
+- (UIImage*)accessoryImage{
+	return [self imageForKey:CKStyleAccessoryImage];
 }
 
 @end
@@ -123,7 +128,12 @@ NSString* CKStyleSelectionStyle = @"selectionStyle";
 		NSMutableDictionary* myCellStyle = [style styleForObject:tableViewCell propertyName:propertyName];
 		if(myCellStyle){
 			//Applying style on UITableViewCell
-			if([myCellStyle containsObjectForKey:CKStyleAccessoryType]){
+			if([myCellStyle containsObjectForKey:CKStyleAccessoryImage]){
+				UIImage* image = [myCellStyle accessoryImage];
+				UIImageView* imageView = [[[UIImageView alloc]initWithImage:image]autorelease];
+				tableViewCell.accessoryView = imageView;
+			}
+			else if([myCellStyle containsObjectForKey:CKStyleAccessoryType]){
 				tableViewCell.accessoryType = [myCellStyle accessoryType];
 			}
 			if([myCellStyle containsObjectForKey:CKStyleSelectionStyle]){
