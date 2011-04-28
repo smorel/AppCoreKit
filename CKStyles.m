@@ -186,8 +186,6 @@ NSString* CKStyleInherits = @"inherits";
 }
 
 - (void)initAfterLoading{
-	[self makeAllInherits];
-	
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
@@ -197,8 +195,6 @@ NSString* CKStyleInherits = @"inherits";
 			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
 			[self setObject:dico forKey:key];
 			
-			CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
-			[self setFormat:format];
 			[dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
 			[dico initAfterLoading];
 		}
@@ -208,6 +204,23 @@ NSString* CKStyleInherits = @"inherits";
 	NSMutableDictionary* emptyStyle = [NSMutableDictionary dictionary];
 	[emptyStyle setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
 	[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
+}
+
+- (void)postInitAfterLoading{
+	[self makeAllInherits];
+	for(id key in [self allKeys]){
+		id object = [self objectForKey:key];
+		if([object isKindOfClass:[NSDictionary class]]
+		   && [key isEqual:CKStyleFormats] == NO
+		   && [key isEqual:CKStyleParentStyle] == NO
+		   && [key isEqual:CKStyleEmptyStyle] == NO){
+			
+			CKStyleFormat* format = [[[CKStyleFormat alloc]initFormatWithFormat:key]autorelease];
+			[self setFormat:format];
+			
+			[object postInitAfterLoading];
+		}
+	}
 }
 
 //Search a style responding to the format in the current scope

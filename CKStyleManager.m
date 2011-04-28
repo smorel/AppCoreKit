@@ -57,6 +57,7 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
 	self.styles = [NSMutableDictionary dictionaryWithDictionary:responseValue];
 	[_styles initAfterLoading];
+	[_styles postInitAfterLoading];
 }
 
 @end
