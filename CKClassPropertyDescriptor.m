@@ -17,6 +17,7 @@
 @synthesize metaDataSelector;
 @synthesize propertyType;
 @synthesize assignementType;
+@synthesize isReadOnly;
 
 - (void)dealloc{
 	self.name = nil;
@@ -42,16 +43,23 @@
 	
 	assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
 	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
+	
+	self.isReadOnly = NO;
 	if([subStrings count] > 2){
-		NSString* assignementAttribute = [subStrings objectAtIndex:1];
-		if([assignementAttribute isEqual:@"&"]){
-			assignementType = CKClassPropertyDescriptorAssignementTypeRetain;
-		}
-		else if([assignementAttribute isEqual:@"C"]){
-			assignementType = CKClassPropertyDescriptorAssignementTypeCopy;
-		}
-		else if([assignementAttribute isEqual:@"W"]){
-			assignementType = CKClassPropertyDescriptorAssignementTypeWeak;
+		for(int i = 1; i < [subStrings count] - 1; ++i){
+			NSString* assignementAttribute = [subStrings objectAtIndex:i];
+			if([assignementAttribute isEqual:@"&"]){
+				assignementType = CKClassPropertyDescriptorAssignementTypeRetain;
+			}
+			else if([assignementAttribute isEqual:@"C"]){
+				assignementType = CKClassPropertyDescriptorAssignementTypeCopy;
+			}
+			else if([assignementAttribute isEqual:@"W"]){
+				assignementType = CKClassPropertyDescriptorAssignementTypeWeak;
+			}
+			else if([assignementAttribute isEqual:@"R"]){
+				self.isReadOnly = YES;
+			}
 		}
 	}	
 	
