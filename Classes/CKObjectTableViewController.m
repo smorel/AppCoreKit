@@ -105,17 +105,28 @@
 	_editable = NO;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings withNibName:(NSString*)nib{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
 	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory];
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
+	return self;
+}
+
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
+	[super initWithNibName:nib bundle:[NSBundle mainBundle]];
+
+	self.objectController = controller;
+	self.controllerFactory = factory;
+	return self;	
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+	[self initWithCollection:collection mappings:mappings withNibName:nil];
 	return self;
 }
 
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
-	[self init];
-	self.objectController = controller;
-	self.controllerFactory = factory;
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
 	return self;
 }
 

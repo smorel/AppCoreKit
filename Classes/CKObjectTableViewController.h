@@ -62,6 +62,10 @@
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings withNibName:(NSString*)nib;
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
+
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
