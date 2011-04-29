@@ -29,6 +29,7 @@
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
 
+- (void)processImports;
 - (void)initAfterLoading;
 - (void)postInitAfterLoading;
 - (void)setFormat:(CKStyleFormat*)format;

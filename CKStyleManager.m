@@ -62,13 +62,27 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	if([_loadedFiles containsObject:path])
 		return;
 	
-	NSData* data = [NSData dataWithContentsOfFile:path];
+	NSData* fileData = [NSData dataWithContentsOfFile:path];
+	NSString* fileContentAsString = [[[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding]autorelease];
+
+	//Removes comments
+	NSScanner *s = [NSScanner scannerWithString:[fileContentAsString copy]];
+	while (![s isAtEnd]) {
+		NSString *text = @"";
+		[s scanUpToString:@"/*" intoString:NULL];
+		[s scanUpToString:@"*/" intoString:&text];
+		fileContentAsString = [fileContentAsString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@*/", text] withString:@""];
+	}
+	
+	NSData* dataToParse = [fileContentAsString dataUsingEncoding:NSUTF8StringEncoding];
+	
 	NSError* error = nil;
-	id responseValue = [[CJSONDeserializer deserializer] deserialize:data error:&error];
+	id responseValue = [[CJSONDeserializer deserializer] deserialize:dataToParse error:&error];
 	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
 	[_loadedFiles addObject:path];
 	
 	NSMutableDictionary* result = [NSMutableDictionary dictionaryWithDictionary:responseValue];
+	[result processImports];
 	[_styles addEntriesFromDictionary:result];
 }
 

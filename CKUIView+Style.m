@@ -78,10 +78,7 @@ NSString* CKStyleAlpha = @"alpha";
 }
 
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
-	BOOL isTableViewCell = [[view superview]isKindOfClass:[UITableViewCell class]];
-	
-	if(isTableViewCell
-	   || [style containsObjectForKey:CKStyleBackgroundGradientColors]
+	if([style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]){
 		return YES;
@@ -108,7 +105,7 @@ NSString* CKStyleAlpha = @"alpha";
 	if([appliedStack containsObject:view] == NO){
 		//Apply before adding background subView
 		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
-		
+	
 		if(myViewStyle){
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
@@ -242,8 +239,14 @@ NSString* CKStyleAlpha = @"alpha";
 			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
 		}
 		
-		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO) ){
-			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+		BOOL needGradientView = [UIView needSubView:style forView:view propertyName:descriptor.name];
+		if((needGradientView && view == nil) || shouldReplaceView ){
+			if(needGradientView && [view isKindOfClass:[CKGradientView class]] == NO){
+				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+			}
+			else{
+				view = [[[UIView alloc]initWithFrame:frame]autorelease];
+			}
 			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self setValue:view forKey:descriptor.name];
 		}

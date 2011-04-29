@@ -7,6 +7,7 @@
 //
 
 #import "CKStyle+Parsing.h"
+#import "CKUIColorAdditions.h"
 
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
@@ -35,11 +36,32 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 			
 + (UIColor*)parseStringToColor:(NSString*)str{
 	NSArray* components = [str componentsSeparatedByString:@" "];
-	NSAssert([components count] == 4,@"invalid color format");
-	return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 
+	if([components count] == 4){
+		return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 
 						   green:[[components objectAtIndex:1]floatValue] 
 							blue:[[components objectAtIndex:2]floatValue] 
 						   alpha:[[components objectAtIndex:3]floatValue]];
+	}
+	else {
+		if([str hasPrefix:@"0x"]){
+			NSArray* components = [str componentsSeparatedByString:@" "];
+			NSAssert([components count] >= 1,@"Invalid format for color");
+			unsigned outVal;
+			NSScanner* scanner = [NSScanner scannerWithString:[components objectAtIndex:0]];
+			[scanner scanHexInt:&outVal];
+			UIColor* color = [UIColor colorWithRGBValue:outVal];
+			
+			if([components count] > 1){
+				color = [color colorWithAlphaComponent:[[components objectAtIndex:1] floatValue] ];
+			}
+			return color;
+		}
+		else{
+			NSAssert(NO,@"Invalid format for color");
+		}
+	}
+
+	return nil;
 }
 
 + (CGSize)parseStringToCGSize:(NSString*)str{
@@ -58,7 +80,12 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 - (UIColor*) colorForKey:(NSString*)key{
 	id object = [self objectForKey:key];
 	if([object isKindOfClass:[NSString class]]){
-		UIColor* result = [CKStyleParsing parseStringToColor:object];
+		UIColor* result = [CKStyleParsing parseStringToColor:[object stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		[self setObject:result forKey:key];
+		return result;
+	}
+	else if([object isKindOfClass:[NSNumber class]]){
+		UIColor* result = [UIColor colorWithRGBValue:[object intValue]];
 		[self setObject:result forKey:key];
 		return result;
 	}
@@ -111,14 +138,18 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	id object = [self objectForKey:key];
 	if([object isKindOfClass:[NSString class]]){
 		UIImage* image = [UIImage imageNamed:object];
-		[self setObject:image forKey:key];
+		if(image != nil){
+			[self setObject:image forKey:key];
+		}
 		return image;
 	}
 	else if([object isKindOfClass:[NSURL class]]){
 		NSURL* url = (NSURL*)object;
 		if([url isFileURL]){
 			UIImage* image = [UIImage imageWithContentsOfFile:[url path]];
-			[self setObject:image forKey:key];
+			if(image != nil){
+				[self setObject:image forKey:key];
+			}
 			return image;
 		}
 		NSAssert(NO,@"Styles only supports file url yet");

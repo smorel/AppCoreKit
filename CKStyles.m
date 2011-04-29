@@ -272,13 +272,27 @@ NSString* CKStyleImport = @"@import";
 	return results;
 }
 
-- (void)initAfterLoading{
+
+- (void)processImports{
 	NSArray* importArray = [self objectForKey:CKStyleImport];
 	for(NSString* import in importArray){
 		[[CKStyleManager defaultManager]importContentOfFileNamed:import];
 	}
 	[self removeObjectForKey:CKStyleImport];
 	
+	for(id key in [self allKeys]){
+		id object = [self objectForKey:key];
+		if([object isKindOfClass:[NSDictionary class]]
+		   && [key isEqual:CKStyleFormats] == NO
+		   && [key isEqual:CKStyleParentStyle] == NO
+		   && [key isEqual:CKStyleEmptyStyle] == NO){
+			NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithDictionary:object];
+			[dico processImports];
+		}
+	}
+}
+
+- (void)initAfterLoading{
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
