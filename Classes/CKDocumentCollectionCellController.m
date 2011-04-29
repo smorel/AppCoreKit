@@ -62,8 +62,6 @@
 		[_activityIndicator stopAnimating];
 	}
 	
-	NSLog(@"CKDocumentCollectionCellController update:view TODO");
-	
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
 	_label.hidden = !_activityIndicator.hidden;	
