@@ -82,7 +82,10 @@ static NSString* getPropertyType(objc_property_t property) {
 		//NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}
-	NSAssert(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+	if(subObject == nil){
+		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		return nil;
+	}
 	return [self propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 }
 

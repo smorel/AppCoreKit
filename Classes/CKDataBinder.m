@@ -83,6 +83,11 @@
 	
 	id value = [instance1Ref.target valueForKeyPath:keyPath1];
 	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
+	if(property == nil){
+		//cannot bind unfound property
+		return;
+	}
+	
 	[instance2Ref.target setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
 	
 	[instance1Ref.target addObserver:self
