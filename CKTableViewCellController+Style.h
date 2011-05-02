@@ -34,3 +34,8 @@ extern NSString* CKStyleSelectionStyle;
 @interface UITableViewCell (CKStyle)
 
 @end
+
+
+@interface CKTableViewController (CKStyle)
+
+@end

@@ -94,10 +94,6 @@
 				forKeyPath:keyPath1
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
-	/*[instance2Ref.target addObserver:self
-				forKeyPath:keyPath2
-				   options:(NSKeyValueObservingOptionNew)
-				   context:nil];*/
 	binded = YES;
 }
 
@@ -109,8 +105,6 @@
 	if(binded){
 		[instance1 removeObserver:self
 								 forKeyPath:keyPath1];
-		/*[instance2 removeObserver:self
-								 forKeyPath:keyPath2];*/
 		binded = NO;
 	}
 }
@@ -122,33 +116,12 @@
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 	
-	/*id dataValue1 = [instance1Ref.target valueForKeyPath:keyPath1];
-	{
-		CKObjectProperty* property = [NSObject property:instance1Ref.target forKeyPath:keyPath1];
-		id newValue1 = [CKValueTransformer transformValue:newValue toClass:property.type];
-		if(![newValue1 isEqual:dataValue1]){
-			[instance1Ref.target removeObserver:self
-									 forKeyPath:keyPath1];
-			[instance1Ref.target setValue:newValue1 forKeyPath:keyPath1];
-			[instance1Ref.target addObserver:self
-								  forKeyPath:keyPath1
-									 options:(NSKeyValueObservingOptionNew)
-									 context:nil];
-		}
-	}*/
-	
 	id dataValue2 = [instance2Ref.target valueForKeyPath:keyPath2];
 	{
 		CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
 		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
 		if(![newValue2 isEqual:dataValue2]){
-			/*[instance2Ref.target removeObserver:self
-									 forKeyPath:keyPath2];*/
 			[instance2Ref.target setValue:newValue2 forKeyPath:keyPath2];
-			/*[instance2Ref.target addObserver:self
-								  forKeyPath:keyPath2
-									 options:(NSKeyValueObservingOptionNew)
-									 context:nil];*/
 		}
 	}
 }

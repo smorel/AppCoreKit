@@ -61,9 +61,12 @@
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
 	CKDocumentController* _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
+	
+	NSMutableArray* _headerCellDescriptors;
 }
 
 @property (nonatomic,retain,readonly) CKDocumentController* objectController;
+@property (nonatomic,retain) NSArray* headerCellDescriptors;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;

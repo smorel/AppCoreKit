@@ -10,6 +10,7 @@
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h";
 #import "CKNSObject+Invocation.h"
+#import "CKStyleManager.h"
 
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
@@ -41,6 +42,10 @@
 - (UIView*)headerViewForSection:(NSInteger)section{
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	if( formSection.headerView != nil ){
+		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+		[formSection.headerView applyStyle:controllerStyle];
+	}
 	return formSection.headerView;
 }
 
@@ -84,10 +89,6 @@
 @synthesize headerTitle = _headerTitle;
 @synthesize headerView = _headerView;
 @synthesize parentController = _parentController;
-
-- (void)dealloc{
-	[super dealloc];
-}
 
 - (NSInteger)sectionIndex{
 	return [_parentController indexOfSection:self];
@@ -217,6 +218,8 @@
 @implementation CKFormDocumentCollectionSection
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
+@synthesize headerCellDescriptors = _headerCellDescriptors;
+
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	[super init];
@@ -225,11 +228,11 @@
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
 
-	
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
+	
 	return self;
 }
 
@@ -239,25 +242,47 @@
 }
 
 - (NSInteger)numberOfObjects{
+	NSInteger count = 0;
+	count += [_headerCellDescriptors count];
 	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
-		return [_objectController numberOfObjectsForSection:0];
+		count += [_objectController numberOfObjectsForSection:0];
 	}
-	return 0;
+	return count;
 }
 
 - (id)objectAtIndex:(NSInteger)index{
+	if(index < [_headerCellDescriptors count]){
+		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
+		return cellDescriptor.value;
+	}
+	
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+		return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
 	}
 	return nil;
 }
 
 - (Class)controllerClassForIndex:(NSInteger)index{
-	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+	if(index < [_headerCellDescriptors count]){
+		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
+		return cellDescriptor.controllerClass;
+	}
+	
+	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
 }
 
 - (void)initializeController:(id)controller atIndex:(NSInteger)index{
-	[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+	if(index < [_headerCellDescriptors count]){
+		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
+		if(cellDescriptor.block){
+			cellDescriptor.block(controller);
+		}
+		else if(cellDescriptor.target){
+			[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
+		}
+	}
+	
+	[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
 }
 
 - (void)objectControllerReloadData:(id)controller{
@@ -274,12 +299,12 @@
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:indexPath.row inSection:self.sectionIndex],nil]];
+							   withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex],nil]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-								withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:indexPath.row inSection:self.sectionIndex],nil]];
+								withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex],nil]];
 }
 
 @end

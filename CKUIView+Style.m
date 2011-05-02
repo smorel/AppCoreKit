@@ -212,6 +212,7 @@ NSString* CKStyleAlpha = @"alpha";
 
 @implementation NSObject (CKStyle)
 
+//FIXME : something not optimial here as we retrieve myViewStyle which is done also in applyStyle
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
@@ -222,21 +223,10 @@ NSString* CKStyleAlpha = @"alpha";
 		CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
 		
 		BOOL shouldReplaceView = NO;
-		if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:)]){
-			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
+		if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
+			NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
+			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
 		}
-		
-		/*BOOL needGradientView = [UIView needSubView:style forView:view propertyName:descriptor.name];
-		if((needGradientView && view == nil) || shouldReplaceView ){
-			if(needGradientView && [view isKindOfClass:[CKGradientView class]] == NO){
-				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
-			}
-			else{
-				view = [[[UIView alloc]initWithFrame:frame]autorelease];
-			}
-			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-			[self setValue:view forKey:descriptor.name];
-		}*/
 		
 		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO) ){
 			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];

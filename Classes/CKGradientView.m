@@ -67,6 +67,10 @@
 		CGContextSetAlpha(gc,0.0);
 		CGContextFillRect(gc, self.bounds);
 	}
+	
+	if(_image){
+		[_image drawInRect:self.bounds];
+	}	
 						  
 	if(self.gradientColors){
 		CGFloat colorLocations[self.gradientColorLocations.count];
@@ -78,10 +82,6 @@
 		NSMutableArray *colors = [NSMutableArray array];
 		for (UIColor *color in self.gradientColors) {
 			[colors addObject:(id)([[color RGBColor]CGColor])];
-		}
-		
-		if(_image){
-			[_image drawInRect:self.bounds];
 		}
 		
 		CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, colorLocations);

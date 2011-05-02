@@ -33,6 +33,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+	
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:

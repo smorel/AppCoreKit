@@ -102,10 +102,10 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	return roundedCornerType;
 }
 
-- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor{
+- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
 	if([object isKindOfClass:[UITableViewCell class]]){
-		if([descriptor.name isEqual:@"backgroundView"]
-		   || [descriptor.name isEqual:@"selectedBackgroundView"]){
+		if(([descriptor.name isEqual:@"backgroundView"]
+		   || [descriptor.name isEqual:@"selectedBackgroundView"]) && [style isEmpty] == NO){
 			return YES;
 		}
 	}
@@ -143,6 +143,27 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 		}
 	}
 	return NO;
+}
+
+
+@end
+
+@implementation CKTableViewController (CKStyle)
+
+- (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
+	if([object isKindOfClass:[UITableView class]]){
+		if([descriptor.name isEqual:@"backgroundView"] && [style isEmpty] == NO){
+			return YES;
+		}
+	}
+	return NO;
+}
+
+- (void)applyStyle{
+	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+	
+	NSMutableSet* appliedStack = [NSMutableSet set];
+	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];
 }
 
 

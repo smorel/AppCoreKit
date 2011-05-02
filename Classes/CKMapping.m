@@ -11,6 +11,7 @@
 #import "RegexKitLite.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
+#import "CKNSDate+Conversions.h"
 
 
 #define DebugLog 0
@@ -167,6 +168,17 @@
 	return [NSNumber numberWithInt:i]; }
 @end
 
+//CKNSStringToIntTransformer
+@interface      CKNSStringToDateTransformer : NSValueTransformer {} @end
+@implementation CKNSStringToDateTransformer
++ (Class)transformedValueClass { return [NSString class]; }
+- (id)transformedValue:(id)value { 
+	if ([value isKindOfClass:[NSString class]] == NO) return nil;
+	NSString* strDate = value;
+	return [NSDate dateFromString:strDate withDateFormat:@"yyyy-MM-dd"];
+}
+@end
+
 @implementation NSMutableDictionary (CKMapping)
 
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withBlock:(CKMappingBlock)block{
@@ -213,6 +225,10 @@
 
 - (void)mapIntForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
 	[self mapKeyPath:keyPath toKeyPath:destination required:bo withValueTransformerClass:[CKNSStringToIntTransformer class]];
+}
+
+- (void)mapDateForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withValueTransformerClass:[CKNSStringToDateTransformer class]];
 }
 
 @end
