@@ -85,6 +85,10 @@
 	[self update:self.tableViewCell];
 }
 
+- (UITableViewCell*)loadCell{
+	return [super loadCell];
+}
+
 - (void)setupCell:(UITableViewCell *)cell{
 	[super setupCell:cell];
 	self.selectable = NO;

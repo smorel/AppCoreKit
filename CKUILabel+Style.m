@@ -12,7 +12,7 @@
 #import "CKStyle+Parsing.h"
 #import "CKLocalization.h"
 
-NSString* CKStyleTextColor = @"textcolor";
+NSString* CKStyleTextColor = @"textColor";
 NSString* CKStyleFontSize = @"fontSize";
 NSString* CKStyleFontName = @"fontName";
 NSString* CKStyleText = @"text";

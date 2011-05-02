@@ -184,23 +184,10 @@ NSString* CKStyleAlpha = @"alpha";
 				
 				//Apply color
 				BOOL dontTouchBackgroundColor = NO;
-				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES
-				   && [myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors] == NO){
-					if([backgroundView isKindOfClass:[CKGradientView class]]){
-						CKGradientView* gradientView = (CKGradientView*)backgroundView;
-						UIColor* color = [myViewStyle backgroundColor];
-						gradientView.gradientColors = [NSArray arrayWithObjects:color,color,nil];
-						gradientView.gradientColorLocations = [NSArray arrayWithObjects:
-															   [NSNumber numberWithInt:0], 
-															   [NSNumber numberWithInt:1], 
-															   nil];	
-						opaque = opaque && (CGColorGetAlpha([color CGColor]) >= 1);				
-					}
-					else{
-						dontTouchBackgroundColor = YES;
-						backgroundView.backgroundColor = [myViewStyle backgroundColor];
-						opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
-					}
+				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES){
+					dontTouchBackgroundColor = YES;
+					backgroundView.backgroundColor = [myViewStyle backgroundColor];
+					opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
 				}
 				
 				BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
@@ -239,7 +226,7 @@ NSString* CKStyleAlpha = @"alpha";
 			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor];
 		}
 		
-		BOOL needGradientView = [UIView needSubView:style forView:view propertyName:descriptor.name];
+		/*BOOL needGradientView = [UIView needSubView:style forView:view propertyName:descriptor.name];
 		if((needGradientView && view == nil) || shouldReplaceView ){
 			if(needGradientView && [view isKindOfClass:[CKGradientView class]] == NO){
 				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
@@ -247,6 +234,12 @@ NSString* CKStyleAlpha = @"alpha";
 			else{
 				view = [[[UIView alloc]initWithFrame:frame]autorelease];
 			}
+			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[self setValue:view forKey:descriptor.name];
+		}*/
+		
+		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO) ){
+			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
 			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self setValue:view forKey:descriptor.name];
 		}

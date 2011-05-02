@@ -57,26 +57,36 @@
 	[super drawRect:rect];
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
-	
-	CGFloat colorLocations[self.gradientColorLocations.count];
-	int i = 0;
-	for (NSNumber *n in self.gradientColorLocations) {
-		colorLocations[i++] = [n floatValue];
+	if(self.backgroundColor != nil){
+		CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
+		CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
+		CGContextFillRect(gc,self.bounds);
 	}
-	
-	
-	
-	NSMutableArray *colors = [NSMutableArray array];
-	for (UIColor *color in self.gradientColors) {
-		[colors addObject:(id)([[color RGBColor]CGColor])];
+	else{
+		CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
+		CGContextSetAlpha(gc,0.0);
+		CGContextFillRect(gc, self.bounds);
 	}
-	
-	if(_image){
-		[_image drawInRect:self.bounds];
+						  
+	if(self.gradientColors){
+		CGFloat colorLocations[self.gradientColorLocations.count];
+		int i = 0;
+		for (NSNumber *n in self.gradientColorLocations) {
+			colorLocations[i++] = [n floatValue];
+		}
+		
+		NSMutableArray *colors = [NSMutableArray array];
+		for (UIColor *color in self.gradientColors) {
+			[colors addObject:(id)([[color RGBColor]CGColor])];
+		}
+		
+		if(_image){
+			[_image drawInRect:self.bounds];
+		}
+		
+		CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, colorLocations);
+		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
 	}
-	
-	CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, colorLocations);
-	CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
 }
 
 @end
