@@ -8,54 +8,66 @@
 
 #import "CKNetworkActivityManager.h"
 
-@interface CKNetworkActivityManager ()
-@property (nonatomic, retain) NSMutableSet *objects;
-@end
-
-static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
 @implementation CKNetworkActivityManager
-@synthesize objects;
 
-+ (CKNetworkActivityManager*)defaultManager{
-	if(CKDefaultNetworkActivityManager == nil){
-		CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc]init];
++ (CKNetworkActivityManager*)defaultManager {
+	static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
+	if (CKDefaultNetworkActivityManager == nil) {
+		CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc] init];
 	}
 	return CKDefaultNetworkActivityManager;
 }
 
-- (id)init{
-	[super init];
-	self.objects = [NSMutableArray array];
+- (id)init {
+	if (self = [super init]) {
+		_objects = [[NSMutableSet alloc] initWithCapacity:100];
+	}
 	return self;
 }
 
-- (void)dealloc{
-	self.objects = nil;
+- (void)dealloc {
+	[_objects release];
 	[super dealloc];
 }
 
-- (void)addNetworkActivityForObject:(id)object{
-	if([self.objects count] == 0){
+//
+
+- (void)addNetworkActivityForObject:(id)object {
+	[self performSelectorOnMainThread:@selector(doAddNetworkActivityForObject:) withObject:object waitUntilDone:NO];
+}
+
+- (void)removeNetworkActivityForObject:(id)object {
+	[self performSelectorOnMainThread:@selector(doRemoveNetworkActivityForObject:) withObject:object waitUntilDone:NO];
+}
+
+#pragma mark Private
+
+- (void)doAddNetworkActivityForObject:(id)object {
+	if ([_objects count] == 0) {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	}
-	[self.objects addObject:[NSValue valueWithNonretainedObject:object]];
 	
-	//NSLog(@"Network Activity Count = %d",[self.objects count]);
+	NSValue *value = [NSValue valueWithNonretainedObject:object];
+	[_objects addObject:value];
+	
+//	NSLog(@"Add <%p> <%d> %@", value, [self.objects count], object);
 }
 
-- (void)removeNetworkActivityForObject:(id)object{
-	[self.objects removeObject:[NSValue valueWithNonretainedObject:object]];
-	if([self.objects count] == 0){
+- (void)doRemoveNetworkActivityForObject:(id)object {
+	NSValue *value = [NSValue valueWithNonretainedObject:object];
+	[_objects removeObject:value];
+	
+	if ([_objects count] == 0) {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	}
-	
-	//NSLog(@"Network Activity Count = %d",[self.objects count]);
+
+//	NSLog(@"Remove <%p> <%d> %@", value, [self.objects count], object);
 }
 
-- (NSString*)description{
-	NSString* desc = [NSString stringWithFormat:@"CKNetworkActivityManager objects : {\n"];
-	for(NSValue* object in objects){
-		desc = [desc stringByAppendingFormat:@"%@\n",[[object nonretainedObjectValue] description]];
+- (NSString *)description {
+	NSString *desc = [NSString stringWithFormat:@"CKNetworkActivityManager objects : {\n"];
+	for(NSValue *object in _objects) {
+		desc = [desc stringByAppendingFormat:@"%@\n", [[object nonretainedObjectValue] description]];
 	}
 	desc = [desc stringByAppendingFormat:@"}\n"];
 	return desc;

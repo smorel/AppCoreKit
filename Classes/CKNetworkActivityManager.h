@@ -10,7 +10,7 @@
 
 
 @interface CKNetworkActivityManager : NSObject {
-	NSMutableSet* objects;
+	NSMutableSet *_objects;
 }
 
 + (CKNetworkActivityManager*)defaultManager;
