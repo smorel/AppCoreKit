@@ -11,6 +11,7 @@
 #import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
+#import <CloudKit/CKNSObject+Bindings.h>
 
 @implementation CKTableViewCellController
 
@@ -39,6 +40,8 @@
 }
 
 - (void)dealloc {
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	
 	[_key release];
 	[_value release];
 	[_indexPath release];

@@ -57,7 +57,14 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 			return color;
 		}
 		else{
-			NSAssert(NO,@"Invalid format for color");
+			SEL colorSelector = NSSelectorFromString(str);
+			if(colorSelector && [[UIColor class] respondsToSelector:colorSelector]){
+				UIColor* color = [[UIColor class] performSelector:colorSelector];
+				return color;
+			}
+			else{
+				NSAssert(NO,@"invalid format for color");
+			}
 		}
 	}
 
