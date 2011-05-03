@@ -22,7 +22,11 @@
 =======
 	<string>1.4</string>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>655</string>
+>>>>>>> release-1.4
+=======
+	<string>658</string>
 >>>>>>> release-1.4
 </dict>
 </plist>
