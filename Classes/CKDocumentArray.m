@@ -94,4 +94,8 @@
 	[self removeObserver:object forKeyPath:@"objects"];
 }
 
+- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
+	return [_objects filteredArrayUsingPredicate:predicate];
+}
+
 @end

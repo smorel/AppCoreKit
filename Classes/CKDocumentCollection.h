@@ -40,6 +40,8 @@
 - (void)removeObserver:(id)object;
 - (void)fetchRange:(NSRange)range;
 
+- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate;
+
 @end
 
 @protocol CKDocumentCollectionDelegate

@@ -80,6 +80,11 @@
 	NSAssert(NO,@"Abstract Implementation");
 }
 
+- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
+	NSAssert(NO,@"Abstract Implementation");
+	return nil;
+}
+
 - (void)fetchRange:(NSRange)range{
 	if(_feedSource == nil)
 		return;

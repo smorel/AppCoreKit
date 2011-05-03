@@ -92,9 +92,11 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		id object = [self valueForKey:property.name];
-		NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
-		[desc appendString:propertyString];
+		if(property.isReadOnly == NO){
+			id object = [self valueForKey:property.name];
+			NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
+			[desc appendString:propertyString];
+		}
 	}
 	[desc appendString:@"}"];
 	 
@@ -223,10 +225,12 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	NSMutableArray* allValues = [NSMutableArray array];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		id object = [self valueForKey:property.name];
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(object && metaData.hashable){
-			[allValues addObject:object];
+		if(property.isReadOnly == NO){
+			id object = [self valueForKey:property.name];
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+			if(object && metaData.hashable){
+				[allValues addObject:object];
+			}
 		}
 	}
 	return (NSUInteger)[allValues hash];
