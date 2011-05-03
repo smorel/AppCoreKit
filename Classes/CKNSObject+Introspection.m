@@ -93,6 +93,11 @@ static NSString* getPropertyType(objc_property_t property) {
 	return [[CKClassPropertyDescriptorManager defaultManager]property:name forClass:[c class]];
 }
 
+
+- (CKClassPropertyDescriptor*) propertyDescriptorForKeyPath:(NSString*)keyPath{
+	return [NSObject propertyDescriptor:[self class] forKeyPath:keyPath];
+}
+
 - (void)introspection:(Class)c array:(NSMutableArray*)array{
 	unsigned int outCount, i;
     objc_property_t *ps = class_copyPropertyList(c, &outCount);

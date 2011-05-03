@@ -53,6 +53,8 @@ typedef BOOL(^CKObjectPredicate)(id);
 +(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name;
 +(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath;
 
+-(CKClassPropertyDescriptor*) propertyDescriptorForKeyPath:(NSString*)keyPath;
+
 - (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects;
 - (void)introspection:(Class)c array:(NSMutableArray*)array;
 

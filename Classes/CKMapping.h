@@ -42,6 +42,21 @@ typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 
 @end
 
+
+@interface CKArrayMapping : NSObject {
+	NSString* key;
+	Class objectClass;
+	NSMutableDictionary* mappings;
+	CKMappingPolicy policy;
+}
+
+@property (nonatomic, retain) NSString* key;
+@property (nonatomic, retain) NSMutableDictionary* mappings;
+@property (nonatomic, assign) Class objectClass;
+@property (nonatomic, assign) CKMappingPolicy policy;
+
+@end
+
 //
 
 @interface NSObject (CKMapping) 
@@ -49,6 +64,13 @@ typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 - (id)initWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error;
 - (void)mapWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error;
 
+@end
+
+//
+
+@interface NSMutableArray (CKMapping)
+//keyPath is the keyPath in the sourceDictionary
+- (void)mapWithDictionary:(NSDictionary*)sourceDictionary keyPath:(NSString*)keyPath objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings error:(NSError**)error;
 @end
 
 //
@@ -69,5 +91,9 @@ typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 - (void)mapStringWithoutHTMLForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapTrimmedStringForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 - (void)mapIntForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
+- (void)mapDateForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
+
+- (void)mapCollectionForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings required:(BOOL)bo;
+
 // --
 @end
