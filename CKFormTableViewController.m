@@ -353,8 +353,9 @@
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-								withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex],nil]];
+	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex];
+	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
+								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
 
 @end
