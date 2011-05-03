@@ -52,8 +52,11 @@ NSString* CKStyleNumberOfLines = @"numberOfLines";
 		if(myLabelStyle){
 			if([myLabelStyle containsObjectForKey:CKStyleTextColor])
 				label.textColor = [myLabelStyle textColor];
-			if([myLabelStyle containsObjectForKey:CKStyleText])
-				label.text = [myLabelStyle text];
+			if([myLabelStyle containsObjectForKey:CKStyleText]){
+				if(label.text == nil){
+					label.text = [myLabelStyle text];
+				}
+			}
 			if([myLabelStyle containsObjectForKey:CKStyleNumberOfLines])
 				label.numberOfLines = [myLabelStyle numberOfLines];
 			
