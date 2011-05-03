@@ -8,7 +8,6 @@
 
 #import "CKObjectTableViewController.h"
 #import <CloudKit/CKNSDateAdditions.h>
-#import <CloudKit/CKTableViewCellController.h>
 #import <objc/runtime.h>
 #import <CloudKit/CKUIKeyboardInformation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -30,7 +29,6 @@
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
 - (void)updateNumberOfPages;
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
 - (void)adjustView;
 - (void)adjustTableView;

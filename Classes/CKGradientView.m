@@ -57,15 +57,17 @@
 	[super drawRect:rect];
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
-	if(self.backgroundColor != nil){
-		CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
-		CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
-		CGContextFillRect(gc,self.bounds);
-	}
-	else{
-		CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
-		CGContextSetAlpha(gc,0.0);
-		CGContextFillRect(gc, self.bounds);
+	if(self.gradientColors == nil){
+		if(self.backgroundColor != nil){
+			CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
+			CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
+			CGContextFillRect(gc,self.bounds);
+		}
+		else{
+			CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
+			CGContextSetAlpha(gc,0.0);
+			CGContextFillRect(gc, self.bounds);
+		}
 	}
 	
 	if(_image){

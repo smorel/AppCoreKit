@@ -11,6 +11,7 @@
 #import "CKObjectViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
+#import <CloudKit/CKTableViewCellController.h>
 
 @interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate> {
 	id _objectController;
@@ -67,5 +68,6 @@
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
+- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

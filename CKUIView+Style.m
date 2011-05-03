@@ -121,12 +121,21 @@ NSString* CKStyleAlpha = @"alpha";
 						view.backgroundColor = [UIColor clearColor];
 						[view insertSubview:gradientView atIndex:0];
 					}
+		
+					backgroundView = gradientView;
+				}
+				
+				
+				if([backgroundView isKindOfClass:[CKGradientView class]]){
+					CKGradientView* gradientView = (CKGradientView*)backgroundView;
 					
+					//Apply Background Image
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 						gradientView.image = [myViewStyle backgroundImage];
 						opaque = NO;
 					}
 					
+					//Apply Gradient
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]){
 						NSArray* colors = [myViewStyle backgroundGradientColors];
 						for(UIColor* color in colors){
@@ -171,10 +180,7 @@ NSString* CKStyleAlpha = @"alpha";
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 						gradientView.roundedCornerSize = [myViewStyle cornerSize];
-					}
-					
-					
-					backgroundView = gradientView;
+					}					
 				}
 				
 				//Apply transparency

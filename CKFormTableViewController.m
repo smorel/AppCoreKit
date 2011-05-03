@@ -113,6 +113,10 @@
 	NSAssert(NO,@"Base Implementation");
 }
 
+- (void)updateStyleForNonNewVisibleCells{
+	NSAssert(NO,@"Base Implementation");
+}
+
 
 @end
 
@@ -208,17 +212,36 @@
 	}
 }
 
+- (void)updateStyleForNonNewVisibleCells{
+	//Update style for indexpath that have not been applyed
+	NSInteger sectionIndex = [self sectionIndex];
+	
+	NSArray *visibleCells = [self.parentController.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+		if(indexPath.section == sectionIndex){
+			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+			NSAssert(controller != nil,@"invalid controller");
+			
+			NSMutableDictionary* controllerStyle = [controller controllerStyle];
+			[controller applyStyle:controllerStyle forCell:cell];
+		}
+	}
+}
+
 @end
 
 @interface CKFormDocumentCollectionSection()
 @property (nonatomic,retain) CKDocumentController* objectController;
 @property (nonatomic,retain) CKObjectViewControllerFactory* controllerFactory;
+@property (nonatomic,retain) NSMutableArray* changeSet;
 @end
 
 @implementation CKFormDocumentCollectionSection
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
 @synthesize headerCellDescriptors = _headerCellDescriptors;
+@synthesize changeSet = _changeSet;
 
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
@@ -285,21 +308,48 @@
 	[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
 }
 
+- (void)updateStyleForNonNewVisibleCells{
+	//Update style for indexpath that have not been applyed
+	NSInteger sectionIndex = [self sectionIndex];
+	
+	NSArray *visibleCells = [self.parentController.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+		if([self.changeSet containsObject:indexPath] == NO
+		   && indexPath.section == sectionIndex){
+			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+			NSAssert(controller != nil,@"invalid controller");
+			
+			NSMutableDictionary* controllerStyle = [controller controllerStyle];
+			[controller applyStyle:controllerStyle forCell:cell];
+		}
+	}
+	
+	[self.changeSet removeAllObjects];	
+}
+
 - (void)objectControllerReloadData:(id)controller{
 	[self.parentController performSelector:@selector(objectControllerReloadData:) withObject:self.objectController];
+	[self updateStyleForNonNewVisibleCells];
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
+	if(self.changeSet == nil){
+		self.changeSet = [NSMutableArray array];
+	}
 	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
 	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self.objectController];
+	[self updateStyleForNonNewVisibleCells];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex];
+	[self.changeSet addObject:theIndexPath];
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,object,[NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex],nil]];
+							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -423,6 +473,13 @@
 
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section{
 	return [_sections indexOfObject:section];
+}
+
+- (void)reload{
+	[super reload];
+	for(CKFormSectionBase* section in _sections){
+		[section updateStyleForNonNewVisibleCells];
+	}
 }
 
 @end

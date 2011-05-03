@@ -30,6 +30,8 @@
 - (Class)controllerClassForIndex:(NSInteger)index;
 - (void)initializeController:(id)controller atIndex:(NSInteger)index;
 
+- (void)updateStyleForNonNewVisibleCells;
+
 @end
 
 
@@ -63,6 +65,7 @@
 	CKObjectViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
+	NSMutableArray* _changeSet;
 }
 
 @property (nonatomic,retain,readonly) CKDocumentController* objectController;
