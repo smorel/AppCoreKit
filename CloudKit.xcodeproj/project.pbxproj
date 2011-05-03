@@ -1969,11 +1969,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 655;
-=======
 				CURRENT_PROJECT_VERSION = 658;
->>>>>>> release-1.4
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
@@ -1997,11 +1993,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 655;
-=======
 				CURRENT_PROJECT_VERSION = 658;
->>>>>>> release-1.4
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
