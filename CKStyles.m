@@ -224,7 +224,12 @@ NSString* CKStyleImport = @"@import";
 		   && [key isEqual:CKStyleFormats] == NO){
 			id sourceObject = [source objectForKey:key];
 			if([mutableTarget containsObjectForKey:key] == NO){
-				[mutableTarget setObject:[source objectForKey:key] forKey:key];
+				if([sourceObject isKindOfClass:[NSDictionary class]]){
+					[mutableTarget setObject:[NSMutableDictionary dictionaryWithDictionary:sourceObject] forKey:key];
+				}
+				else{
+					[mutableTarget setObject:sourceObject forKey:key];
+				}
 			}
 			else if([sourceObject isKindOfClass:[NSMutableDictionary class]]){
 				[self applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key] forKey:key];
@@ -249,7 +254,12 @@ NSString* CKStyleImport = @"@import";
 					   && [obj isEqual:CKStyleFormats] == NO){
 						id inheritedObject = [inheritedStyle objectForKey:obj];
 						if([self containsObjectForKey:obj] == NO){
-							[self setObject:inheritedObject forKey:obj];
+							if([inheritedObject isKindOfClass:[NSDictionary class]]){
+								[self setObject:[NSMutableDictionary dictionaryWithDictionary:inheritedObject] forKey:obj];
+							}
+							else{
+								[self setObject:inheritedObject forKey:obj];
+							}
 						}
 						else if([inheritedObject isKindOfClass:[NSDictionary class]]){
 							[self applyHierarchically:inheritedObject toDictionary:[self objectForKey:obj] forKey:obj];
@@ -310,11 +320,6 @@ NSString* CKStyleImport = @"@import";
 			}
 		}
 	}
-	
-	//set the empty style
-	NSMutableDictionary* emptyStyle = [NSMutableDictionary dictionary];
-	[emptyStyle setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
-	[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
 }
 
 - (void)postInitAfterLoading{
@@ -330,8 +335,14 @@ NSString* CKStyleImport = @"@import";
 			[self setFormat:format];
 			
 			[object postInitAfterLoading];
+			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
 		}
 	}
+	
+	//set the empty style
+	NSMutableDictionary* emptyStyle = [NSMutableDictionary dictionary];
+	[emptyStyle setObject:[NSValue valueWithNonretainedObject:self] forKey:CKStyleParentStyle];
+	[self setObject:emptyStyle forKey:CKStyleEmptyStyle];
 }
 
 //Search a style responding to the format in the current scope
