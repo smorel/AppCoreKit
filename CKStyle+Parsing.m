@@ -162,6 +162,23 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 		NSAssert(NO,@"Styles only supports file url yet");
 		return nil;
 	}
+	else if([object isKindOfClass:[NSArray class]]){
+		NSArray* components = (NSArray*)object;
+		NSAssert([components count] == 2,@"invalid format for image");
+				 
+		NSString* name = [components objectAtIndex:0];
+
+		UIImage* image = [UIImage imageNamed:name];
+		if(image){
+			NSString* sizeStr = [components objectAtIndex:1];
+			CGSize size = [CKStyleParsing parseStringToCGSize:sizeStr];
+			image = [image stretchableImageWithLeftCapWidth:size.width topCapHeight:size.height];
+			if(image != nil){
+				[self setObject:image forKey:key];
+			}
+			return image;
+		}
+	}
 	
 	NSAssert(object == nil || [object isKindOfClass:[UIImage class]],@"invalid class for image");
 	return (UIImage*)object;	
