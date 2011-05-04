@@ -15,6 +15,7 @@ extern NSString * const CKTableViewAttributeOrientation;
 extern NSString * const CKTableViewAttributeAnimationDuration;
 extern NSString * const CKTableViewAttributeEditable;
 extern NSString * const CKTableViewAttributeStyle;
+extern NSString * const CKTableViewAttributeParentController;
 
 typedef enum {
 	CKTableViewOrientationPortrait,
@@ -30,5 +31,6 @@ typedef enum {
 - (NSTimeInterval)animationDuration;
 - (BOOL)editable;
 - (id)style;
+- (UIViewController*)parentController;
 
 @end

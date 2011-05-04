@@ -15,6 +15,8 @@ NSString* const CKTableViewAttributeOrientation = @"CKTableViewAttributeOrientat
 NSString* const CKTableViewAttributeAnimationDuration = @"CKTableViewAttributeAnimationDuration";
 NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
 NSString* const CKTableViewAttributeStyle = @"CKTableViewAttributeStyle";
+NSString* const CKTableViewAttributeParentController = @"CKTableViewAttributeParentController";
+
 
 @implementation NSDictionary (CKTableViewAttributes)
 
@@ -50,6 +52,11 @@ NSString* const CKTableViewAttributeStyle = @"CKTableViewAttributeStyle";
 
 - (id)style{
 	return [self objectForKey:CKTableViewAttributeStyle];
+}
+
+- (UIViewController*)parentController{
+	NSValue* value = [self objectForKey:CKTableViewAttributeParentController];
+	return (UIViewController*)[value nonretainedObjectValue];
 }
 
 @end
