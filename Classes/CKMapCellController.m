@@ -45,12 +45,24 @@
 @synthesize annotationImage = _annotationImage;
 @synthesize annotationImageOffset = _annotationImageOffset;
 
+- (void)postInit {
+	self.selectable = NO;
+	self.annotationImageOffset = CGPointMake(0, 0);
+	self.rowHeight = 260.0f;
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate {
 	if (self = [super init]) {
 		self.annotation = [[[CKMapCellAnnotation alloc] initWithCoordinate:coordinate] autorelease];
-		self.selectable = NO;
-		self.annotationImageOffset = CGPointMake(0, 0);
-		self.rowHeight = 260.0f;
+		[self postInit];
 	}
 	return self;
 }
@@ -70,6 +82,7 @@
 }
 
 //
+
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	MKMapView *mapView = [[[MKMapView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	mapView.tag = 1000;
@@ -84,12 +97,21 @@
 	span.latitudeDelta = 0.0005;
 	span.longitudeDelta = 0.0005;
 	
-	MKCoordinateRegion region;
-	region.center = self.annotation.coordinate;
-	region.span = span;
+	CLLocationCoordinate2D centerCoordinate;
 	
+	if (self.annotation) {
+		[mapView addAnnotation:self.annotation];
+		centerCoordinate = self.annotation.coordinate;
+	}
+	else if ([self.value conformsToProtocol:@protocol(MKAnnotation)]) {
+		[mapView addAnnotation:self.value];
+		centerCoordinate = [self.value coordinate];
+	}
+	
+	MKCoordinateRegion region;
+	region.center = centerCoordinate;
+	region.span = span;
 	[mapView setRegion:region animated:NO];
-	[mapView addAnnotation:self.annotation];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
