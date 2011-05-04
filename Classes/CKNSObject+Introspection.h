@@ -49,6 +49,7 @@ typedef BOOL(^CKObjectPredicate)(id);
 + (SEL)typeCheckSelectorForProperty : (NSString*)propertyName;
 + (SEL)setSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName;
++ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName;
 
 +(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name;
 +(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath;

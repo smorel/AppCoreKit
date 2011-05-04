@@ -86,6 +86,10 @@
 	}
 }
 
+- (BOOL)containsObject:(id)object{
+	return [_objects containsObject:object];
+}
+
 - (void)addObserver:(id)object{
 	[self addObserver:object forKeyPath:@"objects" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 }

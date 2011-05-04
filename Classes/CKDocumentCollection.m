@@ -85,6 +85,11 @@
 	return nil;
 }
 
+- (BOOL)containsObject:(id)object{
+	NSAssert(NO,@"Abstract Implementation");
+	return NO;
+}
+
 - (void)fetchRange:(NSRange)range{
 	if(_feedSource == nil)
 		return;

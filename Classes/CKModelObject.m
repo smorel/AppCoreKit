@@ -18,6 +18,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize hashable;
 @synthesize copiable;
 @synthesize deepCopy;
+@synthesize editable;
 
 - (void)reset{
 	comparable = YES;
@@ -26,6 +27,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	hashable = YES;
 	copiable = YES;
 	deepCopy = NO;
+	editable = YES;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

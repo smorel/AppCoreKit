@@ -9,6 +9,7 @@
 #import "CKModelObject.h"
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
+#import "CKDocumentCollection.h"
 
 
 @interface CKObjectProperty : CKModelObject {
@@ -22,5 +23,8 @@
 - (CKClassPropertyDescriptor*)descriptor;
 - (id)value;
 - (void)setValue:(id)value;
+
+- (CKDocumentCollection*)editorCollection;
+- (CKModelObjectPropertyMetaData*)metaData;
 
 @end

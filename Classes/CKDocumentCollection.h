@@ -27,6 +27,7 @@
 
 - (NSInteger)count;
 - (NSArray*)allObjects;
+- (BOOL)containsObject:(id)object;
 - (id)objectAtIndex:(NSInteger)index;
 - (void)addObjectsFromArray:(NSArray *)otherArray;
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;

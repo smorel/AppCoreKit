@@ -67,6 +67,8 @@ static NSString* getPropertyType(objc_property_t property) {
 		objectProperty.type = returnType;
 		
 		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
+		objectProperty.editorCollectionSelector = [NSObject propertyeditorCollectionSelectorForProperty:objectProperty.name];
+		
 		return objectProperty;
 	}
 	return nil;
@@ -249,6 +251,11 @@ static NSString* getPropertyType(objc_property_t property) {
 
 + (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollection",propertyName];
 	return NSSelectorFromString(selectorName);
 }
 

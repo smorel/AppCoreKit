@@ -23,6 +23,7 @@
 	BOOL deepCopy;
 	BOOL hashable;
 	BOOL creatable;
+	BOOL editable;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -31,6 +32,7 @@
 @property (nonatomic, assign) BOOL deepCopy;
 @property (nonatomic, assign) BOOL hashable;
 @property (nonatomic, assign) BOOL creatable;
+@property (nonatomic, assign) BOOL editable;
 
 - (void)reset;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
