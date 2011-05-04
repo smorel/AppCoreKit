@@ -290,7 +290,9 @@
 // check if it will fail.
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification {
-	[self findCurrentAddress];
+	if ([self isActivated]) {
+		[self findCurrentAddress];
+	}
 }
 
 @end
