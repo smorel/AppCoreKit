@@ -31,6 +31,8 @@
 - (void)initializeController:(id)controller atIndex:(NSInteger)index;
 
 - (void)updateStyleForNonNewVisibleCells;
+- (void)start;
+- (void)stop;
 
 @end
 

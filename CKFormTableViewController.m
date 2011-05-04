@@ -117,6 +117,8 @@
 	NSAssert(NO,@"Base Implementation");
 }
 
+- (void)start{}
+- (void)stop{}
 
 @end
 
@@ -247,9 +249,6 @@
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
 	[super init];
 	self.objectController = [CKDocumentController controllerWithCollection:collection];
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
 
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
@@ -257,6 +256,19 @@
 	}
 	
 	return self;
+}
+
+
+- (void)start{
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:self];
+	}
+}
+
+- (void)stop{
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
+	}
 }
 
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
@@ -420,6 +432,20 @@
 	[super dealloc];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+	[super viewWillAppear:animated];
+	for(CKFormSectionBase* section in _sections){
+		[section start];
+	}
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+	[super viewWillDisappear:animated];
+	for(CKFormSectionBase* section in _sections){
+		[section stop];
+	}
+}
+
 - (id)initWithSections:(NSArray*)theSections{
 	[super init];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
@@ -434,6 +460,10 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
+	
+	if([self.view superview] != nil){
+		[section start];
+	}
 	[_sections addObject:section];
 }
 
@@ -443,6 +473,11 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
+	
+	if([self.view superview] != nil){
+		[section start];
+	}
+	
 	[_sections addObject:section];
 	return section;
 }
@@ -453,6 +488,11 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
+	
+	if([self.view superview] != nil){
+		[section start];
+	}
+	
 	[_sections addObject:section];
 	return section;
 }
@@ -463,6 +503,11 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
+	
+	if([self.view superview] != nil){
+		[section start];
+	}
+	
 	[_sections addObject:section];
 	return section;
 }
