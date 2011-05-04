@@ -14,6 +14,7 @@
 
 NSString *CKStyleDefaultBackgroundImage = @"defaultBackgroundImage";
 NSString *CKStyleDefaultImage = @"defaultImage";
+NSString *CKStyleDefaultTextColor = @"defaultTextColor";
 
 @implementation NSMutableDictionary (CKUIButtonStyle)
 
@@ -23,6 +24,10 @@ NSString *CKStyleDefaultImage = @"defaultImage";
 
 - (UIImage*)defaultImage {
 	return [self imageForKey:CKStyleDefaultImage];
+}
+
+- (UIColor *)defaultTextColor {
+	return [self colorForKey:CKStyleDefaultTextColor];
 }
 
 @end
@@ -36,10 +41,10 @@ NSString *CKStyleDefaultImage = @"defaultImage";
 		UIButton* button = (UIButton *)view;
 		NSMutableDictionary* myButtonStyle = [style styleForObject:button propertyName:propertyName];
 		if(myButtonStyle){
-			if([myButtonStyle containsObjectForKey:CKStyleDefaultBackgroundImage])
-				[button setBackgroundImage:[myButtonStyle defaultBackgroundImage] forState:UIControlStateNormal];
-			if([myButtonStyle containsObjectForKey:CKStyleDefaultImage])
-				[button setImage:[myButtonStyle defaultImage] forState:UIControlStateNormal];
+			if ([myButtonStyle containsObjectForKey:CKStyleDefaultBackgroundImage]) [button setBackgroundImage:[myButtonStyle defaultBackgroundImage] forState:UIControlStateNormal];
+			if ([myButtonStyle containsObjectForKey:CKStyleDefaultImage]) [button setImage:[myButtonStyle defaultImage] forState:UIControlStateNormal];
+			if ([myButtonStyle containsObjectForKey:CKStyleDefaultTextColor]) [button setTitleColor:[myButtonStyle defaultTextColor] forState:UIControlStateNormal];
+			if ([myButtonStyle containsObjectForKey:CKStyleFontSize]) [button.titleLabel setFont:[UIFont boldSystemFontOfSize:[myButtonStyle fontSize]]];
 			return YES;
 		}
 		return YES;

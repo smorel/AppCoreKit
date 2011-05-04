@@ -15,11 +15,13 @@
 
 extern NSString *CKStyleDefaultBackgroundImage;
 extern NSString *CKStyleDefaultImage;
+extern NSString *CKStyleDefaultTextColor;
 
 @interface NSMutableDictionary (CKUIButtonStyle)
 
-- (UIImage*)defaultBackgroundImage;
-- (UIImage*)defaultImage;
+- (UIImage *)defaultBackgroundImage;
+- (UIImage *)defaultImage;
+- (UIColor *)defaultTextColor;
 
 @end
 
