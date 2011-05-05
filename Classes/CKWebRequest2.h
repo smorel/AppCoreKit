@@ -17,6 +17,9 @@
 
 OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
+typedef id (^CKWebRequestTransformBlock)(id value);
+
+
 @protocol  CKWebRequestDelegate;
 
 @interface CKWebRequest2 : NSOperation {
@@ -35,12 +38,15 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 	BOOL executing;
 	BOOL finished;
 	BOOL cancelled;
+
+	CKWebRequestTransformBlock theTranformBlock;
 }
 
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, retain) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) NSObject<CKWebRequestDelegate> *delegate;
+@property (nonatomic, copy) CKWebRequestTransformBlock tranformBlock;
 
 + (NSString *)defaultUserAgentString;
 
