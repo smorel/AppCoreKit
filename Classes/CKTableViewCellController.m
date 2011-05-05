@@ -20,6 +20,7 @@
 @synthesize value = _value;
 @synthesize target = _target;
 @synthesize action = _action;
+@synthesize accessoryAction = _accessoryAction;
 @synthesize selectable = _selectable;
 @synthesize editable = _editable;
 @synthesize removable = _removable;
@@ -179,6 +180,13 @@
 		if (_target && [_target respondsToSelector:_action]) {
 			[_target performSelector:_action withObject:self];
 		}
+	}
+}
+
+
+- (void)didSelectAccessoryView{
+	if (_target && [_target respondsToSelector:_accessoryAction]) {
+		[_target performSelector:_accessoryAction withObject:self];
 	}
 }
 
