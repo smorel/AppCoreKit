@@ -29,6 +29,7 @@
 - (id)objectAtIndex:(NSInteger)index;
 - (Class)controllerClassForIndex:(NSInteger)index;
 - (void)initializeController:(id)controller atIndex:(NSInteger)index;
+- (void)removeObjectAtIndex:(NSInteger)index;
 
 - (void)updateStyleForNonNewVisibleCells;
 - (void)start;

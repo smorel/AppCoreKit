@@ -22,6 +22,16 @@
 
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
+	
+	cell.accessoryType = UITableViewCellAccessoryNone;
+	
+	UITextField * textField = [[[UITextField alloc]initWithFrame:CGRectMake(200,0,cell.bounds.size.width - 200,cell.bounds.size.height)]autorelease];
+	textField.delegate = self;
+	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	textField.textAlignment = UITextAlignmentRight;
+
+	cell.accessoryView = textField;
+	
 	return cell;
 }
 
@@ -31,11 +41,9 @@
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	cell.textLabel.text = _(descriptor.name);
 	
-	cell.accessoryView = nil;
-	cell.accessoryType = UITableViewCellAccessoryNone;
-	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
+	[cell.accessoryView bind:@"text" toObject:model.object withKeyPath:model.keyPath];
 	[NSObject endBindingsContext];
 }
 

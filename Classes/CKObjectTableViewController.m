@@ -719,6 +719,16 @@
 	return bo ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+	if(controller != nil){
+		[controller didSelectAccessoryView];
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectAccessoryViewRowAtIndexPath:withObject:)]){
+			[_delegate objectTableViewController:self didSelectAccessoryViewRowAtIndexPath:indexPath withObject:controller.value];
+		}
+	}
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete){
 		//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
@@ -732,7 +742,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKTableViewCellFlagEditable;
+	BOOL bo = flags & (CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable);
 	return bo;
 }
 

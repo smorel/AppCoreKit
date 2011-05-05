@@ -79,6 +79,8 @@
 
 
 @protocol CKObjectTableViewControllerDelegate
+@optional
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectAccessoryViewRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSearch:(NSString*)filter;
 @end

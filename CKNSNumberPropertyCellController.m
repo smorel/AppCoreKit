@@ -59,8 +59,30 @@
 		case CKClassPropertyDescriptorTypeUnsignedLongLong:
 		case CKClassPropertyDescriptorTypeFloat:
 		case CKClassPropertyDescriptorTypeDouble:{
-			cell.accessoryView = nil;
 			cell.accessoryType = UITableViewCellAccessoryNone;
+			
+			UITextField * textField = [[[UITextField alloc]initWithFrame:CGRectMake(200,0,cell.bounds.size.width - 200,cell.bounds.size.height)]autorelease];
+			textField.delegate = self;
+			textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			textField.textAlignment = UITextAlignmentRight;
+			textField.keyboardType = UIKeyboardTypeDecimalPad;
+			
+			/*
+			 typedef enum {
+			 UIKeyboardTypeDefault,
+			 UIKeyboardTypeASCIICapable,
+			 UIKeyboardTypeNumbersAndPunctuation,
+			 UIKeyboardTypeURL,
+			 UIKeyboardTypeNumberPad,
+			 UIKeyboardTypePhonePad,
+			 UIKeyboardTypeNamePhonePad,
+			 UIKeyboardTypeEmailAddress,
+			 UIKeyboardTypeDecimalPad,
+			 UIKeyboardTypeAlphabet = UIKeyboardTypeASCIICapable
+			 } UIKeyboardType;
+			 */
+			
+			cell.accessoryView = textField;
 			break;
 		}
 		case CKClassPropertyDescriptorTypeChar:
@@ -79,7 +101,8 @@
 		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 	}
 	else{
-		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
+		[cell.accessoryView bind:@"text" toObject:model.object withKeyPath:model.keyPath];
 	}
 	[NSObject endBindingsContext];
 }
@@ -96,5 +119,35 @@
 	return CKTableViewCellFlagNone;
 }
 
+#pragma mark UITextField Delegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+	return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	[textField resignFirstResponder];
+	return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+	return YES;
+}
+
+#pragma mark Keyboard
+
+- (void)keyboardDidShow:(NSNotification *)notification {
+	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+										   atScrollPosition:UITableViewScrollPositionNone 
+												   animated:YES];
+}
 
 @end

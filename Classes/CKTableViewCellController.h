@@ -27,6 +27,7 @@ typedef NSUInteger CKTableViewCellFlags;
 	id _value;
 	id _target;
 	SEL _action;
+	SEL _accessoryAction;
 	BOOL _selectable;
 	BOOL _editable;
 	BOOL _removable;
@@ -50,6 +51,7 @@ typedef NSUInteger CKTableViewCellFlags;
 
 @property (nonatomic, retain) id target;
 @property (nonatomic, assign) SEL action;
+@property (nonatomic, assign) SEL accessoryAction;
 @property (nonatomic, getter=isSelectable) BOOL selectable;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, getter=isRemovable) BOOL removable;
@@ -76,6 +78,7 @@ typedef NSUInteger CKTableViewCellFlags;
 - (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;
 - (void)didSelectRow;
+- (void)didSelectAccessoryView;
 
 // Calls -setupCell with the cell associated with this controller.
 // Does not call -setupCell if the cell is not visible.

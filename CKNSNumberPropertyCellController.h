@@ -9,7 +9,7 @@
 #import "CKStandardCellController.h"
 
 
-@interface CKNSNumberPropertyCellController : CKStandardCellController{
+@interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{
 }
 
 @end
