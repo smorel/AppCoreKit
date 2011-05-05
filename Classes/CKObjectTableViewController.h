@@ -13,7 +13,7 @@
 #import "CKDocumentCollection.h"
 #import <CloudKit/CKTableViewCellController.h>
 
-@interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate> {
+@interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate,UISearchBarDelegate> {
 	id _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
 	
@@ -26,6 +26,7 @@
 	
 	BOOL _scrolling;
 	BOOL _editable;
+	BOOL _searchEnabled;
 	
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -43,9 +44,12 @@
 	NSMutableArray* _weakCells;
 	NSIndexPath* _indexPathToReachAfterRotation;
 	NSMutableDictionary* _headerViewsForSections;
+	
+	id _delegate;
 }
 
 @property (nonatomic, retain) id objectController;
+@property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
 
 @property (nonatomic, assign) CKTableViewOrientation orientation;
@@ -57,6 +61,7 @@
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
+@property (nonatomic, assign) BOOL searchEnabled;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
@@ -70,4 +75,10 @@
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath;
 
+@end
+
+
+@protocol CKObjectTableViewControllerDelegate
+- (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)objectTableViewController:(CKObjectTableViewController*)controller didSearch:(NSString*)filter;
 @end

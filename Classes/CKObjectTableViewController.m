@@ -60,9 +60,28 @@
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
 @synthesize controllersForIdentifier = _controllersForIdentifier;
 @synthesize params = _params;
+@synthesize delegate = _delegate;
+@synthesize searchEnabled = _searchEnabled;
 
 @synthesize editButton;
 @synthesize doneButton;
+
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+	[searchBar resignFirstResponder];
+	
+	if ([searchBar.text isEqualToString:@""] == NO
+		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+		[_delegate objectTableViewController:self didSearch:searchBar.text];
+	}
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+	if ([searchBar.text isEqualToString:@""] == YES
+		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+		[_delegate objectTableViewController:self didSearch:@""];
+	}
+}
 
 - (void)printDebug:(NSString*)txt{
 	/*NSLog(@"%@",txt);
@@ -101,6 +120,7 @@
 	_numberOfPages = 0;
 	_scrolling = NO;
 	_editable = NO;
+	_searchEnabled = NO;
 }
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings withNibName:(NSString*)nib{
@@ -174,6 +194,7 @@
 	
 	if([self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
+		[self reload];
 	}
 	
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
@@ -219,6 +240,16 @@
 	}
 	
     [super viewWillAppear:animated];
+	
+	if(self.searchEnabled && self.searchDisplayController == nil){
+		
+		UISearchBar* bar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,44)]autorelease];
+		bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		bar.delegate = self;
+		[self.tableView addSubview:bar];
+		
+		[[[UISearchDisplayController alloc]initWithSearchBar:bar contentsController:self]autorelease];
+	}		
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -318,7 +349,7 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    [super viewDidLoad];	
 }
 
 - (void)viewDidUnload {
@@ -676,6 +707,9 @@
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelectRow];
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectRowAtIndexPath:withObject:)]){
+			[_delegate objectTableViewController:self didSelectRowAtIndexPath:indexPath withObject:controller.value];
+		}
 	}
 }
 
