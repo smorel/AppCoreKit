@@ -59,6 +59,12 @@
 	_delegate = theDelegate;
 }
 
+- (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath{
+	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	return [formSection removeObjectAtIndex:indexPath.row];
+}
+
 @end
 
 
@@ -114,6 +120,10 @@
 }
 
 - (void)updateStyleForNonNewVisibleCells{
+	NSAssert(NO,@"Base Implementation");
+}
+
+- (void)removeObjectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 }
 
@@ -231,6 +241,10 @@
 	}
 }
 
+- (void)removeObjectAtIndex:(NSInteger)index{
+	NSAssert(NO,@"NOT IMPLEMENTED");
+}
+
 @end
 
 @interface CKFormDocumentCollectionSection()
@@ -304,6 +318,17 @@
 	}
 	
 	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+}
+
+
+- (void)removeObjectAtIndex:(NSInteger)index{
+	if(index < [_headerCellDescriptors count]){
+		NSAssert(NO,@"NOT IMPLEMENTED");
+	}
+	
+	if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
+		return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+	}
 }
 
 - (void)initializeController:(id)controller atIndex:(NSInteger)index{
