@@ -17,6 +17,8 @@ NSString* CKStyleFontSize = @"fontSize";
 NSString* CKStyleFontName = @"fontName";
 NSString* CKStyleText = @"text";
 NSString* CKStyleNumberOfLines = @"numberOfLines";
+NSString* CKStyleShadowColor = @"shadowColor";
+NSString* CKStyleShadowOffset = @"shadowOffset";
 
 @implementation NSMutableDictionary (CKUILabelStyle)
 
@@ -39,6 +41,14 @@ NSString* CKStyleNumberOfLines = @"numberOfLines";
 
 - (NSInteger)numberOfLines{
 	return [self integerForKey:CKStyleNumberOfLines];
+}
+
+- (UIColor *)shadowColor {
+	return [self colorForKey:CKStyleShadowColor];
+}
+
+- (CGSize)shadowOffset {
+	return [self cgSizeForKey:CKStyleShadowOffset];
 }
 
 @end
@@ -67,6 +77,11 @@ NSString* CKStyleNumberOfLines = @"numberOfLines";
 			if([myLabelStyle containsObjectForKey:CKStyleFontSize])
 				fontSize= [myLabelStyle fontSize];
 			label.font = [UIFont fontWithName:fontName size:fontSize];
+
+			// Shadow
+			if ([myLabelStyle containsObjectForKey:CKStyleShadowColor]) label.shadowColor = [myLabelStyle shadowColor];
+			if ([myLabelStyle containsObjectForKey:CKStyleShadowOffset]) label.shadowOffset = [myLabelStyle shadowOffset];
+
 			return YES;
 		}
 	}
