@@ -52,6 +52,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize destinationPath;
 @synthesize allowDestinationOverwrite;
 @synthesize destinationStream;
+@synthesize tranformBlock = theTranformBlock;
 
 #pragma mark Initialization
 
@@ -85,6 +86,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theResponse release];
 	[theUserInfo release];
 	[theConnection release];
+	[theTranformBlock release];
 	self.destinationPath = nil;
 	self.destinationStream = nil;
 	[super dealloc];
@@ -367,7 +369,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	
 	// Process the content wih the user specified CKWebResponseTransformer
 	
-//	id value = responseValue;
+	id value = responseValue;
+	if (theTranformBlock) {
+		value = theTranformBlock(responseValue);
+	}
 //	if (_transformer) {
 //		value = [_transformer request:self transformContent:responseValue];
 //	}
@@ -376,7 +381,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveValue:) 
 								  withObject:self 
-								  withObject:responseValue 
+								  withObject:value 
 							   waitUntilDone:NO];	
 	
 	[self markAsFinished];
