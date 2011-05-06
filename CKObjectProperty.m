@@ -96,7 +96,7 @@
 	}
 	else{
 		Class type = descriptor.type;
-		if([type respondsToSelector:@selector(tableViewCellControllerClass:)]){
+		if([type respondsToSelector:@selector(tableViewCellControllerClass)]){
 			Class controllerClass = [type performSelector:@selector(tableViewCellControllerClass)];
 			return controllerClass;
 		}

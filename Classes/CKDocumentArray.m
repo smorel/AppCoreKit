@@ -16,6 +16,13 @@
 @implementation CKDocumentArray
 @synthesize objects = _objects;
 
+- (void)setObjects:(NSMutableArray*)array{
+	//explicitely Make a clone
+	[_objects release];
+	_objects = [[NSMutableArray arrayWithArray:array]retain];
+}
+
+
 - (void)objectsMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.creatable = YES;
 }
