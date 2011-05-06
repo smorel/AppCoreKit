@@ -60,13 +60,13 @@
 	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 	SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:descriptor.name];
 	if([subObject respondsToSelector:selector]){
-		CKDocumentCollection* collection = [subObject performSelector:selector];
+		CKDocumentCollection* collection = [subObject performSelector:selector withObject:filter];
 		return collection;
 	}
 	else{
 		Class type = descriptor.type;
 		if([type respondsToSelector:@selector(editorCollectionWithFilter:)]){
-			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionWithFilter:) withObject:@""];
+			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionWithFilter:) withObject:filter];
 			return collection;
 		}
 	}
