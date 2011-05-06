@@ -10,6 +10,7 @@
 #import "CKObjectController.h"
 #import "CKDocumentCollectionCellController.h"
 #import "CKDocumentCollection.h"
+#import <objc/runtime.h>
 
 
 @implementation CKObjectViewControllerFactory
@@ -49,13 +50,16 @@
 	id object = [_objectController objectAtIndexPath:indexPath];
 	Class returnClass = [_mappings objectForKey:[object class]];
 	if(returnClass == nil){
-	   for(Class c in [_mappings allKeys]){
-		   if([object isKindOfClass:c]){
-			   returnClass = [_mappings objectForKey:c];
-			   [_mappings setObject:returnClass forKey:[object class]];
-			   break;
-		   }
-	   }
+		Class objectClass = [object class];
+		objectClass = class_getSuperclass(objectClass);
+		while(objectClass != nil){
+			returnClass = [_mappings objectForKey:objectClass];
+			if(returnClass != nil){
+				[_mappings setObject:returnClass forKey:objectClass];
+				return returnClass;
+			}
+			objectClass = class_getSuperclass(objectClass);
+		}
 	}
 	return returnClass;
 }
