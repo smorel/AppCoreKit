@@ -257,6 +257,7 @@
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
 @synthesize headerCellDescriptors = _headerCellDescriptors;
+@synthesize footerCellDescriptors = _footerCellDescriptors;
 @synthesize changeSet = _changeSet;
 
 
@@ -296,43 +297,78 @@
 	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
 		count += [_objectController numberOfObjectsForSection:0];
 	}
+	count += [_footerCellDescriptors count];
 	return count;
 }
 
 - (id)objectAtIndex:(NSInteger)index{
-	if(index < [_headerCellDescriptors count]){
+	int headerCount = [_headerCellDescriptors count];
+	if(index < headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		return cellDescriptor.value;
 	}
 	
-	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+	int count = [_objectController numberOfObjectsForSection:0];
+	if(index < count + headerCount){
+		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
+			return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+		}
 	}
+	
+	
+	int footerCount = [_footerCellDescriptors count];
+	if(index < count + headerCount +footerCount){
+		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
+		return cellDescriptor.value;
+	}
+	
 	return nil;
 }
 
 - (Class)controllerClassForIndex:(NSInteger)index{
-	if(index < [_headerCellDescriptors count]){
+	int headerCount = [_headerCellDescriptors count];
+	if(index < headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		return cellDescriptor.controllerClass;
 	}
 	
-	return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+	int count = [_objectController numberOfObjectsForSection:0];
+	if(index < count + headerCount){
+		return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+	}
+	
+	int footerCount = [_footerCellDescriptors count];
+	if(index < count + headerCount +footerCount){
+		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
+		return cellDescriptor.controllerClass;
+	}
+	
+	return nil;
 }
 
 
 - (void)removeObjectAtIndex:(NSInteger)index{
-	if(index < [_headerCellDescriptors count]){
+	int headerCount = [_headerCellDescriptors count];
+	if(index < headerCount){
 		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 	
-	if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
-		return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+	int count = [_objectController numberOfObjectsForSection:0];
+	if(index < count + headerCount){
+		if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
+			return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+		}
+	}
+	
+	int footerCount = [_footerCellDescriptors count];
+	if(index < count + headerCount + footerCount){
+		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 }
 
 - (void)initializeController:(id)controller atIndex:(NSInteger)index{
-	if(index < [_headerCellDescriptors count]){
+	int headerCount = [_headerCellDescriptors count];
+	if(index < headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		if(cellDescriptor.block){
 			cellDescriptor.block(controller);
@@ -340,9 +376,26 @@
 		else if(cellDescriptor.target){
 			[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
 		}
+		return;
 	}
 	
-	[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:(index - [_headerCellDescriptors count]) inSection:0]];
+	int count = [_objectController numberOfObjectsForSection:0];
+	if(index < count + headerCount){
+		[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+		return;
+	}
+	
+	int footerCount = [_footerCellDescriptors count];
+	if(index < count + headerCount + footerCount){
+		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
+		if(cellDescriptor.block){
+			cellDescriptor.block(controller);
+		}
+		else if(cellDescriptor.target){
+			[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
+		}
+		return;
+	}
 }
 
 - (void)updateStyleForNonNewVisibleCells{
@@ -383,14 +436,16 @@
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex];
+	int headerCount = [_headerCellDescriptors count];
+	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionIndex];
 	[self.changeSet addObject:theIndexPath];
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + [_headerCellDescriptors count]) inSection:self.sectionIndex];
+	int headerCount = [_headerCellDescriptors count];
+	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionIndex];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
 								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }

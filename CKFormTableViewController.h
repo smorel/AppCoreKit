@@ -68,11 +68,13 @@
 	CKObjectViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
+	NSMutableArray* _footerCellDescriptors;
 	NSMutableArray* _changeSet;
 }
 
 @property (nonatomic,retain,readonly) CKDocumentController* objectController;
 @property (nonatomic,retain) NSArray* headerCellDescriptors;
+@property (nonatomic,retain) NSArray* footerCellDescriptors;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
