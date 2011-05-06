@@ -246,7 +246,7 @@
 		UISearchBar* bar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,44)]autorelease];
 		bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		bar.delegate = self;
-		[self.tableView addSubview:bar];
+		self.tableView.tableHeaderView = bar;
 		
 		[[[UISearchDisplayController alloc]initWithSearchBar:bar contentsController:self]autorelease];
 	}		
