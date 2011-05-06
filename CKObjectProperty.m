@@ -43,7 +43,7 @@
 	[object setValue:value forKeyPath:keyPath];
 }
 
-- (CKDocumentCollection*)editorCollection{
+- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
 	id subObject = object;
 	
 	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
@@ -58,9 +58,50 @@
 	}
 	
 	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
-	CKDocumentCollection* collection = [subObject performSelector:descriptor.editorCollectionSelector];
+	SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:descriptor.name];
+	if([subObject respondsToSelector:selector]){
+		CKDocumentCollection* collection = [subObject performSelector:selector];
+		return collection;
+	}
+	else{
+		Class type = descriptor.type;
+		if([type respondsToSelector:@selector(editorCollectionWithFilter:)]){
+			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionWithFilter:) withObject:@""];
+			return collection;
+		}
+	}
+	return nil;
+}
+
+
+- (Class)tableViewCellControllerType{
+	id subObject = object;
 	
-	return collection;
+	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+	for(int i=0;i<[ar count]-1;++i){
+		NSString* path = [ar objectAtIndex:i];
+		subObject = [subObject valueForKey:path];
+	}
+	
+	if(subObject == nil){
+		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		return nil;
+	}
+	
+	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	SEL selector = [NSObject propertyTableViewCellControllerClassSelectorForProperty:descriptor.name];
+	if([subObject respondsToSelector:selector]){
+		Class controllerClass = [subObject performSelector:selector];
+		return controllerClass;
+	}
+	else{
+		Class type = descriptor.type;
+		if([type respondsToSelector:@selector(tableViewCellControllerClass:)]){
+			Class controllerClass = [type performSelector:@selector(tableViewCellControllerClass)];
+			return controllerClass;
+		}
+	}
+	return nil;
 }
 
 

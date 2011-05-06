@@ -43,7 +43,6 @@ typedef enum{
 	Class type;
 	NSString* attributes;
 	SEL metaDataSelector;
-	SEL editorCollectionSelector;
 	CKClassPropertyDescriptorType propertyType;
 	CKClassPropertyDescriptorAssignementType assignementType;
 	BOOL isReadOnly;
@@ -53,7 +52,6 @@ typedef enum{
 @property (nonatomic, assign, readwrite) Class type;
 @property (nonatomic, retain, readwrite) NSString *attributes;
 @property (nonatomic, assign, readwrite) SEL metaDataSelector;
-@property (nonatomic, assign, readwrite) SEL editorCollectionSelector;
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorType propertyType;
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorAssignementType assignementType;
 @property (nonatomic, assign, readwrite) BOOL isReadOnly;

@@ -67,7 +67,6 @@ static NSString* getPropertyType(objc_property_t property) {
 		objectProperty.type = returnType;
 		
 		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
-		objectProperty.editorCollectionSelector = [NSObject propertyeditorCollectionSelectorForProperty:objectProperty.name];
 		
 		return objectProperty;
 	}
@@ -255,7 +254,12 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 + (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollection",propertyName];
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionWithFilter:",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
 	return NSSelectorFromString(selectorName);
 }
 

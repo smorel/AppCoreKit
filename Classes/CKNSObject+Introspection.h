@@ -50,6 +50,7 @@ typedef BOOL(^CKObjectPredicate)(id);
 + (SEL)setSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName;
++ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName;
 
 +(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name;
 +(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath;

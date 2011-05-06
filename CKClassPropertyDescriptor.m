@@ -15,7 +15,6 @@
 @synthesize type;
 @synthesize attributes;
 @synthesize metaDataSelector;
-@synthesize editorCollectionSelector;
 @synthesize propertyType;
 @synthesize assignementType;
 @synthesize isReadOnly;
