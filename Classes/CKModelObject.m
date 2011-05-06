@@ -114,7 +114,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			if(metaData.copiable){
 				id value = [other valueForKey:property.name];
 				if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
-					value = [value copy];
+					value = [value copyWithZone:nil];
 					if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
 					   || property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain){
 						[value autorelease];

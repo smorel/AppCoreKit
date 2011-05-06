@@ -10,6 +10,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 #define TextEditTag 1
 #define SwitchTag 2
@@ -26,6 +27,7 @@
 	CKObjectProperty* model = self.value;
 	UISwitch* s = (UISwitch*)[self.tableViewCell.accessoryView viewWithTag:SwitchTag];
 	[model setValue:[NSNumber numberWithBool:s.on]];
+	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 }
 
 - (void)onvalue{
@@ -34,6 +36,12 @@
 	
 	UISwitch* s = (UISwitch*)[self.tableViewCell.accessoryView viewWithTag:SwitchTag];
 	[s setOn:bo animated:YES];
+}
+
+- (void)textFieldChanged:(id)value{
+	CKObjectProperty* model = self.value;
+	[model setValue:value];
+	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 }
 
 - (UITableViewCell*)loadCell{
@@ -102,7 +110,7 @@
 	}
 	else{
 		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
-		[cell.accessoryView bind:@"text" toObject:model.object withKeyPath:model.keyPath];
+		[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
 	}
 	[NSObject endBindingsContext];
 }

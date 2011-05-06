@@ -57,12 +57,13 @@
 }
 
 - (void)addObjectsFromArray:(NSArray *)otherArray{
-	NSAssert(NO,@"Abstract Implementation");
+	[self insertObjects:otherArray atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [otherArray count])]];
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
 	NSAssert(NO,@"Abstract Implementation");
 }
+
 			 
 - (void)removeObjectsInArray:(NSArray *)otherArray{
 	NSAssert(NO,@"Abstract Implementation");
@@ -71,6 +72,7 @@
 - (void)removeAllObjects{
 	NSAssert(NO,@"Abstract Implementation");
 }
+
 
 - (void)addObserver:(id)object{
 	NSAssert(NO,@"Abstract Implementation");
@@ -88,6 +90,10 @@
 - (BOOL)containsObject:(id)object{
 	NSAssert(NO,@"Abstract Implementation");
 	return NO;
+}
+
+- (void)replaceObject:(id)object byObject:(id)other{
+	NSAssert(NO,@"Abstract Implementation");
 }
 
 - (void)fetchRange:(NSRange)range{

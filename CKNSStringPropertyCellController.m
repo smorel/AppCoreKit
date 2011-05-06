@@ -11,6 +11,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 
 @implementation CKNSStringPropertyCellController
@@ -35,6 +36,12 @@
 	return cell;
 }
 
+- (void)textFieldChanged:(id)value{
+	CKObjectProperty* model = self.value;
+	[model setValue:value];
+	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+}
+
 - (void)setupCell:(UITableViewCell *)cell {
 	CKObjectProperty* model = self.value;
 	
@@ -43,7 +50,7 @@
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
-	[cell.accessoryView bind:@"text" toObject:model.object withKeyPath:model.keyPath];
+	[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
 	[NSObject endBindingsContext];
 }
 

@@ -327,6 +327,8 @@
 		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
 		75A4B5E4130D71CC0099256C /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4B5E2130D71CC0099256C /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75A4B5E5130D71CC0099256C /* CKDataBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4B5E3130D71CC0099256C /* CKDataBlockBinder.m */; };
+		75A8762713733E3C00565B6A /* CKNSNotificationCenter+Edition.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A8762513733E3C00565B6A /* CKNSNotificationCenter+Edition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A8762813733E3C00565B6A /* CKNSNotificationCenter+Edition.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A8762613733E3C00565B6A /* CKNSNotificationCenter+Edition.m */; };
 		75AF567212F9DC890013B9EF /* CKViewTemplateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75AF567312F9DC890013B9EF /* CKViewTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */; };
 		75B01F521301A923005A22F7 /* CKImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B01F501301A923005A22F7 /* CKImageTransformer.h */; };
@@ -694,6 +696,8 @@
 		75A2A30E12F7F31000E71451 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKView.m; sourceTree = "<group>"; };
 		75A4B5E2130D71CC0099256C /* CKDataBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDataBlockBinder.h; sourceTree = "<group>"; };
 		75A4B5E3130D71CC0099256C /* CKDataBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBlockBinder.m; sourceTree = "<group>"; };
+		75A8762513733E3C00565B6A /* CKNSNotificationCenter+Edition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSNotificationCenter+Edition.h"; sourceTree = "<group>"; };
+		75A8762613733E3C00565B6A /* CKNSNotificationCenter+Edition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSNotificationCenter+Edition.m"; sourceTree = "<group>"; };
 		75AF567012F9DC890013B9EF /* CKViewTemplateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKViewTemplateManager.h; sourceTree = "<group>"; };
 		75AF567112F9DC890013B9EF /* CKViewTemplateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKViewTemplateManager.m; sourceTree = "<group>"; };
 		75B01F501301A923005A22F7 /* CKImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKImageTransformer.h; sourceTree = "<group>"; };
@@ -794,6 +798,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				75A8762413733E2F00565B6A /* EditingManager */,
 				753CBBA1135DE426000ADDEE /* Style */,
 				75ECE1A7135CDFD60087A696 /* Document */,
 				751004C31337BB28008B0E7B /* Object Controllers */,
@@ -1416,6 +1421,15 @@
 			name = Mappings;
 			sourceTree = "<group>";
 		};
+		75A8762413733E2F00565B6A /* EditingManager */ = {
+			isa = PBXGroup;
+			children = (
+				75A8762513733E3C00565B6A /* CKNSNotificationCenter+Edition.h */,
+				75A8762613733E3C00565B6A /* CKNSNotificationCenter+Edition.m */,
+			);
+			name = EditingManager;
+			sourceTree = "<group>";
+		};
 		75BC615713607FC500E029EA /* View style categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1634,6 +1648,7 @@
 				75BC66621360D69D00E029EA /* CKUIViewController+Style.h in Headers */,
 				7542533C136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h in Headers */,
 				4FF2A10C136B4CB8008FC8DF /* CKUIButton+Style.h in Headers */,
+				75A8762713733E3C00565B6A /* CKNSNotificationCenter+Edition.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1919,6 +1934,7 @@
 				75BC66631360D69D00E029EA /* CKUIViewController+Style.m in Sources */,
 				7542533D136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m in Sources */,
 				4FF2A10D136B4CB8008FC8DF /* CKUIButton+Style.m in Sources */,
+				75A8762813733E3C00565B6A /* CKNSNotificationCenter+Edition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

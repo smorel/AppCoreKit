@@ -7,6 +7,7 @@
 //
 
 #import "CKDocumentArray.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 @interface CKDocumentArray()
 @property (nonatomic,retain) NSMutableArray* objects;
@@ -31,10 +32,6 @@
 	return [_objects objectAtIndex:index];
 }
 
-- (void)addObjectsFromArray:(NSArray *)otherArray{
-	[self insertObjects:otherArray atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([_objects count], [otherArray count])]];
-}
-
 - (void)insertObjects:(NSArray *)theObjects atIndexes:(NSIndexSet *)indexes{
 	if([theObjects count] <= 0)
 		return;
@@ -44,6 +41,7 @@
     [_objects insertObjects:theObjects atIndexes:indexes];
     [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"objects"];	
 	
+	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
 	if(self.autosave){
 		[self save];
 	}
@@ -70,16 +68,22 @@
 	[_objects removeObjectsInArray:toRemove];
 	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	
+	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
+	
 	if(self.autosave){
 		[self save];
 	}	
 }
 
 - (void)removeAllObjects{
+	NSArray* theObjects = _objects;
+	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[_objects count])];
 	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	[_objects removeAllObjects];
 	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
 	if(self.autosave){
 		[self save];
@@ -100,6 +104,16 @@
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
 	return [_objects filteredArrayUsingPredicate:predicate];
+}
+
+- (void)replaceObject:(id)object byObject:(id)other{
+	NSUInteger index = [_objects indexOfObject:object];
+	if(index != NSNotFound){
+		[self removeObjectsInArray:[NSArray arrayWithObject:object]];
+		[self insertObjects:[NSArray arrayWithObject:other] atIndexes:[NSIndexSet indexSetWithIndex:index]];
+		
+		[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
+	}
 }
 
 @end
