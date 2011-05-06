@@ -119,8 +119,16 @@
 - (void)replaceObject:(id)object byObject:(id)other{
 	NSUInteger index = [_objects indexOfObject:object];
 	if(index != NSNotFound){
-		[self removeObjectsInArray:[NSArray arrayWithObject:object]];
-		[self insertObjects:[NSArray arrayWithObject:other] atIndexes:[NSIndexSet indexSetWithIndex:index]];
+		
+		NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
+		
+		[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
+		[_objects removeObjectAtIndex:index];
+		[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
+		
+		[self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"objects"];
+		[_objects insertObject:other atIndex:index];
+		[self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"objects"];	
 		
 		[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
 	}
