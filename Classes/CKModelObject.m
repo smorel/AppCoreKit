@@ -114,7 +114,31 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			if(metaData.copiable){
 				id value = [other valueForKey:property.name];
 				if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
-					value = [value copyWithZone:nil];
+					if([value isKindOfClass:[NSArray class]]){
+						NSArray* array = value;
+						value = [[property.type alloc]init];
+						for(id object in array){
+							[value addObject:[object copy]];
+						}
+					}
+					else if([value isKindOfClass:[NSDictionary class]]){
+						NSDictionary* dico = value;
+						value = [[property.type alloc]init];
+						for(id key in [dico allKeys]){
+							id object = [dico objectForKey:key];
+							[value setObject:[object copy] forKey:key];
+						}
+					}
+					else if([value isKindOfClass:[NSSet class]]){
+						NSMutableSet* set = value;
+						value = [[property.type alloc]init];
+						for(id object in set){
+							[value addObject:[object copy]];
+						}
+					}
+					else{
+						value = [value copyWithZone:nil];
+					}
 					if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
 					   || property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain){
 						[value autorelease];

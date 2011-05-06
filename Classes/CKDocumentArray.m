@@ -25,6 +25,9 @@
 
 - (void)objectsMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.creatable = YES;
+	
+	//deepCopy + retain will make the array to duplicate all the objects from the source
+	metaData.deepCopy = YES;
 }
 
 - (NSInteger)count{
