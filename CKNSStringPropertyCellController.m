@@ -24,14 +24,17 @@
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
 	
-	cell.accessoryType = UITableViewCellAccessoryNone;
-	
-	UITextField * textField = [[[UITextField alloc]initWithFrame:CGRectMake(200,0,cell.bounds.size.width - 200,cell.bounds.size.height)]autorelease];
-	textField.delegate = self;
+	UITableView *tableView = self.parentController.tableView;
+	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+	CGFloat offset = (width/2.55);
+	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
+	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
+	textField.borderStyle = UITextBorderStyleNone;
+	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	textField.textAlignment = UITextAlignmentRight;
-
-	cell.accessoryView = textField;
+	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	textField.delegate = self;
+	cell.accessoryView = textField;	
 	
 	return cell;
 }
