@@ -46,6 +46,7 @@
 
 - (UITableViewCell*)loadCell{
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
+	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }
 
@@ -143,7 +144,7 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
 	//TODO : filter numbers
-	return NO;
+	return YES;
 }
 
 #pragma mark Keyboard

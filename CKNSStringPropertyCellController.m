@@ -23,6 +23,7 @@
 
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
+	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITableView *tableView = self.parentController.tableView;
 	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
