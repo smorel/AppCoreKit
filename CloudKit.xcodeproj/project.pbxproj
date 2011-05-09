@@ -232,6 +232,8 @@
 		71B1BF6D123A9F6B002D7A9A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71B1BF6C123A9F6B002D7A9A /* MobileCoreServices.framework */; };
 		71BC06981222C3B600C50BF6 /* CKSlideshowViewControllerDep.h in Headers */ = {isa = PBXBuildFile; fileRef = 71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71BC06991222C3B600C50BF6 /* CKSlideshowViewControllerDep.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */; };
+		71CCCC3E137877A900BA9A81 /* CKWebService2.h in Headers */ = {isa = PBXBuildFile; fileRef = 71CCCC3C137877A900BA9A81 /* CKWebService2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71CCCC3F137877A900BA9A81 /* CKWebService2.m in Sources */ = {isa = PBXBuildFile; fileRef = 71CCCC3D137877A900BA9A81 /* CKWebService2.m */; };
 		71D1854A1301EAEE000AD883 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D185341301EAEE000AD883 /* CDataScanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71D1854B1301EAEE000AD883 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D185351301EAEE000AD883 /* CDataScanner.m */; };
 		71D1854C1301EAEE000AD883 /* CFilteringJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D185371301EAEE000AD883 /* CFilteringJSONSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -600,6 +602,8 @@
 		71B1BF6C123A9F6B002D7A9A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		71BC06961222C3B600C50BF6 /* CKSlideshowViewControllerDep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewControllerDep.h; path = Classes/CKSlideshowViewControllerDep.h; sourceTree = "<group>"; };
 		71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewControllerDep.m; path = Classes/CKSlideshowViewControllerDep.m; sourceTree = "<group>"; };
+		71CCCC3C137877A900BA9A81 /* CKWebService2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebService2.h; sourceTree = "<group>"; };
+		71CCCC3D137877A900BA9A81 /* CKWebService2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebService2.m; sourceTree = "<group>"; };
 		71D185341301EAEE000AD883 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		71D185351301EAEE000AD883 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
 		71D185371301EAEE000AD883 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
@@ -911,6 +915,8 @@
 				710DF10F10FFBC030063FB2C /* CKWebRequest.m */,
 				71E49B6E12D784960034594E /* CKWebRequest2.h */,
 				71E49B6D12D784960034594E /* CKWebRequest2.m */,
+				71CCCC3C137877A900BA9A81 /* CKWebService2.h */,
+				71CCCC3D137877A900BA9A81 /* CKWebService2.m */,
 				710DF11010FFBC030063FB2C /* CKWebService.h */,
 				710DF11110FFBC030063FB2C /* CKWebService.m */,
 			);
@@ -1649,6 +1655,7 @@
 				7542533C136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h in Headers */,
 				4FF2A10C136B4CB8008FC8DF /* CKUIButton+Style.h in Headers */,
 				75A8762713733E3C00565B6A /* CKNSNotificationCenter+Edition.h in Headers */,
+				71CCCC3E137877A900BA9A81 /* CKWebService2.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1935,6 +1942,7 @@
 				7542533D136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.m in Sources */,
 				4FF2A10D136B4CB8008FC8DF /* CKUIButton+Style.m in Sources */,
 				75A8762813733E3C00565B6A /* CKNSNotificationCenter+Edition.m in Sources */,
+				71CCCC3F137877A900BA9A81 /* CKWebService2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
