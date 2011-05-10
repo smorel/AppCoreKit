@@ -29,11 +29,11 @@
 	UITableView *tableView = self.parentController.tableView;
 	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
 	CGFloat offset = (width/2.55);
-	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
+	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
 	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentRight;
@@ -46,13 +46,6 @@
 	CKObjectProperty* model = self.value;
 	[model setValue:value];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
-	
-	//update accessory view frame
-	/*UITableView *tableView = self.parentController.tableView;
-	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-	CGFloat offset = (width/2.55);
-	textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
-	 */
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -65,6 +58,13 @@
 	[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
 	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[NSObject endBindingsContext];
+	
+	//update accessory view frame
+	UITextField* textField = (UITextField*)cell.accessoryView;
+	UITableView *tableView = self.parentController.tableView;
+	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+	CGFloat offset = (width/2.55);
+	textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
 }
 
 + (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
