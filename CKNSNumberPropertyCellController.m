@@ -154,7 +154,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if([CKTableViewCellNextResponder setNextResponder:self] == NO){
+	if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
 		[textField resignFirstResponder];
 	}
 	return YES;

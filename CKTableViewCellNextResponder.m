@@ -73,7 +73,7 @@
 	return nil;
 }
 
-+ (BOOL)setNextResponder:(CKTableViewCellController*)controller{
++ (BOOL)activateNextResponderFromController:(CKTableViewCellController*)controller{
 	NSIndexPath* nextIndexPath = [CKTableViewCellNextResponder findNextTextController:controller enableScroll:YES];
 	if(nextIndexPath == nil)
 		return NO;
