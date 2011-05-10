@@ -12,6 +12,7 @@
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKTableViewCellNextResponder.h"
 
 
 @implementation CKNSStringPropertyCellController
@@ -38,6 +39,8 @@
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentRight;
 	textField.autocorrectionType = UITextAutocorrectionTypeNo;
+	
+	
 	cell.accessoryView = textField;	
 	
 	return cell;
@@ -68,7 +71,15 @@
 	textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
 	
 	NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-	textField.placeholder = _(placeholerText);}
+	textField.placeholder = _(placeholerText);
+	
+	if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+		textField.returnKeyType = UIReturnKeyNext;
+	}
+	else{
+		textField.returnKeyType = UIReturnKeyDone;
+	}
+}
 
 + (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
@@ -97,7 +108,9 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	[textField resignFirstResponder];
+	if([CKTableViewCellNextResponder setNextResponder:self] == NO){
+		[textField resignFirstResponder];
+	}
 	return YES;
 }
 
@@ -111,6 +124,11 @@
 	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
+}
+
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object{
+	return YES;
 }
 
 @end

@@ -337,6 +337,8 @@
 		75B01F531301A923005A22F7 /* CKImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F511301A923005A22F7 /* CKImageTransformer.m */; };
 		75B01F851301AF13005A22F7 /* CKThumbnailImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */; };
 		75B01F861301AF13005A22F7 /* CKThumbnailImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */; };
+		75B6953A13799E0E00434E70 /* CKTableViewCellNextResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B6953813799E0E00434E70 /* CKTableViewCellNextResponder.h */; };
+		75B6953B13799E0E00434E70 /* CKTableViewCellNextResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B6953913799E0E00434E70 /* CKTableViewCellNextResponder.m */; };
 		75BC5A8D135F33EF00E029EA /* CKUIView+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC5A8B135F33EF00E029EA /* CKUIView+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC5A8E135F33EF00E029EA /* CKUIView+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC5A8C135F33EF00E029EA /* CKUIView+Style.m */; };
 		75BC5AEC135F42C900E029EA /* CKStyles.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC5AEA135F42C900E029EA /* CKStyles.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -708,6 +710,8 @@
 		75B01F511301A923005A22F7 /* CKImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKImageTransformer.m; sourceTree = "<group>"; };
 		75B01F831301AF13005A22F7 /* CKThumbnailImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKThumbnailImageTransformer.h; sourceTree = "<group>"; };
 		75B01F841301AF13005A22F7 /* CKThumbnailImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKThumbnailImageTransformer.m; sourceTree = "<group>"; };
+		75B6953813799E0E00434E70 /* CKTableViewCellNextResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKTableViewCellNextResponder.h; sourceTree = "<group>"; };
+		75B6953913799E0E00434E70 /* CKTableViewCellNextResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKTableViewCellNextResponder.m; sourceTree = "<group>"; };
 		75BC5A8B135F33EF00E029EA /* CKUIView+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Style.h"; sourceTree = "<group>"; };
 		75BC5A8C135F33EF00E029EA /* CKUIView+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Style.m"; sourceTree = "<group>"; };
 		75BC5AEA135F42C900E029EA /* CKStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKStyles.h; sourceTree = "<group>"; };
@@ -1364,6 +1368,8 @@
 				7548227F134655BB00DB0948 /* CKNSNumberPropertyCellController.m */,
 				754823AC1346642C00DB0948 /* CKNSStringPropertyCellController.h */,
 				754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */,
+				75B6953813799E0E00434E70 /* CKTableViewCellNextResponder.h */,
+				75B6953913799E0E00434E70 /* CKTableViewCellNextResponder.m */,
 			);
 			name = PropertyTableView;
 			sourceTree = "<group>";
@@ -1656,6 +1662,7 @@
 				4FF2A10C136B4CB8008FC8DF /* CKUIButton+Style.h in Headers */,
 				75A8762713733E3C00565B6A /* CKNSNotificationCenter+Edition.h in Headers */,
 				71CCCC3E137877A900BA9A81 /* CKWebService2.h in Headers */,
+				75B6953A13799E0E00434E70 /* CKTableViewCellNextResponder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1943,6 +1950,7 @@
 				4FF2A10D136B4CB8008FC8DF /* CKUIButton+Style.m in Sources */,
 				75A8762813733E3C00565B6A /* CKNSNotificationCenter+Edition.m in Sources */,
 				71CCCC3F137877A900BA9A81 /* CKWebService2.m in Sources */,
+				75B6953B13799E0E00434E70 /* CKTableViewCellNextResponder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
