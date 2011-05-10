@@ -17,6 +17,7 @@
 @property (nonatomic,retain) id object;
 @property (nonatomic,retain) NSString* keyPath;
 @property (nonatomic,assign) id value;
+@property (nonatomic,readonly) NSString* name;
 
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 

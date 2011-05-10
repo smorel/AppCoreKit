@@ -21,6 +21,7 @@
 	[super dealloc];
 }
 
+//pas utiliser load cell mais initCell pour application des styles ...
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -35,6 +36,7 @@
 	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.delegate = self;
+	textField.textAlignment = UITextAlignmentRight;
 	cell.accessoryView = textField;	
 	
 	return cell;
@@ -44,6 +46,13 @@
 	CKObjectProperty* model = self.value;
 	[model setValue:value];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	
+	//update accessory view frame
+	/*UITableView *tableView = self.parentController.tableView;
+	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+	CGFloat offset = (width/2.55);
+	textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
+	 */
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -53,8 +62,8 @@
 	cell.textLabel.text = _(descriptor.name);
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
+	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[NSObject endBindingsContext];
 }
 

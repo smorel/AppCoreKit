@@ -125,4 +125,9 @@
 	return metaData;
 }
 
+- (NSString*)name{
+	CKClassPropertyDescriptor* descriptor = [self descriptor];
+	return descriptor.name;
+}
+
 @end
