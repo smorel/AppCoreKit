@@ -450,6 +450,31 @@
 								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
 
+
+- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	int headerCount = [_headerCellDescriptors count];
+	NSMutableArray* newIndexPaths = [NSMutableArray array];
+	for(int i=0;i<[indexPaths count];++i){
+		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
+		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount column:self.sectionIndex];
+		[newIndexPaths addObject:newIndexPath];
+	}
+	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
+							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
+}
+
+- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	int headerCount = [_headerCellDescriptors count];
+	NSMutableArray* newIndexPaths = [NSMutableArray array];
+	for(int i=0;i<[indexPaths count];++i){
+		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
+		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount column:self.sectionIndex];
+		[newIndexPaths addObject:newIndexPath];
+	}
+	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
+							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
+}
+
 @end
 
 

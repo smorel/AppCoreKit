@@ -202,7 +202,37 @@
 	}
 	//}
 	
-
+	int count = 0;
+	unsigned currentIndex = [indexs firstIndex];
+	NSMutableArray* indexPaths = [NSMutableArray array];
+	while (currentIndex != NSNotFound) {
+		//Do not notify add if currentIndex > limit
+		[indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+		currentIndex = [indexs indexGreaterThanIndex: currentIndex];
+		++count;
+	}
+	
+	switch(kind){
+		case NSKeyValueChangeInsertion:{
+			if(numberOfFeedObjectsLimit > 0) {
+				NSAssert(NO,@"not implemented");
+				//passer sur les obbjets dont l'index est > numberOfFeedObjectsLimit et les remover
+			}
+			
+			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+				[_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
+			}
+			break;
+		}
+		case NSKeyValueChangeRemoval:{
+			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
+				[_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
+			}
+			break;
+		}
+	}
+	
+	/*
 	int count = 0;
 	unsigned currentIndex = [indexs firstIndex];
 	switch(kind){
@@ -211,13 +241,11 @@
 				NSAssert(count < [newModels count],@"Problem with observer change newModels");
 				
 				//Do not notify add if currentIndex > limit
-				if(numberOfFeedObjectsLimit > 0 && currentIndex >= numberOfFeedObjectsLimit){/*Do nothing*/}
+				if(numberOfFeedObjectsLimit > 0 && currentIndex >= numberOfFeedObjectsLimit){}
 				else{
-					//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
 						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
 					}
-					//}
 				}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
 				++count;
@@ -227,17 +255,16 @@
 		case NSKeyValueChangeRemoval:{
 			while (currentIndex != NSNotFound) {
 				NSAssert(count < [oldModels count],@"Problem with observer change newModels");
-				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-					if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
-						[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-					}
-				//}
+				if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
+					[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+				}
 				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
 				++count;
 			}
 			break;
 		}
 	}	
+	 */
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 		if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
