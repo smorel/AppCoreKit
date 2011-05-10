@@ -227,7 +227,11 @@
 @interface      CKNSStringToNSStringTransformer : NSValueTransformer {} @end
 @implementation CKNSStringToNSStringTransformer
 + (Class)transformedValueClass { return [NSString class]; }
-- (id)transformedValue:(id)value { return (NSString*)value; }
+- (id)transformedValue:(id)value { 
+	if([value isKindOfClass:[NSNull class]]) 
+		return @" "; 
+	return (NSString*)value; 
+}
 @end
 
 //CKNSStringToNSStringWithoutHTMLTransformer
