@@ -138,7 +138,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)setBodyData:(NSData *)bodyData {
 	[theRequest setHTTPBody:bodyData];
-	[theRequest setValue:[NSString stringWithFormat:@"%llu", [bodyData length]] forHTTPHeaderField:@"Content-Length"];
+	[theRequest setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-Length"];
 }
 
 - (void)setBodyParams:(NSDictionary *)params {

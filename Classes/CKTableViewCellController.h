@@ -87,4 +87,6 @@ typedef NSUInteger CKTableViewCellFlags;
 //private
 - (void)initTableViewCell:(UITableViewCell*)cell;
 
++ (BOOL)hasAccessoryResponderWithValue:(id)object;
+
 @end

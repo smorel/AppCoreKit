@@ -11,6 +11,7 @@
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKTableViewCellNextResponder.h"
 
 #define TextEditTag 1
 #define SwitchTag 2
@@ -115,6 +116,13 @@
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		textField.placeholder = _(placeholerText);
+		
+		if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+			textField.returnKeyType = UIReturnKeyNext;
+		}
+		else{
+			textField.returnKeyType = UIReturnKeyDone;
+		}
 	}
 	[NSObject endBindingsContext];
 }
@@ -146,7 +154,9 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	[textField resignFirstResponder];
+	if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
+		[textField resignFirstResponder];
+	}
 	return YES;
 }
 
@@ -165,6 +175,18 @@
 	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
+}
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object{
+	CKObjectProperty* model = object;
+	
+	CKClassPropertyDescriptor* descriptor = [model descriptor];
+	switch(descriptor.propertyType){
+		case CKClassPropertyDescriptorTypeChar:
+		case CKClassPropertyDescriptorTypeCppBool:
+			return NO;
+	}
+	return YES;
 }
 
 @end

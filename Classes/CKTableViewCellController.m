@@ -201,4 +201,9 @@
 	return CKTableViewCellFlagAll;
 }
 
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object{
+	return NO;
+}
+
 @end
