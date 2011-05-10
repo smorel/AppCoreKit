@@ -133,9 +133,12 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
+		if([subPropertyName isEqual:@"parentController.isInEditionMode"]){
+			int i =3;
+		}
 		id value = [object valueForKeyPath:subPropertyName];
 		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
-		[str appendFormat:@"%@%@='%@'",(i > 0) ? @"," : @"" ,subPropertyName,valueString];
+		[str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
 		++i;
 	}
 	
