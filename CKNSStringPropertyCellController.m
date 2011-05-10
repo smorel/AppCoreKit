@@ -37,6 +37,7 @@
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentRight;
+	textField.autocorrectionType = UITextAutocorrectionTypeNo;
 	cell.accessoryView = textField;	
 	
 	return cell;

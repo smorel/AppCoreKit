@@ -82,6 +82,7 @@
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
 			textField.textAlignment = UITextAlignmentRight;
+			textField.autocorrectionType = UITextAutocorrectionTypeNo;
 			cell.accessoryView = textField;	
 	
 			break;
