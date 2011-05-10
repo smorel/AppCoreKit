@@ -13,6 +13,7 @@
 #import "CKLocalization.h"
 
 NSString* CKStyleTextColor = @"textColor";
+NSString* CKStyleHighlightedTextColor = @"highlightedTextColor";
 NSString* CKStyleFontSize = @"fontSize";
 NSString* CKStyleFontName = @"fontName";
 NSString* CKStyleText = @"text";
@@ -24,6 +25,10 @@ NSString* CKStyleShadowOffset = @"shadowOffset";
 
 - (UIColor*)textColor{
 	return [self colorForKey:CKStyleTextColor];
+}
+
+- (UIColor*)highlightedTextColor {
+	return [self colorForKey:CKStyleHighlightedTextColor];
 }
 
 - (CGFloat)fontSize{
@@ -62,6 +67,8 @@ NSString* CKStyleShadowOffset = @"shadowOffset";
 		if(myLabelStyle){
 			if([myLabelStyle containsObjectForKey:CKStyleTextColor])
 				label.textColor = [myLabelStyle textColor];
+			if([myLabelStyle containsObjectForKey:CKStyleHighlightedTextColor])
+				label.highlightedTextColor = [myLabelStyle highlightedTextColor];
 			if([myLabelStyle containsObjectForKey:CKStyleText]){
 				if(label.text == nil){
 					label.text = [myLabelStyle text];

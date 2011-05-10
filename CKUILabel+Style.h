@@ -9,6 +9,7 @@
 #import "CKUIView+Style.h"
 
 extern NSString* CKStyleTextColor;
+extern NSString* CKStyleHighlightedTextColor;
 extern NSString* CKStyleFontSize;
 extern NSString* CKStyleFontName;
 extern NSString* CKStyleText;
@@ -19,6 +20,7 @@ extern NSString* CKStyleShadowOffset;
 @interface NSMutableDictionary (CKUILabelStyle)
 
 - (UIColor*)textColor;
+- (UIColor*)highlightedTextColor;
 - (CGFloat)fontSize;
 - (NSString*)fontName;
 - (NSString*)text;
