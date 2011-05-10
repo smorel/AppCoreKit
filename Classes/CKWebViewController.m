@@ -47,6 +47,7 @@
 @synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
 @synthesize maxContentSizeForViewInPopover = _maxContentSizeForViewInPopover;
 @synthesize canBeDismissed = _canBeDismissed;
+@synthesize webViewToolbar = _webViewToolbar;
 
 - (void)setup {
 	_showURLInTitle = YES;
@@ -89,7 +90,10 @@
 	_webView.delegate = self;
 	self.view.backgroundColor = [UIColor blackColor];
 	[self.view addSubview:_webView];
-
+	
+	self.webViewToolbar = [[[UIToolbar alloc] init] autorelease];
+	[self.view addSubview:_webViewToolbar];
+	
 	// Load the URL
 	if (_homeURL) {
 		NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
@@ -118,14 +122,20 @@
 
 	// Save the NavigationController styles
 	_navigationControllerStyles = [[self.navigationController getStyles] retain];
-
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	
+	// Hide the toolbar from the webView
+	[self.navigationController setToolbarHidden:YES animated:NO];
+	
+	// Setup the custom toolbar
+	self.webViewToolbar.frame = CGRectMake(0, self.view.bounds.size.height-44, self.view.bounds.size.width, 44);
 	[self updateToolbar];
-	[self setToolbarItems:_toolbarButtonsStatic animated:animated];
-
+	[self.webViewToolbar setItems:_toolbarButtonsStatic animated:animated];
+	
 	// Display the toolbar
-	if (self.hidesToolbar == NO) [self.navigationController setToolbarHidden:NO animated:animated];
+	self.webViewToolbar.hidden = self.hidesToolbar;
+	
+	_webView.frame = self.hidesToolbar ? self.view.bounds : CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44);
 	
 	_webView.hidden = YES;
 }
@@ -157,6 +167,8 @@
 	_backButton = nil;
 	[_forwardButton release];
 	_forwardButton = nil;
+	[_webViewToolbar release];
+	_webViewToolbar = nil;
 }
 
 - (void)dealloc {
@@ -171,6 +183,7 @@
 	[_toolbarButtonsLoading release];
 	[_navigationControllerStyles release];
 	[_onLoadScript release];
+	[_webViewToolbar release];
     [super dealloc];
 }
 
@@ -194,8 +207,8 @@
 	_forwardButton.enabled = _webView.canGoForward;
 	
 	[self generateToolbar];
-	if ([_webView isLoading]) [self setToolbarItems:self.toolbarButtonsLoading animated:YES];
-	else [self setToolbarItems:self.toolbarButtonsStatic animated:YES];
+	if ([_webView isLoading]) [self.webViewToolbar setItems:self.toolbarButtonsLoading animated:NO];
+	else [self.webViewToolbar setItems:self.toolbarButtonsStatic animated:NO];
 }
 
 - (void)goBack {
