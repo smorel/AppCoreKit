@@ -21,6 +21,7 @@
 	[super dealloc];
 }
 
+//pas utiliser load cell mais initCell pour application des styles ...
 - (UITableViewCell *)loadCell {
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -28,13 +29,15 @@
 	UITableView *tableView = self.parentController.tableView;
 	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
 	CGFloat offset = (width/2.55);
-	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
+	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
 	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.delegate = self;
+	textField.textAlignment = UITextAlignmentRight;
+	textField.autocorrectionType = UITextAutocorrectionTypeNo;
 	cell.accessoryView = textField;	
 	
 	return cell;
@@ -53,10 +56,19 @@
 	cell.textLabel.text = _(descriptor.name);
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
+	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[NSObject endBindingsContext];
-}
+	
+	//update accessory view frame
+	UITextField* textField = (UITextField*)cell.accessoryView;
+	UITableView *tableView = self.parentController.tableView;
+	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+	CGFloat offset = (width/2.55);
+	textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
+	
+	NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+	textField.placeholder = _(placeholerText);}
 
 + (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];

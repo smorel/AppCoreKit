@@ -41,7 +41,7 @@
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
 	[model setValue:value];
-	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }
 
 - (UITableViewCell*)loadCell{
@@ -77,10 +77,12 @@
 			UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 			textField.borderStyle = UITextBorderStyleNone;
 			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-			textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
+			textField.textAlignment = UITextAlignmentRight;
+			textField.autocorrectionType = UITextAutocorrectionTypeNo;
 			cell.accessoryView = textField;	
 	
 			break;
@@ -101,8 +103,18 @@
 		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 	}
 	else{
-		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 		[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
+		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
+		
+		//update accessory view frame
+		UITextField* textField = (UITextField*)cell.accessoryView;
+		UITableView *tableView = self.parentController.tableView;
+		CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
+		CGFloat offset = (width/2.55);
+		textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
+		
+		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+		textField.placeholder = _(placeholerText);
 	}
 	[NSObject endBindingsContext];
 }
