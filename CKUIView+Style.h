@@ -35,6 +35,8 @@ extern NSString* CKStyleBackgroundImage;
 extern NSString* CKStyleCornerStyle;
 extern NSString* CKStyleCornerSize;
 extern NSString* CKStyleAlpha;
+extern NSString* CKStyleBorderColor;
+extern NSString* CKStyleBorderWidth;
 
 @interface NSMutableDictionary (CKViewStyle)
 
@@ -45,6 +47,8 @@ extern NSString* CKStyleAlpha;
 - (CKViewCornerStyle)cornerStyle;
 - (CGSize)cornerSize;
 - (CGFloat)alpha;
+- (UIColor*)borderColor;
+- (CGFloat)borderWidth;
 
 @end
 

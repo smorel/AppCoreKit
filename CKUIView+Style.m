@@ -22,6 +22,8 @@ NSString* CKStyleBackgroundImage = @"backgroundImage";
 NSString* CKStyleCornerStyle = @"cornerStyle";
 NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
+NSString* CKStyleBorderColor = @"borderColor";
+NSString* CKStyleBorderWidth = @"borderWidth";
 
 @implementation NSMutableDictionary (CKViewStyle)
 
@@ -54,6 +56,14 @@ NSString* CKStyleAlpha = @"alpha";
 	return [self cgFloatForKey:CKStyleAlpha];
 }
 
+- (UIColor*)borderColor{
+	return [self colorForKey:CKStyleBorderColor];
+}
+
+- (CGFloat)borderWidth{
+	return [self cgFloatForKey:CKStyleBorderWidth];
+}
+
 @end
 
 @implementation UIView (CKStyle)
@@ -80,7 +90,8 @@ NSString* CKStyleAlpha = @"alpha";
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
 	if([style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
-	   || [style containsObjectForKey:CKStyleBackgroundImage]){
+	   || [style containsObjectForKey:CKStyleBackgroundImage]
+	   || [style containsObjectForKey:CKStyleBorderColor]){
 		return YES;
 	}
 	return NO;
@@ -90,7 +101,8 @@ NSString* CKStyleAlpha = @"alpha";
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
-	   || [myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
+	   || [myViewStyle containsObjectForKey:CKStyleBackgroundImage]
+	   || [myViewStyle containsObjectForKey:CKStyleBorderColor]){
 		return YES;
 	}
 	return NO;
@@ -180,7 +192,15 @@ NSString* CKStyleAlpha = @"alpha";
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 						gradientView.roundedCornerSize = [myViewStyle cornerSize];
-					}		
+					}	
+					
+					if([myViewStyle containsObjectForKey:CKStyleBorderColor]){
+						gradientView.borderColor = [myViewStyle borderColor];
+					}	
+					
+					if([myViewStyle containsObjectForKey:CKStyleBorderWidth]){
+						gradientView.borderWidth = [myViewStyle borderWidth];
+					}
 					
 					[gradientView setNeedsDisplay];
 				}

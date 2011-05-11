@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius);
+
 @interface UIImage (CKUIImageTransformationsAdditions)
 
 - (UIImage *)imageThatFits:(CGSize)size crop:(BOOL)crop;

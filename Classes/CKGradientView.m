@@ -9,6 +9,7 @@
 #import "CKGradientView.h"
 #import "CKUIColorAdditions.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKUIImage+Transformations.h"
 
 
 @implementation CKGradientView
@@ -16,8 +17,12 @@
 @synthesize gradientColors = _gradientColors;
 @synthesize gradientColorLocations = _gradientColorLocations;
 @synthesize image = _image;
+@synthesize borderColor = _borderColor;
+@synthesize borderWidth = _borderWidth;
 
 - (void)postInit {
+	self.borderColor = [UIColor clearColor];
+	self.borderWidth = 1;
 }
 
 - (id)init {
@@ -45,9 +50,10 @@
 }
 
 - (void)dealloc {
+	[_image release]; _image = nil;
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
-	[_image release]; _image = nil;
+	[_borderColor release]; _borderColor = nil;
 	[super dealloc];
 }
 
@@ -88,6 +94,56 @@
 		
 		CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, colorLocations);
 		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
+	}
+	
+	if(_borderColor!= nil && _borderColor != [UIColor clearColor]){
+		
+		[_borderColor setStroke];
+		
+		if((self.roundedCornerSize.width == 0 && self.roundedCornerSize.height == 0)
+		   || self.corners == CKRoundedCornerViewTypeNone){
+			CGContextSetLineWidth(gc, _borderWidth);
+			CGContextAddRect(gc, self.bounds);
+			CGContextStrokePath(gc);
+		}
+		else{
+			UIRectCorner roundedCorners = UIRectCornerAllCorners;
+			switch (self.corners) {
+				case CKRoundedCornerViewTypeTop:
+					roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+					break;
+				case CKRoundedCornerViewTypeBottom:
+					roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+					break;
+					
+				default:
+					break;
+			}
+			
+			UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:self.roundedCornerSize];
+			/*
+			enum CGLineJoin {
+				kCGLineJoinMiter,
+				kCGLineJoinRound,
+				kCGLineJoinBevel
+			};
+			typedef enum CGLineJoin CGLineJoin;
+			
+			enum CGLineCap {
+				kCGLineCapButt,
+				kCGLineCapRound,
+				kCGLineCapSquare
+			};
+			typedef enum CGLineCap CGLineCap;
+
+			 
+			 @property(nonatomic) CGLineCap lineCapStyle;
+			 @property(nonatomic) CGLineJoin lineJoinStyle;
+			*/
+			path.lineJoinStyle = kCGLineJoinBevel;
+			[path setLineWidth:_borderWidth];
+			[path stroke];
+		}
 	}
 }
 

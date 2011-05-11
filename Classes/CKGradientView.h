@@ -13,10 +13,14 @@
 	NSArray *_gradientColors;
 	NSArray *_gradientColorLocations;
 	UIImage *_image;
+	UIColor* _borderColor;
+	CGFloat _borderWidth;
 }
 
 @property (nonatomic, retain) NSArray *gradientColors;
 @property (nonatomic, retain) NSArray *gradientColorLocations;
 @property (nonatomic, retain) UIImage *image;
+@property (nonatomic, retain) UIColor *borderColor;
+@property (nonatomic, assign) CGFloat borderWidth;
 
 @end
