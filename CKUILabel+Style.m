@@ -20,6 +20,7 @@ NSString* CKStyleText = @"text";
 NSString* CKStyleNumberOfLines = @"numberOfLines";
 NSString* CKStyleShadowColor = @"shadowColor";
 NSString* CKStyleShadowOffset = @"shadowOffset";
+NSString* CKStyleTextAlignment = @"textAlignment";
 
 @implementation NSMutableDictionary (CKUILabelStyle)
 
@@ -56,6 +57,13 @@ NSString* CKStyleShadowOffset = @"shadowOffset";
 	return [self cgSizeForKey:CKStyleShadowOffset];
 }
 
+- (UITextAlignment)textAlignment{
+	return (UITextAlignment)[self enumValueForKey:CKStyleTextAlignment 
+								   withDictionary:CKEnumDictionary(UITextAlignmentLeft,
+																   UITextAlignmentCenter,
+																   UITextAlignmentRight)];
+}
+
 @end
 
 @implementation UILabel (CKStyle)
@@ -88,6 +96,9 @@ NSString* CKStyleShadowOffset = @"shadowOffset";
 			// Shadow
 			if ([myLabelStyle containsObjectForKey:CKStyleShadowColor]) label.shadowColor = [myLabelStyle shadowColor];
 			if ([myLabelStyle containsObjectForKey:CKStyleShadowOffset]) label.shadowOffset = [myLabelStyle shadowOffset];
+			
+			if([myLabelStyle containsObjectForKey:CKStyleTextAlignment])
+				label.textAlignment = [myLabelStyle textAlignment];
 
 			return YES;
 		}

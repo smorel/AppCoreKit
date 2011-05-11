@@ -16,6 +16,7 @@ extern NSString* CKStyleText;
 extern NSString* CKStyleNumberOfLines;
 extern NSString* CKStyleShadowColor;
 extern NSString* CKStyleShadowOffset;
+extern NSString* CKStyleTextAlignment;
 
 @interface NSMutableDictionary (CKUILabelStyle)
 
@@ -27,6 +28,7 @@ extern NSString* CKStyleShadowOffset;
 - (NSInteger)numberOfLines;
 - (UIColor *)shadowColor;
 - (CGSize)shadowOffset;
+- (UITextAlignment)textAlignment;
 
 @end
 

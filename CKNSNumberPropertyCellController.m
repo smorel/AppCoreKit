@@ -79,7 +79,7 @@
 			textField.borderStyle = UITextBorderStyleNone;
 			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 			//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-			textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+			textField.clearButtonMode = UITextFieldViewModeAlways;
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
 			textField.textAlignment = UITextAlignmentRight;

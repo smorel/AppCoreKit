@@ -14,6 +14,7 @@
 #import "CKObjectCarouselViewController.h"
 #import "CKDocumentCollection.h"
 #import "CKDocumentCollectionViewCellController+Style.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 #import "CKStyleManager.h"
 
@@ -34,6 +35,7 @@
 	
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
+	
 	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
 	_activityIndicator.center = cell.center;
 	_activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -41,13 +43,14 @@
 	
 	[view addSubview:_activityIndicator];
 	
-	self.label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	self.label = [[[UILabel alloc] initWithFrame:CGRectInset(view.bounds,10,0)] autorelease];
 	_label.textAlignment = UITextAlignmentCenter;
 	_label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[view addSubview:_label];
 	
 	[cell.contentView addSubview:view];
 }
+
 
 - (void)update:(UIView*)view{
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
@@ -84,6 +87,9 @@
 - (void)internalUpdate:(id)value{
 	[self update:self.tableViewCell];
 }
+- (void)internalUpdateWithNotification:(NSNotification*)notification{
+	[self update:self.tableViewCell];
+}
 
 - (UITableViewCell*)loadCell{
 	return [super loadCell];
@@ -101,10 +107,14 @@
 	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
 	_activityIndicator.hidden = _activityIndicator.hidden || forceHidden;
 	
+	//TODO REGISTER ON NOTIF TO KNOW IF THE COLLECTION IS UPDATED !!!
+	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
 	[source bind:@"hasMore" target:self action:@selector(internalUpdate:)];
 	[source bind:@"currentIndex" target:self action:@selector(internalUpdate:)];
+	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectAddedNotification target:self action:@selector(internalUpdateWithNotification:)];
+	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectRemovedNotification target:self action:@selector(internalUpdateWithNotification:)];
 	[NSObject endBindingsContext];
 }
 
