@@ -52,6 +52,10 @@
 	if(self.autosave){
 		[self save];
 	}
+	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
@@ -64,6 +68,9 @@
 	if(self.autosave){
 		[self save];
 	}	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
 }
 
 - (void)removeAllObjects{
@@ -76,6 +83,9 @@
 	
 	if(self.autosave){
 		[self save];
+	}
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
 	}
 }
 
@@ -101,6 +111,10 @@
 	[_objects insertObject:other atIndex:index];	
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
+	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
 }
 
 @end

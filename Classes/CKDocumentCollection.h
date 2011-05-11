@@ -51,4 +51,6 @@
 - (void)documentCollectionDidSave:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidFailLoading:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidFailSaving:(CKDocumentCollection*)collection;
+//very global delegate selector : could be splitted in several more precise functions
+- (void)documentCollectionDidChange:(CKDocumentCollection*)collection;
 @end

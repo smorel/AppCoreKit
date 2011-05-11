@@ -40,6 +40,9 @@
 
 - (void)delegateMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
+	metaData.comparable = NO;
+	metaData.hashable = NO;
+	metaData.copiable = NO;
 }
 
 - (NSInteger)count{
