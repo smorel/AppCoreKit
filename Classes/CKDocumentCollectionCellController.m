@@ -78,7 +78,7 @@
 			break;
 		}
 		default:{
-			_label.text = [NSString stringWithFormat:@"%d %@",[collection count],_(theStyle.manyItemsMessage)];
+			_label.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
 			break;
 		}
 	}
