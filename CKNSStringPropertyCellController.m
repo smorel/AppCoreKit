@@ -37,7 +37,7 @@
 	//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textField.clearButtonMode = UITextFieldViewModeAlways;
 	textField.delegate = self;
-	textField.textAlignment = UITextAlignmentRight;
+	textField.textAlignment = UITextAlignmentLeft;
 	textField.autocorrectionType = UITextAutocorrectionTypeNo;
 	
 	

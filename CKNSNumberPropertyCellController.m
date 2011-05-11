@@ -82,7 +82,7 @@
 			textField.clearButtonMode = UITextFieldViewModeAlways;
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
-			textField.textAlignment = UITextAlignmentRight;
+			textField.textAlignment = UITextAlignmentLeft;
 			textField.autocorrectionType = UITextAutocorrectionTypeNo;
 			cell.accessoryView = textField;	
 	
