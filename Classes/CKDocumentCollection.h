@@ -47,6 +47,7 @@
 @end
 
 @protocol CKDocumentCollectionDelegate
+@optional
 - (void)documentCollectionDidLoad:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidSave:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidFailLoading:(CKDocumentCollection*)collection;
