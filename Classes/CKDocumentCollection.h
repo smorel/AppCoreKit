@@ -31,9 +31,9 @@
 - (id)objectAtIndex:(NSInteger)index;
 - (void)addObjectsFromArray:(NSArray *)otherArray;
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;
-- (void)removeObjectsInArray:(NSArray *)otherArray;
+- (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet;
 - (void)removeAllObjects;
-- (void)replaceObject:(id)object byObject:(id)other;
+- (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other;
 
 - (BOOL)load;
 - (BOOL)save;

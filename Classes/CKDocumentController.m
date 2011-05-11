@@ -149,7 +149,7 @@
 	if(indexPath.length != 2)
 		return;
 	
-	[_collection removeObjectsInArray:[NSArray arrayWithObject:[self objectAtIndexPath:indexPath]]];
+	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:indexPath.row]];
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
@@ -165,9 +165,9 @@
 		[_collection removeObserver:self];
 	}
 	
-	id object = [self objectAtIndexPath:indexPath];
-	[_collection removeObjectsInArray:[NSArray arrayWithObject:object]];
-	[_collection insertObjects:[NSArray arrayWithObject:object] atIndexes:[NSIndexSet indexSetWithIndex:  indexPath2.row]];
+	id object = [_collection objectAtIndex:indexPath.row];
+	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:  indexPath.row]];
+	[_collection insertObjects:[NSArray arrayWithObject:object] atIndexes:[NSIndexSet indexSetWithIndex:indexPath2.row]];
 
 	if(_collection){
 		[_collection addObserver:self];

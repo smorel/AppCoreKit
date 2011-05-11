@@ -46,10 +46,7 @@
 	if([theObjects count] <= 0)
 		return;
 	
-    //NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index, [newItems count])];
-    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"objects"];
     [_objects insertObjects:theObjects atIndexes:indexes];
-    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"objects"];	
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
 	if(self.autosave){
@@ -57,26 +54,10 @@
 	}
 }
 
-- (void)removeObjectsInArray:(NSArray *)otherArray{
-	NSMutableArray* toRemove = [NSMutableArray array];
-	NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-	for(id item in otherArray){
-		NSUInteger index = [_objects indexOfObject:item];
-		if(index == NSNotFound){
-			NSLog(@"invalid object when remove");
-		}
-		else{
-			[indexSet addIndex:index];
-			[toRemove addObject:item];
-		}
-	}
+- (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
+	NSArray* toRemove = [_objects objectsAtIndexes:indexSet];
 	
-	if([toRemove count] <= 0)
-		return;
-	
-	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
-	[_objects removeObjectsInArray:toRemove];
-	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
+	[_objects removeObjectsAtIndexes:indexSet];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
 	
@@ -86,12 +67,10 @@
 }
 
 - (void)removeAllObjects{
-	NSArray* theObjects = _objects;
+	NSArray* theObjects = [NSArray arrayWithArray: _objects];
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[_objects count])];
-	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	[_objects removeAllObjects];
-	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
@@ -116,22 +95,12 @@
 	return [_objects filteredArrayUsingPredicate:predicate];
 }
 
-- (void)replaceObject:(id)object byObject:(id)other{
-	NSUInteger index = [_objects indexOfObject:object];
-	if(index != NSNotFound){
-		
-		NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:index];
-		
-		[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
-		[_objects removeObjectAtIndex:index];
-		[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
-		
-		[self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"objects"];
-		[_objects insertObject:other atIndex:index];
-		[self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexSet forKey:@"objects"];	
-		
-		[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
-	}
+- (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
+	id object = [_objects objectAtIndex:index];
+	[_objects removeObjectAtIndex:index];
+	[_objects insertObject:other atIndex:index];	
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
 }
 
 @end

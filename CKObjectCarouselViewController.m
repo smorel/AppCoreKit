@@ -480,6 +480,14 @@
 	//NOT SUPPORTED dynamic deletion
 }
 
+- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//NOT SUPPORTED dynamic insertion
+}
+
+- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//NOT SUPPORTED dynamic deletion
+}
+
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
 	CGFloat offset = [self.carouselView pageForIndexPath:indexPath];
 	[self.carouselView setContentOffset:offset animated:animated];

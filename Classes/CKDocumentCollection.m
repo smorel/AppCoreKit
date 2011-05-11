@@ -64,8 +64,7 @@
 	NSAssert(NO,@"Abstract Implementation");
 }
 
-			 
-- (void)removeObjectsInArray:(NSArray *)otherArray{
+- (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
 	NSAssert(NO,@"Abstract Implementation");
 }
 
@@ -92,7 +91,7 @@
 	return NO;
 }
 
-- (void)replaceObject:(id)object byObject:(id)other{
+- (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
 	NSAssert(NO,@"Abstract Implementation");
 }
 
