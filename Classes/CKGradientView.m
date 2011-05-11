@@ -13,6 +13,35 @@
 
 #import "CKNSObject+Bindings.h"
 
+@implementation CKGradientViewUpdater
+@synthesize view = _view;
+
+- (void)frameChanged:(id)value{
+	[self.view setNeedsDisplay];
+}
+
+- (id)initWithView:(UIView*)theView{
+	if(self = [super init]){
+		self.view = theView;
+		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self]];
+		[theView bind:@"frame" target:self action:@selector(frameChanged:)];
+		[NSObject endBindingsContext];
+	}
+	return self;
+}
+
+- (void)dealloc{
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[super dealloc];
+}
+
+@end
+
+@interface CKGradientView () 
+@property(nonatomic,retain)CKGradientViewUpdater* updater;
+@end
+
+
 
 @implementation CKGradientView
 
@@ -21,18 +50,12 @@
 @synthesize image = _image;
 @synthesize borderColor = _borderColor;
 @synthesize borderWidth = _borderWidth;
-
-- (void)frameChanged:(id)value{
-	[self setNeedsDisplay];
-}
+@synthesize updater = _updater;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
-	
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self]];
-	[self bind:@"frame" target:self action:@selector(frameChanged:)];
-	[NSObject endBindingsContext];
+	self.updater = [[[CKGradientViewUpdater alloc]initWithView:self]autorelease];
 }
 
 - (id)init {
@@ -60,7 +83,7 @@
 }
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[_updater release]; _updater = nil;
 	[_image release]; _image = nil;
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;

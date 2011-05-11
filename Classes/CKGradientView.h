@@ -9,12 +9,22 @@
 #import "CKRoundedCornerView.h"
 
 
+@interface CKGradientViewUpdater : NSObject{
+	UIView* _view;
+}
+@property(nonatomic,assign)UIView* view;
+- (id)initWithView:(UIView*)view;
+@end
+
+
 @interface CKGradientView : CKRoundedCornerView {
 	NSArray *_gradientColors;
 	NSArray *_gradientColorLocations;
 	UIImage *_image;
 	UIColor* _borderColor;
 	CGFloat _borderWidth;
+	
+	CKGradientViewUpdater* _updater;
 }
 
 @property (nonatomic, retain) NSArray *gradientColors;
