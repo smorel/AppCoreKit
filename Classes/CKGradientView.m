@@ -11,6 +11,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIImage+Transformations.h"
 
+#import "CKNSObject+Bindings.h"
+
 
 @implementation CKGradientView
 
@@ -20,9 +22,17 @@
 @synthesize borderColor = _borderColor;
 @synthesize borderWidth = _borderWidth;
 
+- (void)frameChanged:(id)value{
+	[self setNeedsDisplay];
+}
+
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
+	
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self]];
+	[self bind:@"frame" target:self action:@selector(frameChanged:)];
+	[NSObject endBindingsContext];
 }
 
 - (id)init {
@@ -50,6 +60,7 @@
 }
 
 - (void)dealloc {
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_image release]; _image = nil;
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
