@@ -180,7 +180,9 @@ NSString* CKStyleAlpha = @"alpha";
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 						gradientView.roundedCornerSize = [myViewStyle cornerSize];
-					}					
+					}		
+					
+					[gradientView setNeedsDisplay];
 				}
 				
 				//Apply transparency

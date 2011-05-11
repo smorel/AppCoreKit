@@ -794,6 +794,14 @@
 	NSTimeInterval delay = 0.4;
 	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
 	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:delay];
+	
+	//Update the indexPath of the visible controllers as they could have moved.
+	NSArray *visibleCells = [self.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+		CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	}
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{

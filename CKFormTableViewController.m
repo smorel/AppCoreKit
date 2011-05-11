@@ -405,7 +405,7 @@
 	NSArray *visibleCells = [self.parentController.tableView visibleCells];
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
-		if([self.changeSet containsObject:indexPath] == NO
+		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
 		   && indexPath.section == sectionIndex){
 			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
