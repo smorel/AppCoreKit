@@ -175,12 +175,12 @@
 }
 
 - (void)didSelectRow {
-	if (self.isSelectable) {
+	//if (self.isSelectable) {
 		if (self.parentController.stickySelection == NO) [self.parentController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
 		if (_target && [_target respondsToSelector:_action]) {
 			[_target performSelector:_action withObject:self];
 		}
-	}
+	//}
 }
 
 
