@@ -73,11 +73,11 @@
 	_label.hidden = !_activityIndicator.hidden;	
 	switch([collection count]){
 		case 0:{
-			_label.text = theStyle.noItemsMessage;
+			_label.text = _(theStyle.noItemsMessage);
 			break;
 		}
 		case 1:{
-			_label.text = theStyle.oneItemMessage;
+			_label.text = _(theStyle.oneItemMessage);
 			break;
 		}
 		default:{

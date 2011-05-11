@@ -456,7 +456,7 @@
 	NSMutableArray* newIndexPaths = [NSMutableArray array];
 	for(int i=0;i<[indexPaths count];++i){
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount column:self.sectionIndex];
+		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionIndex];
 		[newIndexPaths addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
@@ -468,7 +468,7 @@
 	NSMutableArray* newIndexPaths = [NSMutableArray array];
 	for(int i=0;i<[indexPaths count];++i){
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount column:self.sectionIndex];
+		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionIndex];
 		[newIndexPaths addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
