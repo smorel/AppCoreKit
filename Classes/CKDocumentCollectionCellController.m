@@ -53,6 +53,9 @@
 
 
 - (void)update:(UIView*)view{
+	if(view == nil)
+		return;
+	
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
@@ -88,7 +91,9 @@
 	[self update:self.tableViewCell];
 }
 - (void)internalUpdateWithNotification:(NSNotification*)notification{
-	[self update:self.tableViewCell];
+	if([notification documentCollection] == self.value){
+		[self update:self.tableViewCell];
+	}
 }
 
 - (UITableViewCell*)loadCell{
