@@ -459,7 +459,6 @@
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	int headerCount = [_headerCellDescriptors count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionIndex];
-	[self.changeSet addObject:theIndexPath];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
 								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
@@ -486,8 +485,6 @@
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionIndex];
 		[newIndexPaths addObject:newIndexPath];
-		
-		[self.changeSet addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
