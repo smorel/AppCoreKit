@@ -215,8 +215,21 @@
 	switch(kind){
 		case NSKeyValueChangeInsertion:{
 			if(numberOfFeedObjectsLimit > 0) {
-				NSAssert(NO,@"not implemented");
-				//passer sur les obbjets dont l'index est > numberOfFeedObjectsLimit et les remover
+				NSMutableArray* limitedIndexPaths = [NSMutableArray array];
+				NSMutableArray* limitedObjects = [NSMutableArray array];
+				for(int i=0;i<[indexPaths count];++i){
+					NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
+					if(indexpath.row < numberOfFeedObjectsLimit){
+						[limitedIndexPaths addObject:indexpath];
+						id object = [newModels objectAtIndex:i];
+						[limitedObjects addObject:object];
+					}
+				}
+				
+				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+					[_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+				}
+				break;
 			}
 			
 			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
