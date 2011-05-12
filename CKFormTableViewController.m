@@ -127,6 +127,19 @@
 	NSAssert(NO,@"Base Implementation");
 }
 
+- (void)updateStyleForExistingCells{
+	//Update style for indexpath that have not been applyed
+	NSInteger count = [self numberOfObjects];
+	for(NSInteger i = 0; i < count; ++i){
+		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionIndex];
+		CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+		if(controller){
+			NSMutableDictionary* controllerStyle = [controller controllerStyle];
+			[controller applyStyle:controllerStyle forCell:controller.tableViewCell];
+		}
+	}
+}
+
 - (void)start{}
 - (void)stop{}
 
@@ -446,6 +459,7 @@
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	int headerCount = [_headerCellDescriptors count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionIndex];
+	[self.changeSet addObject:theIndexPath];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
 								withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
@@ -458,6 +472,8 @@
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionIndex];
 		[newIndexPaths addObject:newIndexPath];
+		
+		[self.changeSet addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
@@ -470,6 +486,8 @@
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionIndex];
 		[newIndexPaths addObject:newIndexPath];
+		
+		[self.changeSet addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:removeObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
@@ -539,6 +557,11 @@
 
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
+	
+	for(CKFormSectionBase* section in _sections){
+		[section updateStyleForNonNewVisibleCells];
+	}
+	
 	for(CKFormSectionBase* section in _sections){
 		[section start];
 	}
@@ -624,13 +647,6 @@
 
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section{
 	return [_sections indexOfObject:section];
-}
-
-- (void)reload{
-	[super reload];
-	for(CKFormSectionBase* section in _sections){
-		[section updateStyleForNonNewVisibleCells];
-	}
 }
 
 @end

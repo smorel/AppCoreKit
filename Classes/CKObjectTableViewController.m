@@ -295,6 +295,14 @@
 	
 	[self updateNumberOfPages];
 	[self printDebug:@"viewWillAppear"];
+	
+	//Update the indexPath of the visible controllers as they could have moved.
+	NSArray *visibleCells = [self.tableView visibleCells];
+	for (UITableViewCell *cell in visibleCells) {
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+		CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	}
 }
 
 

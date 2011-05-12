@@ -32,6 +32,8 @@
 - (void)removeObjectAtIndex:(NSInteger)index;
 
 - (void)updateStyleForNonNewVisibleCells;
+- (void)updateStyleForExistingCells;
+
 - (void)start;
 - (void)stop;
 
