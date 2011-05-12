@@ -192,7 +192,7 @@
 	[_objectController release];
 	_objectController = [controller retain];
 	
-	if([self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
+	if([self isViewLoaded] && [self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
 		[self reload];
 	}
