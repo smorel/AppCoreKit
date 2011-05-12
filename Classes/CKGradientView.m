@@ -17,12 +17,17 @@
 @synthesize view = _view;
 
 - (void)frameChanged:(id)value{
-	[self.view setNeedsDisplay];
+	if(_size.width != self.view.bounds.size.width
+	   || _size.height != self.view.bounds.size.height){
+		_size = self.view.bounds.size;
+		[self.view setNeedsDisplay];
+	}
 }
 
 - (id)initWithView:(UIView*)theView{
 	if(self = [super init]){
 		self.view = theView;
+		_size = self.view.bounds.size;
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self]];
 		[theView bind:@"frame" target:self action:@selector(frameChanged:)];
 		[NSObject endBindingsContext];

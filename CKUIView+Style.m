@@ -137,6 +137,7 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 					backgroundView = gradientView;
 				}
 				
+				//backgroundView.opaque = YES;
 				
 				if([backgroundView isKindOfClass:[CKGradientView class]]){
 					CKGradientView* gradientView = (CKGradientView*)backgroundView;
@@ -144,7 +145,7 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 					//Apply Background Image
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 						gradientView.image = [myViewStyle backgroundImage];
-						opaque = NO;
+						//opaque = NO;
 					}
 					
 					//Apply Gradient
@@ -215,14 +216,19 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES){
 					dontTouchBackgroundColor = YES;
 					backgroundView.backgroundColor = [myViewStyle backgroundColor];
-					opaque = opaque && (CGColorGetAlpha([backgroundView.backgroundColor CGColor]) >= 1);
+					CGFloat alpha = CGColorGetAlpha([backgroundView.backgroundColor CGColor]);
+					opaque = opaque && (alpha >= 1);
 				}
 				
-				BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
-				if(dontTouchBackgroundColor == NO){
+				if(dontTouchBackgroundColor == NO && (roundedCornerType != CKRoundedCornerViewTypeNone)){
 					backgroundView.backgroundColor = [UIColor clearColor];
 				}
-				backgroundView.opaque = ((colorOpaque == YES) && (backgroundView.alpha >= 1)) ? YES : NO;
+				
+				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
+				if(dontTouchBackgroundColor == NO){
+					//backgroundView.backgroundColor = [UIColor clearColor];
+					backgroundView.backgroundColor = [UIColor redColor];
+				}*/
 			}
 			
 			[appliedStack addObject:view];

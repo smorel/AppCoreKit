@@ -11,6 +11,7 @@
 
 @interface CKGradientViewUpdater : NSObject{
 	UIView* _view;
+	CGSize _size;
 }
 @property(nonatomic,assign)UIView* view;
 - (id)initWithView:(UIView*)view;
