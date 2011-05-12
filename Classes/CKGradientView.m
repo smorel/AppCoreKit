@@ -56,10 +56,12 @@
 @synthesize borderColor = _borderColor;
 @synthesize borderWidth = _borderWidth;
 @synthesize updater = _updater;
+@synthesize borderStyle = _borderStyle;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
+	self.borderStyle = CKRoundedCornerViewTypeNone;
 	self.updater = [[[CKGradientViewUpdater alloc]initWithView:self]autorelease];
 }
 
@@ -96,9 +98,94 @@
 	[super dealloc];
 }
 
-//
+- (CGMutablePathRef)generateBorderPath{
+	UIRectCorner roundedCorners = UIRectCornerAllCorners;
+	switch (self.corners) {
+		case CKRoundedCornerViewTypeTop:
+			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+			break;
+		case CKRoundedCornerViewTypeBottom:
+			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+			break;
+		case CKRoundedCornerViewTypeNone:
+			roundedCorners = 0;
+			break;
+		default:
+			break;
+	}
+	
+	CGFloat width = self.bounds.size.width;
+	CGFloat height = self.bounds.size.height;
+	CGFloat radius = self.roundedCornerSize;
+	CGMutablePathRef path = CGPathCreateMutable ();
+	
+	if(_borderStyle & CKGradientViewBorderTypeLeft){
+		//draw arc from bottom to left or move to bottom left
+		if((roundedCorners & UIRectCornerBottomLeft) && (_borderStyle & CKGradientViewBorderTypeBottom)){
+			CGPathMoveToPoint (path, nil, radius, height);
+			CGPathAddArcToPoint (path, nil, 0, height, 0, height - radius, radius);
+		}
+		else{
+			CGPathMoveToPoint (path, nil, 0, (roundedCorners & UIRectCornerBottomLeft) ? (height - radius) : height);
+		}
+		
+		//draw left line
+		CGPathAddLineToPoint (path, nil, 0, (roundedCorners & UIRectCornerTopLeft) ? radius : 0);
+		
+		//draw arc from left to top
+		if((roundedCorners & UIRectCornerTopLeft) && (_borderStyle & CKGradientViewBorderTypeTop)){
+			CGPathAddArcToPoint (path, nil, 0, 0, radius, 0, radius);
+		}
+	}
+	
+	//draw top
+	if(_borderStyle & CKGradientViewBorderTypeTop){
+		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? radius : 0, 0);
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (width - radius) : width, 0);
+	}
+	
+	//draw right
+	if(_borderStyle & CKGradientViewBorderTypeRight){
+		//draw arc from top to right or move to top right
+		if((roundedCorners & UIRectCornerTopRight) && (_borderStyle & CKGradientViewBorderTypeTop)){
+			CGPathMoveToPoint (path, nil, width - radius, 0);
+			CGPathAddArcToPoint (path, nil, width, 0, width, radius, radius);
+		}
+		else{
+			CGPathMoveToPoint (path, nil, width, (roundedCorners & UIRectCornerTopRight) ? radius : 0);
+		}
+		
+		//draw right line
+		CGPathAddLineToPoint (path, nil, width, (roundedCorners & UIRectCornerBottomRight) ? (height - radius) : height);
+		
+		//draw arc from right to bottom
+		if((roundedCorners & UIRectCornerBottomRight) && (_borderStyle & CKGradientViewBorderTypeBottom)){
+			CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
+		}
+	}
+	
+	//draw bottom
+	if(_borderStyle & CKGradientViewBorderTypeBottom){
+		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (width - radius) : width, height);
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : 0, height);
+	}
+	
+	return path;
+}
 
 - (void)drawRect:(CGRect)rect {
+	
+	/* shadows
+	 [layer setShadowOffset:CGSizeMake(0, 3)];
+	 [layer setShadowOpacity:0.4];
+	 [layer setShadowRadius:3.0f];
+	 [layer setShouldRasterize:YES];
+	 
+	 [layer setCornerRadius:12.0f];
+	 [layer setShadowPath:
+	 [[UIBezierPath bezierPathWithRoundedRect:[self bounds] cornerRadius:12.0f] CGPath]];
+	 */
+	
 	[super drawRect:rect];
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
@@ -136,53 +223,11 @@
 	}
 	
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor]){
-		
 		[_borderColor setStroke];
-		
-		if((self.roundedCornerSize.width == 0 && self.roundedCornerSize.height == 0)
-		   || self.corners == CKRoundedCornerViewTypeNone){
-			CGContextSetLineWidth(gc, _borderWidth);
-			CGContextAddRect(gc, self.bounds);
-			CGContextStrokePath(gc);
-		}
-		else{
-			UIRectCorner roundedCorners = UIRectCornerAllCorners;
-			switch (self.corners) {
-				case CKRoundedCornerViewTypeTop:
-					roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
-					break;
-				case CKRoundedCornerViewTypeBottom:
-					roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
-					break;
-					
-				default:
-					break;
-			}
-			
-			UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:self.roundedCornerSize];
-			/*
-			enum CGLineJoin {
-				kCGLineJoinMiter,
-				kCGLineJoinRound,
-				kCGLineJoinBevel
-			};
-			typedef enum CGLineJoin CGLineJoin;
-			
-			enum CGLineCap {
-				kCGLineCapButt,
-				kCGLineCapRound,
-				kCGLineCapSquare
-			};
-			typedef enum CGLineCap CGLineCap;
-
-			 
-			 @property(nonatomic) CGLineCap lineCapStyle;
-			 @property(nonatomic) CGLineJoin lineJoinStyle;
-			*/
-			path.lineJoinStyle = kCGLineJoinBevel;
-			[path setLineWidth:_borderWidth];
-			[path stroke];
-		}
+		CGContextSetLineWidth(gc, self.borderWidth);
+		CGMutablePathRef path = [self generateBorderPath];
+		CGContextAddPath(gc, path);
+		CGContextStrokePath(gc);
 	}
 }
 

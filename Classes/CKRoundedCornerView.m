@@ -21,7 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.corners = CKRoundedCornerViewTypeNone;
-		self.roundedCornerSize = CGSizeMake(10,10);
+		self.roundedCornerSize = 10;
     }
     return self;
 }
@@ -47,7 +47,7 @@
 	}
 	
 	if (self.corners != CKRoundedCornerViewTypeNone) {
-		[[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:self.roundedCornerSize] addClip];
+		[[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)] addClip];
 	}
 }
 

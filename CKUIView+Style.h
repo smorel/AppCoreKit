@@ -28,6 +28,13 @@ typedef enum{
 	CKViewCornerStylePlain
 }CKViewCornerStyle;
 
+typedef enum{
+	CKViewBorderStyleDefault,
+	CKViewBorderStyleAll,
+	CKViewBorderStyleNone
+}CKViewBorderStyle;
+
+
 extern NSString* CKStyleBackgroundColor;
 extern NSString* CKStyleBackgroundGradientColors;
 extern NSString* CKStyleBackgroundGradientLocations;
@@ -37,6 +44,7 @@ extern NSString* CKStyleCornerSize;
 extern NSString* CKStyleAlpha;
 extern NSString* CKStyleBorderColor;
 extern NSString* CKStyleBorderWidth;
+extern NSString* CKStyleBorderStyle;
 
 @interface NSMutableDictionary (CKViewStyle)
 
@@ -45,10 +53,11 @@ extern NSString* CKStyleBorderWidth;
 - (NSArray*)backgroundGradientLocations;
 - (UIImage*)backgroundImage;
 - (CKViewCornerStyle)cornerStyle;
-- (CGSize)cornerSize;
+- (CGFloat)cornerSize;
 - (CGFloat)alpha;
 - (UIColor*)borderColor;
 - (CGFloat)borderWidth;
+- (CKViewBorderStyle)borderStyle;
 
 @end
 
@@ -75,6 +84,7 @@ extern NSString* CKStyleBorderWidth;
 @optional
 
 - (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
+- (CKGradientViewBorderType)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style;
 
 @end

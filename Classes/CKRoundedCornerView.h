@@ -17,10 +17,10 @@ typedef enum {
 
 @interface CKRoundedCornerView : UIView {
 	CKRoundedCornerViewType _corners;
-	CGSize _roundedCornerSize;
+	CGFloat _roundedCornerSize;
 }
 
 @property (nonatomic,assign) CKRoundedCornerViewType corners;
-@property (nonatomic,assign) CGSize roundedCornerSize;
+@property (nonatomic,assign) CGFloat roundedCornerSize;
 
 @end

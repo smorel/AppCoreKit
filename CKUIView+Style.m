@@ -24,6 +24,7 @@ NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
 NSString* CKStyleBorderColor = @"borderColor";
 NSString* CKStyleBorderWidth = @"borderWidth";
+NSString* CKStyleBorderStyle = @"borderStyle";
 
 @implementation NSMutableDictionary (CKViewStyle)
 
@@ -45,11 +46,15 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
-									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, CKViewCornerStyleRounded,CKViewCornerStyleRoundedTop,CKViewCornerStyleRoundedBottom, CKViewCornerStylePlain)];
+									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, 
+																	 CKViewCornerStyleRounded,
+																	 CKViewCornerStyleRoundedTop,
+																	 CKViewCornerStyleRoundedBottom, 
+																	 CKViewCornerStylePlain)];
 }
 
-- (CGSize)cornerSize{
-	return [self cgSizeForKey:CKStyleCornerSize];
+- (CGFloat)cornerSize{
+	return [self cgFloatForKey:CKStyleCornerSize];
 }
 
 - (CGFloat)alpha{
@@ -62,6 +67,13 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 
 - (CGFloat)borderWidth{
 	return [self cgFloatForKey:CKStyleBorderWidth];
+}
+
+- (CKViewBorderStyle)borderStyle{
+	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
+									 withDictionary:CKEnumDictionary(CKViewBorderStyleDefault,
+																	 CKViewBorderStyleAll,
+																	 CKViewBorderStyleNone)];
 }
 
 @end
@@ -124,6 +136,7 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 				BOOL opaque = YES;
 				
 				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
+				CKGradientViewBorderType viewBorderType = CKGradientViewBorderTypeNone;
 				
 				if([UIView needSubView:myViewStyle forView:view]){
 					CKGradientView* gradientView = [UIView gradientView:view];
@@ -164,32 +177,58 @@ NSString* CKStyleBorderWidth = @"borderWidth";
 					}
 					
 					//Apply corners
-					CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
-					if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
-						cornerStyle = [myViewStyle cornerStyle];
-					}
-					
-					if(cornerStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
-						roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
-					}
-					else{
-						switch(cornerStyle){
-							case CKViewCornerStyleRounded:{
-								roundedCornerType = CKRoundedCornerViewTypeAll;
-								break;
-							}
-							case CKViewCornerStyleRoundedTop:{
-								roundedCornerType = CKRoundedCornerViewTypeTop;
-								break;
-							}
-							case CKViewCornerStyleRoundedBottom:{
-								roundedCornerType = CKRoundedCornerViewTypeBottom;
-								break;
+					{
+						CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
+						if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
+							cornerStyle = [myViewStyle cornerStyle];
+						}
+						
+						if(cornerStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+							roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
+						}
+						else{
+							switch(cornerStyle){
+								case CKViewCornerStyleRounded:{
+									roundedCornerType = CKRoundedCornerViewTypeAll;
+									break;
+								}
+								case CKViewCornerStyleRoundedTop:{
+									roundedCornerType = CKRoundedCornerViewTypeTop;
+									break;
+								}
+								case CKViewCornerStyleRoundedBottom:{
+									roundedCornerType = CKRoundedCornerViewTypeBottom;
+									break;
+								}
 							}
 						}
+						gradientView.corners = roundedCornerType;
 					}
 					
-					gradientView.corners = roundedCornerType;
+					//Apply BorderStyle
+					{
+						CKViewBorderStyle borderStyle = CKViewBorderStyleDefault;
+						if([myViewStyle containsObjectForKey:CKStyleBorderStyle]){
+							borderStyle = [myViewStyle borderStyle];
+						}
+						
+						if(borderStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
+							viewBorderType = [delegate view:gradientView borderStyleWithStyle:myViewStyle];
+						}
+						else{
+							switch(borderStyle){
+								case CKViewBorderStyleAll:{
+									viewBorderType = CKGradientViewBorderTypeAll;
+									break;
+								}
+								case CKViewBorderStyleNone:{
+									viewBorderType = CKGradientViewBorderTypeNone;
+									break;
+								}
+							}
+						}
+						gradientView.borderStyle = viewBorderType;
+					}
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
 						gradientView.roundedCornerSize = [myViewStyle cornerSize];

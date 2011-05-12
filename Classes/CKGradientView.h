@@ -8,6 +8,14 @@
 
 #import "CKRoundedCornerView.h"
 
+typedef enum {
+	CKGradientViewBorderTypeNone = 0,
+	CKGradientViewBorderTypeTop = 1 << 1,
+	CKGradientViewBorderTypeBottom = 1 << 2,
+	CKGradientViewBorderTypeRight = 1 << 3,
+	CKGradientViewBorderTypeLeft = 1 << 4,
+	CKGradientViewBorderTypeAll = CKGradientViewBorderTypeTop | CKGradientViewBorderTypeBottom | CKGradientViewBorderTypeRight | CKGradientViewBorderTypeLeft
+} CKGradientViewBorderType;
 
 @interface CKGradientViewUpdater : NSObject{
 	UIView* _view;
@@ -26,6 +34,8 @@
 	CGFloat _borderWidth;
 	
 	CKGradientViewUpdater* _updater;
+	
+	NSInteger _borderStyle;
 }
 
 @property (nonatomic, retain) NSArray *gradientColors;
@@ -33,5 +43,6 @@
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, assign) CGFloat borderWidth;
+@property (nonatomic, assign) NSInteger borderStyle;
 
 @end

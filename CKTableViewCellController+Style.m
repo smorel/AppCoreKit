@@ -102,6 +102,37 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 	return roundedCornerType;
 }
 
+- (CKGradientViewBorderType)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
+	CKGradientViewBorderType borderType = CKGradientViewBorderTypeNone;
+	
+	switch([style cornerStyle]){
+		case CKViewCornerStyleDefault:{
+			if(view == self.tableViewCell.backgroundView
+			   || view == self.tableViewCell.selectedBackgroundView){
+				UIView* parentView = [self parentControllerView];
+				if([parentView isKindOfClass:[UITableView class]]){
+					UITableView* tableView = (UITableView*)parentView;
+					if(tableView.style == UITableViewStyleGrouped){
+						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+						if(self.indexPath.row == numberOfRows - 1){
+							borderType = CKGradientViewBorderTypeAll;
+						}
+						else {
+							borderType = CKGradientViewBorderTypeAll &~ CKGradientViewBorderTypeBottom;
+						}
+					}
+					else{
+						borderType = CKGradientViewBorderTypeBottom;
+					}
+				}
+			}
+			break;
+		}
+	}
+	
+	return borderType;
+}
+
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
 	if([object isKindOfClass:[UITableViewCell class]]){
 		if(([descriptor.name isEqual:@"backgroundView"]
