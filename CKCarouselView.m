@@ -83,7 +83,7 @@ double round(double x)
 @synthesize numberOfPages = _numberOfPages;
 @synthesize currentPage = _currentPage;
 @synthesize dataSource = _dataSource;
-@synthesize delegate = _delegate;
+//@synthesize delegate = _delegate;
 @synthesize reusableViews = _reusableViews;
 @synthesize displayType = _displayType;
 @synthesize currentSection = _currentSection;
@@ -101,6 +101,10 @@ double round(double x)
 	self.rowSizes = [NSMutableArray array];
 	self.displayType = CKCarouselViewDisplayTypeHorizontal;
 	self.layer.delegate = self;
+	
+	//self.scrollEnabled = NO;
+	self.showsHorizontalScrollIndicator = NO;
+	self.showsVerticalScrollIndicator = NO;
 	
 	//add gestures
     /*UITapGestureRecognizer* tapRecognizer = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)]autorelease];
@@ -146,7 +150,7 @@ double round(double x)
 	[_reusableViews release];
 	_reusableViews = nil;
 	_dataSource = nil;
-	_delegate = nil;
+	//_delegate = nil;
 	[super dealloc];
 }
 
@@ -162,16 +166,16 @@ double round(double x)
 		if(_dataSource && [_dataSource respondsToSelector:@selector(carouselView:numberOfRowsInSection:)]){
 			count += [_dataSource carouselView:self numberOfRowsInSection:i];
 			for(NSInteger j=0;j<count;++j){
-				if(_delegate && [_delegate respondsToSelector:@selector(carouselView:sizeForViewAtIndexPath:)]){
+				if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:sizeForViewAtIndexPath:)]){
 					NSIndexPath* indexPath = [NSIndexPath indexPathForRow:j inSection:i];
-					[_rowSizes addObject:[NSValue valueWithCGSize:[_delegate carouselView:self sizeForViewAtIndexPath:indexPath]]];
+					[_rowSizes addObject:[NSValue valueWithCGSize:[self.delegate carouselView:self sizeForViewAtIndexPath:indexPath]]];
 				}
 			}
 		}
 	}
 	
-	if(_delegate && [_delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
-		self.visibleHeaderView = [_delegate carouselView:self viewForHeaderInSection:0];
+	if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
+		self.visibleHeaderView = [self.delegate carouselView:self viewForHeaderInSection:0];
 	}
 	
 	self.numberOfPages = count;
@@ -228,8 +232,8 @@ double round(double x)
 		[self enqueueReusableView:view];
 		[_visibleViewsForIndexPaths removeObjectForKey:indexPath];
 		
-		if(_delegate && [_delegate respondsToSelector:@selector(carouselView:viewDidDisappearAtIndexPath:)]){
-			[_delegate carouselView:self viewDidDisappearAtIndexPath:indexPath];
+		if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidDisappearAtIndexPath:)]){
+			[self.delegate carouselView:self viewDidDisappearAtIndexPath:indexPath];
 		}
 	}
 	
@@ -242,8 +246,8 @@ double round(double x)
 				[_visibleViewsForIndexPaths setObject:view forKey:indexPath];
 			}
 			
-			if(_delegate && [_delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
-				[_delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
+			if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
+				[self.delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
 			}
 		}
 	}
@@ -499,14 +503,14 @@ double round(double x)
 			if(section != _currentSection){
 				self.currentSection = section;
 				_headerViewToRemove = _visibleHeaderView;
-				if(_delegate && [_delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
-					self.visibleHeaderView = [_delegate carouselView:self viewForHeaderInSection:section];
+				if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
+					self.visibleHeaderView = [self.delegate carouselView:self viewForHeaderInSection:section];
 				}
 			}
 		}
 		[self updateViewsAnimated:NO];
-		if(_delegate && [_delegate respondsToSelector:@selector(carouselViewDidScroll:)]){
-			[_delegate carouselViewDidScroll:self];
+		if(self.delegate && [self.delegate respondsToSelector:@selector(carouselViewDidScroll:)]){
+			[self.delegate carouselViewDidScroll:self];
 		}
 	}
 }

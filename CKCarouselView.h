@@ -69,7 +69,7 @@ typedef enum{
 	CKCarouselViewDisplayTypeHorizontal
 }CKCarouselViewDisplayType;
 
-@interface CKCarouselView : UIView<UIGestureRecognizerDelegate> {
+@interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> {
 	NSMutableArray* _rowSizes;
 	CGFloat _contentOffset;
 	NSInteger _numberOfPages;
@@ -83,7 +83,7 @@ typedef enum{
 	NSMutableDictionary* _visibleViewsForIndexPaths;
 	
 	id _dataSource;
-	id _delegate;
+	//id _delegate;
 	
 	NSMutableDictionary* _reusableViews;
 	CKCarouselViewDisplayType _displayType;
@@ -96,7 +96,7 @@ typedef enum{
 @property (nonatomic,assign) NSInteger currentSection;
 @property (nonatomic,assign) CGFloat spacing;
 @property (nonatomic,assign) IBOutlet id dataSource;
-@property (nonatomic,assign) IBOutlet id delegate;
+//@property (nonatomic,assign) IBOutlet id delegate;
 @property (nonatomic,assign) CKCarouselViewDisplayType displayType;
 
 - (void)reloadData;
