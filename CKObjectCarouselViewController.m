@@ -351,49 +351,51 @@
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
-		
-		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-		if(controllerClass){
-			NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
+		if(object != nil){
 			
-			UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
-			UITableViewCell* cell = (UITableViewCell*)view;
-
-			CKTableViewCellController* controller = nil;
-			if(cell == nil){
-				controller = [[[controllerClass alloc]init]autorelease];
-				[controller performSelector:@selector(setParentController:) withObject:self];
-				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-				[controller setValue:object];
+			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
+			if(controllerClass){
+				NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
 				
-				cell = [controller loadCell];
-				cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+				UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
+				UITableViewCell* cell = (UITableViewCell*)view;
 				
-				//Register cell to controller
-				if(_cellsToControllers == nil){
-					self.cellsToControllers = [NSMutableDictionary dictionary];
+				CKTableViewCellController* controller = nil;
+				if(cell == nil){
+					controller = [[[controllerClass alloc]init]autorelease];
+					[controller performSelector:@selector(setParentController:) withObject:self];
+					[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+					[controller setValue:object];
+					
+					cell = [controller loadCell];
+					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+					
+					//Register cell to controller
+					if(_cellsToControllers == nil){
+						self.cellsToControllers = [NSMutableDictionary dictionary];
+					}
+					
+					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
+				}
+				else{
+					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 				}
 				
-				[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
+				
+				NSAssert(cell != nil,@"The cell has not been created");
+				
+				[controller performSelector:@selector(setParentController:) withObject:self];
+				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
+				
+				[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				[controller setValue:object];
+				[controller setupCell:cell];	
+				
+				[self fetchMoreIfNeededAtIndexPath:indexPath];
+				
+				return cell;
 			}
-			else{
-				controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-			}
-			
-			
-			NSAssert(cell != nil,@"The cell has not been created");
-			
-			[controller performSelector:@selector(setParentController:) withObject:self];
-			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-			[controller performSelector:@selector(setTableViewCell:) withObject:cell];
-			
-			[_controllerFactory initializeController:controller atIndexPath:indexPath];
-			[controller setValue:object];
-			[controller setupCell:cell];	
-			
-			[self fetchMoreIfNeededAtIndexPath:indexPath];
-			
-			return cell;
 		}
 	}
 	

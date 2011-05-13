@@ -228,33 +228,39 @@ double round(double x)
 	
 	for(NSIndexPath* indexPath in toRemove){
 		UIView* view = [_visibleViewsForIndexPaths objectForKey:indexPath];
-		[view removeFromSuperview];
-		[self enqueueReusableView:view];
-		[_visibleViewsForIndexPaths removeObjectForKey:indexPath];
-		
-		if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidDisappearAtIndexPath:)]){
-			[self.delegate carouselView:self viewDidDisappearAtIndexPath:indexPath];
+		if(view != nil){
+			[view removeFromSuperview];
+			[self enqueueReusableView:view];
+			[_visibleViewsForIndexPaths removeObjectForKey:indexPath];
+			
+			if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidDisappearAtIndexPath:)]){
+				[self.delegate carouselView:self viewDidDisappearAtIndexPath:indexPath];
+			}
 		}
 	}
 	
 	for(NSIndexPath* indexPath in toAdd){
 		if(_dataSource && [_dataSource respondsToSelector:@selector(carouselView:viewForRowAtIndexPath:)]){
 			UIView* view = [_dataSource carouselView:self viewForRowAtIndexPath:indexPath];
-			if([view superview] != self){
-				[view removeFromSuperview];
-				[self addSubview:view];
-				[_visibleViewsForIndexPaths setObject:view forKey:indexPath];
-			}
-			
-			if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
-				[self.delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
+			if(view != nil){
+				if([view superview] != self){
+					[view removeFromSuperview];
+					[self addSubview:view];
+					[_visibleViewsForIndexPaths setObject:view forKey:indexPath];
+				}
+				
+				if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
+					[self.delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
+				}
 			}
 		}
 	}
 	
 	for(NSIndexPath* indexPath in [_visibleViewsForIndexPaths allKeys]){
 		UIView* view = [_visibleViewsForIndexPaths objectForKey:indexPath];
-		[self layoutSubView:view atIndexPath:indexPath];
+		if(view != nil){
+			[self layoutSubView:view atIndexPath:indexPath];
+		}
 	}
 	
 	//Same for HeaderView
