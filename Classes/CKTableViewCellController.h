@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"
+#import "CKNSDictionary+TableViewAttributes.h"
 
 
 enum{
