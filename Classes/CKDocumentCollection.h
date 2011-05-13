@@ -24,6 +24,7 @@
 
 - (id)initWithFeedSource:(CKFeedSource*)source;
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
+- (id)initWithStorage:(id)storage;
 
 - (NSInteger)count;
 - (NSArray*)allObjects;

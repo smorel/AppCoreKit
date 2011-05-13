@@ -228,6 +228,16 @@ static NSString* getPropertyType(objc_property_t property) {
 	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
 }
 
++ (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:property prefix:prefix suffix:suffix];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix{
+	NSString* selectorName = [NSString stringWithFormat:@"%@%@",property,suffix];
+	return NSSelectorFromString(selectorName);
+}
+
 + (SEL)insertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
 	return NSSelectorFromString(selectorName);

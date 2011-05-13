@@ -24,5 +24,9 @@
 //Helpers to create and set collections
 - (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source forKey:(NSString*)key;
 - (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage forKey:(NSString*)key;
+- (CKDocumentArray*)arrayWithStorage:(id)storage forKey:(NSString*)key;
+
+- (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
+- (CKDocumentArray*)arrayWithStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
 
 @end

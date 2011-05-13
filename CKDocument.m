@@ -73,4 +73,23 @@
 	return array;
 }
 
+- (CKDocumentArray*)arrayWithStorage:(id)storage forKey:(NSString*)key{
+	NSAssert([_objects objectForKey:key] == nil,@"The document already contains an object for key '%@'",key);
+	CKDocumentArray* array = [[[CKDocumentArray alloc]initWithStorage:storage]autorelease];
+	[_objects setObject:array forKey:key];
+	return array;
+}
+
+- (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key{
+	CKDocumentArray* ar = [self arrayWithFeedSource:source withStorage:storage forKey:key];
+	ar.autosave = autoSave;
+	return ar;
+}
+
+- (CKDocumentArray*)arrayWithStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key{
+	CKDocumentArray* ar = [self arrayWithStorage:storage forKey:key];
+	ar.autosave = autoSave;
+	return ar;	
+}
+
 @end

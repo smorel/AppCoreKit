@@ -245,40 +245,6 @@
 		}
 	}
 	
-	/*
-	int count = 0;
-	unsigned currentIndex = [indexs firstIndex];
-	switch(kind){
-		case NSKeyValueChangeInsertion:{
-			while (currentIndex != NSNotFound) {
-				NSAssert(count < [newModels count],@"Problem with observer change newModels");
-				
-				//Do not notify add if currentIndex > limit
-				if(numberOfFeedObjectsLimit > 0 && currentIndex >= numberOfFeedObjectsLimit){}
-				else{
-					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
-						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-					}
-				}
-				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-				++count;
-			}
-			break;
-		}
-		case NSKeyValueChangeRemoval:{
-			while (currentIndex != NSNotFound) {
-				NSAssert(count < [oldModels count],@"Problem with observer change newModels");
-				if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
-					[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-				}
-				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-				++count;
-			}
-			break;
-		}
-	}	
-	 */
-	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 		if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
 			[_delegate objectControllerDidEndUpdating:self];

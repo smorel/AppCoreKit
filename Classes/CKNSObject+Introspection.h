@@ -44,6 +44,9 @@ typedef BOOL(^CKObjectPredicate)(id);
 
 - (NSMutableArray*)subObjects :(CKObjectPredicate)expandWith insertWith:(CKObjectPredicate)insertWith includeSelf:(BOOL)includeSelf;
 
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
++ (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix;
++ (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix;
 + (SEL)insertorForProperty : (NSString*)propertyName;
 + (SEL)keyValueInsertorForProperty : (NSString*)propertyName;
 + (SEL)typeCheckSelectorForProperty : (NSString*)propertyName;

@@ -30,6 +30,13 @@
 	return self;
 }
 
+- (id)initWithStorage:(id)storage{
+	[super init];
+	self.storage = storage;
+	self.autosave = NO;
+	return self;
+}
+
 - (void)feedSourceMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }
