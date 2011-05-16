@@ -42,11 +42,12 @@
 }
 
 - (void)setMappings:(id)theMappings{
+	NSMutableArray* res = [NSMutableArray array];
+	[res mapControllerClass:[CKDocumentCollectionViewCellController class] withObjectClass:[CKDocumentCollection class]];
+	[res addObjectsFromArray:theMappings];
+	
 	[_mappings release];
-	_mappings = [theMappings retain];
-	if(_mappings){
-		[_mappings mapControllerClass:[CKDocumentCollectionViewCellController class] withObjectClass:[CKDocumentCollection class]];
-	}
+	_mappings = [res retain];
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
