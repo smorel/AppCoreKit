@@ -27,8 +27,6 @@
 
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
-- (Class)controllerClassForIndex:(NSInteger)index;
-- (void)initializeController:(id)controller atIndex:(NSInteger)index;
 - (void)removeObjectAtIndex:(NSInteger)index;
 
 - (void)updateStyleForNonNewVisibleCells;
@@ -37,6 +35,7 @@
 - (void)start;
 - (void)stop;
 
+- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
 @end
 
 
@@ -78,28 +77,17 @@
 @property (nonatomic,retain) NSArray* headerCellDescriptors;
 @property (nonatomic,retain) NSArray* footerCellDescriptors;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 
 @end
 
 typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
-@interface CKFormCellDescriptor : CKModelObject{
+@interface CKFormCellDescriptor : CKObjectViewControllerFactoryItem{
 	id _value;
-	Class _controllerClass;
-	
-	//OS4
-	CKFormCellInitializeBlock _initializeBlock;
-	//OS3
-	id _initializeTarget;
-	SEL _initializeAction;
 }
 
 @property (nonatomic,retain) id value;
-@property (nonatomic,assign) Class controllerClass;
-@property (nonatomic,copy) CKFormCellInitializeBlock block;
-@property (nonatomic,assign) id target;
-@property (nonatomic,assign) SEL action;
 
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock;
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action;
@@ -121,7 +109,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (void)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
 

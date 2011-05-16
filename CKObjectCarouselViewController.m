@@ -75,7 +75,7 @@
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
 	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory];
@@ -348,24 +348,27 @@
 	return [controller identifier];
 }
 
+- (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
+	CGSize size = [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];	
+	return size;
+}
+
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
 		if(object != nil){
 			
-			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-			if(controllerClass){
-				NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
+			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
+			if(factoryItem != nil && factoryItem.controllerClass){
+				NSString* identifier = [self identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath];
 				
 				UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 				UITableViewCell* cell = (UITableViewCell*)view;
 				
 				CKTableViewCellController* controller = nil;
 				if(cell == nil){
-					controller = [[[controllerClass alloc]init]autorelease];
+					controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
 					[controller performSelector:@selector(setParentController:) withObject:self];
-					[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-					[controller setValue:object];
 					
 					cell = [controller loadCell];
 					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -388,7 +391,8 @@
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
 				
-				[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				//[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				//no more needs as we register callbacks on create
 				[controller setValue:object];
 				[controller setupCell:cell];	
 				
@@ -398,6 +402,7 @@
 			}
 		}
 	}
+	
 	
 	return nil;
 }
@@ -422,19 +427,6 @@
 	}
 	//}
 	return view;
-}
-
-- (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		id object = [_objectController objectAtIndexPath:indexPath];
-		
-		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-		if(controllerClass && [controllerClass respondsToSelector:@selector(rowSizeForObject:withParams:)]){
-			NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:self.params];
-			return [v CGSizeValue];
-		}
-	}
-	return CGSizeMake(0,0);
 }
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath{
@@ -517,18 +509,8 @@
 }
 
 - (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		id object = [_objectController objectAtIndexPath:indexPath];
-		
-		Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-		if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-			CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:self.params];
-			return flags;
-		}
-	}
-	//}
-	return CKTableViewCellFlagNone;
+	CKTableViewCellFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
+	return flags;
 }
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{

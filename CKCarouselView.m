@@ -64,6 +64,7 @@ double round(double x)
 @property (nonatomic,retain) NSMutableDictionary* reusableViews;
 @property (nonatomic,retain) NSMutableArray* rowSizes;
 @property (nonatomic,assign) CGFloat contentOffset;
+@property (nonatomic, assign) id delegate;
 
 - (void)enqueueReusableView:(UIView*)view;
 - (void)updateVisibleIndexPaths:(NSMutableArray*)visiblesIndexPaths indexPathToAdd:(NSMutableArray*)indexPathToAdd indexPathToRemove:(NSMutableArray*)indexPathToRemove;
@@ -89,6 +90,7 @@ double round(double x)
 @synthesize currentSection = _currentSection;
 @synthesize spacing = _spacing;
 @synthesize rowSizes = _rowSizes;
+@dynamic delegate;
 
 - (void)postInit{
 	self.contentOffset = 0;

@@ -58,10 +58,10 @@
 			//get the value at indexpath and the controller type and call + (BOOL)hasAccessoryResponderWithValue:(id)object
 			if([controller.parentController isKindOfClass:[CKObjectTableViewController class]]){
 				CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.parentController;
-				Class controllerClass = [tableViewController.controllerFactory controllerClassForIndexPath:nextIndexPath];
-				if([controllerClass respondsToSelector:@selector(hasAccessoryResponderWithValue:)]){
+				CKObjectViewControllerFactoryItem* factoryItem = [tableViewController.controllerFactory factoryItemAtIndexPath:nextIndexPath];
+				if([factoryItem.controllerClass respondsToSelector:@selector(hasAccessoryResponderWithValue:)]){
 					id object = [tableViewController.objectController objectAtIndexPath:nextIndexPath];
-					if([controllerClass hasAccessoryResponderWithValue:object] == YES)
+					if([factoryItem.controllerClass hasAccessoryResponderWithValue:object] == YES)
 						return nextIndexPath;
 				}
 			}

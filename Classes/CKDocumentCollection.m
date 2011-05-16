@@ -15,6 +15,12 @@
 @synthesize autosave = _autosave;
 @synthesize delegate = _delegate;
 
+- (id)init{
+	[super init];
+	self.autosave = NO;
+	return self;
+}
+
 
 - (id)initWithFeedSource:(CKFeedSource*)source{
 	[super init];
