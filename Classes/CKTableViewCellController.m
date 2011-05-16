@@ -13,6 +13,7 @@
 #import "CKStyleManager.h"
 #import <CloudKit/CKNSObject+Bindings.h>
 
+
 @implementation CKTableViewCellController
 
 @synthesize name = _name;
@@ -29,6 +30,12 @@
 @synthesize parentController = _parentController;
 @synthesize indexPath = _indexPath;
 @synthesize rowHeight = _rowHeight;
+@synthesize cellStyle = _cellStyle;
+
+@synthesize initCallback;
+@synthesize setupCallback;
+@synthesize selectionCallback;
+@synthesize accessorySelectionCallback;
 
 - (id)init {
 	self = [super init];
@@ -36,6 +43,7 @@
 		_selectable = YES;
 		self.rowHeight = 0.0f;
 		self.editable = YES;
+		self.cellStyle = UITableViewCellStyleDefault;
 	}
 	return self;
 }
@@ -48,6 +56,12 @@
 	[_indexPath release];
 	[_target release];
 	[_name release];
+	
+	
+	[initCallback release];
+	[setupCallback release];
+	[selectionCallback release];
+	[accessorySelectionCallback release];
 	
 	_target = nil;
 	_action = nil;
@@ -109,9 +123,9 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 }
 
-- (UITableViewCell *)cellWithStyle:(UITableViewStyle)style {
+- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style {
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	UITableViewStyle cellStyle = style;
+	UITableViewCellStyle cellStyle = style;
 	if([controllerStyle containsObjectForKey:CKStyleCellType])
 		cellStyle = [controllerStyle cellStyle];
 
@@ -123,6 +137,9 @@
 		acType = [controllerStyle accessoryType];
 	
 	cell.accessoryType = acType;
+	if(initCallback != nil){
+		[initCallback execute:self];
+	}
 	//cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 	[self initTableViewCell:cell];
 	
@@ -152,11 +169,14 @@
 }
 
 - (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
+	UITableViewCell *cell = [self cellWithStyle:self.cellStyle];
 	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	if(setupCallback != nil){
+		[setupCallback execute:self];
+	}
 	//if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return;
 }
@@ -180,6 +200,9 @@
 		if (_target && [_target respondsToSelector:_action]) {
 			[_target performSelector:_action withObject:self];
 		}
+	if(selectionCallback != nil){
+		[selectionCallback execute:self];
+	}
 	//}
 }
 
@@ -187,6 +210,9 @@
 - (void)didSelectAccessoryView{
 	if (_target && [_target respondsToSelector:_accessoryAction]) {
 		[_target performSelector:_accessoryAction withObject:self];
+	}
+	if(accessorySelectionCallback != nil){
+		[accessorySelectionCallback execute:self];
 	}
 }
 

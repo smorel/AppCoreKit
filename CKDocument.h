@@ -14,6 +14,8 @@
 //	NSMutableDictionary* _retainCounts;
 }
 
++ (id)sharedDocument;
+
 //- (void)retainObjectsForKey:(NSString*)key;
 //- (void)releaseObjectsForKey:(NSString*)key;
 
@@ -28,5 +30,6 @@
 
 - (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
 - (CKDocumentArray*)arrayWithStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
+- (CKDocumentArray*)arrayForKey:(NSString*)key;
 
 @end

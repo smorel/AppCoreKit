@@ -74,18 +74,11 @@
 
 @implementation CKFormObjectControllerFactory
 
-- (Class)controllerClassForIndexPath:(NSIndexPath*)indexPath{
+- (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
-	return [formSection controllerClassForIndex:indexPath.row];
-}
-
-- (void)initializeController:(id)controller atIndexPath:(NSIndexPath*)indexPath{
-	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
-	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
-	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
-	[formSection initializeController:controller atIndex:indexPath.row];
+	return [formSection factoryItemForIndex:indexPath.row];
 }
 
 @end
@@ -110,13 +103,9 @@
 	return nil;
 }
 
-- (Class)controllerClassForIndex:(NSInteger)index{
+- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 	return nil;
-}
-
-- (void)initializeController:(id)controller atIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
 }
 
 - (void)updateStyleForNonNewVisibleCells{
@@ -222,19 +211,9 @@
 	return cellDescriptor.value;
 }
 
-- (Class)controllerClassForIndex:(NSInteger)index{
+- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
 	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	return cellDescriptor.controllerClass;
-}
-
-- (void)initializeController:(id)controller atIndex:(NSInteger)index{
-	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	if(cellDescriptor.block){
-		cellDescriptor.block(controller);
-	}
-	else if(cellDescriptor.target){
-		[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
-	}
+	return (CKObjectViewControllerFactoryItem*)cellDescriptor;
 }
 
 - (void)updateStyleForNonNewVisibleCells{
@@ -274,10 +253,10 @@
 @synthesize changeSet = _changeSet;
 
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	[super init];
 	self.objectController = [CKDocumentController controllerWithCollection:collection];
-
+	
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
@@ -299,7 +278,7 @@
 	}
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
 	return section;
 }
@@ -338,27 +317,26 @@
 	return nil;
 }
 
-- (Class)controllerClassForIndex:(NSInteger)index{
+- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
 	int headerCount = [_headerCellDescriptors count];
 	if(index < headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
-		return cellDescriptor.controllerClass;
+		return cellDescriptor;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
 	if(index < count + headerCount){
-		return [_controllerFactory controllerClassForIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+		return [_controllerFactory factoryItemAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 	}
 	
 	int footerCount = [_footerCellDescriptors count];
 	if(index < count + headerCount +footerCount){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
-		return cellDescriptor.controllerClass;
+		return cellDescriptor;
 	}
 	
 	return nil;
 }
-
 
 - (void)removeObjectAtIndex:(NSInteger)index{
 	int headerCount = [_headerCellDescriptors count];
@@ -376,38 +354,6 @@
 	int footerCount = [_footerCellDescriptors count];
 	if(index < count + headerCount + footerCount){
 		NSAssert(NO,@"NOT IMPLEMENTED");
-	}
-}
-
-- (void)initializeController:(id)controller atIndex:(NSInteger)index{
-	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
-		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
-		if(cellDescriptor.block){
-			cellDescriptor.block(controller);
-		}
-		else if(cellDescriptor.target){
-			[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
-		}
-		return;
-	}
-	
-	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
-		[_controllerFactory initializeController:controller atIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
-		return;
-	}
-	
-	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount + footerCount){
-		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
-		if(cellDescriptor.block){
-			cellDescriptor.block(controller);
-		}
-		else if(cellDescriptor.target){
-			[cellDescriptor.target performSelector:cellDescriptor.action withObject:controller];
-		}
-		return;
 	}
 }
 
@@ -495,16 +441,12 @@
 
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
-@synthesize controllerClass = _controllerClass;
-@synthesize block = _initializeBlock;
-@synthesize target = _initializeTarget;
-@synthesize action = _initializeAction;
 
 - (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.block = initializeBlock;
+	[self.params setObject:[CKCallback callbackWithBlock:^(id controller){initializeBlock(controller); return (id)nil;}] forKey:CKObjectViewControllerFactoryItemInit];
 	return self;
 }
 
@@ -512,8 +454,7 @@
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
-	self.target = theTarget;
-	self.action = theAction;
+	[self.params setObject:[CKCallback callbackWithTarget:theTarget action:theAction] forKey:CKObjectViewControllerFactoryItemInit];
 	return self;
 }
 
@@ -622,7 +563,7 @@
 	return section;
 }
 
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];

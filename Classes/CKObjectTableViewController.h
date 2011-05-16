@@ -9,9 +9,13 @@
 #import "CKTableViewController.h"
 #import "CKObjectController.h"
 #import "CKObjectViewControllerFactory.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
-#import <CloudKit/CKTableViewCellController.h>
+#import "CKTableViewCellController.h"
+
+//not needed in this implementation but very often used when inheriting ...
+#import "CKNSDictionary+TableViewAttributes.h"
+#import "CKObjectViewControllerFactory.h"
+#import "CKDocumentController.h"
 
 @interface CKObjectTableViewController : CKTableViewController<CKObjectControllerDelegate,UISearchBarDelegate> {
 	id _objectController;
@@ -66,10 +70,10 @@
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings withNibName:(NSString*)nib;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;

@@ -56,14 +56,16 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 @implementation CKModelObject
 
+
++ (id)model{
+	return [[[[self class]alloc]init]autorelease];
+}
+
 - (void)postInit{
 }
 
 
 - (void)initializeProperties{
-	if([[[self class]description]isEqual:@"RFDDeal"] == YES){
-		int i = 3;
-	}
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){

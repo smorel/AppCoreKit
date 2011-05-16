@@ -134,6 +134,9 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
+	if(style == nil || [style isEmpty] == YES)
+		return NO;
+	
 	if([object isKindOfClass:[UITableViewCell class]]){
 		if(([descriptor.name isEqual:@"backgroundView"]
 		   || [descriptor.name isEqual:@"selectedBackgroundView"]) && [style isEmpty] == NO){
@@ -182,6 +185,9 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 @implementation CKTableViewController (CKStyle)
 
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
+	if(style == nil || [style isEmpty] == YES)
+		return NO;
+	
 	if([object isKindOfClass:[UITableView class]]){
 		if([descriptor.name isEqual:@"backgroundView"] && [style isEmpty] == NO){
 			return YES;

@@ -10,7 +10,7 @@
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
-
+#import "CKCallback.h"
 
 enum{
 	CKTableViewCellFlagNone = 1UL << 0,
@@ -40,6 +40,13 @@ typedef NSUInteger CKTableViewCellFlags;
 	
 	//Set when reusing controllers via CKObjectTableViewController
 	UITableViewCell* _tableViewCell;
+	
+	CKCallback* initCallback;
+	CKCallback* setupCallback;
+	CKCallback* selectionCallback;
+	CKCallback* accessorySelectionCallback;
+	
+	UITableViewCellStyle _cellStyle;
 }
 
 @property (nonatomic, retain) NSString *name;
@@ -49,6 +56,7 @@ typedef NSUInteger CKTableViewCellFlags;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKTableViewController *parentController;
 @property (nonatomic, assign, readonly) UITableViewCell *tableViewCell;
+@property (nonatomic, assign) UITableViewCellStyle cellStyle;
 
 @property (nonatomic, retain) id target;
 @property (nonatomic, assign) SEL action;
@@ -60,7 +68,13 @@ typedef NSUInteger CKTableViewCellFlags;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, assign) CGFloat rowHeight;
 
-- (UITableViewCell *)cellWithStyle:(UITableViewStyle)style;
+
+@property (nonatomic, retain) CKCallback* initCallback;
+@property (nonatomic, retain) CKCallback* setupCallback;
+@property (nonatomic, retain) CKCallback* selectionCallback;
+@property (nonatomic, retain) CKCallback* accessorySelectionCallback;
+
+- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style;
 
 //SEB : use a CKNibCellController instead
 //- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;

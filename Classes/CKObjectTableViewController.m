@@ -123,7 +123,7 @@
 	_searchEnabled = NO;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings withNibName:(NSString*)nib{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
 	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
 	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
@@ -138,7 +138,7 @@
 	return self;	
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSDictionary*)mappings{
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	[self initWithCollection:collection mappings:mappings withNibName:nil];
 	return self;
 }
@@ -372,43 +372,6 @@
 	}
 }
 
-- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation size:(CGSize)size{
-	CGFloat height = 0;
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-			id object = [_objectController objectAtIndexPath:indexPath];
-			
-			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-			if(controllerClass && [controllerClass respondsToSelector:@selector(rowSizeForObject:withParams:)]){
-				NSValue* v = (NSValue*) [controllerClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:self.params];
-				CGSize size = [v CGSizeValue];
-				//NSLog(@"Size for row : %d,%d =%f,%f",indexPath.row,indexPath.section,size.width,size.height);
-				height = (_orientation == CKTableViewOrientationLandscape) ? size.width : size.height;
-			}
-		}
-	//}
-	
-	NSIndexPath* toReach = [[_indexPathToReachAfterRotation copy]autorelease];
-	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
-		//that means the view is rotating and needs to be updated with the future cells size
-		self.indexPathToReachAfterRotation = nil;
-		CGFloat offset = 0;
-		if(toReach.row > 0){
-			CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
-			offset = r.origin.y + r.size.height;
-		}
-		else{
-			CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
-			offset = r.origin.y + r.size.height;
-		}
-		self.indexPathToReachAfterRotation = toReach;
-		self.tableView.contentOffset = CGPointMake(0,offset);
-	}
-	
-	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
-	
-	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
-}
 
 #pragma mark Orientation Management
 - (void)adjustView{
@@ -552,24 +515,41 @@
 	return nil;
 }
 
+- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation size:(CGSize)size{
+	CGFloat height = 0;
+	CGSize thesize = [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];
+	height = (_orientation == CKTableViewOrientationLandscape) ? thesize.width : thesize.height;
+	
+	NSIndexPath* toReach = [[_indexPathToReachAfterRotation copy]autorelease];
+	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
+		//that means the view is rotating and needs to be updated with the future cells size
+		self.indexPathToReachAfterRotation = nil;
+		CGFloat offset = 0;
+		if(toReach.row > 0){
+			CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
+			offset = r.origin.y + r.size.height;
+		}
+		else{
+			CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
+			offset = r.origin.y + r.size.height;
+		}
+		self.indexPathToReachAfterRotation = toReach;
+		self.tableView.contentOffset = CGPointMake(0,offset);
+	}
+	
+	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
+	
+	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.view.bounds.size];
 	return height;
 }
 
 - (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-			id object = [_objectController objectAtIndexPath:indexPath];
-			
-			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-			if(controllerClass && [controllerClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-				CKTableViewCellFlags flags = [controllerClass flagsForObject:object withParams:self.params];
-				return flags;
-			}
-		}
-	//}
-	return CKTableViewCellFlagNone;
+	CKTableViewCellFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
+	return flags;
 }
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
@@ -611,19 +591,18 @@
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:indexPath];
 			
-			Class controllerClass = [_controllerFactory controllerClassForIndexPath:indexPath];
-			if(controllerClass){
-				NSString* identifier = [self identifierForClass:controllerClass object:object indexPath:indexPath];
+			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
+			if(factoryItem != nil && factoryItem.controllerClass){
+				NSString* identifier = [self identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
 				CKTableViewCellController* controller = nil;
 				if(cell == nil){
 					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
-					controller = [[[controllerClass alloc]init]autorelease];
+					
+					controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
 					[controller performSelector:@selector(setParentController:) withObject:self];
-					[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-					[controller setValue:object];
 					
 					cell = [controller loadCell];
 					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
@@ -673,7 +652,8 @@
 				}
 				[_indexPathToCells setObject:[NSValue valueWithNonretainedObject:cell] forKey:indexPath];
 				
-				[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				//[_controllerFactory initializeController:controller atIndexPath:indexPath];
+				//no more needed as we register callbacks.
 				[controller setValue:object];
 				[controller setupCell:cell];	
 				

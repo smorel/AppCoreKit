@@ -17,6 +17,16 @@
 @synthesize objects = _objects;
 //@synthesize retainCounts = _retainCounts;
 
+
++ (id)sharedDocument{
+	static id CKDocumentSharedInstance = nil;
+	if (CKDocumentSharedInstance == nil) {
+		CKDocumentSharedInstance = [[[self class] alloc] init];
+	}
+	return CKDocumentSharedInstance;
+}
+
+
 - (id)init{
 	[super init];
 	self.objects = [NSMutableDictionary dictionary];
@@ -90,6 +100,13 @@
 	CKDocumentArray* ar = [self arrayWithStorage:storage forKey:key];
 	ar.autosave = autoSave;
 	return ar;	
+}
+
+- (CKDocumentArray*)arrayForKey:(NSString*)key{
+	NSAssert([_objects objectForKey:key] == nil,@"The document already contains an object for key '%@'",key);
+	CKDocumentArray* array = [[[CKDocumentArray alloc]init]autorelease];
+	[_objects setObject:array forKey:key];
+	return array;
 }
 
 @end

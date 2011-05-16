@@ -16,6 +16,7 @@ NSString* const CKTableViewAttributeAnimationDuration = @"CKTableViewAttributeAn
 NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
 NSString* const CKTableViewAttributeStyle = @"CKTableViewAttributeStyle";
 NSString* const CKTableViewAttributeParentController = @"CKTableViewAttributeParentController";
+NSString* const CKTableViewAttributeObject = @"CKTableViewAttributeObject";
 
 
 @implementation NSDictionary (CKTableViewAttributes)
@@ -57,6 +58,10 @@ NSString* const CKTableViewAttributeParentController = @"CKTableViewAttributePar
 - (UIViewController*)parentController{
 	NSValue* value = [self objectForKey:CKTableViewAttributeParentController];
 	return (UIViewController*)[value nonretainedObjectValue];
+}
+
+- (id)object{
+	return [self objectForKey:CKTableViewAttributeObject];
 }
 
 @end

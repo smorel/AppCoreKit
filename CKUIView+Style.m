@@ -100,6 +100,9 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 }
 
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
+	if(style == nil || [style isEmpty] == YES)
+		return NO;
+	
 	if([style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
@@ -111,6 +114,9 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName{
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
+	if(myViewStyle == nil || [myViewStyle isEmpty] == YES)
+		return NO;
+	
 	if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
 	   || [myViewStyle containsObjectForKey:CKStyleBackgroundImage]
@@ -131,7 +137,7 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
 	
 		if(myViewStyle){
-			if([myViewStyle isEmpty] == NO){
+			if(myViewStyle != nil && [myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
 				
@@ -287,6 +293,10 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 
 //FIXME : something not optimial here as we retrieve myViewStyle which is done also in applyStyle
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if(style == nil)
+		return;
+	
+	
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
