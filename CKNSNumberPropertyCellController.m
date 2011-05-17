@@ -73,12 +73,12 @@
 			
 			UITableView *tableView = self.parentController.tableView;
 			CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-			CGFloat offset = (width/2.55);
-			CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
+			CGFloat offset = (width/3);
+			CGRect frame = CGRectIntegral(CGRectMake(0, offset, width - offset, self.rowHeight - 20));
 			UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 			textField.borderStyle = UITextBorderStyleNone;
 			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-			//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			textField.clearButtonMode = UITextFieldViewModeAlways;
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -111,8 +111,8 @@
 		UITextField* textField = (UITextField*)cell.accessoryView;
 		UITableView *tableView = self.parentController.tableView;
 		CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-		CGFloat offset = (width/2.55);
-		textField.frame = CGRectIntegral(CGRectMake(0, 10, width - offset, 44 - 20));
+		CGFloat offset = (width/3);
+		textField.frame = CGRectIntegral(CGRectMake(0, offset, width - offset, 44 - 20));
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		textField.placeholder = _(placeholerText);

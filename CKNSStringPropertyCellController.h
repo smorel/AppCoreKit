@@ -10,7 +10,7 @@
 
 
 @interface CKNSStringPropertyCellController : CKStandardCellController<UITextFieldDelegate> {
-
+	CGFloat _accessoryViewSizeRatio;
 }
 
 @end
