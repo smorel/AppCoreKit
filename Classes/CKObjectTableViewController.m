@@ -192,13 +192,13 @@
 	[_objectController release];
 	_objectController = [controller retain];
 	
+	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
+		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
+	}
+	
 	if([self isViewLoaded] && [self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
 		[self reload];
-	}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 }
 
