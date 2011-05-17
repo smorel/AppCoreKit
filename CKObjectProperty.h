@@ -19,6 +19,7 @@
 @property (nonatomic,assign) id value;
 @property (nonatomic,readonly) NSString* name;
 
++ (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 
 - (CKClassPropertyDescriptor*)descriptor;

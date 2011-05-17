@@ -23,8 +23,7 @@
 }
 
 //pas utiliser load cell mais initCell pour application des styles ...
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITableView *tableView = self.parentController.tableView;
@@ -53,6 +52,7 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	[super setupCell:cell];
 	CKObjectProperty* model = self.value;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];

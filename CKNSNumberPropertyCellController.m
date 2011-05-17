@@ -45,13 +45,13 @@
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }
 
-- (UITableViewCell*)loadCell{
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[self identifier]] autorelease];
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	[super setupCell:cell];
 	CKObjectProperty* model = self.value;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
