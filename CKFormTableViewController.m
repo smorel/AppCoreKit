@@ -65,6 +65,12 @@
 	return [formSection removeObjectAtIndex:indexPath.row];
 }
 
+- (void)fetchRange:(NSRange)range forSection:(int)section{
+	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	[formSection fetchRange:range];
+}
+
 @end
 
 
@@ -115,6 +121,8 @@
 - (void)removeObjectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 }
+
+- (void)fetchRange:(NSRange)range{}
 
 - (void)updateStyleForExistingCells{
 	//Update style for indexpath that have not been applyed
@@ -283,6 +291,12 @@
 	return section;
 }
 
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	section.headerTitle = title;
+	return section;
+}
+
 - (NSInteger)numberOfObjects{
 	NSInteger count = 0;
 	count += [_headerCellDescriptors count];
@@ -315,6 +329,14 @@
 	}
 	
 	return nil;
+}
+
+
+- (void)fetchRange:(NSRange)range{
+	int headerCount = [_headerCellDescriptors count];
+	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
+		[_objectController fetchRange:NSMakeRange(range.location - headerCount,range.length) forSection:0];
+	}
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{

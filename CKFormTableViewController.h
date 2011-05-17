@@ -28,6 +28,7 @@
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
 - (void)removeObjectAtIndex:(NSInteger)index;
+- (void)fetchRange:(NSRange)range;
 
 - (void)updateStyleForNonNewVisibleCells;
 - (void)updateStyleForExistingCells;
@@ -79,6 +80,7 @@
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title;
 
 @end
 
