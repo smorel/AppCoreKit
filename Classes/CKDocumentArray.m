@@ -77,7 +77,10 @@
 	NSArray* theObjects = [NSArray arrayWithArray: _objects];
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[_objects count])];
+	
+	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	[_objects removeAllObjects];
+	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
