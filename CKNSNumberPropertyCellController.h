@@ -9,7 +9,8 @@
 #import "CKStandardCellController.h"
 
 
-@interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{
+@interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{	
+	CGFloat _accessoryViewSizeRatio;
 }
 
 @end

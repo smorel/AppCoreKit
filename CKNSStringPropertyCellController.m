@@ -24,16 +24,16 @@
 
 //pas utiliser load cell mais initCell pour application des styles ...
 - (void)initTableViewCell:(UITableViewCell*)cell{
+	_accessoryViewSizeRatio = 2.0 / 3.0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITableView *tableView = self.parentController.tableView;
-	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-	CGFloat offset = (width/3);
-	CGRect frame = CGRectIntegral(CGRectMake(0, offset, width - offset, 44 - 20));
+	
+	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, 44 - 20));
 	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	textField.clearButtonMode = UITextFieldViewModeAlways;
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentLeft;
@@ -66,9 +66,7 @@
 	//update accessory view frame
 	UITextField* textField = (UITextField*)cell.accessoryView;
 	UITableView *tableView = self.parentController.tableView;
-	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-	CGFloat offset = (width/3);
-	textField.frame = CGRectIntegral(CGRectMake(0, offset, width - offset, 44 - 20));
+	textField.frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, 44 - 20));
 	
 	NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 	textField.placeholder = _(placeholerText);
