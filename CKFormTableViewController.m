@@ -556,21 +556,22 @@
 }
 
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
-	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors];
-	if(_sections == nil){
-		self.sections = [NSMutableArray array];
-	}
-	section.parentController = self;
-	
-	if([self.view superview] != nil){
-		[section start];
-	}
-	
-	[_sections addObject:section];
-	return section;
+	return [self addSectionWithCellDescriptors:cellDescriptors headerTitle:@""];
 }
 
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
+	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle atIndex:[_sections count]];
+}
+
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	return [self insertSectionWithCollection:collection mappings:mappings atIndex:[_sections count]];
+}
+
+- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index{
+	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:@"" atIndex:index];
+}
+
+- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index{
 	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
@@ -581,11 +582,11 @@
 		[section start];
 	}
 	
-	[_sections addObject:section];
+	[_sections insertObject:section atIndex:index];
 	return section;
 }
 
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings atIndex:(NSInteger)index{
 	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
@@ -596,8 +597,9 @@
 		[section start];
 	}
 	
-	[_sections addObject:section];
+	[_sections insertObject:section atIndex:index];
 	return section;
+	
 }
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{

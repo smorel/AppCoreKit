@@ -112,6 +112,11 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
 - (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
+
+- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
+- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
+
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
 
