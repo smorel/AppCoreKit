@@ -46,8 +46,8 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 	else if(value == nil || [value isKindOfClass:[NSNull class]]){
 		if([NSObject isKindOf:type parentType:[NSURL class]])
 			return [NSURL URLWithString:@""];
-		else if ([NSObject isKindOf:type parentType:[NSString class]])
-			return @" ";
+		/*else if ([NSObject isKindOf:type parentType:[NSString class]])
+			return @" ";*/
 		else if([NSObject isKindOf:type parentType:[NSNumber class]])
 			return [NSNumber numberWithInt:0];
 	}
