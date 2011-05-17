@@ -26,6 +26,7 @@
 - (void)setValue:(id)value;
 
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
+- (CKDocumentCollection*)editorCollectionForNewlyCreated;
 - (Class)tableViewCellControllerType;
 
 - (CKModelObjectPropertyMetaData*)metaData;

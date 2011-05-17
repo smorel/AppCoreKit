@@ -268,6 +268,11 @@ static NSString* getPropertyType(objc_property_t property) {
 	return NSSelectorFromString(selectorName);
 }
 
++ (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionForNewlyCreated",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
 + (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
 	return NSSelectorFromString(selectorName);

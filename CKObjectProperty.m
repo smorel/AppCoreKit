@@ -74,6 +74,38 @@
 }
 
 
+- (CKDocumentCollection*)editorCollectionForNewlyCreated{
+	id subObject = object;
+	
+	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+	for(int i=0;i<[ar count]-1;++i){
+		NSString* path = [ar objectAtIndex:i];
+		subObject = [subObject valueForKey:path];
+	}
+	
+	if(subObject == nil){
+		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		return nil;
+	}
+	
+	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:descriptor.name];
+	if([subObject respondsToSelector:selector]){
+		CKDocumentCollection* collection = [subObject performSelector:selector];
+		return collection;
+	}
+	else{
+		Class type = descriptor.type;
+		if([type respondsToSelector:@selector(editorCollectionForNewlyCreated)]){
+			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionForNewlyCreated)];
+			return collection;
+		}
+	}
+	return nil;
+	
+}
+
+
 - (Class)tableViewCellControllerType{
 	id subObject = object;
 	
