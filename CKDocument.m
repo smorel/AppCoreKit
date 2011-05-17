@@ -40,22 +40,14 @@
 	[super dealloc];
 }
 
-/*- (void)retainObjectsForKey:(NSString*)key{
-	NSNumber* number = [_retainCounts objectForKey:key];
-	NSInteger count = (number != nil) ? [number intValue] : 0;
-	[_retainCounts setObject:[NSNumber numberWithInt:(count+1)] forKey:key];
-}
-
-- (void)releaseObjectsForKey:(NSString*)key{
-	NSNumber* number = [_retainCounts objectForKey:key];
-	NSAssert(number != nil,@"Trying to release a document object that is not retained for key '%@'",key);
-	NSInteger count = [number intValue];
-	if(count <= 1){
-		[_objects removeObjectForKey:key];
-		[_retainCounts removeObjectForKey:key];
+- (void)clear{
+	for(id object in [_objects allValues]){
+		if([object isKindOfClass:[CKDocumentCollection class]]){
+			CKDocumentCollection* collection = (CKDocumentCollection*)object;
+			[collection removeAllObjects];
+		}
 	}
-}*/
-
+}
 
 - (void)removeCollectionForKey:(NSString*)key{
 	[_objects removeObjectForKey:key];

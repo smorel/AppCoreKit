@@ -16,6 +16,8 @@
 
 + (id)sharedDocument;
 
+- (void)clear;
+
 //- (void)retainObjectsForKey:(NSString*)key;
 //- (void)releaseObjectsForKey:(NSString*)key;
 
