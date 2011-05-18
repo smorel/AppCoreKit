@@ -106,7 +106,7 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 	return self;
 }
 
-- (NSString*)formatForObject:(id)object propertyName:(NSString*)thePropertyName{
+- (NSString*)formatForObject:(id)object propertyName:(NSString*)thePropertyName className:(NSString*)className{
 	NSMutableString* str = [NSMutableString stringWithCapacity:1024];
 	if(self.propertyName){
 		[str appendString:thePropertyName];
@@ -115,12 +115,6 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 		//TODO : here verify if we really use inheritance for object ...
 		if(CKStyleClassNamesCache == nil){
 			CKStyleClassNamesCache = [[NSMutableDictionary alloc]init];
-		}
-		NSString* className = [CKStyleClassNamesCache objectForKey:[object class]];
-		if(className == nil){
-			className = [object className];
-			className = [className stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
-			[CKStyleClassNamesCache setObject:className forKey:[object class]];
 		}
 		[str appendString:className];
 	}
@@ -346,16 +340,16 @@ NSString* CKStyleImport = @"@import";
 }
 
 //Search a style responding to the format in the current scope
-- (NSMutableDictionary*)_styleForObject:(id)object format:(CKStyleFormat*)format propertyName:(NSString*)propertyName{
-	NSString* objectFormatKey = [format formatForObject:object propertyName:propertyName];
+- (NSMutableDictionary*)_styleForObject:(id)object format:(CKStyleFormat*)format propertyName:(NSString*)propertyName className:(NSString*)className{
+	NSString* objectFormatKey = [format formatForObject:object propertyName:propertyName className:className];
 	return [self objectForKey:objectFormatKey];
 }
 
 
 //Search a style responding to the formats in the current scope
-- (NSMutableDictionary*)_styleForObject:(id)object formats:(NSArray*)formats propertyName:(NSString*)propertyName{
+- (NSMutableDictionary*)_styleForObject:(id)object formats:(NSArray*)formats propertyName:(NSString*)propertyName className:(NSString*)className{
 	for(CKStyleFormat* format in formats){
-		NSMutableDictionary* style = [self _styleForObject:object format:format propertyName:propertyName];
+		NSMutableDictionary* style = [self _styleForObject:object format:format propertyName:propertyName className:className];
 		if(style){
 			return style;
 		}
@@ -369,7 +363,7 @@ NSString* CKStyleImport = @"@import";
 	if(allFormats){
 		NSArray* propertyformats = [allFormats objectForKey:propertyName];
 		if(propertyformats){
-			NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName];
+			NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName className:nil];
 			if(style){
 				return style;
 			}
@@ -377,9 +371,16 @@ NSString* CKStyleImport = @"@import";
 		
 		Class type = [object class];
 		while(type != nil){
+			NSString* className = [CKStyleClassNamesCache objectForKey:type];
+			if(className == nil){
+				className = [type description];
+				//className = [className stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
+				[CKStyleClassNamesCache setObject:className forKey:type];
+			}
+			
 			NSArray* formats = [allFormats objectForKey:type];
 			if(formats){
-				NSMutableDictionary* style = [self _styleForObject:object formats:formats propertyName:propertyName];
+				NSMutableDictionary* style = [self _styleForObject:object formats:formats propertyName:propertyName  className:className];
 				if(style){
 					return style;
 				}

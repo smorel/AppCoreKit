@@ -16,7 +16,7 @@
 @property(nonatomic,retain) NSMutableArray* properties;
 
 - (id)initFormatWithFormat:(NSString*)format;
-- (NSString*)formatForObject:(id)object propertyName:(NSString*)propertyName;
+- (NSString*)formatForObject:(id)object propertyName:(NSString*)propertyName className:(NSString*)className;
 + (NSString*)normalizeFormat:(NSString*)format;
 
 @end
