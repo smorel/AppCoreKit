@@ -44,6 +44,7 @@
 
 @interface CKGradientView () 
 @property(nonatomic,retain)CKGradientViewUpdater* updater;
+@property(nonatomic,retain)UIColor* fillColor;
 @end
 
 
@@ -57,12 +58,14 @@
 @synthesize borderWidth = _borderWidth;
 @synthesize updater = _updater;
 @synthesize borderStyle = _borderStyle;
+@synthesize fillColor = _fillColor;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
 	self.borderStyle = CKRoundedCornerViewTypeNone;
 	self.updater = [[[CKGradientViewUpdater alloc]initWithView:self]autorelease];
+	self.fillColor = [UIColor clearColor];
 }
 
 - (id)init {
@@ -89,12 +92,19 @@
 	return self;
 }
 
+//HACK to control how to paint using the background color !
+- (void)setBackgroundColor:(UIColor *)color{
+	self.fillColor = color;
+	[super setBackgroundColor:[UIColor clearColor]];
+}
+
 - (void)dealloc {
 	[_updater release]; _updater = nil;
 	[_image release]; _image = nil;
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
 	[_borderColor release]; _borderColor = nil;
+	[_fillColor release]; _fillColor = nil;
 	[super dealloc];
 }
 
@@ -174,39 +184,55 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-	
-	/* shadows
-	 [layer setShadowOffset:CGSizeMake(0, 3)];
-	 [layer setShadowOpacity:0.4];
-	 [layer setShadowRadius:3.0f];
-	 [layer setShouldRasterize:YES];
-	 
-	 [layer setCornerRadius:12.0f];
-	 [layer setShadowPath:
-	 [[UIBezierPath bezierPathWithRoundedRect:[self bounds] cornerRadius:12.0f] CGPath]];
-	 */
-	
-	[super drawRect:rect];
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
+	UIRectCorner roundedCorners = UIRectCornerAllCorners;
+	switch (self.corners) {
+		case CKRoundedCornerViewTypeTop:
+			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+			break;
+		case CKRoundedCornerViewTypeBottom:
+			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+			break;
+			
+		default:
+			break;
+	}
+	
+	CGPathRef clippingPath = nil;
+	if (self.corners != CKRoundedCornerViewTypeNone) {
+		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
+	}
+	
 	if(self.gradientColors == nil){
-		if(self.backgroundColor != nil){
-			CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
-			CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
-			CGContextFillRect(gc,self.bounds);
+		if(self.fillColor != nil){
+			[self.fillColor setFill];
+			//CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
+			//CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
+			CGContextAddPath(gc, clippingPath);
+			CGContextFillPath(gc);
 		}
 		else{
-			CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
-			CGContextSetAlpha(gc,0.0);
-			CGContextFillRect(gc, self.bounds);
+			[[UIColor clearColor] setFill];
+			//CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
+			//CGContextSetAlpha(gc,0.0);
+			CGContextAddPath(gc, clippingPath);
+			CGContextFillPath(gc);
 		}
 	}
 	
+	
 	if(_image){
+		CGContextAddPath(gc, clippingPath);
+		CGContextClip(gc);
+		
 		[_image drawInRect:self.bounds];
 	}	
 						  
 	if(self.gradientColors){
+		CGContextAddPath(gc, clippingPath);
+		CGContextClip(gc);
+		
 		CGFloat colorLocations[self.gradientColorLocations.count];
 		int i = 0;
 		for (NSNumber *n in self.gradientColorLocations) {

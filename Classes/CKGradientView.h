@@ -36,6 +36,8 @@ typedef enum {
 	CKGradientViewUpdater* _updater;
 	
 	NSInteger _borderStyle;
+	
+	UIColor* _fillColor;
 }
 
 @property (nonatomic, retain) NSArray *gradientColors;

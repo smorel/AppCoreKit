@@ -311,7 +311,7 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
 		}
 		
-		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && [view isKindOfClass:[CKGradientView class]] == NO) ){
+		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) ){
 			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
 			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self setValue:view forKey:descriptor.name];
