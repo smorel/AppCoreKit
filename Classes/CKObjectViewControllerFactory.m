@@ -12,6 +12,10 @@
 #import "CKDocumentCollection.h"
 #import <objc/runtime.h>
 
+#import "CKStyles.h"
+#import "CKStyleManager.h"
+#import "CKTableViewCellController+Style.h"
+#import "CKTableViewCellController+StyleManager.h"
 
 @interface CKObjectViewControllerFactory ()
 
@@ -71,14 +75,14 @@
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
-	return [item flagsForObject:object withParams:params];
+	return [item flagsForObject:object atIndexPath:indexPath withParams:params];
 }
 
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath  params:(NSMutableDictionary*)params{
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
-	return [item sizeForObject:object withParams:params];
+	return [item sizeForObject:object atIndexPath:indexPath withParams:params];
 }
 
 @end
@@ -146,7 +150,15 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	return [_params objectForKey:CKObjectViewControllerFactoryItemAccessorySelection];
 }
 
-- (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSMutableDictionary*)params{
+- (CKTableViewCellFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
+	//Style size first
+	NSMutableDictionary* controllerStyle = [CKTableViewCellController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	if([controllerStyle isEmpty] == NO){
+		if([controllerStyle containsObjectForKey:CKStyleCellFlags]){
+			return [controllerStyle cellFlags];
+		}
+	}
+	
 	id flagsObject = [_params objectForKey:CKObjectViewControllerFactoryItemFlags];
 	if(flagsObject != nil){
 		if([flagsObject isKindOfClass:[CKCallback class]]){
@@ -176,8 +188,15 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	return CKTableViewCellFlagNone;
 }
 
-- (CGSize)sizeForObject:(id)object withParams:(NSMutableDictionary*)params{
-	//TODO checker dans le style du controller si on a une size ....
+- (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath withParams:(NSMutableDictionary*)params{
+	//Style size first
+	NSMutableDictionary* controllerStyle = [CKTableViewCellController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	if([controllerStyle isEmpty] == NO){
+		if([controllerStyle containsObjectForKey:CKStyleCellSize]){
+			return [controllerStyle cellSize];
+		}
+	}
+	
 	id sizeObject = [_params objectForKey:CKObjectViewControllerFactoryItemSize];
 	if(sizeObject != nil){
 		if([sizeObject isKindOfClass:[CKCallback class]]){

@@ -31,7 +31,13 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 @implementation CKStyleParsing
 
 + (NSInteger)parseString:(NSString*)str toEnum:(NSDictionary*)keyValues{
-	return [[keyValues objectForKey:str]intValue];
+	NSInteger integer = 0;
+	NSArray* components = [str componentsSeparatedByString:@"|"];
+	for(NSString* c in components){
+		NSInteger ci = [[keyValues objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
+		integer |= ci;
+	}
+	return integer;
 }
 			
 + (UIColor*)parseStringToColor:(NSString*)str{

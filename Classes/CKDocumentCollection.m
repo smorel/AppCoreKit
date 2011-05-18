@@ -7,6 +7,7 @@
 //
 
 #import "CKDocumentCollection.h"
+#import "CKNSObject+Invocation.h"
 
 
 @implementation CKDocumentCollection
@@ -124,7 +125,9 @@
 
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
 	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
-	[self insertObjects:items atIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+	
+	//execute on main thread !
+	[self performSelectorOnMainThread:@selector(insertObjects:atIndexes:) withObject:items withObject:[NSIndexSet indexSetWithIndexesInRange:range] waitUntilDone:NO];
 }
 
 - (BOOL)load{

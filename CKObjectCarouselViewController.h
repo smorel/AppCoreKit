@@ -22,7 +22,6 @@
 	int _numberOfObjectsToprefetch;
 	NSMutableDictionary* _cellsToControllers;
 	NSMutableDictionary* _headerViewsForSections;
-	NSMutableDictionary* _controllersForIdentifier;
 	NSMutableDictionary* _params;
 	
 	UIPageControl* _pageControl;

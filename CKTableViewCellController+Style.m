@@ -22,6 +22,8 @@ NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryType = @"accessoryType";
 NSString* CKStyleSelectionStyle = @"selectionStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
+NSString* CKStyleCellSize = @"size";
+NSString* CKStyleCellFlags = @"flags";
 
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
@@ -51,6 +53,20 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 
 - (UIImage*)accessoryImage{
 	return [self imageForKey:CKStyleAccessoryImage];
+}
+
+- (CGSize)cellSize{
+	return [self cgSizeForKey:CKStyleCellSize];
+}
+
+- (CKTableViewCellFlags)cellFlags{
+	return (CKTableViewCellFlags)[self enumValueForKey:CKStyleCellFlags 
+										withDictionary:CKEnumDictionary(CKTableViewCellFlagNone,
+																		CKTableViewCellFlagSelectable,
+																		CKTableViewCellFlagEditable,
+																		CKTableViewCellFlagRemovable,
+																		CKTableViewCellFlagMovable,
+																		CKTableViewCellFlagAll)];
 }
 
 @end

@@ -15,6 +15,7 @@
 #import <CloudKit/CKNSObject+bindings.h>
 #import "CKVersion.h"
 #import "CKDocumentController.h"
+#import "CKTableViewCellController+StyleManager.h"
 
 //
 
@@ -24,7 +25,6 @@
 @property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
 @property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
-@property (nonatomic, retain) NSMutableDictionary* controllersForIdentifier;
 @property (nonatomic, retain) NSMutableDictionary* params;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 
@@ -33,7 +33,6 @@
 - (void)adjustView;
 - (void)adjustTableView;
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell;
-- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath;
 - (void)updateParams;
 
 @end
@@ -58,7 +57,6 @@
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
-@synthesize controllersForIdentifier = _controllersForIdentifier;
 @synthesize params = _params;
 @synthesize delegate = _delegate;
 @synthesize searchEnabled = _searchEnabled;
@@ -155,8 +153,6 @@
 	_indexPathToReachAfterRotation = nil;
 	[_params release];
 	_params = nil;
-	[_controllersForIdentifier release];
-	_controllersForIdentifier = nil;
 	[_objectController release];
 	_objectController = nil;
 	[_cellsToControllers release];
@@ -571,24 +567,6 @@
 	[_weakCells removeObject:sender];
 }
 
-- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath {
-	if(self.controllersForIdentifier == nil){
-		self.controllersForIdentifier = [NSMutableDictionary dictionary];
-	}
-	
-	CKTableViewCellController* controller = [_controllersForIdentifier objectForKey:theClass];
-	if(controller == nil){
-		controller = [[[theClass alloc]init]autorelease];
-		[_controllersForIdentifier setObject:controller forKey:theClass];
-	}
-	
-	[controller performSelector:@selector(setParentController:) withObject:self];
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-	[controller setValue:object];
-	
-	return [controller identifier];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
@@ -596,7 +574,7 @@
 			
 			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 			if(factoryItem != nil && factoryItem.controllerClass){
-				NSString* identifier = [self identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath];
+				NSString* identifier = [CKTableViewCellController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath  parentController:self];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];

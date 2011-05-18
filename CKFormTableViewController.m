@@ -518,12 +518,19 @@
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
 	
-	for(CKFormSectionBase* section in _sections){
+	/*for(CKFormSectionBase* section in _sections){
 		[section updateStyleForNonNewVisibleCells];
-	}
+	}*/
 	
 	for(CKFormSectionBase* section in _sections){
 		[section start];
+	}
+}
+
+- (void)reload{
+	[super reload];
+	for(CKFormSectionBase* section in _sections){
+		[section updateStyleForNonNewVisibleCells];
 	}
 }
 

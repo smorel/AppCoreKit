@@ -294,6 +294,8 @@
 		754823AF1346642C00DB0948 /* CKNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */; };
 		754824C61346892300DB0948 /* CKClassPropertyDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 754824C41346892300DB0948 /* CKClassPropertyDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		754824C71346892300DB0948 /* CKClassPropertyDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 754824C51346892300DB0948 /* CKClassPropertyDescriptor.m */; };
+		7557FFB1138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7557FFAF138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h */; };
+		7557FFB2138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */; };
 		7559BCC8137DE682007E7399 /* CKCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 7559BCC6137DE682007E7399 /* CKCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7559BCC9137DE682007E7399 /* CKCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 7559BCC7137DE682007E7399 /* CKCallback.m */; };
 		75661F15135E233C00E108AD /* CKGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75661F11135E233C00E108AD /* CKGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -667,6 +669,8 @@
 		754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNSStringPropertyCellController.m; sourceTree = "<group>"; };
 		754824C41346892300DB0948 /* CKClassPropertyDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKClassPropertyDescriptor.h; sourceTree = "<group>"; };
 		754824C51346892300DB0948 /* CKClassPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKClassPropertyDescriptor.m; sourceTree = "<group>"; };
+		7557FFAF138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKTableViewCellController+StyleManager.h"; sourceTree = "<group>"; };
+		7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKTableViewCellController+StyleManager.m"; sourceTree = "<group>"; };
 		7559BCC6137DE682007E7399 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCallback.h; sourceTree = "<group>"; };
 		7559BCC7137DE682007E7399 /* CKCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCallback.m; sourceTree = "<group>"; };
 		75661F11135E233C00E108AD /* CKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGradientView.h; sourceTree = "<group>"; };
@@ -1332,6 +1336,8 @@
 				751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */,
 				7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */,
 				7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */,
+				7557FFAF138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h */,
+				7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */,
 			);
 			name = "Object TableViews";
 			sourceTree = "<group>";
@@ -1663,6 +1669,7 @@
 				71CCCC3E137877A900BA9A81 /* CKWebService2.h in Headers */,
 				75B6953A13799E0E00434E70 /* CKTableViewCellNextResponder.h in Headers */,
 				7559BCC8137DE682007E7399 /* CKCallback.h in Headers */,
+				7557FFB1138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1951,6 +1958,7 @@
 				71CCCC3F137877A900BA9A81 /* CKWebService2.m in Sources */,
 				75B6953B13799E0E00434E70 /* CKTableViewCellNextResponder.m in Sources */,
 				7559BCC9137DE682007E7399 /* CKCallback.m in Sources */,
+				7557FFB2138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

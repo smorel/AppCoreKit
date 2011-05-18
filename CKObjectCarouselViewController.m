@@ -10,6 +10,7 @@
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKDocumentController.h"
+#import "CKTableViewCellController+StyleManager.h"
 
 
 @interface UIViewWithIdentifier : UIView{
@@ -27,14 +28,12 @@
 @interface CKObjectCarouselViewController ()
 @property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
-@property (nonatomic, retain) NSMutableDictionary* controllersForIdentifier;
 @property (nonatomic, retain) NSMutableDictionary* params;
 
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
 - (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
 
-- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath;
 - (void)updateParams;
 
 @end
@@ -47,7 +46,6 @@
 @synthesize cellsToControllers = _cellsToControllers;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
-@synthesize controllersForIdentifier = _controllersForIdentifier;
 @synthesize params = _params;
 
 - (void)postInit{
@@ -100,8 +98,6 @@
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
 	[_params release];
 	_params = nil;
-	[_controllersForIdentifier release];
-	_controllersForIdentifier = nil;
 	[_carouselView release];
 	_carouselView = nil;
 	[_objectController release];
@@ -329,25 +325,6 @@
 	return 0;
 }
 
-
-- (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath {
-	if(self.controllersForIdentifier == nil){
-		self.controllersForIdentifier = [NSMutableDictionary dictionary];
-	}
-	
-	CKTableViewCellController* controller = [_controllersForIdentifier objectForKey:theClass];
-	if(controller == nil){
-		controller = [[[theClass alloc]init]autorelease];
-		[_controllersForIdentifier setObject:controller forKey:theClass];
-	}
-	
-	[controller performSelector:@selector(setParentController:) withObject:self];
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-	[controller setValue:object];
-	
-	return [controller identifier];
-}
-
 - (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
 	CGSize size = [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];	
 	return size;
@@ -360,7 +337,7 @@
 			
 			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 			if(factoryItem != nil && factoryItem.controllerClass){
-				NSString* identifier = [self identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath];
+				NSString* identifier = [CKTableViewCellController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath parentController:self];
 				
 				UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 				UITableViewCell* cell = (UITableViewCell*)view;

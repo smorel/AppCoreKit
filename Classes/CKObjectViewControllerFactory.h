@@ -27,8 +27,8 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 @property(nonatomic,retain)NSMutableDictionary* params;
 
 - (BOOL)matchWithObject:(id)object;
-- (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSMutableDictionary*)params;
-- (CGSize)sizeForObject:(id)object withParams:(NSMutableDictionary*)params;
+- (CKTableViewCellFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
+- (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 
 - (CKCallback*)initCallback;
 - (CKCallback*)setupCallback;

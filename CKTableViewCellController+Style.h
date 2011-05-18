@@ -13,6 +13,8 @@ extern NSString* CKStyleCellType;
 extern NSString* CKStyleAccessoryType;
 extern NSString* CKStyleAccessoryImage;
 extern NSString* CKStyleSelectionStyle;
+extern NSString* CKStyleCellSize;
+extern NSString* CKStyleCellFlags;
 
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
@@ -20,6 +22,8 @@ extern NSString* CKStyleSelectionStyle;
 - (UITableViewCellAccessoryType)accessoryType;
 - (UITableViewCellSelectionStyle)selectionStyle;
 - (UIImage*)accessoryImage;
+- (CGSize)cellSize;
+- (CKTableViewCellFlags)cellFlags;
 
 @end
 
