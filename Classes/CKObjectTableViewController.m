@@ -560,10 +560,13 @@
 		}
 	}
 }
+
 - (void)releaseCell:(id)sender target:(id)target{
 	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_indexPathToCells removeObjectForKey:previousPath];
 	
+	CKTableViewCellController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
+	[controller performSelector:@selector(setTableViewCell:) withObject:nil];
 	[_cellsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_weakCells removeObject:sender];
 }

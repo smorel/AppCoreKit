@@ -13,6 +13,30 @@
 #import "CKStyleManager.h"
 #import <CloudKit/CKNSObject+Bindings.h>
 
+@interface CKUITableViewCellController : UITableViewCell{
+	id _delegate;
+}
+@property(nonatomic,assign) id delegate;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(id)delegate;
+@end
+
+@implementation CKUITableViewCellController
+@synthesize delegate = _delegate;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(id)thedelegate{
+	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	self.delegate = thedelegate;
+	return self;
+}
+
+- (void)layoutSubviews{
+	if(_delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
+		[_delegate performSelector:@selector(layoutCell:) withObject:self];
+	}
+	[super layoutSubviews];
+}
+
+@end
 
 @implementation CKTableViewCellController
 
@@ -109,6 +133,10 @@
 
 - (void)setTableViewCell:(UITableViewCell*)cell{
 	_tableViewCell = cell;
+	if([cell isKindOfClass:[CKUITableViewCellController class]]){
+		CKUITableViewCellController* customCell = (CKUITableViewCellController*)cell;
+		customCell.delegate = self;
+	}
 }
 
 - (UITableViewCell *)tableViewCell {
@@ -129,7 +157,7 @@
 	if([controllerStyle containsObjectForKey:CKStyleCellType])
 		cellStyle = [controllerStyle cellStyle];
 
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier]] autorelease];
+	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	self.tableViewCell = cell;
 	
 	UITableViewCellAccessoryType acType = self.accessoryType;
@@ -142,7 +170,7 @@
 	}
 	//cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
 	[self initTableViewCell:cell];
-	
+	[self layoutCell:cell];
 	[self applyStyle:controllerStyle forCell:cell];
 	
 	return cell;
@@ -230,6 +258,11 @@
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
 	return NO;
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	//You can overload this method if you need to update cell layout when cell is resizing.
+	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
 }
 
 @end

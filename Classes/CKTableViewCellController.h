@@ -55,7 +55,7 @@ typedef NSUInteger CKTableViewCellFlags;
 @property (nonatomic, retain, readonly) NSString *identifier;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKTableViewController *parentController;
-@property (nonatomic, assign, readonly) UITableViewCell *tableViewCell;
+@property (nonatomic, assign,readonly) UITableViewCell *tableViewCell;
 @property (nonatomic, assign) UITableViewCellStyle cellStyle;
 
 @property (nonatomic, retain) id target;
@@ -73,6 +73,7 @@ typedef NSUInteger CKTableViewCellFlags;
 @property (nonatomic, retain) CKCallback* setupCallback;
 @property (nonatomic, retain) CKCallback* selectionCallback;
 @property (nonatomic, retain) CKCallback* accessorySelectionCallback;
+
 
 - (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style;
 
@@ -103,5 +104,6 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)initTableViewCell:(UITableViewCell*)cell;
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
+- (void)layoutCell:(UITableViewCell *)cell;
 
 @end

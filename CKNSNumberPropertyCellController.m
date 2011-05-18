@@ -48,7 +48,6 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	_accessoryViewSizeRatio = 2.0 / 3.0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -71,13 +70,10 @@
 		case CKClassPropertyDescriptorTypeFloat:
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
-			
-			UITableView *tableView = self.parentController.tableView;
-			CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, self.rowHeight - 20));
-			UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
+
+			UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
 			textField.borderStyle = UITextBorderStyleNone;
 			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-			//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			textField.clearButtonMode = UITextFieldViewModeAlways;
 			textField.delegate = self;
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -96,6 +92,8 @@
 		}
 	}	
 	
+	[self layoutCell:cell];
+	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
 	if(s){
@@ -106,11 +104,7 @@
 		[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
 		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 		
-		//update accessory view frame
-		UITextField* textField = (UITextField*)cell.accessoryView;
-		UITableView *tableView = self.parentController.tableView;
-		textField.frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, 44 - 20));
-		
+		UITextField *textField = (UITextField*)cell.accessoryView;
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		textField.placeholder = _(placeholerText);
 		
@@ -122,6 +116,22 @@
 		}
 	}
 	[NSObject endBindingsContext];
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
+	if(s == nil){
+		UITextField *textField = (UITextField*)cell.accessoryView;
+		
+		CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
+		textField.frame = frame;
+		cell.accessoryView.frame = frame;
+		
+		NSLog(@"cell size : %f %f textField size : %f %f accessoryView frame : %f %f",
+			  cell.bounds.size.width,cell.bounds.size.height,
+			  textField.bounds.size.width,textField.bounds.size.height,
+			  cell.accessoryView.bounds.size.width,cell.accessoryView.bounds.size.height);
+	}
 }
 
 + (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{

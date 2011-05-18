@@ -207,31 +207,35 @@
 	if(self.gradientColors == nil){
 		if(self.fillColor != nil){
 			[self.fillColor setFill];
-			//CGContextSetFillColorWithColor(gc, self.backgroundColor.CGColor);
-			//CGContextSetAlpha(gc,CGColorGetAlpha([self.backgroundColor CGColor]));
-			CGContextAddPath(gc, clippingPath);
+			if(clippingPath != nil){
+				CGContextAddPath(gc, clippingPath);
+			}
 			CGContextFillPath(gc);
 		}
 		else{
 			[[UIColor clearColor] setFill];
-			//CGContextSetFillColorWithColor(gc, [UIColor clearColor].CGColor);
-			//CGContextSetAlpha(gc,0.0);
-			CGContextAddPath(gc, clippingPath);
+			if(clippingPath != nil){
+				CGContextAddPath(gc, clippingPath);
+			}
 			CGContextFillPath(gc);
 		}
 	}
 	
 	
 	if(_image){
-		CGContextAddPath(gc, clippingPath);
-		CGContextClip(gc);
+		if(clippingPath != nil){
+			CGContextAddPath(gc, clippingPath);
+			CGContextClip(gc);
+		}
 		
 		[_image drawInRect:self.bounds];
 	}	
 						  
 	if(self.gradientColors){
-		CGContextAddPath(gc, clippingPath);
-		CGContextClip(gc);
+		if(clippingPath != nil){
+			CGContextAddPath(gc, clippingPath);
+			CGContextClip(gc);
+		}
 		
 		CGFloat colorLocations[self.gradientColorLocations.count];
 		int i = 0;

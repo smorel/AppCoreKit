@@ -27,22 +27,28 @@
 	_accessoryViewSizeRatio = 2.0 / 3.0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	UITableView *tableView = self.parentController.tableView;
-	
-	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, 44 - 20));
-	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
+	UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	//textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	textField.clearButtonMode = UITextFieldViewModeAlways;
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentLeft;
 	textField.autocorrectionType = UITextAutocorrectionTypeNo;
 	
-	
 	cell.accessoryView = textField;	
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	UITextField *textField = (UITextField*)cell.accessoryView;
+	//update accessory view frame
+	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
+	textField.frame = frame;
+	cell.accessoryView.frame = frame;
 	
-	return cell;
+	NSLog(@"cell size : %f %f textField size : %f %f accessoryView frame : %f %f",
+		  cell.bounds.size.width,cell.bounds.size.height,
+		  textField.bounds.size.width,textField.bounds.size.height,
+		  cell.accessoryView.bounds.size.width,cell.accessoryView.bounds.size.height);
 }
 
 - (void)textFieldChanged:(id)value{
@@ -63,11 +69,7 @@
 	[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
 	[NSObject endBindingsContext];
 	
-	//update accessory view frame
-	UITextField* textField = (UITextField*)cell.accessoryView;
-	UITableView *tableView = self.parentController.tableView;
-	textField.frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * _accessoryViewSizeRatio, 44 - 20));
-	
+	UITextField *textField = (UITextField*)cell.accessoryView;
 	NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 	textField.placeholder = _(placeholerText);
 	
