@@ -49,7 +49,7 @@
 }
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[self clearBindingsContext];
 	
 	[_key release];
 	[_value release];

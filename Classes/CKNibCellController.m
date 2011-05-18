@@ -37,7 +37,6 @@
 		}
 	}
 	
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_portraitNibName release];
 	[_landscapeNibName release];
 	[_portraitView release];
@@ -77,7 +76,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[self beginBindingsContextByRemovingPreviousBindings];
 	switch(self.currentMode){
 		case CKNibCellControllerModePortrait:{
 			[self bindValueInPortraitView:cell.contentView];
@@ -88,7 +87,7 @@
 			break;
 		}
 	}
-	[NSObject endBindingsContext];
+	[self endBindingsContext];
 }
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
