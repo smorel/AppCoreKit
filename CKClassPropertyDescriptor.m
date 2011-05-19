@@ -10,6 +10,72 @@
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
 
+typedef struct CKStructParsedAttributes{
+	NSString* className;
+	NSString* encoding;
+	NSInteger size;
+}CKStructParsedAttributes;
+
+CKStructParsedAttributes parseStructAttributes(NSString* attributes){
+	CKStructParsedAttributes results;
+	NSRange rangeForClassName = [attributes rangeOfString:@"="];
+	results.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
+	
+	//FIXME : later do it properly by registering descriptors for structs, ...
+	if([results.className isEqual:@"CGSize"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGSize)];
+		results.size = sizeof(CGSize);
+	}
+	else if([results.className isEqual:@"CGRect"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGRect)];
+		results.size = sizeof(CGRect);
+	}
+	else if([results.className isEqual:@"CGPoint"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGPoint)];
+		results.size = sizeof(CGPoint);
+	}
+	else{
+		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+	}
+	return results;
+}
+
+/*
+ NSRange rangeForClassName = [attributes rangeOfString:@"="];
+ self.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
+ NSRange rangeForEnd = [attributes rangeOfString:@"}"];
+ NSString* attributesEncoding = [attributes substringWithRange:NSMakeRange(rangeForClassName.location + 2,rangeForEnd.location - (rangeForClassName.location + 2) )];
+ NSArray* encodingComponents = [attributesEncoding componentsSeparatedByString:@"\""];
+ 
+ NSInteger size = 0;
+ NSMutableString* theencoding = [NSMutableString stringWithFormat:@"{%@=",self.className];
+ for(int i= 1; i < [encodingComponents count]; i += 2){
+ NSString* e = [encodingComponents objectAtIndex:i];
+ [theencoding appendString:e];
+ if([e isEqual:@"@"]){size += sizeof(NSObject*);}
+ else if([e isEqual:@"c"]){size += sizeof(char);}
+ else if([e isEqual:@"i"]){size += sizeof(NSInteger);}
+ else if([e isEqual:@"s"]){size += sizeof(short);}
+ else if([e isEqual:@"l"]){size += sizeof(long);}
+ else if([e isEqual:@"q"]){size += sizeof(long long);}
+ else if([e isEqual:@"C"]){size += sizeof(unsigned char);}
+ else if([e isEqual:@"I"]){size += sizeof(NSUInteger);}
+ else if([e isEqual:@"S"]){size += sizeof(unsigned short);}
+ else if([e isEqual:@"L"]){size += sizeof(unsigned long);}
+ else if([e isEqual:@"Q"]){size += sizeof(unsigned long long);}
+ else if([e isEqual:@"f"]){size += sizeof(CGFloat);}
+ else if([e isEqual:@"d"]){size += sizeof(double);}
+ else if([e isEqual:@"B"]){size += sizeof(BOOL);}
+ else if([e isEqual:@"v"]){size += sizeof(void*);}
+ else if([e isEqual:@"*"]){size += sizeof(char*);}
+ else if([e isEqual:@"#"]){size += sizeof(Class);}
+ else if([e isEqual:@":"]){size += sizeof(SEL);}
+ else if([e hasPrefix:@"{"]){NSAssert(NO,@"not supported");}
+ }
+ [theencoding appendString:@"}"];
+ */
+
+
 @implementation CKClassPropertyDescriptor
 @synthesize name;
 @synthesize type;
@@ -18,10 +84,15 @@
 @synthesize propertyType;
 @synthesize assignementType;
 @synthesize isReadOnly;
+@synthesize className;
+@synthesize encoding;
+@synthesize typeSize;
 
 - (void)dealloc{
 	self.name = nil;
 	self.attributes = nil;
+	self.className = nil;
+	self.encoding = nil;
 	[super dealloc];
 }
 
@@ -34,7 +105,7 @@
 }
 
 - (NSString*)className{
-	return [NSString stringWithUTF8String:class_getName(self.type)];
+	return className;
 }
 
 - (void)setAttributes:(NSString *)att{
@@ -65,57 +136,100 @@
 	
 	if([attributes hasPrefix:@"T@"]){
 		self.propertyType = CKClassPropertyDescriptorTypeObject;
+		self.encoding = @"@";
+		self.typeSize = sizeof(NSObject*);
 	}
 	else if([attributes hasPrefix:@"Tc"]){
 		self.propertyType = CKClassPropertyDescriptorTypeChar;
+		self.encoding = @"c";
+		self.typeSize = sizeof(char);
 	}
 	else if([attributes hasPrefix:@"Ti"]){
 		self.propertyType = CKClassPropertyDescriptorTypeInt;
+		self.encoding = @"i";
+		self.typeSize = sizeof(NSInteger);
 	}
 	else if([attributes hasPrefix:@"Ts"]){
 		self.propertyType = CKClassPropertyDescriptorTypeShort;
+		self.encoding = @"s";
+		self.typeSize = sizeof(short);
 	}
 	else if([attributes hasPrefix:@"Tl"]){
 		self.propertyType = CKClassPropertyDescriptorTypeLong;
+		self.encoding = @"l";
+		self.typeSize = sizeof(long);
 	}
 	else if([attributes hasPrefix:@"Tq"]){
 		self.propertyType = CKClassPropertyDescriptorTypeLongLong;
+		self.encoding = @"q";
+		self.typeSize = sizeof(long long);
 	}
 	else if([attributes hasPrefix:@"TC"]){
 		self.propertyType = CKClassPropertyDescriptorTypeUnsignedChar;
+		self.encoding = @"C";
+		self.typeSize = sizeof(unsigned char);
 	}
 	else if([attributes hasPrefix:@"TI"]){
 		self.propertyType = CKClassPropertyDescriptorTypeUnsignedInt;
+		self.encoding = @"I";
+		self.typeSize = sizeof(NSUInteger);
 	}
 	else if([attributes hasPrefix:@"TS"]){
 		self.propertyType = CKClassPropertyDescriptorTypeUnsignedShort;
+		self.encoding = @"S";
+		self.typeSize = sizeof(unsigned short);
 	}
 	else if([attributes hasPrefix:@"TL"]){
 		self.propertyType = CKClassPropertyDescriptorTypeUnsignedLong;
+		self.encoding = @"L";
+		self.typeSize = sizeof(unsigned long);
 	}
 	else if([attributes hasPrefix:@"TQ"]){
 		self.propertyType = CKClassPropertyDescriptorTypeUnsignedLongLong;
+		self.encoding = @"Q";
+		self.typeSize = sizeof(unsigned long long);
 	}
 	else if([attributes hasPrefix:@"Tf"]){
 		self.propertyType = CKClassPropertyDescriptorTypeFloat;
+		self.encoding = @"f";
+		self.typeSize = sizeof(float);
 	}
 	else if([attributes hasPrefix:@"Td"]){
 		self.propertyType = CKClassPropertyDescriptorTypeDouble;
+		self.encoding = @"d";
+		self.typeSize = sizeof(double);
 	}
 	else if([attributes hasPrefix:@"TB"]){
 		self.propertyType = CKClassPropertyDescriptorTypeCppBool;
+		self.encoding = @"B";
+		self.typeSize = sizeof(BOOL);
 	}
 	else if([attributes hasPrefix:@"Tv"]){
 		self.propertyType = CKClassPropertyDescriptorTypeVoid;
+		self.encoding = @"v";
+		self.typeSize = sizeof(void*);
 	}
 	else if([attributes hasPrefix:@"T*"]){
 		self.propertyType = CKClassPropertyDescriptorTypeCharString;
+		self.encoding = @"*";
+		self.typeSize = sizeof(char*);
 	}
 	else if([attributes hasPrefix:@"T#"]){
 		self.propertyType = CKClassPropertyDescriptorTypeClass;
+		self.encoding = @"#";
+		self.typeSize = sizeof(Class);
 	}
 	else if([attributes hasPrefix:@"T:"]){
 		self.propertyType = CKClassPropertyDescriptorTypeSelector;
+		self.encoding = @":";
+		self.typeSize = sizeof(SEL);
+	}
+	else if([attributes hasPrefix:@"T{"]){
+		self.propertyType = CKClassPropertyDescriptorTypeStruct;
+		CKStructParsedAttributes result = parseStructAttributes(attributes);
+		self.className = result.className;
+		self.encoding = result.encoding;
+		self.typeSize = result.size;
 	}
 	else{
 		/*
@@ -223,6 +337,36 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 	}
 	return nil;
 }
+
+/*
+- (NSArray*)allPropertiesForStruct:(NSString*)name{
+	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:name];
+	return allProperties;
+}
+
+- (NSArray*)allPropertieNamesForStruct:(NSString*)name{
+	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:name];
+	return allPropertyNames;
+}
+
+- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname{
+	NSArray* properties = [self allPropertiesForStruct:structname];
+	//TODO : Optimize this by getting a dictionary of properties instead of an array !
+	for(CKClassPropertyDescriptor* p in properties){
+		if([p.name isEqual:name])
+			return p;
+	}
+	return nil;
+}
+
+- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name{
+	[_propertiesByClassName setObject:propertyDescriptors forKey:name];
+	NSMutableArray* allPropertyNames = [NSMutableArray array];
+	for(CKClassPropertyDescriptor* p in propertyDescriptors){
+		[allPropertyNames addObject:p.name];
+	}
+	[_propertyNamesByClassName setObject:allPropertyNames forKey:name];
+}*/
 
 @end
 

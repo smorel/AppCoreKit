@@ -6,22 +6,32 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CKObjectProperty.h"
 
-/*
+
 @interface NSValueTransformer (CKAddition)
 
+//tranform
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property;
++ (void)transform:(NSDictionary*)source toObject:(id)target;
++ (id)transform:(id)source toClass:(Class)type;
+
+//mappings
 + (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings;
 
 //helpers
-+ (UIColor*)colorFromObject:(id)object;
-+ (NSArray*)arrayFromObject:(id)object withContentClass:(Class)contentClass;
-+ (NSSet*)setFromObject:(id)object withContentClass:(Class)contentClass;
-+ (CKDocumentCollection*)documentCollectionFromObject:(id)object withContentClass:(Class)contentClass;
-+ (UIImage*)imageFromObject:(id)object;
++ (UIColor*)UIColorFromObject:(id)object;
++ (NSArray*)NSArrayFromObject:(id)object withContentClass:(Class)contentClass;
++ (NSSet*)NSSetFromObject:(id)object withContentClass:(Class)contentClass;
++ (UIImage*)UImageFromObject:(id)object;
 + (NSInteger)enumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;
-+ (NSNumber*)numberFormObject:(id)object;
++ (NSNumber*)NSNumberFormObject:(id)object;
++ (NSDate*)NSDateFromObject:(id)object withFormat:(NSString*)format;
++ (NSURL*)NSURLFromObject:(id)object;
++ (NSString*)NSStringFormObject:(id)object;
++ (CGSize)CGSizeFromObject:(id)object;
++ (CGRect)CGRectFromObject:(id)object;
++ (CGPoint)CGPointFromObject:(id)object;
 + (char)charFromObject:(id)object;
 + (NSInteger)integerFromObject:(id)object;
 + (short)shortFromObject:(id)object;
@@ -34,12 +44,8 @@
 + (unsigned long long)unsignedLongLongFromObject:(id)object;
 + (CGFloat)floatFromObject:(id)object;
 + (double)doubleFromObject:(id)object;
-+ (NSString*)stringFormObject:(id)object;
-+ (CGSize)cgSizeFromObject:(id)object;
-+ (CGRect)cgRectFromObject:(id)object;
-+ (CGPoint)cgPointFromObject:(id)object;
-+ (NSDate*)dateFromObject:(id)object withFormat:(NSString*)format;
-+ (NSURL*)urlFromObject:(id)object;
++ (BOOL)boolFromObject:(id)object;
++ (Class)classFromObject:(id)object;
++ (SEL)selectorFromObject:(id)object;
 
 @end
-*/

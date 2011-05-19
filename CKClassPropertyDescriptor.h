@@ -28,6 +28,7 @@ typedef enum{
 	CKClassPropertyDescriptorTypeObject,
 	CKClassPropertyDescriptorTypeClass,
 	CKClassPropertyDescriptorTypeSelector,
+	CKClassPropertyDescriptorTypeStruct,
 	CKClassPropertyDescriptorTypeUnknown
 }CKClassPropertyDescriptorType;
 
@@ -40,6 +41,9 @@ typedef enum{
 
 @interface CKClassPropertyDescriptor : NSObject{
 	NSString* name;
+	NSString* className;
+	NSString* encoding;
+	NSInteger typeSize;
 	Class type;
 	NSString* attributes;
 	SEL metaDataSelector;
@@ -50,6 +54,9 @@ typedef enum{
 
 @property (nonatomic, retain, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) Class type;
+@property (nonatomic, assign, readwrite) NSInteger typeSize;
+@property (nonatomic, retain, readwrite) NSString *className;
+@property (nonatomic, retain, readwrite) NSString *encoding;
 @property (nonatomic, retain, readwrite) NSString *attributes;
 @property (nonatomic, assign, readwrite) SEL metaDataSelector;
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorType propertyType;
@@ -57,7 +64,6 @@ typedef enum{
 @property (nonatomic, assign, readwrite) BOOL isReadOnly;
 
 -(NSString*)getTypeDescriptor;
-- (NSString*)className;
 
 @end
 
@@ -66,6 +72,8 @@ typedef enum{
 	NSMutableDictionary* _propertiesByClassName;
 	NSMutableDictionary* _viewPropertiesByClassName;
 	NSMutableDictionary* _propertyNamesByClassName;
+	
+	//faire la gestion des descripteurs de struct
 }
 
 + (CKClassPropertyDescriptorManager*)defaultManager;
@@ -73,7 +81,12 @@ typedef enum{
 - (NSArray*)allViewsPropertyForClass:(Class)class;
 - (NSArray*)allPropertieNamesForClass:(Class)class;
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class;
-
+/*
+- (NSArray*)allPropertiesForStruct:(NSString*)name;
+- (NSArray*)allPropertieNamesForStruct:(NSString*)name;
+- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname;
+- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name;
+*/
 @property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
 @property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;
 
