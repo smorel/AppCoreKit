@@ -8,110 +8,8 @@
 
 #import "CKSerializer.h"
 
-@interface      CKNSURLValueTransformer : NSValueTransformer {} @end
-@implementation CKNSURLValueTransformer
-+ (Class)transformedValueClass { return [NSURL class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKNSDateValueTransformer : NSValueTransformer {} @end
-@implementation CKNSDateValueTransformer
-+ (Class)transformedValueClass { return [NSDate class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKCGPointValueTransformer : NSValueTransformer {} @end
-@implementation CKCGPointValueTransformer
-+ (Class)transformedValueClass { return [NSValue class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKCGRectValueTransformer : NSValueTransformer {} @end
-@implementation CKCGRectValueTransformer
-+ (Class)transformedValueClass { return [NSValue class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKCGSizeValueTransformer : NSValueTransformer {} @end
-@implementation CKCGSizeValueTransformer
-+ (Class)transformedValueClass { return [NSValue class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKNSStringValueTransformer : NSValueTransformer {} @end
-@implementation CKNSStringValueTransformer
-+ (Class)transformedValueClass { return [NSString class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKNSNumberValueTransformer : NSValueTransformer {} @end
-@implementation CKNSNumberValueTransformer
-+ (Class)transformedValueClass { return [NSNumber class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKEnumValueTransformer : NSValueTransformer {} @end
-@implementation CKEnumValueTransformer
-+ (Class)transformedValueClass { return [NSNumber class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKImageValueTransformer : NSValueTransformer {} @end
-@implementation CKImageValueTransformer
-+ (Class)transformedValueClass { return [UIImage class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKNSArrayValueTransformer : NSValueTransformer {} @end
-@implementation CKNSArrayValueTransformer
-+ (Class)transformedValueClass { return [NSArray class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKNSSetValueTransformer : NSValueTransformer {} @end
-@implementation CKNSSetValueTransformer
-+ (Class)transformedValueClass { return [NSSet class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKDocumentCollectionValueTransformer : NSValueTransformer {} @end
-@implementation CKDocumentCollectionValueTransformer
-+ (Class)transformedValueClass { return [CKDocumentCollection class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
-@interface      CKUIColorValueTransformer : NSValueTransformer {} @end
-@implementation CKUIColorValueTransformer
-+ (Class)transformedValueClass { return [UIColor class]; }
-- (id)transformedValue:(id)value { 
-	return nil;
-}
-@end
-
+/*
+//utiliser des selector au lieu des valueTransformers
 @implementation CKSerializer
 
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property{
@@ -206,3 +104,4 @@
 }
 
 @end
+*/

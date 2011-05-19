@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-//CKNSStringToNSURLTransformer
-
-
+/*
 @interface NSValueTransformer (CKAddition)
 
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property;
@@ -44,3 +42,4 @@
 + (NSURL*)urlFromObject:(id)object;
 
 @end
+*/
