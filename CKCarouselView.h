@@ -71,7 +71,7 @@ typedef enum{
 
 @interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> {
 	NSMutableArray* _rowSizes;
-	CGFloat _contentOffset;
+	CGFloat _internalContentOffset;
 	NSInteger _numberOfPages;
 	NSInteger _currentPage;
 	NSInteger _currentSection;

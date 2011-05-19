@@ -63,7 +63,7 @@ double round(double x)
 @property (nonatomic,retain) NSMutableDictionary* visibleViewsForIndexPaths;
 @property (nonatomic,retain) NSMutableDictionary* reusableViews;
 @property (nonatomic,retain) NSMutableArray* rowSizes;
-@property (nonatomic,assign) CGFloat contentOffset;
+@property (nonatomic,assign) CGFloat internalContentOffset;
 @property (nonatomic, assign) id delegate;
 
 - (void)enqueueReusableView:(UIView*)view;
@@ -77,7 +77,7 @@ double round(double x)
 @end
 
 @implementation CKCarouselView
-@synthesize contentOffset = _contentOffset;
+@synthesize internalContentOffset = _internalContentOffset;
 @synthesize visibleHeaderView = _visibleHeaderView;
 @synthesize headerViewToRemove = _headerViewToRemove;
 @synthesize visibleViewsForIndexPaths = _visibleViewsForIndexPaths;
@@ -93,7 +93,8 @@ double round(double x)
 @dynamic delegate;
 
 - (void)postInit{
-	self.contentOffset = 0;
+	self.contentOffset = CGPointZero;
+	self.internalContentOffset = 0;
 	self.numberOfPages = 0;
 	self.currentPage = 0;
 	self.currentSection = 0;
@@ -217,7 +218,7 @@ double round(double x)
 		_headerViewToRemove = nil;
 	}
 	if(_visibleHeaderView){
-		_visibleHeaderView.frame = CGRectMake(0,0,self.bounds.size.width,_visibleHeaderView.bounds.size.height);
+		_visibleHeaderView.frame = CGRectIntegral(CGRectMake(0,0,self.bounds.size.width,_visibleHeaderView.bounds.size.height));
 		if([_visibleHeaderView superview] != self){
 			[self addSubview:_visibleHeaderView];
 		}
@@ -323,7 +324,7 @@ double round(double x)
 	[indexPathToRemove removeAllObjects];
 	
 	BOOL finished = NO;
-	for(NSInteger i = MIN(MAX((NSInteger)_contentOffset,0),_numberOfPages-1); i >=0 && !finished; --i){
+	for(NSInteger i = MIN(MAX((NSInteger)_internalContentOffset,0),_numberOfPages-1); i >=0 && !finished; --i){
 		NSIndexPath* indexPath = [self indexPathForPage:i];
 		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
@@ -338,7 +339,7 @@ double round(double x)
 		}
 	}
 	finished = NO;
-	for(NSInteger i = MIN(MAX((NSInteger)_contentOffset+1,0),_numberOfPages-1); i < _numberOfPages && !finished; ++i){
+	for(NSInteger i = MIN(MAX((NSInteger)_internalContentOffset+1,0),_numberOfPages-1); i < _numberOfPages && !finished; ++i){
 		NSIndexPath* indexPath = [self indexPathForPage:i];
 		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
@@ -464,7 +465,7 @@ double round(double x)
 	CGSize viewSize = [self sizeForViewAtIndexPath:indexPath];
 	
 	NSInteger page = [self pageForIndexPath:indexPath];
-	CGFloat offset = page - _contentOffset;
+	CGFloat offset = page - _internalContentOffset;
 	CGFloat sign = (offset > 0 ) ? 1 : -1;
 	CGFloat absOffset = fabs(offset);
 	if(absOffset < 0.5){
@@ -487,23 +488,21 @@ double round(double x)
 	
 	page = [self pageForIndexPath:indexPath];
 	CGPoint viewTopLeft = CGPointMake(center.x + xOffset - viewSize.width / 2,center.y - viewSize.height / 2);
-	CGRect rect = CGRectMake(viewTopLeft.x,viewTopLeft.y,viewSize.width,viewSize.height);
+	CGRect rect = CGRectIntegral(CGRectMake(viewTopLeft.x,viewTopLeft.y,viewSize.width,viewSize.height));
 	return rect;
 }
 
 - (void)layoutSubView:(UIView*)view atIndexPath:(NSIndexPath*)indexPath{
-	CGRect frameForRow = [self rectForRowAtIndexPath:indexPath];
-	view.frame = frameForRow;
-	
+	view.frame = [self rectForRowAtIndexPath:indexPath];
 	//DO Layout _contentOffset
 	//set frame, bounds, center, scale and layer transforms
 }
 
 #pragma mark contentOffset
 - (void)updateOffset:(CGFloat)offset{
-	if(_contentOffset != offset){
-		self.contentOffset = offset;
-		NSInteger page = MAX(0,MIN(_numberOfPages-1,(NSInteger)round(self.contentOffset)));
+	if(_internalContentOffset != offset){
+		self.internalContentOffset = offset;
+		NSInteger page = MAX(0,MIN(_numberOfPages-1,(NSInteger)round(self.internalContentOffset)));
 		if(page != _currentPage){
 			self.currentPage = page;
 			NSIndexPath* indexPath = [self indexPathForPage:page];
@@ -534,7 +533,7 @@ double round(double x)
 	animation.duration = 0.4;
 	animation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.2 :0.8 :1.0 :1.0];//[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
 	if(animated){
-		animation.fromValue = [NSNumber numberWithFloat: _contentOffset ];
+		animation.fromValue = [NSNumber numberWithFloat: _internalContentOffset ];
 	}
 	else{
 		animation.fromValue = [NSNumber numberWithFloat: offset ];
@@ -568,6 +567,11 @@ double round(double x)
 }
 
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
+	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
+		(recognizer.state == UIGestureRecognizerStateFailed)){
+		return;
+	}
+
 	//CGPoint location = [recognizer locationInView:self];
 	CGPoint translation = [recognizer translationInView:self];
 	CGPoint velocity = [recognizer velocityInView:self];
@@ -576,13 +580,13 @@ double round(double x)
 	//CGFloat pageVelocity = [self convertToPageCoordinate:_contentOffsetWhenStartPanning translation:velocity.x];
 	
 	if(recognizer.state == UIGestureRecognizerStateBegan){
-		_contentOffsetWhenStartPanning = _contentOffset;
+		_contentOffsetWhenStartPanning = _internalContentOffset;
 	}
 	else if(recognizer.state != UIGestureRecognizerStateEnded){
 		[self setContentOffset:_contentOffsetWhenStartPanning - pageOffset animated:NO];
 	}
 	else{
-		CGFloat offset = round(_contentOffset);
+		CGFloat offset = round(_internalContentOffset);
 		if((offset <= 0 && velocity.x >= 0)|| (offset >= _numberOfPages-1 && velocity.x <= 0) || fabs(velocity.x) <= 300){
 			offset = MAX(0,MIN(_numberOfPages-1,offset));
 			[self setContentOffset:offset animated:YES];
@@ -606,7 +610,7 @@ double round(double x)
 			animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
 			
 			NSMutableArray* values = [NSMutableArray array];
-			[values addObject: [NSNumber numberWithFloat:_contentOffset]];
+			[values addObject: [NSNumber numberWithFloat:_internalContentOffset]];
 			CGFloat bouncePos = offset - velocity.x / 30000;
 			[values addObject: [NSNumber numberWithFloat:bouncePos]];
 			[values addObject: [NSNumber numberWithFloat:offset]];
