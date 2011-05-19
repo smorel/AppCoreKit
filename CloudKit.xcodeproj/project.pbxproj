@@ -294,6 +294,8 @@
 		754823AF1346642C00DB0948 /* CKNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */; };
 		754824C61346892300DB0948 /* CKClassPropertyDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 754824C41346892300DB0948 /* CKClassPropertyDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		754824C71346892300DB0948 /* CKClassPropertyDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 754824C51346892300DB0948 /* CKClassPropertyDescriptor.m */; };
+		7557010213847890000FFCF3 /* CKSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7557010013847890000FFCF3 /* CKSerializer.h */; };
+		7557010313847890000FFCF3 /* CKSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7557010113847890000FFCF3 /* CKSerializer.m */; };
 		7557FFB1138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7557FFAF138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h */; };
 		7557FFB2138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */; };
 		7559BCC8137DE682007E7399 /* CKCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 7559BCC6137DE682007E7399 /* CKCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -669,6 +671,8 @@
 		754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNSStringPropertyCellController.m; sourceTree = "<group>"; };
 		754824C41346892300DB0948 /* CKClassPropertyDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKClassPropertyDescriptor.h; sourceTree = "<group>"; };
 		754824C51346892300DB0948 /* CKClassPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKClassPropertyDescriptor.m; sourceTree = "<group>"; };
+		7557010013847890000FFCF3 /* CKSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSerializer.h; sourceTree = "<group>"; };
+		7557010113847890000FFCF3 /* CKSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSerializer.m; sourceTree = "<group>"; };
 		7557FFAF138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKTableViewCellController+StyleManager.h"; sourceTree = "<group>"; };
 		7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKTableViewCellController+StyleManager.m"; sourceTree = "<group>"; };
 		7559BCC6137DE682007E7399 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCallback.h; sourceTree = "<group>"; };
@@ -810,6 +814,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
+				755700FF13847860000FFCF3 /* Serialization */,
 				75A8762413733E2F00565B6A /* EditingManager */,
 				753CBBA1135DE426000ADDEE /* Style */,
 				75ECE1A7135CDFD60087A696 /* Document */,
@@ -1393,6 +1398,15 @@
 			name = Introspection;
 			sourceTree = "<group>";
 		};
+		755700FF13847860000FFCF3 /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				7557010013847890000FFCF3 /* CKSerializer.h */,
+				7557010113847890000FFCF3 /* CKSerializer.m */,
+			);
+			name = Serialization;
+			sourceTree = "<group>";
+		};
 		758EC592132ADEDB000280FE /* Public */ = {
 			isa = PBXGroup;
 			children = (
@@ -1670,6 +1684,7 @@
 				75B6953A13799E0E00434E70 /* CKTableViewCellNextResponder.h in Headers */,
 				7559BCC8137DE682007E7399 /* CKCallback.h in Headers */,
 				7557FFB1138455BF000FFCF3 /* CKTableViewCellController+StyleManager.h in Headers */,
+				7557010213847890000FFCF3 /* CKSerializer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1959,6 +1974,7 @@
 				75B6953B13799E0E00434E70 /* CKTableViewCellNextResponder.m in Sources */,
 				7559BCC9137DE682007E7399 /* CKCallback.m in Sources */,
 				7557FFB2138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m in Sources */,
+				7557010313847890000FFCF3 /* CKSerializer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
