@@ -21,6 +21,19 @@
 	return [NSData dataWithBytes:&bytes length:20];
 }
 
++ (NSData *)dataWithMD5EncodedString:(NSString *)string {
+	CC_MD5_CTX md5;
+	UInt8 digest[CC_MD5_DIGEST_LENGTH];
+	
+	CC_MD5_Init(&md5);
+	CC_MD5_Update(&md5, [string UTF8String], [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+	CC_MD5_Final(digest, &md5);
+	
+	return [NSData dataWithBytes:&digest length:CC_MD5_DIGEST_LENGTH];
+}
+
+//
+
 - (NSString *)hexadecimalRepresentation {
 	const unsigned char *bytes = (const unsigned char *)[self bytes];
 	NSMutableString *string = [NSMutableString stringWithCapacity:[self length]];
