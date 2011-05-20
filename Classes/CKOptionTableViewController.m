@@ -52,6 +52,7 @@
 		NSString *text = self.labels ? [self.labels objectAtIndex:i] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:i]];
 		CKStandardCellController *cell = [[[CKStandardCellController alloc] initWithText:text] autorelease];
 		cell.accessoryType = (i == self.selectedIndex) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+		cell.value = (i == self.selectedIndex) ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:0];
 		[cells addObject:cell];
 	}
 	[self addSectionWithCellControllers:cells];
