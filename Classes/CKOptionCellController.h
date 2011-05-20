@@ -16,6 +16,9 @@
 	NSArray *_labels;
 }
 
+@property (nonatomic, retain) NSArray *values;
+@property (nonatomic, retain) NSArray *labels;
+
 // If labels is nil, the table values are displayed, otherwise ensure values and labels have the same count.
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels;
 

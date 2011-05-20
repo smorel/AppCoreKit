@@ -8,16 +8,6 @@
 
 #import "CKOptionCellController.h"
 
-
-@interface CKOptionCellController ()
-
-@property (nonatomic, retain) NSArray *values;
-@property (nonatomic, retain) NSArray *labels;
-
-@end
-
-
-
 @implementation CKOptionCellController
 
 @synthesize values = _values;
