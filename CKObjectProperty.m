@@ -12,6 +12,12 @@
 @implementation CKObjectProperty
 @synthesize object,keyPath;
 
+- (void)dealloc{
+	[object release];
+	[keyPath release];
+	[super dealloc];
+}
+
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath{
 	CKObjectProperty* p = [[[CKObjectProperty alloc]initWithObject:object keyPath:keyPath]autorelease];
 	return p;

@@ -8,7 +8,7 @@
 
 #import "CKModelObject.h"
 
-@interface CKStyleFormat : CKModelObject{
+@interface CKStyleFormat : NSObject{
 }
 @property(nonatomic,retain) NSString* format;
 @property(nonatomic,assign) Class objectClass;

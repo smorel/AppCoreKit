@@ -21,6 +21,13 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 @implementation CKStyleFormat
 @synthesize objectClass,properties,format,propertyName;
 
+- (void)dealloc{
+	[format release];
+	[propertyName release];
+	[properties release];
+	[super dealloc];
+}
+
 + (NSArray*)parseFormat:(NSString*)format{
 	NSMutableArray* components = [NSMutableArray array];
 	

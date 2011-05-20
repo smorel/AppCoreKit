@@ -12,7 +12,7 @@
 #import "CKDocumentCollection.h"
 
 
-@interface CKObjectProperty : CKModelObject {
+@interface CKObjectProperty : NSObject {
 }
 @property (nonatomic,retain) id object;
 @property (nonatomic,retain) NSString* keyPath;
