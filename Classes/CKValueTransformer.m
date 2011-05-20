@@ -8,13 +8,16 @@
 
 #import "CKValueTransformer.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 @implementation CKValueTransformer
 
-static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 
 + (id)transformValue:(id)value toClass:(Class)type{
-	if([value isKindOfClass:type])
+	return [NSValueTransformer transform:value toClass:type];
+	
+	
+	/*if([value isKindOfClass:type])
 		return value;
 	
 	if(CKValueTransformerNumberFormatter == nil){
@@ -68,8 +71,7 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 		return str;
 	}
 
-	//return the object hopping there is autoConversion :)
-	return value;
+	return value;*/
 }
 
 @end

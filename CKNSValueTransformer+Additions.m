@@ -29,6 +29,8 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 }
 
 
+static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
+
 NSString* CKSerializerClassTag = @"@class";
 NSString* CKSerializerIDTag = @"@id";
 
@@ -471,6 +473,14 @@ NSString* CKSerializerIDTag = @"@id";
 	return nil;
 }
 
++ (NSString*)convertNSStringFromObject:(id)object{
+	NSAssert(NO,@"not implemented");
+	/* we should prefer implement (NSString*)convertToNSString:(...)object; in the NSObject's inherited class extension (example following)
+	 here we should handle only the cases we object is a native type or a struct wrapped inside NSValue or things like that
+	 */
+	return nil;
+}
+
 @end
 
 
@@ -685,6 +695,25 @@ NSString* CKSerializerIDTag = @"@id";
 	CKDocumentArray* result = [[[CKDocumentArray alloc]init]autorelease];
 	[result addObjectsFromArray:results];
 	return result;
+}
+
+@end
+
+
+@implementation NSNumber (CKTransformAdditions)
+
++ (NSNumber*)convertFromNSString:(NSString*)str{
+	if(CKValueTransformerNumberFormatter == nil){
+		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+	}
+	return [CKValueTransformerNumberFormatter numberFromString:str]; 
+}
+
++ (NSString*)convertToNSString:(NSNumber*)n{
+	if(CKValueTransformerNumberFormatter == nil){
+		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+	}
+	return [CKValueTransformerNumberFormatter stringFromNumber:n];
 }
 
 @end

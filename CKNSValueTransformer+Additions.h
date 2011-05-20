@@ -46,6 +46,8 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (Class)convertClassFromObject:(id)object;
 + (SEL)convertSelectorFromObject:(id)object;
 
++ (NSString*)convertNSStringFromObject:(id)object;
+
 @end
 
 
@@ -68,6 +70,11 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (UIImage*)convertFromNSURL:(NSURL*)url;
 + (UIImage*)convertFromNSArray:(NSArray*)array;
 + (NSString*)convertToNSString:(UIImage*)image;
+@end
+
+@interface NSNumber (CKTransformAdditions)
++ (NSNumber*)convertFromNSString:(NSString*)str;
++ (NSString*)convertToNSString:(NSNumber*)n;
 @end
 
 @interface NSArray (CKTransformAdditions)
