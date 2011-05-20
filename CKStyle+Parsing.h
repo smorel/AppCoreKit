@@ -8,16 +8,6 @@
 
 #import "CKNSValueTransformer+Additions.h"
 
-@interface CKStyleParsing : NSObject {
-}
-
-+ (NSInteger)parseString:(NSString*)str toEnum:(NSDictionary*)keyValues;
-+ (UIColor*)parseStringToColor:(NSString*)str;
-+ (CGSize)parseStringToCGSize:(NSString*)str;
-
-@end
-
-
 @interface NSMutableDictionary (CKStyleParsing)
 
 - (UIColor*) colorForKey:(NSString*)key;

@@ -21,6 +21,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize deepCopy;
 @synthesize editable;
 @synthesize enumDefinition;
+@synthesize contentType;
 
 - (void)dealloc{
 	self.enumDefinition = nil;
@@ -36,6 +37,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.deepCopy = NO;
 	self.editable = YES;
 	self.enumDefinition = nil;
+	self.contentType = nil;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

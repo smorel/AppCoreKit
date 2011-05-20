@@ -25,6 +25,7 @@
 	BOOL creatable;
 	BOOL editable;
 	NSDictionary* enumDefinition;
+	Class contentType;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -35,6 +36,7 @@
 @property (nonatomic, assign) BOOL creatable;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, retain) NSDictionary* enumDefinition;
+@property (nonatomic, assign) Class contentType;
 
 - (void)reset;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;

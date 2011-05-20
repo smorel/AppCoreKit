@@ -42,12 +42,6 @@ NSString* CKSerializerIDTag = @"@id";
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property{
 	CKClassPropertyDescriptor* descriptor = [property descriptor];
 	
-	//if no conversion requiered, set the property directly
-	if(descriptor.type != nil && [object isKindOfClass:descriptor.type]){
-		[property setValue:object];
-		return;
-	}
-	
 	switch(descriptor.propertyType){
 		case CKClassPropertyDescriptorTypeChar:{
 			char c = [NSValueTransformer convertCharFromObject:object];
@@ -171,7 +165,19 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property{
-	id propertyValue = [property value];
+	id target = (property != nil) ? [property value] : nil;
+	
+	CKModelObjectPropertyMetaData* metaData = [property metaData];
+	if(metaData.contentType != nil){
+		SEL selector = [type convertFromObjectWithContentClassNameSelector:source];
+		if(selector != nil){
+			id result = [type performSelector:selector withObject:source withObject:[metaData.contentType description]];
+			if(property != nil){
+				[property setValue:result];
+			}
+			return result;
+		}
+	}
 	
 	SEL selector = [type convertFromObjectSelector:source];
 	if(selector != nil){
@@ -183,8 +189,8 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	selector = [type convertToObjectSelector:source];
-	if(selector != nil && propertyValue != nil){
-		id result = [[source class] performSelector:selector withObject:propertyValue];
+	if(selector != nil && target != nil){
+		id result = [[source class] performSelector:selector withObject:target];
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -199,13 +205,21 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		return result;
 	}
+	
+	
+	//if no conversion requiered, set the property directly
+	if(property != nil){
+		CKClassPropertyDescriptor* descriptor = [property descriptor];
+		if(descriptor.type != nil && [source isKindOfClass:descriptor.type]){
+			[property setValue:source];
+			return source;
+		}
+	}
 		
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
 	//Use the default serialization for objects
 	NSAssert([source isKindOfClass:[NSDictionary class]],@"object of type '%@' can only be set from dictionary",[type description]);
-	
-	id target = (property != nil) ? [property value] : nil;
 	if(target == nil){
 		Class typeToCreate = type;
 		NSString* sourceClassName = [source objectForKey:CKSerializerClassTag];
@@ -479,6 +493,23 @@ NSString* CKSerializerIDTag = @"@id";
 	return nil;
 }
 
++ (SEL)convertFromObjectWithContentClassNameSelector:(id)object{
+	Class sourceClass = [object class];
+	while(sourceClass != nil){
+		Class selfType = [self class];
+		while(selfType != nil){
+			NSString* selectorName = [NSString stringWithFormat:@"convertFrom%@:withContentClassName:",[sourceClass description]];
+			SEL selector = NSSelectorFromString(selectorName);
+			if([selfType respondsToSelector:selector]){
+				return selector;
+			}
+			selfType = class_getSuperclass(selfType);
+		}
+		sourceClass = class_getSuperclass(sourceClass);
+	}
+	return nil;
+}
+
 + (SEL)convertToObjectSelector:(id)object{
 	Class selfType = [self class];
 	while(selfType != nil){
@@ -615,6 +646,45 @@ NSString* CKSerializerIDTag = @"@id";
 
 + (NSString*)convertToNSString:(UIImage*)image{
 	return [image description];
+}
+
+@end
+
+
+@implementation NSArray (CKTransformAdditions)
+
++ (NSArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className{
+	NSMutableArray* results = [NSMutableArray array];
+	Class type = NSClassFromString(className);
+	for(id content in array){
+		if(type != nil){
+			id result = [NSValueTransformer transform:content toClass:type];
+			[results addObject:result];
+		}
+		else{
+			 NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",className];
+			 SEL selector = NSSelectorFromString(selectorName);
+			 if([[NSValueTransformer class]respondsToSelector:selector]){
+				 id result = [NSValueTransformer performSelector:selector withObject:array];
+				 [results addObject:result];
+			 }
+			 else{
+				 NSAssert(NO,@"no convertion function found");
+			 }
+		}
+	}
+	return results;
+}
+
+@end
+
+@implementation CKDocumentArray (CKTransformAdditions)
+
++ (CKDocumentArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className{
+	NSArray* results = [NSArray convertFromNSArray:array withContentClassName:className];
+	CKDocumentArray* result = [[[CKDocumentArray alloc]init]autorelease];
+	[result addObjectsFromArray:results];
+	return result;
 }
 
 @end

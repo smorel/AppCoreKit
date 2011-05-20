@@ -7,6 +7,7 @@
 //
 
 #import "CKObjectProperty.h"
+#import "CKDocumentArray.h"
 
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 #define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
@@ -50,6 +51,7 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 
 @interface NSObject (CKTransformAdditions)
 + (SEL)convertFromObjectSelector:(id)object;
++ (SEL)convertFromObjectWithContentClassNameSelector:(id)object;
 + (SEL)convertToObjectSelector:(id)object;
 + (SEL)valueTransformerObjectSelector:(id)object;
 + (id)convertFromObject:(id)object;
@@ -66,4 +68,12 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (UIImage*)convertFromNSURL:(NSURL*)url;
 + (UIImage*)convertFromNSArray:(NSArray*)array;
 + (NSString*)convertToNSString:(UIImage*)image;
+@end
+
+@interface NSArray (CKTransformAdditions)
++ (NSArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
+@end
+
+@interface CKDocumentArray (CKTransformAdditions)
++ (CKDocumentArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
 @end
