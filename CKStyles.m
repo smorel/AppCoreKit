@@ -12,8 +12,9 @@
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
 
-#import "CKValueTransformer.h"
 #import "RegexKitLite.h"
+#import "CKObjectProperty.h"
+#import "CKNSValueTransformer+Additions.h"
 
 static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
@@ -127,8 +128,8 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		id value = [object valueForKeyPath:subPropertyName];
-		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
+		CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:subPropertyName];
+		NSString* valueString = [NSValueTransformer transformProperty:property toClass:[NSString class]];
 		[str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
 		++i;
 	}

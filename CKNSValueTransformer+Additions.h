@@ -19,12 +19,14 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property;
 + (void)transform:(NSDictionary*)source toObject:(id)target;
 + (id)transform:(id)source toClass:(Class)type;
++ (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type;
 
 //mappings
 + (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings;
 
 //helpers for non NSObject class
 + (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDefinition:(NSDictionary*)enumDefinition;
 
 + (CGSize)convertCGSizeFromObject:(id)object;
 + (CGRect)convertCGRectFromObject:(id)object;
@@ -83,4 +85,9 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 
 @interface CKDocumentArray (CKTransformAdditions)
 + (CKDocumentArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
+@end
+
+@interface NSIndexPath (CKTransformAdditions)
++ (NSIndexPath*)convertFromNSString:(NSString*)str;
++ (NSString*)convertToNSString:(NSIndexPath*)indexPath;
 @end

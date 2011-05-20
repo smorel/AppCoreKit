@@ -45,7 +45,9 @@
 }
 
 - (void)setValue:(id)value{
-	[object setValue:value forKeyPath:keyPath];
+	if([[self value] isEqual:value] == NO){
+		[object setValue:value forKeyPath:keyPath];
+	}
 }
 
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{

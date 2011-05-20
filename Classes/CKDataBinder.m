@@ -10,6 +10,7 @@
 #import "CKValueTransformer.h"
 #import "CKBindingsManager.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 @interface CKDataBinder ()
@@ -81,14 +82,14 @@
 -(void)bind{
 	[self unbind];
 	
-	id value = [instance1Ref.target valueForKeyPath:keyPath1];
 	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
 	if(property == nil){
 		//cannot bind unfound property
 		return;
 	}
 	
-	[instance2Ref.target setValue:[CKValueTransformer transformValue:value toClass:property.type] forKeyPath:keyPath2];
+	[instance2Ref.target setValue:[NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:instance1Ref.target keyPath:keyPath1] 
+																toClass:property.type] forKeyPath:keyPath2];
 	
 	[instance1Ref.target addObserver:self
 				forKeyPath:keyPath1
@@ -115,15 +116,7 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	
-	id dataValue2 = [instance2Ref.target valueForKeyPath:keyPath2];
-	{
-		CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
-		id newValue2 = [CKValueTransformer transformValue:newValue toClass:property.type];
-		if(![newValue2 isEqual:dataValue2]){
-			[instance2Ref.target setValue:newValue2 forKeyPath:keyPath2];
-		}
-	}
+	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.target keyPath:keyPath2] ];
 }
 
 @end

@@ -15,34 +15,50 @@
 
 - (UIColor*) colorForKey:(NSString*)key{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[UIColor class]]){
+		return object;
+	}
 	id result = [NSValueTransformer transform:object toClass:[UIColor class]];
-	[self setObject:result forKey:key];
+	if(result){
+		[self setObject:result forKey:key];
+	}
 	return result;
 }
 
 - (NSArray*) colorArrayForKey:(NSString*)key{
 	id object = [self objectForKey:key];
 	id result = [NSArray convertFromNSArray:object withContentClassName:@"UIColor"];
-	[self setObject:result forKey:key];
+	if(result){
+		[self setObject:result forKey:key];
+	}
 	return result;
 }
 
 - (NSArray*) cgFloatArrayForKey:(NSString*)key{
 	id object = [self objectForKey:key];
-	id result = [NSArray convertFromNSArray:object withContentClassName:@"CGFloat"];
-	[self setObject:result forKey:key];
+	id result = [NSArray convertFromNSArray:object withContentClassName:@"NSNumber"];
+	if(result){
+		[self setObject:result forKey:key];
+	}
 	return result;
 }
 
 - (UIImage*) imageForKey:(NSString*)key{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[UIImage class]]){
+		return object;
+	}
 	id result = [NSValueTransformer transform:object toClass:[UIImage class]];
-	[self setObject:result forKey:key];
-	return result;
+	if(result){
+		[self setObject:result forKey:key];
+	}	return result;
 }
 
 - (NSInteger) enumValueForKey:(NSString*)key withDictionary:(NSDictionary*)dictionary{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object intValue];
+	}
 	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDefinition:dictionary];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;
@@ -50,6 +66,9 @@
 
 - (CGSize) cgSizeForKey:(NSString*)key{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[NSValue class]]){
+		return [object CGSizeValue];
+	}
 	CGSize result = [NSValueTransformer convertCGSizeFromObject:object];
 	[self setObject:[NSValue valueWithCGSize:result] forKey:key];
 	return result;	
@@ -57,6 +76,9 @@
 
 - (CGFloat) cgFloatForKey:(NSString*)key{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object floatValue];
+	}
 	CGFloat result = [NSValueTransformer convertFloatFromObject:object];
 	[self setObject:[NSNumber numberWithFloat:result] forKey:key];
 	return result;	
@@ -71,6 +93,9 @@
 
 - (NSInteger) integerForKey:(NSString*)key{
 	id object = [self objectForKey:key];
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object intValue];
+	}
 	NSInteger result = [NSValueTransformer convertIntegerFromObject:object];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;	

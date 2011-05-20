@@ -35,6 +35,8 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.size = sizeof(CGPoint);
 	}
 	else{
+		results.encoding = nil;
+		results.size = 0;
 		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
 	return results;

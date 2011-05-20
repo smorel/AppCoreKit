@@ -167,6 +167,14 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property{
+	if(source == nil){
+		if(property != nil){
+			[property setValue:nil];
+		}
+		return nil;
+	}
+	
+	
 	id target = (property != nil) ? [property value] : nil;
 	
 	CKModelObjectPropertyMetaData* metaData = [property metaData];
@@ -181,6 +189,14 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 	}
 	
+	//if no conversion requiered, set the property directly
+	if([source isKindOfClass:type]){
+		if(property != nil){
+			[property setValue:source];
+		}
+		return source;
+	}
+	
 	SEL selector = [type convertFromObjectSelector:source];
 	if(selector != nil){
 		id result = [type performSelector:selector withObject:source];
@@ -191,8 +207,8 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	selector = [type convertToObjectSelector:source];
-	if(selector != nil && target != nil){
-		id result = [[source class] performSelector:selector withObject:target];
+	if(selector != nil){
+		id result = [[source class] performSelector:selector withObject:source];
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -206,16 +222,6 @@ NSString* CKSerializerIDTag = @"@id";
 			[property setValue:result];
 		}
 		return result;
-	}
-	
-	
-	//if no conversion requiered, set the property directly
-	if(property != nil){
-		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		if(descriptor.type != nil && [source isKindOfClass:descriptor.type]){
-			[property setValue:source];
-			return source;
-		}
 	}
 		
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
@@ -240,6 +246,24 @@ NSString* CKSerializerIDTag = @"@id";
 
 + (id)transform:(id)source toClass:(Class)type{
 	return [NSValueTransformer transform:source toClass:type inProperty:nil];
+}
+
+
++ (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
+	if([NSObject isKindOf:type parentType:[NSString class]]){
+		CKClassPropertyDescriptor* descriptor = [property descriptor];
+		switch(descriptor.propertyType){
+			case CKClassPropertyDescriptorTypeInt:{
+				CKModelObjectPropertyMetaData* metaData = [property metaData];
+				if(metaData.enumDefinition != nil){
+					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDefinition:metaData.enumDefinition];
+				}
+				break;
+			}
+		}
+	}
+	
+	return [NSValueTransformer transform:[property value] toClass:type];
 }
 
 + (void)transform:(NSDictionary*)source toObject:(id)target{
@@ -282,6 +306,20 @@ NSString* CKSerializerIDTag = @"@id";
 	return (object == nil) ? 0 : [object intValue];
 }
 
+
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDefinition:(NSDictionary*)enumDefinition{
+	NSMutableString* str = [NSMutableString string];
+	for(NSString* e in [enumDefinition allKeys]){
+		NSInteger ci = [[enumDefinition objectForKey:e]intValue];
+		if(value & ci){
+			if([str length] > 0){
+				[str appendString:@" | "];
+			}
+			[str appendString:e];
+		}
+	}
+	return str;
+}
 
 + (CGSize)parseStringToCGSize:(NSString*)str{
 	NSArray* components = [str componentsSeparatedByString:@" "];
@@ -675,7 +713,8 @@ NSString* CKSerializerIDTag = @"@id";
 			 NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",className];
 			 SEL selector = NSSelectorFromString(selectorName);
 			 if([[NSValueTransformer class]respondsToSelector:selector]){
-				 id result = [NSValueTransformer performSelector:selector withObject:array];
+				 //nsinvokation
+				 id result = [NSValueTransformer performSelector:selector withObject:content];
 				 [results addObject:result];
 			 }
 			 else{
@@ -714,6 +753,36 @@ NSString* CKSerializerIDTag = @"@id";
 		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
 	}
 	return [CKValueTransformerNumberFormatter stringFromNumber:n];
+}
+
+@end
+
+
+@implementation NSIndexPath (CKTransformAdditions)
+
++ (NSIndexPath*)convertFromNSString:(NSString*)str{
+	NSArray* components = [str componentsSeparatedByString:@" "];
+	NSUInteger* indexes = malloc(sizeof(NSUInteger) * [components count]);
+	
+	int i =0;
+	for(NSString* component in components){
+		indexes[i] = [component intValue];
+		++i;
+	}
+	return [[[NSIndexPath alloc]initWithIndexes:indexes length:[components count]]autorelease];
+}
+
++ (NSString*)convertToNSString:(NSIndexPath*)indexPath{
+	NSMutableString* str = [NSMutableString string];
+	for(int i =0;i<[indexPath length];++i){
+		if(i < [indexPath length] - 1){
+			[str appendFormat:@"%d ",[indexPath indexAtPosition:i]];
+		}
+		else{
+			[str appendFormat:@"%d",[indexPath indexAtPosition:i]];
+		}
+	}
+	return str;
 }
 
 @end
