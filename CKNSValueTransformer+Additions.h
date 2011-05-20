@@ -8,6 +8,9 @@
 
 #import "CKObjectProperty.h"
 
+NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
+#define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+
 
 @interface NSValueTransformer (CKAddition)
 

@@ -9,24 +9,6 @@
 #import "CKStyle+Parsing.h"
 #import "CKUIColorAdditions.h"
 
-NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
-	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
-	NSArray* components = [strValues componentsSeparatedByString:@","];
-	
-	va_list ArgumentList;
-	va_start(ArgumentList,strValues);
-	
-	int i = 0;
-	while (i < [components count]){
-		int value = va_arg(ArgumentList, int);
-		[dico setObject:[NSNumber numberWithInt:value] forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-		++i;
-    }
-    va_end(ArgumentList);
-	
-	return dico;
-}
-
 
 @implementation CKStyleParsing
 

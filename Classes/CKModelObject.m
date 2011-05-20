@@ -20,15 +20,22 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize copiable;
 @synthesize deepCopy;
 @synthesize editable;
+@synthesize enumDefinition;
+
+- (void)dealloc{
+	self.enumDefinition = nil;
+	[super dealloc];
+}
 
 - (void)reset{
-	comparable = YES;
-	serializable = YES;
-	creatable = NO;
-	hashable = YES;
-	copiable = YES;
-	deepCopy = NO;
-	editable = YES;
+	self.comparable = YES;
+	self.serializable = YES;
+	self.creatable = NO;
+	self.hashable = YES;
+	self.copiable = YES;
+	self.deepCopy = NO;
+	self.editable = YES;
+	self.enumDefinition = nil;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

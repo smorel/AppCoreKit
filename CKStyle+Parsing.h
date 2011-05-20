@@ -6,10 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
-#define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#import "CKNSValueTransformer+Additions.h"
 
 @interface CKStyleParsing : NSObject {
 }

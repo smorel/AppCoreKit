@@ -10,6 +10,25 @@
 #import <objc/runtime.h>
 #import "CKUIColorAdditions.h"
 
+NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
+	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+	NSArray* components = [strValues componentsSeparatedByString:@","];
+	
+	va_list ArgumentList;
+	va_start(ArgumentList,strValues);
+	
+	int i = 0;
+	while (i < [components count]){
+		int value = va_arg(ArgumentList, int);
+		[dico setObject:[NSNumber numberWithInt:value] forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		++i;
+    }
+    va_end(ArgumentList);
+	
+	return dico;
+}
+
+
 NSString* CKSerializerClassTag = @"@class";
 NSString* CKSerializerIDTag = @"@id";
 
@@ -36,7 +55,14 @@ NSString* CKSerializerIDTag = @"@id";
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
-			NSInteger i = [NSValueTransformer convertIntegerFromObject:object];
+			CKModelObjectPropertyMetaData* metaData = [property metaData];
+			NSInteger i = 0;
+			if(metaData.enumDefinition != nil){
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDefinition:metaData.enumDefinition];
+			}
+			else{
+				i = [NSValueTransformer convertIntegerFromObject:object];
+			}
 			[property setValue:[NSNumber numberWithInt:i]];
 			break;
 		}
