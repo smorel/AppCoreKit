@@ -19,33 +19,48 @@
 //mappings
 + (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings;
 
-//helpers
-+ (UIColor*)UIColorFromObject:(id)object;
-+ (NSArray*)NSArrayFromObject:(id)object withContentClass:(Class)contentClass;
-+ (NSSet*)NSSetFromObject:(id)object withContentClass:(Class)contentClass;
-+ (UIImage*)UImageFromObject:(id)object;
-+ (NSInteger)enumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;
-+ (NSNumber*)NSNumberFormObject:(id)object;
-+ (NSDate*)NSDateFromObject:(id)object withFormat:(NSString*)format;
-+ (NSURL*)NSURLFromObject:(id)object;
-+ (NSString*)NSStringFormObject:(id)object;
-+ (CGSize)CGSizeFromObject:(id)object;
-+ (CGRect)CGRectFromObject:(id)object;
-+ (CGPoint)CGPointFromObject:(id)object;
-+ (char)charFromObject:(id)object;
-+ (NSInteger)integerFromObject:(id)object;
-+ (short)shortFromObject:(id)object;
-+ (long)longFromObject:(id)object;
-+ (long long)longLongFromObject:(id)object;
-+ (unsigned char)unsignedCharFromObject:(id)object;
-+ (NSUInteger)unsignedIntFromObject:(id)object;
-+ (unsigned short)unsignedShortFromObject:(id)object;
-+ (unsigned long)unsignedLongFromObject:(id)object;
-+ (unsigned long long)unsignedLongLongFromObject:(id)object;
-+ (CGFloat)floatFromObject:(id)object;
-+ (double)doubleFromObject:(id)object;
-+ (BOOL)boolFromObject:(id)object;
-+ (Class)classFromObject:(id)object;
-+ (SEL)selectorFromObject:(id)object;
+//helpers for non NSObject class
++ (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;
 
++ (CGSize)convertCGSizeFromObject:(id)object;
++ (CGRect)convertCGRectFromObject:(id)object;
++ (CGPoint)convertCGPointFromObject:(id)object;
+
++ (char)convertCharFromObject:(id)object;
++ (NSInteger)convertIntegerFromObject:(id)object;
++ (short)convertShortFromObject:(id)object;
++ (long)convertLongFromObject:(id)object;
++ (long long)convertLongLongFromObject:(id)object;
++ (unsigned char)convertUnsignedCharFromObject:(id)object;
++ (NSUInteger)convertUnsignedIntFromObject:(id)object;
++ (unsigned short)convertUnsignedShortFromObject:(id)object;
++ (unsigned long)convertUnsignedLongFromObject:(id)object;
++ (unsigned long long)convertUnsignedLongLongFromObject:(id)object;
++ (CGFloat)convertFloatFromObject:(id)object;
++ (double)convertDoubleFromObject:(id)object;
++ (BOOL)convertBoolFromObject:(id)object;
++ (Class)convertClassFromObject:(id)object;
++ (SEL)convertSelectorFromObject:(id)object;
+
+@end
+
+
+@interface NSObject (CKTransformAdditions)
++ (SEL)convertFromObjectSelector:(id)object;
++ (SEL)convertToObjectSelector:(id)object;
++ (SEL)valueTransformerObjectSelector:(id)object;
++ (id)convertFromObject:(id)object;
+@end
+
+@interface UIColor (CKTransformAdditions)
++ (UIColor*)convertFromNSString:(NSString*)str;
++ (UIColor*)convertFromNSNumber:(NSNumber*)n;
++ (NSString*)convertToNSString:(UIColor*)color;
+@end
+
+@interface UIImage (CKTransformAdditions)
++ (UIImage*)convertFromNSString:(NSString*)str;
++ (UIImage*)convertFromNSURL:(NSURL*)url;
++ (UIImage*)convertFromNSArray:(NSArray*)array;
++ (NSString*)convertToNSString:(UIImage*)image;
 @end

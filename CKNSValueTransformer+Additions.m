@@ -8,6 +8,7 @@
 
 #import "CKNSValueTransformer+Additions.h"
 #import <objc/runtime.h>
+#import "CKUIColorAdditions.h"
 
 NSString* CKSerializerClassTag = @"@class";
 NSString* CKSerializerIDTag = @"@id";
@@ -21,79 +22,86 @@ NSString* CKSerializerIDTag = @"@id";
 
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property{
 	CKClassPropertyDescriptor* descriptor = [property descriptor];
+	
+	//if no conversion requiered, set the property directly
+	if(descriptor.type != nil && [object isKindOfClass:descriptor.type]){
+		[property setValue:object];
+		return;
+	}
+	
 	switch(descriptor.propertyType){
 		case CKClassPropertyDescriptorTypeChar:{
-			char c = [NSValueTransformer charFromObject:object];
+			char c = [NSValueTransformer convertCharFromObject:object];
 			[property setValue:[NSNumber numberWithChar:c]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
-			NSInteger i = [NSValueTransformer integerFromObject:object];
+			NSInteger i = [NSValueTransformer convertIntegerFromObject:object];
 			[property setValue:[NSNumber numberWithInt:i]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeShort:{
-			short s = [NSValueTransformer shortFromObject:object];
+			short s = [NSValueTransformer convertShortFromObject:object];
 			[property setValue:[NSNumber numberWithShort:s]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeLong:{
-			long l = [NSValueTransformer longFromObject:object];
+			long l = [NSValueTransformer convertLongFromObject:object];
 			[property setValue:[NSNumber numberWithLong:l]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeLongLong:{
-			long long ll = [NSValueTransformer longLongFromObject:object];
+			long long ll = [NSValueTransformer convertLongLongFromObject:object];
 			[property setValue:[NSNumber numberWithLongLong:ll]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedChar:{
-			unsigned char uc = [NSValueTransformer unsignedCharFromObject:object];
+			unsigned char uc = [NSValueTransformer convertUnsignedCharFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedChar:uc]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedInt:{
-			NSUInteger ui = [NSValueTransformer unsignedIntFromObject:object];
+			NSUInteger ui = [NSValueTransformer convertUnsignedIntFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedInt:ui]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedShort:{
-			unsigned short us = [NSValueTransformer unsignedShortFromObject:object];
+			unsigned short us = [NSValueTransformer convertUnsignedShortFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedShort:us]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedLong:{
-			unsigned long ul = [NSValueTransformer unsignedLongFromObject:object];
+			unsigned long ul = [NSValueTransformer convertUnsignedLongFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedLong:ul]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedLongLong:{
-			unsigned long long ull = [NSValueTransformer unsignedLongLongFromObject:object];
+			unsigned long long ull = [NSValueTransformer convertUnsignedLongLongFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedLongLong:ull]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeFloat:{
-			CGFloat f = [NSValueTransformer floatFromObject:object];
+			CGFloat f = [NSValueTransformer convertFloatFromObject:object];
 			[property setValue:[NSNumber numberWithFloat:f]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeDouble:{
-			double d = [NSValueTransformer doubleFromObject:object];
+			double d = [NSValueTransformer convertDoubleFromObject:object];
 			[property setValue:[NSNumber numberWithDouble:d]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeCppBool:{
-			BOOL bo =  [NSValueTransformer boolFromObject:object];
+			BOOL bo =  [NSValueTransformer convertBoolFromObject:object];
 			[property setValue:[NSNumber numberWithBool:bo]];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeClass:{
-			Class c =  [NSValueTransformer classFromObject:object];
+			Class c =  [NSValueTransformer convertClassFromObject:object];
 			[property setValue:c];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeSelector:{
-			SEL s =  [NSValueTransformer selectorFromObject:object];
+			SEL s =  [NSValueTransformer convertSelectorFromObject:object];
 			[property setValue:[NSValue valueWithPointer:s]];
 			break;
 		}
@@ -103,7 +111,7 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		case CKClassPropertyDescriptorTypeStruct:{
 			NSString* typeName = descriptor.className;
-			NSString* selectorName = [NSString stringWithFormat:@"%@FromObject:",typeName];
+			NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",typeName];
 			SEL selector = NSSelectorFromString(selectorName);
 			if([[NSValueTransformer class]respondsToSelector:selector]){
 				NSMethodSignature *signature = [[NSValueTransformer class] methodSignatureForSelector:selector];
@@ -137,22 +145,35 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property{
-	//Search for a specific transform selector
-	Class ittype = type;
-	while(ittype != nil){
-		NSString* typeName = [ittype description];
-		NSString* selectorName = [NSString stringWithFormat:@"%@FromObject:",typeName];
-		SEL selector = NSSelectorFromString(selectorName);
-		if([[NSValueTransformer class]respondsToSelector:selector]){
-			id result = [[NSValueTransformer class] performSelector:selector withObject:source];
-			if(property != nil){
-				[property setValue:result];
-			}
-			return result;
+	id propertyValue = [property value];
+	
+	SEL selector = [type convertFromObjectSelector:source];
+	if(selector != nil){
+		id result = [type performSelector:selector withObject:source];
+		if(property != nil){
+			[property setValue:result];
 		}
-		ittype = class_getSuperclass(ittype);
+		return result;
 	}
 	
+	selector = [type convertToObjectSelector:source];
+	if(selector != nil && propertyValue != nil){
+		id result = [[source class] performSelector:selector withObject:propertyValue];
+		if(property != nil){
+			[property setValue:result];
+		}
+		return result;
+	}
+	
+	selector = [type valueTransformerObjectSelector:source];
+	if(selector != nil){
+		id result = [[NSValueTransformer class] performSelector:selector withObject:source];
+		if(property != nil){
+			[property setValue:result];
+		}
+		return result;
+	}
+		
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
 	//Use the default serialization for objects
@@ -200,112 +221,374 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 }
 
-+ (UIColor*)UIColorFromObject:(id)object{
++ (NSInteger)parseString:(NSString*)str toEnum:(NSDictionary*)keyValues{
+	NSInteger integer = 0;
+	NSArray* components = [str componentsSeparatedByString:@"|"];
+	for(NSString* c in components){
+		NSInteger ci = [[keyValues objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
+		integer |= ci;
+	}
+	return integer;
+}
+
++ (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition{
+	if([object isKindOfClass:[NSString class]]){
+		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition];
+		return result;
+	}
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
+	return (object == nil) ? 0 : [object intValue];
+}
+
+
++ (CGSize)parseStringToCGSize:(NSString*)str{
+	NSArray* components = [str componentsSeparatedByString:@" "];
+	NSAssert([components count] == 2,@"invalid size format");
+	return CGSizeMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue]);
+}
+
+
++ (CGSize)convertCGSizeFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		CGSize size = [NSValueTransformer parseStringToCGSize:object];
+		return size;
+	}
+	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	return (object == nil) ? CGSizeMake(10,10) : [object CGSizeValue];
+}
+
++ (CGRect)parseStringToCGRect:(NSString*)str{
+	NSArray* components = [str componentsSeparatedByString:@" "];
+	NSAssert([components count] == 4,@"invalid rect format");
+	return CGRectMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue],[[components objectAtIndex:2]floatValue],[[components objectAtIndex:3]floatValue]);
+}
+
++ (CGRect)convertCGRectFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		CGRect rect = [NSValueTransformer parseStringToCGRect:object];
+		return rect;
+	}
+	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	return (object == nil) ? CGRectMake(0,0,10,10) : [object CGRectValue];
+}
+
++ (CGPoint)parseStringToCGPoint:(NSString*)str{
+	NSArray* components = [str componentsSeparatedByString:@" "];
+	NSAssert([components count] == 2,@"invalid point format");
+	return CGPointMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue]);
+}
+
++ (CGPoint)convertCGPointFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		CGPoint point = [NSValueTransformer parseStringToCGPoint:object];
+		return point;
+	}
+	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	return (object == nil) ? CGPointMake(10,10) : [object CGPointValue];
+}
+
++ (char)convertCharFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		NSString* lower = [[object stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
+		if([lower isEqual:@"yes"] || [lower isEqual:@"true"] || [lower isEqual:@"1"]){
+			return 1;
+		}
+		else if([lower isEqual:@"no"] || [lower isEqual:@"false"] || [lower isEqual:@"0"]){
+			return 0;
+		}
+		return [object charValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for char");
+	return (object == nil) ? ' ' : [object charValue];
+}
+
++ (NSInteger)convertIntegerFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return [object intValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for int");
+	return (object == nil) ? 0 : [object intValue];
+}
+
++ (short)convertShortFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (short)[object intValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for short");
+	return (object == nil) ? 0 : (short)[object intValue];
+}
+
++ (long)convertLongFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (long)[object longLongValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long");
+	return (object == nil) ? 0 : (long)[object longValue];
+}
+
++ (long long)convertLongLongFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (long long)[object longLongValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long long");
+	return (object == nil) ? 0 : (long long)[object longLongValue];
+}
+
++ (unsigned char)convertUnsignedCharFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		NSString* lower = [[object stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
+		if([lower isEqual:@"yes"] || [lower isEqual:@"true"] || [lower isEqual:@"1"]){
+			return 1;
+		}
+		else if([lower isEqual:@"no"] || [lower isEqual:@"false"] || [lower isEqual:@"0"]){
+			return 0;
+		}
+		return (unsigned char)[object charValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned char");
+	return (object == nil) ? ' ' : [object unsignedCharValue];
+}
+
++ (NSUInteger)convertUnsignedIntFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (NSUInteger)[object intValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned int");
+	return (object == nil) ? 0 : [object unsignedIntValue];
+}
+
++ (unsigned short)convertUnsignedShortFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (unsigned short)[object intValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned short");
+	return (object == nil) ? 0 : (unsigned short)[object intValue];
+}
+
++ (unsigned long)convertUnsignedLongFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (unsigned long)[object longLongValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long");
+	return (object == nil) ? 0 : (unsigned long)[object longValue];
+}
+
++ (unsigned long long)convertUnsignedLongLongFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (unsigned long long)[object longLongValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long long");
+	return (object == nil) ? 0 : (unsigned long long)[object longLongValue];
+}
+
++ (CGFloat)convertFloatFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (CGFloat)[object floatValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for float");
+	return (object == nil) ? 0.0f : (CGFloat)[object floatValue];
+}
+
++ (double)convertDoubleFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return (double)[object doubleValue];
+	}
+	
+	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for double");
+	return (object == nil) ? 0.0 : (double)[object doubleValue];
+}
+
++ (BOOL)convertBoolFromObject:(id)object{
+	return [NSValueTransformer convertCharFromObject:object];
+}
+
++ (Class)convertClassFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return NSClassFromString(object);
+	}
+	
+	NSAssert(NO,@"invalid class for Class");
 	return nil;
 }
 
-+ (NSArray*)NSArrayFromObject:(id)object withContentClass:(Class)contentClass{
++ (SEL)convertSelectorFromObject:(id)object{
+	if([object isKindOfClass:[NSString class]]){
+		return NSSelectorFromString(object);
+	}
+	
+	NSAssert(NO,@"invalid class for selector");
 	return nil;
 }
 
-+ (NSSet*)NSSetFromObject:(id)object withContentClass:(Class)contentClass{
+@end
+
+
+@implementation NSObject (CKTransformAdditions)
+
++ (SEL)convertFromObjectSelector:(id)object{
+	Class sourceClass = [object class];
+	while(sourceClass != nil){
+		Class selfType = [self class];
+		while(selfType != nil){
+			NSString* selectorName = [NSString stringWithFormat:@"convertFrom%@:",[sourceClass description]];
+			SEL selector = NSSelectorFromString(selectorName);
+			if([selfType respondsToSelector:selector]){
+				return selector;
+			}
+			selfType = class_getSuperclass(selfType);
+		}
+		sourceClass = class_getSuperclass(sourceClass);
+	}
 	return nil;
 }
 
-+ (UIImage*)UImageFromObject:(id)object{
++ (SEL)convertToObjectSelector:(id)object{
+	Class selfType = [self class];
+	while(selfType != nil){
+		Class sourceClass = [object class];
+		while(sourceClass != nil){
+			NSString* selectorName = [NSString stringWithFormat:@"convertTo%@:",[selfType description]];
+			SEL selector = NSSelectorFromString(selectorName);
+			if([sourceClass respondsToSelector:selector]){
+				return selector;
+			}
+			sourceClass = class_getSuperclass(sourceClass);
+		}
+		selfType = class_getSuperclass(selfType);
+	}
 	return nil;
 }
 
-+ (NSInteger)enumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition{
-	return 0;
-}
-
-+ (NSNumber*)NSNumberFormObject:(id)object{
++ (SEL)valueTransformerObjectSelector:(id)object{
+	Class ittype = [self class];
+	while(ittype != nil){
+		NSString* typeName = [ittype description];
+		NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",typeName];
+		SEL selector = NSSelectorFromString(selectorName);
+		if([[NSValueTransformer class]respondsToSelector:selector]){
+			return selector;
+		}
+		ittype = class_getSuperclass(ittype);
+	}
 	return nil;
 }
 
-+ (NSDate*)NSDateFromObject:(id)object withFormat:(NSString*)format{
+
++ (id)convertFromObject:(id)object{
+	Class type = [self class];
+	
+	SEL selector = [type convertFromObjectSelector:object];
+	if(selector != nil){
+		id result = [type performSelector:selector withObject:object];
+		return result;
+	}
+		
+	selector = [type valueTransformerObjectSelector:object];
+	if(selector != nil){
+		id result = [[NSValueTransformer class] performSelector:selector withObject:object];
+		return result;
+	}
+	
 	return nil;
 }
 
-+ (NSURL*)NSURLFromObject:(id)object{
+@end
+
+
+@implementation UIColor (CKTransformAdditions)
+
++ (UIColor*)convertFromNSString:(NSString*)str{
+	NSArray* components = [str componentsSeparatedByString:@" "];
+	if([components count] == 4){
+		return [UIColor colorWithRed:[[components objectAtIndex:0]floatValue] 
+							   green:[[components objectAtIndex:1]floatValue] 
+								blue:[[components objectAtIndex:2]floatValue] 
+							   alpha:[[components objectAtIndex:3]floatValue]];
+	}
+	else {
+		if([str hasPrefix:@"0x"]){
+			NSArray* components = [str componentsSeparatedByString:@" "];
+			NSAssert([components count] >= 1,@"Invalid format for color");
+			unsigned outVal;
+			NSScanner* scanner = [NSScanner scannerWithString:[components objectAtIndex:0]];
+			[scanner scanHexInt:&outVal];
+			UIColor* color = [UIColor colorWithRGBValue:outVal];
+			
+			if([components count] > 1){
+				color = [color colorWithAlphaComponent:[[components objectAtIndex:1] floatValue] ];
+			}
+			return color;
+		}
+		else{
+			SEL colorSelector = NSSelectorFromString(str);
+			if(colorSelector && [[UIColor class] respondsToSelector:colorSelector]){
+				UIColor* color = [[UIColor class] performSelector:colorSelector];
+				return color;
+			}
+			else{
+				NSAssert(NO,@"invalid format for color");
+			}
+		}
+	}
+	
 	return nil;
 }
 
-+ (NSString*)NSStringFormObject:(id)object{
-	return @"";
++ (UIColor*)convertFromNSNumber:(NSNumber*)n{
+	UIColor* result = [UIColor colorWithRGBValue:[n intValue]];
+	return result;
 }
 
-+ (CGSize)CGSizeFromObject:(id)object{
-	return CGSizeMake(10,10);
++ (NSString*)convertToNSString:(UIColor*)color{
+	return [color description];
 }
 
-+ (CGRect)CGRectFromObject:(id)object{
-	return CGRectMake(10,10,10,10);
+@end
+
+
+@implementation UIImage (CKTransformAdditions)
+
++ (UIImage*)convertFromNSString:(NSString*)str{
+	UIImage* image = [UIImage imageNamed:str];
+	return image;
 }
 
-+ (CGPoint)CGPointFromObject:(id)object{
-	return CGPointMake(10,10);
-}
-
-+ (char)charFromObject:(id)object{
-	return 0;
-}
-
-+ (NSInteger)integerFromObject:(id)object{
-	return 0;
-}
-
-+ (short)shortFromObject:(id)object{
-	return 0;
-}
-
-+ (long)longFromObject:(id)object{
-	return 0;
-}
-
-+ (long long)longLongFromObject:(id)object{
-	return 0;
-}
-
-+ (unsigned char)unsignedCharFromObject:(id)object{
-	return 0;
-}
-
-+ (NSUInteger)unsignedIntFromObject:(id)object{
-	return 0;
-}
-
-+ (unsigned short)unsignedShortFromObject:(id)object{
-	return 0;
-}
-
-+ (unsigned long)unsignedLongFromObject:(id)object{
-	return 0;
-}
-
-+ (unsigned long long)unsignedLongLongFromObject:(id)object{
-	return 0;
-}
-
-+ (CGFloat)floatFromObject:(id)object{
-	return 0.0f;
-}
-
-+ (double)doubleFromObject:(id)object{
-	return 0.0;
-}
-
-+ (BOOL)boolFromObject:(id)object{
-	return NO;
-}
-
-+ (Class)classFromObject:(id)object{
++ (UIImage*)convertFromNSURL:(NSURL*)url{
+	if([url isFileURL]){
+		UIImage* image = [UIImage imageWithContentsOfFile:[url path]];
+		return image;
+	}
+	NSAssert(NO,@"Styles only supports file url yet");
 	return nil;
 }
 
-+ (SEL)selectorFromObject:(id)object{
++ (UIImage*)convertFromNSArray:(NSArray*)components{
+	NSAssert([components count] == 2,@"invalid format for image");
+	NSString* name = [components objectAtIndex:0];
+	
+	UIImage* image = [UIImage imageNamed:name];
+	if(image){
+		NSString* sizeStr = [components objectAtIndex:1];
+		CGSize size = [NSValueTransformer parseStringToCGSize:sizeStr];
+		image = [image stretchableImageWithLeftCapWidth:size.width topCapHeight:size.height];
+		return image;
+	}
 	return nil;
+}
+
++ (NSString*)convertToNSString:(UIImage*)image{
+	return [image description];
 }
 
 @end
