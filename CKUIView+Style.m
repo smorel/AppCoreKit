@@ -285,6 +285,38 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 
 @end
 
+
+
+@implementation UIView (CKValueTransformer)
+
+- (void)autoresizingMaskMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewAutoresizingNone,
+											   UIViewAutoresizingFlexibleLeftMargin,
+											   UIViewAutoresizingFlexibleWidth,
+											   UIViewAutoresizingFlexibleRightMargin,
+											   UIViewAutoresizingFlexibleTopMargin,
+											   UIViewAutoresizingFlexibleHeight,
+											   UIViewAutoresizingFlexibleBottomMargin);
+}
+
+- (void)contentModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewContentModeScaleToFill,
+											   UIViewContentModeScaleAspectFit,
+											   UIViewContentModeScaleAspectFill,
+											   UIViewContentModeRedraw,
+											   UIViewContentModeCenter,
+											   UIViewContentModeTop,
+											   UIViewContentModeBottom,
+											   UIViewContentModeLeft,
+											   UIViewContentModeRight,
+											   UIViewContentModeTopLeft,
+											   UIViewContentModeTopRight,
+											   UIViewContentModeBottomLeft,
+											   UIViewContentModeBottomRight);
+}
+
+@end
+
 @implementation NSObject (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{

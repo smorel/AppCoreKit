@@ -162,10 +162,23 @@ NSString* CKStyleCellFlags = @"flags";
 											   UITableViewCellAccessoryCheckmark);
 }
 
+- (void)editingAccessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+											   UITableViewCellAccessoryDisclosureIndicator, 
+											   UITableViewCellAccessoryDetailDisclosureButton,
+											   UITableViewCellAccessoryCheckmark);
+}
+
 - (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
 	metaData.enumDefinition = CKEnumDictionary(UITableViewCellSelectionStyleNone,
 											   UITableViewCellSelectionStyleBlue,
 											   UITableViewCellSelectionStyleGray);
+}
+
+- (void)editingStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellEditingStyleNone,
+											   UITableViewCellEditingStyleDelete,
+											   UITableViewCellEditingStyleInsert);
 }
 
 @end
