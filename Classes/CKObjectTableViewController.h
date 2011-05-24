@@ -51,6 +51,7 @@
 	id _delegate;
 	
 	UISearchBar* _searchBar;
+	CGFloat _liveSearchDelay;
 }
 
 @property (nonatomic, retain) id objectController;
@@ -67,6 +68,7 @@
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, assign) BOOL searchEnabled;
+@property (nonatomic, assign) CGFloat liveSearchDelay;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;

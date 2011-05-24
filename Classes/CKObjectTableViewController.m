@@ -62,6 +62,7 @@
 @synthesize delegate = _delegate;
 @synthesize searchEnabled = _searchEnabled;
 @synthesize searchBar = _searchBar;
+@synthesize liveSearchDelay = _liveSearchDelay;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -80,6 +81,19 @@
 	if ([searchBar.text isEqualToString:@""] == YES
 		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 		[_delegate objectTableViewController:self didSearch:@""];
+	}
+}
+
+- (void)delayedSearchWithText:(NSString*)str{
+	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+		[_delegate objectTableViewController:self didSearch:str];
+	}
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	if(_liveSearchDelay > 0){
+		[self performSelector:@selector(delayedSearchWithText:) withObject:searchBar.text afterDelay:_liveSearchDelay];
 	}
 }
 
@@ -121,6 +135,7 @@
 	_scrolling = NO;
 	_editable = NO;
 	_searchEnabled = NO;
+	_liveSearchDelay = 0.5;
 }
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
