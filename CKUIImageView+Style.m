@@ -23,10 +23,10 @@ NSString* CKStyleImage = @"image";
 
 @implementation UIImageView (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UIImageView* imageView = (UIImageView*)view;
-		NSMutableDictionary* myImageViewStyle = [style styleForObject:imageView propertyName:propertyName];
+		NSMutableDictionary* myImageViewStyle = style;
 		if(myImageViewStyle){
 			if([myImageViewStyle containsObjectForKey:CKStyleImage])
 				imageView.image = [myImageViewStyle image];

@@ -369,11 +369,13 @@ NSString* CKStyleImport = @"@import";
 - (NSMutableDictionary*)_styleForObject:(id)object propertyName:(NSString*)propertyName{
 	NSDictionary* allFormats = [self objectForKey:CKStyleFormats];
 	if(allFormats){
-		NSArray* propertyformats = [allFormats objectForKey:propertyName];
-		if(propertyformats){
-			NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName className:nil];
-			if(style){
-				return style;
+		if(propertyName != nil){
+			NSArray* propertyformats = [allFormats objectForKey:propertyName];
+			if(propertyformats){
+				NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName className:nil];
+				if(style){
+					return style;
+				}
 			}
 		}
 		

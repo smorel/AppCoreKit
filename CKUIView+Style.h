@@ -67,11 +67,11 @@ extern NSString* CKStyleBorderStyle;
 - (void)applyStyle:(NSMutableDictionary*)style;
 - (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
 
 //private
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName;
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
 @end
 
 @interface NSObject (CKStyle)

@@ -43,7 +43,7 @@
 	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
 	if( formSection.headerView != nil ){
-		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.headerView applyStyle:controllerStyle];
 	}
 	return formSection.headerView;

@@ -68,10 +68,10 @@ NSString* CKStyleTextAlignment = @"textAlignment";
 
 @implementation UILabel (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UILabel* label = (UILabel*)view;
-		NSMutableDictionary* myLabelStyle = [style styleForObject:label propertyName:propertyName];
+		NSMutableDictionary* myLabelStyle = style;
 		if(myLabelStyle){
 			if([myLabelStyle containsObjectForKey:CKStyleTextColor])
 				label.textColor = [myLabelStyle textColor];

@@ -74,8 +74,8 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation CKTableViewCellController (CKStyle)
 
 - (NSMutableDictionary*)controllerStyle{
-	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:@""];
-	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:@""];
+	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
+	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
 	return controllerStyle;
 }
 
@@ -163,6 +163,9 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell{
+	if([[[self class]description]isEqual:@"RXInterventionTableViewCellController"] == YES){
+		int i = 3;
+	}
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
@@ -172,10 +175,10 @@ NSString* CKStyleCellFlags = @"flags";
 
 @implementation UITableViewCell (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UITableViewCell* tableViewCell = (UITableViewCell*)view;
-		NSMutableDictionary* myCellStyle = [style styleForObject:tableViewCell propertyName:propertyName];
+		NSMutableDictionary* myCellStyle = style;
 		if(myCellStyle){
 			//Applying style on UITableViewCell
 			if([myCellStyle containsObjectForKey:CKStyleAccessoryImage]){
@@ -213,7 +216,7 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];
