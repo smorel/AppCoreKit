@@ -7,6 +7,7 @@
 //
 
 #import "CKObjectProperty.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 @implementation CKObjectProperty
@@ -173,6 +174,10 @@
 - (NSString*)name{
 	CKClassPropertyDescriptor* descriptor = [self descriptor];
 	return descriptor.name;
+}
+
+- (id)convertToClass:(Class)type{
+	return [NSValueTransformer transformProperty:self toClass:type];
 }
 
 @end
