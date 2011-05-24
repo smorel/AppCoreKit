@@ -70,7 +70,8 @@
 
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-	[searchBar resignFirstResponder];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self.searchBar resignFirstResponder];
 	
 	if ([searchBar.text isEqualToString:@""] == NO
 		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
@@ -79,6 +80,7 @@
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	if ([searchBar.text isEqualToString:@""] == YES
 		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 		[_delegate objectTableViewController:self didSearch:@""];
@@ -699,6 +701,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[self.searchBar resignFirstResponder];
 	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelectRow];
