@@ -26,6 +26,7 @@
 	BOOL editable;
 	NSDictionary* enumDefinition;
 	Class contentType;
+	NSString* dateFormat;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -37,6 +38,7 @@
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, retain) NSDictionary* enumDefinition;
 @property (nonatomic, assign) Class contentType;
+@property (nonatomic, retain) NSString* dateFormat;
 
 - (void)reset;
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;

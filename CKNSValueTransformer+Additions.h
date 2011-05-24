@@ -18,6 +18,7 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 //tranform
 + (void)transform:(id)object inProperty:(CKObjectProperty*)property;
 + (void)transform:(NSDictionary*)source toObject:(id)target;
+
 + (id)transform:(id)source toClass:(Class)type;
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type;
 
@@ -77,6 +78,16 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 @interface NSNumber (CKTransformAdditions)
 + (NSNumber*)convertFromNSString:(NSString*)str;
 + (NSString*)convertToNSString:(NSNumber*)n;
+@end
+
+@interface NSURL (CKTransformAdditions)
++ (NSURL*)convertFromNSString:(NSString*)str;
++ (NSString*)convertToNSString:(NSURL*)n;
+@end
+
+@interface NSDate (CKTransformAdditions)
++ (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format;
++ (NSString*)convertToNSString:(NSDate*)n withFormat:(NSString*)format;
 @end
 
 @interface NSArray (CKTransformAdditions)

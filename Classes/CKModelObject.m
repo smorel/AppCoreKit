@@ -22,9 +22,11 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize editable;
 @synthesize enumDefinition;
 @synthesize contentType;
+@synthesize dateFormat;
 
 - (void)dealloc{
 	self.enumDefinition = nil;
+	self.dateFormat = nil;
 	[super dealloc];
 }
 
@@ -38,6 +40,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.editable = YES;
 	self.enumDefinition = nil;
 	self.contentType = nil;
+	self.dateFormat = nil;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

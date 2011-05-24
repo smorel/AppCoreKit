@@ -9,6 +9,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import <objc/runtime.h>
 #import "CKUIColorAdditions.h"
+#import "CKNSDate+Conversions.h"
 
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
@@ -235,6 +236,8 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	id target = (property != nil) ? [property value] : nil;
 	
+	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
+	
 	CKModelObjectPropertyMetaData* metaData = [property metaData];
 	if(metaData.contentType != nil){
 		NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:metaData.contentType];
@@ -257,6 +260,24 @@ NSString* CKSerializerIDTag = @"@id";
 			}
 			return result;
 		}
+	}
+	
+	//special case for date
+	if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
+	   && [source isKindOfClass:[NSString class]]){
+		id result = [NSDate convertFromNSString:source withFormat:metaData.dateFormat];
+		if(property != nil){
+			[property setValue:result];
+		}
+		return source;
+	}
+	else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+			&& [source isKindOfClass:[NSDate class]]){
+		id result = [NSDate convertToNSString:source withFormat:metaData.dateFormat];
+		if(property != nil){
+			[property setValue:result];
+		}
+		return source;
 	}
 	
 	//if no conversion requiered, set the property directly
@@ -311,8 +332,6 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		return result;
 	}
-		
-	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
 	//Use the default serialization for objects
 	NSAssert([source isKindOfClass:[NSDictionary class]],@"object of type '%@' can only be set from dictionary",[type description]);
@@ -872,6 +891,31 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 	}
 	return str;
+}
+
+@end
+
+
+@implementation NSURL (CKTransformAdditions)
+
++ (NSURL*)convertFromNSString:(NSString*)str{
+	return [NSURL URLWithString:str];
+}
+
++ (NSString*)convertToNSString:(NSURL*)url{
+	return [url absoluteString];
+}
+
+@end
+
+@implementation NSDate (CKTransformAdditions)
+
++ (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format{//special case to handle with metaData
+	return [NSDate dateFromString:str withDateFormat:format];
+}
+
++ (NSString*)convertToNSString:(NSDate*)date withFormat:(NSString*)format{
+	return [NSDate stringFromDate:date withDateFormat:format];
 }
 
 @end
