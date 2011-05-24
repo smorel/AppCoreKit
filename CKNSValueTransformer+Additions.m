@@ -53,13 +53,14 @@ NSString* CKSerializerIDTag = @"@id";
 //utiliser des selector au lieu des valueTransformers
 @implementation NSValueTransformer (CKAddition)
 
-+ (void)transform:(id)object inProperty:(CKObjectProperty*)property{
++ (id)transform:(id)object inProperty:(CKObjectProperty*)property{
 	CKClassPropertyDescriptor* descriptor = [property descriptor];
 	
 	switch(descriptor.propertyType){
 		case CKClassPropertyDescriptorTypeChar:{
 			char c = [NSValueTransformer convertCharFromObject:object];
 			[property setValue:[NSNumber numberWithChar:c]];
+			return [NSNumber numberWithChar:c];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
@@ -72,75 +73,90 @@ NSString* CKSerializerIDTag = @"@id";
 				i = [NSValueTransformer convertIntegerFromObject:object];
 			}
 			[property setValue:[NSNumber numberWithInt:i]];
+			return [NSNumber numberWithInt:i];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeShort:{
 			short s = [NSValueTransformer convertShortFromObject:object];
 			[property setValue:[NSNumber numberWithShort:s]];
+			return [NSNumber numberWithShort:s];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeLong:{
 			long l = [NSValueTransformer convertLongFromObject:object];
 			[property setValue:[NSNumber numberWithLong:l]];
+			return [NSNumber numberWithLong:l];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeLongLong:{
 			long long ll = [NSValueTransformer convertLongLongFromObject:object];
 			[property setValue:[NSNumber numberWithLongLong:ll]];
+			return [NSNumber numberWithLongLong:ll];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedChar:{
 			unsigned char uc = [NSValueTransformer convertUnsignedCharFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedChar:uc]];
+			return [NSNumber numberWithUnsignedChar:uc];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedInt:{
 			NSUInteger ui = [NSValueTransformer convertUnsignedIntFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedInt:ui]];
+			return [NSNumber numberWithUnsignedInt:ui];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedShort:{
 			unsigned short us = [NSValueTransformer convertUnsignedShortFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedShort:us]];
+			return [NSNumber numberWithUnsignedShort:us];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedLong:{
 			unsigned long ul = [NSValueTransformer convertUnsignedLongFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedLong:ul]];
+			return [NSNumber numberWithUnsignedLong:ul];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedLongLong:{
 			unsigned long long ull = [NSValueTransformer convertUnsignedLongLongFromObject:object];
 			[property setValue:[NSNumber numberWithUnsignedLongLong:ull]];
+			return [NSNumber numberWithUnsignedLongLong:ull];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeFloat:{
 			CGFloat f = [NSValueTransformer convertFloatFromObject:object];
 			[property setValue:[NSNumber numberWithFloat:f]];
+			return [NSNumber numberWithFloat:f];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeDouble:{
 			double d = [NSValueTransformer convertDoubleFromObject:object];
 			[property setValue:[NSNumber numberWithDouble:d]];
+			return [NSNumber numberWithDouble:d];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeCppBool:{
 			BOOL bo =  [NSValueTransformer convertBoolFromObject:object];
 			[property setValue:[NSNumber numberWithBool:bo]];
+			return [NSNumber numberWithBool:bo];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeClass:{
 			Class c =  [NSValueTransformer convertClassFromObject:object];
-			[property setValue:c];
+			[property setValue:[NSValue valueWithPointer:c]];
+			return [NSValue valueWithPointer:c];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeSelector:{
 			SEL s =  [NSValueTransformer convertSelectorFromObject:object];
 			[property setValue:[NSValue valueWithPointer:s]];
+			return [NSValue valueWithPointer:s];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeObject:{
-			[NSValueTransformer transform:object toClass:descriptor.type inProperty:property];
+			id result = [NSValueTransformer transform:object toClass:descriptor.type inProperty:property];
+			return result;
 			break;
 		}
 		case CKClassPropertyDescriptorTypeStruct:{
@@ -162,6 +178,7 @@ NSString* CKSerializerIDTag = @"@id";
 				
 				NSValue* value =  [NSValue value:returnValue withObjCType:[descriptor.encoding UTF8String]];
 				[property setValue:value];
+				return value;
 			}
 			else{
 				NSAssert(NO,@"No transform selector for struct of type '%@'",typeName);
@@ -175,6 +192,7 @@ NSString* CKSerializerIDTag = @"@id";
 			break;
 		}
 	}
+	return nil;
 }
 
 

@@ -101,4 +101,11 @@
 	return result;	
 }
 
+- (id)objectForKey:(NSString*)key inProperty:(CKObjectProperty*)property{
+	id object = [self objectForKey:key];
+	id transformedValue = [NSValueTransformer transform:object inProperty:property];
+	[self setObject:transformedValue forKey:key];
+	return transformedValue;	
+}
+
 @end

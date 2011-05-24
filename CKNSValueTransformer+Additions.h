@@ -16,7 +16,7 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 @interface NSValueTransformer (CKAddition)
 
 //tranform
-+ (void)transform:(id)object inProperty:(CKObjectProperty*)property;
++ (id)transform:(id)object inProperty:(CKObjectProperty*)property;
 + (void)transform:(NSDictionary*)source toObject:(id)target;
 
 + (id)transform:(id)source toClass:(Class)type;
