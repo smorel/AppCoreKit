@@ -49,6 +49,8 @@
 	NSMutableDictionary* _headerViewsForSections;
 	
 	id _delegate;
+	
+	UISearchBar* _searchBar;
 }
 
 @property (nonatomic, retain) id objectController;

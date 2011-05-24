@@ -27,6 +27,7 @@
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @property (nonatomic, retain) NSMutableDictionary* params;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
+@property (nonatomic, retain) UISearchBar* searchBar;
 
 - (void)updateNumberOfPages;
 - (void)notifiesCellControllersForVisibleRows;
@@ -60,6 +61,7 @@
 @synthesize params = _params;
 @synthesize delegate = _delegate;
 @synthesize searchEnabled = _searchEnabled;
+@synthesize searchBar = _searchBar;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -171,6 +173,8 @@
 	doneButton = nil;
 	[_headerViewsForSections release];
 	_headerViewsForSections = nil;
+	[_searchBar release];
+	_searchBar = nil;
     [super dealloc];
 }
 
@@ -237,14 +241,19 @@
 	
     [super viewWillAppear:animated];
 	
-	if(self.searchEnabled && self.searchDisplayController == nil){
+	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
+		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,44)]autorelease];
+		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_searchBar.delegate = self;
+		//self.tableView.tableHeaderView = _searchBar;
+		[self.view addSubview:_searchBar];
 		
-		UISearchBar* bar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,44)]autorelease];
-		bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		bar.delegate = self;
-		self.tableView.tableHeaderView = bar;
+		if(self.tableViewContainer.frame.origin.y < 44){
+			self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + 44,
+													   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - 44);
+		}
 		
-		[[[UISearchDisplayController alloc]initWithSearchBar:bar contentsController:self]autorelease];
+		[[[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self]autorelease];
 	}		
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
