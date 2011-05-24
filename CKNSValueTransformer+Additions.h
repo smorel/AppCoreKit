@@ -17,12 +17,11 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 
 //tranform
 + (id)transform:(id)object inProperty:(CKObjectProperty*)property;
-+ (void)transform:(NSDictionary*)source toObject:(id)target;
-
 + (id)transform:(id)source toClass:(Class)type;
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type;
 
-//mappings
+
++ (void)transform:(NSDictionary*)source toObject:(id)target;
 + (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings;
 
 //helpers for non NSObject class

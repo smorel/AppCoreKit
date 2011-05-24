@@ -12,25 +12,10 @@
 #import "CKStyle+Parsing.h"
 #import "CKLocalization.h"
 
-NSString* CKStyleTextColor = @"textColor";
-NSString* CKStyleHighlightedTextColor = @"highlightedTextColor";
 NSString* CKStyleFontSize = @"fontSize";
 NSString* CKStyleFontName = @"fontName";
-NSString* CKStyleText = @"text";
-NSString* CKStyleNumberOfLines = @"numberOfLines";
-NSString* CKStyleShadowColor = @"shadowColor";
-NSString* CKStyleShadowOffset = @"shadowOffset";
-NSString* CKStyleTextAlignment = @"textAlignment";
 
 @implementation NSMutableDictionary (CKUILabelStyle)
-
-- (UIColor*)textColor{
-	return [self colorForKey:CKStyleTextColor];
-}
-
-- (UIColor*)highlightedTextColor {
-	return [self colorForKey:CKStyleHighlightedTextColor];
-}
 
 - (CGFloat)fontSize{
 	return [self cgFloatForKey:CKStyleFontSize];
@@ -38,52 +23,46 @@ NSString* CKStyleTextAlignment = @"textAlignment";
 
 - (NSString*)fontName{
 	return [self stringForKey:CKStyleFontName];
-	
 }
 
-- (NSString*)text{
-	return _([self stringForKey:CKStyleText]);
+@end
+
+@implementation UILabel (CKValueTransformer)
+
+- (void)textAlignmentMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITextAlignmentLeft,
+											   UITextAlignmentCenter,
+											   UITextAlignmentRight);
 }
 
-- (NSInteger)numberOfLines{
-	return [self integerForKey:CKStyleNumberOfLines];
+- (void)lineBreakModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UILineBreakModeWordWrap,
+											   UILineBreakModeCharacterWrap,
+											   UILineBreakModeClip,
+											   UILineBreakModeHeadTruncation,
+											   UILineBreakModeTailTruncation,
+											   UILineBreakModeMiddleTruncation);
 }
 
-- (UIColor *)shadowColor {
-	return [self colorForKey:CKStyleShadowColor];
-}
-
-- (CGSize)shadowOffset {
-	return [self cgSizeForKey:CKStyleShadowOffset];
-}
-
-- (UITextAlignment)textAlignment{
-	return (UITextAlignment)[self enumValueForKey:CKStyleTextAlignment 
-								   withDictionary:CKEnumDictionary(UITextAlignmentLeft,
-																   UITextAlignmentCenter,
-																   UITextAlignmentRight)];
+- (void)baselineAdjustmentMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIBaselineAdjustmentAlignBaselines,
+											   UIBaselineAdjustmentAlignCenters,
+											   UIBaselineAdjustmentNone);
 }
 
 @end
 
 @implementation UILabel (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleFontName,CKStyleFontSize,nil]];
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UILabel* label = (UILabel*)view;
 		NSMutableDictionary* myLabelStyle = style;
 		if(myLabelStyle){
-			if([myLabelStyle containsObjectForKey:CKStyleTextColor])
-				label.textColor = [myLabelStyle textColor];
-			if([myLabelStyle containsObjectForKey:CKStyleHighlightedTextColor])
-				label.highlightedTextColor = [myLabelStyle highlightedTextColor];
-			if([myLabelStyle containsObjectForKey:CKStyleText]){
-				if(label.text == nil){
-					label.text = [myLabelStyle text];
-				}
-			}
-			if([myLabelStyle containsObjectForKey:CKStyleNumberOfLines])
-				label.numberOfLines = [myLabelStyle numberOfLines];
 			
 			NSString* fontName = label.font.fontName;
 			if([myLabelStyle containsObjectForKey:CKStyleFontName])
@@ -92,14 +71,7 @@ NSString* CKStyleTextAlignment = @"textAlignment";
 			if([myLabelStyle containsObjectForKey:CKStyleFontSize])
 				fontSize= [myLabelStyle fontSize];
 			label.font = [UIFont fontWithName:fontName size:fontSize];
-
-			// Shadow
-			if ([myLabelStyle containsObjectForKey:CKStyleShadowColor]) label.shadowColor = [myLabelStyle shadowColor];
-			if ([myLabelStyle containsObjectForKey:CKStyleShadowOffset]) label.shadowOffset = [myLabelStyle shadowOffset];
 			
-			if([myLabelStyle containsObjectForKey:CKStyleTextAlignment])
-				label.textAlignment = [myLabelStyle textAlignment];
-
 			return YES;
 		}
 	}
@@ -107,3 +79,5 @@ NSString* CKStyleTextAlignment = @"textAlignment";
 }
 
 @end
+
+//special case for font as fonts have no property size !

@@ -36,6 +36,10 @@ NSString *CKStyleDefaultTextColor = @"defaultTextColor";
 
 @implementation UIButton (CKStyle)
 
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,nil]];
+}
+
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UIButton* button = (UIButton *)view;

@@ -15,6 +15,8 @@
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
 
+NSMutableSet* reserverKeyWords = nil;
+
 NSString* CKStyleBackgroundColor = @"backgroundColor";
 NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
 NSString* CKStyleBackgroundGradientLocations = @"backgroundGradientLocations";
@@ -116,6 +118,11 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	return [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack  delegate:nil];
+}
+
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,
+								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,nil]];
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
@@ -275,9 +282,33 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 	return NO;
 }
 
+
 @end
 
 @implementation NSObject (CKStyle)
+
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKStyleFormats,CKStyleParentStyle,CKStyleEmptyStyle,CKStyleInherits,CKStyleImport,nil]];
+}
+
++ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object{
+	if(reserverKeyWords == nil){
+		reserverKeyWords = [[NSMutableSet set]retain];
+	}
+	
+	[[self class]updateReservedKeyWords:reserverKeyWords];
+	
+	NSArray* allPropertyNames = [object allPropertyNames];
+	for(NSString* key in [style allKeys]){
+		if([reserverKeyWords containsObject:key] == NO
+		   && [allPropertyNames containsObject:key] == YES){
+			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
+			if(descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == NO){
+				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
+			}
+		}
+	}
+}
 
 //FIXME : something not optimial here as we retrieve myViewStyle which is done also in applyStyle
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
@@ -319,6 +350,13 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 			[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 		}
 	}
+	
+	
+	if([appliedStack containsObject:self] == NO){
+		[NSObject applyStyleByIntrospection:style toObject:self];
+	}
+	[appliedStack addObject:self];
 }
+
 
 @end

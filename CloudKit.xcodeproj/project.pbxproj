@@ -351,8 +351,6 @@
 		75BC5E21135F84D900E029EA /* CKStyle+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC5E1F135F84D900E029EA /* CKStyle+Parsing.m */; };
 		75BC612C1360768C00E029EA /* CKUILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC612A1360768C00E029EA /* CKUILabel+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC612D1360768C00E029EA /* CKUILabel+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC612B1360768C00E029EA /* CKUILabel+Style.m */; };
-		75BC6131136076A100E029EA /* CKUIImageView+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC612F136076A100E029EA /* CKUIImageView+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75BC6132136076A100E029EA /* CKUIImageView+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC6130136076A100E029EA /* CKUIImageView+Style.m */; };
 		75BC624013608C9300E029EA /* CKTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC623E13608C9300E029EA /* CKTableViewCellController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC624113608C9300E029EA /* CKTableViewCellController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC623F13608C9300E029EA /* CKTableViewCellController+Style.m */; };
 		75BC66511360D5AF00E029EA /* CKUIViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC664F1360D5AF00E029EA /* CKUIViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -728,8 +726,6 @@
 		75BC5E1F135F84D900E029EA /* CKStyle+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKStyle+Parsing.m"; sourceTree = "<group>"; };
 		75BC612A1360768C00E029EA /* CKUILabel+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUILabel+Style.h"; sourceTree = "<group>"; };
 		75BC612B1360768C00E029EA /* CKUILabel+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUILabel+Style.m"; sourceTree = "<group>"; };
-		75BC612F136076A100E029EA /* CKUIImageView+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIImageView+Style.h"; sourceTree = "<group>"; };
-		75BC6130136076A100E029EA /* CKUIImageView+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIImageView+Style.m"; sourceTree = "<group>"; };
 		75BC623E13608C9300E029EA /* CKTableViewCellController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKTableViewCellController+Style.h"; sourceTree = "<group>"; };
 		75BC623F13608C9300E029EA /* CKTableViewCellController+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKTableViewCellController+Style.m"; sourceTree = "<group>"; };
 		75BC664F1360D5AF00E029EA /* CKUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIViewController.h; sourceTree = "<group>"; };
@@ -814,7 +810,7 @@
 		0867D691FE84028FC02AAC07 /* CloudKit */ = {
 			isa = PBXGroup;
 			children = (
-				755700FF13847860000FFCF3 /* Serialization */,
+				755700FF13847860000FFCF3 /* ValueTransformer */,
 				75A8762413733E2F00565B6A /* EditingManager */,
 				753CBBA1135DE426000ADDEE /* Style */,
 				75ECE1A7135CDFD60087A696 /* Document */,
@@ -1398,13 +1394,13 @@
 			name = Introspection;
 			sourceTree = "<group>";
 		};
-		755700FF13847860000FFCF3 /* Serialization */ = {
+		755700FF13847860000FFCF3 /* ValueTransformer */ = {
 			isa = PBXGroup;
 			children = (
 				7557010013847890000FFCF3 /* CKNSValueTransformer+Additions.h */,
 				7557010113847890000FFCF3 /* CKNSValueTransformer+Additions.m */,
 			);
-			name = Serialization;
+			name = ValueTransformer;
 			sourceTree = "<group>";
 		};
 		758EC592132ADEDB000280FE /* Public */ = {
@@ -1469,8 +1465,6 @@
 				75BC5A8C135F33EF00E029EA /* CKUIView+Style.m */,
 				75BC612A1360768C00E029EA /* CKUILabel+Style.h */,
 				75BC612B1360768C00E029EA /* CKUILabel+Style.m */,
-				75BC612F136076A100E029EA /* CKUIImageView+Style.h */,
-				75BC6130136076A100E029EA /* CKUIImageView+Style.m */,
 				4FF2A10A136B4CB8008FC8DF /* CKUIButton+Style.h */,
 				4FF2A10B136B4CB8008FC8DF /* CKUIButton+Style.m */,
 				75BC623E13608C9300E029EA /* CKTableViewCellController+Style.h */,
@@ -1673,7 +1667,6 @@
 				75BC5AEC135F42C900E029EA /* CKStyles.h in Headers */,
 				75BC5E20135F84D900E029EA /* CKStyle+Parsing.h in Headers */,
 				75BC612C1360768C00E029EA /* CKUILabel+Style.h in Headers */,
-				75BC6131136076A100E029EA /* CKUIImageView+Style.h in Headers */,
 				75BC624013608C9300E029EA /* CKTableViewCellController+Style.h in Headers */,
 				75BC66511360D5AF00E029EA /* CKUIViewController.h in Headers */,
 				75BC66621360D69D00E029EA /* CKUIViewController+Style.h in Headers */,
@@ -1963,7 +1956,6 @@
 				75BC5AED135F42C900E029EA /* CKStyles.m in Sources */,
 				75BC5E21135F84D900E029EA /* CKStyle+Parsing.m in Sources */,
 				75BC612D1360768C00E029EA /* CKUILabel+Style.m in Sources */,
-				75BC6132136076A100E029EA /* CKUIImageView+Style.m in Sources */,
 				75BC624113608C9300E029EA /* CKTableViewCellController+Style.m in Sources */,
 				75BC66521360D5AF00E029EA /* CKUIViewController.m in Sources */,
 				75BC66631360D69D00E029EA /* CKUIViewController+Style.m in Sources */,

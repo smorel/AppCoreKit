@@ -19,8 +19,6 @@
 #import "CKStyle+Parsing.h"
 
 NSString* CKStyleCellType = @"cellType";
-NSString* CKStyleAccessoryType = @"accessoryType";
-NSString* CKStyleSelectionStyle = @"selectionStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
 NSString* CKStyleCellSize = @"size";
 NSString* CKStyleCellFlags = @"flags";
@@ -33,22 +31,6 @@ NSString* CKStyleCellFlags = @"flags";
 																	 UITableViewCellStyleValue1, 
 																	 UITableViewCellStyleValue2,
 																	 UITableViewCellStyleSubtitle)];
-}
-
-- (UITableViewCellAccessoryType)accessoryType{
-	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleAccessoryType 
-									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, 
-																	 UITableViewCellAccessoryDisclosureIndicator, 
-																	 UITableViewCellAccessoryDetailDisclosureButton,
-																	 UITableViewCellAccessoryCheckmark)];
-}
-
-- (UITableViewCellSelectionStyle)selectionStyle{
-	return (UITableViewCellSelectionStyle)[self enumValueForKey:CKStyleSelectionStyle 
-												withDictionary:CKEnumDictionary(UITableViewCellSelectionStyleNone,
-																				UITableViewCellSelectionStyleBlue,
-																				UITableViewCellSelectionStyleGray)];
-
 }
 
 - (UIImage*)accessoryImage{
@@ -163,15 +145,30 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell{
-	if([[[self class]description]isEqual:@"RXInterventionTableViewCellController"] == YES){
-		int i = 3;
-	}
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
 
 @end
 
+
+
+@implementation UITableViewCell (CKValueTransformer)
+
+- (void)accessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+											   UITableViewCellAccessoryDisclosureIndicator, 
+											   UITableViewCellAccessoryDetailDisclosureButton,
+											   UITableViewCellAccessoryCheckmark);
+}
+
+- (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellSelectionStyleNone,
+											   UITableViewCellSelectionStyleBlue,
+											   UITableViewCellSelectionStyleGray);
+}
+
+@end
 
 @implementation UITableViewCell (CKStyle)
 
@@ -185,12 +182,6 @@ NSString* CKStyleCellFlags = @"flags";
 				UIImage* image = [myCellStyle accessoryImage];
 				UIImageView* imageView = [[[UIImageView alloc]initWithImage:image]autorelease];
 				tableViewCell.accessoryView = imageView;
-			}
-			else if([myCellStyle containsObjectForKey:CKStyleAccessoryType]){
-				tableViewCell.accessoryType = [myCellStyle accessoryType];
-			}
-			if([myCellStyle containsObjectForKey:CKStyleSelectionStyle]){
-				tableViewCell.selectionStyle = [myCellStyle selectionStyle];
 			}
 			return YES;
 		}

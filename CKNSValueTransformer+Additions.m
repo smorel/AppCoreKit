@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import "CKUIColorAdditions.h"
 #import "CKNSDate+Conversions.h"
+#import "CKLocalization.h"
 
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
@@ -273,6 +274,10 @@ NSString* CKSerializerIDTag = @"@id";
 		
 		if(selector != nil){
 			id result = [type performSelector:selector withObject:source withObject:[metaData.contentType description]];
+			if([result isKindOfClass:[NSString class]]){
+				result = _(result);
+			}
+			
 			if(property != nil){
 				[property setValue:result];
 			}
@@ -300,10 +305,14 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	//if no conversion requiered, set the property directly
 	if([source isKindOfClass:type]){
-		if(property != nil){
-			[property setValue:source];
+		id result = source;
+		if([result isKindOfClass:[NSString class]]){
+			result = _(result);
 		}
-		return source;
+		if(property != nil){
+			[property setValue:result];
+		}
+		return result;
 	}
 	
 	//Use the cached selector if exists
@@ -314,6 +323,9 @@ NSString* CKSerializerIDTag = @"@id";
 		if(selector != nil){
 			Class selectorClass = [[dico objectForKey:CKNSValueTransformerCacheClassTag]pointerValue];
 			id result = [selectorClass performSelector:selector withObject:source];
+			if([result isKindOfClass:[NSString class]]){
+				result = _(result);
+			}			
 			if(property != nil){
 				[property setValue:result];
 			}
@@ -325,6 +337,9 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:type selector:selector];
 		id result = [type performSelector:selector withObject:source];
+		if([result isKindOfClass:[NSString class]]){
+			result = _(result);
+		}	
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -335,6 +350,9 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:[source class] selector:selector];
 		id result = [[source class] performSelector:selector withObject:source];
+		if([result isKindOfClass:[NSString class]]){
+			result = _(result);
+		}	
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -345,6 +363,9 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:[NSValueTransformer class] selector:selector];
 		id result = [[NSValueTransformer class] performSelector:selector withObject:source];
+		if([result isKindOfClass:[NSString class]]){
+			result = _(result);
+		}	
 		if(property != nil){
 			[property setValue:result];
 		}
@@ -370,7 +391,11 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (id)transform:(id)source toClass:(Class)type{
-	return [NSValueTransformer transform:source toClass:type inProperty:nil];
+	id result = [NSValueTransformer transform:source toClass:type inProperty:nil];
+	if([result isKindOfClass:[NSString class]]){
+		return _(result);
+	}
+	return result;
 }
 
 

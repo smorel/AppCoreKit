@@ -8,6 +8,12 @@
 
 #import "CKModelObject.h"
 
+extern NSString* CKStyleFormats;
+extern NSString* CKStyleParentStyle;
+extern NSString* CKStyleEmptyStyle;
+extern NSString* CKStyleInherits;
+extern NSString* CKStyleImport;
+
 @interface CKStyleFormat : NSObject{
 }
 @property(nonatomic,retain) NSString* format;

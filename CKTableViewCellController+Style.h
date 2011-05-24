@@ -10,17 +10,13 @@
 #import "CKUIViewController+Style.h"
 
 extern NSString* CKStyleCellType;
-extern NSString* CKStyleAccessoryType;
 extern NSString* CKStyleAccessoryImage;
-extern NSString* CKStyleSelectionStyle;
 extern NSString* CKStyleCellSize;
 extern NSString* CKStyleCellFlags;
 
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (UITableViewCellStyle)cellStyle;
-- (UITableViewCellAccessoryType)accessoryType;
-- (UITableViewCellSelectionStyle)selectionStyle;
 - (UIImage*)accessoryImage;
 - (CGSize)cellSize;
 - (CKTableViewCellFlags)cellFlags;
@@ -39,6 +35,8 @@ extern NSString* CKStyleCellFlags;
 
 @end
 
+@interface UITableViewCell (CKValueTransformer)
+@end
 
 @interface CKTableViewController (CKStyle)
 
