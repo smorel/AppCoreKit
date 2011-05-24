@@ -23,6 +23,7 @@
 	
 	CKTableViewOrientation _orientation;
 	BOOL _resizeOnKeyboardNotification;
+	BOOL _moveOnKeyboardNotification;
 	
 	int _currentPage;
 	int _numberOfPages;
@@ -52,6 +53,8 @@
 	
 	UISearchBar* _searchBar;
 	CGFloat _liveSearchDelay;
+	
+	CGRect _frameBeforeKeyboardNotification;
 }
 
 @property (nonatomic, retain) id objectController;
@@ -62,6 +65,7 @@
 @property (nonatomic, assign) UITableViewRowAnimation rowInsertAnimation;
 @property (nonatomic, assign) UITableViewRowAnimation rowRemoveAnimation;
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
+@property (nonatomic, assign) BOOL moveOnKeyboardNotification;
 @property (nonatomic, assign) int currentPage;
 @property (nonatomic, assign) int numberOfPages;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;

@@ -52,6 +52,7 @@
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
+@synthesize moveOnKeyboardNotification = _moveOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
 @synthesize headerViewsForSections = _headerViewsForSections;
@@ -130,6 +131,7 @@
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
+	_moveOnKeyboardNotification = NO;
 	_currentPage = 0;
 	_numberOfPages = 0;
 	_scrolling = NO;
@@ -882,35 +884,73 @@
 #pragma mark Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification {
-	if (_resizeOnKeyboardNotification == NO) return;
+	_frameBeforeKeyboardNotification = self.tableViewContainer.frame;
 	
-	NSDictionary *info = [notification userInfo];
-	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
-	
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationBeginsFromCurrentState:YES];
-	[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-	[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-	CGRect tableViewFrame = self.tableView.frame;
-	tableViewFrame.size.height -= keyboardRect.size.height;
-	self.tableView.frame = tableViewFrame;
-	[UIView commitAnimations];
+	if (_resizeOnKeyboardNotification == YES){
+		NSDictionary *info = [notification userInfo];
+		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+		
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+		CGRect tableViewFrame = self.tableView.frame;
+		tableViewFrame.size.height -= keyboardRect.size.height;
+		self.tableView.frame = tableViewFrame;
+		[UIView commitAnimations];
+	}
+	else if(_moveOnKeyboardNotification == YES){
+		NSDictionary *info = [notification userInfo];
+		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+		
+		CGFloat totalHeight = self.view.bounds.size.height;
+		CGFloat tableCenter = self.tableViewContainer.bounds.size.height / 2 + self.tableViewContainer.frame.origin.y;
+		
+		CGFloat ratio = tableCenter / totalHeight;
+		
+		CGFloat newY = ((totalHeight - keyboardRect.size.height) * ratio) - self.tableViewContainer.bounds.size.height / 2;
+		if((newY + self.tableViewContainer.bounds.size.height / 2.0f) > (totalHeight - keyboardRect.size.height)){
+			newY = (totalHeight - keyboardRect.size.height) - (self.tableViewContainer.bounds.size.height / 2.0f);
+		}
+		
+		if(newY < 10){
+			newY = 10;
+		}
+		
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+		CGRect tableViewFrame = self.tableViewContainer.frame;
+		tableViewFrame.origin.y = newY;
+		self.tableViewContainer.frame = tableViewFrame;
+		[UIView commitAnimations];
+	}
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-	if (_resizeOnKeyboardNotification == NO) return;
-	
-	NSDictionary *info = [notification userInfo];
-	CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
-	
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationBeginsFromCurrentState:YES];
-	[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-	[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-	CGRect tableViewFrame = self.tableView.frame;
-	tableViewFrame.size.height += keyboardRect.size.height;
-	self.tableView.frame = tableViewFrame;
-	[UIView commitAnimations];
+	if (_resizeOnKeyboardNotification == YES){
+		NSDictionary *info = [notification userInfo];
+		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+		
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+		CGRect tableViewFrame = self.tableView.frame;
+		tableViewFrame.size.height += keyboardRect.size.height;
+		self.tableView.frame = tableViewFrame;
+		[UIView commitAnimations];
+	}
+	else if(_moveOnKeyboardNotification == YES){
+		NSDictionary *info = [notification userInfo];
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
+		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
+		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+		[UIView commitAnimations];
+	}
 }
 
 #pragma mark Paging 
