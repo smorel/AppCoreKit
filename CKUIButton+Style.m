@@ -36,10 +36,14 @@ NSString *CKStyleDefaultTextColor = @"defaultTextColor";
 
 @implementation UIButton (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,nil]];
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UIButton* button = (UIButton *)view;
-		NSMutableDictionary* myButtonStyle = [style styleForObject:button propertyName:propertyName];
+		NSMutableDictionary* myButtonStyle = style;
 		if(myButtonStyle){
 			if ([myButtonStyle containsObjectForKey:CKStyleDefaultBackgroundImage]) [button setBackgroundImage:[myButtonStyle defaultBackgroundImage] forState:UIControlStateNormal];
 			if ([myButtonStyle containsObjectForKey:CKStyleDefaultImage]) [button setImage:[myButtonStyle defaultImage] forState:UIControlStateNormal];

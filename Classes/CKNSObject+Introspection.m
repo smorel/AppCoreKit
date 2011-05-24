@@ -57,15 +57,14 @@ static NSString* getPropertyType(objc_property_t property) {
 		//const char *propType = getPropertyType(property);
 		const char *attributes = property_getAttributes(descriptor);
 		
-		CKClassPropertyDescriptor* objectProperty = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-		objectProperty.name = [NSString stringWithUTF8String:propName];
-		//objectProperty.type = [NSString stringWithUTF8String:propType];
-		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
-		
 		NSString *propType = getPropertyType(descriptor);
 		Class returnType = NSClassFromString(propType);
-		objectProperty.type = returnType;
 		
+		CKClassPropertyDescriptor* objectProperty = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+		objectProperty.name = [NSString stringWithUTF8String:propName];
+		objectProperty.type = returnType;
+		objectProperty.className = [NSString stringWithUTF8String:class_getName(returnType)];
+		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
 		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
 		
 		return objectProperty;

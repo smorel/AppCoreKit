@@ -12,13 +12,21 @@
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
 
-#import "CKValueTransformer.h"
 #import "RegexKitLite.h"
+#import "CKObjectProperty.h"
+#import "CKNSValueTransformer+Additions.h"
 
 static NSMutableDictionary* CKStyleClassNamesCache = nil;
 
 @implementation CKStyleFormat
 @synthesize objectClass,properties,format,propertyName;
+
+- (void)dealloc{
+	[format release];
+	[propertyName release];
+	[properties release];
+	[super dealloc];
+}
 
 + (NSArray*)parseFormat:(NSString*)format{
 	NSMutableArray* components = [NSMutableArray array];
@@ -127,8 +135,8 @@ static NSMutableDictionary* CKStyleClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		id value = [object valueForKeyPath:subPropertyName];
-		NSString* valueString = [CKValueTransformer transformValue:value toClass:[NSString class]];
+		CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:subPropertyName];
+		NSString* valueString = [NSValueTransformer transformProperty:property toClass:[NSString class]];
 		[str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
 		++i;
 	}
@@ -361,11 +369,13 @@ NSString* CKStyleImport = @"@import";
 - (NSMutableDictionary*)_styleForObject:(id)object propertyName:(NSString*)propertyName{
 	NSDictionary* allFormats = [self objectForKey:CKStyleFormats];
 	if(allFormats){
-		NSArray* propertyformats = [allFormats objectForKey:propertyName];
-		if(propertyformats){
-			NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName className:nil];
-			if(style){
-				return style;
+		if(propertyName != nil){
+			NSArray* propertyformats = [allFormats objectForKey:propertyName];
+			if(propertyformats){
+				NSMutableDictionary* style = [self _styleForObject:object formats:propertyformats propertyName:propertyName className:nil];
+				if(style){
+					return style;
+				}
 			}
 		}
 		

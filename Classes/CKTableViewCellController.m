@@ -160,11 +160,12 @@
 	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	self.tableViewCell = cell;
 	
-	UITableViewCellAccessoryType acType = self.accessoryType;
+	/*UITableViewCellAccessoryType acType = self.accessoryType;
 	if([controllerStyle containsObjectForKey:CKStyleAccessoryType])
 		acType = [controllerStyle accessoryType];
 	
-	cell.accessoryType = acType;
+	cell.accessoryType = acType;*/
+	
 	if(initCallback != nil){
 		[initCallback execute:self];
 	}

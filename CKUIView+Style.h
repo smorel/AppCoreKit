@@ -17,8 +17,6 @@
      faudra enregistrer les enums qu'on veut pouvoir utiliser avec l'introspection en utilisant le helper CKEnumDictionary
  */
 
-
-
 typedef enum{
 	CKViewCornerStyleDefault,//in this case, we set the corner style of the parent controller (table plain or grouped)
 	//in the following case, we force the corner style of the cell and bypass the parent controller style
@@ -61,21 +59,25 @@ extern NSString* CKStyleBorderStyle;
 
 @end
 
+@interface UIView (CKValueTransformer)
+@end
 
 @interface UIView (CKStyle) 
 
 - (void)applyStyle:(NSMutableDictionary*)style;
 - (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
 
 //private
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName;
++ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
+
 @end
 
 @interface NSObject (CKStyle)
 
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 
 @end

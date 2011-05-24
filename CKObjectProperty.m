@@ -7,10 +7,17 @@
 //
 
 #import "CKObjectProperty.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 @implementation CKObjectProperty
 @synthesize object,keyPath;
+
+- (void)dealloc{
+	[object release];
+	[keyPath release];
+	[super dealloc];
+}
 
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath{
 	CKObjectProperty* p = [[[CKObjectProperty alloc]initWithObject:object keyPath:keyPath]autorelease];
@@ -45,7 +52,9 @@
 }
 
 - (void)setValue:(id)value{
-	[object setValue:value forKeyPath:keyPath];
+	if([[self value] isEqual:value] == NO){
+		[object setValue:value forKeyPath:keyPath];
+	}
 }
 
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
@@ -165,6 +174,10 @@
 - (NSString*)name{
 	CKClassPropertyDescriptor* descriptor = [self descriptor];
 	return descriptor.name;
+}
+
+- (id)convertToClass:(Class)type{
+	return [NSValueTransformer transformProperty:self toClass:type];
 }
 
 @end

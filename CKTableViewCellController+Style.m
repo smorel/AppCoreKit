@@ -19,8 +19,6 @@
 #import "CKStyle+Parsing.h"
 
 NSString* CKStyleCellType = @"cellType";
-NSString* CKStyleAccessoryType = @"accessoryType";
-NSString* CKStyleSelectionStyle = @"selectionStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
 NSString* CKStyleCellSize = @"size";
 NSString* CKStyleCellFlags = @"flags";
@@ -33,22 +31,6 @@ NSString* CKStyleCellFlags = @"flags";
 																	 UITableViewCellStyleValue1, 
 																	 UITableViewCellStyleValue2,
 																	 UITableViewCellStyleSubtitle)];
-}
-
-- (UITableViewCellAccessoryType)accessoryType{
-	return (UITableViewCellAccessoryType)[self enumValueForKey:CKStyleAccessoryType 
-									 withDictionary:CKEnumDictionary(UITableViewCellAccessoryNone, 
-																	 UITableViewCellAccessoryDisclosureIndicator, 
-																	 UITableViewCellAccessoryDetailDisclosureButton,
-																	 UITableViewCellAccessoryCheckmark)];
-}
-
-- (UITableViewCellSelectionStyle)selectionStyle{
-	return (UITableViewCellSelectionStyle)[self enumValueForKey:CKStyleSelectionStyle 
-												withDictionary:CKEnumDictionary(UITableViewCellSelectionStyleNone,
-																				UITableViewCellSelectionStyleBlue,
-																				UITableViewCellSelectionStyleGray)];
-
 }
 
 - (UIImage*)accessoryImage{
@@ -74,8 +56,8 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation CKTableViewCellController (CKStyle)
 
 - (NSMutableDictionary*)controllerStyle{
-	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:@""];
-	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:@""];
+	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
+	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
 	return controllerStyle;
 }
 
@@ -170,24 +152,49 @@ NSString* CKStyleCellFlags = @"flags";
 @end
 
 
+
+@implementation UITableViewCell (CKValueTransformer)
+
+- (void)accessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+											   UITableViewCellAccessoryDisclosureIndicator, 
+											   UITableViewCellAccessoryDetailDisclosureButton,
+											   UITableViewCellAccessoryCheckmark);
+}
+
+- (void)editingAccessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+											   UITableViewCellAccessoryDisclosureIndicator, 
+											   UITableViewCellAccessoryDetailDisclosureButton,
+											   UITableViewCellAccessoryCheckmark);
+}
+
+- (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellSelectionStyleNone,
+											   UITableViewCellSelectionStyleBlue,
+											   UITableViewCellSelectionStyleGray);
+}
+
+- (void)editingStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UITableViewCellEditingStyleNone,
+											   UITableViewCellEditingStyleDelete,
+											   UITableViewCellEditingStyleInsert);
+}
+
+@end
+
 @implementation UITableViewCell (CKStyle)
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
-	if([UIView applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack delegate:delegate]){
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UITableViewCell* tableViewCell = (UITableViewCell*)view;
-		NSMutableDictionary* myCellStyle = [style styleForObject:tableViewCell propertyName:propertyName];
+		NSMutableDictionary* myCellStyle = style;
 		if(myCellStyle){
 			//Applying style on UITableViewCell
 			if([myCellStyle containsObjectForKey:CKStyleAccessoryImage]){
 				UIImage* image = [myCellStyle accessoryImage];
 				UIImageView* imageView = [[[UIImageView alloc]initWithImage:image]autorelease];
 				tableViewCell.accessoryView = imageView;
-			}
-			else if([myCellStyle containsObjectForKey:CKStyleAccessoryType]){
-				tableViewCell.accessoryType = [myCellStyle accessoryType];
-			}
-			if([myCellStyle containsObjectForKey:CKStyleSelectionStyle]){
-				tableViewCell.selectionStyle = [myCellStyle selectionStyle];
 			}
 			return YES;
 		}
@@ -213,7 +220,7 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:@""];
+	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];

@@ -8,37 +8,17 @@
 
 #import "CKUIView+Style.h"
 
-extern NSString* CKStyleTextColor;
-extern NSString* CKStyleHighlightedTextColor;
-extern NSString* CKStyleFontSize;
-extern NSString* CKStyleFontName;
-extern NSString* CKStyleText;
-extern NSString* CKStyleNumberOfLines;
-extern NSString* CKStyleShadowColor;
-extern NSString* CKStyleShadowOffset;
-extern NSString* CKStyleTextAlignment;
-
-@interface NSMutableDictionary (CKUILabelStyle)
-
-- (UIColor*)textColor;
-- (UIColor*)highlightedTextColor;
-- (CGFloat)fontSize;
-- (NSString*)fontName;
-- (NSString*)text;
-- (NSInteger)numberOfLines;
-- (UIColor *)shadowColor;
-- (CGSize)shadowOffset;
-- (UITextAlignment)textAlignment;
-
+@interface UILabel (CKValueTransformer)
 @end
 
-/* SUPPORTS :
-     * CKStyleBackgroundStyle
-     * CKStyleTextColor
-     * CKStyleTextFontSize
-     * CKStyleTextFontName
-     * CKStyleText
- */
+extern NSString* CKStyleFontSize;
+extern NSString* CKStyleFontName;
+
+@interface NSMutableDictionary (CKUILabelStyle)
+- (CGFloat)fontSize;
+- (NSString*)fontName;
+@end
+
 @interface UILabel (CKStyle)
 
 @end

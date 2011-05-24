@@ -6,20 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
-#define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
-
-@interface CKStyleParsing : NSObject {
-}
-
-+ (NSInteger)parseString:(NSString*)str toEnum:(NSDictionary*)keyValues;
-+ (UIColor*)parseStringToColor:(NSString*)str;
-+ (CGSize)parseStringToCGSize:(NSString*)str;
-
-@end
-
+#import "CKNSValueTransformer+Additions.h"
 
 @interface NSMutableDictionary (CKStyleParsing)
 
@@ -32,5 +19,7 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 - (CGFloat) cgFloatForKey:(NSString*)key;
 - (NSString*) stringForKey:(NSString*)key;
 - (NSInteger) integerForKey:(NSString*)key;
+
+- (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property;
 
 @end

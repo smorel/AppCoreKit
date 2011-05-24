@@ -12,7 +12,7 @@
 #import "CKDocumentCollection.h"
 
 
-@interface CKObjectProperty : CKModelObject {
+@interface CKObjectProperty : NSObject {
 }
 @property (nonatomic,retain) id object;
 @property (nonatomic,retain) NSString* keyPath;
@@ -23,13 +23,14 @@
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 
 - (CKClassPropertyDescriptor*)descriptor;
+- (CKModelObjectPropertyMetaData*)metaData;
 - (id)value;
 - (void)setValue:(id)value;
+- (id)convertToClass:(Class)type;
 
+//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
 - (CKDocumentCollection*)editorCollectionForNewlyCreated;
 - (Class)tableViewCellControllerType;
-
-- (CKModelObjectPropertyMetaData*)metaData;
 
 @end

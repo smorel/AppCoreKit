@@ -15,6 +15,8 @@
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
 
+NSMutableSet* reserverKeyWords = nil;
+
 NSString* CKStyleBackgroundColor = @"backgroundColor";
 NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
 NSString* CKStyleBackgroundGradientLocations = @"backgroundGradientLocations";
@@ -80,14 +82,6 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 
 @implementation UIView (CKStyle)
 
-- (void)applyStyle:(NSMutableDictionary*)style{
-	[self applyStyle:style propertyName:@""];
-}
-
-- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
-	[[self class] applyStyle:style toView:self propertyName:propertyName appliedStack:[NSMutableSet set]];
-}
-
 + (CKGradientView*)gradientView:(UIView*)view{
 	if([view isKindOfClass:[CKGradientView class]])
 		return (CKGradientView*)view;
@@ -112,32 +106,37 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 	return NO;
 }
 
-+ (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view propertyName:(NSString*)propertyName{
-	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
-	if(myViewStyle == nil || [myViewStyle isEmpty] == YES)
-		return NO;
-	
-	if([myViewStyle containsObjectForKey:CKStyleBackgroundGradientColors]
-	   || [myViewStyle containsObjectForKey:CKStyleCornerStyle]
-	   || [myViewStyle containsObjectForKey:CKStyleBackgroundImage]
-	   || [myViewStyle containsObjectForKey:CKStyleBorderColor]){
-		return YES;
-	}
-	return NO;
+- (void)applyStyle:(NSMutableDictionary*)style{
+	[self applyStyle:style propertyName:nil];
 }
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack
+- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
+	NSMutableDictionary* myViewStyle = [style styleForObject:self propertyName:propertyName];
+	[[self class] applyStyle:myViewStyle toView:self appliedStack:[NSMutableSet set] delegate:nil];
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
+	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
+	return [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack  delegate:nil];
+}
+
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,
+								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,nil]];
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
                    delegate:(id)delegate {
 	if(view == nil)
 		return NO;
 	
-	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
+	NSMutableDictionary* myViewStyle = style;
 	if([appliedStack containsObject:view] == NO){
 		//Apply before adding background subView
 		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
 	
 		if(myViewStyle){
-			if(myViewStyle != nil && [myViewStyle isEmpty] == NO){
+			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
 				
@@ -283,13 +282,65 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 	return NO;
 }
 
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
-	return [[view class] applyStyle:style toView:view propertyName:propertyName appliedStack:appliedStack  delegate:nil];
+
+@end
+
+
+
+@implementation UIView (CKValueTransformer)
+
+- (void)autoresizingMaskMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewAutoresizingNone,
+											   UIViewAutoresizingFlexibleLeftMargin,
+											   UIViewAutoresizingFlexibleWidth,
+											   UIViewAutoresizingFlexibleRightMargin,
+											   UIViewAutoresizingFlexibleTopMargin,
+											   UIViewAutoresizingFlexibleHeight,
+											   UIViewAutoresizingFlexibleBottomMargin);
+}
+
+- (void)contentModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewContentModeScaleToFill,
+											   UIViewContentModeScaleAspectFit,
+											   UIViewContentModeScaleAspectFill,
+											   UIViewContentModeRedraw,
+											   UIViewContentModeCenter,
+											   UIViewContentModeTop,
+											   UIViewContentModeBottom,
+											   UIViewContentModeLeft,
+											   UIViewContentModeRight,
+											   UIViewContentModeTopLeft,
+											   UIViewContentModeTopRight,
+											   UIViewContentModeBottomLeft,
+											   UIViewContentModeBottomRight);
 }
 
 @end
 
 @implementation NSObject (CKStyle)
+
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKStyleFormats,CKStyleParentStyle,CKStyleEmptyStyle,CKStyleInherits,CKStyleImport,nil]];
+}
+
++ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object{
+	if(reserverKeyWords == nil){
+		reserverKeyWords = [[NSMutableSet set]retain];
+	}
+	
+	[[self class]updateReservedKeyWords:reserverKeyWords];
+	
+	NSArray* allPropertyNames = [object allPropertyNames];
+	for(NSString* key in [style allKeys]){
+		if([reserverKeyWords containsObject:key] == NO
+		   && [allPropertyNames containsObject:key] == YES){
+			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
+			if(descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == NO){
+				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
+			}
+		}
+	}
+}
 
 //FIXME : something not optimial here as we retrieve myViewStyle which is done also in applyStyle
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
@@ -305,29 +356,39 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 		UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
 		CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
 		
-		BOOL shouldReplaceView = NO;
-		if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
-			NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
-			shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
-		}
-		
-		if(([UIView needSubView:style forView:view propertyName:descriptor.name] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) ){
-			view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
-			view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-			[self setValue:view forKey:descriptor.name];
-		}
-		
-		if(view){
-			[descriptor.type applyStyle:style toView:view propertyName:descriptor.name appliedStack:appliedStack delegate:delegate];
-		}
+		NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
+		//if(myViewStyle != nil && [myViewStyle isEmpty] == NO){
+			BOOL shouldReplaceView = NO;
+			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
+				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
+			}
+			
+			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) ){
+				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+				[self setValue:view forKey:descriptor.name];
+			}
+			
+			if(view){
+				[descriptor.type applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+			}
+		//}
 	}
 	
 	if([self isKindOfClass:[UIView class]] == YES){
 		UIView* selfView = (UIView*)self;
 		for(UIView* view in [selfView subviews]){
-			[[view class] applyStyle:style toView:view propertyName:@"" appliedStack:appliedStack delegate:delegate];
+			NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
+			[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 		}
 	}
+	
+	
+	if([appliedStack containsObject:self] == NO){
+		[NSObject applyStyleByIntrospection:style toObject:self];
+	}
+	[appliedStack addObject:self];
 }
+
 
 @end
