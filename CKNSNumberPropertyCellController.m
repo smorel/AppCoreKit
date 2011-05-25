@@ -134,7 +134,7 @@
 	}
 }
 
-+ (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
 }
 
@@ -142,8 +142,8 @@
 	[super rotateCell:cell withParams:params animated:animated];
 }
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKTableViewCellFlagNone;
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 #pragma mark UITextField Delegate
@@ -179,7 +179,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
 }

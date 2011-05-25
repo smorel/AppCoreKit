@@ -6,81 +6,25 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CKItemViewController.h"
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 
-enum{
-	CKTableViewCellFlagNone = 1UL << 0,
-	CKTableViewCellFlagSelectable = 1UL << 1,
-	CKTableViewCellFlagEditable = 1UL << 2,
-	CKTableViewCellFlagRemovable = 1UL << 3,
-	CKTableViewCellFlagMovable = 1UL << 4,
-	CKTableViewCellFlagAll = CKTableViewCellFlagSelectable | CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable
-};
-typedef NSUInteger CKTableViewCellFlags;
-
-@interface CKTableViewCellController : NSObject {
-	NSString *_name;
-	NSString *_key;
-	id _value;
-	id _target;
-	SEL _action;
-	SEL _accessoryAction;
-	BOOL _selectable;
-	BOOL _editable;
-	BOOL _removable;
-	BOOL _movable;
+@interface CKTableViewCellController : CKItemViewController {
 	UITableViewCellAccessoryType _accessoryType;
-	NSIndexPath *_indexPath;
-	CKTableViewController *_parentController;
-	CGFloat _rowHeight;
-	
-	//Set when reusing controllers via CKObjectTableViewController
-	UITableViewCell* _tableViewCell;
-	
-	CKCallback* initCallback;
-	CKCallback* setupCallback;
-	CKCallback* selectionCallback;
-	CKCallback* accessorySelectionCallback;
-	
 	UITableViewCellStyle _cellStyle;
+	
+	NSString* _key;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *key;
-@property (nonatomic, retain) id value;
-@property (nonatomic, retain, readonly) NSString *identifier;
-@property (nonatomic, retain, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) CKTableViewController *parentController;
-@property (nonatomic, assign,readonly) UITableViewCell *tableViewCell;
+@property (nonatomic, readonly) UITableViewCell *tableViewCell;
 @property (nonatomic, assign) UITableViewCellStyle cellStyle;
-
-@property (nonatomic, retain) id target;
-@property (nonatomic, assign) SEL action;
-@property (nonatomic, assign) SEL accessoryAction;
-@property (nonatomic, getter=isSelectable) BOOL selectable;
-@property (nonatomic, getter=isEditable) BOOL editable;
-@property (nonatomic, getter=isRemovable) BOOL removable;
-@property (nonatomic, getter=isMovable) BOOL movable;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, assign) CGFloat rowHeight;
-
-
-@property (nonatomic, retain) CKCallback* initCallback;
-@property (nonatomic, retain) CKCallback* setupCallback;
-@property (nonatomic, retain) CKCallback* selectionCallback;
-@property (nonatomic, retain) CKCallback* accessorySelectionCallback;
-
+@property (nonatomic, retain) NSString* key;
 
 - (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style;
-
-//SEB : use a CKNibCellController instead
-//- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;
-
-//
 
 - (void)cellDidAppear:(UITableViewCell *)cell;
 - (void)cellDidDisappear;
@@ -89,12 +33,8 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)setupCell:(UITableViewCell *)cell;
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params;
-
-- (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;
 - (void)didSelectRow;
-- (void)didSelectAccessoryView;
 
 // Calls -setupCell with the cell associated with this controller.
 // Does not call -setupCell if the cell is not visible.
@@ -105,5 +45,8 @@ typedef NSUInteger CKTableViewCellFlags;
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
 - (void)layoutCell:(UITableViewCell *)cell;
+
+- (CKTableViewController*)parentTableViewController;
+- (UITableView*)parentTableView;
 
 @end

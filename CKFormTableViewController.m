@@ -131,8 +131,7 @@
 		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionIndex];
 		CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
 		if(controller){
-			NSMutableDictionary* controllerStyle = [controller controllerStyle];
-			[controller applyStyle:controllerStyle forCell:controller.tableViewCell];
+			[controller applyStyle];
 		}
 	}
 }
@@ -234,9 +233,7 @@
 		if(indexPath.section == sectionIndex){
 			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
-			
-			NSMutableDictionary* controllerStyle = [controller controllerStyle];
-			[controller applyStyle:controllerStyle forCell:cell];
+			[controller applyStyle];
 		}
 	}
 }
@@ -390,9 +387,7 @@
 		   && indexPath.section == sectionIndex){
 			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
-			
-			NSMutableDictionary* controllerStyle = [controller controllerStyle];
-			[controller applyStyle:controllerStyle forCell:cell];
+			[controller applyStyle];
 		}
 	}
 	

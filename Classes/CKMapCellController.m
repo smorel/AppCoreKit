@@ -46,9 +46,7 @@
 @synthesize annotationImageOffset = _annotationImageOffset;
 
 - (void)postInit {
-	self.selectable = NO;
 	self.annotationImageOffset = CGPointMake(0, 0);
-	self.rowHeight = 260.0f;
 }
 
 - (id)init {
@@ -139,6 +137,15 @@
 	}
 	
 	return view;
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
+}
+
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+	return [NSValue valueWithCGSize:CGSizeMake(100,260.0)];
 }
 
 @end

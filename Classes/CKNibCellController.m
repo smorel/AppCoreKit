@@ -47,7 +47,6 @@
 - (id)init {
 	self = [super init];
 	if (self) {
-		self.selectable = NO;
 		self.currentMode = CKNibCellControllerModeNone;
 		self.autoresizeViewsOnInsertion = YES;
 	}
@@ -142,12 +141,12 @@
 	}
 }
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
 	//Implement in derived class
-	return CKTableViewCellFlagNone;
+	return CKItemViewFlagNone;
 }
 
-+ (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
 	//Implement in derived class
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
 }

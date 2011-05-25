@@ -28,7 +28,6 @@
 	if (self = [super initWithText:title]) {
 		self.value = value;
 		self.placeholder = placeholder;
-		self.selectable = NO;
 	}
 	return self;
 }
@@ -43,17 +42,21 @@
 	cell.accessoryView = nil;
 	cell.accessoryType = UITableViewCellAccessoryNone;
 	
-	UITableView *tableView = self.parentController.tableView;
-	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 20 : 40);
-	CGFloat offset = self.text ? (width/2.55) : 0;
-	CGRect frame = CGRectIntegral(CGRectMake(0, 10, width - offset, self.rowHeight - 20));
-	UITextField *textField = [[[UITextField alloc] initWithFrame:frame] autorelease];
+	UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	textField.borderStyle = UITextBorderStyleNone;
 	textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	textField.textColor = [UIColor blueTextColor];
 	cell.accessoryView = textField;
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	UITextField *textField = (UITextField*)cell.accessoryView;
+	//update accessory view frame
+	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
+	textField.frame = frame;
+	cell.accessoryView.frame = frame;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -103,9 +106,15 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+	NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+	CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+	[tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 @end

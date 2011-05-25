@@ -272,6 +272,11 @@ static NSString* getPropertyType(objc_property_t property) {
 	return NSSelectorFromString(selectorName);
 }
 
++ (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionAtLocation:radius",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
 + (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
 	return NSSelectorFromString(selectorName);

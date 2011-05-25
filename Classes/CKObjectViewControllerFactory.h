@@ -7,7 +7,7 @@
 //
 
 #import "CKNSDictionary+TableViewAttributes.h"
-#import "CKTableViewCellController.h"
+#import "CKItemViewController.h"
 
 
 extern NSString* CKObjectViewControllerFactoryItemCreate;
@@ -27,7 +27,7 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 @property(nonatomic,retain)NSMutableDictionary* params;
 
 - (BOOL)matchWithObject:(id)object;
-- (CKTableViewCellFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
+- (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 - (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 
 - (CKCallback*)initCallback;
@@ -55,7 +55,7 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 
 //Parent controller API
 - (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
-- (CKTableViewCellFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;

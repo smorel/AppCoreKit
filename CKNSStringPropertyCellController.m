@@ -24,7 +24,6 @@
 
 //pas utiliser load cell mais initCell pour application des styles ...
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	_accessoryViewSizeRatio = 2.0 / 3.0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
@@ -44,11 +43,6 @@
 	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
 	textField.frame = frame;
 	cell.accessoryView.frame = frame;
-	
-	NSLog(@"cell size : %f %f textField size : %f %f accessoryView frame : %f %f",
-		  cell.bounds.size.width,cell.bounds.size.height,
-		  textField.bounds.size.width,textField.bounds.size.height,
-		  cell.accessoryView.bounds.size.width,cell.accessoryView.bounds.size.height);
 }
 
 - (void)textFieldChanged:(id)value{
@@ -81,7 +75,7 @@
 	}
 }
 
-+ (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
 	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
 }
 
@@ -89,8 +83,8 @@
 	[super rotateCell:cell withParams:params animated:animated];
 }
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKTableViewCellFlagNone;
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 #pragma mark UITextField Delegate
@@ -121,7 +115,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
 }

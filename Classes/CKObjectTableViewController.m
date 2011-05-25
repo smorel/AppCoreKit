@@ -292,10 +292,10 @@
 	[self updateParams];
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
+		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			[controller rotateCell:cell withParams:self.params animated:YES];
+		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			[controller rotateView:cell withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
@@ -324,7 +324,7 @@
 	NSArray *visibleCells = [self.tableView visibleCells];
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+		CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
 		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	}
 }
@@ -369,9 +369,9 @@
 	[super viewDidDisappear:animated];
 	
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		if(controller && [controller respondsToSelector:@selector(cellDidDisappear)]){
-			[controller cellDidDisappear];
+		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
+		if(controller && [controller respondsToSelector:@selector(viewDidDisappear)]){
+			[controller viewDidDisappear];
 		}
 	}
 }
@@ -489,12 +489,12 @@
 	
 	[self updateParams];
 	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
+		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
 		UITableViewCell* cell = [cellValue nonretainedObjectValue];
 		
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
 			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			[controller rotateCell:cell withParams:self.params animated:YES];
+			[controller rotateView:cell withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:cell];
@@ -531,10 +531,10 @@
 	return 0;
 }
 
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CKItemViewController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath{
 	UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	if(cell){
-		return (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
+		return (CKItemViewController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
 	}
 	return nil;
 }
@@ -571,8 +571,8 @@
 	return height;
 }
 
-- (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	CKTableViewCellFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
+- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
+	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
 	return flags;
 }
 
@@ -589,8 +589,8 @@
 	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_indexPathToCells removeObjectForKey:previousPath];
 	
-	CKTableViewCellController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[controller performSelector:@selector(setTableViewCell:) withObject:nil];
+	CKItemViewController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
+	[controller performSelector:@selector(setView:) withObject:nil];
 	[_cellsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_weakCells removeObject:sender];
 }
@@ -602,18 +602,18 @@
 			
 			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 			if(factoryItem != nil && factoryItem.controllerClass){
-				NSString* identifier = [CKTableViewCellController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath  parentController:self];
+				NSString* identifier = [CKItemViewController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath  parentController:self];
 				
 				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
 				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
-				CKTableViewCellController* controller = nil;
+				CKItemViewController* controller = nil;
 				if(cell == nil){
 					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
 					
 					controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
 					[controller performSelector:@selector(setParentController:) withObject:self];
 					
-					cell = [controller loadCell];
+					cell = (UITableViewCell*)[controller loadView];
 					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
 					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 					
@@ -649,7 +649,7 @@
 				
 				[controller performSelector:@selector(setParentController:) withObject:self];
 				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
+				[controller performSelector:@selector(setView:) withObject:cell];
 				
 				
 				if(_cellsToIndexPath == nil){
@@ -664,13 +664,13 @@
 				//[_controllerFactory initializeController:controller atIndexPath:indexPath];
 				//no more needed as we register callbacks.
 				[controller setValue:object];
-				[controller setupCell:cell];	
+				[controller setupView:cell];	
 				
 				[self fetchMoreIfNeededAtIndexPath:indexPath];
 				[self updateNumberOfPages];
 				
-				if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-					[controller rotateCell:cell withParams:self.params animated:NO];
+				if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+					[controller rotateView:cell withParams:self.params animated:NO];
 				}	
 				
 				//NSLog(@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section);
@@ -691,20 +691,20 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKTableViewCellFlagSelectable;
+	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKItemViewFlagSelectable;
 	if(controller && bo){
-		[controller willSelectRow];
+		[controller willSelect];
 	}
 	return (bo) ? indexPath : nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.searchBar resignFirstResponder];
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller != nil){
-		[controller didSelectRow];
+		[controller didSelect];
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectRowAtIndexPath:withObject:)]){
 			[_delegate objectTableViewController:self didSelectRowAtIndexPath:indexPath withObject:controller.value];
 		}
@@ -712,13 +712,13 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKTableViewCellFlagRemovable;
+	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKItemViewFlagRemovable;
 	return bo ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
+	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelectAccessoryView];
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectAccessoryViewRowAtIndexPath:withObject:)]){
@@ -739,14 +739,14 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & (CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable);
+	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & (CKItemViewFlagEditable | CKItemViewFlagRemovable | CKItemViewFlagMovable);
 	return bo;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKTableViewCellFlagMovable;
+	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	BOOL bo = flags & CKItemViewFlagMovable;
 	return bo;
 }
 

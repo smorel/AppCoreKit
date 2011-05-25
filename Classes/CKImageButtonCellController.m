@@ -25,7 +25,6 @@
 	if (self = [super initWithText:title]) {
 		self.image = image;
 		self.highlightedImage = hightlightedImage;
-		self.selectable = NO;
 		self.accessoryType = UITableViewCellAccessoryNone;
 	}
 	return self;
@@ -57,6 +56,9 @@
 	if (self.image) [button setBackgroundImage:self.image forState:UIControlStateNormal];
 	if (self.highlightedImage) [button setBackgroundImage:self.highlightedImage forState:UIControlStateHighlighted];
 	[button addTarget:self.target action:self.action forControlEvents:UIControlEventTouchUpInside];
+}
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 @end

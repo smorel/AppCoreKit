@@ -116,7 +116,40 @@
 		}
 	}
 	return nil;
+}
+
+
+- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius{
+	id subObject = object;
 	
+	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+	for(int i=0;i<[ar count]-1;++i){
+		NSString* path = [ar objectAtIndex:i];
+		subObject = [subObject valueForKey:path];
+	}
+	
+	if(subObject == nil){
+		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		return nil;
+	}
+	
+	
+	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
+	
+	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:descriptor.name];
+	if([subObject respondsToSelector:selector]){
+		CKDocumentCollection* collection = [subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
+		return collection;
+	}
+	else{
+		Class type = descriptor.type;
+		if([type respondsToSelector:@selector(editorCollectionAtLocation:radius:)]){
+			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionAtLocation:radius:) withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
+			return collection;
+		}
+	}
+	return nil;	
 }
 
 

@@ -12,32 +12,32 @@
 
 static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 
-@implementation CKTableViewCellController (CKStyleManager)
+@implementation CKItemViewController (CKStyleManager)
 
 + (void)flush:(NSNotification*)notif{
 	[CKTableViewCellControllerInstances removeAllObjects];
 }
 
 + (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKTableViewCellController* controller = [CKTableViewCellController controllerForClass:theClass object:object indexPath:indexPath parentController:parentController];
+	CKItemViewController* controller = [CKItemViewController controllerForClass:theClass object:object indexPath:indexPath parentController:parentController];
 	return [controller identifier];
 }
 
 + (NSMutableDictionary*)styleForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKTableViewCellController* controller = [CKTableViewCellController controllerForClass:theClass object:object indexPath:indexPath parentController:parentController];
+	CKItemViewController* controller = [CKItemViewController controllerForClass:theClass object:object indexPath:indexPath parentController:parentController];
 	return [controller controllerStyle];
 }
 
-+ (CKTableViewCellController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
++ (CKItemViewController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
 	if(CKTableViewCellControllerInstances == nil){
 		CKTableViewCellControllerInstances = [[NSMutableDictionary dictionary]retain];
 		
 		[CKTableViewCellControllerInstances beginBindingsContextByRemovingPreviousBindings];
-		[[NSNotificationCenter defaultCenter]bindNotificationName:UIApplicationDidReceiveMemoryWarningNotification target:[CKTableViewCellController class] action:@selector(flush:)];
+		[[NSNotificationCenter defaultCenter]bindNotificationName:UIApplicationDidReceiveMemoryWarningNotification target:[CKItemViewController class] action:@selector(flush:)];
 		[CKTableViewCellControllerInstances endBindingsContext];
 	}
 	
-	CKTableViewCellController* controller = [CKTableViewCellControllerInstances objectForKey:theClass];
+	CKItemViewController* controller = [CKTableViewCellControllerInstances objectForKey:theClass];
 	if(controller == nil){
 		controller = [[[theClass alloc]init]autorelease];
 		[CKTableViewCellControllerInstances setObject:controller forKey:theClass];

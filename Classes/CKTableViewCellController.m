@@ -40,33 +40,13 @@
 
 @implementation CKTableViewCellController
 
-@synthesize name = _name;
-@synthesize key = _key;
-@synthesize value = _value;
-@synthesize target = _target;
-@synthesize action = _action;
-@synthesize accessoryAction = _accessoryAction;
-@synthesize selectable = _selectable;
-@synthesize editable = _editable;
-@synthesize removable = _removable;
-@synthesize movable = _movable;
 @synthesize accessoryType = _accessoryType;
-@synthesize parentController = _parentController;
-@synthesize indexPath = _indexPath;
-@synthesize rowHeight = _rowHeight;
 @synthesize cellStyle = _cellStyle;
-
-@synthesize initCallback;
-@synthesize setupCallback;
-@synthesize selectionCallback;
-@synthesize accessorySelectionCallback;
+@synthesize key = _key;
 
 - (id)init {
 	self = [super init];
 	if (self != nil) {
-		_selectable = YES;
-		self.rowHeight = 0.0f;
-		self.editable = YES;
 		self.cellStyle = UITableViewCellStyleDefault;
 	}
 	return self;
@@ -74,27 +54,61 @@
 
 - (void)dealloc {
 	[self clearBindingsContext];
-	
 	[_key release];
-	[_value release];
-	[_indexPath release];
-	[_target release];
-	[_name release];
-	
-	
-	[initCallback release];
-	[setupCallback release];
-	[selectionCallback release];
-	[accessorySelectionCallback release];
-	
-	_target = nil;
-	_action = nil;
-	_parentController = nil;
+	_key = nil;
 	[super dealloc];
 }
 
+
+#pragma mark TableViewCell Setter getter
+
+- (void)setView:(UIView*)view{
+	_view = view;
+	if([view isKindOfClass:[CKUITableViewCellController class]]){
+		CKUITableViewCellController* customCell = (CKUITableViewCellController*)view;
+		customCell.delegate = self;
+	}
+}
+
+- (UITableViewCell *)tableViewCell {
+	if(self.view){
+		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+		return (UITableViewCell*)self.view;
+	}
+	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
+	}
+	return nil;
+}
+
+#pragma mark Cell Factory
+
+- (UITableViewCell *)loadCell {
+	UITableViewCell *cell = [self cellWithStyle:self.cellStyle];
+	return cell;
+}
+
+- (void)setupCell:(UITableViewCell *)cell {
+	return;
+}
+
+- (void)initTableViewCell:(UITableViewCell*)cell{
+}
+
+- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style {
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
+	UITableViewCellStyle cellStyle = style;
+	if([controllerStyle containsObjectForKey:CKStyleCellType])
+		cellStyle = [controllerStyle cellStyle];
+
+	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
+	self.view = cell;
+	
+	return cell;
+}
+
 - (NSString *)identifier {
-	//Different identifier for rows that begins or end a section in grouped tables
 	NSString* groupedTableModifier = @"";
 	UIView* parentView = [self parentControllerView];
 	if([parentView isKindOfClass:[UITableView class]]){
@@ -117,76 +131,6 @@
 	return [NSString stringWithFormat:@"%@-<%p>-%@",[[self class] description],controllerStyle,groupedTableModifier];
 }
 
-- (void)setIndexPath:(NSIndexPath *)indexPath {
-	// This method is hidden from the public interface and is called by the CKManagedTableViewController
-	// when adding the CKTableViewCellController.	
-	[_indexPath release];
-	_indexPath = [indexPath retain];
-}
-
-- (void)setParentController:(CKTableViewController *)parentController {
-	// Set a *weak* reference to the parent controller
-	// This method is hidden from the public interface and is called by the CKManagedTableViewController
-	// when adding the CKTableViewCellController.
-	_parentController = parentController;
-}
-
-- (void)setTableViewCell:(UITableViewCell*)cell{
-	_tableViewCell = cell;
-	if([cell isKindOfClass:[CKUITableViewCellController class]]){
-		CKUITableViewCellController* customCell = (CKUITableViewCellController*)cell;
-		customCell.delegate = self;
-	}
-}
-
-- (UITableViewCell *)tableViewCell {
-	if(_tableViewCell)
-		return _tableViewCell;
-	return [_parentController.tableView cellForRowAtIndexPath:self.indexPath];
-}
-
-#pragma mark Cell Factory
-
-
-- (void)initTableViewCell:(UITableViewCell*)cell{
-}
-
-- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style {
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	UITableViewCellStyle cellStyle = style;
-	if([controllerStyle containsObjectForKey:CKStyleCellType])
-		cellStyle = [controllerStyle cellStyle];
-
-	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
-	self.tableViewCell = cell;
-	
-	/*UITableViewCellAccessoryType acType = self.accessoryType;
-	if([controllerStyle containsObjectForKey:CKStyleAccessoryType])
-		acType = [controllerStyle accessoryType];
-	
-	cell.accessoryType = acType;*/
-	
-	if(initCallback != nil){
-		[initCallback execute:self];
-	}
-	//cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-	[self initTableViewCell:cell];
-	[self layoutCell:cell];
-	[self applyStyle:controllerStyle forCell:cell];
-	
-	return cell;
-}
-
-/*
-- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName {
-	UITableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil] first];
-
-	cell.selectionStyle = self.isSelectable ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-	
-	return cell;
-}
- */
-
 #pragma mark CKManagedTableViewController Protocol
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
@@ -197,53 +141,18 @@
 	return;
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:self.cellStyle];
-	return cell;
-}
-
-- (void)setupCell:(UITableViewCell *)cell {
-	if(setupCallback != nil){
-		[setupCallback execute:self];
-	}
-	//if (self.selectable == NO) cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	return;
-}
-
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
-}
-
-- (CGFloat)heightForRow {
-	return self.rowHeight;
 }
 
 // Selection
 
 - (NSIndexPath *)willSelectRow {
-	return self.isSelectable ? self.indexPath : nil;
+	return self.indexPath;
 }
 
 - (void)didSelectRow {
-	//if (self.isSelectable) {
-		if (self.parentController.stickySelection == NO) [self.parentController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
-		if (_target && [_target respondsToSelector:_action]) {
-			[_target performSelector:_action withObject:self];
-		}
-	if(selectionCallback != nil){
-		[selectionCallback execute:self];
-	}
-	//}
 }
 
-
-- (void)didSelectAccessoryView{
-	if (_target && [_target respondsToSelector:_accessoryAction]) {
-		[_target performSelector:_accessoryAction withObject:self];
-	}
-	if(accessorySelectionCallback != nil){
-		[accessorySelectionCallback execute:self];
-	}
-}
 
 // Update
 
@@ -252,11 +161,7 @@
 		[self setupCell:self.tableViewCell];
 }
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKTableViewCellFlagAll;
-}
-
-
+//This method is used by CKTableViewCellNextResponder to setup the keyboard and the next responder
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
 	return NO;
 }
@@ -264,6 +169,72 @@
 - (void)layoutCell:(UITableViewCell *)cell{
 	//You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
+}
+
+
+- (CKTableViewController*)parentTableViewController{
+	if([self.parentController isKindOfClass:[CKTableViewController class]]){
+		return (CKTableViewController*)self.parentController;
+	}
+	return nil;
+}
+
+- (UITableView*)parentTableView{
+	return [[self parentTableViewController] tableView];
+}
+
+
+#pragma mark CKItemViewController Implementation
+
+- (UIView *)loadView{
+	UITableViewCell* cell = [self loadCell];
+	[self initView:cell];
+	[self layoutCell:cell];
+	[self applyStyle];
+	return cell;
+}
+
+- (void)initView:(UIView*)view{
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	[self initTableViewCell:(UITableViewCell*)view];
+	[super initView:view];
+}
+
+- (void)setupView:(UIView *)view{
+	[super setupView:view];
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	[self setupCell:(UITableViewCell*)view];
+}
+
+- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
+	[super rotateView:view withParams:params animated:animated];
+	[self rotateCell:(UITableViewCell*)view withParams:params animated:animated];
+}
+
+- (void)viewDidAppear:(UIView *)view{
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	[self cellDidAppear:(UITableViewCell*)view];
+	[super viewDidAppear:view];
+}
+
+- (void)viewDidDisappear{
+	[self cellDidDisappear];
+	[super viewDidDisappear];
+}
+
+- (NSIndexPath *)willSelect{
+	return [self willSelectRow];
+}
+
+- (void)didSelect{
+	if([self.parentController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+		if (tableViewController.stickySelection == NO){
+			[tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
+		}
+	}
+	[self didSelectRow];
+	[super didSelect];
 }
 
 @end

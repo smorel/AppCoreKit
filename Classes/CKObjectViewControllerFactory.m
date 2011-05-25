@@ -71,7 +71,7 @@
 	return [item controllerForObject:object atIndexPath:indexPath];
 }
 
-- (CKTableViewCellFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params{
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params{
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
@@ -150,9 +150,9 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	return [_params objectForKey:CKObjectViewControllerFactoryItemAccessorySelection];
 }
 
-- (CKTableViewCellFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
+- (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKTableViewCellController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	NSMutableDictionary* controllerStyle = [CKItemViewController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellFlags]){
 			return [controllerStyle cellFlags];
@@ -165,13 +165,13 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 			CKCallback* flagsCallBack = (CKCallback*)flagsObject;
 			if(flagsCallBack != nil){
 				NSNumber* number = [flagsCallBack execute:params];
-				CKTableViewCellFlags flags = (CKTableViewCellFlags)[number intValue];
+				CKItemViewFlags flags = (CKItemViewFlags)[number intValue];
 				return flags;
 			}
 		}
 		else if([flagsObject isKindOfClass:[NSNumber class]]){
 			NSNumber* number = (NSNumber*)flagsObject;
-			CKTableViewCellFlags flags = (CKTableViewCellFlags)[number intValue];
+			CKItemViewFlags flags = (CKItemViewFlags)[number intValue];
 			return flags;
 		}
 		else{
@@ -181,16 +181,16 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	else{
 		Class theClass = self.controllerClass;
 		if(theClass && [theClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-			CKTableViewCellFlags flags = [theClass flagsForObject:object withParams:params];
+			CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
 			return flags;
 		}
 	}
-	return CKTableViewCellFlagNone;
+	return CKItemViewFlagNone;
 }
 
 - (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKTableViewCellController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	NSMutableDictionary* controllerStyle = [CKItemViewController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellSize]){
 			return [controllerStyle cellSize];
@@ -218,8 +218,8 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	}
 	else{
 		Class theClass = self.controllerClass;
-		if(theClass && [theClass respondsToSelector:@selector(rowSizeForObject:withParams:)]){
-			NSValue* v = (NSValue*) [theClass performSelector:@selector(rowSizeForObject:withParams:) withObject:object withObject:params];
+		if(theClass && [theClass respondsToSelector:@selector(viewSizeForObject:withParams:)]){
+			NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
 			CGSize size = [v CGSizeValue];
 			return size;
 		}
@@ -228,7 +228,7 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 }
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	CKTableViewCellController* controller = [[[self.controllerClass alloc]init]autorelease];
+	CKItemViewController* controller = [[[self.controllerClass alloc]init]autorelease];
 	controller.initCallback = [self initCallback];
 	controller.setupCallback = [self setupCallback];
 	controller.selectionCallback = [self selectionCallback];

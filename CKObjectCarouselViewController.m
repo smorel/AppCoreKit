@@ -32,7 +32,7 @@
 
 - (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)notifiesCellControllersForVisibleRows;
-- (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
 
 - (void)updateParams;
 
@@ -485,8 +485,8 @@
 	}
 }
 
-- (CKTableViewCellFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	CKTableViewCellFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
+- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
+	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
 	return flags;
 }
 

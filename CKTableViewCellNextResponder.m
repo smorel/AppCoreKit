@@ -15,7 +15,7 @@
 
 + (NSIndexPath*)findNextTextController:(CKTableViewCellController*)controller enableScroll:(BOOL)enableScroll{
 	if([controller.parentController isKindOfClass:[CKTableViewController class]]){
-		UITableView* tableView = controller.parentController.tableView;
+		UITableView* tableView = [controller parentTableView];
 		NSIndexPath* indexPath = controller.indexPath;
 		NSInteger section = indexPath.section;
 		NSInteger row = indexPath.row;
@@ -78,7 +78,7 @@
 	if(nextIndexPath == nil)
 		return NO;
 	
-	UITableView* tableView = controller.parentController.tableView;
+	UITableView* tableView = [controller parentTableView];
 	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:nextIndexPath];
 	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
 	[textfield becomeFirstResponder];

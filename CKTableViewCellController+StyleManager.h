@@ -6,10 +6,10 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKTableViewCellController.h"
+#import "CKItemViewController.h"
 
-@interface CKTableViewCellController (CKStyleManager)
+@interface CKItemViewController (CKStyleManager)
 + (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 + (NSMutableDictionary*)styleForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
-+ (CKTableViewCellController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
++ (CKItemViewController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 @end

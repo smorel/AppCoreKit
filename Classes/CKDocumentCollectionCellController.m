@@ -51,6 +51,16 @@
 	[cell.contentView addSubview:view];
 }
 
+//FIXME : UGLY TEMPORARY HACK
+- (BOOL)forceHidden{
+	if([self.parentController isKindOfClass:[CKObjectCarouselViewController class]])
+		return YES;
+	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController ;
+		return tableViewController.tableView.pagingEnabled;
+	}
+	return NO;
+}
 
 - (void)update:(UIView*)view{
 	if(view == nil)
@@ -59,8 +69,7 @@
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
-	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
-	_activityIndicator.hidden = forceHidden || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	_activityIndicator.hidden = [self forceHidden] || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
 	if(!_activityIndicator.hidden){
 		[_activityIndicator startAnimating];
 	}
@@ -102,15 +111,13 @@
 
 - (void)setupCell:(UITableViewCell *)cell{
 	[super setupCell:cell];
-	self.selectable = NO;
 	
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
 	[self update:cell.contentView];
 	
-	BOOL forceHidden = [self.parentController isKindOfClass:[CKObjectCarouselViewController class]] || self.parentController.tableView.pagingEnabled; //FIXME : UGLY TEMPORARY HACK
-	_activityIndicator.hidden = _activityIndicator.hidden || forceHidden;
+	_activityIndicator.hidden = _activityIndicator.hidden || [self forceHidden];
 	
 	//TODO REGISTER ON NOTIF TO KNOW IF THE COLLECTION IS UPDATED !!!
 	
@@ -123,15 +130,15 @@
 	[NSObject endBindingsContext];
 }
 
-+ (NSValue*)rowSizeForObject:(id)object withParams:(NSDictionary*)params{
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
 	if([params pagingEnabled])
 		return [NSValue valueWithCGSize:CGSizeMake(-1,-1)];
 	return [NSValue valueWithCGSize:CGSizeMake(320,44)];
 }
 
 
-+ (CKTableViewCellFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKTableViewCellFlagNone;
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 @end

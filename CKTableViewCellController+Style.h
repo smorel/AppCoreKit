@@ -19,25 +19,26 @@ extern NSString* CKStyleCellFlags;
 - (UITableViewCellStyle)cellStyle;
 - (UIImage*)accessoryImage;
 - (CGSize)cellSize;
-- (CKTableViewCellFlags)cellFlags;
+- (CKItemViewFlags)cellFlags;
 
 @end
 
 @interface CKTableViewCellController (CKStyle)
-
-- (void)applyStyle:(NSMutableDictionary*)style forCell:(UITableViewCell*)cell;
-- (NSMutableDictionary*)controllerStyle;
-- (UIView*)parentControllerView;
-
 @end
 
 @interface UITableViewCell (CKStyle)
-
 @end
 
 @interface UITableViewCell (CKValueTransformer)
 @end
 
 @interface CKTableViewController (CKStyle)
+@end
+
+@interface CKItemViewController (CKStyle)
+
+- (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view;
+- (NSMutableDictionary*)controllerStyle;
+- (UIView*)parentControllerView;
 
 @end

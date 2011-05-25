@@ -27,7 +27,6 @@
 		self.value = text;
 		self.placeholder = placeholder;
 		self.maxStretchableHeight = CGFLOAT_MAX;
-		self.selectable = NO;
 		self.font = [UIFont systemFontOfSize:17];
 		self.allowCarriageReturn = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeight) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -53,9 +52,11 @@
 		// when orientation changes
 		[(CKTextView *)view updateHeight];
 		// ---
-		self.rowHeight = view.frame.size.height + 5;
-		[self.parentController.tableView beginUpdates];
-		[self.parentController.tableView endUpdates];		
+		
+		NSAssert(NO,@"implement viewSizeForObject:params: and compute the correct size");
+		//self.rowHeight = view.frame.size.height + 5;
+		[[self parentTableView] beginUpdates];
+		[[self parentTableView] endUpdates];		
 	}
 }
 
@@ -67,15 +68,19 @@
 	cell.clipsToBounds = NO;
 	cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
-	UITableView *tableView = self.parentController.tableView;
-	CGFloat width = tableView.bounds.size.width - ((tableView.style == UITableViewStylePlain) ? 0 : 20);
-	CGFloat offset = self.text ? (width/2.55) : 0;
-	CGRect frame = CGRectMake(((tableView.style == UITableViewStylePlain) ? 0 : 10), 2, width - offset, self.rowHeight-5);
-	CKTextView *textView = [[[CKTextView alloc] initWithFrame:frame] autorelease];
+	CKTextView *textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	textView.backgroundColor = [UIColor clearColor];
 	textView.tag = kTextViewTag;
 	[cell.contentView addSubview:textView];
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	CKTextView *textField = (CKTextView*)[cell.contentView viewWithTag:kTextViewTag];
+	//update accessory view frame
+	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
+	textField.frame = frame;
+	cell.accessoryView.frame = frame;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -134,19 +139,26 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([object isKindOfClass:[CKTextView class]] && [keyPath isEqualToString:@"frame"]) {
-		CKTextView *textView = (CKTextView *)object;
-		self.rowHeight = textView.frame.size.height + 5;
-		[self.parentController.tableView beginUpdates];
-		[self.parentController.tableView endUpdates];		
+		//CKTextView *textView = (CKTextView *)object;
+		
+		NSAssert(NO,@"implement viewSizeForObject:params: and compute the correct size");
+		//self.rowHeight = textView.frame.size.height + 5;
+		[[self parentTableView] beginUpdates];
+		[[self parentTableView] endUpdates];		
 	}
 }
 
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[self.parentController.tableView scrollToRowAtIndexPath:self.indexPath 
+	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
 										   atScrollPosition:UITableViewScrollPositionNone 
 												   animated:YES];
 }
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
+}
+
 
 @end

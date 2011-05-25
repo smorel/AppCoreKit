@@ -27,7 +27,6 @@
 	if (self = [super initWithText:title]) {
 		self.value = [NSNumber numberWithBool:value];
 		self.switchCellStyle = style;
-		self.selectable = (self.switchCellStyle == CKToggleSwitchCellStyleCheckmark);
 		self.enabled = YES;
 	}
 	return self;

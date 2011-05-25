@@ -10,6 +10,7 @@
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKDocumentCollection.h"
+#import <MapKit/MapKit.h>
 
 
 @interface CKObjectProperty : NSObject {
@@ -31,6 +32,7 @@
 //FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
 - (CKDocumentCollection*)editorCollectionForNewlyCreated;
+- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
 - (Class)tableViewCellControllerType;
 
 @end
