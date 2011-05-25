@@ -958,12 +958,9 @@
 		715CA152110E36F700593672 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				75A6CE43138D7556001E3EB5 /* CKItemViewContainerController.h */,
-				75A6CE44138D7556001E3EB5 /* CKItemViewContainerController.m */,
-				75A6CE31138D6002001E3EB5 /* CKItemViewController.h */,
-				75A6CE32138D6002001E3EB5 /* CKItemViewController.m */,
 				75BC664F1360D5AF00E029EA /* CKUIViewController.h */,
 				75BC66501360D5AF00E029EA /* CKUIViewController.m */,
+				75A6CFF9138D88E8001E3EB5 /* Items Controllers */,
 				75A6CE2B138D5FC4001E3EB5 /* Map */,
 				75661F11135E233C00E108AD /* CKGradientView.h */,
 				75661F12135E233C00E108AD /* CKGradientView.m */,
@@ -1464,6 +1461,17 @@
 				4F31C6E1125B7E3F009E08D4 /* CKMapViewController.m */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		75A6CFF9138D88E8001E3EB5 /* Items Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				75A6CE43138D7556001E3EB5 /* CKItemViewContainerController.h */,
+				75A6CE44138D7556001E3EB5 /* CKItemViewContainerController.m */,
+				75A6CE31138D6002001E3EB5 /* CKItemViewController.h */,
+				75A6CE32138D6002001E3EB5 /* CKItemViewController.m */,
+			);
+			name = "Items Controllers";
 			sourceTree = "<group>";
 		};
 		75A86C951371D5C800565B6A /* Mappings */ = {

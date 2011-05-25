@@ -11,42 +11,27 @@
 #import <objc/runtime.h>
 #import <CloudKit/CKUIKeyboardInformation.h>
 #import <QuartzCore/QuartzCore.h>
-#import <CloudKit/MAZeroingWeakRef.h>
-#import <CloudKit/CKNSObject+bindings.h>
 #import "CKVersion.h"
 #import "CKDocumentController.h"
 #import "CKTableViewCellController+StyleManager.h"
+#import <CloudKit/CKNSObject+bindings.h>
 
 //
 
 @interface CKObjectTableViewController ()
-@property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
-@property (nonatomic, retain) NSMutableDictionary* cellsToIndexPath;
-@property (nonatomic, retain) NSMutableDictionary* indexPathToCells;
-@property (nonatomic, retain) NSMutableArray* weakCells;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
-@property (nonatomic, retain) NSMutableDictionary* params;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) UISearchBar* searchBar;
 
 - (void)updateNumberOfPages;
-- (void)notifiesCellControllersForVisibleRows;
 - (void)adjustView;
 - (void)adjustTableView;
-- (void)rotateSubViewsForCell:(UITableViewCell*)cell;
-- (void)updateParams;
 
 @end
 
 //
 
 @implementation CKObjectTableViewController
-@synthesize objectController = _objectController;
-@synthesize cellsToControllers = _cellsToControllers;
-@synthesize controllerFactory = _controllerFactory;
-@synthesize cellsToIndexPath = _cellsToIndexPath;
-@synthesize indexPathToCells = _indexPathToCells;
-@synthesize weakCells = _weakCells;
 @synthesize currentPage = _currentPage;
 @synthesize numberOfPages = _numberOfPages;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
@@ -59,8 +44,6 @@
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
-@synthesize params = _params;
-@synthesize delegate = _delegate;
 @synthesize searchEnabled = _searchEnabled;
 @synthesize searchBar = _searchBar;
 @synthesize liveSearchDelay = _liveSearchDelay;
@@ -142,50 +125,10 @@
 	_liveSearchDelay = 0.5;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
-	[super initWithNibName:nib bundle:[NSBundle mainBundle]];
-
-	self.objectController = controller;
-	self.controllerFactory = factory;
-	return self;	
-}
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[self initWithCollection:collection mappings:mappings withNibName:nil];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
-	return self;
-}
-
-
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
+	//[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[_indexPathToReachAfterRotation release];
 	_indexPathToReachAfterRotation = nil;
-	[_params release];
-	_params = nil;
-	[_objectController release];
-	_objectController = nil;
-	[_cellsToControllers release];
-	_cellsToControllers = nil;
-	[_controllerFactory release];
-	_controllerFactory = nil;
-	[_cellsToIndexPath release];
-	_cellsToIndexPath = nil;
-	[_indexPathToCells release];
-	_indexPathToCells = nil;
-	[_weakCells release];
-	_weakCells = nil;
 	[editButton release];
 	editButton = nil;
 	[doneButton release];
@@ -195,43 +138,6 @@
 	[_searchBar release];
 	_searchBar = nil;
     [super dealloc];
-}
-
-- (void)setObjectController:(id)controller{
-	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(setDelegate:)]){
-			[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-		}
-	//}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	[_objectController release];
-	_objectController = [controller retain];
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if([self isViewLoaded] && [self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
-		[controller performSelector:@selector(setDelegate:) withObject:self];
-		[self reload];
-	}
-}
-
-- (void)setControllerFactory:(id)factory{
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	[_controllerFactory release];
-	_controllerFactory = [factory retain];
-	
-	if([factory respondsToSelector:@selector(setObjectController:)]){
-		[factory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
 }
 
 - (IBAction)edit:(id)sender{
@@ -254,10 +160,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
-	
     [super viewWillAppear:animated];
 	
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
@@ -290,18 +192,7 @@
 	}
 	
 	[self updateParams];
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:cell withParams:self.params animated:YES];
-			
-			if ([CKOSVersion() floatValue] < 3.2) {
-				[self rotateSubViewsForCell:cell];
-			}
-		}
-	}	
+	[self updateVisibleViewsRotation];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
 		[self adjustTableView];
@@ -318,38 +209,18 @@
 	}
 	
 	[self updateNumberOfPages];
-	[self printDebug:@"viewWillAppear"];
-	
-	//Update the indexPath of the visible controllers as they could have moved.
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
-		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-	}
-}
-
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-	[self notifiesCellControllersForVisibleRows];
-	[self printDebug:@"viewDidAppear"];
+	[self updateVisibleViewsIndexPath];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-	
+
+	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	self.indexPathToReachAfterRotation = nil;
 	
 	NSArray *visibleCells = [self.tableView visibleCells];
-	
-	//NSArray* visible = [self.tableView indexPathsForVisibleRows];
-	//for(NSIndexPath* indexPath in visible){
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
@@ -365,47 +236,7 @@
 	}
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
-		if(controller && [controller respondsToSelector:@selector(viewDidDisappear)]){
-			[controller viewDidDisappear];
-		}
-	}
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];	
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
-
-- (void)notifiesCellControllersForVisibleRows {
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		[[self controllerForRowAtIndexPath:indexPath] cellDidAppear:cell];
-	}
-}
-
-
 #pragma mark Orientation Management
-- (void)adjustView{
-	if(_orientation == CKTableViewOrientationLandscape) {
-		CGRect frame = self.view.frame;
-		self.view.transform = CGAffineTransformMakeRotation(-M_PI/2);
-		self.view.frame = frame;
-	}
-}
-
 
 - (void)rotateSubViewsForCell:(UITableViewCell*)cell{
 	if(_orientation == CKTableViewOrientationLandscape){
@@ -427,6 +258,14 @@
 	}
 }
 
+- (void)adjustView{
+	if(_orientation == CKTableViewOrientationLandscape) {
+		CGRect frame = self.view.frame;
+		self.view.transform = CGAffineTransformMakeRotation(-M_PI/2);
+		self.view.frame = frame;
+	}
+}
+
 - (void)adjustTableView{
 	[self adjustView];
 	
@@ -435,9 +274,9 @@
 		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
 	}
 	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		[self rotateSubViewsForCell:cell];
+	NSArray *visibleViews = [self visibleViews];
+	for (UIView *view in visibleViews) {
+		[self rotateSubViewsForCell:(UITableViewCell*)view];
 	}
 }
 
@@ -455,8 +294,6 @@
 	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
 	
 	self.indexPathToReachAfterRotation = nil;
-	//NSArray* visible = [self.tableView indexPathsForVisibleRows];
-	//for(NSIndexPath* indexPath in visible){
 	NSArray *visibleCells = [self.tableView visibleCells];
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -466,13 +303,13 @@
 			break;
 		}
 	}
+	
 	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self printDebug:@"end of willRotateToInterfaceOrientation"];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
@@ -481,67 +318,25 @@
 		[self adjustTableView];
 	}
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
-	
-	if ([CKOSVersion() floatValue] < 3.2) {
-		[self.tableView beginUpdates];
-		[self.tableView endUpdates];
-	}
-	
-	[self updateParams];
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKItemViewController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		
-		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			[controller rotateView:cell withParams:self.params animated:YES];
-			
-			if ([CKOSVersion() floatValue] < 3.2) {
-				[self rotateSubViewsForCell:cell];
-			}
-		}
-	}
-	[self notifiesCellControllersForVisibleRows];
-	[self printDebug:@"end of willAnimateRotationToInterfaceOrientation"];
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	self.indexPathToReachAfterRotation = nil;
-	[self notifiesCellControllersForVisibleRows];
-	[self updateNumberOfPages];
-	[self printDebug:@"end of didRotateFromInterfaceOrientation"];
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 #pragma mark UITableView DataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(numberOfSections)]){
-			return [_objectController numberOfSections];
-		}
-	//}
-	return 0;
+	return [self sectionCount];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
-			return [_objectController numberOfObjectsForSection:section];
-		}
-	//}
-	return 0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+	return [self numberOfViewsForSection:section];
 }
 
-- (CKItemViewController*)controllerForRowAtIndexPath:(NSIndexPath *)indexPath{
-	UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	if(cell){
-		return (CKItemViewController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-	}
-	return nil;
-}
-
-- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation size:(CGSize)size{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
-	CGSize thesize = [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];
+	CGSize thesize = [self sizeForViewAtIndexPath:indexPath];
 	height = (_orientation == CKTableViewOrientationLandscape) ? thesize.width : thesize.height;
 	
 	NSIndexPath* toReach = [[_indexPathToReachAfterRotation copy]autorelease];
@@ -566,257 +361,77 @@
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = [self heightForRowAtIndexPath:indexPath interfaceOrientation:self.interfaceOrientation size:self.view.bounds.size];
-	return height;
-}
-
-- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
-	return flags;
-}
-
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
-		int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
-		if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-			[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
-		}
+	int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
+	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
+		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
 }
 
-- (void)releaseCell:(id)sender target:(id)target{
-	NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[_indexPathToCells removeObjectForKey:previousPath];
-	
-	CKItemViewController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[controller performSelector:@selector(setView:) withObject:nil];
-	[_cellsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
-	[_weakCells removeObject:sender];
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+	return [self.tableView dequeueReusableCellWithIdentifier:identifier];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-			id object = [_objectController objectAtIndexPath:indexPath];
-			
-			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-			if(factoryItem != nil && factoryItem.controllerClass){
-				NSString* identifier = [CKItemViewController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath  parentController:self];
-				
-				//NSLog(@"dequeuing cell for identifier:%@ adress=%p",identifier,identifier);
-				UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
-				CKItemViewController* controller = nil;
-				if(cell == nil){
-					//NSLog(@"creating cell for identifier:%@ adress=%p",identifier,identifier);
-					
-					controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
-					[controller performSelector:@selector(setParentController:) withObject:self];
-					
-					cell = (UITableViewCell*)[controller loadView];
-					//NSLog(@"reuseIdentifier : %@ adress=%p",cell.reuseIdentifier,cell.reuseIdentifier);
-					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-					
-					//Register cell to controller
-					if(_cellsToControllers == nil){
-						self.cellsToControllers = [NSMutableDictionary dictionary];
-					}
-					
-					if(_weakCells == nil){
-						self.weakCells = [NSMutableArray array];
-					}
-					
-					MAZeroingWeakRef* cellRef = [[MAZeroingWeakRef alloc]initWithTarget:cell];
-					[cellRef setDelegate:self action:@selector(releaseCell:target:)];
-					[_weakCells addObject:cellRef];
-					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
-					[cellRef release];
-				}
-				else{
-					//NSLog(@"reusing cell for identifier:%@ adress=%p",identifier,identifier);
-					NSIndexPath* previousPath = [_cellsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:cell]];
-					[_indexPathToCells removeObjectForKey:previousPath];
-					
-					NSAssert(_cellsToControllers != nil,@"Should have been created");
-					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-				}
-				
-				NSAssert(cell != nil,@"The cell has not been created");
-				
-				/*if(self.editing){
-					[self setEditing:YES animated:NO];
-				}*/
-				
-				[controller performSelector:@selector(setParentController:) withObject:self];
-				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-				[controller performSelector:@selector(setView:) withObject:cell];
-				
-				
-				if(_cellsToIndexPath == nil){
-					self.cellsToIndexPath = [NSMutableDictionary dictionary];
-				}
-				[_cellsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:cell]];
-				if(_indexPathToCells == nil){
-					self.indexPathToCells = [NSMutableDictionary dictionary];
-				}
-				[_indexPathToCells setObject:[NSValue valueWithNonretainedObject:cell] forKey:indexPath];
-				
-				//[_controllerFactory initializeController:controller atIndexPath:indexPath];
-				//no more needed as we register callbacks.
-				[controller setValue:object];
-				[controller setupView:cell];	
-				
-				[self fetchMoreIfNeededAtIndexPath:indexPath];
-				[self updateNumberOfPages];
-				
-				if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-					[controller rotateView:cell withParams:self.params animated:NO];
-				}	
-				
-				//NSLog(@"cellForRowAtIndexPath:%d,%d",indexPath.row,indexPath.section);
-				
-				return cell;
-			}
-		}
-	//}
+	UIView* view = [self createViewAtIndexPath:indexPath];
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
 	
-	return nil;
+	[self fetchMoreIfNeededAtIndexPath:indexPath];
+	[self updateNumberOfPages];
+	
+	return (UITableViewCell*)view;
 }
 
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-	//CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
 	[self rotateSubViewsForCell:cell];
 	[self updateNumberOfPages];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKItemViewFlagSelectable;
-	if(controller && bo){
-		[controller willSelect];
+	if([self willSelectViewAtIndexPath:indexPath]){
+		return indexPath;
 	}
-	return (bo) ? indexPath : nil;
+	return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.searchBar resignFirstResponder];
-	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
-	if(controller != nil){
-		[controller didSelect];
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectRowAtIndexPath:withObject:)]){
-			[_delegate objectTableViewController:self didSelectRowAtIndexPath:indexPath withObject:controller.value];
-		}
-	}
+	[self didSelectViewAtIndexPath:indexPath];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
+	CKItemViewFlags flags = [self flagsForViewAtIndexPath:indexPath];
 	BOOL bo = flags & CKItemViewFlagRemovable;
 	return bo ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-	CKItemViewController* controller = [self controllerForRowAtIndexPath:indexPath];
-	if(controller != nil){
-		[controller didSelectAccessoryView];
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSelectAccessoryViewRowAtIndexPath:withObject:)]){
-			[_delegate objectTableViewController:self didSelectAccessoryViewRowAtIndexPath:indexPath withObject:controller.value];
-		}
-	}
+	[self didSelectAccessoryViewAtIndexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete){
-		//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-			if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
-				[_objectController removeObjectAtIndexPath:indexPath];
-				[self fetchMoreIfNeededAtIndexPath:indexPath];
-			}
-		//}
+		[self didRemoveViewAtIndexPath:indexPath];
+		[self fetchMoreIfNeededAtIndexPath:indexPath];
 	}
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & (CKItemViewFlagEditable | CKItemViewFlagRemovable | CKItemViewFlagMovable);
-	return bo;
+	return [self isViewEditableAtIndexPath:indexPath];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKItemViewFlags flags = [self flagsForRowAtIndexPath:indexPath];
-	BOOL bo = flags & CKItemViewFlagMovable;
-	return bo;
+	return [self isViewMovableAtIndexPath:indexPath];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(targetIndexPathForMoveFromRowAtIndexPath:toProposedIndexPath:)]){
-			return [_objectController targetIndexPathForMoveFromRowAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
-		}
-	//}
-	return [NSIndexPath indexPathForRow:0 inSection:-1];
+	return [self targetIndexPathForMoveFromIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController)]){
-		if([_objectController respondsToSelector:@selector(moveObjectFromIndexPath:toIndexPath:)]){
-			[_objectController moveObjectFromIndexPath:fromIndexPath toIndexPath:toIndexPath];
-		}
-	//}
+	[self didMoveViewAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
 }
 
-#pragma mark CKFeedDataSourceDelegate
-
-- (void)objectControllerReloadData:(id)controller{
-	[self.tableView reloadData];
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:delay];
-}
-
-- (void)objectControllerDidBeginUpdating:(id)controller{
-	[self.tableView beginUpdates];
-//	NSLog(@"beginUpdates");
-}
-
-- (void)objectControllerDidEndUpdating:(id)controller{
-//	NSLog(@"endUpdates");
-	[self.tableView endUpdates];
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
-	[self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:delay];
-	
-	//Update the indexPath of the visible controllers as they could have moved.
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-	}
-}
-
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:_rowInsertAnimation];
-}
-
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:_rowRemoveAnimation];
-}
-
-- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
-}
-
-- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
-}
 
 #pragma mark UITableView Protocol for Sections
 
@@ -1010,12 +625,67 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	if (decelerate || scrollView.decelerating)
 		return;
-	[self notifiesCellControllersForVisibleRows];
+	[self updateViewsVisibility:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
-	[self notifiesCellControllersForVisibleRows];
+	[self updateViewsVisibility:YES];
+}
+
+#pragma mark CKItemViewContainerController Implementation
+
+- (NSArray*)visibleViews{
+	return [self.tableView visibleCells];
+}
+
+- (NSIndexPath*)indexPathForView:(UIView*)view{
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
+	return [self.tableView indexPathForCell:(UITableViewCell*)view];
+}
+
+- (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
+	return [self.tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (void)updateVisibleViewsRotation{
+	NSArray *visibleViews = [self visibleViews];
+	for (UIView *view in visibleViews) {
+		NSIndexPath *indexPath = [self indexPathForView:view];
+		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			[controller rotateView:view withParams:self.params animated:YES];
+			
+			if ([CKOSVersion() floatValue] < 3.2) {
+				[self rotateSubViewsForCell:(UITableViewCell*)view];
+			}
+		}
+	}	
+}
+
+- (void)onReload{
+	[self.tableView reloadData];
+}
+
+- (void)onBeginUpdates{
+	[self.tableView beginUpdates];
+}
+
+- (void)onEndUpdates{
+	[self.tableView endUpdates];
+	
+	//bad solution because the contentsize is updated at the end of insert animation ....
+	//could be better if we could observe or be notified that the contentSize has changed.
+	NSTimeInterval delay = 0.4;
+	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
+}
+
+- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
+}
+
+- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
 }
 
 @end

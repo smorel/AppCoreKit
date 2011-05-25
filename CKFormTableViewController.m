@@ -129,7 +129,7 @@
 	NSInteger count = [self numberOfObjects];
 	for(NSInteger i = 0; i < count; ++i){
 		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionIndex];
-		CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+		CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
 		if(controller){
 			[controller applyStyle];
 		}
@@ -231,7 +231,7 @@
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
 		if(indexPath.section == sectionIndex){
-			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
 			[controller applyStyle];
 		}
@@ -385,7 +385,7 @@
 		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
 		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
 		   && indexPath.section == sectionIndex){
-			CKTableViewCellController* controller = [self.parentController controllerForRowAtIndexPath:indexPath];
+			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
 			[controller applyStyle];
 		}

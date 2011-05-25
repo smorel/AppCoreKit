@@ -12,6 +12,16 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 
+enum{
+	CKTableViewCellFlagNone = CKItemViewFlagNone,
+	CKTableViewCellFlagSelectable = CKItemViewFlagSelectable,
+	CKTableViewCellFlagEditable = CKItemViewFlagEditable,
+	CKTableViewCellFlagRemovable = CKItemViewFlagRemovable,
+	CKTableViewCellFlagMovable = CKItemViewFlagMovable,
+	CKTableViewCellFlagAll = CKItemViewFlagAll
+};
+typedef NSUInteger CKTableViewCellFlags;
+
 @interface CKTableViewCellController : CKItemViewController {
 	UITableViewCellAccessoryType _accessoryType;
 	UITableViewCellStyle _cellStyle;

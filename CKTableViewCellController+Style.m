@@ -49,7 +49,13 @@ NSString* CKStyleCellFlags = @"flags";
 																		CKItemViewFlagEditable,
 																		CKItemViewFlagRemovable,
 																		CKItemViewFlagMovable,
-																		CKItemViewFlagAll)];
+																		CKItemViewFlagAll,
+																		CKTableViewCellFlagNone,
+																		CKTableViewCellFlagSelectable,
+																		CKTableViewCellFlagEditable,
+																		CKTableViewCellFlagRemovable,
+																		CKTableViewCellFlagMovable,
+																		CKTableViewCellFlagAll)];
 }
 
 @end
