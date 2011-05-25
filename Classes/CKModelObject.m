@@ -108,16 +108,16 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 				//[self setValue:nil forKey:property.name];
 			}
 			
-			SEL changeSelector =  [NSObject selectorForProperty:property.name prefix:@"" suffix:@"Changed"];
+			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
 				[self removeObserver:self forKeyPath:property.name];
 			}
 			
 			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
 			   || [NSObject isKindOf:property.type parentType:[NSSet class]]){
-				SEL addsSelector =  [NSObject selectorForProperty:property.name prefix:@"" suffix:@"ObjectsAdded:atIndexes:"];
-				SEL removeSelector =  [NSObject selectorForProperty:property.name prefix:@"" suffix:@"ObjectsRemoved:atIndexes:"];
-				SEL replaceSelector =  [NSObject selectorForProperty:property.name prefix:@"" suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
+				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
+				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
+				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
 				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
 					[self removeObserver:self forKeyPath:property.name];
 				}
