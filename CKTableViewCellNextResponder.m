@@ -37,24 +37,6 @@
 			
 			nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
 			
-			
-			if(enableScroll){
-				BOOL isVisible = NO;
-				NSArray* visibleCells = [tableView visibleCells];
-				for (UITableViewCell *cell in visibleCells) {
-					NSIndexPath *visibleIndexPath = [tableView indexPathForCell:cell];
-					if([visibleIndexPath isEqual:nextIndexPath]){
-						isVisible = YES;
-						break;
-					}
-				}
-				
-				if(isVisible == NO){
-					[tableView scrollToRowAtIndexPath:nextIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-				}
-			}
-			
-			
 			//get the value at indexpath and the controller type and call + (BOOL)hasAccessoryResponderWithValue:(id)object
 			if([controller.parentController isKindOfClass:[CKObjectTableViewController class]]){
 				CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.parentController;
@@ -82,6 +64,11 @@
 	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:nextIndexPath];
 	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
 	[textfield becomeFirstResponder];
+	
+	
+	[tableView scrollToRowAtIndexPath:nextIndexPath
+								  atScrollPosition:UITableViewScrollPositionNone
+										  animated:YES];
 	return YES;
 }
 
