@@ -254,7 +254,18 @@
 + (Class)transformedValueClass { return [NSNumber class]; }
 - (id)transformedValue:(id)value { 
 	NSInteger i = [value intValue];
-	return [NSNumber numberWithInt:i]; }
+	return [NSNumber numberWithInt:i]; 
+}
+@end
+
+//CKNSStringToFloatTransformer
+@interface      CKNSStringToFloatTransformer : NSValueTransformer {} @end
+@implementation CKNSStringToFloatTransformer
++ (Class)transformedValueClass { return [NSNumber class]; }
+- (id)transformedValue:(id)value { 
+	CGFloat f = [value floatValue];
+	return [NSNumber numberWithFloat:f]; 
+}
 @end
 
 //CKNSStringToIntTransformer
@@ -314,6 +325,10 @@
 
 - (void)mapIntForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
 	[self mapKeyPath:keyPath toKeyPath:destination required:bo withValueTransformerClass:[CKNSStringToIntTransformer class]];
+}
+
+- (void)mapFloatForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
+	[self mapKeyPath:keyPath toKeyPath:destination required:bo withValueTransformerClass:[CKNSStringToFloatTransformer class]];
 }
 
 - (void)mapDateForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo{
