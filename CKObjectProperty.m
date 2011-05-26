@@ -137,7 +137,7 @@
 	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
 	
 	CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
-	SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:descriptor.name];
+	SEL selector = [NSObject propertyeditorCollectionForGeolocalizationSelectorForProperty:descriptor.name];
 	if([subObject respondsToSelector:selector]){
 		CKDocumentCollection* collection = [subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 		return collection;
