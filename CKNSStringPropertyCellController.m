@@ -116,7 +116,7 @@
 
 - (void)keyboardDidShow:(NSNotification *)notification {
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-										   atScrollPosition:UITableViewScrollPositionNone 
+										   atScrollPosition:UITableViewScrollPositionNone
 												   animated:YES];
 }
 

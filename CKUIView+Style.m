@@ -27,6 +27,8 @@ NSString* CKStyleAlpha = @"alpha";
 NSString* CKStyleBorderColor = @"borderColor";
 NSString* CKStyleBorderWidth = @"borderWidth";
 NSString* CKStyleBorderStyle = @"borderStyle";
+NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
+
 
 @implementation NSMutableDictionary (CKViewStyle)
 
@@ -45,6 +47,24 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 - (UIImage*)backgroundImage{
 	return [self imageForKey:CKStyleBackgroundImage];
 } 
+
+- (UIViewContentMode)backgroundImageContentMode{
+	return (UIViewContentMode)[self enumValueForKey:CKStyleBackgroundImageContentMode 
+									 withDictionary:CKEnumDictionary(UIViewContentModeScaleToFill,
+																	 UIViewContentModeScaleAspectFit,
+																	 UIViewContentModeScaleAspectFill,
+																	 UIViewContentModeRedraw,
+																	 UIViewContentModeCenter,
+																	 UIViewContentModeTop,
+																	 UIViewContentModeBottom,
+																	 UIViewContentModeLeft,
+																	 UIViewContentModeRight,
+																	 UIViewContentModeTopLeft,
+																	 UIViewContentModeTopRight,
+																	 UIViewContentModeBottomLeft,
+																	 UIViewContentModeBottomRight)];
+							   
+}
 
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
@@ -121,7 +141,7 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 }
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
-	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,CKStyleBackgroundImageContentMode,
 								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,nil]];
 }
 
@@ -164,6 +184,10 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 						gradientView.image = [myViewStyle backgroundImage];
 						//opaque = NO;
+					}
+					
+					if([myViewStyle containsObjectForKey:CKStyleBackgroundImageContentMode]){
+						gradientView.imageContentMode = [myViewStyle backgroundImageContentMode];
 					}
 					
 					//Apply Gradient

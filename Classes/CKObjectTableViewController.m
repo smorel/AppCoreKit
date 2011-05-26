@@ -512,9 +512,9 @@
 		[UIView setAnimationBeginsFromCurrentState:YES];
 		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
 		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		CGRect tableViewFrame = self.tableView.frame;
+		CGRect tableViewFrame = self.tableViewContainer.frame;
 		tableViewFrame.size.height -= keyboardRect.size.height;
-		self.tableView.frame = tableViewFrame;
+		self.tableViewContainer.frame = tableViewFrame;
 		[UIView commitAnimations];
 	}
 	else if(_moveOnKeyboardNotification == YES){

@@ -59,6 +59,7 @@
 @synthesize updater = _updater;
 @synthesize borderStyle = _borderStyle;
 @synthesize fillColor = _fillColor;
+@synthesize imageContentMode = _imageContentMode;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
@@ -66,6 +67,7 @@
 	self.borderStyle = CKRoundedCornerViewTypeNone;
 	self.updater = [[[CKGradientViewUpdater alloc]initWithView:self]autorelease];
 	self.fillColor = [UIColor clearColor];
+	self.imageContentMode = UIViewContentModeScaleToFill;
 }
 
 - (id)init {
@@ -228,7 +230,95 @@
 			CGContextClip(gc);
 		}
 		
-		[_image drawInRect:self.bounds];
+		//self.imageContentMode
+		//[_image drawInRect:self.bounds];
+		
+		BOOL clip = NO;
+		CGRect originalRect = rect;
+		if (_image.size.width != rect.size.width || _image.size.height != rect.size.height) {
+			if (_imageContentMode == UIViewContentModeLeft) {
+				rect = CGRectMake(rect.origin.x,
+								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeRight) {
+				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
+								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeTop) {
+				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
+								  rect.origin.y,
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeBottom) {
+				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
+								  rect.origin.y + floor(rect.size.height - _image.size.height),
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeCenter) {
+				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
+								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
+								  _image.size.width, _image.size.height);
+			} else if (_imageContentMode == UIViewContentModeBottomLeft) {
+				rect = CGRectMake(rect.origin.x,
+								  rect.origin.y + floor(rect.size.height - _image.size.height),
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeBottomRight) {
+				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
+								  rect.origin.y + (rect.size.height - _image.size.height),
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeTopLeft) {
+				rect = CGRectMake(rect.origin.x,
+								  rect.origin.y,
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeTopRight) {
+				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
+								  rect.origin.y,
+								  _image.size.width, _image.size.height);
+				clip = YES;
+			} else if (_imageContentMode == UIViewContentModeScaleAspectFill) {
+				CGSize imageSize = _image.size;
+				if (imageSize.height < imageSize.width) {
+					imageSize.width = floor((imageSize.width/imageSize.height) * rect.size.height);
+					imageSize.height = rect.size.height;
+				} else {
+					imageSize.height = floor((imageSize.height/imageSize.width) * rect.size.width);
+					imageSize.width = rect.size.width;
+				}
+				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
+								  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
+								  imageSize.width, imageSize.height);
+			} else if (_imageContentMode == UIViewContentModeScaleAspectFit) {
+				CGSize imageSize = _image.size;
+				if (imageSize.height < imageSize.width) {
+					imageSize.height = floor((imageSize.height/imageSize.width) * rect.size.width);
+					imageSize.width = rect.size.width;
+				} else {
+					imageSize.width = floor((imageSize.width/imageSize.height) * rect.size.height);
+					imageSize.height = rect.size.height;
+				}
+				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
+								  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
+								  imageSize.width, imageSize.height);
+			}
+		}
+		
+		CGContextRef context = UIGraphicsGetCurrentContext();
+		if (clip) {
+			CGContextSaveGState(context);
+			CGContextAddRect(context, originalRect);
+			CGContextClip(context);
+		}
+		
+		[_image drawInRect:rect];
+		
+		if (clip) {
+			CGContextRestoreGState(context);
+		}
 	}	
 						  
 	if(self.gradientColors){

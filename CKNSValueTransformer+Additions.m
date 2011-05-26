@@ -663,7 +663,7 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (NSString*)convertNSStringFromObject:(id)object{
-	NSAssert(NO,@"not implemented");
+	//NSAssert(NO,@"not implemented");
 	/* we should prefer implement (NSString*)convertToNSString:(...)object; in the NSObject's inherited class extension (example following)
 	 here we should handle only the cases we object is a native type or a struct wrapped inside NSValue or things like that
 	 */

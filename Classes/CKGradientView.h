@@ -30,6 +30,7 @@ typedef enum {
 	NSArray *_gradientColors;
 	NSArray *_gradientColorLocations;
 	UIImage *_image;
+	UIViewContentMode _imageContentMode;
 	UIColor* _borderColor;
 	CGFloat _borderWidth;
 	
@@ -46,5 +47,6 @@ typedef enum {
 @property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, assign) CGFloat borderWidth;
 @property (nonatomic, assign) NSInteger borderStyle;
+@property (nonatomic, assign) UIViewContentMode imageContentMode;
 
 @end
