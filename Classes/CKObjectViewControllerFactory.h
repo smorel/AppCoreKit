@@ -67,9 +67,9 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 @interface NSMutableArray (CKObjectViewControllerFactory)
 
 //low level API
-- (void)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params;
+- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params;
 
 //Higher level API
-- (void)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass;
+- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass;
 
 @end

@@ -251,15 +251,16 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 @implementation NSMutableArray (CKObjectViewControllerFactory)
 
 
-- (void)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params{
+- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params{
 	CKObjectViewControllerFactoryItem* item = [[[CKObjectViewControllerFactoryItem alloc]init]autorelease];
 	item.controllerClass = controllerClass;
 	item.params = params;
 	[self addObject:item];
+	return item;
 }
 
-- (void)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass{
-	[self mapControllerClass:controllerClass withParams:[NSDictionary dictionaryWithObject:
+- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass{
+	return [self mapControllerClass:controllerClass withParams:[NSMutableDictionary dictionaryWithObject:
 														 [CKCallback callbackWithBlock:^(id object){return (id)[NSNumber numberWithBool:[object isKindOfClass:objectClass]];}] 
 																					forKey:CKObjectViewControllerFactoryItemFilter]];
 }
