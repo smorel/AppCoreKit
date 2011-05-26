@@ -18,7 +18,13 @@
 #import "CKDocumentArray.h"
 #import "CKTableViewCellController+StyleManager.h"
 
+#import "CKNSNotificationCenter+Edition.h"
+
 //
+@interface CKMapViewController()
+- (void)onPropertyChanged:(NSNotification*)notification;
+@end
+
 
 @implementation CKMapViewController
 
@@ -45,6 +51,7 @@
 }
 
 - (void)postInit{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -340,20 +347,27 @@
 	NSArray* objects = [self objectsForSection:0];
 	[self.mapView addAnnotations:objects];
 	
-	/*
+	[self zoomToRegionEnclosingAnnotations:objects animated:YES];
 	 // Set the zoom for 1 entry
-	 if (self.annotations.count == 1) {
+	 /*if (self.annotations.count == 1) {
 	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
 	 [self zoomToCenterCoordinate:annotation.coordinate animated:NO];
-	 return;
-	 }
-	 */
+	 }*/
+
 }
 
 - (void)setObjectController:(id)controller{
 	[super setObjectController:controller];
 	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
 		[_objectController setDisplayFeedSourceCell:NO];
+	}
+}
+
+- (void)onPropertyChanged:(NSNotification*)notification{
+	NSArray* objects = [self objectsForSection:0];
+	CKObjectProperty* property = [notification objectProperty];
+	if([objects containsObject:property.object] == YES){
+		[self reloadData];
 	}
 }
 
