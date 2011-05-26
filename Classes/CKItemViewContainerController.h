@@ -125,6 +125,7 @@
 
 //Private
 - (void)updateParams;
+- (void)postInit; // Subclasses can override this method to perform additional initialization
 
 @end
 

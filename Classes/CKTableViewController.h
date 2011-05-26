@@ -31,8 +31,6 @@
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, assign) BOOL stickySelection;
 
-- (void)postInit; // Subclasses can override this method to perform additional initialization
-
 - (id)initWithStyle:(UITableViewStyle)style;
 - (void)clearSelection:(BOOL)animated;
 - (void)reload;

@@ -55,6 +55,14 @@
 	return nil;
 }
 
+
++ (void)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
+	UITableView* tableView = [controller parentTableView];
+	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
+	[textfield becomeFirstResponder];
+}
+
 + (BOOL)activateNextResponderFromController:(CKTableViewCellController*)controller{
 	NSIndexPath* nextIndexPath = [CKTableViewCellNextResponder findNextTextController:controller enableScroll:YES];
 	if(nextIndexPath == nil)
@@ -75,12 +83,6 @@
 	return YES;
 }
 
-+ (BOOL)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
-	UITableView* tableView = [controller parentTableView];
-	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
-	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
-	[textfield becomeFirstResponder];
-}
 
 + (BOOL)needsNextKeyboard:(CKTableViewCellController*)controller{
 	NSIndexPath* nextIndexPath = [CKTableViewCellNextResponder findNextTextController:controller enableScroll:NO];

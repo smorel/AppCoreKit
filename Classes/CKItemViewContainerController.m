@@ -37,9 +37,34 @@
 
 
 #pragma mark Initialization
+- (void)postInit{
+}
+
+- (id)init {
+	if (self = [super initWithNibName:nil bundle:nil]) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
 
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
-	[super initWithNibName:nib bundle:[NSBundle mainBundle]];
+	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
 	self.controllerFactory = factory;
 	return self;	
