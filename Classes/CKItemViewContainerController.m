@@ -224,8 +224,7 @@
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
-	NSAssert(NO,@"Implement in inheriting class");
-	return nil;
+	return [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
 }
 
 - (NSArray*)visibleViews{
@@ -240,7 +239,7 @@
 
 #pragma mark ObjectController/ControllerFactory helpers
 
-- (NSInteger)sectionCount{
+- (NSInteger)numberOfSections{
 	if([_objectController respondsToSelector:@selector(numberOfSections)]){
 		return [_objectController numberOfSections];
 	}
@@ -285,6 +284,29 @@
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
 	NSAssert(NO,@"Implement in inheriting class");
 	return nil;
+}
+
+
+- (id)objectAtIndexPath:(NSIndexPath*)indexPath{
+	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
+		return [_objectController objectAtIndexPath:indexPath];
+	}
+	return nil;
+}
+
+
+- (NSArray*)objectsForSection:(NSInteger)section{
+	NSMutableArray* array = [NSMutableArray array];
+	NSInteger count = [self numberOfViewsForSection:section];
+	for(int i=0;i<count;++i){
+		[array addObject:[self objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]]];
+	}
+	return array;
+}
+
+- (NSInteger)indexOfObject:(id)object inSection:(NSInteger)section{
+	NSArray* objects = [self objectsForSection:section];
+	return [objects indexOfObject:object];
 }
 
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{

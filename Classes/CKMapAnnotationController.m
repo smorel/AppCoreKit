@@ -7,8 +7,75 @@
 //
 
 #import "CKMapAnnotationController.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 @implementation CKMapAnnotationController
+
+@synthesize style = _style;
+
+- (id)init{
+	[super init];
+	_style = CKMapAnnotationPin;
+	return self;
+}
+
+- (void)styleMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(CKMapAnnotationCustom,
+											   CKMapAnnotationPin);
+}
+
+- (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style{
+	MKAnnotationView* view = nil;
+	switch(style){
+		case CKMapAnnotationPin:{
+			view = [[[MKPinAnnotationView alloc] initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
+			break;
+		}
+		case CKMapAnnotationCustom:{
+			view = [[[MKAnnotationView alloc]initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
+			break;
+		}
+	}
+	view.canShowCallout = YES;
+	return view;
+}
+
+#pragma mark CKItemViewController Implementation
+
+- (UIView *)loadView{
+	MKAnnotationView* view = [self viewWithStyle:_style];
+	[self initView:view];
+	[self applyStyle];
+	return view;
+}
+
+- (void)initView:(UIView*)view{
+	[super initView:view];
+}
+
+- (void)setupView:(UIView *)view{
+	[super setupView:view];
+}
+
+- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
+	[super rotateView:view withParams:params animated:animated];
+}
+
+- (void)viewDidAppear:(UIView *)view{
+	[super viewDidAppear:view];
+}
+
+- (void)viewDidDisappear{
+	[super viewDidDisappear];
+}
+
+- (NSIndexPath *)willSelect{
+	return self.indexPath;
+}
+
+- (void)didSelect{
+	[super didSelect];
+}
 
 @end

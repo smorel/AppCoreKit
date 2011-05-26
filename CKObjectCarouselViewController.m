@@ -26,30 +26,16 @@
 
 
 @interface CKObjectCarouselViewController ()
-@property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
-@property (nonatomic, retain) NSMutableDictionary* params;
-
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)notifiesCellControllersForVisibleRows;
-- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
-
-- (void)updateParams;
-
 @end
 
 @implementation CKObjectCarouselViewController
 @synthesize carouselView = _carouselView;
-@synthesize objectController = _objectController;
-@synthesize controllerFactory = _controllerFactory;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
-@synthesize cellsToControllers = _cellsToControllers;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
-@synthesize params = _params;
 
 - (void)postInit{
-	self.cellsToControllers = [NSMutableDictionary dictionary];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -73,86 +59,15 @@
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
-	[self init];
-	self.objectController = controller;
-	self.controllerFactory = factory;
-	
-	//if([controller conformsToProtocol:@protocol(CKObjectController)]){
-	if([controller respondsToSelector:@selector(setDelegate:)]){
-		[controller performSelector:@selector(setDelegate:) withObject:self];
-	}
-	//}
-	return self;
-}
-
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
-	[_params release];
-	_params = nil;
 	[_carouselView release];
 	_carouselView = nil;
-	[_objectController release];
-	_objectController = nil;
-	[_controllerFactory release];
-	_controllerFactory = nil;
 	[_headerViewsForSections release];
 	_headerViewsForSections = nil;
-	[_cellsToControllers release];
-	_cellsToControllers = nil;
 	[_pageControl release];
 	_pageControl = nil;
 	[super dealloc];
-}
-
-- (void)setObjectController:(id)controller{
-	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-	//}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	
-	[_objectController release];
-	_objectController = [controller retain];
-	
-	if([self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
-		[controller performSelector:@selector(setDelegate:) withObject:self];
-	}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(controller && [controller isKindOfClass:[CKDocumentController class]]){
-		CKDocumentController* documentController = (CKDocumentController*)controller;
-		documentController.displayFeedSourceCell = NO;
-	}
-}
-
-- (void)setControllerFactory:(id)factory{
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	[_controllerFactory release];
-	_controllerFactory = [factory retain];
-	
-	if([factory respondsToSelector:@selector(setObjectController:)]){
-		[factory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
 }
 
 - (void)loadView {
@@ -195,7 +110,6 @@
 }
 
 - (void)updateParams{
-	
 	if(self.params == nil){
 		self.params = [NSMutableDictionary dictionary];
 	}
@@ -236,152 +150,42 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
-	
     [super viewWillAppear:animated];
+	
 	[self updateParams];
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			[controller rotateCell:cell withParams:self.params animated:YES];
-		}
-	}	
-	
+	[self updateVisibleViewsRotation];
 	
 	[self.carouselView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-	[self notifiesCellControllersForVisibleRows];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		if(controller && [controller respondsToSelector:@selector(cellDidDisappear)]){
-			[controller cellDidDisappear];
-		}
-	}
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
-	[self updateParams];
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			[controller rotateCell:cell withParams:self.params animated:YES];
-		}
-	}
-	[self notifiesCellControllersForVisibleRows];
-	
+	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 	[self.carouselView reloadData];
 	[self.carouselView updateViewsAnimated:YES];
-	
-	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-	[self notifiesCellControllersForVisibleRows];
 }
 
 #pragma mark CKCarouselViewDataSource
 
 - (NSInteger)numberOfSectionsInCarouselView:(CKCarouselView*)carouselView{
-	if([_objectController respondsToSelector:@selector(numberOfSections)]){
-		return [_objectController numberOfSections];
-	}
-	return 0;
+	return [self numberOfSections];
 }
 
 - (NSInteger)carouselView:(CKCarouselView*)carouselView numberOfRowsInSection:(NSInteger)section{
-	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
-		return [_objectController numberOfObjectsForSection:section];
-	}
-	return 0;
+	return [self numberOfViewsForSection:section];
 }
 
-- (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
-	CGSize size = [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];	
-	return size;
+- (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{	
+	return [self sizeForViewAtIndexPath:indexPath];
+}
+
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+	return [self.carouselView dequeueReusableViewWithIdentifier:identifier];
 }
 
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		id object = [_objectController objectAtIndexPath:indexPath];
-		if(object != nil){
-			
-			CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-			if(factoryItem != nil && factoryItem.controllerClass){
-				NSString* identifier = [CKTableViewCellController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath parentController:self];
-				
-				UIView* view = [self.carouselView dequeueReusableViewWithIdentifier:identifier];
-				UITableViewCell* cell = (UITableViewCell*)view;
-				
-				CKTableViewCellController* controller = nil;
-				if(cell == nil){
-					controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
-					[controller performSelector:@selector(setParentController:) withObject:self];
-					
-					cell = [controller loadCell];
-					cell.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-					
-					//Register cell to controller
-					if(_cellsToControllers == nil){
-						self.cellsToControllers = [NSMutableDictionary dictionary];
-					}
-					
-					[_cellsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:cell]];
-				}
-				else{
-					controller = (CKTableViewCellController*)[_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:cell]];
-				}
-				
-				
-				NSAssert(cell != nil,@"The cell has not been created");
-				
-				[controller performSelector:@selector(setParentController:) withObject:self];
-				[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-				[controller performSelector:@selector(setTableViewCell:) withObject:cell];
-				
-				//[_controllerFactory initializeController:controller atIndexPath:indexPath];
-				//no more needs as we register callbacks on create
-				[controller setValue:object];
-				[controller setupCell:cell];	
-				
-				[self fetchMoreIfNeededAtIndexPath:indexPath];
-				
-				return cell;
-			}
-		}
-	}
-	
-	
-	return nil;
+	UIView* view = [self createViewAtIndexPath:indexPath];
+	[self fetchMoreIfNeededAtIndexPath:indexPath];
+	return view;
 }
 
 #pragma mark CKCarouselViewDelegate
@@ -407,20 +211,17 @@
 }
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath{
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	if(controller && [controller respondsToSelector:@selector(cellDidDisappear)]){
-		[controller cellDidDisappear];
+	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	if(controller && [controller respondsToSelector:@selector(viewDidDisappear)]){
+		[controller viewDidDisappear];
 	}
 }
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath{
-	CKTableViewCellController* controller = [self controllerForRowAtIndexPath:indexPath];
-	if(controller && [controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
+	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
 		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
-		NSAssert([view isKindOfClass:[UITableViewCell class]],@"Works with CKTableViewCellController YET");
-		UITableViewCell* cell = (UITableViewCell*)view;
-		
-		[controller rotateCell:cell withParams:self.params animated:NO];
+		[controller rotateView:view withParams:self.params animated:NO];
 	}	
 }
 
@@ -429,34 +230,24 @@
 
 #pragma mark CKObjectControllerDelegate
 
-- (void)objectControllerReloadData:(id)controller{
-	[self.carouselView reloadData];
-	[self notifiesCellControllersForVisibleRows];
-}
-
-- (void)objectControllerDidBeginUpdating:(id)controller{
-	//NOT SUPPORTED
-}
-
-- (void)objectControllerDidEndUpdating:(id)controller{
-	//NOT SUPPORTED
+- (void)onReload{
 	[self.carouselView reloadData];
 }
 
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	//NOT SUPPORTED dynamic insertion
+- (void)onBeginUpdates{
+	//To implement in inherited class
 }
 
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	//NOT SUPPORTED dynamic deletion
+- (void)onEndUpdates{
+	[self.carouselView reloadData];
 }
 
-- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//NOT SUPPORTED dynamic insertion
+- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//To implement in inherited class
 }
 
-- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//NOT SUPPORTED dynamic deletion
+- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//To implement in inherited class
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
@@ -466,36 +257,25 @@
 
 #pragma mark CKObjectCarouselViewController
 
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath{
-	UIView* view = [self.carouselView viewAtIndexPath:indexPath];
-	if(view){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-		return controller;
-	}
-	return nil;
-}
-
-- (void)notifiesCellControllersForVisibleRows {
-	NSArray *visibleIndexPaths = [self.carouselView visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
-		NSAssert([view isKindOfClass:[UITableViewCell class]],@"Works with CKTableViewCellController YET");
-		UITableViewCell* cell = (UITableViewCell*)view;
-		[[self controllerForRowAtIndexPath:indexPath] cellDidAppear:cell];
-	}
-}
-
-- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
-	return flags;
-}
-
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
-		int numberOfRows = [self carouselView:self.carouselView numberOfRowsInSection:indexPath.section];
-		if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-			[_objectController fetchRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
-		}
+	int numberOfRows = [self numberOfViewsForSection:indexPath.section];
+	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
+		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
+	}
+}
+
+- (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
+	return [self.carouselView viewAtIndexPath:indexPath];
+}
+
+- (NSArray*)visibleViews{
+	return [self.carouselView visibleViews];
+}
+
+- (void)setObjectController:(id)controller{
+	[super setObjectController:controller];
+	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
+		[_objectController setDisplayFeedSourceCell:NO];
 	}
 }
 

@@ -6,11 +6,20 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CKItemViewController.h"
+#import <MapKit/MapKit.h>
 
+typedef enum CKMapAnnotationStyle{
+	CKMapAnnotationCustom,
+	CKMapAnnotationPin
+}CKMapAnnotationStyle;
 
-@interface CKMapAnnotationController : NSObject {
-
+@interface CKMapAnnotationController : CKItemViewController {
+	CKMapAnnotationStyle _style;
 }
+
+@property (nonatomic,assign) CKMapAnnotationStyle style;
+
+- (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
 
 @end

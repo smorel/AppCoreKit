@@ -20,29 +20,10 @@
 
 //
 
-@interface CKMapViewController ()
-@property (nonatomic, retain) NSMutableDictionary* cellsToControllers;
-@property (nonatomic, retain) NSMutableDictionary* params;
-
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)notifiesCellControllersForVisibleRows;
-- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath;
-
-- (void)updateParams;
-
-@end
-
-
 @implementation CKMapViewController
 
-@synthesize annotations = _annotations;
 @synthesize centerCoordinate = _centerCoordinate;
 @synthesize mapView = _mapView;
-
-@synthesize objectController = _objectController;
-@synthesize controllerFactory = _controllerFactory;
-@synthesize cellsToControllers = _cellsToControllers;
-@synthesize params = _params;
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
     if (self = [super init]) {
@@ -60,19 +41,10 @@
 - (void)dealloc {
 	[_mapView release];
 	_mapView = nil;
-	[_params release];
-	_params = nil;
-	[_objectController release];
-	_objectController = nil;
-	[_controllerFactory release];
-	_controllerFactory = nil;
-	[_cellsToControllers release];
-	_cellsToControllers = nil;
     [super dealloc];
 }
 
 - (void)postInit{
-	self.cellsToControllers = [NSMutableDictionary dictionary];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -94,65 +66,6 @@
 		[self postInit];
 	}
 	return self;
-}
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
-	[self init];
-	self.objectController = controller;
-	self.controllerFactory = factory;
-	
-	return self;
-}
-
-#pragma mark Controller Factory & Object Controller Management
-
-- (void)setObjectController:(id)controller{
-	//if(_objectController && [_objectController conformsToProtocol:@protocol(CKObjectController)]){
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-	//}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	
-	[_objectController release];
-	_objectController = [controller retain];
-	
-	if([self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
-		[controller performSelector:@selector(setDelegate:) withObject:self];
-	}
-	
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(controller && [controller isKindOfClass:[CKDocumentController class]]){
-		CKDocumentController* documentController = (CKDocumentController*)controller;
-		documentController.displayFeedSourceCell = NO;
-	}
-}
-
-- (void)setControllerFactory:(id)factory{
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:nil];
-	}
-	
-	[_controllerFactory release];
-	_controllerFactory = [factory retain];
-	
-	if([factory respondsToSelector:@selector(setObjectController:)]){
-		[factory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
 }
 
 #pragma Params Management
@@ -196,10 +109,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
-	
 	[super viewWillAppear:animated];
 		
 	self.mapView.delegate = self;
@@ -207,108 +116,48 @@
 	self.mapView.showsUserLocation = YES;
 	
 	[self updateParams];
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			[controller rotateCell:cell withParams:self.params animated:YES];
-		}
-	}	
-	
-	/*
-	// Set the zoom for 1 entry
-	if (self.annotations.count == 1) {
-		NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
-		[self zoomToCenterCoordinate:annotation.coordinate animated:NO];
-		return;
-	}
-	 */
+	[self updateVisibleViewsRotation];
+		
 	[self reloadData];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	[self notifiesCellControllersForVisibleRows];
-}
 
 -(void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	self.mapView.showsUserLocation = NO;
 	self.mapView.delegate = nil;
-	
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
-}
-
-- (void)viewDidDisappear:(BOOL)animated{
-	[super viewDidDisappear:animated];
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		if(controller && [controller respondsToSelector:@selector(cellDidDisappear)]){
-			[controller cellDidDisappear];
-		}
-	}
-}
-
-#pragma mark Rotation management
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
-	[self updateParams];
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:cellValue];
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		
-		if([controller respondsToSelector:@selector(rotateCell:withParams:animated:)]){
-			[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
-			[controller rotateCell:cell withParams:self.params animated:YES];
-		}
-	}
-	[self notifiesCellControllersForVisibleRows];
-	
-	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-	[self notifiesCellControllersForVisibleRows];
 }
 
 #pragma mark Annotations
 
 - (void)setAnnotations:(NSArray *)theAnnotations {
-	/*CKDocumentController* documentController = nil
+	CKDocumentController* documentController = nil;
 	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		documentController = (CKDocumentController*)self.objectController
+		documentController = (CKDocumentController*)self.objectController;
 	}
 	else{
 		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
 		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
 		if([self isViewLoaded] && [self.view superview] != nil){
-			if([_objectController respondsToSelector:@selector(setDelegate:)]){
-				[_objectController performSelector:@selector(setDelegate:) withObject:self];
+			if([self.objectController respondsToSelector:@selector(setDelegate:)]){
+				[self.objectController performSelector:@selector(setDelegate:) withObject:self];
 			}
 		}
 	}
 	
-	[documentController.collection addObjectsFromArray:theAnnotations];*/
+	[documentController.collection removeAllObjects];
+	[documentController.collection addObjectsFromArray:theAnnotations];
 }
 
 - (NSArray*)annotations{
-	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		CKDocumentController* documentController = (CKDocumentController*)_objectController;
-		return [documentController.collection allObjects];
-	}
-	return nil;
+	return [self objectsForSection:0];
 }
+
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate{
+	_centerCoordinate = coordinate;
+	[self.mapView setCenterCoordinate:coordinate animated:([self isViewLoaded] && [self.view superview] != nil)];
+}
+														   
 
 #pragma mark Location Management
 
@@ -368,21 +217,32 @@
 
 #pragma mark MKMapView Delegate
 
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+	return [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
 	if (annotation == mapView.userLocation) 
 		return nil;
 	
-	static NSString *annotationIdentifier = @"Annotation";
-	
-	MKPinAnnotationView *annView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
-	if (!annView) {
-		annView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier] autorelease];
-		annView.canShowCallout = YES;
-	} else {
-		annView.annotation = annotation;
+	NSInteger index = [self indexOfObject:annotation inSection:0];
+	UIView* view = [self createViewAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+	if(view == nil){
+		static NSString *annotationIdentifier = @"Annotation";
+
+		MKPinAnnotationView *annView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+		if (!annView) {
+			annView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier] autorelease];
+			annView.canShowCallout = YES;
+		} else {
+			annView.annotation = annotation;
+		}
+		
+		return annView;
 	}
 	
-	return annView;
+	NSAssert([view isKindOfClass:[MKAnnotationView class]],@"invalid type for view");
+	return (MKAnnotationView*)view;
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
@@ -392,11 +252,19 @@
 	}	
 }
 
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
-	return;
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
+	[self didSelectAccessoryViewAtIndexPath:[self indexPathForView:view]];
+}
+	 
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+	[self didSelectViewAtIndexPath:[self indexPathForView:view]];
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
+	//TODO
+}
+
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
 	return;
 }
 
@@ -412,23 +280,8 @@
  - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView;
  - (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error;
  
- // mapView:viewForAnnotation: provides the view for each annotation.
- // This method may be called for all or some of the added annotations.
- // For MapKit provided annotations (eg. MKUserLocation) return nil to use the MapKit provided annotation view.
- - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation;
- 
- // mapView:didAddAnnotationViews: is called after the annotation views have been added and positioned in the map.
- // The delegate can implement this method to animate the adding of the annotations views.
- // Use the current positions of the annotation views as the destinations of the animation.
- - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views;
- 
- // mapView:annotationView:calloutAccessoryControlTapped: is called when the user taps on left & right callout accessory UIControls.
- - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control;
  
  //OS4 only
- - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view ;
- - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view;
- 
  - (void)mapViewWillStartLocatingUser:(MKMapView *)mapView ;
  - (void)mapViewDidStopLocatingUser:(MKMapView *)mapView ;
  - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation;
@@ -443,66 +296,65 @@
  - (void)mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews;
  */
 
-
 #pragma mark CKObjectControllerDelegate
 
-- (void)objectControllerReloadData:(id)controller{
-	[self reloadData];
-	[self notifiesCellControllersForVisibleRows];
-}
-
-- (void)objectControllerDidBeginUpdating:(id)controller{
-	//NOT SUPPORTED
-}
-
-- (void)objectControllerDidEndUpdating:(id)controller{
+- (void)onReload{
 	[self reloadData];
 }
 
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	//NOT SUPPORTED dynamic insertion
+- (void)onBeginUpdates{
+	//To implement in inherited class
 }
 
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	//NOT SUPPORTED dynamic deletion
+- (void)onEndUpdates{
+	[self reloadData];
 }
 
-- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//NOT SUPPORTED dynamic insertion
+- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//To implement in inherited class
 }
 
-- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//NOT SUPPORTED dynamic deletion
+- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//To implement in inherited class
 }
 
-#pragma mark Private API
+- (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
+	id object = [self objectAtIndexPath:indexPath];
+	return [self.mapView viewForAnnotation:object];
+}
 
-- (CKTableViewCellController*)controllerForRowAtIndexPath:(NSIndexPath*)indexPath{
-	id object = [_objectController objectAtIndexPath:indexPath];
-	MKAnnotationView * view = [_mapView viewForAnnotation:object];
-	if(view){
-		CKTableViewCellController* controller = [_cellsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-		return controller;
+- (NSArray*)visibleViews{
+	NSMutableArray* array = [NSMutableArray array];
+	NSInteger count = [self numberOfViewsForSection:0];
+	for(int i=0;i<count;++i){
+		UIView* view = [self viewAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+		if(view != nil){
+			[array addObject:view];
+		}
 	}
-	return nil;
-}
-
-- (void)notifiesCellControllersForVisibleRows {
-	/*NSArray *visibleIndexPaths = [self.carouselView visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
-		NSAssert([view isKindOfClass:[UITableViewCell class]],@"Works with CKTableViewCellController YET");
-		UITableViewCell* cell = (UITableViewCell*)view;
-		[[self controllerForRowAtIndexPath:indexPath] cellDidAppear:cell];
-	}*/
-}
-
-- (CKItemViewFlags)flagsForRowAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
-	return flags;
+	return array;
 }
 
 - (void)reloadData{
+	[self.mapView removeAnnotations:self.mapView.annotations];
+	NSArray* objects = [self objectsForSection:0];
+	[self.mapView addAnnotations:objects];
+	
+	/*
+	 // Set the zoom for 1 entry
+	 if (self.annotations.count == 1) {
+	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
+	 [self zoomToCenterCoordinate:annotation.coordinate animated:NO];
+	 return;
+	 }
+	 */
+}
+
+- (void)setObjectController:(id)controller{
+	[super setObjectController:controller];
+	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
+		[_objectController setDisplayFeedSourceCell:NO];
+	}
 }
 
 @end

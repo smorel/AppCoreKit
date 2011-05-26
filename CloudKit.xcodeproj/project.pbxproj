@@ -333,7 +333,7 @@
 		75A2A31A12F7F31000E71451 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A30E12F7F31000E71451 /* CKView.m */; };
 		75A4B5E4130D71CC0099256C /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4B5E2130D71CC0099256C /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75A4B5E5130D71CC0099256C /* CKDataBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4B5E3130D71CC0099256C /* CKDataBlockBinder.m */; };
-		75A6CE2E138D5FE8001E3EB5 /* CKMapAnnotationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A6CE2C138D5FE8001E3EB5 /* CKMapAnnotationController.h */; };
+		75A6CE2E138D5FE8001E3EB5 /* CKMapAnnotationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A6CE2C138D5FE8001E3EB5 /* CKMapAnnotationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A6CE2F138D5FE8001E3EB5 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A6CE2D138D5FE8001E3EB5 /* CKMapAnnotationController.m */; };
 		75A6CE33138D6002001E3EB5 /* CKItemViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A6CE31138D6002001E3EB5 /* CKItemViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A6CE34138D6002001E3EB5 /* CKItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A6CE32138D6002001E3EB5 /* CKItemViewController.m */; };

@@ -90,8 +90,12 @@
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath;
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier;
 
+- (id)objectAtIndexPath:(NSIndexPath*)indexPath;
+- (NSArray*)objectsForSection:(NSInteger)section;
+- (NSInteger)indexOfObject:(id)object inSection:(NSInteger)section;
+
 //hierarchy management
-- (NSInteger)sectionCount;
+- (NSInteger)numberOfSections;
 - (NSInteger)numberOfViewsForSection:(NSInteger)section;
 
 - (void)fetchObjectsInRange:(NSRange)range  forSection:(NSInteger)section;
