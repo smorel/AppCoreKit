@@ -36,7 +36,7 @@
 			}
 			
 			nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-			
+
 			//get the value at indexpath and the controller type and call + (BOOL)hasAccessoryResponderWithValue:(id)object
 			if([controller.parentController isKindOfClass:[CKObjectTableViewController class]]){
 				CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.parentController;
@@ -61,15 +61,25 @@
 		return NO;
 	
 	UITableView* tableView = [controller parentTableView];
+	[tableView scrollToRowAtIndexPath:nextIndexPath
+					 atScrollPosition:UITableViewScrollPositionNone
+							 animated:YES];
+	
 	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:nextIndexPath];
+	if(tableViewCell != nil){
+		[[self class] activateAfterDelay:controller indexPath:nextIndexPath];
+	}
+	else{
+		[[self class]performSelector:@selector(activateAfterDelay:indexPath:) withObject:controller withObject:nextIndexPath afterDelay:0.3];
+	}
+	return YES;
+}
+
++ (BOOL)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
+	UITableView* tableView = [controller parentTableView];
+	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
 	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
 	[textfield becomeFirstResponder];
-	
-	
-	[tableView scrollToRowAtIndexPath:nextIndexPath
-								  atScrollPosition:UITableViewScrollPositionNone
-										  animated:YES];
-	return YES;
 }
 
 + (BOOL)needsNextKeyboard:(CKTableViewCellController*)controller{
