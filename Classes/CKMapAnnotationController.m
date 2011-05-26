@@ -26,19 +26,20 @@
 }
 
 - (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style{
-	MKAnnotationView* view = nil;
+	MKAnnotationView* theView = nil;
 	switch(style){
 		case CKMapAnnotationPin:{
-			view = [[[MKPinAnnotationView alloc] initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
+			theView = [[[MKPinAnnotationView alloc] initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
 			break;
 		}
 		case CKMapAnnotationCustom:{
-			view = [[[MKAnnotationView alloc]initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
+			theView = [[[MKAnnotationView alloc]initWithAnnotation:self.value reuseIdentifier:[self identifier]] autorelease];
 			break;
 		}
 	}
-	view.canShowCallout = YES;
-	return view;
+	theView.canShowCallout = YES;
+	self.view = theView;
+	return theView;
 }
 
 #pragma mark CKItemViewController Implementation
