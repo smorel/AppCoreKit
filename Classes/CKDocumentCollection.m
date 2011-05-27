@@ -124,7 +124,8 @@
 	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
 	
 	//execute on main thread !
-	[self performSelectorOnMainThread:@selector(insertObjects:atIndexes:) withObject:items withObject:[NSIndexSet indexSetWithIndexesInRange:range] waitUntilDone:NO];
+	//[self performSelectorOnMainThread:@selector(insertObjects:atIndexes:) withObject:items withObject:[NSIndexSet indexSetWithIndexesInRange:range] waitUntilDone:NO];
+	[self insertObjects:items atIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 }
 
 - (BOOL)load{
