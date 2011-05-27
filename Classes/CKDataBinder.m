@@ -88,8 +88,8 @@
 		return;
 	}
 	
-	[instance2Ref.target setValue:[NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:instance1Ref.target keyPath:keyPath1] 
-																toClass:property.type] forKeyPath:keyPath2];
+	[NSValueTransformer transform:[instance1Ref.target valueForKeyPath:keyPath1]
+							   inProperty:[CKObjectProperty propertyWithObject:instance2Ref.target keyPath:keyPath2]];
 	
 	[instance1Ref.target addObserver:self
 				forKeyPath:keyPath1
