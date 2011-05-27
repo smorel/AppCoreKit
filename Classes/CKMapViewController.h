@@ -36,7 +36,7 @@
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 
-- (void)reloadData;
+- (BOOL)reloadData;
 
 //private
 - (void)postInit;

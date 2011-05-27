@@ -25,6 +25,11 @@
 											   CKMapAnnotationPin);
 }
 
+
+- (MKAnnotationView*)loadAnnotationView{
+	return [self viewWithStyle:_style];
+}
+
 - (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style{
 	MKAnnotationView* theView = nil;
 	switch(style){
@@ -45,7 +50,7 @@
 #pragma mark CKItemViewController Implementation
 
 - (UIView *)loadView{
-	MKAnnotationView* view = [self viewWithStyle:_style];
+	MKAnnotationView* view = [self loadAnnotationView];
 	[self initView:view];
 	[self applyStyle];
 	return view;

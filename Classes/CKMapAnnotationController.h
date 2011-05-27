@@ -20,6 +20,7 @@ typedef enum CKMapAnnotationStyle{
 
 @property (nonatomic,assign) CKMapAnnotationStyle style;
 
+- (MKAnnotationView*)loadAnnotationView;
 - (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
 
 @end

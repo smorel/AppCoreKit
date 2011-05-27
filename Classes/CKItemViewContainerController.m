@@ -271,7 +271,7 @@
 	return 0;
 }
 
-- (NSInteger)numberOfViewsForSection:(NSInteger)section{
+- (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	if([_objectController respondsToSelector:@selector(numberOfObjectsForSection:)]){
 		return [_objectController numberOfObjectsForSection:section];
 	}
@@ -322,7 +322,7 @@
 
 - (NSArray*)objectsForSection:(NSInteger)section{
 	NSMutableArray* array = [NSMutableArray array];
-	NSInteger count = [self numberOfViewsForSection:section];
+	NSInteger count = [self numberOfObjectsForSection:section];
 	for(int i=0;i<count;++i){
 		[array addObject:[self objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]]];
 	}
@@ -525,6 +525,14 @@
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	//To implement in inherited class
+}
+
+- (CKFeedSource*)collectionDataSource{
+	if([self.objectController isKindOfClass:[CKDocumentController class]]){
+		CKDocumentController* documentController = (CKDocumentController*)self.objectController;
+		return documentController.collection.feedSource;
+	}
+	return nil;
 }
 
 @end

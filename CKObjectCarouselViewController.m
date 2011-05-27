@@ -171,7 +171,7 @@
 }
 
 - (NSInteger)carouselView:(CKCarouselView*)carouselView numberOfRowsInSection:(NSInteger)section{
-	return [self numberOfViewsForSection:section];
+	return [self numberOfObjectsForSection:section];
 }
 
 - (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath{	
@@ -258,7 +258,7 @@
 #pragma mark CKObjectCarouselViewController
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	int numberOfRows = [self numberOfViewsForSection:indexPath.section];
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section];
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}

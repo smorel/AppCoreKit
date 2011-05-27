@@ -96,7 +96,7 @@
 
 //hierarchy management
 - (NSInteger)numberOfSections;
-- (NSInteger)numberOfViewsForSection:(NSInteger)section;
+- (NSInteger)numberOfObjectsForSection:(NSInteger)section;
 
 - (void)fetchObjectsInRange:(NSRange)range  forSection:(NSInteger)section;
 
@@ -122,6 +122,9 @@
 - (void)onEndUpdates;
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+
+//Helpers
+- (CKFeedSource*)collectionDataSource;
 
 //Private
 - (void)updateParams;

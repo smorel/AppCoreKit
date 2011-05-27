@@ -8,7 +8,7 @@
 
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
-
+#import "CKNSObject+Invocation.h"
 
 
 @implementation CKTableViewCellNextResponder

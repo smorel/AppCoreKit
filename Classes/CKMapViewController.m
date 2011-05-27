@@ -336,7 +336,7 @@
 
 - (NSArray*)visibleViews{
 	NSMutableArray* array = [NSMutableArray array];
-	NSInteger count = [self numberOfViewsForSection:0];
+	NSInteger count = [self numberOfObjectsForSection:0];
 	for(int i=0;i<count;++i){
 		UIView* view = [self viewAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
 		if(view != nil){
@@ -346,8 +346,12 @@
 	return array;
 }
 
-- (void)reloadData{
-	NSLog(@"reloadData");
+- (BOOL)reloadData{
+	CKFeedSource* source = [self collectionDataSource];
+	if ((source != nil) && source.isFetching) {
+		return NO;
+	}
+	
 	[self.mapView removeAnnotations:self.mapView.annotations];
 	NSArray* objects = [self objectsForSection:0];
 	[self.mapView addAnnotations:objects];
@@ -358,6 +362,7 @@
 	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
 	 [self zoomToCenterCoordinate:annotation.coordinate animated:NO];
 	 }*/
+	return YES;
 
 }
 

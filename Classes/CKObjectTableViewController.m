@@ -199,12 +199,31 @@
 	}
 	
 	if(_indexPathToReachAfterRotation){
+		//adjust _indexPathToReachAfterRotation to the nearest valid indexpath
+		NSInteger currentRow = _indexPathToReachAfterRotation.row;
+		NSInteger currentSection = _indexPathToReachAfterRotation.section;
+		NSInteger rowCount = [self numberOfObjectsForSection:currentSection];
+		if(currentRow >= rowCount){
+			if(rowCount > 0){
+				currentRow = rowCount - 1;
+			}
+			else{
+				currentSection = currentSection - 1;
+				while(currentSection >= 0){
+					NSInteger rowCount = [self numberOfObjectsForSection:currentSection];
+					if(rowCount > 0){
+						currentRow = rowCount - 1;
+						currentSection = currentSection;
+						break;
+					}
+					currentSection--;
+				}
+			}
+		}
 		
-		if (_indexPathToReachAfterRotation.row < [self.tableView numberOfRowsInSection:_indexPathToReachAfterRotation.section])
-			[self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionTop animated:NO];
-		else 
-			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_indexPathToReachAfterRotation.section] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-		
+		if (currentRow >= 0 && currentSection >= 0){
+			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:currentRow inSection:currentSection] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		}
 		self.indexPathToReachAfterRotation = nil;
 	}
 	
@@ -331,7 +350,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-	return [self numberOfViewsForSection:section];
+	return [self numberOfObjectsForSection:section];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
