@@ -15,10 +15,12 @@
 @synthesize storage = _storage;
 @synthesize autosave = _autosave;
 @synthesize delegate = _delegate;
+@synthesize count = _count;
 
 - (id)init{
 	[super init];
 	self.autosave = NO;
+	self.count = 0;
 	return self;
 }
 
@@ -57,10 +59,6 @@
 	metaData.comparable = NO;
 	metaData.hashable = NO;
 	metaData.copiable = NO;
-}
-
-- (NSInteger)count{
-	return 0;
 }
 
 - (NSArray*)allObjects{
@@ -116,10 +114,9 @@
 	if(_feedSource == nil)
 		return;
 	//adjust range to existing objects
-	NSInteger count = [self count];
 	NSInteger requested = range.location + range.length;
-	if(requested > count){
-		[_feedSource fetchRange:NSMakeRange(count, requested - count)];
+	if(requested > self.count){
+		[_feedSource fetchRange:NSMakeRange(self.count, requested - self.count)];
 	}
 }
 
@@ -160,6 +157,12 @@
 		[_delegate documentCollectionDidFailSaving:self];
 	}
 	return NO;
+}
+
+- (void)setCount:(NSInteger)c{
+	[self willChangeValueForKey:@"count"];
+    _count = c;
+    [self didChangeValueForKey:@"count"];
 }
 
 @end

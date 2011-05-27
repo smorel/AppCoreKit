@@ -15,18 +15,19 @@
 	id _storage;//<CKDocumentStorage>
 	BOOL _autosave;
 	id _delegate;
+	NSInteger _count;
 }
 
 @property (nonatomic,retain) CKFeedSource* feedSource;
 @property (nonatomic,retain) id storage;
 @property (nonatomic,assign) BOOL autosave;
 @property (nonatomic,assign) id delegate;
+@property (nonatomic,assign) NSInteger count;
 
 - (id)initWithFeedSource:(CKFeedSource*)source;
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
 - (id)initWithStorage:(id)storage;
 
-- (NSInteger)count;
 - (NSArray*)allObjects;
 - (BOOL)containsObject:(id)object;
 - (id)objectAtIndex:(NSInteger)index;

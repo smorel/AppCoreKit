@@ -30,10 +30,6 @@
 	metaData.deepCopy = YES;
 }
 
-- (NSInteger)count{
-	return [_objects count];
-}
-
 - (NSArray*)allObjects{
 	return [NSArray arrayWithArray:_objects];
 }
@@ -47,6 +43,7 @@
 		return;
 	
     [_objects insertObjects:theObjects atIndexes:indexes];
+	self.count = [_objects count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
 	if(self.autosave){
@@ -62,6 +59,7 @@
 	NSArray* toRemove = [_objects objectsAtIndexes:indexSet];
 	
 	[_objects removeObjectsAtIndexes:indexSet];
+	self.count = [_objects count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
 	
@@ -81,6 +79,7 @@
 	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
 	[_objects removeAllObjects];
 	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
+	self.count = [_objects count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
