@@ -23,11 +23,19 @@
 @interface CKMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
 	CLLocationCoordinate2D _centerCoordinate;
 	MKMapView *_mapView;
+	
+	BOOL _enableSmartZoom;
+	CGFloat _smartZoomDefaultRadius;
+	NSInteger _smartZoomMinimumNumberOfAnnotations;
 }
 
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (nonatomic, assign, readwrite) NSArray *annotations;
 @property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
+
+@property (nonatomic, assign) BOOL enableSmartZoom;
+@property (nonatomic, assign) CGFloat smartZoomDefaultRadius;
+@property (nonatomic, assign) NSInteger smartZoomMinimumNumberOfAnnotations;
 
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate;
@@ -35,6 +43,7 @@
 - (void)panToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
+- (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 
 - (BOOL)reloadData;
 - (BOOL)reloadData:(BOOL)animated;
