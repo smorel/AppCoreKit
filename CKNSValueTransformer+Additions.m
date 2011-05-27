@@ -895,6 +895,7 @@ NSString* CKSerializerIDTag = @"@id";
 + (NSNumber*)convertFromNSString:(NSString*)str{
 	if(CKValueTransformerNumberFormatter == nil){
 		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+		[CKValueTransformerNumberFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease]];
 	}
 	return [CKValueTransformerNumberFormatter numberFromString:str]; 
 }
@@ -902,6 +903,7 @@ NSString* CKSerializerIDTag = @"@id";
 + (NSString*)convertToNSString:(NSNumber*)n{
 	if(CKValueTransformerNumberFormatter == nil){
 		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+		[CKValueTransformerNumberFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease]];
 	}
 	return [CKValueTransformerNumberFormatter stringFromNumber:n];
 }

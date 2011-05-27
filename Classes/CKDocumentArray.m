@@ -34,6 +34,10 @@
 	return [NSArray arrayWithArray:_objects];
 }
 
+- (NSInteger) count{
+	return [_objects count];
+}
+
 - (id)objectAtIndex:(NSInteger)index{
 	return [_objects objectAtIndex:index];
 }

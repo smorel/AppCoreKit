@@ -234,10 +234,6 @@
 	
 	NSInteger index = [self indexOfObject:annotation inSection:0];
 	UIView* view = [self createViewAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-	NSLog(@"annotation for object of type : %@ at index %d with view : %@",[annotation class],index,view);
-	MKPinAnnotationView* pinView = (MKPinAnnotationView*)view;
-	NSLog(@"pin color %d",pinView.pinColor);
-	
 	if(view == nil){
 		static NSString *annotationIdentifier = @"Annotation";
 
