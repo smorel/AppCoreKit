@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSArray *labels;
 @property (nonatomic, readwrite) NSInteger selectedIndex;
 
+- (void)setup;
+
 @end
 
 
@@ -34,6 +36,8 @@
 		self.values = values;
 		self.labels = labels;
 		self.selectedIndex = index;
+		self.stickySelection = YES;
+		[self setup];
 	}
 	return self;	
 }
@@ -48,23 +52,38 @@
 
 - (void)setup {
 	NSMutableArray *cells = [NSMutableArray arrayWithCapacity:self.values.count];
-	for (int i=0 ; i<self.values.count ; i++) {
-		NSString *text = self.labels ? [self.labels objectAtIndex:i] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:i]];
-		CKStandardCellController *cell = [[[CKStandardCellController alloc] initWithText:text] autorelease];
-		cell.accessoryType = (i == self.selectedIndex) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-		cell.value = (i == self.selectedIndex) ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:0];
-		[cells addObject:cell];
+	for (int i=0 ; i< self.values.count ; i++) {
+		id value = [NSNumber numberWithInt:i];
+		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:(i == self.selectedIndex) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
+		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(initCell:)] forKey:CKObjectViewControllerFactoryItemSetup];
+		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(selectCell:)] forKey:CKObjectViewControllerFactoryItemSelection];
+		[cells addObject:descriptor];
 	}
-	[self addSectionWithCellControllers:cells];
+	[self addSectionWithCellDescriptors:cells];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-	self.selectedIndex = indexPath.row;
+- (id)initCell:(id)controller{
+	CKStandardCellController* standardController = (CKStandardCellController*)controller;
+	int i = standardController.indexPath.row;
+	if(i == self.selectedIndex){
+		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+	}
+	else{
+		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+	}
+	standardController.text = self.labels ? [self.labels objectAtIndex:i] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:i]];
+	return nil;
+}
+
+
+- (id)selectCell:(id)controller{
+	CKStandardCellController* standardController = (CKStandardCellController*)controller;
+	int i = standardController.indexPath.row;
+	self.selectedIndex = i;
 	if (self.optionTableDelegate && [self.optionTableDelegate respondsToSelector:@selector(optionTableViewController:didSelectValueAtIndex:)])
 		[self.optionTableDelegate optionTableViewController:self didSelectValueAtIndex:self.selectedIndex];
+	return nil;
 }
-
 
 
 @end

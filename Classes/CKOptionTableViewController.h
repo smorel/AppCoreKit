@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "CKManagedTableViewController.h"
+#import "CKFormTableViewController.h"
 
 @class CKOptionTableViewController;
 
@@ -17,7 +17,7 @@
 @end
 
 
-@interface CKOptionTableViewController : CKManagedTableViewController {
+@interface CKOptionTableViewController : CKFormTableViewController {
 	id _optionTableDelegate;
 	NSArray *_values;
 	NSArray *_labels;
