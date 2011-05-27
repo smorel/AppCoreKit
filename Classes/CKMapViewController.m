@@ -125,7 +125,7 @@
 	[self updateParams];
 	[self updateVisibleViewsRotation];
 		
-	[self reloadData];
+	[self reloadData:NO];
 }
 
 
@@ -314,15 +314,16 @@
 }
 
 - (void)onEndUpdates{
-	[self reloadData];
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//To implement in inherited class
+	[self.mapView addAnnotations:objects];
+	[self zoomToRegionEnclosingAnnotations:objects animated:YES];
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//To implement in inherited class
+	[self.mapView removeAnnotations:objects];
+	[self zoomToRegionEnclosingAnnotations:objects animated:YES];
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
@@ -343,16 +344,20 @@
 }
 
 - (BOOL)reloadData{
+	return [self reloadData:YES];
+}
+
+- (BOOL)reloadData:(BOOL)animated{
 	CKFeedSource* source = [self collectionDataSource];
 	if ((source != nil) && source.isFetching) {
-		return NO;
+		//return NO;
 	}
 	
 	[self.mapView removeAnnotations:self.mapView.annotations];
 	NSArray* objects = [self objectsForSection:0];
 	[self.mapView addAnnotations:objects];
 	
-	[self zoomToRegionEnclosingAnnotations:objects animated:YES];
+	[self zoomToRegionEnclosingAnnotations:objects animated:animated];
 	 // Set the zoom for 1 entry
 	 /*if (self.annotations.count == 1) {
 	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];

@@ -37,6 +37,7 @@
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 
 - (BOOL)reloadData;
+- (BOOL)reloadData:(BOOL)animated;
 
 //private
 - (void)postInit;
