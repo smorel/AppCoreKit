@@ -289,6 +289,10 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (BOOL) isEqual:(id)other {
+	return self == other;
+}
+
+- (BOOL)isEqualToObject:(id)other{
 	if ([other isKindOfClass:[self class]]) {
 		BOOL result = YES;
 		NSArray* allProperties = [self allPropertyDescriptors];
@@ -308,6 +312,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		return result;
 	}
 	return NO;
+	
 }
 
 - (NSUInteger)hash {

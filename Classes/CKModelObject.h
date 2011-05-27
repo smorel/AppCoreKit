@@ -52,5 +52,6 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 
 + (id)model;
 - (void)copy : (id)other;
+- (BOOL)isEqualToObject:(id)other;
 
 @end
