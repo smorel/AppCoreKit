@@ -53,7 +53,6 @@
 - (void)setup {
 	NSMutableArray *cells = [NSMutableArray arrayWithCapacity:self.values.count];
 	for (int i=0 ; i< self.values.count ; i++) {
-		id value = [NSNumber numberWithInt:i];
 		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:(i == self.selectedIndex) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
 		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(initCell:)] forKey:CKObjectViewControllerFactoryItemSetup];
 		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(selectCell:)] forKey:CKObjectViewControllerFactoryItemSelection];

@@ -288,9 +288,11 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	[aCoder encodeObject:names forKey:CKModelObjectAllPropertyNamesKey];
 }
 
+/*
 - (BOOL) isEqual:(id)other {
 	return self == other;
 }
+*/
 
 - (BOOL)isEqualToObject:(id)other{
 	if ([other isKindOfClass:[self class]]) {
