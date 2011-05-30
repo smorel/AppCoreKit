@@ -272,11 +272,4 @@
 	return [self.carouselView visibleViews];
 }
 
-- (void)setObjectController:(id)controller{
-	[super setObjectController:controller];
-	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
-		[_objectController setDisplayFeedSourceCell:NO];
-	}
-}
-
 @end

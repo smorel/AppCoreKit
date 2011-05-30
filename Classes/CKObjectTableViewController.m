@@ -140,6 +140,13 @@
     [super dealloc];
 }
 
+- (void)setObjectController:(id)controller{
+	[super setObjectController:controller];
+	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
+		[_objectController setDisplayFeedSourceCell:YES];
+	}
+}
+
 - (IBAction)edit:(id)sender{
 	[self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
 	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];

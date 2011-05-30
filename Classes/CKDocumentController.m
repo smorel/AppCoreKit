@@ -51,7 +51,7 @@
 	}
 	observing = NO;
 	
-	displayFeedSourceCell = YES;
+	displayFeedSourceCell = NO;
 	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
 	
 	return self;
