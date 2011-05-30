@@ -44,6 +44,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 //
 @interface CKMapViewController()
 - (void)onPropertyChanged:(NSNotification*)notification;
+- (void)zoom:(BOOL)animated;
+@property (nonatomic, retain) id nearestAnnotation;
 @end
 
 
@@ -51,9 +53,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 @synthesize centerCoordinate = _centerCoordinate;
 @synthesize mapView = _mapView;
-@synthesize enableSmartZoom = _enableSmartZoom;
+@synthesize zoomStrategy = _zoomStrategy;
 @synthesize smartZoomDefaultRadius = _smartZoomDefaultRadius;
 @synthesize smartZoomMinimumNumberOfAnnotations = _smartZoomMinimumNumberOfAnnotations;
+@synthesize annotationToSelect = _annotationToSelect;
+@synthesize nearestAnnotation = _nearestAnnotation;
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
     if (self = [super init]) {
@@ -71,13 +75,17 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)dealloc {
 	[_mapView release];
 	_mapView = nil;
+	[_annotationToSelect release];
+	_annotationToSelect = nil;
+	[_nearestAnnotation release];
+	_nearestAnnotation = nil;
     [super dealloc];
 }
 
 - (void)postInit{
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 	
-	_enableSmartZoom = YES;
+	_zoomStrategy = CKMapViewControllerZoomStrategyEnclosing;
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
 }
@@ -235,8 +243,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	CLLocation *locNorthEast = [[CLLocation alloc] initWithLatitude:northEast.latitude longitude:northEast.longitude];	
 	
 	// This is a diag distance (if you wanted tighter you could do NE-NW or NE-SE)
-	// FIXME: Triggers a "deprecation warning" but works on OS < 3.2
-	CLLocationDistance meters = [locSouthWest getDistanceFrom:locNorthEast];
+	CLLocationDistance meters = [locSouthWest distanceFromLocation:locNorthEast];
 	MKCoordinateRegion region;
 	region.center.latitude = (southWest.latitude + northEast.latitude) / 2.0;
 	region.center.longitude = (southWest.longitude + northEast.longitude) / 2.0;
@@ -255,13 +262,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated{
 	NSArray* orderedByDistance = [annotations sortedArrayUsingFunction:&compareLocations context:&_centerCoordinate];
 	NSMutableArray* theAnnotations = [NSMutableArray array];
-	id toSelect = nil;
 	for (NSObject<MKAnnotation> *annotation in orderedByDistance) {
 		[theAnnotations addObject:annotation];
 		if(annotation.coordinate.latitude != _centerCoordinate.latitude
 		   && annotation.coordinate.longitude != _centerCoordinate.longitude
-		   && toSelect == nil){
-			toSelect = annotation;
+		   && _nearestAnnotation == nil){
+			self.nearestAnnotation = annotation;
 		}
 		if([theAnnotations count] >= _smartZoomMinimumNumberOfAnnotations)
 			break;
@@ -269,6 +275,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	}
 	
 	if([theAnnotations count] > 0){
+		if(self.annotationToSelect != nil && [theAnnotations containsObject:_annotationToSelect] == NO){
+			[theAnnotations addObject:self.annotationToSelect];
+		}
 		[self zoomToRegionEnclosingAnnotations:theAnnotations animated:animated];
 	}
 	else{
@@ -281,13 +290,49 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		region = [self.mapView regionThatFits:region];
 		[self.mapView setRegion:region animated:animated];
 	}
-	
-	if(toSelect != nil){
-		[self.mapView performSelector:@selector(selectAnnotation:animated:) withObject:toSelect withObject:[NSNumber numberWithBool:YES] afterDelay:2.0];
+}
+
+
+- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapViewControllerZoomStrategy)strategy animated:(BOOL)animated{
+	switch(strategy){
+		case CKMapViewControllerZoomStrategySmart:{
+			[self smartZoomWithAnnotations:annotations animated:animated];
+			break;
+		}
+		case CKMapViewControllerZoomStrategyEnclosing:{
+			[self zoomToRegionEnclosingAnnotations:annotations animated:animated];
+			break;
+		}
+	}
+}
+
+- (void)zoom:(BOOL)animated{
+	[self zoomOnAnnotations:self.mapView.annotations withStrategy:self.zoomStrategy animated:animated];
+}
+
+- (void)setAnnotationToSelect:(id<MKAnnotation>)annotation{
+	[_annotationToSelect release];
+	if(annotation.coordinate.latitude != 0 && annotation.coordinate.longitude != 0){
+		_annotationToSelect = [annotation retain];
+	}
+	else{
+		_annotationToSelect = nil;
 	}
 }
 
 #pragma mark MKMapView Delegate
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+	if(self.annotationToSelect != nil && [self.mapView.annotations containsObject:_annotationToSelect]){
+		[self.mapView selectAnnotation:self.annotationToSelect animated:YES];
+	}
+	else if(self.nearestAnnotation != nil){
+		[self.mapView selectAnnotation:self.nearestAnnotation animated:YES];
+	}
+}
+
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
+}
 
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
 	return [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -336,20 +381,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	//TODO
 }
 
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView {
-	return;
-}
-
-- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
-	return;
-}
-
 /*
  - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated;
- - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated;
  
  - (void)mapViewWillStartLoadingMap:(MKMapView *)mapView;
- - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView;
  - (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error;
  
  
@@ -383,22 +418,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	[self.mapView addAnnotations:objects];
-	if(_enableSmartZoom){
-		[self smartZoomWithAnnotations:self.mapView.annotations animated:YES];
-	}
-	else{
-		[self zoomToRegionEnclosingAnnotations:self.mapView.annotations animated:YES];
-	}
+	[self zoom:YES];
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	[self.mapView removeAnnotations:objects];
-	if(_enableSmartZoom){
-		[self smartZoomWithAnnotations:self.mapView.annotations animated:YES];
-	}
-	else{
-		[self zoomToRegionEnclosingAnnotations:self.mapView.annotations animated:YES];
-	}
+	[self zoom:YES];
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
@@ -431,13 +456,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self.mapView removeAnnotations:self.mapView.annotations];
 	NSArray* objects = [self objectsForSection:0];
 	[self.mapView addAnnotations:objects];
-	
-	if(_enableSmartZoom){
-		[self smartZoomWithAnnotations:self.mapView.annotations animated:YES];
-	}
-	else{
-		[self zoomToRegionEnclosingAnnotations:self.mapView.annotations animated:YES];
-	}
+
+	[self zoom:YES];
 	 // Set the zoom for 1 entry
 	 /*if (self.annotations.count == 1) {
 	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
