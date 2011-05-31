@@ -190,18 +190,20 @@
 	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerView:view]autorelease];
 }
 
-- (void)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index{
+- (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index{
 	if(_cellDescriptors == nil){
 		self.cellDescriptors = [NSMutableArray array];
 	}
 	[_cellDescriptors insertObject:cellDescriptor atIndex:index];
+	return cellDescriptor;
 }
 
-- (void)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor{
+- (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor{
 	if(_cellDescriptors == nil){
 		self.cellDescriptors = [NSMutableArray array];
 	}
 	[_cellDescriptors addObject:cellDescriptor];
+	return cellDescriptor;
 }
 
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index{
@@ -290,6 +292,22 @@
 
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	section.headerTitle = title;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings 
+								numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	section.objectController.numberOfObjectsToPrefetch = numberOfObjectsToPrefetch;
+	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title 
+								numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings 
+																				 numberOfObjectsToPrefetch:numberOfObjectsToPrefetch displayFeedSourceCell:displayFeedSourceCell];
 	section.headerTitle = title;
 	return section;
 }
@@ -500,6 +518,7 @@
 @synthesize sections = _sections;
 
 - (void)postInit{
+	[super postInit];
 	self.objectController = [[[CKFormObjectController alloc]init]autorelease];
 	self.controllerFactory = [[[CKFormObjectControllerFactory alloc]init]autorelease];
 }
@@ -545,7 +564,7 @@
 	return self;
 }
 
-- (void)addSection:(CKFormSectionBase *)section{
+- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section{
 	if(_sections == nil){
 		self.sections = [NSMutableArray array];
 	}
@@ -555,6 +574,7 @@
 		[section start];
 	}
 	[_sections addObject:section];
+	return section;
 }
 
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{

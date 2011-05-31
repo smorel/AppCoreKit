@@ -56,6 +56,9 @@
 
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index {
 	self.value = [self.values objectAtIndex:index];
+	if(self.tableViewCell){
+		self.tableViewCell.detailTextLabel.text = [self labelForValue:self.value];
+	}
 	[self.parentController.navigationController popViewControllerAnimated:YES];
 }
 
