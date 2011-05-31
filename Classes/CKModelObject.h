@@ -25,6 +25,7 @@
 	BOOL creatable;
 	BOOL editable;
 	NSDictionary* enumDefinition;
+	NSDictionary* valuesAndLabels;
 	Class contentType;
 	NSString* dateFormat;
 }
@@ -37,6 +38,7 @@
 @property (nonatomic, assign) BOOL creatable;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, retain) NSDictionary* enumDefinition;
+@property (nonatomic, retain) NSDictionary* valuesAndLabels;
 @property (nonatomic, assign) Class contentType;
 @property (nonatomic, retain) NSString* dateFormat;
 
@@ -51,6 +53,11 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 }
 
 + (id)model;
+
+@end
+
+@interface NSObject (CKModelObject)
+
 - (void)copy : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
