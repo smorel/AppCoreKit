@@ -59,8 +59,8 @@
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
 
-- (void)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
-- (void)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
+- (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
+- (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index;
 
 @end
@@ -81,6 +81,9 @@
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title;
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell;
 
 @end
 
@@ -108,7 +111,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 - (id)initWithSections:(NSArray*)sections;
 
-- (void)addSection:(CKFormSectionBase *)section;
+- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
 - (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
