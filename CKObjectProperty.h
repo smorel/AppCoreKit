@@ -21,7 +21,9 @@
 @property (nonatomic,readonly) NSString* name;
 
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
++ (CKObjectProperty*)propertyWithObject:(id)object;
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
+- (id)initWithObject:(id)object;
 
 - (CKClassPropertyDescriptor*)descriptor;
 - (CKModelObjectPropertyMetaData*)metaData;
