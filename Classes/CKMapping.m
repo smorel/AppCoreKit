@@ -253,6 +253,9 @@
 @implementation CKNSStringToIntTransformer
 + (Class)transformedValueClass { return [NSNumber class]; }
 - (id)transformedValue:(id)value { 
+	if(value == nil || [value isKindOfClass:[NSNull class]] == YES)
+		return [NSNumber numberWithInt:0];
+	
 	NSInteger i = [value intValue];
 	return [NSNumber numberWithInt:i]; 
 }
