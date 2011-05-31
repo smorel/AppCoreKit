@@ -25,15 +25,18 @@
 
 - (BOOL)load:(CKDocumentCollection*)collection{
 	if( [[NSFileManager defaultManager] fileExistsAtPath:_path] ){
-		id result = [NSKeyedUnarchiver unarchiveObjectWithFile:_path];
-		[collection copy : result];
+		id objects = [NSKeyedUnarchiver unarchiveObjectWithFile:_path];
+		if([objects isKindOfClass:[NSArray class]]){
+			[collection addObjectsFromArray:objects];
+		}
 		return YES;
 	}
 	return NO;
 }
 
 - (BOOL)save:(CKDocumentCollection*)collection{
-	return [NSKeyedArchiver archiveRootObject:collection toFile:_path];
+	NSArray* allObjects = [collection allObjects];
+	return [NSKeyedArchiver archiveRootObject:allObjects toFile:_path];
 }
 
 @end
