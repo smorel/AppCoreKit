@@ -963,4 +963,12 @@ NSString* CKSerializerIDTag = @"@id";
 	return [NSDate stringFromDate:date withDateFormat:format];
 }
 
++ (NSDate*)convertFromNSString:(NSString*)str{
+	return [NSDate dateFromString:str withDateFormat:@"dd MMMM yyyy"];
+}
+
++ (NSString*)convertToNSString:(NSDate*)date{
+	return [NSDate stringFromDate:date withDateFormat:@"dd MMMM yyyy"];
+}
+
 @end
