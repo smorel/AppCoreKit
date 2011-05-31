@@ -239,7 +239,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
 
 	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -260,6 +259,7 @@
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
+	[super viewWillDisappear:animated];
 }
 
 #pragma mark Orientation Management
