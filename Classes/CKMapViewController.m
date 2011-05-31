@@ -467,13 +467,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 }
 
-- (void)setObjectController:(id)controller{
-	[super setObjectController:controller];
-	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
-		[_objectController setDisplayFeedSourceCell:NO];
-	}
-}
-
 - (void)onPropertyChanged:(NSNotification*)notification{
 	NSArray* objects = [self objectsForSection:0];
 	CKObjectProperty* property = [notification objectProperty];

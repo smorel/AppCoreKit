@@ -228,6 +228,7 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 + (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix{
+	NSAssert(prefix && (prefix.length > 0), @"prefix should not be empty.");
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:property prefix:prefix suffix:suffix];
 	return NSSelectorFromString(selectorName);
 }
