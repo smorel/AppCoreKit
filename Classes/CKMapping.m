@@ -229,7 +229,7 @@
 + (Class)transformedValueClass { return [NSString class]; }
 - (id)transformedValue:(id)value { 
 	if([value isKindOfClass:[NSNull class]]) 
-		return @" "; 
+		return nil; 
 	return (NSString*)value; 
 }
 @end
