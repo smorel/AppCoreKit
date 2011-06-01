@@ -260,6 +260,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated{
+	self.nearestAnnotation = nil;
 	NSArray* orderedByDistance = [annotations sortedArrayUsingFunction:&compareLocations context:&_centerCoordinate];
 	NSMutableArray* theAnnotations = [NSMutableArray array];
 	for (NSObject<MKAnnotation> *annotation in orderedByDistance) {
@@ -275,7 +276,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	}
 	
 	if([theAnnotations count] > 0){
-		if(self.annotationToSelect != nil && [theAnnotations containsObject:_annotationToSelect] == NO){
+		if(self.annotationToSelect != nil){
 			[theAnnotations addObject:self.annotationToSelect];
 		}
 		[self zoomToRegionEnclosingAnnotations:theAnnotations animated:animated];
