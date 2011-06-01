@@ -16,7 +16,7 @@ extern NSString* CKStyleCellFlags;
 
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
-- (UITableViewCellStyle)cellStyle;
+- (CKTableViewCellStyle)cellStyle;
 - (UIImage*)accessoryImage;
 - (CGSize)cellSize;
 - (CKItemViewFlags)cellFlags;

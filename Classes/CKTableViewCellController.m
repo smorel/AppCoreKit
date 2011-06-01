@@ -9,31 +9,33 @@
 #import "CKTableViewCellController.h"
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
+#import <objc/runtime.h>
 
 #import "CKStyleManager.h"
 #import <CloudKit/CKNSObject+Bindings.h>
 
 @interface CKUITableViewCellController : UITableViewCell{
-	id _delegate;
+	CKTableViewCellController* _delegate;
 }
-@property(nonatomic,assign) id delegate;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(id)delegate;
+@property(nonatomic,assign) CKTableViewCellController* delegate;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
 @end
 
 @implementation CKUITableViewCellController
 @synthesize delegate = _delegate;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(id)thedelegate{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	self.delegate = thedelegate;
 	return self;
 }
 
 - (void)layoutSubviews{
+	[super layoutSubviews];
+	
 	if(_delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
 		[_delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
-	[super layoutSubviews];
 }
 
 @end
@@ -54,6 +56,7 @@
 
 - (void)dealloc {
 	[self clearBindingsContext];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
 	[_key release];
 	_key = nil;
 	[super dealloc];
@@ -94,15 +97,30 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
+	if(self.cellStyle == CKTableViewCellStyleValue3){
+		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[cell bind:@"detailTextLabel.text" target:self action:@selector(updateDetailText:)];
+		[NSObject endBindingsContext];	
+	}
 }
 
-- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style {
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	UITableViewCellStyle cellStyle = style;
-	if([controllerStyle containsObjectForKey:CKStyleCellType])
-		cellStyle = [controllerStyle cellStyle];
+- (void)updateDetailText:(id)value{
+	[self layoutCell:self.tableViewCell];
+}
 
-	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:cellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style {
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
+	CKTableViewCellStyle thecellStyle = style;
+	if([controllerStyle containsObjectForKey:CKStyleCellType])
+		thecellStyle = [controllerStyle cellStyle];
+
+	self.cellStyle = thecellStyle;
+	
+	CKTableViewCellStyle toUseCellStyle = thecellStyle;
+	if(toUseCellStyle == CKTableViewCellStyleValue3){
+		toUseCellStyle = CKTableViewCellStyleValue1;
+	}
+	CKUITableViewCellController *cell = [[[CKUITableViewCellController alloc] initWithStyle:toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	self.view = cell;
 	
 	return cell;
@@ -166,11 +184,35 @@
 	return NO;
 }
 
++ (UIResponder*)responderInView:(UIView*)view{
+	return nil;
+}
+
+
+- (CGRect)value3FrameForCell:(UITableViewCell*)cell{
+	CGFloat realWidth = cell.bounds.size.width;
+	CGFloat width = realWidth * (2.0f / 3.0f);
+	CGFloat x = realWidth - width;
+	
+	CGFloat contentWidth = cell.contentView.bounds.size.width;
+	width = contentWidth - x;
+	
+	CGRect frame = CGRectIntegral(CGRectMake(x, 0, width , cell.contentView.bounds.size.height));
+	return frame;
+}
+
 - (void)layoutCell:(UITableViewCell *)cell{
 	//You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
+	if(self.cellStyle == CKTableViewCellStyleValue3){
+				
+		if(self.tableViewCell.detailTextLabel != nil){
+			self.tableViewCell.detailTextLabel.frame = [self value3FrameForCell:cell];
+			self.tableViewCell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+			self.tableViewCell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+		}
+	}
 }
-
 
 - (CKTableViewController*)parentTableViewController{
 	if([self.parentController isKindOfClass:[CKTableViewController class]]){

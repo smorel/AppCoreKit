@@ -22,19 +22,28 @@ enum{
 };
 typedef NSUInteger CKTableViewCellFlags;
 
+
+typedef enum CKTableViewCellStyle {
+    CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
+    CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
+    CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
+    CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
+	CKTableViewCellStyleValue3
+} CKTableViewCellStyle;             
+
 @interface CKTableViewCellController : CKItemViewController {
 	UITableViewCellAccessoryType _accessoryType;
-	UITableViewCellStyle _cellStyle;
+	CKTableViewCellStyle _cellStyle;
 	
 	NSString* _key;
 }
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
-@property (nonatomic, assign) UITableViewCellStyle cellStyle;
+@property (nonatomic, assign) CKTableViewCellStyle cellStyle;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
 
-- (UITableViewCell *)cellWithStyle:(UITableViewCellStyle)style;
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 
 - (void)cellDidAppear:(UITableViewCell *)cell;
 - (void)cellDidDisappear;
@@ -54,9 +63,13 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)initTableViewCell:(UITableViewCell*)cell;
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
++ (UIResponder*)responderInView:(UIView*)view;
+
 - (void)layoutCell:(UITableViewCell *)cell;
 
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
+
+- (CGRect)value3FrameForCell:(UITableViewCell*)cell;
 
 @end

@@ -26,12 +26,17 @@ NSString* CKStyleCellFlags = @"flags";
 
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
-- (UITableViewCellStyle)cellStyle{
-	return (UITableViewCellStyle)[self enumValueForKey:CKStyleCellType 
+- (CKTableViewCellStyle)cellStyle{
+	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
 									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, 
 																	 UITableViewCellStyleValue1, 
 																	 UITableViewCellStyleValue2,
-																	 UITableViewCellStyleSubtitle)];
+																	 UITableViewCellStyleSubtitle,
+																	 CKTableViewCellStyleDefault, 
+																	 CKTableViewCellStyleValue1, 
+																	 CKTableViewCellStyleValue2,
+																	 CKTableViewCellStyleSubtitle,
+																	 CKTableViewCellStyleValue3)];
 }
 
 - (UIImage*)accessoryImage{

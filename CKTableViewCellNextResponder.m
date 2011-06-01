@@ -59,8 +59,8 @@
 + (void)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
 	UITableView* tableView = [controller parentTableView];
 	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
-	UITextField* textfield = (UITextField*)tableViewCell.accessoryView;
-	[textfield becomeFirstResponder];
+	UIResponder* responder = [[controller class]responderInView:tableViewCell];
+	[responder becomeFirstResponder];
 }
 
 + (BOOL)activateNextResponderFromController:(CKTableViewCellController*)controller{

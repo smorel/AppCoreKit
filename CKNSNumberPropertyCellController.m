@@ -19,6 +19,12 @@
 
 @implementation CKNSNumberPropertyCellController
 
+- (id)init{
+	[super init];
+	self.cellStyle = CKTableViewCellStyleValue3;
+	return self;
+}
+
 -(void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[super dealloc];
@@ -72,6 +78,7 @@
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
 			UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+			textField.tag = 50000;
 			textField.borderStyle = UITextBorderStyleNone;
 			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 			textField.clearButtonMode = UITextFieldViewModeAlways;
@@ -79,7 +86,8 @@
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
 			textField.textAlignment = UITextAlignmentLeft;
 			textField.autocorrectionType = UITextAutocorrectionTypeNo;
-			cell.accessoryView = textField;	
+			textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];	
+			[cell.contentView addSubview:textField];
 	
 			break;
 		}
@@ -101,10 +109,10 @@
 		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 	}
 	else{
-		[cell.accessoryView bind:@"text" target:self action:@selector(textFieldChanged:)];
-		[model.object bind:model.keyPath toObject:cell.accessoryView withKeyPath:@"text"];
+		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+		[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
+		[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
 		
-		UITextField *textField = (UITextField*)cell.accessoryView;
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		textField.placeholder = _(placeholerText);
 		
@@ -121,16 +129,12 @@
 - (void)layoutCell:(UITableViewCell *)cell{
 	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
 	if(s == nil){
-		UITextField *textField = (UITextField*)cell.accessoryView;
-		
-		CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
-		textField.frame = frame;
-		cell.accessoryView.frame = frame;
-		
-		NSLog(@"cell size : %f %f textField size : %f %f accessoryView frame : %f %f",
-			  cell.bounds.size.width,cell.bounds.size.height,
-			  textField.bounds.size.width,textField.bounds.size.height,
-			  cell.accessoryView.bounds.size.width,cell.accessoryView.bounds.size.height);
+		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+		//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
+		//if(self.cellStyle == CKTableViewCellStyleValue3){
+			textField.frame = [self value3FrameForCell:cell];
+			textField.autoresizingMask = UIViewAutoresizingNone;
+		//}
 	}
 }
 
@@ -194,6 +198,11 @@
 			return NO;
 	}
 	return YES;
+}
+
++ (UIResponder*)responderInView:(UIView*)view{
+	UITextField *textField = (UITextField*)[view viewWithTag:50000];
+	return textField;
 }
 
 @end
