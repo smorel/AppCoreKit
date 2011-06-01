@@ -43,7 +43,7 @@ typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 @end
 
 
-@interface CKArrayMapping : NSObject {
+@interface CKObjectMapping : NSObject {
 	NSString* key;
 	Class objectClass;
 	NSMutableDictionary* mappings;
@@ -95,6 +95,7 @@ typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 - (void)mapDateForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo;
 
 - (void)mapCollectionForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings required:(BOOL)bo;
+- (void)mapObjectForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings required:(BOOL)bo;
 
 // --
 @end

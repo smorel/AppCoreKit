@@ -60,7 +60,7 @@
 
 //
 
-@implementation CKArrayMapping
+@implementation CKObjectMapping
 @synthesize key,mappings,objectClass,policy;
 
 - (void)dealloc{
@@ -93,7 +93,7 @@
 	
 	for (id key in mappings) {
 		id obj = [mappings objectForKey:key];
-		NSAssert(([obj isKindOfClass:[CKMapping class]] || [obj isKindOfClass:[CKCustomMapping class]] || [obj isKindOfClass:[CKArrayMapping class]]),@"The mapper object is not a CKMapping");
+		NSAssert(([obj isKindOfClass:[CKMapping class]] || [obj isKindOfClass:[CKCustomMapping class]] || [obj isKindOfClass:[CKObjectMapping class]]),@"The mapper object is not a CKMapping");
 		NSAssert([key isKindOfClass:[NSString class]],@"The mapper key is not a string");
 
 		if ([obj isKindOfClass:[CKMapping class]]) {
@@ -124,8 +124,8 @@
 			id value = mappingObject.mapperBlock(sourceDictionary, error);
 			if (value) [self setValue:value forKeyPath:key];
 		}
-		else if ([obj isKindOfClass:[CKArrayMapping class]]) {
-			CKArrayMapping *mappingObject = (CKArrayMapping *)obj;
+		else if ([obj isKindOfClass:[CKObjectMapping class]]) {
+			CKObjectMapping *mappingObject = (CKObjectMapping *)obj;
 			id sourceObject = [sourceDictionary valueForKeyPath:mappingObject.key];
 			if(sourceObject == nil){
 				//TODO : fill error
@@ -137,28 +137,31 @@
 				}
 			}
 			else{
-				NSAssert([sourceObject isKindOfClass:[NSArray class]],@"trying to map a non array object as array");
-				
-				NSMutableArray *items = [NSMutableArray array];
-				for (NSDictionary *d in sourceObject) {
-					id object = [[[mappingObject.objectClass alloc] initWithDictionary:d withMappings:mappingObject.mappings error:error] autorelease];
-					[items addObject:object];
-				}
-				
 				id target = [self valueForKeyPath:key];
-				if([target isKindOfClass:[CKDocumentCollection class]]){
-					CKDocumentCollection* collection = (CKDocumentCollection*)target;
-					[collection removeAllObjects];
-					[collection addObjectsFromArray:items];
+				CKClassPropertyDescriptor* descriptor = [self propertyDescriptorForKeyPath:key];
+				if([NSObject isKindOf:descriptor.type parentType:[CKDocumentCollection class]]
+				   ||[NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+					NSAssert([sourceObject isKindOfClass:[NSArray class]],@"trying to map a non array object as array");
+					NSMutableArray *items = [NSMutableArray array];
+					for (NSDictionary *d in sourceObject) {
+						id object = [[[mappingObject.objectClass alloc] initWithDictionary:d withMappings:mappingObject.mappings error:error] autorelease];
+						[items addObject:object];
+					}
+					
+					if([target isKindOfClass:[CKDocumentCollection class]]){
+						CKDocumentCollection* collection = (CKDocumentCollection*)target;
+						[collection removeAllObjects];
+						[collection addObjectsFromArray:items];
+					}
+					else {
+						if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+							[self setValue:items forKeyPath:key];
+						}
+					}
 				}
-				else {
-					CKClassPropertyDescriptor* descriptor = [self propertyDescriptorForKeyPath:key];
-					if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
-						[self setValue:items forKeyPath:key];
-					}
-					else{
-						NSAssert(NO,@"invalid type for target object");
-					}
+				else if([NSObject isKindOf:descriptor.type parentType:[NSObject class]]){
+					id object = [[[mappingObject.objectClass alloc] initWithDictionary:sourceObject withMappings:mappingObject.mappings error:error] autorelease];
+					[self setValue:object forKeyPath:key];
 				}
 			}
 		}
@@ -339,7 +342,16 @@
 }
 
 - (void)mapCollectionForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings required:(BOOL)bo{
-	CKArrayMapping* mapperObject = [[[CKArrayMapping alloc] init] autorelease];
+	CKObjectMapping* mapperObject = [[[CKObjectMapping alloc] init] autorelease];
+	mapperObject.key = keyPath;
+	mapperObject.objectClass = objectClass;
+	mapperObject.mappings = mappings;
+	mapperObject.policy = (bo == YES) ? CKMappingPolicyRequired : CKMappingPolicyOptional;
+	[self setObject:mapperObject forKey:destination];
+}
+
+- (void)mapObjectForKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings required:(BOOL)bo{
+	CKObjectMapping* mapperObject = [[[CKObjectMapping alloc] init] autorelease];
 	mapperObject.key = keyPath;
 	mapperObject.objectClass = objectClass;
 	mapperObject.mappings = mappings;
