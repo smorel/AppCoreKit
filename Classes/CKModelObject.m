@@ -9,6 +9,7 @@
 #import "CKModelObject.h"
 #import <objc/runtime.h>
 #import "CKNSObject+Invocation.h"
+#import "CKLocalization.h"
 
 static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
 
@@ -395,6 +396,26 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		return result;
 	}
 	return NO;
+}
+
++ (NSDictionary*)validationPredicates{
+	//this can be overloaded in your subclasses to define your own validation predicates
+	//example : [NSDictionary dictionaryWithObjectsAndKeys:predicate1,@"propertyName1",predicate2,@"propertyName2",...,nil];
+	return [NSDictionary dictionary];
+}
+
+- (BOOL)isValid{
+	NSDictionary* validation = [[self class]validationPredicates];
+	if(validation != nil){
+		for(NSString* propertyName in [validation allKeys]){
+			id value = [self valueForKeyPath:propertyName];
+			NSPredicate* predicate = [validation objectForKey:propertyName];
+			if([predicate evaluateWithObject:value] == NO){
+				return NO;
+			}
+		}
+	}
+	return YES;
 }
 
 @end

@@ -61,4 +61,7 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 - (void)copy : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
++ (NSDictionary*)validationPredicates;
+- (BOOL)isValid;
+
 @end
