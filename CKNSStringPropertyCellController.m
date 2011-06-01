@@ -40,12 +40,12 @@
 	textField.delegate = self;
 	textField.textAlignment = UITextAlignmentLeft;
 	textField.autocorrectionType = UITextAutocorrectionTypeNo;
-	textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
 	
 	[cell.contentView addSubview:textField];	
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	[super layoutCell:cell];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
 	//if(self.cellStyle == CKTableViewCellStyleValue3){

@@ -36,12 +36,17 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyle _cellStyle;
 	
 	NSString* _key;
+	CGFloat _value3Ratio;
+	CGFloat _value3LabelsSpace;
 }
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
+
+@property (nonatomic, assign) CGFloat value3Ratio;
+@property (nonatomic, assign) CGFloat value3LabelsSpace;
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 

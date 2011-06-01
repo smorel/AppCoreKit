@@ -86,7 +86,6 @@
 			textField.keyboardType = UIKeyboardTypeDecimalPad;
 			textField.textAlignment = UITextAlignmentLeft;
 			textField.autocorrectionType = UITextAutocorrectionTypeNo;
-			textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];	
 			[cell.contentView addSubview:textField];
 	
 			break;
@@ -127,6 +126,7 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	[super layoutCell:cell];
 	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
 	if(s == nil){
 		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];

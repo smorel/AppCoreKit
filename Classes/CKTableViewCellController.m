@@ -45,11 +45,15 @@
 @synthesize accessoryType = _accessoryType;
 @synthesize cellStyle = _cellStyle;
 @synthesize key = _key;
+@synthesize value3Ratio = _value3Ratio;
+@synthesize value3LabelsSpace = _value3LabelsSpace;
 
 - (id)init {
 	self = [super init];
 	if (self != nil) {
 		self.cellStyle = UITableViewCellStyleDefault;
+		self.value3Ratio = 2.0 / 3.0;
+		self.value3LabelsSpace = 10;
 	}
 	return self;
 }
@@ -191,7 +195,7 @@
 
 - (CGRect)value3FrameForCell:(UITableViewCell*)cell{
 	CGFloat realWidth = cell.bounds.size.width;
-	CGFloat width = realWidth * (2.0f / 3.0f);
+	CGFloat width = realWidth * self.value3Ratio;
 	CGFloat x = realWidth - width;
 	
 	CGFloat contentWidth = cell.contentView.bounds.size.width;
@@ -205,11 +209,19 @@
 	//You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
 	if(self.cellStyle == CKTableViewCellStyleValue3){
-				
-		if(self.tableViewCell.detailTextLabel != nil){
-			self.tableViewCell.detailTextLabel.frame = [self value3FrameForCell:cell];
-			self.tableViewCell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-			self.tableViewCell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+		CGRect detailFrame = [self value3FrameForCell:cell];
+		if(cell.detailTextLabel != nil){
+			cell.detailTextLabel.frame = detailFrame;
+			cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+			cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+			cell.detailTextLabel.textColor = [UIColor blackColor];
+		}
+		if(cell.textLabel != nil){
+			CGRect textFrame = CGRectMake(0,0,detailFrame.origin.x - self.value3LabelsSpace,detailFrame.size.height);
+			cell.textLabel.frame = textFrame;
+			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+			cell.textLabel.textAlignment = UITextAlignmentRight;
+			cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
 		}
 	}
 }
