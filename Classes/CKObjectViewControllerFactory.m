@@ -246,6 +246,85 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	return controller;
 }
 
+- (void)setCreateBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemCreate];
+}
+
+- (void)setInitBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemInit];
+}
+
+- (void)setSetupBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemSetup];
+}
+
+- (void)setSelectionBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemSelection];
+}
+
+- (void)setAccessorySelectionBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemAccessorySelection];
+}
+
+- (void)setFlagsBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemFlags];
+}
+
+- (void)setFilterBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemFilter];
+}
+
+- (void)setSizeBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemSize];
+}
+
+
+- (void)setCreateTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemCreate];
+}
+
+- (void)setInitTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemInit];
+}
+
+- (void)setSetupTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemSetup];
+}
+
+- (void)setSelectionTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemSelection];
+}
+
+- (void)setAccessorySelectionTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemAccessorySelection];
+}
+
+- (void)setFlagsTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemFlags];
+}
+
+- (void)setFilterTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemFilter];
+}
+
+- (void)setSizeTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemSize];
+}
+
+
+- (void)setFlags:(CKItemViewFlags)flags{
+	[self.params setObject:[NSNumber numberWithInt:flags] forKey:CKObjectViewControllerFactoryItemFlags];
+}
+
+- (void)setFilterPredicate:(NSPredicate*)predicate{
+	[self.params setObject:predicate forKey:CKObjectViewControllerFactoryItemFilter];
+}
+
+- (void)setSize:(CGSize)size{
+	[self.params setObject:[NSValue valueWithCGSize:size] forKey:CKObjectViewControllerFactoryItemSize];
+}
+
+
 @end
 
 @implementation NSMutableArray (CKObjectViewControllerFactory)

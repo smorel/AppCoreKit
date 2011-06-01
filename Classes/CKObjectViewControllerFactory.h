@@ -35,6 +35,29 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 - (CKCallback*)selectionCallback;
 - (CKCallback*)accessorySelectionCallback;
 
+- (void)setCreateBlock:(CKCallbackBlock)block;
+- (void)setInitBlock:(CKCallbackBlock)block;
+- (void)setSetupBlock:(CKCallbackBlock)block;
+- (void)setSelectionBlock:(CKCallbackBlock)block;
+- (void)setAccessorySelectionBlock:(CKCallbackBlock)block;
+- (void)setFlagsBlock:(CKCallbackBlock)block;
+- (void)setFilterBlock:(CKCallbackBlock)block;
+- (void)setSizeBlock:(CKCallbackBlock)block;
+
+
+- (void)setCreateTarget:(id)target action:(SEL)action;
+- (void)setInitTarget:(id)target action:(SEL)action;
+- (void)setSetupTarget:(id)target action:(SEL)action;
+- (void)setSelectionTarget:(id)target action:(SEL)action;
+- (void)setAccessorySelectionTarget:(id)target action:(SEL)action;
+- (void)setFlagsTarget:(id)target action:(SEL)action;
+- (void)setFilterTarget:(id)target action:(SEL)action;
+- (void)setSizeTarget:(id)target action:(SEL)action;
+
+- (void)setFlags:(CKItemViewFlags)flags;
+- (void)setFilterPredicate:(NSPredicate*)predicate;
+- (void)setSize:(CGSize)size;
+
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
