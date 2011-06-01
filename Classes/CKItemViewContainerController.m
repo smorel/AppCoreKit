@@ -124,7 +124,7 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if([self isViewLoaded] && [self.view window] && [controller respondsToSelector:@selector(setDelegate:)]){
+	if([self isViewLoaded] && ([self.view superview] != nil) && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
 		[self onReload];
 	}
@@ -159,10 +159,10 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-	[self updateViewsVisibility:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[self updateViewsVisibility:NO];
 	[super viewWillDisappear:animated];
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
@@ -191,6 +191,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	[self updateViewsVisibility:YES];
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 

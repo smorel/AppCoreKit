@@ -15,33 +15,39 @@
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
 	id _delegate;
+	CKFormTableViewController* _parentController;
 }
 @property (nonatomic, assign) id delegate;
+@property (nonatomic,assign) CKFormTableViewController* parentController;
+- (id)initWithParentController:(CKFormTableViewController*)controller;
 @end
 
 @implementation CKFormObjectController
 @synthesize delegate = _delegate;
+@synthesize parentController = _parentController;
+
+- (id)initWithParentController:(CKFormTableViewController*)controller{
+	[super init];
+	self.parentController = controller;
+	return self;
+}
 
 - (NSInteger)numberOfSections{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	return [formController.sections count];
+	return [self.parentController.sections count];
 }
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController.sections objectAtIndex:section];
 	return [formSection numberOfObjects];
 }
 
 - (NSString*)headerTitleForSection:(NSInteger)section{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:section];
 	return formSection.headerTitle;
 }
 
 - (UIView*)headerViewForSection:(NSInteger)section{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:section];
 	if( formSection.headerView != nil ){
 		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.headerView applyStyle:controllerStyle];
@@ -50,9 +56,9 @@
 }
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
-	return [formSection objectAtIndex:indexPath.row];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:indexPath.section];
+	id object = [formSection objectAtIndex:indexPath.row];
+	return object;
 }
 
 - (void)setDelegate:(id)theDelegate{
@@ -60,14 +66,12 @@
 }
 
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection =  (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:indexPath.section];
 	return [formSection removeObjectAtIndex:indexPath.row];
 }
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
-	CKFormTableViewController* formController = (CKFormTableViewController*)self.delegate;
-	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:section];
+	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController.sections objectAtIndex:section];
 	[formSection fetchRange:range];
 }
 
@@ -82,7 +86,7 @@
 
 - (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
-	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.delegate;
+	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController.sections objectAtIndex:indexPath.section];
 	return [formSection factoryItemForIndex:indexPath.row];
 }
@@ -217,7 +221,8 @@
 
 - (id)objectAtIndex:(NSInteger)index{
 	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	return cellDescriptor.value;
+	id object =  cellDescriptor.value;
+	return object;
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
@@ -326,13 +331,15 @@
 	int headerCount = [_headerCellDescriptors count];
 	if(index < headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
-		return cellDescriptor.value;
+		id object =  cellDescriptor.value;
+		return object;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
 	if(index < count + headerCount){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-			return [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+			id object = [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
+			return object;
 		}
 	}
 	
@@ -340,7 +347,8 @@
 	int footerCount = [_footerCellDescriptors count];
 	if(index < count + headerCount +footerCount){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
-		return cellDescriptor.value;
+		id object =  cellDescriptor.value;
+		return object;
 	}
 	
 	return nil;
@@ -519,7 +527,7 @@
 
 - (void)postInit{
 	[super postInit];
-	self.objectController = [[[CKFormObjectController alloc]init]autorelease];
+	self.objectController = [[[CKFormObjectController alloc]initWithParentController:self]autorelease];
 	self.controllerFactory = [[[CKFormObjectControllerFactory alloc]init]autorelease];
 }
 
@@ -570,7 +578,7 @@
 	}
 	section.parentController = self;
 	
-	if([self.view superview] != nil){
+	if(self.viewIsOnScreen){
 		[section start];
 	}
 	[_sections addObject:section];
@@ -600,7 +608,7 @@
 	}
 	section.parentController = self;
 	
-	if([self.view superview] != nil){
+	if(self.viewIsOnScreen){
 		[section start];
 	}
 	
@@ -615,7 +623,7 @@
 	}
 	section.parentController = self;
 	
-	if([self.view superview] != nil){
+	if(self.viewIsOnScreen){
 		[section start];
 	}
 	

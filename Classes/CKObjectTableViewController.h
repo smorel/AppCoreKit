@@ -36,6 +36,7 @@
 	CGFloat _liveSearchDelay;
 	
 	CGRect _frameBeforeKeyboardNotification;
+	BOOL _viewIsOnScreen;
 }
 
 @property (nonatomic, assign) CKTableViewOrientation orientation;
@@ -49,6 +50,7 @@
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, assign) BOOL searchEnabled;
+@property (nonatomic, assign,readonly) BOOL viewIsOnScreen;
 @property (nonatomic, assign) CGFloat liveSearchDelay;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;

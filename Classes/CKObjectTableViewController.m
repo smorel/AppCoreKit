@@ -47,6 +47,7 @@
 @synthesize searchEnabled = _searchEnabled;
 @synthesize searchBar = _searchBar;
 @synthesize liveSearchDelay = _liveSearchDelay;
+@synthesize viewIsOnScreen = _viewIsOnScreen;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -123,6 +124,7 @@
 	_editable = NO;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
+	_viewIsOnScreen = NO;
 }
 
 - (void)dealloc {
@@ -167,6 +169,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+	_viewIsOnScreen = YES;
     [super viewWillAppear:animated];
 	
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
@@ -259,7 +262,13 @@
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
+	 
 	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+	[super viewDidDisappear:animated];
+	_viewIsOnScreen = NO;
 }
 
 #pragma mark Orientation Management
@@ -309,10 +318,6 @@
 - (void)setOrientation:(CKTableViewOrientation)orientation {
 	_orientation = orientation;
 	[self adjustView];
-}
-   
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
@@ -400,6 +405,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIView* view = [self createViewAtIndexPath:indexPath];
+	if([view isKindOfClass:[UITableViewCell class]] == NO){
+		int i =3;
+	}
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
 	
 	[self fetchMoreIfNeededAtIndexPath:indexPath];
@@ -690,14 +698,23 @@
 }
 
 - (void)onReload{
+	if(!_viewIsOnScreen)
+		return;
+	
 	[self.tableView reloadData];
 }
 
 - (void)onBeginUpdates{
+	if(!_viewIsOnScreen)
+		return;
+	
 	[self.tableView beginUpdates];
 }
 
 - (void)onEndUpdates{
+	if(!_viewIsOnScreen)
+		return;
+	
 	[self.tableView endUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -707,10 +724,16 @@
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	if(!_viewIsOnScreen)
+		return;
+	
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	if(!_viewIsOnScreen)
+		return;
+	
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
 }
 
