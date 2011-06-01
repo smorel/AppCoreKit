@@ -243,9 +243,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 
-	//keyboard notifications
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
 	self.indexPathToReachAfterRotation = nil;
 	
 	NSArray *visibleCells = [self.tableView visibleCells];
@@ -267,8 +264,18 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
+	if(_frameBeforeKeyboardNotification.size.width != 0
+	   && _frameBeforeKeyboardNotification.size.height != 0){
+		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
+	}
+	
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
+	
+	//keyboard notifications
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 #pragma mark Orientation Management
@@ -581,20 +588,8 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-	if (_resizeOnKeyboardNotification == YES){
-		NSDictionary *info = [notification userInfo];
-		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
-		
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		CGRect tableViewFrame = self.tableViewContainer.frame;
-		tableViewFrame.size.height += keyboardRect.size.height;
-		self.tableViewContainer.frame = tableViewFrame;
-		[UIView commitAnimations];
-	}
-	else if(_moveOnKeyboardNotification == YES){
+	if(_frameBeforeKeyboardNotification.size.width != 0
+	   && _frameBeforeKeyboardNotification.size.height != 0){
 		NSDictionary *info = [notification userInfo];
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationBeginsFromCurrentState:YES];
@@ -602,6 +597,8 @@
 		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
 		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
 		[UIView commitAnimations];
+		
+		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
 	}
 }
 
