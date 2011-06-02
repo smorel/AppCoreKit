@@ -7,6 +7,7 @@
 //
 
 #import "CKTableViewController.h"
+#import "CKTableViewCellController.h"
 
 @interface CKObjectTableViewController : CKTableViewController<UISearchBarDelegate> {
 	CKTableViewOrientation _orientation;

@@ -10,7 +10,6 @@
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
-#import "CKUIImageView+Style.h"
 #import "CKUIViewController+Style.h"
 
 
