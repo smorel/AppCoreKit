@@ -13,5 +13,7 @@
 @dynamic value;
 @dynamic createdAt;
 @dynamic item;
+@dynamic items;
 
 @end
+

@@ -191,4 +191,12 @@
 	}
 }
 
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
+	return [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
+												   predicate:predicate
+											createIfNotFound:createIfNotFound 
+												  wasCreated:wasCreated];
+}
+
 @end

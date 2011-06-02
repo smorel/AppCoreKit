@@ -39,3 +39,11 @@
 - (NSDictionary *)attributesDictionary DEPRECATED_ATTRIBUTE;
 
 @end
+
+
+@interface CKItem (CKItemModification)
+
+- (void)updateAttributes:(NSDictionary*)attributes;
+- (void)updateAttributeNamed:(NSString*)name value:(NSString*)value;
+
+@end
