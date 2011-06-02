@@ -77,14 +77,31 @@
 	// Adds the "domain scope" for the predicate, equivalent to the format string
 	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
 
-	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	/*NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
 	[predicateArguments addObjectsFromArray:arguments];
 		
 	NSMutableString *scopedPredicateFormat = [NSMutableString stringWithString:@"(domain == %@)"];
 	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
 	
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:limit];
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:limit];*/
+	return [self fetchItemsWithFormat:predicateFormat arguments:arguments range:NSMakeRange(0,limit) sortedByKeys:[NSArray arrayWithObject:@"createdAt"]];
+}
+
+- (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys{
+	// Adds the "domain scope" for the predicate, equivalent to the format string
+	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
+	
+	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	if(arguments != nil){
+		[predicateArguments addObjectsFromArray:arguments];
+	}
+	
+	NSMutableString *scopedPredicateFormat = [NSMutableString stringWithString:@"(domain == %@)"];
+	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
+	
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedByKeys:keys range:range];
 }
 
 #pragma mark CKStore Count Items

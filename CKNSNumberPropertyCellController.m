@@ -104,13 +104,13 @@
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
 	if(s){
-		[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
 		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
+		[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
 	}
 	else{
 		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
-		[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 		[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
+		[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		textField.placeholder = _(placeholerText);
