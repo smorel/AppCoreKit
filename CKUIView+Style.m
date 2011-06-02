@@ -15,6 +15,7 @@
 #import "CKUILabel+Style.h"
 #import "CKUIImageView+Style.h"
 
+#import "CKTextView.h"
 NSMutableSet* reserverKeyWords = nil;
 
 NSString* CKStyleBackgroundColor = @"backgroundColor";
@@ -152,6 +153,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	
 	NSMutableDictionary* myViewStyle = style;
 	if([appliedStack containsObject:view] == NO){
+		[appliedStack addObject:view];
 		//Apply before adding background subView
 		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
 	
@@ -298,8 +300,6 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 					backgroundView.backgroundColor = [UIColor redColor];
 				}*/
 			}
-			
-			[appliedStack addObject:view];
 		}
 		return YES;
 	}
@@ -408,9 +408,9 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	}
 	
 	
-	if([appliedStack containsObject:self] == NO){
+	//if([appliedStack containsObject:self] == NO){
 		[NSObject applyStyleByIntrospection:style toObject:self];
-	}
+	//}
 	[appliedStack addObject:self];
 }
 
