@@ -51,6 +51,8 @@
 
 @synthesize editButton;
 @synthesize doneButton;
+@synthesize rightButton;
+@synthesize leftButton;
 
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -134,6 +136,10 @@
 	_indexPathToReachAfterRotation = nil;
 	[editButton release];
 	editButton = nil;
+	[rightButton release];
+	rightButton = nil;
+	[leftButton release];
+	leftButton = nil;
 	[doneButton release];
 	doneButton = nil;
 	[_headerViewsForSections release];
@@ -189,6 +195,14 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	if(self.rightButton){
+		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
+	}
+	
+	if(self.leftButton){
+		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
+	}
 	
 	if(_editable){
 		self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];

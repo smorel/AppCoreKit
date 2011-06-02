@@ -28,6 +28,8 @@
 	//for editable tables
 	UIBarButtonItem *editButton;
 	UIBarButtonItem *doneButton;
+	UIBarButtonItem *rightButton;
+	UIBarButtonItem *leftButton;
 	
 	//internal
 	NSIndexPath* _indexPathToReachAfterRotation;
@@ -56,6 +58,8 @@
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
+@property (nonatomic, retain) UIBarButtonItem *rightButton;
+@property (nonatomic, retain) UIBarButtonItem *leftButton;
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 
