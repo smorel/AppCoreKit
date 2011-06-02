@@ -169,7 +169,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	_viewIsOnScreen = YES;
     [super viewWillAppear:animated];
 	
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
@@ -239,6 +238,8 @@
 	
 	[self updateNumberOfPages];
 	[self updateVisibleViewsIndexPath];
+	
+	_viewIsOnScreen = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
