@@ -69,8 +69,8 @@
 	
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 	[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
+	[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 	[NSObject endBindingsContext];
 	
 	NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
