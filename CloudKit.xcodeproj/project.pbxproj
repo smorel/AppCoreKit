@@ -315,7 +315,7 @@
 		7599A6D0134D0A79008AADE6 /* CKFormTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7599A6CE134D0A79008AADE6 /* CKFormTableViewController.m */; };
 		759B3AD413172064006C41D9 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AD213172064006C41D9 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		759B3AD513172064006C41D9 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AD313172064006C41D9 /* CKMapping.m */; };
-		759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */; };
+		759B3AED131720E5006C41D9 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 759B3AEB131720E5006C41D9 /* CKNSString+Parsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		759B3AEE131720E5006C41D9 /* CKNSString+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 759B3AEC131720E5006C41D9 /* CKNSString+Parsing.m */; };
 		75A2A2FE12F7F2DD00E71451 /* CKFeedSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A2A2FA12F7F2DD00E71451 /* CKFeedSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A2A2FF12F7F2DD00E71451 /* CKFeedSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */; };
@@ -353,7 +353,7 @@
 		75BC5A8E135F33EF00E029EA /* CKUIView+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC5A8C135F33EF00E029EA /* CKUIView+Style.m */; };
 		75BC5AEC135F42C900E029EA /* CKStyles.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC5AEA135F42C900E029EA /* CKStyles.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC5AED135F42C900E029EA /* CKStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC5AEB135F42C900E029EA /* CKStyles.m */; };
-		75BC5E20135F84D900E029EA /* CKStyle+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC5E1E135F84D900E029EA /* CKStyle+Parsing.h */; };
+		75BC5E20135F84D900E029EA /* CKStyle+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC5E1E135F84D900E029EA /* CKStyle+Parsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC5E21135F84D900E029EA /* CKStyle+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC5E1F135F84D900E029EA /* CKStyle+Parsing.m */; };
 		75BC612C1360768C00E029EA /* CKUILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC612A1360768C00E029EA /* CKUILabel+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75BC612D1360768C00E029EA /* CKUILabel+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC612B1360768C00E029EA /* CKUILabel+Style.m */; };

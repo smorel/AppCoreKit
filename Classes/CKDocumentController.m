@@ -9,6 +9,7 @@
 #import "CKDocumentController.h"
 #import <CloudKit/CKDocument.h>
 #import <UIKit/UITableView.h>
+#import "CKNSObject+Invocation.h"
 #import "CKVersion.h"
 
 @implementation CKDocumentController
@@ -191,14 +192,14 @@
 	
 	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate objectControllerReloadData:self];
+			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:YES];
 			return;
 		}
 	}
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 	if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-		[_delegate objectControllerDidBeginUpdating:self];
+		[_delegate performSelectorOnMainThread:@selector(objectControllerDidBeginUpdating:) withObject:self waitUntilDone:YES];
 	}
 	//}
 	
@@ -227,28 +228,28 @@
 				}
 				
 				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-					[_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+					[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:limitedObjects withObject:limitedIndexPaths waitUntilDone:YES];
 				}
 				break;
 			}
 			
 			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-				[_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
+				[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:newModels withObject:indexPaths waitUntilDone:YES];
 			}
 			break;
 		}
 		case NSKeyValueChangeRemoval:{
 			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-				[_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
+				[_delegate performSelectorOnMainThread:@selector(objectController:removeObjects:atIndexPaths:) withObject:self withObject:oldModels withObject:indexPaths waitUntilDone:YES];
 			}
 			break;
 		}
 	}
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-		if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-			[_delegate objectControllerDidEndUpdating:self];
-		}
+	if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
+		[_delegate performSelectorOnMainThread:@selector(objectControllerDidEndUpdating:) withObject:self waitUntilDone:YES];
+	}
 	//}
 }
 

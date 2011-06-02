@@ -125,6 +125,7 @@
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_viewIsOnScreen = NO;
+	_numberOfObjectsToprefetch = 10;
 }
 
 - (void)dealloc {
@@ -627,6 +628,27 @@
 	
 	if(_currentPage != page){
 		self.currentPage = page;
+	}
+	
+	//Fetch data if needed
+	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
+	NSArray* visibleCells = [self.tableView visibleCells];
+	for(UITableViewCell* cell in visibleCells){
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:indexPath.section]];
+		if(maxForSection != nil){
+			if(indexPath.row > [maxForSection intValue]){
+				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+			}
+		}
+		else{
+			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+		}
+	}
+	
+	for(NSNumber* numSection in [maxIndexPaths allKeys]){
+		NSNumber* numRow = [maxIndexPaths objectForKey:numSection];
+		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:[numRow intValue] inSection:[numSection intValue]]];
 	}
 }
 
