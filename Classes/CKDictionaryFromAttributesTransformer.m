@@ -30,7 +30,16 @@
 		} else if (object) {
 			[result setObject:[NSMutableArray arrayWithObjects:object, attribute.value, nil] forKey:attribute.name];
 		} else {
-			[result setObject:attribute.value forKey:attribute.name];
+			if(attribute.value){
+				[result setObject:attribute.value forKey:attribute.name];
+			}
+			else{
+				NSMutableArray* array = [NSMutableArray array];
+				for(CKItem* item in attribute.items){
+					[array addObject:[item propertyListRepresentation]];
+				}
+				[result setObject:array forKey:attribute.name];
+			}
 		}
 	}
 	

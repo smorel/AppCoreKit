@@ -45,5 +45,6 @@
 
 - (void)updateAttributes:(NSDictionary*)attributes;
 - (void)updateAttributeNamed:(NSString*)name value:(NSString*)value;
+- (CKAttribute*)attributeNamed:(NSString*)attribute createIfNotFound:(BOOL)createIfNotFound;
 
 @end

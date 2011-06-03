@@ -15,5 +15,9 @@
 @dynamic item;
 @dynamic items;
 
+- (NSString*)description{
+	return [NSString stringWithFormat:@"CKAttribute<%p> value:%@ items:%@",self,self.name,self.items];
+}
+
 @end
 
