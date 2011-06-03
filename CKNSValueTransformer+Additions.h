@@ -52,6 +52,13 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 
 @end
 
+@interface NSObject (CKTransformAdditionsCreate)
++ (id)objectFromDictionary:(NSDictionary*)dictionary;
+@end
+
+@interface NSArray (CKTransformAdditionsCreate)
++ (id)objectArrayFromDictionaryArray:(NSArray*)array;
+@end
 
 @interface NSObject (CKTransformAdditions)
 + (SEL)convertFromObjectSelector:(id)object;

@@ -673,6 +673,44 @@ NSString* CKSerializerIDTag = @"@id";
 @end
 
 
+@implementation NSObject (CKTransformAdditionsCreate)
+
++ (id)objectFromDictionary:(NSDictionary*)dictionary{
+	Class typeToCreate = nil;
+	NSString* sourceClassName = [dictionary objectForKey:CKSerializerClassTag];
+	if(sourceClassName != nil){
+		typeToCreate = NSClassFromString(sourceClassName);
+	}
+	
+	if(typeToCreate == nil){
+		return nil;
+	}
+	
+	id returnObject = [[[typeToCreate alloc]init]autorelease];
+	[NSValueTransformer transform:dictionary toObject:returnObject];
+	return returnObject;
+}
+
+@end
+
+
+@implementation NSArray (CKTransformAdditionsCreate)
+
++ (id)objectArrayFromDictionaryArray:(NSArray*)array{
+	NSMutableArray* results = [NSMutableArray array];
+	for(id o in array){
+		NSAssert([o isKindOfClass:[NSDictionary class]],@"invalid object type in array");
+		id object = [NSObject objectFromDictionary:o];
+		if(object){
+			[results addObject:object];
+		}
+	}
+	return results;
+}
+
+@end
+
+
 @implementation NSObject (CKTransformAdditions)
 
 + (SEL)convertFromObjectSelector:(id)object{
