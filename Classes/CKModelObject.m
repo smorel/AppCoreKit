@@ -70,7 +70,12 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 @end
 
 @implementation CKModelObject
+@synthesize uniqueId,modelName;
 
+
+- (void)uniqueIdMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
 
 + (id)model{
 	return [[[[self class]alloc]init]autorelease];

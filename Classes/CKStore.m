@@ -143,24 +143,7 @@
 	}
 	
 	// Insert attributes
-	
-	for (id key in [attributes allKeys]) {
-		NSAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
-		id value = [attributes objectForKey:key];
-		NSAssert([value isKindOfClass:[NSString class]], @"Attribute value must be of class NSString");
-		
-		BOOL created = NO;
-		CKAttribute *attribute = [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
-																			   predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (value == %@) AND (item == %@)", key, value, item]
-																		createIfNotFound:YES 
-																			  wasCreated:&created];
-		if (created) {
-			attribute.name = key;
-			attribute.value = value;		
-			[item addAttributesObject:attribute];
-		}
-	}
-	
+	[item updateAttributes:attributes];
 	return name;
 }
 
@@ -192,11 +175,23 @@
 }
 
 
+@end
+
+
+@implementation CKStore (CKStorePrivateAddition)
+
 - (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
 	return [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
-												   predicate:predicate
-											createIfNotFound:createIfNotFound 
-												  wasCreated:wasCreated];
+														 predicate:predicate
+												  createIfNotFound:createIfNotFound 
+														wasCreated:wasCreated];
+}
+
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
+	return [self.manager.objectContext fetchObjectForEntityForName:@"CKItem"
+														 predicate:predicate
+												  createIfNotFound:createIfNotFound 
+														wasCreated:wasCreated];
 }
 
 @end

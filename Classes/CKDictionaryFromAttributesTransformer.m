@@ -8,6 +8,7 @@
 
 #import "CKDictionaryFromAttributesTransformer.h"
 #import "CKAttribute.h"
+#import "CKItem.h"
 
 @implementation CKDictionaryFromAttributesTransformer
 

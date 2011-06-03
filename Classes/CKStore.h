@@ -44,7 +44,6 @@ typedef enum {
 
 @class CKCoreDataManager;
 @class CKDomain;
-@class CKAttribute;
 
 @interface CKStore : NSObject {
 	CKCoreDataManager *_manager;
@@ -80,6 +79,19 @@ typedef enum {
 - (NSArray *)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName;
 - (id)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName resultType:(CKStoreResultType)resultType;
 
+
+@end
+
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
 - (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
 
 @end

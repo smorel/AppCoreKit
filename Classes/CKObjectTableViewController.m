@@ -430,9 +430,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIView* view = [self createViewAtIndexPath:indexPath];
-	if([view isKindOfClass:[UITableViewCell class]] == NO){
-		int i =3;
-	}
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
 	
 	[self fetchMoreIfNeededAtIndexPath:indexPath];

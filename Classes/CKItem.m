@@ -40,8 +40,14 @@
 	for (id key in [attributes allKeys]) {
 		NSAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
 		id value = [attributes objectForKey:key];
-		NSAssert([value isKindOfClass:[NSString class]], @"Attribute value must be of class NSString");
-		[self updateAttributeNamed:(NSString*)key value:(NSString*)value];
+		if(value != nil){
+			if([value isKindOfClass:[NSString class]]){
+				[self updateAttributeNamed:(NSString*)key value:(NSString*)value];
+			}
+			else if([value isKindOfClass:[NSArray class]]){
+				[self updateAttributeNamed:(NSString*)key items:(NSArray*)value];
+			}
+		}
 	}
 }
 
@@ -54,6 +60,21 @@
 
 	attribute.name = name;
 	attribute.value = value;	
+	if (created) {
+		[self addAttributesObject:attribute];
+	}
+}
+
+- (void)updateAttributeNamed:(NSString*)name items:(NSArray*)items{
+	CKStore* store = [CKStore storeWithDomainName:self.domain.name];
+	BOOL created = NO;
+	
+	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (item == %@)", name, self] 
+											   createIfNotFound:YES wasCreated:&created];
+	
+	attribute.name = name;
+	[attribute removeItems:attribute.items];
+	[attribute addItems:[NSSet setWithArray:items]];
 	if (created) {
 		[self addAttributesObject:attribute];
 	}

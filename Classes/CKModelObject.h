@@ -50,7 +50,14 @@
 
 typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
+	BOOL _saving;
 }
+
+//This property is automatically set when serializing an object in core data
+@property (nonatomic,retain) NSString* uniqueId;
+
+//This property will get used to order items from core data
+@property (nonatomic,retain) NSString* modelName;
 
 + (id)model;
 
