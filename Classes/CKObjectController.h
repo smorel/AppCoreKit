@@ -33,6 +33,10 @@
 
 - (void)setDelegate:(id)delegate;//CKObjectControllerDelegate
 
+//For multithreading purpose all incoming event while locked should be ignored !!!
+- (void)lock;
+- (void)unlock;
+
 @end
 
 

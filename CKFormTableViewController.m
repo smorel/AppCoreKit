@@ -75,6 +75,20 @@
 	[formSection fetchRange:range];
 }
 
+- (void)lock{
+	for(int i=0;i<[self numberOfSections];++i){
+		CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:i];
+		[formSection lock];
+	}
+}
+
+- (void)unlock{
+	for(int i=0;i<[self numberOfSections];++i){
+		CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController.sections objectAtIndex:i];
+		[formSection unlock];
+	}
+}
+
 @end
 
 
@@ -124,6 +138,12 @@
 
 - (void)removeObjectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
+}
+
+- (void)lock{
+}
+
+- (void)unlock{
 }
 
 - (void)fetchRange:(NSRange)range{}
@@ -288,6 +308,14 @@
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
 	}
+}
+
+- (void)lock{
+	[_objectController lock];
+}
+
+- (void)unlock{
+	[_objectController unlock];
 }
 
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{

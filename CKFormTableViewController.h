@@ -36,6 +36,9 @@
 - (void)start;
 - (void)stop;
 
+- (void)lock;
+- (void)unlock;
+
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
 @end
 

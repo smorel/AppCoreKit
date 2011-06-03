@@ -54,6 +54,8 @@
 	
 	displayFeedSourceCell = NO;
 	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
+	locked = NO;
+	changedWhileLocked = NO;
 	
 	return self;
 }
@@ -183,6 +185,11 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
+	
+	if(locked){
+		changedWhileLocked = YES;
+		return;
+	}
 		
 	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
 	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
@@ -192,14 +199,14 @@
 	
 	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:YES];
+			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:NO];
 			return;
 		}
 	}
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 	if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-		[_delegate performSelectorOnMainThread:@selector(objectControllerDidBeginUpdating:) withObject:self waitUntilDone:YES];
+		[_delegate performSelectorOnMainThread:@selector(objectControllerDidBeginUpdating:) withObject:self waitUntilDone:NO];
 	}
 	//}
 	
@@ -228,19 +235,19 @@
 				}
 				
 				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-					[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:limitedObjects withObject:limitedIndexPaths waitUntilDone:YES];
+					[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:limitedObjects withObject:limitedIndexPaths waitUntilDone:NO];
 				}
 				break;
 			}
 			
 			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-				[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:newModels withObject:indexPaths waitUntilDone:YES];
+				[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:newModels withObject:indexPaths waitUntilDone:NO];
 			}
 			break;
 		}
 		case NSKeyValueChangeRemoval:{
 			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-				[_delegate performSelectorOnMainThread:@selector(objectController:removeObjects:atIndexPaths:) withObject:self withObject:oldModels withObject:indexPaths waitUntilDone:YES];
+				[_delegate performSelectorOnMainThread:@selector(objectController:removeObjects:atIndexPaths:) withObject:self withObject:oldModels withObject:indexPaths waitUntilDone:NO];
 			}
 			break;
 		}
@@ -248,10 +255,25 @@
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 	if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-		[_delegate performSelectorOnMainThread:@selector(objectControllerDidEndUpdating:) withObject:self waitUntilDone:YES];
+		[_delegate performSelectorOnMainThread:@selector(objectControllerDidEndUpdating:) withObject:self waitUntilDone:NO];
 	}
 	//}
 }
 
+- (void)lock{
+	locked = YES;
+	[[NSRunLoop currentRunLoop] cancelPerformSelectorsWithTarget:self];
+}
+
+- (void)unlock{
+	locked = NO;
+	if(changedWhileLocked){
+		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:NO];
+			return;
+		}
+		changedWhileLocked = NO;
+	}
+}
 
 @end

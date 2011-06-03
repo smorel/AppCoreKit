@@ -176,6 +176,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+	[self.objectController lock];
     [super viewWillAppear:animated];
 	
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
@@ -255,6 +256,7 @@
 	[self updateVisibleViewsIndexPath];
 	
 	_viewIsOnScreen = YES;
+	[self.objectController unlock];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

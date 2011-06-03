@@ -18,6 +18,8 @@
 	BOOL displayFeedSourceCell;
 	NSInteger numberOfObjectsToPrefetch;
 	NSInteger numberOfFeedObjectsLimit;
+	BOOL locked;
+	BOOL changedWhileLocked;
 }
 
 @property (nonatomic, assign) id delegate;
