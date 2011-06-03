@@ -14,8 +14,11 @@
 @interface CKModelObject (CKStoreAddition)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain;
+
 - (CKItem*)saveToDomainNamed:(NSString*)domain;
+- (void)deleteFromDomainNamed:(NSString*)domain;
 + (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain;
+
 + (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain;
 + (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain createIfNotFound:(BOOL)createIfNotFound;
 + (CKItem*)itemWithUniqueId:(NSString*) uniqueId inDomainNamed:(NSString*)domain;

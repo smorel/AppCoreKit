@@ -59,6 +59,14 @@
 	return dico;
 }
 
+- (void)deleteFromDomainNamed:(NSString*)domain{
+	CKItem* item = [CKModelObject itemWithObject:self inDomainNamed:domain];
+	if(item){
+		CKStore* store = [CKStore storeWithDomainName:domain];
+		[store deleteItems:[NSArray arrayWithObject:item]];
+	}
+}
+
 + (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain {
 	CKStore* store = [CKStore storeWithDomainName:@"test"];
 	BOOL created;
