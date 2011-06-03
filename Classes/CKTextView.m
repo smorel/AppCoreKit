@@ -116,6 +116,10 @@
 
 - (void)valueDidChange {
 	self.placeholderLabel.hidden = [self hasText];
+	
+	if ([self.delegate respondsToSelector:@selector(textViewValueChanged:)]) {
+		[self.delegate textViewValueChanged:self.text];
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

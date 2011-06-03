@@ -19,3 +19,11 @@
 - (void)updateHeight;
 
 @end
+
+//
+
+@protocol CKTextViewDelegate
+
+-(void)textViewValueChanged:(NSString*)text;
+
+@end
