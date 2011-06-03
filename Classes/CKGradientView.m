@@ -8,10 +8,11 @@
 
 #import "CKGradientView.h"
 #import "CKUIColorAdditions.h"
-#import <QuartzCore/QuartzCore.h>
 #import "CKUIImage+Transformations.h"
-
 #import "CKNSObject+Bindings.h"
+#import "CKNSArrayAdditions.h"
+
+#import <QuartzCore/QuartzCore.h>
 
 @implementation CKGradientViewUpdater
 @synthesize view = _view;
@@ -60,6 +61,8 @@
 @synthesize borderStyle = _borderStyle;
 @synthesize fillColor = _fillColor;
 @synthesize imageContentMode = _imageContentMode;
+@synthesize embossTopColor = _embossTopColor;
+@synthesize embossBottomColor = _embossBottomColor;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
@@ -100,6 +103,11 @@
 	[super setBackgroundColor:[UIColor clearColor]];
 }
 
+- (void)setBorderWidth:(CGFloat)width {
+	CGFloat scale = [[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1;
+	_borderWidth = 2 * width * scale;
+}
+
 - (void)dealloc {
 	[_updater release]; _updater = nil;
 	[_image release]; _image = nil;
@@ -107,8 +115,109 @@
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
 	[_borderColor release]; _borderColor = nil;
 	[_fillColor release]; _fillColor = nil;
+	[_embossTopColor release]; _embossTopColor = nil;
+	[_embossBottomColor release]; _embossBottomColor = nil;
 	[super dealloc];
 }
+
+#pragma mark - Emboss Paths
+
+- (CGMutablePathRef)topEmbossPath {
+	UIRectCorner roundedCorners = UIRectCornerAllCorners;
+	switch (self.corners) {
+		case CKRoundedCornerViewTypeTop:
+			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+			break;
+		case CKRoundedCornerViewTypeBottom:
+			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+			break;
+		case CKRoundedCornerViewTypeNone:
+			roundedCorners = 0;
+			break;
+		default:
+			break;
+	}
+	
+	CGFloat x = self.bounds.origin.x;
+	CGFloat y = self.bounds.origin.y;
+	CGFloat width = self.bounds.size.width;
+	CGFloat radius = self.roundedCornerSize;
+	CGMutablePathRef path = CGPathCreateMutable ();
+	
+	if (self.borderColor && (self.borderColor != [UIColor clearColor])) {
+		y += (self.borderWidth / 2);
+		x += (self.borderWidth / 2);
+		width -= (self.borderWidth / 2);
+	}
+	
+	CGPathMoveToPoint (path, nil, x, -1);
+	CGPathAddLineToPoint (path, nil, x, (roundedCorners & UIRectCornerTopLeft) ? radius : y);
+	if(roundedCorners & UIRectCornerTopLeft){
+		CGPathAddArcToPoint (path, nil, x, y, radius, y, radius);
+	}
+	CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (width - radius) : width, y);
+	if(roundedCorners & UIRectCornerTopRight){
+		CGPathAddArcToPoint (path, nil, width, y, width, radius, radius);
+	}
+	else{
+		CGPathMoveToPoint (path, nil, width, (roundedCorners & UIRectCornerTopRight) ? radius : y);
+	}
+	CGPathAddLineToPoint (path, nil, width, -1);
+	CGPathAddLineToPoint (path, nil, x, -1);
+	
+	CGPathCloseSubpath(path);
+	return path;
+}
+
+- (CGMutablePathRef)bottomEmbossPath {
+	UIRectCorner roundedCorners = UIRectCornerAllCorners;
+	switch (self.corners) {
+		case CKRoundedCornerViewTypeTop:
+			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+			break;
+		case CKRoundedCornerViewTypeBottom:
+			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+			break;
+		case CKRoundedCornerViewTypeNone:
+			roundedCorners = 0;
+			break;
+		default:
+			break;
+	}
+	
+	CGFloat x = self.bounds.origin.x;
+	CGFloat width = self.bounds.size.width;
+	CGFloat height = self.bounds.size.height;
+	CGFloat radius = self.roundedCornerSize;
+	CGMutablePathRef path = CGPathCreateMutable ();
+	
+	if ((self.borderColor && (self.borderColor != [UIColor clearColor])) && (self.borderStyle & CKGradientViewBorderTypeBottom)) {
+		height -= (self.borderWidth / 2);
+		x += (self.borderWidth / 2);
+		width -= (self.borderWidth / 2);
+	}
+	
+	CGPathMoveToPoint(path, nil, x, self.bounds.size.height + 1);
+	CGPathAddLineToPoint(path, nil, width, self.bounds.size.height + 1);
+	CGPathAddLineToPoint (path, nil, width, (roundedCorners & UIRectCornerBottomRight) ? (height - radius) : height);
+	if(roundedCorners & UIRectCornerBottomRight){
+		CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
+	}
+	CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : x, height);
+	if(roundedCorners & UIRectCornerBottomLeft){
+		CGPathMoveToPoint (path, nil, radius, height);
+		CGPathAddArcToPoint (path, nil, x, height, x, height - radius, radius);
+	}
+	else{
+		CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (height - radius) : height);
+	}
+	CGPathAddLineToPoint(path, nil, x, self.bounds.size.height + 1);
+	
+	CGPathCloseSubpath(path);
+	return path;
+}
+
+#pragma mark - Border Path
 
 - (CGMutablePathRef)generateBorderPath{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
@@ -320,7 +429,8 @@
 			CGContextRestoreGState(context);
 		}
 	}	
-						  
+	
+	// Gradient
 	if(self.gradientColors){
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
@@ -342,6 +452,35 @@
 		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
 	}
 	
+	// Top Emboss
+	if (_embossTopColor && (_embossTopColor != [UIColor clearColor])) {
+		CGContextSaveGState(gc);
+		if(clippingPath != nil){
+			CGContextAddPath(gc, clippingPath);
+			CGContextClip(gc);
+		}
+		CGContextSetShadowWithColor(gc, CGSizeMake(0, 1), 0, _embossTopColor.CGColor);
+		CGContextAddPath(gc, [self topEmbossPath]);
+		[[self.gradientColors objectAtIndex:0] setFill];
+		CGContextFillPath(gc);
+		CGContextRestoreGState(gc);
+	}
+	
+	// Bottom Emboss
+	if (_embossBottomColor && (_embossBottomColor != [UIColor clearColor])) {
+		CGContextSaveGState(gc);
+		if(clippingPath != nil){
+			CGContextAddPath(gc, clippingPath);
+			CGContextClip(gc);
+		}
+		CGContextSetShadowWithColor(gc, CGSizeMake(0, -1), 0, _embossBottomColor.CGColor);
+		CGContextAddPath(gc, [self bottomEmbossPath]);
+		[[self.gradientColors last] setFill];
+		CGContextFillPath(gc);
+		CGContextRestoreGState(gc);
+	}
+	
+	// Border
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor]){
 		[_borderColor setStroke];
 		CGContextSetLineWidth(gc, self.borderWidth);

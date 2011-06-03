@@ -39,6 +39,8 @@ typedef enum {
 	NSInteger _borderStyle;
 	
 	UIColor* _fillColor;
+	UIColor *_embossTopColor;
+	UIColor *_embossBottomColor;
 }
 
 @property (nonatomic, retain) NSArray *gradientColors;
@@ -48,5 +50,7 @@ typedef enum {
 @property (nonatomic, assign) CGFloat borderWidth;
 @property (nonatomic, assign) NSInteger borderStyle;
 @property (nonatomic, assign) UIViewContentMode imageContentMode;
+@property (nonatomic, retain) UIColor *embossTopColor;
+@property (nonatomic, retain) UIColor *embossBottomColor;
 
 @end
