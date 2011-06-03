@@ -199,14 +199,14 @@
 	
 	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:NO];
+			[_delegate objectControllerReloadData:self];
 			return;
 		}
 	}
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 	if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-		[_delegate performSelectorOnMainThread:@selector(objectControllerDidBeginUpdating:) withObject:self waitUntilDone:NO];
+		[_delegate objectControllerDidBeginUpdating:self];
 	}
 	//}
 	
@@ -235,19 +235,19 @@
 				}
 				
 				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-					[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:limitedObjects withObject:limitedIndexPaths waitUntilDone:NO];
+					[_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
 				}
 				break;
 			}
 			
 			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-				[_delegate performSelectorOnMainThread:@selector(objectController:insertObjects:atIndexPaths:) withObject:self withObject:newModels withObject:indexPaths waitUntilDone:NO];
+				[_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
 			}
 			break;
 		}
 		case NSKeyValueChangeRemoval:{
 			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-				[_delegate performSelectorOnMainThread:@selector(objectController:removeObjects:atIndexPaths:) withObject:self withObject:oldModels withObject:indexPaths waitUntilDone:NO];
+				[_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
 			}
 			break;
 		}
@@ -255,7 +255,7 @@
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
 	if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-		[_delegate performSelectorOnMainThread:@selector(objectControllerDidEndUpdating:) withObject:self waitUntilDone:NO];
+		[_delegate objectControllerDidEndUpdating:self];
 	}
 	//}
 }
@@ -269,8 +269,7 @@
 	locked = NO;
 	if(changedWhileLocked){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate performSelectorOnMainThread:@selector(objectControllerReloadData:) withObject:self waitUntilDone:NO];
-			return;
+			[_delegate objectControllerReloadData:self];
 		}
 		changedWhileLocked = NO;
 	}
