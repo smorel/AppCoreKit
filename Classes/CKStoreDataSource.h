@@ -59,6 +59,8 @@ typedef void (^CKStoreDataSourceSuccessBlock)();
 	CKStoreRequest* _request;
 }
 
++ (CKStoreDataSource*)dataSource;
+
 @property (nonatomic, copy) CKStoreDataSourceRequestBlock requestBlock;
 @property (nonatomic, copy) CKStoreDataSourceTransformBlock transformBlock;
 @property (nonatomic, copy) CKStoreDataSourceFailureBlock failureBlock;

@@ -14,6 +14,7 @@
 #import "CKNSDate+Conversions.h"
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 #define DebugLog 0
@@ -231,9 +232,7 @@
 @implementation CKNSStringToNSStringTransformer
 + (Class)transformedValueClass { return [NSString class]; }
 - (id)transformedValue:(id)value { 
-	if([value isKindOfClass:[NSNull class]]) 
-		return nil; 
-	return (NSString*)value; 
+	return [NSValueTransformer transform:value toClass:[NSString class]];
 }
 @end
 

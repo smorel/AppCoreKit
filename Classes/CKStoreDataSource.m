@@ -159,6 +159,10 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 @synthesize storeDelegate = _storeDelegate;
 @synthesize request = _request;
 
++ (CKStoreDataSource*)dataSource{
+	return [[[CKStoreDataSource alloc]init]autorelease];
+}
+
 - (void)dealloc {
 	[self cancelFetch];
 	self.requestBlock = nil;
