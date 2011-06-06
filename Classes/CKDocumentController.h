@@ -16,7 +16,6 @@
 	BOOL observing;
 	BOOL animateFirstInsertion;
 	BOOL displayFeedSourceCell;
-	NSInteger numberOfObjectsToPrefetch;
 	NSInteger numberOfFeedObjectsLimit;
 	BOOL locked;
 	BOOL changedWhileLocked;

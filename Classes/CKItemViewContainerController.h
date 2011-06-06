@@ -62,11 +62,13 @@
 	NSMutableDictionary* _params;
 	
 	id _delegate;
+	int _numberOfObjectsToprefetch;
 }
 
 @property (nonatomic, retain) id objectController;
 @property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
 @property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) int numberOfObjectsToprefetch;
 
 //private property
 @property (nonatomic, retain) NSMutableDictionary* params;
@@ -100,6 +102,7 @@
 
 - (void)fetchObjectsInRange:(NSRange)range  forSection:(NSInteger)section;
 - (void)fetchMoreData;
+- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 
 //items controller interactions
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath;

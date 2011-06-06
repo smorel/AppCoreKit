@@ -34,10 +34,12 @@
 @synthesize weakViews = _weakViews;
 @synthesize params = _params;
 @synthesize delegate = _delegate;
+@synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 
 
 #pragma mark Initialization
 - (void)postInit{
+	_numberOfObjectsToprefetch = 10;
 }
 
 - (id)init {
@@ -288,12 +290,6 @@
 	return flags;
 }
 
-- (void)fetchObjectsInRange:(NSRange)range forSection:(NSInteger)section{
-	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
-		[_objectController fetchRange:range forSection:section];
-	}
-}
-
 - (void)fetchMoreData{
 	//Fetch data if needed
 	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
@@ -314,6 +310,19 @@
 	for(NSNumber* numSection in [maxIndexPaths allKeys]){
 		NSNumber* numRow = [maxIndexPaths objectForKey:numSection];
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:[numRow intValue] inSection:[numSection intValue]]];
+	}
+}
+
+- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section];
+	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
+		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
+	}
+}
+
+- (void)fetchObjectsInRange:(NSRange)range forSection:(NSInteger)section{
+	if([_objectController respondsToSelector:@selector(fetchRange:forSection:)]){
+		[_objectController fetchRange:range forSection:section];
 	}
 }
 

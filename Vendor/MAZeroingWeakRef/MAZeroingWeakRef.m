@@ -381,15 +381,9 @@ static BOOL IsKVOSubclass(id obj)
 static Class CreatePlainCustomSubclass(Class class)
 {
     NSString *newName = [NSString stringWithFormat: @"%s_MAZeroingWeakRefSubclass", class_getName(class)];
-	if([newName isEqualToString:@"UITableViewLabel_MAZeroingWeakRefSubclass"]){
-		int i =3;
-	}
     const char *newNameC = [newName UTF8String];
     
     Class subclass = objc_allocateClassPair(class, newNameC, 0);
-	if(subclass == nil){
-		int i =3;
-	}
     
     Method release = class_getInstanceMethod(class, @selector(release));
     Method dealloc = class_getInstanceMethod(class, @selector(dealloc));

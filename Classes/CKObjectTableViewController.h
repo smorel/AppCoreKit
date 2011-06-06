@@ -16,7 +16,6 @@
 	
 	int _currentPage;
 	int _numberOfPages;
-	int _numberOfObjectsToprefetch;
 	
 	BOOL _scrolling;
 	BOOL _editable;
@@ -49,7 +48,6 @@
 @property (nonatomic, assign) BOOL moveOnKeyboardNotification;
 @property (nonatomic, assign) int currentPage;
 @property (nonatomic, assign) int numberOfPages;
-@property (nonatomic, assign) int numberOfObjectsToprefetch;
 @property (nonatomic, assign, readonly) BOOL scrolling;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, assign) BOOL searchEnabled;
@@ -61,7 +59,6 @@
 @property (nonatomic, retain) UIBarButtonItem *rightButton;
 @property (nonatomic, retain) UIBarButtonItem *leftButton;
 
-- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 

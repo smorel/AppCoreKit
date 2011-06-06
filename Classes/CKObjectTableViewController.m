@@ -34,7 +34,6 @@
 @implementation CKObjectTableViewController
 @synthesize currentPage = _currentPage;
 @synthesize numberOfPages = _numberOfPages;
-@synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 @synthesize moveOnKeyboardNotification = _moveOnKeyboardNotification;
@@ -127,7 +126,6 @@
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_viewIsOnScreen = NO;
-	_numberOfObjectsToprefetch = 10;
 }
 
 - (void)dealloc {
@@ -424,13 +422,6 @@
 	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
 	
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
-}
-
-- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	int numberOfRows = [self tableView:self.tableView numberOfRowsInSection:indexPath.section];
-	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
-	}
 }
 
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{

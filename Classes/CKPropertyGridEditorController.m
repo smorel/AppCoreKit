@@ -118,7 +118,7 @@
 	CKUIBarButtonItemWithInfo* button = (CKUIBarButtonItemWithInfo*)sender;
 	CKDocumentCollection* collection = [button.userInfo objectForKey:@"collection"];
 	Class type = [[button.userInfo objectForKey:@"class"]pointerValue];
-	CKObjectTableViewController* controller = [button.userInfo objectForKey:@"controller"];
+	//CKObjectTableViewController* controller = [button.userInfo objectForKey:@"controller"];
 	
 	id object = [[[type alloc]init]autorelease];
 	[collection addObjectsFromArray:[NSArray arrayWithObject:object]];

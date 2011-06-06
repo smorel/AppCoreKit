@@ -31,7 +31,6 @@
 
 @implementation CKObjectCarouselViewController
 @synthesize carouselView = _carouselView;
-@synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
 
@@ -257,13 +256,6 @@
 }
 
 #pragma mark CKObjectCarouselViewController
-
-- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section];
-	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
-		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
-	}
-}
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
 	return [self.carouselView viewAtIndexPath:indexPath];
