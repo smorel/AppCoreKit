@@ -10,6 +10,8 @@
 #import <objc/runtime.h>
 #import "CKNSObject+Invocation.h"
 #import "CKLocalization.h"
+#import "CKDebug.h"
+#import "CKDocumentCollection.h"
 
 static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
 
@@ -100,6 +102,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
 				[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+				CKDebugLog(@"register <%p> as observer on <%p,%@>",self,self,property.name);
 			}
 			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
 			   || [NSObject isKindOf:property.type parentType:[NSSet class]]){
@@ -130,6 +133,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			
 			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
+				CKDebugLog(@"unregister <%p> as observer on <%p,%@>",self,self,property.name);
 				[self removeObserver:self forKeyPath:property.name];
 			}
 			
@@ -344,7 +348,16 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:other property:property];
 			if(metaData.copiable){
 				id value = [other valueForKey:property.name];
-				if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
+				if([value isKindOfClass:[CKDocumentCollection class]]){
+					CKDocumentCollection* collection = value;
+					value = [[property.type alloc]init];
+					NSMutableArray* copiedObjects = [NSMutableArray array];
+					for(id object in [collection allObjects]){
+						[copiedObjects addObject:[object copy]];
+					}
+					[value addObjectsFromArray:copiedObjects];
+				}
+				else if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
 					if([value isKindOfClass:[NSArray class]]){
 						NSArray* array = value;
 						value = [[property.type alloc]init];

@@ -440,7 +440,7 @@ NSString* CKSerializerIDTag = @"@id";
 		if(object != nil){
 			CKObjectProperty* property = [[CKObjectProperty alloc]initWithObject:target keyPath:descriptor.name];
 			[NSValueTransformer transform:object inProperty:property];
-			[property release];
+			[property autorelease];
 		}
 	}
 }
@@ -722,8 +722,15 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (id)convertFromNSArray:(NSArray*)components{
-	NSAssert([components count] == 1,@"could convert array with 1 element to object");
-	return [NSObject objectFromDictionary:[components objectAtIndex:0]];
+	if([components count] == 0){
+		return nil;
+	}
+	else if([components count] == 1){
+		return [NSObject objectFromDictionary:[components objectAtIndex:0]];
+	}
+	else{
+		NSAssert(NO,@"too much elements in array");
+	}
 }
 
 @end

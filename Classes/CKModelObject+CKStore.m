@@ -49,7 +49,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
 					CKModelObject* model = (CKModelObject*)subObject;
 					
-					CKItem* item = [CKModelObject itemWithObject:model inDomainNamed:domain createIfNotFound:YES];
+					CKItem* item = [model saveToDomainNamed:domain];
 					[result addObject:item];
 				}
 				[dico setObject:result forKey:propertyName];
@@ -58,7 +58,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				CKModelObject* model = (CKModelObject*)propertyValue;
 				
 				NSMutableArray* result = [NSMutableArray array];
-				CKItem* item = [CKModelObject itemWithObject:model inDomainNamed:domain createIfNotFound:YES];
+				CKItem* item = [model saveToDomainNamed:domain];
 				[result addObject:item];
 				[dico setObject:result forKey:propertyName];
 			}
@@ -107,6 +107,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 		if(self.modelName == nil){
 			self.modelName = self.uniqueId;
 		}
+		[CKModelObject registerObject:self withUniqueId:self.uniqueId];
 		item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
 	}
 	else{
@@ -143,12 +144,16 @@ NSMutableDictionary* CKModelObjectManager = nil;
 }
 
 + (void)releaseObject:(id)sender target:(id)target{
+	CKDebugLog(@"delete object <%p> of type <%@> with id %@",target,[target class],[target uniqueId]);
 	[CKModelObjectManager removeObjectForKey:[target uniqueId]];
 }
 
 + (CKModelObject*)objectWithUniqueId:(NSString*)uniqueId{
 	MAZeroingWeakRef* objectRef = [CKModelObjectManager objectForKey:uniqueId];
 	id object = [objectRef target];
+	if(objectRef != nil){
+		CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
+	}
 	return object;
 }
 
@@ -165,6 +170,8 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	MAZeroingWeakRef* objectRef = [[MAZeroingWeakRef alloc]initWithTarget:object];
 	[objectRef setDelegate:self action:@selector(releaseObject:target:)];
 	[CKModelObjectManager setObject:objectRef forKey:uniqueId];
+	
+	CKDebugLog(@"Register object <%p> of type <%@> with id %@",object,[object class],uniqueId);
 }
 
 @end

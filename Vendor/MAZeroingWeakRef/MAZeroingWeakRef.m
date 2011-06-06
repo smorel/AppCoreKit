@@ -476,8 +476,9 @@ static void EnsureCustomSubclass(id obj)
         // only set the class if the current one is its superclass
         // otherwise it's possible that it returns something farther up in the hierarchy
         // and so there's no need to set it then
-        if(class_getSuperclass(subclass) == class)
-            object_setClass(obj, subclass);
+        if(class_getSuperclass(subclass) == classToRegister){
+			object_setClass(obj, subclass);
+		}
     }
 }
 

@@ -16,18 +16,8 @@
 @implementation CKDocumentArray
 @synthesize objects = _objects;
 
-- (void)setObjects:(NSMutableArray*)array{
-	//explicitely Make a clone
-	[_objects release];
-	_objects = [[NSMutableArray arrayWithArray:array]retain];
-}
-
-
 - (void)objectsMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.creatable = YES;
-	
-	//deepCopy + retain will make the array to duplicate all the objects from the source
-	metaData.deepCopy = YES;
 }
 
 - (NSArray*)allObjects{
