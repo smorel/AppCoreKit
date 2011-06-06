@@ -381,9 +381,15 @@ static BOOL IsKVOSubclass(id obj)
 static Class CreatePlainCustomSubclass(Class class)
 {
     NSString *newName = [NSString stringWithFormat: @"%s_MAZeroingWeakRefSubclass", class_getName(class)];
+	if([newName isEqualToString:@"UITableViewLabel_MAZeroingWeakRefSubclass"]){
+		int i =3;
+	}
     const char *newNameC = [newName UTF8String];
     
     Class subclass = objc_allocateClassPair(class, newNameC, 0);
+	if(subclass == nil){
+		int i =3;
+	}
     
     Method release = class_getInstanceMethod(class, @selector(release));
     Method dealloc = class_getInstanceMethod(class, @selector(dealloc));
@@ -439,7 +445,7 @@ static Class CreateCustomSubclass(Class class, id obj)
         if(isKVO)
         {
             classToSubclass = class_getSuperclass(class);
-            newClass = [gCustomSubclassMap objectForKey: classToSubclass];
+            newClass = [gCustomSubclassMap objectForKey: [NSString stringWithUTF8String:class_getName(classToSubclass)]];
         }
         
         if(!newClass)
@@ -458,11 +464,18 @@ static void EnsureCustomSubclass(id obj)
     if(!GetCustomSubclass(obj))
     {
         Class class = object_getClass(obj);
-        Class subclass = [gCustomSubclassMap objectForKey: class];
+		Class classToRegister = class;
+		BOOL isKVO = IsKVOSubclass(obj);
+        if(isKVO)
+        {
+            classToRegister = class_getSuperclass(class);
+		}
+		
+        Class subclass = [gCustomSubclassMap objectForKey: [NSString stringWithUTF8String:class_getName(classToRegister)]];
         if(!subclass)
         {
             subclass = CreateCustomSubclass(class, obj);
-            [gCustomSubclassMap setObject: subclass forKey: class];
+            [gCustomSubclassMap setObject: subclass forKey: [NSString stringWithUTF8String:class_getName(classToRegister)]];
             [gCustomSubclasses addObject: subclass];
         }
         
