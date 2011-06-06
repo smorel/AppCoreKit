@@ -9,6 +9,7 @@
 #import "CKStoreDomainExplorer.h"
 #import <CloudKit/CKStore.h>
 #import <CloudKit/CKItem.h>
+#import <CloudKit/CKAttribute.h>
 #import "CKStoreItemExplorer.h"
 
 @implementation CKStoreDomainExplorer
@@ -113,7 +114,13 @@
     }
 
 	CKItem *item = [_items objectAtIndex:indexPath.row];
-    cell.textLabel.text = item.name;
+	CKAttribute* typeAttribute = [item attributeNamed:@"@class" createIfNotFound:NO];
+	if(typeAttribute == nil){
+		cell.textLabel.text = item.name;
+	}
+	else{
+		cell.textLabel.text = [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name];
+	}
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", item.createdAt];
 
     return cell;
