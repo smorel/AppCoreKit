@@ -57,15 +57,18 @@ typedef void (^CKStoreDataSourceSuccessBlock)();
 	CKStoreDataSourceSuccessBlock _successBlock;
 	id _storeDelegate;
 	CKStoreRequest* _request;
+	BOOL _executeInBackground;
 }
 
 + (CKStoreDataSource*)dataSource;
++ (CKStoreDataSource*)synchronousDataSource;
 
 @property (nonatomic, copy) CKStoreDataSourceRequestBlock requestBlock;
 @property (nonatomic, copy) CKStoreDataSourceTransformBlock transformBlock;
 @property (nonatomic, copy) CKStoreDataSourceFailureBlock failureBlock;
 @property (nonatomic, copy) CKStoreDataSourceSuccessBlock successBlock;
 @property (nonatomic, assign) id storeDelegate;
+@property (nonatomic, assign) BOOL executeInBackground;
 
 @end
 

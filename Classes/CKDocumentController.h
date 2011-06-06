@@ -26,7 +26,6 @@
 @property (nonatomic, assign) BOOL animateFirstInsertion;
 @property (nonatomic, assign) BOOL displayFeedSourceCell;
 @property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
-@property (nonatomic, assign) NSInteger numberOfObjectsToPrefetch;
 @property (nonatomic, retain) CKDocumentCollection* collection;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection;

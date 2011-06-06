@@ -99,6 +99,7 @@
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
 
 - (void)fetchObjectsInRange:(NSRange)range  forSection:(NSInteger)section;
+- (void)fetchMoreData;
 
 //items controller interactions
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath;

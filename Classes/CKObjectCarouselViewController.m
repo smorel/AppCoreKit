@@ -156,6 +156,7 @@
 	[self updateVisibleViewsRotation];
 	
 	[self.carouselView reloadData];
+	[self fetchMoreData];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{

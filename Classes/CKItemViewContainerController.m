@@ -294,6 +294,29 @@
 	}
 }
 
+- (void)fetchMoreData{
+	//Fetch data if needed
+	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
+	NSArray* visibleCells = [self visibleViews];
+	for(UIView* cell in visibleCells){
+		NSIndexPath *indexPath = [self indexPathForView:cell];
+		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:indexPath.section]];
+		if(maxForSection != nil){
+			if(indexPath.row > [maxForSection intValue]){
+				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+			}
+		}
+		else{
+			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+		}
+	}
+	
+	for(NSNumber* numSection in [maxIndexPaths allKeys]){
+		NSNumber* numRow = [maxIndexPaths objectForKey:numSection];
+		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:[numRow intValue] inSection:[numSection intValue]]];
+	}
+}
+
 #pragma mark View/Controller life management
 
 - (void)releaseView:(id)sender target:(id)target{

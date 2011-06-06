@@ -162,6 +162,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self updateVisibleViewsRotation];
 		
 	[self reloadData:NO];
+	[self fetchMoreData];
 }
 
 

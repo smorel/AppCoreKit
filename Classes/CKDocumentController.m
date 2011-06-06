@@ -18,7 +18,6 @@
 @synthesize displayFeedSourceCell;
 @synthesize numberOfFeedObjectsLimit;
 @synthesize animateFirstInsertion;
-@synthesize numberOfObjectsToPrefetch;
 
 - (void)dealloc{
 	if(_collection){
@@ -44,7 +43,6 @@
 	[super init];
 
 	self.numberOfFeedObjectsLimit = 0;
-	self.numberOfObjectsToPrefetch = 10;
 	self.collection = theCollection;
 	
 	if(theCollection){
@@ -64,16 +62,6 @@
 	if(_collection && !observing){
 		observing = YES;
 		[_collection addObserver:self];
-		if([_collection count] <= 0){
-			CKFeedSource* feedSource = _collection.feedSource;
-			if(feedSource){
-				NSInteger count = [_collection count];
-				NSInteger requested = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,numberOfObjectsToPrefetch) : numberOfObjectsToPrefetch;
-				if(requested > count){
-					[feedSource fetchRange:NSMakeRange(count, requested - count)];
-				}
-			}
-		}
 	}
 }
 

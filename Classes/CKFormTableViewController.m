@@ -329,18 +329,14 @@
 	return section;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings 
-								numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell{
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.objectController.numberOfObjectsToPrefetch = numberOfObjectsToPrefetch;
 	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
 	return section;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title 
-								numberOfObjectsToPrefetch:(NSInteger)numberOfObjectsToPrefetch displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings 
-																				 numberOfObjectsToPrefetch:numberOfObjectsToPrefetch displayFeedSourceCell:displayFeedSourceCell];
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings displayFeedSourceCell:displayFeedSourceCell];
 	section.headerTitle = title;
 	return section;
 }
@@ -440,8 +436,9 @@
 		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
 		   && indexPath.section == sectionIndex){
 			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-			NSAssert(controller != nil,@"invalid controller");
-			[controller applyStyle];
+			if(controller != nil){
+				[controller applyStyle];
+			}
 		}
 	}
 	
@@ -566,22 +563,21 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-	[super viewWillAppear:animated];
-	
-	/*for(CKFormSectionBase* section in _sections){
-		[section updateStyleForNonNewVisibleCells];
-	}*/
-	
 	for(CKFormSectionBase* section in _sections){
 		[section start];
-	}
+	 }
+	
+	[super viewWillAppear:animated];
 }
 
 - (void)reload{
-	[super reload];
-	for(CKFormSectionBase* section in _sections){
-		[section updateStyleForNonNewVisibleCells];
+	if(self.viewIsOnScreen){
+		for(CKFormSectionBase* section in _sections){
+			[section updateStyleForNonNewVisibleCells];
+			[section start];
+		}
 	}
+	[super reload];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -605,10 +601,6 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
-	
-	if(self.viewIsOnScreen){
-		[section start];
-	}
 	[_sections addObject:section];
 	return section;
 }
@@ -635,11 +627,6 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
-	
-	if(self.viewIsOnScreen){
-		[section start];
-	}
-	
 	[_sections insertObject:section atIndex:index];
 	return section;
 }
@@ -650,11 +637,6 @@
 		self.sections = [NSMutableArray array];
 	}
 	section.parentController = self;
-	
-	if(self.viewIsOnScreen){
-		[section start];
-	}
-	
 	[_sections insertObject:section atIndex:index];
 	return section;
 	

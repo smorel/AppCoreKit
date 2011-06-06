@@ -158,9 +158,22 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 @dynamic range;
 @synthesize storeDelegate = _storeDelegate;
 @synthesize request = _request;
+@synthesize executeInBackground = _executeInBackground;
 
 + (CKStoreDataSource*)dataSource{
 	return [[[CKStoreDataSource alloc]init]autorelease];
+}
+
++ (CKStoreDataSource*)synchronousDataSource{
+	CKStoreDataSource* source = [CKStoreDataSource dataSource];
+	source.executeInBackground = NO;
+	return source;
+}
+
+- (id)init{
+	[super init];
+	self.executeInBackground = YES;
+	return self;
 }
 
 - (void)dealloc {
@@ -191,8 +204,13 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 	
 	if (self.request) {
 		self.request.delegate = self;
-		[self.request startAsynchronous];
 		self.isFetching = YES;
+		if(_executeInBackground){
+			[self.request startAsynchronous];
+		}
+		else{
+			[self.request start];
+		}
 		return YES;
 	}
 	

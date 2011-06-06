@@ -257,6 +257,15 @@
 	
 	_viewIsOnScreen = YES;
 	[self.objectController unlock];
+	
+	[self fetchMoreData];
+}
+
+- (void)reload{
+	if(self.viewIsOnScreen){
+		[super reload];
+		[self fetchMoreData];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -431,8 +440,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIView* view = [self createViewAtIndexPath:indexPath];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
-	
-	[self fetchMoreIfNeededAtIndexPath:indexPath];
 	[self updateNumberOfPages];
 	
 	return (UITableViewCell*)view;
@@ -643,26 +650,7 @@
 		self.currentPage = page;
 	}
 	
-	//Fetch data if needed
-	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
-	NSArray* visibleCells = [self.tableView visibleCells];
-	for(UITableViewCell* cell in visibleCells){
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:indexPath.section]];
-		if(maxForSection != nil){
-			if(indexPath.row > [maxForSection intValue]){
-				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
-			}
-		}
-		else{
-			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
-		}
-	}
-	
-	for(NSNumber* numSection in [maxIndexPaths allKeys]){
-		NSNumber* numRow = [maxIndexPaths objectForKey:numSection];
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:[numRow intValue] inSection:[numSection intValue]]];
-	}
+	[self fetchMoreData];
 }
 
 - (void)updateNumberOfPages{
