@@ -104,6 +104,23 @@
 	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedByKeys:keys range:range];
 }
 
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {
+	return [self fetchAttributesWithFormat:predicateFormat arguments:arguments range:NSMakeRange(0,0) sortedByKeys:[NSArray arrayWithObject:@"createdAt"]];
+}
+
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys{
+	// Adds the "domain scope" for the predicate, equivalent to the format string
+	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
+	
+	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	if(arguments != nil){
+		[predicateArguments addObjectsFromArray:arguments];
+	}
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat argumentArray:predicateArguments];
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKAttribute" predicate:predicate sortedByKeys:keys range:range];
+}
+
 #pragma mark CKStore Count Items
 
 - (NSUInteger)countItems {

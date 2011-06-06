@@ -30,28 +30,41 @@
 	NSArray* allProperties = [self allPropertyNames];
 	for(NSString* propertyName in allProperties){
 		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
-		id propertyValue = [property value];
-		if([propertyValue isKindOfClass:[CKDocumentCollection class]]
-		   || [propertyValue isKindOfClass:[NSArray class]]
-		   || [propertyValue isKindOfClass:[NSSet class]]){
-			NSArray* allObjects = propertyValue;
-			if([propertyValue isKindOfClass:[NSArray class]] == NO){
-				allObjects = [propertyValue allObjects];
+		CKClassPropertyDescriptor* descriptor = [property descriptor];
+		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		if( (metaData  && metaData.serializable == NO) || descriptor.isReadOnly == YES){}
+		else{
+			id propertyValue = [property value];
+			if([propertyValue isKindOfClass:[CKDocumentCollection class]]
+			   || [propertyValue isKindOfClass:[NSArray class]]
+			   || [propertyValue isKindOfClass:[NSSet class]]){
+				NSArray* allObjects = propertyValue;
+				if([propertyValue isKindOfClass:[NSArray class]] == NO){
+					allObjects = [propertyValue allObjects];
+				}
+				NSMutableArray* result = [NSMutableArray array];
+				for(id subObject in allObjects){
+					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
+					CKModelObject* model = (CKModelObject*)subObject;
+					
+					CKItem* item = [CKModelObject itemWithObject:model inDomainNamed:domain createIfNotFound:YES];
+					[result addObject:item];
+				}
+				[dico setObject:result forKey:propertyName];
 			}
-			NSMutableArray* result = [NSMutableArray array];
-			for(id subObject in allObjects){
-				NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
-				CKModelObject* model = (CKModelObject*)subObject;
+			else if([propertyValue isKindOfClass:[CKModelObject class]]){
+				CKModelObject* model = (CKModelObject*)propertyValue;
 				
+				NSMutableArray* result = [NSMutableArray array];
 				CKItem* item = [CKModelObject itemWithObject:model inDomainNamed:domain createIfNotFound:YES];
 				[result addObject:item];
+				[dico setObject:result forKey:propertyName];
 			}
-			[dico setObject:result forKey:propertyName];
-		}
-		else{
-			id value = [NSValueTransformer transformProperty:property toClass:[NSString class]];
-			if(value){
-				[dico setObject:value forKey:propertyName];
+			else{
+				id value = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+				if([value isKindOfClass:[NSString class]]){
+					[dico setObject:value forKey:propertyName];
+				}
 			}
 		}
 	}
@@ -68,7 +81,7 @@
 }
 
 + (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain {
-	CKStore* store = [CKStore storeWithDomainName:@"test"];
+	CKStore* store = [CKStore storeWithDomainName:domain];
 	BOOL created;
 	CKItem *item = [store fetchItemWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", object.modelName, domain]
 				 createIfNotFound:YES wasCreated:&created];
@@ -95,10 +108,11 @@
 		item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
 	}
 	else{
-		item = [CKModelObject itemWithObject:self inDomainNamed:@"test"];
-		NSAssert(item != nil,@"item not found");
-		item.name = self.modelName;
-		[item updateAttributes:[self attributesDictionaryForDomainNamed:domain]];
+		item = [CKModelObject itemWithObject:self inDomainNamed:domain];
+		if(item != nil){
+			item.name = self.modelName;
+			[item updateAttributes:[self attributesDictionaryForDomainNamed:domain]];
+		}
 	}		
 	_saving = NO;
 	return item;
@@ -111,24 +125,19 @@
 + (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain createIfNotFound:(BOOL)createIfNotFound{
 	CKItem* item = [CKModelObject itemWithUniqueId:object.uniqueId inDomainNamed:domain];
 	if(item == nil && createIfNotFound){
-		return [CKModelObject createItemWithObject:object inDomainNamed:domain];
+		return [object saveToDomainNamed:domain];
 	}
 	return item;
 }
 
 + (CKItem*)itemWithUniqueId:(NSString*)theUniqueId inDomainNamed:(NSString*)domain{
 	CKStore* store = [CKStore storeWithDomainName:domain];
-	NSArray *res = [store fetchItemsWithPredicateFormat:[NSString stringWithFormat:@"(ANY attributes.name == 'uniqueId') AND (ANY attributes.value == '%@')",theUniqueId] arguments:nil];
+	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",theUniqueId] arguments:nil];
 	if([res count] != 1){
 		CKDebugLog(@"Warning : no object found in domain '%@' with uniqueId '%@'",domain,theUniqueId);
 		return nil;
 	}
-	return [res lastObject];	
-}
-
-+ (CKStoreRequest*)requestForObjectsOfType:(Class)type inDomainNamed:(NSString*)domain range:(NSRange)range{
-	//TODO
-	return nil;
+	return [[res lastObject]item];	
 }
 
 @end

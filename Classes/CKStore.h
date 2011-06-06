@@ -61,6 +61,9 @@ typedef enum {
 - (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments;
 - (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments limit:(NSUInteger)limit;
 - (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys;
+
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments;
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys;
 //
 
 - (NSUInteger)countItems;

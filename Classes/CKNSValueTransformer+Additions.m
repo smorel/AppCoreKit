@@ -691,6 +691,11 @@ NSString* CKSerializerIDTag = @"@id";
 	return returnObject;
 }
 
++ (id)convertFromNSArray:(NSArray*)components{
+	NSAssert([components count] == 1,@"could convert array with 1 element to object");
+	return [NSObject objectFromDictionary:[components objectAtIndex:0]];
+}
+
 @end
 
 
