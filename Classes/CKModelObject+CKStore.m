@@ -16,7 +16,9 @@
 #import <CloudKit/CKObjectProperty.h>
 #import <CloudKit/CKNSValueTransformer+Additions.h>
 #import <CloudKit/CKNSStringAdditions.h>
+#import "MAZeroingWeakRef.h"
 
+NSMutableDictionary* CKModelObjectManager = nil;
 
 @implementation CKModelObject (CKStoreAddition)
 
@@ -138,6 +140,31 @@
 		return nil;
 	}
 	return [[res lastObject]item];	
+}
+
++ (void)releaseObject:(id)sender target:(id)target{
+	[CKModelObjectManager removeObjectForKey:[target uniqueId]];
+}
+
++ (CKModelObject*)objectWithUniqueId:(NSString*)uniqueId{
+	MAZeroingWeakRef* objectRef = [CKModelObjectManager objectForKey:uniqueId];
+	id object = [objectRef target];
+	return object;
+}
+
++ (void)registerObject:(CKModelObject*)object withUniqueId:(NSString*)uniqueId{
+	if(uniqueId == nil){
+		CKDebugLog(@"Trying to register an object with no uniqueId : %@",object);
+		return;
+	}
+	
+	if(CKModelObjectManager == nil){
+		CKModelObjectManager = [[NSMutableDictionary alloc]init];
+	}
+	
+	MAZeroingWeakRef* objectRef = [[MAZeroingWeakRef alloc]initWithTarget:object];
+	[objectRef setDelegate:self action:@selector(releaseObject:target:)];
+	[CKModelObjectManager setObject:objectRef forKey:uniqueId];
 }
 
 @end

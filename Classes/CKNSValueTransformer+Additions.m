@@ -12,6 +12,8 @@
 #import "CKNSDate+Conversions.h"
 #import "CKLocalization.h"
 
+#import "CKModelObject+CKStore.h"
+
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	NSArray* components = [strValues componentsSeparatedByString:@","];
@@ -380,7 +382,21 @@ NSString* CKSerializerIDTag = @"@id";
 		if(sourceClassName != nil){
 			typeToCreate = NSClassFromString(sourceClassName);
 		}
-		target = [[[typeToCreate alloc]init]autorelease];
+		
+		
+		if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
+			id uniqueId = [source valueForKeyPath:@"uniqueId"];
+			if([uniqueId isKindOfClass:[NSString class]]){
+				target = [CKModelObject objectWithUniqueId:uniqueId];
+			}
+			if(target == nil){
+				target = [[[typeToCreate alloc]init]autorelease];
+				[CKModelObject registerObject:target withUniqueId:uniqueId];
+			}
+		}
+		else{
+			target = [[[typeToCreate alloc]init]autorelease];
+		}
 	}
 	
 	[NSValueTransformer transform:source toObject:target];
@@ -686,7 +702,21 @@ NSString* CKSerializerIDTag = @"@id";
 		return nil;
 	}
 	
-	id returnObject = [[[typeToCreate alloc]init]autorelease];
+	id returnObject = nil;
+	if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
+		id uniqueId = [dictionary valueForKeyPath:@"uniqueId"];
+		if([uniqueId isKindOfClass:[NSString class]]){
+			returnObject = [CKModelObject objectWithUniqueId:uniqueId];
+		}
+		if(returnObject == nil){
+			returnObject = [[[typeToCreate alloc]init]autorelease];
+			[CKModelObject registerObject:returnObject withUniqueId:uniqueId];
+		}
+	}
+	else{
+		returnObject = [[[typeToCreate alloc]init]autorelease];
+	}
+	
 	[NSValueTransformer transform:dictionary toObject:returnObject];
 	return returnObject;
 }
