@@ -157,6 +157,20 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	return object;
 }
 
++ (CKModelObject*)loadObjectWithUniqueId:(NSString*)uniqueId{
+	CKModelObject* obj = [self objectWithUniqueId:uniqueId];
+	if(obj != nil)
+		return obj;
+	
+	CKStore* store = [CKStore storeWithDomainName:@"whatever"];
+	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",uniqueId] arguments:nil];
+	if([res count] == 1){
+		CKItem* item = (CKItem*)[[res lastObject]item];
+		return [NSObject objectFromDictionary:[item propertyListRepresentation]];
+	}
+	return nil;
+}
+
 + (void)registerObject:(CKModelObject*)object withUniqueId:(NSString*)uniqueId{
 	if(uniqueId == nil){
 		CKDebugLog(@"Trying to register an object with no uniqueId : %@",object);
