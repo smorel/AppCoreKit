@@ -445,8 +445,8 @@ static Class CreateCustomSubclass(Class class, id obj)
         if(!newClass)
         {
             newClass = CreatePlainCustomSubclass(classToSubclass);
-            if(isKVO)
-                SetSuperclass(class, newClass); // EVIL EVIL EVIL
+           /* if(isKVO)
+                SetSuperclass(class, newClass); // EVIL EVIL EVIL*/
         }
         
         return newClass;
@@ -477,7 +477,13 @@ static void EnsureCustomSubclass(id obj)
         // otherwise it's possible that it returns something farther up in the hierarchy
         // and so there's no need to set it then
         if(class_getSuperclass(subclass) == classToRegister){
+			if([obj respondsToSelector:@selector(willOverrideClass)]){
+				[obj performSelector:@selector(willOverrideClass)];
+			}
 			object_setClass(obj, subclass);
+			   if([obj respondsToSelector:@selector(didOverrideClass)]){
+				[obj performSelector:@selector(didOverrideClass)];
+			}
 		}
     }
 }
