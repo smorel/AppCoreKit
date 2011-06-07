@@ -11,6 +11,7 @@
 #import <CloudKit/CKItem.h>
 #import <CloudKit/CKAttribute.h>
 #import "CKStoreItemExplorer.h"
+#import "CKLocalization.h"
 
 @implementation CKStoreDomainExplorer
 
@@ -48,11 +49,21 @@
 }
 
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
+	UIBarButtonItem* clearButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Clear") style:UIBarButtonItemStylePlain target:self action:@selector(clear:)]autorelease];
+	[self.navigationItem setRightBarButtonItem:clearButton animated:NO];
 }
-*/
+
+- (void)clear:(id)sender{
+	CKStore* store = [CKStore storeWithDomainName:_domain];
+	[store deleteItems:self.items];
+	[self.items removeAllObjects];
+	[self.tableView reloadData];
+}
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];

@@ -731,6 +731,7 @@ NSString* CKSerializerIDTag = @"@id";
 	else{
 		NSAssert(NO,@"too much elements in array");
 	}
+	return (id)nil;
 }
 
 @end
