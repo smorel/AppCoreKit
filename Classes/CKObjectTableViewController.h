@@ -19,7 +19,6 @@
 	
 	BOOL _scrolling;
 	BOOL _editable;
-	BOOL _searchEnabled;
 	
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -34,8 +33,12 @@
 	NSIndexPath* _indexPathToReachAfterRotation;
 	NSMutableDictionary* _headerViewsForSections;
 	
+	//search
+	BOOL _searchEnabled;
 	UISearchBar* _searchBar;
 	CGFloat _liveSearchDelay;
+	UISegmentedControl* _segmentedControl;
+	NSDictionary* _segmentDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
 	
 	CGRect _frameBeforeKeyboardNotification;
 	BOOL _viewIsOnScreen;
@@ -53,6 +56,10 @@
 @property (nonatomic, assign) BOOL searchEnabled;
 @property (nonatomic, assign,readonly) BOOL viewIsOnScreen;
 @property (nonatomic, assign) CGFloat liveSearchDelay;
+
+@property (nonatomic, retain) UISearchBar* searchBar;
+@property (nonatomic, retain) UISegmentedControl* segmentedControl;
+@property (nonatomic, retain) NSDictionary* segmentDefinition;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;

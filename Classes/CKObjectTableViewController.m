@@ -21,7 +21,6 @@
 @interface CKObjectTableViewController ()
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
-@property (nonatomic, retain) UISearchBar* searchBar;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -47,6 +46,8 @@
 @synthesize searchBar = _searchBar;
 @synthesize liveSearchDelay = _liveSearchDelay;
 @synthesize viewIsOnScreen = _viewIsOnScreen;
+@synthesize segmentedControl = _segmentedControl;
+@synthesize segmentDefinition = _segmentDefinition;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -144,6 +145,10 @@
 	_headerViewsForSections = nil;
 	[_searchBar release];
 	_searchBar = nil;
+	[_segmentedControl release];
+	_segmentedControl = nil;
+	[_segmentDefinition release];
+	_segmentDefinition = nil;
     [super dealloc];
 }
 
@@ -173,10 +178,20 @@
 	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
 }
 
+- (void)segmentedControlChange:(id)sender{
+	NSInteger index = _segmentedControl.selectedSegmentIndex;
+	id key = [[_segmentDefinition allKeys]objectAtIndex:index];
+	id value = [_segmentDefinition objectForKey:key];
+	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+	CKCallback* callback = (CKCallback*)value;
+	[callback execute:self];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[self.objectController lock];
     [super viewWillAppear:animated];
 	
+	CGFloat tableViewOffset = 0;
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,44)]autorelease];
 		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -184,13 +199,28 @@
 		//self.tableView.tableHeaderView = _searchBar;
 		[self.view addSubview:_searchBar];
 		
-		if(self.tableViewContainer.frame.origin.y < 44){
-			self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + 44,
-													   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - 44);
-		}
+		tableViewOffset += 44;
 		
 		[[[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self]autorelease];
 	}		
+	
+	//adds segmented control
+	if(_segmentDefinition && [_segmentDefinition count] > 0 && _segmentedControl == nil){
+		self.segmentedControl = [[[UISegmentedControl alloc]initWithItems:[_segmentDefinition allKeys]]autorelease];
+		_segmentedControl.selectedSegmentIndex = 0;
+		_segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
+		_segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[_segmentedControl addTarget:self
+							 action:@selector(segmentedControlChange:)
+				   forControlEvents:UIControlEventValueChanged];
+		[self.view addSubview:_segmentedControl];
+		tableViewOffset += 44;
+	}
+	
+	if(self.tableViewContainer.frame.origin.y < tableViewOffset){
+		self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
+												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
