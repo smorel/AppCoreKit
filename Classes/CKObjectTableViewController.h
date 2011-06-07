@@ -38,7 +38,8 @@
 	UISearchBar* _searchBar;
 	CGFloat _liveSearchDelay;
 	UISegmentedControl* _segmentedControl;
-	NSDictionary* _segmentDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
+	NSDictionary* _searchScopeDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
+	id _defaultSearchScope;
 	
 	CGRect _frameBeforeKeyboardNotification;
 	BOOL _viewIsOnScreen;
@@ -59,7 +60,8 @@
 
 @property (nonatomic, retain) UISearchBar* searchBar;
 @property (nonatomic, retain) UISegmentedControl* segmentedControl;
-@property (nonatomic, retain) NSDictionary* segmentDefinition;
+@property (nonatomic, retain) NSDictionary* searchScopeDefinition;
+@property (nonatomic, retain) id defaultSearchScope;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;

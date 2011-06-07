@@ -47,7 +47,8 @@
 @synthesize liveSearchDelay = _liveSearchDelay;
 @synthesize viewIsOnScreen = _viewIsOnScreen;
 @synthesize segmentedControl = _segmentedControl;
-@synthesize segmentDefinition = _segmentDefinition;
+@synthesize searchScopeDefinition = _searchScopeDefinition;
+@synthesize defaultSearchScope = _defaultSearchScope;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -84,6 +85,15 @@
 	if(_liveSearchDelay > 0){
 		[self performSelector:@selector(delayedSearchWithText:) withObject:searchBar.text afterDelay:_liveSearchDelay];
 	}
+}
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
+	NSInteger index = selectedScope;
+	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
+	id value = [_searchScopeDefinition objectForKey:key];
+	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+	CKCallback* callback = (CKCallback*)value;
+	[callback execute:self];	
 }
 
 - (void)printDebug:(NSString*)txt{
@@ -147,8 +157,11 @@
 	_searchBar = nil;
 	[_segmentedControl release];
 	_segmentedControl = nil;
-	[_segmentDefinition release];
-	_segmentDefinition = nil;
+	[_searchScopeDefinition release];
+	_searchScopeDefinition = nil;
+	[_defaultSearchScope release];
+	_defaultSearchScope = nil;
+	
     [super dealloc];
 }
 
@@ -180,8 +193,8 @@
 
 - (void)segmentedControlChange:(id)sender{
 	NSInteger index = _segmentedControl.selectedSegmentIndex;
-	id key = [[_segmentDefinition allKeys]objectAtIndex:index];
-	id value = [_segmentDefinition objectForKey:key];
+	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
+	id value = [_searchScopeDefinition objectForKey:key];
 	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
 	CKCallback* callback = (CKCallback*)value;
 	[callback execute:self];
@@ -201,13 +214,22 @@
 		
 		tableViewOffset += 44;
 		
+		if(_searchScopeDefinition){
+			_searchBar.showsScopeBar = YES;
+			_searchBar.scopeButtonTitles = [_searchScopeDefinition allKeys];
+			if(_defaultSearchScope){
+				_searchBar.selectedScopeButtonIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
+			}
+		}
 		[[[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self]autorelease];
 	}		
 	
-	//adds segmented control
-	if(_segmentDefinition && [_segmentDefinition count] > 0 && _segmentedControl == nil){
-		self.segmentedControl = [[[UISegmentedControl alloc]initWithItems:[_segmentDefinition allKeys]]autorelease];
-		_segmentedControl.selectedSegmentIndex = 0;
+	//adds segmented control on top if search disable and found _searchScopeDefinition
+	if(self.searchEnabled == NO && _searchScopeDefinition && [_searchScopeDefinition count] > 0 && _segmentedControl == nil){
+		self.segmentedControl = [[[UISegmentedControl alloc]initWithItems:[_searchScopeDefinition allKeys]]autorelease];
+		if(_defaultSearchScope){
+			_segmentedControl.selectedSegmentIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
+		}
 		_segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
 		_segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[_segmentedControl addTarget:self
