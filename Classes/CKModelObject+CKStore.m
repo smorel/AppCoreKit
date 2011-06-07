@@ -137,14 +137,14 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",theUniqueId] arguments:nil];
 	if([res count] != 1){
-		CKDebugLog(@"Warning : no object found in domain '%@' with uniqueId '%@'",domain,theUniqueId);
+		//CKDebugLog(@"Warning : no object found in domain '%@' with uniqueId '%@'",domain,theUniqueId);
 		return nil;
 	}
 	return [[res lastObject]item];	
 }
 
 + (void)releaseObject:(id)sender target:(id)target{
-	CKDebugLog(@"delete object <%p> of type <%@> with id %@",target,[target class],[target uniqueId]);
+	//CKDebugLog(@"delete object <%p> of type <%@> with id %@",target,[target class],[target uniqueId]);
 	[CKModelObjectManager removeObjectForKey:[target uniqueId]];
 }
 
@@ -152,7 +152,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	MAZeroingWeakRef* objectRef = [CKModelObjectManager objectForKey:uniqueId];
 	id object = [objectRef target];
 	if(objectRef != nil){
-		CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
+		//CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
 	}
 	return object;
 }
@@ -173,7 +173,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 
 + (void)registerObject:(CKModelObject*)object withUniqueId:(NSString*)uniqueId{
 	if(uniqueId == nil){
-		CKDebugLog(@"Trying to register an object with no uniqueId : %@",object);
+		//CKDebugLog(@"Trying to register an object with no uniqueId : %@",object);
 		return;
 	}
 	
@@ -185,7 +185,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	[objectRef setDelegate:self action:@selector(releaseObject:target:)];
 	[CKModelObjectManager setObject:objectRef forKey:uniqueId];
 	
-	CKDebugLog(@"Register object <%p> of type <%@> with id %@",object,[object class],uniqueId);
+	//CKDebugLog(@"Register object <%p> of type <%@> with id %@",object,[object class],uniqueId);
 }
 
 @end
