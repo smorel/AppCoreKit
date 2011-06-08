@@ -32,7 +32,7 @@
 
 - (void)onswitch{
 	CKObjectProperty* model = self.value;
-	UISwitch* s = (UISwitch*)[self.tableViewCell.accessoryView viewWithTag:SwitchTag];
+	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
 	[model setValue:[NSNumber numberWithBool:s.on]];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 }
@@ -41,7 +41,7 @@
 	CKObjectProperty* model = self.value;
 	BOOL bo = [[model value] boolValue];
 	
-	UISwitch* s = (UISwitch*)[self.tableViewCell.accessoryView viewWithTag:SwitchTag];
+	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
 	[s setOn:bo animated:YES];
 }
 
@@ -60,6 +60,18 @@
 	[super setupCell:cell];
 	CKObjectProperty* model = self.value;
 	
+	//reset the view
+	cell.accessoryView = nil;
+	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	if(textField){
+		[textField removeFromSuperview];
+	}
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+	if(s){
+		[s removeFromSuperview];
+	}
+	
+	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	cell.textLabel.text = _(descriptor.name);
 	
@@ -94,7 +106,12 @@
 		case CKClassPropertyDescriptorTypeCppBool:{
 			UISwitch *toggleSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
 			toggleSwitch.tag = SwitchTag;
-			cell.accessoryView = toggleSwitch;
+			if(self.cellStyle == CKTableViewCellStyleValue3){
+				[cell.contentView addSubview:toggleSwitch];
+			}
+			else{
+				cell.accessoryView = toggleSwitch;
+			}
 			break;
 		}
 	}	
@@ -102,8 +119,10 @@
 	[self layoutCell:cell];
 	
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
+	s = (UISwitch*)[cell viewWithTag:SwitchTag];
 	if(s){
+		BOOL bo = [[model value]boolValue];
+		[s setOn:bo animated:NO];
 		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 		[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
 	}
@@ -127,7 +146,7 @@
 
 - (void)layoutCell:(UITableViewCell *)cell{
 	[super layoutCell:cell];
-	UISwitch* s = (UISwitch*)[cell.accessoryView viewWithTag:SwitchTag];
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
 	if(s == nil){
 		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 		//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
@@ -135,6 +154,14 @@
 			textField.frame = [self value3FrameForCell:cell];
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		//}
+	}
+	else{
+		if(self.cellStyle == CKTableViewCellStyleValue3){
+			CGRect frame3 = [self value3FrameForCell:cell];
+			CGFloat height = cell.bounds.size.height;
+			CGRect rectForSwitch = CGRectMake(frame3.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
+			s.frame = rectForSwitch;
+		}
 	}
 }
 
