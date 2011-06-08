@@ -15,6 +15,8 @@ extern NSString* CKObjectViewControllerFactoryItemInit;
 extern NSString* CKObjectViewControllerFactoryItemSetup;
 extern NSString* CKObjectViewControllerFactoryItemSelection;
 extern NSString* CKObjectViewControllerFactoryItemAccessorySelection;
+extern NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder;
+extern NSString* CKObjectViewControllerFactoryItemResignFirstResponder;
 extern NSString* CKObjectViewControllerFactoryItemFlags;
 extern NSString* CKObjectViewControllerFactoryItemFilter;
 extern NSString* CKObjectViewControllerFactoryItemSize;
@@ -34,6 +36,8 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 - (CKCallback*)setupCallback;
 - (CKCallback*)selectionCallback;
 - (CKCallback*)accessorySelectionCallback;
+- (CKCallback*)becomeFirstResponderCallback;
+- (CKCallback*)resignFirstResponderCallback;
 
 - (void)setCreateBlock:(CKCallbackBlock)block;
 - (void)setInitBlock:(CKCallbackBlock)block;
@@ -43,6 +47,8 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 - (void)setFlagsBlock:(CKCallbackBlock)block;
 - (void)setFilterBlock:(CKCallbackBlock)block;
 - (void)setSizeBlock:(CKCallbackBlock)block;
+- (void)setBecomeFirstResponderBlock:(CKCallbackBlock)block;
+- (void)setResignFirstResponderBlock:(CKCallbackBlock)block;
 
 
 - (void)setCreateTarget:(id)target action:(SEL)action;
@@ -53,6 +59,8 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 - (void)setFlagsTarget:(id)target action:(SEL)action;
 - (void)setFilterTarget:(id)target action:(SEL)action;
 - (void)setSizeTarget:(id)target action:(SEL)action;
+- (void)setBecomeFirstResponderTarget:(id)target action:(SEL)action;
+- (void)setResignFirstResponderTarget:(id)target action:(SEL)action;
 
 - (void)setFlags:(CKItemViewFlags)flags;
 - (void)setFilterPredicate:(NSPredicate*)predicate;

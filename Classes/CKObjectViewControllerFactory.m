@@ -97,6 +97,8 @@ NSString* CKObjectViewControllerFactoryItemAccessorySelection = @"CKObjectViewCo
 NSString* CKObjectViewControllerFactoryItemFlags = @"CKObjectViewControllerFactoryItemFlags";
 NSString* CKObjectViewControllerFactoryItemFilter = @"CKObjectViewControllerFactoryItemFilter";
 NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactoryItemSize";
+NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder = @"CKObjectViewControllerFactoryItemBecomeFirstResponder";
+NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectViewControllerFactoryItemResignFirstResponder";
 
 @implementation CKObjectViewControllerFactoryItem
 @synthesize controllerClass = _controllerClass;
@@ -148,6 +150,14 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 
 - (CKCallback*)accessorySelectionCallback{
 	return [_params objectForKey:CKObjectViewControllerFactoryItemAccessorySelection];
+}
+
+- (CKCallback*)becomeFirstResponderCallback{
+	return [_params objectForKey:CKObjectViewControllerFactoryItemBecomeFirstResponder];
+}
+
+- (CKCallback*)resignFirstResponderCallback{
+	return [_params objectForKey:CKObjectViewControllerFactoryItemResignFirstResponder];
 }
 
 - (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
@@ -233,6 +243,8 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	controller.setupCallback = [self setupCallback];
 	controller.selectionCallback = [self selectionCallback];
 	controller.accessorySelectionCallback = [self accessorySelectionCallback];
+	controller.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
+	controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
 	
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];
@@ -278,6 +290,14 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemSize];
 }
 
+- (void)setBecomeFirstResponderBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemBecomeFirstResponder];
+}
+
+- (void)setResignFirstResponderBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
+}
+
 
 - (void)setCreateTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemCreate];
@@ -311,6 +331,13 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemSize];
 }
 
+- (void)setBecomeFirstResponderTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemBecomeFirstResponder];
+}
+
+- (void)setResignFirstResponderTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
+}
 
 - (void)setFlags:(CKItemViewFlags)flags{
 	[self.params setObject:[NSNumber numberWithInt:flags] forKey:CKObjectViewControllerFactoryItemFlags];

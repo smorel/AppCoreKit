@@ -34,6 +34,8 @@ typedef NSUInteger CKItemViewFlags;
 	CKCallback* _setupCallback;
 	CKCallback* _selectionCallback;
 	CKCallback* _accessorySelectionCallback;
+	CKCallback* _becomeFirstResponderCallback;
+	CKCallback* _resignFirstResponderCallback;
 	
 	UIView* _view;
 }
@@ -51,6 +53,8 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, retain) CKCallback* setupCallback;
 @property (nonatomic, retain) CKCallback* selectionCallback;
 @property (nonatomic, retain) CKCallback* accessorySelectionCallback;
+@property (nonatomic, retain) CKCallback* becomeFirstResponderCallback;
+@property (nonatomic, retain) CKCallback* resignFirstResponderCallback;
 
 - (NSString*)identifier;
 
@@ -70,5 +74,7 @@ typedef NSUInteger CKItemViewFlags;
 - (void)didSelectAccessoryView;
 
 - (void)initView:(UIView*)view;
+- (void)didBecomeFirstResponder;
+- (void)didResignFirstResponder;
 
 @end

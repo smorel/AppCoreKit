@@ -157,10 +157,12 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+	[self didResignFirstResponder];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

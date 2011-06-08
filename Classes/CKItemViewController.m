@@ -26,6 +26,8 @@
 @synthesize setupCallback = _setupCallback;
 @synthesize selectionCallback = _selectionCallback;
 @synthesize accessorySelectionCallback = _accessorySelectionCallback;
+@synthesize becomeFirstResponderCallback = _becomeFirstResponderCallback;
+@synthesize resignFirstResponderCallback = _resignFirstResponderCallback;
 
 - (void)dealloc {
 	[self clearBindingsContext];
@@ -39,6 +41,8 @@
 	[_initCallback release];
 	[_setupCallback release];
 	[_selectionCallback release];
+	[_becomeFirstResponderCallback release];
+	[_resignFirstResponderCallback release];
 	
 	_target = nil;
 	_action = nil;
@@ -125,6 +129,18 @@
 - (NSString *)identifier {
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
+}
+
+- (void)didBecomeFirstResponder{
+	if(_becomeFirstResponderCallback != nil){
+		[_becomeFirstResponderCallback execute:self];
+	}
+}
+
+- (void)didResignFirstResponder{
+	if(_resignFirstResponderCallback != nil){
+		[_resignFirstResponderCallback execute:self];
+	}
 }
 
 @end

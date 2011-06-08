@@ -57,10 +57,17 @@
 
 
 + (void)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
-	UITableView* tableView = [controller parentTableView];
-	UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
-	UIResponder* responder = [[controller class]responderInView:tableViewCell];
-	[responder becomeFirstResponder];
+	if([controller.parentController isKindOfClass:[CKObjectTableViewController class]]){
+		CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.parentController;
+		
+		UITableView* tableView = [controller parentTableView];
+		UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+	
+		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
+		NSAssert(controllerNew != nil,@"invalid controller");
+		UIResponder* responder = [[controllerNew class]responderInView:tableViewCell];
+		[responder becomeFirstResponder];
+	}
 }
 
 + (BOOL)activateNextResponderFromController:(CKTableViewCellController*)controller{
