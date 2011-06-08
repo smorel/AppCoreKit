@@ -37,4 +37,6 @@
 - (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
 - (Class)tableViewCellControllerType;
 
+- (BOOL)isReadOnly;
+
 @end

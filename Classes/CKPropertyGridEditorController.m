@@ -45,16 +45,39 @@
 
 - (id)initWithObjectProperties:(NSArray*)theProperties{
 	[self init];
-	[self setup:theProperties];
+	[self setupWithProperties:theProperties];
 	return self;
 }
 
 - (id)initWithObject:(id)object representation:(NSDictionary*)representation{
-	if(representation == nil){
-		return [self initWithObject:object];
-	}
-	
 	[self init];
+	[self setupWithObject:object representation:representation];
+	return self;
+}
+
+- (id)initWithObject:(id)object{
+	[self init];
+	[self setupWithObject:object];
+	return self;
+}
+
+- (void)setupWithObject:(id)object{
+	NSArray* propertyDescriptors = [object allPropertyDescriptors];
+	NSMutableArray* theProperties = [NSMutableArray array];
+	for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
+		if(metaData.editable){
+			CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:object keyPath:descriptor.name]autorelease];
+			[theProperties insertObject:property atIndex:0];
+		}
+	}
+	[self setupWithProperties:theProperties];
+}
+
+- (void)setupWithObject:(id)object representation:(NSDictionary*)representation{
+	if(representation == nil){
+		return [self setupWithObject:object];
+	}
 	
 	self.sections = [NSMutableArray array];
 	for(NSString* sectionName in [representation allKeys]){
@@ -69,40 +92,18 @@
 		[self setup:theProperties inSection:section];
 		[self addSection:section];
 	}
-
-	return self;
 	
+	[self reload];
 }
 
-- (id)initWithObject:(id)object{
-	NSArray* propertyDescriptors = [object allPropertyDescriptors];
-	NSMutableArray* theProperties = [NSMutableArray array];
-	for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
-		if(metaData.editable){
-			CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:object keyPath:descriptor.name]autorelease];
-			[theProperties insertObject:property atIndex:0];
-		}
-	}
-	
-	return [self initWithObjectProperties:theProperties];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-	[super viewWillAppear:animated];
-}
-
-//- (CGSize)contentSizeForViewInPopover{
-//	return CGSizeMake(400,216);
-//}
-
-
-- (void)setup:(NSArray*)properties{
+- (void)setupWithProperties:(NSArray*)properties{
 	self.sections = [NSMutableArray array];
 	
 	CKFormSection* section = [CKFormSection section];
 	[self setup:properties inSection:section];
 	[self addSection:section];
+	
+	[self reload];
 }
 
 /*
@@ -207,7 +208,7 @@
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section{
 	for(CKObjectProperty* property in properties){
 		CKModelObjectPropertyMetaData* metaData = [property metaData];
-		if(metaData.editable == YES && [property descriptor].isReadOnly == NO){
+		if(metaData.editable == YES /*&& [property descriptor].isReadOnly == NO*/){
 			if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];

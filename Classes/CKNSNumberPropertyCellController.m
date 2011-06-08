@@ -89,16 +89,38 @@
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
-			UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-			textField.tag = 50000;
-			textField.borderStyle = UITextBorderStyleNone;
-			textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-			textField.clearButtonMode = UITextFieldViewModeAlways;
-			textField.delegate = self;
-			textField.keyboardType = UIKeyboardTypeDecimalPad;
-			textField.textAlignment = UITextAlignmentLeft;
-			textField.autocorrectionType = UITextAutocorrectionTypeNo;
-			[cell.contentView addSubview:textField];
+			if([model isReadOnly]){
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+				[NSObject endBindingsContext];
+			}
+			else{
+				UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+				textField.tag = 50000;
+				textField.borderStyle = UITextBorderStyleNone;
+				textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+				textField.clearButtonMode = UITextFieldViewModeAlways;
+				textField.delegate = self;
+				textField.keyboardType = UIKeyboardTypeDecimalPad;
+				textField.textAlignment = UITextAlignmentLeft;
+				textField.autocorrectionType = UITextAutocorrectionTypeNo;
+				[cell.contentView addSubview:textField];
+				
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
+				[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
+				[NSObject endBindingsContext];
+				
+				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+				textField.placeholder = _(placeholerText);
+				
+				if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+					textField.returnKeyType = UIReturnKeyNext;
+				}
+				else{
+					textField.returnKeyType = UIReturnKeyDone;
+				}
+			}
 	
 			break;
 		}
@@ -112,50 +134,37 @@
 			else{
 				cell.accessoryView = toggleSwitch;
 			}
+			
+			[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+			BOOL bo = [[model value]boolValue];
+			[s setOn:bo animated:NO];
+			[model.object bind:model.keyPath target:self action:@selector(onvalue)];
+			if([model isReadOnly]){
+				s.enabled = NO;
+			}
+			else{
+				s.enabled = YES;
+				[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+			}
+			[NSObject endBindingsContext];
 			break;
 		}
 	}	
-	
-	[self layoutCell:cell];
-	
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	s = (UISwitch*)[cell viewWithTag:SwitchTag];
-	if(s){
-		BOOL bo = [[model value]boolValue];
-		[s setOn:bo animated:NO];
-		[model.object bind:model.keyPath target:self action:@selector(onvalue)];
-		[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
-	}
-	else{
-		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
-		[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
-		[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
-		
-		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-		textField.placeholder = _(placeholerText);
-		
-		if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-			textField.returnKeyType = UIReturnKeyNext;
-		}
-		else{
-			textField.returnKeyType = UIReturnKeyDone;
-		}
-	}
-	[NSObject endBindingsContext];
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
 	[super layoutCell:cell];
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
-	if(s == nil){
-		UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	if(textField){
 		//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
 		//if(self.cellStyle == CKTableViewCellStyleValue3){
 			textField.frame = [self value3FrameForCell:cell];
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		//}
 	}
-	else{
+	
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+	if(s){
 		if(self.cellStyle == CKTableViewCellStyleValue3){
 			CGRect frame3 = [self value3FrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;

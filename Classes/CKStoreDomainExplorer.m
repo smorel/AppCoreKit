@@ -185,6 +185,11 @@
 */
 
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
+
 - (void)dealloc {
 	[_domain release];
 	[_items release];

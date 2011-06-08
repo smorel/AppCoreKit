@@ -19,6 +19,10 @@
 - (id)initWithObjectProperties:(NSArray*)properties;
 - (id)initWithObject:(id)object representation:(NSDictionary*)representation;
 - (id)initWithObject:(id)object;
-- (void)setup:(NSArray*)properties;
+
+
+- (void)setupWithObject:(id)object;
+- (void)setupWithObject:(id)object representation:(NSDictionary*)representation;
+- (void)setupWithProperties:(NSArray*)properties;
 
 @end

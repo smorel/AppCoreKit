@@ -189,6 +189,10 @@
 }
 */
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
 
 - (void)dealloc {
     [super dealloc];

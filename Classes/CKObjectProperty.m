@@ -276,4 +276,9 @@
 	return [NSString stringWithFormat:@"%@ \nkeyPath : %@",self.object,self.keyPath];
 }
 
+- (BOOL)isReadOnly{
+	CKClassPropertyDescriptor* descriptor = [self descriptor];
+	return descriptor.isReadOnly;
+}
+
 @end
