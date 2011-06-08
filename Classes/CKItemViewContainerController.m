@@ -173,11 +173,6 @@
 
 #pragma mark Interface Orientation Management
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
-}
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }

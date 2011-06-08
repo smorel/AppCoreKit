@@ -150,13 +150,17 @@
 			}
 		}			
 		
+		//ALLOW CREATION/REMOVE OF OBJECTS IN CONTAINERS 
+		//FOR OBJECTS NOT CONTAINER, WE SHOULD BE ABLE TO REMOVE AKA. SET TO NIL or ADD AKA. set value selecting a type
+		
 		id value = tableViewCellController.value;
 		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
 			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
 			value = [property value];
 		}
 		
-		if([value isKindOfClass:[CKDocumentCollection class]]){
+		if([value isKindOfClass:[CKDocumentCollection class]]
+		   || [value isKindOfClass:[NSArray class]]){
 			tableViewCellController.tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
 		}
 		
@@ -177,6 +181,8 @@
 			CKModelObjectPropertyMetaData* metaData = [property metaData];
 			contentType = [metaData contentType];
 		}
+		
+		//TODO SUPPORT VIRTUAL COLLECTION VIA CKOBJECTPROPERTY on NSARRAY ...
 
 		if([value isKindOfClass:[CKDocumentCollection class]]){
 			NSMutableArray* mappings = [NSMutableArray array]; 
