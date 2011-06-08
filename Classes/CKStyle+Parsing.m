@@ -8,6 +8,7 @@
 
 #import "CKStyle+Parsing.h"
 #import "CKUIColorAdditions.h"
+#import "CKLocalization.h"
 
 //TODO : HERE store the converted data in the key to convert only once !
 
@@ -88,7 +89,7 @@
 - (NSString*) stringForKey:(NSString*)key{
 	id object = [self objectForKey:key];
 	NSAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
-	return (NSString*)object;
+	return _((NSString*)object);
 }
 
 - (NSInteger) integerForKey:(NSString*)key{
@@ -104,6 +105,10 @@
 - (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property{
 	id object = [self objectForKey:key];
 	id transformedValue = [NSValueTransformer transform:object inProperty:property];
+	if([transformedValue isKindOfClass:[NSString class]]){
+		transformedValue = _((NSString*)transformedValue);
+		[property setValue:transformedValue];
+	}
 	if(transformedValue != nil){
 		[self setObject:transformedValue forKey:key];
 	}

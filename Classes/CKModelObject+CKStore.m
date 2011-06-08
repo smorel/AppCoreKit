@@ -63,6 +63,9 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				[dico setObject:result forKey:propertyName];
 			}
 			else{
+				if([propertyName isEqualToString:@"latitude"]){
+					int i = 3;
+				}
 				id value = [NSValueTransformer transformProperty:property toClass:[NSString class]];
 				if([value isKindOfClass:[NSString class]]){
 					[dico setObject:value forKey:propertyName];

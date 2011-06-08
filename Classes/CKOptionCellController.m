@@ -33,7 +33,8 @@
 
 - (NSString *)labelForValue:(id)value {
 	if (value == nil) return nil;
-	return self.labels ? [self.labels objectAtIndex:[self.values indexOfObject:value]] : [NSString stringWithFormat:@"%@", value];
+	NSInteger index = [self.values indexOfObject:value];
+	return (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%@", value];
 }
 
 //

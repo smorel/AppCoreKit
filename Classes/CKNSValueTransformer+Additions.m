@@ -14,6 +14,8 @@
 
 #import "CKModelObject+CKStore.h"
 
+#define AUTO_LOCALIZATION 0
+
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	NSArray* components = [strValues componentsSeparatedByString:@","];
@@ -276,7 +278,7 @@ NSString* CKSerializerIDTag = @"@id";
 		
 		if(selector != nil){
 			id result = [type performSelector:selector withObject:source withObject:[metaData.contentType description]];
-			if([result isKindOfClass:[NSString class]]){
+			if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 				result = _(result);
 			}
 			
@@ -308,7 +310,7 @@ NSString* CKSerializerIDTag = @"@id";
 	//if no conversion requiered, set the property directly
 	if([source isKindOfClass:type]){
 		id result = source;
-		if([result isKindOfClass:[NSString class]]){
+		if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 			result = _(result);
 		}
 		if(property != nil){
@@ -325,7 +327,7 @@ NSString* CKSerializerIDTag = @"@id";
 		if(selector != nil){
 			Class selectorClass = [[dico objectForKey:CKNSValueTransformerCacheClassTag]pointerValue];
 			id result = [selectorClass performSelector:selector withObject:source];
-			if([result isKindOfClass:[NSString class]]){
+			if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 				result = _(result);
 			}			
 			if(property != nil){
@@ -339,7 +341,7 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:type selector:selector];
 		id result = [type performSelector:selector withObject:source];
-		if([result isKindOfClass:[NSString class]]){
+		if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 			result = _(result);
 		}	
 		if(property != nil){
@@ -352,7 +354,7 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:[source class] selector:selector];
 		id result = [[source class] performSelector:selector withObject:source];
-		if([result isKindOfClass:[NSString class]]){
+		if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 			result = _(result);
 		}	
 		if(property != nil){
@@ -365,7 +367,7 @@ NSString* CKSerializerIDTag = @"@id";
 	if(selector != nil){
 		[NSValueTransformer registerConverterWithIdentifier:converterIdentifier selectorClass:[NSValueTransformer class] selector:selector];
 		id result = [[NSValueTransformer class] performSelector:selector withObject:source];
-		if([result isKindOfClass:[NSString class]]){
+		if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 			result = _(result);
 		}	
 		if(property != nil){
@@ -408,7 +410,7 @@ NSString* CKSerializerIDTag = @"@id";
 
 + (id)transform:(id)source toClass:(Class)type{
 	id result = [NSValueTransformer transform:source toClass:type inProperty:nil];
-	if([result isKindOfClass:[NSString class]]){
+	if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 		return _(result);
 	}
 	return result;
@@ -982,11 +984,12 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (NSString*)convertToNSString:(NSNumber*)n{
-	if(CKValueTransformerNumberFormatter == nil){
+	/*if(CKValueTransformerNumberFormatter == nil){
 		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
 		[CKValueTransformerNumberFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease]];
 	}
-	return [CKValueTransformerNumberFormatter stringFromNumber:n];
+	return [CKValueTransformerNumberFormatter stringFromNumber:n];*/
+	return [NSString stringWithFormat:@"%g",[n floatValue]];
 }
 
 @end
