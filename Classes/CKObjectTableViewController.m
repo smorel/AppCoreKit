@@ -207,7 +207,7 @@
 	CGFloat tableViewOffset = 0;
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
 		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice]orientation];
-		BOOL isPortrait = UIDeviceOrientationIsPortrait(deviceOrientation);
+		BOOL isPortrait = !UIDeviceOrientationIsLandscape(deviceOrientation);
 		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 		tableViewOffset += (!isIpad || (_searchScopeDefinition && isPortrait) ) ? 88 : 44;
 		
