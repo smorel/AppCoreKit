@@ -10,7 +10,11 @@
 
 
 @interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{	
-	CGFloat _accessoryViewSizeRatio;
+	UITextField* _textField;
+	UISwitch* _toggleSwitch;
 }
+
+@property (nonatomic,retain) UITextField* textField;
+@property (nonatomic,retain) UISwitch* toggleSwitch;
 
 @end

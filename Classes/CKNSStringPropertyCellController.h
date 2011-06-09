@@ -10,6 +10,9 @@
 
 
 @interface CKNSStringPropertyCellController : CKStandardCellController<UITextFieldDelegate> {
+	UITextField* _textField;
 }
+
+@property (nonatomic,retain) UITextField* textField;
 
 @end

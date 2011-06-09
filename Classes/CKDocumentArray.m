@@ -16,101 +16,13 @@
 @implementation CKDocumentArray
 @synthesize objects = _objects;
 
+- (void)postInit{
+	[super postInit];
+	self.property = [CKObjectProperty propertyWithObject:self keyPath:@"objects"];
+}
+
 - (void)objectsMetaData:(CKModelObjectPropertyMetaData*)metaData{
 	metaData.creatable = YES;
-}
-
-- (NSArray*)allObjects{
-	return [NSArray arrayWithArray:_objects];
-}
-
-- (NSInteger) count{
-	return [_objects count];
-}
-
-- (id)objectAtIndex:(NSInteger)index{
-	return [_objects objectAtIndex:index];
-}
-
-- (void)insertObjects:(NSArray *)theObjects atIndexes:(NSIndexSet *)indexes{
-	if([theObjects count] <= 0)
-		return;
-	
-    [_objects insertObjects:theObjects atIndexes:indexes];
-	self.count = [_objects count];
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
-	if(self.autosave){
-		[self save];
-	}
-	
-	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
-		[self.delegate documentCollectionDidChange:self];
-	}
-}
-
-- (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-	NSArray* toRemove = [_objects objectsAtIndexes:indexSet];
-	
-	[_objects removeObjectsAtIndexes:indexSet];
-	self.count = [_objects count];
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
-	
-	if(self.autosave){
-		[self save];
-	}	
-	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
-		[self.delegate documentCollectionDidChange:self];
-	}
-}
-
-- (void)removeAllObjects{
-	NSArray* theObjects = [NSArray arrayWithArray: _objects];
-	
-	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[_objects count])];
-	
-	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
-	[_objects removeAllObjects];
-	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:@"objects"];
-	self.count = [_objects count];
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
-	
-	if(self.autosave){
-		[self save];
-	}
-	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
-		[self.delegate documentCollectionDidChange:self];
-	}
-}
-
-- (BOOL)containsObject:(id)object{
-	return [_objects containsObject:object];
-}
-
-- (void)addObserver:(id)object{
-	[self addObserver:object forKeyPath:@"objects" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-}
-
-- (void)removeObserver:(id)object{
-	[self removeObserver:object forKeyPath:@"objects"];
-}
-
-- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
-	return [_objects filteredArrayUsingPredicate:predicate];
-}
-
-- (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-	id object = [_objects objectAtIndex:index];
-	[_objects removeObjectAtIndex:index];
-	[_objects insertObject:other atIndex:index];	
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
-	
-	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
-		[self.delegate documentCollectionDidChange:self];
-	}
 }
 
 @end

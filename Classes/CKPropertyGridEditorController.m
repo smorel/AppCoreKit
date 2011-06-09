@@ -13,6 +13,8 @@
 #import <CloudKit/CKNSObject+Bindings.h>
 #import <CloudKit/CKLocalization.h>
 #import <CloudKit/CKOptionCellController.h>
+#import "CKObjectPropertyArrayCollection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 @interface CKUIBarButtonItemWithInfo : UIBarButtonItem{
 	id userInfo;
@@ -162,28 +164,46 @@
 		if([value isKindOfClass:[CKDocumentCollection class]]
 		   || [value isKindOfClass:[NSArray class]]){
 			tableViewCellController.tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		}
+		else if(value == nil){
+			tableViewCellController.tableViewCell.detailTextLabel.text = @"nil";
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		else{
+			tableViewCellController.tableViewCell.detailTextLabel.text = [value description];
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		
 		tableViewCellController.tableViewCell.textLabel.text = title;
-		tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		return (id)nil;
 	}];
 	[item setFlags:CKItemViewFlagSelectable];
 	[item setSelectionBlock:^(id controller){
 		CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
+		
 		id value = tableViewCellController.value;
 		
 		Class contentType = nil;
 		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
 			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
-			value = [property value];
+			CKClassPropertyDescriptor* descriptor = [property descriptor];
+			
 			CKModelObjectPropertyMetaData* metaData = [property metaData];
 			contentType = [metaData contentType];
+			
+			//Wrap the array in a virtual collection
+			if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+				value = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
+			}		
+			else{
+				value = [property value];
+			}
 		}
 		
-		//TODO SUPPORT VIRTUAL COLLECTION VIA CKOBJECTPROPERTY on NSARRAY ...
-
 		if([value isKindOfClass:[CKDocumentCollection class]]){
 			NSMutableArray* mappings = [NSMutableArray array]; 
 			[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];

@@ -61,6 +61,9 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 
 + (id)model;
 
+//private
+- (void)postInit;
+
 @end
 
 @interface NSObject (CKModelObject)

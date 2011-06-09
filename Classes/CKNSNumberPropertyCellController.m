@@ -12,12 +12,15 @@
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
+#import "CKNSValueTransformer+Additions.h"
 
 #define TextEditTag 1
 #define SwitchTag 2
 #define LabelTag 3
 
 @implementation CKNSNumberPropertyCellController
+@synthesize textField = _textField;
+@synthesize toggleSwitch = _toggleSwitch;
 
 - (id)init{
 	[super init];
@@ -27,6 +30,8 @@
 
 -(void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[_textField release];
+	[_toggleSwitch release];
 	[super dealloc];
 }
 
@@ -47,13 +52,28 @@
 
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
-	[model setValue:value];
+	[NSValueTransformer transform:value inProperty:model];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	_accessoryViewSizeRatio = 2.0 / 3.0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	
+	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+	txtField.tag = 50000;
+	txtField.borderStyle = UITextBorderStyleNone;
+	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	txtField.clearButtonMode = UITextFieldViewModeAlways;
+	txtField.delegate = self;
+	txtField.keyboardType = UIKeyboardTypeDecimalPad;
+	txtField.textAlignment = UITextAlignmentLeft;
+	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+	self.textField = txtField;
+	
+	UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+	theSwitch.tag = SwitchTag;
+	self.toggleSwitch = theSwitch;
+	//creates textfiled and switch here and store them as property for stylesheets ...
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -70,6 +90,7 @@
 	if(s){
 		[s removeFromSuperview];
 	}
+	cell.detailTextLabel.text = nil;
 	
 	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
@@ -95,30 +116,22 @@
 				[NSObject endBindingsContext];
 			}
 			else{
-				UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-				textField.tag = 50000;
-				textField.borderStyle = UITextBorderStyleNone;
-				textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-				textField.clearButtonMode = UITextFieldViewModeAlways;
-				textField.delegate = self;
-				textField.keyboardType = UIKeyboardTypeDecimalPad;
-				textField.textAlignment = UITextAlignmentLeft;
-				textField.autocorrectionType = UITextAutocorrectionTypeNo;
-				[cell.contentView addSubview:textField];
+				
+				[cell.contentView addSubview:self.textField];
 				
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-				[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
-				[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
+				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+				[self.textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 				[NSObject endBindingsContext];
 				
 				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-				textField.placeholder = _(placeholerText);
+				self.textField.placeholder = _(placeholerText);
 				
 				if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-					textField.returnKeyType = UIReturnKeyNext;
+					self.textField.returnKeyType = UIReturnKeyNext;
 				}
 				else{
-					textField.returnKeyType = UIReturnKeyDone;
+					self.textField.returnKeyType = UIReturnKeyDone;
 				}
 			}
 	
@@ -126,27 +139,27 @@
 		}
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
-			UISwitch *toggleSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-			toggleSwitch.tag = SwitchTag;
-			if(self.cellStyle == CKTableViewCellStyleValue3){
-				[cell.contentView addSubview:toggleSwitch];
-			}
-			else{
-				cell.accessoryView = toggleSwitch;
-			}
-			
-			[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-			BOOL bo = [[model value]boolValue];
-			[s setOn:bo animated:NO];
-			[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 			if([model isReadOnly]){
-				s.enabled = NO;
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+				[NSObject endBindingsContext];
 			}
 			else{
-				s.enabled = YES;
-				[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+				
+				if(self.cellStyle == CKTableViewCellStyleValue3){
+					[cell.contentView addSubview:self.toggleSwitch];
+				}
+				else{
+					cell.accessoryView = self.toggleSwitch;
+				}
+				
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				BOOL bo = [[model value]boolValue];
+				[self.toggleSwitch setOn:bo animated:NO];
+				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
+				[self.toggleSwitch bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+				[NSObject endBindingsContext];
 			}
-			[NSObject endBindingsContext];
 			break;
 		}
 	}	

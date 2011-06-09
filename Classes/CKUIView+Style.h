@@ -61,9 +61,6 @@ extern NSString* CKStyleBorderStyle;
 
 @end
 
-@interface UIView (CKValueTransformer)
-@end
-
 @interface UIView (CKStyle) 
 
 - (void)applyStyle:(NSMutableDictionary*)style;
