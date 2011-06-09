@@ -64,6 +64,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	if([bindings count] > 0){
 		id binding = [[bindings lastObject]retain];
 		[bindings removeLastObject];
+		
+		if([binding respondsToSelector:@selector(reset)]){
+			[binding performSelector:@selector(reset)];
+		}
 		return binding;
 	}
 	
@@ -115,9 +119,9 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)unbind:(id)binding{
 	if([binding respondsToSelector:@selector(unbind)]){
 		[binding performSelector:@selector(unbind)];
-		if([binding respondsToSelector:@selector(reset)]){
-			[binding performSelector:@selector(reset)];
-		}
+	}
+	if([binding respondsToSelector:@selector(reset)]){
+		[binding performSelector:@selector(reset)];
 	}
 	[self unregister:binding];
 }
@@ -131,9 +135,9 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	for(id binding in bindings){
 		if([binding respondsToSelector:@selector(unbind)]){
 			[binding performSelector:@selector(unbind)];
-			if([binding respondsToSelector:@selector(reset)]){
-				[binding performSelector:@selector(reset)];
-			}
+		}
+		if([binding respondsToSelector:@selector(reset)]){
+			[binding performSelector:@selector(reset)];
 		}
 		
 		NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
