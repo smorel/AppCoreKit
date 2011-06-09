@@ -22,12 +22,16 @@
 	id _optionTableDelegate;
 	NSArray *_values;
 	NSArray *_labels;
-	NSInteger _selectedIndex;
+	NSMutableArray* _selectedIndexes;
+	BOOL _multiSelectionEnabled;
 }
 
 @property (nonatomic, assign) id optionTableDelegate;
 @property (nonatomic, readonly) NSInteger selectedIndex;
+@property (nonatomic, retain,readonly) NSMutableArray* selectedIndexes;
+@property (nonatomic, assign) BOOL multiSelectionEnabled;
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index;
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled;
 
 @end

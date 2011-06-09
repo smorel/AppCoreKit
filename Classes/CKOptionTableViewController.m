@@ -14,7 +14,7 @@
 
 @property (nonatomic, retain) NSArray *values;
 @property (nonatomic, retain) NSArray *labels;
-@property (nonatomic, readwrite) NSInteger selectedIndex;
+@property (nonatomic, retain, readwrite) NSMutableArray* selectedIndexes;
 
 - (void)setup;
 
@@ -26,7 +26,8 @@
 @synthesize optionTableDelegate = _optionTableDelegate;
 @synthesize values = _values;
 @synthesize labels = _labels;
-@synthesize selectedIndex = _selectedIndex;
+@synthesize selectedIndexes = _selectedIndexes;
+@synthesize multiSelectionEnabled = _multiSelectionEnabled;
 
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index {
@@ -35,8 +36,23 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
 		self.labels = labels;
-		self.selectedIndex = index;
 		self.stickySelection = YES;
+		self.multiSelectionEnabled = NO;
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
+		[self setup];
+	}
+	return self;	
+}
+
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelect{
+	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		self.values = values;
+		self.labels = labels;
+		self.stickySelection = !multiSelect;
+		self.multiSelectionEnabled = multiSelect;
+		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
 		[self setup];
 	}
 	return self;	
@@ -45,6 +61,7 @@
 - (void)dealloc {
 	[self.values release];
 	[self.labels release];
+	[self.selectedIndexes release];
     [super dealloc];
 }
 
@@ -53,7 +70,9 @@
 - (void)setup {
 	NSMutableArray *cells = [NSMutableArray arrayWithCapacity:self.values.count];
 	for (int i=0 ; i< self.values.count ; i++) {
-		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:(i == self.selectedIndex) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
+		NSNumber* index = [NSNumber numberWithInt:i];
+		
+		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
 		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(initCell:)] forKey:CKObjectViewControllerFactoryItemSetup];
 		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(selectCell:)] forKey:CKObjectViewControllerFactoryItemSelection];
 		[cells addObject:descriptor];
@@ -63,14 +82,14 @@
 
 - (id)initCell:(id)controller{
 	CKStandardCellController* standardController = (CKStandardCellController*)controller;
-	int i = standardController.indexPath.row;
-	if(i == self.selectedIndex){
+	NSNumber* index = [NSNumber numberWithInt:standardController.indexPath.row];
+	if([self.selectedIndexes containsObject:index]){
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
 	}
 	else{
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
 	}
-	standardController.text = self.labels ? [self.labels objectAtIndex:i] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:i]];
+	standardController.text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
 	return nil;
 }
 
@@ -78,10 +97,30 @@
 - (id)selectCell:(id)controller{
 	CKStandardCellController* standardController = (CKStandardCellController*)controller;
 	int i = standardController.indexPath.row;
-	self.selectedIndex = i;
-	if (self.optionTableDelegate && [self.optionTableDelegate respondsToSelector:@selector(optionTableViewController:didSelectValueAtIndex:)])
-		[self.optionTableDelegate optionTableViewController:self didSelectValueAtIndex:self.selectedIndex];
+	if(self.multiSelectionEnabled){
+		if([standardController.value intValue] == 1){
+			standardController.value = [NSNumber numberWithInt:0];
+			standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+			[self.selectedIndexes removeObject:[NSNumber numberWithInt:i]];
+		}
+		else{
+			standardController.value = [NSNumber numberWithInt:1];
+			standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+			[self.selectedIndexes addObject:[NSNumber numberWithInt:i]];
+		}
+	}
+	else{
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:i]];
+	}
+	if (self.optionTableDelegate && [self.optionTableDelegate respondsToSelector:@selector(optionTableViewController:didSelectValueAtIndex:)]){
+		[self.optionTableDelegate optionTableViewController:self didSelectValueAtIndex:i];
+	}
 	return nil;
+}
+
+- (NSInteger)selectedIndex{
+	NSAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
+	return [[self.selectedIndexes lastObject]intValue];
 }
 
 

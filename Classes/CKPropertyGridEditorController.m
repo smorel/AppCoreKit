@@ -259,6 +259,7 @@
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
 				[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
+					optionCellController.multiSelectionEnabled = YES;
 					optionCellController.value = [property value];
 					optionCellController.text = _(property.name);
 					optionCellController.values = [copyOfLabelsAndValues allValues];

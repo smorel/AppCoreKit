@@ -316,6 +316,8 @@
 		75661F18135E233C00E108AD /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75661F14135E233C00E108AD /* CKRoundedCornerView.m */; };
 		756834811314139E0039004D /* CKNetworkActivityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7568347F1314139E0039004D /* CKNetworkActivityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		756834821314139E0039004D /* CKNetworkActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 756834801314139E0039004D /* CKNetworkActivityManager.m */; };
+		7570D69113A16B1900CF08FA /* CKNSObjectPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */; };
+		7570D69213A16B1900CF08FA /* CKNSObjectPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */; };
 		758EC4B2132A985D000280FE /* CKNSObject+Bindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC4B0132A985D000280FE /* CKNSObject+Bindings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758EC4B3132A985D000280FE /* CKNSObject+Bindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 758EC4B1132A985D000280FE /* CKNSObject+Bindings.m */; };
 		758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 758EC4B4132A98F1000280FE /* CKBindingsManager.h */; settings = {ATTRIBUTES = (); }; };
@@ -713,6 +715,8 @@
 		75661F14135E233C00E108AD /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRoundedCornerView.m; sourceTree = "<group>"; };
 		7568347F1314139E0039004D /* CKNetworkActivityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNetworkActivityManager.h; sourceTree = "<group>"; };
 		756834801314139E0039004D /* CKNetworkActivityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNetworkActivityManager.m; sourceTree = "<group>"; };
+		7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNSObjectPropertyCellController.h; sourceTree = "<group>"; };
+		7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNSObjectPropertyCellController.m; sourceTree = "<group>"; };
 		758EC4B0132A985D000280FE /* CKNSObject+Bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSObject+Bindings.h"; sourceTree = "<group>"; };
 		758EC4B1132A985D000280FE /* CKNSObject+Bindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSObject+Bindings.m"; sourceTree = "<group>"; };
 		758EC4B4132A98F1000280FE /* CKBindingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBindingsManager.h; sourceTree = "<group>"; };
@@ -1424,6 +1428,8 @@
 		7548227C1346559F00DB0948 /* PropertyGrid */ = {
 			isa = PBXGroup;
 			children = (
+				7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */,
+				7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */,
 				7548227E134655BB00DB0948 /* CKNSNumberPropertyCellController.h */,
 				7548227F134655BB00DB0948 /* CKNSNumberPropertyCellController.m */,
 				754823AC1346642C00DB0948 /* CKNSStringPropertyCellController.h */,
@@ -1780,6 +1786,7 @@
 				75BD2D29139960A900359D80 /* CKStoreItemExplorer.h in Headers */,
 				7563225013A10763004C2D47 /* CKObjectPropertyArrayCollection.h in Headers */,
 				7563236713A11FEE004C2D47 /* CKUIView+Introspection.h in Headers */,
+				7570D69113A16B1900CF08FA /* CKNSObjectPropertyCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2080,6 +2087,7 @@
 				75BD2D2A139960A900359D80 /* CKStoreItemExplorer.m in Sources */,
 				7563225113A10763004C2D47 /* CKObjectPropertyArrayCollection.m in Sources */,
 				7563236813A11FEE004C2D47 /* CKUIView+Introspection.m in Sources */,
+				7570D69213A16B1900CF08FA /* CKNSObjectPropertyCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
