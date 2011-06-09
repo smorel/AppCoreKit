@@ -106,6 +106,11 @@
 		[cell bind:@"detailTextLabel.text" target:self action:@selector(updateDetailText:)];
 		[NSObject endBindingsContext];	
 	}
+	
+	if(self.cellStyle == CKTableViewCellStyleValue3){
+		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+		cell.detailTextLabel.textColor = [UIColor blackColor];
+	}
 }
 
 - (void)updateDetailText:(id)value{
@@ -212,16 +217,14 @@
 		CGRect detailFrame = [self value3FrameForCell:cell];
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = detailFrame;
-			cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
 			cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-			cell.detailTextLabel.textColor = [UIColor blackColor];
+			cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
 		}
 		if(cell.textLabel != nil){
 			CGRect textFrame = CGRectMake(0,0,detailFrame.origin.x - self.value3LabelsSpace,detailFrame.size.height);
 			cell.textLabel.frame = textFrame;
 			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 			cell.textLabel.textAlignment = UITextAlignmentRight;
-			cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
 		}
 	}
 }

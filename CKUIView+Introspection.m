@@ -21,7 +21,6 @@
 //will get call when acting in property grids or table views ...
 - (void)insertSubviewsObjects:(NSArray *)views atIndexes:(NSIndexSet*)indexes{
 	
-	[self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"subviews"];
 	int i = 0;
 	unsigned currentIndex = [indexes firstIndex];
 	while (currentIndex != NSNotFound) {
@@ -30,18 +29,15 @@
 		currentIndex = [indexes indexGreaterThanIndex: currentIndex];
 		++i;
 	}
-	[self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"subviews"];
 }
 
 //informal protocol for CKObjectProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)removeSubviewsObjectsAtIndexes:(NSIndexSet*)indexes{
-	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"subviews"];
 	NSArray* views = [self.subviews objectsAtIndexes:indexes];
 	for(UIView* view in views){
 		[view removeFromSuperview];
 	}
-	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"subviews"];
 }
 
 //informal protocol for CKObjectProperty arrays insert/remove

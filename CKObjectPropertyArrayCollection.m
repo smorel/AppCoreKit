@@ -75,9 +75,7 @@
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[_property value] count])];
 	
-	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
 	[_property removeAllObjects];
-	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
 	self.count = [[_property value] count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
@@ -95,11 +93,11 @@
 }
 
 - (void)addObserver:(id)object{
-	[self addObserver:_property.object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+	[_property.object addObserver:object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 }
 
 - (void)removeObserver:(id)object{
-	[self removeObserver:_property.object forKeyPath:_property.keyPath];
+	[_property.object removeObserver:object forKeyPath:_property.keyPath];
 }
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{

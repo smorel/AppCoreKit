@@ -284,8 +284,11 @@
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
 	CKClassPropertyDescriptor* descriptor = [self descriptor];
 	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	
 	if(descriptor.insertSelector && [self.object respondsToSelector:descriptor.insertSelector]){
+		[self.object willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
 		[self.object performSelector:descriptor.insertSelector withObject:objects withObject:indexes];
+		[self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
 	}
 	else{
 		[[self value]insertObjects:objects atIndexes:indexes];
@@ -295,8 +298,11 @@
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes{
 	CKClassPropertyDescriptor* descriptor = [self descriptor];
 	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	
 	if(descriptor.removeSelector && [self.object respondsToSelector:descriptor.removeSelector]){
+		[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
 		[self.object performSelector:descriptor.removeSelector withObject:indexes];
+		[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
 	}
 	else{
 		[[self value]removeObjectsAtIndexes:indexes];
@@ -306,12 +312,17 @@
 - (void)removeAllObjects{
 	CKClassPropertyDescriptor* descriptor = [self descriptor];
 	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	
+	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
+	[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 	if(descriptor.removeAllSelector && [self.object respondsToSelector:descriptor.removeAllSelector]){
 		[self.object performSelector:descriptor.removeAllSelector];
 	}
 	else{
 		[[self value]removeAllObjects];
 	}
+	
+	[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 }
 
 @end
