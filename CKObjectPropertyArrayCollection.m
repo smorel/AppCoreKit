@@ -41,7 +41,7 @@
 	if([theObjects count] <= 0)
 		return;
 	
-    [[_property value] insertObjects:theObjects atIndexes:indexes];
+    [_property insertObjects:theObjects atIndexes:indexes];
 	self.count = [[_property value] count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
@@ -57,7 +57,7 @@
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
 	NSArray* toRemove = [[_property value] objectsAtIndexes:indexSet];
 	
-	[[_property value] removeObjectsAtIndexes:indexSet];
+	[_property removeObjectsAtIndexes:indexSet];
 	self.count = [[_property value] count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
@@ -76,7 +76,7 @@
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[_property value] count])];
 	
 	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
-	[[_property value] removeAllObjects];
+	[_property removeAllObjects];
 	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
 	self.count = [[_property value] count];
 	

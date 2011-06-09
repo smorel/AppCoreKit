@@ -39,4 +39,8 @@
 
 - (BOOL)isReadOnly;
 
+- (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
+- (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
+- (void)removeAllObjects;
+
 @end

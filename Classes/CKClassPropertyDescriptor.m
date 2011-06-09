@@ -82,13 +82,16 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 @synthesize name;
 @synthesize type;
 @synthesize attributes;
-@synthesize metaDataSelector;
 @synthesize propertyType;
 @synthesize assignementType;
 @synthesize isReadOnly;
 @synthesize className;
 @synthesize encoding;
 @synthesize typeSize;
+@synthesize metaDataSelector;
+@synthesize insertSelector;
+@synthesize removeSelector;
+@synthesize removeAllSelector;
 
 - (void)dealloc{
 	self.name = nil;
@@ -139,6 +142,7 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	if([attributes hasPrefix:@"T@"]){
 		self.propertyType = CKClassPropertyDescriptorTypeObject;
 		self.encoding = @"@";
+		//FIXME sizeof(class)
 		self.typeSize = sizeof(NSObject*);
 	}
 	else if([attributes hasPrefix:@"Tc"]){
@@ -245,6 +249,76 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		
 		self.propertyType = CKClassPropertyDescriptorTypeUnknown;
 	}	
+}
+
+
++ (CKClassPropertyDescriptor*) classDescriptorForPropertyNamed:(NSString*)name withClass:(Class)c assignment:(CKClassPropertyDescriptorAssignementType)assignment readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+	descriptor.className = [c description];
+	descriptor.encoding = @"@";
+	descriptor.typeSize = sizeof(c);
+	descriptor.propertyType = CKClassPropertyDescriptorTypeObject;
+	descriptor.assignementType = assignment;
+	descriptor.type = c;
+	descriptor.isReadOnly = readOnly;
+	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	if([NSObject isKindOf:c parentType:[NSArray class]]){
+		descriptor.insertSelector = [NSObject insertSelectorForProperty:name];
+		descriptor.removeSelector = [NSObject removeSelectorForProperty:name];
+		descriptor.removeAllSelector = [NSObject removeAllSelectorForProperty:name];
+	}
+	return descriptor;
+}
+
++ (CKClassPropertyDescriptor*) structDescriptorForPropertyNamed:(NSString*)name structName:(NSString*)structName structEncoding:(NSString*)encoding structSize:(NSInteger)size readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+	descriptor.className = structName;
+	descriptor.encoding = encoding;
+	descriptor.typeSize = size;
+	descriptor.propertyType = CKClassPropertyDescriptorTypeStruct;
+	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
+	descriptor.type = nil;
+	descriptor.isReadOnly = readOnly;
+	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	return descriptor;
+}
+
++ (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+	descriptor.encoding = @"c";
+	descriptor.typeSize = sizeof(char);
+	descriptor.propertyType = CKClassPropertyDescriptorTypeChar;
+	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
+	descriptor.isReadOnly = readOnly;
+	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	return descriptor;	
+}
+
++ (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+	descriptor.encoding = @"f";
+	descriptor.typeSize = sizeof(float);
+	descriptor.propertyType = CKClassPropertyDescriptorTypeFloat;
+	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
+	descriptor.isReadOnly = readOnly;
+	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	return descriptor;	
+}
+
++ (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
+	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+	descriptor.name = name;
+	descriptor.encoding = @"i";
+	descriptor.typeSize = sizeof(NSInteger);
+	descriptor.propertyType = CKClassPropertyDescriptorTypeInt;
+	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
+	descriptor.isReadOnly = readOnly;
+	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	return descriptor;
 }
 
 @end

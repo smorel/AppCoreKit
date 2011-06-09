@@ -46,10 +46,14 @@ typedef enum{
 	NSInteger typeSize;
 	Class type;
 	NSString* attributes;
-	SEL metaDataSelector;
 	CKClassPropertyDescriptorType propertyType;
 	CKClassPropertyDescriptorAssignementType assignementType;
 	BOOL isReadOnly;
+	
+	SEL metaDataSelector;
+	SEL insertSelector;
+	SEL removeSelector;
+	SEL removeAllSelector;
 }
 
 @property (nonatomic, retain, readwrite) NSString *name;
@@ -58,10 +62,19 @@ typedef enum{
 @property (nonatomic, retain, readwrite) NSString *className;
 @property (nonatomic, retain, readwrite) NSString *encoding;
 @property (nonatomic, retain, readwrite) NSString *attributes;
-@property (nonatomic, assign, readwrite) SEL metaDataSelector;
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorType propertyType;
 @property (nonatomic, assign, readwrite) CKClassPropertyDescriptorAssignementType assignementType;
 @property (nonatomic, assign, readwrite) BOOL isReadOnly;
+@property (nonatomic, assign, readwrite) SEL metaDataSelector;
+@property (nonatomic, assign, readwrite) SEL insertSelector;
+@property (nonatomic, assign, readwrite) SEL removeSelector;
+@property (nonatomic, assign, readwrite) SEL removeAllSelector;
+
++ (CKClassPropertyDescriptor*) classDescriptorForPropertyNamed:(NSString*)name withClass:(Class)c assignment:(CKClassPropertyDescriptorAssignementType)assignment readOnly:(BOOL)readOnly;
++ (CKClassPropertyDescriptor*) structDescriptorForPropertyNamed:(NSString*)name structName:(NSString*)structName structEncoding:(NSString*)encoding structSize:(NSInteger)size readOnly:(BOOL)readOnly;
++ (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
++ (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
++ (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
 
 -(NSString*)getTypeDescriptor;
 

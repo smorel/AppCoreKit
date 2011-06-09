@@ -12,6 +12,7 @@
 #import <malloc/malloc.h>
 
 #include <execinfo.h>
+#import "CKUIView+Introspection.h"
 
 static NSString* getPropertyType(objc_property_t property) {
 	if(property){
@@ -67,6 +68,12 @@ static NSString* getPropertyType(objc_property_t property) {
 		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
 		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
 		
+		if([NSObject isKindOf:returnType parentType:[NSArray class]]){
+			objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
+			objectProperty.removeSelector = [NSObject removeSelectorForProperty:objectProperty.name];
+			objectProperty.removeAllSelector = [NSObject removeAllSelectorForProperty:objectProperty.name];
+		}
+		
 		return objectProperty;
 	}
 	return nil;
@@ -98,7 +105,7 @@ static NSString* getPropertyType(objc_property_t property) {
 	return [NSObject propertyDescriptor:[self class] forKeyPath:keyPath];
 }
 
-- (void)introspection:(Class)c array:(NSMutableArray*)array{
+- (void)_introspection:(Class)c array:(NSMutableArray*)array{
 	unsigned int outCount, i;
     objc_property_t *ps = class_copyPropertyList(c, &outCount);
     for(i = 0; i < outCount; i++) {
@@ -108,11 +115,28 @@ static NSString* getPropertyType(objc_property_t property) {
     }
     free(ps);	
 	
+	/*
+	 Ivar * ivs = class_copyIvarList(c, &outCount);
+	 for(i = 0; i < outCount; i++){
+	 Ivar v = ivs[i];
+	 int i =3;
+	 }
+	 free(ivs);	
+	 */
+	
 	Class f = class_getSuperclass(c);
 	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
-		[self introspection:f array:array];
+		[self _introspection:f array:array];
 	}
 	
+}
+
+- (void)introspection:(Class)c array:(NSMutableArray*)array{
+	[self _introspection:c array:array];
+	if([c respondsToSelector:@selector(additionalClassPropertyDescriptors)]){
+		NSArray* additionalProperties = [c performSelector:@selector(additionalClassPropertyDescriptors)];
+		[array addObjectsFromArray:additionalProperties];
+	}
 }
 
 - (NSArray*)allViewsPropertyDescriptors{
@@ -280,6 +304,22 @@ static NSString* getPropertyType(objc_property_t property) {
 
 + (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
+
++ (SEL)insertSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"insert" suffix:@"Objects:atIndexes:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)removeSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"remove" suffix:@"ObjectsAtIndexes:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)removeAllSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"removeAll" suffix:@"Objects"];
 	return NSSelectorFromString(selectorName);
 }
 

@@ -1,0 +1,137 @@
+//
+//  CKUIView+Introspection.m
+//  CloudKit
+//
+//  Created by Sebastien Morel on 11-06-09.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
+//
+
+#import "CKUIView+Introspection.h"
+
+
+#import <CloudKit/CKNSValueTransformer+Additions.h>
+
+@implementation UIView (CKIntrospectionAdditions)
+
+- (void)subviewsMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.contentType = [UIView class];
+}
+
+//informal protocol for CKObjectProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)insertSubviewsObjects:(NSArray *)views atIndexes:(NSIndexSet*)indexes{
+	
+	[self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"subviews"];
+	int i = 0;
+	unsigned currentIndex = [indexes firstIndex];
+	while (currentIndex != NSNotFound) {
+		UIView* view = [views objectAtIndex:i];
+		[self insertSubview:view atIndex:currentIndex];
+		currentIndex = [indexes indexGreaterThanIndex: currentIndex];
+		++i;
+	}
+	[self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"subviews"];
+}
+
+//informal protocol for CKObjectProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)removeSubviewsObjectsAtIndexes:(NSIndexSet*)indexes{
+	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"subviews"];
+	NSArray* views = [self.subviews objectsAtIndexes:indexes];
+	for(UIView* view in views){
+		[view removeFromSuperview];
+	}
+	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"subviews"];
+}
+
+//informal protocol for CKObjectProperty arrays insert/remove
+//will get call when acting in property grids or table views ...
+- (void)removeAllSubviewsObjects{
+	NSArray* views = [NSArray arrayWithArray:self.subviews];
+	for(UIView* view in views){
+		[view removeFromSuperview];
+	}
+}
+
+- (void)autoresizingMaskMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewAutoresizingNone,
+											   UIViewAutoresizingFlexibleLeftMargin,
+											   UIViewAutoresizingFlexibleWidth,
+											   UIViewAutoresizingFlexibleRightMargin,
+											   UIViewAutoresizingFlexibleTopMargin,
+											   UIViewAutoresizingFlexibleHeight,
+											   UIViewAutoresizingFlexibleBottomMargin);
+}
+
+- (void)contentModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.enumDefinition = CKEnumDictionary(UIViewContentModeScaleToFill,
+											   UIViewContentModeScaleAspectFit,
+											   UIViewContentModeScaleAspectFill,
+											   UIViewContentModeRedraw,
+											   UIViewContentModeCenter,
+											   UIViewContentModeTop,
+											   UIViewContentModeBottom,
+											   UIViewContentModeLeft,
+											   UIViewContentModeRight,
+											   UIViewContentModeTopLeft,
+											   UIViewContentModeTopRight,
+											   UIViewContentModeBottomLeft,
+											   UIViewContentModeBottomRight);
+}
+
++ (NSArray*)additionalClassPropertyDescriptors{
+	NSMutableArray* properties = [NSMutableArray array];
+	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"backgroundColor"
+																		   withClass:[UIColor class]
+																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
+																			readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"bounds"
+																		   structName:@"CGRect"
+																	   structEncoding:[NSString stringWithUTF8String:@encode(CGRect)]
+																		   structSize:sizeof(CGRect)
+																			 readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"center"
+																		   structName:@"CGPoint"
+																	   structEncoding:[NSString stringWithUTF8String:@encode(CGPoint)]
+																		   structSize:sizeof(CGPoint)
+																			 readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"subviews"
+																		   withClass:[NSArray class]
+																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
+																			readOnly:YES]];
+	
+	[properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"clearsContextBeforeDrawing"
+																		   readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"clipsToBounds"
+																		   readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor intDescriptorForPropertyNamed:@"contentMode"
+																		  readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor floatDescriptorForPropertyNamed:@"contentScaleFactor"
+																			readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"contentStretch"
+																		   structName:@"CGRect"
+																	   structEncoding:[NSString stringWithUTF8String:@encode(CGRect)]
+																		   structSize:sizeof(CGRect)
+																			 readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"frame"
+																		   structName:@"CGRect"
+																	   structEncoding:[NSString stringWithUTF8String:@encode(CGRect)]
+																		   structSize:sizeof(CGRect)
+																			 readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"transform"
+																		   structName:@"CGAffineTransform"
+																	   structEncoding:[NSString stringWithUTF8String:@encode(CGAffineTransform)]
+																		   structSize:sizeof(CGAffineTransform)
+																			 readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor intDescriptorForPropertyNamed:@"autoresizingMask"
+																		  readOnly:NO]];
+	
+	/*
+	 @property(nonatomic, getter=isHidden) BOOL hidden
+	 */
+	
+	return properties;
+}
+
+@end
+

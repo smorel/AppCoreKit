@@ -29,6 +29,7 @@
 
 #import "CKClassPropertyDescriptor.h"
 
+
 typedef BOOL(^CKObjectPredicate)(id);
 
 
@@ -56,6 +57,11 @@ typedef BOOL(^CKObjectPredicate)(id);
 + (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName;
+
+
++ (SEL)insertSelectorForProperty : (NSString*)propertyName;
++ (SEL)removeSelectorForProperty : (NSString*)propertyName;
++ (SEL)removeAllSelectorForProperty : (NSString*)propertyName;
 
 +(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name;
 +(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath;
