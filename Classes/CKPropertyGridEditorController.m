@@ -13,6 +13,7 @@
 #import <CloudKit/CKNSObject+Bindings.h>
 #import <CloudKit/CKLocalization.h>
 #import <CloudKit/CKOptionCellController.h>
+#import "CKObjectPropertyArrayCollection.h"
 
 @interface CKUIBarButtonItemWithInfo : UIBarButtonItem{
 	id userInfo;
@@ -172,18 +173,26 @@
 	[item setFlags:CKItemViewFlagSelectable];
 	[item setSelectionBlock:^(id controller){
 		CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
+		
 		id value = tableViewCellController.value;
 		
 		Class contentType = nil;
 		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
 			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
-			value = [property value];
+			CKClassPropertyDescriptor* descriptor = [property descriptor];
+			
 			CKModelObjectPropertyMetaData* metaData = [property metaData];
 			contentType = [metaData contentType];
+			
+			//Wrap the array in a virtual collection
+			if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+				value = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
+			}		
+			else{
+				value = [property value];
+			}
 		}
 		
-		//TODO SUPPORT VIRTUAL COLLECTION VIA CKOBJECTPROPERTY on NSARRAY ...
-
 		if([value isKindOfClass:[CKDocumentCollection class]]){
 			NSMutableArray* mappings = [NSMutableArray array]; 
 			[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];

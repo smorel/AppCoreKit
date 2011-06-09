@@ -12,6 +12,7 @@
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
+#import "CKNSValueTransformer+Additions.h"
 
 #define TextEditTag 1
 #define SwitchTag 2
@@ -47,7 +48,7 @@
 
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
-	[model setValue:value];
+	[NSValueTransformer transform:value inProperty:model];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }
 

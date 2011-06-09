@@ -1,0 +1,121 @@
+//
+//  CKObjectPropertyArrayCollection.m
+//  CloudKit
+//
+//  Created by Sebastien Morel on 11-06-09.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
+//
+
+#import "CKObjectPropertyArrayCollection.h"
+#import "CKNSNotificationCenter+Edition.h"
+
+@implementation CKObjectPropertyArrayCollection
+@synthesize property = _property;
+
++ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKObjectProperty*)property{
+	return [[[CKObjectPropertyArrayCollection alloc]initWithArrayProperty:property]autorelease];
+}
+
+- (id)initWithArrayProperty:(CKObjectProperty*)theProperty{
+	[super init];
+	CKClassPropertyDescriptor* desc = [theProperty descriptor];
+	NSAssert([NSObject isKindOf:desc.type parentType:[NSArray class]],@"invalid property");
+	self.property = theProperty;
+	return self;
+}
+
+
+- (NSArray*)allObjects{
+	return [NSArray arrayWithArray:[_property value]];
+}
+
+- (NSInteger) count{
+	return [[_property value] count];
+}
+
+- (id)objectAtIndex:(NSInteger)index{
+	return [[_property value] objectAtIndex:index];
+}
+
+- (void)insertObjects:(NSArray *)theObjects atIndexes:(NSIndexSet *)indexes{
+	if([theObjects count] <= 0)
+		return;
+	
+    [[_property value] insertObjects:theObjects atIndexes:indexes];
+	self.count = [[_property value] count];
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
+	if(self.autosave){
+		[self save];
+	}
+	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
+}
+
+- (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
+	NSArray* toRemove = [[_property value] objectsAtIndexes:indexSet];
+	
+	[[_property value] removeObjectsAtIndexes:indexSet];
+	self.count = [[_property value] count];
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
+	
+	if(self.autosave){
+		[self save];
+	}	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
+}
+
+- (void)removeAllObjects{
+	NSArray* theObjects = [NSArray arrayWithArray: [_property value]];
+	
+	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[_property value] count])];
+	
+	[self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
+	[[_property value] removeAllObjects];
+	[self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:_property.keyPath];
+	self.count = [[_property value] count];
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
+	
+	if(self.autosave){
+		[self save];
+	}
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
+}
+
+- (BOOL)containsObject:(id)object{
+	return [[_property value] containsObject:object];
+}
+
+- (void)addObserver:(id)object{
+	[self addObserver:_property.object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+}
+
+- (void)removeObserver:(id)object{
+	[self removeObserver:_property.object forKeyPath:_property.keyPath];
+}
+
+- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
+	return [[_property value] filteredArrayUsingPredicate:predicate];
+}
+
+- (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
+	id object = [[_property value] objectAtIndex:index];
+	[[_property value] removeObjectAtIndex:index];
+	[[_property value] insertObject:other atIndex:index];	
+	
+	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
+	
+	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
+		[self.delegate documentCollectionDidChange:self];
+	}
+}
+
+@end

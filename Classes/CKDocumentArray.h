@@ -6,10 +6,10 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentCollection.h"
+#import "CKObjectPropertyArrayCollection.h"
 
 
-@interface CKDocumentArray : CKDocumentCollection {
+@interface CKDocumentArray : CKObjectPropertyArrayCollection {
 	NSMutableArray* _objects;
 }
 

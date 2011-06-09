@@ -13,6 +13,7 @@
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
+#import "CKNSValueTransformer+Additions.h"
 
 
 @implementation CKNSStringPropertyCellController
@@ -47,7 +48,7 @@
 
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
-	[model setValue:value];
+	[NSValueTransformer transform:value inProperty:model];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 }
 

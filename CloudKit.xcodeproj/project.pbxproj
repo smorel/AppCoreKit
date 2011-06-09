@@ -306,6 +306,8 @@
 		7557FFB2138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */; };
 		7559BCC8137DE682007E7399 /* CKCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 7559BCC6137DE682007E7399 /* CKCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7559BCC9137DE682007E7399 /* CKCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 7559BCC7137DE682007E7399 /* CKCallback.m */; };
+		7563225013A10763004C2D47 /* CKObjectPropertyArrayCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7563224E13A10763004C2D47 /* CKObjectPropertyArrayCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7563225113A10763004C2D47 /* CKObjectPropertyArrayCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7563224F13A10763004C2D47 /* CKObjectPropertyArrayCollection.m */; };
 		75661F15135E233C00E108AD /* CKGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75661F11135E233C00E108AD /* CKGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75661F16135E233C00E108AD /* CKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75661F12135E233C00E108AD /* CKGradientView.m */; };
 		75661F17135E233C00E108AD /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75661F13135E233C00E108AD /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -699,6 +701,8 @@
 		7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKTableViewCellController+StyleManager.m"; sourceTree = "<group>"; };
 		7559BCC6137DE682007E7399 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCallback.h; sourceTree = "<group>"; };
 		7559BCC7137DE682007E7399 /* CKCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCallback.m; sourceTree = "<group>"; };
+		7563224E13A10763004C2D47 /* CKObjectPropertyArrayCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKObjectPropertyArrayCollection.h; sourceTree = "<group>"; };
+		7563224F13A10763004C2D47 /* CKObjectPropertyArrayCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKObjectPropertyArrayCollection.m; sourceTree = "<group>"; };
 		75661F11135E233C00E108AD /* CKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGradientView.h; sourceTree = "<group>"; };
 		75661F12135E233C00E108AD /* CKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKGradientView.m; sourceTree = "<group>"; };
 		75661F13135E233C00E108AD /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRoundedCornerView.h; sourceTree = "<group>"; };
@@ -1557,6 +1561,8 @@
 				75ECE127135CD5390087A696 /* CKDocumentCollection.m */,
 				75ECE12A135CD5D90087A696 /* CKDocumentArray.h */,
 				75ECE12B135CD5D90087A696 /* CKDocumentArray.m */,
+				7563224E13A10763004C2D47 /* CKObjectPropertyArrayCollection.h */,
+				7563224F13A10763004C2D47 /* CKObjectPropertyArrayCollection.m */,
 				75ECE155135CD8590087A696 /* CKDocumentStorage.h */,
 				75ECE159135CD8A50087A696 /* CKDocumentFileStorage.h */,
 				75ECE15A135CD8A50087A696 /* CKDocumentFileStorage.m */,
@@ -1758,6 +1764,7 @@
 				75BD2D25139960A900359D80 /* CKStoreDomainExplorer.h in Headers */,
 				75BD2D27139960A900359D80 /* CKStoreExplorer.h in Headers */,
 				75BD2D29139960A900359D80 /* CKStoreItemExplorer.h in Headers */,
+				7563225013A10763004C2D47 /* CKObjectPropertyArrayCollection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2056,6 +2063,7 @@
 				75BD2D26139960A900359D80 /* CKStoreDomainExplorer.m in Sources */,
 				75BD2D28139960A900359D80 /* CKStoreExplorer.m in Sources */,
 				75BD2D2A139960A900359D80 /* CKStoreItemExplorer.m in Sources */,
+				7563225113A10763004C2D47 /* CKObjectPropertyArrayCollection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
