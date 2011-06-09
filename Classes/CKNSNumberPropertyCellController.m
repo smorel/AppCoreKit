@@ -127,27 +127,34 @@
 		}
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
-			UISwitch *toggleSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-			toggleSwitch.tag = SwitchTag;
-			if(self.cellStyle == CKTableViewCellStyleValue3){
-				[cell.contentView addSubview:toggleSwitch];
-			}
-			else{
-				cell.accessoryView = toggleSwitch;
-			}
-			
-			[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-			BOOL bo = [[model value]boolValue];
-			[s setOn:bo animated:NO];
-			[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 			if([model isReadOnly]){
-				s.enabled = NO;
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+				[NSObject endBindingsContext];
 			}
 			else{
-				s.enabled = YES;
-				[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+				UISwitch *toggleSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+				toggleSwitch.tag = SwitchTag;
+				if(self.cellStyle == CKTableViewCellStyleValue3){
+					[cell.contentView addSubview:toggleSwitch];
+				}
+				else{
+					cell.accessoryView = toggleSwitch;
+				}
+				
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				BOOL bo = [[model value]boolValue];
+				[s setOn:bo animated:NO];
+				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
+				if([model isReadOnly]){
+					s.enabled = NO;
+				}
+				else{
+					s.enabled = YES;
+					[s bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+				}
+				[NSObject endBindingsContext];
 			}
-			[NSObject endBindingsContext];
 			break;
 		}
 	}	

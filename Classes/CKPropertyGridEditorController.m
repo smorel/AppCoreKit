@@ -14,6 +14,7 @@
 #import <CloudKit/CKLocalization.h>
 #import <CloudKit/CKOptionCellController.h>
 #import "CKObjectPropertyArrayCollection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 @interface CKUIBarButtonItemWithInfo : UIBarButtonItem{
 	id userInfo;
@@ -163,11 +164,21 @@
 		if([value isKindOfClass:[CKDocumentCollection class]]
 		   || [value isKindOfClass:[NSArray class]]){
 			tableViewCellController.tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		}
+		else if(value == nil){
+			tableViewCellController.tableViewCell.detailTextLabel.text = @"nil";
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		else{
+			tableViewCellController.tableViewCell.detailTextLabel.text = [value description];
+			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
 		
 		tableViewCellController.tableViewCell.textLabel.text = title;
-		tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		return (id)nil;
 	}];
 	[item setFlags:CKItemViewFlagSelectable];
