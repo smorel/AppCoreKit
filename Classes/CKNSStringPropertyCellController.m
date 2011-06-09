@@ -17,6 +17,7 @@
 
 
 @implementation CKNSStringPropertyCellController
+@synthesize textField = _textField;
 
 - (id)init{
 	[super init];
@@ -26,12 +27,23 @@
 
 -(void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+	[_textField release];
 	[super dealloc];
 }
 
 //pas utiliser load cell mais initCell pour application des styles ...
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	
+	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+	txtField.tag = 50000;
+	txtField.borderStyle = UITextBorderStyleNone;
+	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	txtField.clearButtonMode = UITextFieldViewModeAlways;
+	txtField.delegate = self;
+	txtField.textAlignment = UITextAlignmentLeft;
+	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+	self.textField = txtField;
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
@@ -63,6 +75,7 @@
 	if(textField){
 		[textField removeFromSuperview];
 	}
+	cell.detailTextLabel.text = nil;
 	
 	if([model isReadOnly]){
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -70,30 +83,21 @@
 		[NSObject endBindingsContext];
 	}
 	else{
-		UITextField *textField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-		textField.tag = 50000;
-		textField.borderStyle = UITextBorderStyleNone;
-		textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-		textField.clearButtonMode = UITextFieldViewModeAlways;
-		textField.delegate = self;
-		textField.textAlignment = UITextAlignmentLeft;
-		textField.autocorrectionType = UITextAutocorrectionTypeNo;
-		
-		[cell.contentView addSubview:textField];
+		[cell.contentView addSubview:self.textField];
 		
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[model.object bind:model.keyPath toObject:textField withKeyPath:@"text"];
-		[textField bind:@"text" target:self action:@selector(textFieldChanged:)];
+		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+		[self.textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 		[NSObject endBindingsContext];
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-		textField.placeholder = _(placeholerText);
+		self.textField.placeholder = _(placeholerText);
 		
 		if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-			textField.returnKeyType = UIReturnKeyNext;
+			self.textField.returnKeyType = UIReturnKeyNext;
 		}
 		else{
-			textField.returnKeyType = UIReturnKeyDone;
+			self.textField.returnKeyType = UIReturnKeyDone;
 		}
 	}
 }
