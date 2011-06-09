@@ -212,7 +212,7 @@
 		tableViewOffset += (!isIpad || (_searchScopeDefinition && isPortrait) ) ? 88 : 44;
 		
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
-		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		_searchBar.delegate = self;
 		//self.tableView.tableHeaderView = _searchBar;
 		[self.view addSubview:_searchBar];
@@ -235,16 +235,12 @@
 			_segmentedControl.selectedSegmentIndex = [[_searchScopeDefinition allKeys]indexOfObject:_defaultSearchScope];
 		}
 		_segmentedControl.frame = CGRectMake(0,tableViewOffset,self.tableView.frame.size.width,44);
-		_segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+		_segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[_segmentedControl addTarget:self
 							 action:@selector(segmentedControlChange:)
 				   forControlEvents:UIControlEventValueChanged];
 		[self.view addSubview:_segmentedControl];
 		tableViewOffset += 44;
-	}
-	
-	if(tableViewOffset != 0){
-		self.tableViewContainer.autoresizingMask = self.tableViewContainer.autoresizingMask | UIViewAutoresizingFlexibleTopMargin;
 	}
 	
 	if(self.tableViewContainer.frame.origin.y < tableViewOffset){
