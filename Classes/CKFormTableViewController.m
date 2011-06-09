@@ -643,8 +643,11 @@
 }
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
-	CKFormSectionBase* section = [_sections objectAtIndex:index];
-	return section;
+	if(index >= 0 && index < [_sections count]){
+		CKFormSectionBase* section = [_sections objectAtIndex:index];
+		return section;
+	}
+	return nil;
 }
 
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section{
