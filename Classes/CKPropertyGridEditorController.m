@@ -8,28 +8,14 @@
 
 #import "CKPropertyGridEditorController.h"
 
-#import <CloudKit/CKNSNumberPropertyCellController.h>
-#import <CloudKit/CKNSStringPropertyCellController.h>
-#import <CloudKit/CKNSObject+Bindings.h>
-#import <CloudKit/CKLocalization.h>
-#import <CloudKit/CKOptionCellController.h>
+#import "CKNSNumberPropertyCellController.h"
+#import "CKNSStringPropertyCellController.h"
+#import "CKNSObject+Bindings.h"
+#import "CKLocalization.h"
+#import "CKOptionCellController.h"
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
-
-@interface CKUIBarButtonItemWithInfo : UIBarButtonItem{
-	id userInfo;
-}
-@property(nonatomic,retain)id userInfo;
-@end
-
-@implementation CKUIBarButtonItemWithInfo
-@synthesize userInfo;
-- (void)dealloc{
-	[userInfo release];
-	[super dealloc];
-}
-@end
-
+#import "CKNSObjectPropertyCellController.h"
 
 //PROPERTY GRID CONTROLLER
 @interface CKPropertyGridEditorController() 
@@ -117,120 +103,6 @@
 }
 */
 
-- (void)createObject:(id)sender{
-	CKUIBarButtonItemWithInfo* button = (CKUIBarButtonItemWithInfo*)sender;
-	CKDocumentCollection* collection = [button.userInfo objectForKey:@"collection"];
-	Class type = [[button.userInfo objectForKey:@"class"]pointerValue];
-	//CKObjectTableViewController* controller = [button.userInfo objectForKey:@"controller"];
-	
-	id object = [[[type alloc]init]autorelease];
-	[collection addObjectsFromArray:[NSArray arrayWithObject:object]];
-	
-	/*
-	NSIndexPath* indexPath = [controller indexPathForObject:object];
-	[controller.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-	 */
-}
-
-- (void)setupFactoryItemForStandardObject:(CKObjectViewControllerFactoryItem*)item{
-	[item setCreateBlock:^(id controller){
-		CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
-		tableViewCellController.cellStyle = CKTableViewCellStyleValue3;
-		return (id)nil;
-	}];
-	[item setSetupBlock:^(id controller){
-		CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
-		NSString* title = [[tableViewCellController.value class]description];
-		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
-			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
-			title = [property name];
-		}
-		else{
-			CKClassPropertyDescriptor* nameDescriptor = [tableViewCellController.value propertyDescriptorForKeyPath:@"modelName"];
-			if(nameDescriptor != nil && [NSObject isKindOf:nameDescriptor.type parentType:[NSString class]]){
-				title = [tableViewCellController.value valueForKeyPath:@"modelName"];
-			}
-		}			
-		
-		//ALLOW CREATION/REMOVE OF OBJECTS IN CONTAINERS 
-		//FOR OBJECTS NOT CONTAINER, WE SHOULD BE ABLE TO REMOVE AKA. SET TO NIL or ADD AKA. set value selecting a type
-		
-		id value = tableViewCellController.value;
-		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
-			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
-			value = [property value];
-		}
-		
-		if([value isKindOfClass:[CKDocumentCollection class]]
-		   || [value isKindOfClass:[NSArray class]]){
-			tableViewCellController.tableViewCell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
-			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		}
-		else if(value == nil){
-			tableViewCellController.tableViewCell.detailTextLabel.text = @"nil";
-			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
-			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
-		}
-		else{
-			tableViewCellController.tableViewCell.detailTextLabel.text = [value description];
-			tableViewCellController.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			tableViewCellController.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		}
-		
-		tableViewCellController.tableViewCell.textLabel.text = title;
-		return (id)nil;
-	}];
-	[item setFlags:CKItemViewFlagSelectable];
-	[item setSelectionBlock:^(id controller){
-		CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
-		
-		id value = tableViewCellController.value;
-		
-		Class contentType = nil;
-		if([tableViewCellController.value isKindOfClass:[CKObjectProperty class]]){
-			CKObjectProperty* property = (CKObjectProperty*)tableViewCellController.value;
-			CKClassPropertyDescriptor* descriptor = [property descriptor];
-			
-			CKModelObjectPropertyMetaData* metaData = [property metaData];
-			contentType = [metaData contentType];
-			
-			//Wrap the array in a virtual collection
-			if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
-				value = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
-			}		
-			else{
-				value = [property value];
-			}
-		}
-		
-		if([value isKindOfClass:[CKDocumentCollection class]]){
-			NSMutableArray* mappings = [NSMutableArray array]; 
-			[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
-			[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
-			
-			CKObjectViewControllerFactoryItem* standard = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSObject class]];
-			[self setupFactoryItemForStandardObject:standard];
-			[standard setFlags:CKItemViewFlagSelectable | CKItemViewFlagRemovable];
-			
-			CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:value mappings:mappings]autorelease];
-			controller.title = tableViewCellController.tableViewCell.textLabel.text;
-			if(contentType != nil){
-				CKUIBarButtonItemWithInfo* button = [[[CKUIBarButtonItemWithInfo alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(createObject:)]autorelease];
-				button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:value,@"collection",[NSValue valueWithPointer:contentType],@"class",controller,@"controller",nil];
-				controller.rightButton = button;
-			}
-			[tableViewCellController.parentController.navigationController pushViewController:controller animated:YES];
-		}
-		else{
-			CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:value]autorelease];
-			propertyGrid.title = tableViewCellController.tableViewCell.textLabel.text;
-			[tableViewCellController.parentController.navigationController pushViewController:propertyGrid animated:YES];
-		}
-		return (id)nil;
-	}];	
-}
-
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section{
 	for(CKObjectProperty* property in properties){
 		CKModelObjectPropertyMetaData* metaData = [property metaData];
@@ -240,11 +112,11 @@
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
 				[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
+					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					optionCellController.value = [property value];
 					optionCellController.text = _(property.name);
 					optionCellController.values = [copyOfValuesAndLabels allValues];
 					optionCellController.labels = [copyOfValuesAndLabels allKeys];
-					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					[optionCellController bind:@"value" withBlock:^(id value){
 						[property setValue:value];
 						descriptor.value = value;
@@ -259,6 +131,7 @@
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
 				[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
+					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					optionCellController.multiSelectionEnabled = YES;
 					optionCellController.value = [property value];
 					optionCellController.text = _(property.name);
@@ -268,10 +141,15 @@
 						[localizedLabels addObject:_(str)];
 					}
 					optionCellController.labels = localizedLabels;
-					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					[optionCellController bind:@"value" withBlock:^(id value){
-						[property setValue:value];
-						descriptor.value = value;
+						if(value == nil || [value isKindOfClass:[NSNull class]]){
+							[property setValue:[NSNumber numberWithInt:0]];
+							descriptor.value = [NSNumber numberWithInt:0];
+						}
+						else{
+							[property setValue:value];
+							descriptor.value = value;
+						}
 					}];
 					[optionCellController endBindingsContext];
 					
@@ -307,8 +185,7 @@
 							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]]];
 						}
 						else /*if([NSObject isKindOf:descriptor.type parentType:[CKDocumentCollection class]])*/{
-							CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKTableViewCellController class]]];
-							[self setupFactoryItemForStandardObject:descriptor];
+							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]]];
 						}
 						/*
 						else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){

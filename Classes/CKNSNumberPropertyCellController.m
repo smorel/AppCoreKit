@@ -64,6 +64,7 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
+	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
@@ -85,6 +86,8 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	[self clearBindingsContext];
+	
 	CKObjectProperty* model = self.value;
 	
 	//reset the view

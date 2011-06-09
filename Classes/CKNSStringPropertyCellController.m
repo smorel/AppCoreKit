@@ -33,6 +33,7 @@
 
 //pas utiliser load cell mais initCell pour application des styles ...
 - (void)initTableViewCell:(UITableViewCell*)cell{
+	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
@@ -70,6 +71,8 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	[self clearBindingsContext];
+	
 	CKObjectProperty* model = self.value;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
