@@ -52,6 +52,13 @@
 
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
+	NSNumber* number = [self.value value];
+	NSNumber* newNumber = [NSValueTransformer transform:value toClass:[NSNumber class]];
+	if(![number isEqualToNumber:newNumber]){
+		[model setValue:newNumber];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	}
+	
 	[NSValueTransformer transform:value inProperty:model];
 	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }

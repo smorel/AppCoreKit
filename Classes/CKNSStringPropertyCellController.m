@@ -60,8 +60,12 @@
 
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
-	[NSValueTransformer transform:value inProperty:model];
-	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	NSString* strValue = [model value];
+	if(value && ![value isKindOfClass:[NSNull class]] &&
+	   ![value isEqualToString:strValue]){
+		[model setValue:value];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	}
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
