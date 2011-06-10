@@ -35,6 +35,7 @@
 @synthesize pageControl = _pageControl;
 
 - (void)postInit{
+	[super postInit];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -155,7 +156,9 @@
 	[self updateVisibleViewsRotation];
 	
 	[self.carouselView reloadData];
-	[self fetchMoreData];
+	for(int i =0; i< [self numberOfSections];++i){
+		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+	}
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{

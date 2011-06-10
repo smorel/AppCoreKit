@@ -26,6 +26,7 @@
 @synthesize tableViewContainer = _tableViewContainer;
 
 - (void)postInit {
+	[super postInit];
 	self.style = UITableViewStylePlain;
 }
 

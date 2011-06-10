@@ -129,6 +129,9 @@
 	if([self isViewLoaded] && ([self.view superview] != nil) && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
 		[self onReload];
+		for(int i =0; i< [self numberOfSections];++i){
+			[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+		}
 	}
 }
 

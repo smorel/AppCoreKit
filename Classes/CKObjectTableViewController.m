@@ -321,7 +321,9 @@
 	_viewIsOnScreen = YES;
 	[self.objectController unlock];
 	
-	[self fetchMoreData];
+	for(int i =0; i< [self numberOfSections];++i){
+		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+	}
 }
 
 - (void)reload{
