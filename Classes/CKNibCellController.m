@@ -26,14 +26,16 @@
 @synthesize autoresizeViewsOnInsertion = _autoresizeViewsOnInsertion;
 
 - (void)dealloc{
-	switch(self.currentMode){
-		case CKNibCellControllerModePortrait:{
-			[self willDeletePortraitView:self.tableViewCell.contentView];
-			break;
-		}
-		case CKNibCellControllerModeLandscape:{
-			[self willDeleteLandscapeView:self.tableViewCell.contentView];
-			break;
+	if(self.view){
+		switch(self.currentMode){
+			case CKNibCellControllerModePortrait:{
+				[self willDeletePortraitView:self.tableViewCell.contentView];
+				break;
+			}
+			case CKNibCellControllerModeLandscape:{
+				[self willDeleteLandscapeView:self.tableViewCell.contentView];
+				break;
+			}
 		}
 	}
 	
