@@ -53,14 +53,15 @@
 - (void)textFieldChanged:(id)value{
 	CKObjectProperty* model = self.value;
 	NSNumber* number = [self.value value];
-	NSNumber* newNumber = [NSValueTransformer transform:value toClass:[NSNumber class]];
-	if(![number isEqualToNumber:newNumber]){
+	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
+	if(newNumber == nil){
+		[model setValue:[NSNumber numberWithInt:0]];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	}
+	else if(![number isEqualToNumber:newNumber]){
 		[model setValue:newNumber];
 		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 	}
-	
-	[NSValueTransformer transform:value inProperty:model];
-	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];	
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
@@ -131,7 +132,6 @@
 				
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-				[self.textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 				[NSObject endBindingsContext];
 				
 				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
@@ -216,6 +216,10 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[self beginBindingsContextByRemovingPreviousBindings];
+	[textField bindEvent:UIControlEventEditingChanged target:self action:@selector(textFieldChanged:)];
+	[self endBindingsContext];
+	
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
@@ -223,6 +227,11 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 	[self didResignFirstResponder];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	CKObjectProperty* model = self.value;
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+	[NSObject endBindingsContext];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
