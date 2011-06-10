@@ -296,6 +296,8 @@
 		753295A913A18B2A007471B0 /* CKCGPropertyCellControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 753295A713A18B2A007471B0 /* CKCGPropertyCellControllers.m */; };
 		7532965A13A19DD6007471B0 /* CKMultiFloatPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7532965813A19DD6007471B0 /* CKMultiFloatPropertyCellController.h */; };
 		7532965B13A19DD6007471B0 /* CKMultiFloatPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7532965913A19DD6007471B0 /* CKMultiFloatPropertyCellController.m */; };
+		7532972D13A25985007471B0 /* CKClassExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7532972B13A25985007471B0 /* CKClassExplorer.h */; };
+		7532972E13A25985007471B0 /* CKClassExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7532972C13A25985007471B0 /* CKClassExplorer.m */; };
 		753CBBA5135DE432000ADDEE /* CKStyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 753CBBA3135DE432000ADDEE /* CKStyleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		753CBBA6135DE432000ADDEE /* CKStyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 753CBBA4135DE432000ADDEE /* CKStyleManager.m */; };
 		7542533C136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7542533A136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h */; };
@@ -703,6 +705,8 @@
 		753295A713A18B2A007471B0 /* CKCGPropertyCellControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCGPropertyCellControllers.m; sourceTree = "<group>"; };
 		7532965813A19DD6007471B0 /* CKMultiFloatPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMultiFloatPropertyCellController.h; sourceTree = "<group>"; };
 		7532965913A19DD6007471B0 /* CKMultiFloatPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMultiFloatPropertyCellController.m; sourceTree = "<group>"; };
+		7532972B13A25985007471B0 /* CKClassExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKClassExplorer.h; sourceTree = "<group>"; };
+		7532972C13A25985007471B0 /* CKClassExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKClassExplorer.m; sourceTree = "<group>"; };
 		753CBBA3135DE432000ADDEE /* CKStyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStyleManager.h; path = Classes/CKStyleManager.h; sourceTree = "<group>"; };
 		753CBBA4135DE432000ADDEE /* CKStyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStyleManager.m; path = Classes/CKStyleManager.m; sourceTree = "<group>"; };
 		7542533A136901EF002AA1C5 /* CKDocumentCollectionViewCellController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDocumentCollectionViewCellController+Style.h"; path = "Classes/CKDocumentCollectionViewCellController+Style.h"; sourceTree = "<group>"; };
@@ -1405,6 +1409,8 @@
 				7548227C1346559F00DB0948 /* PropertyGrid */,
 				751004AD1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h */,
 				751004AE1337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m */,
+				75B6953813799E0E00434E70 /* CKTableViewCellNextResponder.h */,
+				75B6953913799E0E00434E70 /* CKTableViewCellNextResponder.m */,
 				751004B01337BB1C008B0E7B /* CKObjectTableViewController.h */,
 				751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */,
 				7599A6CD134D0A79008AADE6 /* CKFormTableViewController.h */,
@@ -1427,6 +1433,36 @@
 			name = Carousel;
 			sourceTree = "<group>";
 		};
+		7532972813A25934007471B0 /* CellControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */,
+				7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */,
+				7532965813A19DD6007471B0 /* CKMultiFloatPropertyCellController.h */,
+				7532965913A19DD6007471B0 /* CKMultiFloatPropertyCellController.m */,
+				753295A613A18B2A007471B0 /* CKCGPropertyCellControllers.h */,
+				753295A713A18B2A007471B0 /* CKCGPropertyCellControllers.m */,
+				7532959D13A18AA1007471B0 /* CKUIColorPropertyCellController.h */,
+				7532959E13A18AA1007471B0 /* CKUIColorPropertyCellController.m */,
+				753295A113A18B08007471B0 /* CKNSDatePropertyCellController.h */,
+				753295A213A18B08007471B0 /* CKNSDatePropertyCellController.m */,
+				7548227E134655BB00DB0948 /* CKNSNumberPropertyCellController.h */,
+				7548227F134655BB00DB0948 /* CKNSNumberPropertyCellController.m */,
+				754823AC1346642C00DB0948 /* CKNSStringPropertyCellController.h */,
+				754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */,
+			);
+			name = CellControllers;
+			sourceTree = "<group>";
+		};
+		7532972A13A25965007471B0 /* ClassExplorer */ = {
+			isa = PBXGroup;
+			children = (
+				7532972B13A25985007471B0 /* CKClassExplorer.h */,
+				7532972C13A25985007471B0 /* CKClassExplorer.m */,
+			);
+			name = ClassExplorer;
+			sourceTree = "<group>";
+		};
 		753CBBA1135DE426000ADDEE /* Style */ = {
 			isa = PBXGroup;
 			children = (
@@ -1444,22 +1480,8 @@
 		7548227C1346559F00DB0948 /* PropertyGrid */ = {
 			isa = PBXGroup;
 			children = (
-				7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */,
-				7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */,
-				7532965813A19DD6007471B0 /* CKMultiFloatPropertyCellController.h */,
-				7532965913A19DD6007471B0 /* CKMultiFloatPropertyCellController.m */,
-				753295A613A18B2A007471B0 /* CKCGPropertyCellControllers.h */,
-				753295A713A18B2A007471B0 /* CKCGPropertyCellControllers.m */,
-				7532959D13A18AA1007471B0 /* CKUIColorPropertyCellController.h */,
-				7532959E13A18AA1007471B0 /* CKUIColorPropertyCellController.m */,
-				753295A113A18B08007471B0 /* CKNSDatePropertyCellController.h */,
-				753295A213A18B08007471B0 /* CKNSDatePropertyCellController.m */,
-				7548227E134655BB00DB0948 /* CKNSNumberPropertyCellController.h */,
-				7548227F134655BB00DB0948 /* CKNSNumberPropertyCellController.m */,
-				754823AC1346642C00DB0948 /* CKNSStringPropertyCellController.h */,
-				754823AD1346642C00DB0948 /* CKNSStringPropertyCellController.m */,
-				75B6953813799E0E00434E70 /* CKTableViewCellNextResponder.h */,
-				75B6953913799E0E00434E70 /* CKTableViewCellNextResponder.m */,
+				7532972A13A25965007471B0 /* ClassExplorer */,
+				7532972813A25934007471B0 /* CellControllers */,
 				7502F5B813995C6700458128 /* CKPropertyGridEditorController.h */,
 				7502F5B913995C6700458128 /* CKPropertyGridEditorController.m */,
 			);
@@ -1815,6 +1837,7 @@
 				753295A313A18B08007471B0 /* CKNSDatePropertyCellController.h in Headers */,
 				753295A813A18B2A007471B0 /* CKCGPropertyCellControllers.h in Headers */,
 				7532965A13A19DD6007471B0 /* CKMultiFloatPropertyCellController.h in Headers */,
+				7532972D13A25985007471B0 /* CKClassExplorer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2120,6 +2143,7 @@
 				753295A413A18B08007471B0 /* CKNSDatePropertyCellController.m in Sources */,
 				753295A913A18B2A007471B0 /* CKCGPropertyCellControllers.m in Sources */,
 				7532965B13A19DD6007471B0 /* CKMultiFloatPropertyCellController.m in Sources */,
+				7532972E13A25985007471B0 /* CKClassExplorer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

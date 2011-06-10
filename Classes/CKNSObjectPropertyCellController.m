@@ -19,6 +19,8 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
 
+#import "CKClassExplorer.h"
+
 @interface CKUIBarButtonItemWithInfo : UIBarButtonItem{
 	id userInfo;
 }
@@ -54,6 +56,8 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	
+	//TODO prendre en compte le readonly pour create/remove
 	
 	NSString* title = [[self.value class]description];
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
@@ -136,13 +140,25 @@
 
 - (void)createObject:(id)sender{
 	CKUIBarButtonItemWithInfo* button = (CKUIBarButtonItemWithInfo*)sender;
-	CKDocumentCollection* collection = [button.userInfo objectForKey:@"collection"];
 	Class type = [[button.userInfo objectForKey:@"class"]pointerValue];
-	//CKObjectTableViewController* controller = [button.userInfo objectForKey:@"controller"];
 	
-	id object = [[[type alloc]init]autorelease];
-	[collection addObjectsFromArray:[NSArray arrayWithObject:object]];
+	CKClassExplorer* controller = [[[CKClassExplorer alloc]initWithBaseClass:type]autorelease];
+	controller.userInfo = button.userInfo;
+	controller.delegate = self;
+	[self.parentController.navigationController pushViewController:controller animated:YES];
+}
+
+- (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
+	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
+	CKDocumentCollection* collection = [classExplorer.userInfo objectForKey:@"collection"];
+	NSString* className = (NSString*)object;
+	Class type = NSClassFromString(className);
+	id instance = [[[type alloc]init]autorelease];
+	[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
+	
+	[controller.navigationController popViewControllerAnimated:YES];
+
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];
 	 [controller.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -158,6 +174,7 @@
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	//TODO prendre en compte le readonly pour create/remove
 	return CKItemViewFlagSelectable | CKItemViewFlagRemovable;
 }
 
