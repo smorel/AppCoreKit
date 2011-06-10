@@ -177,6 +177,8 @@
 }
 
 - (void)createObject:(id)sender{
+	[self clearBindingsContext];
+	
 	id userInfos = nil;
 	if([sender isKindOfClass:[CKUIButtonWithInfo class]]){
 		CKUIButtonWithInfo* button = (CKUIButtonWithInfo*)sender;
