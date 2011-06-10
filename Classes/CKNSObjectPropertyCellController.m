@@ -154,7 +154,13 @@
 	CKDocumentCollection* collection = [classExplorer.userInfo objectForKey:@"collection"];
 	NSString* className = (NSString*)object;
 	Class type = NSClassFromString(className);
-	id instance = [[[type alloc]init]autorelease];
+	id instance = nil;
+	if([NSObject isKindOf:type parentType:[UIView class]]){
+		instance = [[[type alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+	}
+	else{
+		instance = [[[type alloc]init]autorelease];
+	}
 	[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
 	
 	[controller.navigationController popViewControllerAnimated:YES];

@@ -55,22 +55,29 @@
 @synthesize rightButton;
 @synthesize leftButton;
 
+- (void)didSearch:(NSString*)text{
+	//if we want to implement it in subclass ..
+}
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[self.searchBar resignFirstResponder];
 	
-	if ([searchBar.text isEqualToString:@""] == NO
-		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-		[_delegate objectTableViewController:self didSearch:searchBar.text];
+	if ([searchBar.text isEqualToString:@""] == NO){
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[_delegate objectTableViewController:self didSearch:searchBar.text];
+		}
+		[self didSearch:searchBar.text];
 	}
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	if ([searchBar.text isEqualToString:@""] == YES
-		&& _delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-		[_delegate objectTableViewController:self didSearch:@""];
+	if ([searchBar.text isEqualToString:@""] == YES){
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[_delegate objectTableViewController:self didSearch:@""];
+		}
+		[self didSearch:searchBar.text];
 	}
 }
 
@@ -78,6 +85,7 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 		[_delegate objectTableViewController:self didSearch:str];
 	}
+	[self didSearch:str];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
@@ -209,7 +217,8 @@
 		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice]orientation];
 		BOOL isPortrait = !UIDeviceOrientationIsLandscape(deviceOrientation);
 		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-		tableViewOffset += (!isIpad || (_searchScopeDefinition && isPortrait) ) ? 88 : 44;
+		BOOL tooSmall = self.view.bounds.size.width <= 320;
+		tableViewOffset += (!isIpad || (_searchScopeDefinition && isPortrait) || tooSmall) ? 88 : 44;
 		
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
 		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

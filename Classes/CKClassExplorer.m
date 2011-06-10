@@ -17,17 +17,43 @@ NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 
 @interface CKClassExplorer()
 @property(nonatomic,retain)CKDocumentArray* classesCollection;
+@property(nonatomic,retain)NSString* additionalFilter;
 - (void)createClassesCollectionWithBaseClass:(Class)type;
 @end
 
 @implementation CKClassExplorer
 @synthesize classesCollection = _classesCollection;
 @synthesize userInfo = _userInfo;
+@synthesize additionalFilter = _additionalFilter;
 
 - (void)dealloc{
 	[_classesCollection release];
 	[_userInfo release];
+	[_additionalFilter release];
 	[super dealloc];
+}
+
+- (void)postInit{
+	[super postInit];
+	self.searchEnabled = YES;
+	self.liveSearchDelay = 0.5;
+	self.additionalFilter = @"ck";
+	
+	self.searchScopeDefinition = [NSDictionary dictionaryWithObjectsAndKeys:
+	    [CKCallback callbackWithBlock:^(id object){
+		    CKClassExplorer* explorer = (CKClassExplorer*)object;
+		    explorer.additionalFilter = @"ck";
+		    [explorer didSearch:explorer.searchBar.text];
+		    return (id)nil;
+	    }],@"CloudKit",
+	    [CKCallback callbackWithBlock:^(id object){
+		    CKClassExplorer* explorer = (CKClassExplorer*)object;
+		    explorer.additionalFilter = nil;
+		    [explorer didSearch:explorer.searchBar.text];
+		    return (id)nil;
+	    }],@"All",
+	    nil];
+	self.defaultSearchScope = @"CloudKit";
 }
 
 - (id)initWithBaseClass:(Class)type{
@@ -59,7 +85,6 @@ NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-	self.objectController = [CKDocumentController controllerWithCollection:_classesCollection];
 	NSMutableArray* mappings = [NSMutableArray array];
 	CKObjectViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
 	[classCellDescriptor setCreateBlock:^(id object){
@@ -75,6 +100,33 @@ NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 	}];
 	[classCellDescriptor setFlags:CKItemViewFlagSelectable];
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	
+	[self didSearch:nil];
+}
+
+- (void)didSearch:(NSString*)text{
+	CKDocumentArray* collection = _classesCollection;
+	if((text != nil && [text length] > 0)
+	   ||(_additionalFilter != nil && [_additionalFilter length] > 0 )){
+		NSArray* allObjects = [_classesCollection allObjects];
+		NSArray* filteredObjects = [allObjects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id evaluatedObject, NSDictionary *bindings) {
+			NSString* str = [(NSString*)evaluatedObject lowercaseString];
+			BOOL found = YES;
+			if(text != nil && [text length] > 0){
+				NSString* filter = [text lowercaseString];
+				NSRange range = [str rangeOfString:filter];
+				found = found  && (range.location != NSNotFound);
+			}
+			if(_additionalFilter != nil && [_additionalFilter length] > 0){
+				NSString* filter = [_additionalFilter lowercaseString];
+				found = found  && [str hasPrefix:filter];
+			}
+			return found;
+		}]];
+		collection = [[[CKDocumentArray alloc]init]autorelease];
+		[collection addObjectsFromArray:filteredObjects];
+	}
+	self.objectController = [CKDocumentController controllerWithCollection:collection];
 }
 
 @end

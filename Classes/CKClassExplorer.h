@@ -14,6 +14,7 @@
 @interface CKClassExplorer : CKObjectTableViewController {
 	CKDocumentArray* _classesCollection;
 	id _userInfo;
+	NSString* _additionalFilter;
 }
 @property(nonatomic,retain)id userInfo;
 

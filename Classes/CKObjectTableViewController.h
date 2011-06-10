@@ -68,6 +68,8 @@
 @property (nonatomic, retain) UIBarButtonItem *rightButton;
 @property (nonatomic, retain) UIBarButtonItem *leftButton;
 
+//private
+- (void)didSearch:(NSString*)text;
 
 @end
 
