@@ -36,8 +36,8 @@
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	int i =0;
 	for(NSString* property in properties){
-		CGRect labelFrame = CGRectMake(10,50 + i * 44,100,44);
-		CGRect textFieldFrame = CGRectMake(110,50 + i * 44,cell.contentView.bounds.size.width - 120,44);
+		CGRect labelFrame = CGRectMake(10,50 + (i * 44) - 2,90,44);
+		CGRect textFieldFrame = CGRectMake(110,50 + i * 44,cell.contentView.bounds.size.width - 110,44);
 		
 		UITextField *txtField = [[[UITextField alloc] initWithFrame:textFieldFrame] autorelease];
 		txtField.tag = 50000;
@@ -48,19 +48,21 @@
 		txtField.keyboardType = UIKeyboardTypeDecimalPad;
 		txtField.textAlignment = UITextAlignmentLeft;
 		txtField.autocorrectionType = UITextAutocorrectionTypeNo;
-		txtField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		txtField.autoresizingMask = UIViewAutoresizingNone;
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",property];
 		txtField.placeholder = _(placeholerText);
 		[_textFields setObject:txtField forKey:property];
 		
 		UILabel* namelabel = [[[UILabel alloc]initWithFrame:labelFrame]autorelease];
 		namelabel.text = property;
+		namelabel.textAlignment = UITextAlignmentRight;
 		namelabel.backgroundColor = [UIColor clearColor];
 		[cell.contentView addSubview:namelabel];
 		
 		
 		UILabel* label = [[[UILabel alloc]initWithFrame:textFieldFrame]autorelease];
 		label.backgroundColor = [UIColor clearColor];
+		txtField.autoresizingMask = UIViewAutoresizingNone;
 		[_labels setObject:label forKey:property];
 		++i;
 	}
@@ -70,6 +72,17 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	int i =0 ;
+	NSArray* properties = [self.multiFloatValue allPropertyNames];
+	for(NSString* property in properties){
+		UILabel *label = [_labels objectForKey:property];
+		UITextField *txtField = [_textFields objectForKey:property];
+		CGRect frame = CGRectMake(110,50 + i * 44,cell.contentView.bounds.size.width - 110,44);
+		label.frame = frame;
+		txtField.frame = frame;
+		++i;
+	}
+	
 	cell.textLabel.frame = CGRectMake(10,10,cell.bounds.size.width - 20,44);
 	cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 }

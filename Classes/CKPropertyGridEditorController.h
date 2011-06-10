@@ -12,6 +12,7 @@
 
 @interface CKPropertyGridEditorController : CKFormTableViewController{
 	UIPopoverController* editorPopover;
+	id _object;
 }
 
 @property (nonatomic, retain) UIPopoverController *editorPopover;
@@ -22,6 +23,7 @@
 
 
 - (void)setupWithObject:(id)object;
+- (void)setupWithObject:(id)object withFilter:(NSString*)filter;
 - (void)setupWithObject:(id)object representation:(NSDictionary*)representation;
 - (void)setupWithProperties:(NSArray*)properties;
 

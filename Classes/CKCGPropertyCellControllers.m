@@ -139,6 +139,55 @@
 
 @end
 
+
+//CGPOINT
+
+@interface CLLocationCoordinate2DWrapper : NSObject{}
+@property(nonatomic,assign)CGFloat latitude;
+@property(nonatomic,assign)CGFloat longitude;
+@end
+@implementation CLLocationCoordinate2DWrapper
+@synthesize latitude,longitude;
+@end
+
+@implementation CKCLLocationCoordinate2DPropertyCellController
+
+- (id)init{
+	[super init];
+	self.multiFloatValue = [[[CLLocationCoordinate2DWrapper alloc]init]autorelease];
+	return self;
+}
+
+- (void)setupCell:(UITableViewCell *)cell {
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	
+	CLLocationCoordinate2D* coord = (CLLocationCoordinate2D*)[[p value]objCType];
+	
+	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
+	coordWrapper.latitude = coord->latitude;
+	coordWrapper.longitude = coord->longitude;
+	
+	[super setupCell:cell];
+}
+
+- (void)valueChanged{
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
+	
+	CLLocationCoordinate2D coord;
+	coord.latitude = coordWrapper.latitude;
+	coord.longitude = coordWrapper.longitude;
+	[p setValue:[NSValue value:&coord withObjCType:@encode(CLLocationCoordinate2D)]];
+}
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+	return [NSValue valueWithCGSize:CGSizeMake(100,50 + 2 * 44)];
+}
+
+@end
+
+
+
 /*
 
 //SEE LATER

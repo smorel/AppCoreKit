@@ -9,15 +9,16 @@
 #import "CKObjectTableViewController.h"
 #import "CKDocumentArray.h"
 #import "CKCallback.h"
+#import <objc/runtime.h>
 
 
 @interface CKClassExplorer : CKObjectTableViewController {
 	CKDocumentArray* _classesCollection;
 	id _userInfo;
-	NSString* _additionalFilter;
 }
 @property(nonatomic,retain)id userInfo;
 
 - (id)initWithBaseClass:(Class)type;
+- (id)initWithProtocol:(Protocol*)protocol;
 
 @end

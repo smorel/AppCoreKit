@@ -269,6 +269,10 @@
 		7502F5BB13995C6700458128 /* CKPropertyGridEditorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7502F5B913995C6700458128 /* CKPropertyGridEditorController.m */; };
 		7502F5BE13995C7100458128 /* CKStoreDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 7502F5BC13995C7100458128 /* CKStoreDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7502F5BF13995C7100458128 /* CKStoreDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7502F5BD13995C7100458128 /* CKStoreDataSource.m */; };
+		7503156D13A2A71900718378 /* CKUIImagePropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7503156B13A2A71900718378 /* CKUIImagePropertyCellController.h */; };
+		7503156E13A2A71900718378 /* CKUIImagePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7503156C13A2A71900718378 /* CKUIImagePropertyCellController.m */; };
+		7503164513A2BF2500718378 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */; };
+		7503164613A2BF2500718378 /* CKMKMapView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */; };
 		7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
 		750D7AB01356365C0091E5AA /* CKNibCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 750D7AAE1356365C0091E5AA /* CKNibCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -678,6 +682,10 @@
 		7502F5B913995C6700458128 /* CKPropertyGridEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPropertyGridEditorController.m; sourceTree = "<group>"; };
 		7502F5BC13995C7100458128 /* CKStoreDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKStoreDataSource.h; sourceTree = "<group>"; };
 		7502F5BD13995C7100458128 /* CKStoreDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKStoreDataSource.m; sourceTree = "<group>"; };
+		7503156B13A2A71900718378 /* CKUIImagePropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKUIImagePropertyCellController.h; sourceTree = "<group>"; };
+		7503156C13A2A71900718378 /* CKUIImagePropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIImagePropertyCellController.m; sourceTree = "<group>"; };
+		7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKMKMapView+Introspection.h"; sourceTree = "<group>"; };
+		7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKMKMapView+Introspection.m"; sourceTree = "<group>"; };
 		7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAZeroingWeakRef.h; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.h; sourceTree = "<group>"; };
 		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
 		750D7AAE1356365C0091E5AA /* CKNibCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNibCellController.h; sourceTree = "<group>"; };
@@ -1438,6 +1446,8 @@
 			children = (
 				7570D68F13A16B1900CF08FA /* CKNSObjectPropertyCellController.h */,
 				7570D69013A16B1900CF08FA /* CKNSObjectPropertyCellController.m */,
+				7503156B13A2A71900718378 /* CKUIImagePropertyCellController.h */,
+				7503156C13A2A71900718378 /* CKUIImagePropertyCellController.m */,
 				7532965813A19DD6007471B0 /* CKMultiFloatPropertyCellController.h */,
 				7532965913A19DD6007471B0 /* CKMultiFloatPropertyCellController.m */,
 				753295A613A18B2A007471B0 /* CKCGPropertyCellControllers.h */,
@@ -1516,6 +1526,8 @@
 			children = (
 				7563236513A11FEE004C2D47 /* CKUIView+Introspection.h */,
 				7563236613A11FEE004C2D47 /* CKUIView+Introspection.m */,
+				7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */,
+				7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1838,6 +1850,8 @@
 				753295A813A18B2A007471B0 /* CKCGPropertyCellControllers.h in Headers */,
 				7532965A13A19DD6007471B0 /* CKMultiFloatPropertyCellController.h in Headers */,
 				7532972D13A25985007471B0 /* CKClassExplorer.h in Headers */,
+				7503156D13A2A71900718378 /* CKUIImagePropertyCellController.h in Headers */,
+				7503164513A2BF2500718378 /* CKMKMapView+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2144,6 +2158,8 @@
 				753295A913A18B2A007471B0 /* CKCGPropertyCellControllers.m in Sources */,
 				7532965B13A19DD6007471B0 /* CKMultiFloatPropertyCellController.m in Sources */,
 				7532972E13A25985007471B0 /* CKClassExplorer.m in Sources */,
+				7503156E13A2A71900718378 /* CKUIImagePropertyCellController.m in Sources */,
+				7503164613A2BF2500718378 /* CKMKMapView+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

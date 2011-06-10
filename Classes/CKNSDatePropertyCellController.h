@@ -6,10 +6,10 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <CKTableViewCellController.h>
 
 
-@interface CKNSDatePropertyCellController : NSObject {
+@interface CKNSDatePropertyCellController : CKTableViewCellController {
 
 }
 

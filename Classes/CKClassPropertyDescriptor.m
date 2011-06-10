@@ -9,6 +9,7 @@
 #import "CKClassPropertyDescriptor.h"
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
+#import <MapKit/MapKit.h>
 
 typedef struct CKStructParsedAttributes{
 	NSString* className;
@@ -37,6 +38,11 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	else if([results.className isEqual:@"CGAffineTransform"]){
 		results.encoding = [NSString stringWithUTF8String:@encode(CGAffineTransform)];
 		results.size = sizeof(CGAffineTransform);
+	}
+	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
+		results.size = sizeof(CLLocationCoordinate2D);
+		results.className = @"CLLocationCoordinate2D";
 	}
 	else{
 		results.encoding = nil;

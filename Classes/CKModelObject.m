@@ -27,10 +27,12 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize contentType;
 @synthesize dateFormat;
 @synthesize valuesAndLabels;
+@synthesize contentProtocol;
 
 - (void)dealloc{
 	self.enumDefinition = nil;
 	self.dateFormat = nil;
+	self.contentProtocol = nil;
 	[super dealloc];
 }
 
@@ -45,6 +47,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.enumDefinition = nil;
 	self.valuesAndLabels = nil;
 	self.contentType = nil;
+	self.contentProtocol = nil;
 	self.dateFormat = nil;
 }
 

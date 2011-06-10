@@ -19,47 +19,69 @@
 #import "CKUIColorPropertyCellController.h"
 #import "CKNSDatePropertyCellController.h"
 #import "CKCGPropertyCellControllers.h"
+#import "CKUIImagePropertyCellController.h"
 
 //PROPERTY GRID CONTROLLER
 @interface CKPropertyGridEditorController() 
+@property (nonatomic, retain) id object;
 - (void)setup:(NSArray*)theProperties  inSection:(CKFormSection*)section;
 @end
 
 @implementation CKPropertyGridEditorController
 @synthesize editorPopover = _editorPopover;
+@synthesize object = _object;
 
 - (void)dealloc{
 	[_editorPopover release];
 	_editorPopover = nil;
+	[_object release];
+	_object = nil;
 	[super dealloc];
 }
 
 - (id)initWithObjectProperties:(NSArray*)theProperties{
-	[self init];
+	[self initWithStyle:UITableViewStyleGrouped];
 	[self setupWithProperties:theProperties];
 	return self;
 }
 
 - (id)initWithObject:(id)object representation:(NSDictionary*)representation{
-	[self init];
+	[self initWithStyle:UITableViewStyleGrouped];
 	[self setupWithObject:object representation:representation];
 	return self;
 }
 
 - (id)initWithObject:(id)object{
-	[self init];
+	[self initWithStyle:UITableViewStyleGrouped];
 	[self setupWithObject:object];
 	return self;
 }
 
-- (void)setupWithObject:(id)object{
-	NSArray* propertyDescriptors = [object allPropertyDescriptors];
+- (void)setupWithObject:(id)theobject{
+	[self setupWithObject:theobject withFilter:nil];
+}
+
+- (void)setupWithObject:(id)theobject withFilter:(NSString*)filter{
+	NSString* lowerCaseFilter = [filter lowercaseString];
+	self.searchEnabled = YES;
+	self.liveSearchDelay = 0.5;
+	
+	self.object = theobject;
+	NSArray* propertyDescriptors = [_object allPropertyDescriptors];
 	NSMutableArray* theProperties = [NSMutableArray array];
 	for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
-		if(metaData.editable){
-			CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:object keyPath:descriptor.name]autorelease];
-			[theProperties insertObject:property atIndex:0];
+		NSString* lowerCaseProperty = [descriptor.name lowercaseString];
+		BOOL useProperty = YES;
+		if(filter != nil){
+			NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
+			useProperty = (range.location != NSNotFound);
+		}
+		if(useProperty){
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:_object property:descriptor];
+			if(metaData.editable){
+				CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:theobject keyPath:descriptor.name]autorelease];
+				[theProperties insertObject:property atIndex:0];
+			}
 		}
 	}
 	[self setupWithProperties:theProperties];
@@ -193,6 +215,9 @@
 						else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){
 							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]]];
 						}
+						else if([NSObject isKindOf:descriptor.type parentType:[UIImage class]]){
+							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIImagePropertyCellController class]]];
+						}
 						else{
 							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]]];
 						}
@@ -209,6 +234,17 @@
 					}
 				}
 			}
+		}
+	}
+}
+
+- (void)didSearch:(NSString*)text{
+	if(_object){
+		if([text length] < 1){
+			[self setupWithObject:_object];
+		}
+		else{
+			[self setupWithObject:_object withFilter:text];
 		}
 	}
 }

@@ -23,6 +23,12 @@
 
 @end
 
+@interface CKCLLocationCoordinate2DPropertyCellController: CKMultiFloatPropertyCellController {
+}
+
+@end
+
+
 /*
 @interface CKCGAffineTransformPropertyCellController: CKMultiFloatPropertyCellController {
 }

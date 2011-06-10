@@ -7,7 +7,7 @@
 //
 
 #import "CKNSObject+Introspection.h"
-
+#import <objc/runtime.h>
 
 @protocol CKMigrating
 - (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object;
@@ -27,6 +27,7 @@
 	NSDictionary* enumDefinition;
 	NSDictionary* valuesAndLabels;
 	Class contentType;
+	Protocol* contentProtocol;
 	NSString* dateFormat;
 }
 
@@ -40,6 +41,7 @@
 @property (nonatomic, retain) NSDictionary* enumDefinition;
 @property (nonatomic, retain) NSDictionary* valuesAndLabels;
 @property (nonatomic, assign) Class contentType;
+@property (nonatomic, assign) Protocol* contentProtocol;
 @property (nonatomic, retain) NSString* dateFormat;
 
 - (void)reset;

@@ -109,7 +109,7 @@
 - (void)didOverrideClass{
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[self.tableViewCell bind:@"detailTextLabel.text" target:self action:@selector(updateDetailText:)];
+		[self.tableViewCell.detailTextLabel bind:@"text" target:self action:@selector(updateDetailText:)];
 		[NSObject endBindingsContext];	
 	}
 }
@@ -117,7 +117,7 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[cell bind:@"detailTextLabel.text" target:self action:@selector(updateDetailText:)];
+		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateDetailText:)];
 		[NSObject endBindingsContext];	
 	}
 	

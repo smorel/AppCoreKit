@@ -218,7 +218,7 @@
 		BOOL isPortrait = !UIDeviceOrientationIsLandscape(deviceOrientation);
 		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
 		BOOL tooSmall = self.view.bounds.size.width <= 320;
-		tableViewOffset += (!isIpad || (_searchScopeDefinition && isPortrait) || tooSmall) ? 88 : 44;
+		tableViewOffset += (!isIpad || (_searchScopeDefinition && (isPortrait || tooSmall))) ? 88 : 44;
 		
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
 		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

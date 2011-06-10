@@ -151,12 +151,14 @@
 	id value = self.value;
 	
 	Class contentType = nil;
+	Protocol* contentProtocol = nil;
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		
 		CKModelObjectPropertyMetaData* metaData = [property metaData];
 		contentType = [metaData contentType];
+		contentProtocol = [metaData contentProtocol];
 		
 		//Wrap the array in a virtual collection
 		if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
@@ -174,9 +176,9 @@
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
 		CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:value mappings:mappings]autorelease];
 		controller.title = self.tableViewCell.textLabel.text;
-		if(contentType != nil){
+		if(contentType != nil || contentProtocol != nil){
 			CKUIBarButtonItemWithInfo* button = [[[CKUIBarButtonItemWithInfo alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(createObject:)]autorelease];
-			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:value,@"collection",[NSValue valueWithPointer:contentType],@"class",controller,@"controller",nil];
+			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:value,@"collection",[NSValue valueWithPointer:contentType],@"class",[NSValue valueWithPointer:contentProtocol],@"protocol",controller,@"controller",nil];
 			controller.rightButton = button;
 		}
 		[self.parentController.navigationController pushViewController:controller animated:YES];
@@ -202,8 +204,9 @@
 	}
 	
 	Class type = [[userInfos objectForKey:@"class"]pointerValue];
+	Protocol* protocol = [[userInfos objectForKey:@"protocol"]pointerValue];
 	
-	CKClassExplorer* controller = [[[CKClassExplorer alloc]initWithBaseClass:type]autorelease];
+	CKClassExplorer* controller = protocol ? [[[CKClassExplorer alloc]initWithProtocol:protocol]autorelease] : [[[CKClassExplorer alloc]initWithBaseClass:type]autorelease];
 	controller.userInfo = userInfos;
 	controller.delegate = self;
 	[self.parentController.navigationController pushViewController:controller animated:YES];
@@ -238,7 +241,19 @@
 		[property setValue:instance];
 	}
 	
-	[controller.navigationController popViewControllerAnimated:YES];
+	[controller.navigationController popViewControllerAnimated:NO];
+	
+	//push the new object
+	NSString* title = [[instance class]description];
+	CKClassPropertyDescriptor* nameDescriptor = [instance propertyDescriptorForKeyPath:@"modelName"];
+	if(nameDescriptor != nil && [NSObject isKindOf:nameDescriptor.type parentType:[NSString class]]){
+		title = [instance valueForKeyPath:@"modelName"];
+	}
+	
+	CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:instance]autorelease];
+	propertyGrid.title = title;
+	[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
+	
 
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];
