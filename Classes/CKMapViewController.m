@@ -19,6 +19,7 @@
 #import "CKTableViewCellController+StyleManager.h"
 
 #import "CKNSNotificationCenter+Edition.h"
+#import "MAZeroingWeakRef.h"
 
 
 NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *context)
@@ -130,6 +131,15 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 #pragma mark View Management
 
+- (void)addAnnotations:(NSArray*)annotations{
+	//HACK : force to subclass as there is some observer registration in the map view
+	//and the objects could be subclassed. We force to subclass before observer registration
+	for(id annotation in annotations){
+		MAZeroingWeakRef* ref = [MAZeroingWeakRef refWithTarget:annotation];
+	}
+	[self.mapView addAnnotations:annotations];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
@@ -143,7 +153,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 	self.mapView.delegate = self;
 	self.mapView.centerCoordinate = self.centerCoordinate;
-	[self.mapView addAnnotations:self.annotations];
+	[self addAnnotations:self.annotations];
 }
 
 - (void)viewDidUnload {
@@ -422,7 +432,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	[self.mapView addAnnotations:objects];
+	[self addAnnotations:objects];
 	[self zoom:YES];
 }
 
@@ -460,7 +470,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	
 	[self.mapView removeAnnotations:self.mapView.annotations];
 	NSArray* objects = [self objectsForSection:0];
-	[self.mapView addAnnotations:objects];
+	[self addAnnotations:objects];
 
 	[self zoom:YES];
 	 // Set the zoom for 1 entry
