@@ -114,7 +114,16 @@
 		cell.detailTextLabel.text = [value description];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		cell.accessoryView = nil;
+		if([self.value isKindOfClass:[CKObjectProperty class]]){
+			CKObjectProperty* property = (CKObjectProperty*)self.value;
+			CKClassPropertyDescriptor* descriptor = [property descriptor];
+			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
+			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
+			[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+			[button setTitle:@"Delete" forState:UIControlStateNormal];
+			[button addTarget:self action:@selector(deleteObject:) forControlEvents:UIControlEventTouchUpInside];
+			self.tableViewCell.accessoryView = button;
+		}
 	}
 	
 	cell.textLabel.text = title;
@@ -127,11 +136,14 @@
 	
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
-		[self beginBindingsContextByRemovingPreviousBindings];
-		[property.object bind:property.keyPath withBlock:^(id value){
-			[self setup];
-		}];
-		[self endBindingsContext];
+		id value = [property value];
+		if(![value isKindOfClass:[CKDocumentCollection class]]){
+			[self beginBindingsContextByRemovingPreviousBindings];
+			[property.object bind:property.keyPath withBlock:^(id value){
+				[self setup];
+			}];
+			[self endBindingsContext];
+		}
 	}
 }
 
@@ -197,6 +209,13 @@
 	[self.parentController.navigationController pushViewController:controller animated:YES];
 }
 
+- (void)deleteObject:(id)sender{
+	CKUIButtonWithInfo* button = (CKUIButtonWithInfo*)sender;
+	
+	CKObjectProperty* property = [ button.userInfo objectForKey:@"property"];
+	[property setValue:nil];
+}
+
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
 	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
@@ -244,6 +263,10 @@
 	
 	if(value == nil){
 		return CKItemViewFlagNone;
+	}
+	
+	if([object isKindOfClass:[CKObjectProperty class]]){
+		return CKItemViewFlagSelectable;
 	}
 	
 	//TODO prendre en compte le readonly pour create/remove
