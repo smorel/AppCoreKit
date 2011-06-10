@@ -331,8 +331,8 @@
 	[_indexPathToViews removeObjectForKey:previousPath];
 	
 	CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[controller performSelector:@selector(setView:) withObject:nil];
 	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
+	//[controller performSelector:@selector(setView:) withObject:nil];
 	[_weakViews removeObject:sender];
 }
 

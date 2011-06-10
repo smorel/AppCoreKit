@@ -147,6 +147,8 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	self.carouselView = nil;
+	self.pageControl = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
