@@ -88,6 +88,7 @@
 
 - (void)viewDidUnload {
 	self.tableView = nil;
+	self.tableViewContainer = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
