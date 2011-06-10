@@ -17,6 +17,7 @@ extern NSString* const CKWebSourceErrorNotification;
 typedef CKWebRequest2 *(^CKWebSourceRequestBlock)(NSRange range);
 typedef id (^CKWebSourceTransformBlock)(id value);
 typedef void (^CKWebSourceFailureBlock)(NSError *error);
+typedef void (^CKWebSourceSuccessBlock)();
 
 @interface CKWebSource : CKFeedSource <CKWebRequestDelegate> {
 	CKWebRequest2 *_request;
@@ -24,6 +25,7 @@ typedef void (^CKWebSourceFailureBlock)(NSError *error);
 	CKWebSourceRequestBlock _requestBlock;
 	CKWebSourceTransformBlock _transformBlock;
 	CKWebSourceFailureBlock _failureBlock;
+	CKWebSourceSuccessBlock _successBlock;
 	
 	id _webSourceDelegate;
 }
@@ -31,7 +33,10 @@ typedef void (^CKWebSourceFailureBlock)(NSError *error);
 @property (nonatomic, copy) CKWebSourceRequestBlock requestBlock;
 @property (nonatomic, copy) CKWebSourceTransformBlock transformBlock;
 @property (nonatomic, copy) CKWebSourceFailureBlock failureBlock;
+@property (nonatomic, copy) CKWebSourceSuccessBlock successBlock;
 @property (nonatomic, assign) id webSourceDelegate;
+
+- (void)setHasMore:(BOOL)bo;
 
 @end
 
@@ -42,6 +47,7 @@ typedef void (^CKWebSourceFailureBlock)(NSError *error);
 @required
 - (CKWebRequest2*)webSource:(CKWebSource*)webSource requestForRange:(NSRange)range;
 - (id)webSource:(CKWebSource*)webSource transform:(id)value;
+- (id)webSourceDidSuccess:(CKWebSource*)webSource;
 
 @optional
 - (void)webSource:(CKWebSource*)webSource didFailWithError:(NSError*)error;
