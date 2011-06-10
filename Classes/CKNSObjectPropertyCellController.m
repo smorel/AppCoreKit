@@ -35,6 +35,19 @@
 }
 @end
 
+@interface CKUIButtonWithInfo : UIButton{
+	id userInfo;
+}
+@property(nonatomic,retain)id userInfo;
+@end
+
+@implementation CKUIButtonWithInfo
+@synthesize userInfo;
+- (void)dealloc{
+	[userInfo release];
+	[super dealloc];
+}
+@end
 
 @implementation CKNSObjectPropertyCellController
 
@@ -53,11 +66,8 @@
 	[super initTableViewCell:cell];
 }
 
-
-- (void)setupCell:(UITableViewCell *)cell {
-	[super setupCell:cell];
-	
-	//TODO prendre en compte le readonly pour create/remove
+- (void)setup{
+	UITableViewCell* cell = self.tableViewCell;
 	
 	NSString* title = [[self.value class]description];
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
@@ -82,19 +92,47 @@
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.accessoryView = nil;
 	}
 	else if(value == nil){
 		cell.detailTextLabel.text = @"nil";
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		
+		if([self.value isKindOfClass:[CKObjectProperty class]]){
+			CKObjectProperty* property = (CKObjectProperty*)self.value;
+			CKClassPropertyDescriptor* descriptor = [property descriptor];
+			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
+			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
+			[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+			[button setTitle:@"Create" forState:UIControlStateNormal];
+			[button addTarget:self action:@selector(createObject:) forControlEvents:UIControlEventTouchUpInside];
+			self.tableViewCell.accessoryView = button;
+		}
 	}
 	else{
 		cell.detailTextLabel.text = [value description];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		cell.accessoryView = nil;
 	}
 	
 	cell.textLabel.text = title;
+}
+
+- (void)setupCell:(UITableViewCell *)cell {
+	[self clearBindingsContext];
+	[super setupCell:cell];
+	[self setup];
+	
+	if([self.value isKindOfClass:[CKObjectProperty class]]){
+		CKObjectProperty* property = (CKObjectProperty*)self.value;
+		[self beginBindingsContextByRemovingPreviousBindings];
+		[property.object bind:property.keyPath withBlock:^(id value){
+			[self setup];
+		}];
+		[self endBindingsContext];
+	}
 }
 
 - (void)didSelectRow{
@@ -139,11 +177,20 @@
 }
 
 - (void)createObject:(id)sender{
-	CKUIBarButtonItemWithInfo* button = (CKUIBarButtonItemWithInfo*)sender;
-	Class type = [[button.userInfo objectForKey:@"class"]pointerValue];
+	id userInfos = nil;
+	if([sender isKindOfClass:[CKUIButtonWithInfo class]]){
+		CKUIButtonWithInfo* button = (CKUIButtonWithInfo*)sender;
+		userInfos = button.userInfo;
+	}
+	else if([sender isKindOfClass:[CKUIBarButtonItemWithInfo class]]){
+		CKUIBarButtonItemWithInfo* button = (CKUIBarButtonItemWithInfo*)sender;
+		userInfos = button.userInfo;
+	}
+	
+	Class type = [[userInfos objectForKey:@"class"]pointerValue];
 	
 	CKClassExplorer* controller = [[[CKClassExplorer alloc]initWithBaseClass:type]autorelease];
-	controller.userInfo = button.userInfo;
+	controller.userInfo = userInfos;
 	controller.delegate = self;
 	[self.parentController.navigationController pushViewController:controller animated:YES];
 }
@@ -151,7 +198,6 @@
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
 	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
-	CKDocumentCollection* collection = [classExplorer.userInfo objectForKey:@"collection"];
 	NSString* className = (NSString*)object;
 	Class type = NSClassFromString(className);
 	id instance = nil;
@@ -161,7 +207,15 @@
 	else{
 		instance = [[[type alloc]init]autorelease];
 	}
-	[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
+	
+	CKDocumentCollection* collection = [classExplorer.userInfo objectForKey:@"collection"];
+	if(collection){
+		[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
+	}
+	else{
+		CKObjectProperty* property = [classExplorer.userInfo objectForKey:@"property"];
+		[property setValue:instance];
+	}
 	
 	[controller.navigationController popViewControllerAnimated:YES];
 
@@ -180,6 +234,16 @@
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	id value = object;
+	if([object isKindOfClass:[CKObjectProperty class]]){
+		CKObjectProperty* property = (CKObjectProperty*)object;
+		value = [property value];
+	}
+	
+	if(value == nil){
+		return CKItemViewFlagNone;
+	}
+	
 	//TODO prendre en compte le readonly pour create/remove
 	return CKItemViewFlagSelectable | CKItemViewFlagRemovable;
 }

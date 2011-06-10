@@ -76,7 +76,8 @@ NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 			Class c = classes[i];
 			NSString* className = NSStringFromClass(c);
 			if([NSObject isKindOf:c parentType:type]
-			   && ![className hasSuffix:@"_MAZeroingWeakRefSubclass"]){
+			   && ![className hasSuffix:@"_MAZeroingWeakRefSubclass"]
+			   && ![className hasPrefix:@"_"]){
 				[ar addObject:className];
 			}
 		}
