@@ -48,6 +48,7 @@
 
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
+	[super initTableViewCell:cell];
 }
 
 

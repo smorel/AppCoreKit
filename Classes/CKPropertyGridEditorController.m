@@ -16,6 +16,9 @@
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
+#import "CKUIColorPropertyCellController.h"
+#import "CKNSDatePropertyCellController.h"
+#import "CKCGPropertyCellControllers.h"
 
 //PROPERTY GRID CONTROLLER
 @interface CKPropertyGridEditorController() 
@@ -184,33 +187,24 @@
 						else if([NSObject isKindOf:descriptor.type parentType:[NSNumber class]]){
 							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]]];
 						}
-						else /*if([NSObject isKindOf:descriptor.type parentType:[CKDocumentCollection class]])*/{
+						else if([NSObject isKindOf:descriptor.type parentType:[UIColor class]]){
+							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIColorPropertyCellController class]]];
+						}
+						else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){
+							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]]];
+						}
+						else{
 							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]]];
 						}
-						/*
-						else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){
-							CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKTableViewCellController class]]];
-							
-							[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
-								CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
-								[tableViewCellController beginBindingsContextByRemovingPreviousBindings];
-								[property.object bind:property.keyPath toObject:tableViewCellController.tableViewCell.detailTextLabel withKeyPath:@"text"];
-								[NSObject endBindingsContext];
-								
-								tableViewCellController.tableViewCell.textLabel.text = _(property.name);
-								if(tableViewCellController.tableViewCell.detailTextLabel.text == nil || [tableViewCellController.tableViewCell.detailTextLabel.text length] < 1){
-									tableViewCellController.tableViewCell.detailTextLabel.text = @" ";//Force to create detailTextLabel
-								}
-								return (id)nil;
-							}] forKey:CKObjectViewControllerFactoryItemSetup];
-							
-							[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
-								CKTableViewCellController* tableViewCellController = (CKTableViewCellController*)controller;
-								[self popoverDateEditorForProperty:property withFrame:tableViewCellController.tableViewCell.frame withDirections:UIPopoverArrowDirectionRight];
-								return (id)nil;
-							}] forKey:CKObjectViewControllerFactoryItemSelection];
-							
-						}*/
+						break;
+					}
+					case CKClassPropertyDescriptorTypeStruct:
+					{
+						NSString* controllerClassName = [NSString stringWithFormat:@"CK%@PropertyCellController",descriptor.className];
+						Class controllerClass = NSClassFromString(controllerClassName);
+						if(controllerClass){
+							[section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:controllerClass]];
+						}
 						break;
 					}
 				}

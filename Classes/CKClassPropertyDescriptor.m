@@ -34,6 +34,10 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(CGPoint)];
 		results.size = sizeof(CGPoint);
 	}
+	else if([results.className isEqual:@"CGAffineTransform"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGAffineTransform)];
+		results.size = sizeof(CGAffineTransform);
+	}
 	else{
 		results.encoding = nil;
 		results.size = 0;
