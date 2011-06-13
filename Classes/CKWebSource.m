@@ -118,7 +118,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	self.isFetching = NO;
 	self.request = nil;
 	
-	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
+	if(_webSourceDelegate && [_webSourceDelegate respondsToSelector:@selector(webSourceDidSuccess:)]){
 		[_webSourceDelegate webSourceDidSuccess:self];
 	}
 	else if(_successBlock){
