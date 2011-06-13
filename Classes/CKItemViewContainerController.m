@@ -164,6 +164,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
+	[self.view endEditing:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -330,7 +331,7 @@
 	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_indexPathToViews removeObjectForKey:previousPath];
 	
-	CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
+	//CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
 	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
 	//[controller performSelector:@selector(setView:) withObject:nil];
 	[_weakViews removeObject:sender];
@@ -350,6 +351,10 @@
 	return nil;
 }
 
+- (BOOL)isValidIndexPath:(NSIndexPath*)indexPath{
+	id object = [self objectAtIndexPath:indexPath];
+	return object != nil;
+}
 
 - (NSArray*)objectsForSection:(NSInteger)section{
 	NSMutableArray* array = [NSMutableArray array];

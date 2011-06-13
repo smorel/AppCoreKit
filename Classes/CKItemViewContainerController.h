@@ -91,6 +91,7 @@
 - (NSArray*)visibleViews;
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath;
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier;
+- (BOOL)isValidIndexPath:(NSIndexPath*)indexPath;
 
 - (id)objectAtIndexPath:(NSIndexPath*)indexPath;
 - (NSArray*)objectsForSection:(NSInteger)section;

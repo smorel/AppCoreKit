@@ -351,17 +351,26 @@
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
+	
+	if(_frameBeforeKeyboardNotification.size.width != 0
+	   && _frameBeforeKeyboardNotification.size.height != 0){
+		if(animated){
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationBeginsFromCurrentState:YES];
+			[UIView setAnimationDuration:0.25];
+			self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+			[UIView commitAnimations];
+		}
+		else{
+			self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+		}
+		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
+	}
 	 
 	[super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-	if(_frameBeforeKeyboardNotification.size.width != 0
-	   && _frameBeforeKeyboardNotification.size.height != 0){
-		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
-		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
-	}
-	
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
 	
@@ -678,7 +687,7 @@
 		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
 		[UIView commitAnimations];
 		
-		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
+		//_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
 	}
 }
 
