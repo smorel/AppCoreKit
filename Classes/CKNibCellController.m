@@ -13,8 +13,6 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface CKNibCellController()
-@property (nonatomic,retain) UIView* portraitView;
-@property (nonatomic,retain) UIView* landscapeView;
 @end
 
 @implementation CKNibCellController

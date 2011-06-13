@@ -31,6 +31,9 @@ typedef enum{
 @property (nonatomic,assign) CKNibCellControllerMode currentMode;
 @property (nonatomic,assign) BOOL autoresizeViewsOnInsertion;
 
+@property (nonatomic,retain) UIView* portraitView;
+@property (nonatomic,retain) UIView* landscapeView;
+
 //PRIVATE
 - (void)customizePortraitView:(UIView*)view;
 - (void)customizeLandscapeView:(UIView*)view;
