@@ -582,7 +582,6 @@
 		71993A5211F8C53D0056EC2C /* CKMultipartParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMultipartParser.h; sourceTree = "<group>"; };
 		71993A5511F8C54A0056EC2C /* CKNSData+Matching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSData+Matching.m"; sourceTree = "<group>"; };
 		71993A5611F8C54A0056EC2C /* CKNSData+Matching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKNSData+Matching.h"; sourceTree = "<group>"; };
-		719F056B10F6A68F002955C0 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = ../cloudkit/CloudKit.bundle; sourceTree = SOURCE_ROOT; };
 		719F05CC10F6A818002955C0 /* CKAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAttribute.h; sourceTree = "<group>"; };
 		719F05CD10F6A818002955C0 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAttribute.m; sourceTree = "<group>"; };
 		719F062710F6E749002955C0 /* CKDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDomain.h; sourceTree = "<group>"; };
@@ -699,6 +698,7 @@
 		751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKObjectTableViewController.m; sourceTree = "<group>"; };
 		751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectViewControllerFactory.h; path = Classes/CKObjectViewControllerFactory.h; sourceTree = "<group>"; };
 		751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectViewControllerFactory.m; path = Classes/CKObjectViewControllerFactory.m; sourceTree = "<group>"; };
+		751A194D13A7C7EF00B6B598 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CloudKit.bundle; sourceTree = "<group>"; };
 		751A366B134DEC660011656D /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCarouselView.h; path = Classes/CKCarouselView.h; sourceTree = "<group>"; };
 		751A366C134DEC660011656D /* CKCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCarouselView.m; path = Classes/CKCarouselView.m; sourceTree = "<group>"; };
 		751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectCarouselViewController.h; path = Classes/CKObjectCarouselViewController.h; sourceTree = "<group>"; };
@@ -877,6 +877,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				751A194D13A7C7EF00B6B598 /* CloudKit.bundle */,
 				D2AAC07E0554694100DB518D /* libCloudKit.a */,
 				712E100310A4C7E700DF6562 /* UnitTests.octest */,
 			);
@@ -910,7 +911,6 @@
 				71AD9EC910A36DCF00C88903 /* Vendor */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
-				719F056B10F6A68F002955C0 /* CloudKit.bundle */,
 				AA747D9E0F9514B9006C5449 /* CloudKit_Prefix.pch */,
 				71D6C00B115440AA004C779E /* CloudKit-Info.plist */,
 				712E100410A4C7E700DF6562 /* UnitTests-Info.plist */,
