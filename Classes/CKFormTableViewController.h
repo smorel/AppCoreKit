@@ -113,6 +113,8 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 @property (nonatomic,retain) NSArray* sections;
 
 - (id)initWithSections:(NSArray*)sections;
+- (id)initWithSections:(NSArray*)sections withNibName:(NSString*)nibName;
+
 
 - (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;

@@ -587,12 +587,18 @@
 	}
 }
 
-- (id)initWithSections:(NSArray*)theSections{
-	[super init];
+
+- (id)initWithSections:(NSArray*)theSections withNibName:(NSString*)nibName{
+	[super initWithNibName:nibName bundle:[NSBundle mainBundle]];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
 	for(CKFormSectionBase* section in theSections){
 		section.parentController = self;
 	}
+	return self;
+}
+
+- (id)initWithSections:(NSArray*)theSections{
+	[self initWithSections:theSections withNibName:nil];
 	return self;
 }
 
