@@ -75,7 +75,6 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	[self beginBindingsContextByRemovingPreviousBindings];
 	switch(self.currentMode){
 		case CKNibCellControllerModePortrait:{
 			[self bindValueInPortraitView:cell.contentView];
@@ -86,7 +85,6 @@
 			break;
 		}
 	}
-	[self endBindingsContext];
 }
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
@@ -137,7 +135,7 @@
 	
 	if(newMode != self.currentMode){
 		self.currentMode = newMode;
-		[self setupCell:self.tableViewCell];
+		[self setupView:self.tableViewCell];
 	}
 }
 

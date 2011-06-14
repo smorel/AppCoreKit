@@ -272,9 +272,11 @@
 }
 
 - (void)setupView:(UIView *)view{
+	[self beginBindingsContextByRemovingPreviousBindings];
 	[super setupView:view];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
+	[self endBindingsContext];
 }
 
 - (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
