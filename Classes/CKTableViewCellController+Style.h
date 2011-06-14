@@ -29,9 +29,6 @@ extern NSString* CKStyleCellFlags;
 @interface UITableViewCell (CKStyle)
 @end
 
-@interface UITableViewCell (CKValueTransformer)
-@end
-
 @interface CKTableViewController (CKStyle)
 @end
 

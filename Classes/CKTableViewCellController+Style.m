@@ -66,37 +66,6 @@ NSString* CKStyleCellFlags = @"flags";
 @end
 
 
-
-@implementation UITableViewCell (CKValueTransformer)
-
-- (void)accessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
-											   UITableViewCellAccessoryDisclosureIndicator, 
-											   UITableViewCellAccessoryDetailDisclosureButton,
-											   UITableViewCellAccessoryCheckmark);
-}
-
-- (void)editingAccessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
-											   UITableViewCellAccessoryDisclosureIndicator, 
-											   UITableViewCellAccessoryDetailDisclosureButton,
-											   UITableViewCellAccessoryCheckmark);
-}
-
-- (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellSelectionStyleNone,
-											   UITableViewCellSelectionStyleBlue,
-											   UITableViewCellSelectionStyleGray);
-}
-
-- (void)editingStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellEditingStyleNone,
-											   UITableViewCellEditingStyleDelete,
-											   UITableViewCellEditingStyleInsert);
-}
-
-@end
-
 @implementation UITableViewCell (CKStyle)
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{

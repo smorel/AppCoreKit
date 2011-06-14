@@ -286,6 +286,10 @@
 		751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B11337BB1C008B0E7B /* CKObjectTableViewController.m */; };
 		751004BF1337BB1C008B0E7B /* CKObjectViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751004C01337BB1C008B0E7B /* CKObjectViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */; };
+		751A198A13A7CD5100B6B598 /* CKUITableView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A198813A7CD5100B6B598 /* CKUITableView+Introspection.h */; };
+		751A198B13A7CD5100B6B598 /* CKUITableView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */; };
+		751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */; };
+		751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */; };
 		751A366D134DEC660011656D /* CKCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A366B134DEC660011656D /* CKCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751A366E134DEC660011656D /* CKCarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A366C134DEC660011656D /* CKCarouselView.m */; };
 		751A3778134DFBAE0011656D /* CKObjectCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -699,6 +703,10 @@
 		751004B41337BB1C008B0E7B /* CKObjectViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectViewControllerFactory.h; path = Classes/CKObjectViewControllerFactory.h; sourceTree = "<group>"; };
 		751004B51337BB1C008B0E7B /* CKObjectViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectViewControllerFactory.m; path = Classes/CKObjectViewControllerFactory.m; sourceTree = "<group>"; };
 		751A194D13A7C7EF00B6B598 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CloudKit.bundle; sourceTree = "<group>"; };
+		751A198813A7CD5100B6B598 /* CKUITableView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUITableView+Introspection.h"; sourceTree = "<group>"; };
+		751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUITableView+Introspection.m"; sourceTree = "<group>"; };
+		751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUITableViewCell+Introspection.h"; sourceTree = "<group>"; };
+		751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUITableViewCell+Introspection.m"; sourceTree = "<group>"; };
 		751A366B134DEC660011656D /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCarouselView.h; path = Classes/CKCarouselView.h; sourceTree = "<group>"; };
 		751A366C134DEC660011656D /* CKCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCarouselView.m; path = Classes/CKCarouselView.m; sourceTree = "<group>"; };
 		751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectCarouselViewController.h; path = Classes/CKObjectCarouselViewController.h; sourceTree = "<group>"; };
@@ -1528,6 +1536,10 @@
 				7563236613A11FEE004C2D47 /* CKUIView+Introspection.m */,
 				7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */,
 				7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */,
+				751A198813A7CD5100B6B598 /* CKUITableView+Introspection.h */,
+				751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */,
+				751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */,
+				751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1852,6 +1864,8 @@
 				7532972D13A25985007471B0 /* CKClassExplorer.h in Headers */,
 				7503156D13A2A71900718378 /* CKUIImagePropertyCellController.h in Headers */,
 				7503164513A2BF2500718378 /* CKMKMapView+Introspection.h in Headers */,
+				751A198A13A7CD5100B6B598 /* CKUITableView+Introspection.h in Headers */,
+				751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2160,6 +2174,8 @@
 				7532972E13A25985007471B0 /* CKClassExplorer.m in Sources */,
 				7503156E13A2A71900718378 /* CKUIImagePropertyCellController.m in Sources */,
 				7503164613A2BF2500718378 /* CKMKMapView+Introspection.m in Sources */,
+				751A198B13A7CD5100B6B598 /* CKUITableView+Introspection.m in Sources */,
+				751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
