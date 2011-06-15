@@ -253,6 +253,8 @@
 		71D1855A1301EAEE000AD883 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D185471301EAEE000AD883 /* CJSONSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71D1855B1301EAEE000AD883 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D185481301EAEE000AD883 /* CJSONSerializer.m */; };
 		71D1855C1301EAEE000AD883 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 71D185491301EAEE000AD883 /* JSONRepresentation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71E2306513A93C6000BB5BD2 /* CKMultipartEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E2306313A93C6000BB5BD2 /* CKMultipartEncoder.m */; };
+		71E2306613A93C6000BB5BD2 /* CKMultipartEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E2306413A93C6000BB5BD2 /* CKMultipartEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E49B6F12D784960034594E /* CKWebRequest2.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E49B6D12D784960034594E /* CKWebRequest2.m */; };
 		71E49B7012D784960034594E /* CKWebRequest2.h in Headers */ = {isa = PBXBuildFile; fileRef = 71E49B6E12D784960034594E /* CKWebRequest2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71E49B7412D784AD0034594E /* CKNSObject+Invocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E49B7212D784AD0034594E /* CKNSObject+Invocation.m */; };
@@ -671,6 +673,8 @@
 		71D185481301EAEE000AD883 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		71D185491301EAEE000AD883 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		71D6C00B115440AA004C779E /* CloudKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CloudKit-Info.plist"; path = "../cloudkit/CloudKit-Info.plist"; sourceTree = SOURCE_ROOT; };
+		71E2306313A93C6000BB5BD2 /* CKMultipartEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKMultipartEncoder.m; sourceTree = "<group>"; };
+		71E2306413A93C6000BB5BD2 /* CKMultipartEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKMultipartEncoder.h; sourceTree = "<group>"; };
 		71E49B6D12D784960034594E /* CKWebRequest2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWebRequest2.m; sourceTree = "<group>"; };
 		71E49B6E12D784960034594E /* CKWebRequest2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWebRequest2.h; sourceTree = "<group>"; };
 		71E49B7212D784AD0034594E /* CKNSObject+Invocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKNSObject+Invocation.m"; sourceTree = "<group>"; };
@@ -1006,6 +1010,8 @@
 				75A2A2FB12F7F2DD00E71451 /* CKFeedSource.m */,
 				75A2A2FC12F7F2DD00E71451 /* CKWebSource.h */,
 				75A2A2FD12F7F2DD00E71451 /* CKWebSource.m */,
+				71E2306313A93C6000BB5BD2 /* CKMultipartEncoder.m */,
+				71E2306413A93C6000BB5BD2 /* CKMultipartEncoder.h */,
 				71993A5111F8C53D0056EC2C /* CKMultipartParser.m */,
 				71993A5211F8C53D0056EC2C /* CKMultipartParser.h */,
 				710DF10E10FFBC030063FB2C /* CKWebRequest.h */,
@@ -1873,6 +1879,7 @@
 				751A198A13A7CD5100B6B598 /* CKUITableView+Introspection.h in Headers */,
 				751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */,
 				751A1DB813A9343500B6B598 /* CKUITextField+Introspection.h in Headers */,
+				71E2306613A93C6000BB5BD2 /* CKMultipartEncoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2184,6 +2191,7 @@
 				751A198B13A7CD5100B6B598 /* CKUITableView+Introspection.m in Sources */,
 				751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */,
 				751A1DB913A9343500B6B598 /* CKUITextField+Introspection.m in Sources */,
+				71E2306513A93C6000BB5BD2 /* CKMultipartEncoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
