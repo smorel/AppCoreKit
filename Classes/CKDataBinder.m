@@ -14,8 +14,8 @@
 
 
 @interface CKDataBinder ()
-@property (nonatomic, retain) MAZeroingWeakRef *instance1Ref;
-@property (nonatomic, retain) MAZeroingWeakRef *instance2Ref;
+@property (nonatomic, retain) CKWeakRef *instance1Ref;
+@property (nonatomic, retain) CKWeakRef *instance2Ref;
 - (void)unbindInstance:(id)instance1 instance2:(id)instance2;
 @end
 
@@ -39,7 +39,7 @@
 
 - (NSString*)description{
 	return [NSString stringWithFormat:@"<CKDataBinder : %p>{\ninstance1Ref = %@\nkeyPath1 = %@\ninstance2Ref = %@\nkeyPath2 = %@}",
-			self,instance1Ref ? instance1Ref.target : @"(null)",keyPath1,instance2Ref ? instance2Ref.target : @"(null)",keyPath2];
+			self,instance1Ref ? instance1Ref.object : @"(null)",keyPath1,instance2Ref ? instance2Ref.object : @"(null)",keyPath2];
 }
 
 - (void)reset{
@@ -49,30 +49,30 @@
 	self.keyPath2 = nil;
 }
 
-- (void)releaseInstance1:(id)sender target:(id)target{
-	[self unbindInstance:target instance2:instance2Ref.target];
+- (id)releaseInstance1:(CKWeakRef*)weakRef{
+	[self unbindInstance:weakRef.object instance2:instance2Ref.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setInstance1:(id)instance{
 	if(instance){
-		self.instance1Ref = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		[instance1Ref setDelegate:self action:@selector(releaseInstance1:target:)];
+		self.instance1Ref = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance1:)];
 	}
 	else{
 		self.instance1Ref = nil;
 	}
 }
 
-- (void)releaseInstance2:(id)sender target:(id)target{
-	[self unbindInstance:instance1Ref.target instance2:target];
+- (id)releaseInstance2:(CKWeakRef*)weakRef{
+	[self unbindInstance:instance1Ref.object instance2:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setInstance2:(id)instance{
 	if(instance){
-		self.instance2Ref = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		[instance2Ref setDelegate:self action:@selector(releaseInstance2:target:)];
+		self.instance2Ref = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance2:)];
 	}
 	else{
 		self.instance2Ref = nil;
@@ -82,16 +82,16 @@
 -(void)bind{
 	[self unbind];
 	
-	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.target forKeyPath:keyPath2];
+	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:instance2Ref.object forKeyPath:keyPath2];
 	if(property == nil){
 		//cannot bind unfound property
 		return;
 	}
 	
-	[NSValueTransformer transform:[instance1Ref.target valueForKeyPath:keyPath1]
-							   inProperty:[CKObjectProperty propertyWithObject:instance2Ref.target keyPath:keyPath2]];
+	[NSValueTransformer transform:[instance1Ref.object valueForKeyPath:keyPath1]
+							   inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2]];
 	
-	[instance1Ref.target addObserver:self
+	[instance1Ref.object addObserver:self
 				forKeyPath:keyPath1
 				   options:(NSKeyValueObservingOptionNew)
 				   context:nil];
@@ -99,7 +99,7 @@
 }
 
 - (void)unbind{
-	[self unbindInstance:instance1Ref.target instance2:instance2Ref.target];
+	[self unbindInstance:instance1Ref.object instance2:instance2Ref.object];
 }
 
 - (void)unbindInstance:(id)instance1 instance2:(id)instance2{
@@ -116,7 +116,7 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.target keyPath:keyPath2] ];
+	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2] ];
 }
 
 @end

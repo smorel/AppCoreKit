@@ -7,12 +7,12 @@
 //
 
 #import "CKBinding.h"
-#import "MAZeroingWeakRef.h"
+#import "CKWeakRef.h"
 
 @interface CKDataBinder : NSObject<CKBinding> {
-	MAZeroingWeakRef* instance1Ref;
+	CKWeakRef* instance1Ref;
 	NSString* keyPath1;
-	MAZeroingWeakRef* instance2Ref;
+	CKWeakRef* instance2Ref;
 	NSString* keyPath2;
 	BOOL binded;
 }

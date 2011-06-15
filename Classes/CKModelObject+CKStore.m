@@ -16,7 +16,7 @@
 #import <CloudKit/CKObjectProperty.h>
 #import <CloudKit/CKNSValueTransformer+Additions.h>
 #import <CloudKit/CKNSStringAdditions.h>
-#import "MAZeroingWeakRef.h"
+#import "CKWeakRef.h"
 
 NSMutableDictionary* CKModelObjectManager = nil;
 
@@ -26,7 +26,6 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	
 	NSString* className = [[self class] description];
-	className = [className stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
 	[dico setObject:className forKey:@"@class"];
 	
 	NSArray* allProperties = [self allPropertyNames];
@@ -146,14 +145,15 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	return [[res lastObject]item];	
 }
 
-+ (void)releaseObject:(id)sender target:(id)target{
++ (id)releaseObject:(CKWeakRef*)weakRef{
 	//CKDebugLog(@"delete object <%p> of type <%@> with id %@",target,[target class],[target uniqueId]);
-	[CKModelObjectManager removeObjectForKey:[target uniqueId]];
+	[CKModelObjectManager removeObjectForKey:[weakRef.object uniqueId]];
+	return nil;
 }
 
 + (CKModelObject*)objectWithUniqueId:(NSString*)uniqueId{
-	MAZeroingWeakRef* objectRef = [CKModelObjectManager objectForKey:uniqueId];
-	id object = [objectRef target];
+	CKWeakRef* objectRef = [CKModelObjectManager objectForKey:uniqueId];
+	id object = [objectRef object];
 	if(objectRef != nil){
 		//CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
 	}
@@ -184,8 +184,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 		CKModelObjectManager = [[NSMutableDictionary alloc]init];
 	}
 	
-	MAZeroingWeakRef* objectRef = [[MAZeroingWeakRef alloc]initWithTarget:object];
-	[objectRef setDelegate:self action:@selector(releaseObject:target:)];
+	CKWeakRef* objectRef = [CKWeakRef weakRefWithObject:object target:self action:@selector(releaseObject:)];
 	[CKModelObjectManager setObject:objectRef forKey:uniqueId];
 	
 	//CKDebugLog(@"Register object <%p> of type <%@> with id %@",object,[object class],uniqueId);

@@ -384,7 +384,6 @@ NSString* CKStyleImport = @"@import";
 			NSString* className = [CKStyleClassNamesCache objectForKey:type];
 			if(className == nil){
 				className = [type description];
-				//className = [className stringByReplacingOccurrencesOfString:@"_MAZeroingWeakRefSubclass" withString:@""];
 				[CKStyleClassNamesCache setObject:className forKey:type];
 			}
 			

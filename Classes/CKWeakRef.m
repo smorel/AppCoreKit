@@ -84,7 +84,7 @@ static char NSObjectWeakRefObjectKey;
 		for(NSValue* refValue in weakRefObj.weakRefs){
 			CKWeakRef* ref = [refValue nonretainedObjectValue];
 			if(ref.callback){
-				[ref.callback execute:self];
+				[ref.callback execute:ref];
 			}
 			ref.object = nil;
 		}

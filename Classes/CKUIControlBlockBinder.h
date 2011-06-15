@@ -7,7 +7,7 @@
 //
 
 #import "CKBinding.h"
-#import "MAZeroingWeakRef.h"
+#import "CKWeakRef.h"
 
 typedef void(^CKUIControlBlock)();
 
@@ -17,10 +17,10 @@ typedef void(^CKUIControlBlock)();
 	
 	//We can use block or target/selector
 	CKUIControlBlock block;
-	MAZeroingWeakRef* targetRef;
+	CKWeakRef* targetRef;
 	SEL selector;
 	
-	MAZeroingWeakRef* controlRef;
+	CKWeakRef* controlRef;
 	BOOL binded;
 }
 

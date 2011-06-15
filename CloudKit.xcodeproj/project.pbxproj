@@ -275,8 +275,6 @@
 		7503156E13A2A71900718378 /* CKUIImagePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7503156C13A2A71900718378 /* CKUIImagePropertyCellController.m */; };
 		7503164513A2BF2500718378 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */; };
 		7503164613A2BF2500718378 /* CKMKMapView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */; };
-		7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */; };
 		750D7AB01356365C0091E5AA /* CKNibCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 750D7AAE1356365C0091E5AA /* CKNibCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		750D7AB11356365C0091E5AA /* CKNibCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 750D7AAF1356365C0091E5AA /* CKNibCellController.m */; };
 		751004B61337BB1C008B0E7B /* CKDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751004AB1337BB1C008B0E7B /* CKDocumentController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -407,7 +405,7 @@
 		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */; };
-		75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DE01D013A96D5800264DF3 /* CKWeakRef.h */; };
+		75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DE01D013A96D5800264DF3 /* CKWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75DE01D313A96D5800264DF3 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DE01D113A96D5800264DF3 /* CKWeakRef.m */; };
 		75E71A83133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E71A7F133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75E71A84133A6A1C00CAAE66 /* CKDocumentCollectionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E71A80133A6A1C00CAAE66 /* CKDocumentCollectionCellController.m */; };
@@ -697,8 +695,6 @@
 		7503156C13A2A71900718378 /* CKUIImagePropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKUIImagePropertyCellController.m; sourceTree = "<group>"; };
 		7503164313A2BF2500718378 /* CKMKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKMKMapView+Introspection.h"; sourceTree = "<group>"; };
 		7503164413A2BF2500718378 /* CKMKMapView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKMKMapView+Introspection.m"; sourceTree = "<group>"; };
-		7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAZeroingWeakRef.h; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.h; sourceTree = "<group>"; };
-		7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAZeroingWeakRef.m; path = Vendor/MAZeroingWeakRef/MAZeroingWeakRef.m; sourceTree = "<group>"; };
 		750D7AAE1356365C0091E5AA /* CKNibCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNibCellController.h; sourceTree = "<group>"; };
 		750D7AAF1356365C0091E5AA /* CKNibCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNibCellController.m; sourceTree = "<group>"; };
 		751004AB1337BB1C008B0E7B /* CKDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocumentController.h; path = Classes/CKDocumentController.h; sourceTree = "<group>"; };
@@ -1253,7 +1249,6 @@
 		71AD9EC910A36DCF00C88903 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				7506BB32132EB8DD001CC8CC /* MAZeroingWeakRef */,
 				4F59F0CA11D00DD6003B4CA8 /* MKNumberBadgeView */,
 				71ADA04D10A372F400C88903 /* TouchXML */,
 				71D185331301EAEE000AD883 /* TouchJSON */,
@@ -1412,15 +1407,6 @@
 				71BC06971222C3B600C50BF6 /* CKSlideshowViewControllerDep.m */,
 			);
 			name = Deprecated;
-			sourceTree = "<group>";
-		};
-		7506BB32132EB8DD001CC8CC /* MAZeroingWeakRef */ = {
-			isa = PBXGroup;
-			children = (
-				7506BB37132EB8EA001CC8CC /* MAZeroingWeakRef.h */,
-				7506BB38132EB8EA001CC8CC /* MAZeroingWeakRef.m */,
-			);
-			name = MAZeroingWeakRef;
 			sourceTree = "<group>";
 		};
 		751004C31337BB28008B0E7B /* Object Controllers */ = {
@@ -1823,7 +1809,6 @@
 				758EC4B2132A985D000280FE /* CKNSObject+Bindings.h in Headers */,
 				758EC4B6132A98F1000280FE /* CKBindingsManager.h in Headers */,
 				758EC58D132ADE7C000280FE /* CKBinding.h in Headers */,
-				7506BB39132EB8EA001CC8CC /* MAZeroingWeakRef.h in Headers */,
 				751004B61337BB1C008B0E7B /* CKDocumentController.h in Headers */,
 				751004B81337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.h in Headers */,
 				751004BA1337BB1C008B0E7B /* CKObjectController.h in Headers */,
@@ -2138,7 +2123,6 @@
 				759B3AEE131720E5006C41D9 /* CKNSString+Parsing.m in Sources */,
 				758EC4B3132A985D000280FE /* CKNSObject+Bindings.m in Sources */,
 				758EC4B7132A98F1000280FE /* CKBindingsManager.m in Sources */,
-				7506BB3A132EB8EA001CC8CC /* MAZeroingWeakRef.m in Sources */,
 				751004B71337BB1C008B0E7B /* CKDocumentController.m in Sources */,
 				751004B91337BB1C008B0E7B /* CKNSDictionary+TableViewAttributes.m in Sources */,
 				751004BC1337BB1C008B0E7B /* CKObjectTableViewController.m in Sources */,

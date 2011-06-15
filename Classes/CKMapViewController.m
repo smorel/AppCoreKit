@@ -19,7 +19,6 @@
 #import "CKTableViewCellController+StyleManager.h"
 
 #import "CKNSNotificationCenter+Edition.h"
-#import "MAZeroingWeakRef.h"
 
 
 NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *context)
@@ -132,11 +131,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark View Management
 
 - (void)addAnnotations:(NSArray*)annotations{
-	//HACK : force to subclass as there is some observer registration in the map view
-	//and the objects could be subclassed. We force to subclass before observer registration
-	for(id annotation in annotations){
-		MAZeroingWeakRef* ref = [MAZeroingWeakRef refWithTarget:annotation];
-	}
 	[self.mapView addAnnotations:annotations];
 }
 

@@ -93,7 +93,6 @@ NSString* CKClassExplorerAdditionalFilter = @"ck";
 			Class c = classes[i];
 			NSString* className = NSStringFromClass(c);
 			if([NSObject isKindOf:c parentType:type]
-			   && ![className hasSuffix:@"_MAZeroingWeakRefSubclass"]
 			   && ![className hasPrefix:@"_"]){
 				[ar addObject:className];
 			}
@@ -136,7 +135,6 @@ NSString* CKClassExplorerAdditionalFilter = @"ck";
 			Class c = classes[i];
 			NSString* className = NSStringFromClass(c);
 			if(class_conformsToProtocol(c,protocol)
-			   && ![className hasSuffix:@"_MAZeroingWeakRefSubclass"]
 			   && ![className hasPrefix:@"_"]){
 				[ar addObject:className];
 			}

@@ -7,16 +7,16 @@
 //
 
 #import "CKBinding.h"
-#import "MAZeroingWeakRef.h"
+#import "CKWeakRef.h"
 
 typedef void(^CKDataBlockBinderExecutionBlock)(id value);
 @interface CKDataBlockBinder : NSObject<CKBinding> {
-	MAZeroingWeakRef* instanceRef;
+	CKWeakRef* instanceRef;
 	NSString* keyPath;
 	
 	//We can use block or target/selector
 	CKDataBlockBinderExecutionBlock block;
-	MAZeroingWeakRef* targetRef;
+	CKWeakRef* targetRef;
 	SEL selector;
 	
 	BOOL binded;

@@ -12,8 +12,8 @@
 #import "CKBindingsManager.h"
 
 @interface CKUIControlBlockBinder ()
-@property (nonatomic, retain) MAZeroingWeakRef *controlRef;
-@property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+@property (nonatomic, retain) CKWeakRef *controlRef;
+@property (nonatomic, retain) CKWeakRef* targetRef;
 - (void)unbindInstance:(id)instance;
 @end
 
@@ -42,7 +42,7 @@
 
 - (NSString*)description{
 	return [NSString stringWithFormat:@"<CKUIControlBlockBinder : %p>{\ncontrolRef = %@\ncontrolEvents = %d}",
-			self,controlRef ? controlRef.target : @"(null)",controlEvents];
+			self,controlRef ? controlRef.object : @"(null)",controlEvents];
 }
 
 - (void)reset{
@@ -53,30 +53,30 @@
 	self.selector = nil;
 }
 
-- (void)releaseTarget:(id)sender target:(id)target{
-	[self unbindInstance:controlRef.target];
+- (id)releaseTarget:(CKWeakRef*)weakRef{
+	[self unbindInstance:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setTarget:(id)instance{
 	if(instance){
-		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		[targetRef setDelegate:self action:@selector(releaseTarget:target:)];
+		self.targetRef = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseTarget:)];
 	}
 	else{
 		self.targetRef = nil;
 	}
 }
 
-- (void)releaseControl:(id)sender target:(id)target{
-	[self unbindInstance:target];
+- (id)releaseControl:(CKWeakRef*)weakRef{
+	[self unbindInstance:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setControl:(UIControl*)control{
 	if(control){
-		self.controlRef = [[[MAZeroingWeakRef alloc] initWithTarget:control]autorelease];
-		[controlRef setDelegate:self action:@selector(releaseControl:target:)];
+		self.controlRef = [CKWeakRef weakRefWithObject:control target:self action:@selector(releaseControl:)];
 	}
 	else{
 		self.controlRef = nil;
@@ -88,8 +88,8 @@
 	if(block){
 		block();
 	}
-	else if(targetRef.target && [targetRef.target respondsToSelector:self.selector]){
-		[targetRef.target performSelector:self.selector];
+	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
+		[targetRef.object performSelector:self.selector];
 	}
 	else{
 		NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
@@ -100,14 +100,14 @@
 - (void)bind{
 	[self unbind];
 
-	if(self.controlRef.target){
-		[(UIControl*)self.controlRef.target addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
+	if(self.controlRef.object){
+		[(UIControl*)self.controlRef.object addTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 	}
 	binded = YES;
 }
 
 -(void)unbind{
-	[self unbindInstance:controlRef.target];
+	[self unbindInstance:controlRef.object];
 }
 
 - (void)unbindInstance:(id)instance{

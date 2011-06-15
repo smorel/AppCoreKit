@@ -8,7 +8,7 @@
 
 #import "CKItemViewContainerController.h"
 
-#import <CloudKit/MAZeroingWeakRef.h>
+#import <CloudKit/CKWeakRef.h>
 #import "CKTableViewCellController+StyleManager.h"
 
 //CKItemViewContainerController
@@ -327,14 +327,14 @@
 
 #pragma mark View/Controller life management
 
-- (void)releaseView:(id)sender target:(id)target{
-	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:target]];
+- (id)releaseView:(CKWeakRef*)weakref{
+	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
 	[_indexPathToViews removeObjectForKey:previousPath];
 	
 	//CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:target]];
+	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
 	//[controller performSelector:@selector(setView:) withObject:nil];
-	[_weakViews removeObject:sender];
+	[_weakViews removeObject:weakref];
 }
 
 
@@ -390,11 +390,9 @@
 				if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
 				if(_weakViews == nil){ self.weakViews = [NSMutableArray array]; }
 				
-				MAZeroingWeakRef* viewRef = [[MAZeroingWeakRef alloc]initWithTarget:view];
-				[viewRef setDelegate:self action:@selector(releaseView:target:)];
+				CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
 				[_weakViews addObject:viewRef];
 				[_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
-				[viewRef release];
 			}
 			else{
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];

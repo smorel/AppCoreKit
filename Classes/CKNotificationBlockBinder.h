@@ -7,17 +7,17 @@
 //
 
 #import "CKBinding.h"
-#import "MAZeroingWeakRef.h"
+#import "CKWeakRef.h"
 
 typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 
 @interface CKNotificationBlockBinder : NSObject<CKBinding> {
-	MAZeroingWeakRef* instanceRef;
+	CKWeakRef* instanceRef;
 	NSString* notificationName;
 	
 	//We can use block or target/selector
 	CKNotificationExecutionBlock block;
-	MAZeroingWeakRef* targetRef;
+	CKWeakRef* targetRef;
 	SEL selector;
 	
 	BOOL binded;
