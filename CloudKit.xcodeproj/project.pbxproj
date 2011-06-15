@@ -407,6 +407,8 @@
 		75DA8CB612FB2008003DC43F /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8CB412FB2008003DC43F /* CKDataBinder.m */; };
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */; };
+		75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DE01D013A96D5800264DF3 /* CKWeakRef.h */; };
+		75DE01D313A96D5800264DF3 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DE01D113A96D5800264DF3 /* CKWeakRef.m */; };
 		75E71A83133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E71A7F133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75E71A84133A6A1C00CAAE66 /* CKDocumentCollectionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E71A80133A6A1C00CAAE66 /* CKDocumentCollectionCellController.m */; };
 		75ECE128135CD5390087A696 /* CKDocumentCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ECE126135CD5390087A696 /* CKDocumentCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -828,6 +830,8 @@
 		75DA8CB412FB2008003DC43F /* CKDataBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDataBinder.m; sourceTree = "<group>"; };
 		75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKNotificationBlockBinder.h; sourceTree = "<group>"; };
 		75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKNotificationBlockBinder.m; sourceTree = "<group>"; };
+		75DE01D013A96D5800264DF3 /* CKWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWeakRef.h; sourceTree = "<group>"; };
+		75DE01D113A96D5800264DF3 /* CKWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWeakRef.m; sourceTree = "<group>"; };
 		75E71A7F133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDocumentCollectionCellController.h; sourceTree = "<group>"; };
 		75E71A80133A6A1C00CAAE66 /* CKDocumentCollectionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDocumentCollectionCellController.m; sourceTree = "<group>"; };
 		75ECE126135CD5390087A696 /* CKDocumentCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocumentCollection.h; path = Classes/CKDocumentCollection.h; sourceTree = "<group>"; };
@@ -1153,6 +1157,8 @@
 		71AD9D5F10A35EED00C88903 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				75DE01D013A96D5800264DF3 /* CKWeakRef.h */,
+				75DE01D113A96D5800264DF3 /* CKWeakRef.m */,
 				75A2A30512F7F31000E71451 /* CKSignal.h */,
 				75A2A30612F7F31000E71451 /* CKSignal.m */,
 				75A2A30D12F7F31000E71451 /* CKView.h */,
@@ -1880,6 +1886,7 @@
 				751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */,
 				751A1DB813A9343500B6B598 /* CKUITextField+Introspection.h in Headers */,
 				71E2306613A93C6000BB5BD2 /* CKMultipartEncoder.h in Headers */,
+				75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2192,6 +2199,7 @@
 				751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */,
 				751A1DB913A9343500B6B598 /* CKUITextField+Introspection.m in Sources */,
 				71E2306513A93C6000BB5BD2 /* CKMultipartEncoder.m in Sources */,
+				75DE01D313A96D5800264DF3 /* CKWeakRef.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
