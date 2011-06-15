@@ -240,7 +240,7 @@
 	CGFloat contentWidth = cell.contentView.bounds.size.width;
 	width = contentWidth - x;
 	
-	CGRect frame = CGRectIntegral(CGRectMake(x, 0, width , cell.contentView.bounds.size.height));
+	CGRect frame = CGRectIntegral(CGRectMake(10 + x, 0, width - 10 , cell.contentView.bounds.size.height));
 	return frame;
 }
 
@@ -255,7 +255,7 @@
 			cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
 		}
 		if(cell.textLabel != nil){
-			CGRect textFrame = CGRectMake(0,0,detailFrame.origin.x - self.value3LabelsSpace,detailFrame.size.height);
+			CGRect textFrame = CGRectMake(10,0,detailFrame.origin.x - 10 - self.value3LabelsSpace,detailFrame.size.height);
 			cell.textLabel.frame = textFrame;
 			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 			cell.textLabel.textAlignment = UITextAlignmentRight;

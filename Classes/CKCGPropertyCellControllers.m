@@ -45,7 +45,7 @@
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,50 + 2 * 44)];
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
 }
 
 @end
@@ -87,7 +87,7 @@
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,50 + 2 * 44)];
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
 }
 
 @end
@@ -134,7 +134,7 @@
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,50 + 4 * 44)];
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
 }
 
 @end
@@ -181,7 +181,7 @@
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,50 + 2 * 44)];
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
 }
 
 @end

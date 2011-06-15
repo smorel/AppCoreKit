@@ -20,11 +20,13 @@
 @synthesize multiFloatValue = _multiFloatValue;
 @synthesize textFields = _textFields;
 @synthesize labels = _labels;
+@synthesize namelabels = _namelabels;
 
 -(void)dealloc{
 	[_multiFloatValue release];
 	[_textFields release];
 	[_labels release];
+	[_namelabels release];
 	[super dealloc];
 }
 
@@ -33,11 +35,13 @@
 	
 	self.textFields = [NSMutableDictionary dictionary];
 	self.labels = [NSMutableDictionary dictionary];
+	self.namelabels = [NSMutableDictionary dictionary];
+	
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	int i =0;
 	for(NSString* property in properties){
-		CGRect labelFrame = CGRectMake(10,50 + (i * 44) - 2,90,44);
-		CGRect textFieldFrame = CGRectMake(110,50 + i * 44,cell.contentView.bounds.size.width - 110,44);
+		CGRect labelFrame = CGRectMake(10,44 + (i * 44) - 2,90,44);
+		CGRect textFieldFrame = CGRectMake(110,44 + i * 44,cell.contentView.bounds.size.width - 110,44);
 		
 		UITextField *txtField = [[[UITextField alloc] initWithFrame:textFieldFrame] autorelease];
 		txtField.tag = 50000;
@@ -57,7 +61,9 @@
 		namelabel.text = property;
 		namelabel.textAlignment = UITextAlignmentRight;
 		namelabel.backgroundColor = [UIColor clearColor];
+		namelabel.font = [UIFont boldSystemFontOfSize:17];
 		[cell.contentView addSubview:namelabel];
+		[_namelabels setObject:namelabel forKey:property];
 		
 		
 		UILabel* label = [[[UILabel alloc]initWithFrame:textFieldFrame]autorelease];
@@ -72,14 +78,20 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	CGRect detailFrame = [self value3FrameForCell:cell];
+	
 	int i =0 ;
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	for(NSString* property in properties){
 		UILabel *label = [_labels objectForKey:property];
 		UITextField *txtField = [_textFields objectForKey:property];
-		CGRect frame = CGRectMake(110,50 + i * 44,cell.contentView.bounds.size.width - 110,44);
+		CGRect frame = CGRectMake(detailFrame.origin.x,44 + i * 44,detailFrame.size.width,44);
 		label.frame = frame;
 		txtField.frame = frame;
+		
+		UILabel *namelabel = [_namelabels objectForKey:property];
+		CGRect nameFrame = CGRectMake(10,frame.origin.y - 1,frame.origin.x - 10 - self.value3LabelsSpace,frame.size.height);
+		namelabel.frame = nameFrame;
 		++i;
 	}
 	
