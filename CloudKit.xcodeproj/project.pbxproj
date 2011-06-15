@@ -290,6 +290,8 @@
 		751A198B13A7CD5100B6B598 /* CKUITableView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */; };
 		751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */; };
 		751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */; };
+		751A1DB813A9343500B6B598 /* CKUITextField+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A1DB613A9343500B6B598 /* CKUITextField+Introspection.h */; };
+		751A1DB913A9343500B6B598 /* CKUITextField+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A1DB713A9343500B6B598 /* CKUITextField+Introspection.m */; };
 		751A366D134DEC660011656D /* CKCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A366B134DEC660011656D /* CKCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751A366E134DEC660011656D /* CKCarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751A366C134DEC660011656D /* CKCarouselView.m */; };
 		751A3778134DFBAE0011656D /* CKObjectCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -707,6 +709,8 @@
 		751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUITableView+Introspection.m"; sourceTree = "<group>"; };
 		751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUITableViewCell+Introspection.h"; sourceTree = "<group>"; };
 		751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUITableViewCell+Introspection.m"; sourceTree = "<group>"; };
+		751A1DB613A9343500B6B598 /* CKUITextField+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUITextField+Introspection.h"; sourceTree = "<group>"; };
+		751A1DB713A9343500B6B598 /* CKUITextField+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUITextField+Introspection.m"; sourceTree = "<group>"; };
 		751A366B134DEC660011656D /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCarouselView.h; path = Classes/CKCarouselView.h; sourceTree = "<group>"; };
 		751A366C134DEC660011656D /* CKCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCarouselView.m; path = Classes/CKCarouselView.m; sourceTree = "<group>"; };
 		751A3776134DFBAE0011656D /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectCarouselViewController.h; path = Classes/CKObjectCarouselViewController.h; sourceTree = "<group>"; };
@@ -1540,6 +1544,8 @@
 				751A198913A7CD5100B6B598 /* CKUITableView+Introspection.m */,
 				751A19A813A7CE0700B6B598 /* CKUITableViewCell+Introspection.h */,
 				751A19A913A7CE0700B6B598 /* CKUITableViewCell+Introspection.m */,
+				751A1DB613A9343500B6B598 /* CKUITextField+Introspection.h */,
+				751A1DB713A9343500B6B598 /* CKUITextField+Introspection.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1866,6 +1872,7 @@
 				7503164513A2BF2500718378 /* CKMKMapView+Introspection.h in Headers */,
 				751A198A13A7CD5100B6B598 /* CKUITableView+Introspection.h in Headers */,
 				751A19AA13A7CE0700B6B598 /* CKUITableViewCell+Introspection.h in Headers */,
+				751A1DB813A9343500B6B598 /* CKUITextField+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2176,6 +2183,7 @@
 				7503164613A2BF2500718378 /* CKMKMapView+Introspection.m in Sources */,
 				751A198B13A7CD5100B6B598 /* CKUITableView+Introspection.m in Sources */,
 				751A19AB13A7CE0700B6B598 /* CKUITableViewCell+Introspection.m in Sources */,
+				751A1DB913A9343500B6B598 /* CKUITextField+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

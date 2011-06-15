@@ -7,9 +7,10 @@
 //
 
 #import "CKItemViewController.h"
+#import "CKObjectViewControllerFactory.h"
 
 @interface CKItemViewController (CKStyleManager)
-+ (NSString*)identifierForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
-+ (NSMutableDictionary*)styleForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
++ (NSString*)identifierForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
++ (NSMutableDictionary*)styleForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 + (CKItemViewController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 @end

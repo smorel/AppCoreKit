@@ -32,6 +32,7 @@ extern NSString* CKObjectViewControllerFactoryItemSize;
 - (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 - (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 
+- (CKCallback*)createCallback;
 - (CKCallback*)initCallback;
 - (CKCallback*)setupCallback;
 - (CKCallback*)selectionCallback;

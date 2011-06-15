@@ -376,7 +376,7 @@
 		
 		CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 		if(factoryItem != nil && factoryItem.controllerClass){
-			NSString* identifier = [CKItemViewController identifierForClass:factoryItem.controllerClass object:object indexPath:indexPath  parentController:self];
+			NSString* identifier = [CKItemViewController identifierForItem:factoryItem object:object indexPath:indexPath  parentController:self];
 			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
 			CKItemViewController* controller = nil;
 			if(view == nil){

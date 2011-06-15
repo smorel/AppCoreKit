@@ -136,6 +136,10 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	return NO;
 }
 
+- (CKCallback*)createCallback{
+	return [_params objectForKey:CKObjectViewControllerFactoryItemCreate];
+}
+
 - (CKCallback*)initCallback{
 	return [_params objectForKey:CKObjectViewControllerFactoryItemInit];
 }
@@ -162,7 +166,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 
 - (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKItemViewController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	NSMutableDictionary* controllerStyle = [CKItemViewController styleForItem:self object:object indexPath:indexPath parentController:[params parentController]];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellFlags]){
 			return [controllerStyle cellFlags];
@@ -200,7 +204,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 
 - (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKItemViewController styleForClass:self.controllerClass object:object indexPath:indexPath parentController:[params parentController]];
+	NSMutableDictionary* controllerStyle = [CKItemViewController styleForItem:self object:object indexPath:indexPath parentController:[params parentController]];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellSize]){
 			return [controllerStyle cellSize];
