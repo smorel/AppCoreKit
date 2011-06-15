@@ -38,6 +38,11 @@ typedef enum CKTableViewCellStyle {
 	NSString* _key;
 	CGFloat _value3Ratio;
 	CGFloat _value3LabelsSpace;
+	
+	
+#ifdef DEBUG 
+	id debugModalController;
+#endif
 }
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;

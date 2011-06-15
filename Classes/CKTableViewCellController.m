@@ -14,6 +14,12 @@
 #import "CKStyleManager.h"
 #import <CloudKit/CKNSObject+Bindings.h>
 
+#ifdef DEBUG 
+#import "CKPropertyGridEditorController.h"
+#endif
+
+#define ENABLE_DEBUG_GESTURE 1
+
 @interface CKUITableViewCellController : UITableViewCell{
 	CKTableViewCellController* _delegate;
 }
@@ -40,6 +46,10 @@
 
 @end
 
+@interface CKTableViewCellController ()
+@property (nonatomic, retain) id debugModalController;
+@end
+
 @implementation CKTableViewCellController
 
 @synthesize accessoryType = _accessoryType;
@@ -47,6 +57,10 @@
 @synthesize key = _key;
 @synthesize value3Ratio = _value3Ratio;
 @synthesize value3LabelsSpace = _value3LabelsSpace;
+
+#ifdef DEBUG 
+@synthesize debugModalController;
+#endif
 
 - (id)init {
 	self = [super init];
@@ -63,6 +77,12 @@
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
 	[_key release];
 	_key = nil;
+	
+#ifdef DEBUG 
+	[debugModalController release];
+	debugModalController = nil;
+#endif
+	
 	[super dealloc];
 }
 
@@ -262,6 +282,13 @@
 	[self initView:cell];
 	[self layoutCell:cell];
 	[self applyStyle];
+	
+#ifdef DEBUG
+	if(ENABLE_DEBUG_GESTURE){
+		[cell addGestureRecognizer:[[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(debugGesture:)]autorelease]];
+	}
+#endif
+	
 	return cell;
 }
 
@@ -310,4 +337,29 @@
 	[super didSelect];
 }
 
+#ifdef DEBUG 
+- (void)debugGesture:(UILongPressGestureRecognizer *)recognizer{
+	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
+		(recognizer.state == UIGestureRecognizerStateFailed)
+		|| self.debugModalController != nil){
+		return;
+	}
+	
+	CKPropertyGridEditorController* editor = [[[CKPropertyGridEditorController alloc]initWithObject:self]autorelease];
+	editor.title = [self description];
+	UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeDebug:)]autorelease];
+	editor.leftButton = close;
+	UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:editor]autorelease];
+	navc.modalPresentationStyle = UIModalPresentationPageSheet;
+	
+	self.debugModalController = editor;
+	[self.parentController presentModalViewController:navc animated:YES];
+}
+
+- (void)closeDebug:(id)sender{
+	[self.debugModalController dismissModalViewControllerAnimated:YES];
+	self.debugModalController = nil;
+}
+
+#endif
 @end
