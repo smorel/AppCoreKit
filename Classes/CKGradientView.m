@@ -320,15 +320,21 @@
 			[self.fillColor setFill];
 			if(clippingPath != nil){
 				CGContextAddPath(gc, clippingPath);
+				CGContextFillPath(gc);
 			}
-			CGContextFillPath(gc);
+			else{
+				CGContextFillRect(gc, self.bounds);
+			}
 		}
 		else{
 			[[UIColor clearColor] setFill];
 			if(clippingPath != nil){
 				CGContextAddPath(gc, clippingPath);
+				CGContextFillPath(gc);
 			}
-			CGContextFillPath(gc);
+			else{
+				CGContextFillRect(gc, self.bounds);
+			}
 		}
 	}
 	
