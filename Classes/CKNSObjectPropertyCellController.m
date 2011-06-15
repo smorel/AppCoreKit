@@ -111,7 +111,7 @@
 		}
 	}
 	else{
-		cell.detailTextLabel.text = [value description];
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		if([self.value isKindOfClass:[CKObjectProperty class]]){

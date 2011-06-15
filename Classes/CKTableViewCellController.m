@@ -346,7 +346,7 @@
 	}
 	
 	CKPropertyGridEditorController* editor = [[[CKPropertyGridEditorController alloc]initWithObject:self]autorelease];
-	editor.title = [self description];
+	editor.title = [NSString stringWithFormat:@"%@ <%p>",[self class],self];
 	UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeDebug:)]autorelease];
 	editor.leftButton = close;
 	UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:editor]autorelease];
