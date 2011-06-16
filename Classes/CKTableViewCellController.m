@@ -120,20 +120,6 @@
 	return;
 }
 
-//ZEROWINGREF informal protocol
-- (void)willOverrideClass{
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
-}
-
-//ZEROWINGREF informal protocol
-- (void)didOverrideClass{
-	if(self.cellStyle == CKTableViewCellStyleValue3){
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[self.tableViewCell.detailTextLabel bind:@"text" target:self action:@selector(updateDetailText:)];
-		[NSObject endBindingsContext];	
-	}
-}
-
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];

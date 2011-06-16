@@ -91,15 +91,6 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void)postInit{
 }
 
-//ZEROWINGREF implicit protocol
-- (void)willOverrideClass{
-	[self uninitializeKVO];
-}
-
-- (void)didOverrideClass{
-	[self initializeKVO];
-}
-
 - (void)initializeProperties{
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
