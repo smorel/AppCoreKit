@@ -43,6 +43,8 @@
 	
 	CGRect _frameBeforeKeyboardNotification;
 	BOOL _viewIsOnScreen;
+	
+	CGFloat _tableMaximumWidth;
 }
 
 @property (nonatomic, assign) CKTableViewOrientation orientation;
@@ -57,6 +59,7 @@
 @property (nonatomic, assign) BOOL searchEnabled;
 @property (nonatomic, assign,readonly) BOOL viewIsOnScreen;
 @property (nonatomic, assign) CGFloat liveSearchDelay;
+@property (nonatomic, assign) CGFloat tableMaximumWidth;
 
 @property (nonatomic, retain) UISearchBar* searchBar;
 @property (nonatomic, retain) UISegmentedControl* segmentedControl;

@@ -49,6 +49,7 @@
 @synthesize segmentedControl = _segmentedControl;
 @synthesize searchScopeDefinition = _searchScopeDefinition;
 @synthesize defaultSearchScope = _defaultSearchScope;
+@synthesize tableMaximumWidth = _tableMaximumWidth;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -145,6 +146,7 @@
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_viewIsOnScreen = NO;
+	_tableMaximumWidth = 0;
 }
 
 - (void)dealloc {
@@ -212,6 +214,18 @@
 	[self.objectController lock];
     [super viewWillAppear:animated];
 	
+	//apply width constraint
+	if(_tableMaximumWidth > 0){
+		CGFloat tableWidth = MIN(_tableMaximumWidth, self.view.bounds.size.width);
+		CGFloat viewHeight = self.view.bounds.size.height;
+		CGFloat viewWidth = self.view.bounds.size.width;
+		CGFloat centerX = viewWidth / 2.0f;
+		
+		self.tableViewContainer.frame = CGRectIntegral(CGRectMake(centerX - tableWidth/2.0f,0 ,tableWidth,viewHeight));
+		self.tableViewContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin ;
+	}
+	
+	//Adds searchbars if needed
 	CGFloat tableViewOffset = 0;
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
 		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice]orientation];
