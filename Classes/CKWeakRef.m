@@ -81,12 +81,16 @@ static char NSObjectWeakRefObjectKey;
 - (void) weakRef_dealloc {
 	CKWeakRefAssociatedObject* weakRefObj = [self weakRefObject];
 	if(weakRefObj){
-		for(NSValue* refValue in weakRefObj.weakRefs){
-			CKWeakRef* ref = [refValue nonretainedObjectValue];
+		while([weakRefObj.weakRefs count] > 0){
+			NSValue* refValue = [weakRefObj.weakRefs anyObject];
+			CKWeakRef* ref = [[refValue nonretainedObjectValue]retain];
 			if(ref.callback){
 				[ref.callback execute:ref];
 			}
+			
 			ref.object = nil;
+			[weakRefObj.weakRefs removeObject:refValue];
+			[ref release];
 		}
 		
 		objc_setAssociatedObject(self, 
