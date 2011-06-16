@@ -190,4 +190,16 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	//CKDebugLog(@"Register object <%p> of type <%@> with id %@",object,[object class],uniqueId);
 }
 
+
++ (NSArray*)itemsWithClass:(Class)type withPropertiesAndValues:(NSDictionary*)attributes inDomainNamed:(NSString*)domain{
+	CKStore* store = [CKStore storeWithDomainName:domain];
+	NSMutableString* predicate = [NSMutableString stringWithFormat:@"(ANY attributes.name == '@class') AND (ANY attributes.value == '%@')",[type description]];
+	for(NSString* propertyName in attributes){
+		id value = [attributes objectForKey:propertyName];
+		NSString* attributeStr = [NSValueTransformer transform:value toClass:[NSString class]];
+		[predicate appendFormat:@"AND (ANY attributes.name == '%@') AND (ANY attributes.value == '%@')",propertyName,attributeStr];
+	}
+	return [store fetchItemsWithPredicateFormat:predicate arguments:nil];
+}
+
 @end
