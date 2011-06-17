@@ -6,11 +6,11 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKReference.h"
+#import "CKItemAttributeReference.h"
 
 
-@implementation CKReference
+@implementation CKItemAttributeReference
 @dynamic item;
-@dynamic parentAttribute;
+@dynamic attribute;
 @end
 

@@ -406,8 +406,8 @@
 		75DA8DC312FB45FE003DC43F /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DA8DC112FB45FE003DC43F /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		75DA8DC412FB45FE003DC43F /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DA8DC212FB45FE003DC43F /* CKNotificationBlockBinder.m */; };
 		75DC01C913ABE076002414F9 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75DC01C613ABE076002414F9 /* CloudKit.xcdatamodeld */; };
-		75DC021513ABE91C002414F9 /* CKReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DC021313ABE91C002414F9 /* CKReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75DC021613ABE91C002414F9 /* CKReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DC021413ABE91C002414F9 /* CKReference.m */; };
+		75DC021513ABE91C002414F9 /* CKItemAttributeReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DC021313ABE91C002414F9 /* CKItemAttributeReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75DC021613ABE91C002414F9 /* CKItemAttributeReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DC021413ABE91C002414F9 /* CKItemAttributeReference.m */; };
 		75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DE01D013A96D5800264DF3 /* CKWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75DE01D313A96D5800264DF3 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DE01D113A96D5800264DF3 /* CKWeakRef.m */; };
 		75E71A83133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E71A7F133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -831,8 +831,8 @@
 		75DC01C313ABE06A002414F9 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CloudKit.bundle; sourceTree = "<group>"; };
 		75DC01C713ABE076002414F9 /* CloudKit-1.1.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1.xcdatamodel"; sourceTree = "<group>"; };
 		75DC01C813ABE076002414F9 /* CloudKit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = CloudKit.xcdatamodel; sourceTree = "<group>"; };
-		75DC021313ABE91C002414F9 /* CKReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKReference.h; sourceTree = "<group>"; };
-		75DC021413ABE91C002414F9 /* CKReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKReference.m; sourceTree = "<group>"; };
+		75DC021313ABE91C002414F9 /* CKItemAttributeReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKItemAttributeReference.h; sourceTree = "<group>"; };
+		75DC021413ABE91C002414F9 /* CKItemAttributeReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKItemAttributeReference.m; sourceTree = "<group>"; };
 		75DE01D013A96D5800264DF3 /* CKWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKWeakRef.h; sourceTree = "<group>"; };
 		75DE01D113A96D5800264DF3 /* CKWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKWeakRef.m; sourceTree = "<group>"; };
 		75E71A7F133A6A1C00CAAE66 /* CKDocumentCollectionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDocumentCollectionCellController.h; sourceTree = "<group>"; };
@@ -1144,8 +1144,8 @@
 				719F062A10F6E749002955C0 /* CKItem.m */,
 				719F05CC10F6A818002955C0 /* CKAttribute.h */,
 				719F05CD10F6A818002955C0 /* CKAttribute.m */,
-				75DC021313ABE91C002414F9 /* CKReference.h */,
-				75DC021413ABE91C002414F9 /* CKReference.m */,
+				75DC021313ABE91C002414F9 /* CKItemAttributeReference.h */,
+				75DC021413ABE91C002414F9 /* CKItemAttributeReference.m */,
 				719F063910F6ED27002955C0 /* CKStore.h */,
 				719F063A10F6ED27002955C0 /* CKStore.m */,
 				71ACFEB611237CD200E6F938 /* CKDictionaryFromAttributesTransformer.h */,
@@ -1890,7 +1890,7 @@
 				751A1DB813A9343500B6B598 /* CKUITextField+Introspection.h in Headers */,
 				71E2306613A93C6000BB5BD2 /* CKMultipartEncoder.h in Headers */,
 				75DE01D213A96D5800264DF3 /* CKWeakRef.h in Headers */,
-				75DC021513ABE91C002414F9 /* CKReference.h in Headers */,
+				75DC021513ABE91C002414F9 /* CKItemAttributeReference.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2204,7 +2204,7 @@
 				71E2306513A93C6000BB5BD2 /* CKMultipartEncoder.m in Sources */,
 				75DE01D313A96D5800264DF3 /* CKWeakRef.m in Sources */,
 				75DC01C913ABE076002414F9 /* CloudKit.xcdatamodeld in Sources */,
-				75DC021613ABE91C002414F9 /* CKReference.m in Sources */,
+				75DC021613ABE91C002414F9 /* CKItemAttributeReference.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

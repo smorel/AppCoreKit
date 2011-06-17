@@ -1,5 +1,5 @@
 //
-//  CKReference.h
+//  CKItemAttributeReference.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-06-17.
@@ -10,9 +10,9 @@
 
 @class CKItem;
 @class CKAttribute;
-@interface CKReference : NSManagedObject {
+@interface CKItemAttributeReference : NSManagedObject {
 }
 
 @property (nonatomic, retain) CKItem * item;
-@property (nonatomic, retain) CKAttribute * parentAttribute;
+@property (nonatomic, retain) CKAttribute * attribute;
 @end

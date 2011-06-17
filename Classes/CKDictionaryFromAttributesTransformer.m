@@ -8,7 +8,7 @@
 
 #import "CKDictionaryFromAttributesTransformer.h"
 #import "CKAttribute.h"
-#import "CKReference.h"
+#import "CKItemAttributeReference.h"
 #import "CKItem.h"
 
 @implementation CKDictionaryFromAttributesTransformer
@@ -37,7 +37,7 @@
 			}
 			else{
 				NSMutableArray* array = [NSMutableArray array];
-				for(CKReference* ref in attribute.References){
+				for(CKItemAttributeReference* ref in attribute.itemReferences){
 					[array addObject:[ref.item propertyListRepresentation]];
 				}
 				[result setObject:array forKey:attribute.name];

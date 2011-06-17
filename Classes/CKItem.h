@@ -18,7 +18,7 @@
 @property (nonatomic, retain) CKDomain *domain;
 @property (nonatomic, retain) NSSet *attributes;
 @property (nonatomic, retain) NSSet* refAttributes;
-@property (nonatomic, retain) NSSet* refs;
+@property (nonatomic, retain) NSSet* references;
 
 
 @end
@@ -38,10 +38,10 @@
 - (void)addRefAttributes:(NSSet *)value;
 - (void)removeRefAttributes:(NSSet *)value;
 
-- (void)addRefsObject:(NSManagedObject *)value;
-- (void)removeRefsObject:(NSManagedObject *)value;
-- (void)addRefs:(NSSet *)value;
-- (void)removeRefs:(NSSet *)value;
+- (void)addReferencesObject:(NSManagedObject *)value;
+- (void)removeReferencesObject:(NSManagedObject *)value;
+- (void)addReferences:(NSSet *)value;
+- (void)removeReferences:(NSSet *)value;
 
 @end
 

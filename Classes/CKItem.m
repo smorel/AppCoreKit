@@ -10,7 +10,7 @@
 #import "CKAttributesDictionary.h"
 #import "CKStore.h"
 #import "CKDomain.h"
-#import "CKReference.h"
+#import "CKItemAttributeReference.h"
 
 @implementation CKItem
 
@@ -19,7 +19,7 @@
 @dynamic domain;
 @dynamic attributes;
 @dynamic refAttributes;
-@dynamic refs;
+@dynamic references;
 
 @end
 
@@ -75,11 +75,11 @@
 											   createIfNotFound:YES wasCreated:&created];
 	
 	attribute.name = name;
-	[attribute removeReferences:attribute.References];
+	[attribute removeItemReferences:attribute.itemReferences];
 	for(CKItem* item in items){
-		CKReference* reference = [store insertNewObjectForEntityForName:@"CKReference"];
+		CKItemAttributeReference* reference = [store insertNewObjectForEntityForName:@"CKItemAttributeReference"];
 		reference.item = item;
-		[attribute addReferencesObject:reference];
+		[attribute addItemReferencesObject:reference];
 	}
 	if (created) {
 		[self addAttributesObject:attribute];
