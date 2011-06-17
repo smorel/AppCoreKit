@@ -85,7 +85,7 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_attributes count];
+    return [_attributes count] + 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -111,23 +111,38 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 	
-	CKAttribute *attr = [_attributes objectAtIndex:indexPath.row];
-	cell.textLabel.text = attr.name;
-	cell.textLabel.numberOfLines = 0;
-	cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-	
-	if(attr.value != nil){
-		cell.detailTextLabel.text = attr.value;
+	if(indexPath.row == 0){
+		cell.textLabel.text = @"item address";
+		cell.textLabel.numberOfLines = 0;
+		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+		
+		cell.detailTextLabel.text = [NSString stringWithFormat:@"%p",self.item];
 		cell.detailTextLabel.numberOfLines = 0;
 		cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
 		
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		
 	}
-	else {
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[attr.items count]];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+	else{
+		CKAttribute *attr = [_attributes objectAtIndex:indexPath.row - 1];
+		cell.textLabel.text = attr.name;
+		cell.textLabel.numberOfLines = 0;
+		cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+		
+		if(attr.value != nil){
+			cell.detailTextLabel.text = attr.value;
+			cell.detailTextLabel.numberOfLines = 0;
+			cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
+			
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		else {
+			cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[attr.items count]];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		}
 	}
 	
     return cell;
@@ -141,7 +156,7 @@
 	// [anotherViewController release];
 	
 	
-	CKAttribute *attr = [_attributes objectAtIndex:indexPath.row];
+	CKAttribute *attr = [_attributes objectAtIndex:indexPath.row - 1];
 	if(attr.value == nil){
 		CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:[attr.items allObjects]]autorelease];
 		controller.title = attr.name;

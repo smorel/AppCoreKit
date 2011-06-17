@@ -59,8 +59,8 @@
 
 - (void)clear:(id)sender{
 	CKStore* store = [CKStore storeWithDomainName:_domain];
-	[store deleteItems:self.items];
 	[self.items removeAllObjects];
+	[store deleteItems:self.items];
 	[self.tableView reloadData];
 }
 

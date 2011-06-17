@@ -23,7 +23,9 @@ NSMutableDictionary* CKModelObjectManager = nil;
 
 @implementation CKModelObject (CKStoreAddition)
 
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
+
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
+	NSAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	
 	NSString* className = [[self class] description];
@@ -48,8 +50,12 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				for(id subObject in allObjects){
 					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
 					CKModelObject* model = (CKModelObject*)subObject;
-					
-					CKItem* item = [model saveToDomainNamed:domain];
+					CKItem* item = nil;
+					if([alreadySaved containsObject:model]){
+						item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+					}else{
+						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
+					}
 					[result addObject:item];
 				}
 				[dico setObject:result forKey:propertyName];
@@ -58,7 +64,12 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				CKModelObject* model = (CKModelObject*)propertyValue;
 				
 				NSMutableArray* result = [NSMutableArray array];
-				CKItem* item = [model saveToDomainNamed:domain];
+				CKItem* item = nil;
+				if([alreadySaved containsObject:model]){
+					item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+				}else{
+					item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
+				}
 				[result addObject:item];
 				[dico setObject:result forKey:propertyName];
 			}
@@ -74,6 +85,11 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	return dico;
 }
 
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
+	NSMutableSet* alreadySaved = [NSMutableSet set];
+	return [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+}
+
 - (void)deleteFromDomainNamed:(NSString*)domain{
 	NSAssert(!_loading, @"cannot delete an object while loading it !");
 	
@@ -84,21 +100,24 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	}
 }
 
-+ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain {
++ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain  alreadySaved:(NSMutableSet*)alreadySaved{
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	BOOL created;
 	CKItem *item = [store fetchItemWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", object.modelName, domain]
-				 createIfNotFound:YES wasCreated:&created];
+								createIfNotFound:YES wasCreated:&created];
 	if (created) {
 		item.name = object.modelName;
 		item.domain = store.domain;
 		[store.domain addItemsObject:item];
 	}
-	[item updateAttributes:[object attributesDictionaryForDomainNamed:domain]];
+	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+	[item updateAttributes:attributes];
+	
+	CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 	return item;
 }
 
-- (CKItem*)saveToDomainNamed:(NSString*)domain{
+- (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
 	if(_saving || _loading)
 		return nil;
 	
@@ -107,22 +126,35 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	if(self.uniqueId == nil){
 		self.uniqueId = [NSString stringWithNewUUID];
 		[CKModelObject registerObject:self withUniqueId:self.uniqueId];
-		item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
+		item = [CKModelObject createItemWithObject:self inDomainNamed:domain alreadySaved:alreadySaved];
 	}
 	else{
 		item = [CKModelObject itemWithObject:self inDomainNamed:domain];
 		if(item != nil){
 			item.name = self.modelName;
-			[item updateAttributes:[self attributesDictionaryForDomainNamed:domain]];
+			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+			[item updateAttributes:attributes];
+			CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 		}
 		else{
 			[CKModelObject registerObject:self withUniqueId:self.uniqueId];
 			item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
 		}
 	}		
+	
+	[alreadySaved addObject:self];
 	_saving = NO;
 	return item;
 }
+
++ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain {
+	return [self createItemWithObject:object inDomainNamed:domain alreadySaved:[NSMutableSet set]];
+}
+
+- (CKItem*)saveToDomainNamed:(NSString*)domain{
+	return [self saveToDomainNamed:domain alreadySaved:[NSMutableSet set]];
+}
+
 
 + (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain{
 	return [CKModelObject itemWithObject:object inDomainNamed:domain createIfNotFound:NO];
