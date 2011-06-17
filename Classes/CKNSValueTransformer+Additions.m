@@ -436,6 +436,10 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (void)transform:(NSDictionary*)source toObject:(id)target{
+	if([target isKindOfClass:[CKModelObject class]]){
+		CKModelObject* model = (CKModelObject*)target;
+		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:YES]];//PRIVATE SELECTOR
+	}
 	NSArray* descriptors = [target allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in descriptors){
 		id object = [source objectForKey:descriptor.name];
@@ -445,14 +449,9 @@ NSString* CKSerializerIDTag = @"@id";
 			[property autorelease];
 		}
 	}
-}
-
-+ (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings{
-	for(NSString* sourceKeyPath in [mappings allKeys]){
-		NSString* targetKeyPath = [mappings objectForKey:sourceKeyPath];
-		id sourceObject = [source valueForKeyPath:sourceKeyPath];
-		CKObjectProperty* targetProperty = [CKObjectProperty propertyWithObject:target keyPath:targetKeyPath];
-		[self transform:sourceObject inProperty:targetProperty];
+	if([target isKindOfClass:[CKModelObject class]]){
+		CKModelObject* model = (CKModelObject*)target;
+		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:NO]];//PRIVATE SELECTOR
 	}
 }
 

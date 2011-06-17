@@ -84,6 +84,37 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	metaData.editable = NO;
 }
 
+- (void)isSavingMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
+
+- (void)isLoadingMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
+
+- (BOOL)isSaving{
+	return _saving;
+}
+
+- (BOOL)isLoading{
+	return _loading;
+}
+
+- (void)setLoading:(NSNumber*)number{
+	_loading = [number boolValue];
+}
+
+
+- (void)setUniqueId:(NSString *)uid{
+	_loading = YES;
+	[uniqueId release];
+	uniqueId = [uid copy];
+	if(self.modelName == nil){
+		self.modelName = uid;
+	}
+	_loading = NO;
+}
+
 + (id)model{
 	return [[[[self class]alloc]init]autorelease];
 }
@@ -109,9 +140,6 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void)initializeKVO{
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		if([property.name isEqualToString:@"score"]){
-			int i =3;
-		}
 		if(property.isReadOnly == NO){
 			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
@@ -341,6 +369,10 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 				if([self respondsToSelector:addsSelector]){
 					[self performSelector:addsSelector withObject:newModels withObject:indexes];
 				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
 				break;
 			}
 			case NSKeyValueChangeRemoval:{
@@ -348,12 +380,20 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 				if([self respondsToSelector:removeSelector]){
 					[self performSelector:removeSelector withObject:oldModels withObject:indexes];
 				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
 				break;
 			}
 			case NSKeyValueChangeReplacement:{
 				SEL replaceSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
 				if([self respondsToSelector:replaceSelector]){
 					[self performSelector:replaceSelector withObjects:[NSArray arrayWithObjects:oldModels,newModels,indexes,nil]];
+				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
 				}
 				break;
 			}

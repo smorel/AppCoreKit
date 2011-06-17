@@ -20,9 +20,7 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (id)transform:(id)source toClass:(Class)type;
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type;
 
-
 + (void)transform:(NSDictionary*)source toObject:(id)target;
-+ (void)transform:(id)source toObject:(id)target usingMappings:(NSDictionary*)mappings;
 
 //helpers for non NSObject class
 + (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;

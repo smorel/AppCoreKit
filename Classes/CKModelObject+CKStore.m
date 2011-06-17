@@ -75,6 +75,8 @@ NSMutableDictionary* CKModelObjectManager = nil;
 }
 
 - (void)deleteFromDomainNamed:(NSString*)domain{
+	NSAssert(!_loading, @"cannot delete an object while loading it !");
+	
 	CKItem* item = [CKModelObject itemWithObject:self inDomainNamed:domain];
 	if(item){
 		CKStore* store = [CKStore storeWithDomainName:domain];
@@ -97,16 +99,13 @@ NSMutableDictionary* CKModelObjectManager = nil;
 }
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain{
-	if(_saving)
+	if(_saving || _loading)
 		return nil;
 	
 	_saving = YES;
 	CKItem* item = nil;
 	if(self.uniqueId == nil){
 		self.uniqueId = [NSString stringWithNewUUID];
-		if(self.modelName == nil){
-			self.modelName = self.uniqueId;
-		}
 		[CKModelObject registerObject:self withUniqueId:self.uniqueId];
 		item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
 	}
@@ -115,6 +114,10 @@ NSMutableDictionary* CKModelObjectManager = nil;
 		if(item != nil){
 			item.name = self.modelName;
 			[item updateAttributes:[self attributesDictionaryForDomainNamed:domain]];
+		}
+		else{
+			[CKModelObject registerObject:self withUniqueId:self.uniqueId];
+			item = [CKModelObject createItemWithObject:self inDomainNamed:domain];
 		}
 	}		
 	_saving = NO;
@@ -137,7 +140,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",theUniqueId] arguments:nil];
 	if([res count] != 1){
-		//CKDebugLog(@"Warning : no object found in domain '%@' with uniqueId '%@'",domain,theUniqueId);
+		CKDebugLog(@"Warning : %@ object(s) found in domain '%@' with uniqueId '%@'",([res count]==0) ? @"no" : "Several",domain,theUniqueId);
 		return nil;
 	}
 	return [[res lastObject]item];	
