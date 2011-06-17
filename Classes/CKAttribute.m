@@ -13,10 +13,10 @@
 @dynamic value;
 @dynamic createdAt;
 @dynamic item;
-@dynamic items;
+@dynamic References;
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"CKAttribute<%p> value:%@ items:%@",self,self.name,self.items];
+	return [NSString stringWithFormat:@"CKAttribute<%p> value:%@ References:%@",self,self.name,self.References];
 }
 
 @end

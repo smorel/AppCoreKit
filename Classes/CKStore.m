@@ -211,4 +211,8 @@
 														wasCreated:wasCreated];
 }
 
+- (id)insertNewObjectForEntityForName:(NSString *)entityName{
+	return [self.manager.objectContext insertNewObjectForEntityForName:entityName];
+}
+
 @end

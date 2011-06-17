@@ -148,7 +148,7 @@
 }
 
 - (void)didSelectRow{
-	id value = self.value;
+	id thevalue = self.value;
 	
 	Class contentType = nil;
 	Protocol* contentProtocol = nil;
@@ -162,29 +162,29 @@
 		
 		//Wrap the array in a virtual collection
 		if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
-			value = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
+			thevalue = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
 		}		
 		else{
-			value = [property value];
+			thevalue = [property value];
 		}
 	}
 	
-	if([value isKindOfClass:[CKDocumentCollection class]]){
+	if([thevalue isKindOfClass:[CKDocumentCollection class]]){
 		NSMutableArray* mappings = [NSMutableArray array]; 
 		[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
 		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
-		CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:value mappings:mappings]autorelease];
+		CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:thevalue mappings:mappings]autorelease];
 		controller.title = self.tableViewCell.textLabel.text;
 		if(contentType != nil || contentProtocol != nil){
 			CKUIBarButtonItemWithInfo* button = [[[CKUIBarButtonItemWithInfo alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(createObject:)]autorelease];
-			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:value,@"collection",[NSValue valueWithPointer:contentType],@"class",[NSValue valueWithPointer:contentProtocol],@"protocol",controller,@"controller",nil];
+			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.value,@"property",[NSValue valueWithPointer:contentType],@"class",[NSValue valueWithPointer:contentProtocol],@"protocol",controller,@"controller",nil];
 			controller.rightButton = button;
 		}
 		[self.parentController.navigationController pushViewController:controller animated:YES];
 	}
 	else{
-		CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:value]autorelease];
+		CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:thevalue]autorelease];
 		propertyGrid.title = self.tableViewCell.textLabel.text;
 		[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
 	}
@@ -222,22 +222,28 @@
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
 	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
-	NSString* className = (NSString*)object;
-	Class type = NSClassFromString(className);
+	
 	id instance = nil;
-	if([NSObject isKindOf:type parentType:[UIView class]]){
-		instance = [[[type alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+	if([object isKindOfClass:[NSString class]]){
+		NSString* className = (NSString*)object;
+		Class type = NSClassFromString(className);
+		if([NSObject isKindOf:type parentType:[UIView class]]){
+			instance = [[[type alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+		}
+		else{
+			instance = [[[type alloc]init]autorelease];
+		}
 	}
-	else{
-		instance = [[[type alloc]init]autorelease];
+	else if([object isKindOfClass:[NSObject class]]){
+		instance = object;
 	}
 	
-	CKDocumentCollection* collection = [classExplorer.userInfo objectForKey:@"collection"];
-	if(collection){
+	CKObjectProperty* property = [classExplorer.userInfo objectForKey:@"property"];
+	if([NSObject isKindOf:property.descriptor.type parentType:[CKDocumentCollection class]]){
+		CKDocumentCollection* collection = (CKDocumentCollection*)[property value];
 		[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
 	}
 	else{
-		CKObjectProperty* property = [classExplorer.userInfo objectForKey:@"property"];
 		[property setValue:instance];
 	}
 	

@@ -9,6 +9,7 @@
 #import "CKStoreItemExplorer.h"
 #import "CKStoreDomainExplorer.h"
 #import <CloudKit/CKAttribute.h>
+#import "CKReference.h"
 
 
 @implementation CKStoreItemExplorer
@@ -139,7 +140,7 @@
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
 		else {
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[attr.items count]];
+			cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[attr.References count]];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 		}
@@ -158,7 +159,11 @@
 	
 	CKAttribute *attr = [_attributes objectAtIndex:indexPath.row - 1];
 	if(attr.value == nil){
-		CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:[attr.items allObjects]]autorelease];
+		NSMutableArray* items = [NSMutableArray array];
+		for(CKReference* ref in attr.References){
+			[items addObject:ref.item];
+		}
+		CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:items]autorelease];
 		controller.title = attr.name;
 		[self.navigationController pushViewController:controller animated:YES];
 	}

@@ -11,10 +11,15 @@
 #import "CKCallback.h"
 #import <objc/runtime.h>
 
+typedef enum CKClassExplorerType{
+	CKClassExplorerTypeClasses,
+	CKClassExplorerTypeInstances
+}CKClassExplorerType;
 
 @interface CKClassExplorer : CKObjectTableViewController {
 	CKDocumentArray* _classesCollection;
 	id _userInfo;
+	NSString* _className;
 }
 @property(nonatomic,retain)id userInfo;
 

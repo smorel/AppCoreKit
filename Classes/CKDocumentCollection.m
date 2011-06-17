@@ -58,7 +58,6 @@
 	metaData.serializable = NO;
 	metaData.comparable = NO;
 	metaData.hashable = NO;
-	metaData.copiable = NO;
 }
 
 - (NSArray*)allObjects{

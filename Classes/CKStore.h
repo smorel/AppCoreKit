@@ -82,7 +82,6 @@ typedef enum {
 - (NSArray *)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName;
 - (id)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName resultType:(CKStoreResultType)resultType;
 
-
 @end
 
 
@@ -96,5 +95,6 @@ typedef enum {
 
 - (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
 - (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
 
 @end

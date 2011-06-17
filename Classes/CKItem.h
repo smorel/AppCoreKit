@@ -17,8 +17,13 @@
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) CKDomain *domain;
 @property (nonatomic, retain) NSSet *attributes;
+@property (nonatomic, retain) NSSet* refAttributes;
+@property (nonatomic, retain) NSSet* refs;
+
 
 @end
+
+
 
 //
 
@@ -28,6 +33,15 @@
 - (void)removeAttributesObject:(CKAttribute *)value;
 - (void)addAttributes:(NSSet *)value;
 - (void)removeAttributes:(NSSet *)value;
+- (void)addRefAttributesObject:(CKAttribute *)value;
+- (void)removeRefAttributesObject:(CKAttribute *)value;
+- (void)addRefAttributes:(NSSet *)value;
+- (void)removeRefAttributes:(NSSet *)value;
+
+- (void)addRefsObject:(NSManagedObject *)value;
+- (void)removeRefsObject:(NSManagedObject *)value;
+- (void)addRefs:(NSSet *)value;
+- (void)removeRefs:(NSSet *)value;
 
 @end
 
