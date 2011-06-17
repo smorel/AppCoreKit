@@ -12,6 +12,12 @@
 #import "CKStyleManager.h"
 #import <CloudKit/CKNSObject+Bindings.h>
 
+@interface CKItemViewController()
+@property (nonatomic, retain) CKWeakRef *viewRef;
+@property (nonatomic, retain) CKWeakRef *weakParentController;
+@end
+
+
 @implementation CKItemViewController
 
 @synthesize name = _name;
@@ -28,6 +34,8 @@
 @synthesize accessorySelectionCallback = _accessorySelectionCallback;
 @synthesize becomeFirstResponderCallback = _becomeFirstResponderCallback;
 @synthesize resignFirstResponderCallback = _resignFirstResponderCallback;
+@synthesize viewRef = _viewRef;
+@synthesize weakParentController = _weakParentController;
 
 - (void)dealloc {
 	[self clearBindingsContext];
@@ -43,12 +51,30 @@
 	[_selectionCallback release];
 	[_becomeFirstResponderCallback release];
 	[_resignFirstResponderCallback release];
+	[_viewRef release];
+	[_weakParentController release];
 	
 	_target = nil;
 	_action = nil;
 	_accessoryAction = nil;
 	_parentController = nil;
 	[super dealloc];
+}
+
+- (void)setView:(UIView *)view{
+	self.viewRef = [CKWeakRef weakRefWithObject:view];
+}
+
+- (UIView*)view{
+	return [_viewRef object];
+}
+
+- (void)setParentController:(UIViewController *)c{
+	self.weakParentController = [CKWeakRef weakRefWithObject:c];
+}
+
+- (UIViewController*)parentController{
+	return (UIViewController*)[_weakParentController object];
 }
 
 //sequence : loadView, initView, applyStyle
@@ -117,13 +143,6 @@
 	// when adding the CKTableViewCellController.	
 	[_indexPath release];
 	_indexPath = [indexPath retain];
-}
-
-- (void)setParentController:(UIViewController *)parentController {
-	// Set a *weak* reference to the parent controller
-	// This method is hidden from the public interface and is called by the parent controller
-	// when adding the CKTableViewCellController.
-	_parentController = parentController;
 }
 
 - (NSString *)identifier {

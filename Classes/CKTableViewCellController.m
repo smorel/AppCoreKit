@@ -90,7 +90,7 @@
 #pragma mark TableViewCell Setter getter
 
 - (void)setView:(UIView*)view{
-	_view = view;
+	[super setView:view];
 	if([view isKindOfClass:[CKUITableViewCellController class]]){
 		CKUITableViewCellController* customCell = (CKUITableViewCellController*)view;
 		customCell.delegate = self;

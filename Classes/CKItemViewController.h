@@ -9,6 +9,7 @@
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
+#import "CKWeakRef.h"
 
 enum{
 	CKItemViewFlagNone = 1UL << 0,
@@ -28,7 +29,6 @@ typedef NSUInteger CKItemViewFlags;
 	SEL _accessoryAction;
 	
 	NSIndexPath *_indexPath;
-	UIViewController* _parentController;
 	
 	CKCallback* _initCallback;
 	CKCallback* _setupCallback;
@@ -37,7 +37,8 @@ typedef NSUInteger CKItemViewFlags;
 	CKCallback* _becomeFirstResponderCallback;
 	CKCallback* _resignFirstResponderCallback;
 	
-	UIView* _view;
+	CKWeakRef* _viewRef;//TODO mettre en weakref ...
+	CKWeakRef* _weakParentController;
 }
 
 @property (nonatomic, retain) NSString *name;
