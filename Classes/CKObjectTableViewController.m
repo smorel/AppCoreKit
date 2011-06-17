@@ -212,7 +212,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.objectController lock];
+	[self updateParams];
     [super viewWillAppear:animated];
+	[self updateParams];
 	
 	//apply width constraint
 	if(_tableMaximumWidth > 0){
@@ -293,7 +295,6 @@
 		[self.tableView endUpdates];
 	}
 	
-	[self updateParams];
 	[self updateVisibleViewsRotation];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
