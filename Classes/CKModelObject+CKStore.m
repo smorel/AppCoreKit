@@ -52,7 +52,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
 					CKModelObject* model = (CKModelObject*)subObject;
 					CKItem* item = nil;
-					if([alreadySaved containsObject:model]){
+					if([alreadySaved containsObject:model] || model.uniqueId != nil){
 						item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
 					}else{
 						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
@@ -66,7 +66,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				
 				NSMutableArray* result = [NSMutableArray array];
 				CKItem* item = nil;
-				if([alreadySaved containsObject:model]){
+				if([alreadySaved containsObject:model] || model.uniqueId != nil){
 					item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
 				}else{
 					item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
