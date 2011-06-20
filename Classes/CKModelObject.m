@@ -115,14 +115,11 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 - (void)initializeKVO{
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
-		if([property.name isEqualToString:@"score"]){
-			int i =3;
-		}
 		if(property.isReadOnly == NO){
 			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
 				[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
-				CKDebugLog(@"register <%p> of type <%@> as observer on <%p,%@>",self,[self class],self,property.name);
+//				CKDebugLog(@"register <%p> of type <%@> as observer on <%p,%@>",self,[self class],self,property.name);
 			}
 			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
 					|| [NSObject isKindOf:property.type parentType:[NSSet class]]){
@@ -160,7 +157,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		if(property.isReadOnly == NO){
 			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
 			if([self respondsToSelector:changeSelector]){
-				CKDebugLog(@"unregister <%p> of type <%@>  as observer on <%p,%@>",self,[self class],self,property.name);
+//				CKDebugLog(@"unregister <%p> of type <%@>  as observer on <%p,%@>",self,[self class],self,property.name);
 				[self removeObserver:self forKeyPath:property.name];
 			}
 			
