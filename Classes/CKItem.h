@@ -51,6 +51,7 @@
 
 - (NSDictionary *)propertyListRepresentation;
 - (NSDictionary *)attributesDictionary DEPRECATED_ATTRIBUTE;
+- (NSDictionary *)attributesIndexedByName;
 
 @end
 
@@ -58,8 +59,14 @@
 @interface CKItem (CKItemModification)
 
 - (void)updateAttributes:(NSDictionary*)attributes;
-- (void)updateAttributeNamed:(NSString*)name value:(NSString*)value;
-- (void)updateAttributeNamed:(NSString*)name items:(NSArray*)items;
 - (CKAttribute*)attributeNamed:(NSString*)attribute createIfNotFound:(BOOL)createIfNotFound;
+
+@end
+
+@interface CKItem (CKOptimizedItemModification)
+
+- (void)updateAttribute:(CKAttribute*)attribute withValue:(NSString*)value;
+- (void)updateAttribute:(CKAttribute*)attribute withItems:(NSArray*)items;
+- (CKAttribute*)findOrCreateAttributeInDictionary:(NSDictionary*)indexedAttributes withName:(NSString*)name;
 
 @end

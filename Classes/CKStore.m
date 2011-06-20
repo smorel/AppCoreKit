@@ -16,6 +16,8 @@
 
 #import "CKNSStringAdditions.h"
 
+static NSMutableDictionary* CKStoreCache = nil;
+
 @interface CKStore ()
 
 @property (retain, readwrite) CKCoreDataManager *manager;
@@ -31,6 +33,12 @@
 #pragma mark CKStore Initialization
 
 + (id)storeWithDomainName:(NSString *)domainName {
+	if(CKStoreCache){
+		id store = [CKStoreCache objectForKey:domainName];
+		if(store){
+			return store;
+		}
+	}
 	return [[[CKStore alloc] initWithDomainName:domainName] autorelease];
 }
 
@@ -49,6 +57,11 @@
 		if (created) { 
 			self.domain.name = domainName; 
 		}
+		
+		if(CKStoreCache == nil){
+			CKStoreCache = [[NSMutableDictionary alloc]init];
+		}
+		[CKStoreCache setObject:self forKey:domainName];
 	}
 	return self;
 }
