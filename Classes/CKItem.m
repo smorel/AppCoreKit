@@ -57,7 +57,7 @@
 	CKStore* store = [CKStore storeWithDomainName:self.domain.name];
 	BOOL created = NO;
 	
-	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (item == %@)", name, self] 
+	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(item == %@) AND (name == %@)", self,name ] 
 											   createIfNotFound:YES wasCreated:&created];
 
 	attribute.name = name;
@@ -71,7 +71,7 @@
 	CKStore* store = [CKStore storeWithDomainName:self.domain.name];
 	BOOL created = NO;
 	
-	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (item == %@)", name, self] 
+	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(item == %@) AND (name == %@)", self,name] 
 											   createIfNotFound:YES wasCreated:&created];
 	
 	attribute.name = name;
@@ -89,7 +89,7 @@
 - (CKAttribute*)attributeNamed:(NSString*)name createIfNotFound:(BOOL)createIfNotFound{
 	CKStore* store = [CKStore storeWithDomainName:self.domain.name];
 	BOOL created = NO;
-	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (item == %@)", name, self] 
+	CKAttribute *attribute = [store fetchAttributeWithPredicate:[NSPredicate predicateWithFormat:@"(item == %@) AND (name == %@)", self,name] 
 											   createIfNotFound:createIfNotFound wasCreated:&created];
 	if (created) {
 		attribute.name = name;
