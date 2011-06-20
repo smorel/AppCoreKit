@@ -19,5 +19,6 @@
 
 - (BOOL)load:(CKDocumentCollection*)collection;
 - (BOOL)save:(CKDocumentCollection*)collection;
+- (BOOL)deleteFile;
 
 @end
