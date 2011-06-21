@@ -481,6 +481,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	CKObjectProperty* property = [notification objectProperty];
 	if([objects containsObject:property.object] == YES){
 		[self reloadData];
+		return;
 	}
 }
 
