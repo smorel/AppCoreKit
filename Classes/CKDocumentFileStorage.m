@@ -39,4 +39,10 @@
 	return [NSKeyedArchiver archiveRootObject:allObjects toFile:_path];
 }
 
+- (BOOL)deleteFile {
+	NSError *error = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:_path error:&error];
+	return (error == nil);
+}
+
 @end
