@@ -840,4 +840,16 @@
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
 }
 
+- (void)onInsertSectionAtIndex:(NSInteger)index{
+	if(!_viewIsOnScreen)
+		return;
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
+}
+
+- (void)onRemoveSectionAtIndex:(NSInteger)index{
+	if(!_viewIsOnScreen)
+		return;
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
+}
+
 @end

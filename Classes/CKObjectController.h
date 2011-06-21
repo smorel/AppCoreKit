@@ -49,5 +49,7 @@
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+- (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index;
+- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index;
 
 @end

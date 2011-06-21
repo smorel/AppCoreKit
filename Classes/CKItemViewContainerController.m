@@ -543,6 +543,14 @@
 	[self onRemoveObjects:objects atIndexPaths:indexPaths];
 }
 
+- (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{
+	[self onInsertSectionAtIndex:index];
+}
+
+- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{
+	[self onRemoveSectionAtIndex:index];
+}
+
 - (void)onReload{
 	//To implement in inherited class
 }
@@ -560,6 +568,14 @@
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	//To implement in inherited class
+}
+
+- (void)onInsertSectionAtIndex:(NSInteger)index{
+	//To implement in inherited class
+}
+
+- (void)onRemoveSectionAtIndex:(NSInteger)index{
 	//To implement in inherited class
 }
 

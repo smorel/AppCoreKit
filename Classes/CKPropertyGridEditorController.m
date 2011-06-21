@@ -92,7 +92,7 @@
 		return [self setupWithObject:object];
 	}
 	
-	self.sections = [NSMutableArray array];
+	[self clear];
 	for(NSString* sectionName in [representation allKeys]){
 		NSArray* propertyNames = [representation objectForKey:sectionName];
 		
@@ -110,12 +110,11 @@
 }
 
 - (void)setupWithProperties:(NSArray*)properties{
-	self.sections = [NSMutableArray array];
+	[self clear];
 	
 	CKFormSection* section = [CKFormSection section];
 	[self setup:properties inSection:section];
 	[self addSection:section];
-	
 	[self reload];
 }
 

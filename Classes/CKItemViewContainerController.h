@@ -127,6 +127,8 @@
 - (void)onEndUpdates;
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+- (void)onInsertSectionAtIndex:(NSInteger)index;
+- (void)onRemoveSectionAtIndex:(NSInteger)index;
 
 //Helpers
 - (CKFeedSource*)collectionDataSource;

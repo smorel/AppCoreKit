@@ -18,12 +18,15 @@
 	NSString* _headerTitle;
 	UIView* _headerView;
 	CKFormTableViewController* _parentController;
+	BOOL _hidden;
 }
 
 @property (nonatomic,retain) NSString* headerTitle;
 @property (nonatomic,retain) UIView* headerView;
 @property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
+@property (nonatomic,readonly) NSInteger sectionVisibleIndex;
+@property (nonatomic,readonly) BOOL hidden;
 
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
@@ -75,11 +78,13 @@
 	NSMutableArray* _headerCellDescriptors;
 	NSMutableArray* _footerCellDescriptors;
 	NSMutableArray* _changeSet;
+	
+	BOOL sectionUpdate;
 }
 
 @property (nonatomic,retain,readonly) CKDocumentController* objectController;
-@property (nonatomic,retain) NSArray* headerCellDescriptors;
-@property (nonatomic,retain) NSArray* footerCellDescriptors;
+@property (nonatomic,retain,readonly) NSMutableArray* headerCellDescriptors;
+@property (nonatomic,retain,readonly) NSMutableArray* footerCellDescriptors;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
@@ -87,6 +92,9 @@
 
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell;
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell;
+
+- (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
+- (CKFormCellDescriptor*)addHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor;
 
 @end
 
@@ -109,12 +117,15 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 @interface CKFormTableViewController : CKObjectTableViewController {
 	NSMutableArray* _sections;
+	BOOL reloading;
 }
-@property (nonatomic,retain) NSArray* sections;
+@property (nonatomic,retain, readonly) NSMutableArray* sections;
+@property (nonatomic,readonly) BOOL reloading;
 
 - (id)initWithSections:(NSArray*)sections;
 - (id)initWithSections:(NSArray*)sections withNibName:(NSString*)nibName;
 
+- (void)clear;
 
 - (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
@@ -127,5 +138,9 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
+
+- (NSInteger)numberOfVisibleSections;
+- (CKFormSectionBase*)visibleSectionAtIndex:(NSInteger)index;
+- (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
 
 @end
