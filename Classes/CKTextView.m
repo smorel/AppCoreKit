@@ -30,6 +30,7 @@
 	[self addSubview:self.placeholderLabel];
 
 	self.maxStretchableHeight = 0;
+	self.clipsToBounds = YES;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(valueDidChange) name:UITextViewTextDidChangeNotification object:self];
 	[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
@@ -116,6 +117,10 @@
 
 - (void)valueDidChange {
 	self.placeholderLabel.hidden = [self hasText];
+	
+	if ([self.delegate respondsToSelector:@selector(textViewValueChanged:)]) {
+		[self.delegate textViewValueChanged:self.text];
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

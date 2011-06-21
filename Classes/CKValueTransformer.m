@@ -8,13 +8,16 @@
 
 #import "CKValueTransformer.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSValueTransformer+Additions.h"
 
 @implementation CKValueTransformer
 
-static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 
 + (id)transformValue:(id)value toClass:(Class)type{
-	if([value isKindOfClass:type])
+	return [NSValueTransformer transform:value toClass:type];
+	
+	
+	/*if([value isKindOfClass:type])
 		return value;
 	
 	if(CKValueTransformerNumberFormatter == nil){
@@ -47,13 +50,28 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 		if([NSObject isKindOf:type parentType:[NSURL class]])
 			return [NSURL URLWithString:@""];
 		else if ([NSObject isKindOf:type parentType:[NSString class]])
-			return [NSString string];
+			return @"";
 		else if([NSObject isKindOf:type parentType:[NSNumber class]])
 			return [NSNumber numberWithInt:0];
 	}
+	else if([value isKindOfClass:[NSIndexPath class]]
+			&& [NSObject isKindOf:type parentType:[NSString class]])
+	{
+		NSMutableString* str = [NSMutableString stringWithCapacity:124];
+		NSIndexPath* indexPath = (NSIndexPath*)value;
+		for(int i=0;i<[indexPath length];++i){
+			if(i < [indexPath length] - 1){
+				[str appendFormat:@"%d ",[indexPath indexAtPosition:i]];
+			}
+			else{
+				[str appendFormat:@"%d",[indexPath indexAtPosition:i]];
+			}
+		}
+		
+		return str;
+	}
 
-	//return the object hopping there is autoConversion :)
-	return value;
+	return value;*/
 }
 
 @end

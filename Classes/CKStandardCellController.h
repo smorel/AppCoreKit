@@ -10,7 +10,6 @@
 #import "CKTableViewCellController.h"
 #import "CKWebRequest.h"
 
-
 @interface CKStandardCellController : CKTableViewCellController <CKWebRequestDelegate> {
 	UITableViewCellStyle _style;
 	NSString *_text;
@@ -29,18 +28,19 @@
 	BOOL _multilineDetailText;
 }
 
+@property (nonatomic, assign) UITableViewCellStyle style;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *detailedText;
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, retain) UIColor *backgroundColor;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *detailedTextColor;
+@property (nonatomic, retain) UIImage *image                     DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
+@property (nonatomic, retain) UIColor *backgroundColor           DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
+@property (nonatomic, retain) UIColor *textColor                 DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
+@property (nonatomic, retain) UIColor *detailedTextColor         DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
 
 @property (nonatomic, assign, getter=isTextMultiline) BOOL multilineText;
 @property (nonatomic, assign, getter=isDetailTextMultiline) BOOL multilineDetailText;
 
-- (id)initWithStyle:(UITableViewCellStyle)style;
+- (id)initWithStyle:(UITableViewCellStyle)style DEPRECATED_ATTRIBUTE;
 - (id)initWithText:(NSString *)text;
-- (id)initWithStyle:(UITableViewCellStyle)style imageURL:(NSString *)imageURL text:(NSString *)text;
+- (id)initWithStyle:(UITableViewCellStyle)style imageURL:(NSString *)imageURL text:(NSString *)text DEPRECATED_ATTRIBUTE;
 
 @end

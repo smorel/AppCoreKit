@@ -60,7 +60,10 @@ typedef enum {
 - (NSArray *)fetchItemsWithNames:(NSArray *)names;
 - (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments;
 - (NSArray *)fetchItemsWithPredicateFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments limit:(NSUInteger)limit;
+- (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys;
 
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments;
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys;
 //
 
 - (NSUInteger)countItems;
@@ -78,5 +81,20 @@ typedef enum {
 
 - (NSArray *)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName;
 - (id)fetchAttributesWithNames:(NSArray *)names forItemNamed:(NSString *)itemName resultType:(CKStoreResultType)resultType;
+
+@end
+
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
 
 @end

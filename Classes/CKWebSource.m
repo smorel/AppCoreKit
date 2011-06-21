@@ -18,6 +18,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
 @property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, assign) NSRange range;
 @end
 
 @implementation CKWebSource
@@ -27,9 +28,11 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @synthesize transformBlock = _transformBlock;
 @synthesize failureBlock = _failureBlock;
 @synthesize webSourceDelegate = _webSourceDelegate;
+@synthesize successBlock = _successBlock;
 @dynamic hasMore;
 @dynamic isFetching;
 @dynamic currentIndex;
+@dynamic range;
 
 - (id)init {
 	if (self = [super init]) {
@@ -42,26 +45,27 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[_requestBlock release];
 	[_transformBlock release];
 	[_failureBlock release];
+	[_successBlock release];
 	_webSourceDelegate = nil;
 	[super dealloc];
 }
 
 //
 
-- (BOOL)fetchNextItems:(NSUInteger)batchSize {
-	if ((self.isFetching == YES) || (self.hasMore == NO)
-		|| (_limit > 0 && self.currentIndex >= _limit) ) 
+- (BOOL)fetchRange:(NSRange)range {
+	self.range = range;
+	if ((self.isFetching == YES) || (self.hasMore == NO)) 
 		return NO;
 	
-	_requestedBatchSize = batchSize;
+	_requestedBatchSize = range.length;
 	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
-		self.request = [_webSourceDelegate webSource:self requestForRange:NSMakeRange(self.currentIndex, batchSize)];
+		self.request = [_webSourceDelegate webSource:self requestForRange:self.range];
 	}
 	else if(_requestBlock){
-		self.request = _requestBlock(NSMakeRange(self.currentIndex, batchSize));
+		self.request = _requestBlock(self.range);
 	}
 	else{
-		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+		NSLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	if (self.request) {
@@ -110,10 +114,16 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		[self performSelector:@selector(addItems:) withObject:newItems];
 	}
 	
-	self.currentIndex += [newItems count];
 	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
 	self.isFetching = NO;
 	self.request = nil;
+	
+	if(_webSourceDelegate && [_webSourceDelegate respondsToSelector:@selector(webSourceDidSuccess:)]){
+		[_webSourceDelegate webSourceDidSuccess:self];
+	}
+	else if(_successBlock){
+		_successBlock();
+	}
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {

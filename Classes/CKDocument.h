@@ -2,23 +2,36 @@
 //  CKDocument.h
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-02-15.
+//  Created by Sebastien Morel on 11-04-18.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-@protocol CKDocument
+#import "CKDocumentArray.h"
 
-- (NSArray*)objectsForKey:(NSString*)key;
-- (void)addObjects:(NSArray*)newItems forKey:(NSString*)key;
-- (void)addObjects:(NSArray*)newItems atIndex:(NSUInteger)index forKey:(NSString*)key;
-- (void)removeObjects:(NSArray*)items forKey:(NSString*)key;
-- (void)removeAllObjectsForKey:(NSString*)key;
-- (void)addObserver:(id)object forKey:(NSString*)key;
-- (void)removeObserver:(id)object forKey:(NSString*)key;
-- (void)retainObjectsForKey:(NSString*)key;
-- (void)releaseObjectsForKey:(NSString*)key;
-- (void)fetchRange:(NSRange)range forKey:(NSString*)key;
-- (void)setDataSource:(id)source forKey:(NSString*)key;
-- (id)dataSourceForKey:(NSString*)key;
+
+@interface CKDocument : NSObject {
+	NSMutableDictionary* _objects;
+//	NSMutableDictionary* _retainCounts;
+}
+
++ (id)sharedDocument;
+
+- (void)clear;
+
+//- (void)retainObjectsForKey:(NSString*)key;
+//- (void)releaseObjectsForKey:(NSString*)key;
+
+- (CKDocumentCollection*)collectionForKey:(NSString*)key;
+- (void)removeCollectionForKey:(NSString*)key;
+- (void)setCollection:(CKDocumentCollection*)collection forKey:(NSString*)key;
+
+//Helpers to create and set collections
+- (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source forKey:(NSString*)key;
+- (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage forKey:(NSString*)key;
+- (CKDocumentArray*)arrayWithStorage:(id)storage forKey:(NSString*)key;
+
+- (CKDocumentArray*)arrayWithFeedSource:(CKFeedSource*)source withStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
+- (CKDocumentArray*)arrayWithStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
+- (CKDocumentArray*)arrayForKey:(NSString*)key;
 
 @end

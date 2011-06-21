@@ -6,24 +6,28 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "CKObjectController.h"
-#import <CloudKit/CKModelObserver.h>
+#import "CKDocumentCollection.h"
 
 
 @interface CKDocumentController : NSObject<CKObjectController> {
-	id _document;
-	NSString* _key;
+	CKDocumentCollection* _collection;
 	id _delegate;
 	BOOL observing;
 	BOOL animateFirstInsertion;
+	BOOL displayFeedSourceCell;
+	NSInteger numberOfFeedObjectsLimit;
+	BOOL locked;
+	BOOL changedWhileLocked;
 }
 
-@property (nonatomic, assign) id document;
-@property (nonatomic, retain) NSString* key;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) BOOL animateFirstInsertion;
+@property (nonatomic, assign) BOOL displayFeedSourceCell;
+@property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
+@property (nonatomic, retain) CKDocumentCollection* collection;
 
-- (id)initWithDocument:(id)document key:(NSString*)key;
+- (id)initWithCollection:(CKDocumentCollection*)collection;
++ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection;
 
 @end

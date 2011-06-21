@@ -12,125 +12,7 @@
 #import <malloc/malloc.h>
 
 #include <execinfo.h>
-
-
-@implementation CKObjectProperty
-@synthesize name;
-@synthesize type;
-@synthesize attributes;
-@synthesize metaDataSelector;
-@synthesize propertyType;
-@synthesize assignementType;
-
-- (void)dealloc{
-	self.name = nil;
-	self.attributes = nil;
-	[super dealloc];
-}
-
-- (NSString*) description{
-	return [NSString stringWithFormat:@"%@",name];
-}
-
--(NSString*)getTypeDescriptor{
-	return [attributes substringWithRange: NSMakeRange(1,2)];
-}
-
-- (NSString*)className{
-	return  NSStringFromClass(self.type);//[NSString stringWithUTF8String:class_getName(self.type)];
-}
-
-- (void)setAttributes:(NSString *)att{
-	[attributes release];
-	attributes = [att retain];
-	
-	assignementType = CKObjectPropertyAssignementTypeAssign;
-	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
-	if([subStrings count] > 2){
-		NSString* assignementAttribute = [subStrings objectAtIndex:1];
-		if([assignementAttribute isEqual:@"&"]){
-			assignementType = CKObjectPropertyAssignementTypeRetain;
-		}
-		else if([assignementAttribute isEqual:@"C"]){
-			assignementType = CKObjectPropertyAssignementTypeCopy;
-		}
-		else if([assignementAttribute isEqual:@"W"]){
-			assignementType = CKObjectPropertyAssignementTypeWeak;
-		}
-	}	
-	
-	if([attributes hasPrefix:@"T@"]){
-		self.propertyType = CKObjectPropertyTypeObject;
-	}
-	else if([attributes hasPrefix:@"Tc"]){
-		self.propertyType = CKObjectPropertyTypeChar;
-	}
-	else if([attributes hasPrefix:@"Ti"]){
-		self.propertyType = CKObjectPropertyTypeInt;
-	}
-	else if([attributes hasPrefix:@"Ts"]){
-		self.propertyType = CKObjectPropertyTypeShort;
-	}
-	else if([attributes hasPrefix:@"Tl"]){
-		self.propertyType = CKObjectPropertyTypeLong;
-	}
-	else if([attributes hasPrefix:@"Tq"]){
-		self.propertyType = CKObjectPropertyTypeLongLong;
-	}
-	else if([attributes hasPrefix:@"TC"]){
-		self.propertyType = CKObjectPropertyTypeUnsignedChar;
-	}
-	else if([attributes hasPrefix:@"TI"]){
-		self.propertyType = CKObjectPropertyTypeUnsignedInt;
-	}
-	else if([attributes hasPrefix:@"TS"]){
-		self.propertyType = CKObjectPropertyTypeUnsignedShort;
-	}
-	else if([attributes hasPrefix:@"TL"]){
-		self.propertyType = CKObjectPropertyTypeUnsignedLong;
-	}
-	else if([attributes hasPrefix:@"TQ"]){
-		self.propertyType = CKObjectPropertyTypeUnsignedLongLong;
-	}
-	else if([attributes hasPrefix:@"Tf"]){
-		self.propertyType = CKObjectPropertyTypeFloat;
-	}
-	else if([attributes hasPrefix:@"Td"]){
-		self.propertyType = CKObjectPropertyTypeDouble;
-	}
-	else if([attributes hasPrefix:@"TB"]){
-		self.propertyType = CKObjectPropertyTypeCppBool;
-	}
-	else if([attributes hasPrefix:@"Tv"]){
-		self.propertyType = CKObjectPropertyTypeVoid;
-	}
-	else if([attributes hasPrefix:@"T*"]){
-		self.propertyType = CKObjectPropertyTypeCharString;
-	}
-	else if([attributes hasPrefix:@"T#"]){
-		self.propertyType = CKObjectPropertyTypeClass;
-	}
-	else if([attributes hasPrefix:@"T:"]){
-		self.propertyType = CKObjectPropertyTypeSelector;
-	}
-	else{
-		/*
-		 [array type] : array
-		 {name=type...} : structure
-		 (name=type...) : union
-		 bnum : bit field of num bits
-		 ^type : pointer to type
-		 ? : unknown type (among other things, this code is used for function pointers)
-		 */ 
-		
-		self.propertyType = CKObjectPropertyTypeUnknown;
-	}	
-}
-
-
-
-@end
-
+#import "CKUIView+Introspection.h"
 
 static NSString* getPropertyType(objc_property_t property) {
 	if(property){
@@ -170,28 +52,34 @@ static NSString* getPropertyType(objc_property_t property) {
 
 @implementation NSObject (CKNSObjectIntrospection)
 
-+(CKObjectProperty*)propertyForDescriptor:(objc_property_t)descriptor{
++(CKClassPropertyDescriptor*)propertyForDescriptor:(objc_property_t)descriptor{
 	const char *propName = property_getName(descriptor);
 	if(propName) {
 		//const char *propType = getPropertyType(property);
 		const char *attributes = property_getAttributes(descriptor);
 		
-		CKObjectProperty* objectProperty = [[[CKObjectProperty alloc]init]autorelease];
-		objectProperty.name = [NSString stringWithUTF8String:propName];
-		//objectProperty.type = [NSString stringWithUTF8String:propType];
-		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
-		
 		NSString *propType = getPropertyType(descriptor);
 		Class returnType = NSClassFromString(propType);
-		objectProperty.type = returnType;
 		
+		CKClassPropertyDescriptor* objectProperty = [[[CKClassPropertyDescriptor alloc]init]autorelease];
+		objectProperty.name = [NSString stringWithUTF8String:propName];
+		objectProperty.type = returnType;
+		objectProperty.className = [NSString stringWithUTF8String:class_getName(returnType)];
+		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
 		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
+		
+		if([NSObject isKindOf:returnType parentType:[NSArray class]]){
+			objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
+			objectProperty.removeSelector = [NSObject removeSelectorForProperty:objectProperty.name];
+			objectProperty.removeAllSelector = [NSObject removeAllSelectorForProperty:objectProperty.name];
+		}
+		
 		return objectProperty;
 	}
 	return nil;
 }
 
-+(CKObjectProperty*) property:(id)object forKeyPath:(NSString*)keyPath{
++(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath{
 	//NSLog(@"finding property:'%@' in '%@'",keyPath,object);
 	id subObject = object;
 	
@@ -201,37 +89,66 @@ static NSString* getPropertyType(objc_property_t property) {
 		//NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}
-	NSAssert(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
-	return [self property:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	if(subObject == nil){
+		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		return nil;
+	}
+	return [self propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 }
 
-+(CKObjectProperty*) property:(Class)c forKey:(NSString*)name{
-	return [[CKObjectPropertyManager defaultManager]property:name forClass:[c class]];
++(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name{
+	return [[CKClassPropertyDescriptorManager defaultManager]property:name forClass:[c class]];
 }
 
-- (void)introspection:(Class)c array:(NSMutableArray*)array{
+
+- (CKClassPropertyDescriptor*) propertyDescriptorForKeyPath:(NSString*)keyPath{
+	return [NSObject propertyDescriptor:[self class] forKeyPath:keyPath];
+}
+
+- (void)_introspection:(Class)c array:(NSMutableArray*)array{
 	unsigned int outCount, i;
     objc_property_t *ps = class_copyPropertyList(c, &outCount);
     for(i = 0; i < outCount; i++) {
         objc_property_t property = ps[i];
-        CKObjectProperty* objectProperty = [NSObject propertyForDescriptor:property ];
+        CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
 		[array addObject:objectProperty];
     }
     free(ps);	
 	
+	/*
+	 Ivar * ivs = class_copyIvarList(c, &outCount);
+	 for(i = 0; i < outCount; i++){
+	 Ivar v = ivs[i];
+	 int i =3;
+	 }
+	 free(ivs);	
+	 */
+	
 	Class f = class_getSuperclass(c);
 	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
-		[self introspection:f array:array];
+		[self _introspection:f array:array];
 	}
 	
 }
 
-- (NSArray*)allProperties{
-	return [[CKObjectPropertyManager defaultManager]allPropertiesForClass:[self class]];
+- (void)introspection:(Class)c array:(NSMutableArray*)array{
+	[self _introspection:c array:array];
+	if([c respondsToSelector:@selector(additionalClassPropertyDescriptors)]){
+		NSArray* additionalProperties = [c performSelector:@selector(additionalClassPropertyDescriptors)];
+		[array addObjectsFromArray:additionalProperties];
+	}
+}
+
+- (NSArray*)allViewsPropertyDescriptors{
+	return [[CKClassPropertyDescriptorManager defaultManager]allViewsPropertyForClass:[self class]];
+}
+
+- (NSArray*)allPropertyDescriptors{
+	return [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:[self class]];
 }
 
 - (NSArray*)allPropertyNames{
-	return [[CKObjectPropertyManager defaultManager]allPropertieNamesForClass:[self class]];
+	return [[CKClassPropertyDescriptorManager defaultManager]allPropertieNamesForClass:[self class]];
 }
 
 
@@ -269,9 +186,9 @@ static NSString* getPropertyType(objc_property_t property) {
 					insertWith:(CKObjectPredicate)insertWith 
 {
 	if(instance && [instance conformsToProtocol:@protocol(NSObject)]){
-		NSArray* properties = [instance allProperties];
-		for(CKObjectProperty* property in properties){
-			if(property && property.propertyType == CKObjectPropertyTypeObject){
+		NSArray* properties = [instance allPropertyDescriptors];
+		for(CKClassPropertyDescriptor* property in properties){
+			if(property && property.propertyType == CKClassPropertyDescriptorTypeObject){
 				id instanceProperty = [instance valueForKey:property.name];
 				if(instanceProperty){
 					[self filterObjects:results explored:explored instance:instanceProperty expandWith:expandWith insertWith:insertWith addInstance:YES];
@@ -334,6 +251,17 @@ static NSString* getPropertyType(objc_property_t property) {
 	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
 }
 
++ (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix{
+	NSAssert(prefix && (prefix.length > 0), @"prefix should not be empty.");
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:property prefix:prefix suffix:suffix];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix{
+	NSString* selectorName = [NSString stringWithFormat:@"%@%@",property,suffix];
+	return NSSelectorFromString(selectorName);
+}
+
 + (SEL)insertorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
 	return NSSelectorFromString(selectorName);
@@ -359,75 +287,40 @@ static NSString* getPropertyType(objc_property_t property) {
 	return NSSelectorFromString(selectorName);
 }
 
-@end
-
-
-@interface CKObjectPropertyManager ()
-@property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
-@end
-
-static CKObjectPropertyManager* CKObjectPropertyManagerDefault = nil;
-@implementation CKObjectPropertyManager
-@synthesize propertiesByClassName = _propertiesByClassName;
-@synthesize propertyNamesByClassName = _propertyNamesByClassName;
-
-+ (CKObjectPropertyManager*)defaultManager{
-	if(CKObjectPropertyManagerDefault == nil){
-		CKObjectPropertyManagerDefault = [[CKObjectPropertyManager alloc]init];
-	}
-	return CKObjectPropertyManagerDefault;
++ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionWithFilter:",propertyName];
+	return NSSelectorFromString(selectorName);
 }
 
-- (id)init{
-	[super init];
-	self.propertiesByClassName = [NSMutableDictionary dictionary];
-	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
-	return self;
++ (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionForNewlyCreated",propertyName];
+	return NSSelectorFromString(selectorName);
 }
 
-- (void)dealloc{
-	self.propertiesByClassName = nil;
-	[super dealloc];
++ (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionAtLocation:radius",propertyName];
+	return NSSelectorFromString(selectorName);
 }
 
-- (NSArray*)allPropertiesForClass:(Class)class{
-	NSString* className =  NSStringFromClass(class);//[NSString stringWithUTF8String:class_getName(class)];
-	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
-	if(allProperties == nil){
-		allProperties = [NSMutableArray array];
-		[NSObject introspection:class array:allProperties];
-		[_propertiesByClassName setObject:allProperties forKey:className];
-		
-		NSMutableArray* allPropertyNames = [NSMutableArray array];
-		for(CKObjectProperty* property in allProperties){
-			[allPropertyNames addObject:property.name];
-		}
-		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
-	}
-	
-	return allProperties;
++ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
+	return NSSelectorFromString(selectorName);
 }
 
 
-- (NSArray*)allPropertieNamesForClass:(Class)class{
-	NSString* className =  NSStringFromClass(class);//[NSString stringWithUTF8String:class_getName(class)];
-	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:className];
-	if(allPropertyNames == nil){
-		[self allPropertiesForClass:class];
-		allPropertyNames = [_propertyNamesByClassName objectForKey:className];
-	}
-	return allPropertyNames;
++ (SEL)insertSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"insert" suffix:@"Objects:atIndexes:"];
+	return NSSelectorFromString(selectorName);
 }
 
-- (CKObjectProperty*)property:(NSString*)name forClass:(Class)class{
-	NSArray* properties = [self allPropertiesForClass:class];
-	//TODO : Optimize this by getting a dictionary of properties instead of an array !
-	for(CKObjectProperty* p in properties){
-		if([p.name isEqual:name])
-			return p;
-	}
-	return nil;
++ (SEL)removeSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"remove" suffix:@"ObjectsAtIndexes:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)removeAllSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"removeAll" suffix:@"Objects"];
+	return NSSelectorFromString(selectorName);
 }
 
 @end

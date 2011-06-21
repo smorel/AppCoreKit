@@ -16,6 +16,8 @@
 
 #import "CKNSStringAdditions.h"
 
+static NSMutableDictionary* CKStoreCache = nil;
+
 @interface CKStore ()
 
 @property (retain, readwrite) CKCoreDataManager *manager;
@@ -31,6 +33,12 @@
 #pragma mark CKStore Initialization
 
 + (id)storeWithDomainName:(NSString *)domainName {
+	if(CKStoreCache){
+		id store = [CKStoreCache objectForKey:domainName];
+		if(store){
+			return store;
+		}
+	}
 	return [[[CKStore alloc] initWithDomainName:domainName] autorelease];
 }
 
@@ -49,6 +57,11 @@
 		if (created) { 
 			self.domain.name = domainName; 
 		}
+		
+		if(CKStoreCache == nil){
+			CKStoreCache = [[NSMutableDictionary alloc]init];
+		}
+		[CKStoreCache setObject:self forKey:domainName];
 	}
 	return self;
 }
@@ -77,14 +90,48 @@
 	// Adds the "domain scope" for the predicate, equivalent to the format string
 	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
 
-	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	/*NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
 	[predicateArguments addObjectsFromArray:arguments];
 		
 	NSMutableString *scopedPredicateFormat = [NSMutableString stringWithString:@"(domain == %@)"];
 	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
 	
-	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:limit];
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedBy:@"createdAt" limit:limit];*/
+	return [self fetchItemsWithFormat:predicateFormat arguments:arguments range:NSMakeRange(0,limit) sortedByKeys:[NSArray arrayWithObject:@"createdAt"]];
+}
+
+- (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys{
+	// Adds the "domain scope" for the predicate, equivalent to the format string
+	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
+	
+	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	if(arguments != nil){
+		[predicateArguments addObjectsFromArray:arguments];
+	}
+	
+	NSMutableString *scopedPredicateFormat = [NSMutableString stringWithString:@"(domain == %@)"];
+	if (predicateFormat) { [scopedPredicateFormat appendFormat:@" AND (%@)", predicateFormat]; }
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:scopedPredicateFormat argumentArray:predicateArguments];
+	
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKItem" predicate:predicate sortedByKeys:keys range:range];
+}
+
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments {
+	return [self fetchAttributesWithFormat:predicateFormat arguments:arguments range:NSMakeRange(0,0) sortedByKeys:[NSArray arrayWithObject:@"createdAt"]];
+}
+
+- (NSArray *)fetchAttributesWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedByKeys:(NSArray*)keys{
+	// Adds the "domain scope" for the predicate, equivalent to the format string
+	// [NSPredicate predicateWithFormat:@"domain == %@ [...]", self.domain, [...]];
+	
+	NSMutableArray *predicateArguments = [NSMutableArray arrayWithObject:self.domain];
+	if(arguments != nil){
+		[predicateArguments addObjectsFromArray:arguments];
+	}
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat argumentArray:predicateArguments];
+	return [self.manager.objectContext fetchObjectsForEntityForName:@"CKAttribute" predicate:predicate sortedByKeys:keys range:range];
 }
 
 #pragma mark CKStore Count Items
@@ -126,24 +173,7 @@
 	}
 	
 	// Insert attributes
-	
-	for (id key in [attributes allKeys]) {
-		NSAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
-		id value = [attributes objectForKey:key];
-		NSAssert([value isKindOfClass:[NSString class]], @"Attribute value must be of class NSString");
-		
-		BOOL created = NO;
-		CKAttribute *attribute = [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
-																			   predicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (value == %@) AND (item == %@)", key, value, item]
-																		createIfNotFound:YES 
-																			  wasCreated:&created];
-		if (created) {
-			attribute.name = key;
-			attribute.value = value;		
-			[item addAttributesObject:attribute];
-		}
-	}
-	
+	[item updateAttributes:attributes];
 	return name;
 }
 
@@ -172,6 +202,30 @@
 	} else {
 		return [[NSValueTransformer valueTransformerForName:@"CKDictionaryFromAttributesTransformer"] transformedValue:attributes];
 	}
+}
+
+
+@end
+
+
+@implementation CKStore (CKStorePrivateAddition)
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
+	return [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"
+														 predicate:predicate
+												  createIfNotFound:createIfNotFound 
+														wasCreated:wasCreated];
+}
+
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
+	return [self.manager.objectContext fetchObjectForEntityForName:@"CKItem"
+														 predicate:predicate
+												  createIfNotFound:createIfNotFound 
+														wasCreated:wasCreated];
+}
+
+- (id)insertNewObjectForEntityForName:(NSString *)entityName{
+	return [self.manager.objectContext insertNewObjectForEntityForName:entityName];
 }
 
 @end

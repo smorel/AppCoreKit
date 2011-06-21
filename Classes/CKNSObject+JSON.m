@@ -38,6 +38,10 @@
 		return [NSString stringWithFormat:@"{%@}", [JSONPairs componentsJoinedByString:@","]];
 	}
 	
+	if ([self isKindOfClass:[NSNumber class]]) {
+		return [(NSNumber *)self stringValue];
+	}
+	
 	return [NSNull null];
 }
 	

@@ -8,6 +8,29 @@
 
 #import "CKUIImage+Transformations.h"
 
+
+static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
+    CGContextBeginPath(gc);
+	CGContextSaveGState(gc);
+	
+	if (radius == 0) {
+        CGContextAddRect(gc, rect);
+    } else {
+		CGContextTranslateCTM(gc, CGRectGetMinX(rect), CGRectGetMinY(rect));
+		CGContextScaleCTM(gc, radius, radius);
+		CGFloat fw = CGRectGetWidth(rect) / radius;
+		CGFloat fh = CGRectGetHeight(rect) / radius;
+		CGContextMoveToPoint(gc, fw, fh/2);
+		CGContextAddArcToPoint(gc, fw, fh, fw/2, fh, 1);
+		CGContextAddArcToPoint(gc, 0, fh, 0, fh/2, 1);
+		CGContextAddArcToPoint(gc, 0, 0, fw/2, 0, 1);
+		CGContextAddArcToPoint(gc, fw, 0, fw, fh/2, 1);
+	}
+	
+	CGContextClosePath(gc);
+	CGContextRestoreGState(gc);
+}
+
 @implementation UIImage (CKUIImageTransformationsAdditions)
 
 // Original code by Ian Baird on 3/28/08.
@@ -65,27 +88,6 @@
     return result;
 }
 
-static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius) {
-    CGContextBeginPath(gc);
-	CGContextSaveGState(gc);
-	
-	if (radius == 0) {
-        CGContextAddRect(gc, rect);
-    } else {
-		CGContextTranslateCTM(gc, CGRectGetMinX(rect), CGRectGetMinY(rect));
-		CGContextScaleCTM(gc, radius, radius);
-		CGFloat fw = CGRectGetWidth(rect) / radius;
-		CGFloat fh = CGRectGetHeight(rect) / radius;
-		CGContextMoveToPoint(gc, fw, fh/2);
-		CGContextAddArcToPoint(gc, fw, fh, fw/2, fh, 1);
-		CGContextAddArcToPoint(gc, 0, fh, 0, fh/2, 1);
-		CGContextAddArcToPoint(gc, 0, 0, fw/2, 0, 1);
-		CGContextAddArcToPoint(gc, fw, 0, fw, fh/2, 1);
-	}
-	
-	CGContextClosePath(gc);
-	CGContextRestoreGState(gc);
-}
 
 - (UIImage *)imageByAddingBorderWithColor:(UIColor *)strokeColor cornerRadius:(CGFloat)radius {
 	int w = self.size.width;

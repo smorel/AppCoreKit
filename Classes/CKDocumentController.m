@@ -9,82 +9,95 @@
 #import "CKDocumentController.h"
 #import <CloudKit/CKDocument.h>
 #import <UIKit/UITableView.h>
+#import "CKNSObject+Invocation.h"
 #import "CKVersion.h"
 
 @implementation CKDocumentController
-@synthesize document = _document;
-@synthesize key = _key;
+@synthesize collection = _collection;
 @synthesize delegate = _delegate;
+@synthesize displayFeedSourceCell;
+@synthesize numberOfFeedObjectsLimit;
+@synthesize animateFirstInsertion;
 
 - (void)dealloc{
-	if(_document){
-		[_document releaseObjectsForKey:_key];
+	if(_collection){
+		//[_document releaseObjectsForKey:_key];
 		if(observing){
-			[_document removeObserver:self forKey:_key];
+			[_collection removeObserver:self];
 		}
 	}
 	
-	_document = nil;
+	[_collection release];
+	_collection = nil;
 	_delegate = nil;
-	[_key release];
-	_key = nil;
 	
 	[super dealloc];
 }
 
-- (id)initWithDocument:(id)theDocument key:(NSString*)theKey{
++ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection{
+	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	return controller;
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)theCollection{
 	[super init];
 
-	self.document = theDocument;
-	self.key = theKey;
+	self.numberOfFeedObjectsLimit = 0;
+	self.collection = theCollection;
 	
-	if(_document){
-		[_document retainObjectsForKey:_key];
+	if(theCollection){
+		//[_document retainObjectsForKey:_key];
 	}
 	observing = NO;
 	
+	displayFeedSourceCell = NO;
 	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
+	locked = NO;
+	changedWhileLocked = NO;
 	
 	return self;
 }
 
-
-- (void)viewWillAppear{
-	if(_document && !observing){
+- (void)start{
+	if(_collection && !observing){
 		observing = YES;
-		NSArray* objects = [_document objectsForKey:_key];
-		[_document addObserver:self forKey:_key];
-		if([objects count] <= 0){
-			CKFeedSource* feedSource = [_document dataSourceForKey:_key];
-			if(feedSource){
-				[feedSource fetchNextItems:10];
-			}
-		}
+		[_collection addObserver:self];
 	}
 }
 
-- (void)viewWillDisappear{
-	if(_document && observing){
+- (void)stop{
+	if(_collection && observing){
 		observing = NO;
-		[_document removeObserver:self forKey:_key];
+		[_collection removeObserver:self];
 		
-		CKFeedSource* feedSource = [_document dataSourceForKey:_key];
+		CKFeedSource* feedSource = _collection.feedSource;
 		if(feedSource){
 			[feedSource cancelFetch];
 		}
 	}
 }
 
+- (void)setDelegate:(id)theDelegate{
+	_delegate = theDelegate;
+	if(theDelegate){
+		[self start];
+	}
+	else{
+		[self stop];
+	}
+}
+
+
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	NSAssert(section == 0,@"Invalid section");
-	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(fetchRange:forKey:)]){
-			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
-				range.location--;
-			}
-			[_document fetchRange:range forKey:_key];
-		}
-	//}
+	if(_collection && _collection.feedSource){
+		range.location--;
+	}
+			
+	//Adjust range using limit
+	range.location = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,range.location) : range.location;
+	range.length = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit - range.location,range.length - range.location) : range.length;
+	[_collection fetchRange:range];
 }
 
 - (NSInteger)numberOfSections{
@@ -92,19 +105,14 @@
 }
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
-	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(objectsForKey:)]){
-			NSArray* objects = [_document objectsForKey:_key];
-			if([_document respondsToSelector:@selector(dataSourceForKey:)]){
-				id dataSource = [_document dataSourceForKey:_key];
-				return [objects count] + ((dataSource != nil) ? 1 : 0);
-			}
-			else {
-				return [objects count];
-			}
+	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
+	if(displayFeedSourceCell && _collection.feedSource){
+		return count + 1;
+	}
+	else {
+		return count;
+	}
 
-		}
-	//}
 	return 0;
 }
 
@@ -116,19 +124,15 @@
 	if(indexPath.length != 2)
 		return nil;
 	
-	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(objectsForKey:)]){
-			NSArray* objects = [_document objectsForKey:_key];
-			if(indexPath.row < [objects count]){
-				NSInteger index = indexPath.row;
-				return [objects objectAtIndex:index];
-			}
-			else if([_document respondsToSelector:@selector(dataSourceForKey:)]){
-				return [_document dataSourceForKey:_key];
-			}
+	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
+	if(indexPath.row < count){
+		NSInteger index = indexPath.row;
+		return [_collection objectAtIndex:index];
+	}
+	else if(displayFeedSourceCell && _collection.feedSource){
+		return _collection;
+	}
 
-		}
-	//}
 	return nil;
 }
 
@@ -136,11 +140,7 @@
 	if(indexPath.length != 2)
 		return;
 	
-	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(removeObjects:forKey:)]){
-			[_document removeObjects:[NSArray arrayWithObject:[self objectAtIndexPath:indexPath]] forKey:_key];
-		}
-	//}
+	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:indexPath.row]];
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
@@ -152,19 +152,16 @@
 	if(indexPath.length != 2 || indexPath2.length != 2)
 		return;
 	
-	if(_document){
-		[_document removeObserver:self forKey:_key];
+	if(_collection){
+		[_collection removeObserver:self];
 	}
 	
-	//if(_document && [_document conformsToProtocol:@protocol(CKDocument)]){
-		if([_document respondsToSelector:@selector(removeObjects:forKey:)]){
-			id object = [self objectAtIndexPath:indexPath];
-			[_document removeObjects:[NSArray arrayWithObject:object] forKey:_key];
-			[_document addObjects:[NSArray arrayWithObject:object] atIndex:indexPath2.row forKey:_key];
-		}
-	//}
-	if(_document){
-		[_document addObserver:self forKey:_key];
+	id object = [_collection objectAtIndex:indexPath.row];
+	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:  indexPath.row]];
+	[_collection insertObjects:[NSArray arrayWithObject:object] atIndexes:[NSIndexSet indexSetWithIndex:indexPath2.row]];
+
+	if(_collection){
+		[_collection addObserver:self];
 	}
 }
 
@@ -176,6 +173,11 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
+	
+	if(locked){
+		changedWhileLocked = YES;
+		return;
+	}
 		
 	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
 	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
@@ -183,8 +185,7 @@
 	
 	NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
 	
-	id objects = [_document objectsForKey:_key];
-	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [objects count])){
+	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
 			[_delegate objectControllerReloadData:self];
 			return;
@@ -197,44 +198,69 @@
 	}
 	//}
 	
-
 	int count = 0;
 	unsigned currentIndex = [indexs firstIndex];
+	NSMutableArray* indexPaths = [NSMutableArray array];
+	while (currentIndex != NSNotFound) {
+		//Do not notify add if currentIndex > limit
+		[indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+		currentIndex = [indexs indexGreaterThanIndex: currentIndex];
+		++count;
+	}
+	
 	switch(kind){
 		case NSKeyValueChangeInsertion:{
-			while (currentIndex != NSNotFound) {
-				NSAssert(count < [newModels count],@"Problem with observer change newModels");
-				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-					if([_delegate respondsToSelector:@selector(objectController:insertObject:atIndexPath:)]){
-						[_delegate objectController:self insertObject:[newModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+			if(numberOfFeedObjectsLimit > 0) {
+				NSMutableArray* limitedIndexPaths = [NSMutableArray array];
+				NSMutableArray* limitedObjects = [NSMutableArray array];
+				for(int i=0;i<[indexPaths count];++i){
+					NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
+					if(indexpath.row < numberOfFeedObjectsLimit){
+						[limitedIndexPaths addObject:indexpath];
+						id object = [newModels objectAtIndex:i];
+						[limitedObjects addObject:object];
 					}
-				//}
-				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-				++count;
+				}
+				
+				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+					[_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+				}
+				break;
+			}
+			
+			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+				[_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
 			}
 			break;
 		}
 		case NSKeyValueChangeRemoval:{
-			while (currentIndex != NSNotFound) {
-				NSAssert(count < [oldModels count],@"Problem with observer change newModels");
-				//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-					if([_delegate respondsToSelector:@selector(objectController:removeObject:atIndexPath:)]){
-						[_delegate objectController:self removeObject:[oldModels objectAtIndex:count] atIndexPath:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-					}
-				//}
-				currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-				++count;
+			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
+				[_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
 			}
 			break;
 		}
-	}	
+	}
 	
 	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-		if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-			[_delegate objectControllerDidEndUpdating:self];
-		}
+	if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
+		[_delegate objectControllerDidEndUpdating:self];
+	}
 	//}
 }
 
+- (void)lock{
+	locked = YES;
+	[[NSRunLoop currentRunLoop] cancelPerformSelectorsWithTarget:self];
+}
+
+- (void)unlock{
+	locked = NO;
+	if(changedWhileLocked){
+		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+			[_delegate objectControllerReloadData:self];
+		}
+		changedWhileLocked = NO;
+	}
+}
 
 @end

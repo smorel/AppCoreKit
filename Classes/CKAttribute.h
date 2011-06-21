@@ -16,5 +16,15 @@
 @property (nonatomic, retain) NSString *value;
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) CKItem *item;
+@property (nonatomic, retain) NSSet* itemReferences;
+@property (nonatomic, readonly) NSArray* items;
+
+@end
+
+@interface CKAttribute (CoreDataGeneratedAccessors)
+- (void)addItemReferencesObject:(NSManagedObject *)value;
+- (void)removeItemReferencesObject:(NSManagedObject *)value;
+- (void)addItemReferences:(NSSet *)value;
+- (void)removeItemReferences:(NSSet *)value;
 
 @end

@@ -9,6 +9,7 @@
 
 #import "CKNSString+URIQuery.h"
 #import "CKNSString+Validations.h"
+#import "CKNSString+Parsing.h"
 
 @interface NSString (CKNSStringAdditions)
 

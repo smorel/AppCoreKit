@@ -56,10 +56,6 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	[[CKBindingsManager defaultManager]unbindAllBindingsWithContext:context];
 }
 
-- (void)removeAllBindings{
-	[[CKBindingsManager defaultManager]unbindAllBindingsWithContext:self];
-}
-
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath2{
 	CKDataBinder* binder = (CKDataBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBinder class]];
 	[binder setInstance1:self];
@@ -87,6 +83,23 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.selector = selector;
 	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
+}
+
+
+- (void)beginBindingsContextByKeepingPreviousBindings{
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyAdd];
+}
+
+- (void)beginBindingsContextByRemovingPreviousBindings{
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+}
+
+- (void)endBindingsContext{
+	[NSObject endBindingsContext];
+}
+
+- (void)clearBindingsContext{
+	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 }
 
 @end

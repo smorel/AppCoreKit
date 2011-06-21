@@ -7,12 +7,12 @@
 //
 
 #import "CKNSObject+Introspection.h"
-
+#import <objc/runtime.h>
 
 @protocol CKMigrating
-- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object;
+- (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object;
 - (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object;
-- (void)propertyAdded:(CKObjectProperty*)property;
+- (void)propertyAdded:(CKClassPropertyDescriptor*)property;
 @end
 
 
@@ -23,6 +23,12 @@
 	BOOL deepCopy;
 	BOOL hashable;
 	BOOL creatable;
+	BOOL editable;
+	NSDictionary* enumDefinition;
+	NSDictionary* valuesAndLabels;
+	Class contentType;
+	Protocol* contentProtocol;
+	NSString* dateFormat;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -31,15 +37,46 @@
 @property (nonatomic, assign) BOOL deepCopy;
 @property (nonatomic, assign) BOOL hashable;
 @property (nonatomic, assign) BOOL creatable;
+@property (nonatomic, assign) BOOL editable;
+@property (nonatomic, retain) NSDictionary* enumDefinition;
+@property (nonatomic, retain) NSDictionary* valuesAndLabels;
+@property (nonatomic, assign) Class contentType;
+@property (nonatomic, assign) Protocol* contentProtocol;
+@property (nonatomic, retain) NSString* dateFormat;
 
 - (void)reset;
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property;
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end
 
 
-typedef void(^CKModelObjectBlock)(CKObjectProperty*,id);
+typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
+	BOOL _saving;
+	BOOL _loading;
 }
+
+//This property is automatically set when serializing an object in core data
+@property (nonatomic,copy) NSString* uniqueId;
+
+//This property will get used to order items from core data
+@property (nonatomic,copy) NSString* modelName;
+@property (nonatomic,readonly) BOOL isSaving;
+@property (nonatomic,readonly) BOOL isLoading;
+
++ (id)model;
+
+//private
+- (void)postInit;
+
+@end
+
+@interface NSObject (CKModelObject)
+
+- (void)copy : (id)other;
+- (BOOL)isEqualToObject:(id)other;
+
++ (NSDictionary*)validationPredicates;
+- (BOOL)isValid;
 
 @end

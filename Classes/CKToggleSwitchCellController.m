@@ -27,7 +27,6 @@
 	if (self = [super initWithText:title]) {
 		self.value = [NSNumber numberWithBool:value];
 		self.switchCellStyle = style;
-		self.selectable = (self.switchCellStyle == CKToggleSwitchCellStyleCheckmark);
 		self.enabled = YES;
 	}
 	return self;
@@ -39,9 +38,7 @@
 
 //
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super loadCell];
-
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	if (self.switchCellStyle == CKToggleSwitchCellStyleSwitch) {
 		UISwitch *toggleSwitch = [[[UISwitch alloc] init] autorelease];
 		cell.accessoryView = toggleSwitch;
@@ -49,7 +46,6 @@
 	if (self.switchCellStyle == CKToggleSwitchCellStyleCheckmark) {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

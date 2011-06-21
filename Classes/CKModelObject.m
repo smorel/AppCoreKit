@@ -8,6 +8,10 @@
 
 #import "CKModelObject.h"
 #import <objc/runtime.h>
+#import "CKNSObject+Invocation.h"
+#import "CKLocalization.h"
+#import "CKDebug.h"
+#import "CKDocumentCollection.h"
 
 static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
 
@@ -18,17 +22,36 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize hashable;
 @synthesize copiable;
 @synthesize deepCopy;
+@synthesize editable;
+@synthesize enumDefinition;
+@synthesize contentType;
+@synthesize dateFormat;
+@synthesize valuesAndLabels;
+@synthesize contentProtocol;
 
-- (void)reset{
-	comparable = YES;
-	serializable = YES;
-	creatable = NO;
-	hashable = YES;
-	copiable = YES;
-	deepCopy = NO;
+- (void)dealloc{
+	self.enumDefinition = nil;
+	self.dateFormat = nil;
+	self.contentProtocol = nil;
+	[super dealloc];
 }
 
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKObjectProperty*)property{
+- (void)reset{
+	self.comparable = YES;
+	self.serializable = YES;
+	self.creatable = NO;
+	self.hashable = YES;
+	self.copiable = YES;
+	self.deepCopy = NO;
+	self.editable = YES;
+	self.enumDefinition = nil;
+	self.valuesAndLabels = nil;
+	self.contentType = nil;
+	self.contentProtocol = nil;
+	self.dateFormat = nil;
+}
+
++ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
 	if(CKModelObjectPropertyMetaDataSingleton == nil){
 		CKModelObjectPropertyMetaDataSingleton = [[CKModelObjectPropertyMetaData alloc]init];
 	}
@@ -46,50 +69,159 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 
 static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKey";
 
+@interface CKModelObject()
+- (void)initializeProperties;
+- (void)uninitializeProperties;
+- (void)initializeKVO;
+- (void)uninitializeKVO;
+@end
+
 @implementation CKModelObject
+@synthesize uniqueId,modelName;
+
+
+- (void)uniqueIdMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
+
+- (void)isSavingMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
+
+- (void)isLoadingMetaData:(CKModelObjectPropertyMetaData*)metaData{
+	metaData.editable = NO;
+}
+
+- (BOOL)isSaving{
+	return _saving;
+}
+
+- (BOOL)isLoading{
+	return _loading;
+}
+
+- (void)setLoading:(NSNumber*)number{
+	_loading = [number boolValue];
+}
+
+
+- (void)setUniqueId:(NSString *)uid{
+	_loading = YES;
+	[uniqueId release];
+	uniqueId = [uid copy];
+	if(self.modelName == nil){
+		self.modelName = uid;
+	}
+	_loading = NO;
+}
+
++ (id)model{
+	return [[[[self class]alloc]init]autorelease];
+}
 
 - (void)postInit{
 }
 
-- (id)init{
-	[super init];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		if(property.propertyType == CKObjectPropertyTypeObject){
-			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-			if(metaData.creatable){
-				id p = [[[property.type alloc]init]autorelease];
-				[self setValue:p forKey:property.name];
+- (void)initializeProperties{
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			if(property.propertyType == CKClassPropertyDescriptorTypeObject){
+				CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+				if(metaData.creatable){
+					id p = [[[property.type alloc]init]autorelease];
+					[self setValue:p forKey:property.name];
+				}
 			}
 		}
 	}
-	
+}
+
+- (void)initializeKVO{
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
+			if([self respondsToSelector:changeSelector]){
+				[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+//				CKDebugLog(@"register <%p> of type <%@> as observer on <%p,%@>",self,[self class],self,property.name);
+			}
+			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
+					|| [NSObject isKindOf:property.type parentType:[NSSet class]]){
+				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
+				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
+				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
+				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
+					[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+				}
+			}
+		}
+	}
+}
+
+
+- (void)uninitializeProperties{
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			if((property.propertyType == CKClassPropertyDescriptorTypeObject) && 
+			   ((property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy) || (property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain))) {
+				id object = [self valueForKey:property.name];
+				if(object){
+					[object release];
+				}
+				//[self setValue:nil forKey:property.name];
+			}
+		}
+	}
+}
+
+- (void)uninitializeKVO{
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			SEL changeSelector =  [NSObject selectorForProperty:property.name suffix:@"Changed"];
+			if([self respondsToSelector:changeSelector]){
+//				CKDebugLog(@"unregister <%p> of type <%@>  as observer on <%p,%@>",self,[self class],self,property.name);
+				[self removeObserver:self forKeyPath:property.name];
+			}
+			
+			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
+					|| [NSObject isKindOf:property.type parentType:[NSSet class]]){
+				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
+				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
+				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
+				if([self respondsToSelector:addsSelector] || [self respondsToSelector:removeSelector] || [self respondsToSelector:replaceSelector]){
+					[self removeObserver:self forKeyPath:property.name];
+				}
+			}
+		}
+	}
+}
+
+- (id)init{
+	[super init];
+	[self initializeProperties];
+	[self initializeKVO];
 	[self postInit];
 	return self;
 }
 
 - (void)dealloc{
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		if(property.propertyType == CKObjectPropertyTypeObject){
-			id object = [self valueForKey:property.name];
-			if(object){
-				[object release];
-			}
-			//[self setValue:nil forKey:property.name];
-		}
-	}
-	
+	[self uninitializeKVO];
+	[self uninitializeProperties];
 	[super dealloc];
 }
 
 - (NSString*)description{
 	NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		id object = [self valueForKey:property.name];
-		NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
-		[desc appendString:propertyString];
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			id object = [self valueForKey:property.name];
+			NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
+			[desc appendString:propertyString];
+		}
 	}
 	[desc appendString:@"}"];
 	 
@@ -97,44 +229,42 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	id copied = [[[self class] alloc] init];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(metaData.copiable){
-			id value = [self valueForKey:property.name];
-			if(metaData.deepCopy && property.assignementType != CKObjectPropertyAssignementTypeCopy){
-				value = [value copy];
-				if(property.assignementType == CKObjectPropertyAssignementTypeCopy
-				   || property.assignementType == CKObjectPropertyAssignementTypeRetain){
-					[value autorelease];
-				}
-			}
-			[copied setValue:value forKey:property.name];
-			
-		}
-	}
-	
+	CKModelObject* copied = [[[self class] alloc] init];
+	[copied copy:self];
 	return copied;
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
 	NSAssert([aDecoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
+		[self initializeProperties];
+		[self initializeKVO];
+		[self postInit];
+		
 		//FUCK names est mal serialize !!!!!!!!!
 		NSArray* names = [aDecoder decodeObjectForKey:CKModelObjectAllPropertyNamesKey];
 		NSMutableArray* allPropertiesInDecoder = [NSMutableArray arrayWithArray:names];
 		
-		NSArray* allProperties = [self allProperties];
-		for(CKObjectProperty* property in allProperties){
+		NSArray* allProperties = [self allPropertyDescriptors];
+		for(CKClassPropertyDescriptor* property in allProperties){
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-			if([aDecoder containsValueForKey:property.name]){
-				id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
-				if([NSObject isKindOf:[objectFromDecoder class] parentType:property.type]){
-					[self setValue:objectFromDecoder forKey:property.name];
-				}
-				else if(objectFromDecoder){
+			if(metaData.serializable == YES){
+				if([aDecoder containsValueForKey:property.name]){
+					id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
+					if([NSObject isKindOf:[objectFromDecoder class] parentType:property.type]){
+						[self setValue:objectFromDecoder forKey:property.name];
+					}
+					else if(objectFromDecoder){
+						if(metaData.creatable){
+							id p = [self valueForKey:property.name];
+							if(p == nil){
+								p = [[[property.type alloc]init]autorelease];
+								[self setValue:p forKey:property.name];
+							}
+						}
+						[self propertyChanged:property serializedObject:objectFromDecoder];
+					}
+				}else{
 					if(metaData.creatable){
 						id p = [self valueForKey:property.name];
 						if(p == nil){
@@ -142,61 +272,206 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 							[self setValue:p forKey:property.name];
 						}
 					}
-					[self propertyChanged:property serializedObject:objectFromDecoder];
-				}
-			}else{
-				if(metaData.creatable){
-					id p = [self valueForKey:property.name];
-					if(p == nil){
-						p = [[[property.type alloc]init]autorelease];
-						[self setValue:p forKey:property.name];
-					}
+					
+					[self propertyAdded:property];
 				}
 				
-				[self propertyAdded:property];
+				[allPropertiesInDecoder removeObject:property.name];
 			}
-			
-			[allPropertiesInDecoder removeObject:property.name];
 		}
-		
+			
 		for(NSString* propertyName in allPropertiesInDecoder){
 			id objectFromDecoder = [aDecoder decodeObjectForKey:propertyName];
 			[self propertyRemoved:propertyName serializedObject:objectFromDecoder];
 		}
 	}
-	[self postInit];
 	return self;
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
 	NSAssert([aCoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
 	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		id object = [self valueForKey:property.name];
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(metaData.serializable){
-			[aCoder encodeObject:object forKey:property.name];
-		}
-		else{
-			[names removeObject:property.name];
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			id object = [self valueForKey:property.name];
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+			if(metaData.serializable){
+				[aCoder encodeObject:object forKey:property.name];
+			}
+			else{
+				[names removeObject:property.name];
+			}
 		}
 	}
 	[aCoder encodeObject:names forKey:CKModelObjectAllPropertyNamesKey];
 }
 
+/*
 - (BOOL) isEqual:(id)other {
-	if ([other isKindOfClass:[self class]]) {
-		BOOL result = YES;
-		NSArray* allProperties = [self allProperties];
-		for(CKObjectProperty* property in allProperties){
+	return self == other;
+}
+*/
+
+- (NSUInteger)hash {
+	NSMutableArray* allValues = [NSMutableArray array];
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
 			id object = [self valueForKey:property.name];
 			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-			if(metaData.comparable){
-				id otherObject = [other valueForKey:property.name];
-				BOOL propertyEqual = ((object == nil && otherObject == nil) || [object isEqual:otherObject]);;
-				if(!propertyEqual){
-					result = NO;
+			if(object && metaData.hashable){
+				[allValues addObject:object];
+			}
+		}
+	}
+	return (NSUInteger)[allValues hash];
+}
+
+
+//For Migration
+- (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object{
+	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
+}
+
+- (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object{
+	NSLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
+}
+
+- (void)propertyAdded:(CKClassPropertyDescriptor*)property{
+	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
+}
+
+- (id)valueForUndefinedKey:(NSString *)key{
+	return nil;
+}
+
+- (void)observeValueForKeyPath:(NSString *)theKeyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context {
+	if(object == context && object == self){
+		NSIndexSet* indexes = [change objectForKey: NSKeyValueChangeIndexesKey];
+		NSArray *oldModels =  [change objectForKey: NSKeyValueChangeOldKey];
+		NSArray *newModels =  [change objectForKey: NSKeyValueChangeNewKey];
+		
+		NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+		switch(kind){
+			case NSKeyValueChangeSetting:{
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
+				break;
+			}
+			case NSKeyValueChangeInsertion:{
+				SEL addsSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"ObjectsAdded:atIndexes:"];
+				if([self respondsToSelector:addsSelector]){
+					[self performSelector:addsSelector withObject:newModels withObject:indexes];
+				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
+				break;
+			}
+			case NSKeyValueChangeRemoval:{
+				SEL removeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"ObjectsRemoved:atIndexes:"];
+				if([self respondsToSelector:removeSelector]){
+					[self performSelector:removeSelector withObject:oldModels withObject:indexes];
+				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
+				break;
+			}
+			case NSKeyValueChangeReplacement:{
+				SEL replaceSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
+				if([self respondsToSelector:replaceSelector]){
+					[self performSelector:replaceSelector withObjects:[NSArray arrayWithObjects:oldModels,newModels,indexes,nil]];
+				}
+				SEL changeSelector =  [NSObject selectorForProperty:theKeyPath suffix:@"Changed"];
+				if([self respondsToSelector:changeSelector]){
+					[self performSelector:changeSelector];
+				}
+				break;
+			}
+		}
+	}
+}
+
+@end
+
+@implementation NSObject (CKModelObject)
+
+- (void)copy : (id)other{
+	NSArray* allProperties = [other allPropertyDescriptors ];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:other property:property];
+			if(metaData.copiable){
+				id value = [other valueForKey:property.name];
+				if([value isKindOfClass:[CKDocumentCollection class]]){
+					CKDocumentCollection* collection = value;
+					value = [[property.type alloc]init];
+					NSMutableArray* copiedObjects = [NSMutableArray array];
+					for(id object in [collection allObjects]){
+						[copiedObjects addObject:[object copy]];
+					}
+					[value addObjectsFromArray:copiedObjects];
+				}
+				else if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
+					if([value isKindOfClass:[NSArray class]]){
+						NSArray* array = value;
+						value = [[property.type alloc]init];
+						for(id object in array){
+							[value addObject:[object copy]];
+						}
+					}
+					else if([value isKindOfClass:[NSDictionary class]]){
+						NSDictionary* dico = value;
+						value = [[property.type alloc]init];
+						for(id key in [dico allKeys]){
+							id object = [dico objectForKey:key];
+							[value setObject:[object copy] forKey:key];
+						}
+					}
+					else if([value isKindOfClass:[NSSet class]]){
+						NSMutableSet* set = value;
+						value = [[property.type alloc]init];
+						for(id object in set){
+							[value addObject:[object copy]];
+						}
+					}
+					else{
+						value = [value copyWithZone:nil];
+					}
+					if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
+					   || property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain){
+						[value autorelease];
+					}
+				}
+				[self setValue:value forKey:property.name];
+			}
+		}
+	}
+}
+
+- (BOOL)isEqualToObject:(id)other{
+	if ([other isKindOfClass:[self class]]) {
+		BOOL result = YES;
+		NSArray* allProperties = [self allPropertyDescriptors];
+		for(CKClassPropertyDescriptor* property in allProperties){
+			if(property.isReadOnly == NO){
+				id object = [self valueForKey:property.name];
+				CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+				if(metaData.comparable){
+					id otherObject = [other valueForKey:property.name];
+					BOOL propertyEqual = ((object == nil && otherObject == nil) || [object isEqual:otherObject]);;
+					if(!propertyEqual){
+						result = NO;
+					}
 				}
 			}
 		}
@@ -205,35 +480,24 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	return NO;
 }
 
-- (NSUInteger)hash {
-	NSMutableArray* allValues = [NSMutableArray array];
-	NSArray* allProperties = [self allProperties];
-	for(CKObjectProperty* property in allProperties){
-		id object = [self valueForKey:property.name];
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-		if(object && metaData.hashable){
-			[allValues addObject:object];
++ (NSDictionary*)validationPredicates{
+	//this can be overloaded in your subclasses to define your own validation predicates
+	//example : [NSDictionary dictionaryWithObjectsAndKeys:predicate1,@"propertyName1",predicate2,@"propertyName2",...,nil];
+	return [NSDictionary dictionary];
+}
+
+- (BOOL)isValid{
+	NSDictionary* validation = [[self class]validationPredicates];
+	if(validation != nil){
+		for(NSString* propertyName in [validation allKeys]){
+			id value = [self valueForKeyPath:propertyName];
+			NSPredicate* predicate = [validation objectForKey:propertyName];
+			if([predicate evaluateWithObject:value] == NO){
+				return NO;
+			}
 		}
 	}
-	return (NSUInteger)[allValues hash];
-}
-
-
-//For Migration
-- (void)propertyChanged:(CKObjectProperty*)property serializedObject:(id)object{
-	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
-}
-
-- (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object{
-	NSLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
-}
-
-- (void)propertyAdded:(CKObjectProperty*)property{
-	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
-}
-
-- (id)valueForUndefinedKey:(NSString *)key{
-	return nil;
+	return YES;
 }
 
 @end

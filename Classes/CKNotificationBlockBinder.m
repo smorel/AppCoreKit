@@ -10,8 +10,8 @@
 #import "CKBindingsManager.h"
 
 @interface CKNotificationBlockBinder ()
-@property (nonatomic, retain) MAZeroingWeakRef* instanceRef;
-@property (nonatomic, retain) MAZeroingWeakRef* targetRef;
+@property (nonatomic, retain) CKWeakRef* instanceRef;
+@property (nonatomic, retain) CKWeakRef* targetRef;
 - (void)unbindInstance:(id)instance;
 @end
 
@@ -41,7 +41,7 @@
 
 - (NSString*)description{
 	return [NSString stringWithFormat:@"<CKNotificationBlockBinder : %p>{\ninstanceRef = %@\nNotificationName = %@}",
-			self,instanceRef ? instanceRef.target : @"(null)",notificationName];
+			self,instanceRef ? instanceRef.object : @"(null)",notificationName];
 }
 
 - (void)reset{
@@ -52,30 +52,30 @@
 	self.selector = nil;
 }
 
-- (void)releaseTarget:(id)sender target:(id)target{
-	[self unbindInstance:instanceRef.target];
+- (id)releaseTarget:(CKWeakRef*)weakRef{
+	[self unbindInstance:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setTarget:(id)instance{
 	if(instance){
-		self.targetRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		[targetRef setDelegate:self action:@selector(releaseTarget:target:)];
+		self.targetRef = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseTarget:)];
 	}
 	else{
 		self.targetRef = nil;
 	}
 }
 
-- (void)releaseInstance:(id)sender target:(id)target{
-	[self unbindInstance:target];
+- (id)releaseInstance:(CKWeakRef*)weakRef{
+	[self unbindInstance:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
+	return nil;
 }
 
 - (void)setInstance:(id)instance{
 	if(instance){
-		self.instanceRef = [[[MAZeroingWeakRef alloc] initWithTarget:instance]autorelease];
-		[instanceRef setDelegate:self action:@selector(releaseInstance:target:)];
+		self.instanceRef =  [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance:)];
 	}
 	else {
 		self.instanceRef = nil;
@@ -86,8 +86,8 @@
 	if(block){
 		block(notification);
 	}
-	else if(targetRef.target && [targetRef.target respondsToSelector:self.selector]){
-		[targetRef.target performSelector:self.selector withObject:notification];
+	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
+		[targetRef.object performSelector:self.selector withObject:notification];
 	}
 	else{
 		NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
@@ -97,12 +97,12 @@
 - (void) bind{
 	[self unbind];
 	//NSLog(@"CKNotificationBlockBinder bind %p %@",self,notification);
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notificationName object:instanceRef.target];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:notificationName object:instanceRef.object];
 	binded = YES;
 }
 
 -(void)unbind{
-	[self unbindInstance:instanceRef.target];
+	[self unbindInstance:instanceRef.object];
 }
 
 - (void)unbindInstance:(id)instance{

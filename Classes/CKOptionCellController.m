@@ -8,20 +8,11 @@
 
 #import "CKOptionCellController.h"
 
-
-@interface CKOptionCellController ()
-
-@property (nonatomic, retain) NSArray *values;
-@property (nonatomic, retain) NSArray *labels;
-
-@end
-
-
-
 @implementation CKOptionCellController
 
 @synthesize values = _values;
 @synthesize labels = _labels;
+@synthesize multiSelectionEnabled = _multiSelectionEnabled;
 
 
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
@@ -30,7 +21,14 @@
 	if (self = [super initWithText:title]) {
 		self.values = values;
 		self.labels = labels;
+		self.style = UITableViewCellStyleValue1;
 	}
+	return self;
+}
+
+- (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels multiSelectionEnabled:(BOOL)multiSelectionEnabled{
+	[self initWithTitle:title values:values labels:labels];
+	self.multiSelectionEnabled = multiSelectionEnabled;
 	return self;
 }
 
@@ -42,25 +40,58 @@
 
 - (NSString *)labelForValue:(id)value {
 	if (value == nil) return nil;
-	return self.labels ? [self.labels objectAtIndex:[self.values indexOfObject:value]] : [NSString stringWithFormat:@"%@", value];
+	if(self.multiSelectionEnabled){
+		NSMutableString* str = [NSMutableString string];
+		NSInteger intValue = [value intValue];
+		for(int i= 0;i < [self.values count]; ++i){
+			NSNumber* v = [self.values objectAtIndex:i];
+			NSString* l = [self.labels objectAtIndex:i];
+			if(intValue & [v intValue]){
+				if([str length] > 0){
+					[str appendFormat:@" | %@",l];
+				}
+				else{
+					[str appendString:l];
+				}
+			}
+		}
+	}
+	else{
+		NSInteger index = [self.values indexOfObject:value];
+		return (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%@", value];
+	}
+	return nil;
+}
+
+- (NSArray*)indexesForValue:(NSInteger) value{
+	NSMutableArray* indexes = [NSMutableArray array];
+	NSInteger intValue = value;
+	for(int i= 0;i < [self.values count]; ++i){
+		NSNumber* v = [self.values objectAtIndex:i];
+		if(intValue & [v intValue]){
+			[indexes addObject:[NSNumber numberWithInt:i]];
+		}
+	}
+	return indexes;
 }
 
 //
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super cellWithStyle:UITableViewCellStyleValue1];
-	cell.textLabel.text = self.text;
-	return cell;
-}
-
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+	cell.textLabel.text = self.text;
 	cell.detailTextLabel.text = [self labelForValue:self.value];
 }
 
 - (void)didSelectRow {
 	[super didSelectRow];
-	CKOptionTableViewController *optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.values indexOfObject:self.value]] autorelease];
+	CKOptionTableViewController *optionTableController = nil;
+	if(self.multiSelectionEnabled){
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES] autorelease];
+	}
+	else{
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:self.value] autorelease];
+	}
 	optionTableController.title = self.text;
 	optionTableController.optionTableDelegate = self;
 	[self.parentController.navigationController pushViewController:optionTableController animated:YES];
@@ -69,8 +100,25 @@
 //
 
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index {
-	self.value = [self.values objectAtIndex:index];
-	[self.parentController.navigationController popViewControllerAnimated:YES];
+	if(self.multiSelectionEnabled){
+		NSArray* indexes = tableViewController.selectedIndexes;
+		NSInteger v = 0;
+		for(NSNumber* index in indexes){
+			v |= [[self.values objectAtIndex:[index intValue]]intValue];
+		}
+		self.value = [NSNumber numberWithInt:v];
+	}
+	else{
+		self.value = [NSNumber numberWithInt:tableViewController.selectedIndex];
+	}
+	
+	if(self.tableViewCell){
+		self.tableViewCell.detailTextLabel.text = [self labelForValue:self.value];
+	}
+	
+	if(!self.multiSelectionEnabled){
+		[self.parentController.navigationController popViewControllerAnimated:YES];
+	}
 }
 
 @end

@@ -30,7 +30,6 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 	if (self = [super init]) {
 		self.playerController = [[[MPMoviePlayerController alloc] initWithContentURL:url] autorelease];
 		self.playerController.controlStyle = MPMovieControlStyleEmbedded;
-		self.selectable = NO;
 	}
 	return self;
 }
@@ -48,6 +47,7 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 }
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
+	[super cellDidAppear:cell];
 	return;
 }
 
@@ -55,9 +55,7 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 	[self.playerController stop];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
-	
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	self.playerController.view.frame = CGRectInset(cell.contentView.bounds, 10, 10);
 	self.playerController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;;
 	self.playerController.scalingMode = MPMovieScalingModeAspectFit;
@@ -70,12 +68,15 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 	
 	[cell.contentView addSubview:spinner];
 	[cell.contentView addSubview:self.playerController.view];
-	
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+	[super setupCell:cell];
 	return;
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 @end

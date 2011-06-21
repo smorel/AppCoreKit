@@ -23,32 +23,11 @@
 @synthesize style = _style;
 @synthesize stickySelection = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
+@synthesize tableViewContainer = _tableViewContainer;
 
 - (void)postInit {
+	[super postInit];
 	self.style = UITableViewStylePlain;
-}
-
-- (id)init {
-	if (self = [super initWithNibName:nil bundle:nil]) {
-		[self postInit];
-	}
-	return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	if (self) {
-		[self postInit];
-	}
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	self = [super initWithCoder:aDecoder];
-	if (self) {
-		[self postInit];
-	}
-	return self;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -64,6 +43,7 @@
 	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
 	self.tableView = nil;
+	self.tableViewContainer = nil;
 	[super dealloc];
 }
 
@@ -78,6 +58,15 @@
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		self.view = theView;
 	}
+	//self.view.clipsToBounds = YES;
+	
+	if ([self.view isKindOfClass:[UITableView class]] == NO && self.tableViewContainer == nil) {
+		CGRect theViewFrame = self.view.bounds;
+		UIView *theView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
+		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		self.tableViewContainer = theView;
+		[self.view addSubview:theView];
+	}
 
 	if (self.tableView == nil) {
 		if ([self.view isKindOfClass:[UITableView class]]) {
@@ -89,14 +78,17 @@
 			theTableView.delegate = self;
 			theTableView.dataSource = self;
 			theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-			[self.view addSubview:theTableView];
+			[self.tableViewContainer addSubview:theTableView];
 			self.tableView = theTableView;
 		}
 	}
+	
+	//self.tableView.clipsToBounds = NO;
 }
 
 - (void)viewDidUnload {
 	self.tableView = nil;
+	self.tableViewContainer = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -126,7 +118,9 @@
 
 - (void)reload {
 	[self.tableView reloadData];
-	if (self.stickySelection == YES && self.selectedIndexPath) [self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
+		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+	}
 }
 
 #pragma mark Setters

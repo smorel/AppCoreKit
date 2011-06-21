@@ -23,10 +23,14 @@ typedef enum {
 + (void)endBindingsContext;
 + (void)removeAllBindingsForContext:(id)context;
 
-- (void)removeAllBindings;
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath;
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block;
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
+
+- (void)beginBindingsContextByKeepingPreviousBindings;
+- (void)beginBindingsContextByRemovingPreviousBindings;
+- (void)endBindingsContext;
+- (void)clearBindingsContext;
 
 @end
 

@@ -10,12 +10,27 @@
 
 @implementation NSObject (CKNSObjectInvocation)
 
+- (void)delayedPerformSelector:(NSArray*)args{
+	NSValue* selectorValue = [args objectAtIndex:0];
+	SEL selector = [selectorValue pointerValue];
+	[self performSelector:selector onThread:[NSThread currentThread] withObjects:[args subarrayWithRange:NSMakeRange(1, [args count] - 1 )] waitUntilDone:YES];
+}
+
+- (void)performSelector:(SEL)selector withObject:(id)arg withObject:(id)arg2 afterDelay:(NSTimeInterval)delay {
+	[self performSelector:@selector(delayedPerformSelector:) withObject:[NSArray arrayWithObjects:[NSValue valueWithPointer:selector],arg, arg2, nil] afterDelay:delay];
+}
+
+
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 waitUntilDone:(BOOL)wait {
 	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, arg2, nil] waitUntilDone:wait];
 }
 
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 withObject:(id)arg3 waitUntilDone:(BOOL)wait {
 	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, arg2, arg3, nil] waitUntilDone:wait];
+}
+
+- (void)performSelector:(SEL)selector withObjects:(NSArray*)objects{
+	[self performSelector:selector onThread:[NSThread currentThread] withObjects:objects waitUntilDone:YES];
 }
 
 - (void)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait {

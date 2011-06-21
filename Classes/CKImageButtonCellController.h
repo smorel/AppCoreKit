@@ -11,7 +11,6 @@
 
 @interface CKImageButtonCellController : CKStandardCellController {
 	UIImage *_highlightedImage;
-	
 }
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image hightlightedImage:(UIImage *)hightlightedImage;

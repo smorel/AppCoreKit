@@ -76,6 +76,55 @@
 	return fetchResults;
 }
 
+
+- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedBy:(NSString *)sortKey range:(NSRange)range{
+	return [self fetchObjectsForEntityForName:entityName 
+									predicate:predicate 
+								 sortedByKeys:(sortKey == nil) ? nil : [NSArray arrayWithObject:sortKey]
+										range:range];
+}
+
+
+- (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName predicate:(NSPredicate *)predicate sortedByKeys:(NSArray *)sortKeys range:(NSRange)range{
+	NSFetchRequest *request = [self fetchRequestWithEntityForName:entityName predicate:predicate];
+	
+	// Set the sort description
+	if (sortKeys) {
+		NSMutableArray *sortDescriptors = [NSMutableArray array];
+		
+		for (NSString *key in sortKeys) {
+			[sortDescriptors addObject:[[[NSSortDescriptor alloc] initWithKey:key ascending:YES] autorelease]];
+		}
+		
+		[request setSortDescriptors:sortDescriptors];
+	}
+	
+	// Set the limits
+	if (range.location != 0) {
+		[request setFetchOffset:range.location];
+	}
+	
+	if (range.length != 0) {
+		[request setFetchLimit:range.length];
+	}
+	
+	// Set batch size
+	[request setFetchBatchSize:20];
+	
+	NSError *error = nil;
+	NSArray *fetchResults = [self executeFetchRequest:request error:&error];
+	
+	if (error) {
+		// FIXME: Send the error back to the client with via a parameter (NSError **)error
+		CKDebugLog(@"Error [%@] while fetching objects for [%@]", error, predicate);
+		return [NSArray array];
+	}
+	
+	//	CKDebugLog(@"Success fetching %d result(s) for [%@]", fetchResults.count, predicate);
+	
+	return fetchResults;
+}
+
 - (NSArray *)fetchObjectsForEntityForName:(NSString *)entityName 
 								predicate:(NSPredicate *)predicate 
 								 sortedBy:(NSString *)sortKey

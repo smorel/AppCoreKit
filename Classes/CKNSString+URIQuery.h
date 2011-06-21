@@ -39,8 +39,8 @@ extern NSString * const CKSpecialURLCharacters;
 // All keys and values are percent-escape encoded
 //
 // For compatibility with POST, does not prepend a "?"
-// All keys and all values must be NSString objects
-+ stringWithQueryDictionary:(NSDictionary*)dictionary ;
+// All keys must be NSString objects and all values must be NSString or NSArray objects
++ (NSString *)stringWithQueryDictionary:(NSDictionary*)dictionary ;
 
 // Not sure how this is different than -stringByReplacingPercentEscapesUsingEncoding:
 // Performing test in implementation to see if I can use that instead of this.

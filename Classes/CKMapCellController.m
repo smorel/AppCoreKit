@@ -45,12 +45,22 @@
 @synthesize annotationImage = _annotationImage;
 @synthesize annotationImageOffset = _annotationImageOffset;
 
+- (void)postInit {
+	self.annotationImageOffset = CGPointMake(0, 0);
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate {
 	if (self = [super init]) {
 		self.annotation = [[[CKMapCellAnnotation alloc] initWithCoordinate:coordinate] autorelease];
-		self.selectable = NO;
-		self.annotationImageOffset = CGPointMake(0, 0);
-		self.rowHeight = 260.0f;
+		[self postInit];
 	}
 	return self;
 }
@@ -71,9 +81,7 @@
 
 //
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:UITableViewCellStyleDefault];
-	
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	MKMapView *mapView = [[[MKMapView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	mapView.tag = 1000;
 	mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -82,19 +90,26 @@
 	mapView.userInteractionEnabled = NO;
 	
 	[cell.contentView addSubview:mapView];
-
+	
 	MKCoordinateSpan span;
 	span.latitudeDelta = 0.0005;
 	span.longitudeDelta = 0.0005;
 	
+	CLLocationCoordinate2D centerCoordinate;
+	
+	if (self.annotation) {
+		[mapView addAnnotation:self.annotation];
+		centerCoordinate = self.annotation.coordinate;
+	}
+	else if ([self.value conformsToProtocol:@protocol(MKAnnotation)]) {
+		[mapView addAnnotation:self.value];
+		centerCoordinate = [self.value coordinate];
+	}
+	
 	MKCoordinateRegion region;
-	region.center = self.annotation.coordinate;
+	region.center = centerCoordinate;
 	region.span = span;
-	
 	[mapView setRegion:region animated:NO];
-	[mapView addAnnotation:self.annotation];
-	
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -122,6 +137,15 @@
 	}
 	
 	return view;
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
+}
+
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+	return [NSValue valueWithCGSize:CGSizeMake(100,260.0)];
 }
 
 @end

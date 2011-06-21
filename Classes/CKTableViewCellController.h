@@ -6,60 +6,54 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CKItemViewController.h"
 #import "CKManagedTableViewController.h"
+#import "CKModelObject.h"
+#import "CKNSDictionary+TableViewAttributes.h"
+#import "CKCallback.h"
 
 enum{
-	CKTableViewCellFlagNone = 1UL << 0,
-	CKTableViewCellFlagSelectable = 1UL << 1,
-	CKTableViewCellFlagEditable = 1UL << 2,
-	CKTableViewCellFlagRemovable = 1UL << 3,
-	CKTableViewCellFlagMovable = 1UL << 4,
-	CKTableViewCellFlagAll = CKTableViewCellFlagSelectable | CKTableViewCellFlagEditable | CKTableViewCellFlagRemovable | CKTableViewCellFlagMovable
+	CKTableViewCellFlagNone = CKItemViewFlagNone,
+	CKTableViewCellFlagSelectable = CKItemViewFlagSelectable,
+	CKTableViewCellFlagEditable = CKItemViewFlagEditable,
+	CKTableViewCellFlagRemovable = CKItemViewFlagRemovable,
+	CKTableViewCellFlagMovable = CKItemViewFlagMovable,
+	CKTableViewCellFlagAll = CKItemViewFlagAll
 };
 typedef NSUInteger CKTableViewCellFlags;
 
-@interface CKTableViewCellController : NSObject {
-	NSString *_key;
-	id _value;
-	id _target;
-	SEL _action;
-	BOOL _selectable;
-	BOOL _editable;
-	BOOL _removable;
-	BOOL _movable;
+
+typedef enum CKTableViewCellStyle {
+    CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
+    CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
+    CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
+    CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
+	CKTableViewCellStyleValue3
+} CKTableViewCellStyle;             
+
+@interface CKTableViewCellController : CKItemViewController {
 	UITableViewCellAccessoryType _accessoryType;
-	NSIndexPath *_indexPath;
-	CKTableViewController *_parentController;
-	CGFloat _rowHeight;
+	CKTableViewCellStyle _cellStyle;
 	
-	id _controllerStyle;
+	NSString* _key;
+	CGFloat _value3Ratio;
+	CGFloat _value3LabelsSpace;
 	
-	//Set when reusing controllers via CKObjectTableViewController
-	UITableViewCell* _tableViewCell;
+	
+#ifdef DEBUG 
+	id debugModalController;
+#endif
 }
 
-@property (nonatomic, retain) NSString *key;
-@property (nonatomic, retain) id value;
-@property (nonatomic, retain) id controllerStyle;
-@property (nonatomic, retain, readonly) NSString *identifier;
-@property (nonatomic, retain, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) CKTableViewController *parentController;
-@property (nonatomic, assign, readonly) UITableViewCell *tableViewCell;
-
-@property (nonatomic, retain) id target;
-@property (nonatomic, assign) SEL action;
-@property (nonatomic, getter=isSelectable) BOOL selectable;
-@property (nonatomic, getter=isEditable) BOOL editable;
-@property (nonatomic, getter=isRemovable) BOOL removable;
-@property (nonatomic, getter=isMovable) BOOL movable;
+@property (nonatomic, readonly) UITableViewCell *tableViewCell;
+@property (nonatomic, assign) CKTableViewCellStyle cellStyle;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, assign) CGFloat rowHeight;
+@property (nonatomic, retain) NSString* key;
 
-- (UITableViewCell *)cellWithStyle:(UITableViewStyle)style;
-- (UITableViewCell *)cellWithNibNamed:(NSString *)nibName;
+@property (nonatomic, assign) CGFloat value3Ratio;
+@property (nonatomic, assign) CGFloat value3LabelsSpace;
 
-//
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 
 - (void)cellDidAppear:(UITableViewCell *)cell;
 - (void)cellDidDisappear;
@@ -68,12 +62,24 @@ typedef NSUInteger CKTableViewCellFlags;
 - (void)setupCell:(UITableViewCell *)cell;
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
 
-- (CGFloat)heightForRow;
 - (NSIndexPath *)willSelectRow;
 - (void)didSelectRow;
 
 // Calls -setupCell with the cell associated with this controller.
 // Does not call -setupCell if the cell is not visible.
 - (void)setNeedsSetup;
+
+//private
+- (void)initTableViewCell:(UITableViewCell*)cell;
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object;
++ (UIResponder*)responderInView:(UIView*)view;
+
+- (void)layoutCell:(UITableViewCell *)cell;
+
+- (CKTableViewController*)parentTableViewController;
+- (UITableView*)parentTableView;
+
+- (CGRect)value3FrameForCell:(UITableViewCell*)cell;
 
 @end

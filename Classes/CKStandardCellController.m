@@ -10,10 +10,10 @@
 #import "CKUIImage+Transformations.h"
 #import "CKCache.h"
 #import "CKDebug.h"
+#import "CKStyleManager.h"
 
 @interface CKStandardCellController ()
 
-@property (nonatomic, assign) UITableViewCellStyle style;
 @property (nonatomic, retain) NSString *imageURL;
 @property (nonatomic, retain) UIImage *fetchedImage;
 @property (nonatomic, retain) CKWebRequest *request;
@@ -38,6 +38,7 @@
 @synthesize detailedTextColor = _detailedTextColor;
 @synthesize multilineText = _multilineText;
 @synthesize multilineDetailText = _multilineDetailText;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style {
 	if (self = [super init]) {
@@ -65,21 +66,19 @@
 }
 
 - (void)dealloc {
+	//DEPRECATED ATTRIBUTES
+	self.image = nil;
+	self.backgroundColor = nil;
+	self.textColor = nil;
+	self.detailedTextColor = nil;
+	
 	self.text = nil;
 	self.detailedText = nil;
 	self.imageURL = nil;
 	self.fetchedImage = nil;
-	self.image = nil;
 	[self.request cancel];
 	self.request = nil;
-	self.backgroundColor = nil;
-	self.textColor = nil;
-	self.detailedTextColor = nil;
 	[super dealloc];
-}
-
-- (NSString *)identifier {
-	return [NSString stringWithFormat:@"%@-%d", [super identifier], self.style];
 }
 
 - (NSString *)cacheKeyForImage {
@@ -89,6 +88,7 @@
 //
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
+	[super cellDidAppear:cell];
 	if (self.imageURL && [self.imageURL length] > 0 && (self.fetchedImage == nil) && (self.request == nil)) {
 		self.request = [CKWebRequest requestWithURLString:self.imageURL params:nil delegate:self];
 		[self.request start];
@@ -99,31 +99,28 @@
 	[self.request cancel];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [self cellWithStyle:self.style];
-	return cell;
-}
-
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	[self.request cancel];
 	
-	if (self.backgroundColor) cell.backgroundColor = self.backgroundColor;
-	if (self.textColor) cell.textLabel.textColor = self.textColor;
-	if (self.detailedTextColor) cell.detailTextLabel.textColor = self.detailedTextColor;
-	if (self.isTextMultiline) cell.textLabel.numberOfLines = 0;
-	if (self.isDetailTextMultiline) cell.detailTextLabel.numberOfLines = 0;
-
-	cell.imageView.image = self.fetchedImage ? self.fetchedImage : self.image;
-	cell.textLabel.text = self.text;
-	cell.detailTextLabel.text = self.detailedText;
+	if(self.fetchedImage != nil || self.image != nil){
+		cell.imageView.image = self.fetchedImage ? self.fetchedImage : self.image;
+	}
+	if(self.text){
+		cell.textLabel.text = self.text;
+	}
+	if(self.detailedText){
+		cell.detailTextLabel.text = self.detailedText;
+	}
 }
 
 #pragma mark CKWebRequestDelegate Protocol
 
 - (void)request:(id)request didReceiveValue:(id)value {
 	self.request = nil;
-	UIImage *image = self.image ? [value imageThatFits:self.image.size crop:YES] : value;
+	
+	UIImage* defaultImage = self.tableViewCell.imageView.image;
+	UIImage *image = defaultImage ? [value imageThatFits:defaultImage.size crop:YES] : value;
 	[[CKCache sharedCache] setImage:image forKey:[self cacheKeyForImage]];
 	self.fetchedImage = image;
 	[self setNeedsSetup];

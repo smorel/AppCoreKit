@@ -25,7 +25,6 @@
 	if (self = [super initWithText:title]) {
 		self.image = image;
 		self.highlightedImage = hightlightedImage;
-		self.selectable = NO;
 		self.accessoryType = UITableViewCellAccessoryNone;
 	}
 	return self;
@@ -37,9 +36,7 @@
 	[super dealloc];
 }
 
-- (UITableViewCell *)loadCell {
-	UITableViewCell *cell = [super loadCell];
-
+- (void)initTableViewCell:(UITableViewCell*)cell{
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.tag = 1000;
 	button.frame = cell.contentView.frame;
@@ -47,8 +44,6 @@
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	[cell.contentView addSubview:button];
-
-	return cell;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -61,6 +56,9 @@
 	if (self.image) [button setBackgroundImage:self.image forState:UIControlStateNormal];
 	if (self.highlightedImage) [button setBackgroundImage:self.highlightedImage forState:UIControlStateHighlighted];
 	[button addTarget:self.target action:self.action forControlEvents:UIControlEventTouchUpInside];
+}
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+	return CKItemViewFlagNone;
 }
 
 @end

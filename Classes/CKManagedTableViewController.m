@@ -261,10 +261,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
-	CGFloat height = [cellController heightForRow];
+	//CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+	/*CGFloat height = [cellController heightForRow];
 	if (height == 0) cellController.rowHeight = tableView.rowHeight;
-	return [cellController heightForRow];
+	return [cellController heightForRow];*/
+	NSAssert(NO,@"implement this using the class function viewSizeForObject:params:");
+	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -300,7 +302,10 @@
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCellEditingStyle editingStyle = UITableViewCellEditingStyleNone;
-	if ([self cellControllerForIndexPath:indexPath].isRemovable) editingStyle = UITableViewCellEditingStyleDelete;
+	/*if ([self cellControllerForIndexPath:indexPath].isRemovable) editingStyle = UITableViewCellEditingStyleDelete;
+	return editingStyle;
+	 */
+	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
 	return editingStyle;
 }
 
@@ -319,11 +324,17 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [self cellControllerForIndexPath:indexPath].isEditable;
+	//return [self cellControllerForIndexPath:indexPath].isEditable;
+	
+	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+	return NO;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [self cellControllerForIndexPath:indexPath].isMovable;
+	//return [self cellControllerForIndexPath:indexPath].isMovable;
+	
+	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+	return NO;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
@@ -333,7 +344,9 @@
 		CKTableSection *proposedSection = [self.sections objectAtIndex:proposedDestinationIndexPath.section];
 		if ((sourceSection.canMoveRowsOut == NO) || (proposedSection.canMoveRowsIn == NO)) return sourceIndexPath;
 	}
-	if ([self cellControllerForIndexPath:proposedDestinationIndexPath].isEditable == NO) return sourceIndexPath;
+	/*if ([self cellControllerForIndexPath:proposedDestinationIndexPath].isEditable == NO) return sourceIndexPath;*/
+	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+	
 	return proposedDestinationIndexPath;
 }
 

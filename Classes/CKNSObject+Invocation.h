@@ -10,6 +10,8 @@
 
 @interface NSObject (CKNSObjectInvocation)
 
+- (void)performSelector:(SEL)selector withObjects:(NSArray*)objects;
+- (void)performSelector:(SEL)selector withObject:(id)arg withObject:(id)arg2 afterDelay:(NSTimeInterval)delay;
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 waitUntilDone:(BOOL)wait;
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 withObject:(id)arg3 waitUntilDone:(BOOL)wait;
 

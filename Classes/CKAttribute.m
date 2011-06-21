@@ -6,6 +6,7 @@
 //
 
 #import "CKAttribute.h"
+#import "CKItemAttributeReference.h"
 
 @implementation CKAttribute
 
@@ -13,5 +14,19 @@
 @dynamic value;
 @dynamic createdAt;
 @dynamic item;
+@dynamic itemReferences;
+
+- (NSString*)description{
+	return [NSString stringWithFormat:@"CKAttribute<%p> value:%@ References:%@",self,self.name,self.itemReferences];
+}
+
+- (NSArray*)items{
+	NSMutableArray* array = [NSMutableArray array];
+	for(CKItemAttributeReference* ref in self.itemReferences){
+		[array addObject:ref.item];
+	}
+	return array;
+}
 
 @end
+
