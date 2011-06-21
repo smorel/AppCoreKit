@@ -631,35 +631,11 @@
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
 
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock{
-	[super init];
-	self.value = theValue;
-	self.controllerClass = theControllerClass;
-	[self.params setObject:[CKCallback callbackWithBlock:^(id controller){initializeBlock(controller); return (id)nil;}] forKey:CKObjectViewControllerFactoryItemInit];
-	return self;
-}
-
-- (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass target:(id)theTarget action:(SEL)theAction{
-	[super init];
-	self.value = theValue;
-	self.controllerClass = theControllerClass;
-	[self.params setObject:[CKCallback callbackWithTarget:theTarget action:theAction] forKey:CKObjectViewControllerFactoryItemInit];
-	return self;
-}
-
 - (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
 	[super init];
 	self.value = theValue;
 	self.controllerClass = theControllerClass;
 	return self;
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass withBlock:initializeBlock]autorelease];
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action{
-	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass target:target action:action]autorelease];
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass{

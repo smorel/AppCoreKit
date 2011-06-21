@@ -105,12 +105,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 @property (nonatomic,retain) id value;
 
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock;
-- (id)initWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action;
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass;
-
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass withBlock:(CKFormCellInitializeBlock)initializeBlock;
-+ (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass target:(id)target action:(SEL)action;
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass;
 
 @end
