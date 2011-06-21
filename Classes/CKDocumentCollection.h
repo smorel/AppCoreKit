@@ -50,6 +50,9 @@
 
 @protocol CKDocumentCollectionDelegate
 @optional
+- (void)documentCollection:(CKDocumentCollection *)collection didFetchItems:(NSArray *)items atRange:(NSRange)range;
+- (void)documentCollection:(CKDocumentCollection *)collection fetchDidFailWithError:(NSError *)error;
+//
 - (void)documentCollectionDidLoad:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidSave:(CKDocumentCollection*)collection;
 - (void)documentCollectionDidFailLoading:(CKDocumentCollection*)collection;

@@ -125,6 +125,18 @@
 	//execute on main thread !
 	//[self performSelectorOnMainThread:@selector(insertObjects:atIndexes:) withObject:items withObject:[NSIndexSet indexSetWithIndexesInRange:range] waitUntilDone:NO];
 	[self insertObjects:items atIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+
+	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:didFetchItems:atRange:)]) {
+		[_delegate documentCollection:self didFetchItems:items atRange:range];
+	}
+}
+
+- (void)feedSource:(CKFeedSource *)feedSource didFailWithError:(NSError *)error {
+	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
+
+	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:fetchDidFailWithError:)]) {
+		[_delegate documentCollection:self fetchDidFailWithError:error];
+	}
 }
 
 - (BOOL)load{

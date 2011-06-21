@@ -30,6 +30,7 @@
 	[self addSubview:self.placeholderLabel];
 
 	self.maxStretchableHeight = 0;
+	self.clipsToBounds = YES;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(valueDidChange) name:UITextViewTextDidChangeNotification object:self];
 	[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
