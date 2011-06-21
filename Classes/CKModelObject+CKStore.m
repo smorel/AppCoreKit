@@ -22,69 +22,11 @@
 
 NSMutableDictionary* CKModelObjectManager = nil;
 
+@interface CKModelObject (CKStoreAdditionPrivate)
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved;
+@end
+
 @implementation CKModelObject (CKStoreAddition)
-
-
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
-	NSAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
-	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
-	
-	NSString* className = [[self class] description];
-	[dico setObject:className forKey:@"@class"];
-	
-	NSArray* allProperties = [self allPropertyNames];
-	for(NSString* propertyName in allProperties){
-		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
-		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		CKModelObjectPropertyMetaData* metaData = [property metaData];
-		if( (metaData  && metaData.serializable == NO) || descriptor.isReadOnly == YES){}
-		else{
-			id propertyValue = [property value];
-			if([propertyValue isKindOfClass:[CKDocumentCollection class]]
-			   || [propertyValue isKindOfClass:[NSArray class]]
-			   || [propertyValue isKindOfClass:[NSSet class]]){
-				NSArray* allObjects = propertyValue;
-				if([propertyValue isKindOfClass:[NSArray class]] == NO){
-					allObjects = [propertyValue allObjects];
-				}
-				NSMutableArray* result = [NSMutableArray array];
-				for(id subObject in allObjects){
-					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
-					CKModelObject* model = (CKModelObject*)subObject;
-					CKItem* item = nil;
-					if([alreadySaved containsObject:model] || model.uniqueId != nil){
-						item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
-					}else{
-						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
-					}
-					[result addObject:item];
-				}
-				[dico setObject:result forKey:propertyName];
-			}
-			else if([propertyValue isKindOfClass:[CKModelObject class]]){
-				CKModelObject* model = (CKModelObject*)propertyValue;
-				
-				NSMutableArray* result = [NSMutableArray array];
-				CKItem* item = nil;
-				if([alreadySaved containsObject:model] || model.uniqueId != nil){
-					item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
-				}else{
-					item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
-				}
-				[result addObject:item];
-				[dico setObject:result forKey:propertyName];
-			}
-			else{
-				id value = [NSValueTransformer transformProperty:property toClass:[NSString class]];
-				if([value isKindOfClass:[NSString class]]){
-					[dico setObject:value forKey:propertyName];
-				}
-			}
-		}
-	}
-	
-	return dico;
-}
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
 	NSMutableSet* alreadySaved = [NSMutableSet set];
@@ -234,6 +176,73 @@ NSMutableDictionary* CKModelObjectManager = nil;
 		[predicate appendFormat:@"AND (ANY attributes.name == '%@') AND (ANY attributes.value == '%@')",propertyName,attributeStr];
 	}
 	return [store fetchItemsWithPredicateFormat:predicate arguments:nil];
+}
+
+@end
+
+
+@implementation CKModelObject (CKStoreAdditionPrivate)
+
+
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
+	NSAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
+	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+	
+	NSString* className = [[self class] description];
+	[dico setObject:className forKey:@"@class"];
+	
+	NSArray* allProperties = [self allPropertyNames];
+	for(NSString* propertyName in allProperties){
+		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
+		CKClassPropertyDescriptor* descriptor = [property descriptor];
+		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		if( (metaData  && metaData.serializable == NO) || descriptor.isReadOnly == YES){}
+		else{
+			id propertyValue = [property value];
+			if([propertyValue isKindOfClass:[CKDocumentCollection class]]
+			   || [propertyValue isKindOfClass:[NSArray class]]
+			   || [propertyValue isKindOfClass:[NSSet class]]){
+				NSArray* allObjects = propertyValue;
+				if([propertyValue isKindOfClass:[NSArray class]] == NO){
+					allObjects = [propertyValue allObjects];
+				}
+				NSMutableArray* result = [NSMutableArray array];
+				for(id subObject in allObjects){
+					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
+					CKModelObject* model = (CKModelObject*)subObject;
+					CKItem* item = nil;
+					if([alreadySaved containsObject:model] || model.uniqueId != nil){
+						item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+					}else{
+						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
+					}
+					[result addObject:item];
+				}
+				[dico setObject:result forKey:propertyName];
+			}
+			else if([propertyValue isKindOfClass:[CKModelObject class]]){
+				CKModelObject* model = (CKModelObject*)propertyValue;
+				
+				NSMutableArray* result = [NSMutableArray array];
+				CKItem* item = nil;
+				if([alreadySaved containsObject:model] || model.uniqueId != nil){
+					item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+				}else{
+					item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
+				}
+				[result addObject:item];
+				[dico setObject:result forKey:propertyName];
+			}
+			else{
+				id value = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+				if([value isKindOfClass:[NSString class]]){
+					[dico setObject:value forKey:propertyName];
+				}
+			}
+		}
+	}
+	
+	return dico;
 }
 
 @end

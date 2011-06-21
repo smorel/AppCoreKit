@@ -134,7 +134,7 @@
 			if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
-				[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
+				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					optionCellController.value = [property value];
@@ -146,14 +146,13 @@
 						descriptor.value = value;
 					}];
 					[optionCellController endBindingsContext];
-					
 					return (id)nil;
-				}] forKey:CKObjectViewControllerFactoryItemSetup];
+				}];
 			}
 			else if(metaData.enumDefinition != nil){
 				NSDictionary* copyOfLabelsAndValues = [metaData.enumDefinition copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
-				[descriptor.params setObject:[CKCallback callbackWithBlock:^(id controller){
+				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					optionCellController.multiSelectionEnabled = YES;
@@ -178,7 +177,7 @@
 					[optionCellController endBindingsContext];
 					
 					return (id)nil;
-				}] forKey:CKObjectViewControllerFactoryItemSetup];
+				}];
 			}
 			else{
 				CKClassPropertyDescriptor* descriptor = [property descriptor];

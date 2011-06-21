@@ -10,23 +10,12 @@
 #import "CKItemViewController.h"
 
 
-extern NSString* CKObjectViewControllerFactoryItemCreate;
-extern NSString* CKObjectViewControllerFactoryItemInit;
-extern NSString* CKObjectViewControllerFactoryItemSetup;
-extern NSString* CKObjectViewControllerFactoryItemSelection;
-extern NSString* CKObjectViewControllerFactoryItemAccessorySelection;
-extern NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder;
-extern NSString* CKObjectViewControllerFactoryItemResignFirstResponder;
-extern NSString* CKObjectViewControllerFactoryItemFlags;
-extern NSString* CKObjectViewControllerFactoryItemFilter;
-extern NSString* CKObjectViewControllerFactoryItemSize;
-
 @interface CKObjectViewControllerFactoryItem : NSObject{
 	Class _controllerClass;
 	NSMutableDictionary* _params;
 }
 @property(nonatomic,assign)Class controllerClass;
-@property(nonatomic,retain)NSMutableDictionary* params;
+@property(nonatomic,retain,readonly)NSMutableDictionary* params;
 
 - (BOOL)matchWithObject:(id)object;
 - (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;

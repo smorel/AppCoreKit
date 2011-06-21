@@ -335,6 +335,8 @@
 	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
 	//[controller performSelector:@selector(setView:) withObject:nil];
 	[_weakViews removeObject:weakref];
+	
+	return (id)nil;
 }
 
 

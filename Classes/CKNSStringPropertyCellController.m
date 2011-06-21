@@ -45,10 +45,6 @@
 	txtField.textAlignment = UITextAlignmentLeft;
 	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
 	self.textField = txtField;
-	
-	if(self.indexPath.row == 1 && self.indexPath.section == 1){
-		int i =3;
-	}
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{

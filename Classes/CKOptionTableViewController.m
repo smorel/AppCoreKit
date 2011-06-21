@@ -73,8 +73,8 @@
 		NSNumber* index = [NSNumber numberWithInt:i];
 		
 		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
-		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(initCell:)] forKey:CKObjectViewControllerFactoryItemSetup];
-		[descriptor.params setObject:[CKCallback callbackWithTarget:self action:@selector(selectCell:)] forKey:CKObjectViewControllerFactoryItemSelection];
+		[descriptor setSetupTarget:self action:@selector(initCell:)];
+		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
 		[cells addObject:descriptor];
 	}
 	[self addSectionWithCellDescriptors:cells];

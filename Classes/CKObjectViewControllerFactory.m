@@ -100,6 +100,10 @@ NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactor
 NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder = @"CKObjectViewControllerFactoryItemBecomeFirstResponder";
 NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectViewControllerFactoryItemResignFirstResponder";
 
+@interface CKObjectViewControllerFactoryItem() 
+@property(nonatomic,retain,readwrite)NSMutableDictionary* params;
+@end
+
 @implementation CKObjectViewControllerFactoryItem
 @synthesize controllerClass = _controllerClass;
 @synthesize params = _params;
