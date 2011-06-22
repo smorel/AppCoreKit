@@ -21,6 +21,7 @@
 @interface CKObjectTableViewController ()
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
+@property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -55,6 +56,7 @@
 @synthesize doneButton;
 @synthesize rightButton;
 @synthesize leftButton;
+@dynamic selectedIndexPath;
 
 - (void)didSearch:(NSString*)text{
 	//if we want to implement it in subclass ..
@@ -831,6 +833,19 @@
 		return;
 	
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath){
+		int count = 0;
+		for(NSIndexPath* indexPath in indexPaths){
+			if(indexPath.section == self.selectedIndexPath.section){
+				if(indexPath.row <= self.selectedIndexPath.row){
+					count++;
+				}
+			}
+		}
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row + count inSection:self.selectedIndexPath.section];
+	}
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -838,18 +853,49 @@
 		return;
 	
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath){
+		int count = 0;
+		for(NSIndexPath* indexPath in indexPaths){
+			if([indexPath isEqual:self.selectedIndexPath]){
+				self.selectedIndexPath = nil;
+				break;
+			}
+			
+			if(indexPath.section == self.selectedIndexPath.section){
+				if(indexPath.row <= self.selectedIndexPath.row){
+					count++;
+				}
+			}
+		}
+		
+		if(self.selectedIndexPath){
+			self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row - count inSection:self.selectedIndexPath.section];
+		}
+	}
 }
 
 - (void)onInsertSectionAtIndex:(NSInteger)index{
 	if(!_viewIsOnScreen)
 		return;
 	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section + 1];
+	}
 }
 
 - (void)onRemoveSectionAtIndex:(NSInteger)index{
 	if(!_viewIsOnScreen)
 		return;
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section - 1];
+	}
 }
 
 @end

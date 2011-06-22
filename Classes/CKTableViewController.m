@@ -94,8 +94,15 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self.tableView reloadData];
-	if (self.stickySelection == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
-	else if (self.selectedIndexPath) [self.tableView selectRowAtIndexPath:self.selectedIndexPath animated:animated scrollPosition:UITableViewScrollPositionNone];
+	if (self.stickySelection == NO){
+		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
+		if([self isValidIndexPath:indexPath]){
+			[self.tableView deselectRowAtIndexPath:indexPath animated:animated];
+		}
+	}
+	else if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]){
+		[self.tableView selectRowAtIndexPath:self.selectedIndexPath animated:animated scrollPosition:UITableViewScrollPositionNone];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
