@@ -12,6 +12,8 @@
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 
+#import "CKDebug.h"
+
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
 	id _delegate;
@@ -33,12 +35,14 @@
 }
 
 - (NSInteger)numberOfSections{
-	return [self.parentController numberOfVisibleSections];
+	NSInteger count = [self.parentController numberOfVisibleSections];
+	return count;
 }
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	return [formSection numberOfObjects];
+	NSInteger count = [formSection numberOfObjects];
+	return count;
 }
 
 - (NSString*)headerTitleForSection:(NSInteger)section{
@@ -183,19 +187,21 @@
 }
 
 - (void)setHidden:(BOOL)bo{
-	if([_parentController reloading]){
-		_hidden = bo;
-	}
-	else if(_hidden != bo){
-		[_parentController objectControllerDidBeginUpdating:_parentController.objectController];
-		_hidden = bo;
-		if(bo){
-			[_parentController objectController:_parentController.objectController removeSectionAtIndex:self.sectionVisibleIndex];
+	if(_hidden != bo){
+		if([_parentController reloading]){
+			_hidden = bo;
 		}
-		else{
-			[_parentController objectController:_parentController.objectController insertSectionAtIndex:self.sectionVisibleIndex];
+		else {
+			[_parentController objectControllerDidBeginUpdating:_parentController.objectController];
+			_hidden = bo;
+			if(bo){
+				[_parentController objectController:_parentController.objectController removeSectionAtIndex:self.sectionVisibleIndex];
+			}
+			else{
+				[_parentController objectController:_parentController.objectController insertSectionAtIndex:self.sectionVisibleIndex];
+			}
+			[_parentController objectControllerDidEndUpdating:_parentController.objectController];
 		}
-		[_parentController objectControllerDidEndUpdating:_parentController.objectController];
 	}
 }
 
@@ -668,6 +674,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+	self.reloading = YES;
 	for(CKFormSectionBase* section in _sections){
 		[section start];
 		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
@@ -676,6 +683,7 @@
 	 }
 	
 	[super viewWillAppear:animated];
+	self.reloading = NO;
 }
 
 
