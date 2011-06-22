@@ -2276,7 +2276,7 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
+				PUBLIC_HEADERS_FOLDER_PATH = Headers/Cloudkit;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -2298,7 +2298,7 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/CloudKit;
+				PUBLIC_HEADERS_FOLDER_PATH = Headers/Cloudkit;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "i386 armv6 armv7";
