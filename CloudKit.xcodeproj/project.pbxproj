@@ -749,8 +749,8 @@
 		7557FFB0138455BF000FFCF3 /* CKTableViewCellController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKTableViewCellController+StyleManager.m"; sourceTree = "<group>"; };
 		7559BCC6137DE682007E7399 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCallback.h; sourceTree = "<group>"; };
 		7559BCC7137DE682007E7399 /* CKCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCallback.m; sourceTree = "<group>"; };
-		7563224E13A10763004C2D47 /* CKObjectPropertyArrayCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKObjectPropertyArrayCollection.h; sourceTree = "<group>"; };
-		7563224F13A10763004C2D47 /* CKObjectPropertyArrayCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKObjectPropertyArrayCollection.m; sourceTree = "<group>"; };
+		7563224E13A10763004C2D47 /* CKObjectPropertyArrayCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyArrayCollection.h; path = Classes/CKObjectPropertyArrayCollection.h; sourceTree = "<group>"; };
+		7563224F13A10763004C2D47 /* CKObjectPropertyArrayCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyArrayCollection.m; path = Classes/CKObjectPropertyArrayCollection.m; sourceTree = "<group>"; };
 		7563236513A11FEE004C2D47 /* CKUIView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIView+Introspection.h"; sourceTree = "<group>"; };
 		7563236613A11FEE004C2D47 /* CKUIView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIView+Introspection.m"; sourceTree = "<group>"; };
 		75661F11135E233C00E108AD /* CKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGradientView.h; sourceTree = "<group>"; };
@@ -1555,6 +1555,7 @@
 				751A1DB713A9343500B6B598 /* CKUITextField+Introspection.m */,
 			);
 			name = Additions;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		758889FF13ABDF8900DA3653 /* Resources */ = {
