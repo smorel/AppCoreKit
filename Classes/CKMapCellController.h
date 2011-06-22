@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import <CloudKit/CKTableViewCellController.h>
+#import "CKTableViewCellController.h"
 
 @class CKMapCellAnnotation;
 

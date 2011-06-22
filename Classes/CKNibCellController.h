@@ -7,7 +7,7 @@
 //
 
 #import "CKTableViewCellController.h"
-#import <CloudKit/CKNSObject+Bindings.h>
+#import "CKNSObject+Bindings.h"
 
 typedef enum{
 	CKNibCellControllerModeNone,

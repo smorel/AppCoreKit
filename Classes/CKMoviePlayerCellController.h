@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIKitDefines.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import <CloudKit/CKTableViewCellController.h>
+#import "CKTableViewCellController.h"
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
 

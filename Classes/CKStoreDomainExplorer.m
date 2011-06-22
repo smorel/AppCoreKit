@@ -7,9 +7,9 @@
 //
 
 #import "CKStoreDomainExplorer.h"
-#import <CloudKit/CKStore.h>
-#import <CloudKit/CKItem.h>
-#import <CloudKit/CKAttribute.h>
+#import "CKStore.h"
+#import "CKItem.h"
+#import "CKAttribute.h"
 #import "CKStoreItemExplorer.h"
 #import "CKLocalization.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CloudKit/CKStore.h>
+#import "CKStore.h"
 
 
 @interface CKStoreExplorer : UITableViewController {

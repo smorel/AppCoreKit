@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CloudKit/CKWebRequest2.h>
+#import "CKWebRequest2.h"
 #import "CKFeedSource.h"
 
 extern NSString* const CKWebSourceErrorNotification;

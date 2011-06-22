@@ -6,7 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Cloudkit/CKModelObject.h>
+#import "CKModelObject.h"
 
 @class CKStoreRequest;
 @class CKItem;

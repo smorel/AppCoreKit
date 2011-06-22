@@ -9,15 +9,15 @@
 #import "CKModelObject+CKStore.h"
 
 #import "CKStoreDataSource.h"
-#import <CloudKit/CKItem.h>
-#import <CloudKit/CKStore.h>
-#import <CloudKit/CKAttribute.h>
-#import <CloudKit/CKDomain.h>
-#import <CloudKit/CKDebug.h>
-#import <CloudKit/CKModelObject.h>
-#import <CloudKit/CKObjectProperty.h>
-#import <CloudKit/CKNSValueTransformer+Additions.h>
-#import <CloudKit/CKNSStringAdditions.h>
+#import "CKItem.h"
+#import "CKStore.h"
+#import "CKAttribute.h"
+#import "CKDomain.h"
+#import "CKDebug.h"
+#import "CKModelObject.h"
+#import "CKObjectProperty.h"
+#import "CKNSValueTransformer+Additions.h"
+#import "CKNSStringAdditions.h"
 #import "CKWeakRef.h"
 
 NSMutableDictionary* CKModelObjectManager = nil;

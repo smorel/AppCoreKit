@@ -7,9 +7,9 @@
 //
 
 #import "CKDocumentCollectionCellController.h"
-#import <CloudKit/CKFeedSource.h>
-#import <CloudKit/CKNSObject+Bindings.h>
-#import <CloudKit/CKLocalization.h>
+#import "CKFeedSource.h"
+#import "CKNSObject+Bindings.h"
+#import "CKLocalization.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectCarouselViewController.h"
 #import "CKDocumentCollection.h"

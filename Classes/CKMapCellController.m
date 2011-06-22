@@ -8,7 +8,7 @@
 
 #import "CKMapCellController.h"
 #import <QuartzCore/QuartzCore.h>
-#import <CloudKit/CKConstants.h>
+#import "CKConstants.h"
 
 @interface CKMapCellAnnotation : NSObject<MKAnnotation> {
 	CLLocationCoordinate2D _coordinate;

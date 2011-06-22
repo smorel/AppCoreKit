@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CloudKit/CKNSObject+Introspection.h>
+#import "CKNSObject+Introspection.h"
 
 typedef enum{
 	CKMappingPolicyRequired,

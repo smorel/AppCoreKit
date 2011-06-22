@@ -8,7 +8,7 @@
 
 #import "CKRoundedCornerView.h"
 #import "CKUIColorAdditions.h"
-#import <CloudKit/CKUIColorAdditions.h>
+#import "CKUIColorAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation CKRoundedCornerView

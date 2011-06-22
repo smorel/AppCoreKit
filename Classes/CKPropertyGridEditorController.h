@@ -6,8 +6,8 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CKFormTableViewController.h>
-#import <CloudKit/CKObjectProperty.h>
+#import "CKFormTableViewController.h"
+#import "CKObjectProperty.h"
 
 
 @interface CKPropertyGridEditorController : CKFormTableViewController{

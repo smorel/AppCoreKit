@@ -7,7 +7,7 @@
 //
 
 #import "CKView.h"
-#import <CloudKit/CKConstants.h>
+#import "CKConstants.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKNSObject+Bindings.h"
 

@@ -9,7 +9,7 @@
 #import "CKUIView+Introspection.h"
 
 
-#import <CloudKit/CKNSValueTransformer+Additions.h>
+#import "CKNSValueTransformer+Additions.h"
 
 @implementation UIView (CKIntrospectionAdditions)
 

@@ -6,8 +6,8 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CKFeedSource.h>
-#import <CloudKit/CKStore.h>
+#import "CKFeedSource.h"
+#import "CKStore.h"
 
 
 @interface CKStoreRequest : NSOperation{

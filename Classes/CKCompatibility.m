@@ -7,7 +7,7 @@
 //
 
 #import "CKCompatibility.h"
-#import <CloudKit/CKVersion.h>
+#import "CKVersion.h"
 
 
 CGSize CKShadowSizeMake(CGFloat width, CGFloat height) {

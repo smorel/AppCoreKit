@@ -8,7 +8,7 @@
 
 #import "CKSlotView.h"
 #import <QuartzCore/QuartzCore.h>
-#import <CloudKit/CKConstants.h>
+#import "CKConstants.h"
 #import <math.h>
 
 //
