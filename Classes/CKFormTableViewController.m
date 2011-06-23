@@ -193,11 +193,12 @@
 		}
 		else {
 			[_parentController objectControllerDidBeginUpdating:_parentController.objectController];
-			_hidden = bo;
 			if(bo){
 				[_parentController objectController:_parentController.objectController removeSectionAtIndex:self.sectionVisibleIndex];
+				_hidden = YES;
 			}
 			else{
+				_hidden = NO;
 				[_parentController objectController:_parentController.objectController insertSectionAtIndex:self.sectionVisibleIndex];
 			}
 			[_parentController objectControllerDidEndUpdating:_parentController.objectController];
