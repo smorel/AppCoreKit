@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface UITextField (CKIntrospectionAdditions)
 /* SEE HOW TO MAKE UITextResponder KVO complient

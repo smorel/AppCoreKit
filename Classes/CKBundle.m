@@ -6,6 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "CKBundle.h"
 
 static NSString * const CKBundleName = @"CloudKit.bundle";

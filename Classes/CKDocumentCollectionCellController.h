@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKStandardCellController.h"
 
 //SEB TODO adds accessors in dictionary helper with special keys

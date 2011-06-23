@@ -6,11 +6,12 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 #import "CKModelObject.h"
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKDocumentCollection.h"
-#import <MapKit/MapKit.h>
 
 
 @interface CKObjectProperty : NSObject {

@@ -6,6 +6,7 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKItemViewController.h"
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"

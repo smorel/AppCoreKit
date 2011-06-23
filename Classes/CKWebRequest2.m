@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "CKWebRequest2.h"
 #import "CKNSStringAdditions.h"
 #import "CKNSString+URIQuery.h"

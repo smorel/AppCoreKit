@@ -6,6 +6,8 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #define _(key) NSLocalizedString(key, key)
 
 NSString *CKLocalizationCurrentLocalization(void);

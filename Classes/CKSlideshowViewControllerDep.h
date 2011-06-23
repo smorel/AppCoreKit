@@ -6,6 +6,7 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @interface CKSlideshowViewControllerDep : UIViewController {

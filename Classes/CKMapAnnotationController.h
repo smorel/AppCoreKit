@@ -6,8 +6,9 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKItemViewController.h"
+#import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "CKItemViewController.h"
 
 typedef enum CKMapAnnotationStyle{
 	CKMapAnnotationCustom,

@@ -6,10 +6,11 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 #import "CKObjectTableViewController.h"
 #import "CKDocumentArray.h"
 #import "CKCallback.h"
-#import <objc/runtime.h>
 
 typedef enum CKClassExplorerType{
 	CKClassExplorerTypeClasses,

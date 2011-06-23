@@ -6,6 +6,7 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "CKWebRequest.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"

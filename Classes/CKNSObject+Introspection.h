@@ -27,6 +27,7 @@
  The property is eligible for garbage collection.
  */
 
+#import <Foundation/Foundation.h>
 #import "CKClassPropertyDescriptor.h"
 
 

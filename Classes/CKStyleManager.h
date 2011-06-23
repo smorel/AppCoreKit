@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKStyles.h"
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController+Style.h"

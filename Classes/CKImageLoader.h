@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "CKWebRequest2.h"
 
 extern NSString * const CKImageLoaderErrorDomain;

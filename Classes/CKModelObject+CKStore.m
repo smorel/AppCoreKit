@@ -115,7 +115,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",theUniqueId] arguments:nil];
 	if([res count] != 1){
-		CKDebugLog(@"Warning : %@ object(s) found in domain '%@' with uniqueId '%@'",(([res count]==0) ? @"no" : "Several"),domain,theUniqueId);
+		//CKDebugLog(@"Warning : %@ object(s) found in domain '%@' with uniqueId '%@'",(([res count]==0) ? @"no" : "Several"),domain,theUniqueId);
 		return nil;
 	}
 	return [[res lastObject]item];	

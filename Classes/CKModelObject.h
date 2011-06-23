@@ -6,8 +6,9 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKNSObject+Introspection.h"
+#import <Foundation/Foundation.h>
 #import <objc/runtime.h>
+#import "CKNSObject+Introspection.h"
 
 @protocol CKMigrating
 - (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object;

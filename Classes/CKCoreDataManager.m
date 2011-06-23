@@ -5,6 +5,8 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 #import "CKCoreDataManager.h"
 #import "CKNSDateAdditions.h"
 #import "CKNSStringAdditions.h"

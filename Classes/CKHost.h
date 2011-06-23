@@ -7,4 +7,6 @@
  *
  */
 
+#import <Foundation/Foundation.h>
+
 NSString *CKHostGetIPAddress();

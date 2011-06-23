@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"

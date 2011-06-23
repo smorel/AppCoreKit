@@ -6,6 +6,7 @@
 //  Copyright 2010 Kenobi Studios. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKStore.h"
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
 CGPoint CGPointOffset(CGPoint point, CGFloat x, CGFloat y);

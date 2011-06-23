@@ -6,6 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius);

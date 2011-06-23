@@ -6,6 +6,8 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
 	return [l18n objectAtIndex:0];
