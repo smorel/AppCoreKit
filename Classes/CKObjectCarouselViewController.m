@@ -10,7 +10,7 @@
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKDocumentController.h"
-#import "CKTableViewCellController+StyleManager.h"
+#import "CKItemViewController+StyleManager.h"
 
 
 @interface UIViewWithIdentifier : UIView{

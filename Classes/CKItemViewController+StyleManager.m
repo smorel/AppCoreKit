@@ -6,7 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKTableViewCellController+StyleManager.h"
+#import "CKItemViewController+StyleManager.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKNSObject+Bindings.h"
 

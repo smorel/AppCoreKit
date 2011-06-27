@@ -15,7 +15,7 @@
 #import "CKStyles.h"
 #import "CKStyleManager.h"
 #import "CKTableViewCellController+Style.h"
-#import "CKTableViewCellController+StyleManager.h"
+#import "CKItemViewController+StyleManager.h"
 
 @interface CKObjectViewControllerFactory ()
 

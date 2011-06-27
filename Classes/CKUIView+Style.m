@@ -13,7 +13,6 @@
 
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
-#import "CKUIImageView+Style.h"
 #import "CKLocalization.h"
 
 #import "CKTextView.h"

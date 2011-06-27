@@ -1,0 +1,6 @@
+//
+// Prefix header for all source files of the 'CloudKit' target in the 'CloudKit' project
+//
+
+#ifdef __OBJC__
+#endif

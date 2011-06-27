@@ -9,7 +9,7 @@
 #import "CKItemViewContainerController.h"
 
 #import "CKWeakRef.h"
-#import "CKTableViewCellController+StyleManager.h"
+#import "CKItemViewController+StyleManager.h"
 
 //CKItemViewContainerController
 
