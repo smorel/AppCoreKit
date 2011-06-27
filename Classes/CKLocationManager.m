@@ -288,11 +288,9 @@
 // Workaround to detect location availability after the application enters foreground, it seems that the
 // property -locationServicesEnabled is not reliable at this step. So, we'll do another run of update to 
 // check if it will fail.
-
 - (void)applicationWillEnterForeground:(NSNotification *)notification {
-	if ([self isActivated]) {
-		[self findCurrentAddress];
-	}
+	_activated = YES;
+	[self findCurrentAddress];
 }
 
 @end
