@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		7550153613B8EA08002DAE8B /* CloudKitUniversal */ = {
+		7550153613B8EA08002DAE8B /* CloudKit Install */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKitUniversal" */;
+			buildConfigurationList = 7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKit Install" */;
 			buildPhases = (
 				7550153513B8EA08002DAE8B /* ShellScript */,
 			);
 			dependencies = (
 			);
-			name = CloudKitUniversal;
+			name = "CloudKit Install";
 			productName = Universal_Framework;
 		};
 /* End PBXAggregateTarget section */
@@ -1894,7 +1894,7 @@
 			projectRoot = "";
 			targets = (
 				7550152F13B8EA08002DAE8B /* CloudKit */,
-				7550153613B8EA08002DAE8B /* CloudKitUniversal */,
+				7550153613B8EA08002DAE8B /* CloudKit Install */,
 			);
 		};
 /* End PBXProject section */
@@ -2216,14 +2216,14 @@
 		7550154413B8EA08002DAE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = CloudKitUniversal;
+				PRODUCT_NAME = CloudKit;
 			};
 			name = Debug;
 		};
 		7550154513B8EA08002DAE8B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = CloudKitUniversal;
+				PRODUCT_NAME = CloudKit;
 			};
 			name = Release;
 		};
@@ -2248,7 +2248,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKitUniversal" */ = {
+		7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKit Install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7550154413B8EA08002DAE8B /* Debug */,
