@@ -11,6 +11,9 @@
 
 //
 
+
+/** TODO
+ */
 @interface CKSlotViewCell : UIView
 
 - (void)prepareForReuse;
@@ -21,6 +24,9 @@
 
 @class CKSlotView;
 
+
+/** TODO
+ */
 @protocol CKSlotViewDelegate
 
 @required
@@ -45,6 +51,9 @@
 
 //
 
+
+/** TODO
+ */
 @interface CKSlotView : UIView <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate> {
 	CGRect _originFrame;
 	UITableView	*_tableView;

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSObject (CKNSObjectJSON) 
 
 - (id)JSONRepresentation;

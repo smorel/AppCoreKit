@@ -12,11 +12,17 @@
 #import "CKDocumentArray.h"
 #import "CKCallback.h"
 
+
+/** TODO
+ */
 typedef enum CKClassExplorerType{
 	CKClassExplorerTypeClasses,
 	CKClassExplorerTypeInstances
 }CKClassExplorerType;
 
+
+/** TODO
+ */
 @interface CKClassExplorer : CKObjectTableViewController {
 	CKDocumentArray* _classesCollection;
 	id _userInfo;

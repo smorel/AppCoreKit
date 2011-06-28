@@ -10,6 +10,9 @@
 #import <objc/runtime.h>
 #import "CKNSObject+Introspection.h"
 
+
+/** TODO
+ */
 @protocol CKMigrating
 - (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object;
 - (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object;
@@ -17,6 +20,8 @@
 @end
 
 
+/** TODO
+ */
 @interface CKModelObjectPropertyMetaData : NSObject{
 	BOOL comparable;
 	BOOL serializable;
@@ -52,6 +57,10 @@
 
 
 typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
+
+
+/** TODO
+ */
 @interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 	BOOL _saving;
 	BOOL _loading;
@@ -72,6 +81,9 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 
 @end
 
+
+/** TODO
+ */
 @interface NSObject (CKModelObject)
 
 - (void)copy : (id)other;

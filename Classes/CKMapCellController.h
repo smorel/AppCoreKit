@@ -13,6 +13,9 @@
 
 @class CKMapCellAnnotation;
 
+
+/** TODO
+ */
 @interface CKMapCellController : CKTableViewCellController <MKMapViewDelegate> {
 	CKMapCellAnnotation *_annotation;
 	UIImage *_annotationImage;

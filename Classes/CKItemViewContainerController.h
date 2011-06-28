@@ -50,6 +50,9 @@
  - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths
 */
 
+
+/** TODO
+ */
 @interface CKItemViewContainerController : CKUIViewController<CKObjectControllerDelegate> {
 	id _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
@@ -142,6 +145,8 @@
 
 
 
+/** TODO
+ */
 @protocol CKItemViewContainerControllerDelegate
 @optional
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;

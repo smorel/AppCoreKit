@@ -11,6 +11,9 @@
 
 #import "CKImageView.h"
 
+
+/** TODO
+ */
 @interface CKSlideshowViewController : UIViewController {
 	id _delegate;
 	NSArray *imagesPaths; // Contains the paths to the images
@@ -43,6 +46,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKSlideshowViewControllerDelegate
 
 - (NSUInteger)numberOfImagesInSlideshowView:(CKSlideshowViewController *)slideshowController;

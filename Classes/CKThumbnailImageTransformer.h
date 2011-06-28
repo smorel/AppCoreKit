@@ -10,6 +10,8 @@
 #import "CKImageTransformer.h"
 
 
+/** TODO
+ */
 @interface CKThumbnailImageTransformer : CKImageTransformer {
 }
 

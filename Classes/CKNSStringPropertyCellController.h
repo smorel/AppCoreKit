@@ -10,6 +10,8 @@
 #import "CKStandardCellController.h"
 
 
+/** TODO
+ */
 @interface CKNSStringPropertyCellController : CKStandardCellController<UITextFieldDelegate> {
 	UITextField* _textField;
 }

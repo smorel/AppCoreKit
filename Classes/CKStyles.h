@@ -9,12 +9,30 @@
 #import <Foundation/Foundation.h>
 #import "CKModelObject.h"
 
+
+/** TODO
+ */
 extern NSString* CKStyleFormats;
+
+/** TODO
+ */
 extern NSString* CKStyleParentStyle;
+
+/** TODO
+ */
 extern NSString* CKStyleEmptyStyle;
+
+/** TODO
+ */
 extern NSString* CKStyleInherits;
+
+/** TODO
+ */
 extern NSString* CKStyleImport;
 
+
+/** TODO
+ */
 @interface CKStyleFormat : NSObject{
 }
 @property(nonatomic,retain) NSString* format;
@@ -28,10 +46,16 @@ extern NSString* CKStyleImport;
 
 @end
 
+
+/** TODO
+ */
 @interface NSDictionary (CKKey)
 - (BOOL)containsObjectForKey:(NSString*)key;
 @end
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKStyle)
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;

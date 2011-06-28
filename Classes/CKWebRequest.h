@@ -17,6 +17,9 @@
 
 @class ASIHTTPRequest;
 
+
+/** TODO
+ */
 @interface CKWebRequest : NSObject {
 	NSURL *_url;
 	NSDictionary *_headers;
@@ -58,6 +61,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKWebRequestDelegate <NSObject> @optional
 - (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers;
 - (void)request:(id)request didReceiveValue:(id)value;
@@ -67,6 +72,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKWebResponseTransformer <NSObject>
 - (id)request:(CKWebRequest *)request transformContent:(id)content;
 @end

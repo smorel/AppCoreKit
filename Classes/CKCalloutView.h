@@ -11,6 +11,8 @@
 #import "CKOverlayView.h"
 
 
+/** TODO
+ */
 typedef enum {
 	CKCalloutArrowDirectionUp = 0,
 	CKCalloutArrowDirectionDown,
@@ -19,6 +21,8 @@ typedef enum {
 } CKCalloutArrowDirection;
 
 
+/** TODO
+ */
 @interface CKCalloutView : CKOverlayView {
 	CGFloat _arrowDeltaX;
 	CGFloat _arrowDeltaY;

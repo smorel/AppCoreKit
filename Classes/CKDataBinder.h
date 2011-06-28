@@ -10,6 +10,9 @@
 #import "CKBinding.h"
 #import "CKWeakRef.h"
 
+
+/** TODO
+ */
 @interface CKDataBinder : NSObject<CKBinding> {
 	CKWeakRef* instance1Ref;
 	NSString* keyPath1;

@@ -9,6 +9,9 @@
 #import <CoreData/CoreData.h>
 #import "CKItem.h"
 
+
+/** TODO
+ */
 @interface CKDomain : NSManagedObject {
 }
 
@@ -19,6 +22,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKDomain (CKDomainAccessors)
 
 - (void)addItemsObject:(CKItem *)value;

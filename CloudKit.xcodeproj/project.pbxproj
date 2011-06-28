@@ -248,8 +248,6 @@
 		7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBEF13B8ED3600268D13 /* CKPickerView.m */; };
 		7560DD3D13B8ED3600268D13 /* CKPropertyGridEditorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3E13B8ED3600268D13 /* CKPropertyGridEditorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */; };
-		7560DD3F13B8ED3600268D13 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF213B8ED3600268D13 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD4013B8ED3600268D13 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF313B8ED3600268D13 /* CKRoundedCornerView.m */; };
 		7560DD4113B8ED3600268D13 /* CKSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF413B8ED3600268D13 /* CKSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD4213B8ED3600268D13 /* CKSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF513B8ED3600268D13 /* CKSignal.m */; };
 		7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -340,10 +338,6 @@
 		7560DDA013B8ED3600268D13 /* CKValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5313B8ED3600268D13 /* CKValueTransformer.m */; };
 		7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5413B8ED3600268D13 /* CKVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5513B8ED3600268D13 /* CKVersion.m */; };
-		7560DDA313B8ED3600268D13 /* CKView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5613B8ED3600268D13 /* CKView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDA413B8ED3600268D13 /* CKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5713B8ED3600268D13 /* CKView.m */; };
-		7560DDA513B8ED3600268D13 /* CKViewTemplateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5813B8ED3600268D13 /* CKViewTemplateManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDA613B8ED3600268D13 /* CKViewTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5913B8ED3600268D13 /* CKViewTemplateManager.m */; };
 		7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5A13B8ED3600268D13 /* CKWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5B13B8ED3600268D13 /* CKWeakRef.m */; };
 		7560DDA913B8ED3600268D13 /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5C13B8ED3600268D13 /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -439,6 +433,8 @@
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
 		7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
+		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; };
+		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -661,8 +657,6 @@
 		7560DBEF13B8ED3600268D13 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = Classes/CKPickerView.m; sourceTree = "<group>"; };
 		7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyGridEditorController.h; path = Classes/CKPropertyGridEditorController.h; sourceTree = "<group>"; };
 		7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyGridEditorController.m; path = Classes/CKPropertyGridEditorController.m; sourceTree = "<group>"; };
-		7560DBF213B8ED3600268D13 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
-		7560DBF313B8ED3600268D13 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		7560DBF413B8ED3600268D13 /* CKSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSignal.h; path = Classes/CKSignal.h; sourceTree = "<group>"; };
 		7560DBF513B8ED3600268D13 /* CKSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSignal.m; path = Classes/CKSignal.m; sourceTree = "<group>"; };
 		7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewController.h; path = Classes/CKSlideshowViewController.h; sourceTree = "<group>"; };
@@ -753,10 +747,6 @@
 		7560DC5313B8ED3600268D13 /* CKValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKValueTransformer.m; path = Classes/CKValueTransformer.m; sourceTree = "<group>"; };
 		7560DC5413B8ED3600268D13 /* CKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKVersion.h; path = Classes/CKVersion.h; sourceTree = "<group>"; };
 		7560DC5513B8ED3600268D13 /* CKVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKVersion.m; path = Classes/CKVersion.m; sourceTree = "<group>"; };
-		7560DC5613B8ED3600268D13 /* CKView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKView.h; path = Classes/CKView.h; sourceTree = "<group>"; };
-		7560DC5713B8ED3600268D13 /* CKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKView.m; path = Classes/CKView.m; sourceTree = "<group>"; };
-		7560DC5813B8ED3600268D13 /* CKViewTemplateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewTemplateManager.h; path = Classes/CKViewTemplateManager.h; sourceTree = "<group>"; };
-		7560DC5913B8ED3600268D13 /* CKViewTemplateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKViewTemplateManager.m; path = Classes/CKViewTemplateManager.m; sourceTree = "<group>"; };
 		7560DC5A13B8ED3600268D13 /* CKWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWeakRef.h; path = Classes/CKWeakRef.h; sourceTree = "<group>"; };
 		7560DC5B13B8ED3600268D13 /* CKWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWeakRef.m; path = Classes/CKWeakRef.m; sourceTree = "<group>"; };
 		7560DC5C13B8ED3600268D13 /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
@@ -851,6 +841,8 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
+		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1164,6 +1156,8 @@
 				7560DB6313B8ED3600268D13 /* CKGradientView.m */,
 				7560DB6413B8ED3600268D13 /* CKGridView.h */,
 				7560DB6513B8ED3600268D13 /* CKGridView.m */,
+				75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */,
+				75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */,
 				7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */,
 				7560DB6F13B8ED3600268D13 /* CKImageView.h */,
 				7560DB7013B8ED3600268D13 /* CKImageView.m */,
@@ -1177,8 +1171,6 @@
 				7560DBED13B8ED3600268D13 /* CKPageScrollView.m */,
 				7560DBEE13B8ED3600268D13 /* CKPickerView.h */,
 				7560DBEF13B8ED3600268D13 /* CKPickerView.m */,
-				7560DBF213B8ED3600268D13 /* CKRoundedCornerView.h */,
-				7560DBF313B8ED3600268D13 /* CKRoundedCornerView.m */,
 				7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */,
 				7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */,
 				7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */,
@@ -1193,10 +1185,6 @@
 				7560DC4713B8ED3600268D13 /* CKUIView+Layout.m */,
 				7560DC4A13B8ED3600268D13 /* CKUIViewController.h */,
 				7560DC4B13B8ED3600268D13 /* CKUIViewController.m */,
-				7560DC5613B8ED3600268D13 /* CKView.h */,
-				7560DC5713B8ED3600268D13 /* CKView.m */,
-				7560DC5813B8ED3600268D13 /* CKViewTemplateManager.h */,
-				7560DC5913B8ED3600268D13 /* CKViewTemplateManager.m */,
 				7560DC6613B8ED3600268D13 /* CKWebViewController.h */,
 				7560DC6713B8ED3600268D13 /* CKWebViewController.m */,
 				7560DC6813B8ED3600268D13 /* CKWebViewControllerRef.h */,
@@ -1786,7 +1774,6 @@
 				7560DD3913B8ED3600268D13 /* CKPageScrollView.h in Headers */,
 				7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */,
 				7560DD3D13B8ED3600268D13 /* CKPropertyGridEditorController.h in Headers */,
-				7560DD3F13B8ED3600268D13 /* CKRoundedCornerView.h in Headers */,
 				7560DD4113B8ED3600268D13 /* CKSignal.h in Headers */,
 				7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */,
 				7560DD4513B8ED3600268D13 /* CKSlideshowViewControllerDep.h in Headers */,
@@ -1832,8 +1819,6 @@
 				7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */,
 				7560DD9F13B8ED3600268D13 /* CKValueTransformer.h in Headers */,
 				7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */,
-				7560DDA313B8ED3600268D13 /* CKView.h in Headers */,
-				7560DDA513B8ED3600268D13 /* CKViewTemplateManager.h in Headers */,
 				7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */,
 				7560DDA913B8ED3600268D13 /* CKWebRequest.h in Headers */,
 				7560DDAB13B8ED3600268D13 /* CKWebRequest2.h in Headers */,
@@ -1877,6 +1862,7 @@
 				7560DE3F13B8EFDC00268D13 /* ASINetworkQueue.h in Headers */,
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
+				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2077,7 +2063,6 @@
 				7560DD3A13B8ED3600268D13 /* CKPageScrollView.m in Sources */,
 				7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */,
 				7560DD3E13B8ED3600268D13 /* CKPropertyGridEditorController.m in Sources */,
-				7560DD4013B8ED3600268D13 /* CKRoundedCornerView.m in Sources */,
 				7560DD4213B8ED3600268D13 /* CKSignal.m in Sources */,
 				7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */,
 				7560DD4613B8ED3600268D13 /* CKSlideshowViewControllerDep.m in Sources */,
@@ -2123,8 +2108,6 @@
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA013B8ED3600268D13 /* CKValueTransformer.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
-				7560DDA413B8ED3600268D13 /* CKView.m in Sources */,
-				7560DDA613B8ED3600268D13 /* CKViewTemplateManager.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */,
 				7560DDAA13B8ED3600268D13 /* CKWebRequest.m in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest2.m in Sources */,
@@ -2164,6 +2147,7 @@
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
 				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
 				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
+				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

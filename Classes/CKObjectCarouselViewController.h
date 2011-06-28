@@ -14,6 +14,9 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
 
+
+/** TODO
+ */
 @interface CKObjectCarouselViewController : CKItemViewContainerController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
 	CKCarouselView* _carouselView;
 	

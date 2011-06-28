@@ -10,6 +10,8 @@
 #import "CKStandardCellController.h"
 
 
+/** TODO
+ */
 @interface CKTextFieldCellController : CKStandardCellController <UITextFieldDelegate> {
 	NSString *_placeholder;
 

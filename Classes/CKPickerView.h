@@ -13,6 +13,9 @@
 
 //
 
+
+/** TODO
+ */
 @protocol CKPickerViewDelegate
 
 @required
@@ -30,6 +33,9 @@
 
 //
 
+
+/** TODO
+ */
 @interface CKPickerView : UIView <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate> {
 	UITableView *_tableView;
 	UIView *_backgroundView;

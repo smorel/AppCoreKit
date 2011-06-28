@@ -10,6 +10,8 @@
 #import "CKObjectPropertyArrayCollection.h"
 
 
+/** TODO
+ */
 @interface CKDocumentArray : CKObjectPropertyArrayCollection {
 	NSMutableArray* _objects;
 }

@@ -14,6 +14,8 @@
 
 // CKGridView
 
+/** TODO
+ */
 @interface CKGridView : UIView {
 	id<CKGridViewDataSource> _dataSource;
 	id<CKGridViewDelegate> _delegate;
@@ -60,6 +62,8 @@
 
 // CKGridViewDataSource Protocol
 
+/** TODO
+ */
 @protocol CKGridViewDataSource
 
 @required
@@ -80,6 +84,9 @@
 
 // CKGridViewDelegate Protocol
 
+
+/** TODO
+ */
 @protocol CKGridViewDelegate
 
 @optional
@@ -92,6 +99,9 @@
 
 // NSIndexPath Addition
 
+
+/** TODO
+ */
 @interface NSIndexPath (CKGridView)
 
 + (NSIndexPath *)indexPathForRow:(NSUInteger)row column:(NSUInteger)column;

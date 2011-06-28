@@ -10,6 +10,8 @@
 #import "CKTableViewCellController.h"
 
 
+/** TODO
+ */
 @interface CKUIImagePropertyCellController : CKTableViewCellController {
 
 }

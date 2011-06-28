@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 @interface CKOverlayView : UIView {
 	UIView *_contentView;
 	UILabel *_textLabel;

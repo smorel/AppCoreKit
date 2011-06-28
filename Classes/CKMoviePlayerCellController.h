@@ -14,6 +14,9 @@
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
 
+
+/** TODO
+ */
 @interface CKMoviePlayerCellController : CKTableViewCellController {
 	MPMoviePlayerController *_playerController;
 }

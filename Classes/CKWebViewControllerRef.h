@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 typedef enum {
 	CKWebViewControllerButtonItemBack,
 	CKWebViewControllerButtonItemForward,
@@ -16,6 +18,9 @@ typedef enum {
 	CKWebViewControllerButtonItemAction
 } CKWebViewControllerButtonItemType;
 
+
+/** TODO
+ */
 @interface CKWebViewControllerRef : UIViewController <UIWebViewDelegate> {
 	UIWebView *_webView;
 	NSURL *_homeURL;

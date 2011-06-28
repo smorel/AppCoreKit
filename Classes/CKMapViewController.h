@@ -21,11 +21,16 @@
 #define MAP_ANNOTATION_RIGHT_BUTTON	2
 
 
+/** TODO
+ */
 typedef enum CKMapViewControllerZoomStrategy{
 	CKMapViewControllerZoomStrategyEnclosing,
 	CKMapViewControllerZoomStrategySmart
 }CKMapViewControllerZoomStrategy;
 
+
+/** TODO
+ */
 @interface CKMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
 	CLLocationCoordinate2D _centerCoordinate;
 	MKMapView *_mapView;

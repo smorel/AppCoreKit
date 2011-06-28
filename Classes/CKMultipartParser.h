@@ -18,6 +18,9 @@
 
 #import <Foundation/Foundation.h>
 
+
+/** TODO
+ */
 @interface CKMultipartParser : NSObject {
 	NSData *buffer;
 	NSData *headerSeparator;

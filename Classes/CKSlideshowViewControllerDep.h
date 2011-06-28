@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 @interface CKSlideshowViewControllerDep : UIViewController {
 	NSArray *imagesPaths;			// Contains the paths to the images
 	NSMutableDictionary *images;	// Contains the UIImages

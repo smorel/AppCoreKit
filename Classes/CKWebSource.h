@@ -19,6 +19,9 @@ typedef id (^CKWebSourceTransformBlock)(id value);
 typedef void (^CKWebSourceFailureBlock)(NSError *error);
 typedef void (^CKWebSourceSuccessBlock)();
 
+
+/** TODO
+ */
 @interface CKWebSource : CKFeedSource <CKWebRequestDelegate> {
 	CKWebRequest2 *_request;
 	NSUInteger _requestedBatchSize;
@@ -42,6 +45,8 @@ typedef void (^CKWebSourceSuccessBlock)();
 
 
 
+/** TODO
+ */
 @protocol CKWebSourceDelegate
 
 @required

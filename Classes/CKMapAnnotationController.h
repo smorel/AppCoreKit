@@ -10,11 +10,16 @@
 #import <MapKit/MapKit.h>
 #import "CKItemViewController.h"
 
+/** TODO
+ */
 typedef enum CKMapAnnotationStyle{
 	CKMapAnnotationCustom,
 	CKMapAnnotationPin
 }CKMapAnnotationStyle;
 
+
+/** TODO
+ */
 @interface CKMapAnnotationController : CKItemViewController {
 	CKMapAnnotationStyle _style;
 }

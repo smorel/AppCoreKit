@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @class CKDocumentCollection;
+
+
+/** TODO
+ */
 @protocol CKDocumentStorage
 
 - (BOOL)load:(CKDocumentCollection*)collection;

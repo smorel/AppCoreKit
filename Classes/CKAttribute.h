@@ -10,6 +10,9 @@
 
 @class CKItem;
 
+
+/** TODO
+ */
 @interface CKAttribute : NSManagedObject {
 }
 
@@ -22,6 +25,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKAttribute (CoreDataGeneratedAccessors)
 - (void)addItemReferencesObject:(NSManagedObject *)value;
 - (void)removeItemReferencesObject:(NSManagedObject *)value;

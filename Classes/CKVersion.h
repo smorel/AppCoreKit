@@ -8,5 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 NSString *CKApplicationVersion();
+
+/** TODO
+ */
 NSString *CKOSVersion();

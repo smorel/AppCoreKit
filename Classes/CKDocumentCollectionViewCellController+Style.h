@@ -9,11 +9,26 @@
 #import <Foundation/Foundation.h>
 #import "CKDocumentCollectionCellController.h"
 
+
+/** TODO
+ */
 extern NSString* CKStyleNoItemsMessage;
+
+/** TODO
+ */
 extern NSString* CKStyleOneItemMessage;
+
+/** TODO
+ */
 extern NSString* CKStyleManyItemsMessage;
+
+/** TODO
+ */
 extern NSString* CKStyleIndicatorStyle;
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKDocumentCollectionViewCellControllerStyle)
 
 - (NSString*)noItemsMessage;

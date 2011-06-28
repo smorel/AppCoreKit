@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 @interface UIColor (CKUIColorAdditions)
 
 + (UIColor *)colorWithRGBValue:(NSUInteger)value;

@@ -9,21 +9,54 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeBounds;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributePagingEnabled;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeInterfaceOrientation;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeOrientation;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeAnimationDuration;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeEditable;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeStyle;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeParentController;
+
+/** TODO
+ */
 extern NSString * const CKTableViewAttributeObject;
 
+
+/** TODO
+ */
 typedef enum {
 	CKTableViewOrientationPortrait,
 	CKTableViewOrientationLandscape
 } CKTableViewOrientation;
 
+
+/** TODO
+ */
 @interface NSDictionary (CKTableViewAttributes)
 
 - (BOOL)pagingEnabled;

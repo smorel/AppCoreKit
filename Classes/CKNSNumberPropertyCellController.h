@@ -10,6 +10,8 @@
 #import "CKStandardCellController.h"
 
 
+/** TODO
+ */
 @interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{	
 	UITextField* _textField;
 	UISwitch* _toggleSwitch;

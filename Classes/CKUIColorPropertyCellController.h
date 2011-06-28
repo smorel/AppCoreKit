@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CKMultiFloatPropertyCellController.h"
 
+
+/** TODO
+ */
 @interface CKUIColorPropertyCellController : CKMultiFloatPropertyCellController {
 
 }

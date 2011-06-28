@@ -11,11 +11,16 @@
 
 @class CKImageTransformer;
 
+/** TODO
+ */
 @protocol CKImageTransformerDelegate
 -(void)imageTransformer:(CKImageTransformer*)transformer didTransformImage:(UIImage*)image cached:(BOOL)cached;
 -(void)imageTransformer:(CKImageTransformer*)transformer didFailWithError:(NSError *)error;
 @end
 
+
+/** TODO
+ */
 @interface CKImageTransformer : NSOperation<CKImageLoaderDelegate> {
 	CKImageLoader* _imageLoader;
 	id<CKImageTransformerDelegate> _delegate;

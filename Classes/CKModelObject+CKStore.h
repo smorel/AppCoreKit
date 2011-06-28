@@ -14,6 +14,9 @@
 
 extern NSMutableDictionary* CKModelObjectManager;
 
+
+/** TODO
+ */
 @interface CKModelObject (CKStoreAddition)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain;

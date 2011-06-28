@@ -10,6 +10,8 @@
 #import "CKTableViewCellController.h"
 
 
+/** TODO
+ */
 @interface CKMultiFloatPropertyCellController: CKTableViewCellController<UITextFieldDelegate> {
 	id _multiFloatValue;
 	NSMutableDictionary* _textFields;

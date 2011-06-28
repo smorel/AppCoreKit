@@ -10,12 +10,18 @@
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 
+
+/** TODO
+ */
 typedef enum{
 	CKNibCellControllerModeNone,
 	CKNibCellControllerModePortrait,
 	CKNibCellControllerModeLandscape
 }CKNibCellControllerMode;
 
+
+/** TODO
+ */
 @interface CKNibCellController : CKTableViewCellController {
 	NSString* _portraitNibName;
 	NSString* _landscapeNibName;

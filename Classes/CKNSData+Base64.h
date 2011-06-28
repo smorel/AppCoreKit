@@ -13,6 +13,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSData (CKNSDataBase64Additions)
 
 + (NSData *)dataWithBase64EncodedString:(NSString *)aString;

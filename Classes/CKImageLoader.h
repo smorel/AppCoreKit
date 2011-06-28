@@ -10,8 +10,13 @@
 #import <UIKit/UIKit.h>
 #import "CKWebRequest2.h"
 
+/** TODO
+ */
 extern NSString * const CKImageLoaderErrorDomain;
 
+
+/** TODO
+ */
 @interface CKImageLoader : NSObject <CKWebRequestDelegate> {
 	id _delegate;
 	CKWebRequest2 *_request;
@@ -31,6 +36,8 @@ extern NSString * const CKImageLoaderErrorDomain;
 
 //
 
+/** TODO
+ */
 @interface CKImageLoader (Deprecated)
 
 @property (nonatomic, assign) CGSize imageSize DEPRECATED_ATTRIBUTE; 
@@ -42,6 +49,8 @@ extern NSString * const CKImageLoaderErrorDomain;
 
 //
 
+/** TODO
+ */
 @protocol CKImageLoaderDelegate
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached;

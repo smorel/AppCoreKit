@@ -11,6 +11,8 @@
 #import "CKItemViewController.h"
 
 
+/** TODO
+ */
 @interface CKObjectViewControllerFactoryItem : NSObject{
 	Class _controllerClass;
 	NSMutableDictionary* _params;
@@ -63,6 +65,10 @@
 
 
 //revoir cette interface et comment elle est utilisee ds les objectTableViewController et Carousel pour qu'ils utilisent directement des CKObjectViewControllerFactoryItem
+
+
+/** TODO
+ */
 @interface CKObjectViewControllerFactory : NSObject {
 	NSMutableArray* _mappings;
 	id _objectController;
@@ -86,6 +92,10 @@
 
 
 //helpers to create CKObjectViewControllerFactoryItem in self
+
+
+/** TODO
+ */
 @interface NSMutableArray (CKObjectViewControllerFactory)
 
 //low level API

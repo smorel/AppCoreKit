@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
+/** TODO
+ */
 @interface CKDictionaryFromAttributesTransformer : NSValueTransformer {
 
 }

@@ -9,11 +9,25 @@
 #import <Foundation/Foundation.h>
 #import "CKObjectProperty.h"
 
+/** TODO
+ */
 extern NSString* CKEditionPropertyChangedNotification;
+
+/** TODO
+ */
 extern NSString* CKEditionObjectAddedNotification;
+
+/** TODO
+ */
 extern NSString* CKEditionObjectRemovedNotification;
+
+/** TODO
+ */
 extern NSString* CKEditionObjectReplacedNotification;
 
+
+/** TODO
+ */
 @interface NSNotificationCenter (CKEdition)
 - (void)notifyPropertyChange:(CKObjectProperty*)property;
 - (void)notifyObjectsAdded:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKDocumentCollection*)collection;
@@ -21,6 +35,9 @@ extern NSString* CKEditionObjectReplacedNotification;
 - (void)notifyObjectReplaced:(id)object byObject:(id)other atIndex:(NSInteger)index inCollection:(CKDocumentCollection*)collection;
 @end
 
+
+/** TODO
+ */
 @interface NSNotification (CKEdition)
 - (CKObjectProperty*)objectProperty;
 - (NSArray*)objects;

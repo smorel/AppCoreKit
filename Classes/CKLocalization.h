@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 #define _(key) NSLocalizedString(key, key)
 
+/** TODO
+ */
 NSString *CKLocalizationCurrentLocalization(void);

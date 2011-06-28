@@ -17,6 +17,9 @@
      faudra enregistrer les enums qu'on veut pouvoir utiliser avec l'introspection en utilisant le helper CKEnumDictionary
  */
 
+
+/** TODO
+ */
 typedef enum{
 	CKViewCornerStyleDefault,//in this case, we set the corner style of the parent controller (table plain or grouped)
 	//in the following case, we force the corner style of the cell and bypass the parent controller style
@@ -26,6 +29,9 @@ typedef enum{
 	CKViewCornerStylePlain
 }CKViewCornerStyle;
 
+
+/** TODO
+ */
 typedef enum{
 	CKViewBorderStyleDefault,
 	CKViewBorderStyleAll,
@@ -33,18 +39,53 @@ typedef enum{
 }CKViewBorderStyle;
 
 
+/** TODO
+ */
 extern NSString* CKStyleBackgroundColor;
+
+/** TODO
+ */
 extern NSString* CKStyleBackgroundGradientColors;
+
+/** TODO
+ */
 extern NSString* CKStyleBackgroundGradientLocations;
+
+/** TODO
+ */
 extern NSString* CKStyleBackgroundImage;
+
+/** TODO
+ */
 extern NSString* CKStyleBackgroundImageContentMode;
+
+/** TODO
+ */
 extern NSString* CKStyleCornerStyle;
+
+/** TODO
+ */
 extern NSString* CKStyleCornerSize;
+
+/** TODO
+ */
 extern NSString* CKStyleAlpha;
+
+/** TODO
+ */
 extern NSString* CKStyleBorderColor;
+
+/** TODO
+ */
 extern NSString* CKStyleBorderWidth;
+
+/** TODO
+ */
 extern NSString* CKStyleBorderStyle;
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKViewStyle)
 
 - (UIColor*)backgroundColor;
@@ -61,6 +102,9 @@ extern NSString* CKStyleBorderStyle;
 
 @end
 
+
+/** TODO
+ */
 @interface UIView (CKStyle) 
 
 - (void)applyStyle:(NSMutableDictionary*)style;
@@ -74,6 +118,9 @@ extern NSString* CKStyleBorderStyle;
 
 @end
 
+
+/** TODO
+ */
 @interface NSObject (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
@@ -81,6 +128,9 @@ extern NSString* CKStyleBorderStyle;
 
 @end
 
+
+/** TODO
+ */
 @protocol CKStyleDelegate
 @optional
 

@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+/** TODO
+ */
 @interface NSManagedObject (CKNSManagedObjectPropertiesAdditions)
 
 - (void)setIdentifier:(NSString *)identifier;
@@ -18,6 +20,8 @@
 
 //
 
+/** TODO
+ */
 @interface NSManagedObjectContext (CKNSManagedObjectContextRequestsAdditions)
 
 - (id)insertNewObjectForEntityForName:(NSString *)entityName;

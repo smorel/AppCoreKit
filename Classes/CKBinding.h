@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 @protocol CKBinding
 - (void)bind;
 - (void)unbind;

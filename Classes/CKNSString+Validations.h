@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSString (CKNSStringValidationsAdditions)
 
 // Returns TRUE if the string is compliant with a specified regex

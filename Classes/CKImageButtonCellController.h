@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CKStandardCellController.h"
 
+
+/** TODO
+ */
 @interface CKImageButtonCellController : CKStandardCellController {
 	UIImage *_highlightedImage;
 }

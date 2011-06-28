@@ -12,6 +12,9 @@
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
+
+/** TODO
+ */
 enum{
 	CKItemViewFlagNone = 1UL << 0,
 	CKItemViewFlagSelectable = 1UL << 1,
@@ -22,6 +25,9 @@ enum{
 };
 typedef NSUInteger CKItemViewFlags;
 
+
+/** TODO
+ */
 @interface CKItemViewController : NSObject {
 	NSString *_name;
 	id _value;

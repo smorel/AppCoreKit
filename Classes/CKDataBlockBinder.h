@@ -11,6 +11,10 @@
 #import "CKWeakRef.h"
 
 typedef void(^CKDataBlockBinderExecutionBlock)(id value);
+
+
+/** TODO
+ */
 @interface CKDataBlockBinder : NSObject<CKBinding> {
 	CKWeakRef* instanceRef;
 	NSString* keyPath;

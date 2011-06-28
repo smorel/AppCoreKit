@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSData (CKNSDataCompression)
 
 - (NSData *)inflatedData;

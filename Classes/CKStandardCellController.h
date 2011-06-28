@@ -10,6 +10,8 @@
 #import "CKTableViewCellController.h"
 #import "CKWebRequest.h"
 
+/** TODO
+ */
 @interface CKStandardCellController : CKTableViewCellController <CKWebRequestDelegate> {
 	UITableViewCellStyle _style;
 	NSString *_text;

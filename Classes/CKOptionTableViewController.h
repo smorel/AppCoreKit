@@ -14,11 +14,16 @@
 
 @class CKOptionTableViewController;
 
+
+/** TODO
+ */
 @protocol CKOptionTableViewControllerDelegate
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index;
 @end
 
 
+/** TODO
+ */
 @interface CKOptionTableViewController : CKFormTableViewController {
 	id _optionTableDelegate;
 	NSArray *_values;

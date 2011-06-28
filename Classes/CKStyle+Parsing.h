@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CKNSValueTransformer+Additions.h"
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKStyleParsing)
 
 - (UIColor*) colorForKey:(NSString*)key;

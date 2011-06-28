@@ -10,6 +10,9 @@
 #import "CKItemViewController.h"
 #import "CKObjectViewControllerFactory.h"
 
+
+/** TODO
+ */
 @interface CKItemViewController (CKStyleManager)
 + (NSString*)identifierForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 + (NSMutableDictionary*)styleForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;

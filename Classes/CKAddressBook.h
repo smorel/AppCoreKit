@@ -13,6 +13,8 @@
 // CKAddressBookPerson
 //
 
+/** TODO
+ */
 @interface CKAddressBookPerson : NSObject {
 	ABRecordRef _record;
 	NSString *_fullName;
@@ -45,6 +47,8 @@
 // CKAddressBook
 //
 
+/** TODO
+ */
 @interface CKAddressBook : NSObject {
 	ABAddressBookRef _addressBook;
 }

@@ -22,6 +22,9 @@ typedef id (^CKWebRequestTransformBlock)(id value);
 
 @protocol  CKWebRequestDelegate;
 
+
+/** TODO
+ */
 @interface CKWebRequest2 : NSOperation {
 	NSMutableURLRequest *theRequest;
 	NSURLConnection *theConnection;
@@ -75,6 +78,8 @@ typedef id (^CKWebRequestTransformBlock)(id value);
 
 //
 
+/** TODO
+ */
 @protocol CKWebRequestDelegate <NSObject> @optional
 - (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber*)progress;
 - (void)requestDidFinishLoading:(id)request;

@@ -11,10 +11,20 @@
 
 // Distance
 
+/** TODO
+ */
 CGFloat CKUnitConvertMetersToMiles(CGFloat meters);
+
+/** TODO
+ */
 CGFloat CKUnitConvertMetersToYards(CGFloat meters);
 
 // Angle
 
+/** TODO
+ */
 CGFloat CKUnitConvertDegreesToRadians(CGFloat degrees);
+
+/** TODO
+ */
 CGFloat CKUnitConvertRadiansToDegrees(CGFloat radians);

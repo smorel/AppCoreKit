@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CKStandardCellController.h"
 
+/** TODO
+ */
 @interface CKTextViewCellController : CKStandardCellController <UITextFieldDelegate, UITextViewDelegate> {
 	id _delegate;
 	NSString *_placeholder;
@@ -31,6 +33,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKTextViewCellControllerDelegate
 
 @optional

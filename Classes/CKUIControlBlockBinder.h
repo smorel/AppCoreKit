@@ -12,7 +12,8 @@
 
 typedef void(^CKUIControlBlock)();
 
-
+/** TODO
+ */
 @interface CKUIControlBlockBinder : NSObject<CKBinding>{
 	UIControlEvents controlEvents;
 	

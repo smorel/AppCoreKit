@@ -9,21 +9,33 @@
 #import <Foundation/Foundation.h>
 #import "CKMultiFloatPropertyCellController.h"
 
+
+/** TODO
+ */
 @interface CKCGSizePropertyCellController: CKMultiFloatPropertyCellController {	
 }
 
 @end
 
+
+/** TODO
+ */
 @interface CKCGPointPropertyCellController: CKMultiFloatPropertyCellController {
 }
 
 @end
 
+
+/** TODO
+ */
 @interface CKCGRectPropertyCellController: CKMultiFloatPropertyCellController {
 }
 
 @end
 
+
+/** TODO
+ */
 @interface CKCLLocationCoordinate2DPropertyCellController: CKMultiFloatPropertyCellController {
 }
 

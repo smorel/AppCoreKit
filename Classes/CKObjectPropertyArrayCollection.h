@@ -11,6 +11,8 @@
 #import "CKObjectProperty.h"
 
 
+/** TODO
+ */
 @interface CKObjectPropertyArrayCollection : CKDocumentCollection {
 	CKObjectProperty* _property;
 }

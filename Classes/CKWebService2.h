@@ -11,6 +11,9 @@
 
 @class Reachability;
 
+
+/** TODO
+ */
 @interface CKWebService2 : NSObject {
 	Reachability *_reachability;
 	NSURL *_baseURL;

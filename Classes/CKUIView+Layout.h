@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 @interface UIView (CKUIViewLayoutAdditions)
 
 - (void)layoutSubviewsWithColumns:(NSUInteger)nbColumns lines:(NSUInteger)nbLines;

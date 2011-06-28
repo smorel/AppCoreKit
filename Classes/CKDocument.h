@@ -10,6 +10,8 @@
 #import "CKDocumentArray.h"
 
 
+/** TODO
+ */
 @interface CKDocument : NSObject {
 	NSMutableDictionary* _objects;
 //	NSMutableDictionary* _retainCounts;

@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 @interface CKCreditsFooterView : UIView {
 }
 

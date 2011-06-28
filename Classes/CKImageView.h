@@ -23,6 +23,9 @@
 
 @class CKImageView;
 
+
+/** TODO
+ */
 @protocol CKImageViewDelegate
 
 - (void)imageView:(CKImageView *)imageView didLoadImage:(UIImage *)image cached:(BOOL)cached;
@@ -32,6 +35,8 @@
 
 //
 
+/** TODO
+ */
 typedef enum {
 	CKImageViewStateNone,
 	CKImageViewStateSpinner,
@@ -39,6 +44,8 @@ typedef enum {
 	CKImageViewStateImage
 }CKImageViewState;
 
+/** TODO
+ */
 typedef enum{
 	CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
     CKImageViewSpinnerStyleWhite = UIActivityIndicatorViewStyleWhite,
@@ -46,6 +53,9 @@ typedef enum{
 	CKImageViewSpinnerStyleNone
 }CKImageViewSpinnerStyle;
 
+
+/** TODO
+ */
 @interface CKImageView : UIView <CKImageLoaderDelegate> {
 	//Image Management
 	CKImageLoader *_imageLoader;

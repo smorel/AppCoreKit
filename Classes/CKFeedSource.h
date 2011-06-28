@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface CKFeedSource : NSObject {
 	id _delegate;
 	BOOL _hasMore;
@@ -27,6 +29,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKFeedSourceDelegate
 @optional
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range;

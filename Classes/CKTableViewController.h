@@ -17,6 +17,9 @@
 // In -viewDidAppear:, it flashes the table's scroll indicators.
 // Implements -setEditing:animated: to toggle the editing state of the table.
 
+
+/** TODO
+ */
 @interface CKTableViewController : CKItemViewContainerController <UITableViewDataSource, UITableViewDelegate> {
 	UIView *_backgroundView;
 	UIView *_tableViewContainer;

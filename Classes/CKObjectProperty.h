@@ -14,6 +14,8 @@
 #import "CKDocumentCollection.h"
 
 
+/** TODO
+ */
 @interface CKObjectProperty : NSObject {
 }
 @property (nonatomic,retain) id object;

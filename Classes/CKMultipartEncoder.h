@@ -21,6 +21,9 @@
 // [multipart addFileWithData:UIImagePNGRepresentation([UIImage imageNamed:@"image.png"]) forName:@"image" fileName:@"image.png" contentType:@"image/png"];
 // NSData *data = [multipart finalizedData];
 
+
+/** TODO
+ */
 @interface CKMultipartEncoder : NSObject {
 	NSString *_contentType;
 	NSString *_boundary;

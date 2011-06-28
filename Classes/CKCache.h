@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 @interface CKCache : NSObject {
 	NSMutableDictionary *_cachedObjects;
 }

@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 @interface CKLayoutBlock : NSObject {
 	NSString *_name;
 	CGRect _rect;
@@ -23,11 +26,16 @@
 
 //
 
+/** TODO
+ */
 typedef enum {
 	CKLayoutAlignmentNone = 0,
 	CKLayoutAlignmentJustify
 } CKLayoutAlignment;
 
+
+/** TODO
+ */
 @interface CKLayout : NSObject {
 	// No properties.
 }

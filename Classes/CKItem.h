@@ -11,6 +11,9 @@
 @class CKDomain;
 @class CKAttribute;
 
+
+/** TODO
+ */
 @interface CKItem : NSManagedObject {
 }
 
@@ -28,6 +31,8 @@
 
 //
 
+/** TODO
+ */
 @interface CKItem (CKItemAccessors)
 
 - (void)addAttributesObject:(CKAttribute *)value;
@@ -48,6 +53,8 @@
 
 //
 
+/** TODO
+ */
 @interface CKItem (CKItemRepresentations)
 
 - (NSDictionary *)propertyListRepresentation;
@@ -57,6 +64,8 @@
 @end
 
 
+/** TODO
+ */
 @interface CKItem (CKItemModification)
 
 - (void)updateAttributes:(NSDictionary*)attributes;
@@ -64,6 +73,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKItem (CKOptimizedItemModification)
 
 - (void)updateAttribute:(CKAttribute*)attribute withValue:(NSString*)value;

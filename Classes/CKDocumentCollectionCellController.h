@@ -25,6 +25,9 @@
 @end
 */
 
+
+/** TODO
+ */
 @interface CKDocumentCollectionViewCellController : CKTableViewCellController {
 	UILabel* _label;
 	UIActivityIndicatorView* _activityIndicator;

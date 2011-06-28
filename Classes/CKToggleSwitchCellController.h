@@ -9,11 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "CKStandardCellController.h"
 
+/** TODO
+ */
 typedef enum {
 	CKToggleSwitchCellStyleSwitch = 0,
 	CKToggleSwitchCellStyleCheckmark
 } CKToggleSwitchCellStyle;
 
+
+/** TODO
+ */
 @interface CKToggleSwitchCellController : CKStandardCellController {
 	CKToggleSwitchCellStyle _switchCellStyle;
 	BOOL _enabled;
