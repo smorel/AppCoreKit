@@ -23,9 +23,9 @@
 /* Begin PBXBuildFile section */
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
-		7506E41113B9028A00EE1471 /* CloudKit.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
-		7506E41313B902C300EE1471 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
+		75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
+		75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1905,8 +1905,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
-				7506E41113B9028A00EE1471 /* CloudKit.xcdatamodeld in Resources */,
-				7506E41313B902C300EE1471 /* CloudKit.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2121,6 +2119,8 @@
 				7560DE3E13B8EFDC00268D13 /* ASIInputStream.m in Sources */,
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
+				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
+				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
