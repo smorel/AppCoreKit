@@ -10,14 +10,24 @@
 #import "CKCallback.h"
 
 /** Weak reference with dealloc callback mechanism.
-    A CKWeakRef allow to reference objects in a weak way and setup a callback that will get called when the traget object is deallocated.
-*/
+  * A CKWeakRef allow to reference objects in a weak way and setup a callback that will get called when the target object is deallocated.
+  *
+  *         CKWeakRef* ref = [CKWeakRef weakRefWithObject:theObject block:^(id object){
+  *             //Do something when theObject is deallocated
+  *         }];
+  */
 @interface CKWeakRef : NSObject {
 	id _object;
 	CKCallback* _callback;
 }
 
+/** property test
+ */
 @property(nonatomic,assign)id object;
+
+///-----------------------------------
+/// @name Creating and Initializing WeakRefs
+///-----------------------------------
 
 /** test
  */
@@ -35,3 +45,4 @@
 + (CKWeakRef*)weakRefWithObject:(id)object target:(id)target action:(SEL)action;
 
 @end
+
