@@ -10,7 +10,7 @@
 #import "CKCallback.h"
 
 /** 
- Weak reference with dealloc callback mechanism. A CKWeakRef allow to reference an object without retaining it. You can optionally register a CKCallback to execute some code when the object is deallocated. When the object is deallocated, the object property of the CKWeakRef is set to nil. By this way, you can safelly call [myRef object] with no crash.
+ Weak reference with dealloc callback mechanism. A [weak ref](CKWeakRef) allow to reference an object without retaining it. You can optionally register a [callback](CKCallback) to execute some code when the object is deallocated. When the object is deallocated, the object property of the [weak ref](CKWeakRef) is set to nil. By this way, you can safelly call [myRef object] with no crash.
  
         CKWeakRef* ref = [CKWeakRef weakRefWithObject:theObject block:^(id object){
             //Do something when theObject is deallocated
