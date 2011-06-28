@@ -438,6 +438,7 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
+		7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1023,16 +1024,8 @@
 		7506E3F813B8FD1300EE1471 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */,
-				7560DB9013B8ED3600268D13 /* CKMKMapView+Introspection.m */,
-				7560DC3813B8ED3600268D13 /* CKUITableView+Introspection.h */,
-				7560DC3913B8ED3600268D13 /* CKUITableView+Introspection.m */,
-				7560DC3A13B8ED3600268D13 /* CKUITableViewCell+Introspection.h */,
-				7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */,
-				7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */,
-				7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */,
-				7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */,
-				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
+				759CB89713BA639F006261B1 /* UIKit */,
+				759CB89513BA6391006261B1 /* MapKit */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1654,6 +1647,30 @@
 			name = ASIHTTPRequest;
 			sourceTree = "<group>";
 		};
+		759CB89513BA6391006261B1 /* MapKit */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */,
+				7560DB9013B8ED3600268D13 /* CKMKMapView+Introspection.m */,
+			);
+			name = MapKit;
+			sourceTree = "<group>";
+		};
+		759CB89713BA639F006261B1 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC3813B8ED3600268D13 /* CKUITableView+Introspection.h */,
+				7560DC3913B8ED3600268D13 /* CKUITableView+Introspection.m */,
+				7560DC3A13B8ED3600268D13 /* CKUITableViewCell+Introspection.h */,
+				7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */,
+				7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */,
+				7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */,
+				7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */,
+				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1917,6 +1934,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
+				7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1934,7 +1952,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n\n# Build Framework\n\nrm -rf \"${UFW_UNIVERSAL_DIR}\"\n\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphoneos${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphonesimulator${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\n\nif [ ! -f \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" ]; then\necho \"Framework target \\\"${UFW_TARGET}\\\" had no source files to build from. Make sure your source files have the correct target membership\"\nexit 1\nfi\n\nmkdir -p \"${UFW_UNIVERSAL_DIR}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: mkdir failed\"; exit 1; fi\n\ncp -a \"${UFW_IPHONE_DIR}/${UFW_FMWK_DIRNAME}\" \"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: cp failed\"; exit 1; fi\n\nlipo -create -output \"${UFW_UNIVERSAL_DIR}/${UFW_EXE_PATH}\" \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" \"${UFW_SIMULATOR_DIR}/${UFW_EXE_PATH}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: lipo failed\"; exit 1; fi\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.CloudKit.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
+			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n\n# Build Framework\n\nrm -rf \"${UFW_UNIVERSAL_DIR}\"\n\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphoneos${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphonesimulator${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\n\nif [ ! -f \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" ]; then\necho \"Framework target \\\"${UFW_TARGET}\\\" had no source files to build from. Make sure your source files have the correct target membership\"\nexit 1\nfi\n\nmkdir -p \"${UFW_UNIVERSAL_DIR}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: mkdir failed\"; exit 1; fi\n\ncp -a \"${UFW_IPHONE_DIR}/${UFW_FMWK_DIRNAME}\" \"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: cp failed\"; exit 1; fi\n\nlipo -create -output \"${UFW_UNIVERSAL_DIR}/${UFW_EXE_PATH}\" \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" \"${UFW_SIMULATOR_DIR}/${UFW_EXE_PATH}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: lipo failed\"; exit 1; fi\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1947,7 +1965,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.CloudKit.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
+			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
