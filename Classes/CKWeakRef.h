@@ -9,13 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CKCallback.h"
 
-/*!
- @class CKWeakRef
- @abstract Weak reference with dealloc callback mechanism.
- @discussion A CKWeakRef allow to reference objects in a weak way and setup a callback that will get called when the traget object is deallocated.
- @namespace Wherecloud
- @updated 2011-06-28
- */
+/** Weak reference with dealloc callback mechanism.
+    A CKWeakRef allow to reference objects in a weak way and setup a callback that will get called when the traget object is deallocated.
+*/
 @interface CKWeakRef : NSObject {
 	id _object;
 	CKCallback* _callback;
@@ -23,7 +19,12 @@
 
 @property(nonatomic,assign)id object;
 
+/** test
+ */
 - (id)initWithObject:(id)object;
+
+/** tests2
+ */
 - (id)initWithObject:(id)object callback:(CKCallback*)callback;
 - (id)initWithObject:(id)object block:(void (^)(id object))block;
 - (id)initWithObject:(id)object target:(id)target action:(SEL)action;
