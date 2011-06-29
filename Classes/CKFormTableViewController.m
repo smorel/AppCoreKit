@@ -340,8 +340,8 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if(collection.count <= 0){
-		_hidden = YES;
+	if(_parentController.autoHideSections && (collection.count <= 0)) {
+		self.hidden = YES;
 	}
 	
 	sectionUpdate = NO;
@@ -351,7 +351,6 @@
 	
 	return self;
 }
-
 
 - (void)start{
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
@@ -659,6 +658,7 @@
 
 @implementation CKFormTableViewController
 @synthesize sections = _sections;
+@synthesize autoHideSections = _autoHideSections;
 @synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
 
@@ -667,6 +667,7 @@
 	self.objectController = [[[CKFormObjectController alloc]initWithParentController:self]autorelease];
 	self.controllerFactory = [[[CKFormObjectControllerFactory alloc]init]autorelease];
 	self.sections = [NSMutableArray array];
+	_autoHideSections = NO;
 	_autoHideSectionHeaders = NO;
 }
 
@@ -680,7 +681,7 @@
 	self.reloading = YES;
 	for(CKFormSectionBase* section in _sections){
 		[section start];
-		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
 	 }
