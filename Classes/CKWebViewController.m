@@ -80,18 +80,16 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-
-	self.view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
-
+    
 	// Set up the WebView
 	_webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
-	_webView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+	_webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_webView.scalesPageToFit = YES;
 	_webView.delegate = self;
-	self.view.backgroundColor = [UIColor blackColor];
 	[self.view addSubview:_webView];
-	
+    
 	self.webViewToolbar = [[[UIToolbar alloc] init] autorelease];
+    self.webViewToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:_webViewToolbar];
 	
 	// Load the URL
@@ -128,15 +126,13 @@
 	[self.navigationController setToolbarHidden:YES animated:NO];
 	
 	// Setup the custom toolbar
-	self.webViewToolbar.frame = CGRectMake(0, self.view.bounds.size.height-44, self.view.bounds.size.width, 44);
+	self.webViewToolbar.frame = CGRectMake(0, self.view.bounds.size.height - 44, self.view.bounds.size.width, 44);
 	[self updateToolbar];
 	[self.webViewToolbar setItems:_toolbarButtonsStatic animated:animated];
 	
 	// Display the toolbar
 	self.webViewToolbar.hidden = self.hidesToolbar;
-	
-	_webView.frame = self.hidesToolbar ? self.view.bounds : CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44);
-	
+	_webView.frame = self.hidesToolbar ? self.view.bounds : CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - 44);
 	_webView.hidden = YES;
 }
 
