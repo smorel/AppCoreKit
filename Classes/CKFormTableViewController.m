@@ -47,7 +47,7 @@
 
 - (NSString*)headerTitleForSection:(NSInteger)section{
 	NSInteger sectionCount = [self numberOfSections];
-	if(sectionCount <= 1)
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
 		return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
@@ -56,7 +56,7 @@
 
 - (UIView*)headerViewForSection:(NSInteger)section{
 	NSInteger sectionCount = [self numberOfSections];
-	if(sectionCount <= 1)
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
@@ -659,6 +659,7 @@
 
 @implementation CKFormTableViewController
 @synthesize sections = _sections;
+@synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
 
 - (void)postInit{
@@ -666,6 +667,7 @@
 	self.objectController = [[[CKFormObjectController alloc]initWithParentController:self]autorelease];
 	self.controllerFactory = [[[CKFormObjectControllerFactory alloc]init]autorelease];
 	self.sections = [NSMutableArray array];
+	_autoHideSectionHeaders = NO;
 }
 
 - (void)dealloc{
