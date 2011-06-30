@@ -5,15 +5,22 @@
 //  Created by Sebastien Morel on 11-02-08.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
+
+#import <Foundation/Foundation.h>
 #import "CKImageLoader.h"
 
 @class CKImageTransformer;
 
+/** TODO
+ */
 @protocol CKImageTransformerDelegate
 -(void)imageTransformer:(CKImageTransformer*)transformer didTransformImage:(UIImage*)image cached:(BOOL)cached;
 -(void)imageTransformer:(CKImageTransformer*)transformer didFailWithError:(NSError *)error;
 @end
 
+
+/** TODO
+ */
 @interface CKImageTransformer : NSOperation<CKImageLoaderDelegate> {
 	CKImageLoader* _imageLoader;
 	id<CKImageTransformerDelegate> _delegate;

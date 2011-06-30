@@ -6,12 +6,16 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKItemViewController.h"
 #import "CKManagedTableViewController.h"
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 
+
+/** TODO
+ */
 enum{
 	CKTableViewCellFlagNone = CKItemViewFlagNone,
 	CKTableViewCellFlagSelectable = CKItemViewFlagSelectable,
@@ -23,6 +27,8 @@ enum{
 typedef NSUInteger CKTableViewCellFlags;
 
 
+/** TODO
+ */
 typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
     CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
@@ -31,6 +37,9 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyleValue3
 } CKTableViewCellStyle;             
 
+
+/** TODO
+ */
 @interface CKTableViewCellController : CKItemViewController {
 	UITableViewCellAccessoryType _accessoryType;
 	CKTableViewCellStyle _cellStyle;

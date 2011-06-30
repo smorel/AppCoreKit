@@ -10,18 +10,39 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+
+/** TODO
+ */
 #define kLocationManagerDidFindCoordinateNotification @"kLocationManagerDidFindCoordinateNotification"
+
+/** TODO
+ */
 #define kLocationManagerDidFindAddressNotification @"kLocationManagerDidFindAddressNotification"
+
+/** TODO
+ */
 #define kLocationManagerDidFailCoordinateNotification @"kLocationManagerDidFailCoordinateNotification"
+
+/** TODO
+ */
 #define kLocationManagerDidFailAddressNotification @"kLocationManagerDidFailAddressNotification"
 
+
+/** TODO
+ */
 typedef enum {
 	ErrorTypeTimeOut = 101,
 	ErrorTypeInvalidLocation
 } CKLocationManagerErrorType;
 
+
+/** TODO
+ */
 static NSString *const CKLocationManagerErrorDomain = @"CKLocationManagerErrorDomain";
 
+
+/** TODO
+ */
 @interface CKLocationManager : NSObject <CLLocationManagerDelegate, MKReverseGeocoderDelegate> {
 	CLLocationManager *_locationManager;
 	MKReverseGeocoder *_reverseGeocoder;

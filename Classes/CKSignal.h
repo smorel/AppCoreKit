@@ -6,6 +6,11 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
+
+/** TODO
+ */
 @interface CKSlot : NSObject{
 	id instance;
 	SEL selector;
@@ -24,6 +29,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKSignal : NSObject {
 	NSMethodSignature* methodSignature;
 	NSMutableArray* slotArray;

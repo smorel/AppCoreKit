@@ -9,6 +9,8 @@
 #import <CoreData/CoreData.h>
 #import "CKNSManagedObjectContext+Requests.h"
 
+/** TODO
+ */
 @interface CKCoreDataManager : NSObject {
 	NSURL *_storeURL;
 	NSString *_storeType;

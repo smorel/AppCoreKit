@@ -7,14 +7,14 @@
 //
 
 #import "CKObjectTableViewController.h"
-#import <CloudKit/CKNSDateAdditions.h>
+#import "CKNSDateAdditions.h"
 #import <objc/runtime.h>
-#import <CloudKit/CKUIKeyboardInformation.h>
+#import "CKUIKeyboardInformation.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKVersion.h"
 #import "CKDocumentController.h"
-#import "CKTableViewCellController+StyleManager.h"
-#import <CloudKit/CKNSObject+bindings.h>
+#import "CKItemViewController+StyleManager.h"
+#import "CKNSObject+bindings.h"
 
 //
 

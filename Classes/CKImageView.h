@@ -6,6 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKImageLoader.h"
 #import "CKSignal.h"
@@ -22,6 +23,9 @@
 
 @class CKImageView;
 
+
+/** TODO
+ */
 @protocol CKImageViewDelegate
 
 - (void)imageView:(CKImageView *)imageView didLoadImage:(UIImage *)image cached:(BOOL)cached;
@@ -31,6 +35,8 @@
 
 //
 
+/** TODO
+ */
 typedef enum {
 	CKImageViewStateNone,
 	CKImageViewStateSpinner,
@@ -38,6 +44,8 @@ typedef enum {
 	CKImageViewStateImage
 }CKImageViewState;
 
+/** TODO
+ */
 typedef enum{
 	CKImageViewSpinnerStyleWhiteLarge = UIActivityIndicatorViewStyleWhiteLarge,
     CKImageViewSpinnerStyleWhite = UIActivityIndicatorViewStyleWhite,
@@ -45,6 +53,9 @@ typedef enum{
 	CKImageViewSpinnerStyleNone
 }CKImageViewSpinnerStyle;
 
+
+/** TODO
+ */
 @interface CKImageView : UIView <CKImageLoaderDelegate> {
 	//Image Management
 	CKImageLoader *_imageLoader;

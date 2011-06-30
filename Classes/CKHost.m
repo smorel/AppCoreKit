@@ -9,6 +9,7 @@
  *  http://blog.zachwaugh.com/post/309927273/programmatically-retrieving-ip-address-of-iphone
  */
 
+#import <Foundation/Foundation.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 

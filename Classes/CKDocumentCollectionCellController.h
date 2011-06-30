@@ -6,7 +6,8 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CKStandardCellController.h>
+#import <Foundation/Foundation.h>
+#import "CKStandardCellController.h"
 
 //SEB TODO adds accessors in dictionary helper with special keys
 /*
@@ -24,6 +25,9 @@
 @end
 */
 
+
+/** TODO
+ */
 @interface CKDocumentCollectionViewCellController : CKTableViewCellController {
 	UILabel* _label;
 	UIActivityIndicatorView* _activityIndicator;

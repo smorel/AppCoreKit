@@ -6,10 +6,14 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 #import "CKImageView.h"
 
+
+/** TODO
+ */
 @interface CKSlideshowViewController : UIViewController {
 	id _delegate;
 	NSArray *imagesPaths; // Contains the paths to the images
@@ -42,6 +46,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKSlideshowViewControllerDelegate
 
 - (NSUInteger)numberOfImagesInSlideshowView:(CKSlideshowViewController *)slideshowController;

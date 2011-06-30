@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKItemViewContainerController.h"
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
@@ -13,6 +14,9 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
 
+
+/** TODO
+ */
 @interface CKObjectCarouselViewController : CKItemViewContainerController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
 	CKCarouselView* _carouselView;
 	

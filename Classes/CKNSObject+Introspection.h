@@ -27,12 +27,15 @@
  The property is eligible for garbage collection.
  */
 
+#import <Foundation/Foundation.h>
 #import "CKClassPropertyDescriptor.h"
 
 
 typedef BOOL(^CKObjectPredicate)(id);
 
 
+/** TODO
+ */
 @interface NSObject (CKNSObjectIntrospection)
 
 - (NSString*)className;
@@ -73,6 +76,8 @@ typedef BOOL(^CKObjectPredicate)(id);
 
 @end
 
+/** TODO
+ */
 @interface NSObject (CKNSObjectDebugStack)
 + (NSString*)callStack;
 + (void)logCallStack;

@@ -6,11 +6,15 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
+
+/** TODO
+ */
 enum{
 	CKItemViewFlagNone = 1UL << 0,
 	CKItemViewFlagSelectable = 1UL << 1,
@@ -21,6 +25,9 @@ enum{
 };
 typedef NSUInteger CKItemViewFlags;
 
+
+/** TODO
+ */
 @interface CKItemViewController : NSObject {
 	NSString *_name;
 	id _value;

@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKObjectTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKModelObject.h"
@@ -13,6 +14,10 @@
 #import "CKDocumentController.h"
 
 @class CKFormTableViewController;
+
+
+/** TODO
+ */
 @interface CKFormSectionBase : CKModelObject
 {
 	NSString* _headerTitle;
@@ -47,6 +52,10 @@
 
 
 @class CKFormCellDescriptor;
+
+
+/** TODO
+ */
 @interface CKFormSection : CKFormSectionBase{
 	
 	NSMutableArray* _cellDescriptors;
@@ -71,6 +80,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
 	CKDocumentController* _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
@@ -99,6 +111,10 @@
 @end
 
 typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
+
+
+/** TODO
+ */
 @interface CKFormCellDescriptor : CKObjectViewControllerFactoryItem{
 	id _value;
 }
@@ -110,6 +126,9 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 @end
 
+
+/** TODO
+ */
 @interface CKFormTableViewController : CKObjectTableViewController {
 	NSMutableArray* _sections;
 	BOOL _autoHideSections;

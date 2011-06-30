@@ -6,11 +6,15 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKBinding.h"
 #import "CKWeakRef.h"
 
 typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 
+
+/** TODO
+ */
 @interface CKNotificationBlockBinder : NSObject<CKBinding> {
 	CKWeakRef* instanceRef;
 	NSString* notificationName;

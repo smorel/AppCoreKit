@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
+/** TODO
+ */
 typedef enum{
 	CKClassPropertyDescriptorTypeChar,
 	CKClassPropertyDescriptorTypeInt,
@@ -32,6 +34,9 @@ typedef enum{
 	CKClassPropertyDescriptorTypeUnknown
 }CKClassPropertyDescriptorType;
 
+
+/** TODO
+ */
 typedef enum{
 	CKClassPropertyDescriptorAssignementTypeCopy,
 	CKClassPropertyDescriptorAssignementTypeRetain,
@@ -39,6 +44,9 @@ typedef enum{
 	CKClassPropertyDescriptorAssignementTypeAssign
 }CKClassPropertyDescriptorAssignementType;
 
+
+/** TODO
+ */
 @interface CKClassPropertyDescriptor : NSObject{
 	NSString* name;
 	NSString* className;
@@ -81,6 +89,8 @@ typedef enum{
 @end
 
 
+/** TODO
+ */
 @interface CKClassPropertyDescriptorManager : NSObject{
 	NSMutableDictionary* _propertiesByClassName;
 	NSMutableDictionary* _viewPropertiesByClassName;

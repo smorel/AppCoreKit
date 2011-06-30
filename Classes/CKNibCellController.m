@@ -7,7 +7,7 @@
 //
 
 #import "CKNibCellController.h"
-#import <CloudKit/CKImageView.h>
+#import "CKImageView.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectTableViewController.h"
 #import <QuartzCore/QuartzCore.h>

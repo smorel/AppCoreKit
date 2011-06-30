@@ -6,10 +6,14 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 //
 
+
+/** TODO
+ */
 @interface CKSlotViewCell : UIView
 
 - (void)prepareForReuse;
@@ -20,6 +24,9 @@
 
 @class CKSlotView;
 
+
+/** TODO
+ */
 @protocol CKSlotViewDelegate
 
 @required
@@ -44,6 +51,9 @@
 
 //
 
+
+/** TODO
+ */
 @interface CKSlotView : UIView <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate> {
 	CGRect _originFrame;
 	UITableView	*_tableView;

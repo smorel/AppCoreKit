@@ -5,6 +5,7 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 
@@ -12,6 +13,8 @@
 // CKAddressBookPerson
 //
 
+/** TODO
+ */
 @interface CKAddressBookPerson : NSObject {
 	ABRecordRef _record;
 	NSString *_fullName;
@@ -44,6 +47,8 @@
 // CKAddressBook
 //
 
+/** TODO
+ */
 @interface CKAddressBook : NSObject {
 	ABAddressBookRef _addressBook;
 }

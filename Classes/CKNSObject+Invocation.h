@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSObject (CKNSObjectInvocation)
 
 - (void)performSelector:(SEL)selector withObjects:(NSArray*)objects;

@@ -8,7 +8,7 @@
 
 #import "CKTextViewCellController.h"
 #import "CKTextView.h"
-#import <CloudKit/CKConstants.h>
+#import "CKConstants.h"
 
 #define kTextViewTag 10001
 

@@ -10,7 +10,7 @@
 #import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
-#import <CloudKit/CKNSObject+Bindings.h>
+#import "CKNSObject+Bindings.h"
 
 @interface CKItemViewController()
 @property (nonatomic, retain) CKWeakRef *viewRef;

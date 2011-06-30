@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface CKBundle : NSObject
 
 + (UIImage *)imageForName:(NSString *)name;

@@ -6,9 +6,13 @@
 //  Copyright Wherecloud 2011. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKTableViewController.h"
 #import "CKTableViewCellController.h"
 
+
+/** TODO
+ */
 @interface CKObjectTableViewController : CKTableViewController<UISearchBarDelegate> {
 	CKTableViewOrientation _orientation;
 	BOOL _resizeOnKeyboardNotification;
@@ -77,6 +81,8 @@
 @end
 
 
+/** TODO
+ */
 @protocol CKObjectTableViewControllerDelegate
 @optional
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;

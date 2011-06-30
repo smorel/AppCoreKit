@@ -6,10 +6,14 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKModelObject.h"
 #import "CKFeedSource.h"
 #import "CKDocumentStorage.h"
 
+
+/** TODO
+ */
 @interface CKDocumentCollection : CKModelObject<CKFeedSourceDelegate> {
 	CKFeedSource* _feedSource;
 	id _storage;//<CKDocumentStorage>
@@ -48,6 +52,9 @@
 
 @end
 
+
+/** TODO
+ */
 @protocol CKDocumentCollectionDelegate
 @optional
 - (void)documentCollection:(CKDocumentCollection *)collection didFetchItems:(NSArray *)items atRange:(NSRange)range;

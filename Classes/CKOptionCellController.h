@@ -11,6 +11,8 @@
 #import "CKOptionTableViewController.h"
 
 
+/** TODO
+ */
 @interface CKOptionCellController : CKStandardCellController <CKOptionTableViewControllerDelegate> {
 	NSArray *_values;
 	NSArray *_labels;

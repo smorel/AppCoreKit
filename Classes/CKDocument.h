@@ -6,9 +6,12 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKDocumentArray.h"
 
 
+/** TODO
+ */
 @interface CKDocument : NSObject {
 	NSMutableDictionary* _objects;
 //	NSMutableDictionary* _retainCounts;

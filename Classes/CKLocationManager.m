@@ -7,7 +7,7 @@
 //
 
 #import "CKLocationManager.h"
-#import <CloudKit/CKDebug.h>
+#import "CKDebug.h"
 
 #define K_LOCATION_VALID_TIME_THRESHOLD    60*3
 #define K_LOCATION_ACCURACY_THRESHOLD      1000

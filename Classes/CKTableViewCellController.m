@@ -12,7 +12,7 @@
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
-#import <CloudKit/CKNSObject+Bindings.h>
+#import "CKNSObject+Bindings.h"
 
 #ifdef DEBUG 
 #import "CKPropertyGridEditorController.h"

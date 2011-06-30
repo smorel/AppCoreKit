@@ -11,6 +11,8 @@
 #import "CKNSString+Validations.h"
 #import "CKNSString+Parsing.h"
 
+/** TODO
+ */
 @interface NSString (CKNSStringAdditions)
 
 // Returns a new string containing an UUID

@@ -6,8 +6,12 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 @protocol CKObjectController 
 @optional
 
@@ -40,6 +44,8 @@
 @end
 
 
+/** TODO
+ */
 @protocol CKObjectControllerDelegate
 
 - (void)objectControllerReloadData:(id)controller;

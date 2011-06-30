@@ -7,13 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
+
+/** TODO
+ */
 extern NSString * const CKLocationManagerUserDeniedNotification;
+
+/** TODO
+ */
 extern NSString * const CKLocationManagerServiceDidDisableNotification;
 
 @class CKLocationManager2;
 
+
+/** TODO
+ */
 @protocol CKLocationManagerDelegate <NSObject>
 @optional
 - (void)locationManager:(CKLocationManager2 *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation;
@@ -23,6 +33,8 @@ extern NSString * const CKLocationManagerServiceDidDisableNotification;
 
 //
 
+/** TODO
+ */
 @interface CKLocationManager2 : NSObject <CLLocationManagerDelegate, UIAlertViewDelegate> {
 	NSMutableSet *_delegates;
 	CLLocationManager *_locationManager;

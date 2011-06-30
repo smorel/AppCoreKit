@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSObject (CKNSObjectNotifications)
 
 - (void)observeNotificationName:(NSString *)name selector:(SEL)selector;

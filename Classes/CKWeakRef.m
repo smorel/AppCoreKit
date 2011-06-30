@@ -106,19 +106,28 @@ static char NSObjectWeakRefObjectKey;
 
 //CKWeakRef
 
+static BOOL swizzlingDone = NO;
+
 @implementation CKWeakRef
 @synthesize object = _object;
 @synthesize callback = _callback;
 
++ (void)executeSwizzling{
+    if(!swizzlingDone){
+        Method origMethod = class_getInstanceMethod([NSObject class], @selector(dealloc));
+        Method newMethod = class_getInstanceMethod([NSObject class], @selector(weakRef_dealloc));
+        if (class_addMethod([NSObject class], @selector(dealloc), method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+            class_replaceMethod([NSObject class], @selector(weakRef_dealloc), method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+        }
+        else {
+            method_exchangeImplementations(origMethod, newMethod);
+        }
+        swizzlingDone = YES;
+    }
+}
+
 + (void)load{
-	Method origMethod = class_getInstanceMethod([NSObject class], @selector(dealloc));
-	Method newMethod = class_getInstanceMethod([NSObject class], @selector(weakRef_dealloc));
-	if (class_addMethod([NSObject class], @selector(dealloc), method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
-		class_replaceMethod([NSObject class], @selector(weakRef_dealloc), method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
-	}
-	else {
-		method_exchangeImplementations(origMethod, newMethod);
-	}
+	[self executeSwizzling];
 }
 
 - (void)dealloc{
@@ -146,6 +155,7 @@ static char NSObjectWeakRefObjectKey;
 }
 
 - (id)initWithObject:(id)theObject{
+	[[self class] executeSwizzling];
 	[super init];
 	self.object = theObject;
 	[self setupAssociatedObject];
@@ -153,6 +163,7 @@ static char NSObjectWeakRefObjectKey;
 }
 
 - (id)initWithObject:(id)theObject callback:(CKCallback*)callback{
+	[[self class] executeSwizzling];
 	[super init];
 	self.object = theObject;
 	self.callback = callback;

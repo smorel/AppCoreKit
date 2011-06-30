@@ -6,10 +6,13 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKObjectController.h"
 #import "CKDocumentCollection.h"
 
 
+/** TODO
+ */
 @interface CKDocumentController : NSObject<CKObjectController> {
 	CKDocumentCollection* _collection;
 	id _delegate;

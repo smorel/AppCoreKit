@@ -6,9 +6,12 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 @interface CKOverlayView : UIView {
 	UIView *_contentView;
 	UILabel *_textLabel;

@@ -13,6 +13,8 @@
 #import "CKDebug.h"
 #import "CKDocumentCollection.h"
 
+//nothing
+
 static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
 
 @implementation CKModelObjectPropertyMetaData

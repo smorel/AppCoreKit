@@ -6,8 +6,11 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CKStandardCellController.h>
+#import <Foundation/Foundation.h>
+#import "CKStandardCellController.h"
 
+/** TODO
+ */
 @interface CKTextViewCellController : CKStandardCellController <UITextFieldDelegate, UITextViewDelegate> {
 	id _delegate;
 	NSString *_placeholder;
@@ -30,6 +33,8 @@
 
 //
 
+/** TODO
+ */
 @protocol CKTextViewCellControllerDelegate
 
 @optional

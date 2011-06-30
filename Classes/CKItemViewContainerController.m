@@ -8,8 +8,8 @@
 
 #import "CKItemViewContainerController.h"
 
-#import <CloudKit/CKWeakRef.h>
-#import "CKTableViewCellController+StyleManager.h"
+#import "CKWeakRef.h"
+#import "CKItemViewController+StyleManager.h"
 
 //CKItemViewContainerController
 

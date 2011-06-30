@@ -7,6 +7,7 @@
 //
 
 #import "CKNetworkActivityManager.h"
+#import <UIKit/UIKit.h>
 
 @implementation CKNetworkActivityManager
 

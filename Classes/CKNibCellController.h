@@ -6,15 +6,22 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
-#import <CloudKit/CKNSObject+Bindings.h>
+#import "CKNSObject+Bindings.h"
 
+
+/** TODO
+ */
 typedef enum{
 	CKNibCellControllerModeNone,
 	CKNibCellControllerModePortrait,
 	CKNibCellControllerModeLandscape
 }CKNibCellControllerMode;
 
+
+/** TODO
+ */
 @interface CKNibCellController : CKTableViewCellController {
 	NSString* _portraitNibName;
 	NSString* _landscapeNibName;

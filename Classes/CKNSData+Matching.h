@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSData (CKNSDataMatching)
 
 - (NSUInteger)indexOfData:(NSData *)data searchRange:(NSRange)searchRange;

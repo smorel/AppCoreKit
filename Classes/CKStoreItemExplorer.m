@@ -8,7 +8,7 @@
 
 #import "CKStoreItemExplorer.h"
 #import "CKStoreDomainExplorer.h"
-#import <CloudKit/CKAttribute.h>
+#import "CKAttribute.h"
 #import "CKItemAttributeReference.h"
 
 

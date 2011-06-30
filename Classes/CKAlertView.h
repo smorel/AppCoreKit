@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 @interface CKAlertView : UIAlertView {
 	id _object;
 }

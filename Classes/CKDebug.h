@@ -7,7 +7,11 @@
 
 // CKDebugLog Macro
 
+#import <Foundation/Foundation.h>
+
 #ifdef DEBUG
+  /** TODO
+   */
   #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 #else
   #define CKDebugLog(s, ...)

@@ -5,9 +5,13 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "CKItem.h"
 
+
+/** TODO
+ */
 @interface CKDomain : NSManagedObject {
 }
 
@@ -18,6 +22,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKDomain (CKDomainAccessors)
 
 - (void)addItemsObject:(CKItem *)value;

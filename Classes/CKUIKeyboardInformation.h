@@ -7,8 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 CGRect CKUIKeyboardInformationBounds(NSDictionary *keyboardUserInfo);
+
+/** TODO
+ */
 CGFloat CKUIKeyboardInformationAnimationDuration(NSDictionary *keyboardUserInfo);
+
+/** TODO
+ */
 UIViewAnimationCurve CKUIKeyboardInformationAnimationCurve(NSDictionary *keyboardUserInfo);

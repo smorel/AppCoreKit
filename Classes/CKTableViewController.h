@@ -8,6 +8,7 @@
 //  Initial code created by Jonathan Wight on 2/25/09.
 //  Copyright 2009 toxicsoftware.com. All rights reserved.
 
+#import <Foundation/Foundation.h>
 #import "CKItemViewContainerController.h"
 
 // From UITableViewController:
@@ -16,6 +17,9 @@
 // In -viewDidAppear:, it flashes the table's scroll indicators.
 // Implements -setEditing:animated: to toggle the editing state of the table.
 
+
+/** TODO
+ */
 @interface CKTableViewController : CKItemViewContainerController <UITableViewDataSource, UITableViewDelegate> {
 	UIView *_backgroundView;
 	UIView *_tableViewContainer;

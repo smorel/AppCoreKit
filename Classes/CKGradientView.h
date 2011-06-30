@@ -6,8 +6,11 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKRoundedCornerView.h"
 
+/** TODO
+ */
 typedef enum {
 	CKGradientViewBorderTypeNone = 0,
 	CKGradientViewBorderTypeTop = 1 << 1,
@@ -17,6 +20,9 @@ typedef enum {
 	CKGradientViewBorderTypeAll = CKGradientViewBorderTypeTop | CKGradientViewBorderTypeBottom | CKGradientViewBorderTypeRight | CKGradientViewBorderTypeLeft
 } CKGradientViewBorderType;
 
+
+/** TODO
+ */
 @interface CKGradientViewUpdater : NSObject{
 	UIView* _view;
 	CGSize _size;
@@ -26,6 +32,8 @@ typedef enum {
 @end
 
 
+/** TODO
+ */
 @interface CKGradientView : CKRoundedCornerView {
 	NSArray *_gradientColors;
 	NSArray *_gradientColorLocations;

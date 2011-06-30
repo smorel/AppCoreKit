@@ -6,10 +6,13 @@
 //  Copyright 2010 Kenobi Studios. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <CloudKit/CKStore.h>
+#import "CKStore.h"
 
 
+/** TODO
+ */
 @interface CKStoreExplorer : UITableViewController {
 	NSArray *_domains;
 	

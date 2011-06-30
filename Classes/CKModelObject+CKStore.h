@@ -6,13 +6,17 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Cloudkit/CKModelObject.h>
+#import <Foundation/Foundation.h>
+#import "CKModelObject.h"
 
 @class CKStoreRequest;
 @class CKItem;
 
 extern NSMutableDictionary* CKModelObjectManager;
 
+
+/** TODO
+ */
 @interface CKModelObject (CKStoreAddition)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain;

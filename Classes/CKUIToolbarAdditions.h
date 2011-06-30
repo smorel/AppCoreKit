@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 @interface UIToolbar (CKUIToolbarAdditions)
 
 - (void)replaceItemWithTag:(NSInteger)tag withItem:(UIBarButtonItem *)item;

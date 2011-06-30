@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
+/** TODO
+ */
 @interface CKBindingsManager : NSObject {
 	NSMutableDictionary* _bindingsForContext;
 	NSMutableDictionary* _bindingsToContext;

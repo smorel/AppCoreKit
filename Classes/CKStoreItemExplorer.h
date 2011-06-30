@@ -6,10 +6,13 @@
 //  Copyright 2010 Kenobi Studios. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <CloudKit/CKItem.h>
+#import "CKItem.h"
 
 
+/** TODO
+ */
 @interface CKStoreItemExplorer : UITableViewController {
 	CKItem *_item;
 	NSMutableArray *_attributes;

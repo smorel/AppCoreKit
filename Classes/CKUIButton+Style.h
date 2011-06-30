@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKUIView+Style.h"
 
 /* SUPPORTS :
@@ -13,10 +14,22 @@
  * CKStyleDefaultImage
  */
 
+
+/** TODO
+ */
 extern NSString *CKStyleDefaultBackgroundImage;
+
+/** TODO
+ */
 extern NSString *CKStyleDefaultImage;
+
+/** TODO
+ */
 extern NSString *CKStyleDefaultTextColor;
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKUIButtonStyle)
 
 - (UIImage *)defaultBackgroundImage;
@@ -25,8 +38,9 @@ extern NSString *CKStyleDefaultTextColor;
 
 @end
 
-//
 
+/** TODO
+ */
 @interface UIButton (CKStyle)
 
 @end

@@ -6,8 +6,11 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 typedef enum {
 	CKKeypadViewKeyZero = 0,
 	CKKeypadViewKeyOne = 1,
@@ -29,6 +32,8 @@ typedef enum {
 
 // CKKeypadViewDelegate
 
+/** TODO
+ */
 @protocol CKKeypadViewDelegate
 @optional
 - (BOOL)keypadView:(CKKeypadView *)keypadView shouldSelectKey:(CKKeypadViewKey)key;
@@ -38,6 +43,8 @@ typedef enum {
 
 // CKKeypadView
 
+/** TODO
+ */
 @interface CKKeypadView : UIView {
 	NSString *_value;
 

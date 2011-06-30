@@ -5,10 +5,14 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
 @class CKItem;
 
+
+/** TODO
+ */
 @interface CKAttribute : NSManagedObject {
 }
 
@@ -21,6 +25,9 @@
 
 @end
 
+
+/** TODO
+ */
 @interface CKAttribute (CoreDataGeneratedAccessors)
 - (void)addItemReferencesObject:(NSManagedObject *)value;
 - (void)removeItemReferencesObject:(NSManagedObject *)value;

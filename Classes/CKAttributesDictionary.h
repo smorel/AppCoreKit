@@ -10,6 +10,9 @@
 
 @class CKItem;
 
+
+/** TODO
+ */
 @interface CKAttributesDictionary : NSDictionary {
 	CKItem *_item;
 	NSDictionary *_attributes;

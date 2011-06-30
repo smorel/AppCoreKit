@@ -6,5 +6,12 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
+/** TODO
+ */
 NSString *CKApplicationVersion();
+
+/** TODO
+ */
 NSString *CKOSVersion();

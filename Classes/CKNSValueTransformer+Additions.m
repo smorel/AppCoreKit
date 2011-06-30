@@ -385,7 +385,7 @@ NSString* CKSerializerIDTag = @"@id";
 			typeToCreate = NSClassFromString(sourceClassName);
 		}
 		
-		
+        
 		if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
 			id uniqueId = [source valueForKeyPath:@"uniqueId"];
 			if([uniqueId isKindOfClass:[NSString class]]){

@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSArray (CKNSArrayAdditions)
 
 // Returns the first element of the array

@@ -9,8 +9,8 @@
 #import "CKBonjourResolver.h"
 #import "CKInetEndPoint.h"
 
-#import <CloudKit/CKNSString+Validations.h>
-#import <CloudKit/CKDebug.h>
+#import "CKNSString+Validations.h"
+#import "CKDebug.h"
 
 @interface CKBonjourResolver ()
 @property (nonatomic, copy) NSString *nameRegex;

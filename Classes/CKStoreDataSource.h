@@ -6,10 +6,13 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CKFeedSource.h>
-#import <CloudKit/CKStore.h>
+#import <Foundation/Foundation.h>
+#import "CKFeedSource.h"
+#import "CKStore.h"
 
 
+/** TODO
+ */
 @interface CKStoreRequest : NSOperation{
 	CKStore*   _store;
 	NSString* _predicateFormat;
@@ -37,6 +40,8 @@
 @end
 
 
+/** TODO
+ */
 @protocol CKStoreRequestDelegate
 - (void)request:(id)request didReceiveValue:(id)value;
 - (void)request:(id)request didFailWithError:(NSError *)error;
@@ -50,6 +55,9 @@ typedef id (^CKStoreDataSourceTransformBlock)(id value);
 typedef void (^CKStoreDataSourceFailureBlock)(NSError *error);
 typedef void (^CKStoreDataSourceSuccessBlock)();
 
+
+/** TODO
+ */
 @interface CKStoreDataSource : CKFeedSource<CKStoreRequestDelegate> {
 	CKStoreDataSourceRequestBlock _requestBlock;
 	CKStoreDataSourceTransformBlock _transformBlock;
@@ -73,6 +81,8 @@ typedef void (^CKStoreDataSourceSuccessBlock)();
 @end
 
 
+/** TODO
+ */
 @protocol CKStoreDataSourceDelegate
 
 @required

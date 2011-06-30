@@ -6,12 +6,14 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKBinding.h"
 #import "CKWeakRef.h"
 
 typedef void(^CKUIControlBlock)();
 
-
+/** TODO
+ */
 @interface CKUIControlBlockBinder : NSObject<CKBinding>{
 	UIControlEvents controlEvents;
 	

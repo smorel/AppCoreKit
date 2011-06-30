@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 CGSize CKShadowSizeMake(CGFloat x, CGFloat y);

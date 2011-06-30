@@ -6,14 +6,20 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 typedef enum {
 	CKWebViewButtonBack,
 	CKWebViewButtonForward,
 	CKWebViewButtonReload
 } CKWebViewButton;
 
+
+/** TODO
+ */
 @interface CKWebViewController : UIViewController <UIWebViewDelegate> {
 	UIWebView *_webView;
 	UIToolbar* _webViewToolbar;

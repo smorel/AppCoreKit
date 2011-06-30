@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSDate (CKNSDateConversionsAdditions)
 
 // Returns a date from a string according to a date format and the default locale

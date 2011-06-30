@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSDate (NSDateCalculationsAdditions)
 
 // Returns a copy of the date with the time set to midnight on the same day.

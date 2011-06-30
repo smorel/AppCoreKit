@@ -6,8 +6,12 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKNSValueTransformer+Additions.h"
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKStyleParsing)
 
 - (UIColor*) colorForKey:(NSString*)key;

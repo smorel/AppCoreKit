@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
+/** TODO
+ */
 @interface UIImage (Factory)
 
 + (UIImage *)imageStack:(NSInteger)nbImages size:(CGSize)size edgeInsets:(UIEdgeInsets)insets;

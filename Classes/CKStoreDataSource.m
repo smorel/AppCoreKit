@@ -7,8 +7,8 @@
 //
 
 #import "CKStoreDataSource.h"
-#import <Cloudkit/CKDebug.h>
-#import <Cloudkit/CKItem.h>
+#import "CKDebug.h"
+#import "CKItem.h"
 
 NSString* const CKStoreSourceErrorNotification = @"CKStoreSourceErrorNotification";
 static NSOperationQueue *theSharedStoreDataSourceQueue = nil;

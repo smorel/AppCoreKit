@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+/** TODO
+ */
 @interface UITextField (CKIntrospectionAdditions)
 /* SEE HOW TO MAKE UITextResponder KVO complient
 @property(nonatomic,assign) UITextAutocapitalizationType autocapitalizationType;

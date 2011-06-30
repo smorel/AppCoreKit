@@ -6,6 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "CKItemViewContainerController.h"
@@ -20,11 +21,16 @@
 #define MAP_ANNOTATION_RIGHT_BUTTON	2
 
 
+/** TODO
+ */
 typedef enum CKMapViewControllerZoomStrategy{
 	CKMapViewControllerZoomStrategyEnclosing,
 	CKMapViewControllerZoomStrategySmart
 }CKMapViewControllerZoomStrategy;
 
+
+/** TODO
+ */
 @interface CKMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
 	CLLocationCoordinate2D _centerCoordinate;
 	MKMapView *_mapView;

@@ -12,6 +12,9 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 
+
+/** TODO
+ */
 @interface CKInetEndPoint : NSObject {
 	NSString *_inetAddressRepresentation;
 	NSUInteger _port;

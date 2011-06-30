@@ -6,10 +6,15 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKBinding.h"
 #import "CKWeakRef.h"
 
 typedef void(^CKDataBlockBinderExecutionBlock)(id value);
+
+
+/** TODO
+ */
 @interface CKDataBlockBinder : NSObject<CKBinding> {
 	CKWeakRef* instanceRef;
 	NSString* keyPath;

@@ -6,12 +6,21 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+
+/** TODO
+ */
 typedef enum {
 	CKBindingsContextPolicyAdd,
 	CKBindingsContextPolicyRemovePreviousBindings
 } CKBindingsContextPolicy;
 
+
+
+/** TODO
+ */
 @interface NSObject (CKBindings)
 
 + (NSString *)allBindingsDescription;
@@ -36,6 +45,10 @@ typedef enum {
 
 //
 
+
+
+/** TODO
+ */
 @interface UIControl (CKBindings)
 
 - (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block;
@@ -45,6 +58,9 @@ typedef enum {
 
 //
 
+
+/** TODO
+ */
 @interface NSNotificationCenter (CKBindings)
 
 - (void)bindNotificationName:(NSString *)notification object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block;

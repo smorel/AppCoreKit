@@ -6,12 +6,16 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @class CKPickerView;
 
 //
 
+
+/** TODO
+ */
 @protocol CKPickerViewDelegate
 
 @required
@@ -29,6 +33,9 @@
 
 //
 
+
+/** TODO
+ */
 @interface CKPickerView : UIView <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate> {
 	UITableView *_tableView;
 	UIView *_backgroundView;

@@ -6,9 +6,12 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CKTableViewCellController.h>
+#import <Foundation/Foundation.h>
+#import "CKTableViewCellController.h"
 
 
+/** TODO
+ */
 @interface CKMultiFloatPropertyCellController: CKTableViewCellController<UITextFieldDelegate> {
 	id _multiFloatValue;
 	NSMutableDictionary* _textFields;

@@ -37,6 +37,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 typedef enum {
 	CKStoreAttributeResultType = 0,
 	CKStoreNSDictionaryResultType
@@ -45,6 +47,9 @@ typedef enum {
 @class CKCoreDataManager;
 @class CKDomain;
 
+
+/** TODO
+ */
 @interface CKStore : NSObject {
 	CKCoreDataManager *_manager;
 	CKDomain *_domain;
@@ -90,6 +95,9 @@ typedef enum {
 @class CKAttribute;
 @class CKItem;
 
+
+/** TODO
+ */
 @interface CKStore (CKStorePrivateAddition)
 @property (retain, readwrite) CKDomain *domain;
 

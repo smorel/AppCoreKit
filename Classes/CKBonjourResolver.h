@@ -10,6 +10,8 @@
 
 @class CKBonjourResolver;
 
+/** TODO
+ */
 @protocol CKBonjourResolverDelegate
 
 - (void)bonjourResolver:(CKBonjourResolver *)bonjourResolver didResolveServiceNamed:(NSString *)name hostName:(NSString *)hostName inetEndPoints:(NSArray *)inetEndPoints;
@@ -19,6 +21,8 @@
 
 //
 
+/** TODO
+ */
 @interface CKBonjourResolver : NSObject <NSNetServiceBrowserDelegate, NSNetServiceDelegate> {
 	NSNetServiceBrowser *_netServiceBrowser;
 	NSMutableArray *_unresolvedServices;

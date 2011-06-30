@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class CKCarouselView;
+
+/** TODO
+ */
 @protocol CKCarouselViewDataSource
 - (NSInteger)numberOfSectionsInCarouselView:(CKCarouselView*)carouselView;
 - (NSInteger)carouselView:(CKCarouselView*)carouselView numberOfRowsInSection:(NSInteger)section;
@@ -29,6 +33,8 @@ Reordering Table Rows
 @end
 
 
+/** TODO
+ */
 @protocol CKCarouselViewDelegate
 - (UIView*) carouselView:(CKCarouselView*)carouselView viewForHeaderInSection:(NSInteger)section;
 - (CGSize) carouselView:(CKCarouselView*)carouselView sizeForViewAtIndexPath:(NSIndexPath*)indexPath;
@@ -65,10 +71,15 @@ Reordering Table Rows
 @end
 
 
+/** TODO
+ */
 typedef enum{
 	CKCarouselViewDisplayTypeHorizontal
 }CKCarouselViewDisplayType;
 
+
+/** TODO
+ */
 @interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> {
 	NSMutableArray* _rowSizes;
 	CGFloat _internalContentOffset;

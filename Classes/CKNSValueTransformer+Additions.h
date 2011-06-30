@@ -6,13 +6,23 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "CKObjectProperty.h"
 #import "CKDocumentArray.h"
 
+
+/** TODO
+ */
 NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
+
+
+/** TODO
+ */
 #define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
 
 
+/** TODO
+ */
 @interface NSValueTransformer (CKAddition)
 
 //tranform
@@ -50,14 +60,23 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 
 @end
 
+
+/** TODO
+ */
 @interface NSObject (CKTransformAdditionsCreate)
 + (id)objectFromDictionary:(NSDictionary*)dictionary;
 @end
 
+
+/** TODO
+ */
 @interface NSArray (CKTransformAdditionsCreate)
 + (id)objectArrayFromDictionaryArray:(NSArray*)array;
 @end
 
+
+/** TODO
+ */
 @interface NSObject (CKTransformAdditions)
 + (SEL)convertFromObjectSelector:(id)object;
 + (SEL)convertFromObjectWithContentClassNameSelector:(id)object;
@@ -66,12 +85,18 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (id)convertFromObject:(id)object;
 @end
 
+
+/** TODO
+ */
 @interface UIColor (CKTransformAdditions)
 + (UIColor*)convertFromNSString:(NSString*)str;
 + (UIColor*)convertFromNSNumber:(NSNumber*)n;
 + (NSString*)convertToNSString:(UIColor*)color;
 @end
 
+
+/** TODO
+ */
 @interface UIImage (CKTransformAdditions)
 + (UIImage*)convertFromNSString:(NSString*)str;
 + (UIImage*)convertFromNSURL:(NSURL*)url;
@@ -79,29 +104,47 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
 + (NSString*)convertToNSString:(UIImage*)image;
 @end
 
+
+/** TODO
+ */
 @interface NSNumber (CKTransformAdditions)
 + (NSNumber*)convertFromNSString:(NSString*)str;
 + (NSString*)convertToNSString:(NSNumber*)n;
 @end
 
+
+/** TODO
+ */
 @interface NSURL (CKTransformAdditions)
 + (NSURL*)convertFromNSString:(NSString*)str;
 + (NSString*)convertToNSString:(NSURL*)n;
 @end
 
+
+/** TODO
+ */
 @interface NSDate (CKTransformAdditions)
 + (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format;
 + (NSString*)convertToNSString:(NSDate*)n withFormat:(NSString*)format;
 @end
 
+
+/** TODO
+ */
 @interface NSArray (CKTransformAdditions)
 + (NSArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
 @end
 
+
+/** TODO
+ */
 @interface CKDocumentArray (CKTransformAdditions)
 + (CKDocumentArray*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
 @end
 
+
+/** TODO
+ */
 @interface NSIndexPath (CKTransformAdditions)
 + (NSIndexPath*)convertFromNSString:(NSString*)str;
 + (NSString*)convertToNSString:(NSIndexPath*)indexPath;

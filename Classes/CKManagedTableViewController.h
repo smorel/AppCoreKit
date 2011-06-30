@@ -6,11 +6,15 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKTableViewController.h"
 
 @class CKTableViewCellController;
 
+
+/** TODO
+ */
 @interface CKTableSection : NSObject {
 	NSMutableArray *_cellControllers;
 	NSString *_headerTitle;
@@ -37,6 +41,8 @@
 
 
 
+/** TODO
+ */
 typedef enum {
 	CKManagedTableViewOrientationPortrait,
 	CKManagedTableViewOrientationLandscape
@@ -44,6 +50,9 @@ typedef enum {
 
 //
 
+
+/** TODO
+ */
 @interface CKManagedTableViewController : CKTableViewController <UIScrollViewDelegate> {
 	id _managedTableViewDelegate;
 	NSMutableArray *_sections;
@@ -74,6 +83,8 @@ typedef enum {
 
 //
 
+/** TODO
+ */
 @protocol CKManagedTableViewControllerDelegate
 @optional
 - (void)tableViewController:(CKManagedTableViewController *)tableViewController cellControllerValueDidChange:(CKTableViewCellController *)cellController;

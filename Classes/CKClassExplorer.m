@@ -8,8 +8,8 @@
 
 #import "CKClassExplorer.h"
 #import <objc/runtime.h>
-#import <CloudKit/CKStoreDataSource.h>
-#import <CloudKit/CKNSValueTransformer+Additions.h>
+#import "CKStoreDataSource.h"
+#import "CKNSValueTransformer+Additions.h"
 
 NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 {

@@ -6,10 +6,13 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKOverlayView.h"
 
 
+/** TODO
+ */
 typedef enum {
 	CKCalloutArrowDirectionUp = 0,
 	CKCalloutArrowDirectionDown,
@@ -18,6 +21,8 @@ typedef enum {
 } CKCalloutArrowDirection;
 
 
+/** TODO
+ */
 @interface CKCalloutView : CKOverlayView {
 	CGFloat _arrowDeltaX;
 	CGFloat _arrowDeltaY;

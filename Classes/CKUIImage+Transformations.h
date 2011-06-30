@@ -6,10 +6,16 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** TODO
+ */
 static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radius);
 
+
+/** TODO
+ */
 @interface UIImage (CKUIImageTransformationsAdditions)
 
 - (UIImage *)imageThatFits:(CGSize)size crop:(BOOL)crop;

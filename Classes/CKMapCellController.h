@@ -6,12 +6,16 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import <CloudKit/CKTableViewCellController.h>
+#import "CKTableViewCellController.h"
 
 @class CKMapCellAnnotation;
 
+
+/** TODO
+ */
 @interface CKMapCellController : CKTableViewCellController <MKMapViewDelegate> {
 	CKMapCellAnnotation *_annotation;
 	UIImage *_annotationImage;

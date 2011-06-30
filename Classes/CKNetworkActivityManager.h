@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
+/** TODO
+ */
 @interface CKNetworkActivityManager : NSObject {
 	NSMutableSet *_objects;
 }

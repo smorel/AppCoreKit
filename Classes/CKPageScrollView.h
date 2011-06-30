@@ -6,11 +6,15 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @protocol CKPageScrollViewDataSource;
 @protocol CKPageScrollViewDelegate;
 
+
+/** TODO
+ */
 @interface CKPageScrollView : UIView <UIScrollViewDelegate> {
 	id<CKPageScrollViewDataSource> _dataSource;
 	id<CKPageScrollViewDelegate> _delegate;
@@ -37,6 +41,9 @@
 
 // DataSource
 
+
+/** TODO
+ */
 @protocol CKPageScrollViewDataSource
 
 @required
@@ -47,6 +54,9 @@
 
 // Delegate
 
+
+/** TODO
+ */
 @protocol CKPageScrollViewDelegate
 
 @optional
