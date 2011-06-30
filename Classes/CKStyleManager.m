@@ -66,7 +66,9 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	NSString* fileContentAsString = [[[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding]autorelease];
 
 	//Removes comments
-	NSScanner *s = [NSScanner scannerWithString:[fileContentAsString copy]];
+	NSString *scannerString = [fileContentAsString copy];
+	NSScanner *s = [NSScanner scannerWithString:scannerString];
+	[scannerString release];
 	while (![s isAtEnd]) {
 		NSString *text = @"";
 		[s scanUpToString:@"/*" intoString:NULL];

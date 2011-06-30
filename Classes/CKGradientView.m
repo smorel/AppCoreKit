@@ -122,7 +122,7 @@
 
 #pragma mark - Emboss Paths
 
-- (CGMutablePathRef)topEmbossPath {
+- (void)generateTopEmbossPath:(CGMutablePathRef)path {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:
@@ -142,7 +142,6 @@
 	CGFloat y = self.bounds.origin.y;
 	CGFloat width = self.bounds.size.width;
 	CGFloat radius = self.roundedCornerSize;
-	CGMutablePathRef path = CGPathCreateMutable ();
 	
 	if (self.borderColor && (self.borderColor != [UIColor clearColor])) {
 		y += (self.borderWidth / 2);
@@ -166,10 +165,9 @@
 	CGPathAddLineToPoint (path, nil, x, -1);
 	
 	CGPathCloseSubpath(path);
-	return path;
 }
 
-- (CGMutablePathRef)bottomEmbossPath {
+- (void)generateBottomEmbossPath:(CGMutablePathRef)path {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:
@@ -189,7 +187,6 @@
 	CGFloat width = self.bounds.size.width;
 	CGFloat height = self.bounds.size.height;
 	CGFloat radius = self.roundedCornerSize;
-	CGMutablePathRef path = CGPathCreateMutable ();
 	
 	if ((self.borderColor && (self.borderColor != [UIColor clearColor])) && (self.borderStyle & CKGradientViewBorderTypeBottom)) {
 		height -= (self.borderWidth / 2);
@@ -214,12 +211,11 @@
 	CGPathAddLineToPoint(path, nil, x, self.bounds.size.height + 1);
 	
 	CGPathCloseSubpath(path);
-	return path;
 }
 
 #pragma mark - Border Path
 
-- (CGMutablePathRef)generateBorderPath{
+- (void)generateBorderPath:(CGMutablePathRef)path {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:
@@ -238,7 +234,6 @@
 	CGFloat width = self.bounds.size.width;
 	CGFloat height = self.bounds.size.height;
 	CGFloat radius = self.roundedCornerSize;
-	CGMutablePathRef path = CGPathCreateMutable ();
 	
 	if(_borderStyle & CKGradientViewBorderTypeLeft){
 		//draw arc from bottom to left or move to bottom left
@@ -290,8 +285,6 @@
 		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (width - radius) : width, height);
 		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : 0, height);
 	}
-	
-	return path;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -453,9 +446,13 @@
 		for (UIColor *color in self.gradientColors) {
 			[colors addObject:(id)([[color RGBColor]CGColor])];
 		}
-		
-		CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)colors, colorLocations);
+
+		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+		CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)colors, colorLocations);
+		CFRelease(colorSpace);
+
 		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
+		CGGradientRelease(gradient);
 	}
 	
 	// Top Emboss
@@ -466,7 +463,10 @@
 			CGContextClip(gc);
 		}
 		CGContextSetShadowWithColor(gc, CGSizeMake(0, 1), 0, _embossTopColor.CGColor);
-		CGContextAddPath(gc, [self topEmbossPath]);
+		CGMutablePathRef topEmbossPath = CGPathCreateMutable();
+		[self generateTopEmbossPath:topEmbossPath];
+		CGContextAddPath(gc, topEmbossPath);
+		CFRelease(topEmbossPath);
 		[[self.gradientColors objectAtIndex:0] setFill];
 		CGContextFillPath(gc);
 		CGContextRestoreGState(gc);
@@ -480,7 +480,10 @@
 			CGContextClip(gc);
 		}
 		CGContextSetShadowWithColor(gc, CGSizeMake(0, -1), 0, _embossBottomColor.CGColor);
-		CGContextAddPath(gc, [self bottomEmbossPath]);
+		CGMutablePathRef bottomEmbossPath = CGPathCreateMutable();
+		[self generateBottomEmbossPath:bottomEmbossPath];
+		CGContextAddPath(gc, bottomEmbossPath);
+		CFRelease(bottomEmbossPath);
 		[[self.gradientColors last] setFill];
 		CGContextFillPath(gc);
 		CGContextRestoreGState(gc);
@@ -490,8 +493,10 @@
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor]){
 		[_borderColor setStroke];
 		CGContextSetLineWidth(gc, self.borderWidth);
-		CGMutablePathRef path = [self generateBorderPath];
-		CGContextAddPath(gc, path);
+		CGMutablePathRef borderPath = CGPathCreateMutable();
+		[self generateBorderPath:borderPath];
+		CGContextAddPath(gc, borderPath);
+		CFRelease(borderPath);
 		CGContextStrokePath(gc);
 	}
 }

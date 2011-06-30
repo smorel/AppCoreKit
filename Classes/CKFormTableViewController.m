@@ -47,7 +47,7 @@
 
 - (NSString*)headerTitleForSection:(NSInteger)section{
 	NSInteger sectionCount = [self numberOfSections];
-	if(sectionCount <= 1)
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
 		return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
@@ -56,7 +56,7 @@
 
 - (UIView*)headerViewForSection:(NSInteger)section{
 	NSInteger sectionCount = [self numberOfSections];
-	if(sectionCount <= 1)
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
@@ -193,11 +193,12 @@
 		}
 		else {
 			[_parentController objectControllerDidBeginUpdating:_parentController.objectController];
-			_hidden = bo;
 			if(bo){
 				[_parentController objectController:_parentController.objectController removeSectionAtIndex:self.sectionVisibleIndex];
+				_hidden = YES;
 			}
 			else{
+				_hidden = NO;
 				[_parentController objectController:_parentController.objectController insertSectionAtIndex:self.sectionVisibleIndex];
 			}
 			[_parentController objectControllerDidEndUpdating:_parentController.objectController];
@@ -339,8 +340,8 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if(collection.count <= 0){
-		_hidden = YES;
+	if(_parentController.autoHideSections && (collection.count <= 0)) {
+		self.hidden = YES;
 	}
 	
 	sectionUpdate = NO;
@@ -350,7 +351,6 @@
 	
 	return self;
 }
-
 
 - (void)start{
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
@@ -658,6 +658,8 @@
 
 @implementation CKFormTableViewController
 @synthesize sections = _sections;
+@synthesize autoHideSections = _autoHideSections;
+@synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
 
 - (void)postInit{
@@ -665,6 +667,8 @@
 	self.objectController = [[[CKFormObjectController alloc]initWithParentController:self]autorelease];
 	self.controllerFactory = [[[CKFormObjectControllerFactory alloc]init]autorelease];
 	self.sections = [NSMutableArray array];
+	_autoHideSections = NO;
+	_autoHideSectionHeaders = NO;
 }
 
 - (void)dealloc{
@@ -677,7 +681,7 @@
 	self.reloading = YES;
 	for(CKFormSectionBase* section in _sections){
 		[section start];
-		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
 	 }
