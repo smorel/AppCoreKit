@@ -118,8 +118,8 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 }
 @property (nonatomic,retain, readonly) NSMutableArray* sections;
 @property (nonatomic,readonly) BOOL reloading;
-@property (nonatomic,readonly) BOOL autoHideSections;
-@property (nonatomic,readonly) BOOL autoHideSectionHeaders;
+@property (nonatomic,assign) BOOL autoHideSections;
+@property (nonatomic,assign) BOOL autoHideSectionHeaders;
 
 - (id)initWithSections:(NSArray*)sections;
 - (id)initWithSections:(NSArray*)sections withNibName:(NSString*)nibName;
