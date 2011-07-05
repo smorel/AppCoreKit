@@ -435,6 +435,8 @@
 		7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
+		75C97AC013C3A85100F67A59 /* CKRigoloWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C97AC113C3A85100F67A59 /* CKRigoloWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -843,6 +845,8 @@
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
+		75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRigoloWebService.h; path = Classes/CKRigoloWebService.h; sourceTree = "<group>"; };
+		75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRigoloWebService.m; path = Classes/CKRigoloWebService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1482,6 +1486,7 @@
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Web */,
 				7506E40F13B9022700EE1471 /* Support */,
+				75C97ABC13C3A0C900F67A59 /* Rigolo */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1657,6 +1662,15 @@
 				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
 			);
 			name = UIKit;
+			sourceTree = "<group>";
+		};
+		75C97ABC13C3A0C900F67A59 /* Rigolo */ = {
+			isa = PBXGroup;
+			children = (
+				75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */,
+				75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */,
+			);
+			name = Rigolo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1863,6 +1877,7 @@
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
+				75C97AC013C3A85100F67A59 /* CKRigoloWebService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2148,6 +2163,7 @@
 				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
 				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
+				75C97AC113C3A85100F67A59 /* CKRigoloWebService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
