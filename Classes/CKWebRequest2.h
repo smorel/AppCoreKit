@@ -17,7 +17,9 @@
 
 OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
-typedef id (^CKWebRequestTransformBlock)(id value);
+typedef id   (^CKWebRequestTransformBlock)(id value);
+typedef void (^CKWebRequestSuccessBlock)(id value);
+typedef void (^CKWebRequestFailureBlock)(NSError* error);
 
 
 @protocol  CKWebRequestDelegate;
@@ -42,14 +44,18 @@ typedef id (^CKWebRequestTransformBlock)(id value);
 	BOOL finished;
 	BOOL cancelled;
 
-	CKWebRequestTransformBlock theTranformBlock;
+	CKWebRequestTransformBlock theTransformBlock;
+	CKWebRequestSuccessBlock theSuccessBlock;
+	CKWebRequestFailureBlock theFailureBlock;
 }
 
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, retain) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) NSObject<CKWebRequestDelegate> *delegate;
-@property (nonatomic, copy) CKWebRequestTransformBlock tranformBlock;
+@property (nonatomic, copy) CKWebRequestTransformBlock transformBlock;
+@property (nonatomic, copy) CKWebRequestSuccessBlock successBlock;
+@property (nonatomic, copy) CKWebRequestFailureBlock failureBlock;
 
 + (NSString *)defaultUserAgentString;
 

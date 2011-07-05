@@ -53,7 +53,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize destinationPath;
 @synthesize allowDestinationOverwrite;
 @synthesize destinationStream;
-@synthesize tranformBlock = theTranformBlock;
+@synthesize transformBlock = theTransformBlock;
+@synthesize successBlock = theSuccessBlock;
+@synthesize failureBlock = theFailureBlock;
 
 #pragma mark Initialization
 
@@ -87,7 +89,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theResponse release];
 	[theUserInfo release];
 	[theConnection release];
-	[theTranformBlock release];
+	[theTransformBlock release];
+	[theSuccessBlock release];
+	[theFailureBlock release];
 	self.destinationPath = nil;
 	self.destinationStream = nil;
 	[super dealloc];
@@ -308,7 +312,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 									  withObject:self 
 									  withObject:error 
 								   waitUntilDone:NO];
-
+        
+        if (theFailureBlock) {
+            theFailureBlock(error);
+        }
+        
 		[self markAsFinished];
 		return;
 	}
@@ -371,8 +379,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	// Process the content wih the user specified CKWebResponseTransformer
 	
 	id value = responseValue;
-	if (theTranformBlock) {
-		value = theTranformBlock(responseValue);
+	if (theTransformBlock) {
+		value = theTransformBlock(responseValue);
 	}
 //	if (_transformer) {
 //		value = [_transformer request:self transformContent:responseValue];
@@ -384,7 +392,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 								  withObject:self 
 								  withObject:value 
 							   waitUntilDone:NO];	
-	
+	if (theSuccessBlock) {
+		theSuccessBlock(value);
+	}
+    
 	[self markAsFinished];
 }
 
@@ -392,6 +403,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	//NSURLErrorFailingURLStringErrorKey incompatible os3
 	//CKDebugLog(@"ERR Connection failed! %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 	[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
+    if (theFailureBlock) {
+		theFailureBlock(error);
+	}
 	[self markAsFinished];
 }
 
