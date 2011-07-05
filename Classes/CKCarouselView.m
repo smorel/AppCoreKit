@@ -157,6 +157,31 @@ double round(double x)
 	[super dealloc];
 }
 
+//
+
+- (NSInteger)numberOfSections {
+	if(_dataSource && [_dataSource respondsToSelector:@selector(numberOfSectionsInCarouselView:)]) {
+		return [_dataSource numberOfSectionsInCarouselView:self];
+	}
+	return 0;
+}
+
+- (NSInteger)numberOfItemsInSection:(NSInteger)section {
+	if(_dataSource && [_dataSource respondsToSelector:@selector(carouselView:numberOfRowsInSection:)]){
+		return [_dataSource carouselView:self numberOfRowsInSection:section];
+	}
+	return 0;
+}
+
+- (BOOL)hasItems {
+	for (NSInteger i=0 ; i<[self numberOfSections] ; i++) {
+		if ([self numberOfItemsInSection:i] > 0) return YES;
+	}
+	return NO;
+}
+
+//
+
 - (void)reloadData{
 	NSInteger numberOfSections = 0;
 	if(_dataSource && [_dataSource respondsToSelector:@selector(numberOfSectionsInCarouselView:)]){
@@ -274,10 +299,7 @@ double round(double x)
 }
 
 - (NSIndexPath*)indexPathForPage:(NSInteger)page{
-	NSInteger numberOfSections = 0;
-	if(_dataSource && [_dataSource respondsToSelector:@selector(numberOfSectionsInCarouselView:)]){
-		numberOfSections = [_dataSource numberOfSectionsInCarouselView:self];
-	}
+	NSInteger numberOfSections = [self numberOfSections];
 	
 	NSInteger count = 0;
 	for(NSInteger i=0;i<numberOfSections; ++i){
@@ -567,6 +589,8 @@ double round(double x)
 }
 
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
+	if ([self hasItems] == NO) return;
+
 	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
 		(recognizer.state == UIGestureRecognizerStateFailed)){
 		return;
