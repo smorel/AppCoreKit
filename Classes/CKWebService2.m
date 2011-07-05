@@ -35,21 +35,26 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 @synthesize defaultParams = _defaultParams;
 @synthesize defaultHeaders = _defaultHeaders;
 
-static id CKWebServiceSharedInstance = nil;
-
+static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 #pragma mark Initialization
 
 + (id)sharedWebService {
-	static id CKWebServiceSharedInstance = nil;
-	if (CKWebServiceSharedInstance == nil) {
-		CKWebServiceSharedInstance = [[[self class] alloc] init];
+	static id CKWebServiceSharedInstances = nil;
+    
+    id sharedService = nil;
+	if (CKWebServiceSharedInstances == nil) {
+        CKWebServiceSharedInstances = [[NSMutableDictionary alloc]init];
 	}
-	return CKWebServiceSharedInstance;
+    sharedService = [CKWebServiceSharedInstances objectForKey:[[self class]description]];
+    if(sharedService == nil){
+        sharedService = [[[[self class] alloc] init]autorelease];
+        [CKWebServiceSharedInstances setObject:sharedService forKey:[[self class]description]];    
+    }
+	return sharedService;
 }
 
 + (void)setSharedWebService:(id)sharedWebService {
-	[CKWebServiceSharedInstance release];
-	CKWebServiceSharedInstance = [sharedWebService retain];
+    [CKWebServiceSharedInstances setObject:sharedWebService forKey:[[self class]description]];    
 }
 
 //
