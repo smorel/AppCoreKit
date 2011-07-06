@@ -70,7 +70,6 @@
                                                                                version:buildVersion
      
                                                                                completion:^(BOOL upToDate,NSString* version){
-                                                                                   version = @"423";
                                                                                 if(!upToDate){
                                                                                     NSString* title = _(@"New Version Available");
                                                                                     NSString* message = [NSString stringWithFormat:_(@"Build (%@)"),version];
