@@ -1490,7 +1490,7 @@
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Web */,
 				7506E40F13B9022700EE1471 /* Support */,
-				75C97ABC13C3A0C900F67A59 /* Rigolo */,
+				75C97ABC13C3A0C900F67A59 /* Provisioning */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1668,7 +1668,7 @@
 			name = UIKit;
 			sourceTree = "<group>";
 		};
-		75C97ABC13C3A0C900F67A59 /* Rigolo */ = {
+		75C97ABC13C3A0C900F67A59 /* Provisioning */ = {
 			isa = PBXGroup;
 			children = (
 				75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */,
@@ -1676,7 +1676,7 @@
 				75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */,
 				75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */,
 			);
-			name = Rigolo;
+			name = Provisioning;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

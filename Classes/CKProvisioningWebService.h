@@ -36,7 +36,7 @@
  @param completion
  @param failure
  */
-- (void)checkForNewVersionWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
+- (void)checkForNewProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
                                     completion:(void (^)(BOOL upToDate,NSString* version))completion 
                                        failure:(void (^)(NSError* error))failure;
 
@@ -46,7 +46,7 @@
  @param completion
  @param failure
  */
-- (void)listAllVersionsWithBundleIdentifier:(NSString*)bundleIdentifier
+- (void)listAllProductReleasesWithBundleIdentifier:(NSString*)bundleIdentifier
                                  completion:(void (^)(NSArray* productReleases))completion 
                                     failure:(void (^)(NSError* error))failure;
 
@@ -57,7 +57,7 @@
  @param completion
  @param failure
  */
-- (void)detailsForVersion:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
+- (void)detailsForProductRelease:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
                completion:(void (^)(CKProductRelease* productRelease))completion 
                   failure:(void (^)(NSError* error))failure;
 

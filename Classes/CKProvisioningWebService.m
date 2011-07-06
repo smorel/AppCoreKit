@@ -41,7 +41,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
         [mappings mapStringForKeyPath:@"build-version"      toKeyPath:@"buildVersion"       required:YES];
         [mappings mapStringForKeyPath:@"release-notes-text" toKeyPath:@"releaseNotes"       required:YES];
         [mappings mapURLForKeyPath:   @"release-notes-url"  toKeyPath:@"releaseNotesURL"    required:NO];
-        [mappings mapKeyPath:         @"provisioningURL"        withValueFromBlock:^id(id sourceObject, NSError **error) {
+        [mappings mapKeyPath:         @"provisioningURL"    withValueFromBlock:^id(id sourceObject, NSError **error) {
             NSString* urlStr = [sourceObject objectForKey:@"ota-url"];
             NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];
             return url;
@@ -56,9 +56,9 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     return CKProvisioningProductMappings;
 }
 
-- (void)checkForNewVersionWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
-                                    completion:(void (^)(BOOL upToDate,NSString* version))completion 
-                                       failure:(void (^)(NSError* error))failure{
+- (void)checkForNewProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
+                                           completion:(void (^)(BOOL upToDate,NSString* version))completion 
+                                              failure:(void (^)(NSError* error))failure{
     CKWebRequest2* request = [self getRequestForPath:@"check.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];
     request.successBlock = ^(id value){
         NSNumber* upToDateNumber = [value objectForKey:@"uptodate"];
@@ -78,9 +78,9 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
 }
 
 
-- (void)listAllVersionsWithBundleIdentifier:(NSString*)bundleIdentifier
-                                 completion:(void (^)(NSArray* productReleases))completion 
-                                    failure:(void (^)(NSError* error))failure{
+- (void)listAllProductReleasesWithBundleIdentifier:(NSString*)bundleIdentifier
+                                        completion:(void (^)(NSArray* productReleases))completion 
+                                           failure:(void (^)(NSError* error))failure{
     CKWebRequest2* request = [self getRequestForPath:@"list.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",nil]];
     request.transformBlock = ^(id value){
         NSMutableArray* releases = [NSMutableArray array];
@@ -105,9 +105,9 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     [self performRequest:request];
 }
 
-- (void)detailsForVersion:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
-               completion:(void (^)(CKProductRelease* productRelease))completion 
-                  failure:(void (^)(NSError* error))failure{
+- (void)detailsForProductRelease:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
+                      completion:(void (^)(CKProductRelease* productRelease))completion 
+                         failure:(void (^)(NSError* error))failure{
     CKWebRequest2* request = [self getRequestForPath:@"descriptor.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];
     request.transformBlock = ^(id value){
         NSError* error;

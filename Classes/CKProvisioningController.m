@@ -66,7 +66,7 @@
     NSString* buildVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     
-    [[CKProvisioningWebService sharedWebService]checkForNewVersionWithBundleIdentifier:bundleIdentifier 
+    [[CKProvisioningWebService sharedWebService]checkForNewProductReleaseWithBundleIdentifier:bundleIdentifier 
                                                                                version:buildVersion
      
                                                                                completion:^(BOOL upToDate,NSString* version){
@@ -112,7 +112,7 @@
 
 - (void)detailsForProductRelease:(NSString*)version{
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-    [[CKProvisioningWebService sharedWebService]detailsForVersion:version 
+    [[CKProvisioningWebService sharedWebService]detailsForProductRelease:version 
                                                  bundleIdentifier:bundleIdentifier
                                                        completion:^(CKProductRelease* productRelease){
                                                            [self displayProductRelease:productRelease parentController:nil];
@@ -123,7 +123,7 @@
 
 - (void)listAllProductReleases{
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-    [[CKProvisioningWebService sharedWebService]listAllVersionsWithBundleIdentifier:bundleIdentifier 
+    [[CKProvisioningWebService sharedWebService]listAllProductReleasesWithBundleIdentifier:bundleIdentifier 
                                                                          completion:^(NSArray* productReleases){
                                                                              [self displayProductReleases:productReleases];
                                                                          }
