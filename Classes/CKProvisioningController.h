@@ -1,5 +1,5 @@
 //
-//  CKRigoloDefaultBehaviour.h
+//  CKProvisioningController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-07-06.
@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "CKRigoloWebService.h"
 
 /** 
  TODO
  */
-@interface CKRigoloDefaultBehaviour : NSObject<CKRigoloWebServiceDelegate,UIAlertViewDelegate> {
+@interface CKProvisioningController : NSObject<UIAlertViewDelegate> {
     NSArray* _items;
 }
+
+- (void)start;
 
 @end
