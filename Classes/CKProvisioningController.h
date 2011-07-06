@@ -14,8 +14,10 @@
  */
 @interface CKProvisioningController : NSObject<UIAlertViewDelegate> {
     NSArray* _items;
+    UIViewController* _parentViewController;
 }
+@property(nonatomic,retain) UIViewController* parentViewController;
 
-- (void)start;
+- (id)initWithParentViewController:(UIViewController*)controller;
 
 @end

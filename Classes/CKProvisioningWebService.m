@@ -11,6 +11,7 @@
 #import "CKProvisioningWebService.h"
 #import "CKMapping.h"
 #import "CKNSObject+Invocation.h"
+#import "CKNSString+URIQuery.h"
 
 @implementation CKProductRelease
 @synthesize bundleIdentifier,applicationName,releaseDate,buildVersion,releaseNotes,releaseNotesURL,provisioningURL,recommended;
@@ -40,13 +41,17 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
         [mappings mapStringForKeyPath:@"build-version"      toKeyPath:@"buildVersion"       required:YES];
         [mappings mapStringForKeyPath:@"release-notes-text" toKeyPath:@"releaseNotes"       required:YES];
         [mappings mapURLForKeyPath:   @"release-notes-url"  toKeyPath:@"releaseNotesURL"    required:NO];
-        [mappings mapURLForKeyPath:   @"ota-url"            toKeyPath:@"provisioningURL"    required:YES];
-        [mappings mapKeyPath:         @"recommended"        withValueFromBlock:^id(id sourceObject, NSError **error) {
-            NSString* str = [sourceObject objectForKey:@"recommended"];
-            BOOL bo = [[str lowercaseString]isEqualToString:@"true"];
-            return [NSNumber numberWithBool:bo];
+        [mappings mapKeyPath:         @"provisioningURL"        withValueFromBlock:^id(id sourceObject, NSError **error) {
+            NSString* urlStr = [sourceObject objectForKey:@"ota-url"];
+            NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];
+            return url;
         }];
-        CKProvisioningProductMappings = mappings;
+        [mappings mapKeyPath:         @"recommended"        withValueFromBlock:^id(id sourceObject, NSError **error) {
+            NSNumber* recommendedNumber = [sourceObject objectForKey:@"recommended"];
+            BOOL recommended = [recommendedNumber boolValue];
+            return [NSNumber numberWithBool:recommended];
+        }];
+        CKProvisioningProductMappings = [mappings retain];
     }
     return CKProvisioningProductMappings;
 }
@@ -56,9 +61,9 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
                                        failure:(void (^)(NSError* error))failure{
     CKWebRequest2* request = [self getRequestForPath:@"check.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];
     request.successBlock = ^(id value){
-        NSString* upToDateStr = [value objectForKey:@"uptodate"];
-        BOOL upToDate = [[upToDateStr lowercaseString]isEqualToString:@"true"];
-        NSString* buildVersion = [value objectForKey:@"latestbuild"];
+        NSNumber* upToDateNumber = [value objectForKey:@"uptodate"];
+        BOOL upToDate = [upToDateNumber boolValue];
+        NSString* buildVersion = [value objectForKey:@"latest-build"];
         if(completion){
             completion(upToDate,buildVersion);
         }

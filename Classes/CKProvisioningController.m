@@ -41,9 +41,11 @@
 
 @implementation CKProvisioningController
 @synthesize items = _items;
+@synthesize parentViewController = _parentViewController;
 
-- (id)init{
+- (id)initWithParentViewController:(UIViewController*)controller{
     [super init];
+    self.parentViewController = controller;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     return self;
 }
@@ -51,6 +53,8 @@
 - (void)dealloc{
     [_items release];
     _items = nil;
+    [_parentViewController release];
+    _parentViewController = nil;
     [super dealloc];
 }
 
@@ -66,11 +70,16 @@
                                                                                version:buildVersion
      
                                                                                completion:^(BOOL upToDate,NSString* version){
+                                                                                   version = @"423";
                                                                                 if(!upToDate){
                                                                                     NSString* title = _(@"New Version Available");
                                                                                     NSString* message = [NSString stringWithFormat:_(@"Build (%@)"),version];
                                                                                     CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:(@"Details"),nil]autorelease];
                                                                                     alertView.object = [NSDictionary dictionaryWithObjectsAndKeys:version,@"version", nil];
+                                                                                    [alertView show];
+                                                                                }
+                                                                                else{
+                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:@"UpToDate" message:@"" delegate:self cancelButtonTitle:_(@"Ok") otherButtonTitles:nil]autorelease];
                                                                                     [alertView show];
                                                                                 }
                                                                                }
@@ -222,8 +231,8 @@
     
     formController.rightButton = installButton;
     if(parentController == nil){
-        UIViewController* rootController = [[[UIApplication sharedApplication]keyWindow]rootViewController];
-        NSAssert(rootController != nil,@"You need to set the rootViewController outlet of your Window in MainWindow.nib");
+        UIViewController* rootController =  self.parentViewController;
+        NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
         if(rootController.modalViewController == nil){
             UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:formController]autorelease];
             formController.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
@@ -238,8 +247,8 @@
 }
 
 - (void)displayProductReleases:(NSArray*)productReleases{
-    UIViewController* rootController = [[[UIApplication sharedApplication]keyWindow]rootViewController];
-    NSAssert(rootController != nil,@"You need to set the rootViewController outlet of your Window in MainWindow.nib");
+    UIViewController* rootController =  self.parentViewController;
+    NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
     if(rootController.modalViewController == nil){
         self.items = productReleases;
         
@@ -291,8 +300,8 @@
 }
 
 - (void)dismissModal:(id)sender{
-    UIViewController* rootController = [[[UIApplication sharedApplication]keyWindow]rootViewController];
-    NSAssert(rootController != nil,@"You need to set the rootViewController outlet of your Window in MainWindow.nib");
+    UIViewController* rootController =  self.parentViewController;
+    NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
     [rootController dismissModalViewControllerAnimated:YES];
 }
 
