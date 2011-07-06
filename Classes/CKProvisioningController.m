@@ -180,7 +180,7 @@
         CKProductRelease* productRelease = (CKProductRelease*)controller.value;
         controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
         controller.tableViewCell.textLabel.text = _(@"Release Date");
-        controller.tableViewCell.detailTextLabel.text = [NSValueTransformer transform:productRelease.releaseDate toClass:[NSString class]];
+        controller.tableViewCell.detailTextLabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
         return (id)nil; 
         
     }];
@@ -269,7 +269,8 @@
             CKTableViewCellController* controller = (CKTableViewCellController*)value;
             CKProductRelease* productRelease = (CKProductRelease*)controller.value;
             controller.tableViewCell.textLabel.text = [NSString stringWithFormat:@"%@ (%@) %@",productRelease.applicationName,productRelease.buildVersion,(productRelease.recommended ? @"RECOMMANDED" : @"")];
-            controller.tableViewCell.detailTextLabel.text = [NSValueTransformer transform:productRelease.releaseDate toClass:[NSString class]];
+            controller.tableViewCell.detailTextLabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
+
             return (id)nil; 
             
         }];

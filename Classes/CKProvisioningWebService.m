@@ -12,9 +12,15 @@
 #import "CKMapping.h"
 #import "CKNSObject+Invocation.h"
 #import "CKNSString+URIQuery.h"
+#import "CKNSDate+Conversions.h"
 
 @implementation CKProductRelease
 @synthesize bundleIdentifier,applicationName,releaseDate,buildVersion,releaseNotes,releaseNotesURL,provisioningURL,recommended;
+
+- (void)releaseDateMetaData:(CKModelObjectPropertyMetaData*)metaData{
+    metaData.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+}
+
 @end
 
 
@@ -37,10 +43,20 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
         NSMutableDictionary* mappings = [NSMutableDictionary dictionary];
         [mappings mapStringForKeyPath:@"bundle-identifier"  toKeyPath:@"bundleIdentifier"   required:YES];
         [mappings mapStringForKeyPath:@"name"               toKeyPath:@"applicationName"    required:YES];
-        [mappings mapDateForKeyPath:  @"release-date"       toKeyPath:@"releaseDate"        required:YES];
         [mappings mapStringForKeyPath:@"build-version"      toKeyPath:@"buildVersion"       required:YES];
         [mappings mapStringForKeyPath:@"release-notes-text" toKeyPath:@"releaseNotes"       required:YES];
         [mappings mapURLForKeyPath:   @"release-notes-url"  toKeyPath:@"releaseNotesURL"    required:NO];
+        [mappings mapKeyPath:         @"releaseDate"    withValueFromBlock:^id(id sourceObject, NSError **error) {
+            NSString* dateStr = [sourceObject objectForKey:@"release-date"];
+            
+            NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+            formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+            formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+            formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+            NSDate* date = [formatter dateFromString:dateStr];
+
+            return date;
+        }];
         [mappings mapKeyPath:         @"provisioningURL"    withValueFromBlock:^id(id sourceObject, NSError **error) {
             NSString* urlStr = [sourceObject objectForKey:@"ota-url"];
             NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];

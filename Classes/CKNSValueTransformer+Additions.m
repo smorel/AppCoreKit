@@ -418,12 +418,12 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
+    CKModelObjectPropertyMetaData* metaData = [property metaData];
 	if([NSObject isKindOf:type parentType:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
-				CKModelObjectPropertyMetaData* metaData = [property metaData];
 				if(metaData.enumDefinition != nil){
 					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDefinition:metaData.enumDefinition];
 				}
@@ -431,7 +431,18 @@ NSString* CKSerializerIDTag = @"@id";
 			}
 		}
 	}
-	
+	//special case for date ...
+    else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
+	   && [property.value isKindOfClass:[NSString class]]){
+		id result = [NSDate convertFromNSString:property.value withFormat:metaData.dateFormat];
+		return result;
+	}
+	else if(metaData.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+			&& [property.value isKindOfClass:[NSDate class]]){
+		id result = [NSDate convertToNSString:property.value withFormat:metaData.dateFormat];
+		return result;
+	}
+    
 	return [NSValueTransformer transform:[property value] toClass:type];
 }
 
