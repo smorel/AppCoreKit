@@ -32,7 +32,7 @@
 - (void)check;
 - (void)list;
 - (void)detailsForVersion:(NSString*)version;
-- (void)updateTo:(CKRigoloItem*)item;
+- (void)install:(CKRigoloItem*)item;
 @end
 
 /** 
@@ -40,6 +40,10 @@
  */
 @protocol CKRigoloWebServiceDelegate
 @optional
+- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService checkFailedWithError:(NSError*)error;
+- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService listFailedWithError:(NSError*)error;
+- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService detailsForVersion:(NSString*)version failedWithError:(NSError*)error;
+
 - (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService isUpToDateWithVersion:(NSString*)version;
 - (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService needsUpdateToVersion:(NSString*)version;
 - (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService didReceiveDetails:(CKRigoloItem*)details;

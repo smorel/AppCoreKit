@@ -437,6 +437,8 @@
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C97AC013C3A85100F67A59 /* CKRigoloWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C97AC113C3A85100F67A59 /* CKRigoloWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */; };
+		75C97AC513C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97AC313C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.h */; };
+		75C97AC613C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97AC413C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -847,6 +849,8 @@
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRigoloWebService.h; path = Classes/CKRigoloWebService.h; sourceTree = "<group>"; };
 		75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRigoloWebService.m; path = Classes/CKRigoloWebService.m; sourceTree = "<group>"; };
+		75C97AC313C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRigoloDefaultBehaviour.h; path = Classes/CKRigoloDefaultBehaviour.h; sourceTree = "<group>"; };
+		75C97AC413C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRigoloDefaultBehaviour.m; path = Classes/CKRigoloDefaultBehaviour.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1669,6 +1673,8 @@
 			children = (
 				75C97ABE13C3A85100F67A59 /* CKRigoloWebService.h */,
 				75C97ABF13C3A85100F67A59 /* CKRigoloWebService.m */,
+				75C97AC313C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.h */,
+				75C97AC413C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.m */,
 			);
 			name = Rigolo;
 			sourceTree = "<group>";
@@ -1878,6 +1884,7 @@
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
 				75C97AC013C3A85100F67A59 /* CKRigoloWebService.h in Headers */,
+				75C97AC513C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2164,6 +2171,7 @@
 				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKRigoloWebService.m in Sources */,
+				75C97AC613C4A9EF00F67A59 /* CKRigoloDefaultBehaviour.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,10 @@
 #import <UIKit/UIKit.h>
 #import "CKRigoloWebService.h"
 #import "CKMapping.h"
+#import "CKRigoloDefaultBehaviour.h"
+#import "CKNSObject+Invocation.h"
 
+static CKRigoloDefaultBehaviour* CKRigoloDefaultBehaviourInstance = nil;
 
 @implementation CKRigoloItem
 @synthesize bundleIdentifier,applicationName,releaseDate,buildVersion,releaseNotes,releaseNotesURL,overTheAirURL;
@@ -31,8 +34,11 @@ static NSMutableDictionary* CKRigoloItemMappings = nil;
 - (id)init {
 	[super init];
     self.baseURL = [NSURL URLWithString:@"http://rigolo-api.wherecloud.com/v1/app/"];
-    self.delegate = self;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    if(CKRigoloDefaultBehaviourInstance == nil){
+        CKRigoloDefaultBehaviourInstance = [[CKRigoloDefaultBehaviour alloc]init];
+    }
+    self.delegate = CKRigoloDefaultBehaviourInstance;
     return self;
 }
 
@@ -75,6 +81,9 @@ static NSMutableDictionary* CKRigoloItemMappings = nil;
     };
     request.failureBlock = ^(NSError* error){
         NSLog(@"RIGOLO CHECK ERROR : %@",error);
+        if([_delegate respondsToSelector:@selector(rigoloWebService:checkFailedWithError:)]){
+            [_delegate performSelector:@selector(rigoloWebService:checkFailedWithError:) withObject:self withObject:error];
+        }
     };
     
     [self performRequest:request];
@@ -99,6 +108,9 @@ static NSMutableDictionary* CKRigoloItemMappings = nil;
     };
     request.failureBlock = ^(NSError* error){
         NSLog(@"RIGOLO LIST ERROR : %@",error);
+        if([_delegate respondsToSelector:@selector(rigoloWebService:listFailedWithError:)]){
+            [_delegate performSelector:@selector(rigoloWebService:listFailedWithError:) withObject:self withObject:error];
+        }
     };
     
     [self performRequest:request];
@@ -119,32 +131,16 @@ static NSMutableDictionary* CKRigoloItemMappings = nil;
     };
     request.failureBlock = ^(NSError* error){
         NSLog(@"RIGOLO DESCRIPTOR ERROR : %@",error);
+        if([_delegate respondsToSelector:@selector(rigoloWebService:detailsForVersion:failedWithError:)]){
+            [_delegate performSelector:@selector(rigoloWebService:detailsForVersion:failedWithError:) withObjects:[NSArray arrayWithObjects:self,version,error,nil]];
+        }
     };
     
     [self performRequest:request];
 }
 
-- (void)updateTo:(CKRigoloItem*)item{
+- (void)install:(CKRigoloItem*)item{
     [[UIApplication sharedApplication]openURL:item.overTheAirURL];
-}
-
-//CKRigoloWebServiceDelegate : By default CKRigoloWebService is its own delegate and handle all the request feedback with a default behaviour
-
-- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService isUpToDateWithVersion:(NSString*)version{
-}
-
-- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService needsUpdateToVersion:(NSString*)version{
-    //pops an alert "NEW VERSION" CANCEL,DETAILS
-    //if DETAILS launch a detail request
-}
-
-- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService didReceiveDetails:(CKRigoloItem*)details{
-    //push as modal a controller with the release details and an UPDATE button or cancel
-    //if update, updateTo the corresponding item
-}
-
-- (void)rigoloWebService:(CKRigoloWebService*)rigoloWebService didReceiveItemList:(NSArray*)rigoloItems{
-    //can display a table with the items
 }
 
 @end
