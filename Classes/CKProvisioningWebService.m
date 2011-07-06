@@ -121,7 +121,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     [self performRequest:request];
 }
 
-- (void)detailsForProductRelease:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
+- (void)detailsForProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version
                       completion:(void (^)(CKProductRelease* productRelease))completion 
                          failure:(void (^)(NSError* error))failure{
     CKWebRequest2* request = [self getRequestForPath:@"descriptor.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];

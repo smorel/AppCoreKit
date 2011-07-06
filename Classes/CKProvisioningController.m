@@ -77,24 +77,9 @@
                                                                                     alertView.object = [NSDictionary dictionaryWithObjectsAndKeys:version,@"version", nil];
                                                                                     [alertView show];
                                                                                 }
-                                                                                else{
-                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:@"UpToDate" message:@"" delegate:self cancelButtonTitle:_(@"Ok") otherButtonTitles:nil]autorelease];
-                                                                                    [alertView show];
-                                                                                }
                                                                                }
      
                                                                                failure:^(NSError* error){
-                                                                                   NSMutableArray* items = [NSMutableArray array];
-                                                                                   for(int i =0;i<10;++i){
-                                                                                       CKProductRelease* item = [CKProductRelease model];
-                                                                                       item.applicationName = @"TOTO";
-                                                                                       item.bundleIdentifier = @"com.wherecloud.TOTO";
-                                                                                       item.releaseDate = [NSDate date];
-                                                                                       item.buildVersion = [NSString stringWithFormat:@"%d",i];
-                                                                                       item.releaseNotes = [NSString stringWithFormat:@"THE RELEASE NOTES\r\nFOR VERSION %d\r\nOF THE APPLICATION TOTO",i];
-                                                                                       [items addObject:item];
-                                                                                   }
-                                                                                   [self displayProductReleases:items];
                                                                                }];
 }
 
@@ -111,21 +96,25 @@
 
 - (void)detailsForProductRelease:(NSString*)version{
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-    [[CKProvisioningWebService sharedWebService]detailsForProductRelease:version 
-                                                 bundleIdentifier:bundleIdentifier
-                                                       completion:^(CKProductRelease* productRelease){
-                                                           [self displayProductRelease:productRelease parentController:nil];
-                                                       }
-                                                          failure:^(NSError* error){
-                                                          }];
+    [[CKProvisioningWebService sharedWebService]detailsForProductReleaseWithBundleIdentifier:bundleIdentifier
+                                                                                     version:version 
+     
+                                                                                     completion:^(CKProductRelease* productRelease){
+                                                                                         [self displayProductRelease:productRelease parentController:nil];
+                                                                                     }
+     
+                                                                                     failure:^(NSError* error){
+                                                                                     }];
 }
 
 - (void)listAllProductReleases{
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     [[CKProvisioningWebService sharedWebService]listAllProductReleasesWithBundleIdentifier:bundleIdentifier 
-                                                                         completion:^(NSArray* productReleases){
-                                                                             [self displayProductReleases:productReleases];
-                                                                         }
+     
+                                                                            completion:^(NSArray* productReleases){
+                                                                                [self displayProductReleases:productReleases];
+                                                                            }
+     
                                                                             failure:^(NSError* error){
                                                                             }];
     

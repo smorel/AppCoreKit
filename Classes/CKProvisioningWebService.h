@@ -57,7 +57,7 @@
  @param completion
  @param failure
  */
-- (void)detailsForProductRelease:(NSString*)version bundleIdentifier:(NSString*)bundleIdentifier
+- (void)detailsForProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version
                completion:(void (^)(CKProductRelease* productRelease))completion 
                   failure:(void (^)(NSError* error))failure;
 
