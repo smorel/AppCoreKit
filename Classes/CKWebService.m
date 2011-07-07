@@ -117,27 +117,17 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
     NetworkStatus netStatus = [_reachability currentReachabilityStatus];
     if (netStatus == NotReachable) {
 		if (showAlert) {
-			CKAlertView *alertView = 
-			  [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection")
-										  message:_(@"No Internet Message")
-										 delegate:self
-								cancelButtonTitle:_(@"Dismiss")
-								otherButtonTitles:_(@"Retry"), nil] autorelease];
-			alertView.object = object;
+			CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"No Internet Message")] autorelease];
+			[alertView addButtonWithTitle:_(@"Dismiss") action:nil];
+			[alertView addButtonWithTitle:_(@"Retry") action:^(void) {
+				CKWebRequest *request = (CKWebRequest *)(object);
+				if (request) [self performRequest:request];
+			}];
 			[alertView show];
 		}
 		return NO;
 	}
 	return YES;
-}
-
-#pragma mark UIAlertView Delegate
-
-- (void)alertView:(CKAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == 1) {
-		CKWebRequest *request = (CKWebRequest *)(alertView.object);
-		if (request) [self performRequest:request];
-	}
 }
 
 @end
