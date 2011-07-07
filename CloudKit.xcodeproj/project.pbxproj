@@ -32,6 +32,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
@@ -438,6 +440,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/CKActionSheet.h; sourceTree = "<group>"; };
+		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/CKActionSheet.m; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
@@ -1146,6 +1150,8 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
+				4F4F052E13C5F5410009DE31 /* CKActionSheet.m */,
 				7560DB1F13B8ED3600268D13 /* CKAlertView.h */,
 				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
 				7560DB3013B8ED3600268D13 /* CKCalloutView.h */,
@@ -1863,6 +1869,7 @@
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
+				4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2148,6 +2155,7 @@
 				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
 				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
+				4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
