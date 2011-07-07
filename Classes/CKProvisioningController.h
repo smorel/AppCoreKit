@@ -19,5 +19,6 @@
 @property(nonatomic,retain) UIViewController* parentViewController;
 
 - (id)initWithParentViewController:(UIViewController*)controller;
+- (void)fetchAndDisplayAllProductReleaseAsModal;
 
 @end

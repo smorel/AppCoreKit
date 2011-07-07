@@ -31,10 +31,11 @@
 
 /** 
  This method checks if their is a newer version on the provisioning server compared to the currently running version identified by bundleIdentifier and version.
- @param bundleIdentifier
- @param version
- @param completion
- @param failure
+ 
+ @param bundleIdentifier : TODO
+ @param version :  TODO
+ @param completion :  TODO
+ @param failure :  TODO
  */
 - (void)checkForNewProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
                                     completion:(void (^)(BOOL upToDate,NSString* version))completion 
@@ -42,9 +43,10 @@
 
 /** 
  This method lists all the released products hosted by the provisioning server.
- @param bundleIdentifier
- @param completion
- @param failure
+ 
+ @param bundleIdentifier : TODO
+ @param completion : TODO
+ @param failure : TODO
  */
 - (void)listAllProductReleasesWithBundleIdentifier:(NSString*)bundleIdentifier
                                  completion:(void (^)(NSArray* productReleases))completion 
@@ -52,10 +54,11 @@
 
 /** 
  This method retrieves the details for a specific released version hosted on the provisioning server.
- @param version
- @param bundleIdentifier
- @param completion
- @param failure
+ 
+ @param version : TODO
+ @param bundleIdentifier : TODO
+ @param completion : TODO
+ @param failure : TODO
  */
 - (void)detailsForProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version
                completion:(void (^)(CKProductRelease* productRelease))completion 

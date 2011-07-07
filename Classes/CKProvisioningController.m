@@ -121,6 +121,10 @@
 }
 
 
+- (void)fetchAndDisplayAllProductReleaseAsModal{
+    [self listAllProductReleases];
+}
+
 - (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController{
     CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
     formController.title = [NSString stringWithFormat:_(@"Version %@"),productRelease.buildVersion];
