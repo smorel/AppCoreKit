@@ -25,7 +25,6 @@
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
 		75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
-		75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -421,7 +420,7 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
+		7593CEB813C6266700F72D33 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7593CEB713C6266700F72D33 /* CloudKit.bundle */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -435,7 +434,6 @@
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
 		7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = CloudKit.xcdatamodeld; path = Resources/CloudKit.xcdatamodeld; sourceTree = "<group>"; };
-		7506E41213B902C300EE1471 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CloudKit.bundle; sourceTree = "<group>"; };
 		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
@@ -834,6 +832,7 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		7593CEB713C6266700F72D33 /* CloudKit.bundle */ = {isa = PBXFileReference; name = CloudKit.bundle; path = Resources/CloudKit.bundle; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
@@ -1399,7 +1398,7 @@
 			isa = PBXGroup;
 			children = (
 				7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */,
-				7506E41213B902C300EE1471 /* CloudKit.bundle */,
+				7593CEB713C6266700F72D33 /* CloudKit.bundle */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1930,7 +1929,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
-				7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */,
+				7593CEB813C6266700F72D33 /* CloudKit.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2143,7 +2142,6 @@
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
 				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
-				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
 				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
