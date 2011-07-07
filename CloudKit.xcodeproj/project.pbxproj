@@ -832,7 +832,7 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		7593CEB713C6266700F72D33 /* CloudKit.bundle */ = {isa = PBXFileReference; name = CloudKit.bundle; path = Resources/CloudKit.bundle; sourceTree = "<group>"; };
+		7593CEB713C6266700F72D33 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = Resources/CloudKit.bundle; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
@@ -2166,7 +2166,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				FRAMEWORK_VERSION = 1.5;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -2185,7 +2185,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				FRAMEWORK_VERSION = 1.5;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2201,10 +2201,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1069;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				FRAMEWORK_VERSION = 1.6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
 				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
@@ -2219,10 +2216,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1069;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				FRAMEWORK_VERSION = 1.6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
 				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
