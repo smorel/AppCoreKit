@@ -6,3 +6,5 @@ Crash Reports/*
 .DS_Store
 profile
 Headers
+
+/CloudKit.xcodeproj/project.xcworkspace/
