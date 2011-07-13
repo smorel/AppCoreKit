@@ -23,6 +23,21 @@
 /* Begin PBXBuildFile section */
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
+		7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */; };
+		7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */; };
+		7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */; };
+		7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */; };
+		7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */; };
+		7536F9E513CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */; };
+		7536F9E613CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */; };
+		7536F9E713CE0BE900720C17 /* CKKeypadViewButtonBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */; };
+		7536F9E813CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */; };
+		7536F9E913CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */; };
+		7536F9EA13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */; };
+		7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */; };
+		7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */; };
+		7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */; };
+		7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
 		75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -420,7 +435,6 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		7593CEB813C6266700F72D33 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7593CEB713C6266700F72D33 /* CloudKit.bundle */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -434,6 +448,20 @@
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
 		7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = CloudKit.xcdatamodeld; path = Resources/CloudKit.xcdatamodeld; sourceTree = "<group>"; };
+		7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKCreditsFooterViewWCLogo.png; sourceTree = "<group>"; };
+		7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKCreditsFooterViewWCLogo@2x.png"; sourceTree = "<group>"; };
+		7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Highlighted.png"; sourceTree = "<group>"; };
+		7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Selected.png"; sourceTree = "<group>"; };
+		7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKKeypadViewBackspaceButton.png; sourceTree = "<group>"; };
+		7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewButtonBackground-Highlighted.png"; sourceTree = "<group>"; };
+		7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewButtonBackground-Selected.png"; sourceTree = "<group>"; };
+		7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKKeypadViewButtonBackground.png; sourceTree = "<group>"; };
+		7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKSlideShowViewControllerArrowLeft.png; sourceTree = "<group>"; };
+		7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKSlideShowViewControllerArrowLeft@2x.png"; sourceTree = "<group>"; };
+		7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKSlideShowViewControllerArrowRight.png; sourceTree = "<group>"; };
+		7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKSlideShowViewControllerArrowRight@2x.png"; sourceTree = "<group>"; };
+		7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoBack.png; sourceTree = "<group>"; };
+		7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoForward.png; sourceTree = "<group>"; };
 		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
@@ -832,7 +860,6 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		7593CEB713C6266700F72D33 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CloudKit.bundle; path = Resources/CloudKit.bundle; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
@@ -1398,9 +1425,31 @@
 			isa = PBXGroup;
 			children = (
 				7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */,
-				7593CEB713C6266700F72D33 /* CloudKit.bundle */,
+				7536F9D113CE0BE900720C17 /* Images */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		7536F9D113CE0BE900720C17 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */,
+				7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */,
+				7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */,
+				7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */,
+				7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */,
+				7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */,
+				7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */,
+				7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */,
+				7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */,
+				7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */,
+				7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */,
+				7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */,
+				7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */,
+				7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */,
+			);
+			name = Images;
+			path = Resources/Images;
 			sourceTree = "<group>";
 		};
 		7550152413B8EA08002DAE8B = {
@@ -1929,7 +1978,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
-				7593CEB813C6266700F72D33 /* CloudKit.bundle in Resources */,
+				7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */,
+				7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */,
+				7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */,
+				7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */,
+				7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */,
+				7536F9E513CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png in Resources */,
+				7536F9E613CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png in Resources */,
+				7536F9E713CE0BE900720C17 /* CKKeypadViewButtonBackground.png in Resources */,
+				7536F9E813CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png in Resources */,
+				7536F9E913CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png in Resources */,
+				7536F9EA13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png in Resources */,
+				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
+				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
+				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
+				7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
