@@ -37,9 +37,6 @@
 		7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */; };
 		7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */; };
 		7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */; };
-		7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
-		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
-		75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1936,6 +1933,7 @@
 				7550152C13B8EA08002DAE8B /* Frameworks */,
 				7550152D13B8EA08002DAE8B /* Headers */,
 				7550152E13B8EA08002DAE8B /* Resources */,
+				7536FC5E13CE148E00720C17 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1977,7 +1975,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
 				7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */,
 				7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */,
 				7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */,
@@ -1992,13 +1989,25 @@
 				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
 				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
 				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
-				7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7536FC5E13CE148E00720C17 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R -L ${SRCROOT}/Resources/CloudKit.xcdatamodeld ${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\nrm -f ${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist";
+		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2204,7 +2213,6 @@
 				7560DE3E13B8EFDC00268D13 /* ASIInputStream.m in Sources */,
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
-				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
 				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
