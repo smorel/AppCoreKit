@@ -7,17 +7,6 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		7550153613B8EA08002DAE8B /* CloudKit Install */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKit Install" */;
-			buildPhases = (
-				7550153513B8EA08002DAE8B /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "CloudKit Install";
-			productName = Universal_Framework;
-		};
 		7561645313BA527A00330BF0 /* CloudKit Documentation */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 7561645513BA527A00330BF0 /* Build configuration list for PBXAggregateTarget "CloudKit Documentation" */;
@@ -34,9 +23,23 @@
 /* Begin PBXBuildFile section */
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
+		7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */; };
+		7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */; };
+		7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */; };
+		7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */; };
+		7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */; };
+		7536F9E513CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */; };
+		7536F9E613CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */; };
+		7536F9E713CE0BE900720C17 /* CKKeypadViewButtonBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */; };
+		7536F9E813CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */; };
+		7536F9E913CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */; };
+		7536F9EA13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */; };
+		7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */; };
+		7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */; };
+		7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */; };
+		7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
 		75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */; };
-		75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -432,9 +435,12 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7506E41213B902C300EE1471 /* CloudKit.bundle */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
+		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */; };
+		75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -442,7 +448,20 @@
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
 		7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = CloudKit.xcdatamodeld; path = Resources/CloudKit.xcdatamodeld; sourceTree = "<group>"; };
-		7506E41213B902C300EE1471 /* CloudKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CloudKit.bundle; sourceTree = "<group>"; };
+		7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKCreditsFooterViewWCLogo.png; sourceTree = "<group>"; };
+		7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKCreditsFooterViewWCLogo@2x.png"; sourceTree = "<group>"; };
+		7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Highlighted.png"; sourceTree = "<group>"; };
+		7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Selected.png"; sourceTree = "<group>"; };
+		7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKKeypadViewBackspaceButton.png; sourceTree = "<group>"; };
+		7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewButtonBackground-Highlighted.png"; sourceTree = "<group>"; };
+		7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewButtonBackground-Selected.png"; sourceTree = "<group>"; };
+		7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKKeypadViewButtonBackground.png; sourceTree = "<group>"; };
+		7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKSlideShowViewControllerArrowLeft.png; sourceTree = "<group>"; };
+		7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKSlideShowViewControllerArrowLeft@2x.png"; sourceTree = "<group>"; };
+		7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKSlideShowViewControllerArrowRight.png; sourceTree = "<group>"; };
+		7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKSlideShowViewControllerArrowRight@2x.png"; sourceTree = "<group>"; };
+		7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoBack.png; sourceTree = "<group>"; };
+		7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoForward.png; sourceTree = "<group>"; };
 		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
@@ -843,6 +862,10 @@
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
+		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
+		75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningWebService.m; path = Classes/CKProvisioningWebService.m; sourceTree = "<group>"; };
+		75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningController.h; path = Classes/CKProvisioningController.h; sourceTree = "<group>"; };
+		75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningController.m; path = Classes/CKProvisioningController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1402,9 +1425,31 @@
 			isa = PBXGroup;
 			children = (
 				7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */,
-				7506E41213B902C300EE1471 /* CloudKit.bundle */,
+				7536F9D113CE0BE900720C17 /* Images */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		7536F9D113CE0BE900720C17 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */,
+				7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */,
+				7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */,
+				7536F9D513CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png */,
+				7536F9D613CE0BE900720C17 /* CKKeypadViewBackspaceButton.png */,
+				7536F9D713CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png */,
+				7536F9D813CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png */,
+				7536F9D913CE0BE900720C17 /* CKKeypadViewButtonBackground.png */,
+				7536F9DA13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png */,
+				7536F9DB13CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png */,
+				7536F9DC13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png */,
+				7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */,
+				7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */,
+				7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */,
+			);
+			name = Images;
+			path = Resources/Images;
 			sourceTree = "<group>";
 		};
 		7550152413B8EA08002DAE8B = {
@@ -1482,6 +1527,7 @@
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Web */,
 				7506E40F13B9022700EE1471 /* Support */,
+				75C97ABC13C3A0C900F67A59 /* Provisioning */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1657,6 +1703,17 @@
 				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
 			);
 			name = UIKit;
+			sourceTree = "<group>";
+		};
+		75C97ABC13C3A0C900F67A59 /* Provisioning */ = {
+			isa = PBXGroup;
+			children = (
+				75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */,
+				75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */,
+				75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */,
+				75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */,
+			);
+			name = Provisioning;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1863,6 +1920,8 @@
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
+				75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */,
+				75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1908,7 +1967,6 @@
 			projectRoot = "";
 			targets = (
 				7550152F13B8EA08002DAE8B /* CloudKit */,
-				7550153613B8EA08002DAE8B /* CloudKit Install */,
 				7561645313BA527A00330BF0 /* CloudKit Documentation */,
 			);
 		};
@@ -1920,26 +1978,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */,
-				7561645913BA5AEE00330BF0 /* CloudKit.bundle in Resources */,
+				7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */,
+				7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */,
+				7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */,
+				7536F9E313CE0BE900720C17 /* CKKeypadViewBackspaceButton-Selected.png in Resources */,
+				7536F9E413CE0BE900720C17 /* CKKeypadViewBackspaceButton.png in Resources */,
+				7536F9E513CE0BE900720C17 /* CKKeypadViewButtonBackground-Highlighted.png in Resources */,
+				7536F9E613CE0BE900720C17 /* CKKeypadViewButtonBackground-Selected.png in Resources */,
+				7536F9E713CE0BE900720C17 /* CKKeypadViewButtonBackground.png in Resources */,
+				7536F9E813CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft.png in Resources */,
+				7536F9E913CE0BE900720C17 /* CKSlideShowViewControllerArrowLeft@2x.png in Resources */,
+				7536F9EA13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight.png in Resources */,
+				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
+				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
+				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
+				7536F9EE13CE0C0000720C17 /* CloudKit.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7550153513B8EA08002DAE8B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n\n# Build Framework\n\nrm -rf \"${UFW_UNIVERSAL_DIR}\"\n\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphoneos${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\nxcodebuild -target \"${UFW_TARGET}\" -configuration ${CONFIGURATION} -sdk iphonesimulator${UFW_SDK_VERSION} BUILD_DIR=${BUILD_DIR} CONFIGURATION_TEMP_DIR=${CONFIGURATION_TEMP_DIR} clean build\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: xcodebuild failed\"; exit 1; fi\n\nif [ ! -f \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" ]; then\necho \"Framework target \\\"${UFW_TARGET}\\\" had no source files to build from. Make sure your source files have the correct target membership\"\nexit 1\nfi\n\nmkdir -p \"${UFW_UNIVERSAL_DIR}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: mkdir failed\"; exit 1; fi\n\ncp -a \"${UFW_IPHONE_DIR}/${UFW_FMWK_DIRNAME}\" \"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: cp failed\"; exit 1; fi\n\nlipo -create -output \"${UFW_UNIVERSAL_DIR}/${UFW_EXE_PATH}\" \"${UFW_IPHONE_DIR}/${UFW_EXE_PATH}\" \"${UFW_SIMULATOR_DIR}/${UFW_EXE_PATH}\"\nif [ \"$?\" != \"0\" ]; then echo >&2 \"Error: lipo failed\"; exit 1; fi\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
-		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1951,7 +2010,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assume the target name is the same as the project name\nUFW_TARGET=${PROJECT}\n\nif [ -z ${SDK_NAME} ]; then\n# Use the latest iphoneos SDK available\nUFW_GREP_RESULT=$(xcodebuild -showsdks | grep -o \"iphoneos.*$\")\nwhile read -r line; do\nUFW_SDK_VERSION=\"${line}\"\ndone <<< \"${UFW_GREP_RESULT}\"\nelse\n# Use the SDK specified by XCode\nUFW_SDK_VERSION=\"${SDK_NAME}\"\nfi\n\nUFW_SDK_VERSION=$(echo \"${UFW_SDK_VERSION}\" | grep -o \"[0-9].*$\")\nUFW_FMWK_DIRNAME=\"${UFW_TARGET}.framework\"\nUFW_EXE_PATH=\"${UFW_FMWK_DIRNAME}/Versions/Current/${UFW_TARGET}\"\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\nUFW_SIMULATOR_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator\"\nUFW_UNIVERSAL_DIR=\"${USER_LIBRARY_DIR}/CloudKit/${FRAMEWORK_VERSION}\"\nUFW_DOCUMENTATION_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Documentation\"\nUFW_HEADERS_DIR=\"${UFW_UNIVERSAL_DIR}/${UFW_FMWK_DIRNAME}/Headers\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_DOCUMENTATION_DIR}\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --ignore .m \"${SRCROOT}/Classes\"\n\ncp -R -f \"${UFW_DOCUMENTATION_DIR}/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
+			shellScript = "UFW_TARGET=${PROJECT}\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_IPHONE_DIR}/Documentation/output\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --exit-threshold 2 \"${SRCROOT}/Classes\"\n\ncp -R -L \"${UFW_IPHONE_DIR}/Documentation/output/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2146,8 +2205,9 @@
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
 				75598F9F13BA066F003AE505 /* CloudKit.xcdatamodeld in Sources */,
-				75598FA113BA0676003AE505 /* CloudKit.bundle in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
+				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
+				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2169,7 +2229,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				FRAMEWORK_VERSION = 1.5;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -2188,7 +2248,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				FRAMEWORK_VERSION = 1.5;
+				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2204,10 +2264,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1068;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				FRAMEWORK_VERSION = 1.6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
 				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
@@ -2222,10 +2279,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1068;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				FRAMEWORK_VERSION = 1.6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
 				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
@@ -2233,20 +2287,6 @@
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = framework;
-			};
-			name = Release;
-		};
-		7550154413B8EA08002DAE8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = CloudKit;
-			};
-			name = Debug;
-		};
-		7550154513B8EA08002DAE8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = CloudKit;
 			};
 			name = Release;
 		};
@@ -2281,15 +2321,6 @@
 			buildConfigurations = (
 				7550154113B8EA08002DAE8B /* Debug */,
 				7550154213B8EA08002DAE8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7550154313B8EA08002DAE8B /* Build configuration list for PBXAggregateTarget "CloudKit Install" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7550154413B8EA08002DAE8B /* Debug */,
-				7550154513B8EA08002DAE8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
