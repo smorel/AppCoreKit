@@ -53,14 +53,14 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 }
 
 
-- (void)importContentOfFileNamed:(NSString*)name{
+- (BOOL)importContentOfFileNamed:(NSString*)name{
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
-	[self importContentOfFile:path];
+	return [self importContentOfFile:path];
 }
 
-- (void)importContentOfFile:(NSString*)path{
+- (BOOL)importContentOfFile:(NSString*)path{
 	if([_loadedFiles containsObject:path])
-		return;
+		return NO;
 	
 	NSData* fileData = [NSData dataWithContentsOfFile:path];
 	NSString* fileContentAsString = [[[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding]autorelease];
@@ -86,13 +86,18 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	NSMutableDictionary* result = [NSMutableDictionary dictionaryWithDictionary:responseValue];
 	[result processImports];
 	[_styles addEntriesFromDictionary:result];
+	
+	return YES;
 }
 
 - (void)loadContentOfFile:(NSString*)path{
-	self.styles = [NSMutableDictionary dictionary];
-	[self importContentOfFile:path];
-	[_styles initAfterLoading];
-	[_styles postInitAfterLoading];
+	if (_styles == nil){
+		self.styles = [NSMutableDictionary dictionary];
+	}
+	if([self importContentOfFile:path]){
+		[_styles initAfterLoading];
+		[_styles postInitAfterLoading];
+	}
 }
 
 - (NSString*)description{
