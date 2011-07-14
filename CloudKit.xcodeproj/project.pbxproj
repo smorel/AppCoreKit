@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		7550153C13B8EA08002DAE8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7550153A13B8EA08002DAE8B /* InfoPlist.strings */; };
@@ -430,6 +431,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 			isa = PBXGroup;
 			children = (
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
+				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.m */,
 				7560DB2A13B8ED3600268D13 /* CKBundle.h */,
@@ -2145,6 +2148,7 @@
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
 				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
+				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
