@@ -75,11 +75,3 @@ typedef BOOL(^CKObjectPredicate)(id);
 - (void)introspection:(Class)c array:(NSMutableArray*)array;
 
 @end
-
-/** TODO
- */
-@interface NSObject (CKNSObjectDebugStack)
-+ (NSString*)callStack;
-+ (void)logCallStack;
-+ (void)logCallStackIfBlockCopy;
-@end

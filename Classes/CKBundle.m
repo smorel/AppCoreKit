@@ -18,4 +18,8 @@ static NSString * const CKBundleName = @"CloudKit.bundle";
 	return [UIImage imageNamed:path];
 }
 
++ (NSString *)pathForStylesheet:(NSString *)name {
+	return [CKBundleName stringByAppendingPathComponent:[NSString stringWithFormat:@"Styles/%@", name]];
+}
+
 @end

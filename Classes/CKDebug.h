@@ -8,6 +8,7 @@
 // CKDebugLog Macro
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #ifdef DEBUG
   /** TODO
@@ -16,3 +17,15 @@
 #else
   #define CKDebugLog(s, ...)
 #endif
+
+
+// UIView
+@interface UIView (CKDebug)
+
+- (void)printViewHierarchy;
+
+@end
+
+// CallStack
+NSString* CKDebugGetCallStack();
+void CKDebugPrintCallStack();

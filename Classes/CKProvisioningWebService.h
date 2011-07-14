@@ -16,7 +16,8 @@
 @property (nonatomic,copy) NSString* bundleIdentifier;
 @property (nonatomic,copy) NSString* applicationName;
 @property (nonatomic,copy) NSDate* releaseDate;
-@property (nonatomic,copy) NSString* buildVersion;
+@property (nonatomic,copy) NSString* buildNumber;
+@property (nonatomic,copy) NSString* versionNumber;
 @property (nonatomic,copy) NSString* releaseNotes;
 @property (nonatomic,copy) NSURL* releaseNotesURL;
 @property (nonatomic,copy) NSURL* provisioningURL;
@@ -30,7 +31,7 @@
 }
 
 /** 
- This method checks if their is a newer version on the provisioning server compared to the currently running version identified by bundleIdentifier and version.
+ This method checks if there is a newer version on the provisioning server compared to the currently running version identified by bundleIdentifier and version.
  
  @param bundleIdentifier : TODO
  @param version :  TODO

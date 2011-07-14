@@ -306,7 +306,7 @@ NSString* CKStyleImport = @"@import";
 
 - (void)initAfterLoading{
 	for(id key in [self allKeys]){
-		id object = [self objectForKey:key];
+		id object = [[self objectForKey:key]retain];
 		if([object isKindOfClass:[NSDictionary class]]
 		   && [key isEqual:CKStyleFormats] == NO
 		   && [key isEqual:CKStyleParentStyle] == NO
@@ -321,6 +321,7 @@ NSString* CKStyleImport = @"@import";
 				[dico initAfterLoading];
 			}
 		}
+		[object release];
 	}
 }
 

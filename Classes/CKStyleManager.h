@@ -30,7 +30,7 @@
 - (void)loadContentOfFile:(NSString*)path;
 
 //private
-- (void)importContentOfFileNamed:(NSString*)name;
-- (void)importContentOfFile:(NSString*)path;
+- (BOOL)importContentOfFileNamed:(NSString*)name;
+- (BOOL)importContentOfFile:(NSString*)path;
 
 @end
