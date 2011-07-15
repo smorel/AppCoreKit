@@ -16,6 +16,9 @@
 #import "CKLocalization.h"
 
 #import "CKTextView.h"
+#import "CKDebug.h"
+
+
 NSMutableSet* reserverKeyWords = nil;
 
 NSString* CKStyleBackgroundColor = @"backgroundColor";
@@ -331,6 +334,9 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 			if(descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == NO){
 				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
 			}
+            else if(descriptor == nil){
+                CKDebugLog("invalid property %@ specified in style %@",key,style);
+            }
 		}
 	}
 }
