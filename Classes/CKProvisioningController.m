@@ -17,6 +17,7 @@
 #import "CKStyleManager.h"
 #import "CKBundle.h"
 #import "CKVersion.h"
+#import "CKDebug.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -50,11 +51,13 @@
 - (void)checkForNewProductRelease;
 - (void)listAllProductReleases;
 - (void)detailsForProductRelease:(NSString*)version;
+- (void)presentController:(CKObjectTableViewController *)controller;
 - (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController;
 - (void)displayProductReleases:(NSArray*)productReleases;
 
 - (CKObjectTableViewController *)controllerForProductReleases;
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
+- (UIView *)recommendedView;
 
 @property(nonatomic,retain) NSMutableArray* items;
 
@@ -71,7 +74,7 @@
 		self.items = [NSMutableArray array];
 		self.parentViewController = controller;
 		[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-		[[CKStyleManager defaultManager] loadContentOfFileNamed:[CKBundle pathForStylesheet:@"CKProvisioningController"]];
+		[[CKStyleManager defaultManager] loadContentOfFileNamed:@"CKProvisioningController"];
 	}
     return self;
 }
@@ -94,6 +97,8 @@
 }
 
 - (void)checkForNewProductRelease{
+//	[self presentController:[self controllerForProductReleases]];
+//	return;
     NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     
@@ -134,6 +139,31 @@
 
 #pragma mark - Presentation
 
+- (void)presentController:(CKObjectTableViewController *)controller {
+	UIViewController* rootController = self.parentViewController;
+	NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
+	if(rootController.modalViewController == nil){
+		UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			controller.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+																					  target:self 
+																					  action:@selector(dismissPopover:)] autorelease];
+			if (self.popoverController) {
+				[self.popoverController dismissPopoverAnimated:YES];
+			}
+			self.popoverController = [[[UIPopoverController alloc] initWithContentViewController:navController] autorelease];
+			self.popoverController.delegate = self;
+			[self.popoverController presentPopoverFromRect:CGRectMake(0, -10, rootController.view.bounds.size.width, 10) inView:rootController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		}
+		else {
+			controller.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+																					  target:self 
+																					  action:@selector(dismissModal:)] autorelease];
+			[rootController presentModalViewController:navController animated:YES];
+		}
+	}
+}
+
 - (void)displayProductReleases:(NSArray*)productReleases {
     UIViewController* rootController =  self.parentViewController;
     NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
@@ -152,34 +182,11 @@
 	CKObjectTableViewController *formController = [self controllerForProductRelease:productRelease];
 
     if(parentController == nil){
-        UIViewController* rootController = self.parentViewController;
-        NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
-        if(rootController.modalViewController == nil){
-            UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:formController]autorelease];
-			if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-				formController.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
-																						  target:self 
-																						  action:@selector(dismissPopover:)] autorelease];
-				if (self.popoverController) {
-					[self.popoverController dismissPopoverAnimated:YES];
-				}
-				self.popoverController = [[[UIPopoverController alloc] initWithContentViewController:navController] autorelease];
-				self.popoverController.delegate = self;
-				[self.popoverController presentPopoverFromRect:CGRectMake(0, -10, rootController.view.bounds.size.width, 10) inView:rootController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-			}
-            else {
-				formController.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
-																						  target:self 
-																						  action:@selector(dismissModal:)] autorelease];
-				[rootController presentModalViewController:navController animated:YES];
-			}
-        }
+		[self presentController:formController];
     }
     else{
         [parentController.navigationController pushViewController:formController animated:YES];
     }
-	formController.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	formController.tableView.scrollEnabled = NO;
 }
 
 - (void)detailsForProductRelease:(NSString*)version{
@@ -228,6 +235,7 @@
 	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
 	NSString *versionString = [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
     formController.title = versionString;
+	formController.name = @"rigoloReleaseDetailViewController";
 
 	// Header
 	CKFormCellDescriptor* headerCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -245,18 +253,13 @@
 		iconImageView.clipsToBounds = YES;
 		iconImageView.layer.cornerRadius = 10;
 		[controller.tableViewCell.contentView addSubview:iconImageView];
-		UIImageView *recommendedBadge = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-recommended-badge.png"]] autorelease];
-		recommendedBadge.tag = 10006;
-		recommendedBadge.frame = CGRectOffset(recommendedBadge.frame, controller.tableViewCell.contentView.bounds.size.width - 5 - CGRectGetMaxX(recommendedBadge.bounds), 5);
-		[controller.tableViewCell.contentView addSubview:recommendedBadge];
-        UILabel* recommendedLabel = [[[UILabel alloc]initWithFrame:CGRectZero]autorelease];
-        recommendedLabel.tag = 10005;
-		recommendedLabel.textAlignment = UITextAlignmentRight;
-		recommendedLabel.text = @"Recommended";
-		[recommendedLabel sizeToFit];
-		recommendedLabel.frame = CGRectMake(CGRectGetMinX(recommendedBadge.frame) - 5 - CGRectGetMaxX(recommendedLabel.bounds), CGRectGetMinY(recommendedBadge.frame), recommendedLabel.bounds.size.width, recommendedBadge.bounds.size.height);
-		recommendedLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		[controller.tableViewCell.contentView addSubview:recommendedLabel];
+		UIView *recommendedView = [self recommendedView];
+		recommendedView.tag = 10005;
+		CGRect frame = recommendedView.frame;
+		frame.origin.x = controller.tableViewCell.contentView.bounds.size.width - recommendedView.bounds.size.width - 5;
+		frame.origin.y = 5;
+		recommendedView.frame = frame;
+		[controller.tableViewCell.contentView addSubview:recommendedView];
         UILabel* appNamelabel = [[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10, 10, controller.tableViewCell.contentView.bounds.size.width - CGRectGetMaxX(iconImageView.frame) - 20, CGRectGetMaxY(iconImageView.bounds))]autorelease];
         appNamelabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         appNamelabel.tag = 10001;
@@ -280,9 +283,8 @@
     [headerCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         CKProductRelease* productRelease = (CKProductRelease*)controller.value;
-		UILabel *recommendedLabel = (UILabel *)[controller.tableViewCell.contentView viewWithTag:10005];
-		UIImageView *recommendedBadge = (UIImageView *)[controller.tableViewCell.contentView viewWithTag:10006];
-		recommendedLabel.hidden = recommendedBadge.hidden = !productRelease.recommended;
+		UIView *recommendedView = [controller.tableViewCell.contentView viewWithTag:10005];
+		recommendedView.hidden = !productRelease.recommended;
 		UIImageView *iconImageView = (UIImageView *)[controller.tableViewCell.contentView viewWithTag:10000];
 		iconImageView.image = [UIImage imageNamed:@"Icon.png"];
         UILabel* appNamelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10001];
@@ -409,42 +411,89 @@
 }
 
 - (CKObjectTableViewController *)controllerForProductReleases {
+	__block CKProvisioningController *bself = self;
 	NSMutableArray* mappings = [NSMutableArray array];
 	CKObjectViewControllerFactoryItem* releaseCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[CKProductRelease class]];
 	[releaseCellDescriptor setCreateBlock:^id(id value) {
 		CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.name = @"rigoloCell";
+		controller.name = @"rigoloReleaseListCell";
 		controller.cellStyle = CKTableViewCellStyleSubtitle;
-		return (id)nil; 
+		return (id)nil;
 	}];
 	[releaseCellDescriptor setInitBlock:^id(id value) {
-		CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		return (id)nil; 
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        UILabel* versionlabel = [[[UILabel alloc]initWithFrame:CGRectMake(15, 15, 200, 30)]autorelease];
+        versionlabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        versionlabel.tag = 10000;
+        [controller.tableViewCell.contentView addSubview:versionlabel];
+        UILabel* datelabel = [[[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(versionlabel.frame)+5, 280, 30)] autorelease];
+        datelabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        datelabel.tag = 10001;
+        [controller.tableViewCell.contentView addSubview:datelabel];
+		UIView *recommendedView = [self recommendedView];
+		recommendedView.tag = 10005;
+		CGRect frame = recommendedView.frame;
+		frame.origin.x = CGRectGetMaxX(controller.tableViewCell.bounds) - CGRectGetMaxX(recommendedView.bounds) - 5;
+		frame.origin.y = (CGRectGetMaxY(controller.tableViewCell.bounds) - CGRectGetMaxY(recommendedView.bounds)) / 2;
+		recommendedView.frame = CGRectIntegral(frame);
+		recommendedView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+		[controller.tableViewCell.contentView addSubview:recommendedView];
+        return (id)nil;
 	}];
 	[releaseCellDescriptor setSetupBlock:^id(id value) {
 		CKTableViewCellController* controller = (CKTableViewCellController*)value;
 		CKProductRelease* productRelease = (CKProductRelease*)controller.value;
-		controller.tableViewCell.textLabel.text = [NSString stringWithFormat:@"%@ (%@) %@",productRelease.applicationName,productRelease.buildNumber,(productRelease.recommended ? @"RECOMMANDED" : @"")];
-		controller.tableViewCell.detailTextLabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
-		
+		UILabel* versionlabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10000];
+        versionlabel.text = [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
+        UILabel* datelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10001];
+        datelabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
+		UIView *recommendedView = [controller.tableViewCell viewWithTag:10005];
+		recommendedView.hidden = !productRelease.recommended;
+		controller.tableViewCell.accessoryView = productRelease.recommended ? nil : [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-cell-disclosure.png"]] autorelease];
 		return (id)nil; 
-		
 	}];
+    [releaseCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 90)];
+    }];
 	[releaseCellDescriptor setSelectionBlock:^id(id value) {
 		CKTableViewCellController* controller = (CKTableViewCellController*)value;
 		CKProductRelease* productRelease = (CKProductRelease*)controller.value;
-		[self displayProductRelease:productRelease parentController:controller.parentController];
+		[bself displayProductRelease:productRelease parentController:controller.parentController];
 		return (id)nil;
 	}];
 	[releaseCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
-	CKObjectPropertyArrayCollection* collection = [CKObjectPropertyArrayCollection collectionWithArrayProperty:[CKObjectProperty propertyWithObject:self keyPath:@"items"]];
+    NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+	CKDocumentArray *collection = [[[CKDocumentArray alloc] initWithFeedSource:[[CKProvisioningWebService sharedWebService] sourceForReleasesWithBundleIdentifier:bundleIdentifier]] autorelease];
 	CKObjectTableViewController* tableViewController = [[[CKObjectTableViewController alloc]initWithCollection:collection mappings:mappings]autorelease];
+	tableViewController.name = @"rigoloReleasesViewController";
 	tableViewController.contentSizeForViewInPopover = CGSizeMake(320, 416);
 	tableViewController.title = _(@"Versions");
 	return tableViewController;
+}
+
+- (UIView *)recommendedView {
+	UIView *view = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	UILabel* recommendedLabel = [[[UILabel alloc]initWithFrame:CGRectZero]autorelease];
+	recommendedLabel.textAlignment = UITextAlignmentRight;
+	recommendedLabel.text = _(@"Recommended");
+	[recommendedLabel sizeToFit];
+	[view addSubview:recommendedLabel];
+
+	UIImageView *recommendedBadge = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-recommended-badge.png"]] autorelease];
+	recommendedBadge.frame = CGRectOffset(recommendedBadge.frame, CGRectGetMaxX(recommendedLabel.frame) + 5,0);
+	[view addSubview:recommendedBadge];
+	
+	CGRect frame = recommendedLabel.frame;
+	frame.size.height = recommendedBadge.bounds.size.height;
+	recommendedLabel.frame = frame;
+
+	view.frame = CGRectMake(0, 0, CGRectGetMaxX(recommendedBadge.frame), CGRectGetMaxY(recommendedBadge.bounds));
+
+	return view;
 }
 
 #pragma mark - UIPopoverController Delegate

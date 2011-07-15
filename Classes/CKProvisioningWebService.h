@@ -7,6 +7,7 @@
 //
 
 #import "CKWebService2.h"
+#import "CKWebSource.h"
 #import "CKModelObject.h"
 
 /** 
@@ -64,5 +65,8 @@
 - (void)detailsForProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version
                completion:(void (^)(CKProductRelease* productRelease))completion 
                   failure:(void (^)(NSError* error))failure;
+
+
+- (CKWebSource *)sourceForReleasesWithBundleIdentifier:(NSString *)bundleIdentifier;
 
 @end

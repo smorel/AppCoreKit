@@ -146,4 +146,24 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     [self performRequest:request];
 }
 
+- (CKWebSource *)sourceForReleasesWithBundleIdentifier:(NSString *)bundleIdentifier {
+	__block CKProvisioningWebService *bself = self;
+
+	CKWebSource *source = [[[CKWebSource alloc] init] autorelease];
+	source.requestBlock = ^(NSRange range) {
+		return (CKWebRequest2 *)[bself getRequestForPath:@"list.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",nil]];
+	};
+	source.transformBlock = ^(id value){
+		NSMutableArray* releases = [NSMutableArray array];
+		NSError* error;
+		for(NSDictionary* dico in [value objectForKey:@"releases"]){
+			CKProductRelease* release = [[[CKProductRelease alloc]initWithDictionary:dico withMappings:[self productReleaseMapping] error:&error]autorelease];
+			[releases addObject:release];
+		}
+		return (id)releases;
+	};
+
+	return source;
+}
+
 @end

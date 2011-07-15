@@ -14,12 +14,9 @@ static NSString * const CKBundleName = @"CloudKit.bundle";
 @implementation CKBundle
 
 + (UIImage *)imageForName:(NSString *)name {
-	NSString *path = [CKBundleName stringByAppendingPathComponent:[NSString stringWithFormat:@"Images/%@", name]];
-	return [UIImage imageNamed:path];
-}
-
-+ (NSString *)pathForStylesheet:(NSString *)name {
-	return [CKBundleName stringByAppendingPathComponent:[NSString stringWithFormat:@"Styles/%@", name]];
+	return [UIImage imageNamed:name];
+//	NSString *path = [CKBundleName stringByAppendingPathComponent:[NSString stringWithFormat:@"Images/%@", name]];
+//	return [UIImage imageNamed:path];
 }
 
 @end

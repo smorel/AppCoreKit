@@ -13,6 +13,5 @@
 @interface CKBundle : NSObject
 
 + (UIImage *)imageForName:(NSString *)name;
-+ (NSString *)pathForStylesheet:(NSString *)name;
 
 @end
