@@ -237,7 +237,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
-	NSAssert([aDecoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
+	NSAssert([aDecoder allowsKeyedCoding],@"CKModelObject does not support sequential archiving.");
     if (self = [super init]) {
 		[self initializeProperties];
 		[self initializeKVO];
