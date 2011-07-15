@@ -12,6 +12,8 @@
 
 //TODO : HERE store the converted data in the key to convert only once !
 
+static NSSet* CKStyleResourceTypeSet = nil;
+
 @implementation NSMutableDictionary (CKStyleParsing)
 
 - (UIColor*) colorForKey:(NSString*)key{
@@ -102,16 +104,40 @@
 	return result;	
 }
 
++ (NSSet*)resourceTypes{
+    if(CKStyleResourceTypeSet == nil){
+        CKStyleResourceTypeSet = [[NSSet setWithObjects:
+                                   [NSValue valueWithPointer:[NSString class]],
+                                   [NSValue valueWithPointer:[NSURL class]],
+                                   [NSValue valueWithPointer:[UIColor class]],
+                                   [NSValue valueWithPointer:[UIImage class]],
+                                   [NSValue valueWithPointer:[NSNumber class]],
+                                   [NSValue valueWithPointer:[NSValue class]],
+                                   [NSValue valueWithPointer:[NSDate class]],
+                                   [NSValue valueWithPointer:[NSIndexPath class]],
+                                   nil]retain];
+    }
+    return CKStyleResourceTypeSet;
+}
+
 - (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property{
 	id object = [self objectForKey:key];
 	id transformedValue = [NSValueTransformer transform:object inProperty:property];
+    if(object == transformedValue){
+        return transformedValue;
+    }
+    
+    //Force localization
 	if([transformedValue isKindOfClass:[NSString class]]){
 		transformedValue = _((NSString*)transformedValue);
 		[property setValue:transformedValue];
 	}
-	/*if(transformedValue != nil){
+    
+    //Cache resources in style tree to avoid parsing each time
+    NSSet* theResourceTypes = [NSMutableDictionary resourceTypes];
+	if(transformedValue != nil && [theResourceTypes containsObject:[NSValue valueWithPointer:[transformedValue class]]]){
 		[self setObject:transformedValue forKey:key];
-	}*/
+	}
 	return transformedValue;	
 }
 
