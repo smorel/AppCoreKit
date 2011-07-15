@@ -12,7 +12,7 @@
 #import "CKStyle+Parsing.h"
 
 
-@implementation CKUIViewController (CKStyle)
+@implementation UIViewController (CKStyle)
 
 - (void)applyStyle{
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];

@@ -13,7 +13,7 @@
 
 /** TODO
  */
-@interface CKUIViewController (CKStyle)
+@interface UIViewController (CKStyle)
 
 - (void)applyStyle;
 
