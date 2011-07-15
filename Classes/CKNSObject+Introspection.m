@@ -324,30 +324,3 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 @end
-
-@implementation  NSObject (CKNSObjectDebugStack)
-
-+ (NSString*)callStack{
-	NSString* string = @"";
-	void *frames[128];
-	int len = backtrace(frames, 128);
-	char **symbols = backtrace_symbols(frames, len);
-	for (int i = 0; i < len; ++i) {
-		string = [string stringByAppendingFormat:@"%s\n", symbols[i]];
-	}
-	free(symbols);
-	return string;
-}
-
-+ (void)logCallStack{
-	NSLog(@"%@",[NSObject callStack]);
-}
-
-+ (void)logCallStackIfBlockCopy{
-	NSString* stack = [NSObject callStack];
-	NSRange blockCopyRange = [stack rangeOfString:@"__copy_helper_block_"];
-	if(blockCopyRange.location != NSNotFound){
-		NSLog(@"%@",stack);
-	}
-}
-@end

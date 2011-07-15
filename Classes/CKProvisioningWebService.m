@@ -15,10 +15,10 @@
 #import "CKNSDate+Conversions.h"
 
 @implementation CKProductRelease
-@synthesize bundleIdentifier,applicationName,releaseDate,buildVersion,releaseNotes,releaseNotesURL,provisioningURL,recommended;
+@synthesize bundleIdentifier,applicationName,releaseDate,buildNumber,versionNumber,releaseNotes,releaseNotesURL,provisioningURL,recommended;
 
 - (void)releaseDateMetaData:(CKModelObjectPropertyMetaData*)metaData{
-    metaData.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    metaData.dateFormat = @"dd-MM-yy HH:mm:ss";
 }
 
 @end
@@ -43,7 +43,8 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
         NSMutableDictionary* mappings = [NSMutableDictionary dictionary];
         [mappings mapStringForKeyPath:@"bundle-identifier"  toKeyPath:@"bundleIdentifier"   required:YES];
         [mappings mapStringForKeyPath:@"name"               toKeyPath:@"applicationName"    required:YES];
-        [mappings mapStringForKeyPath:@"build-version"      toKeyPath:@"buildVersion"       required:YES];
+        [mappings mapStringForKeyPath:@"build-number"	    toKeyPath:@"buildNumber"	    required:YES];
+        [mappings mapStringForKeyPath:@"version-number"	    toKeyPath:@"versionNumber"      required:YES];
         [mappings mapStringForKeyPath:@"release-notes-text" toKeyPath:@"releaseNotes"       required:YES];
         [mappings mapURLForKeyPath:   @"release-notes-url"  toKeyPath:@"releaseNotesURL"    required:NO];
         [mappings mapKeyPath:         @"releaseDate"    withValueFromBlock:^id(id sourceObject, NSError **error) {
@@ -101,7 +102,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     request.transformBlock = ^(id value){
         NSMutableArray* releases = [NSMutableArray array];
         NSError* error;
-        for(NSDictionary* dico in value){
+        for(NSDictionary* dico in [value objectForKey:@"releases"]){
             CKProductRelease* release = [[[CKProductRelease alloc]initWithDictionary:dico withMappings:[self productReleaseMapping] error:&error]autorelease];
             [releases addObject:release];
         }
@@ -143,6 +144,26 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
     };
     
     [self performRequest:request];
+}
+
+- (CKWebSource *)sourceForReleasesWithBundleIdentifier:(NSString *)bundleIdentifier {
+	__block CKProvisioningWebService *bself = self;
+
+	CKWebSource *source = [[[CKWebSource alloc] init] autorelease];
+	source.requestBlock = ^(NSRange range) {
+		return (CKWebRequest2 *)[bself getRequestForPath:@"list.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",nil]];
+	};
+	source.transformBlock = ^(id value){
+		NSMutableArray* releases = [NSMutableArray array];
+		NSError* error;
+		for(NSDictionary* dico in [value objectForKey:@"releases"]){
+			CKProductRelease* release = [[[CKProductRelease alloc]initWithDictionary:dico withMappings:[self productReleaseMapping] error:&error]autorelease];
+			[releases addObject:release];
+		}
+		return (id)releases;
+	};
+
+	return source;
 }
 
 @end

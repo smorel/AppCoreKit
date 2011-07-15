@@ -12,11 +12,13 @@
 /** 
  TODO
  */
-@interface CKProvisioningController : NSObject<UIAlertViewDelegate> {
-    NSArray* _items;
+@interface CKProvisioningController : NSObject <UIPopoverControllerDelegate, UIAlertViewDelegate> {
+    NSMutableArray* _items;
     UIViewController* _parentViewController;
+	UIPopoverController *_popoverController;
 }
 @property(nonatomic,retain) UIViewController* parentViewController;
+@property(nonatomic,retain) UIPopoverController *popoverController;
 
 - (id)initWithParentViewController:(UIViewController*)controller;
 - (void)fetchAndDisplayAllProductReleaseAsModal;

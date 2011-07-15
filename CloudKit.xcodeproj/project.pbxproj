@@ -21,6 +21,24 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
+		4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */; };
+		4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */; };
+		4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */; };
+		4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */; };
+		4FBBA64613CF72A300772054 /* rigolo-btn-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */; };
+		4FBBA64713CF72A300772054 /* rigolo-btn-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */; };
+		4FBBA64813CF72A300772054 /* rigolo-btn-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */; };
+		4FBBA64913CF72A300772054 /* rigolo-btn-green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */; };
+		4FBBA64A13CF72A300772054 /* rigolo-cell-disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */; };
+		4FBBA64B13CF72A300772054 /* rigolo-cell-disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */; };
+		4FBBA64C13CF72A300772054 /* rigolo-recommended-badge.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */; };
+		4FBBA64D13CF72A300772054 /* rigolo-recommended-badge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */; };
+		4FBBA64E13CF72A300772054 /* rigolo-release-history-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */; };
+		4FBBA64F13CF72A300772054 /* rigolo-release-history-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */; };
+		4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */; };
+		4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */; };
+		4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA65313CF72B300772054 /* CKProvisioningController.style */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */; };
@@ -441,6 +459,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
+		4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg.png"; sourceTree = "<group>"; };
+		4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg@2x.png"; sourceTree = "<group>"; };
+		4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears.png"; sourceTree = "<group>"; };
+		4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears@2x.png"; sourceTree = "<group>"; };
+		4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled.png"; sourceTree = "<group>"; };
+		4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled@2x.png"; sourceTree = "<group>"; };
+		4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-green.png"; sourceTree = "<group>"; };
+		4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-green@2x.png"; sourceTree = "<group>"; };
+		4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-cell-disclosure.png"; sourceTree = "<group>"; };
+		4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-cell-disclosure@2x.png"; sourceTree = "<group>"; };
+		4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-recommended-badge.png"; sourceTree = "<group>"; };
+		4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-recommended-badge@2x.png"; sourceTree = "<group>"; };
+		4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-history-icon.png"; sourceTree = "<group>"; };
+		4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-history-icon@2x.png"; sourceTree = "<group>"; };
+		4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon.png"; sourceTree = "<group>"; };
+		4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon@2x.png"; sourceTree = "<group>"; };
+		4FBBA65313CF72B300772054 /* CKProvisioningController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CKProvisioningController.style; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
@@ -892,10 +928,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4FBBA65213CF72B300772054 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				4FBBA65313CF72B300772054 /* CKProvisioningController.style */,
+			);
+			name = Styles;
+			path = Resources/Styles;
+			sourceTree = "<group>";
+		};
 		7506E3ED13B8FA4F00EE1471 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
+				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.m */,
 				7560DB2A13B8ED3600268D13 /* CKBundle.h */,
@@ -1423,6 +1469,7 @@
 			children = (
 				7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */,
 				7536F9D113CE0BE900720C17 /* Images */,
+				4FBBA65213CF72B300772054 /* Styles */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1430,6 +1477,22 @@
 		7536F9D113CE0BE900720C17 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */,
+				4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */,
+				4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */,
+				4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */,
+				4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */,
+				4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */,
+				4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */,
+				4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */,
+				4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */,
+				4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */,
+				4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */,
+				4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */,
+				4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */,
+				4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */,
+				4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */,
+				4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */,
 				7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */,
 				7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */,
 				7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */,
@@ -1989,6 +2052,23 @@
 				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
 				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
 				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
+				4FBBA64613CF72A300772054 /* rigolo-btn-disabled.png in Resources */,
+				4FBBA64713CF72A300772054 /* rigolo-btn-disabled@2x.png in Resources */,
+				4FBBA64813CF72A300772054 /* rigolo-btn-green.png in Resources */,
+				4FBBA64913CF72A300772054 /* rigolo-btn-green@2x.png in Resources */,
+				4FBBA64A13CF72A300772054 /* rigolo-cell-disclosure.png in Resources */,
+				4FBBA64B13CF72A300772054 /* rigolo-cell-disclosure@2x.png in Resources */,
+				4FBBA64C13CF72A300772054 /* rigolo-recommended-badge.png in Resources */,
+				4FBBA64D13CF72A300772054 /* rigolo-recommended-badge@2x.png in Resources */,
+				4FBBA64E13CF72A300772054 /* rigolo-release-history-icon.png in Resources */,
+				4FBBA64F13CF72A300772054 /* rigolo-release-history-icon@2x.png in Resources */,
+				4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */,
+				4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */,
+				4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */,
+				4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */,
+				4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */,
+				4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */,
+				4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2006,7 +2086,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\"\nrm -f \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist\"";
+			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\"\nrm -f \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2216,6 +2296,7 @@
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
 				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
+				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
