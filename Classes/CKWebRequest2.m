@@ -11,7 +11,7 @@
 #import "CKNSStringAdditions.h"
 #import "CKNSString+URIQuery.h"
 #import "CKNSObject+Invocation.h"
-#import "CJSONDeserializer.h"
+#import "JSONKit.h"
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
 #import "CKDebug.h"
@@ -358,7 +358,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseValue = [[CJSONDeserializer deserializer] deserialize:theReceivedData error:&error];
+        responseValue = [theReceivedData objectFromJSONDataWithParseOptions:JKParseOptionNone error:&error];
 	} else if ([contentType isMatchedByRegex:@"image/"]) {
 		responseValue = [UIImage imageWithData:theReceivedData];
 	} else if ([contentType isMatchedByRegex:@"text/"]) {

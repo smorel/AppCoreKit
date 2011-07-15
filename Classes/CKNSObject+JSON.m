@@ -1,6 +1,6 @@
 //
 //  CKNSObject+JSON.m
-//  LoleWall
+//  CloudKit
 //
 //  Created by Fred Brunel on 11-01-10.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.

@@ -13,7 +13,7 @@
 #import "CKStyles.h"
 #import "CKUIView+Style.h"
 
-#import "CJSONDeserializer.h"
+#import "JSONKit.h"
 
 @interface CKStyleManager()
 @property (nonatomic,retain) NSMutableDictionary* styles;
@@ -62,28 +62,15 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	if([_loadedFiles containsObject:path])
 		return NO;
 	
+    //Parse file with validation
 	NSData* fileData = [NSData dataWithContentsOfFile:path];
-	NSString* fileContentAsString = [[[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding]autorelease];
-
-	//Removes comments
-	NSString *scannerString = [fileContentAsString copy];
-	NSScanner *s = [NSScanner scannerWithString:scannerString];
-	[scannerString release];
-	while (![s isAtEnd]) {
-		NSString *text = @"";
-		[s scanUpToString:@"/*" intoString:NULL];
-		[s scanUpToString:@"*/" intoString:&text];
-		fileContentAsString = [fileContentAsString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@*/", text] withString:@""];
-	}
-	
-	NSData* dataToParse = [fileContentAsString dataUsingEncoding:NSUTF8StringEncoding];
-	
 	NSError* error = nil;
-	id responseValue = [[CJSONDeserializer deserializer] deserialize:dataToParse error:&error];
-	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
-	[_loadedFiles addObject:path];
+    id result = [fileData mutableObjectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:&error];
+	NSAssert(result != nil,@"invalid format in style file '%@'\nat line : '%@'\nwith error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
+             [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
 	
-	NSMutableDictionary* result = [NSMutableDictionary dictionaryWithDictionary:responseValue];
+    //Post process
+    [_loadedFiles addObject:path];
 	[result processImports];
 	[_styles addEntriesFromDictionary:result];
 	
