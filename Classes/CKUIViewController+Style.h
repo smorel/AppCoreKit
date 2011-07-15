@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKUIViewController.h"
 #import "CKUIView+Style.h"
 
 
 /** TODO
  */
-@interface CKUIViewController (CKStyle)
+@interface UIViewController (CKStyle)
 
 - (void)applyStyle;
 
