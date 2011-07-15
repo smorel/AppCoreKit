@@ -109,9 +109,9 @@
 		transformedValue = _((NSString*)transformedValue);
 		[property setValue:transformedValue];
 	}
-	if(transformedValue != nil){
+	/*if(transformedValue != nil){
 		[self setObject:transformedValue forKey:key];
-	}
+	}*/
 	return transformedValue;	
 }
 
