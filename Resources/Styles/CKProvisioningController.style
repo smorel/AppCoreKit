@@ -189,5 +189,24 @@
 				}
 			}
 		}	
+	},
+
+	/*-------------------------
+		Release Notes
+	*/
+	"CKProvisioningReleaseNotesViewController" : {
+		"view" : {
+			"backgroundColor" : "0x444448",
+			"UIView[tag=10000]" : {
+				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"],
+			},
+			"UILabel[tag=10001]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontName" : "Helvetica-Bold"
+			},
+			"UITextView[tag=10003]" : {
+				"textColor" : "0x304371"
+			}
+		},
 	}
 }

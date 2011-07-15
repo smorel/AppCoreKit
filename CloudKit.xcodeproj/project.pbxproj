@@ -22,6 +22,10 @@
 
 /* Begin PBXBuildFile section */
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
+		4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */; };
+		4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */; };
+		4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */; };
+		4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */; };
 		4FBBA64613CF72A300772054 /* rigolo-btn-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */; };
 		4FBBA64713CF72A300772054 /* rigolo-btn-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */; };
 		4FBBA64813CF72A300772054 /* rigolo-btn-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */; };
@@ -456,6 +460,10 @@
 
 /* Begin PBXFileReference section */
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
+		4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg.png"; sourceTree = "<group>"; };
+		4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg@2x.png"; sourceTree = "<group>"; };
+		4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears.png"; sourceTree = "<group>"; };
+		4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears@2x.png"; sourceTree = "<group>"; };
 		4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled.png"; sourceTree = "<group>"; };
 		4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled@2x.png"; sourceTree = "<group>"; };
 		4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-green.png"; sourceTree = "<group>"; };
@@ -1469,6 +1477,10 @@
 		7536F9D113CE0BE900720C17 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */,
+				4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */,
+				4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */,
+				4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */,
 				4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */,
 				4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */,
 				4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */,
@@ -2053,6 +2065,10 @@
 				4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */,
 				4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */,
 				4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */,
+				4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */,
+				4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */,
+				4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */,
+				4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2070,7 +2086,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\"\nrm -f \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist\"";
+			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\"\nrm -f \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

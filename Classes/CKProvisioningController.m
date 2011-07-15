@@ -21,7 +21,11 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-//CKRigoloDefaultBehaviourBarButtonItem
+NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
+	return [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
+}
+
+// CKRigoloDefaultBehaviourBarButtonItem
 
 @interface CKProvisioningControllerBarButtonItem : UIBarButtonItem{
     id _userInfo;
@@ -43,8 +47,20 @@
 @synthesize userInfo = _userInfo;
 @end
 
+// CKProvisioningReleaseNotesViewController
 
-//CKRigoloDefaultBehaviour
+@interface CKProvisioningReleaseNotesViewController : UIViewController {
+	NSString* _name;
+}
+
+@property (nonatomic,retain) CKProductRelease *productRelease;
+@property (nonatomic,retain) NSString *name;
+
++ (CKProvisioningReleaseNotesViewController *)controllerWithProductRelease:(CKProductRelease *)productRelease;
+
+@end
+
+// CKRigoloDefaultBehaviour
 
 @interface CKProvisioningController()
 
@@ -97,8 +113,6 @@
 }
 
 - (void)checkForNewProductRelease{
-//	[self presentController:[self controllerForProductReleases]];
-//	return;
     NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     
@@ -233,8 +247,7 @@
 
     CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
 	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
-	NSString *versionString = [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
-    formController.title = versionString;
+    formController.title = CKVersionStringForProductRelease(productRelease);
 	formController.name = @"rigoloReleaseDetailViewController";
 
 	// Header
@@ -290,7 +303,7 @@
         UILabel* appNamelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10001];
         appNamelabel.text = productRelease.applicationName;
         UILabel* versionlabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10002];
-        versionlabel.text = versionString;
+        versionlabel.text = CKVersionStringForProductRelease(productRelease);
         UILabel* datelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10003];
         datelabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
         UILabel* currentVersionLabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10004];
@@ -302,6 +315,7 @@
         CGSize tableViewSize = [params bounds];
         return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 160)]; 
     }];
+	[headerCellDescriptor setFlags:CKItemViewFlagNone];
 	
 	// Install
 	CKFormCellDescriptor* installCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -339,6 +353,7 @@
         CGSize tableViewSize = [params bounds];
         return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 130)];
     }];
+	[installCellDescriptor setFlags:CKItemViewFlagNone];
 	
 	// Release Notes
     CKFormCellDescriptor* releaseNotesCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -364,6 +379,13 @@
         CGSize tableViewSize = [params bounds];
         return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 65)];
     }];
+	[releaseNotesCellDescriptor setSelectionBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        CKProductRelease* productRelease = (CKProductRelease*)controller.value;
+		[formController.navigationController pushViewController:[CKProvisioningReleaseNotesViewController controllerWithProductRelease:productRelease] animated:YES];
+        return (id)nil; 
+	}];
+	[releaseNotesCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
 	// Release History
     CKFormCellDescriptor* releaseHistoryCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -405,6 +427,7 @@
 																					   }];
 		return (id)nil;
 	}];
+	[releaseHistoryCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
     [formController addSectionWithCellDescriptors:[NSArray arrayWithObjects:headerCellDescriptor,installCellDescriptor,releaseNotesCellDescriptor,releaseHistoryCellDescriptor,nil]];
 	return formController;
@@ -444,7 +467,7 @@
 		CKTableViewCellController* controller = (CKTableViewCellController*)value;
 		CKProductRelease* productRelease = (CKProductRelease*)controller.value;
 		UILabel* versionlabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10000];
-        versionlabel.text = [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
+        versionlabel.text = CKVersionStringForProductRelease(productRelease);
         UILabel* datelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10001];
         datelabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
 		UIView *recommendedView = [controller.tableViewCell viewWithTag:10005];
@@ -500,6 +523,63 @@
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
 	[_popoverController release]; _popoverController = nil;
+}
+
+@end
+
+#pragma mark -
+#pragma mark - Release Notes ViewController
+
+@implementation CKProvisioningReleaseNotesViewController
+
+@synthesize productRelease = _productRelease;
+@synthesize name = _name;
+
++ (CKProvisioningReleaseNotesViewController *)controllerWithProductRelease:(CKProductRelease *)productRelease {
+	CKProvisioningReleaseNotesViewController *controller = [[[CKProvisioningReleaseNotesViewController alloc] init] autorelease];
+	controller.productRelease = productRelease;
+	controller.contentSizeForViewInPopover = CGSizeMake(320, 416);
+	return controller;
+}
+
+- (void)dealloc {
+	self.productRelease = nil;
+	[_name release];
+	_name = nil;
+	
+	[super dealloc];
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+
+	UITextView *notesView = [[[UITextView alloc] initWithFrame:CGRectMake(0, 50, self.view.bounds.size.width, self.view.bounds.size.height - 50)] autorelease];
+	notesView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	notesView.tag = 10003;
+	notesView.editable = NO;
+	notesView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"rigolo-notes-bg.png"]];
+	notesView.font = [UIFont fontWithName:@"Noteworthy-Bold" size:17];
+	notesView.text = [NSString stringWithFormat:@"%@ %@", self.productRelease.releaseNotes, self.productRelease.releaseNotes];
+	[self.view addSubview:notesView];
+	
+	CKGradientView *headerView = [[[CKGradientView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)] autorelease];
+	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	headerView.tag = 10000;
+	[self.view addSubview:headerView];
+
+	UILabel *versionLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 0, headerView.bounds.size.width-20, headerView.bounds.size.height)] autorelease];
+	versionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	versionLabel.tag = 10001;
+	versionLabel.textAlignment = UITextAlignmentCenter;
+	versionLabel.text = CKVersionStringForProductRelease(self.productRelease);
+	[self.view addSubview:versionLabel];
+
+	UIImageView *pageTears = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"rigolo-notes-pagetears.png"]] autorelease];
+	pageTears.frame = CGRectMake(0, 50, self.view.bounds.size.width, pageTears.bounds.size.height);
+	pageTears.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[self.view addSubview:pageTears];
+
+	[self applyStyle];
 }
 
 @end
