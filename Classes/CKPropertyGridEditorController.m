@@ -134,6 +134,11 @@
 			if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
+                [descriptor setCreateBlock:^(id controller){
+					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
+                    optionCellController.cellStyle = CKTableViewCellStyleValue3;
+                    return (id)nil;
+				}];
 				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
@@ -152,6 +157,11 @@
 			else if(metaData.enumDefinition != nil){
 				NSDictionary* copyOfLabelsAndValues = [metaData.enumDefinition copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
+                [descriptor setCreateBlock:^(id controller){
+					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
+                    optionCellController.cellStyle = CKTableViewCellStyleValue3;
+                    return (id)nil;
+				}];
 				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];

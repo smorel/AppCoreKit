@@ -31,13 +31,13 @@
            @end
  
  
- In the previous example, we provides a user setting containing 3 properties. each time you will set one of these, the NSUserDefaults standardUserDefaults object will get automatically updated and synchronized. The properties for this object will get stored with the following keys in the NSUserDefaults :
+ In the previous example, we provide a user setting containing 3 properties. Each time you will set one of these, the NSUserDefaults standardUserDefaults object will get automatically updated and synchronized. The properties for this object will get stored with the following keys in the NSUserDefaults :
  
            MyUserDefaults_theBool
            MyUserDefaults_theFloat
            MyUserDefaults_theString
            
- If we do not find some of those keys at init, the default values could be sepecified either in your postInit selector or in a plist named MyUserDefaults.plist located in the mainBundle.
+ If we do not find some of those keys at init, the default values could be specified either in your postInit selector or in a plist named MyUserDefaults.plist located in the mainBundle.
  
  @see CKModelObject
  */

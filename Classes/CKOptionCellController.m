@@ -57,7 +57,7 @@
 		}
 	}
 	else{
-		NSInteger index = [self.values indexOfObject:value];
+		NSInteger index = [value intValue];
 		return (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%@", value];
 	}
 	return nil;
@@ -90,7 +90,7 @@
 		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES] autorelease];
 	}
 	else{
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:self.value] autorelease];
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.value intValue]] autorelease];
 	}
 	optionTableController.title = self.text;
 	optionTableController.optionTableDelegate = self;

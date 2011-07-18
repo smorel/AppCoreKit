@@ -1121,26 +1121,15 @@
 		7506E40213B8FE6100EE1471 /* Tables */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
-				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
+				7528070813D4B0500010A300 /* PropertyGrid */,
 				7560DB5213B8ED3600268D13 /* CKDocumentCollectionCellController.h */,
 				7560DB5313B8ED3600268D13 /* CKDocumentCollectionCellController.m */,
 				7560DB6913B8ED3600268D13 /* CKImageButtonCellController.h */,
 				7560DB6A13B8ED3600268D13 /* CKImageButtonCellController.m */,
 				7560DB9513B8ED3600268D13 /* CKMoviePlayerCellController.h */,
 				7560DB9613B8ED3600268D13 /* CKMoviePlayerCellController.m */,
-				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
-				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
 				7560DB9F13B8ED3600268D13 /* CKNibCellController.h */,
 				7560DBA013B8ED3600268D13 /* CKNibCellController.m */,
-				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
-				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
-				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
-				7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */,
-				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
-				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
-				7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */,
-				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
 				7560DBE413B8ED3600268D13 /* CKOptionCellController.h */,
 				7560DBE513B8ED3600268D13 /* CKOptionCellController.m */,
 				7560DBFC13B8ED3600268D13 /* CKStandardCellController.h */,
@@ -1151,10 +1140,6 @@
 				7560DC1D13B8ED3600268D13 /* CKTextViewCellController.m */,
 				7560DC2013B8ED3600268D13 /* CKToggleSwitchCellController.h */,
 				7560DC2113B8ED3600268D13 /* CKToggleSwitchCellController.m */,
-				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
-				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
-				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
-				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
 				7560DB6013B8ED3600268D13 /* CKFormTableViewController.h */,
 				7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */,
 				7560DB8513B8ED3600268D13 /* CKManagedTableViewController.h */,
@@ -1171,10 +1156,6 @@
 				7560DC1513B8ED3600268D13 /* CKTableViewCellNextResponder.m */,
 				7560DC1613B8ED3600268D13 /* CKTableViewController.h */,
 				7560DC1713B8ED3600268D13 /* CKTableViewController.m */,
-				7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */,
-				7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */,
-				7560DB3613B8ED3600268D13 /* CKClassExplorer.h */,
-				7560DB3713B8ED3600268D13 /* CKClassExplorer.m */,
 			);
 			name = Tables;
 			sourceTree = "<group>";
@@ -1460,6 +1441,33 @@
 				751F1EFD13D0E95B0041900C /* CKUserDefaults.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		7528070813D4B0500010A300 /* PropertyGrid */ = {
+			isa = PBXGroup;
+			children = (
+				7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */,
+				7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */,
+				7560DB3613B8ED3600268D13 /* CKClassExplorer.h */,
+				7560DB3713B8ED3600268D13 /* CKClassExplorer.m */,
+				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
+				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
+				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
+				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
+				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
+				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
+				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
+				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
+				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
+				7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */,
+				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
+				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
+				7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */,
+				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
+				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
+				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
+			);
+			name = PropertyGrid;
 			sourceTree = "<group>";
 		};
 		7536F9D113CE0BE900720C17 /* Images */ = {
