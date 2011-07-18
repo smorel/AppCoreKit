@@ -11,7 +11,7 @@
 
 /** 
  A CKUserDefaults contains properties that will get synched automatically with the [NSUserDefaults standardUserDefaults] system provided by Apple.
- This allow to easilly specify typed properties with default values in a plist named YourClassUserDefaults.plist or in the postInit selector.
+ This allow to easily specify typed properties with default values in a plist named YourClassUserDefaults.plist or in the postInit selector.
  It also provides all the helpers from CKModelObject : auto init, auto dealloc, copy, serialization and more ...
  
  CKUserDefaults objects are sharedInstance for an easy access. It will get initialized the first time you access the shared instance of your specific class.
@@ -23,7 +23,11 @@
            @end
  
            @implementation MyUserDefaults
-                    @syntesize theBool,theFloat,theString
+                    @syntesize theBool,theFloat,theString;
+                    - (void)postInit{
+                           [super postInit];
+                           //Initialize default values for your properties.
+                    }
            @end
  
  
