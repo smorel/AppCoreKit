@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "CKProvisioningWebService.h"
+#import "CKUserDefaults.h"
+#import "CKFormTableViewController.h"
+
+@interface CKProvisioningUserDefaults : CKUserDefaults{}
+@property (nonatomic,assign)BOOL autoCheck;
+@end
 
 /** 
  TODO
@@ -21,6 +28,9 @@
 @property(nonatomic,retain) UIPopoverController *popoverController;
 
 - (id)initWithParentViewController:(UIViewController*)controller;
-- (void)fetchAndDisplayAllProductReleaseAsModal;
+
+- (CKFormTableViewController *)controllerForSettings;
+- (CKObjectTableViewController *)controllerForProductReleases;
+- (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
 
 @end

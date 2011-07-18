@@ -9,19 +9,28 @@
 #import "CKProvisioningController.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
-#import "CKFormTableViewController.h"
 #import "CKNSNumberPropertyCellController.h"
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSDictionary+TableViewAttributes.h"
-#import "CKProvisioningWebService.h"
 #import "CKStyleManager.h"
 #import "CKBundle.h"
 #import "CKVersion.h"
 #import "CKDebug.h"
 #import "CKObjectProperty.h"
+#import "CKNSObject+Bindings.h"
 
 #import <QuartzCore/QuartzCore.h>
+
+@implementation CKProvisioningUserDefaults
+@synthesize autoCheck;
+
+- (void)postInit{
+    [super postInit];
+    self.autoCheck = YES;
+}
+
+@end
 
 NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	return [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
@@ -73,9 +82,6 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController;
 - (void)displayProductReleases:(NSArray*)productReleases;
 
-- (CKFormTableViewController *)controllerForSettings;
-- (CKObjectTableViewController *)controllerForProductReleases;
-- (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
 - (UIView *)recommendedView;
 
 @property(nonatomic,retain) NSMutableArray* items;
@@ -92,7 +98,25 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	if (self) {
 		self.items = [NSMutableArray array];
 		self.parentViewController = controller;
-		[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        
+        //Init autocheck notifications
+        if([[CKProvisioningUserDefaults sharedInstance]autoCheck]){
+            [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        }
+        
+        [self beginBindingsContextByRemovingPreviousBindings];
+        [[CKProvisioningUserDefaults sharedInstance] bind:@"autoCheck" withBlock:^(id value) {
+            if([[CKProvisioningUserDefaults sharedInstance]autoCheck]){
+                [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+            }
+            else{
+                if([[CKProvisioningUserDefaults sharedInstance]autoCheck]){
+                    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+                }
+            }
+        }];
+        [self endBindingsContext];
+        
 		[[CKStyleManager defaultManager] loadContentOfFileNamed:@"CKProvisioningController"];
 	}
     return self;
@@ -207,6 +231,11 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)detailsForProductRelease:(NSString*)version{
+    /* DEBUG
+     [self presentController:[self controllerForSettings]];
+    return;
+     */
+    
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     [[CKProvisioningWebService sharedWebService]detailsForProductReleaseWithBundleIdentifier:bundleIdentifier
                                                                                      version:version 
@@ -330,25 +359,25 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	[updateCellDescriptor setFlags:CKItemViewFlagNone];
 	
 	// Check Automatically
-//	CKFormCellDescriptor* checkAutoCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[CKObjectProperty propertyWithObject:[NSUserDefaults standardUserDefaults] keyPath:@"CheckRigolo"]  controllerClass:[CKNSNumberPropertyCellController class]];
-//    [checkAutoCellDescriptor setCreateBlock:^id(id value) {
-//        CKTableViewCellController* controller = (CKTableViewCellController*)value;
-//        controller.name = @"rigoloSettingsCheckAutoCell";
-//        controller.cellStyle = CKTableViewCellStyleDefault;
-//        return (id)nil;
-//    }];
-//    [checkAutoCellDescriptor setInitBlock:^id(id value) {
-//        CKTableViewCellController* controller = (CKTableViewCellController*)value;
-//        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
-//		controller.tableViewCell.textLabel.text = _(@"Check Automatically");
-//        return (id)nil; 
-//    }];
-//    [checkAutoCellDescriptor setSizeBlock:^id(id value) {
-//        NSDictionary* params = (NSDictionary*)value;
-//        CGSize tableViewSize = [params bounds];
-//        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 55)];
-//    }];
-//	[checkAutoCellDescriptor setFlags:CKItemViewFlagNone];
+	CKFormCellDescriptor* checkAutoCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[CKObjectProperty propertyWithObject:[CKProvisioningUserDefaults sharedInstance] keyPath:@"autoCheck"]  controllerClass:[CKNSNumberPropertyCellController class]];
+    [checkAutoCellDescriptor setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.name = @"rigoloSettingsCheckAutoCell";
+        controller.cellStyle = CKTableViewCellStyleDefault;
+        return (id)nil;
+    }];
+    [checkAutoCellDescriptor setInitBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		controller.tableViewCell.textLabel.text = _(@"Check Automatically");
+        return (id)nil; 
+    }];
+    [checkAutoCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 55)];
+    }];
+	[checkAutoCellDescriptor setFlags:CKItemViewFlagNone];
 	
 	// Release Notes
     CKFormCellDescriptor* releaseNotesCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -424,7 +453,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	}];
 	[releaseHistoryCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
-    [formController addSectionWithCellDescriptors:[NSArray arrayWithObjects:headerCellDescriptor,updateCellDescriptor,releaseNotesCellDescriptor,releaseHistoryCellDescriptor,nil]];
+    [formController addSectionWithCellDescriptors:[NSArray arrayWithObjects:headerCellDescriptor,updateCellDescriptor,checkAutoCellDescriptor,releaseNotesCellDescriptor,releaseHistoryCellDescriptor,nil]];
 	return formController;
 }
 
