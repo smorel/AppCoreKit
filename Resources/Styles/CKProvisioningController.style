@@ -95,6 +95,82 @@
 		}
 	},
 
+	"CKTableViewCellController[name=rigoloReleaseNotesCell]" : {
+		"UITableViewCell" : {
+			"@inherits" : ["$RIGOLO_DARK_CELL"]
+		}
+	},
+	"CKTableViewCellController[name=rigoloReleaseHistoryCell]" : {
+		"UITableViewCell" : {
+			"@inherits" : ["$RIGOLO_DARK_CELL"]
+		}
+	},
+
+	/*-------------------------
+		Settings
+	*/
+	"UIViewController[name=rigoloSettingsViewController]" : {
+		"UITableView" : {
+			"separatorStyle" : "UITableViewCellSeparatorStyleNone",
+			"backgroundColor" : "0x444448"
+		},
+		"CKTableViewCellController[name=rigoloSettingsHeaderCell]" : {
+			"UITableViewCell" : {
+				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
+			},
+
+			"UILabel[tag=10001]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontName" : "Helvetica-Bold",
+				"fontSize" : "20"
+			},
+			"UILabel[tag=10002]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontSize" : "16"
+			},
+			"UILabel[tag=10003,tag=10004]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontSize" : "14"
+			},
+			"UIView[tag=10005]" : {
+				"UILabel" : {
+					"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"]
+				}
+			}
+		},
+
+		"CKTableViewCellController[name=rigoloSettingsUpdateCell]" : {
+			"UITableViewCell" : {
+				"backgroundView" : {
+					"backgroundColor" : "0x444448"
+				},
+
+				"UIButton[tag=10000]" : {
+					"titleLabel" : {
+						"shadowOffset" : "0 -1",
+						"shadowColor" : "blackColor",
+						"fontName" : "Helvetica-Bold",
+						"fontSize" : "20"
+					}
+				}
+			}
+		},
+
+		"CKTableViewCellController[name=rigoloSettingsCheckAutoCell]" : {
+			"UITableViewCell" : {
+				"backgroundView" : {
+					"backgroundColor" : "0x444448"
+				},
+				"UILabel" : {
+					"@inherits" : ["$RIGOLO_WHITE_LABEL"],
+					"fontName" : "Helvetica-Bold",
+					"fontSize" : "18"
+				}
+			}
+		}
+	},
+
+
 	/*-------------------------
 		Release Details
 	*/
@@ -103,57 +179,46 @@
 			"separatorStyle" : "UITableViewCellSeparatorStyleNone",
 			"backgroundColor" : "0x444448"
 		},
-	},
-	"CKTableViewCellController[name=rigoloReleaseDetailsHeaderCell]" : {
-		"UITableViewCell" : {
-			"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
-		},
-
-		"UILabel[tag=10001]" : {
-			"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
-			"fontName" : "Helvetica-Bold",
-			"fontSize" : "20"
-		},
-		"UILabel[tag=10002]" : {
-			"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
-			"fontSize" : "16"
-		},
-		"UILabel[tag=10003,tag=10004]" : {
-			"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
-			"fontSize" : "14"
-		},
-		"UIView[tag=10005]" : {
-			"UILabel" : {
-				"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"]
-			}
-		}
-	},
-
-	"CKTableViewCellController[name=rigoloReleaseDetailsInstallCell]" : {
-		"UITableViewCell" : {
-			"backgroundView" : {
-				"backgroundColor" : "0x444448"
-			}
-		},
-
-		"UIButton" : {
-			"titleLabel" : {
-				"shadowOffset" : "0 -1",
-				"shadowColor" : "blackColor"
+		"CKTableViewCellController[name=rigoloReleaseDetailsHeaderCell]" : {
+			"UITableViewCell" : {
+				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
 			},
-			"fontName" : "Helvetica-Bold",
-			"fontSize" : "20"
-		}
-	},
 
-	"CKTableViewCellController[name=rigoloReleaseDetailsReleaseNotesCell]" : {
-		"UITableViewCell" : {
-			"@inherits" : ["$RIGOLO_DARK_CELL"]
-		}
-	},
-	"CKTableViewCellController[name=rigoloReleaseDetailsReleaseHistoryCell]" : {
-		"UITableViewCell" : {
-			"@inherits" : ["$RIGOLO_DARK_CELL"]
+			"UILabel[tag=10001]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontName" : "Helvetica-Bold",
+				"fontSize" : "20"
+			},
+			"UILabel[tag=10002]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontSize" : "16"
+			},
+			"UILabel[tag=10003,tag=10004]" : {
+				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
+				"fontSize" : "14"
+			},
+			"UIView[tag=10005]" : {
+				"UILabel" : {
+					"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"]
+				}
+			}
+		},
+
+		"CKTableViewCellController[name=rigoloReleaseDetailsInstallCell]" : {
+			"UITableViewCell" : {
+				"backgroundView" : {
+					"backgroundColor" : "0x444448"
+				}
+			},
+
+			"UIButton" : {
+				"titleLabel" : {
+					"shadowOffset" : "0 -1",
+					"shadowColor" : "blackColor",
+					"fontName" : "Helvetica-Bold",
+					"fontSize" : "20"
+				}
+			}
 		}
 	},
 
@@ -198,7 +263,7 @@
 		"view" : {
 			"backgroundColor" : "0x444448",
 			"UIView[tag=10000]" : {
-				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"],
+				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
 			},
 			"UILabel[tag=10001]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
@@ -207,6 +272,6 @@
 			"UITextView[tag=10003]" : {
 				"textColor" : "0x304371"
 			}
-		},
+		}
 	}
 }

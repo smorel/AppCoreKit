@@ -10,6 +10,7 @@
 #import "CKLocalization.h"
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
+#import "CKNSNumberPropertyCellController.h"
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSDictionary+TableViewAttributes.h"
@@ -18,6 +19,7 @@
 #import "CKBundle.h"
 #import "CKVersion.h"
 #import "CKDebug.h"
+#import "CKObjectProperty.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -71,6 +73,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController;
 - (void)displayProductReleases:(NSArray*)productReleases;
 
+- (CKFormTableViewController *)controllerForSettings;
 - (CKObjectTableViewController *)controllerForProductReleases;
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
 - (UIView *)recommendedView;
@@ -240,7 +243,192 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	[self.popoverController dismissPopoverAnimated:YES];
 }
 
-#pragma mark - ViewController Creation
+#pragma mark - Settings ViewController
+
+- (CKFormTableViewController *)controllerForSettings {
+	__block CKProvisioningController* bself = self;
+	CKProductRelease *productRelease = [[[CKProductRelease alloc] init] autorelease];
+	productRelease.buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	productRelease.versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+	
+    CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
+	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
+	formController.name = @"rigoloSettingsViewController";
+    formController.title = @"Rigolo Settings";
+	
+	// Header
+	CKFormCellDescriptor* headerCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
+    [headerCellDescriptor setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.name = @"rigoloSettingsHeaderCell";
+        controller.cellStyle = CKTableViewCellStyleDefault;
+        return (id)nil;
+    }];
+    [headerCellDescriptor setInitBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		UIImageView *iconImageView = [[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 57, 57)] autorelease];
+		iconImageView.tag = 10000;
+		iconImageView.clipsToBounds = YES;
+		iconImageView.layer.cornerRadius = 10;
+		[controller.tableViewCell.contentView addSubview:iconImageView];
+        UILabel* appNamelabel = [[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView.frame)+10, 10, controller.tableViewCell.contentView.bounds.size.width - CGRectGetMaxX(iconImageView.frame) - 20, CGRectGetMaxY(iconImageView.bounds))]autorelease];
+        appNamelabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        appNamelabel.tag = 10001;
+        [controller.tableViewCell.contentView addSubview:appNamelabel];
+        UILabel* currentVersionLabel = [[[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(controller.tableViewCell.contentView.bounds)-40, controller.tableViewCell.contentView.bounds.size.width - 20, 30)]autorelease];
+        currentVersionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        currentVersionLabel.tag = 10004;
+		currentVersionLabel.textAlignment = UITextAlignmentCenter;
+        [controller.tableViewCell.contentView addSubview:currentVersionLabel];
+        return (id)nil; 
+    }];
+    [headerCellDescriptor setSetupBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        CKProductRelease* productRelease = (CKProductRelease*)controller.value;
+		UIImageView *iconImageView = (UIImageView *)[controller.tableViewCell.contentView viewWithTag:10000];
+		iconImageView.image = [UIImage imageNamed:@"Icon.png"];
+        UILabel* appNamelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10001];
+        appNamelabel.text = productRelease.applicationName;
+        UILabel* currentVersionLabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:10004];
+        currentVersionLabel.text = [NSString stringWithFormat:@"You are currently running version %@", CKApplicationVersion()];
+        return (id)nil; 
+    }];
+    [headerCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 115)]; 
+    }];
+	[headerCellDescriptor setFlags:CKItemViewFlagNone];
+	
+	// Update
+	CKFormCellDescriptor* updateCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
+    [updateCellDescriptor setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.name = @"rigoloSettingsUpdateCell";
+        controller.cellStyle = CKTableViewCellStyleDefault;
+        return (id)nil;
+    }];
+    [updateCellDescriptor setInitBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		CKProvisioningControllerButton* installButton = [[[CKProvisioningControllerButton alloc] initWithFrame:CGRectMake(10, 20, controller.tableViewCell.contentView.bounds.size.width-20, 90)] autorelease];
+		installButton.tag = 10000;
+		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+		[installButton setTitle:@"Check for Updates" forState:UIControlStateNormal];
+		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
+		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+		[installButton addTarget:bself action:@selector(install:) forControlEvents:UIControlEventTouchUpInside];
+		[controller.tableViewCell.contentView addSubview:installButton];
+        return (id)nil; 
+    }];
+    [updateCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 120)];
+    }];
+	[updateCellDescriptor setFlags:CKItemViewFlagNone];
+	
+	// Check Automatically
+//	CKFormCellDescriptor* checkAutoCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[CKObjectProperty propertyWithObject:[NSUserDefaults standardUserDefaults] keyPath:@"CheckRigolo"]  controllerClass:[CKNSNumberPropertyCellController class]];
+//    [checkAutoCellDescriptor setCreateBlock:^id(id value) {
+//        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+//        controller.name = @"rigoloSettingsCheckAutoCell";
+//        controller.cellStyle = CKTableViewCellStyleDefault;
+//        return (id)nil;
+//    }];
+//    [checkAutoCellDescriptor setInitBlock:^id(id value) {
+//        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+//        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+//		controller.tableViewCell.textLabel.text = _(@"Check Automatically");
+//        return (id)nil; 
+//    }];
+//    [checkAutoCellDescriptor setSizeBlock:^id(id value) {
+//        NSDictionary* params = (NSDictionary*)value;
+//        CGSize tableViewSize = [params bounds];
+//        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 55)];
+//    }];
+//	[checkAutoCellDescriptor setFlags:CKItemViewFlagNone];
+	
+	// Release Notes
+    CKFormCellDescriptor* releaseNotesCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
+    [releaseNotesCellDescriptor setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.name = @"rigoloReleaseNotesCell";
+        controller.cellStyle = CKTableViewCellStyleDefault;
+        return (id)nil;
+    }];
+	[releaseNotesCellDescriptor setInitBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+		controller.tableViewCell.accessoryView = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-cell-disclosure.png"]] autorelease];
+        return (id)nil;
+	}];
+    [releaseNotesCellDescriptor setSetupBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+		controller.tableViewCell.textLabel.text = @"Release Notes";
+		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-notes-icon.png"];
+        return (id)nil; 
+    }];
+    [releaseNotesCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 65)];
+    }];
+	[releaseNotesCellDescriptor setSelectionBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        CKProductRelease* productRelease = (CKProductRelease*)controller.value;
+		[formController.navigationController pushViewController:[CKProvisioningReleaseNotesViewController controllerWithProductRelease:productRelease] animated:YES];
+        return (id)nil; 
+	}];
+	[releaseNotesCellDescriptor setFlags:CKItemViewFlagSelectable];
+	
+	// Release History
+    CKFormCellDescriptor* releaseHistoryCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
+    [releaseHistoryCellDescriptor setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.name = @"rigoloReleaseHistoryCell";
+        controller.cellStyle = CKTableViewCellStyleDefault;
+        return (id)nil; 
+    }];
+	[releaseHistoryCellDescriptor setInitBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+		controller.tableViewCell.accessoryView = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-cell-disclosure.png"]] autorelease];
+        return (id)nil;
+	}];
+    [releaseHistoryCellDescriptor setSetupBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+		controller.tableViewCell.textLabel.text = @"Release History";
+		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-history-icon.png"];
+        return (id)nil; 
+    }];
+    [releaseHistoryCellDescriptor setSizeBlock:^id(id value) {
+        NSDictionary* params = (NSDictionary*)value;
+        CGSize tableViewSize = [params bounds];
+        return [NSValue valueWithCGSize:CGSizeMake(tableViewSize.width, 65)];
+    }];
+	[releaseHistoryCellDescriptor setSelectionBlock:^id(id value) {
+		CKObjectTableViewController *controller = [bself controllerForProductReleases];
+		[formController.navigationController pushViewController:controller animated:YES];
+		NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+		[[CKProvisioningWebService sharedWebService]listAllProductReleasesWithBundleIdentifier:bundleIdentifier 
+		 
+																					completion:^(NSArray* productReleases){
+																						[bself.items removeAllObjects];
+																						[bself.items addObjectsFromArray:productReleases];
+																						[controller reload];
+																					}
+		 
+																					   failure:^(NSError* error){
+																					   }];
+		return (id)nil;
+	}];
+	[releaseHistoryCellDescriptor setFlags:CKItemViewFlagSelectable];
+	
+    [formController addSectionWithCellDescriptors:[NSArray arrayWithObjects:headerCellDescriptor,updateCellDescriptor,releaseNotesCellDescriptor,releaseHistoryCellDescriptor,nil]];
+	return formController;
+}
+
+#pragma mark - Release Details ViewController
 
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease {
 	__block CKProvisioningController* bself = self;
@@ -359,7 +547,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     CKFormCellDescriptor* releaseNotesCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
     [releaseNotesCellDescriptor setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.name = @"rigoloReleaseDetailsReleaseNotesCell";
+        controller.name = @"rigoloReleaseNotesCell";
         controller.cellStyle = CKTableViewCellStyleDefault;
         return (id)nil;
     }];
@@ -391,9 +579,9 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     CKFormCellDescriptor* releaseHistoryCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
     [releaseHistoryCellDescriptor setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.name = @"rigoloReleaseDetailsReleaseHistoryCell";
+        controller.name = @"rigoloReleaseHistoryCell";
         controller.cellStyle = CKTableViewCellStyleDefault;
-        return (id)nil; 
+        return (id)nil;
     }];
 	[releaseHistoryCellDescriptor setInitBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
@@ -432,6 +620,8 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     [formController addSectionWithCellDescriptors:[NSArray arrayWithObjects:headerCellDescriptor,installCellDescriptor,releaseNotesCellDescriptor,releaseHistoryCellDescriptor,nil]];
 	return formController;
 }
+
+#pragma mark - Release History ViewController
 
 - (CKObjectTableViewController *)controllerForProductReleases {
 	__block CKProvisioningController *bself = self;
