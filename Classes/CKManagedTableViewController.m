@@ -82,16 +82,6 @@
 	_resizeOnKeyboardNotification = YES;
 }
 
-- (void)awakeFromNib {
-	[self postInit];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
-	[super initWithCoder:decoder];
-	[self postInit];
-	return self;
-}
-
 //
 
 - (void)dealloc {

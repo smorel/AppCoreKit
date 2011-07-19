@@ -59,8 +59,19 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize annotationToSelect = _annotationToSelect;
 @synthesize nearestAnnotation = _nearestAnnotation;
 
+- (void)postInit {
+	[super postInit];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
+	
+	_zoomStrategy = CKMapViewControllerZoomStrategyEnclosing;
+	_smartZoomMinimumNumberOfAnnotations = 3;
+	_smartZoomDefaultRadius = 1000;
+}
+
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
-    if (self = [super init]) {
+	self = [super init];
+    if (self) {
 		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
 		[collection addObjectsFromArray:annotations];
 		
@@ -80,35 +91,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[_nearestAnnotation release];
 	_nearestAnnotation = nil;
     [super dealloc];
-}
-
-- (void)postInit{
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
-	
-	_zoomStrategy = CKMapViewControllerZoomStrategyEnclosing;
-	_smartZoomMinimumNumberOfAnnotations = 3;
-	_smartZoomDefaultRadius = 1000;
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
-	[super initWithCoder:decoder];
-	[self postInit];
-	return self;
-}
-
-- (id)init {
-    if (self = [super init]) {
-		[self postInit];
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	if (self) {
-		[self postInit];
-	}
-	return self;
 }
 
 #pragma Params Management
