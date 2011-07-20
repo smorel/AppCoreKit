@@ -12,9 +12,9 @@
 /** TODO
  */
 NSString *CKLocalizationCurrentLocalization(void);
-NSString* CKLocalizedString(NSString* key);
+NSString* CKLocalizedString(NSString* key,NSString* value);
 
 
 /** TODO
  */
-#define _(key) CKLocalizedString(key)
+#define _(key) CKLocalizedString(key,key)

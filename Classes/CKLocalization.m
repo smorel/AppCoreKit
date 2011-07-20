@@ -15,7 +15,7 @@ NSString *CKLocalizationCurrentLocalization(void) {
 
 static NSMutableArray* CKLocalizationStringTableNames = nil;
 
-NSString* CKLocalizedString(NSString* key){
+NSString* CKLocalizedString(NSString* key,NSString* value){
     //Find all localization tables
     if(CKLocalizationStringTableNames == nil){
         NSMutableArray* files = [[NSMutableArray alloc]init];
@@ -35,9 +35,8 @@ NSString* CKLocalizedString(NSString* key){
         CKLocalizationStringTableNames = files;
     }
     
-    NSString* value = key;
     for(NSString* tableName in CKLocalizationStringTableNames){
-        NSString* result =  [[NSBundle mainBundle] localizedStringForKey:key value:@"" table:tableName];
+        NSString* result =  [[NSBundle mainBundle] localizedStringForKey:key value:value table:tableName];
         if(![result isEqualToString:key])
             return result;
     }
