@@ -437,6 +437,7 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
+		75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75A83AC213D75A8400413C17 /* CloudKit.strings */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -867,6 +868,8 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		75A83AC113D75A8400413C17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudKit.strings; sourceTree = "<group>"; };
+		75A83AC313D75A9000413C17 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CloudKit.strings; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
@@ -1411,6 +1414,7 @@
 				7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */,
 				7536F9D113CE0BE900720C17 /* Images */,
 				4FBBA65213CF72B300772054 /* Styles */,
+				75A83AC213D75A8400413C17 /* CloudKit.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1966,6 +1970,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				fr,
 			);
 			mainGroup = 7550152413B8EA08002DAE8B;
 			productRefGroup = 7550153113B8EA08002DAE8B /* Products */;
@@ -2016,6 +2021,7 @@
 				4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */,
 				4FBA90A413D0D5AD00C7A237 /* rigolo-btn-blue.png in Resources */,
 				4FBA90A513D0D5AD00C7A237 /* rigolo-btn-blue@2x.png in Resources */,
+				75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2249,6 +2255,16 @@
 				7550153B13B8EA08002DAE8B /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		75A83AC213D75A8400413C17 /* CloudKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				75A83AC113D75A8400413C17 /* en */,
+				75A83AC313D75A9000413C17 /* fr */,
+			);
+			name = CloudKit.strings;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
