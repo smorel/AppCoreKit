@@ -110,13 +110,15 @@
 				}
 			}
 			else{
-				NSValueTransformer* valueTransformer = [mappingObject valueTransformer];
-				if(valueTransformer){
-					id transformedValue = [valueTransformer transformedValue:sourceObject];
-					[self setValue:transformedValue forKeyPath:key];
-				}
-				else{
-					mappingObject.mapperBlock(sourceObject,self,key,error);
+				if([sourceObject isKindOfClass:[NSNull class]] == NO){
+					NSValueTransformer* valueTransformer = [mappingObject valueTransformer];
+					if(valueTransformer){
+						id transformedValue = [valueTransformer transformedValue:sourceObject];
+						[self setValue:transformedValue forKeyPath:key];
+					}
+					else{
+						mappingObject.mapperBlock(sourceObject,self,key,error);
+					}
 				}
 			}
 		}
