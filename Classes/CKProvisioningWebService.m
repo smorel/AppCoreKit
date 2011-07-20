@@ -76,7 +76,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
 - (void)checkForNewProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version 
                                            completion:(void (^)(BOOL upToDate,NSString* version))completion 
                                               failure:(void (^)(NSError* error))failure{
-    CKWebRequest2* request = [self getRequestForPath:@"check.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];
+    CKWebRequest2* request = [self getRequestForPath:@"check.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-number",nil]];
     request.successBlock = ^(id value){
         NSNumber* upToDateNumber = [value objectForKey:@"uptodate"];
         BOOL upToDate = [upToDateNumber boolValue];
@@ -125,7 +125,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
 - (void)detailsForProductReleaseWithBundleIdentifier:(NSString*)bundleIdentifier version:(NSString*)version
                       completion:(void (^)(CKProductRelease* productRelease))completion 
                          failure:(void (^)(NSError* error))failure{
-    CKWebRequest2* request = [self getRequestForPath:@"descriptor.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-version",nil]];
+    CKWebRequest2* request = [self getRequestForPath:@"descriptor.json" params:[NSDictionary dictionaryWithObjectsAndKeys:bundleIdentifier,@"bundle-identifier",version,@"build-number",nil]];
     request.transformBlock = ^(id value){
         NSError* error;
         CKProductRelease* release = [[[CKProductRelease alloc]initWithDictionary:value withMappings:[self productReleaseMapping] error:&error]autorelease];
