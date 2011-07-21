@@ -33,6 +33,7 @@
 - (id)value;
 - (void)setValue:(id)value;
 - (id)convertToClass:(Class)type;
+- (Class)type;
 
 //FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
@@ -45,5 +46,6 @@
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
 - (void)removeAllObjects;
+- (NSInteger)count;
 
 @end

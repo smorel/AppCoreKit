@@ -8,6 +8,7 @@
 
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKDocumentCollection.h"
 
 
 @implementation CKObjectProperty
@@ -27,7 +28,9 @@
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
 	[super init];
 	self.object = theobject;
-	self.keyPath = thekeyPath;
+    if([thekeyPath length] > 0){
+        self.keyPath = thekeyPath;
+    }
 	return self;
 }
 
@@ -59,6 +62,12 @@
 	}
 	return [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 	//return [NSObject propertyDescriptor:[object class] forKeyPath:keyPath];
+}
+
+- (Class)type{
+    if(keyPath == nil)
+        return [object class];
+    return [[self descriptor]type];
 }
 
 - (id)value{
@@ -282,24 +291,36 @@
 }
 
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	Class selfClass = [self type];
+    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+        [[self value]insertObjects:objects atIndexes:indexes];
+        return;
+    }
+	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
-	if(descriptor.insertSelector && [self.object respondsToSelector:descriptor.insertSelector]){
-		[self.object willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
-		[self.object performSelector:descriptor.insertSelector withObject:objects withObject:indexes];
-		[self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
-	}
-	else{
-		[[self value]insertObjects:objects atIndexes:indexes];
-	}
+    if([NSObject isKindOf:selfClass parentType:[NSArray class]]){
+        CKClassPropertyDescriptor* descriptor = [self descriptor];
+        if(descriptor && descriptor.insertSelector && [self.object respondsToSelector:descriptor.insertSelector]){
+            [self.object willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
+            [self.object performSelector:descriptor.insertSelector withObject:objects withObject:indexes];
+            [self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
+        }
+        else{
+            [[self value]insertObjects:objects atIndexes:indexes];
+        }
+    }
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes{
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	Class selfClass = [self type];
+    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+		[[self value]removeObjectsAtIndexes:indexes];
+        return;
+    }
+	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
-	if(descriptor.removeSelector && [self.object respondsToSelector:descriptor.removeSelector]){
+	CKClassPropertyDescriptor* descriptor = [self descriptor];
+	if(descriptor && descriptor.removeSelector && [self.object respondsToSelector:descriptor.removeSelector]){
 		[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
 		[self.object performSelector:descriptor.removeSelector withObject:indexes];
 		[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
@@ -310,12 +331,18 @@
 }
 
 - (void)removeAllObjects{
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	NSAssert([NSObject isKindOf:descriptor.type parentType:[NSArray class]],@"invalid property type");
+	Class selfClass = [self type];
+    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+        [[self value]removeAllObjects];
+        return;
+    }
+	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
 	[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
-	if(descriptor.removeAllSelector && [self.object respondsToSelector:descriptor.removeAllSelector]){
+    
+	CKClassPropertyDescriptor* descriptor = [self descriptor];
+	if(descriptor && descriptor.removeAllSelector && [self.object respondsToSelector:descriptor.removeAllSelector]){
 		[self.object performSelector:descriptor.removeAllSelector];
 	}
 	else{
@@ -323,6 +350,14 @@
 	}
 	
 	[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
+}
+
+
+- (NSInteger)count{
+	Class selfClass = [self type];
+	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]]
+             ||[NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]],@"invalid property type");
+    return [[self value]count];
 }
 
 @end
