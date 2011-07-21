@@ -20,6 +20,7 @@ NSString* CKMappingContentType = @"@contentType";
 NSString* CKMappingClearContainer = @"@clearContent";
 NSString* CKMappingInsertAtBegin = @"@insertContentAtBegin";
 NSString* CKMappingTransformSelector = @"@transformSelector";
+NSString* CKMappingDefaultValue = @"@defaultValue";
 
 @implementation NSObject (CKMapping2) 
 
@@ -45,18 +46,6 @@ NSString* CKMappingTransformSelector = @"@transformSelector";
     }
     
     if(mappings){
-        //mappings can look like and should be applyed on self with targetKeyPath = nil as is and not iterate on keys ...
-        //Shoudl think about how to rewrite the recursion ...
-        /*
-         "$PatientGet" : {
-             "KeyPath" : "patients"
-             "contentType" : "MyModel",
-             "MyModel" : {
-                 "@inherits" : ["$MyModel_Light"]
-             }
-	     },
-       */
-        
         for(NSString* targetKeyPath in [mappings allKeys]){
             if([mappings isReservedKeyWord:targetKeyPath]){
                 continue;
@@ -72,6 +61,7 @@ NSString* CKMappingTransformSelector = @"@transformSelector";
             SEL transformSelector = nil;
             Class contentType = nil;
             NSMutableDictionary* targetDictionary = targetObject;
+            id defaultValue = nil;
             if([targetObject isKindOfClass:[NSDictionary class]]){
                 id requieredObject = [targetObject objectForKey:CKMappingRequieredKey];
                 if(requieredObject){
@@ -98,6 +88,8 @@ NSString* CKMappingTransformSelector = @"@transformSelector";
                 if(transformSelectorName){
                     transformSelector = NSSelectorFromString(transformSelectorName);
                 }
+                
+                defaultValue = [targetObject objectForKey:CKMappingDefaultValue];
             }
             else if([targetObject isKindOfClass:[NSString class]]){
                 sourceKeyPath = (NSString*)targetObject;
@@ -110,16 +102,16 @@ NSString* CKMappingTransformSelector = @"@transformSelector";
                 value = [sourceObject valueForKeyPath:sourceKeyPath];
             }
             
+            CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:targetKeyPath];
             if(value == nil || [value isKindOfClass:[NSNull class]]){
                 if(requiered){
                     NSAssert(NO,@"invalid value");
                 }
                 else{
-                    //log ...
+                    [NSValueTransformer transform:defaultValue inProperty:property];
                 }
             }
             else{
-                CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:targetKeyPath];
                 Class targetType = [property type];
                 if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
                     NSAssert([value isKindOfClass:[NSArray class]],@"Invalid source object for collection target");
