@@ -7,7 +7,6 @@
 //
 
 #import "CKUIView+Style.h"
-#import "CKStyles.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 
@@ -314,10 +313,6 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 
 @implementation NSObject (CKStyle)
-
-+ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
-	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKStyleFormats,CKStyleParentStyle,CKStyleEmptyStyle,CKStyleInherits,CKStyleImport,nil]];
-}
 
 + (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object{
 	if(reserverKeyWords == nil){

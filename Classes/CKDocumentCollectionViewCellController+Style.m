@@ -7,7 +7,6 @@
 //
 
 #import "CKDocumentCollectionViewCellController+Style.h"
-#import "CKStyles.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKLocalization.h"

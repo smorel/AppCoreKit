@@ -12,7 +12,6 @@
 #import "CKDocumentCollection.h"
 #import <objc/runtime.h>
 
-#import "CKStyles.h"
 #import "CKStyleManager.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKItemViewController+StyleManager.h"

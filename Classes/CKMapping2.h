@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKCascadingTree.h"
 
 /* Format for mappings : Can be defined in a JSON file
       { 
@@ -34,11 +35,30 @@
  */
 @interface NSObject (CKMapping2) 
 
-- (id)initWithObject:(id)sourceObject withMappings:(NSDictionary*)mappings;
-- (void)setupWithObject:(id)sourceObject withMappings:(NSDictionary*)mappings;
+- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
 
-- (id)initWithObject:(id)sourceObject withMappingsInFileNamed:(NSString*)fileName;
-- (void)setupWithObject:(id)sourceObject withMappingsInFileNamed:(NSString*)fileName;
+- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
+- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
 
+
+@end
+
+@interface CKMappingManager : CKCascadingTree {
+}
+
++ (CKMappingManager*)defaultManager;
+
+- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
+- (NSMutableDictionary*)mappingsForIdentifier:(NSString*)identifier;
+
+- (void)loadContentOfFileNamed:(NSString*)name;
+- (BOOL)importContentOfFileNamed:(NSString*)name;
+
+@end
+
+@interface NSMutableDictionary (CKMappingManager)
+
+- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
 
 @end

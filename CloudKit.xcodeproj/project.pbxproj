@@ -296,8 +296,6 @@
 		7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */; };
 		7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0A13B8ED3600268D13 /* CKStyleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0B13B8ED3600268D13 /* CKStyleManager.m */; };
-		7560DD5913B8ED3600268D13 /* CKStyles.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0C13B8ED3600268D13 /* CKStyles.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD5A13B8ED3600268D13 /* CKStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0D13B8ED3600268D13 /* CKStyles.m */; };
 		7560DD5B13B8ED3600268D13 /* CKTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */; };
 		7560DD5D13B8ED3600268D13 /* CKTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -439,6 +437,8 @@
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
 		75A4058213D87B2000D932B0 /* CKMapping2.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMapping2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A4058313D87B2000D932B0 /* CKMapping2.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4058113D87B2000D932B0 /* CKMapping2.m */; };
+		75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */; };
 		75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75A83AC213D75A8400413C17 /* CloudKit.strings */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
@@ -729,8 +729,6 @@
 		7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyle+Parsing.m"; path = "Classes/CKStyle+Parsing.m"; sourceTree = "<group>"; };
 		7560DC0A13B8ED3600268D13 /* CKStyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStyleManager.h; path = Classes/CKStyleManager.h; sourceTree = "<group>"; };
 		7560DC0B13B8ED3600268D13 /* CKStyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStyleManager.m; path = Classes/CKStyleManager.m; sourceTree = "<group>"; };
-		7560DC0C13B8ED3600268D13 /* CKStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStyles.h; path = Classes/CKStyles.h; sourceTree = "<group>"; };
-		7560DC0D13B8ED3600268D13 /* CKStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStyles.m; path = Classes/CKStyles.m; sourceTree = "<group>"; };
 		7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewCellController.h; path = Classes/CKTableViewCellController.h; sourceTree = "<group>"; };
 		7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewCellController.m; path = Classes/CKTableViewCellController.m; sourceTree = "<group>"; };
 		7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Style.h"; path = "Classes/CKTableViewCellController+Style.h"; sourceTree = "<group>"; };
@@ -872,6 +870,8 @@
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		75A4058013D87B2000D932B0 /* CKMapping2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping2.h; path = Classes/CKMapping2.h; sourceTree = "<group>"; };
 		75A4058113D87B2000D932B0 /* CKMapping2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapping2.m; path = Classes/CKMapping2.m; sourceTree = "<group>"; };
+		75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCascadingTree.h; path = Classes/CKCascadingTree.h; sourceTree = "<group>"; };
+		75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCascadingTree.m; path = Classes/CKCascadingTree.m; sourceTree = "<group>"; };
 		75A83AC113D75A8400413C17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudKit.strings; sourceTree = "<group>"; };
 		75A83AC313D75A9000413C17 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CloudKit.strings; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
@@ -965,8 +965,6 @@
 				7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */,
 				7560DC0A13B8ED3600268D13 /* CKStyleManager.h */,
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
-				7560DC0C13B8ED3600268D13 /* CKStyles.h */,
-				7560DC0D13B8ED3600268D13 /* CKStyles.m */,
 			);
 			name = Style;
 			sourceTree = "<group>";
@@ -1592,6 +1590,7 @@
 				7506E3ED13B8FA4F00EE1471 /* Core */,
 				7506E3F313B8FBB100EE1471 /* Document */,
 				7506E3F913B8FD5500EE1471 /* Bindings */,
+				75A405EC13D8B66E00D932B0 /* CascadingTrees */,
 				7506E3FB13B8FD9A00EE1471 /* Mappings */,
 				7506E3F113B8FAE400EE1471 /* Style */,
 				7506E3FC13B8FDC700EE1471 /* UI */,
@@ -1726,6 +1725,15 @@
 				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
 			);
 			name = UIKit;
+			sourceTree = "<group>";
+		};
+		75A405EC13D8B66E00D932B0 /* CascadingTrees */ = {
+			isa = PBXGroup;
+			children = (
+				75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */,
+				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
+			);
+			name = CascadingTrees;
 			sourceTree = "<group>";
 		};
 		75C97ABC13C3A0C900F67A59 /* Provisioning */ = {
@@ -1866,7 +1874,6 @@
 				7560DD5313B8ED3600268D13 /* CKStoreItemExplorer.h in Headers */,
 				7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */,
 				7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */,
-				7560DD5913B8ED3600268D13 /* CKStyles.h in Headers */,
 				7560DD5B13B8ED3600268D13 /* CKTableViewCellController.h in Headers */,
 				7560DD5D13B8ED3600268D13 /* CKTableViewCellController+Style.h in Headers */,
 				7560DD6113B8ED3600268D13 /* CKTableViewCellNextResponder.h in Headers */,
@@ -1938,6 +1945,7 @@
 				751F1EE113D0C3990041900C /* JSONKit.h in Headers */,
 				751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */,
 				75A4058213D87B2000D932B0 /* CKMapping2.h in Headers */,
+				75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2183,7 +2191,6 @@
 				7560DD5413B8ED3600268D13 /* CKStoreItemExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
 				7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */,
-				7560DD5A13B8ED3600268D13 /* CKStyles.m in Sources */,
 				7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */,
 				7560DD5E13B8ED3600268D13 /* CKTableViewCellController+Style.m in Sources */,
 				7560DD6213B8ED3600268D13 /* CKTableViewCellNextResponder.m in Sources */,
@@ -2251,6 +2258,7 @@
 				751F1EE213D0C3990041900C /* JSONKit.m in Sources */,
 				751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */,
 				75A4058313D87B2000D932B0 /* CKMapping2.m in Sources */,
+				75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

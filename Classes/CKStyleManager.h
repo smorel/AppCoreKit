@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKStyles.h"
+#import "CKCascadingTree.h"
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
@@ -16,21 +16,20 @@
 
 /** TODO
  */
-@interface CKStyleManager : NSObject {
-	NSMutableDictionary* _styles;
-	NSMutableSet* _loadedFiles;
+@interface CKStyleManager : CKCascadingTree {
 }
 
 + (CKStyleManager*)defaultManager;
 
 - (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
 
-//Could extend to load style from files ...
 - (void)loadContentOfFileNamed:(NSString*)name;
-- (void)loadContentOfFile:(NSString*)path;
-
-//private
 - (BOOL)importContentOfFileNamed:(NSString*)name;
-- (BOOL)importContentOfFile:(NSString*)path;
+
+@end
+
+@interface NSMutableDictionary (CKStyleManager)
+
+- (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
 
 @end

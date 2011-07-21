@@ -7,7 +7,6 @@
 //
 
 #import "CKTableViewCellController+Style.h"
-#import "CKStyles.h"
 #import "CKStyleManager.h"
 
 //HACK : here to know the context of the parent controller ...
