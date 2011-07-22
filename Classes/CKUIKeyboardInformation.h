@@ -16,6 +16,10 @@ CGRect CKUIKeyboardInformationBounds(NSDictionary *keyboardUserInfo);
 
 /** TODO
  */
+CGPoint CKUIKeyboardInformationCenterEnd(NSDictionary *keyboardUserInfo);
+
+/** TODO
+ */
 CGFloat CKUIKeyboardInformationAnimationDuration(NSDictionary *keyboardUserInfo);
 
 /** TODO
