@@ -36,6 +36,7 @@
 
 - (NSMutableDictionary*)dictionaryForObject:(id)object propertyName:(NSString*)propertyName;
 - (NSMutableDictionary*)dictionaryForClass:(Class)c;
+- (NSMutableDictionary*)dictionaryForKey:(NSString*)key;
 
 - (BOOL)isEmpty;
 - (BOOL)containsObjectForKey:(NSString*)key;

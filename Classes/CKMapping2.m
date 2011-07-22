@@ -14,16 +14,29 @@
 #import "JSONKit.h"
 #import <objc/runtime.h>
 
-NSString* CKMappingRequieredKey = @"@requiered";
-NSString* CKMappingtargetKeyPath = @"@keyPath";
-NSString* CKMappingContentType = @"@contentType";
-NSString* CKMappingClearContainer = @"@clearContent";
-NSString* CKMappingInsertAtBegin = @"@insertContentAtBegin";
-NSString* CKMappingTransformSelector = @"@transformSelector";
-NSString* CKMappingDefaultValue = @"@defaultValue";
+//behaviour
+NSString* CKMappingObjectKey = @"@object";
+NSString* CKMappingClassKey = @"@class";
+NSString* CKMappingMappingsKey = @"@mappings";
+NSString* CKMappingReverseMappingsKey = @"@reverseMappings";
+NSString* CKMappingtargetKeyPathKey = @"@keyPath";
+NSString* CKMappingSelfKey = @"@self";
+
+//defaults
+NSString* CKMappingRequieredKey = @"@required";
+NSString* CKMappingDefaultValueKey = @"@defaultValue";
+NSString* CKMappingTransformSelectorKey = @"@transformSelector";
+NSString* CKMappingTransformSelectorClassKey = @"@transformClass";
+
+//list managememt
+NSString* CKMappingClearContainerKey = @"@clearContent";
+NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
+
+
 
 @implementation NSObject (CKMapping2) 
 
+//---------------------------------- Initialization -----------------------------
 - (id)initWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
     self = [self initWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier]];
     return self;
@@ -39,150 +52,228 @@ NSString* CKMappingDefaultValue = @"@defaultValue";
     return self;
 }
 
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
+    return [[CKMappingManager defaultManager]objectFromValue:sourceObject withMappingsIdentifier:identifier];
+}
+
+// ----------------------  Dictionary parser -------------------------
+
+//Search for @mappings key and resolve reference
+- (NSMutableDictionary*)mappingsDefinition:(NSMutableDictionary*)dico{
+    id mappingsDefinition = [dico objectForKey:CKMappingMappingsKey];
+    if([mappingsDefinition isKindOfClass:[NSString class]]){
+        return [dico dictionaryForKey:mappingsDefinition];
+    }
+    else if([mappingsDefinition isKindOfClass:[NSDictionary class]]){
+        return mappingsDefinition;
+    }
+    return nil;
+}
+
+- (NSMutableDictionary*)objectDefinition:(NSMutableDictionary*)dico{
+    id objectDefinition = [dico objectForKey:CKMappingObjectKey];
+    if(objectDefinition && [objectDefinition isKindOfClass:[NSDictionary class]]){
+        return objectDefinition;
+    }
+    return nil;
+}
+
+- (BOOL)boolValueForKey:(NSString*)key inDictionary:(NSMutableDictionary*)dico{
+    BOOL bo = NO;
+    id object = [dico objectForKey:key];
+    if(object){
+        bo = [NSValueTransformer convertBoolFromObject:object];
+    }
+    return bo;
+}
+
+- (BOOL)isRequired:(NSMutableDictionary*)dico{
+    return [self boolValueForKey:CKMappingRequieredKey inDictionary:dico];
+}
+
+- (BOOL)needsToBeCleared:(NSMutableDictionary*)dico{
+    return [self boolValueForKey:CKMappingClearContainerKey inDictionary:dico];
+}
+
+- (BOOL)insertAtBegin:(NSMutableDictionary*)dico{
+    return [self boolValueForKey:CKMappingInsertAtBeginKey inDictionary:dico];
+}
+
+- (BOOL)reverseMappings:(NSMutableDictionary*)dico{
+    return [self boolValueForKey:CKMappingReverseMappingsKey inDictionary:dico];
+}
+
+- (Class)objectClass:(NSMutableDictionary*)dico defaultClass:(Class)c{
+    NSString* className = [dico objectForKey:CKMappingClassKey];
+    return (className == nil) ? c : NSClassFromString(className);
+}
+
+- (Class)transformClass:(NSMutableDictionary*)dico defaultClass:(Class)c{
+    NSString* className = [dico objectForKey:CKMappingTransformSelectorClassKey];
+    return (className == nil) ? c : NSClassFromString(className);
+}
+
+- (SEL)transformSelector:(NSMutableDictionary*)dico{
+     NSString* selectorName = [dico objectForKey:CKMappingTransformSelectorKey];
+    return (selectorName == nil) ? nil : NSSelectorFromString(selectorName);
+}
+
+- (BOOL)isSelf:(NSString*)s{
+    return [s isEqualToString:CKMappingSelfKey];
+}
+
+- (NSString*)keyPath:(NSMutableDictionary*)dico{
+    return [dico objectForKey:CKMappingtargetKeyPathKey];
+}
+
+- (NSString*)defaultValue:(NSMutableDictionary*)dico{
+    return [dico objectForKey:CKMappingDefaultValueKey];
+}
+
+//------------------------------- Mapping Engine ------------------------------
+
+- (id)createObjectOfClass:(Class)c withObject:(id)source withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
+    id object = [[[c alloc]init] autorelease];
+    [object setupWithObject:source withMappings:mappings reversed:reversed];
+    return object;
+}
+
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
+    NSMutableDictionary* def = [self objectDefinition:mappings];
+    NSAssert(def != nil,@"This method requiers an object definition as root or mappings definition");
+    return [self createObjectOfClass:[self objectClass:def defaultClass:nil] withObject:sourceObject withMappings:[self mappingsDefinition:def] reversed:[self reverseMappings:def]];
+}
+
 - (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
-    //if no mappings specified, try to find a matching one in the root tree.
-    if(mappings == nil){
-        mappings = [[CKMappingManager defaultManager] mappingsForObject:self propertyName:nil];
+    [self setupWithObject:sourceObject withMappings:mappings reversed:NO];
+}
+
+- (void)setupPropertyWithKeyPath:(NSString*)keyPath fromObject:(id)other keyPath:(NSString*)otherKeyPath withOptions:(NSMutableDictionary*)options{
+    if([self isSelf:keyPath])
+        keyPath = nil;
+    if([self isSelf:otherKeyPath])
+        otherKeyPath = nil;
+    
+    id value = other;
+    if(otherKeyPath != nil && [otherKeyPath length] > 0){
+        value = [other valueForKeyPath:otherKeyPath];
     }
     
+    //Source value validation
+    CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
+    if(value == nil || [value isKindOfClass:[NSNull class]]){
+        if([self isRequired:options]){
+            NSAssert(NO,@"invalid value");
+        }
+        else{
+            [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+        }
+    }
+    //Source is ok => apply to target
+    else{
+        Class targetType = [property type];
+        
+        //property is a collection
+        if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
+            NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
+            
+            CKModelObjectPropertyMetaData* metaData = [property metaData];
+            Class contentType = [self objectClass:subObjectDefinition defaultClass:[metaData contentType]];
+            NSAssert(contentType != nil,@"no Class has been define for collection's objects either in property metaData and in the mappings definition.");
+            
+            if([self needsToBeCleared:options]){
+                [property removeAllObjects];
+            }
+            
+                       
+            NSMutableArray* results = [NSMutableArray array];
+            NSArray* ar = (NSArray*)value;
+            for(id sourceSubObject in ar){
+                //create sub object
+                id targetSubObject = [[[contentType alloc]init]autorelease];
+                //find mappings for sub objects
+                id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
+                if(!subObjectMappings){
+                    subObjectMappings = [options dictionaryForObject:targetSubObject propertyName:nil];
+                }
+                //map sub object
+                [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings];
+                //adds sub object
+                [results addObject:targetSubObject];
+            }
+            
+            //feed the collection with results
+            if([self insertAtBegin:options]){
+                [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[results count])]];
+            }
+            else{
+                [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([property count],[results count])]];
+            }
+
+        }
+        //property is an object or a simple property
+        else{
+            SEL transformSelector = [self transformSelector:options];
+            if(transformSelector){
+                Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
+                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value];
+                [property setValue:transformedValue];
+            }
+            else{
+                NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
+                Class contentType = [self objectClass:subObjectDefinition defaultClass:[property type]];
+                                
+                id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
+                if(!subObjectMappings){
+                    subObjectMappings = [options dictionaryForClass:contentType];
+                }
+                                
+                if(subObjectMappings && ![subObjectMappings isEmpty]){
+                    id subObject = [property value];
+                    if([subObject isKindOfClass:contentType]){
+                        [subObject setupWithObject:value withMappings:subObjectMappings];
+                    }
+                    else{
+                        subObject = [[contentType alloc]initWithObject:value withMappings:subObjectMappings];
+                        [property setValue:subObject];
+                    }
+                }
+                else{
+                    [NSValueTransformer transform:value inProperty:property];
+                }
+            }
+        }
+    }
+}
+
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
     if(mappings){
         for(NSString* targetKeyPath in [mappings allKeys]){
             if([mappings isReservedKeyWord:targetKeyPath]){
                 continue;
             }
             
-            //Read config
             id targetObject = [mappings objectForKey:targetKeyPath];
-            
-            BOOL requiered = NO;
-            BOOL clearContainer = NO;
-            BOOL insertAtBegin = NO;
-            NSString* sourceKeyPath = nil;
-            SEL transformSelector = nil;
-            Class contentType = nil;
-            NSMutableDictionary* targetDictionary = targetObject;
-            id defaultValue = nil;
-            if([targetObject isKindOfClass:[NSDictionary class]]){
-                id requieredObject = [targetObject objectForKey:CKMappingRequieredKey];
-                if(requieredObject){
-                    requiered = [NSValueTransformer convertBoolFromObject:requieredObject];
-                }
-                sourceKeyPath = [targetObject objectForKey:CKMappingtargetKeyPath];
-                
-                NSString* contentTypeName = [targetObject objectForKey:CKMappingContentType];
-                if(contentTypeName){
-                    contentType = NSClassFromString(contentTypeName);
-                }
-                
-                id clearContainerObject = [targetObject objectForKey:CKMappingClearContainer];
-                if(clearContainerObject){
-                    clearContainer = [NSValueTransformer convertBoolFromObject:clearContainerObject];
-                }
-                
-                id insertAtBeginObject = [targetObject objectForKey:CKMappingInsertAtBegin];
-                if(insertAtBeginObject){
-                    insertAtBegin = [NSValueTransformer convertBoolFromObject:insertAtBeginObject];
-                }
-                
-                NSString* transformSelectorName = [targetObject objectForKey:CKMappingTransformSelector];
-                if(transformSelectorName){
-                    transformSelector = NSSelectorFromString(transformSelectorName);
-                }
-                
-                defaultValue = [targetObject objectForKey:CKMappingDefaultValue];
-            }
-            else if([targetObject isKindOfClass:[NSString class]]){
-                sourceKeyPath = (NSString*)targetObject;
-                targetDictionary = mappings;
-            }
-            
-            //Apply mappings
-            id value = sourceObject;
-            if(sourceKeyPath != nil && [sourceKeyPath length] > 0){
-                value = [sourceObject valueForKeyPath:sourceKeyPath];
-            }
-            
-            CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:targetKeyPath];
-            if(value == nil || [value isKindOfClass:[NSNull class]]){
-                if(requiered){
-                    NSAssert(NO,@"invalid value");
+            if([targetObject isKindOfClass:[NSString class]]){
+                if(reversed){
+                    [self setupPropertyWithKeyPath:(NSString*)targetObject fromObject:sourceObject keyPath:targetKeyPath withOptions:nil];
                 }
                 else{
-                    [NSValueTransformer transform:defaultValue inProperty:property];
+                    [self setupPropertyWithKeyPath:targetKeyPath fromObject:sourceObject keyPath:(NSString*)targetObject withOptions:nil];
                 }
             }
-            else{
-                Class targetType = [property type];
-                if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
-                    NSAssert([value isKindOfClass:[NSArray class]],@"Invalid source object for collection target");
-                    if(contentType == nil){
-                        CKModelObjectPropertyMetaData* metaData = [property metaData];
-                        contentType = metaData.contentType;
-                    }
-                    NSAssert(contentType != nil,@"no contentType has been define for collection");
-                    
-                    if(clearContainer){
-                        [property removeAllObjects];
-                    }
-                    
-                    NSMutableArray* results = [NSMutableArray array];
-                    NSArray* ar = (NSArray*)value;
-                    for(id sourceSubObject in ar){
-                        id targetSubObject = [[[contentType alloc]init]autorelease];
-                        id subObjectMappings = [targetDictionary dictionaryForObject:targetSubObject propertyName:nil];
-                        [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings];
-                        [results addObject:targetSubObject];
-                    }
-                    
-                    if(insertAtBegin){
-                        [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[results count])]];
-                    }
-                    else{
-                        [property insertObjects:results atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([property count],[results count])]];
-                    }
+            else if([targetObject isKindOfClass:[NSDictionary class]]){
+                if(reversed){
+                    [self setupPropertyWithKeyPath:[self keyPath:targetObject] fromObject:sourceObject keyPath:targetKeyPath withOptions:targetObject];
                 }
                 else{
-                    if(transformSelector){
-                        id transformedValue = [targetType performSelector:transformSelector withObject:value];
-                        [property setValue:transformedValue];
-                    }
-                    else{
-                        if(contentType == nil){
-                            contentType = [property type];
-                        }
-                        
-                        id subObjectMappings = nil;
-                        /*id targetObjectValue = [property value];
-                        if(targetObjectValue){
-                            subObjectMappings = [targetDictionary dictionaryForObject:targetObjectValue propertyName:property.name];
-                        }
-                        else */if(contentType){
-                            subObjectMappings = [targetDictionary dictionaryForClass:contentType];
-                        }
-                        
-                        if(subObjectMappings && ![subObjectMappings isEmpty]){
-                            id subObject = [property value];
-                            BOOL done = NO;
-                            if(contentType != nil){
-                                if([subObject isKindOfClass:contentType]){
-                                    [subObject setupWithObject:value withMappings:subObjectMappings];
-                                    done = YES;
-                                }
-                                else{
-                                    subObject = [[contentType alloc]initWithObject:value withMappings:subObjectMappings];
-                                    [property setValue:subObject];
-                                }
-                            }
-                        }
-                        else{
-                            [NSValueTransformer transform:value inProperty:property];
-                        }
-                    }
+                    [self setupPropertyWithKeyPath:targetKeyPath fromObject:sourceObject keyPath:[self keyPath:targetObject] withOptions:targetObject];
                 }
             }
         }
     }
 }
+
 
 @end
 
@@ -215,10 +306,17 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 	[self loadContentOfFile:path];
 }
 
-
 - (BOOL)importContentOfFileNamed:(NSString*)name{
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"mappings"];
 	return [self appendContentOfFile:path];
+}
+
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
+    return [NSObject objectFromValue:sourceObject withMappings:mappings];
+}
+
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
+    return [NSObject objectFromValue:sourceObject withMappings:[self mappingsForIdentifier:identifier]];
 }
 
 @end

@@ -37,12 +37,26 @@
 
 - (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
 - (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
 
 - (id)initWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
 - (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
 
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
 
 @end
+
+
+/*
+@interface NSMutableDictionary (CKMapping2)
+- (void)setKeyPath: ... FromKeyPath:...;
+- (void)mapKeyPath: ... FromKeyPath:... requiered:...;
+- (void)mapKeyPath: ... FromKeyPath:... requiered:... objectClass:...;
+- (void)mapKeyPath: ... FromKeyPath:... requiered:... objectClass:... transformBlock:^(id)djhfbjfdsh;
+@end
+*/
+
 
 @interface CKMappingManager : CKCascadingTree {
 }
@@ -54,6 +68,9 @@
 
 - (void)loadContentOfFileNamed:(NSString*)name;
 - (BOOL)importContentOfFileNamed:(NSString*)name;
+
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
 
 @end
 

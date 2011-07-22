@@ -489,6 +489,23 @@ NSString* CKCascadingTreeImport   = @"@import";
     return nil;
 }
 
+- (NSMutableDictionary*)dictionaryForKey:(NSString*)key{
+    id foundDico = [self objectForKey:key];
+    if(foundDico){
+        return foundDico;
+    }
+    
+    NSMutableDictionary* parentDico = [self parentDictionary];
+	if(parentDico){
+		NSMutableDictionary* foundDico = [parentDico dictionaryForKey:key];
+		if(foundDico){
+			return foundDico;
+		}
+	}
+    
+    return nil;
+}
+
 - (BOOL)isEmpty{
     NSInteger count = [self count];
 	if([self containsObjectForKey:CKCascadingTreeFormats]) --count;
