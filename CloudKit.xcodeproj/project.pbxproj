@@ -2006,7 +2006,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/\"\nrm -f \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${PROJECT}.framework/Resources/Info.plist\"";
+			shellScript = "cp -R -L \"${SRCROOT}/Resources/CloudKit.xcdatamodeld\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/\"\nrm -f \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
