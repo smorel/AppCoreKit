@@ -349,3 +349,54 @@
 
 #endif
 @end
+
+
+
+@implementation CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
+@dynamic rowHeight;
+@dynamic movable;
+@dynamic editable;
+@dynamic removable;
+
+- (CGFloat)heightForRow{
+    return _rowHeight;
+}
+
+- (CGFloat)rowHeight{
+    return _rowHeight;
+}
+
+- (void)setRowHeight:(CGFloat)f{
+    _rowHeight = f;
+    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller");
+    CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+    [[tableViewController tableView]beginUpdates];
+    [[tableViewController tableView]endUpdates];
+}
+
+- (BOOL)isMovable{
+    return _movable;
+}
+
+- (void)setMovable:(BOOL)bo{
+    _movable = bo;
+}
+
+- (BOOL)isEditable{
+    return _editable;
+}
+
+- (void)setEditable:(BOOL)bo{
+    _editable = bo;
+}
+
+- (BOOL)isRemovable{
+    return _movable;
+}
+
+- (void)setRemovable:(BOOL)bo{
+    _movable = bo;
+}
+
+
+@end

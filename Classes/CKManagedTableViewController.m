@@ -250,13 +250,39 @@
 	return [[[self.sections objectAtIndex:section] cellControllers] count];
 }
 
+- (NSMutableDictionary*)params{
+	NSMutableDictionary* params = [NSMutableDictionary dictionary];
+	
+	[params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+	[params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+	[params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+	[params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+	[params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];
+	[params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
+    
+    return params;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	//CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
-	/*CGFloat height = [cellController heightForRow];
-	if (height == 0) cellController.rowHeight = tableView.rowHeight;
-	return [cellController heightForRow];*/
-	NSAssert(NO,@"implement this using the class function viewSizeForObject:params:");
-	return 0;
+    //Supports for cloudkit implementation before 1.5
+    CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+    if([cellController respondsToSelector:@selector(heightForRow)]){
+        id heightObj = [cellController performSelector:@selector(heightForRow)];
+        NSAssert([heightObj isKindOfClass:[NSNumber class]],@"invalid return type");
+        CGFloat height = [heightObj floatValue];
+        if (height == 0 && [cellController respondsToSelector:@selector(setRowHeight:)]) {
+            [cellController performSelector:@selector(setRowHeight:) withObject:[NSNumber numberWithFloat:tableView.rowHeight]];
+            height = tableView.rowHeight;
+        }
+        return height;
+    }
+    //Supports for cloudkit implementation after 1.5
+    else if([[cellController class]respondsToSelector:@selector(viewSizeForObject:withParams:)]){
+        CGSize size = [[[cellController class]performSelector:@selector(viewSizeForObject:withParams:) withObject:cellController.value withObject:[self params]]CGSizeValue];
+        return size.height;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -292,10 +318,25 @@
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCellEditingStyle editingStyle = UITableViewCellEditingStyleNone;
-	/*if ([self cellControllerForIndexPath:indexPath].isRemovable) editingStyle = UITableViewCellEditingStyleDelete;
-	return editingStyle;
-	 */
-	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+    
+    //Supports for cloudkit implementation before 1.5
+    CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+    if([cellController respondsToSelector:@selector(isRemovable)]){
+        id isRemovableObj = [cellController performSelector:@selector(isRemovable)];
+        NSAssert([isRemovableObj isKindOfClass:[NSNumber class]],@"invalid return type");
+        BOOL removable = [isRemovableObj floatValue];
+        if(removable){
+            editingStyle = UITableViewCellEditingStyleDelete;
+        }
+    }
+    //Supports for cloudkit implementation after 1.5
+    else if([[cellController class]respondsToSelector:@selector(flagsForObject:withParams:)]){
+        CKItemViewFlags flags = [[[cellController class]performSelector:@selector(flagsForObject:withParams:) withObject:cellController.value withObject:[self params]]intValue];
+        if(flags & CKItemViewFlagRemovable){
+            editingStyle = UITableViewCellEditingStyleDelete;
+        }
+    }
+
 	return editingStyle;
 }
 
@@ -314,16 +355,46 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-	//return [self cellControllerForIndexPath:indexPath].isEditable;
-	
-	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+    //Supports for cloudkit implementation before 1.5
+    CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+    if([cellController respondsToSelector:@selector(isEditable)]){
+        id isEditableObj = [cellController performSelector:@selector(isEditable)];
+        NSAssert([isEditableObj isKindOfClass:[NSNumber class]],@"invalid return type");
+        BOOL editable = [isEditableObj floatValue];
+        if(editable){
+            return YES;
+        }
+    }
+    //Supports for cloudkit implementation after 1.5
+    else if([[cellController class]respondsToSelector:@selector(flagsForObject:withParams:)]){
+        CKItemViewFlags flags = [[[cellController class]performSelector:@selector(flagsForObject:withParams:) withObject:cellController.value withObject:[self params]]intValue];
+        if(flags & CKItemViewFlagEditable){
+            return YES;
+        }
+    }
+    
 	return NO;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-	//return [self cellControllerForIndexPath:indexPath].isMovable;
-	
-	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
+    //Supports for cloudkit implementation before 1.5
+    CKTableViewCellController *cellController = [self cellControllerForIndexPath:indexPath];
+    if([cellController respondsToSelector:@selector(isMovable)]){
+        id isMovableObj = [cellController performSelector:@selector(isMovable)];
+        NSAssert([isMovableObj isKindOfClass:[NSNumber class]],@"invalid return type");
+        BOOL movable = [isMovableObj floatValue];
+        if(movable){
+            return YES;
+        }
+    }
+    //Supports for cloudkit implementation after 1.5
+    else if([[cellController class]respondsToSelector:@selector(flagsForObject:withParams:)]){
+        CKItemViewFlags flags = [[[cellController class]performSelector:@selector(flagsForObject:withParams:) withObject:cellController.value withObject:[self params]]intValue];
+        if(flags & CKItemViewFlagMovable){
+            return YES;
+        }
+    }
+    
 	return NO;
 }
 
@@ -334,9 +405,11 @@
 		CKTableSection *proposedSection = [self.sections objectAtIndex:proposedDestinationIndexPath.section];
 		if ((sourceSection.canMoveRowsOut == NO) || (proposedSection.canMoveRowsIn == NO)) return sourceIndexPath;
 	}
-	/*if ([self cellControllerForIndexPath:proposedDestinationIndexPath].isEditable == NO) return sourceIndexPath;*/
-	NSAssert(NO,@"implement this using the class function flagsForObject:params:");
-	
+    
+    if([self tableView:self.tableView canEditRowAtIndexPath:proposedDestinationIndexPath] == NO){
+        return sourceIndexPath;
+    }
+    
 	return proposedDestinationIndexPath;
 }
 
