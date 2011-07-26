@@ -370,6 +370,7 @@ NSString* CKCascadingTreeImport   = @"@import";
     [NSObject updateReservedKeyWords:set];
     return [set containsObject:key];
 }
+
 @end
 
 //NSMutableDictionary (CKCascadingTree)
@@ -628,12 +629,24 @@ NSString* CKCascadingTreeImport   = @"@import";
 	return [_tree dictionaryForObject:object propertyName:propertyName];
 }
 
-- (NSMutableDictionary*)dictionaryForKey:(NSString*)key{
+- (NSMutableDictionary*)dictionaryForKey:(id)key{
     return [_tree objectForKey:key];
 }
 
 - (NSMutableDictionary*)dictionaryForClass:(Class)c{
     return [_tree dictionaryForClass:c];
+}
+
+- (void)addDictionary:(NSMutableDictionary*)dictionary forKey:(id)key{
+    id object = [_tree objectForKey:key];
+    if(object){
+        NSAssert(NO,@"tree already contains an object for key '%@'",key);
+    }
+    [_tree setObject:dictionary forKey:key];
+}
+
+- (void)removeDictionaryForKey:(id)key{
+    [_tree removeObjectForKey:key];
 }
 
 - (NSString*)description{

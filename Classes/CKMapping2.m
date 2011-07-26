@@ -11,6 +11,7 @@
 #import "CKNSObject+Introspection.h"
 #import "CKObjectProperty.h"
 #import "CKDocumentCollection.h"
+#import "CKCallback.h"
 #import "JSONKit.h"
 #import <objc/runtime.h>
 
@@ -27,22 +28,74 @@ NSString* CKMappingRequieredKey = @"@required";
 NSString* CKMappingDefaultValueKey = @"@defaultValue";
 NSString* CKMappingTransformSelectorKey = @"@transformSelector";
 NSString* CKMappingTransformSelectorClassKey = @"@transformClass";
+NSString* CKMappingTransformCallbackKey = @"@transformCallback";
 
 //list managememt
 NSString* CKMappingClearContainerKey = @"@clearContent";
 NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
+//CKMappingManager
+
+@interface CKMappingManager : CKCascadingTree {
+}
+
++ (CKMappingManager*)defaultManager;
+
+- (void)loadContentOfFileNamed:(NSString*)name;
+- (BOOL)importContentOfFileNamed:(NSString*)name;
+
+
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed;
+
+- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
+- (NSMutableDictionary*)mappingsForIdentifier:(id)identifier;
+
+@end
+
+//NSMutableDictionary (CKMappingManager)
+
+@interface NSMutableDictionary (CKMappingManager)
+
+- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
+
+@end
+
+
+@implementation NSMutableDictionary (CKStyleManager)
+
+- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName{
+    return [self dictionaryForObject:object propertyName:propertyName];
+}
+
+@end
+
+//NSObject (CKMapping2) 
+
+@interface NSObject (CKMapping2) 
+
+- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
+
+- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier;
+- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier;
+
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed;
+
+@end
 
 
 @implementation NSObject (CKMapping2) 
 
 //---------------------------------- Initialization -----------------------------
-- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
+- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier{
     self = [self initWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier]];
     return self;
 }
 
-- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
+- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier{
     [self setupWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier]];
 }
 
@@ -52,8 +105,8 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     return self;
 }
 
-+ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
-    return [[CKMappingManager defaultManager]objectFromValue:sourceObject withMappingsIdentifier:identifier];
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed{
+    return [[CKMappingManager defaultManager]objectFromValue:sourceObject withMappingsIdentifier:identifier reversed:reversed];
 }
 
 // ----------------------  Dictionary parser -------------------------
@@ -105,6 +158,12 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
 - (Class)objectClass:(NSMutableDictionary*)dico defaultClass:(Class)c{
     NSString* className = [dico objectForKey:CKMappingClassKey];
+    if(!className){
+        id subObjectMappings = [self mappingsDefinition:dico];
+        if(subObjectMappings){
+            className = [subObjectMappings objectForKey:CKMappingClassKey];
+        }
+    }
     return (className == nil) ? c : NSClassFromString(className);
 }
 
@@ -116,6 +175,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 - (SEL)transformSelector:(NSMutableDictionary*)dico{
      NSString* selectorName = [dico objectForKey:CKMappingTransformSelectorKey];
     return (selectorName == nil) ? nil : NSSelectorFromString(selectorName);
+}
+
+- (CKCallback*)transformCallback:(NSMutableDictionary*)dico{
+    return [dico objectForKey:CKMappingTransformCallbackKey];
 }
 
 - (BOOL)isSelf:(NSString*)s{
@@ -138,17 +201,26 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     return object;
 }
 
-+ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
     NSMutableDictionary* def = [self objectDefinition:mappings];
-    NSAssert(def != nil,@"This method requiers an object definition as root or mappings definition");
-    return [self createObjectOfClass:[self objectClass:def defaultClass:nil] withObject:sourceObject withMappings:[self mappingsDefinition:def] reversed:[self reverseMappings:def]];
+    if(def != nil){
+        return [self createObjectOfClass:[self objectClass:def defaultClass:nil] withObject:sourceObject withMappings:[self mappingsDefinition:def] reversed:(reversed || [self reverseMappings:def])];
+    }
+    else{
+        NSString* className = [mappings objectForKey:CKMappingClassKey];
+        if(className){
+            Class c = NSClassFromString(className);
+            return [self createObjectOfClass:c withObject:sourceObject withMappings:mappings reversed:NO];
+        }
+    }
+    return nil;
 }
 
 - (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
     [self setupWithObject:sourceObject withMappings:mappings reversed:NO];
 }
 
-- (void)setupPropertyWithKeyPath:(NSString*)keyPath fromObject:(id)other keyPath:(NSString*)otherKeyPath withOptions:(NSMutableDictionary*)options{
+- (void)setupPropertyWithKeyPath:(NSString*)keyPath fromValue:(id)other keyPath:(NSString*)otherKeyPath withOptions:(NSMutableDictionary*)options reversed:(BOOL)reversed{
     if([self isSelf:keyPath])
         keyPath = nil;
     if([self isSelf:otherKeyPath])
@@ -179,27 +251,48 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             
             CKModelObjectPropertyMetaData* metaData = [property metaData];
             Class contentType = [self objectClass:subObjectDefinition defaultClass:[metaData contentType]];
-            NSAssert(contentType != nil,@"no Class has been define for collection's objects either in property metaData and in the mappings definition.");
+           
+            id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
+            if(!subObjectMappings && contentType != nil){
+                subObjectMappings = [options dictionaryForClass:contentType];
+            }
+            else if((contentType == nil || contentType == [metaData contentType]) && subObjectMappings){
+                NSString* className = [subObjectMappings objectForKey:CKMappingClassKey];
+                if(className){
+                    contentType = NSClassFromString(className);
+                }
+            }
+            
+            NSAssert(contentType != nil,@"No type specified for this mappings");
             
             if([self needsToBeCleared:options]){
                 [property removeAllObjects];
             }
             
-                       
-            NSMutableArray* results = [NSMutableArray array];
-            NSArray* ar = (NSArray*)value;
-            for(id sourceSubObject in ar){
-                //create sub object
-                id targetSubObject = [[[contentType alloc]init]autorelease];
-                //find mappings for sub objects
-                id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
-                if(!subObjectMappings){
-                    subObjectMappings = [options dictionaryForObject:targetSubObject propertyName:nil];
+            NSArray* ar = nil;
+            if([value isKindOfClass:[NSArray class]]){
+                ar = value;
+            }
+            else if([value isKindOfClass:[CKDocumentCollection class]]){
+                CKDocumentCollection* collection = (CKDocumentCollection*)value;
+                ar = [collection allObjects];
+            }
+            
+            NSArray* results = nil;
+            if(subObjectMappings){
+                NSMutableArray* createdObjects = [NSMutableArray array];
+                for(id sourceSubObject in ar){
+                    //create sub object
+                    id targetSubObject = [[[contentType alloc]init]autorelease];
+                    //map sub object
+                    [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
+                    //adds sub object
+                    [createdObjects addObject:targetSubObject];
                 }
-                //map sub object
-                [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings];
-                //adds sub object
-                [results addObject:targetSubObject];
+                results = createdObjects;
+            }
+            else{
+                results = ar;
             }
             
             //feed the collection with results
@@ -214,7 +307,12 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         //property is an object or a simple property
         else{
             SEL transformSelector = [self transformSelector:options];
-            if(transformSelector){
+            CKCallback* callback = [self transformCallback:options];
+            if(callback){
+                id transformedValue = [callback execute:value];
+                [property setValue:transformedValue];
+            }
+            else if(transformSelector){
                 Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
                 id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value];
                 [property setValue:transformedValue];
@@ -224,17 +322,24 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 Class contentType = [self objectClass:subObjectDefinition defaultClass:[property type]];
                                 
                 id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
-                if(!subObjectMappings){
+                if(!subObjectMappings && contentType){
                     subObjectMappings = [options dictionaryForClass:contentType];
+                }
+                else if((contentType == nil || contentType == [property type]) && subObjectMappings){
+                    NSString* className = [subObjectMappings objectForKey:CKMappingClassKey];
+                    if(className){
+                        contentType = NSClassFromString(className);
+                    }
                 }
                                 
                 if(subObjectMappings && ![subObjectMappings isEmpty]){
                     id subObject = [property value];
                     if([subObject isKindOfClass:contentType]){
-                        [subObject setupWithObject:value withMappings:subObjectMappings];
+                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
                     }
                     else{
-                        subObject = [[contentType alloc]initWithObject:value withMappings:subObjectMappings];
+                        subObject = [[[contentType alloc]init]autorelease];
+                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
                         [property setValue:subObject];
                     }
                 }
@@ -249,25 +354,38 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 - (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
     if(mappings){
         for(NSString* targetKeyPath in [mappings allKeys]){
-            if([mappings isReservedKeyWord:targetKeyPath]){
+            if([mappings isReservedKeyWord:targetKeyPath]
+               || [targetKeyPath isEqualToString:CKMappingClassKey]
+               || [targetKeyPath isEqualToString:CKMappingObjectKey]
+               || [targetKeyPath isEqualToString:CKMappingMappingsKey]
+               || [targetKeyPath isEqualToString:CKMappingMappingsKey]
+               || [targetKeyPath isEqualToString:CKMappingReverseMappingsKey]
+               || [targetKeyPath isEqualToString:CKMappingtargetKeyPathKey]
+               || [targetKeyPath isEqualToString:CKMappingRequieredKey]
+               || [targetKeyPath isEqualToString:CKMappingDefaultValueKey]
+               || [targetKeyPath isEqualToString:CKMappingTransformSelectorKey]
+               || [targetKeyPath isEqualToString:CKMappingTransformSelectorClassKey]
+               || [targetKeyPath isEqualToString:CKMappingTransformCallbackKey]
+               || [targetKeyPath isEqualToString:CKMappingClearContainerKey]
+               || [targetKeyPath isEqualToString:CKMappingInsertAtBeginKey]){
                 continue;
             }
             
             id targetObject = [mappings objectForKey:targetKeyPath];
             if([targetObject isKindOfClass:[NSString class]]){
                 if(reversed){
-                    [self setupPropertyWithKeyPath:(NSString*)targetObject fromObject:sourceObject keyPath:targetKeyPath withOptions:nil];
+                    [self setupPropertyWithKeyPath:(NSString*)targetObject fromValue:sourceObject keyPath:targetKeyPath withOptions:nil reversed:reversed];
                 }
                 else{
-                    [self setupPropertyWithKeyPath:targetKeyPath fromObject:sourceObject keyPath:(NSString*)targetObject withOptions:nil];
+                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:(NSString*)targetObject withOptions:nil reversed:reversed];
                 }
             }
             else if([targetObject isKindOfClass:[NSDictionary class]]){
                 if(reversed){
-                    [self setupPropertyWithKeyPath:[self keyPath:targetObject] fromObject:sourceObject keyPath:targetKeyPath withOptions:targetObject];
+                    [self setupPropertyWithKeyPath:[self keyPath:targetObject] fromValue:sourceObject keyPath:targetKeyPath withOptions:targetObject reversed:reversed];
                 }
                 else{
-                    [self setupPropertyWithKeyPath:targetKeyPath fromObject:sourceObject keyPath:[self keyPath:targetObject] withOptions:targetObject];
+                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:[self keyPath:targetObject] withOptions:targetObject reversed:reversed];
                 }
             }
         }
@@ -277,8 +395,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
 @end
 
-
-
+//CKMappingManager
 
 static CKMappingManager* CKMappingManagerDefault = nil;
 
@@ -291,11 +408,13 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 	return CKMappingManagerDefault;
 }
 
+
+
 - (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName{
 	return [self dictionaryForObject:object propertyName:propertyName];
 }
 
-- (NSMutableDictionary*)mappingsForIdentifier:(NSString*)identifier{
+- (NSMutableDictionary*)mappingsForIdentifier:(id)identifier{
     if(identifier == nil)
         return nil;
     return [self dictionaryForKey:identifier];
@@ -311,21 +430,227 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 	return [self appendContentOfFile:path];
 }
 
-- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
-    return [NSObject objectFromValue:sourceObject withMappings:mappings];
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
+    return [NSObject objectFromValue:sourceObject withMappings:mappings reversed:reversed];
 }
 
-- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier{
-    return [NSObject objectFromValue:sourceObject withMappings:[self mappingsForIdentifier:identifier]];
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed{
+    return [NSObject objectFromValue:sourceObject withMappings:[self mappingsForIdentifier:identifier] reversed:reversed];
 }
 
 @end
 
 
-@implementation NSMutableDictionary (CKStyleManager)
+@interface CKMappingContext()
+@property(nonatomic,retain)NSMutableDictionary* dictionary;
+- (id)initWithDictionary:(NSMutableDictionary*)dictionary identifier:(id)theidentifier;
+@end
 
-- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName{
-    return [self dictionaryForObject:object propertyName:propertyName];
+
+@implementation CKMappingContext
+@synthesize  dictionary = _dictionary;
+@synthesize  identifier = _identifier;
+
+- (id)initWithDictionary:(NSMutableDictionary*)thedictionary identifier:(id)theidentifier{
+    self = [super init];
+    self.dictionary = thedictionary;
+    self.identifier = theidentifier;
+    return self;
+}
+
+- (void)dealloc{
+    [_dictionary release];
+    _dictionary = nil;
+    [_identifier release];
+    _identifier = nil;
+    [super dealloc];
+}
+
++ (void)loadContentOfFileNamed:(NSString*)name{
+    [[CKMappingManager defaultManager]loadContentOfFileNamed:name];
+}
+
++ (CKMappingContext*)contextWithIdentifier:(id)identifier{
+    NSMutableDictionary* dico = [[CKMappingManager defaultManager]mappingsForIdentifier:identifier];
+    if(dico){
+        return [[[CKMappingContext alloc]initWithDictionary:dico identifier:identifier]autorelease];
+    }
+    return [[[CKMappingContext alloc]initWithDictionary:[NSMutableDictionary dictionary] identifier:identifier]autorelease];
+}
+
++ (void)clearMappingsContextWithIdentifier:(id)identifier{
+    [[CKMappingManager defaultManager]removeDictionaryForKey:identifier];
+}
+
+- (BOOL)isEmpty{
+    return [[self dictionary]isEmpty];
+}
+
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type{
+    NSMutableArray* array = [NSMutableArray array];
+    //TODO copy [self dictionary] and set object:class = type
+    //MARCHE PO [array setupPropertyWithKeyPath:@"" fromValue:value keyPath:@"" withOptions:[self dictionary] reversed:NO];
+    return array;
+}
+
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
+    NSMutableArray* array = [NSMutableArray array];
+    //TODO copy [self dictionary] and set object:class = type
+    //MARCHE PO [array setupPropertyWithKeyPath:@"" fromValue:value keyPath:@"" withOptions:[self dictionary] reversed:reversed];
+    return array;
+}
+
+- (id)objectFromValue:(id)value ofClass:(Class)type{
+    return [self objectFromValue:value ofClass:type reversed:NO];
+}
+
+- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
+    id object = [[[type alloc]init] autorelease];
+    [self mapValue:value toObject:object reversed:reversed];
+    return object;
+}
+
+- (id)mapValue:(id)value toObject:(id)object{
+    [object setupWithObject:value withMappings:[self dictionary] reversed:NO];
+    return object;
+}
+
+
+- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed{
+    [object setupWithObject:value withMappings:[self dictionary] reversed:reversed];
+    return object;
+}
+
+- (id)objectFromValue:(id)value{
+    //TODO : CHECKER SI source est collection et si on a une definition d'objet dans dictionary si non rerouter vers les bonnes fonctions ...
+    return [[CKMappingManager defaultManager]objectFromValue:value withMappingsIdentifier:self.identifier reversed:NO];
+}
+
+- (id)objectFromValue:(id)value reversed:(BOOL)reversed{
+    //TODO : CHECKER SI source est collection et si on a une definition d'objet dans dictionary si non rerouter vers les bonnes fonctions ...
+    return [[CKMappingManager defaultManager]objectFromValue:value withMappingsIdentifier:self.identifier reversed:reversed];
+}
+
+- (void)setObjectClass:(Class)type{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    [dictionary setObject:[type description] forKey:CKMappingClassKey];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    [dictionary setObject:sourceKeyPath forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath transformBlock:(id(^)(id source))transformBlock{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithBlock:transformBlock] forKey:CKMappingTransformCallbackKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath transformTarget:(id)target action:(SEL)action{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKMappingTransformCallbackKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:value forKey:CKMappingDefaultValueKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformBlock:(id(^)(id source))transformBlock{
+    NSMutableDictionary* dictionary = [self dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithBlock:transformBlock] forKey:CKMappingTransformCallbackKey];
+    [mapping setObject:value forKey:CKMappingDefaultValueKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformTarget:(id)target action:(SEL)action{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKMappingTransformCallbackKey];
+    [mapping setObject:value forKey:CKMappingDefaultValueKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[NSNumber numberWithBool:requiered] forKey:CKMappingRequieredKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformBlock:(id(^)(id source))transformBlock{
+    NSMutableDictionary* dictionary = [self dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithBlock:transformBlock] forKey:CKMappingTransformCallbackKey];
+    [mapping setObject:[NSNumber numberWithBool:requiered] forKey:CKMappingRequieredKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformTarget:(id)target action:(SEL)action{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKMappingTransformCallbackKey];
+    [mapping setObject:[NSNumber numberWithBool:requiered] forKey:CKMappingRequieredKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    NSMutableDictionary* objectDefinition = [NSMutableDictionary dictionary];
+    [mapping setObject:objectDefinition forKey:CKMappingObjectKey];
+    [objectDefinition setObject:[objectClass description] forKey:CKMappingClassKey];
+    [objectDefinition setObject:contextIdentifier forKey:CKMappingMappingsKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[NSNumber numberWithBool:requiered] forKey:CKMappingRequieredKey];
+    NSMutableDictionary* objectDefinition = [NSMutableDictionary dictionary];
+    [mapping setObject:objectDefinition forKey:CKMappingObjectKey];
+    [objectDefinition setObject:[objectClass description] forKey:CKMappingClassKey];
+    [objectDefinition setObject:contextIdentifier forKey:CKMappingMappingsKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath  withMappingsContextIdentifier:(id)contextIdentifier{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    NSMutableDictionary* objectDefinition = [NSMutableDictionary dictionary];
+    [mapping setObject:objectDefinition forKey:CKMappingObjectKey];
+    [objectDefinition setObject:contextIdentifier forKey:CKMappingMappingsKey];
+    [dictionary setObject:mapping forKey:keyPath];
+}
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered  withMappingsContextIdentifier:(id)contextIdentifier{
+    NSMutableDictionary* dictionary = [self  dictionary];
+    NSMutableDictionary* mapping = [NSMutableDictionary dictionary];
+    [mapping setObject:sourceKeyPath forKey:CKMappingtargetKeyPathKey];
+    [mapping setObject:[NSNumber numberWithBool:requiered] forKey:CKMappingRequieredKey];
+    NSMutableDictionary* objectDefinition = [NSMutableDictionary dictionary];
+    [mapping setObject:objectDefinition forKey:CKMappingObjectKey];
+    [objectDefinition setObject:contextIdentifier forKey:CKMappingMappingsKey];
+    [dictionary setObject:mapping forKey:keyPath];
 }
 
 @end
