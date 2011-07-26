@@ -13,11 +13,39 @@
 @implementation CKUIViewController
 @synthesize name = _name;
 
+- (void)postInit {	
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self postInit];
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
 - (void)dealloc{
 	[_name release];
 	[super dealloc];
 }
 
+#pragma mark - View lifecycle
 
 -(void) viewDidLoad{
 	[super viewDidLoad];

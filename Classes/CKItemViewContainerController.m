@@ -38,29 +38,14 @@
 
 
 #pragma mark Initialization
-- (void)postInit{
+- (void)postInit {
+	[super postInit];
 	_numberOfObjectsToprefetch = 10;
 }
 
 - (id)init {
-	if (self = [super initWithNibName:nil bundle:nil]) {
-		[self postInit];
-	}
-	return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	self = [super initWithNibName:nil bundle:nil];
 	if (self) {
-		[self postInit];
-	}
-	return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	self = [super initWithCoder:aDecoder];
-	if (self) {
-		[self postInit];
 	}
 	return self;
 }

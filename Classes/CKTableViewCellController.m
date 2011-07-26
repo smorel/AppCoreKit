@@ -68,6 +68,10 @@
 		self.cellStyle = UITableViewCellStyleDefault;
 		self.value3Ratio = 2.0 / 3.0;
 		self.value3LabelsSpace = 10;
+        
+        self.selectable = YES;
+        self.rowHeight = 44.0f;
+        self.editable = YES;
 	}
 	return self;
 }
@@ -348,4 +352,61 @@
 }
 
 #endif
+@end
+
+
+
+@implementation CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
+@dynamic rowHeight;
+@dynamic movable;
+@dynamic editable;
+@dynamic removable;
+@dynamic selectable;
+
+- (CGFloat)heightForRow{
+    return _rowHeight;
+}
+
+- (void)setRowHeight:(CGFloat)f{
+    _rowHeight = f;
+    if(self.parentController){
+        NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller");
+        CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+        [[tableViewController tableView]beginUpdates];
+        [[tableViewController tableView]endUpdates];
+    }
+}
+
+- (BOOL)isMovable{
+    return _movable;
+}
+
+- (void)setMovable:(BOOL)bo{
+    _movable = bo;
+}
+
+- (BOOL)isEditable{
+    return _editable;
+}
+
+- (void)setEditable:(BOOL)bo{
+    _editable = bo;
+}
+
+- (BOOL)isRemovable{
+    return _movable;
+}
+
+- (void)setRemovable:(BOOL)bo{
+    _movable = bo;
+}
+
+- (BOOL)isSelectable{
+    return _selectable;
+}
+
+- (void)setSelectable:(BOOL)bo{
+    _selectable = bo;
+}
+
 @end

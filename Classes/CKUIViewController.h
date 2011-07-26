@@ -18,4 +18,10 @@
 
 @property (nonatomic,retain) NSString* name;
 
+/** 
+ This method is called upon initialization. Subclasses can override this method.
+ @warning You should not call this method directly.
+ */
+- (void)postInit;
+
 @end

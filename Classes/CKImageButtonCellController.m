@@ -26,6 +26,9 @@
 		self.image = image;
 		self.highlightedImage = hightlightedImage;
 		self.accessoryType = UITableViewCellAccessoryNone;
+        
+        self.selectable = NO;
+        self.editable = NO;
 	}
 	return self;
 }

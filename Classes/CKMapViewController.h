@@ -64,7 +64,4 @@ typedef enum CKMapViewControllerZoomStrategy{
 - (BOOL)reloadData;
 - (BOOL)reloadData:(BOOL)animated;
 
-//private
-- (void)postInit;
-
 @end

@@ -653,15 +653,24 @@
 	
 	if (_resizeOnKeyboardNotification == YES){
 		NSDictionary *info = [notification userInfo];
-		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
+		CGRect keyboardBounds = CKUIKeyboardInformationBounds(info);
+		CGPoint keyboardCenter = CKUIKeyboardInformationCenterEnd(info);
+		
+		CGPoint keyboardOrigin = CGPointMake(keyboardCenter.x - keyboardBounds.size.width / 2.0, keyboardCenter.y - keyboardBounds.size.height / 2.0);
+		CGRect keyboardRect = { keyboardOrigin, keyboardBounds.size };
+		
+		CGRect viewFrame = self.tableView.frame;
+		CGRect keyboardFrame = [self.tableView.superview convertRect:keyboardRect fromView:nil];
+		CGRect hiddenRect = CGRectIntersection(viewFrame, keyboardFrame);
+		
+		CGRect remainder, slice;
+		CGRectDivide(viewFrame, &slice, &remainder, CGRectGetHeight(hiddenRect), CGRectMaxYEdge);
 		
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationBeginsFromCurrentState:YES];
 		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
 		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		CGRect tableViewFrame = self.tableViewContainer.frame;
-		tableViewFrame.size.height -= keyboardRect.size.height;
-		self.tableViewContainer.frame = tableViewFrame;
+		self.tableViewContainer.frame = remainder;//tableViewFrame;
 		[UIView commitAnimations];
 	}
 	else if(_moveOnKeyboardNotification == YES){

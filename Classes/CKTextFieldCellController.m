@@ -28,6 +28,9 @@
 	if (self = [super initWithText:title]) {
 		self.value = value;
 		self.placeholder = placeholder;
+        
+        self.selectable = NO;
+        self.editable = NO;
 	}
 	return self;
 }

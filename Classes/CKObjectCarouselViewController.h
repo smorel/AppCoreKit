@@ -28,7 +28,6 @@
 @property (nonatomic,retain) IBOutlet CKCarouselView* carouselView;
 @property (nonatomic,retain) IBOutlet UIPageControl* pageControl;
 
-- (void)postInit;
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 @end

@@ -34,31 +34,6 @@
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
 
-- (void)postInit{
-	[super postInit];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder {
-	[super initWithCoder:decoder];
-	[self postInit];
-	return self;
-}
-
-- (id)init {
-    if (self = [super init]) {
-		[self postInit];
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	if (self) {
-		[self postInit];
-	}
-	return self;
-}
-
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
 	[_carouselView release];
