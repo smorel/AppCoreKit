@@ -30,6 +30,9 @@
 		self.font = [UIFont systemFontOfSize:17];
 		self.allowCarriageReturn = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeight) name:UIDeviceOrientationDidChangeNotification object:nil];
+        
+        self.selectable = NO;
+        self.editable = NO;
 	}
 	return self;
 }
@@ -54,7 +57,7 @@
 		// ---
 		
 		NSAssert(NO,@"implement viewSizeForObject:params: and compute the correct size");
-		//self.rowHeight = view.frame.size.height + 5;
+		self.rowHeight = view.frame.size.height + 5;
 		[[self parentTableView] beginUpdates];
 		[[self parentTableView] endUpdates];		
 	}

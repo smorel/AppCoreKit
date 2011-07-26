@@ -37,7 +37,6 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyleValue3
 } CKTableViewCellStyle;             
 
-
 /** TODO
  */
 @interface CKTableViewCellController : CKItemViewController {
@@ -58,6 +57,7 @@ typedef enum CKTableViewCellStyle {
     BOOL _movable;
     BOOL _editable;
     BOOL _removable;
+    BOOL _selectable;
 }
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
@@ -101,15 +101,17 @@ typedef enum CKTableViewCellStyle {
 
 @interface CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
 
-@property (nonatomic, assign) CGFloat rowHeight DEPRECATED_ATTRIBUTE;
+@property (nonatomic, getter = heightForRow) CGFloat rowHeight DEPRECATED_ATTRIBUTE;
 @property (nonatomic, getter = isMovable) BOOL movable DEPRECATED_ATTRIBUTE;
 @property (nonatomic, getter = isEditable) BOOL editable DEPRECATED_ATTRIBUTE;
 @property (nonatomic, getter = isRemovable) BOOL removable DEPRECATED_ATTRIBUTE;
+@property (nonatomic, getter = isSelectable) BOOL selectable DEPRECATED_ATTRIBUTE;
 
 - (CGFloat)heightForRow DEPRECATED_ATTRIBUTE;
 - (BOOL)isMovable DEPRECATED_ATTRIBUTE;
 - (BOOL)isEditable DEPRECATED_ATTRIBUTE;
 - (BOOL)isRemovable DEPRECATED_ATTRIBUTE;
+- (BOOL)isSelectable DEPRECATED_ATTRIBUTE;
 
 @end
 

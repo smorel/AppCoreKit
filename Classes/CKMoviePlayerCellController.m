@@ -30,6 +30,8 @@ CGRect __CGRectCenter(CGRect rect, CGRect target) {
 	if (self = [super init]) {
 		self.playerController = [[[MPMoviePlayerController alloc] initWithContentURL:url] autorelease];
 		self.playerController.controlStyle = MPMovieControlStyleEmbedded;
+        self.selectable = NO;
+        self.editable = NO;
 	}
 	return self;
 }
