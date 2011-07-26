@@ -9,66 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CKNSObject+Introspection.h"
 
-
-/** TODO
- */
-typedef enum{
-	CKMappingPolicyRequired,
-	CKMappingPolicyOptional
-}CKMappingPolicy;
-
-typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NSError** error);
-
-
-/** TODO
- */
-@interface CKMapping : NSObject{
-	NSString* key;
-	CKMappingBlock mapperBlock;
-	CKMappingPolicy policy;
-	Class transformerClass;
-}
-
-@property (nonatomic, retain) NSString *key;
-@property (nonatomic, copy) CKMappingBlock mapperBlock;
-@property (nonatomic, assign) CKMappingPolicy policy;
-@property (nonatomic, assign) Class transformerClass;
-
-- (NSValueTransformer*)valueTransformer;
-
-@end
-
-//
-
 typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
-
-
-/** TODO
- */
-@interface CKCustomMapping : NSObject {
-	CKCustomMappingBlock mapperBlock;
-}
-
-@property (nonatomic, copy) CKCustomMappingBlock mapperBlock;
-
-@end
-
-
-/** TODO
- */
-@interface CKObjectMapping : NSObject {
-	NSString* key;
-	Class objectClass;
-	NSMutableDictionary* mappings;
-	CKMappingPolicy policy;
-}
-
-@property (nonatomic, retain) NSString* key;
-@property (nonatomic, retain) NSMutableDictionary* mappings;
-@property (nonatomic, assign) Class objectClass;
-@property (nonatomic, assign) CKMappingPolicy policy;
-
-@end
+typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NSError** error);
 
 //
 

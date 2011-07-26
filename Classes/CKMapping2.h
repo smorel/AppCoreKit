@@ -8,74 +8,68 @@
 
 #import <Foundation/Foundation.h>
 #import "CKCascadingTree.h"
-
-/* Format for mappings : Can be defined in a JSON file
-      { 
-         ObjectClass1 : {
-                           keyPath : propertyTarget1,
-                           ...
-                           Key1.Key2. ... :   {
-                                             requiered : YES,
-                                             keyPath : "Key1.Key2.Key3. ...",
-                                             transformSelector : "NSDateFromStringCustom:" //if keyPath points to a NSDate property we will transform the source using [NSDate NSDateFromStringCustom:sourceValue]
-                                             
-                                             //for objects that will get created in array or document collection properties
-                                             contentType : "CKYourType"
-                                             clearContent : YES,
-                                             insertContentAtBegin : YES
-                                             },
-                           ...
-                        },
-         ...
-      }
- */
  
-
 /** TODO
  */
-@interface NSObject (CKMapping2) 
-
-- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
-
-- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
-- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
-
-+ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-+ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
-
-@end
-
-
-/*
-@interface NSMutableDictionary (CKMapping2)
-- (void)setKeyPath: ... FromKeyPath:...;
-- (void)mapKeyPath: ... FromKeyPath:... requiered:...;
-- (void)mapKeyPath: ... FromKeyPath:... requiered:... objectClass:...;
-- (void)mapKeyPath: ... FromKeyPath:... requiered:... objectClass:... transformBlock:^(id)djhfbjfdsh;
-@end
-*/
-
-
-@interface CKMappingManager : CKCascadingTree {
+@interface CKMappingContext : NSObject{
+    NSMutableDictionary* _dictionary;
+    id _identifier;
 }
 
-+ (CKMappingManager*)defaultManager;
+@property(nonatomic,retain)id identifier;
 
-- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
-- (NSMutableDictionary*)mappingsForIdentifier:(NSString*)identifier;
+///-----------------------------------
+/// @name Accessing instance of CKMappingContext
+///-----------------------------------
 
-- (void)loadContentOfFileNamed:(NSString*)name;
-- (BOOL)importContentOfFileNamed:(NSString*)name;
++ (CKMappingContext*)contextWithIdentifier:(id)identifier;
++ (void)loadContentOfFileNamed:(NSString*)name;
 
-- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(NSString*)identifier;
+///-----------------------------------
+/// @name Applying Mapping from value
+///-----------------------------------
+
+//value should be a collection (NSArray, CKDocumentCollection)
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type;
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed;
+- (id)objectFromValue:(id)value ofClass:(Class)type;
+- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed;
+
+//apply the context mappings to the object
+- (id)mapValue:(id)value toObject:(id)object;
+- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed;
+
+//Reserved for mappings definitions containing the object definition for the return object
+//if source is collection return a NSArray else return an instance defined by the objectClass of the mapping definition
+- (id)objectFromValue:(id)value;
+- (id)objectFromValue:(id)value reversed:(BOOL)reversed;
+- (NSArray*)objectsFromValue:(id)value;
+- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed;
+
+///-----------------------------------
+/// @name Mappings Definition Methods
+///-----------------------------------
+
+- (void)setObjectClass:(Class)type;
+
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath transformBlock:(id(^)(id source))transformBlock;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath transformTarget:(id)target action:(SEL)action;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformBlock:(id(^)(id source))transformBlock;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformTarget:(id)target action:(SEL)action;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformBlock:(id(^)(id source))transformBlock;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformTarget:(id)target action:(SEL)action;
+
+//valid for object property or array, collection sub objects
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath withMappingsContextIdentifier:(id)contextIdentifier;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered withMappingsContextIdentifier:(id)contextIdentifier;
+
+- (BOOL)isEmpty;
 
 @end
 
-@interface NSMutableDictionary (CKMappingManager)
 
-- (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
-
-@end

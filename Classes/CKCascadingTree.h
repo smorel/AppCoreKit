@@ -21,8 +21,11 @@
 - (BOOL)appendContentOfFile:(NSString*)path;
 
 - (NSMutableDictionary*)dictionaryForObject:(id)object propertyName:(NSString*)propertyName;
-- (NSMutableDictionary*)dictionaryForKey:(NSString*)key;
+- (NSMutableDictionary*)dictionaryForKey:(id)key;
 - (NSMutableDictionary*)dictionaryForClass:(Class)c;
+
+- (void)addDictionary:(NSMutableDictionary*)dictionary forKey:(id)key;
+- (void)removeDictionaryForKey:(id)key;
 
 @end
 

@@ -161,6 +161,11 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    //DEBUG TEST
+    [self presentController:[self controllerForSettings]];
+    return;
+    
+    
     CKAlertView* ckAlertView = (CKAlertView*)alertView;
     switch(buttonIndex){
         case 1:{
@@ -174,7 +179,13 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (void)install:(id)sender{
 	if ([sender respondsToSelector:@selector(userInfo)]) {
 		CKProductRelease* productRelease = (CKProductRelease*)[sender userInfo];
-		[[UIApplication sharedApplication]openURL:productRelease.provisioningURL];
+		BOOL result = [[UIApplication sharedApplication]openURL:productRelease.provisioningURL];
+        if(result == NO){
+            NSString* title = [NSString stringWithFormat:@"Install %@ %@(%@) failed",productRelease.applicationName,productRelease.versionNumber,productRelease.buildNumber];
+            NSString* message = [NSString stringWithFormat:@"Unable to open URL : %@",productRelease.provisioningURL];
+            CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:nil]autorelease];
+            [alertView show];
+        }
 	}
 }
 
@@ -344,7 +355,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 		CKProvisioningControllerButton* installButton = [[[CKProvisioningControllerButton alloc] initWithFrame:CGRectMake(10, 20, controller.tableViewCell.contentView.bounds.size.width-20, 90)] autorelease];
 		installButton.tag = 10000;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-		[installButton setTitle:@"Check for Updates" forState:UIControlStateNormal];
+		[installButton setTitle:_(@"Check for Updates") forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
 		[installButton addTarget:bself action:@selector(install:) forControlEvents:UIControlEventTouchUpInside];

@@ -17,9 +17,68 @@
 #import "CKNSValueTransformer+Additions.h"
 
 
+/** TODO
+ */
+typedef enum{
+	CKMappingPolicyRequired,
+	CKMappingPolicyOptional
+}CKMappingPolicy;
+
+
+
+/** TODO
+ */
+@interface CKMappingPrivate : NSObject{
+	NSString* key;
+	CKMappingBlock mapperBlock;
+	CKMappingPolicy policy;
+	Class transformerClass;
+}
+
+@property (nonatomic, retain) NSString *key;
+@property (nonatomic, copy) CKMappingBlock mapperBlock;
+@property (nonatomic, assign) CKMappingPolicy policy;
+@property (nonatomic, assign) Class transformerClass;
+
+- (NSValueTransformer*)valueTransformer;
+
+@end
+
+//
+
+
+
+/** TODO
+ */
+@interface CKCustomMapping : NSObject {
+	CKCustomMappingBlock mapperBlock;
+}
+
+@property (nonatomic, copy) CKCustomMappingBlock mapperBlock;
+
+@end
+
+
+/** TODO
+ */
+@interface CKObjectMapping : NSObject {
+	NSString* key;
+	Class objectClass;
+	NSMutableDictionary* mappings;
+	CKMappingPolicy policy;
+}
+
+@property (nonatomic, retain) NSString* key;
+@property (nonatomic, retain) NSMutableDictionary* mappings;
+@property (nonatomic, assign) Class objectClass;
+@property (nonatomic, assign) CKMappingPolicy policy;
+
+@end
+
+
 #define DebugLog 0
 
-@implementation CKMapping
+@implementation CKMappingPrivate
 @synthesize key;
 @synthesize mapperBlock;
 @synthesize policy;
@@ -94,11 +153,11 @@
 	
 	for (id key in mappings) {
 		id obj = [mappings objectForKey:key];
-		NSAssert(([obj isKindOfClass:[CKMapping class]] || [obj isKindOfClass:[CKCustomMapping class]] || [obj isKindOfClass:[CKObjectMapping class]]),@"The mapper object is not a CKMapping");
+		NSAssert(([obj isKindOfClass:[CKMappingPrivate class]] || [obj isKindOfClass:[CKCustomMapping class]] || [obj isKindOfClass:[CKObjectMapping class]]),@"The mapper object is not a CKMapping");
 		NSAssert([key isKindOfClass:[NSString class]],@"The mapper key is not a string");
 
-		if ([obj isKindOfClass:[CKMapping class]]) {
-			CKMapping* mappingObject = (CKMapping*)obj;
+		if ([obj isKindOfClass:[CKMappingPrivate class]]) {
+			CKMappingPrivate* mappingObject = (CKMappingPrivate*)obj;
 			id sourceObject = [sourceDictionary valueForKeyPath:mappingObject.key];
 			if(sourceObject == nil){
 				//TODO : fill error
@@ -289,7 +348,7 @@
 @implementation NSMutableDictionary (CKMapping)
 
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withBlock:(CKMappingBlock)block{
-	CKMapping* mapperObject = [[[CKMapping alloc]init]autorelease];
+	CKMappingPrivate* mapperObject = [[[CKMappingPrivate alloc]init]autorelease];
 	mapperObject.key = keyPath;
 	mapperObject.mapperBlock = block;
 	mapperObject.policy = (bo == YES) ? CKMappingPolicyRequired : CKMappingPolicyOptional;
@@ -297,7 +356,7 @@
 }
 
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withValueTransformerClass:(Class)valueTransformerClass{
-	CKMapping* mapperObject = [[[CKMapping alloc]init]autorelease];
+	CKMappingPrivate* mapperObject = [[[CKMappingPrivate alloc]init]autorelease];
 	mapperObject.key = keyPath;
 	mapperObject.transformerClass = valueTransformerClass;
 	mapperObject.policy = (bo == YES) ? CKMappingPolicyRequired : CKMappingPolicyOptional;
