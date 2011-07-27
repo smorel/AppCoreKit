@@ -125,7 +125,7 @@
 	[super viewDidDisappear:animated];
 	
 	for (CKTableSection *section in self.sections) {
-		[section.cellControllers makeObjectsPerformSelector:@selector(cellDidDisappear)];
+		[section.cellControllers makeObjectsPerformSelector:@selector(viewDidDisappear)];
 	}
 }
 
@@ -299,14 +299,14 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     CKTableViewCellController *controller = [self cellControllerForIndexPath:indexPath];
     if([controller isSelectable]){
-        return [controller willSelectRow];
+        return [controller willSelect];
     }
     return NO;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-	[[self cellControllerForIndexPath:indexPath] didSelectRow];
+	[[self cellControllerForIndexPath:indexPath] didSelect];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -408,7 +408,7 @@
 	
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		[[self cellControllerForIndexPath:indexPath] cellDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
+		[[self cellControllerForIndexPath:indexPath] viewDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
 
