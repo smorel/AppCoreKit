@@ -162,7 +162,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 //Constants
 
 NSString* CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
-NSString* CKCascadingTreeParent   = @"CKCascadingTree";
+NSString* CKCascadingTreeParent   = @"CKCascadingTreeParent";
 NSString* CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
 NSString* CKCascadingTreeInherits = @"@inherits";
 NSString* CKCascadingTreeImport   = @"@import";
@@ -333,6 +333,24 @@ NSString* CKCascadingTreeImport   = @"@import";
 				[dico initAfterLoading];
 			}
 		}
+        else if([object isKindOfClass:[NSArray class]]){
+            int index = 0;
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    NSMutableDictionary* dico = subObject;
+                    if(![subObject isKindOfClass:[NSMutableDictionary class]]){
+                        [subObject retain];
+                        [object removeObjectAtIndex:index];
+                        dico = [NSMutableDictionary dictionaryWithDictionary:subObject];
+                        [object insertObject:dico atIndex:index];
+                        [dico initAfterLoading];
+                        [subObject release];
+                    }
+                    [dico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                }
+                ++index;
+            }
+        }
 		[object release];
 	}
 }
@@ -352,6 +370,13 @@ NSString* CKCascadingTreeImport   = @"@import";
 			[object postInitAfterLoading];
 			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
 		}
+        else if([object isKindOfClass:[NSArray class]]){
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    [subObject postInitAfterLoading];
+                }
+            }
+        }
 	}
 	
 	//set the empty style
@@ -630,6 +655,10 @@ NSString* CKCascadingTreeImport   = @"@import";
 }
 
 - (NSMutableDictionary*)dictionaryForKey:(id)key{
+    return [_tree objectForKey:key];
+}
+
+- (NSArray*)arrayForKey:(id)key{
     return [_tree objectForKey:key];
 }
 

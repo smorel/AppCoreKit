@@ -486,18 +486,49 @@ static CKMappingManager* CKMappingManagerDefault = nil;
     return [[self dictionary]isEmpty];
 }
 
+- (NSMutableDictionary*)arrayDefinitionWithMappings:(NSMutableDictionary*)mappings objectClass:(Class)type{
+    NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+    [dico setObject:@"NSMutableArray" forKey:CKMappingClassKey];
+    NSMutableDictionary* selfDefinition = [NSMutableDictionary dictionary];
+    [selfDefinition setObject:CKMappingSelfKey forKey:CKMappingtargetKeyPathKey];
+    NSMutableDictionary* objectDefinition = [NSMutableDictionary dictionary];
+    if(type){
+        [objectDefinition setObject:[type description] forKey:CKMappingClassKey];
+    }
+    [objectDefinition setObject:mappings forKey:CKMappingMappingsKey];
+    [selfDefinition setObject:objectDefinition forKey:CKMappingObjectKey];
+    [dico setObject:selfDefinition forKey:CKMappingSelfKey];
+    return dico;
+}
+
+//ARRAYS
+
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type{
-    NSMutableArray* array = [NSMutableArray array];
-    //TODO copy [self dictionary] and set object:class = type
-    //MARCHE PO [array setupPropertyWithKeyPath:@"" fromValue:value keyPath:@"" withOptions:[self dictionary] reversed:NO];
-    return array;
+    return (NSArray*)[self objectsFromValue:value ofClass:type reversed:NO];
 }
 
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
-    NSMutableArray* array = [NSMutableArray array];
-    //TODO copy [self dictionary] and set object:class = type
-    //MARCHE PO [array setupPropertyWithKeyPath:@"" fromValue:value keyPath:@"" withOptions:[self dictionary] reversed:reversed];
-    return array;
+    NSAssert([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[CKDocumentCollection class]],
+             @"invalid value type");
+    return [NSObject objectFromValue:value withMappings:[self arrayDefinitionWithMappings:[self dictionary] objectClass:type] reversed:reversed];
+}
+
+- (NSArray*)objectsFromValue:(id)value{
+    return [self objectsFromValue:(id)value ofClass:nil];
+}
+
+- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed{
+    return [self objectsFromValue:(id)value ofClass:nil reversed:reversed];
+}
+
+//OBJECT
+- (id)objectFromValue:(id)value{
+    return [self objectFromValue:value reversed:NO];
+}
+
+- (id)objectFromValue:(id)value reversed:(BOOL)reversed{
+    NSAssert([value isKindOfClass:[NSDictionary class]],@"invalid value type");
+    return [[CKMappingManager defaultManager]objectFromValue:value withMappings:[self dictionary] reversed:reversed];
 }
 
 - (id)objectFromValue:(id)value ofClass:(Class)type{
@@ -505,32 +536,24 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 }
 
 - (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
+    NSAssert([value isKindOfClass:[NSDictionary class]],@"invalid value type");
     id object = [[[type alloc]init] autorelease];
     [self mapValue:value toObject:object reversed:reversed];
     return object;
 }
 
+//INSTANCE
 - (id)mapValue:(id)value toObject:(id)object{
-    [object setupWithObject:value withMappings:[self dictionary] reversed:NO];
-    return object;
+    return [self mapValue:value toObject:object reversed:NO];
 }
-
 
 - (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed{
     [object setupWithObject:value withMappings:[self dictionary] reversed:reversed];
     return object;
 }
 
-- (id)objectFromValue:(id)value{
-    //TODO : CHECKER SI source est collection et si on a une definition d'objet dans dictionary si non rerouter vers les bonnes fonctions ...
-    return [[CKMappingManager defaultManager]objectFromValue:value withMappingsIdentifier:self.identifier reversed:NO];
-}
 
-- (id)objectFromValue:(id)value reversed:(BOOL)reversed{
-    //TODO : CHECKER SI source est collection et si on a une definition d'objet dans dictionary si non rerouter vers les bonnes fonctions ...
-    return [[CKMappingManager defaultManager]objectFromValue:value withMappingsIdentifier:self.identifier reversed:reversed];
-}
-
+//SETUP
 - (void)setObjectClass:(Class)type{
     NSMutableDictionary* dictionary = [self  dictionary];
     [dictionary setObject:[type description] forKey:CKMappingClassKey];

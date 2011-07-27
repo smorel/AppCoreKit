@@ -23,6 +23,7 @@
 - (NSMutableDictionary*)dictionaryForObject:(id)object propertyName:(NSString*)propertyName;
 - (NSMutableDictionary*)dictionaryForKey:(id)key;
 - (NSMutableDictionary*)dictionaryForClass:(Class)c;
+- (NSArray*)arrayForKey:(id)key;
 
 - (void)addDictionary:(NSMutableDictionary*)dictionary forKey:(id)key;
 - (void)removeDictionaryForKey:(id)key;
