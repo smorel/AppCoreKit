@@ -60,8 +60,9 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
         }];
         [mappings mapKeyPath:         @"provisioningURL"    withValueFromBlock:^id(id sourceObject, NSError **error) {
             NSString* urlStr = [sourceObject objectForKey:@"ota-url"];
-            NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];
-            return url;
+            return [NSURL URLWithString:urlStr];
+            //NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];
+            //return url;
         }];
         [mappings mapKeyPath:         @"recommended"        withValueFromBlock:^id(id sourceObject, NSError **error) {
             NSNumber* recommendedNumber = [sourceObject objectForKey:@"recommended"];
