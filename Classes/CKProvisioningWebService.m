@@ -59,10 +59,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
             return date;
         }];
         [mappings mapKeyPath:         @"provisioningURL"    withValueFromBlock:^id(id sourceObject, NSError **error) {
-            NSString* urlStr = [sourceObject objectForKey:@"ota-url"];
-            return [NSURL URLWithString:urlStr];
-            //NSURL* url = [NSURL URLWithString:[urlStr decodeAllPercentEscapes]];
-            //return url;
+            return [NSURL URLWithString:[sourceObject objectForKey:@"ota-url"]];
         }];
         [mappings mapKeyPath:         @"recommended"        withValueFromBlock:^id(id sourceObject, NSError **error) {
             NSNumber* recommendedNumber = [sourceObject objectForKey:@"recommended"];
