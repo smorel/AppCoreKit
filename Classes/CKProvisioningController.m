@@ -161,11 +161,6 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    //DEBUG TEST
-    [self presentController:[self controllerForSettings]];
-    return;
-    
-    
     CKAlertView* ckAlertView = (CKAlertView*)alertView;
     switch(buttonIndex){
         case 1:{
