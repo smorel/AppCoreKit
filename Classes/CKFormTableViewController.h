@@ -31,7 +31,7 @@
 @property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
-@property (nonatomic,readonly) BOOL hidden;
+@property (nonatomic,assign) BOOL hidden;
 
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
@@ -48,6 +48,7 @@
 - (void)unlock;
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
+
 @end
 
 

@@ -21,6 +21,78 @@
 #import "CKCGPropertyCellControllers.h"
 #import "CKUIImagePropertyCellController.h"
 
+#import "CKCallback.h"
+
+NSString* CKPropertyGridEditorControllerHeaderTitleKey = @"CKPropertyGridEditorControllerHeaderTitleKey";
+NSString* CKPropertyGridEditorControllerFooterTitleKey = @"CKPropertyGridEditorControllerFooterTitleKey";
+NSString* CKPropertyGridEditorControllerPropertiesKey = @"CKPropertyGridEditorControllerPropertiesKey";
+NSString* CKPropertyGridEditorControllerCallbackKey = @"CKPropertyGridEditorControllerCallbackKey";
+NSString* CKPropertyGridEditorControllerHiddenKey = @"CKPropertyGridEditorControllerHiddenKey";
+
+@implementation NSMutableArray (CKPropertyGridEditorController)
+
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties{
+    NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+    if(title){
+        [dico setObject:title forKey:CKPropertyGridEditorControllerHeaderTitleKey];
+    }
+    if(properties){
+        [dico setObject:properties forKey:CKPropertyGridEditorControllerPropertiesKey];
+    }
+    [self addObject:dico];
+}
+
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block{
+    NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+    if(title){
+        [dico setObject:title forKey:CKPropertyGridEditorControllerHeaderTitleKey];
+    }
+    if(properties){
+        [dico setObject:properties forKey:CKPropertyGridEditorControllerPropertiesKey];
+    }
+    if(block){
+        [dico setObject:[CKCallback callbackWithBlock:^id(id value) {
+            block((CKPropertyGridEditorController*)value);
+            return (id)nil;
+        }] forKey:CKPropertyGridEditorControllerCallbackKey];
+    }
+    [self addObject:dico];
+}
+
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties hidden:(BOOL)hidden{
+    NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+    if(title){
+        [dico setObject:title forKey:CKPropertyGridEditorControllerHeaderTitleKey];
+    }
+    if(properties){
+        [dico setObject:properties forKey:CKPropertyGridEditorControllerPropertiesKey];
+    }
+    [dico setObject:[NSNumber numberWithBool:hidden] forKey:CKPropertyGridEditorControllerHiddenKey];
+    [self addObject:dico];
+}
+
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block hidden:(BOOL)hidden{
+    NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+    if(title){
+        [dico setObject:title forKey:CKPropertyGridEditorControllerHeaderTitleKey];
+    }
+    if(properties){
+        [dico setObject:properties forKey:CKPropertyGridEditorControllerPropertiesKey];
+    }
+    if(block){
+        [dico setObject:[CKCallback callbackWithBlock:^id(id value) {
+            block((CKPropertyGridEditorController*)value);
+            return (id)nil;
+        }] forKey:CKPropertyGridEditorControllerCallbackKey];
+    }
+    [dico setObject:[NSNumber numberWithBool:hidden] forKey:CKPropertyGridEditorControllerHiddenKey];
+    [self addObject:dico];
+}
+
+@end
+
+
+
 //PROPERTY GRID CONTROLLER
 @interface CKPropertyGridEditorController() 
 @property (nonatomic, retain) id object;
@@ -30,6 +102,12 @@
 @implementation CKPropertyGridEditorController
 @synthesize editorPopover = _editorPopover;
 @synthesize object = _object;
+
+- (void)postInit{
+    [super postInit];
+    self.searchEnabled = YES;
+	self.liveSearchDelay = 0.5;
+}
 
 - (void)dealloc{
 	[_editorPopover release];
@@ -45,7 +123,7 @@
 	return self;
 }
 
-- (id)initWithObject:(id)object representation:(NSDictionary*)representation{
+- (id)initWithObject:(id)object representation:(NSArray*)representation{
 	[self initWithStyle:UITableViewStyleGrouped];
 	[self setupWithObject:object representation:representation];
 	return self;
@@ -63,8 +141,6 @@
 
 - (void)setupWithObject:(id)theobject withFilter:(NSString*)filter{
 	NSString* lowerCaseFilter = [filter lowercaseString];
-	self.searchEnabled = YES;
-	self.liveSearchDelay = 0.5;
 	
 	self.object = theobject;
 	NSArray* propertyDescriptors = [_object allPropertyDescriptors];
@@ -87,23 +163,34 @@
 	[self setupWithProperties:theProperties];
 }
 
-- (void)setupWithObject:(id)object representation:(NSDictionary*)representation{
+- (void)setupWithObject:(id)object representation:(NSArray*)representation{
 	if(representation == nil){
 		return [self setupWithObject:object];
 	}
 	
 	[self clear];
-	for(NSString* sectionName in [representation allKeys]){
-		NSArray* propertyNames = [representation objectForKey:sectionName];
+	for(NSDictionary* section in representation){
+        NSString* sectionName = [section objectForKey:CKPropertyGridEditorControllerHeaderTitleKey];
+        NSString* footerName = [section objectForKey:CKPropertyGridEditorControllerFooterTitleKey];
+		NSArray* propertyNames = [section objectForKey:CKPropertyGridEditorControllerPropertiesKey];
+        CKCallback* callback = [section objectForKey:CKPropertyGridEditorControllerCallbackKey];
+        NSNumber* hiddenNumber = [section objectForKey:CKPropertyGridEditorControllerHiddenKey];
 		
 		NSMutableArray* theProperties = [NSMutableArray array];
 		for(NSString* propertyName in propertyNames){
 			CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:propertyName];
 			[theProperties addObject:property];
 		}
+        
+        //TODO footerName
 		CKFormSection* section = (sectionName != nil && [sectionName length] > 0) ? [CKFormSection sectionWithHeaderTitle:_(sectionName)] : [CKFormSection section];
+        section.hidden = (hiddenNumber == nil) ? NO : [hiddenNumber boolValue];
 		[self setup:theProperties inSection:section];
 		[self addSection:section];
+        
+        if(callback){
+            [callback execute:self];
+        }
 	}
 	
 	[self reload];

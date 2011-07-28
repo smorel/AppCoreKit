@@ -339,6 +339,9 @@
 }
 
 - (BOOL)isValidIndexPath:(NSIndexPath*)indexPath{
+    if(indexPath == nil)
+        return NO;
+    
 	id object = [self objectAtIndexPath:indexPath];
 	return object != nil;
 }

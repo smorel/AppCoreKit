@@ -21,13 +21,20 @@
 @property (nonatomic, retain) UIPopoverController *editorPopover;
 
 - (id)initWithObjectProperties:(NSArray*)properties;
-- (id)initWithObject:(id)object representation:(NSDictionary*)representation;
+- (id)initWithObject:(id)object representation:(NSArray*)representation;
 - (id)initWithObject:(id)object;
 
 
 - (void)setupWithObject:(id)object;
 - (void)setupWithObject:(id)object withFilter:(NSString*)filter;
-- (void)setupWithObject:(id)object representation:(NSDictionary*)representation;
+- (void)setupWithObject:(id)object representation:(NSArray*)representation;
 - (void)setupWithProperties:(NSArray*)properties;
 
+@end
+
+@interface NSMutableArray (CKPropertyGridEditorController)
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties;
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block;
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties hidden:(BOOL)hidden;
+- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block hidden:(BOOL)hidden;
 @end

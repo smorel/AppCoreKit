@@ -490,8 +490,7 @@
 	return [self numberOfObjectsForSection:section];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = 0;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {	CGFloat height = 0;
 	CGSize thesize = [self sizeForViewAtIndexPath:indexPath];
 	height = (_orientation == CKTableViewOrientationLandscape) ? thesize.width : thesize.height;
 	
@@ -604,13 +603,12 @@
 	}
 	
 	if(height <= 0){
-		//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-			if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
-				if( [_objectController headerTitleForSection:section] != nil ){
-					height = 30;
-				}
-			}
-		//}
+        if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
+            NSString* title = [_objectController headerTitleForSection:section];
+            if( title != nil ){
+                return -1;
+            }
+        }
 	}
 	return height;
 }
