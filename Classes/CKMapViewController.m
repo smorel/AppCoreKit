@@ -202,11 +202,15 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self.mapView setRegion:region animated:animated];
 }
 
-- (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated {
+- (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius animated:(BOOL)animated {
 	self.centerCoordinate = coordinate;
-	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.centerCoordinate, 1000.0f, 1000.0f);
+	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.centerCoordinate, radius, radius);
 	region = [self.mapView regionThatFits:region];
 	[self.mapView setRegion:region animated:animated];
+}
+
+- (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated {
+	[self zoomToCenterCoordinate:coordinate radius:500.0f animated:animated];
 }
 
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)theAnnotations animated:(BOOL)animated {
