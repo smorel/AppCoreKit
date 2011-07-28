@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
+/** TODO
+ */
+CGRect CKUIKeyboardInformationFrameEnd(NSDictionary *keyboardUserInfo);
 
 /** TODO
  */

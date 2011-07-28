@@ -652,26 +652,27 @@
 	_frameBeforeKeyboardNotification = self.tableViewContainer.frame;
 	
 	if (_resizeOnKeyboardNotification == YES){
-		NSDictionary *info = [notification userInfo];
-		CGRect keyboardBounds = CKUIKeyboardInformationBounds(info);
-		CGPoint keyboardCenter = CKUIKeyboardInformationCenterEnd(info);
-		
-		CGPoint keyboardOrigin = CGPointMake(keyboardCenter.x - keyboardBounds.size.width / 2.0, keyboardCenter.y - keyboardBounds.size.height / 2.0);
-		CGRect keyboardRect = { keyboardOrigin, keyboardBounds.size };
-		
-		CGRect viewFrame = self.tableView.frame;
-		CGRect keyboardFrame = [self.tableView.superview convertRect:keyboardRect fromView:nil];
-		CGRect hiddenRect = CGRectIntersection(viewFrame, keyboardFrame);
-		
-		CGRect remainder, slice;
-		CGRectDivide(viewFrame, &slice, &remainder, CGRectGetHeight(hiddenRect), CGRectMaxYEdge);
-		
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		self.tableViewContainer.frame = remainder;//tableViewFrame;
-		[UIView commitAnimations];
+        NSDictionary *info = [notification userInfo];
+        CGRect keyboardEndFrame;
+        NSTimeInterval animationDuration;
+        UIViewAnimationCurve animationCurve;
+        [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+        [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+        [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+        
+        CGRect newFrame = _frameBeforeKeyboardNotification;
+        CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:keyboardEndFrame toView:self.tableViewContainer];
+        CGFloat offset = (_frameBeforeKeyboardNotification.origin.y + _frameBeforeKeyboardNotification.size.height ) - keyboardFrame.origin.y;
+        if(offset > 0){
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:animationDuration];
+            [UIView setAnimationCurve:animationCurve];
+            
+            newFrame.size.height -= offset;
+            self.tableViewContainer.frame = newFrame;
+            
+            [UIView commitAnimations];
+        }
 	}
 	else if(_moveOnKeyboardNotification == YES){
 		NSDictionary *info = [notification userInfo];

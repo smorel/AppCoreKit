@@ -8,6 +8,12 @@
 
 #import "CKUIKeyboardInformation.h"
 
+CGRect CKUIKeyboardInformationFrameEnd(NSDictionary *keyboardUserInfo) {
+	NSValue *keyBounds = [keyboardUserInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+	CGRect keyboardRect;
+	[keyBounds getValue:&keyboardRect];
+	return keyboardRect;
+}
 
 CGRect CKUIKeyboardInformationBounds(NSDictionary *keyboardUserInfo) {
 	NSValue *keyBounds = [keyboardUserInfo objectForKey:UIKeyboardBoundsUserInfoKey];
