@@ -330,7 +330,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
 			}
             else if(descriptor == nil){
-                CKDebugLog("invalid property %@ specified in style %@",key,style);
+                CKDebugLog(@"invalid property %@ specified in style %@",key,style);
             }
 		}
 	}

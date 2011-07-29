@@ -12,6 +12,7 @@
 
 
 /** TODO
+    CKPropertyGridEditorController is DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER
  */
 @interface CKPropertyGridEditorController : CKFormTableViewController{
 	UIPopoverController* editorPopover;
@@ -20,21 +21,11 @@
 
 @property (nonatomic, retain) UIPopoverController *editorPopover;
 
-- (id)initWithObjectProperties:(NSArray*)properties;
-- (id)initWithObject:(id)object representation:(NSArray*)representation;
-- (id)initWithObject:(id)object;
+- (id)initWithObjectProperties:(NSArray*)properties DEPRECATED_ATTRIBUTE;
+- (id)initWithObject:(id)object DEPRECATED_ATTRIBUTE;
 
+- (void)setupWithObject:(id)object DEPRECATED_ATTRIBUTE;
+- (void)setupWithObject:(id)object withFilter:(NSString*)filter DEPRECATED_ATTRIBUTE;
+- (void)setupWithProperties:(NSArray*)properties DEPRECATED_ATTRIBUTE;
 
-- (void)setupWithObject:(id)object;
-- (void)setupWithObject:(id)object withFilter:(NSString*)filter;
-- (void)setupWithObject:(id)object representation:(NSArray*)representation;
-- (void)setupWithProperties:(NSArray*)properties;
-
-@end
-
-@interface NSMutableArray (CKPropertyGridEditorController)
-- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties;
-- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block;
-- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties hidden:(BOOL)hidden;
-- (void)addSectionWithHeaderTitle:(NSString*)title withProperties:(NSArray*)properties withBlock:(void(^)(CKPropertyGridEditorController* controller))block hidden:(BOOL)hidden;
 @end
