@@ -280,7 +280,7 @@
 	
 	UITableViewCell *theCell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
 	if (theCell == nil) {
-		theCell = [controller loadCell];
+		theCell = (UITableViewCell*)[controller loadView];
 	}
 	
 	//TODO
@@ -291,7 +291,7 @@
 		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
 	}
 
-	[controller setupCell:theCell];	
+	[controller setupView:theCell];	
 	return theCell;
 }
 
