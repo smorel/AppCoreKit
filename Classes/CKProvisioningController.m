@@ -186,8 +186,8 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 		CKProductRelease* productRelease = (CKProductRelease*)[sender userInfo];
 		BOOL result = [[UIApplication sharedApplication]openURL:productRelease.provisioningURL];
         if(result == NO){
-            NSString* title = [NSString stringWithFormat:@"Install %@ %@(%@) failed",productRelease.applicationName,productRelease.versionNumber,productRelease.buildNumber];
-            NSString* message = [NSString stringWithFormat:@"Unable to open URL : %@",productRelease.provisioningURL];
+            NSString* title = [NSString stringWithFormat:_(@"Install %@ %@(%@) failed"),productRelease.applicationName,productRelease.versionNumber,productRelease.buildNumber];
+            NSString* message = [NSString stringWithFormat:_(@"Unable to open URL : %@"),productRelease.provisioningURL];
             CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:nil]autorelease];
             [alertView show];
         }
@@ -309,7 +309,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
 	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
 	formController.name = @"rigoloSettingsViewController";
-    formController.title = @"Rigolo Settings";
+    formController.title = @"Provisioning Service Settings";
 	
 	// Header
 	CKFormCellDescriptor* headerCellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:productRelease controllerClass:[CKTableViewCellController class]];
@@ -420,7 +420,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	}];
     [releaseNotesCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = @"Release Notes";
+		controller.tableViewCell.textLabel.text = _(@"Release Notes");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-notes-icon.png"];
         return (id)nil; 
     }];
@@ -452,7 +452,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	}];
     [releaseHistoryCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = @"Release History";
+		controller.tableViewCell.textLabel.text = _(@"Release History");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-history-icon.png"];
         return (id)nil; 
     }];
@@ -574,8 +574,8 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 		CKProvisioningControllerButton* installButton = [[[CKProvisioningControllerButton alloc] initWithFrame:CGRectInset(controller.tableViewCell.contentView.bounds, 10, 20)] autorelease];
 		installButton.tag = 10000;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[installButton setTitle:@"INSTALL" forState:UIControlStateNormal];
-		[installButton setTitle:@"INSTALLED" forState:UIControlStateDisabled];
+		[installButton setTitle:_(@"INSTALL") forState:UIControlStateNormal];
+		[installButton setTitle:_(@"INSTALLED") forState:UIControlStateDisabled];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-green.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-disabled.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateDisabled];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
@@ -613,7 +613,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	}];
     [releaseNotesCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = @"Release Notes";
+		controller.tableViewCell.textLabel.text = _(@"Release Notes");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-notes-icon.png"];
         return (id)nil; 
     }];
@@ -645,7 +645,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	}];
     [releaseHistoryCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = @"Release History";
+		controller.tableViewCell.textLabel.text = _(@"Release History");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-history-icon.png"];
         return (id)nil; 
     }];
@@ -802,7 +802,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	notesView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	notesView.tag = 10003;
 	notesView.editable = NO;
-	notesView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"rigolo-notes-bg.png"]];
+	notesView.backgroundColor = [UIColor colorWithPatternImage:[CKBundle imageForName:@"rigolo-notes-bg.png"]];
 	notesView.font = [UIFont fontWithName:@"Noteworthy-Bold" size:17];
 	notesView.text = self.productRelease.releaseNotes;
 	[self.view addSubview:notesView];
@@ -819,7 +819,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	versionLabel.text = CKVersionStringForProductRelease(self.productRelease);
 	[self.view addSubview:versionLabel];
 
-	UIImageView *pageTears = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"rigolo-notes-pagetears.png"]] autorelease];
+	UIImageView *pageTears = [[[UIImageView alloc] initWithImage:[CKBundle imageForName:@"rigolo-notes-pagetears.png"]] autorelease];
 	pageTears.frame = CGRectMake(0, 50, self.view.bounds.size.width, pageTears.bounds.size.height);
 	pageTears.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:pageTears];
