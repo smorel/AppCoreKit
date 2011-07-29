@@ -171,8 +171,8 @@
 		7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */; };
 		7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8913B8ED3600268D13 /* CKMapCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8A13B8ED3600268D13 /* CKMapCellController.m */; };
-		7560DCD813B8ED3600268D13 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8B13B8ED3600268D13 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCD913B8ED3600268D13 /* CKMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8C13B8ED3600268D13 /* CKMapping.m */; };
+		7560DCD813B8ED3600268D13 /* CKNSDictionary+Mappings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8B13B8ED3600268D13 /* CKNSDictionary+Mappings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCD913B8ED3600268D13 /* CKNSDictionary+Mappings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8C13B8ED3600268D13 /* CKNSDictionary+Mappings.m */; };
 		7560DCDA13B8ED3600268D13 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCDB13B8ED3600268D13 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
 		7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -437,8 +437,9 @@
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
-		75A4058213D87B2000D932B0 /* CKMapping2.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMapping2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75A4058313D87B2000D932B0 /* CKMapping2.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4058113D87B2000D932B0 /* CKMapping2.m */; };
+		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMappingContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75A4058313D87B2000D932B0 /* CKMappingContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4058113D87B2000D932B0 /* CKMappingContext.m */; };
 		75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */; };
 		75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75A83AC213D75A8400413C17 /* CloudKit.strings */; };
@@ -606,8 +607,8 @@
 		7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapAnnotationController.m; path = Classes/CKMapAnnotationController.m; sourceTree = "<group>"; };
 		7560DB8913B8ED3600268D13 /* CKMapCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapCellController.h; path = Classes/CKMapCellController.h; sourceTree = "<group>"; };
 		7560DB8A13B8ED3600268D13 /* CKMapCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapCellController.m; path = Classes/CKMapCellController.m; sourceTree = "<group>"; };
-		7560DB8B13B8ED3600268D13 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
-		7560DB8C13B8ED3600268D13 /* CKMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapping.m; path = Classes/CKMapping.m; sourceTree = "<group>"; };
+		7560DB8B13B8ED3600268D13 /* CKNSDictionary+Mappings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDictionary+Mappings.h"; path = "Classes/CKNSDictionary+Mappings.h"; sourceTree = "<group>"; };
+		7560DB8C13B8ED3600268D13 /* CKNSDictionary+Mappings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDictionary+Mappings.m"; path = "Classes/CKNSDictionary+Mappings.m"; sourceTree = "<group>"; };
 		7560DB8D13B8ED3600268D13 /* CKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapViewController.h; path = Classes/CKMapViewController.h; sourceTree = "<group>"; };
 		7560DB8E13B8ED3600268D13 /* CKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapViewController.m; path = Classes/CKMapViewController.m; sourceTree = "<group>"; };
 		7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMKMapView+Introspection.h"; path = "Classes/CKMKMapView+Introspection.h"; sourceTree = "<group>"; };
@@ -872,8 +873,9 @@
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+PropertyGrid.h"; path = "Classes/CKFormTableViewController+PropertyGrid.h"; sourceTree = "<group>"; };
 		7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+PropertyGrid.m"; path = "Classes/CKFormTableViewController+PropertyGrid.m"; sourceTree = "<group>"; };
-		75A4058013D87B2000D932B0 /* CKMapping2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping2.h; path = Classes/CKMapping2.h; sourceTree = "<group>"; };
-		75A4058113D87B2000D932B0 /* CKMapping2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapping2.m; path = Classes/CKMapping2.m; sourceTree = "<group>"; };
+		7577E00813E32FE40065E098 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
+		75A4058013D87B2000D932B0 /* CKMappingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMappingContext.h; path = Classes/CKMappingContext.h; sourceTree = "<group>"; };
+		75A4058113D87B2000D932B0 /* CKMappingContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMappingContext.m; path = Classes/CKMappingContext.m; sourceTree = "<group>"; };
 		75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCascadingTree.h; path = Classes/CKCascadingTree.h; sourceTree = "<group>"; };
 		75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCascadingTree.m; path = Classes/CKCascadingTree.m; sourceTree = "<group>"; };
 		75A83AC113D75A8400413C17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudKit.strings; sourceTree = "<group>"; };
@@ -1102,10 +1104,11 @@
 		7506E3FB13B8FD9A00EE1471 /* Mappings */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB8B13B8ED3600268D13 /* CKMapping.h */,
-				7560DB8C13B8ED3600268D13 /* CKMapping.m */,
-				75A4058013D87B2000D932B0 /* CKMapping2.h */,
-				75A4058113D87B2000D932B0 /* CKMapping2.m */,
+				7560DB8B13B8ED3600268D13 /* CKNSDictionary+Mappings.h */,
+				7560DB8C13B8ED3600268D13 /* CKNSDictionary+Mappings.m */,
+				75A4058013D87B2000D932B0 /* CKMappingContext.h */,
+				75A4058113D87B2000D932B0 /* CKMappingContext.m */,
+				7577E00813E32FE40065E098 /* CKMapping.h */,
 			);
 			name = Mappings;
 			sourceTree = "<group>";
@@ -1832,7 +1835,7 @@
 				7560DCD213B8ED3600268D13 /* CKManagedTableViewController.h in Headers */,
 				7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */,
 				7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */,
-				7560DCD813B8ED3600268D13 /* CKMapping.h in Headers */,
+				7560DCD813B8ED3600268D13 /* CKNSDictionary+Mappings.h in Headers */,
 				7560DCDA13B8ED3600268D13 /* CKMapViewController.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */,
 				7560DCDE13B8ED3600268D13 /* CKModelObject.h in Headers */,
@@ -1966,9 +1969,10 @@
 				75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */,
 				751F1EE113D0C3990041900C /* JSONKit.h in Headers */,
 				751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */,
-				75A4058213D87B2000D932B0 /* CKMapping2.h in Headers */,
+				75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */,
 				75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */,
 				7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */,
+				7577E00913E32FE40065E098 /* CKMapping.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2153,7 +2157,7 @@
 				7560DCD313B8ED3600268D13 /* CKManagedTableViewController.m in Sources */,
 				7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */,
 				7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */,
-				7560DCD913B8ED3600268D13 /* CKMapping.m in Sources */,
+				7560DCD913B8ED3600268D13 /* CKNSDictionary+Mappings.m in Sources */,
 				7560DCDB13B8ED3600268D13 /* CKMapViewController.m in Sources */,
 				7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */,
 				7560DCDF13B8ED3600268D13 /* CKModelObject.m in Sources */,
@@ -2280,7 +2284,7 @@
 				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,
 				751F1EE213D0C3990041900C /* JSONKit.m in Sources */,
 				751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */,
-				75A4058313D87B2000D932B0 /* CKMapping2.m in Sources */,
+				75A4058313D87B2000D932B0 /* CKMappingContext.m in Sources */,
 				75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */,
 				7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */,
 			);

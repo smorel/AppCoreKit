@@ -6,7 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKMapping.h"
+#import "CKNSDictionary+Mappings.h"
 #import "CKNSString+Parsing.h"
 #import "RegexKitLite.h"
 #import "CKDebug.h"
@@ -133,6 +133,10 @@ typedef enum{
 @end
 
 //
+
+
+
+
 
 @implementation NSObject (CKMapping)
 

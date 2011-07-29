@@ -6,7 +6,7 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKMapping2.h"
+#import "CKMappingContext.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObject+Introspection.h"
 #import "CKObjectProperty.h"
