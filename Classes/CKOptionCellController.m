@@ -83,6 +83,13 @@
 	cell.detailTextLabel.text = [self labelForValue:self.value];
 }
 
+- (void)initTableViewCell:(UITableViewCell *)cell{
+    [super initTableViewCell:cell];
+	cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+}
+
 - (void)didSelectRow {
 	[super didSelectRow];
 	CKOptionTableViewController *optionTableController = nil;
