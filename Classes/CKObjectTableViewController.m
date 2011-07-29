@@ -19,7 +19,6 @@
 //
 
 @interface CKObjectTableViewController ()
-@property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 
@@ -39,7 +38,6 @@
 @synthesize moveOnKeyboardNotification = _moveOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
-@synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
@@ -163,8 +161,6 @@
 	leftButton = nil;
 	[doneButton release];
 	doneButton = nil;
-	[_headerViewsForSections release];
-	_headerViewsForSections = nil;
 	[_searchBar release];
 	_searchBar = nil;
 	[_segmentedControl release];
@@ -582,17 +578,10 @@
 #pragma mark UITableView Protocol for Sections
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-		if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
-			return [_objectController headerTitleForSection:section];
-		}
-	//}
-	return @"";
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
-	return @"";
+    if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
+        return [_objectController headerTitleForSection:section];
+    }
+	return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -613,33 +602,46 @@
 	return height;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
-	return 0;
-}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	UIView* view = _headerViewsForSections ? [_headerViewsForSections objectForKey:[NSNumber numberWithInt:section]] : nil;
+    if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
+        return [_objectController headerViewForSection:section];
+    }
+
+	return nil;
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
+        return [_objectController footerTitleForSection:section];
+    }
+	return nil;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+	CGFloat height = 0;
+	UIView* view = [self tableView:self.tableView viewForFooterInSection:section];
 	if(view){
-		return view;
+		height = view.frame.size.height;
 	}
 	
-	//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-		if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-			view = [_objectController headerViewForSection:section];
-			if(_headerViewsForSections == nil){
-				self.headerViewsForSections = [NSMutableDictionary dictionary];
-			}
-			if(view != nil){
-				[_headerViewsForSections setObject:view forKey:[NSNumber numberWithInt:section]];
-			}
-		}
-	//}
-	return view;
+	if(height <= 0){
+        if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
+            NSString* title = [_objectController footerTitleForSection:section];
+            if( title != nil ){
+                return -1;
+            }
+        }
+	}
+	return height;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-	//TODO : ask to _feedDataSource ???
+    if([_objectController respondsToSelector:@selector(footerViewForSection:)]){
+        return [_objectController footerViewForSection:section];
+    }
 	return nil;
 }
 

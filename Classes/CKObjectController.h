@@ -22,6 +22,9 @@
 - (NSString*)headerTitleForSection:(NSInteger)section;
 - (UIView*)headerViewForSection:(NSInteger)section;
 
+- (NSString*)footerTitleForSection:(NSInteger)section;
+- (UIView*)footerViewForSection:(NSInteger)section;
+
 //Objects Management
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
 

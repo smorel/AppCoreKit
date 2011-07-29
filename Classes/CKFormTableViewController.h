@@ -22,12 +22,16 @@
 {
 	NSString* _headerTitle;
 	UIView* _headerView;
+	NSString* _footeritle;
+	UIView* _footerView;
 	CKFormTableViewController* _parentController;
 	BOOL _hidden;
 }
 
 @property (nonatomic,retain) NSString* headerTitle;
 @property (nonatomic,retain) UIView* headerView;
+@property (nonatomic,retain) NSString* footerTitle;
+@property (nonatomic,retain) UIView* footerView;
 @property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
@@ -66,14 +70,20 @@
 
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
+- (id)initWithCellDescriptors:(NSArray*)cellDescriptors footerTitle:(NSString*)title;
+- (id)initWithCellDescriptors:(NSArray*)cellDescriptors footerView:(UIView*)view;
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors;
 
 + (CKFormSection*)section;
 + (CKFormSection*)sectionWithHeaderTitle:(NSString*)title;
 + (CKFormSection*)sectionWithHeaderView:(UIView*)view;
++ (CKFormSection*)sectionWithFooterTitle:(NSString*)title;
++ (CKFormSection*)sectionWithFooterView:(UIView*)view;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerTitle:(NSString*)title;
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerView:(UIView*)view;
 
 - (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
 - (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
@@ -141,19 +151,36 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 @property (nonatomic,assign) BOOL autoHideSections;
 @property (nonatomic,assign) BOOL autoHideSectionHeaders;
 
+///-----------------------------------
+/// @name Initializing CKFormTableViewController
+///-----------------------------------
+
 - (id)initWithSections:(NSArray*)sections;
 - (id)initWithSections:(NSArray*)sections withNibName:(NSString*)nibName;
 
+///-----------------------------------
+/// @name Clearing CKFormTableViewController
+///-----------------------------------
+
 - (void)clear;
+
+///-----------------------------------
+/// @name Creating or inserting the sections
+///-----------------------------------
 
 - (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
+
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
+
+///-----------------------------------
+/// @name Accessing the sections
+///-----------------------------------
 
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
