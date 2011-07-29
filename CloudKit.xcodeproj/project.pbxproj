@@ -435,7 +435,7 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; };
+		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
 		75A4058213D87B2000D932B0 /* CKMapping2.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMapping2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A4058313D87B2000D932B0 /* CKMapping2.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4058113D87B2000D932B0 /* CKMapping2.m */; };
