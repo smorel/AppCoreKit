@@ -25,6 +25,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize copiable;
 @synthesize deepCopy;
 @synthesize editable;
+@synthesize multiselectionEnabled;
 @synthesize enumDefinition;
 @synthesize contentType;
 @synthesize dateFormat;

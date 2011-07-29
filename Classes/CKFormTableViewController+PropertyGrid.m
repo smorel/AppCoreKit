@@ -89,7 +89,7 @@
 				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
-					optionCellController.multiSelectionEnabled = YES;
+					optionCellController.multiSelectionEnabled = metaData.multiselectionEnabled;
 					optionCellController.value = [property value];
 					optionCellController.text = _(property.name);
 					optionCellController.values = [copyOfLabelsAndValues allValues];

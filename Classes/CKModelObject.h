@@ -35,6 +35,7 @@
 	Class contentType;
 	Protocol* contentProtocol;
 	NSString* dateFormat;
+    BOOL multiselectionEnabled;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -44,6 +45,7 @@
 @property (nonatomic, assign) BOOL hashable;
 @property (nonatomic, assign) BOOL creatable;
 @property (nonatomic, assign) BOOL editable;
+@property (nonatomic, assign) BOOL multiselectionEnabled;
 @property (nonatomic, retain) NSDictionary* enumDefinition;
 @property (nonatomic, retain) NSDictionary* valuesAndLabels;
 @property (nonatomic, assign) Class contentType;
