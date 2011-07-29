@@ -67,6 +67,28 @@
 	return formSection.headerView;
 }
 
+- (NSString*)footerTitleForSection:(NSInteger)section{
+	NSInteger sectionCount = [self numberOfSections];
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
+		return nil;
+	
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
+	return formSection.footerTitle;
+}
+
+- (UIView*)footerViewForSection:(NSInteger)section{
+	NSInteger sectionCount = [self numberOfSections];
+	if([_parentController autoHideSectionHeaders] && sectionCount <= 1)
+        return nil;
+	
+	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
+	if( formSection.footerView != nil ){
+		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+		[formSection.footerView applyStyle:controllerStyle];
+	}
+	return formSection.footerView;
+}
+
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath{
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:indexPath.section];
 	id object = [formSection objectAtIndex:indexPath.row];
@@ -123,6 +145,8 @@
 @implementation CKFormSectionBase
 @synthesize headerTitle = _headerTitle;
 @synthesize headerView = _headerView;
+@synthesize footerTitle = _footerTitle;
+@synthesize footerView = _footerView;
 @synthesize parentController = _parentController;
 @synthesize hidden = _hidden;
 
@@ -186,6 +210,30 @@
 	return [_parentController indexOfVisibleSection:self];
 }
 
+- (void)setHeaderTitle:(NSString *)headerTitle{
+    [_headerTitle release];
+    _headerTitle = [headerTitle retain];
+    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)setHeaderView:(UIView *)headerView{
+    [_headerView release];
+    _headerView = [headerView retain];
+    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)setFooterTitle:(NSString *)footerTitle{
+    [_footerTitle release];
+    _footerTitle = [footerTitle retain];
+    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)setFooterView:(UIView *)footerView{
+    [_footerView release];
+    _footerView = [footerView retain];
+    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 - (void)setHidden:(BOOL)bo{
 	if(_hidden != bo){
 		if([_parentController reloading]){
@@ -233,6 +281,20 @@
 	return self;
 }
 
+- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors footerTitle:(NSString*)title{
+    [super init];
+	self.footerTitle = title;
+	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
+	return self;
+}
+
+- (id)initWithCellDescriptors:(NSArray*)theCellDescriptors footerView:(UIView*)view{
+    [super init];
+	self.footerView = view;
+	self.cellDescriptors = [NSMutableArray arrayWithArray:theCellDescriptors];
+	return self;
+}
+
 + (CKFormSection*)section{
 	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerTitle:@""]autorelease];
 }
@@ -245,6 +307,14 @@
 	return [[[CKFormSection alloc]initWithCellDescriptors:nil headerView:view]autorelease];
 }
 
++ (CKFormSection*)sectionWithFooterTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellDescriptors:nil footerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithFooterView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellDescriptors:nil footerView:view]autorelease];
+}
+
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors{
 	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerTitle:@""]autorelease];
 }
@@ -255,6 +325,14 @@
 
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view{
 	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors headerView:view]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors footerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors footerView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellDescriptors:cellDescriptors footerView:view]autorelease];
 }
 
 - (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index{

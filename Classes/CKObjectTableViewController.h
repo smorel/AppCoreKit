@@ -35,7 +35,6 @@
 	
 	//internal
 	NSIndexPath* _indexPathToReachAfterRotation;
-	NSMutableDictionary* _headerViewsForSections;
 	
 	//search
 	BOOL _searchEnabled;

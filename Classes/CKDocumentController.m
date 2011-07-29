@@ -116,10 +116,6 @@
 	return 0;
 }
 
-- (NSString*)headerTitleForSection:(NSInteger)section{
-	return nil;
-}
-
 - (id)objectAtIndexPath:(NSIndexPath*)indexPath{
 	if(indexPath.length != 2)
 		return nil;
