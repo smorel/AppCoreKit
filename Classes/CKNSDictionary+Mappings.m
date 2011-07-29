@@ -138,7 +138,7 @@ typedef enum{
 
 
 
-@implementation NSObject (CKMapping)
+@implementation NSObject (CKMapping_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
 
 - (id)initWithDictionary:(NSDictionary*)sourceDictionary withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
 	[self init];
@@ -237,7 +237,7 @@ typedef enum{
 @end
 
 
-@implementation NSMutableArray (CKMapping)
+@implementation NSMutableArray (CKMapping_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
 
 - (void)mapWithDictionary:(NSDictionary*)sourceDictionary keyPath:(NSString*)keyPath objectClass:(Class)objectClass withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
 	if(![sourceDictionary isKindOfClass:[NSDictionary class]]){
@@ -349,7 +349,7 @@ typedef enum{
 }
 @end
 
-@implementation NSMutableDictionary (CKMapping)
+@implementation NSMutableDictionary (CKMapping_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
 
 - (void)mapKeyPath:(NSString*)keyPath toKeyPath:(NSString*)destination required:(BOOL)bo withBlock:(CKMappingBlock)block{
 	CKMappingPrivate* mapperObject = [[[CKMappingPrivate alloc]init]autorelease];
