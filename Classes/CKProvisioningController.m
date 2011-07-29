@@ -139,6 +139,10 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     [self listAllProductReleases];
 }
 
+- (void)checkUpdate:(id)sender{
+    [self checkForNewProductRelease];
+}
+
 - (void)checkForNewProductRelease{
     NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
@@ -148,9 +152,9 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
      
                                                                                completion:^(BOOL upToDate,NSString* version){
                                                                                 if(!upToDate){
-                                                                                    NSString* title = _(@"New Version Available");
-                                                                                    NSString* message = [NSString stringWithFormat:_(@"Build (%@)"),version];
-                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:(@"Details"),nil]autorelease];
+                                                                                    NSString* title = _(@"Provisioning Service");
+                                                                                    NSString* message = [NSString stringWithFormat:_(@"A new release of the product is available\nVersion (%@)"),version];
+                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:_(@"Details"),_(@"Settings"),nil]autorelease];
                                                                                     alertView.object = [NSDictionary dictionaryWithObjectsAndKeys:version,@"version", nil];
                                                                                     [alertView show];
                                                                                 }
@@ -161,12 +165,18 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    CKAlertView* ckAlertView = (CKAlertView*)alertView;
-    switch(buttonIndex){
-        case 1:{
-            NSString* version = [ckAlertView.object objectForKey:@"version"];
-            [self detailsForProductRelease:version];
-            break;
+    if([alertView isKindOfClass:[CKAlertView class]]){
+        CKAlertView* ckAlertView = (CKAlertView*)alertView;
+        switch(buttonIndex){
+            case 1:{
+                NSString* version = [ckAlertView.object objectForKey:@"version"];
+                [self detailsForProductRelease:version];
+                break;
+            }
+            case 2:{
+                [self presentController:[self controllerForSettings]];
+                return;
+            }
         }
     }
 }
@@ -189,7 +199,8 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (void)presentController:(CKObjectTableViewController *)controller {
 	UIViewController* rootController = self.parentViewController;
 	NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
-	if(rootController.modalViewController == nil){
+	if(rootController.modalViewController == nil
+       && ![self.popoverController isPopoverVisible] ){
 		UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 			controller.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
@@ -209,6 +220,15 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 			[rootController presentModalViewController:navController animated:YES];
 		}
 	}
+    else{
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            UINavigationController* navController = (UINavigationController*)self.popoverController.contentViewController;
+            [navController pushViewController:controller animated:YES];
+        }
+        else{
+            [rootController.modalViewController.navigationController pushViewController:controller animated:YES];
+        }
+    }
 }
 
 - (void)displayProductReleases:(NSArray*)productReleases {
@@ -353,7 +373,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 		[installButton setTitle:_(@"Check for Updates") forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-		[installButton addTarget:bself action:@selector(install:) forControlEvents:UIControlEventTouchUpInside];
+		[installButton addTarget:bself action:@selector(checkUpdate:) forControlEvents:UIControlEventTouchUpInside];
 		[controller.tableViewCell.contentView addSubview:installButton];
         return (id)nil; 
     }];
@@ -784,7 +804,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	notesView.editable = NO;
 	notesView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"rigolo-notes-bg.png"]];
 	notesView.font = [UIFont fontWithName:@"Noteworthy-Bold" size:17];
-	notesView.text = [NSString stringWithFormat:@"%@ %@", self.productRelease.releaseNotes, self.productRelease.releaseNotes];
+	notesView.text = self.productRelease.releaseNotes;
 	[self.view addSubview:notesView];
 	
 	CKGradientView *headerView = [[[CKGradientView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)] autorelease];
