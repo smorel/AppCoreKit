@@ -72,7 +72,7 @@
 	txtField.tag = 50000;
 	txtField.borderStyle = UITextBorderStyleNone;
 	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	txtField.clearButtonMode = UITextFieldViewModeAlways;
+	txtField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	txtField.delegate = self;
 	txtField.keyboardType = UIKeyboardTypeDecimalPad;
 	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -241,6 +241,10 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
+                                  atScrollPosition:UITableViewScrollPositionNone 
+                                          animated:YES];
+    
 	[self beginBindingsContextByRemovingPreviousBindings];
 	[textField bindEvent:UIControlEventEditingChanged target:self action:@selector(textFieldChanged:)];
 	[self endBindingsContext];
@@ -279,8 +283,8 @@
 
 - (void)keyboardDidShow:(NSNotification *)notification {
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-										   atScrollPosition:UITableViewScrollPositionNone 
-												   animated:YES];
+                                  atScrollPosition:UITableViewScrollPositionNone 
+                                          animated:YES];
 }
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{

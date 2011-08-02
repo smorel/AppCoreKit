@@ -40,7 +40,7 @@
 	txtField.tag = 50000;
 	txtField.borderStyle = UITextBorderStyleNone;
 	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	txtField.clearButtonMode = UITextFieldViewModeAlways;
+	txtField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	txtField.delegate = self;
 	txtField.textAlignment = UITextAlignmentLeft;
 	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -144,6 +144,10 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
+                                  atScrollPosition:UITableViewScrollPositionNone
+                                          animated:YES];
+    
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 }
@@ -168,8 +172,8 @@
 
 - (void)keyboardDidShow:(NSNotification *)notification {
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-										   atScrollPosition:UITableViewScrollPositionNone
-												   animated:YES];
+                                  atScrollPosition:UITableViewScrollPositionNone
+                                          animated:YES];
 }
 
 

@@ -11,6 +11,7 @@
 #include "CKLocalization.h"
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 @interface CKNSDateViewController : CKUIViewController{
     CKObjectProperty* _property;
@@ -64,6 +65,7 @@
     [self beginBindingsContextByRemovingPreviousBindings];
     [_datePicker bindEvent:UIControlEventValueChanged withBlock:^() {
         [self.property setValue:[_datePicker date]];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:self.property];
     }];
     [self endBindingsContext];
 }
