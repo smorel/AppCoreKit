@@ -435,6 +435,8 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
+		757578FB13E71C000082C247 /* CKSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757578F913E71C000082C247 /* CKSheetController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		757578FC13E71C000082C247 /* CKSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757578FA13E71C000082C247 /* CKSheetController.m */; };
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
 		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -871,6 +873,8 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		757578F913E71C000082C247 /* CKSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSheetController.h; path = Classes/CKSheetController.h; sourceTree = "<group>"; };
+		757578FA13E71C000082C247 /* CKSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSheetController.m; path = Classes/CKSheetController.m; sourceTree = "<group>"; };
 		7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+PropertyGrid.h"; path = "Classes/CKFormTableViewController+PropertyGrid.h"; sourceTree = "<group>"; };
 		7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+PropertyGrid.m"; path = "Classes/CKFormTableViewController+PropertyGrid.m"; sourceTree = "<group>"; };
 		7577E00813E32FE40065E098 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
@@ -1121,6 +1125,8 @@
 				7506E40213B8FE6100EE1471 /* Tables */,
 				7506E40613B8FFB400EE1471 /* Map */,
 				7506E40413B8FF6700EE1471 /* Views */,
+				757578F913E71C000082C247 /* CKSheetController.h */,
+				757578FA13E71C000082C247 /* CKSheetController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1973,6 +1979,7 @@
 				75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */,
 				7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */,
 				7577E00913E32FE40065E098 /* CKMapping.h in Headers */,
+				757578FB13E71C000082C247 /* CKSheetController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2287,6 +2294,7 @@
 				75A4058313D87B2000D932B0 /* CKMappingContext.m in Sources */,
 				75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */,
 				7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */,
+				757578FC13E71C000082C247 /* CKSheetController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
+#include "CKSheetController.h"
 
 
 /** TODO
  */
-@interface CKNSDatePropertyCellController : CKTableViewCellController {
+@interface CKNSDatePropertyCellController : CKTableViewCellController<CKSheetControllerDelegate> {
 
 }
 

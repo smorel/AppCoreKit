@@ -15,12 +15,14 @@
 #import "CKDocumentController.h"
 #import "CKItemViewController+StyleManager.h"
 #import "CKNSObject+bindings.h"
+#include "CKSheetController.h"
 
 //
 
 @interface CKObjectTableViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
+@property (nonatomic, retain) UIView* placeHolderViewDuringKeyboardOrSheet;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -35,7 +37,6 @@
 @synthesize numberOfPages = _numberOfPages;
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
-@synthesize moveOnKeyboardNotification = _moveOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
 @synthesize editable = _editable;
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
@@ -49,6 +50,7 @@
 @synthesize searchScopeDefinition = _searchScopeDefinition;
 @synthesize defaultSearchScope = _defaultSearchScope;
 @synthesize tableMaximumWidth = _tableMaximumWidth;
+@synthesize placeHolderViewDuringKeyboardOrSheet = _placeHolderViewDuringKeyboardOrSheet;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -132,13 +134,21 @@
 	[NSObject endBindingsContext];*/
 }
 
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
+    self.placeHolderViewDuringKeyboardOrSheet = [[[UIView alloc]initWithFrame:self.tableViewContainer.frame]autorelease];
+    _placeHolderViewDuringKeyboardOrSheet.backgroundColor = [UIColor clearColor];
+    _placeHolderViewDuringKeyboardOrSheet.autoresizingMask = self.tableViewContainer.autoresizingMask;
+    [self.view insertSubview:_placeHolderViewDuringKeyboardOrSheet atIndex:0];
+}
+
 - (void)postInit{
 	[super postInit];
 	_rowInsertAnimation = UITableViewRowAnimationFade;
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
-	_moveOnKeyboardNotification = NO;
 	_currentPage = 0;
 	_numberOfPages = 0;
 	_scrolling = NO;
@@ -169,6 +179,8 @@
 	_searchScopeDefinition = nil;
 	[_defaultSearchScope release];
 	_defaultSearchScope = nil;
+	[_placeHolderViewDuringKeyboardOrSheet release];
+	_placeHolderViewDuringKeyboardOrSheet = nil;
 	
     [super dealloc];
 }
@@ -271,8 +283,10 @@
 												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
 	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
 	
 	if(self.rightButton){
 		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
@@ -365,20 +379,19 @@
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
-	if(_frameBeforeKeyboardNotification.size.width != 0
-	   && _frameBeforeKeyboardNotification.size.height != 0){
+	/*if(_placeHolderViewDuringKeyboardOrSheet){
 		if(animated){
+            self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask;
 			[UIView beginAnimations:nil context:nil];
 			[UIView setAnimationBeginsFromCurrentState:YES];
-			[UIView setAnimationDuration:0.25];
-			self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+			[UIView setAnimationDuration:0.3];
+			self.tableViewContainer.frame = _placeHolderViewDuringKeyboardOrSheet.frame;
 			[UIView commitAnimations];
 		}
 		else{
-			self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
+			self.tableViewContainer.frame = _placeHolderViewDuringKeyboardOrSheet.frame;
 		}
-		_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
-	}
+	}*/
 	 
 	[super viewWillDisappear:animated];
 }
@@ -388,8 +401,10 @@
 	_viewIsOnScreen = NO;
 	
 	//keyboard notifications
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillHideNotification object:nil];
 }
 
 #pragma mark Orientation Management
@@ -647,75 +662,83 @@
 
 
 #pragma mark Keyboard Notifications
-
-- (void)keyboardWillShow:(NSNotification *)notification {
-	_frameBeforeKeyboardNotification = self.tableViewContainer.frame;
-	
-	if (_resizeOnKeyboardNotification == YES){
-        NSDictionary *info = [notification userInfo];
-        CGRect keyboardEndFrame;
-        NSTimeInterval animationDuration;
-        UIViewAnimationCurve animationCurve;
-        [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
-        [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-        [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-        
-        CGRect newFrame = _frameBeforeKeyboardNotification;
-        CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:keyboardEndFrame toView:self.tableViewContainer];
-        CGFloat offset = (_frameBeforeKeyboardNotification.origin.y + _frameBeforeKeyboardNotification.size.height ) - keyboardFrame.origin.y;
-        if(offset > 0){
-            [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationDuration:animationDuration];
-            [UIView setAnimationCurve:animationCurve];
+- (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
+    if(_modalViewCount == 0){
+        if (_resizeOnKeyboardNotification == YES){
+            CGRect currentFrame = _placeHolderViewDuringKeyboardOrSheet.frame;
             
-            newFrame.size.height -= offset;
-            self.tableViewContainer.frame = newFrame;
+            self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask | UIViewAutoresizingFlexibleBottomMargin;
             
-            [UIView commitAnimations];
+            CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:_placeHolderViewDuringKeyboardOrSheet];
+            CGFloat offset = (currentFrame.origin.y + currentFrame.size.height ) - keyboardFrame.origin.y;
+            if(offset > 0){
+                [UIView beginAnimations:nil context:nil];
+                [UIView setAnimationDuration:animationDuration];
+                [UIView setAnimationCurve:animationCurve];
+                
+                CGRect newFrame = currentFrame;
+                newFrame.size.height -= offset;
+                self.tableViewContainer.frame = newFrame;
+                
+                [UIView commitAnimations];
+            }
         }
-	}
-	else if(_moveOnKeyboardNotification == YES){
-		NSDictionary *info = [notification userInfo];
-		CGRect keyboardRect = CKUIKeyboardInformationBounds(info);
-		
-		CGFloat totalHeight = self.view.bounds.size.height;
-		CGFloat tableCenter = self.tableViewContainer.bounds.size.height / 2 + self.tableViewContainer.frame.origin.y;
-		
-		CGFloat ratio = tableCenter / totalHeight;
-		
-		CGFloat newY = ((totalHeight - keyboardRect.size.height) * ratio) - self.tableViewContainer.bounds.size.height / 2;
-		if((newY + self.tableViewContainer.bounds.size.height / 2.0f) > (totalHeight - keyboardRect.size.height)){
-			newY = (totalHeight - keyboardRect.size.height) - (self.tableViewContainer.bounds.size.height / 2.0f);
-		}
-		
-		if(newY < 10){
-			newY = 10;
-		}
-		
+    }
+}
+
+- (void)stretchBackToPreviousFrameUsingAnimationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
+    if(_modalViewCount == 0){
+        self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask;
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		CGRect tableViewFrame = self.tableViewContainer.frame;
-		tableViewFrame.origin.y = newY;
-		self.tableViewContainer.frame = tableViewFrame;
+		[UIView setAnimationDuration:animationDuration];
+		[UIView setAnimationCurve:animationCurve];
+		self.tableViewContainer.frame = _placeHolderViewDuringKeyboardOrSheet.frame;
 		[UIView commitAnimations];
+        
 	}
 }
 
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardEndFrame;
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    [[info objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+    _modalViewCount++;
+}
+
 - (void)keyboardWillHide:(NSNotification *)notification {
-	if(_frameBeforeKeyboardNotification.size.width != 0
-	   && _frameBeforeKeyboardNotification.size.height != 0){
-		NSDictionary *info = [notification userInfo];
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationDuration:CKUIKeyboardInformationAnimationDuration(info)];
-		[UIView setAnimationCurve:CKUIKeyboardInformationAnimationCurve(info)];
-		self.tableViewContainer.frame = _frameBeforeKeyboardNotification;
-		[UIView commitAnimations];
-		
-		//_frameBeforeKeyboardNotification = CGRectMake(0,0,0,0);
-	}
+    _modalViewCount--;
+    NSDictionary *info = [notification userInfo];
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [self stretchBackToPreviousFrameUsingAnimationCurve:animationCurve duration:animationDuration];
+}
+
+- (void)sheetWillShow:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardEndFrame = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue];
+    UIViewAnimationCurve animationCurve = [[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
+    NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
+    [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];
+    _modalViewCount++;
+}
+
+- (void)sheetWillHide:(NSNotification *)notification {
+    _modalViewCount--;
+    NSDictionary *info = [notification userInfo];
+    UIViewAnimationCurve animationCurve = [[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
+    NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
+    BOOL keyboardWillShow = [[info objectForKey:CKSheetKeyboardWillShowInfoKey]boolValue];
+    if(!keyboardWillShow){
+        [self stretchBackToPreviousFrameUsingAnimationCurve:animationCurve duration:animationDuration];
+    }
 }
 
 #pragma mark Paging 
