@@ -14,7 +14,6 @@
 /** TODO
  */
 @interface CKNSDatePropertyCellController : CKTableViewCellController<CKSheetControllerDelegate> {
-
 }
 
 @end
