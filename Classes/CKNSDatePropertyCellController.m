@@ -12,7 +12,6 @@
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
 
-
 @interface CKNSDateViewController : CKUIViewController{
     CKObjectProperty* _property;
     UIDatePicker* _datePicker;
@@ -44,9 +43,20 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    self.datePicker = [[[UIDatePicker alloc]initWithFrame:[[self view]frame]]autorelease];
+    
+    CGRect frame = [[self view]frame];
+    
+    CGFloat height = 160;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+    if(UIInterfaceOrientationIsPortrait(orientation)){
+        height = 216;
+    }
+    
+    CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - height / 2.0,320.0, height);
+    self.datePicker = [[[UIDatePicker alloc]initWithFrame:theFrame]autorelease];
     _datePicker.datePickerMode = UIDatePickerModeDate;
-    _datePicker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
+          UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     [_datePicker setDate:[self.property value]];
     
     [[self view]addSubview:_datePicker];
@@ -113,9 +123,38 @@
 - (void)didSelectRow{
 	CKObjectProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
+    
     CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
     dateController.title = _(descriptor.name);
-    [self.parentController.navigationController pushViewController:dateController animated:YES];
+    
+    CKSheetController* sheetController = [[[CKSheetController alloc]initWithContentViewController:dateController]autorelease];
+    
+    UIView* parentView = self.parentController.view;
+    sheetController.delegate = self;
+    [sheetController showFromRect:[parentView bounds] inView:parentView animated:YES];
+    
+    //[self.parentController.navigationController pushViewController:dateController animated:YES];
+}
+
+
+- (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
+    
+}
+
+- (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
+    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+	CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+	[tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
+                                         atScrollPosition:UITableViewScrollPositionNone 
+                                                 animated:YES];
+}
+
+- (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{
+    
+}
+
+- (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
+    
 }
 
 @end
