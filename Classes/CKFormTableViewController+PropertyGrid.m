@@ -57,7 +57,9 @@
 		if(metaData.editable == YES /*&& [property descriptor].isReadOnly == NO*/){
 			if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
-				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
+                
+                NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
+				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[NSNumber numberWithInt:index] controllerClass:[CKOptionCellController class]]];
                 [descriptor setCreateBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
                     optionCellController.cellStyle = CKTableViewCellStylePropertyGrid;
@@ -66,13 +68,16 @@
 				[descriptor setSetupBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
-					optionCellController.value = [property value];
+                    NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
+                    optionCellController.value = [NSNumber numberWithInt:index];
 					optionCellController.text = _(property.name);
 					optionCellController.values = [copyOfValuesAndLabels allValues];
 					optionCellController.labels = [copyOfValuesAndLabels allKeys];
-					[optionCellController bind:@"value" withBlock:^(id value){
+					[optionCellController bind:@"currentValue" withBlock:^(id value){
 						[property setValue:value];
-						descriptor.value = value;
+                        
+                        NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
+                        descriptor.value = [NSNumber numberWithInt:index];
 					}];
 					[optionCellController endBindingsContext];
 					return (id)nil;
@@ -90,7 +95,13 @@
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
 					[optionCellController beginBindingsContextByRemovingPreviousBindings];
 					optionCellController.multiSelectionEnabled = metaData.multiselectionEnabled;
-					optionCellController.value = [property value];
+                    if(optionCellController.multiSelectionEnabled){
+                        optionCellController.value = [property value];
+                    }
+                    else{
+                        NSInteger index = [[copyOfLabelsAndValues allValues]indexOfObject:[property value]];
+                        optionCellController.value = [NSNumber numberWithInt:index];
+                    }
 					optionCellController.text = _(property.name);
 					optionCellController.values = [copyOfLabelsAndValues allValues];
 					NSMutableArray* localizedLabels = [NSMutableArray array];
@@ -98,14 +109,20 @@
 						[localizedLabels addObject:_(str)];
 					}
 					optionCellController.labels = localizedLabels;
-					[optionCellController bind:@"value" withBlock:^(id value){
+					[optionCellController bind:@"currentValue" withBlock:^(id value){
 						if(value == nil || [value isKindOfClass:[NSNull class]]){
 							[property setValue:[NSNumber numberWithInt:0]];
 							descriptor.value = [NSNumber numberWithInt:0];
 						}
 						else{
 							[property setValue:value];
-							descriptor.value = value;
+							if(optionCellController.multiSelectionEnabled){
+                                optionCellController.value = [property value];
+                            }
+                            else{
+                                NSInteger index = [[copyOfLabelsAndValues allValues]indexOfObject:[property value]];
+                                optionCellController.value = [NSNumber numberWithInt:index];
+                            }
 						}
 					}];
 					[optionCellController endBindingsContext];
