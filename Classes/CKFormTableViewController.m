@@ -747,6 +747,7 @@
 	self.sections = [NSMutableArray array];
 	_autoHideSections = NO;
 	_autoHideSectionHeaders = NO;
+    self.style = UITableViewStyleGrouped;
 }
 
 - (void)dealloc{

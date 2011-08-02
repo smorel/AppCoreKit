@@ -81,7 +81,7 @@
 
 - (id)init{
 	[super init];
-	self.cellStyle = CKTableViewCellStyleValue3;
+	self.cellStyle = CKTableViewCellStylePropertyGrid;
 	return self;
 }
 

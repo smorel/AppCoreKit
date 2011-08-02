@@ -35,7 +35,8 @@ NSString* CKStyleCellFlags = @"flags";
 																	 CKTableViewCellStyleValue1, 
 																	 CKTableViewCellStyleValue2,
 																	 CKTableViewCellStyleSubtitle,
-																	 CKTableViewCellStyleValue3)];
+																	 CKTableViewCellStyleValue3,
+                                                                     CKTableViewCellStylePropertyGrid)];
 }
 
 - (UIImage*)accessoryImage{

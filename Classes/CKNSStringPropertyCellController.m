@@ -21,7 +21,7 @@
 
 - (id)init{
 	[super init];
-	self.cellStyle = CKTableViewCellStyleValue3;
+	self.cellStyle = CKTableViewCellStylePropertyGrid;
 	return self;
 }
 
@@ -44,6 +44,16 @@
 	txtField.delegate = self;
 	txtField.textAlignment = UITextAlignmentLeft;
 	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+        }  
+        else{
+            txtField.textColor = [UIColor blackColor];
+        }
+    }  
+    
 	self.textField = txtField;
 }
 
@@ -51,11 +61,14 @@
 	[super layoutCell:cell];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
-	//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
-	//if(self.cellStyle == CKTableViewCellStyleValue3){
-		textField.frame = [self value3FrameForCell:cell];
-		textField.autoresizingMask = UIViewAutoresizingNone;
-	//}
+        if(self.cellStyle == CKTableViewCellStyleValue3){
+            textField.frame = [self value3DetailFrameForCell:cell];
+            textField.autoresizingMask = UIViewAutoresizingNone;
+        }
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+            textField.frame = [self propertyGridDetailFrameForCell:cell];
+            textField.autoresizingMask = UIViewAutoresizingNone;
+        }
 	}
 }
 
@@ -76,7 +89,10 @@
 	CKObjectProperty* model = self.value;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
-	cell.textLabel.text = _(descriptor.name);
+    
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+        cell.textLabel.text = _(descriptor.name);
+    }
 	
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){

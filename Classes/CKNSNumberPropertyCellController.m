@@ -24,7 +24,7 @@
 
 - (id)init{
 	[super init];
-	self.cellStyle = CKTableViewCellStyleValue3;
+	self.cellStyle = CKTableViewCellStylePropertyGrid;
 	return self;
 }
 
@@ -75,8 +75,19 @@
 	txtField.clearButtonMode = UITextFieldViewModeAlways;
 	txtField.delegate = self;
 	txtField.keyboardType = UIKeyboardTypeDecimalPad;
-	txtField.textAlignment = UITextAlignmentLeft;
 	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            txtField.textAlignment = UITextAlignmentRight;
+        }  
+        else{
+            txtField.textColor = [UIColor blackColor];
+            txtField.textAlignment = UITextAlignmentLeft;
+        }
+    }  
+    
 	self.textField = txtField;
 	
 	UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
@@ -155,8 +166,9 @@
 				[NSObject endBindingsContext];
 			}
 			else{
-				
-				if(self.cellStyle == CKTableViewCellStyleValue3){
+                
+                if(self.cellStyle == CKTableViewCellStyleValue3 ||
+                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStylePropertyGrid)){
 					[cell.contentView addSubview:self.toggleSwitch];
 				}
 				else{
@@ -179,20 +191,33 @@
 	[super layoutCell:cell];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
-		//FIXME : here we could manage layout to fit with value1, value2, subTitle && value3 ...
-		//if(self.cellStyle == CKTableViewCellStyleValue3){
-			textField.frame = [self value3FrameForCell:cell];
+		if(self.cellStyle == CKTableViewCellStyleValue3){
+			textField.frame = [self value3DetailFrameForCell:cell];
 			textField.autoresizingMask = UIViewAutoresizingNone;
-		//}
+		}
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+			textField.frame = [self propertyGridDetailFrameForCell:cell];
+			textField.autoresizingMask = UIViewAutoresizingNone;
+		}
 	}
 	
 	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
 	if(s){
 		if(self.cellStyle == CKTableViewCellStyleValue3){
-			CGRect frame3 = [self value3FrameForCell:cell];
+            CGRect switchFrame = [self value3DetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
-			CGRect rectForSwitch = CGRectMake(frame3.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
+			CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
 			s.frame = rectForSwitch;
+		}
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+			CGRect switchFrame = [self propertyGridDetailFrameForCell:cell];
+			CGFloat height = cell.bounds.size.height;
+            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+                //align right
+                CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
+                s.frame = rectForSwitch;
+            }
+            //For iphone its an accessory view
 		}
 	}
 }

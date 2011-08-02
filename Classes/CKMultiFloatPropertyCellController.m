@@ -78,7 +78,7 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
-	CGRect detailFrame = [self value3FrameForCell:cell];
+	CGRect detailFrame = [self value3DetailFrameForCell:cell];
 	
 	int i =0 ;
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
