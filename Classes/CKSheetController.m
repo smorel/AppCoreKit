@@ -8,7 +8,7 @@
 
 #import "CKSheetController.h"
 
-
+NSString *const CKSheetResignNotification           = @"CKSheetResignNotification";
 NSString *const CKSheetWillShowNotification         = @"CKSheetWillShowNotification";
 NSString *const CKSheetWillHideNotification         = @"CKSheetWillHideNotification";
 NSString *const CKSheetFrameEndUserInfoKey          = @"CKSheetFrameEndUserInfoKey";
@@ -33,6 +33,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
     
     //this will retain the CKSheetController until it will get dismissed.
     //this avoid us to explicitelly retain it in the client code.
@@ -95,6 +96,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 
 - (void)dismissSheetAnimated:(BOOL)animated  causedByKeyboard:(BOOL)causedByKeyboard{
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
     
     UIView* contentView = self.contentViewController.view;
     
@@ -153,6 +155,11 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 - (void)keyboardDidShow:(NSNotification*)notif{
     [self dismissSheetAnimated:YES causedByKeyboard:YES]; 
 }
+
+- (void)shouldResign:(NSNotification*)notif{
+    [self dismissSheetAnimated:YES causedByKeyboard:NO]; 
+}
+
 
 @end
 
