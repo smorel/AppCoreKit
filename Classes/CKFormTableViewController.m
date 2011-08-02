@@ -748,6 +748,7 @@
 	_autoHideSections = NO;
 	_autoHideSectionHeaders = NO;
     self.style = UITableViewStyleGrouped;
+    _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyResignResponder;
 }
 
 - (void)dealloc{
