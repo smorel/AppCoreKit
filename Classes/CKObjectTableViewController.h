@@ -16,7 +16,6 @@
 @interface CKObjectTableViewController : CKTableViewController<UISearchBarDelegate> {
 	CKTableViewOrientation _orientation;
 	BOOL _resizeOnKeyboardNotification;
-	BOOL _moveOnKeyboardNotification;
 	
 	int _currentPage;
 	int _numberOfPages;
@@ -44,7 +43,9 @@
 	NSDictionary* _searchScopeDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
 	id _defaultSearchScope;
 	
-	CGRect _frameBeforeKeyboardNotification;
+    int _modalViewCount;
+    UIView* _placeHolderViewDuringKeyboardOrSheet;
+    
 	BOOL _viewIsOnScreen;
 	
 	CGFloat _tableMaximumWidth;
@@ -54,7 +55,6 @@
 @property (nonatomic, assign) UITableViewRowAnimation rowInsertAnimation;
 @property (nonatomic, assign) UITableViewRowAnimation rowRemoveAnimation;
 @property (nonatomic, assign) BOOL resizeOnKeyboardNotification;
-@property (nonatomic, assign) BOOL moveOnKeyboardNotification;
 @property (nonatomic, assign) int currentPage;
 @property (nonatomic, assign) int numberOfPages;
 @property (nonatomic, assign, readonly) BOOL scrolling;
