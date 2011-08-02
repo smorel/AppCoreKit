@@ -8,11 +8,17 @@
 
 #import "CKOptionCellController.h"
 
+
+@interface CKOptionCellController ()
+@property (nonatomic, retain, readwrite) id currentValue;
+@end
+
 @implementation CKOptionCellController
 
 @synthesize values = _values;
 @synthesize labels = _labels;
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
+@synthesize currentValue = _currentValue;
 
 
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
@@ -29,12 +35,18 @@
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels multiSelectionEnabled:(BOOL)multiSelectionEnabled{
 	[self initWithTitle:title values:values labels:labels];
 	self.multiSelectionEnabled = multiSelectionEnabled;
+    if(multiSelectionEnabled){
+        for(id v in values){
+            NSAssert([v isKindOfClass:[NSNumber class]],@"multiSelectionEnabled can only get used with integer values !!!");
+        }
+    }
 	return self;
 }
 
 - (void)dealloc {
 	self.values = nil;
 	self.labels = nil;
+	self.currentValue = nil;
 	[super dealloc];
 }
 
@@ -114,9 +126,11 @@
 			v |= [[self.values objectAtIndex:[index intValue]]intValue];
 		}
 		self.value = [NSNumber numberWithInt:v];
+        self.currentValue = [NSNumber numberWithInt:v];
 	}
 	else{
 		self.value = [NSNumber numberWithInt:tableViewController.selectedIndex];
+        self.currentValue = [self.values objectAtIndex:tableViewController.selectedIndex];
 	}
 	
 	if(self.tableViewCell){

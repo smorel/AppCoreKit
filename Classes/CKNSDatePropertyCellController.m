@@ -11,6 +11,9 @@
 #include "CKLocalization.h"
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
+#import "CKNSNotificationCenter+Edition.h"
+
+static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
 @interface CKNSDateViewController : CKUIViewController{
     CKObjectProperty* _property;
@@ -30,7 +33,7 @@
 
 - (id)initWithProperty:(CKObjectProperty*)theproperty{
     self = [super init];
-    self.property = theproperty;
+    _property = [theproperty retain];
     return self;
 }
 
@@ -57,13 +60,14 @@
     _datePicker.datePickerMode = UIDatePickerModeDate;
     _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
           UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [_datePicker setDate:[self.property value]];
+    [_datePicker setDate:[self.property value] animated:NO];
     
     [[self view]addSubview:_datePicker];
     
     [self beginBindingsContextByRemovingPreviousBindings];
     [_datePicker bindEvent:UIControlEventValueChanged withBlock:^() {
         [self.property setValue:[_datePicker date]];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:self.property];
     }];
     [self endBindingsContext];
 }
@@ -74,6 +78,12 @@
     _datePicker = nil;
 }
 
+- (void)setProperty:(CKObjectProperty *)property{
+    [_property release];
+    _property = [property retain];
+    [_datePicker setDate:[_property value]];
+}
+
 @end
 
 
@@ -81,7 +91,7 @@
 
 - (id)init{
 	[super init];
-	self.cellStyle = CKTableViewCellStyleValue3;
+	self.cellStyle = CKTableViewCellStylePropertyGrid;
 	return self;
 }
 
@@ -124,16 +134,26 @@
 	CKObjectProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
-    dateController.title = _(descriptor.name);
     
-    CKSheetController* sheetController = [[[CKSheetController alloc]initWithContentViewController:dateController]autorelease];
+    if(CKNSDateSheetControllerSingleton == nil){
+        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
+        dateController.title = _(descriptor.name);
+        CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];
+        
+        CKNSDateSheetControllerSingleton.delegate = self;
+        UIView* parentView = self.parentController.view;
+        [CKNSDateSheetControllerSingleton showFromRect:[parentView bounds] inView:parentView animated:YES];
+    }
+    else{
+        CKNSDateViewController* dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
+        [dateController setProperty:self.value];
+    }
     
-    UIView* parentView = self.parentController.view;
-    sheetController.delegate = self;
-    [sheetController showFromRect:[parentView bounds] inView:parentView animated:YES];
-    
-    //[self.parentController.navigationController pushViewController:dateController animated:YES];
+    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+	CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+	[tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
+                                         atScrollPosition:UITableViewScrollPositionNone 
+                                                 animated:YES];
 }
 
 
@@ -154,7 +174,8 @@
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
-    
+    [CKNSDateSheetControllerSingleton release];
+    CKNSDateSheetControllerSingleton = nil;
 }
 
 @end

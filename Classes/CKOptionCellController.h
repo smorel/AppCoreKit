@@ -17,11 +17,13 @@
 	NSArray *_values;
 	NSArray *_labels;
 	BOOL _multiSelectionEnabled;
+    id _currentValue;
 }
 
 @property (nonatomic, retain) NSArray *values;
 @property (nonatomic, retain) NSArray *labels;
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
+@property (nonatomic, retain, readonly) id currentValue;
 
 // If labels is nil, the table values are displayed, otherwise ensure values and labels have the same count.
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels;

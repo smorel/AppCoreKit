@@ -345,11 +345,14 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
-		UIView* view = [self valueForKey:descriptor.name];
+		UIView* view = nil;
+        if([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
+            //We are supposed to get a nil view here ! but UIKit creates a view when getting selectedBackgroundView wich have not the right class if called here.
+        }
+        else{
+            view = [self valueForKey:descriptor.name];
+        }
 
-		UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
-		CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
-		
 		NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
 		//if(myViewStyle != nil && [myViewStyle isEmpty] == NO){
 			BOOL shouldReplaceView = NO;
@@ -357,7 +360,10 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
 			}
 			
-			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) ){
+			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) )
+            {
+                UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
+                CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
 				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
 				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 				[self setValue:view forKey:descriptor.name];

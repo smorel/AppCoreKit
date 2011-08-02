@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+extern NSString *const CKSheetResignNotification;
 extern NSString *const CKSheetWillShowNotification;
 extern NSString *const CKSheetWillHideNotification;
 extern NSString *const CKSheetFrameEndUserInfoKey;

@@ -23,6 +23,12 @@
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 @property (nonatomic, retain) UIView* placeHolderViewDuringKeyboardOrSheet;
+@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
+@property (nonatomic, assign, readwrite) int currentPage;
+@property (nonatomic, assign, readwrite) int numberOfPages;
+@property (nonatomic, retain, readwrite) UISearchBar* searchBar;
+@property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -51,6 +57,7 @@
 @synthesize defaultSearchScope = _defaultSearchScope;
 @synthesize tableMaximumWidth = _tableMaximumWidth;
 @synthesize placeHolderViewDuringKeyboardOrSheet = _placeHolderViewDuringKeyboardOrSheet;
+@synthesize scrollingPolicy = _scrollingPolicy;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -157,6 +164,7 @@
 	_liveSearchDelay = 0.5;
 	_viewIsOnScreen = NO;
 	_tableMaximumWidth = 0;
+    _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyNone;
 }
 
 - (void)dealloc {
@@ -782,6 +790,19 @@
 	}
 }
 
+- (void)executeScrollingPolicy{
+    switch(_scrollingPolicy){
+        case CKObjectTableViewControllerScrollingPolicyNone:{
+            break;
+        }
+        case CKObjectTableViewControllerScrollingPolicyResignResponder:{
+            [self.view endEditing:YES];
+            [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+            break;
+        }
+    }
+}
+
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
 }
@@ -792,6 +813,10 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self executeScrollingPolicy];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {

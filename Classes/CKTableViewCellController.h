@@ -13,7 +13,6 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 
-
 /** TODO
  */
 enum{
@@ -34,7 +33,8 @@ typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
     CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
-	CKTableViewCellStyleValue3
+	CKTableViewCellStyleValue3,
+	CKTableViewCellStylePropertyGrid
 } CKTableViewCellStyle;             
 
 /** TODO
@@ -44,8 +44,8 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyle _cellStyle;
 	
 	NSString* _key;
-	CGFloat _value3Ratio;
-	CGFloat _value3LabelsSpace;
+	CGFloat _componentsRatio;
+	CGFloat _componentsSpace;
 	
 	
 #ifdef DEBUG 
@@ -65,8 +65,9 @@ typedef enum CKTableViewCellStyle {
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
 
-@property (nonatomic, assign) CGFloat value3Ratio;
-@property (nonatomic, assign) CGFloat value3LabelsSpace;
+@property (nonatomic, assign) CGFloat componentsRatio;
+@property (nonatomic, assign) CGFloat componentsSpace;
+
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 
@@ -95,7 +96,11 @@ typedef enum CKTableViewCellStyle {
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
-- (CGRect)value3FrameForCell:(UITableViewCell*)cell;
+- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
+- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
+
+- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
+- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
 
 @end
 
@@ -106,6 +111,9 @@ typedef enum CKTableViewCellStyle {
 @property (nonatomic, getter = isEditable) BOOL editable DEPRECATED_ATTRIBUTE;
 @property (nonatomic, getter = isRemovable) BOOL removable DEPRECATED_ATTRIBUTE;
 @property (nonatomic, getter = isSelectable) BOOL selectable DEPRECATED_ATTRIBUTE;
+
+@property (nonatomic, assign) CGFloat value3Ratio DEPRECATED_ATTRIBUTE;
+@property (nonatomic, assign) CGFloat value3LabelsSpace DEPRECATED_ATTRIBUTE;
 
 - (CGFloat)heightForRow DEPRECATED_ATTRIBUTE;
 - (BOOL)isMovable DEPRECATED_ATTRIBUTE;

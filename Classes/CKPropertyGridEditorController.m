@@ -106,7 +106,7 @@
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
                 [descriptor setCreateBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                    optionCellController.cellStyle = CKTableViewCellStyleValue3;
+                    optionCellController.cellStyle = CKTableViewCellStylePropertyGrid;
                     return (id)nil;
 				}];
 				[descriptor setSetupBlock:^(id controller){
@@ -129,7 +129,7 @@
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
                 [descriptor setCreateBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                    optionCellController.cellStyle = CKTableViewCellStyleValue3;
+                    optionCellController.cellStyle = CKTableViewCellStylePropertyGrid;
                     return (id)nil;
 				}];
 				[descriptor setSetupBlock:^(id controller){
