@@ -435,7 +435,7 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		757578FB13E71C000082C247 /* CKSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757578F913E71C000082C247 /* CKSheetController.h */; };
+		757578FB13E71C000082C247 /* CKSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757578F913E71C000082C247 /* CKSheetController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757578FC13E71C000082C247 /* CKSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757578FA13E71C000082C247 /* CKSheetController.m */; };
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
