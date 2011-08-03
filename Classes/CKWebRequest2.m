@@ -358,7 +358,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseValue = [NSObject objectFromJSONData:theReceivedData error:&error]; //[[CJSONDeserializer deserializer] deserialize:theReceivedData error:&error];
+		responseValue = [NSObject objectFromJSONData:theReceivedData error:&error];
 	} else if ([contentType isMatchedByRegex:@"image/"]) {
 		responseValue = [UIImage imageWithData:theReceivedData];
 	} else if ([contentType isMatchedByRegex:@"text/"]) {
