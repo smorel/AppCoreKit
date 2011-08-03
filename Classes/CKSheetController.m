@@ -60,14 +60,18 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         [_delegate sheetControllerWillShowSheet:self];
     }
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetWillShowNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                                [NSValue valueWithCGRect:contentEndRectInWindow],
-                                                                                                                CKSheetFrameEndUserInfoKey,
-                                                                                                                [NSNumber numberWithFloat:((animated == YES) ? 0.3 : 0)],
-                                                                                                                CKSheetAnimationDurationUserInfoKey, 
-                                                                                                                [NSNumber numberWithInt:UIViewAnimationOptionCurveEaseInOut],
-                                                                                                                CKSheetAnimationCurveUserInfoKey,
-                                                                                                                nil]];
+    [_contentViewController viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetWillShowNotification 
+                                                       object:self 
+                                                     userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                               [NSValue valueWithCGRect:contentEndRectInWindow],
+                                                               CKSheetFrameEndUserInfoKey,
+                                                               [NSNumber numberWithFloat:((animated == YES) ? 0.3 : 0)],
+                                                               CKSheetAnimationDurationUserInfoKey, 
+                                                               [NSNumber numberWithInt:UIViewAnimationOptionCurveEaseInOut],
+                                                               CKSheetAnimationCurveUserInfoKey,
+                                                               nil]];
     
 
     
@@ -83,6 +87,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                              if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
                                  [_delegate sheetControllerDidShowSheet:self];
                              }
+                             [_contentViewController viewDidAppear:animated];
                          }];
     }
     else{
@@ -91,6 +96,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
             [_delegate sheetControllerDidShowSheet:self];
         }
+        [_contentViewController viewDidAppear:animated];
     }
 }
 
@@ -110,6 +116,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerWillDismissSheet:)]){
         [_delegate sheetControllerWillDismissSheet:self];
     }
+    [_contentViewController viewWillDisappear:animated];
     
     if(animated){
         [UIView animateWithDuration:0.3
@@ -121,6 +128,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                              if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
                                  [_delegate sheetControllerDidDismissSheet:self];
                              }
+                             [_contentViewController viewDidDisappear:animated];
                              
                              [self autorelease];
                          }];
@@ -132,20 +140,23 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidDismissSheet:)]){
             [_delegate sheetControllerDidDismissSheet:self];
         }
+        [_contentViewController viewDidDisappear:animated];
         
         [self autorelease];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:CKSheetWillHideNotification object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                                      [NSValue valueWithCGRect:contentEndRectInWindow],
-                                                                                                                      CKSheetFrameEndUserInfoKey,
-                                                                                                                      [NSNumber numberWithFloat:((animated == YES) ? 0.3 : 0)],
-                                                                                                                      CKSheetAnimationDurationUserInfoKey, 
-                                                                                                                      [NSNumber numberWithInt:UIViewAnimationOptionCurveEaseInOut],
-                                                                                                                      CKSheetAnimationCurveUserInfoKey,
-                                                                                                                      [NSNumber numberWithBool:causedByKeyboard],
-                                                                                                                      CKSheetKeyboardWillShowInfoKey,
-                                                                                                                      nil]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CKSheetWillHideNotification 
+                                                        object:self 
+                                                      userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                [NSValue valueWithCGRect:contentEndRectInWindow],
+                                                                CKSheetFrameEndUserInfoKey,
+                                                                [NSNumber numberWithFloat:((animated == YES) ? 0.3 : 0)],
+                                                                CKSheetAnimationDurationUserInfoKey, 
+                                                                [NSNumber numberWithInt:UIViewAnimationOptionCurveEaseInOut],
+                                                                CKSheetAnimationCurveUserInfoKey,
+                                                                [NSNumber numberWithBool:causedByKeyboard],
+                                                                CKSheetKeyboardWillShowInfoKey,
+                                                                nil]];
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated{
