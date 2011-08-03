@@ -56,6 +56,14 @@ typedef enum CKMapViewControllerZoomStrategy{
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate;
 
 - (void)panToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
+- (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius animated:(BOOL)animated;
+
+/** 
+ Zooms to a default radius of 500m
+ @param coordinate The center coordinate
+ @param animated Animates the zoom
+ @see zoomToCenterCoordinate:radius:animated:
+ */
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated;

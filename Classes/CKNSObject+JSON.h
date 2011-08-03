@@ -14,4 +14,7 @@
 
 - (id)JSONRepresentation;
 
++ (id)objectFromJSONData:(NSData *)data;
++ (id)objectFromJSONData:(NSData *)data error:(NSError **)error;
+
 @end

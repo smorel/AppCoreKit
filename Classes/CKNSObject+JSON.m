@@ -7,6 +7,7 @@
 //
 
 #import "CKNSObject+JSON.h"
+#import "CJSONDeserializer.h"
 
 @implementation NSObject (CKNSObjectJSON)
 
@@ -44,5 +45,12 @@
 	
 	return [NSNull null];
 }
-	
+
++ (id)objectFromJSONData:(NSData *)data {
+	return [[CJSONDeserializer deserializer] deserialize:data error:nil];
+}
++ (id)objectFromJSONData:(NSData *)data error:(NSError **)error {
+	return [[CJSONDeserializer deserializer] deserialize:data error:error];
+}
+
 @end
