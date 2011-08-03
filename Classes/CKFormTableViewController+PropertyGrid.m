@@ -22,6 +22,8 @@
 #import "CKCGPropertyCellControllers.h"
 #import "CKUIImagePropertyCellController.h"
 
+#import "CKNSObject+Introspection.h"
+
 @interface CKFormTableViewController(CKPropertyGridPrivate)
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section;
 - (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter;
@@ -54,8 +56,12 @@
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section{
     for(CKObjectProperty* property in properties){
 		CKModelObjectPropertyMetaData* metaData = [property metaData];
-		if(metaData.editable == YES /*&& [property descriptor].isReadOnly == NO*/){
-			if(metaData.valuesAndLabels != nil){
+		if(metaData.editable == YES){
+            if(metaData.propertyCellControllerClass != nil){
+                NSAssert([NSObject isKindOf:metaData.propertyCellControllerClass parentType:[CKTableViewCellController class]],@"invalid propertyCellControllerClass defined for property : %@",property);
+                [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass]];
+            }
+			else if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
                 
                 NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];

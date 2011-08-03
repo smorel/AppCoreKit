@@ -31,6 +31,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize dateFormat;
 @synthesize valuesAndLabels;
 @synthesize contentProtocol;
+@synthesize propertyCellControllerClass;
 
 - (void)dealloc{
 	self.enumDefinition = nil;
@@ -52,6 +53,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.contentType = nil;
 	self.contentProtocol = nil;
 	self.dateFormat = nil;
+	self.propertyCellControllerClass = nil;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

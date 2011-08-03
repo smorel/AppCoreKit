@@ -255,7 +255,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 	[self didResignFirstResponder];
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	
 	CKObjectProperty* model = self.value;
 	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
