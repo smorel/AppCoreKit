@@ -11,7 +11,7 @@
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
 #import "CKNSStringAdditions.h"
-#import "CJSONDeserializer.h"
+#import "CKNSObject+JSON.h"
 #import "CXMLDocument.h"
 #import "RegexKitLite.h"
 
@@ -195,7 +195,7 @@ static ASINetworkQueue *_sharedQueue = nil;
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:[httpRequest responseData] options:0 error:nil] autorelease];
 	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseValue = [[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
+		responseValue = [NSObject objectFromJSONData:[httpRequest responseData] error:&error]; //[[CJSONDeserializer deserializer] deserialize:[httpRequest responseData] error:&error];
 	} else if ([contentType isMatchedByRegex:@"image/"]) {
 		responseValue = [UIImage imageWithData:[httpRequest responseData]];
 	} else {
