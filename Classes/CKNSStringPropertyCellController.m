@@ -153,8 +153,8 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	[self didResignFirstResponder];
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

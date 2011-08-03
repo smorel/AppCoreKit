@@ -445,6 +445,8 @@
 		75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */; };
 		75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75A83AC213D75A8400413C17 /* CloudKit.strings */; };
+		75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -884,6 +886,8 @@
 		75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCascadingTree.m; path = Classes/CKCascadingTree.m; sourceTree = "<group>"; };
 		75A83AC113D75A8400413C17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudKit.strings; sourceTree = "<group>"; };
 		75A83AC313D75A9000413C17 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CloudKit.strings; sourceTree = "<group>"; };
+		75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultilineNSStringPropertyCellController.h; path = Classes/CKMultilineNSStringPropertyCellController.h; sourceTree = "<group>"; };
+		75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultilineNSStringPropertyCellController.m; path = Classes/CKMultilineNSStringPropertyCellController.m; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
@@ -1487,6 +1491,8 @@
 				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
 				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
 				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
+				75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */,
+				75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */,
 			);
 			name = CellControllers;
 			sourceTree = "<group>";
@@ -1980,6 +1986,7 @@
 				7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */,
 				7577E00913E32FE40065E098 /* CKMapping.h in Headers */,
 				757578FB13E71C000082C247 /* CKSheetController.h in Headers */,
+				75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2295,6 +2302,7 @@
 				75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */,
 				7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */,
 				757578FC13E71C000082C247 /* CKSheetController.m in Sources */,
+				75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
