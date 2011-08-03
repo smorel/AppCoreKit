@@ -15,11 +15,13 @@
 @interface CKTextView : UITextView {
 	UILabel *_placeholderLabel;
 	CGFloat _maxStretchableHeight;
+    CGPoint _placeholderOffset;
 }
 
 @property (nonatomic, readonly, retain) IBOutlet UILabel *placeholderLabel;
 @property (nonatomic, assign) NSString *placeholder;
 @property (nonatomic, assign) CGFloat maxStretchableHeight;
+@property (nonatomic, assign) CGPoint placeholderOffset;
 
 - (void)updateHeight;
 

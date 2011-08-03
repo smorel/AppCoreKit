@@ -87,12 +87,23 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 @end
 
 
+
+@interface CKNSDatePropertyCellController()
+@property(nonatomic,retain)UIPopoverController* popoverController;
+@end
+
 @implementation CKNSDatePropertyCellController
+@synthesize popoverController;
 
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
 	return self;
+}
+
+- (void)dealloc{
+    self.popoverController = nil;
+    [super dealloc];
 }
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
@@ -135,18 +146,46 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
     
-    if(CKNSDateSheetControllerSingleton == nil){
-        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
-        dateController.title = _(descriptor.name);
-        CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];
-        
-        CKNSDateSheetControllerSingleton.delegate = self;
-        UIView* parentView = self.parentController.view;
-        [CKNSDateSheetControllerSingleton showFromRect:[parentView bounds] inView:parentView animated:YES];
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(CKNSDateSheetControllerSingleton == nil){
+            CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
+            dateController.title = _(descriptor.name);
+            CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];
+            
+            CKNSDateSheetControllerSingleton.delegate = self;
+            UIView* parentView = self.parentController.view;
+            [CKNSDateSheetControllerSingleton showFromRect:[parentView bounds] 
+                                                    inView:parentView 
+                                                  animated:YES];
+        }
+        else{
+            CKNSDateViewController* dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
+            [dateController setProperty:self.value];
+        }
     }
     else{
-        CKNSDateViewController* dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
-        [dateController setProperty:self.value];
+        [[[self parentController]view]endEditing:YES];//Hides keyboard if needed
+        
+        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
+        dateController.title = _(descriptor.name);
+        
+        CGFloat height = 160;
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+        if(UIInterfaceOrientationIsPortrait(orientation)){
+            height = 216;
+        }
+        dateController.contentSizeForViewInPopover = CGSizeMake(320,height);
+        
+        self.popoverController = [[UIPopoverController alloc]initWithContentViewController:dateController];
+        self.popoverController.delegate = self;
+        
+        UITableViewCell* cell = [self tableViewCell];
+        [self.popoverController presentPopoverFromRect:[cell bounds] 
+                                 inView:cell 
+               permittedArrowDirections:UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown
+                               animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }
     
     NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
@@ -174,8 +213,23 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
+
     [CKNSDateSheetControllerSingleton release];
     CKNSDateSheetControllerSingleton = nil;
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController{
+    return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
+    self.popoverController = nil;
+}
+
+- (void)orientationChanged:(NSNotification*)notif{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [self.popoverController dismissPopoverAnimated:YES];
+    self.popoverController = nil;
 }
 
 @end

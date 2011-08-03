@@ -20,10 +20,12 @@
 
 @synthesize placeholderLabel = _placeholderLabel;
 @synthesize maxStretchableHeight = _maxStretchableHeight;
+@synthesize placeholderOffset = _placeholderOffset;
 
 - (void)postInit {
-	self.placeholderLabel = [[[UILabel alloc] initWithFrame:CGRectMake(8, 8, self.bounds.size.width-16, self.font.lineHeight)] autorelease];
-	self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    self.placeholderOffset = CGPointMake(8, 8);
+	self.placeholderLabel = [[[UILabel alloc] initWithFrame:CGRectMake(_placeholderOffset.x, _placeholderOffset.y, self.bounds.size.width-(2*_placeholderOffset.x), self.font.lineHeight)] autorelease];
+	self.placeholderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 	self.placeholderLabel.font = self.font;
 	self.placeholderLabel.backgroundColor = [UIColor clearColor];
 	self.placeholderLabel.textColor = [UIColor lightGrayColor];
@@ -123,10 +125,17 @@
 	}
 }
 
+
+
+- (void)setPlaceholderOffset:(CGPoint)theplaceholderOffset{
+    _placeholderOffset = theplaceholderOffset;
+	self.placeholderLabel.frame = CGRectMake(_placeholderOffset.x, _placeholderOffset.y, self.bounds.size.width-(2*_placeholderOffset.x), self.font.lineHeight);
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:@"font"]) {
 		self.placeholderLabel.font = self.font;
-		self.placeholderLabel.frame = CGRectMake(8, 8, self.placeholderLabel.bounds.size.width, self.font.lineHeight);
+        self.placeholderLabel.frame = CGRectMake(_placeholderOffset.x, _placeholderOffset.y, self.bounds.size.width-(2*_placeholderOffset.x), self.font.lineHeight);
 	}
 }
 

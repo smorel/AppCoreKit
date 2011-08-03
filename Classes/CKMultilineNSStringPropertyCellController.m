@@ -51,6 +51,7 @@
     _textView.tag = 50000;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
     _textView.scrollEnabled = NO;
+    _textView.placeholderOffset = CGPointMake(10,8);
     
     _textView.font = [UIFont systemFontOfSize:17];
     _textView.placeholderLabel.font = [UIFont systemFontOfSize:17];
@@ -93,7 +94,8 @@
             }
         }
         else{
-            _textView.frame = [self propertyGridDetailFrameForCell:cell];
+            CGRect f = [self propertyGridDetailFrameForCell:cell];
+            _textView.frame = CGRectMake(f.origin.x - 8,f.origin.y + 3,f.size.width + 8,f.size.height);
         }
     }
 }
@@ -110,15 +112,16 @@
         rowWidth = [(UITableViewCell*)[visibleViews objectAtIndex:0]bounds].size.width;
     }
     
-     
     CKObjectProperty* property = (CKObjectProperty*)object;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     NSString* text = _(descriptor.name);
-    NSString* detail = [property value];
+    NSString* detail = [NSString stringWithFormat:@"%@%@",[property value],
+                        ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? @"\nFAKE\nFAKE" : @"\nFAKE"];
+    //always have one or two lines more to avoid animation vs. carret glitch.
     
     //SEE how to get the real font ...
     CGSize detailSize = [detail sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:CGSizeMake(rowWidth - 6,CGFLOAT_MAX)];
-    CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,detailSize.height + 10);
+    CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,detailSize.height);
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         if(text == nil || 
            [text isKindOfClass:[NSNull class]] ||

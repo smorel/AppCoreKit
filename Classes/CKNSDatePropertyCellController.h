@@ -13,7 +13,7 @@
 
 /** TODO
  */
-@interface CKNSDatePropertyCellController : CKTableViewCellController<CKSheetControllerDelegate> {
+@interface CKNSDatePropertyCellController : CKTableViewCellController<CKSheetControllerDelegate,UIPopoverControllerDelegate> {
 }
 
 @end

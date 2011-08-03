@@ -185,6 +185,7 @@
 	
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+        cell.textLabel.numberOfLines = 0;
 		cell.detailTextLabel.textColor = [UIColor blackColor];
         
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
@@ -199,6 +200,8 @@
         }
         else{
             cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.backgroundColor = [UIColor redColor];
             cell.detailTextLabel.textColor = [UIColor blackColor];
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
             cell.textLabel.textAlignment = UITextAlignmentRight;
@@ -265,7 +268,12 @@
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
     CGRect detailFrame = [self value3DetailFrameForCell:cell];
-    return CGRectMake(10,0,detailFrame.origin.x - 10 - self.componentsSpace,detailFrame.size.height);
+    
+    CGFloat maxWidth = detailFrame.origin.x - 10 - self.componentsSpace;
+    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
+                                   constrainedToSize:CGSizeMake( maxWidth , cell.contentView.bounds.size.height) 
+                                       lineBreakMode:cell.textLabel.lineBreakMode];
+    return CGRectMake(10,11,maxWidth,size.height);
 }
 
 //PropertyGrid layout
@@ -300,7 +308,7 @@
             CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                    constrainedToSize:CGSizeMake( realWidth - width - 10 , cell.contentView.bounds.size.height) 
                                                lineBreakMode:cell.textLabel.lineBreakMode];
-            return CGRectMake(10,0, size.width, cell.contentView.bounds.size.height);
+            return CGRectMake(10,11, size.width, size.height);
         }
     }
     return [self value3TextFrameForCell:cell];
