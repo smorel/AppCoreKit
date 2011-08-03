@@ -140,6 +140,7 @@
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
 	[super viewWillAppear:animated];
+	[self updateParams];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -266,6 +267,9 @@
 }
 
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath{
+    if(self.params == nil){
+        [self updateParams];
+    }
 	return [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];
 }
 
