@@ -13,7 +13,7 @@
 #import "CKStyles.h"
 #import "CKUIView+Style.h"
 
-#import "CJSONDeserializer.h"
+#import "CKNSObject+JSON.h"
 
 @interface CKStyleManager()
 @property (nonatomic,retain) NSMutableDictionary* styles;
@@ -79,7 +79,7 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 	NSData* dataToParse = [fileContentAsString dataUsingEncoding:NSUTF8StringEncoding];
 	
 	NSError* error = nil;
-	id responseValue = [[CJSONDeserializer deserializer] deserialize:dataToParse error:&error];
+	id responseValue = [NSObject objectFromJSONData:dataToParse error:&error];// [[CJSONDeserializer deserializer] deserialize:dataToParse error:&error];
 	NSAssert([responseValue isKindOfClass:[NSDictionary class]],@"invalid format in style file");
 	[_loadedFiles addObject:path];
 	
