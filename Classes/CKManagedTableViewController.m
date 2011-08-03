@@ -89,6 +89,20 @@
 	[super dealloc];
 }
 
+- (void)updateParams{
+	if(self.params == nil){
+		self.params = [NSMutableDictionary dictionary];
+	}
+	
+	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];
+	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
+}
+
 #pragma mark View Management
 
 - (void)viewDidLoad {
