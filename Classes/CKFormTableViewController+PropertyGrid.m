@@ -23,6 +23,7 @@
 #import "CKUIImagePropertyCellController.h"
 
 #import "CKNSObject+Introspection.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 @interface CKFormTableViewController(CKPropertyGridPrivate)
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section;
@@ -81,6 +82,7 @@
 					optionCellController.labels = [copyOfValuesAndLabels allKeys];
 					[optionCellController bind:@"currentValue" withBlock:^(id value){
 						[property setValue:value];
+                        [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
                         
                         NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
                         descriptor.value = [NSNumber numberWithInt:index];
@@ -130,6 +132,7 @@
                                 optionCellController.value = [NSNumber numberWithInt:index];
                             }
 						}
+                        [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
 					}];
 					[optionCellController endBindingsContext];
 					
