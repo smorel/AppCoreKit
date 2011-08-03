@@ -89,6 +89,20 @@
 	[super dealloc];
 }
 
+- (void)updateParams{
+	if(self.params == nil){
+		self.params = [NSMutableDictionary dictionary];
+	}
+	
+	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];
+	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
+}
+
 #pragma mark View Management
 
 - (void)viewDidLoad {
@@ -125,7 +139,7 @@
 	[super viewDidDisappear:animated];
 	
 	for (CKTableSection *section in self.sections) {
-		[section.cellControllers makeObjectsPerformSelector:@selector(cellDidDisappear)];
+		[section.cellControllers makeObjectsPerformSelector:@selector(viewDidDisappear)];
 	}
 }
 
@@ -280,7 +294,7 @@
 	
 	UITableViewCell *theCell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifier];
 	if (theCell == nil) {
-		theCell = [controller loadCell];
+		theCell = (UITableViewCell*)[controller loadView];
 	}
 	
 	//TODO
@@ -291,7 +305,7 @@
 		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
 	}
 
-	[controller setupCell:theCell];	
+	[controller setupView:theCell];	
 	return theCell;
 }
 
@@ -299,14 +313,14 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     CKTableViewCellController *controller = [self cellControllerForIndexPath:indexPath];
     if([controller isSelectable]){
-        return [controller willSelectRow];
+        return [controller willSelect];
     }
     return NO;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-	[[self cellControllerForIndexPath:indexPath] didSelectRow];
+	[[self cellControllerForIndexPath:indexPath] didSelect];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -408,7 +422,7 @@
 	
 	for (UITableViewCell *cell in visibleCells) {
 		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		[[self cellControllerForIndexPath:indexPath] cellDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
+		[[self cellControllerForIndexPath:indexPath] viewDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
 	}
 }
 

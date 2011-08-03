@@ -7,6 +7,7 @@
 //
 
 #import "CKNSObject+JSON.h"
+#import "JSONKit.h"
 
 @implementation NSObject (CKNSObjectJSON)
 
@@ -44,5 +45,12 @@
 	
 	return [NSNull null];
 }
-	
+
++ (id)objectFromJSONData:(NSData *)data {
+	return [NSObject objectFromJSONData:data error:nil];
+}
++ (id)objectFromJSONData:(NSData *)data error:(NSError **)error {
+	return [data objectFromJSONDataWithParseOptions:JKParseOptionNone error:error];
+}
+
 @end

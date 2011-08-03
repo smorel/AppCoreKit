@@ -162,4 +162,19 @@
 	self.selectedIndexPath = indexPath;
 }
 
+#pragma mark CKItemViewContainerController Implementation
+
+- (NSArray*)visibleViews{
+	return [self.tableView visibleCells];
+}
+
+- (NSIndexPath*)indexPathForView:(UIView*)view{
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
+	return [self.tableView indexPathForCell:(UITableViewCell*)view];
+}
+
+- (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
+	return [self.tableView cellForRowAtIndexPath:indexPath];
+}
+
 @end
