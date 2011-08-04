@@ -340,6 +340,13 @@
 		self.cellDescriptors = [NSMutableArray array];
 	}
 	[_cellDescriptors insertObject:cellDescriptor atIndex:index];
+    
+    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
+	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
+	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    
 	return cellDescriptor;
 }
 
@@ -348,13 +355,34 @@
 		self.cellDescriptors = [NSMutableArray array];
 	}
 	[_cellDescriptors addObject:cellDescriptor];
+    
+    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellDescriptors count] -1 inSection:self.sectionVisibleIndex];
+	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
+	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    
 	return cellDescriptor;
 }
 
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index{
+    CKFormCellDescriptor* descriptor = [_cellDescriptors objectAtIndex:index];
+    
 	[_cellDescriptors removeObjectAtIndex:index];
+	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+    
+    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
+	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
+                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,descriptor.value,theIndexPath,nil]];
+    
+	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
 }
 
+- (void)removeCellDescriptor:(CKFormCellDescriptor *)descriptor{
+    NSInteger index = [_cellDescriptors indexOfObjectIdenticalTo:descriptor];
+    NSAssert(index != NSNotFound,@"cannot find %@",descriptor);
+    [self removeCellDescriptorAtIndex:index];
+}
 
 - (NSInteger)numberOfObjects{
 	return [_cellDescriptors count];
@@ -707,6 +735,35 @@
 	}
 	
 	return descriptor;
+}
+
+- (void)removeFooterCellDescriptor:(CKFormCellDescriptor*)descriptor{
+    NSInteger footerIndex = [_footerCellDescriptors indexOfObjectIdenticalTo:descriptor];
+    NSAssert(footerIndex != NSNotFound,@"cannot find %@",descriptor);
+    int headerCount = [_headerCellDescriptors count];
+	int count = [_objectController numberOfObjectsForSection:0];
+	int index = headerCount + count + footerIndex;
+	
+	[self.footerCellDescriptors removeObjectAtIndex:footerIndex];
+	
+	if(![_parentController reloading]){
+		[self objectControllerDidBeginUpdating:self.objectController];
+		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
+		[self objectControllerDidEndUpdating:self.objectController];
+	}
+}
+
+- (void)removeHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor{
+    NSInteger headerIndex = [_headerCellDescriptors indexOfObjectIdenticalTo:descriptor];
+	int index = headerIndex;
+	
+	[self.headerCellDescriptors removeObjectAtIndex:headerIndex];
+	
+	if(![_parentController reloading]){
+		[self objectControllerDidBeginUpdating:self.objectController];
+		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
+		[self objectControllerDidEndUpdating:self.objectController];
+	}
 }
 
 @end

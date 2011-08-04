@@ -87,6 +87,7 @@
 
 - (CKFormCellDescriptor*)insertCellDescriptor:(CKFormCellDescriptor *)cellDescriptor atIndex:(NSUInteger)index;
 - (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
+- (void)removeCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index;
 
 @end
@@ -117,7 +118,9 @@
 + (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell;
 
 - (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
+- (void)removeFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
 - (CKFormCellDescriptor*)addHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor;
+- (void)removeHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor;
 
 @end
 
