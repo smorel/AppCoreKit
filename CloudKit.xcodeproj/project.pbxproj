@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
 		4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */; };
 		4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */; };
@@ -456,6 +458,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/CKActionSheet.h; sourceTree = "<group>"; };
+		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/CKActionSheet.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
 		4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg.png"; sourceTree = "<group>"; };
 		4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg@2x.png"; sourceTree = "<group>"; };
@@ -1171,6 +1175,8 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
+				4F4F052E13C5F5410009DE31 /* CKActionSheet.m */,
 				7560DB1F13B8ED3600268D13 /* CKAlertView.h */,
 				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
 				7560DB3013B8ED3600268D13 /* CKCalloutView.h */,
@@ -1977,6 +1983,7 @@
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
+				4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */,
 				75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */,
 				75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */,
 				751F1EE113D0C3990041900C /* JSONKit.h in Headers */,
@@ -2293,6 +2300,7 @@
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
+				4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */,
 				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
 				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
 				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,

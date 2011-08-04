@@ -154,31 +154,21 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
                                                                                 if(!upToDate){
                                                                                     NSString* title = _(@"Provisioning Service");
                                                                                     NSString* message = [NSString stringWithFormat:_(@"A new release of the product is available\nVersion (%@)"),version];
-                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:_(@"Details"),_(@"Settings"),nil]autorelease];
-                                                                                    alertView.object = [NSDictionary dictionaryWithObjectsAndKeys:version,@"version", nil];
+                                                                                    
+                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
+                                                                                    [alertView addButtonWithTitle:_(@"Details") action:^(void){
+                                                                                        [self detailsForProductRelease:version];
+                                                                                    }];
+                                                                                    [alertView addButtonWithTitle:_(@"Settings") action:^(void){
+                                                                                        [self presentController:[self controllerForSettings]];
+                                                                                    }];
+                                                                                    [alertView addButtonWithTitle:_(@"Cancel") action:nil];
                                                                                     [alertView show];
                                                                                 }
                                                                                }
      
                                                                                failure:^(NSError* error){
                                                                                }];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if([alertView isKindOfClass:[CKAlertView class]]){
-        CKAlertView* ckAlertView = (CKAlertView*)alertView;
-        switch(buttonIndex){
-            case 1:{
-                NSString* version = [ckAlertView.object objectForKey:@"version"];
-                [self detailsForProductRelease:version];
-                break;
-            }
-            case 2:{
-                [self presentController:[self controllerForSettings]];
-                return;
-            }
-        }
-    }
 }
 
 - (void)install:(id)sender{
