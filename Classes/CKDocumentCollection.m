@@ -171,10 +171,12 @@
 	return NO;
 }
 
+/*
 - (void)setCount:(NSInteger)c{
 	[self willChangeValueForKey:@"count"];
     _count = c;
     [self didChangeValueForKey:@"count"];
 }
+ */
 
 @end
