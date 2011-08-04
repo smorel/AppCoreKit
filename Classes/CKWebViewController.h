@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "CKUIViewController.h"
+
 /** TODO
  */
 typedef enum {
@@ -20,7 +22,7 @@ typedef enum {
 
 /** TODO
  */
-@interface CKWebViewController : UIViewController <UIWebViewDelegate> {
+@interface CKWebViewController : CKUIViewController <UIWebViewDelegate> {
 	UIWebView *_webView;
 	UIToolbar* _webViewToolbar;
 	
