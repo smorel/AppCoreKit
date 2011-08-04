@@ -105,11 +105,22 @@
     UIViewController* controller = [params parentController];
     NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
     
-    CGFloat rowWidth = 0;
     CKObjectTableViewController* parentTableViewController = (CKObjectTableViewController*)controller;
+    CGFloat rowWidth = 0;
     NSArray* visibleViews = [parentTableViewController visibleViews];
     if([visibleViews count] > 0){
         rowWidth = [(UITableViewCell*)[visibleViews objectAtIndex:0]bounds].size.width;
+    }
+    else {
+        if(parentTableViewController.tableView.style == UITableViewStylePlain){
+            rowWidth = [params bounds].width;
+        }
+        else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            rowWidth = [params bounds].width - 20;
+        }
+        else{
+            rowWidth = [params bounds].width - 20;//HERE 20 should be dynamic but no documentation about it !
+        }
     }
     
     CKObjectProperty* property = (CKObjectProperty*)object;
@@ -147,9 +158,6 @@
 		[model setValue:value];
 		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 	}
-    
-    [[self parentTableView]beginUpdates];
-    [[self parentTableView]endUpdates];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -199,6 +207,9 @@
 
 -(void)textViewValueChanged:(NSString*)text{
     [self textViewChanged:text];
+    
+    [[self parentTableView]beginUpdates];
+    [[self parentTableView]endUpdates];
 }
 
 #pragma mark Keyboard
