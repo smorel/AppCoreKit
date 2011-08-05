@@ -17,7 +17,8 @@ NSString* const CKTableViewAttributeEditable = @"CKTableViewAttributeEditable";
 NSString* const CKTableViewAttributeStyle = @"CKTableViewAttributeStyle";
 NSString* const CKTableViewAttributeParentController = @"CKTableViewAttributeParentController";
 NSString* const CKTableViewAttributeObject = @"CKTableViewAttributeObject";
-
+NSString* const CKTableViewAttributeStaticController = @"CKTableViewAttributeStaticController";
+NSString* const CKTableViewAttributeStaticControllerStyle = @"CKTableViewAttributeStaticControllerStyle";
 
 @implementation NSDictionary (CKTableViewAttributes)
 
@@ -62,6 +63,14 @@ NSString* const CKTableViewAttributeObject = @"CKTableViewAttributeObject";
 
 - (id)object{
 	return [self objectForKey:CKTableViewAttributeObject];
+}
+
+- (NSMutableDictionary*)staticControllerStyle{
+	return [self objectForKey:CKTableViewAttributeStaticControllerStyle];
+}
+
+- (CKItemViewController*)staticController{
+	return [self objectForKey:CKTableViewAttributeStaticController];
 }
 
 @end

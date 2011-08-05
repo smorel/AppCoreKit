@@ -222,10 +222,6 @@
 	}
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
-}
-
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
 	[super rotateCell:cell withParams:params animated:animated];
 }

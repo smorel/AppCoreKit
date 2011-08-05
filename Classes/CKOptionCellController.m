@@ -46,7 +46,8 @@
 - (void)dealloc {
 	self.values = nil;
 	self.labels = nil;
-	self.currentValue = nil;
+	[_currentValue release];
+    _currentValue = nil;
 	[super dealloc];
 }
 
@@ -98,7 +99,9 @@
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
 	cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
