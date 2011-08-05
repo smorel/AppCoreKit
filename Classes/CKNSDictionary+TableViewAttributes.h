@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class CKItemViewController;
 
 /** TODO
  */
@@ -46,6 +47,13 @@ extern NSString * const CKTableViewAttributeParentController;
  */
 extern NSString * const CKTableViewAttributeObject;
 
+/** TODO
+ */
+extern NSString * const CKTableViewAttributeStaticController;
+
+/** TODO
+ */
+extern NSString * const CKTableViewAttributeStaticControllerStyle;
 
 /** TODO
  */
@@ -68,5 +76,7 @@ typedef enum {
 - (id)style;
 - (UIViewController*)parentController;
 - (id)object;
+- (NSMutableDictionary*)staticControllerStyle;
+- (CKItemViewController*)staticController;
 
 @end

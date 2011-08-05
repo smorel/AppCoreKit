@@ -13,6 +13,7 @@
 
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
+#import "CKItemViewController+StyleManager.h"
 
 #ifdef DEBUG 
 #import "CKPropertyGridEditorController.h"
@@ -148,7 +149,7 @@
 	if([parentView isKindOfClass:[UITableView class]]){
 		UITableView* tableView = (UITableView*)parentView;
 		if(tableView.style == UITableViewStyleGrouped){
-			NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+			NSInteger numberOfRows = [(CKItemViewContainerController*)self.parentController numberOfObjectsForSection:self.indexPath.section];
 			if(self.indexPath.row == 0 && numberOfRows > 1){
 				groupedTableModifier = @"BeginGroup";
 			}
@@ -186,23 +187,28 @@
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
         cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
 		cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
         
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        cell.textLabel.numberOfLines = 0;
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
             cell.detailTextLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
             cell.textLabel.textAlignment = UITextAlignmentLeft;
         }
         else{
             cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
-            cell.textLabel.numberOfLines = 0;
-            cell.textLabel.backgroundColor = [UIColor redColor];
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
             cell.detailTextLabel.textColor = [UIColor blackColor];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
             cell.textLabel.textAlignment = UITextAlignmentRight;
         }
@@ -254,16 +260,67 @@
 	return nil;
 }
 
++ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{
+    CGFloat rowWidth = 0;
+    if(controller.tableView.style == UITableViewStylePlain){
+        rowWidth = controller.tableView.frame.size.width;
+    }
+    else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        rowWidth = controller.tableView.frame.size.width - 20;
+    }
+    else{
+        CGFloat tableViewWidth = controller.tableViewContainer.frame.size.width;
+        CGFloat offset = -1;
+        if(tableViewWidth > 716)offset = 90;
+        else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
+        else if(tableViewWidth > 624) offset = 76;
+        else if(tableViewWidth > 545) offset = 74 - (((NSInteger)(624 - tableViewWidth) / 13) * 2);
+        else if(tableViewWidth > 400) offset = 62;
+        else offset = 20;
+        
+        rowWidth = tableViewWidth - offset;
+    }
+    return rowWidth;
+}
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    UIViewController* parentController = [params parentController];
+    NSAssert([parentController isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
+    
+    CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
+    CGRect textFrame = CGRectMake(0,0,100,24);
+    if(staticController.view){
+        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]];
+        staticController.tableViewCell.frame = CGRectMake(0,0,rowWidth,staticController.tableViewCell.frame.size.height);
+        
+        //NSLog(@"computed rowWidth for cell : %f", rowWidth);
+        
+        if(staticController.cellStyle == CKTableViewCellStyleValue3){
+            if(staticController.tableViewCell.textLabel != nil){
+                textFrame = [staticController value3TextFrameForCell:staticController.tableViewCell];
+            }
+        }
+        else if(staticController.cellStyle == CKTableViewCellStylePropertyGrid){
+            if(staticController.tableViewCell != nil){
+                textFrame = [staticController propertyGridTextFrameForCell:staticController.tableViewCell];
+            }
+        }
+       // NSLog(@"textLabel size %f %f",textFrame.size.width,textFrame.size.height);
+    }
+    
+    return [NSValue valueWithCGSize:CGSizeMake(textFrame.size.width,MAX(24,textFrame.size.height) + 20)];
+}
+
 //Value3 layout 
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
-	CGFloat realWidth = cell.bounds.size.width;
+	CGFloat realWidth = cell.contentView.frame.size.width;
 	CGFloat width = realWidth * self.componentsRatio;
 	CGFloat x = realWidth - width;
 	
-	CGFloat contentWidth = cell.contentView.bounds.size.width;
+	CGFloat contentWidth = cell.contentView.frame.size.width;
 	width = contentWidth - x;
 	
-	return CGRectIntegral(CGRectMake(10 + x, 0, width - 10 , cell.contentView.bounds.size.height));
+	return CGRectIntegral(CGRectMake(10 + x, 0, width - 10 , MAX(44,cell.contentView.frame.size.height)));
 }
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
@@ -271,7 +328,7 @@
     
     CGFloat maxWidth = detailFrame.origin.x - 10 - self.componentsSpace;
     CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                   constrainedToSize:CGSizeMake( maxWidth , cell.contentView.bounds.size.height) 
+                                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                        lineBreakMode:cell.textLabel.lineBreakMode];
     return CGRectMake(10,11,maxWidth,size.height);
 }
@@ -282,13 +339,13 @@
         if(cell.textLabel.text == nil || 
            [cell.textLabel.text isKindOfClass:[NSNull class]] ||
            [cell.textLabel.text length] <= 0){
-            return CGRectMake(10,0, cell.contentView.bounds.size.width - 20, cell.contentView.bounds.size.height);
+            return CGRectMake(10,0, cell.contentView.frame.size.width - 20, cell.contentView.frame.size.height);
         }
         else{
             CGRect textFrame = [self propertyGridTextFrameForCell:cell];
             CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.bounds.size.width - 10 - x;
-            return CGRectMake(x,0, width, cell.contentView.bounds.size.height);
+            CGFloat width = cell.contentView.frame.size.width - 10 - x;
+            return CGRectMake(x,0, width, cell.contentView.frame.size.height);
         }
     }
     return [self value3DetailFrameForCell:cell];
@@ -302,12 +359,16 @@
             return CGRectMake(0,0,0,0);
         }
         else{
-            CGFloat realWidth = cell.bounds.size.width;
+            CGFloat realWidth = cell.contentView.frame.size.width;
             CGFloat width = realWidth * self.componentsRatio;
             
+            CGFloat maxWidth = realWidth - width - 10 - self.componentsSpace;
             CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                   constrainedToSize:CGSizeMake( realWidth - width - 10 , cell.contentView.bounds.size.height) 
+                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                                lineBreakMode:cell.textLabel.lineBreakMode];
+           // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
+            //NSLog(@"cell width : %f",realWidth);
+            //NSLog(@"textLabel size %f %f",size.width,size.height);
             return CGRectMake(10,11, size.width, size.height);
         }
     }

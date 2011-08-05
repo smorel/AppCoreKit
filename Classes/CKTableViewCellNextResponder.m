@@ -15,6 +15,7 @@
 
 + (NSIndexPath*)findNextTextController:(CKTableViewCellController*)controller enableScroll:(BOOL)enableScroll{
 	if([controller.parentController isKindOfClass:[CKTableViewController class]]){
+        CKItemViewContainerController* parentController = (CKItemViewContainerController*)controller.parentController;
 		UITableView* tableView = [controller parentTableView];
 		NSIndexPath* indexPath = controller.indexPath;
 		NSInteger section = indexPath.section;
@@ -22,7 +23,7 @@
 		
 		NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
 		while(nextIndexPath != nil){
-			NSInteger rowCountForSection = [tableView numberOfRowsInSection:section];
+			NSInteger rowCountForSection = [parentController numberOfObjectsForSection:section];
 			if(nextIndexPath.row >= rowCountForSection - 1){
 				NSInteger sectionCount = [tableView numberOfSections];
 				if(nextIndexPath.section >= sectionCount - 1){

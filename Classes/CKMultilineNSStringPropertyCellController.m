@@ -105,24 +105,7 @@
     UIViewController* controller = [params parentController];
     NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
     
-    CKObjectTableViewController* parentTableViewController = (CKObjectTableViewController*)controller;
-    CGFloat rowWidth = 0;
-    NSArray* visibleViews = [parentTableViewController visibleViews];
-    if([visibleViews count] > 0){
-        rowWidth = [(UITableViewCell*)[visibleViews objectAtIndex:0]bounds].size.width;
-    }
-    else {
-        if(parentTableViewController.tableView.style == UITableViewStylePlain){
-            rowWidth = [params bounds].width;
-        }
-        else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            rowWidth = [params bounds].width - 20;
-        }
-        else{
-            rowWidth = [params bounds].width - 20;//HERE 20 should be dynamic but no documentation about it !
-        }
-    }
-    
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)controller];
     CKObjectProperty* property = (CKObjectProperty*)object;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     NSString* text = _(descriptor.name);

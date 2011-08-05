@@ -15,6 +15,7 @@
 #import "CKStyleManager.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKItemViewController+StyleManager.h"
+#import "CKNSDictionary+TableViewAttributes.h"
 
 @interface CKObjectViewControllerFactory ()
 
@@ -175,7 +176,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 			return [controllerStyle cellFlags];
 		}
 	}
-	
+    
 	id flagsObject = [_params objectForKey:CKObjectViewControllerFactoryItemFlags];
 	if(flagsObject != nil){
 		if([flagsObject isKindOfClass:[CKCallback class]]){
@@ -214,6 +215,28 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 		}
 	}
 	
+    CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForClass:self.controllerClass
+                                                                                                          object:object 
+                                                                                                       indexPath:indexPath 
+                                                                                                parentController:[params parentController]];
+    staticController.initCallback = [self initCallback];
+    staticController.setupCallback = [self setupCallback];
+    staticController.selectionCallback = [self selectionCallback];
+    staticController.accessorySelectionCallback = [self accessorySelectionCallback];
+    staticController.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
+    staticController.resignFirstResponderCallback = [self resignFirstResponderCallback];
+    [params setObject:staticController forKey:CKTableViewAttributeStaticController];
+    if(controllerStyle){
+        [params setObject:controllerStyle forKey:CKTableViewAttributeStaticControllerStyle];
+    }
+    [staticController performSelector:@selector(setParentController:) withObject:[params parentController]];
+    [staticController performSelector:@selector(setIndexPath:) withObject:indexPath];
+    [staticController setValue:object];
+    if(staticController.view != nil){
+        [staticController setupView:staticController.view];	
+    }
+
+    
 	id sizeObject = [_params objectForKey:CKObjectViewControllerFactoryItemSize];
 	if(sizeObject != nil){
 		if([sizeObject isKindOfClass:[CKCallback class]]){

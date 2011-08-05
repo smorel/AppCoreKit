@@ -47,9 +47,11 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 		[CKTableViewCellControllerInstances endBindingsContext];
 	}
 	
+    BOOL created = NO;
 	CKItemViewController* controller = [CKTableViewCellControllerInstances objectForKey:theClass];
 	if(controller == nil){
 		controller = [[[theClass alloc]init]autorelease];
+        created = YES;
 		[CKTableViewCellControllerInstances setObject:controller forKey:theClass];
 	}
 	
@@ -57,6 +59,14 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	[controller performSelector:@selector(setParentController:) withObject:parentController];
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];	
+    
+    if(created){
+        //Ptet caller le create block si possible ...
+        controller.view = [controller loadView];
+        //As controller.view is a weak ref and this view will not get retained by the table, we keep a reference on it as a retain.
+		[CKTableViewCellControllerInstances setObject:controller.view forKey:[NSString stringWithFormat:@"<%p>",controller.view]];
+    }
+    
 	return controller;
 }
 

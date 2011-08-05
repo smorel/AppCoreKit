@@ -72,7 +72,8 @@
 	for (int i=0 ; i< self.values.count ; i++) {
 		NSNumber* index = [NSNumber numberWithInt:i];
 		
-		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKStandardCellController class]];
+		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKTableViewCellController class]];
+        [descriptor setCreateTarget:self action:@selector(createCell:)];
 		[descriptor setSetupTarget:self action:@selector(initCell:)];
 		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
 		[cells addObject:descriptor];
@@ -80,8 +81,15 @@
 	[self addSectionWithCellDescriptors:cells];
 }
 
+- (id)createCell:(id)controller{
+	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
+    standardController.cellStyle = CKTableViewCellStylePropertyGrid;
+    standardController.componentsRatio = 0;
+    return nil;
+}
+
 - (id)initCell:(id)controller{
-	CKStandardCellController* standardController = (CKStandardCellController*)controller;
+	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
 	NSNumber* index = [NSNumber numberWithInt:standardController.indexPath.row];
 	if([self.selectedIndexes containsObject:index]){
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -89,13 +97,13 @@
 	else{
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
 	}
-	standardController.text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
+	standardController.tableViewCell.textLabel.text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
 	return nil;
 }
 
 
 - (id)selectCell:(id)controller{
-	CKStandardCellController* standardController = (CKStandardCellController*)controller;
+	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
 	int i = standardController.indexPath.row;
 	if(self.multiSelectionEnabled){
 		if([standardController.value intValue] == 1){

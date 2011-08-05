@@ -13,6 +13,8 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 
+@class CKObjectTableViewController;
+
 /** TODO
  */
 enum{
@@ -101,6 +103,8 @@ typedef enum CKTableViewCellStyle {
 
 - (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
 - (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
+
++ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
 
 @end
 
