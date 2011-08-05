@@ -262,14 +262,16 @@
 
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{
     CGFloat rowWidth = 0;
-    if(controller.tableView.style == UITableViewStylePlain){
-        rowWidth = controller.tableView.frame.size.width;
+    UIView* tableViewContainer = [controller tableViewContainer];
+    UITableView* tableView = [controller tableView];
+    if(tableView.style == UITableViewStylePlain){
+        rowWidth = tableViewContainer.frame.size.width;
     }
     else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        rowWidth = controller.tableView.frame.size.width - 20;
+        rowWidth = tableViewContainer.frame.size.width - 20;
     }
     else{
-        CGFloat tableViewWidth = controller.tableViewContainer.frame.size.width;
+        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
         CGFloat offset = -1;
         if(tableViewWidth > 716)offset = 90;
         else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
