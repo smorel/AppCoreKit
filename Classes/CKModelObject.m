@@ -32,6 +32,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 @synthesize valuesAndLabels;
 @synthesize contentProtocol;
 @synthesize propertyCellControllerClass;
+@synthesize validationPredicate;
 
 - (void)dealloc{
 	self.enumDefinition = nil;
@@ -54,6 +55,7 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.contentProtocol = nil;
 	self.dateFormat = nil;
 	self.propertyCellControllerClass = nil;
+	self.validationPredicate = nil;
 }
 
 + (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
@@ -485,23 +487,20 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	return NO;
 }
 
-+ (NSDictionary*)validationPredicates{
-	//this can be overloaded in your subclasses to define your own validation predicates
-	//example : [NSDictionary dictionaryWithObjectsAndKeys:predicate1,@"propertyName1",predicate2,@"propertyName2",...,nil];
-	return [NSDictionary dictionary];
-}
 
 - (BOOL)isValid{
-	NSDictionary* validation = [[self class]validationPredicates];
-	if(validation != nil){
-		for(NSString* propertyName in [validation allKeys]){
-			id value = [self valueForKeyPath:propertyName];
-			NSPredicate* predicate = [validation objectForKey:propertyName];
-			if([predicate evaluateWithObject:value] == NO){
-				return NO;
-			}
-		}
-	}
+	NSArray* allProperties = [self allPropertyDescriptors];
+    for(CKClassPropertyDescriptor* property in allProperties){
+        if(property.isReadOnly == NO){
+            CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self property:property];
+            if(metaData.validationPredicate){
+                id object = [self valueForKey:property.name];
+                if(![metaData.validationPredicate evaluateWithObject:object]){
+                    return NO;
+                }
+            }
+        }
+    }
 	return YES;
 }
 

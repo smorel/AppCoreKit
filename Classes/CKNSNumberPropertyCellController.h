@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKStandardCellController.h"
+#import "CKPropertyGridCellController.h"
 
 
 /** TODO
  */
-@interface CKNSNumberPropertyCellController : CKStandardCellController<UITextFieldDelegate>{	
+@interface CKNSNumberPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate>{	
 	UITextField* _textField;
 	UISwitch* _toggleSwitch;
 }

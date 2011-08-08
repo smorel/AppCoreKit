@@ -19,12 +19,6 @@
 @implementation CKNSStringPropertyCellController
 @synthesize textField = _textField;
 
-- (id)init{
-	[super init];
-	self.cellStyle = CKTableViewCellStylePropertyGrid;
-	return self;
-}
-
 -(void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_textField release];
@@ -48,9 +42,13 @@
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }  
         else{
             txtField.textColor = [UIColor blackColor];
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
     
@@ -100,7 +98,7 @@
 	}
 	cell.detailTextLabel.text = nil;
 	
-	if([model isReadOnly]){
+	if([model isReadOnly] || self.readOnly){
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];

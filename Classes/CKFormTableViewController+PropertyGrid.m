@@ -26,9 +26,9 @@
 #import "CKNSNotificationCenter+Edition.h"
 
 @interface CKFormTableViewController(CKPropertyGridPrivate)
-- (void)setup:(NSArray*)properties inSection:(CKFormSection*)section;
 - (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter;
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property;
+- (void)setup:(NSArray*)properties inSection:(CKFormSection*)section readOnly:(BOOL)readOnly;
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly;
 @end
 
 @implementation CKFormTableViewController(CKPropertyGridPrivate)
@@ -56,24 +56,21 @@
 }
 
 
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property{
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly{
+    CKFormCellDescriptor* cellDescriptor = nil;
+    
     CKModelObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.editable == YES){
         if(metaData.propertyCellControllerClass != nil){
             NSAssert([NSObject isKindOf:metaData.propertyCellControllerClass parentType:[CKTableViewCellController class]],@"invalid propertyCellControllerClass defined for property : %@",property);
-            return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
         }
         else if(metaData.valuesAndLabels != nil){
             NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
             
             NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
-            CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:[NSNumber numberWithInt:index] controllerClass:[CKOptionCellController class]];
-            [descriptor setCreateBlock:^(id controller){
-                CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                optionCellController.cellStyle = CKTableViewCellStylePropertyGrid;
-                return (id)nil;
-            }];
-            [descriptor setSetupBlock:^(id controller){
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[NSNumber numberWithInt:index] controllerClass:[CKOptionCellController class]];
+            [cellDescriptor setSetupBlock:^(id controller){
                 CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
                 [optionCellController beginBindingsContextByRemovingPreviousBindings];
                 NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
@@ -86,22 +83,16 @@
                     [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
                     
                     NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
-                    descriptor.value = [NSNumber numberWithInt:index];
+                    cellDescriptor.value = [NSNumber numberWithInt:index];
                 }];
                 [optionCellController endBindingsContext];
                 return (id)nil;
             }];
-            return descriptor;
         }
         else if(metaData.enumDefinition != nil){
             NSDictionary* copyOfLabelsAndValues = [metaData.enumDefinition copy];//we copy it as metaData is a reused singleton
-            CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]];
-            [descriptor setCreateBlock:^(id controller){
-                CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                optionCellController.cellStyle = CKTableViewCellStylePropertyGrid;
-                return (id)nil;
-            }];
-            [descriptor setSetupBlock:^(id controller){
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]];
+            [cellDescriptor setSetupBlock:^(id controller){
                 CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
                 [optionCellController beginBindingsContextByRemovingPreviousBindings];
                 optionCellController.multiSelectionEnabled = metaData.multiselectionEnabled;
@@ -122,7 +113,7 @@
                 [optionCellController bind:@"currentValue" withBlock:^(id value){
                     if(value == nil || [value isKindOfClass:[NSNull class]]){
                         [property setValue:[NSNumber numberWithInt:0]];
-                        descriptor.value = [NSNumber numberWithInt:0];
+                        cellDescriptor.value = [NSNumber numberWithInt:0];
                     }
                     else{
                         [property setValue:value];
@@ -140,7 +131,6 @@
                 
                 return (id)nil;
             }];
-            return descriptor;
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
@@ -160,27 +150,27 @@
                 case CKClassPropertyDescriptorTypeCppBool:
                 case CKClassPropertyDescriptorTypeVoid:
                 case CKClassPropertyDescriptorTypeCharString:{
-                    return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
                     break;
                 }
                 case CKClassPropertyDescriptorTypeObject:{
                     if([NSObject isKindOf:descriptor.type parentType:[NSString class]]){
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSStringPropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSStringPropertyCellController class]];
                     }
                     else if([NSObject isKindOf:descriptor.type parentType:[NSNumber class]]){
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
                     }
                     else if([NSObject isKindOf:descriptor.type parentType:[UIColor class]]){
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIColorPropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIColorPropertyCellController class]];
                     }
                     else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){
-                        return[CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]];
                     }
                     else if([NSObject isKindOf:descriptor.type parentType:[UIImage class]]){
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIImagePropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIImagePropertyCellController class]];
                     }
                     else{
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]];
                     }
                     break;
                 }
@@ -189,19 +179,36 @@
                     NSString* controllerClassName = [NSString stringWithFormat:@"CK%@PropertyCellController",descriptor.className];
                     Class controllerClass = NSClassFromString(controllerClassName);
                     if(controllerClass){
-                        return [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:controllerClass];
+                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:controllerClass];
                     }
                     break;
                 }
             }
         }
     }
-    return nil;
+    
+    if(cellDescriptor){
+        [cellDescriptor setCreateBlock:^(id controller){
+            CKTableViewCellController* cellController = (CKTableViewCellController*)controller;
+            cellController.cellStyle = CKTableViewCellStylePropertyGrid;
+            if([cellController respondsToSelector:@selector(setReadOnly:)]){
+                NSMethodSignature *signature = [controller methodSignatureForSelector:@selector(setReadOnly:)];
+				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+				[invocation setSelector:@selector(setReadOnly:)];
+				[invocation setTarget:controller];
+				[invocation setArgument:(void*)&readOnly
+								atIndex:2];
+				[invocation invoke];
+            }
+            return (id)nil;
+        }];
+    }
+    return cellDescriptor;
 }
 
-- (void)setup:(NSArray*)properties inSection:(CKFormSection*)section{
+- (void)setup:(NSArray*)properties inSection:(CKFormSection*)section readOnly:(BOOL)readOnly{
     for(CKObjectProperty* property in properties){
-        CKFormCellDescriptor* descriptor = [CKFormTableViewController cellDescriptorWithProperty:property];
+        CKFormCellDescriptor* descriptor = [CKFormTableViewController cellDescriptorWithProperty:property readOnly:readOnly];
         if(descriptor){
             [section addCellDescriptor:descriptor];
         }
@@ -233,6 +240,30 @@
 }
 
 - (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden{
+    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:hidden readOnly:NO];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:hidden readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:filter headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object properties:[self propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
     NSMutableArray* theProperties = [NSMutableArray array];
     for(NSString* propertyName in properties){
         CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:propertyName];
@@ -242,7 +273,7 @@
     //TODO footerName
     CKFormSection* section = (title != nil && [title length] > 0) ? [CKFormSection sectionWithHeaderTitle:_(title)] : [CKFormSection section];
     section.hidden = hidden;
-    [self setup:theProperties inSection:section];
+    [self setup:theProperties inSection:section readOnly:readOnly];
     [self addSection:section];
     
     return section;
@@ -258,7 +289,15 @@
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property{
-    CKFormCellDescriptor* descriptor = [CKFormTableViewController cellDescriptorWithProperty:property];
+    return [CKFormCellDescriptor cellDescriptorWithProperty:property readOnly:NO];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath] readOnly:readOnly];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly{
+    CKFormCellDescriptor* descriptor = [CKFormTableViewController cellDescriptorWithProperty:property readOnly:readOnly];
     return descriptor;
 }
 

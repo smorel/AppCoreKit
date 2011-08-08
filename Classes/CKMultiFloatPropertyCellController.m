@@ -115,7 +115,7 @@
 
 - (void)rebind{
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
-	if([property isReadOnly]){
+	if([property isReadOnly] || self.readOnly){
 		[self beginBindingsContextByRemovingPreviousBindings];
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
 		for(NSString* property in properties){
@@ -148,7 +148,7 @@
 	}
 	
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
-	if([property isReadOnly]){
+	if([property isReadOnly] || self.readOnly){
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
 		for(NSString* property in properties){
 			UILabel *label = [_labels objectForKey:property];

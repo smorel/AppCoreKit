@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKTableViewCellController.h"
+#import "CKPropertyGridCellController.h"
 
 
 /** TODO
  */
-@interface CKNSObjectPropertyCellController : CKTableViewCellController {
+@interface CKNSObjectPropertyCellController : CKPropertyGridCellController {
 
 }
 

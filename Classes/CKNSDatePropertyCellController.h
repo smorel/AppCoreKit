@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKTableViewCellController.h"
+#import "CKPropertyGridCellController.h"
 #include "CKSheetController.h"
 
 
 /** TODO
  */
-@interface CKNSDatePropertyCellController : CKTableViewCellController<CKSheetControllerDelegate,UIPopoverControllerDelegate> {
+@interface CKNSDatePropertyCellController : CKPropertyGridCellController<CKSheetControllerDelegate,UIPopoverControllerDelegate> {
 }
 
 @end

@@ -6,11 +6,11 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKTableViewCellController.h"
+#import "CKPropertyGridCellController.h"
 #import "CKTextView.h"
 
 
-@interface CKMultilineNSStringPropertyCellController : CKTableViewCellController<UITextViewDelegate> {
+@interface CKMultilineNSStringPropertyCellController : CKPropertyGridCellController<UITextViewDelegate> {
     CKTextView* _textView;
 }
 

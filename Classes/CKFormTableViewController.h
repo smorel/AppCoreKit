@@ -22,7 +22,7 @@
 {
 	NSString* _headerTitle;
 	UIView* _headerView;
-	NSString* _footeritle;
+	NSString* _footerTitle;
 	UIView* _footerView;
 	CKFormTableViewController* _parentController;
 	BOOL _hidden;

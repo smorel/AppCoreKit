@@ -95,12 +95,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 @implementation CKNSDatePropertyCellController
 @synthesize popoverController;
 
-- (id)init{
-	[super init];
-	self.cellStyle = CKTableViewCellStylePropertyGrid;
-	return self;
-}
-
 - (void)dealloc{
     self.popoverController = nil;
     [super dealloc];
@@ -108,15 +102,18 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
-	cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	
 	CKObjectProperty* model = self.value;
+    if([model isReadOnly] || self.readOnly){
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	cell.textLabel.text = _(descriptor.name);
@@ -137,6 +134,11 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+    CKNSDatePropertyCellController* staticController = (CKNSDatePropertyCellController*)[params staticController];
+	CKObjectProperty* model = object;
+    if([model isReadOnly] || staticController.readOnly){
+        return CKItemViewFlagNone;
+    }
     return CKItemViewFlagSelectable;
 }
 

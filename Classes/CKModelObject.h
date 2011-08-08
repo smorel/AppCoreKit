@@ -38,12 +38,15 @@
 	Class contentType;
 	Protocol* contentProtocol;
     
+    NSPredicate* validationPredicate;
+    
+	NSDictionary* enumDefinition;
+    BOOL multiselectionEnabled;
+	NSString* dateFormat;
+    
     //PropertyGrid Representation
 	BOOL editable;
-	NSDictionary* enumDefinition;
 	NSDictionary* valuesAndLabels;
-	NSString* dateFormat;
-    BOOL multiselectionEnabled;
     Class propertyCellControllerClass;
 }
 
@@ -57,6 +60,7 @@
 @property (nonatomic, assign) Class contentType;
 @property (nonatomic, assign) Protocol* contentProtocol;
 @property (nonatomic, retain) NSString* dateFormat;
+@property (nonatomic, retain) NSPredicate* validationPredicate;
 
 ///-----------------------------------
 /// @name PropertyGrid Representation

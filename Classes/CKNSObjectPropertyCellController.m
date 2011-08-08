@@ -51,17 +51,6 @@
 
 @implementation CKNSObjectPropertyCellController
 
-- (id)init{
-	[super init];
-	self.cellStyle = CKTableViewCellStylePropertyGrid;
-	return self;
-}
-
--(void)dealloc{
-	[super dealloc];
-}
-
-
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	[super initTableViewCell:cell];
 }

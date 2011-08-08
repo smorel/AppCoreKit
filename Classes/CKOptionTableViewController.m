@@ -74,7 +74,7 @@
 		
 		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKTableViewCellController class]];
         [descriptor setCreateTarget:self action:@selector(createCell:)];
-		[descriptor setSetupTarget:self action:@selector(initCell:)];
+		[descriptor setSetupTarget:self action:@selector(setupCell:)];
 		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
 		[cells addObject:descriptor];
 	}
@@ -88,7 +88,7 @@
     return nil;
 }
 
-- (id)initCell:(id)controller{
+- (id)setupCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
 	NSNumber* index = [NSNumber numberWithInt:standardController.indexPath.row];
 	if([self.selectedIndexes containsObject:index]){
@@ -97,7 +97,8 @@
 	else{
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
 	}
-	standardController.tableViewCell.textLabel.text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
+    NSString* text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
+	standardController.tableViewCell.textLabel.text = text;
 	return nil;
 }
 

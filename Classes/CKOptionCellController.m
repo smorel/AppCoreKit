@@ -19,6 +19,7 @@
 @synthesize labels = _labels;
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
 @synthesize currentValue = _currentValue;
+@synthesize readOnly = _readOnly;
 
 
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
@@ -27,7 +28,7 @@
 	if (self = [super initWithText:title]) {
 		self.values = values;
 		self.labels = labels;
-		self.style = UITableViewCellStyleValue1;
+		self.cellStyle = UITableViewCellStyleValue1;
 	}
 	return self;
 }
@@ -94,15 +95,44 @@
 	[super setupCell:cell];
 	cell.textLabel.text = self.text;
 	cell.detailTextLabel.text = [self labelForValue:self.value];
+    
+    if(self.readOnly){
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
 }
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
-	cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
-    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	//cell.textLabel.backgroundColor = [UIColor clearColor];
+    //cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+    //cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+    //cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+    
+    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentRight;
+        }  
+        else{
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        }
+    }  
+
+    if(self.readOnly){
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+    CKOptionCellController* staticController = (CKOptionCellController*)[params staticController];
+    if(staticController.readOnly){
+        return CKItemViewFlagNone;
+    }
+    return CKItemViewFlagSelectable;
 }
 
 - (void)didSelectRow {

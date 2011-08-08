@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSArray *labels;
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
 @property (nonatomic, retain, readonly) id currentValue;
+@property (nonatomic,assign) BOOL readOnly;
 
 // If labels is nil, the table values are displayed, otherwise ensure values and labels have the same count.
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels;

@@ -22,12 +22,6 @@
 @synthesize textField = _textField;
 @synthesize toggleSwitch = _toggleSwitch;
 
-- (id)init{
-	[super init];
-	self.cellStyle = CKTableViewCellStylePropertyGrid;
-	return self;
-}
-
 -(void)dealloc{
 	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_textField release];
@@ -81,10 +75,14 @@
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             txtField.textAlignment = UITextAlignmentRight;
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentRight;
         }  
         else{
             txtField.textColor = [UIColor blackColor];
             txtField.textAlignment = UITextAlignmentLeft;
+            cell.detailTextLabel.numberOfLines = 0;
+            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
     
@@ -132,7 +130,7 @@
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
-			if([model isReadOnly]){
+			if([model isReadOnly] || self.readOnly){
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
@@ -160,7 +158,7 @@
 		}
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
-			if([model isReadOnly]){
+			if([model isReadOnly] || self.readOnly){
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
@@ -222,8 +220,8 @@
 	}
 }
 
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateCell:cell withParams:params animated:animated];
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    return [CKTableViewCellController viewSizeForObject:object withParams:params];
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{

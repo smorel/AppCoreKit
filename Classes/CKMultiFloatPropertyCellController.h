@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKTableViewCellController.h"
+#import "CKPropertyGridCellController.h"
 
 
 /** TODO
  */
-@interface CKMultiFloatPropertyCellController: CKTableViewCellController<UITextFieldDelegate> {
+@interface CKMultiFloatPropertyCellController: CKPropertyGridCellController<UITextFieldDelegate> {
 	id _multiFloatValue;
 	NSMutableDictionary* _textFields;
 	NSMutableDictionary* _labels;
