@@ -10,6 +10,11 @@
 #import "CKTableViewController.h"
 #import "CKTableViewCellController.h"
 
+typedef enum CKObjectTableViewControllerEditableType{
+    CKObjectTableViewControllerEditableTypeNone,
+    CKObjectTableViewControllerEditableTypeLeft,
+    CKObjectTableViewControllerEditableTypeRight
+}CKObjectTableViewControllerEditableType;
 
 typedef enum CKObjectTableViewControllerScrollingPolicy{
     CKObjectTableViewControllerScrollingPolicyNone,
@@ -28,7 +33,7 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
 	BOOL _scrolling;
     CKObjectTableViewControllerScrollingPolicy _scrollingPolicy;
     
-	BOOL _editable;
+    CKObjectTableViewControllerEditableType _editableType;
 	
 	UIBarButtonItem *rightButton;
 	UIBarButtonItem *leftButton;
@@ -120,9 +125,9 @@ Specify the animations that should be launch on row and sections insertion
 /// @name Edition
 ///-----------------------------------
 /** 
-Specify if the table is editable. If yes, an edit/done button is automatically added to the right of the navigation bar.
+Specify if the table is editable. If yes, an edit/done button is automatically added to the left/right of the navigation bar.
 */
-@property (nonatomic, assign) BOOL editable;
+@property (nonatomic, assign) CKObjectTableViewControllerEditableType editableType;
 
 ///-----------------------------------
 /// @name Search
@@ -167,6 +172,10 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
  */
 @property (nonatomic, retain) UIBarButtonItem *leftButton;
 
+@end
+
+@interface CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+@property (nonatomic) BOOL editable DEPRECATED_ATTRIBUTE;
 @end
 
 

@@ -44,7 +44,6 @@
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
 @synthesize scrolling = _scrolling;
-@synthesize editable = _editable;
 @synthesize indexPathToReachAfterRotation = _indexPathToReachAfterRotation;
 @synthesize rowInsertAnimation = _rowInsertAnimation;
 @synthesize rowRemoveAnimation = _rowRemoveAnimation;
@@ -58,6 +57,7 @@
 @synthesize tableMaximumWidth = _tableMaximumWidth;
 @synthesize placeHolderViewDuringKeyboardOrSheet = _placeHolderViewDuringKeyboardOrSheet;
 @synthesize scrollingPolicy = _scrollingPolicy;
+@synthesize editableType = _editableType;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -159,7 +159,7 @@
 	_currentPage = 0;
 	_numberOfPages = 0;
 	_scrolling = NO;
-	_editable = NO;
+	_editableType = CKObjectTableViewControllerEditableTypeNone;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_viewIsOnScreen = NO;
@@ -200,11 +200,6 @@
 	}
 }
 
-- (IBAction)edit:(id)sender{
-	[self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
-	[self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
-}
-
 - (void)updateParams{
 	if(self.params == nil){
 		self.params = [NSMutableDictionary dictionary];
@@ -215,7 +210,7 @@
 	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
 	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSNumber numberWithBool:self.editable] forKey:CKTableViewAttributeEditable];
+	[self.params setObject:[NSNumber numberWithBool:self.editableType != CKObjectTableViewControllerEditableTypeNone] forKey:CKTableViewAttributeEditable];
 	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
 }
 
@@ -226,6 +221,22 @@
 	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
 	CKCallback* callback = (CKCallback*)value;
 	[callback execute:self];
+}
+
+- (IBAction)edit:(id)sender{
+    switch(_editableType){
+        case CKObjectTableViewControllerEditableTypeLeft:{
+            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeRight:{
+            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeNone:break;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -304,10 +315,20 @@
 		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
 	}
 	
-	if(_editable){
-		self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-		self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-		[self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+	switch(_editableType){
+        case CKObjectTableViewControllerEditableTypeLeft:{
+            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeRight:{
+            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeNone:break;
 	}
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
@@ -941,6 +962,22 @@
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
 		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section - 1];
 	}
+}
+
+@end
+
+
+@implementation CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+@dynamic editable;
+
+- (BOOL)editable{
+    return _editableType != CKObjectTableViewControllerEditableTypeNone;
+}
+
+- (void)setEditable:(BOOL)editable{
+    if(_editableType == CKObjectTableViewControllerEditableTypeNone){
+        _editableType = CKObjectTableViewControllerEditableTypeLeft;
+    }
 }
 
 @end
