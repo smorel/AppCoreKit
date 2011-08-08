@@ -85,8 +85,8 @@
 }
 
 - (void)dealloc {
-	[self clearBindingsContext];
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+	[self clearBindingsContext];
 	[_key release];
 	_key = nil;
 	
@@ -179,8 +179,8 @@
 	if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
 		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[cell bind:@"detailTextLabel.text" target:self action:@selector(updateLayout:)];
-        [cell bind:@"textLabel.text" target:self action:@selector(updateLayout:)];
+		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
+        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
 		[NSObject endBindingsContext];	
 	}
 	
@@ -291,12 +291,15 @@
     
     CGFloat tableWidth = [params bounds].width;
     CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
+    if(staticController.cellStyle == CKTableViewCellStyleValue3
+       || staticController.cellStyle == CKTableViewCellStylePropertyGrid){
+        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+        CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
         
-    CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-    CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-    
-    CGFloat maxHeight = MAX(bottomText,MAX(34,bottomDetails)) + 10;
-    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
+        CGFloat maxHeight = MAX(bottomText,MAX(34,bottomDetails)) + 10;
+        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
+    }
+    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
 }
 
 //Value3 layout 
