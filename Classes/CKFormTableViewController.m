@@ -611,7 +611,7 @@
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
-	if(_hidden){
+	if(_hidden && _parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount > 0 ){
 			self.hidden = NO;
@@ -620,7 +620,7 @@
 		}
 	}
 	
-	if(!_hidden){
+	if(!_hidden && _parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount <= 0 ){
 			self.hidden = YES;

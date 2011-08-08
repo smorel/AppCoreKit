@@ -106,13 +106,11 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
         
         [self beginBindingsContextByRemovingPreviousBindings];
         [[CKProvisioningUserDefaults sharedInstance] bind:@"autoCheck" withBlock:^(id value) {
-            if([[CKProvisioningUserDefaults sharedInstance]autoCheck]){
+            if([[CKProvisioningUserDefaults sharedInstance] autoCheck]){
                 [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
             }
             else{
-                if([[CKProvisioningUserDefaults sharedInstance]autoCheck]){
-                    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-                }
+				[[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
             }
         }];
         [self endBindingsContext];
@@ -130,7 +128,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)onBecomeActive:(NSNotification*)notif{
-    [self checkForNewProductRelease];
+	[self checkForNewProductRelease];
 }
 
 #pragma mark - Updates
@@ -296,8 +294,9 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	productRelease.buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 	productRelease.versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	
-    CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
+    CKFormTableViewController* formController = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
 	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
+	formController.hidesBottomBarWhenPushed = YES;
 	formController.name = @"rigoloSettingsViewController";
     formController.title = @"Provisioning Service Settings";
 	
@@ -478,7 +477,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease {
 	__block CKProvisioningController* bself = self;
 
-    CKFormTableViewController* formController = [[[CKFormTableViewController alloc]init]autorelease];
+    CKFormTableViewController* formController = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
 	formController.contentSizeForViewInPopover = CGSizeMake(320, 416);
     formController.title = CKVersionStringForProductRelease(productRelease);
 	formController.name = @"rigoloReleaseDetailViewController";
