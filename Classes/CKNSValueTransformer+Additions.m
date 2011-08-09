@@ -257,8 +257,6 @@ NSString* CKSerializerIDTag = @"@id";
 		return nil;
 	}
 	
-	id target = (property != nil) ? [property value] : nil;
-	
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
 	CKModelObjectPropertyMetaData* metaData = [property metaData];
@@ -376,6 +374,8 @@ NSString* CKSerializerIDTag = @"@id";
 		return result;
 	}
 	
+    
+	id target = (property != nil) ? [property value] : nil;
 	//Use the default serialization for objects
 	NSAssert([source isKindOfClass:[NSDictionary class]],@"object of type '%@' can only be set from dictionary",[type description]);
 	if(target == nil){

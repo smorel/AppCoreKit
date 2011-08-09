@@ -18,6 +18,7 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 
 #import "CKObjectTableViewController.h"
+#import "CKNSObject+Bindings.h"
 
 @interface CKObjectViewControllerFactory ()
 
@@ -219,7 +220,9 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
             }
         }
     }
-
+    
+    [staticController clearBindingsContext];
+    
     return staticController;
 }
 

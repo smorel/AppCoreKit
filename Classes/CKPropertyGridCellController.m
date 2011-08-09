@@ -27,7 +27,7 @@
 }
 
 - (void)setValue:(id)value{
-    if(![_value isEqual:value]){
+    if(![self.value isEqual:value]){
         NSAssert(value == nil || [value isKindOfClass:[CKObjectProperty class]],@"Invalid value type");
         [super setValue:value];
     
