@@ -43,6 +43,8 @@
 		4F4A917213F040EC0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */; };
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
+		4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */; };
+		4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
 		4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */; };
 		4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */; };
@@ -63,6 +65,12 @@
 		4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */; };
 		4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */; };
 		4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA65313CF72B300772054 /* CKProvisioningController.style */; };
+		4FF55BD013F1D10D00FBA1BC /* CKProvisioningSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */; };
+		4FF55BD113F1D10D00FBA1BC /* CKProvisioningSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */; };
+		4FF55BD513F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */; };
+		4FF55BD613F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */; };
+		4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */; };
+		4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		751F1EE113D0C3990041900C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EDF13D0C3990041900C /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -500,6 +508,8 @@
 		4F4A916A13F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-light-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
 		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/CKActionSheet.h; sourceTree = "<group>"; };
 		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/CKActionSheet.m; sourceTree = "<group>"; };
+		4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningReleaseViewController.h; path = Classes/CKProvisioningReleaseViewController.h; sourceTree = "<group>"; };
+		4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningReleaseViewController.m; path = Classes/CKProvisioningReleaseViewController.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
 		4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg.png"; sourceTree = "<group>"; };
 		4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg@2x.png"; sourceTree = "<group>"; };
@@ -519,7 +529,13 @@
 		4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-history-icon@2x.png"; sourceTree = "<group>"; };
 		4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon.png"; sourceTree = "<group>"; };
 		4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon@2x.png"; sourceTree = "<group>"; };
-		4FBBA65313CF72B300772054 /* CKProvisioningController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CKProvisioningController.style; sourceTree = "<group>"; };
+		4FBBA65313CF72B300772054 /* CKProvisioningController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CKProvisioningController.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
+		4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningSettingsController.h; path = Classes/CKProvisioningSettingsController.h; sourceTree = "<group>"; };
+		4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningSettingsController.m; path = Classes/CKProvisioningSettingsController.m; sourceTree = "<group>"; };
+		4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningReleaseNotesViewController.h; path = Classes/CKProvisioningReleaseNotesViewController.h; sourceTree = "<group>"; };
+		4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningReleaseNotesViewController.m; path = Classes/CKProvisioningReleaseNotesViewController.m; sourceTree = "<group>"; };
+		4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningHistoryViewController.h; path = Classes/CKProvisioningHistoryViewController.h; sourceTree = "<group>"; };
+		4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningHistoryViewController.m; path = Classes/CKProvisioningHistoryViewController.m; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
@@ -1827,6 +1843,14 @@
 				75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */,
 				75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */,
 				75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */,
+				4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */,
+				4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */,
+				4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */,
+				4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */,
+				4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */,
+				4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */,
+				4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */,
+				4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */,
 			);
 			name = Provisioning;
 			sourceTree = "<group>";
@@ -2064,6 +2088,10 @@
 				75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */,
 				75F295DE13EB0089009CCC70 /* CKFormTableViewController+Menus.h in Headers */,
 				75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */,
+				4FF55BD013F1D10D00FBA1BC /* CKProvisioningSettingsController.h in Headers */,
+				4FF55BD513F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h in Headers */,
+				4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */,
+				4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2403,6 +2431,10 @@
 				75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */,
 				75F295DF13EB0089009CCC70 /* CKFormTableViewController+Menus.m in Sources */,
 				75F2960613F04490009CCC70 /* CKPropertyGridCellController.m in Sources */,
+				4FF55BD113F1D10D00FBA1BC /* CKProvisioningSettingsController.m in Sources */,
+				4FF55BD613F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m in Sources */,
+				4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */,
+				4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

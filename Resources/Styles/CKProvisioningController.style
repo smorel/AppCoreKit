@@ -119,20 +119,16 @@
 				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
 			},
 
-			"UILabel[tag=10001]" : {
+			"UILabel[tag=454002]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontName" : "Helvetica-Bold",
 				"fontSize" : "20"
 			},
-			"UILabel[tag=10002]" : {
+			"UILabel[tag=454003]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontSize" : "16"
 			},
-			"UILabel[tag=10003,tag=10004]" : {
-				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
-				"fontSize" : "14"
-			},
-			"UIView[tag=10005]" : {
+			"UIView[tag=454901]" : {
 				"UILabel" : {
 					"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"]
 				}
@@ -145,7 +141,7 @@
 					"backgroundColor" : "0x444448"
 				},
 
-				"UIButton[tag=10000]" : {
+				"UIButton[tag=454004]" : {
 					"titleLabel" : {
 						"shadowOffset" : "0 -1",
 						"shadowColor" : "blackColor",
@@ -184,20 +180,20 @@
 				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
 			},
 
-			"UILabel[tag=10001]" : {
+			"UILabel[tag=454103]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontName" : "Helvetica-Bold",
 				"fontSize" : "20"
 			},
-			"UILabel[tag=10002]" : {
+			"UILabel[tag=454104]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontSize" : "16"
 			},
-			"UILabel[tag=10003,tag=10004]" : {
+			"UILabel[tag=454105,tag=454106]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontSize" : "14"
 			},
-			"UIView[tag=10005]" : {
+			"UIView[tag=454107]" : {
 				"UILabel" : {
 					"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"]
 				}
@@ -230,22 +226,40 @@
 		"UITableView" : {
 			"separatorStyle" : "UITableViewCellSeparatorStyleNone",
 			"backgroundColor" : "0x444448"
+		},
+		"CKDocumentCollectionViewCellController" : {
+			"noItemsMessage" : "No versions",
+			"oneItemMessage" : "1 version",
+			"manyItemsMessage" : "%d versions",
+			"indicatorStyle" : "UIActivityIndicatorViewStyleWhite",
+			"label" : {
+				"backgroundColor" : "clearColor",
+				"textAlignment" : "UITextAlignmentCenter",
+				"fontName" : "Helvetica",
+				"textColor" : "whiteColor"
+			},
+			"UITableViewCell" : {
+				"@inherits" : [ 
+							   "$RIGOLO_DARK_CELL"
+							   ],
+				"selectionStyle" : "UITableViewCellSelectionStyleNone"
+			}
 		}
 	},
 	"CKTableViewCellController[name=rigoloReleaseListCell]" : {
 		"UITableViewCell" : {
 			"@inherits" : ["$RIGOLO_DARK_CELL"],
-			"UILabel[tag=10000]" : {
+			"UILabel[tag=454301]" : {
 				"@inherits" : ["$RIGOLO_WHITE_LABEL"],
 				"fontName" : "Helvetica-Bold",
 				"fontSize" : "18"
 			},
-			"UILabel[tag=10001]" : {
+			"UILabel[tag=454302]" : {
 				"@inherits" : ["$RIGOLO_WHITE_LABEL"],
 				"fontSize" : "14",
 				"textColor" : "lightGrayColor"
 			},
-			"UIView[tag=10005]" : {
+			"UIView[tag=454303]" : {
 				"UILabel" : {
 					"@inherits" : ["$RIGOLO_RECOMMENDED_LABEL"],
 					"fontSize" : "12",
@@ -262,14 +276,14 @@
 	"CKProvisioningReleaseNotesViewController" : {
 		"view" : {
 			"backgroundColor" : "0x444448",
-			"UIView[tag=10000]" : {
+			"UIView[tag=454202]" : {
 				"@inherits" : ["$RIGOLO_LIGHT_GRAY_GRADIENT"]
 			},
-			"UILabel[tag=10001]" : {
+			"UILabel[tag=454203]" : {
 				"@inherits" : ["$RIGOLO_DARK_GRAY_LABEL"],
 				"fontName" : "Helvetica-Bold"
 			},
-			"UITextView[tag=10003]" : {
+			"UITextView[tag=454201]" : {
 				"textColor" : "0x304371"
 			}
 		}
