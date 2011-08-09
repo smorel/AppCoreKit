@@ -16,10 +16,9 @@
 #import "CKStyleManager.h"
 #import "CKBundle.h"
 #import "CKVersion.h"
-#import "CKDebug.h"
 #import "CKObjectProperty.h"
 #import "CKNSObject+Bindings.h"
-
+#import "CKDebug.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation CKProvisioningUserDefaults
@@ -357,7 +356,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		CKProvisioningControllerButton* installButton = [[[CKProvisioningControllerButton alloc] initWithFrame:CGRectMake(10, 20, controller.tableViewCell.contentView.bounds.size.width-20, 90)] autorelease];
-		installButton.tag = 10000;
+		installButton.tag = 19999;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 		[installButton setTitle:_(@"Check for Updates") forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
@@ -561,7 +560,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		CKProvisioningControllerButton* installButton = [[[CKProvisioningControllerButton alloc] initWithFrame:CGRectInset(controller.tableViewCell.contentView.bounds, 10, 20)] autorelease];
-		installButton.tag = 10000;
+		installButton.tag = 19999;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[installButton setTitle:_(@"INSTALL") forState:UIControlStateNormal];
 		[installButton setTitle:_(@"INSTALLED") forState:UIControlStateDisabled];
@@ -575,7 +574,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     [installCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         CKProductRelease* productRelease = (CKProductRelease*)controller.value;
-		CKProvisioningControllerButton *installButton = (CKProvisioningControllerButton *)[controller.tableViewCell.contentView viewWithTag:10000];
+		CKProvisioningControllerButton *installButton = (CKProvisioningControllerButton *)[controller.tableViewCell.contentView viewWithTag:19999];
 		installButton.enabled = ([productRelease.buildNumber isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]] == NO);
 		installButton.userInfo = productRelease;
         return (id)nil; 
