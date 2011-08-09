@@ -10,6 +10,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
+#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
@@ -29,8 +30,10 @@
 }
 
 - (void)onswitch{
+	CKObjectProperty* model = self.value;
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
-    [self setValueInObjectProperty:[NSNumber numberWithBool:s.on]];
+	[model setValue:[NSNumber numberWithBool:s.on]];
+	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 }
 
 - (void)onvalue{
@@ -42,13 +45,16 @@
 }
 
 - (void)textFieldChanged:(id)value{
+	CKObjectProperty* model = self.value;
 	NSNumber* number = (NSNumber*)[self.value value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
 	if(newNumber == nil){
-        [self setValueInObjectProperty:[NSNumber numberWithInt:0]];
+		[model setValue:[NSNumber numberWithInt:0]];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 	}
 	else if(![number isEqualToNumber:newNumber]){
-        [self setValueInObjectProperty:newNumber];
+		[model setValue:newNumber];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
 	}
 }
 

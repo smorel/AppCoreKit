@@ -11,18 +11,17 @@
 #include "CKLocalization.h"
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
 @interface CKNSDateViewController : CKUIViewController{
     CKObjectProperty* _property;
     UIDatePicker* _datePicker;
-    id _delegate;
 }
 
 @property(nonatomic,assign)CKObjectProperty* property;
 @property(nonatomic,retain)UIDatePicker* datePicker;
-@property(nonatomic,assign)id delegate;
 
 - (id)initWithProperty:(CKObjectProperty*)property;
 
@@ -31,7 +30,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 @implementation CKNSDateViewController
 @synthesize property = _property;
 @synthesize datePicker = _datePicker;
-@synthesize delegate = _delegate;
 
 - (id)initWithProperty:(CKObjectProperty*)theproperty{
     self = [super init];
@@ -43,7 +41,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     [self clearBindingsContext];
     [_datePicker release];
     _datePicker = nil;
-    _delegate = nil;
     [super dealloc];
 }
 
@@ -69,10 +66,8 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     
     [self beginBindingsContextByRemovingPreviousBindings];
     [_datePicker bindEvent:UIControlEventValueChanged withBlock:^() {
-        NSDate* newDate = [_datePicker date];
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:didSetValue:)]){
-            [_delegate performSelector:@selector(dateController:didSetValue:) withObject:self withObject:newDate];
-        }
+        [self.property setValue:[_datePicker date]];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:self.property];
     }];
     [self endBindingsContext];
 }
@@ -157,7 +152,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         if(CKNSDateSheetControllerSingleton == nil){
             CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
             dateController.title = _(descriptor.name);
-            dateController.delegate = self;
             CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];
             
             CKNSDateSheetControllerSingleton.delegate = self;
@@ -176,7 +170,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         
         CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
         dateController.title = _(descriptor.name);
-        dateController.delegate = self;
         
         CGFloat height = 160;
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
@@ -239,11 +232,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [self.popoverController dismissPopoverAnimated:YES];
     self.popoverController = nil;
-}
-
-
-- (void)dateController:(CKNSDateViewController*)controller didSetValue:(NSDate*)value{
-    [self setValueInObjectProperty:value];
 }
 
 @end

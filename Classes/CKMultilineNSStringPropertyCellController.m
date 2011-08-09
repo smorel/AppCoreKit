@@ -10,6 +10,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
+#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
 
@@ -137,7 +138,13 @@
 }
  
 - (void)textViewChanged:(id)value{
-    [self setValueInObjectProperty:value];
+	CKObjectProperty* model = self.value;
+	NSString* strValue = [model value];
+	if(value && ![value isKindOfClass:[NSNull class]] &&
+	   ![value isEqualToString:strValue]){
+		[model setValue:value];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	}
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

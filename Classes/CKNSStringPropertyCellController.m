@@ -11,6 +11,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
+#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
@@ -70,7 +71,13 @@
 }
 
 - (void)textFieldChanged:(id)value{
-    [self setValueInObjectProperty:value];
+	CKObjectProperty* model = self.value;
+	NSString* strValue = [model value];
+	if(value && ![value isKindOfClass:[NSNull class]] &&
+	   ![value isEqualToString:strValue]){
+		[model setValue:value];
+		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+	}
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -85,8 +92,9 @@
         cell.textLabel.text = _(descriptor.name);
     }
 	
-	if(self.textField){
-		[self.textField removeFromSuperview];
+	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	if(textField){
+		[textField removeFromSuperview];
 	}
 	cell.detailTextLabel.text = nil;
 	
@@ -96,12 +104,11 @@
 		[NSObject endBindingsContext];
 	}
 	else{
+		[cell.contentView addSubview:self.textField];
+		
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-        [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
-                                                         withBlock:^(NSNotification *notification) {
-                                                             [self textFieldChanged:self.textField.text];
-                                                              }];
+		[self.textField bind:@"text" target:self action:@selector(textFieldChanged:)];
 		[NSObject endBindingsContext];
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
@@ -113,7 +120,6 @@
 		else{
 			self.textField.returnKeyType = UIReturnKeyDone;
 		}
-		[cell.contentView addSubview:self.textField];
 	}
 }
 

@@ -350,7 +350,7 @@
                 return CGRectMake(10,11, cell.contentView.frame.size.width - 20, size.height);
             }
             else{
-                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, MAX(23,textFrame.size.height));
+                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, textFrame.size.height);
             }
         }
         else{
@@ -365,10 +365,10 @@
                     CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                    return CGRectMake(x,11, width, MAX(23,textFrame.size.height));
+                    return CGRectMake(x,11, width, textFrame.size.height);
                 }
                 else{
-                    return CGRectMake(x,11, width, MAX(23,textFrame.size.height));
+                    return CGRectMake(x,11, width, textFrame.size.height);
                 }
             }
             else{
