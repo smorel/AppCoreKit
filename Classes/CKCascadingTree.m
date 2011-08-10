@@ -628,7 +628,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (BOOL)importContentOfFile:(NSString*)path{
-	if([_loadedFiles containsObject:path])
+    if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
 	
     //TODO
