@@ -311,141 +311,6 @@
     return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
 }
 
-//Value3 layout 
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self value3TextFrameForCell:cell];
-    
-    CGFloat realWidth = cell.contentView.frame.size.width;
-	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - 10;
-    
-    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                   constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.detailTextLabel.lineBreakMode];
-	
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
-                                     width , MAX(textFrame.size.height,MAX(24,size.height))));
-}
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
-    
-    CGFloat realWidth = cell.contentView.frame.size.width;
-    CGFloat width = realWidth * self.componentsRatio;
-    
-    CGFloat maxWidth = realWidth - width - self.componentsSpace;
-
-    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.textLabel.lineBreakMode];
-    return CGRectMake(10,11,maxWidth,MAX(24,size.height));
-}
-
-//PropertyGrid layout
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell{
-    //TODO : factoriser un peu mieux ce code la ....
-    CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            if(cell.detailTextLabel.text != nil && 
-               [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-               [cell.detailTextLabel.text length] > 0 &&
-               cell.detailTextLabel.numberOfLines != 1){
-                
-                CGFloat realWidth = cell.contentView.frame.size.width;
-                CGFloat maxWidth = realWidth - 20;
-                
-                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                           constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                               lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, size.height);
-            }
-            else{
-                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, MAX(23,textFrame.size.height));
-            }
-        }
-        else{
-            //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-            CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.frame.size.width - 10 - x;
-            if(width > 0 ){
-                if(cell.detailTextLabel.text != nil && 
-                   [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-                   [cell.detailTextLabel.text length] > 0 &&
-                   cell.detailTextLabel.numberOfLines != 1){
-                    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                    return CGRectMake(x,11, width, MAX(23,textFrame.size.height));
-                }
-                else{
-                    return CGRectMake(x,11, width, MAX(23,textFrame.size.height));
-                }
-            }
-            else{
-                return CGRectMake(0,0,0,0);
-            }
-        }
-    }
-    return [self value3DetailFrameForCell:cell];
-}
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell{
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            return CGRectMake(0,0,0,0);
-        }
-        else{
-            CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat width = realWidth * self.componentsRatio;
-            
-            CGFloat maxWidth = realWidth - width - 10 - self.componentsSpace;
-            CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                               lineBreakMode:cell.textLabel.lineBreakMode];
-           // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
-            //NSLog(@"cell width : %f",realWidth);
-            //NSLog(@"textLabel size %f %f",size.width,size.height);
-            return CGRectMake(10,11, size.width, size.height);
-        }
-    }
-    return [self value3TextFrameForCell:cell];
-}
-
-- (void)layoutCell:(UITableViewCell *)cell{
-	//You can overload this method if you need to update cell layout when cell is resizing.
-	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
-	if(self.cellStyle == CKTableViewCellStyleValue3){
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self value3TextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		}
-	}
-}
-
 - (CKTableViewController*)parentTableViewController{
 	if([self.parentController isKindOfClass:[CKTableViewController class]]){
 		return (CKTableViewController*)self.parentController;
@@ -618,6 +483,148 @@
 
 - (void)setSelectable:(BOOL)bo{
     _selectable = bo;
+}
+
+@end
+
+
+
+@implementation CKTableViewCellController (CKLayout)
+
+
+//Value3 layout 
+- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
+    CGRect textFrame = [self value3TextFrameForCell:cell];
+    
+    CGFloat realWidth = cell.contentView.frame.size.width;
+	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - 10;
+    
+    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
+	
+	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
+                                     width , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
+}
+
+- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
+    if(cell.textLabel.text == nil || 
+       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
+       [cell.textLabel.text length] <= 0){
+        return CGRectMake(0,0,0,0);
+    }
+    
+    CGFloat realWidth = cell.contentView.frame.size.width;
+    CGFloat width = realWidth * self.componentsRatio;
+    
+    CGFloat maxWidth = realWidth - width - self.componentsSpace;
+    
+    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
+                                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
+                                       lineBreakMode:cell.textLabel.lineBreakMode];
+    return CGRectMake(10,11,maxWidth,MAX(cell.textLabel.font.lineHeight,size.height));
+}
+
+//PropertyGrid layout
+- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell{
+    //TODO : factoriser un peu mieux ce code la ....
+    CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(cell.textLabel.text == nil || 
+           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
+           [cell.textLabel.text length] <= 0){
+            if(cell.detailTextLabel.text != nil && 
+               [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
+               [cell.detailTextLabel.text length] > 0 &&
+               cell.detailTextLabel.numberOfLines != 1){
+                
+                CGFloat realWidth = cell.contentView.frame.size.width;
+                CGFloat maxWidth = realWidth - 20;
+                
+                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                                     constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
+                                                         lineBreakMode:cell.detailTextLabel.lineBreakMode];
+                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, size.height);
+            }
+            else{
+                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+            }
+        }
+        else{
+            //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+            CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
+            CGFloat width = cell.contentView.frame.size.width - 10 - x;
+            if(width > 0 ){
+                if(cell.detailTextLabel.text != nil && 
+                   [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
+                   [cell.detailTextLabel.text length] > 0 &&
+                   cell.detailTextLabel.numberOfLines != 1){
+                    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
+                    return CGRectMake(x,11, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                }
+                else{
+                    return CGRectMake(x,11, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                }
+            }
+            else{
+                return CGRectMake(0,0,0,0);
+            }
+        }
+    }
+    return [self value3DetailFrameForCell:cell];
+}
+
+- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell{
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(cell.textLabel.text == nil || 
+           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
+           [cell.textLabel.text length] <= 0){
+            return CGRectMake(0,0,0,0);
+        }
+        else{
+            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat width = realWidth * self.componentsRatio;
+            
+            CGFloat maxWidth = realWidth - width - 10 - self.componentsSpace;
+            CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
+                                           constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
+                                               lineBreakMode:cell.textLabel.lineBreakMode];
+            // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
+            //NSLog(@"cell width : %f",realWidth);
+            //NSLog(@"textLabel size %f %f",size.width,size.height);
+            return CGRectMake(10,11, size.width, size.height);
+        }
+    }
+    return [self value3TextFrameForCell:cell];
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+	//You can overload this method if you need to update cell layout when cell is resizing.
+	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
+	if(self.cellStyle == CKTableViewCellStyleValue3){
+		if(cell.detailTextLabel != nil){
+			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
+            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+		}
+		if(cell.textLabel != nil){
+			CGRect textFrame = [self value3TextFrameForCell:cell];
+			cell.textLabel.frame = textFrame;
+			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+		}
+	}
+    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+		if(cell.detailTextLabel != nil){
+			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
+            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+		}
+		if(cell.textLabel != nil){
+			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+			cell.textLabel.frame = textFrame;
+			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+		}
+	}
 }
 
 @end

@@ -93,16 +93,8 @@ typedef enum CKTableViewCellStyle {
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
 + (UIResponder*)responderInView:(UIView*)view;
 
-- (void)layoutCell:(UITableViewCell *)cell;
-
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
 
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
 
@@ -124,6 +116,19 @@ typedef enum CKTableViewCellStyle {
 - (BOOL)isEditable DEPRECATED_ATTRIBUTE;
 - (BOOL)isRemovable DEPRECATED_ATTRIBUTE;
 - (BOOL)isSelectable DEPRECATED_ATTRIBUTE;
+
+@end
+
+
+@interface CKTableViewCellController (CKLayout)
+
+- (void)layoutCell:(UITableViewCell *)cell;
+
+- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
+- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
+
+- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
+- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
 
 @end
 
