@@ -10,7 +10,6 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
 
@@ -40,7 +39,6 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
-	_textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	_textView.backgroundColor = [UIColor clearColor];
     _textView.tag = 50000;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
@@ -76,7 +74,7 @@
             if(cell.textLabel.text == nil || 
                [cell.textLabel.text isKindOfClass:[NSNull class]] ||
                [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,cell.contentView.bounds.size.height);
+                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
                 _textView.frame = textViewFrame;
             }
             else{
@@ -85,13 +83,13 @@
                 textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
                 cell.textLabel.frame = textFrame;
                 
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,cell.contentView.bounds.size.width - 30);
+                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
                 _textView.frame = textViewFrame;
             }
         }
         else{
             CGRect f = [self propertyGridDetailFrameForCell:cell];
-            _textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,f.size.height);
+            _textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,_textView.frame.size.height);
         }
     }
 }
@@ -101,23 +99,18 @@
     UIViewController* controller = [params parentController];
     NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
     
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)controller];
     CKObjectProperty* property = (CKObjectProperty*)object;
-    CKClassPropertyDescriptor* descriptor = [property descriptor];
     
     CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
     if([property isReadOnly] || staticController.readOnly){
         return [CKTableViewCellController viewSizeForObject:object withParams:params];
     }
     else{
-        NSString* text = _(descriptor.name);
-        NSString* detail = [NSString stringWithFormat:@"%@%@",[property value],
-                            ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? @"\nFAKE\nFAKE" : @"\nFAKE"];
-        //always have one or two lines more to avoid animation vs. carret glitch.
+        NSString* text = staticController.tableViewCell.textLabel.text;
+        NSString* detail = [property value];
         
-        //SEE how to get the real font ...
-        CGSize detailSize = [detail sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:CGSizeMake(rowWidth - 6,CGFLOAT_MAX)];
-        CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,detailSize.height);
+        CGRect newFrame = [staticController.textView frameForText:detail];        
+        CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,newFrame.size.height);
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             if(text == nil || 
                [text isKindOfClass:[NSNull class]] ||
@@ -138,13 +131,7 @@
 }
  
 - (void)textViewChanged:(id)value{
-	CKObjectProperty* model = self.value;
-	NSString* strValue = [model value];
-	if(value && ![value isKindOfClass:[NSNull class]] &&
-	   ![value isEqualToString:strValue]){
-		[model setValue:value];
-		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
-	}
+    [self setValueInObjectProperty:value];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -164,12 +151,19 @@
 		[NSObject endBindingsContext];
 	}
 	else{
-        _textView.delegate = self;
+        _respondsToFrameChange = NO;
         _textView.placeholder =  _(descriptor.name);
         _textView.text = [property value];
+        _textView.delegate = self;
         
         [self beginBindingsContextByRemovingPreviousBindings];
-        [property.object bind:property.keyPath toObject:_textView withKeyPath:@"text"];
+        [property.object bind:property.keyPath withBlock:^(id value) {
+            if(![_textView.text isEqualToString:value]){
+                _respondsToFrameChange = YES;
+                _textView.text = value;
+                _respondsToFrameChange = NO;
+            }
+        }];
         [self endBindingsContext];
         
         [cell.contentView addSubview:self.textView];
@@ -184,6 +178,7 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    _respondsToFrameChange = YES;
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
                                   atScrollPosition:UITableViewScrollPositionNone
                                           animated:YES];
@@ -198,13 +193,20 @@
     //Do not call the following code from here as we have a return button not next and textViewShouldEndEditing could be called when scrolling. 
     /*if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
         [textView resignFirstResponder];
-    }*/
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+     }*/
+    _respondsToFrameChange = NO;
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     return YES;
 }
 
 -(void)textViewValueChanged:(NSString*)text{
     [self textViewChanged:text];
+}
+
+
+-(void)textViewFrameChanged:(CGRect)frame{
+    if(!_respondsToFrameChange)
+        return;
     
     [[self parentTableView]beginUpdates];
     [[self parentTableView]endUpdates];

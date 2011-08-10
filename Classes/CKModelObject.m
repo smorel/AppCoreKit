@@ -12,6 +12,8 @@
 #import "CKLocalization.h"
 #import "CKDebug.h"
 #import "CKDocumentCollection.h"
+#import "CKNSObject+Bindings.h"
+#import "CKNSNotificationCenter+Edition.h"
 
 //nothing
 
@@ -487,8 +489,14 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	return NO;
 }
 
+@end
 
-- (BOOL)isValid{
+
+@implementation NSObject (CKValidation)
+
+
+- (CKObjectValidationResults*)validate{
+    CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
 	NSArray* allProperties = [self allPropertyDescriptors];
     for(CKClassPropertyDescriptor* property in allProperties){
         if(property.isReadOnly == NO){
@@ -496,12 +504,54 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
             if(metaData.validationPredicate){
                 id object = [self valueForKey:property.name];
                 if(![metaData.validationPredicate evaluateWithObject:object]){
-                    return NO;
+                    [results.invalidProperties addObject:property.name];
                 }
             }
         }
     }
-	return YES;
+	return results;
+}
+
+- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock{
+    //Register on property edition to send validation status when editing properties
+    [[NSNotificationCenter defaultCenter]bindNotificationName:CKEditionPropertyChangedNotification withBlock:^(NSNotification *notification) {
+        CKObjectProperty* property = [notification objectProperty];
+        if(property.object == self){
+            CKObjectValidationResults* validationResults = [self validate];
+            validationResults.modifiedKeyPath = property.keyPath;
+            if(validationBlock){
+                validationBlock(validationResults);
+            }
+        }
+    }];
+    
+    //Sends validation status synchronously
+    CKObjectValidationResults* validationResults = [self validate];
+    if(validationBlock){
+        validationBlock(validationResults);
+    }
+}
+
+@end
+
+
+@implementation CKObjectValidationResults
+@synthesize modifiedKeyPath,invalidProperties;
+
+- (id)init{
+    self = [super init];
+    self.invalidProperties = [NSMutableArray array];
+    return self;
+}
+
+- (void)dealloc{
+    self.modifiedKeyPath = nil;
+    self.invalidProperties = nil;
+    [super dealloc];
+}
+
+- (BOOL)isValid{
+    return [self.invalidProperties count] == 0;
 }
 
 @end

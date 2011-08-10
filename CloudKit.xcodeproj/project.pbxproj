@@ -487,6 +487,8 @@
 		75F295DF13EB0089009CCC70 /* CKFormTableViewController+Menus.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */; };
 		75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F2960613F04490009CCC70 /* CKPropertyGridCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */; };
+		75F2961213F196F9009CCC70 /* CKNSPredicate+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2961013F196F9009CCC70 /* CKNSPredicate+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -958,6 +960,8 @@
 		75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+Menus.m"; path = "Classes/CKFormTableViewController+Menus.m"; sourceTree = "<group>"; };
 		75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyGridCellController.h; path = Classes/CKPropertyGridCellController.h; sourceTree = "<group>"; };
 		75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyGridCellController.m; path = Classes/CKPropertyGridCellController.m; sourceTree = "<group>"; };
+		75F2961013F196F9009CCC70 /* CKNSPredicate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSPredicate+Additions.h"; path = "Classes/CKNSPredicate+Additions.h"; sourceTree = "<group>"; };
+		75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSPredicate+Additions.m"; path = "Classes/CKNSPredicate+Additions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1485,6 +1489,8 @@
 				7560DC5113B8ED3600268D13 /* CKUnit.m */,
 				7560DC5413B8ED3600268D13 /* CKVersion.h */,
 				7560DC5513B8ED3600268D13 /* CKVersion.m */,
+				75F2961013F196F9009CCC70 /* CKNSPredicate+Additions.h */,
+				75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1858,28 +1864,36 @@
 		75F2960213F04424009CCC70 /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
-				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
+				75F2960F13F1805F009CCC70 /* incomplete */,
 				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
 				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
 				7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */,
-				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
-				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
 				7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */,
 				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
-				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
-				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
 				75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */,
 				75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */,
-				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
-				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
-				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
-				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
 				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
 				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
 			);
 			name = Form;
+			sourceTree = "<group>";
+		};
+		75F2960F13F1805F009CCC70 /* incomplete */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
+				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
+				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
+				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
+				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
+				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
+				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
+				7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */,
+				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
+				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
+			);
+			name = incomplete;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2092,6 +2106,7 @@
 				4FF55BD513F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h in Headers */,
 				4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */,
 				4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */,
+				75F2961213F196F9009CCC70 /* CKNSPredicate+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2435,6 +2450,7 @@
 				4FF55BD613F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m in Sources */,
 				4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */,
 				4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */,
+				75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

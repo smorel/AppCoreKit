@@ -10,7 +10,6 @@
 #import "CKObjectProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
@@ -30,10 +29,8 @@
 }
 
 - (void)onswitch{
-	CKObjectProperty* model = self.value;
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
-	[model setValue:[NSNumber numberWithBool:s.on]];
-	[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+    [self setValueInObjectProperty:[NSNumber numberWithBool:s.on]];
 }
 
 - (void)onvalue{
@@ -45,16 +42,13 @@
 }
 
 - (void)textFieldChanged:(id)value{
-	CKObjectProperty* model = self.value;
 	NSNumber* number = (NSNumber*)[self.value value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
 	if(newNumber == nil){
-		[model setValue:[NSNumber numberWithInt:0]];
-		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+        [self setValueInObjectProperty:[NSNumber numberWithInt:0]];
 	}
 	else if(![number isEqualToNumber:newNumber]){
-		[model setValue:newNumber];
-		[[NSNotificationCenter defaultCenter]notifyPropertyChange:model];
+        [self setValueInObjectProperty:newNumber];
 	}
 }
 
@@ -186,6 +180,13 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+    CGFloat savedComponentRatio = self.componentsRatio;
+    if(s && self.cellStyle == CKTableViewCellStylePropertyGrid
+       && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        self.componentsRatio = 0;
+    }
+    
 	[super layoutCell:cell];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
@@ -198,8 +199,7 @@
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
-	
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+    
 	if(s){
 		if(self.cellStyle == CKTableViewCellStyleValue3){
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
@@ -217,6 +217,8 @@
             }
             //For iphone its an accessory view
 		}
+        
+        self.componentsRatio = savedComponentRatio;
 	}
 }
 

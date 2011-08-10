@@ -121,6 +121,7 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 @end
 
 
+
 /** TODO
  */
 @interface NSObject (CKModelObject)
@@ -128,7 +129,27 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 - (void)copy : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
-+ (NSDictionary*)validationPredicates;
+
+@end
+
+
+
+/** TODO
+ */
+@interface CKObjectValidationResults : NSObject{
+}
+@property(nonatomic,copy)NSString* modifiedKeyPath;
+@property(nonatomic,retain)NSMutableArray* invalidProperties;
 - (BOOL)isValid;
 
 @end
+
+/** TODO
+ */
+@interface NSObject (CKValidation)
+
+- (CKObjectValidationResults*)validate;
+- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock;
+
+@end
+

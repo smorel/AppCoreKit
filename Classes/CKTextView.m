@@ -8,6 +8,8 @@
 
 #import "CKTextView.h"
 
+#import <objc/runtime.h>
+
 @interface CKTextView ()
 
 @property (nonatomic, readwrite, retain) IBOutlet UILabel *placeholderLabel;
@@ -32,10 +34,13 @@
 	[self addSubview:self.placeholderLabel];
 
 	self.maxStretchableHeight = 0;
-	self.clipsToBounds = YES;
+	self.clipsToBounds = NO;
+    self.scrollEnabled = NO;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(valueDidChange) name:UITextViewTextDidChangeNotification object:self];
 	[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
+    
+    _oldFrame = self.frame;
 }
 
 - (id)init {
@@ -68,30 +73,57 @@
 
 //
 
+- (CGRect)frameForText:(NSString*)text{
+    CGRect newFrame = self.frame;
+    UIEdgeInsets insets = [self contentInset];
+    CGFloat width = self.contentSize.width;
+    
+    int topMargin = 0;
+    object_getInstanceVariable(self, "m_marginTop", (void **)(&topMargin));
+    
+    width = width - 2 * topMargin;
+    NSString* str = (self.text == nil || [self.text isKindOfClass:[NSNull class]] || [self.text length] <= 0 ) ? @"a" : self.text;
+    CGSize size = [str sizeWithFont:self.font 
+                  constrainedToSize:CGSizeMake( width  , CGFLOAT_MAX)];
+    CGFloat newheight = size.height + insets.top + insets.bottom + topMargin;
+    newFrame.size.height = MIN(self.maxStretchableHeight, newheight);
+    
+    return newFrame;
+}
+
 - (void)updateHeight {
 	if (self.maxStretchableHeight > 0) {
-		[UIView beginAnimations:nil context:nil];
-		CGRect newFrame = self.frame;
-		newFrame.size.height = MIN(self.maxStretchableHeight, self.contentSize.height);
-		self.frame = newFrame;
-		[UIView commitAnimations];
+        CGRect newFrame = [self frameForText:self.text];
+        if(_oldFrame.size.height != newFrame.size.height){
+            [UIView beginAnimations:nil context:nil];
+            self.frame = newFrame;
+            [UIView commitAnimations];
+            
+            if ([self.delegate respondsToSelector:@selector(textViewFrameChanged:)]) {
+                [self.delegate textViewFrameChanged:newFrame];
+            }
+        }
+
 		self.scrollEnabled = (self.contentSize.height > self.maxStretchableHeight);
+        
+        _oldFrame = newFrame;
 	}	
 }
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	[self updateHeight];
 }
 
 - (void)setText:(NSString *)text {
 	[super setText:text];
+    
 	self.placeholderLabel.hidden = [self hasText];
+	[self updateHeight];
 }
 
 //
 
-- (UIEdgeInsets)contentInset { return UIEdgeInsetsZero; }
+/*- (UIEdgeInsets)contentInset { return UIEdgeInsetsZero; }
 -(void)setContentInset:(UIEdgeInsets)s {
 	UIEdgeInsets insets = s;
 	
@@ -105,6 +137,10 @@
 		size.height = self.font.lineHeight + 16;
 	}
 	[super setContentSize:size];
+}*/
+
+- (CGPoint)contentOffset{
+    return CGPointMake(0, 0);
 }
 
 - (NSString *)placeholder {
@@ -123,6 +159,7 @@
 	if ([self.delegate respondsToSelector:@selector(textViewValueChanged:)]) {
 		[self.delegate textViewValueChanged:self.text];
 	}
+	[self updateHeight];
 }
 
 

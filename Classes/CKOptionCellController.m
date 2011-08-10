@@ -20,7 +20,7 @@
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
 @synthesize currentValue = _currentValue;
 @synthesize readOnly = _readOnly;
-
+@synthesize optionCellStyle;
 
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
 	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
@@ -29,6 +29,7 @@
 		self.values = values;
 		self.labels = labels;
 		self.cellStyle = UITableViewCellStyleValue1;
+        self.optionCellStyle = UITableViewCellStyleValue1;
 	}
 	return self;
 }
@@ -144,6 +145,7 @@
 	else{
 		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.value intValue]] autorelease];
 	}
+    optionTableController.optionCellStyle = self.optionCellStyle;
 	optionTableController.title = self.text;
 	optionTableController.optionTableDelegate = self;
 	[self.parentController.navigationController pushViewController:optionTableController animated:YES];

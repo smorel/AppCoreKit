@@ -16,6 +16,7 @@
 	UILabel *_placeholderLabel;
 	CGFloat _maxStretchableHeight;
     CGPoint _placeholderOffset;
+    CGRect _oldFrame;
 }
 
 @property (nonatomic, readonly, retain) IBOutlet UILabel *placeholderLabel;
@@ -24,6 +25,7 @@
 @property (nonatomic, assign) CGPoint placeholderOffset;
 
 - (void)updateHeight;
+- (CGRect)frameForText:(NSString*)text;
 
 @end
 
@@ -35,5 +37,6 @@
 @protocol CKTextViewDelegate
 
 -(void)textViewValueChanged:(NSString*)text;
+-(void)textViewFrameChanged:(CGRect)frame;
 
 @end
