@@ -34,7 +34,7 @@ static NSMutableDictionary* CKProvisioningProductMappings = nil;
 
 - (id)init {
 	[super init];
-    self.baseURL = [NSURL URLWithString:@"http://10.0.1.100/v1/app/"];
+    self.baseURL = [NSURL URLWithString:@"http://rigolo.wherecloud.com/v1/app/"];
     return self;
 }
 
