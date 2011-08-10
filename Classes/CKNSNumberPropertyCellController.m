@@ -180,6 +180,13 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+    CGFloat savedComponentRatio = self.componentsRatio;
+    if(s && self.cellStyle == CKTableViewCellStylePropertyGrid
+       && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        self.componentsRatio = 0;
+    }
+    
 	[super layoutCell:cell];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
@@ -192,8 +199,7 @@
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
-	
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+    
 	if(s){
 		if(self.cellStyle == CKTableViewCellStyleValue3){
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
@@ -211,6 +217,8 @@
             }
             //For iphone its an accessory view
 		}
+        
+        self.componentsRatio = savedComponentRatio;
 	}
 }
 
