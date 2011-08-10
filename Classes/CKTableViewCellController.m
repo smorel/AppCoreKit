@@ -201,10 +201,16 @@
         
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
+        
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
             cell.textLabel.font = [UIFont boldSystemFontOfSize:17];

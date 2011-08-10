@@ -14,7 +14,7 @@
  This provides the base value for the mecanisms that should be implemented in subclasses like readonly, or value validation.
  */
 @interface CKPropertyGridCellController : CKTableViewCellController {
-    UIColor* _oldBackgroundColor;
+    UIButton* _validationButton;
 }
 /** 
  Specify whether the cell should be editable or readonly. Depending on this value, the detail ui view should change.
@@ -40,10 +40,14 @@
  */
 - (BOOL)isValidValue:(id)value;
 
+/** 
+ This method will validate the value using the property predicate, set the value in the property and update the display to reflect validation status.
+ @param id value : the value that should be validated
+ */
 - (void)setValueInObjectProperty:(id)value;
 
 
 //Private
-- (void)changeUIToReflectValidity:(BOOL)validity;
+- (void)setInvalidButtonVisible:(BOOL)visible;
 
 @end
