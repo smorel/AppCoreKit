@@ -664,6 +664,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
             importFileExtension = mainExtension;
         }
         NSString* path = [[NSBundle mainBundle]pathForResource:importFileName ofType:importFileExtension];
+        NSLog(@"processImportsForDictionary %@ with path %@",importFileName,path);
         [self importContentOfFile:path];
 	}
 	[dictionary removeObjectForKey:CKCascadingTreeImport];
