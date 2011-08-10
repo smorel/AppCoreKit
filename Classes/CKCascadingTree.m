@@ -166,6 +166,8 @@ NSString* CKCascadingTreeParent   = @"CKCascadingTreeParent";
 NSString* CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
 NSString* CKCascadingTreeInherits = @"@inherits";
 NSString* CKCascadingTreeImport   = @"@import";
+NSString* CKCascadingTreeIPad     = @"@ipad";
+NSString* CKCascadingTreeIPhone   = @"@iphone";
 
 @interface NSObject (CKCascadingTree)
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
@@ -268,6 +270,33 @@ NSString* CKCascadingTreeImport   = @"@import";
 	}
 }
 
+- (void)makeAllPlatformSpecific{
+    BOOL isIphone = [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
+    if(isIphone){
+        [self removeObjectForKey:CKCascadingTreeIPad];
+        NSDictionary* iphoneDico = [self objectForKey:CKCascadingTreeIPhone];
+        [self addEntriesFromDictionary:iphoneDico];
+        [self removeObjectForKey:CKCascadingTreeIPhone];
+    }
+    else{
+        [self removeObjectForKey:CKCascadingTreeIPhone];
+        NSDictionary* ipadDico = [self objectForKey:CKCascadingTreeIPad];
+        [self addEntriesFromDictionary:ipadDico];
+        [self removeObjectForKey:CKCascadingTreeIPad];
+    }
+    
+    //Apply makeAllPlatformSpecific to self
+    for(NSString* obj in [self allKeys]){
+        if([obj isEqual:CKCascadingTreeParent] == NO
+           && [obj isEqual:CKCascadingTreeEmpty] == NO
+           && [obj isEqual:CKCascadingTreeFormats] == NO){
+            if([obj isKindOfClass:[NSMutableDictionary class]]){
+                [(NSMutableDictionary*)obj makeAllPlatformSpecific];
+            }
+        }
+    }
+}
+
 - (void)makeAllInherits{
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
@@ -356,6 +385,7 @@ NSString* CKCascadingTreeImport   = @"@import";
 }
 
 - (void)postInitAfterLoading{
+    [self makeAllPlatformSpecific];
     [self makeAllInherits];
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
