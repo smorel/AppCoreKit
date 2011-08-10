@@ -23,14 +23,13 @@
 NSMutableDictionary* CKModelObjectManager = nil;
 
 @interface CKModelObject (CKStoreAdditionPrivate)
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved;
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive;
 @end
 
 @implementation CKModelObject (CKStoreAddition)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
-	NSMutableSet* alreadySaved = [NSMutableSet set];
-	return [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+	return [self attributesDictionaryForDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:NO];
 }
 
 - (void)deleteFromDomainNamed:(NSString*)domain{
@@ -43,7 +42,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	}
 }
 
-+ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain  alreadySaved:(NSMutableSet*)alreadySaved{
++ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	BOOL created;
 	CKItem *item = [store fetchItemWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", object.modelName, domain]
@@ -53,14 +52,14 @@ NSMutableDictionary* CKModelObjectManager = nil;
 		item.domain = store.domain;
 		[store.domain addItemsObject:item];
 	}
-	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 	[item updateAttributes:attributes];
 	
 	CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 	return item;
 }
 
-- (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
+- (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
 	if(_saving || _loading)
 		return nil;
 	
@@ -69,13 +68,13 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	if(self.uniqueId == nil){
 		self.uniqueId = [NSString stringWithNewUUID];
 		[CKModelObject registerObject:self withUniqueId:self.uniqueId];
-		item = [CKModelObject createItemWithObject:self inDomainNamed:domain alreadySaved:alreadySaved];
+		item = [CKModelObject createItemWithObject:self inDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 	}
 	else{
 		item = [CKModelObject itemWithObject:self inDomainNamed:domain];
 		if(item != nil){
 			item.name = self.modelName;
-			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved];
+			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 			[item updateAttributes:attributes];
 			CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 		}
@@ -91,13 +90,16 @@ NSMutableDictionary* CKModelObjectManager = nil;
 }
 
 + (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain {
-	return [self createItemWithObject:object inDomainNamed:domain alreadySaved:[NSMutableSet set]];
+	return [self createItemWithObject:object inDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:NO];
 }
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain{
-	return [self saveToDomainNamed:domain alreadySaved:[NSMutableSet set]];
+	return [self saveToDomainNamed:domain recursive:NO];
 }
 
+- (CKItem*)saveToDomainNamed:(NSString*)domain recursive:(BOOL)recursive{
+	return [self saveToDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:recursive];
+}
 
 + (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain{
 	return [CKModelObject itemWithObject:object inDomainNamed:domain createIfNotFound:NO];
@@ -183,8 +185,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 
 @implementation CKModelObject (CKStoreAdditionPrivate)
 
-
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved{
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
 	NSAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	
@@ -211,10 +212,15 @@ NSMutableDictionary* CKModelObjectManager = nil;
 					NSAssert([subObject isKindOfClass:[CKModelObject class]],@"Supports only auto serialization on CKModelObject");
 					CKModelObject* model = (CKModelObject*)subObject;
 					CKItem* item = nil;
-					if([alreadySaved containsObject:model] || model.uniqueId != nil){
-						item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+					if(model.uniqueId != nil){
+                        if([alreadySaved containsObject:model] || !recursive){
+                            item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+                        }
+                        else{
+                            item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                        }
 					}else{
-						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
+						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 					}
 					[result addObject:item];
 				}
@@ -225,11 +231,17 @@ NSMutableDictionary* CKModelObjectManager = nil;
 				
 				NSMutableArray* result = [NSMutableArray array];
 				CKItem* item = nil;
-				if([alreadySaved containsObject:model] || model.uniqueId != nil){
-					item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
-				}else{
-					item = [model saveToDomainNamed:domain alreadySaved:alreadySaved];
-				}
+                if(model.uniqueId != nil){
+                    if([alreadySaved containsObject:model] || !recursive){
+                        item = [CKModelObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+                    }
+                    else{
+                        item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                    }
+                }else{
+                    item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                }
+                
 				[result addObject:item];
 				[dico setObject:result forKey:propertyName];
 			}

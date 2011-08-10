@@ -22,6 +22,8 @@ extern NSMutableDictionary* CKModelObjectManager;
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain;
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain;
+- (CKItem*)saveToDomainNamed:(NSString*)domain recursive:(BOOL)recursive;
+
 - (void)deleteFromDomainNamed:(NSString*)domain;
 + (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain;
 
