@@ -11,6 +11,7 @@
 #include "CKLocalization.h"
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
+#import "CKPopoverController.h"
 
 static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
@@ -89,25 +90,19 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     [_datePicker setDate:[_property value]];
 }
 
+- (CGSize)contentSizeForViewInPopover{
+    CGFloat height = 160;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+    if(UIInterfaceOrientationIsPortrait(orientation)){
+        height = 216;
+    }
+    return CGSizeMake(320,height);
+}
+
 @end
 
-
-
-@interface CKNSDatePropertyCellController()
-@property(nonatomic,retain)UIPopoverController* popoverController;
-@end
 
 @implementation CKNSDatePropertyCellController
-@synthesize popoverController;
-
-- (void)dealloc{
-    self.popoverController = nil;
-    if(_registeredOnOrientationChange){
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-        _registeredOnOrientationChange = NO;
-    }
-    [super dealloc];
-}
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
@@ -182,24 +177,13 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         dateController.title = _(descriptor.name);
         dateController.delegate = self;
         
-        CGFloat height = 160;
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
-        if(UIInterfaceOrientationIsPortrait(orientation)){
-            height = 216;
-        }
-        dateController.contentSizeForViewInPopover = CGSizeMake(320,height);
-        
-        self.popoverController = [[UIPopoverController alloc]initWithContentViewController:dateController];
-        self.popoverController.delegate = self;
+        CKPopoverController* popoverController = [[CKPopoverController alloc]initWithContentViewController:dateController];
         
         UITableViewCell* cell = [self tableViewCell];
-        [self.popoverController presentPopoverFromRect:[cell bounds] 
+        [popoverController presentPopoverFromRect:[cell bounds] 
                                  inView:cell 
                permittedArrowDirections:UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown
                                animated:YES];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
-        _registeredOnOrientationChange = YES;
     }
     
     NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
@@ -231,28 +215,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     [CKNSDateSheetControllerSingleton release];
     CKNSDateSheetControllerSingleton = nil;
 }
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController{
-    return YES;
-}
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
-    self.popoverController = nil;
-    if(_registeredOnOrientationChange){
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-        _registeredOnOrientationChange = NO;
-    }
-}
-
-- (void)orientationChanged:(NSNotification*)notif{
-    if(_registeredOnOrientationChange){
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-        _registeredOnOrientationChange = NO;
-    }
-    [self.popoverController dismissPopoverAnimated:YES];
-    self.popoverController = nil;
-}
-
 
 - (void)dateController:(CKNSDateViewController*)controller didSetValue:(NSDate*)value{
     [self setValueInObjectProperty:value];

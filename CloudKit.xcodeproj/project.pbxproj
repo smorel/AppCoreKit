@@ -483,6 +483,8 @@
 		75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */; };
 		75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */; };
+		75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16BF13F32B4500835FE3 /* CKPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC16C013F32B4500835FE3 /* CKPopoverController.m */; };
 		75F295DE13EB0089009CCC70 /* CKFormTableViewController+Menus.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F295DC13EB0088009CCC70 /* CKFormTableViewController+Menus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F295DF13EB0089009CCC70 /* CKFormTableViewController+Menus.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */; };
 		75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -956,6 +958,8 @@
 		75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningWebService.m; path = Classes/CKProvisioningWebService.m; sourceTree = "<group>"; };
 		75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningController.h; path = Classes/CKProvisioningController.h; sourceTree = "<group>"; };
 		75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningController.m; path = Classes/CKProvisioningController.m; sourceTree = "<group>"; };
+		75CC16BF13F32B4500835FE3 /* CKPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPopoverController.h; path = Classes/CKPopoverController.h; sourceTree = "<group>"; };
+		75CC16C013F32B4500835FE3 /* CKPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPopoverController.m; path = Classes/CKPopoverController.m; sourceTree = "<group>"; };
 		75F295DC13EB0088009CCC70 /* CKFormTableViewController+Menus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+Menus.h"; path = "Classes/CKFormTableViewController+Menus.h"; sourceTree = "<group>"; };
 		75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+Menus.m"; path = "Classes/CKFormTableViewController+Menus.m"; sourceTree = "<group>"; };
 		75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyGridCellController.h; path = Classes/CKPropertyGridCellController.h; sourceTree = "<group>"; };
@@ -1199,6 +1203,8 @@
 				7506E40413B8FF6700EE1471 /* Views */,
 				757578F913E71C000082C247 /* CKSheetController.h */,
 				757578FA13E71C000082C247 /* CKSheetController.m */,
+				75CC16BF13F32B4500835FE3 /* CKPopoverController.h */,
+				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -2107,6 +2113,7 @@
 				4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */,
 				4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */,
 				75F2961213F196F9009CCC70 /* CKNSPredicate+Additions.h in Headers */,
+				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2451,6 +2458,7 @@
 				4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */,
 				4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */,
 				75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */,
+				75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

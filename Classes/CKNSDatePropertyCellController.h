@@ -13,8 +13,7 @@
 
 /** TODO
  */
-@interface CKNSDatePropertyCellController : CKPropertyGridCellController<CKSheetControllerDelegate,UIPopoverControllerDelegate> {
-    BOOL _registeredOnOrientationChange;
+@interface CKNSDatePropertyCellController : CKPropertyGridCellController<CKSheetControllerDelegate> {
 }
 
 @end
