@@ -36,6 +36,7 @@
 @property (nonatomic, readonly) NSInteger selectedIndex;
 @property (nonatomic, retain,readonly) NSMutableArray* selectedIndexes;
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
+@property (nonatomic, assign) CKTableViewCellStyle optionCellStyle;
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index;
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled;

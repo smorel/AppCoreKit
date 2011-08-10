@@ -20,22 +20,29 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 
 
 + (NSString*)identifierForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
-	CKCallback* callback = [item createCallback];
-	if(callback){
-		[callback execute:controller];
-	}
+	CKItemViewController* controller = [CKItemViewController controllerForItem:item object:object indexPath:indexPath parentController:parentController];
 	return [controller identifier];
 }
 
 
 + (NSMutableDictionary*)styleForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
+	CKItemViewController* controller = [CKItemViewController controllerForItem:item object:object indexPath:indexPath parentController:parentController];
+	return [controller controllerStyle];
+}
+
+
++ (CKItemViewController*)controllerForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
+    CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
 	CKCallback* callback = [item createCallback];
 	if(callback){
 		[callback execute:controller];
 	}
-	return [controller controllerStyle];
+    if(controller.view == nil){
+        controller.view = [controller loadView];
+        //As controller.view is a weak ref and this view will not get retained by the table, we keep a reference on it as a retain.
+		[CKTableViewCellControllerInstances setObject:controller.view forKey:[NSString stringWithFormat:@"<%p>",controller.view]];
+    }
+    return controller;
 }
 
 + (CKItemViewController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
@@ -59,13 +66,6 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	[controller performSelector:@selector(setParentController:) withObject:parentController];
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];	
-    
-    if(created){
-        //Ptet caller le create block si possible ...
-        controller.view = [controller loadView];
-        //As controller.view is a weak ref and this view will not get retained by the table, we keep a reference on it as a retain.
-		[CKTableViewCellControllerInstances setObject:controller.view forKey:[NSString stringWithFormat:@"<%p>",controller.view]];
-    }
     
 	return controller;
 }

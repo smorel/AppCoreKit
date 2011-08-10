@@ -191,6 +191,10 @@
         [cellDescriptor setCreateBlock:^(id controller){
             CKTableViewCellController* cellController = (CKTableViewCellController*)controller;
             cellController.cellStyle = CKTableViewCellStylePropertyGrid;
+            if([cellController respondsToSelector:@selector(setOptionCellStyle:)]){
+                [cellController setOptionCellStyle:CKTableViewCellStylePropertyGrid];
+            }
+            
             if([cellController respondsToSelector:@selector(setReadOnly:)]){
                 NSMethodSignature *signature = [controller methodSignatureForSelector:@selector(setReadOnly:)];
 				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];

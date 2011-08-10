@@ -173,7 +173,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 
 
 - (CKItemViewController*)setupStaticControllerWithParams:(NSMutableDictionary*)params withStyle:(NSMutableDictionary*)controllerStyle withObject:(id)object withIndexPath:(NSIndexPath*)indexPath{
-    CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForClass:self.controllerClass
+    CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForItem:self
                                                                                                       object:object 
                                                                                                    indexPath:indexPath 
                                                                                             parentController:[params parentController]];

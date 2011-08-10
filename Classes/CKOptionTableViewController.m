@@ -28,6 +28,8 @@
 @synthesize labels = _labels;
 @synthesize selectedIndexes = _selectedIndexes;
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
+@synthesize optionCellStyle;
+
 
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index {
@@ -39,7 +41,7 @@
 		self.stickySelection = YES;
 		self.multiSelectionEnabled = NO;
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
-		[self setup];
+        self.optionCellStyle = CKTableViewCellStyleValue1;
 	}
 	return self;	
 }
@@ -53,7 +55,7 @@
 		self.stickySelection = !multiSelect;
 		self.multiSelectionEnabled = multiSelect;
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
-		[self setup];
+        self.optionCellStyle = CKTableViewCellStyleValue1;
 	}
 	return self;	
 }
@@ -65,6 +67,12 @@
     [super dealloc];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [self clear];
+    [self setup];
+    [super viewWillAppear:animated];
+}
+
 //
 
 - (void)setup {
@@ -74,6 +82,7 @@
 		
 		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKTableViewCellController class]];
         [descriptor setCreateTarget:self action:@selector(createCell:)];
+		[descriptor setInitTarget:self action:@selector(initCell:)];
 		[descriptor setSetupTarget:self action:@selector(setupCell:)];
 		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
 		[cells addObject:descriptor];
@@ -83,9 +92,18 @@
 
 - (id)createCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-    standardController.cellStyle = CKTableViewCellStylePropertyGrid;
-    standardController.componentsRatio = 0;
+    standardController.componentsRatio = 1;
+    standardController.cellStyle = self.optionCellStyle;
     return nil;
+}
+
+- (id)initCell:(id)controller{
+	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
+    if(standardController.cellStyle == CKTableViewCellStyleValue3
+       || standardController.cellStyle == CKTableViewCellStylePropertyGrid){
+        standardController.tableViewCell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+	}
+	return nil;
 }
 
 - (id)setupCell:(id)controller{
@@ -97,8 +115,21 @@
 	else{
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
 	}
-    NSString* text = self.labels ? [self.labels objectAtIndex:standardController.indexPath.row] : [NSString stringWithFormat:@"%@", [self.values objectAtIndex:standardController.indexPath.row]];
-	standardController.tableViewCell.textLabel.text = text;
+    
+    NSString* text = @"UNKNOWN";
+    NSUInteger rowIndex = standardController.indexPath.row;
+    if(_labels){
+        if(rowIndex < [_labels count]){
+            text = [_labels objectAtIndex:rowIndex];
+        }
+    }
+    else{
+        if(rowIndex < [_values count]){
+            text = [_values objectAtIndex:rowIndex];
+        }
+    }
+    standardController.tableViewCell.textLabel.text = @"";
+	standardController.tableViewCell.detailTextLabel.text = text;
 	return nil;
 }
 

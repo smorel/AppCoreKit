@@ -178,6 +178,13 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        
+        //Ensure detailTextLabel is created !
+        if(cell.detailTextLabel == nil){
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,100,44)];
+            object_setInstanceVariable(cell, "_detailTextLabel", (void**)(label));
+        }
+        
 		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
         [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
@@ -187,6 +194,7 @@
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
         cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
         cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
 		cell.detailTextLabel.textColor = [UIColor blackColor];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
@@ -196,6 +204,7 @@
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
             cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
@@ -295,7 +304,7 @@
        || staticController.cellStyle == CKTableViewCellStylePropertyGrid){
         CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
         CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-        
+               
         CGFloat maxHeight = MAX(bottomText,MAX(34,bottomDetails)) + 10;
         return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
     }
@@ -313,10 +322,17 @@
                                    constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                        lineBreakMode:cell.detailTextLabel.lineBreakMode];
 	
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, width , MAX(textFrame.size.height,MAX(24,size.height))));
+	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
+                                     width , MAX(textFrame.size.height,MAX(24,size.height))));
 }
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
+    if(cell.textLabel.text == nil || 
+       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
+       [cell.textLabel.text length] <= 0){
+        return CGRectMake(0,0,0,0);
+    }
+    
     CGFloat realWidth = cell.contentView.frame.size.width;
     CGFloat width = realWidth * self.componentsRatio;
     
