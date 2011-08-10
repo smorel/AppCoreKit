@@ -102,6 +102,10 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
 - (void)dealloc{
     self.popoverController = nil;
+    if(_registeredOnOrientationChange){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        _registeredOnOrientationChange = NO;
+    }
     [super dealloc];
 }
 
@@ -195,6 +199,7 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
                                animated:YES];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        _registeredOnOrientationChange = YES;
     }
     
     NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
@@ -233,10 +238,17 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
     self.popoverController = nil;
+    if(_registeredOnOrientationChange){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        _registeredOnOrientationChange = NO;
+    }
 }
 
 - (void)orientationChanged:(NSNotification*)notif{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    if(_registeredOnOrientationChange){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+        _registeredOnOrientationChange = NO;
+    }
     [self.popoverController dismissPopoverAnimated:YES];
     self.popoverController = nil;
 }
