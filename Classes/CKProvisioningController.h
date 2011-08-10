@@ -12,6 +12,8 @@
 #import "CKUserDefaults.h"
 #import "CKFormTableViewController.h"
 
+NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease);
+
 @interface CKProvisioningUserDefaults : CKUserDefaults{}
 @property (nonatomic,assign)BOOL autoCheck;
 @end
@@ -32,5 +34,10 @@
 - (CKFormTableViewController *)controllerForSettings;
 - (CKObjectTableViewController *)controllerForProductReleases;
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
+
+- (void)presentSettingsControllerInViewController:(UIViewController*)controller fromBarButtonItem:(UIBarButtonItem*)barButtonItem;
+- (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController;
+
++ (UIView *)recommendedView;
 
 @end

@@ -84,6 +84,7 @@
 		versionLabel.shadowOffset = CGSizeMake(0, 1);
 		versionLabel.font = [UIFont systemFontOfSize:14];
 		versionLabel.text = appVersion;
+		versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		[versionLabel sizeToFit];
 		
 		UIView *plateContainerView = [[[UIView alloc] initWithFrame:self.plateView.frame] autorelease];
@@ -94,10 +95,12 @@
 
 		CGFloat titleViewOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(self.titleView.bounds)) / 2);
 		self.titleView.frame = CGRectOffset(self.titleView.frame, titleViewOffsetX, topMargin);
+		self.titleView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		
 		CGFloat plateViewOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(plateContainerView.bounds)) / 2);
 		CGFloat plateViewOffsetY = roundf(CGRectGetMaxY(self.titleView.frame) + titlePlateMargin);
 		plateContainerView.frame = CGRectOffset(plateContainerView.frame, plateViewOffsetX, plateViewOffsetY);
+		plateContainerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		
 		CGFloat versionLabelOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(versionLabel.bounds)) / 2);
 		CGFloat versionLabelOffsetY = roundf(CGRectGetMaxY(plateContainerView.frame) + plateVersionMargin);
@@ -107,12 +110,14 @@
 		[self addSubview:plateContainerView];
 		[self addSubview:versionLabel];
 		
+		/*
 		UISwipeGestureRecognizer *leftSwipeGesture = [[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftSwipeGesture:)] autorelease];
 		leftSwipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
 		[self addGestureRecognizer:leftSwipeGesture];
 		UISwipeGestureRecognizer *rightSwipeGesture = [[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleRightSwipeGesture:)] autorelease];
 		rightSwipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
 		[self addGestureRecognizer:rightSwipeGesture];
+		 */
 	}
 	return self;
 }
