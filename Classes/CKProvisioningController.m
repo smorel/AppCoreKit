@@ -77,13 +77,14 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 + (UIView *)recommendedView;
 
 @property(nonatomic,retain) NSMutableArray* items;
-
+@property(nonatomic,retain) UIViewController* modalParentViewController;
 @end
 
 @implementation CKProvisioningController
 @synthesize items = _items;
 @synthesize parentViewController = _parentViewController;
 @synthesize popoverController = _popoverController;
+@synthesize modalParentViewController;
 
 - (id)initWithParentViewController:(UIViewController*)controller{
     self = [super init];
@@ -116,6 +117,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     [_items release]; _items = nil;
     [_parentViewController release]; _parentViewController = nil;
 	[_popoverController release]; _popoverController = nil;
+	[self.modalParentViewController release]; self.modalParentViewController = nil;
     [super dealloc];
 }
 
@@ -176,28 +178,38 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 
 #pragma mark - Presentation
 
-- (void)presentController:(CKObjectTableViewController *)controller {
-	UIViewController* rootController = self.parentViewController;
-	NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
+- (void)presentController:(CKObjectTableViewController *)controller inViewController:(UIViewController *)rootController fromBarButtonItem:(UIBarButtonItem *)barButtonItem {
+//	NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
 	if(rootController.modalViewController == nil
        && ![self.popoverController isPopoverVisible] ){
 		UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:controller]autorelease];
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 			controller.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
-																					  target:self 
-																					  action:@selector(dismissPopover:)] autorelease];
+																				  target:self 
+																				  action:@selector(dismissPopover:)] autorelease];
 			if (self.popoverController) {
 				[self.popoverController dismissPopoverAnimated:YES];
 			}
 			self.popoverController = [[[UIPopoverController alloc] initWithContentViewController:navController] autorelease];
 			self.popoverController.delegate = self;
-			[self.popoverController presentPopoverFromRect:CGRectMake(0, -10, rootController.view.bounds.size.width, 10) inView:rootController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+			
+			if (barButtonItem) {
+				[self.popoverController presentPopoverFromBarButtonItem:barButtonItem
+											   permittedArrowDirections:UIPopoverArrowDirectionAny
+															   animated:YES];
+			}
+			else {
+				[self.popoverController presentPopoverFromRect:CGRectMake(0, -10, rootController.view.bounds.size.width, 10)
+														inView:rootController.view
+									  permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+			}
 		}
 		else {
 			controller.leftButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
 																					  target:self 
 																					  action:@selector(dismissModal:)] autorelease];
 			[rootController presentModalViewController:navController animated:YES];
+			self.modalParentViewController = rootController;
 		}
 	}
     else{
@@ -209,6 +221,14 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
             [rootController.modalViewController.navigationController pushViewController:controller animated:YES];
         }
     }
+}
+
+- (void)presentController:(CKObjectTableViewController *)controller inViewController:(UIViewController *)rootController {
+	[self presentController:controller inViewController:rootController fromBarButtonItem:nil];
+}
+
+- (void)presentController:(CKObjectTableViewController *)controller {
+	[self presentController:controller inViewController:self.parentViewController];
 }
 
 - (void)displayProductReleases:(NSArray*)productReleases {
@@ -271,7 +291,11 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 - (void)dismissModal:(id)sender{
     UIViewController* rootController =  self.parentViewController;
     NSAssert(rootController != nil,@"You must initialize the controller with a parentViewController");
-    [rootController dismissModalViewControllerAnimated:YES];
+	if (self.modalParentViewController) {
+		[self.modalParentViewController dismissModalViewControllerAnimated:YES];
+		self.modalParentViewController = nil;
+	} else
+		[rootController dismissModalViewControllerAnimated:YES];
 }
 
 - (void)dismissPopover:(id)sender {
@@ -283,6 +307,14 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 // Settings
 - (CKFormTableViewController *)controllerForSettings {
 	return [CKProvisioningSettingsController controllerWithProvisioningController:self];
+}
+
+- (void)presentSettingsControllerInViewController:(UIViewController*)controller fromBarButtonItem:(UIBarButtonItem*)barButtonItem {
+	if (self.popoverController && self.popoverController.isPopoverVisible) {
+		[self.popoverController dismissPopoverAnimated:YES];
+	} else {
+		[self presentController:[self controllerForSettings] inViewController:controller fromBarButtonItem:barButtonItem];	
+	}
 }
 
 // Release History

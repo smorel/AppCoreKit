@@ -35,6 +35,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease);
 - (CKObjectTableViewController *)controllerForProductReleases;
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
 
+- (void)presentSettingsControllerInViewController:(UIViewController*)controller fromBarButtonItem:(UIBarButtonItem*)barButtonItem;
 - (void)displayProductRelease:(CKProductRelease*)productRelease parentController:(UIViewController*)parentController;
 
 + (UIView *)recommendedView;
