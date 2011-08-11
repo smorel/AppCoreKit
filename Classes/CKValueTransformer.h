@@ -11,9 +11,7 @@
 
 /** TODO
  */
-@interface CKValueTransformer : NSObject {
-
-}
+@interface CKValueTransformer : NSObject {}
 
 + (id)transformValue:(id)value toClass:(Class)type;
 
