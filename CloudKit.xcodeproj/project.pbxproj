@@ -43,34 +43,7 @@
 		4F4A917213F040EC0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */; };
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
-		4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */; };
-		4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
-		4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */; };
-		4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */; };
-		4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */; };
-		4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */; };
-		4FBA90A413D0D5AD00C7A237 /* rigolo-btn-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA90A213D0D5AD00C7A237 /* rigolo-btn-blue.png */; };
-		4FBA90A513D0D5AD00C7A237 /* rigolo-btn-blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBA90A313D0D5AD00C7A237 /* rigolo-btn-blue@2x.png */; };
-		4FBBA64613CF72A300772054 /* rigolo-btn-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */; };
-		4FBBA64713CF72A300772054 /* rigolo-btn-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */; };
-		4FBBA64813CF72A300772054 /* rigolo-btn-green.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */; };
-		4FBBA64913CF72A300772054 /* rigolo-btn-green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */; };
-		4FBBA64A13CF72A300772054 /* rigolo-cell-disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */; };
-		4FBBA64B13CF72A300772054 /* rigolo-cell-disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */; };
-		4FBBA64C13CF72A300772054 /* rigolo-recommended-badge.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */; };
-		4FBBA64D13CF72A300772054 /* rigolo-recommended-badge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */; };
-		4FBBA64E13CF72A300772054 /* rigolo-release-history-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */; };
-		4FBBA64F13CF72A300772054 /* rigolo-release-history-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */; };
-		4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */; };
-		4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */; };
-		4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */ = {isa = PBXBuildFile; fileRef = 4FBBA65313CF72B300772054 /* CKProvisioningController.style */; };
-		4FF55BD013F1D10D00FBA1BC /* CKProvisioningSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */; };
-		4FF55BD113F1D10D00FBA1BC /* CKProvisioningSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */; };
-		4FF55BD513F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */; };
-		4FF55BD613F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */; };
-		4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */; };
-		4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
 		751F1EE113D0C3990041900C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EDF13D0C3990041900C /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -479,10 +452,6 @@
 		75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
-		75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */; };
-		75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */; };
 		75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16BF13F32B4500835FE3 /* CKPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC16C013F32B4500835FE3 /* CKPopoverController.m */; };
 		75CC170113F46E3900835FE3 /* CKUIColor+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16FF13F46E3900835FE3 /* CKUIColor+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -534,34 +503,7 @@
 		4F4A916A13F040EC0093293F /* en */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = en; path = "Resources/en.lproj/wc-appsignature-type-light-craftedby@2x.png"; sourceTree = SOURCE_ROOT; };
 		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/CKActionSheet.h; sourceTree = "<group>"; };
 		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/CKActionSheet.m; sourceTree = "<group>"; };
-		4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningReleaseViewController.h; path = Classes/CKProvisioningReleaseViewController.h; sourceTree = "<group>"; };
-		4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningReleaseViewController.m; path = Classes/CKProvisioningReleaseViewController.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
-		4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg.png"; sourceTree = "<group>"; };
-		4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-bg@2x.png"; sourceTree = "<group>"; };
-		4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears.png"; sourceTree = "<group>"; };
-		4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-notes-pagetears@2x.png"; sourceTree = "<group>"; };
-		4FBA90A213D0D5AD00C7A237 /* rigolo-btn-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-blue.png"; sourceTree = "<group>"; };
-		4FBA90A313D0D5AD00C7A237 /* rigolo-btn-blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-blue@2x.png"; sourceTree = "<group>"; };
-		4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled.png"; sourceTree = "<group>"; };
-		4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-disabled@2x.png"; sourceTree = "<group>"; };
-		4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-green.png"; sourceTree = "<group>"; };
-		4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-btn-green@2x.png"; sourceTree = "<group>"; };
-		4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-cell-disclosure.png"; sourceTree = "<group>"; };
-		4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-cell-disclosure@2x.png"; sourceTree = "<group>"; };
-		4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-recommended-badge.png"; sourceTree = "<group>"; };
-		4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-recommended-badge@2x.png"; sourceTree = "<group>"; };
-		4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-history-icon.png"; sourceTree = "<group>"; };
-		4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-history-icon@2x.png"; sourceTree = "<group>"; };
-		4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon.png"; sourceTree = "<group>"; };
-		4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rigolo-release-notes-icon@2x.png"; sourceTree = "<group>"; };
-		4FBBA65313CF72B300772054 /* CKProvisioningController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CKProvisioningController.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
-		4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningSettingsController.h; path = Classes/CKProvisioningSettingsController.h; sourceTree = "<group>"; };
-		4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningSettingsController.m; path = Classes/CKProvisioningSettingsController.m; sourceTree = "<group>"; };
-		4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningReleaseNotesViewController.h; path = Classes/CKProvisioningReleaseNotesViewController.h; sourceTree = "<group>"; };
-		4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningReleaseNotesViewController.m; path = Classes/CKProvisioningReleaseNotesViewController.m; sourceTree = "<group>"; };
-		4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningHistoryViewController.h; path = Classes/CKProvisioningHistoryViewController.h; sourceTree = "<group>"; };
-		4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningHistoryViewController.m; path = Classes/CKProvisioningHistoryViewController.m; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
@@ -976,10 +918,6 @@
 		75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultilineNSStringPropertyCellController.m; path = Classes/CKMultilineNSStringPropertyCellController.m; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
-		75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningWebService.h; path = Classes/CKProvisioningWebService.h; sourceTree = "<group>"; };
-		75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningWebService.m; path = Classes/CKProvisioningWebService.m; sourceTree = "<group>"; };
-		75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProvisioningController.h; path = Classes/CKProvisioningController.h; sourceTree = "<group>"; };
-		75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKProvisioningController.m; path = Classes/CKProvisioningController.m; sourceTree = "<group>"; };
 		75CC16BF13F32B4500835FE3 /* CKPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPopoverController.h; path = Classes/CKPopoverController.h; sourceTree = "<group>"; };
 		75CC16C013F32B4500835FE3 /* CKPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPopoverController.m; path = Classes/CKPopoverController.m; sourceTree = "<group>"; };
 		75CC16FF13F46E3900835FE3 /* CKUIColor+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIColor+ValueTransformer.h"; path = "Classes/CKUIColor+ValueTransformer.h"; sourceTree = "<group>"; };
@@ -1042,7 +980,6 @@
 		4FBBA65213CF72B300772054 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
-				4FBBA65313CF72B300772054 /* CKProvisioningController.style */,
 			);
 			name = Styles;
 			path = Resources/Styles;
@@ -1618,24 +1555,6 @@
 				4F4A912513F03D7B0093293F /* wc-appsignature-light-back@2x.png */,
 				4F4A912613F03D7B0093293F /* wc-appsignature-light-front.png */,
 				4F4A912713F03D7B0093293F /* wc-appsignature-light-front@2x.png */,
-				4FBA909613D0953C00C7A237 /* rigolo-notes-pagetears.png */,
-				4FBA909713D0953C00C7A237 /* rigolo-notes-pagetears@2x.png */,
-				4FBA909213D085AC00C7A237 /* rigolo-notes-bg.png */,
-				4FBA909313D085AC00C7A237 /* rigolo-notes-bg@2x.png */,
-				4FBA90A213D0D5AD00C7A237 /* rigolo-btn-blue.png */,
-				4FBA90A313D0D5AD00C7A237 /* rigolo-btn-blue@2x.png */,
-				4FBBA63A13CF72A300772054 /* rigolo-btn-disabled.png */,
-				4FBBA63B13CF72A300772054 /* rigolo-btn-disabled@2x.png */,
-				4FBBA63C13CF72A300772054 /* rigolo-btn-green.png */,
-				4FBBA63D13CF72A300772054 /* rigolo-btn-green@2x.png */,
-				4FBBA63E13CF72A300772054 /* rigolo-cell-disclosure.png */,
-				4FBBA63F13CF72A300772054 /* rigolo-cell-disclosure@2x.png */,
-				4FBBA64013CF72A300772054 /* rigolo-recommended-badge.png */,
-				4FBBA64113CF72A300772054 /* rigolo-recommended-badge@2x.png */,
-				4FBBA64213CF72A300772054 /* rigolo-release-history-icon.png */,
-				4FBBA64313CF72A300772054 /* rigolo-release-history-icon@2x.png */,
-				4FBBA64413CF72A300772054 /* rigolo-release-notes-icon.png */,
-				4FBBA64513CF72A300772054 /* rigolo-release-notes-icon@2x.png */,
 				7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */,
 				7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */,
 				7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */,
@@ -1732,7 +1651,6 @@
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Web */,
 				7506E40F13B9022700EE1471 /* Support */,
-				75C97ABC13C3A0C900F67A59 /* Provisioning */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1891,25 +1809,6 @@
 				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
 			);
 			name = CascadingTrees;
-			sourceTree = "<group>";
-		};
-		75C97ABC13C3A0C900F67A59 /* Provisioning */ = {
-			isa = PBXGroup;
-			children = (
-				75C97ABE13C3A85100F67A59 /* CKProvisioningWebService.h */,
-				75C97ABF13C3A85100F67A59 /* CKProvisioningWebService.m */,
-				75C97AC313C4A9EF00F67A59 /* CKProvisioningController.h */,
-				75C97AC413C4A9EF00F67A59 /* CKProvisioningController.m */,
-				4FF55BCE13F1D10D00FBA1BC /* CKProvisioningSettingsController.h */,
-				4FF55BCF13F1D10D00FBA1BC /* CKProvisioningSettingsController.m */,
-				4F578A6B13F1E088007B5507 /* CKProvisioningReleaseViewController.h */,
-				4F578A6C13F1E088007B5507 /* CKProvisioningReleaseViewController.m */,
-				4FF55BD313F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h */,
-				4FF55BD413F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m */,
-				4FF55BD713F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h */,
-				4FF55BD813F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m */,
-			);
-			name = Provisioning;
 			sourceTree = "<group>";
 		};
 		75CC16FE13F46E0800835FE3 /* Additions */ = {
@@ -2170,8 +2069,6 @@
 				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
 				4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */,
-				75C97AC013C3A85100F67A59 /* CKProvisioningWebService.h in Headers */,
-				75C97AC513C4A9EF00F67A59 /* CKProvisioningController.h in Headers */,
 				751F1EE113D0C3990041900C /* JSONKit.h in Headers */,
 				751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */,
 				75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */,
@@ -2182,10 +2079,6 @@
 				75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */,
 				75F295DE13EB0089009CCC70 /* CKFormTableViewController+Menus.h in Headers */,
 				75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */,
-				4FF55BD013F1D10D00FBA1BC /* CKProvisioningSettingsController.h in Headers */,
-				4FF55BD513F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.h in Headers */,
-				4FF55BD913F1DBC000FBA1BC /* CKProvisioningHistoryViewController.h in Headers */,
-				4F578A6D13F1E088007B5507 /* CKProvisioningReleaseViewController.h in Headers */,
 				75F2961213F196F9009CCC70 /* CKNSPredicate+Additions.h in Headers */,
 				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 				75CC170113F46E3900835FE3 /* CKUIColor+ValueTransformer.h in Headers */,
@@ -2270,25 +2163,6 @@
 				7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */,
 				7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */,
 				7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */,
-				4FBBA64613CF72A300772054 /* rigolo-btn-disabled.png in Resources */,
-				4FBBA64713CF72A300772054 /* rigolo-btn-disabled@2x.png in Resources */,
-				4FBBA64813CF72A300772054 /* rigolo-btn-green.png in Resources */,
-				4FBBA64913CF72A300772054 /* rigolo-btn-green@2x.png in Resources */,
-				4FBBA64A13CF72A300772054 /* rigolo-cell-disclosure.png in Resources */,
-				4FBBA64B13CF72A300772054 /* rigolo-cell-disclosure@2x.png in Resources */,
-				4FBBA64C13CF72A300772054 /* rigolo-recommended-badge.png in Resources */,
-				4FBBA64D13CF72A300772054 /* rigolo-recommended-badge@2x.png in Resources */,
-				4FBBA64E13CF72A300772054 /* rigolo-release-history-icon.png in Resources */,
-				4FBBA64F13CF72A300772054 /* rigolo-release-history-icon@2x.png in Resources */,
-				4FBBA65013CF72A300772054 /* rigolo-release-notes-icon.png in Resources */,
-				4FBBA65113CF72A300772054 /* rigolo-release-notes-icon@2x.png in Resources */,
-				4FBBA65413CF72B300772054 /* CKProvisioningController.style in Resources */,
-				4FBA909413D085AC00C7A237 /* rigolo-notes-bg.png in Resources */,
-				4FBA909513D085AC00C7A237 /* rigolo-notes-bg@2x.png in Resources */,
-				4FBA909813D0953C00C7A237 /* rigolo-notes-pagetears.png in Resources */,
-				4FBA909913D0953C00C7A237 /* rigolo-notes-pagetears@2x.png in Resources */,
-				4FBA90A413D0D5AD00C7A237 /* rigolo-btn-blue.png in Resources */,
-				4FBA90A513D0D5AD00C7A237 /* rigolo-btn-blue@2x.png in Resources */,
 				75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */,
 				4F4A912813F03D7B0093293F /* wc-appsignature-dark-back.png in Resources */,
 				4F4A912913F03D7B0093293F /* wc-appsignature-dark-back@2x.png in Resources */,
@@ -2526,8 +2400,6 @@
 				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */,
-				75C97AC113C3A85100F67A59 /* CKProvisioningWebService.m in Sources */,
-				75C97AC613C4A9EF00F67A59 /* CKProvisioningController.m in Sources */,
 				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,
 				751F1EE213D0C3990041900C /* JSONKit.m in Sources */,
 				751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */,
@@ -2538,10 +2410,6 @@
 				75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */,
 				75F295DF13EB0089009CCC70 /* CKFormTableViewController+Menus.m in Sources */,
 				75F2960613F04490009CCC70 /* CKPropertyGridCellController.m in Sources */,
-				4FF55BD113F1D10D00FBA1BC /* CKProvisioningSettingsController.m in Sources */,
-				4FF55BD613F1D53C00FBA1BC /* CKProvisioningReleaseNotesViewController.m in Sources */,
-				4FF55BDA13F1DBC000FBA1BC /* CKProvisioningHistoryViewController.m in Sources */,
-				4F578A6E13F1E088007B5507 /* CKProvisioningReleaseViewController.m in Sources */,
 				75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */,
 				75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */,
 				75CC170213F46E3900835FE3 /* CKUIColor+ValueTransformer.m in Sources */,
