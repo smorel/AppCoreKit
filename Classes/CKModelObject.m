@@ -298,7 +298,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
-	NSAssert([aCoder allowsKeyedCoding],@"NFBModelObject does not support sequential archiving.");
+	NSAssert([aCoder allowsKeyedCoding],@"CKModelObject does not support sequential archiving.");
 	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){

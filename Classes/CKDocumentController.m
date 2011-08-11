@@ -1,6 +1,6 @@
 //
 //  CKFeedController.m
-//  FeedView
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-16.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.

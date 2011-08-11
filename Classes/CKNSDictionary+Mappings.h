@@ -1,6 +1,6 @@
 //
-//  NFBDataSourceMapper.h
-//  NFB
+//  CKNSDictionary+Mappings.h
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-02-24.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.

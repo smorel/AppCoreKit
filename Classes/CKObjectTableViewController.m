@@ -1,6 +1,6 @@
 //
-//  RootViewController.m
-//  FeedView
+//  CKObjectTableViewController.m
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-16.
 //  Copyright Wherecloud 2011. All rights reserved.
