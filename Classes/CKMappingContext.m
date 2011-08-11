@@ -15,6 +15,9 @@
 #import "JSONKit.h"
 #import <objc/runtime.h>
 
+NSString * const CKMappingErrorDomain = @"CKMappingErrorDomain";
+NSString * const CKMappingErrorDetailsKey = @"CKMappingErrorDetailsKey";
+
 //behaviour
 NSString* CKMappingObjectKey = @"@object";
 NSString* CKMappingClassKey = @"@class";
@@ -45,8 +48,8 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 - (BOOL)importContentOfFileNamed:(NSString*)name;
 
 
-- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
-- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed;
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error;
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed error:(NSError**)error;
 
 - (NSMutableDictionary*)mappingsForObject:(id)object propertyName:(NSString*)propertyName;
 - (NSMutableDictionary*)mappingsForIdentifier:(id)identifier;
@@ -74,15 +77,15 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
 @interface NSObject (CKMapping2) 
 
-- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings;
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
+- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings error:(NSError**)error;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings error:(NSError**)error;
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error;
 
-- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier;
-- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier;
+- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier error:(NSError**)error;
+- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier error:(NSError**)error;
 
-+ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed;
-+ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed;
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error;
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed error:(NSError**)error;
 
 @end
 
@@ -90,23 +93,23 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 @implementation NSObject (CKMapping2) 
 
 //---------------------------------- Initialization -----------------------------
-- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier{
-    self = [self initWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier]];
+- (id)initWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier error:(NSError**)error{
+    self = [self initWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier] error:error];
     return self;
 }
 
-- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier{
-    [self setupWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier]];
+- (void)setupWithObject:(id)sourceObject withMappingsIdentifier:(id)identifier error:(NSError**)error{
+    [self setupWithObject:sourceObject withMappings:[[CKMappingManager defaultManager]mappingsForIdentifier:identifier] error:error];
 }
 
-- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
+- (id)initWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
     self = [self init];
-    [self setupWithObject:sourceObject withMappings:mappings];
+    [self setupWithObject:sourceObject withMappings:mappings error:error];
     return self;
 }
 
-+ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed{
-    return [[CKMappingManager defaultManager]objectFromValue:sourceObject withMappingsIdentifier:identifier reversed:reversed];
++ (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed error:(NSError**)error{
+    return [[CKMappingManager defaultManager]objectFromValue:sourceObject withMappingsIdentifier:identifier reversed:reversed error:error];
 }
 
 // ----------------------  Dictionary parser -------------------------
@@ -195,32 +198,43 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
 //------------------------------- Mapping Engine ------------------------------
 
-- (id)createObjectOfClass:(Class)c withObject:(id)source withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
+- (id)createObjectOfClass:(Class)c withObject:(id)source withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error{
+    if(*error)
+        return nil;
+    
     id object = [[[c alloc]init] autorelease];
-    [object setupWithObject:source withMappings:mappings reversed:reversed];
+    [object setupWithObject:source withMappings:mappings reversed:reversed error:error];
     return object;
 }
 
-+ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
++ (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error{
     NSMutableDictionary* def = [self objectDefinition:mappings];
+    id result = nil;
     if(def != nil){
-        return [self createObjectOfClass:[self objectClass:def defaultClass:nil] withObject:sourceObject withMappings:[self mappingsDefinition:def] reversed:(reversed || [self reverseMappings:def])];
+        result = [self createObjectOfClass:[self objectClass:def defaultClass:nil] withObject:sourceObject withMappings:[self mappingsDefinition:def] reversed:(reversed || [self reverseMappings:def]) error:error];
     }
     else{
         NSString* className = [mappings objectForKey:CKMappingClassKey];
         if(className){
             Class c = NSClassFromString(className);
-            return [self createObjectOfClass:c withObject:sourceObject withMappings:mappings reversed:NO];
+            result = [self createObjectOfClass:c withObject:sourceObject withMappings:mappings reversed:NO error:error];
         }
     }
-    return nil;
+    
+    if(*error)
+        return nil;
+
+    return result;
 }
 
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings{
-    [self setupWithObject:sourceObject withMappings:mappings reversed:NO];
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings error:(NSError**)error{
+    [self setupWithObject:sourceObject withMappings:mappings reversed:NO error:error];
 }
 
-- (void)setupPropertyWithKeyPath:(NSString*)keyPath fromValue:(id)other keyPath:(NSString*)otherKeyPath withOptions:(NSMutableDictionary*)options reversed:(BOOL)reversed{
+- (void)setupPropertyWithKeyPath:(NSString*)keyPath fromValue:(id)other keyPath:(NSString*)otherKeyPath withOptions:(NSMutableDictionary*)options reversed:(BOOL)reversed error:(NSError**)error{
+    if(*error)
+        return;
+        
     if([self isSelf:keyPath])
         keyPath = nil;
     if([self isSelf:otherKeyPath])
@@ -235,7 +249,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
     if(value == nil || [value isKindOfClass:[NSNull class]]){
         if([self isRequired:options]){
-            NSAssert(NO,@"invalid value");
+            NSString* details = [NSString stringWithFormat:@"Missing requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+            *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeMissingRequieredValue 
+                                     userInfo:[NSDictionary dictionaryWithObjectsAndKeys:details,CKMappingErrorDetailsKey, nil]];
+            return;
         }
         else{
             [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
@@ -263,7 +280,13 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 }
             }
             
-            NSAssert(contentType != nil,@"No type specified for this mappings");
+            if(contentType == nil){
+                NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
+                NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property metaData",CKMappingClassKey];
+                *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidObjectClass 
+                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@\n%@",details,details2],CKMappingErrorDetailsKey, nil]];
+                return;
+            }
             
             if([self needsToBeCleared:options]){
                 [property removeAllObjects];
@@ -285,7 +308,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                     //create sub object
                     id targetSubObject = [[[contentType alloc]init]autorelease];
                     //map sub object
-                    [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
+                    [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
                     //adds sub object
                     [createdObjects addObject:targetSubObject];
                 }
@@ -335,11 +358,11 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 if(subObjectMappings && ![subObjectMappings isEmpty]){
                     id subObject = [property value];
                     if([subObject isKindOfClass:contentType]){
-                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
+                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
                     }
                     else{
                         subObject = [[[contentType alloc]init]autorelease];
-                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed)];
+                        [subObject setupWithObject:value withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
                         [property setValue:subObject];
                     }
                 }
@@ -351,7 +374,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     }
 }
 
-- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
+- (void)setupWithObject:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error{
+    if(*error)
+        return;
+    
     if(mappings){
         for(NSString* targetKeyPath in [mappings allKeys]){
             if([mappings isReservedKeyWord:targetKeyPath]
@@ -374,20 +400,23 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             id targetObject = [mappings objectForKey:targetKeyPath];
             if([targetObject isKindOfClass:[NSString class]]){
                 if(reversed){
-                    [self setupPropertyWithKeyPath:(NSString*)targetObject fromValue:sourceObject keyPath:targetKeyPath withOptions:nil reversed:reversed];
+                    [self setupPropertyWithKeyPath:(NSString*)targetObject fromValue:sourceObject keyPath:targetKeyPath withOptions:nil reversed:reversed error:error];
                 }
                 else{
-                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:(NSString*)targetObject withOptions:nil reversed:reversed];
+                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:(NSString*)targetObject withOptions:nil reversed:reversed error:error];
                 }
             }
             else if([targetObject isKindOfClass:[NSDictionary class]]){
                 if(reversed){
-                    [self setupPropertyWithKeyPath:[self keyPath:targetObject] fromValue:sourceObject keyPath:targetKeyPath withOptions:targetObject reversed:reversed];
+                    [self setupPropertyWithKeyPath:[self keyPath:targetObject] fromValue:sourceObject keyPath:targetKeyPath withOptions:targetObject reversed:reversed error:error];
                 }
                 else{
-                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:[self keyPath:targetObject] withOptions:targetObject reversed:reversed];
+                    [self setupPropertyWithKeyPath:targetKeyPath fromValue:sourceObject keyPath:[self keyPath:targetObject] withOptions:targetObject reversed:reversed error:error];
                 }
             }
+            
+            if(*error)
+                return;
         }
     }
 }
@@ -430,12 +459,12 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 	return [self appendContentOfFile:path];
 }
 
-- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed{
-    return [NSObject objectFromValue:sourceObject withMappings:mappings reversed:reversed];
+- (id)objectFromValue:(id)sourceObject withMappings:(NSMutableDictionary*)mappings reversed:(BOOL)reversed error:(NSError**)error{
+    return [NSObject objectFromValue:sourceObject withMappings:mappings reversed:reversed error:error];
 }
 
-- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed{
-    return [NSObject objectFromValue:sourceObject withMappings:[self mappingsForIdentifier:identifier] reversed:reversed];
+- (id)objectFromValue:(id)sourceObject withMappingsIdentifier:(id)identifier reversed:(BOOL)reversed error:(NSError**)error{
+    return [NSObject objectFromValue:sourceObject withMappings:[self mappingsForIdentifier:identifier] reversed:reversed error:error];
 }
 
 @end
@@ -503,52 +532,63 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 
 //ARRAYS
 
-- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type{
-    return (NSArray*)[self objectsFromValue:value ofClass:type reversed:NO];
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type error:(NSError**)error{
+    return (NSArray*)[self objectsFromValue:value ofClass:type reversed:NO error:error];
 }
 
-- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
-    NSAssert([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[CKDocumentCollection class]],
-             @"invalid value type");
-    return [NSObject objectFromValue:value withMappings:[self arrayDefinitionWithMappings:[self dictionary] objectClass:type] reversed:reversed];
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error{
+    if(![value isKindOfClass:[NSArray class]] && ![value isKindOfClass:[CKDocumentCollection class]]){
+        *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidSourceData 
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"'value' must be a NSArray or a CKDocumentCollection",CKMappingErrorDetailsKey, nil]];
+        return nil;
+    }
+    return [NSObject objectFromValue:value withMappings:[self arrayDefinitionWithMappings:[self dictionary] objectClass:type] reversed:reversed error:error];
 }
 
-- (NSArray*)objectsFromValue:(id)value{
-    return [self objectsFromValue:(id)value ofClass:nil];
+- (NSArray*)objectsFromValue:(id)value error:(NSError**)error{
+    return [self objectsFromValue:(id)value ofClass:nil error:error];
 }
 
-- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed{
-    return [self objectsFromValue:(id)value ofClass:nil reversed:reversed];
+- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed error:(NSError**)error{
+    return [self objectsFromValue:(id)value ofClass:nil reversed:reversed error:error];
 }
 
 //OBJECT
-- (id)objectFromValue:(id)value{
-    return [self objectFromValue:value reversed:NO];
+- (id)objectFromValue:(id)value error:(NSError**)error{
+    return [self objectFromValue:value reversed:NO error:error];
 }
 
-- (id)objectFromValue:(id)value reversed:(BOOL)reversed{
-    NSAssert([value isKindOfClass:[NSDictionary class]],@"invalid value type");
-    return [[CKMappingManager defaultManager]objectFromValue:value withMappings:[self dictionary] reversed:reversed];
+- (id)objectFromValue:(id)value reversed:(BOOL)reversed error:(NSError**)error{
+    /*if(![value isKindOfClass:[NSDictionary class]]){
+        *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidSourceData 
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"'value' must be a NSDictionary",CKMappingErrorDetailsKey, nil]];
+        return nil;
+    }*/
+    return [[CKMappingManager defaultManager]objectFromValue:value withMappings:[self dictionary] reversed:reversed error:error];
 }
 
-- (id)objectFromValue:(id)value ofClass:(Class)type{
-    return [self objectFromValue:value ofClass:type reversed:NO];
+- (id)objectFromValue:(id)value ofClass:(Class)type error:(NSError**)error{
+    return [self objectFromValue:value ofClass:type reversed:NO error:error];
 }
 
-- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed{
-    NSAssert([value isKindOfClass:[NSDictionary class]],@"invalid value type");
+- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error{
+    if(![value isKindOfClass:[NSDictionary class]]){
+        *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidSourceData 
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"'value' must be a NSDictionary",CKMappingErrorDetailsKey, nil]];
+        return nil;
+    }
     id object = [[[type alloc]init] autorelease];
-    [self mapValue:value toObject:object reversed:reversed];
+    [self mapValue:value toObject:object reversed:reversed error:error];
     return object;
 }
 
 //INSTANCE
-- (id)mapValue:(id)value toObject:(id)object{
-    return [self mapValue:value toObject:object reversed:NO];
+- (id)mapValue:(id)value toObject:(id)object error:(NSError**)error{
+    return [self mapValue:value toObject:object reversed:NO error:error];
 }
 
-- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed{
-    [object setupWithObject:value withMappings:[self dictionary] reversed:reversed];
+- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed error:(NSError**)error{
+    [object setupWithObject:value withMappings:[self dictionary] reversed:reversed error:error];
     return object;
 }
 

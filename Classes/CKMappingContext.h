@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "CKCascadingTree.h"
+
+/* Errors
+ */
+extern NSString* const CKMappingErrorDomain;
+extern NSString* const CKMappingErrorDetailsKey;
+#define CKMappingErrorCodeInvalidSourceData     1
+#define CKMappingErrorCodeInvalidObjectClass    2
+#define CKMappingErrorCodeMissingRequieredValue 3
  
 /** TODO
  */
@@ -30,21 +38,21 @@
 ///-----------------------------------
 
 //value should be a collection (NSArray, CKDocumentCollection)
-- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type;
-- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed;
-- (id)objectFromValue:(id)value ofClass:(Class)type;
-- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed;
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type error:(NSError**)error;
+- (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error;
+- (id)objectFromValue:(id)value ofClass:(Class)type error:(NSError**)error;
+- (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error;
 
 //apply the context mappings to the object
-- (id)mapValue:(id)value toObject:(id)object;
-- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed;
+- (id)mapValue:(id)value toObject:(id)object error:(NSError**)error;
+- (id)mapValue:(id)value toObject:(id)object reversed:(BOOL)reversed error:(NSError**)error;
 
 //Reserved for mappings definitions containing the object definition for the return object
 //if source is collection return a NSArray else return an instance defined by the objectClass of the mapping definition
-- (id)objectFromValue:(id)value;
-- (id)objectFromValue:(id)value reversed:(BOOL)reversed;
-- (NSArray*)objectsFromValue:(id)value;
-- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed;
+- (id)objectFromValue:(id)value error:(NSError**)error;
+- (id)objectFromValue:(id)value reversed:(BOOL)reversed error:(NSError**)error;
+- (NSArray*)objectsFromValue:(id)value error:(NSError**)error;
+- (NSArray*)objectsFromValue:(id)value reversed:(BOOL)reversed error:(NSError**)error;
 
 ///-----------------------------------
 /// @name Mappings Definition Methods
