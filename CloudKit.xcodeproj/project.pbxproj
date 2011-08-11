@@ -1659,10 +1659,10 @@
 			isa = PBXGroup;
 			children = (
 				7560DDB713B8EDA300268D13 /* Classes */,
+				7506E41413B902ED00EE1471 /* Resources */,
+				7560DDB813B8EDB700268D13 /* Vendor */,
 				7550153713B8EA08002DAE8B /* CloudKit */,
 				7550153213B8EA08002DAE8B /* Frameworks */,
-				7560DDB813B8EDB700268D13 /* Vendor */,
-				7506E41413B902ED00EE1471 /* Resources */,
 				7550153113B8EA08002DAE8B /* Products */,
 			);
 			sourceTree = "<group>";
