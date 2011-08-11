@@ -223,6 +223,62 @@
 	[callback execute:self];
 }
 
+- (void)createsAndDisplayEditableButtonsWithType:(CKObjectTableViewControllerEditableType)type animated:(BOOL)animated{
+    switch(type){
+        case CKObjectTableViewControllerEditableTypeLeft:{
+            self.leftButton = self.navigationItem.leftBarButtonItem;
+            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeRight:{
+            self.rightButton = self.navigationItem.rightBarButtonItem;
+            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeNone:break;
+	}
+}
+
+- (void)setEditableType:(CKObjectTableViewControllerEditableType)theEditableType{
+    if(theEditableType != _editableType && _viewIsOnScreen){
+        switch(_editableType){
+            case CKObjectTableViewControllerEditableTypeLeft:{
+                if(self.leftButton){
+                    [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
+                }
+                else{
+                    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+                }
+                break;
+            }
+            case CKObjectTableViewControllerEditableTypeRight:{
+                if(self.rightButton){
+                    [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
+                }
+                else{
+                    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+                }
+                break;
+            }
+            case CKObjectTableViewControllerEditableTypeNone:break;
+        }
+        
+        if(theEditableType != CKObjectTableViewControllerEditableTypeNone){
+            [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
+        }
+        else if(theEditableType == CKObjectTableViewControllerEditableTypeNone){
+            if([self isEditing]){
+                [self setEditing:NO animated:YES];
+            }
+        }
+    }
+    _editableType = theEditableType;
+}
+
 - (IBAction)edit:(id)sender{
     switch(_editableType){
         case CKObjectTableViewControllerEditableTypeLeft:{
@@ -315,21 +371,7 @@
 		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
 	}
 	
-	switch(_editableType){
-        case CKObjectTableViewControllerEditableTypeLeft:{
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeRight:{
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeNone:break;
-	}
+	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
 		[self.tableView beginUpdates];
