@@ -68,7 +68,6 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 
 @interface CKProvisioningController()
 
-- (void)checkForNewProductRelease;
 - (void)listAllProductReleases;
 - (void)detailsForProductRelease:(NSString*)version;
 - (void)presentController:(CKObjectTableViewController *)controller;
@@ -122,7 +121,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 }
 
 - (void)onBecomeActive:(NSNotification*)notif{
-	[self checkForNewProductRelease];
+	[self checkForNewProductReleaseWithCompletionBlock:nil];
 }
 
 #pragma mark - Updates
@@ -131,11 +130,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
     [self listAllProductReleases];
 }
 
-- (void)checkUpdate:(id)sender{
-    [self checkForNewProductRelease];
-}
-
-- (void)checkForNewProductRelease{
+- (void)checkForNewProductReleaseWithCompletionBlock:(void(^)(BOOL upToDate,NSString* version))completionBlock {
     NSString* buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString* bundleIdentifier = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
     
@@ -143,20 +138,23 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
                                                                                version:buildNumber
      
                                                                                completion:^(BOOL upToDate,NSString* version){
-                                                                                if(!upToDate){
-                                                                                    NSString* title = _(@"RIGOLO_Wireless Update");
-                                                                                    NSString* message = [NSString stringWithFormat:_(@"RIGOLO_A new release of the product is available\nVersion (%@)"),version];
-                                                                                    
-                                                                                    CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
-                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Details") action:^(void){
-                                                                                        [self detailsForProductRelease:version];
-                                                                                    }];
-                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Settings") action:^(void){
-                                                                                        [self presentController:[self controllerForSettings]];
-                                                                                    }];
-                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Cancel") action:nil];
-                                                                                    [alertView show];
-                                                                                }
+																				   NSString* title = _(@"RIGOLO_Wireless Update");
+																				   if(!upToDate){
+																					   NSString* message = [NSString stringWithFormat:_(@"RIGOLO_A new release of the product is available\nVersion (%@)"),version];
+																					   
+																					   CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
+																					   [alertView addButtonWithTitle:_(@"RIGOLO_Details") action:^(void){
+																						   [self detailsForProductRelease:version];
+																					   }];
+																					   [alertView addButtonWithTitle:_(@"RIGOLO_Settings") action:^(void){
+																						   [self presentController:[self controllerForSettings]];
+																					   }];
+																					   [alertView addButtonWithTitle:_(@"RIGOLO_Cancel") action:nil];
+																					   [alertView show];
+																				   }
+																				   if (completionBlock) {
+																					   completionBlock(upToDate, version);
+																				   }
                                                                                }
      
                                                                                failure:^(NSError* error){

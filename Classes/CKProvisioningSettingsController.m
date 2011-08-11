@@ -9,7 +9,9 @@
 #import "CKProvisioningSettingsController.h"
 #import "CKProvisioningReleaseNotesViewController.h"
 #import "CKObjectProperty.h"
+#import "CKNSObject+Bindings.h"
 #import "CKNSNumberPropertyCellController.h"
+#import "CKAlertView.h"
 #import "CKVersion.h"
 #import "CKBundle.h"
 #import "CKLocalization.h"
@@ -143,13 +145,39 @@
 		CKProvisioningSettingsControllerButton* installButton = [[[CKProvisioningSettingsControllerButton alloc] initWithFrame:CGRectMake(10, 20, controller.tableViewCell.contentView.bounds.size.width-20, 90)] autorelease];
 		installButton.tag = kCKProvisioningSettingsUpdateButtonTag;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+		installButton.adjustsImageWhenDisabled = NO;
 		[installButton setTitle:_(@"RIGOLO_Check for Updates") forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-		[installButton addTarget:self.provisioningController action:@selector(checkUpdate:) forControlEvents:UIControlEventTouchUpInside];
 		[controller.tableViewCell.contentView addSubview:installButton];
         return (id)nil; 
     }];
+	[updateCellDescriptor setSetupBlock:^id(id value) {
+		CKTableViewCellController *controller = (CKTableViewCellController *)value;
+		UIButton *installButton = (UIButton *)[controller.tableViewCell.contentView viewWithTag:kCKProvisioningSettingsUpdateButtonTag];
+		[installButton bindEvent:UIControlEventTouchUpInside withBlock:^(void) {
+			UIActivityIndicatorView *spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+			spinner.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			[spinner startAnimating];
+			[installButton setTitle:nil forState:UIControlStateNormal];
+			[installButton addSubview:spinner];
+			spinner.center = installButton.center;
+			spinner.frame = CGRectIntegral(CGRectOffset(spinner.frame, -5, -20));
+			installButton.enabled = NO;
+
+			[bself.provisioningController checkForNewProductReleaseWithCompletionBlock:^(BOOL upToDate, NSString *version) {
+				[spinner removeFromSuperview];
+				installButton.enabled = YES;
+				[installButton setTitle:_(@"RIGOLO_Check for Updates") forState:UIControlStateNormal];
+				if (upToDate) {
+					CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"RIGOLO_Wireless Update") message:_(@"RIGOLO_Your app is up to date.")] autorelease];
+					[alertView addButtonWithTitle:_(@"RIGOLO_OK") action:nil];
+					[alertView show];
+				}
+			}];
+		}];
+		return (id)nil;
+	}];
     [updateCellDescriptor setSizeBlock:^id(id value) {
         NSDictionary* params = (NSDictionary*)value;
         CGSize tableViewSize = [params bounds];

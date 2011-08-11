@@ -6,7 +6,7 @@
   Copyright 2011 Wherecloud. All rights reserved.
 */
 
-"RIGOLO_A new release of the product is available\nVersion (%@)" = "A new release of the product is available\nVersion (%@)";
+"RIGOLO_A new release of the product is available\nVersion (%@)" = "A new release is available\nVersion (%@)";
 "autoCheck" = "Check automatically";
 
 "RIGOLO_Cancel" = "Cancel";
@@ -36,3 +36,4 @@
 "RIGOLO_Wireless Updates" = "Wireless Updates";
 
 "RIGOLO_You are currently running version %@" = "You are currently running version %@";
+"RIGOLO_Your app is up to date." = "Your app is up to date.";

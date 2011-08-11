@@ -31,6 +31,8 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease);
 
 - (id)initWithParentViewController:(UIViewController*)controller;
 
+- (void)checkForNewProductReleaseWithCompletionBlock:(void(^)(BOOL upToDate,NSString* version))completionBlock;
+
 - (CKFormTableViewController *)controllerForSettings;
 - (CKObjectTableViewController *)controllerForProductReleases;
 - (CKFormTableViewController *)controllerForProductRelease:(CKProductRelease *)productRelease;
