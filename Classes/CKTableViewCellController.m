@@ -520,7 +520,8 @@
         return CGRectMake(0,0,0,0);
     }
     
-    CGFloat realWidth = cell.contentView.frame.size.width;
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+    CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
     CGFloat maxWidth = realWidth - width - self.componentsSpace;
@@ -590,7 +591,8 @@
             return CGRectMake(0,0,0,0);
         }
         else{
-            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+            CGFloat realWidth = rowWidth;
             CGFloat width = realWidth * self.componentsRatio;
             
             CGFloat maxWidth = realWidth - width - 10 - self.componentsSpace;
