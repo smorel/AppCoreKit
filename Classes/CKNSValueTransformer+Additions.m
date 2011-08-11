@@ -969,6 +969,28 @@ NSString* CKSerializerIDTag = @"@id";
 	return results;
 }
 
+
++ (id)convertFromNSArray:(NSArray*)components{
+    NSMutableArray* results = [NSMutableArray array];
+    for(id content in components){
+        if([content isKindOfClass:[NSDictionary class]]){
+            NSString* sourceClassName = [content objectForKey:CKSerializerClassTag];
+            if(sourceClassName != nil){
+                Class typeToCreate = NSClassFromString(sourceClassName);
+                id result = [NSValueTransformer transform:content toClass:typeToCreate];
+                [results addObject:result];
+            }
+            else{
+                NSAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the metaData",content);
+            }
+        }
+        else{
+            [results addObject:content];
+        }
+    }
+    return results;
+}
+
 @end
 
 @implementation CKDocumentArray (CKTransformAdditions)
@@ -978,6 +1000,13 @@ NSString* CKSerializerIDTag = @"@id";
 	CKDocumentArray* result = [[[CKDocumentArray alloc]init]autorelease];
 	[result addObjectsFromArray:results];
 	return result;
+}
+
++ (id)convertFromNSArray:(NSArray*)components{
+    CKDocumentArray* collection = [[[CKDocumentArray alloc]init]autorelease];
+    NSArray* array = [NSArray convertFromNSArray:components];
+    [collection addObjectsFromArray:array];
+	return collection;
 }
 
 @end
