@@ -79,7 +79,7 @@
 	CKProvisioningHistoryViewController* tableViewController = [[[CKProvisioningHistoryViewController alloc]initWithCollection:collection mappings:mappings]autorelease];
 	tableViewController.name = @"rigoloReleasesViewController";
 	tableViewController.contentSizeForViewInPopover = CGSizeMake(320, 416);
-	tableViewController.title = _(@"Versions");
+	tableViewController.title = _(@"RIGOLO_History");
 	return tableViewController;
 }
 

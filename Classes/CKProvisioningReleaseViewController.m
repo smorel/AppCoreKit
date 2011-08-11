@@ -106,7 +106,7 @@
         UILabel* datelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:kCKProvisioningReleaseDateViewTag];
         datelabel.text = [NSValueTransformer transformProperty:[CKObjectProperty propertyWithObject:productRelease keyPath:@"releaseDate"] toClass:[NSString class]];
         UILabel* currentVersionLabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:kCKProvisioningReleaseCurrentVersionViewTag];
-        currentVersionLabel.text = [NSString stringWithFormat:_(@"You are currently running version %@"), CKApplicationVersion()];
+        currentVersionLabel.text = [NSString stringWithFormat:_(@"RIGOLO_You are currently running version %@"), CKApplicationVersion()];
         return (id)nil; 
     }];
     [headerCellDescriptor setSizeBlock:^id(id value) {
@@ -130,8 +130,8 @@
 		CKProvisioningReleaseControllerButton* installButton = [[[CKProvisioningReleaseControllerButton alloc] initWithFrame:CGRectInset(controller.tableViewCell.contentView.bounds, 10, 20)] autorelease];
 		installButton.tag = kCKProvisioningReleaseInstallButtonTag;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[installButton setTitle:_(@"INSTALL") forState:UIControlStateNormal];
-		[installButton setTitle:_(@"INSTALLED") forState:UIControlStateDisabled];
+		[installButton setTitle:_(@"RIGOLO_INSTALL") forState:UIControlStateNormal];
+		[installButton setTitle:_(@"RIGOLO_INSTALLED") forState:UIControlStateDisabled];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-green.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-disabled.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateDisabled];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
@@ -169,7 +169,7 @@
 	}];
     [releaseNotesCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = _(@"Release Notes");
+		controller.tableViewCell.textLabel.text = _(@"RIGOLO_Release Notes");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-notes-icon.png"];
         return (id)nil; 
     }];
@@ -201,7 +201,7 @@
 	}];
     [releaseHistoryCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = _(@"Release History");
+		controller.tableViewCell.textLabel.text = _(@"RIGOLO_Release History");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-history-icon.png"];
         return (id)nil; 
     }];

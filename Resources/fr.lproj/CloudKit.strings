@@ -5,3 +5,34 @@
   Created by Sebastien Morel on 11-07-20.
   Copyright 2011 Wherecloud. All rights reserved.
 */
+
+"RIGOLO_A new release of the product is available\nVersion (%@)" = "Une nouvelle version est disponible.\nVersion (%@)";
+"autoCheck" = "Auto-détection";
+
+"RIGOLO_Cancel" = "Annuler";
+"RIGOLO_Cannot install %@ %@(%@).\nUnable to open URL : %@" = "Impossible d'installer %@ %@(%@).\nImpossible d'ouvrer l'URL: %@";
+"RIGOLO_Check Automatically" = "Auto-détection";
+"RIGOLO_Check for Updates" = "Vérifier maintenant";
+
+"RIGOLO_Details" = "Détails";
+
+"RIGOLO_History" = "Versions";
+
+"RIGOLO_Installation failed" = "L'installation a échoué";
+"RIGOLO_INSTALL" = "INSTALLER";
+"RIGOLO_INSTALLED" = "INSTALLÉ";
+
+"RIGOLO_OK" = "OK";
+
+"RIGOLO_Recommended" = "Recommandé";
+"RIGOLO_Release History" = "Historique";
+"RIGOLO_Release Notes" = "Notes";
+
+"RIGOLO_Settings" = "Réglages";
+
+"RIGOLO_Version %@ (%@)" = "Version %@ (%@)";
+
+"RIGOLO_Wireless Update" = "Mise à jour";
+"RIGOLO_Wireless Updates" = "Mises à jour";
+
+"RIGOLO_You are currently running version %@" = "Vous utilisez la version %@";

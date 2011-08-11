@@ -39,7 +39,7 @@
 @end
 
 NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
-	return [NSString stringWithFormat:_(@"Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
+	return [NSString stringWithFormat:_(@"RIGOLO_Version %@ (%@)"), productRelease.versionNumber, productRelease.buildNumber];
 }
 
 // CKRigoloDefaultBehaviourBarButtonItem
@@ -144,17 +144,17 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
      
                                                                                completion:^(BOOL upToDate,NSString* version){
                                                                                 if(!upToDate){
-                                                                                    NSString* title = _(@"Provisioning Service");
-                                                                                    NSString* message = [NSString stringWithFormat:_(@"A new release of the product is available\nVersion (%@)"),version];
+                                                                                    NSString* title = _(@"RIGOLO_Wireless Update");
+                                                                                    NSString* message = [NSString stringWithFormat:_(@"RIGOLO_A new release of the product is available\nVersion (%@)"),version];
                                                                                     
                                                                                     CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
-                                                                                    [alertView addButtonWithTitle:_(@"Details") action:^(void){
+                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Details") action:^(void){
                                                                                         [self detailsForProductRelease:version];
                                                                                     }];
-                                                                                    [alertView addButtonWithTitle:_(@"Settings") action:^(void){
+                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Settings") action:^(void){
                                                                                         [self presentController:[self controllerForSettings]];
                                                                                     }];
-                                                                                    [alertView addButtonWithTitle:_(@"Cancel") action:nil];
+                                                                                    [alertView addButtonWithTitle:_(@"RIGOLO_Cancel") action:nil];
                                                                                     [alertView show];
                                                                                 }
                                                                                }
@@ -168,9 +168,9 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 		CKProductRelease* productRelease = (CKProductRelease*)[sender userInfo];
 		BOOL result = [[UIApplication sharedApplication]openURL:productRelease.provisioningURL];
         if(result == NO){
-            NSString* title = [NSString stringWithFormat:_(@"Install %@ %@(%@) failed"),productRelease.applicationName,productRelease.versionNumber,productRelease.buildNumber];
-            NSString* message = [NSString stringWithFormat:_(@"Unable to open URL : %@"),productRelease.provisioningURL];
-            CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"Cancel") otherButtonTitles:nil]autorelease];
+            NSString* title = _(@"RIGOLO_Installation failed");
+            NSString* message = [NSString stringWithFormat:_(@"RIGOLO_Cannot install %@ %@(%@).\nUnable to open URL : %@"),productRelease.applicationName,productRelease.versionNumber,productRelease.buildNumber,productRelease.provisioningURL];
+            CKAlertView* alertView = [[[CKAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:_(@"RIGOLO_OK") otherButtonTitles:nil]autorelease];
             [alertView show];
         }
 	}
@@ -334,7 +334,7 @@ NSString *CKVersionStringForProductRelease(CKProductRelease *productRelease) {
 	
 	UILabel* recommendedLabel = [[[UILabel alloc]initWithFrame:CGRectZero]autorelease];
 	recommendedLabel.textAlignment = UITextAlignmentRight;
-	recommendedLabel.text = _(@"Recommended");
+	recommendedLabel.text = _(@"RIGOLO_Recommended");
 	[recommendedLabel sizeToFit];
 	[view addSubview:recommendedLabel];
 

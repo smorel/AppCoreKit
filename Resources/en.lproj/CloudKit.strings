@@ -6,4 +6,33 @@
   Copyright 2011 Wherecloud. All rights reserved.
 */
 
+"RIGOLO_A new release of the product is available\nVersion (%@)" = "A new release of the product is available\nVersion (%@)";
 "autoCheck" = "Check automatically";
+
+"RIGOLO_Cancel" = "Cancel";
+"RIGOLO_Cannot install %@ %@(%@).\nUnable to open URL : %@" = "Cannot install %@ %@(%@).\nUnable to open URL : %@";
+"RIGOLO_Check Automatically" = "Check Automatically";
+"RIGOLO_Check for Updates" = "Check for Updates";
+
+"RIGOLO_Details" = "Details";
+
+"RIGOLO_History" = "History";
+
+"RIGOLO_Installation failed" = "Installation failed";
+"RIGOLO_INSTALL" = "INSTALL";
+"RIGOLO_INSTALLED" = "INSTALLED";
+
+"RIGOLO_OK" = "OK";
+
+"RIGOLO_Recommended" = "Recommended";
+"RIGOLO_Release History" = "Release History";
+"RIGOLO_Release Notes" = "Release Notes";
+
+"RIGOLO_Settings" = "Settings";
+
+"RIGOLO_Version %@ (%@)" = "Version %@ (%@)";
+
+"RIGOLO_Wireless Update" = "Wireless Update";
+"RIGOLO_Wireless Updates" = "Wireless Updates";
+
+"RIGOLO_You are currently running version %@" = "You are currently running version %@";

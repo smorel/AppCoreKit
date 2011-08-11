@@ -54,7 +54,7 @@
 	self.contentSizeForViewInPopover = CGSizeMake(320, 416);
 	self.hidesBottomBarWhenPushed = YES;
 	self.name = @"rigoloSettingsViewController";
-    self.title = _(@"Wireless Updates");
+    self.title = _(@"RIGOLO_Wireless Updates");
 }
 
 - (id)initWithProvisioningController:(CKProvisioningController *)provisioningController {
@@ -119,7 +119,7 @@
         UILabel* appNamelabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:kCKProvisioningSettingsAppNameViewTag];
         appNamelabel.text = productRelease.applicationName;
         UILabel* currentVersionLabel = (UILabel*)[controller.tableViewCell.contentView viewWithTag:kCKProvisioningSettingsVersionViewTag];
-        currentVersionLabel.text = [NSString stringWithFormat:@"You are currently running version %@", CKApplicationVersion()];
+        currentVersionLabel.text = [NSString stringWithFormat:_(@"RIGOLO_You are currently running version %@"), CKApplicationVersion()];
         return (id)nil; 
     }];
     [headerCellDescriptor setSizeBlock:^id(id value) {
@@ -143,7 +143,7 @@
 		CKProvisioningSettingsControllerButton* installButton = [[[CKProvisioningSettingsControllerButton alloc] initWithFrame:CGRectMake(10, 20, controller.tableViewCell.contentView.bounds.size.width-20, 90)] autorelease];
 		installButton.tag = kCKProvisioningSettingsUpdateButtonTag;
 		installButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-		[installButton setTitle:_(@"Check for Updates") forState:UIControlStateNormal];
+		[installButton setTitle:_(@"RIGOLO_Check for Updates") forState:UIControlStateNormal];
 		[installButton setBackgroundImage:[[CKBundle imageForName:@"rigolo-btn-blue.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20] forState:UIControlStateNormal];
 		[installButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
 		[installButton addTarget:self.provisioningController action:@selector(checkUpdate:) forControlEvents:UIControlEventTouchUpInside];
@@ -168,7 +168,7 @@
     [checkAutoCellDescriptor setInitBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
-		controller.tableViewCell.textLabel.text = _(@"Check Automatically");
+		controller.tableViewCell.textLabel.text = _(@"RIGOLO_Check Automatically");
         return (id)nil; 
     }];
     [checkAutoCellDescriptor setSizeBlock:^id(id value) {
@@ -193,7 +193,7 @@
 	}];
     [releaseNotesCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = _(@"Release Notes");
+		controller.tableViewCell.textLabel.text = _(@"RIGOLO_Release Notes");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-notes-icon.png"];
         return (id)nil; 
     }];
@@ -225,7 +225,7 @@
 	}];
     [releaseHistoryCellDescriptor setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-		controller.tableViewCell.textLabel.text = _(@"Release History");
+		controller.tableViewCell.textLabel.text = _(@"RIGOLO_Release History");
 		controller.tableViewCell.imageView.image = [CKBundle imageForName:@"rigolo-release-history-icon.png"];
         return (id)nil; 
     }];
