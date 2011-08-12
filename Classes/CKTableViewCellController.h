@@ -49,7 +49,6 @@ typedef enum CKTableViewCellStyle {
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
 	
-	
 #ifdef DEBUG 
 	id debugModalController;
 #endif

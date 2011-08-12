@@ -102,6 +102,7 @@ NSString* CKObjectViewControllerFactoryItemFilter = @"CKObjectViewControllerFact
 NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactoryItemSize";
 NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder = @"CKObjectViewControllerFactoryItemBecomeFirstResponder";
 NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectViewControllerFactoryItemResignFirstResponder";
+NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFactoryItemLayout";
 
 @interface CKObjectViewControllerFactoryItem() 
 @property(nonatomic,retain,readwrite)NSMutableDictionary* params;
@@ -171,6 +172,9 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	return [_params objectForKey:CKObjectViewControllerFactoryItemResignFirstResponder];
 }
 
+- (CKCallback*)layoutCallback{
+	return [_params objectForKey:CKObjectViewControllerFactoryItemLayout];
+}
 
 - (CKItemViewController*)setupStaticControllerWithParams:(NSMutableDictionary*)params withStyle:(NSMutableDictionary*)controllerStyle withObject:(id)object withIndexPath:(NSIndexPath*)indexPath{
     CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForItem:self
@@ -184,6 +188,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
     staticController.accessorySelectionCallback = [self accessorySelectionCallback];
     staticController.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
     staticController.resignFirstResponderCallback = [self resignFirstResponderCallback];
+    staticController.layoutCallback = [self layoutCallback];
     [params setObject:staticController forKey:CKTableViewAttributeStaticController];
     if(controllerStyle){
         [params setObject:controllerStyle forKey:CKTableViewAttributeStaticControllerStyle];
@@ -316,6 +321,7 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	controller.accessorySelectionCallback = [self accessorySelectionCallback];
 	controller.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
 	controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
+	controller.layoutCallback = [self layoutCallback];
 	
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];
@@ -369,6 +375,9 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
 }
 
+- (void)setLayoutBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemLayout];
+}
 
 - (void)setCreateTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemCreate];
@@ -408,6 +417,10 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 
 - (void)setResignFirstResponderTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
+}
+
+- (void)setLayoutTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemLayout];
 }
 
 - (void)setFlags:(CKItemViewFlags)flags{

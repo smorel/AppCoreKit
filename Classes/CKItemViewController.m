@@ -34,6 +34,7 @@
 @synthesize accessorySelectionCallback = _accessorySelectionCallback;
 @synthesize becomeFirstResponderCallback = _becomeFirstResponderCallback;
 @synthesize resignFirstResponderCallback = _resignFirstResponderCallback;
+@synthesize layoutCallback = _layoutCallback;
 @synthesize viewRef = _viewRef;
 @synthesize weakParentController = _weakParentController;
 
@@ -51,6 +52,7 @@
 	[_selectionCallback release];
 	[_becomeFirstResponderCallback release];
 	[_resignFirstResponderCallback release];
+	[_layoutCallback release];
 	[_viewRef release];
 	[_weakParentController release];
 	

@@ -43,6 +43,7 @@ typedef NSUInteger CKItemViewFlags;
 	CKCallback* _accessorySelectionCallback;
 	CKCallback* _becomeFirstResponderCallback;
 	CKCallback* _resignFirstResponderCallback;
+	CKCallback* _layoutCallback;
 	
 	CKWeakRef* _viewRef;//TODO mettre en weakref ...
 	CKWeakRef* _weakParentController;
@@ -63,6 +64,9 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, retain) CKCallback* accessorySelectionCallback;
 @property (nonatomic, retain) CKCallback* becomeFirstResponderCallback;
 @property (nonatomic, retain) CKCallback* resignFirstResponderCallback;
+
+//Used on CKTableViewCellControllers only yet
+@property (nonatomic, retain) CKCallback* layoutCallback;
 
 - (NSString*)identifier;
 

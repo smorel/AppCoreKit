@@ -633,6 +633,10 @@
 			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
+    
+    if(_layoutCallback){
+        [_layoutCallback execute:self];
+    }
 }
 
 @end
