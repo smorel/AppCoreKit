@@ -402,6 +402,7 @@
 				controller.accessorySelectionCallback = [factoryItem accessorySelectionCallback];
 				controller.becomeFirstResponderCallback = [factoryItem becomeFirstResponderCallback];
 				controller.resignFirstResponderCallback = [factoryItem resignFirstResponderCallback];
+				controller.layoutCallback = [factoryItem layoutCallback];
 			}
 			
 			NSAssert(view != nil,@"The view has not been created");

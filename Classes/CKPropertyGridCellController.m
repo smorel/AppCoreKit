@@ -136,11 +136,12 @@
     }
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-    [super layoutCell:cell];
-    if(_validationButton != nil){
-        _validationButton.frame = [self rectForValidationButtonWithCell:cell];
-     }
+- (id)standardLayout:(CKPropertyGridCellController*)controller{
+    [super standardLayout:controller];
+    if(controller.validationButton != nil){
+        controller.validationButton.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+    }
+    return (id)nil;
 }
 
 @end

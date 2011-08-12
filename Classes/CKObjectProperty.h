@@ -35,17 +35,17 @@
 - (id)convertToClass:(Class)type;
 - (Class)type;
 
-//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
-- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
-- (CKDocumentCollection*)editorCollectionForNewlyCreated;
-- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
-- (Class)tableViewCellControllerType;
-
 - (BOOL)isReadOnly;
 
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
 - (void)removeAllObjects;
 - (NSInteger)count;
+
+//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
+- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
+- (CKDocumentCollection*)editorCollectionForNewlyCreated;
+- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
+- (Class)tableViewCellControllerType DEPRECATED_ATTRIBUTE;
 
 @end

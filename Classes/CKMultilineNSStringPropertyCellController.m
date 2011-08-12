@@ -62,38 +62,40 @@
     }  
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-	[super layoutCell:cell];
+- (id)standardLayout:(CKMultilineNSStringPropertyCellController*)controller{
+    [super standardLayout:controller];
     
-    _textView.autoresizingMask = UIViewAutoresizingNone;
-    if(self.cellStyle == CKTableViewCellStyleValue3){
-        _textView.frame = [self value3DetailFrameForCell:cell];
+    UITableViewCell* cell = controller.tableViewCell;
+    controller.textView.autoresizingMask = UIViewAutoresizingNone;
+    if(controller.cellStyle == CKTableViewCellStyleValue3){
+        controller.textView.frame = [controller value3DetailFrameForCell:cell];
     }
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+    else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             if(cell.textLabel.text == nil || 
                [cell.textLabel.text isKindOfClass:[NSNull class]] ||
                [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
-                _textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
+                controller.textView.frame = textViewFrame;
             }
             else{
                 //sets the textLabel on one full line and the textView beside
-                CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+                CGRect textFrame = [controller propertyGridTextFrameForCell:cell];
                 textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
                 cell.textLabel.frame = textFrame;
                 
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
-                _textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
+                controller.textView.frame = textViewFrame;
             }
         }
         else{
-            CGRect f = [self propertyGridDetailFrameForCell:cell];
-            _textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,_textView.frame.size.height);
+            CGRect f = [controller propertyGridDetailFrameForCell:cell];
+            controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
         }
     }
+    
+    return (id)nil;
 }
-
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
     UIViewController* controller = [params parentController];

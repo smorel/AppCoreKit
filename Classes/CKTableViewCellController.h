@@ -49,7 +49,6 @@ typedef enum CKTableViewCellStyle {
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
 	
-	
 #ifdef DEBUG 
 	id debugModalController;
 #endif
@@ -89,6 +88,7 @@ typedef enum CKTableViewCellStyle {
 
 //private
 - (void)initTableViewCell:(UITableViewCell*)cell;
+- (void)layoutCell:(UITableViewCell*)cell;
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
 + (UIResponder*)responderInView:(UIView*)view;
@@ -122,7 +122,7 @@ typedef enum CKTableViewCellStyle {
 
 @interface CKTableViewCellController (CKLayout)
 
-- (void)layoutCell:(UITableViewCell *)cell;
+- (id)standardLayout:(CKTableViewCellController *)controller;
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;

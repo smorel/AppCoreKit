@@ -54,19 +54,21 @@
 	self.textField = txtField;
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-	[super layoutCell:cell];
+- (id)standardLayout:(CKNSStringPropertyCellController*)controller{
+	[super standardLayout:controller];
+    UITableViewCell* cell = controller.tableViewCell;
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
-        if(self.cellStyle == CKTableViewCellStyleValue3){
-            textField.frame = [self value3DetailFrameForCell:cell];
+        if(controller.cellStyle == CKTableViewCellStyleValue3){
+            textField.frame = [controller value3DetailFrameForCell:cell];
             textField.autoresizingMask = UIViewAutoresizingNone;
         }
-        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-            textField.frame = [self propertyGridDetailFrameForCell:cell];
+        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
+            textField.frame = [controller propertyGridDetailFrameForCell:cell];
             textField.autoresizingMask = UIViewAutoresizingNone;
         }
 	}
+    return (id)nil;
 }
 
 - (void)textFieldChanged:(id)value{

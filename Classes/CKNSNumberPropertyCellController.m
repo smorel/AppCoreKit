@@ -179,35 +179,37 @@
 	}	
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
+- (id)standardLayout:(CKNSNumberPropertyCellController*)controller{
+    UITableViewCell* cell = controller.tableViewCell;
+    
 	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
     CGFloat savedComponentRatio = self.componentsRatio;
-    if(s && self.cellStyle == CKTableViewCellStylePropertyGrid
+    if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        self.componentsRatio = 0;
+        controller.componentsRatio = 0;
     }
     
-	[super layoutCell:cell];
+	[super standardLayout:controller];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
-		if(self.cellStyle == CKTableViewCellStyleValue3){
-			textField.frame = [self value3DetailFrameForCell:cell];
+		if(controller.cellStyle == CKTableViewCellStyleValue3){
+			textField.frame = [controller value3DetailFrameForCell:cell];
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		}
-        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-			textField.frame = [self propertyGridDetailFrameForCell:cell];
+        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
+			textField.frame = [controller propertyGridDetailFrameForCell:cell];
 			textField.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
     
 	if(s){
-		if(self.cellStyle == CKTableViewCellStyleValue3){
+		if(controller.cellStyle == CKTableViewCellStyleValue3){
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
 			CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
 			s.frame = rectForSwitch;
 		}
-        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
 			CGRect switchFrame = [self propertyGridDetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
@@ -218,8 +220,9 @@
             //For iphone its an accessory view
 		}
         
-        self.componentsRatio = savedComponentRatio;
+        controller.componentsRatio = savedComponentRatio;
 	}
+    return (id)nil;
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
