@@ -14,67 +14,9 @@
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKModelObjectPropertyMetaData.h"
 
 //nothing
-
-static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
-
-@implementation CKModelObjectPropertyMetaData
-@synthesize comparable;
-@synthesize serializable;
-@synthesize creatable;
-@synthesize hashable;
-@synthesize copiable;
-@synthesize deepCopy;
-@synthesize editable;
-@synthesize multiselectionEnabled;
-@synthesize enumDefinition;
-@synthesize contentType;
-@synthesize dateFormat;
-@synthesize valuesAndLabels;
-@synthesize contentProtocol;
-@synthesize propertyCellControllerClass;
-@synthesize validationPredicate;
-
-- (void)dealloc{
-	self.enumDefinition = nil;
-	self.dateFormat = nil;
-	self.contentProtocol = nil;
-	[super dealloc];
-}
-
-- (void)reset{
-	self.comparable = YES;
-	self.serializable = YES;
-	self.creatable = NO;
-	self.hashable = YES;
-	self.copiable = YES;
-	self.deepCopy = NO;
-	self.editable = YES;
-	self.enumDefinition = nil;
-	self.valuesAndLabels = nil;
-	self.contentType = nil;
-	self.contentProtocol = nil;
-	self.dateFormat = nil;
-	self.propertyCellControllerClass = nil;
-	self.validationPredicate = nil;
-}
-
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
-	if(CKModelObjectPropertyMetaDataSingleton == nil){
-		CKModelObjectPropertyMetaDataSingleton = [[CKModelObjectPropertyMetaData alloc]init];
-	}
-	[CKModelObjectPropertyMetaDataSingleton reset];
-	
-	SEL metaDataSelector = property.metaDataSelector;
-	if([object respondsToSelector:metaDataSelector]){
-		[object performSelector:metaDataSelector withObject:CKModelObjectPropertyMetaDataSingleton];
-	}
-	
-	return CKModelObjectPropertyMetaDataSingleton;
-}
-
-@end
 
 static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKey";
 

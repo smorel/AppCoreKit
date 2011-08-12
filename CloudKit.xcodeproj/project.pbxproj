@@ -486,6 +486,8 @@
 		75FB52A013F5846F0053BD4A /* CKFormTableViewController+Options.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB529E13F5846F0053BD4A /* CKFormTableViewController+Options.m */; };
 		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
+		75FB52B413F5E2C90053BD4A /* CKModelObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75FB52B513F5E2C90053BD4A /* CKModelObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -956,6 +958,8 @@
 		75FB529E13F5846F0053BD4A /* CKFormTableViewController+Options.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+Options.m"; path = "Classes/CKFormTableViewController+Options.m"; sourceTree = "<group>"; };
 		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
+		75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKModelObjectPropertyMetaData.h; path = Classes/CKModelObjectPropertyMetaData.h; sourceTree = "<group>"; };
+		75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKModelObjectPropertyMetaData.m; path = Classes/CKModelObjectPropertyMetaData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1080,6 +1084,8 @@
 				7560DB4D13B8ED3600268D13 /* CKDocument.m */,
 				7560DB5E13B8ED3600268D13 /* CKFeedSource.h */,
 				7560DB5F13B8ED3600268D13 /* CKFeedSource.m */,
+				75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */,
+				75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
@@ -2105,6 +2111,7 @@
 				75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */,
 				75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */,
 				75FB529F13F5846F0053BD4A /* CKFormTableViewController+Options.h in Headers */,
+				75FB52B413F5E2C90053BD4A /* CKModelObjectPropertyMetaData.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2439,6 +2446,7 @@
 				75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */,
 				75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */,
 				75FB52A013F5846F0053BD4A /* CKFormTableViewController+Options.m in Sources */,
+				75FB52B513F5E2C90053BD4A /* CKModelObjectPropertyMetaData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

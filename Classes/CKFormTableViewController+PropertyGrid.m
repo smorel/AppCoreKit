@@ -68,8 +68,8 @@
         else if(metaData.valuesAndLabels != nil){
             cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property valuesAndLabels:[metaData.valuesAndLabels copy]];
         }
-        else if(metaData.enumDefinition != nil){
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDefinition:[metaData.enumDefinition copy] multiSelectionEnabled:metaData.multiselectionEnabled];
+        else if(metaData.enumDescriptor != nil){
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDescriptor:[metaData.enumDescriptor copy] multiSelectionEnabled:metaData.multiselectionEnabled];
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];

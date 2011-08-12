@@ -53,7 +53,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (UIViewContentMode)backgroundImageContentMode{
 	return (UIViewContentMode)[self enumValueForKey:CKStyleBackgroundImageContentMode 
-									 withDictionary:CKEnumDictionary(UIViewContentModeScaleToFill,
+									 withEnumDescriptor:CKEnumDefinition(@"UIViewContentMode",
+                                                                     UIViewContentModeScaleToFill,
 																	 UIViewContentModeScaleAspectFit,
 																	 UIViewContentModeScaleAspectFill,
 																	 UIViewContentModeRedraw,
@@ -71,7 +72,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
-									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, 
+									 withEnumDescriptor:CKEnumDefinition(@"CKViewCornerStyle",
+                                                                     CKViewCornerStyleDefault, 
 																	 CKViewCornerStyleRounded,
 																	 CKViewCornerStyleRoundedTop,
 																	 CKViewCornerStyleRoundedBottom, 
@@ -96,7 +98,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
-									 withDictionary:CKEnumDictionary(CKViewBorderStyleDefault,
+									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
+                                                                     CKViewBorderStyleDefault,
 																	 CKViewBorderStyleAll,
 																	 CKViewBorderStyleNone)];
 }

@@ -50,7 +50,8 @@
 }
 
 - (void)autoresizingMaskMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UIViewAutoresizingNone,
+	metaData.enumDescriptor = CKEnumDefinition(@"UIViewAutoresizing",
+                                                   UIViewAutoresizingNone,
 											   UIViewAutoresizingFlexibleLeftMargin,
 											   UIViewAutoresizingFlexibleWidth,
 											   UIViewAutoresizingFlexibleRightMargin,
@@ -60,7 +61,8 @@
 }
 
 - (void)contentModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UIViewContentModeScaleToFill,
+	metaData.enumDescriptor = CKEnumDefinition(@"UIViewContentMode",
+                                                   UIViewContentModeScaleToFill,
 											   UIViewContentModeScaleAspectFit,
 											   UIViewContentModeScaleAspectFill,
 											   UIViewContentModeRedraw,

@@ -15,8 +15,8 @@
 
 @implementation CKFormCellDescriptor (CKOptions)
 
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath enumDefinition:(NSDictionary*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
-    return [CKFormCellDescriptor cellDescriptorWithObject:object keyPath:keyPath enumDefinition:enumDefinition multiSelectionEnabled:multiSelectionEnabled readOnly:NO];
++ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath enumDescriptor:(CKEnumDescriptor*)enumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled{
+    return [CKFormCellDescriptor cellDescriptorWithObject:object keyPath:keyPath enumDescriptor:enumDescriptor multiSelectionEnabled:multiSelectionEnabled readOnly:NO];
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath valuesAndLabels:(NSDictionary*)valuesAndLabels{
@@ -24,8 +24,8 @@
     
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath enumDefinition:(NSDictionary*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
-    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath] enumDefinition:enumDefinition multiSelectionEnabled:multiSelectionEnabled readOnly:readOnly];
++ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath enumDescriptor:(CKEnumDescriptor*)enumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath] enumDescriptor:enumDescriptor multiSelectionEnabled:multiSelectionEnabled readOnly:readOnly];
     
 }
 
@@ -34,8 +34,8 @@
 }
 
 
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property enumDefinition:(NSDictionary*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
-    return [CKFormCellDescriptor cellDescriptorWithProperty:property enumDefinition:enumDefinition multiSelectionEnabled:multiSelectionEnabled readOnly:NO];
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property enumDescriptor:(CKEnumDescriptor*)enumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:property enumDescriptor:enumDescriptor multiSelectionEnabled:multiSelectionEnabled readOnly:NO];
     
 }
 
@@ -44,17 +44,17 @@
     
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty enumDefinition:(NSDictionary*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty enumDescriptor:(CKEnumDescriptor*)enumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
     CKFormCellDescriptor* cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[theproperty value] controllerClass:[CKOptionCellController class]];
     [cellDescriptor setSetupBlock:^(id controller){
         CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
         //init optionCellController
         NSMutableArray* localizedLabels = [NSMutableArray array];
-        for(NSString* str in [enumDefinition allKeys]){
+        for(NSString* str in [enumDescriptor.valuesAndLabels allKeys]){
             [localizedLabels addObject:_(str)];
         }
         optionCellController.labels = localizedLabels;
-        optionCellController.values = [enumDefinition allValues];
+        optionCellController.values = [enumDescriptor.valuesAndLabels allValues];
         
         CKObjectProperty* property = theproperty;
         [optionCellController beginBindingsContextByRemovingPreviousBindings];

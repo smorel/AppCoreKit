@@ -12,6 +12,7 @@
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKDocumentCollection.h"
+#import "CKModelObjectPropertyMetaData.h"
 
 
 /** TODO

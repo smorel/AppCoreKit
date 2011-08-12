@@ -8,6 +8,7 @@
 
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Invocation.h"
+#import "CKModelObjectPropertyMetaData.h"
 
 
 @implementation CKDocumentCollection

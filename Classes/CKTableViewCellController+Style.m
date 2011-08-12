@@ -27,7 +27,8 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (CKTableViewCellStyle)cellStyle{
 	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
-									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, 
+									 withEnumDescriptor:CKEnumDefinition(@"UITableViewCellStyle",
+                                                                         UITableViewCellStyleDefault, 
 																	 UITableViewCellStyleValue1, 
 																	 UITableViewCellStyleValue2,
 																	 UITableViewCellStyleSubtitle,
@@ -49,7 +50,8 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (CKItemViewFlags)cellFlags{
 	return (CKItemViewFlags)[self enumValueForKey:CKStyleCellFlags 
-										withDictionary:CKEnumDictionary(CKItemViewFlagNone,
+										withEnumDescriptor:CKEnumDefinition(@"CKItemViewFlags",
+                                                                            CKItemViewFlagNone,
 																		CKItemViewFlagSelectable,
 																		CKItemViewFlagEditable,
 																		CKItemViewFlagRemovable,

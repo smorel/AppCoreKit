@@ -21,7 +21,8 @@
 }
 
 - (void)styleMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(CKMapAnnotationCustom,
+	metaData.enumDescriptor = CKEnumDefinition(@"CKMapAnnotationStyle",
+                                               CKMapAnnotationCustom,
 											   CKMapAnnotationPin);
 }
 

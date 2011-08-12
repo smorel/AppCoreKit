@@ -57,12 +57,12 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	}	return result;
 }
 
-- (NSInteger) enumValueForKey:(NSString*)key withDictionary:(NSDictionary*)dictionary{
+- (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
 	id object = [self objectForKey:key];
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
-	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDefinition:dictionary];
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;
 }

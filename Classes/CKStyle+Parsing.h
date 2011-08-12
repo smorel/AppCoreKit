@@ -18,7 +18,7 @@
 - (NSArray*) colorArrayForKey:(NSString*)key;
 - (NSArray*) cgFloatArrayForKey:(NSString*)key;
 - (UIImage*) imageForKey:(NSString*)key;
-- (NSInteger) enumValueForKey:(NSString*)key withDictionary:(NSDictionary*)dictionary;
+- (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor;
 - (CGSize) cgSizeForKey:(NSString*)key;
 - (CGFloat) cgFloatForKey:(NSString*)key;
 - (NSString*) stringForKey:(NSString*)key;

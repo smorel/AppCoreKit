@@ -29,13 +29,15 @@ NSString* CKStyleFontName = @"fontName";
 @implementation UILabel (CKValueTransformer)
 
 - (void)textAlignmentMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITextAlignmentLeft,
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+                                                   UITextAlignmentLeft,
 											   UITextAlignmentCenter,
 											   UITextAlignmentRight);
 }
 
 - (void)lineBreakModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UILineBreakModeWordWrap,
+	metaData.enumDescriptor = CKEnumDefinition(@"UILineBreakMode",
+                                                   UILineBreakModeWordWrap,
 											   UILineBreakModeCharacterWrap,
 											   UILineBreakModeClip,
 											   UILineBreakModeHeadTruncation,
@@ -44,7 +46,8 @@ NSString* CKStyleFontName = @"fontName";
 }
 
 - (void)baselineAdjustmentMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UIBaselineAdjustmentAlignBaselines,
+	metaData.enumDescriptor = CKEnumDefinition(@"UIBaselineAdjustment",
+                                                   UIBaselineAdjustmentAlignBaselines,
 											   UIBaselineAdjustmentAlignCenters,
 											   UIBaselineAdjustmentNone);
 }

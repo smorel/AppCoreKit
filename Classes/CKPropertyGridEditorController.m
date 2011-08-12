@@ -124,8 +124,8 @@
 					return (id)nil;
 				}];
 			}
-			else if(metaData.enumDefinition != nil){
-				NSDictionary* copyOfLabelsAndValues = [metaData.enumDefinition copy];//we copy it as metaData is a reused singleton
+			else if(metaData.enumDescriptor != nil){
+				NSDictionary* copyOfLabelsAndValues = [metaData.enumDescriptor.valuesAndLabels copy];//we copy it as metaData is a reused singleton
 				CKFormCellDescriptor* descriptor = [section addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]]];
                 [descriptor setCreateBlock:^(id controller){
 					CKOptionCellController* optionCellController = (CKOptionCellController*)controller;

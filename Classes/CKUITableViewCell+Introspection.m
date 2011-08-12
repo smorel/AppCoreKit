@@ -14,27 +14,31 @@
 @implementation UITableViewCell (CKIntrospectionAdditions)
 
 - (void)accessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                   UITableViewCellAccessoryNone, 
 											   UITableViewCellAccessoryDisclosureIndicator, 
 											   UITableViewCellAccessoryDetailDisclosureButton,
 											   UITableViewCellAccessoryCheckmark);
 }
 
 - (void)editingAccessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellAccessoryNone, 
+	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                   UITableViewCellAccessoryNone, 
 											   UITableViewCellAccessoryDisclosureIndicator, 
 											   UITableViewCellAccessoryDetailDisclosureButton,
 											   UITableViewCellAccessoryCheckmark);
 }
 
 - (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellSelectionStyleNone,
+	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellSelectionStyle",
+                                                   UITableViewCellSelectionStyleNone,
 											   UITableViewCellSelectionStyleBlue,
 											   UITableViewCellSelectionStyleGray);
 }
 
 - (void)editingStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UITableViewCellEditingStyleNone,
+	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellEditingStyle",
+                                                   UITableViewCellEditingStyleNone,
 											   UITableViewCellEditingStyleDelete,
 											   UITableViewCellEditingStyleInsert);
 }
