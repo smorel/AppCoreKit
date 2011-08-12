@@ -136,8 +136,8 @@
     }
 }
 
-- (id)standardLayout:(CKPropertyGridCellController*)controller{
-    [super standardLayout:controller];
+- (id)performStandardLayout:(CKPropertyGridCellController*)controller{
+    [super performStandardLayout:controller];
     if(controller.validationButton != nil){
         controller.validationButton.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
     }

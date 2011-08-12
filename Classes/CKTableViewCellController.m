@@ -81,7 +81,7 @@
         self.rowHeight = 44.0f;
         self.editable = YES;
         
-        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(standardLayout:)];
+        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
 	}
 	return self;
 }
@@ -395,7 +395,7 @@
 
 - (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
     if(thelayoutCallback == nil){
-        thelayoutCallback = [CKCallback callbackWithTarget:self action:@selector(standardLayout:)];
+        thelayoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
     }
     [_layoutCallback release];
     _layoutCallback = [thelayoutCallback retain];
@@ -625,7 +625,7 @@
 }
 
 
-- (id)standardLayout:(CKTableViewCellController *)controller{
+- (id)performStandardLayout:(CKTableViewCellController *)controller{
     UITableViewCell* cell = controller.tableViewCell;
     //You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.

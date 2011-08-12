@@ -120,9 +120,15 @@ typedef enum CKTableViewCellStyle {
 @end
 
 
+
+
+
+
+//FIXME use layout when available !
+
 @interface CKTableViewCellController (CKLayout)
 
-- (id)standardLayout:(CKTableViewCellController *)controller;
+- (id)performStandardLayout:(CKTableViewCellController *)controller;
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;

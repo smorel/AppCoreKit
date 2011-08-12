@@ -62,8 +62,8 @@
     }  
 }
 
-- (id)standardLayout:(CKMultilineNSStringPropertyCellController*)controller{
-    [super standardLayout:controller];
+- (id)performStandardLayout:(CKMultilineNSStringPropertyCellController*)controller{
+    [super performStandardLayout:controller];
     
     UITableViewCell* cell = controller.tableViewCell;
     controller.textView.autoresizingMask = UIViewAutoresizingNone;

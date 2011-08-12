@@ -54,8 +54,8 @@
 	self.textField = txtField;
 }
 
-- (id)standardLayout:(CKNSStringPropertyCellController*)controller{
-	[super standardLayout:controller];
+- (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
+	[super performStandardLayout:controller];
     UITableViewCell* cell = controller.tableViewCell;
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){

@@ -78,7 +78,7 @@
 	[cell.contentView addSubview:textView];
 }
 
-- (id)standardLayout:(CKTextViewCellController*)controller{
+- (id)performStandardLayout:(CKTextViewCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
 	CKTextView *textField = (CKTextView*)[cell.contentView viewWithTag:kTextViewTag];
 	//update accessory view frame

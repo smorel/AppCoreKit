@@ -179,7 +179,7 @@
 	}	
 }
 
-- (id)standardLayout:(CKNSNumberPropertyCellController*)controller{
+- (id)performStandardLayout:(CKNSNumberPropertyCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
     
 	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
@@ -189,7 +189,7 @@
         controller.componentsRatio = 0;
     }
     
-	[super standardLayout:controller];
+	[super performStandardLayout:controller];
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3){

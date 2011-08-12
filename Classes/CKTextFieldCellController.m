@@ -54,7 +54,7 @@
 	cell.accessoryView = textField;
 }
 
-- (id)standardLayout:(CKTextFieldCellController*)controller{
+- (id)performStandardLayout:(CKTextFieldCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
 	UITextField *textField = (UITextField*)cell.accessoryView;
 	//update accessory view frame
