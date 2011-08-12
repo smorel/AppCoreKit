@@ -11,14 +11,19 @@
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
+#import "CKFormTableViewController.h"
 
 @interface CKPropertyGridCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
+@property(nonatomic,retain)UIView* oldAccessoryView;
+@property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
 @end
 
 @implementation CKPropertyGridCellController
 @synthesize readOnly = _readOnly;
 @synthesize validationButton = _validationButton;
+@synthesize oldAccessoryView = _oldAccessoryView;
+@synthesize oldAccessoryType = _oldAccessoryType;
 
 - (id)init{
 	[super init];
@@ -27,8 +32,11 @@
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_validation",self]];
     [_validationButton release];
     _validationButton = nil;
+    [_oldAccessoryView release];
+    _oldAccessoryView = nil;
     [super dealloc];
 }
 
@@ -61,11 +69,14 @@
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];
     
-    [self beginBindingsContextByKeepingPreviousBindings];
-    [cell bind:@"backgroundColor" withBlock:^(id value) {
-        BOOL validity = [self isValidValue:[[self objectProperty] value]];
-        [self setInvalidButtonVisible:!validity];
-    }];
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_validation",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+        [form bind:@"validationEnabled" withBlock:^(id value) {
+            BOOL validity = [self isValidValue:[[self objectProperty] value]];
+            [self setInvalidButtonVisible:!validity];
+        }];
+    }
     [self endBindingsContext];
 }
 
@@ -107,17 +118,37 @@
     if(self.view == nil)
         return;
     
-   if(visible){
-        if(_validationButton == nil){
-            self.validationButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-            [_validationButton addTarget:self action:@selector(validationInfos:) forControlEvents:UIControlEventTouchUpInside];
+    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+        visible = visible && form.validationEnabled;
+        BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+                                           || [self parentTableView].style == UITableViewStylePlain );
+        
+        if(visible){
+            if(_validationButton == nil){
+                self.validationButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+                [_validationButton addTarget:self action:@selector(validationInfos:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            
+            if(shouldReplaceAccessoryView){
+                _oldAccessoryView = self.tableViewCell.accessoryView;
+                _oldAccessoryType = self.tableViewCell.accessoryType;
+                self.tableViewCell.accessoryView = _validationButton;
+            }
+            else{
+                _validationButton.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
+                [self.tableViewCell addSubview:_validationButton];
+            }
         }
-         
-       _validationButton.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
-        [self.tableViewCell addSubview:_validationButton];
-    }
-    else if(_validationButton){
-        [_validationButton removeFromSuperview];
+        else if(_validationButton){
+            if(shouldReplaceAccessoryView){
+                self.tableViewCell.accessoryView = _oldAccessoryView;
+                self.tableViewCell.accessoryType = _oldAccessoryType;
+            }
+            else{
+                [_validationButton removeFromSuperview];
+            }
+        }
     }
 }
 
@@ -139,7 +170,11 @@
 - (id)performStandardLayout:(CKPropertyGridCellController*)controller{
     [super performStandardLayout:controller];
     if(controller.validationButton != nil){
-        controller.validationButton.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+        BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+                                           || [self parentTableView].style == UITableViewStylePlain );
+        if(!shouldReplaceAccessoryView){
+            controller.validationButton.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+        }
     }
     return (id)nil;
 }

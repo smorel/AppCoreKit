@@ -148,11 +148,13 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 	BOOL _autoHideSections;
 	BOOL _autoHideSectionHeaders;
 	BOOL reloading;
+    BOOL _validationEnabled;
 }
 @property (nonatomic,retain, readonly) NSMutableArray* sections;
 @property (nonatomic,readonly) BOOL reloading;
 @property (nonatomic,assign) BOOL autoHideSections;
 @property (nonatomic,assign) BOOL autoHideSectionHeaders;
+@property (nonatomic,assign) BOOL validationEnabled;
 
 ///-----------------------------------
 /// @name Initializing CKFormTableViewController

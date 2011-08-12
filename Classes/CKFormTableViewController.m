@@ -796,6 +796,7 @@
 @synthesize autoHideSections = _autoHideSections;
 @synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
+@synthesize validationEnabled = _validationEnabled;
 
 - (void)postInit{
 	[super postInit];
@@ -804,6 +805,7 @@
 	self.sections = [NSMutableArray array];
 	_autoHideSections = NO;
 	_autoHideSectionHeaders = NO;
+    _validationEnabled = NO;
     self.style = UITableViewStyleGrouped;
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyResignResponder;
 }

@@ -15,6 +15,8 @@
  */
 @interface CKPropertyGridCellController : CKTableViewCellController {
     UIButton* _validationButton;
+    UIView* _oldAccessoryView;
+    UITableViewCellAccessoryType _oldAccessoryType;
 }
 /** 
  Specify whether the cell should be editable or readonly. Depending on this value, the detail ui view should change.
