@@ -90,9 +90,9 @@
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	NSAssert(section == 0,@"Invalid section");
-	if(_collection && _collection.feedSource){
+	/*if(_collection && _collection.feedSource){
 		range.location--;
-	}
+	}*/
 			
 	//Adjust range using limit
 	range.location = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,range.location) : range.location;

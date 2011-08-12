@@ -280,24 +280,31 @@
 
 - (void)fetchMoreData{
 	//Fetch data if needed
+	NSInteger minVisibleSectionIndex = INT32_MAX;
+	NSInteger maxVisibleSectionIndex = -1;
 	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
 	NSArray* visibleCells = [self visibleViews];
 	for(UIView* cell in visibleCells){
 		NSIndexPath *indexPath = [self indexPathForView:cell];
-		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:indexPath.section]];
+		NSInteger section = indexPath.section;
+		if(section < minVisibleSectionIndex) minVisibleSectionIndex = section;
+		if(section > maxVisibleSectionIndex) maxVisibleSectionIndex = section;
+		id maxForSection = [maxIndexPaths objectForKey:[NSNumber numberWithInt:section]];
 		if(maxForSection != nil){
 			if(indexPath.row > [maxForSection intValue]){
-				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+				[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:section]];
 			}
 		}
 		else{
-			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:indexPath.section]];
+			[maxIndexPaths setObject:[NSNumber numberWithInt:indexPath.row] forKey:[NSNumber numberWithInt:section]];
 		}
 	}
 	
-	for(NSNumber* numSection in [maxIndexPaths allKeys]){
-		NSNumber* numRow = [maxIndexPaths objectForKey:numSection];
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:[numRow intValue] inSection:[numSection intValue]]];
+	for(NSInteger i = minVisibleSectionIndex; i <= maxVisibleSectionIndex; ++i){
+		NSNumber* sectionNumber = [NSNumber numberWithInt:i];
+		id maxRowNumber = [maxIndexPaths objectForKey:sectionNumber];
+		NSInteger maxRow = maxRowNumber ? [maxRowNumber intValue] : 0;
+		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:maxRow inSection:i]];
 	}
 }
 
