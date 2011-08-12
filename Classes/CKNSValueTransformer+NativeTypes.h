@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "CKModelObject.h"
 
-@interface CKEnumDescriptor : CKModelObject{}
+@interface CKEnumDescriptor : NSObject{}
 @property(nonatomic,retain)NSString* name;
 @property(nonatomic,retain)NSDictionary* valuesAndLabels;
 @end

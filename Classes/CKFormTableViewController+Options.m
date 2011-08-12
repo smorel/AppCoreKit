@@ -44,17 +44,18 @@
     
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty enumDescriptor:(CKEnumDescriptor*)enumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty enumDescriptor:(CKEnumDescriptor*)theEnumDescriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled readOnly:(BOOL)readOnly{
+    NSDictionary* valuesAndLabels = [theEnumDescriptor.valuesAndLabels copy];
     CKFormCellDescriptor* cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[theproperty value] controllerClass:[CKOptionCellController class]];
     [cellDescriptor setSetupBlock:^(id controller){
         CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
         //init optionCellController
         NSMutableArray* localizedLabels = [NSMutableArray array];
-        for(NSString* str in [enumDescriptor.valuesAndLabels allKeys]){
+        for(NSString* str in [valuesAndLabels allKeys]){
             [localizedLabels addObject:_(str)];
         }
         optionCellController.labels = localizedLabels;
-        optionCellController.values = [enumDescriptor.valuesAndLabels allValues];
+        optionCellController.values = [valuesAndLabels allValues];
         
         CKObjectProperty* property = theproperty;
         [optionCellController beginBindingsContextByRemovingPreviousBindings];
@@ -91,8 +92,8 @@
     return cellDescriptor;
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty valuesAndLabels:(NSDictionary*)valuesAndLabels readOnly:(BOOL)readOnly{
-    
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)theproperty valuesAndLabels:(NSDictionary*)thevaluesAndLabels readOnly:(BOOL)readOnly{
+    NSDictionary* valuesAndLabels = [thevaluesAndLabels copy];
     CKFormCellDescriptor* cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:theproperty controllerClass:[CKOptionCellController class]];
     [cellDescriptor setSetupBlock:^(id controller){
         CKOptionCellController* optionCellController = (CKOptionCellController*)controller;

@@ -66,10 +66,10 @@
             cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
         }
         else if(metaData.valuesAndLabels != nil){
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property valuesAndLabels:[metaData.valuesAndLabels copy]];
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property valuesAndLabels:metaData.valuesAndLabels];
         }
         else if(metaData.enumDescriptor != nil){
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDescriptor:[metaData.enumDescriptor copy] multiSelectionEnabled:metaData.multiselectionEnabled];
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDescriptor:metaData.enumDescriptor multiSelectionEnabled:metaData.multiselectionEnabled];
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
