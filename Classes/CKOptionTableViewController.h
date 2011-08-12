@@ -41,4 +41,7 @@
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index;
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled;
 
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index style:(UITableViewStyle)style;
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled style:(UITableViewStyle)style;
+
 @end

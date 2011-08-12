@@ -25,17 +25,17 @@
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
 	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
 
-	if (self = [super initWithText:title]) {
-		self.values = values;
-		self.labels = labels;
-		self.cellStyle = UITableViewCellStyleValue1;
-        self.optionCellStyle = UITableViewCellStyleValue1;
-	}
+	self = [super initWithText:title]; 
+    self.values = values;
+    self.labels = labels;
+    self.cellStyle = UITableViewCellStyleValue1;
+    self.optionCellStyle = UITableViewCellStyleValue1;
+	
 	return self;
 }
 
 - (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels multiSelectionEnabled:(BOOL)multiSelectionEnabled{
-	[self initWithTitle:title values:values labels:labels];
+	self = [self initWithTitle:title values:values labels:labels];
 	self.multiSelectionEnabled = multiSelectionEnabled;
     if(multiSelectionEnabled){
         for(id v in values){
@@ -138,12 +138,13 @@
 
 - (void)didSelectRow {
 	[super didSelectRow];
+    CKTableViewController* tableController = (CKTableViewController*)[self parentController];
 	CKOptionTableViewController *optionTableController = nil;
 	if(self.multiSelectionEnabled){
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES] autorelease];
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}
 	else{
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.value intValue]] autorelease];
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.value intValue] style:[tableController style]] autorelease];
 	}
     optionTableController.optionCellStyle = self.optionCellStyle;
 	optionTableController.title = self.text;
