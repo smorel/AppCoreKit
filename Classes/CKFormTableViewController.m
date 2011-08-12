@@ -646,7 +646,7 @@
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate){
+	if(sectionUpdate || self.hidden){
 		return;
 	}
 	
@@ -658,7 +658,7 @@
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate){
+	if(sectionUpdate || self.hidden){
 		return;
 	}
 	
@@ -670,7 +670,7 @@
 
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate){
+	if(sectionUpdate || self.hidden){
 		return;
 	}
 	int headerCount = [_headerCellDescriptors count];
@@ -687,7 +687,7 @@
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate){
+	if(sectionUpdate || self.hidden){
 		return;
 	}
 	int headerCount = [_headerCellDescriptors count];
@@ -841,7 +841,7 @@
 			[section start];
 			
 			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-				section.hidden = ([section numberOfObjects] <= 0);
+				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
 					CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
 					[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
