@@ -484,6 +484,8 @@
 		75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */; };
 		75FB529F13F5846F0053BD4A /* CKFormTableViewController+Options.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB529D13F5846E0053BD4A /* CKFormTableViewController+Options.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52A013F5846F0053BD4A /* CKFormTableViewController+Options.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB529E13F5846F0053BD4A /* CKFormTableViewController+Options.m */; };
+		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
+		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -952,6 +954,8 @@
 		75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSPredicate+Additions.m"; path = "Classes/CKNSPredicate+Additions.m"; sourceTree = "<group>"; };
 		75FB529D13F5846E0053BD4A /* CKFormTableViewController+Options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+Options.h"; path = "Classes/CKFormTableViewController+Options.h"; sourceTree = "<group>"; };
 		75FB529E13F5846F0053BD4A /* CKFormTableViewController+Options.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+Options.m"; path = "Classes/CKFormTableViewController+Options.m"; sourceTree = "<group>"; };
+		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
+		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1547,6 +1551,8 @@
 		7536F9D113CE0BE900720C17 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */,
+				75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */,
 				4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */,
 				4F4A913313F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png */,
 				4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */,
@@ -2191,6 +2197,8 @@
 				4F4A916E13F040EC0093293F /* wc-appsignature-type-dark-craftedby@2x.png in Resources */,
 				4F4A917113F040EC0093293F /* wc-appsignature-type-light-craftedby.png in Resources */,
 				4F4A917213F040EC0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */,
+				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
+				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,9 +12,13 @@
 #import "CKLocalization.h"
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
+#import "CKBundle.h"
+
+#define CLICKABLE_VALIDATION_INFO 0
 
 @interface CKPropertyGridCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
+@property(nonatomic,retain)UIImageView* validationImageView;
 @property(nonatomic,retain)UIView* oldAccessoryView;
 @property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
 @end
@@ -24,6 +28,7 @@
 @synthesize validationButton = _validationButton;
 @synthesize oldAccessoryView = _oldAccessoryView;
 @synthesize oldAccessoryType = _oldAccessoryType;
+@synthesize validationImageView = _validationImageView;
 
 - (id)init{
 	[super init];
@@ -37,6 +42,8 @@
     _validationButton = nil;
     [_oldAccessoryView release];
     _oldAccessoryView = nil;
+    [_validationImageView release];
+    _validationImageView = nil;
     [super dealloc];
 }
 
@@ -99,18 +106,20 @@
 }
 
 - (CGRect)rectForValidationButtonWithCell:(UITableViewCell*)cell{
-    if(!_validationButton)
+    UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)self.validationButton : (UIView*)self.validationImageView;
+    
+    if(!newAccessoryView)
         return CGRectMake(0,0,0,0);
     
     UIView* contentView = cell.contentView;
     CGRect contentRect = contentView.frame;
-    CGFloat x = MAX(_validationButton.frame.size.width / 2.0,contentRect.origin.x / 2.0);
+    CGFloat x = MAX(newAccessoryView.frame.size.width / 2.0,contentRect.origin.x / 2.0);
     
     
-    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - _validationButton.frame.size.width / 2.0,
-                                   self.tableViewCell.frame.size.height / 2.0 - _validationButton.frame.size.height / 2.0,
-                                   _validationButton.frame.size.width,
-                                   _validationButton.frame.size.height);
+    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - newAccessoryView.frame.size.width / 2.0,
+                                   self.tableViewCell.frame.size.height / 2.0 - newAccessoryView.frame.size.height / 2.0,
+                                   newAccessoryView.frame.size.width,
+                                   newAccessoryView.frame.size.height);
     return CGRectIntegral(buttonRect);
 }
 
@@ -125,28 +134,39 @@
                                            || [self parentTableView].style == UITableViewStylePlain );
         
         if(visible){
-            if(_validationButton == nil){
-                self.validationButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+            UIImage* image = [CKBundle imageForName:@"form-icon-invalid"];
+            if(CLICKABLE_VALIDATION_INFO && _validationButton == nil){
+                self.validationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                _validationButton.frame = CGRectMake(0,0,image.size.width,image.size.height);
+                [_validationButton setImage:image forState:UIControlStateNormal];
                 [_validationButton addTarget:self action:@selector(validationInfos:) forControlEvents:UIControlEventTouchUpInside];
             }
+            else if(!CLICKABLE_VALIDATION_INFO && _validationImageView == nil){
+                self.validationImageView = [[[UIImageView alloc]initWithImage:image]autorelease];
+                _validationImageView.frame = CGRectMake(0,0,image.size.width,image.size.height);
+            }
             
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
             if(shouldReplaceAccessoryView){
                 _oldAccessoryView = self.tableViewCell.accessoryView;
                 _oldAccessoryType = self.tableViewCell.accessoryType;
-                self.tableViewCell.accessoryView = _validationButton;
+                self.tableViewCell.accessoryView = newAccessoryView;
             }
             else{
-                _validationButton.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
-                [self.tableViewCell addSubview:_validationButton];
+                newAccessoryView.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
+                [self.tableViewCell addSubview:newAccessoryView];
             }
         }
-        else if(_validationButton){
-            if(shouldReplaceAccessoryView){
-                self.tableViewCell.accessoryView = _oldAccessoryView;
-                self.tableViewCell.accessoryType = _oldAccessoryType;
-            }
-            else{
-                [_validationButton removeFromSuperview];
+        else{
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
+            if(newAccessoryView){
+                if(shouldReplaceAccessoryView){
+                    self.tableViewCell.accessoryView = _oldAccessoryView;
+                    self.tableViewCell.accessoryType = _oldAccessoryType;
+                }
+                else{
+                    [newAccessoryView removeFromSuperview];
+                }
             }
         }
     }
@@ -173,7 +193,8 @@
         BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
                                            || [self parentTableView].style == UITableViewStylePlain );
         if(!shouldReplaceAccessoryView){
-            controller.validationButton.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)controller.validationButton : (UIView*)controller.validationImageView;
+            newAccessoryView.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
         }
     }
     return (id)nil;

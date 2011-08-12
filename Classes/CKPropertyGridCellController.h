@@ -15,6 +15,7 @@
  */
 @interface CKPropertyGridCellController : CKTableViewCellController {
     UIButton* _validationButton;
+    UIImageView* _validationImageView;
     UIView* _oldAccessoryView;
     UITableViewCellAccessoryType _oldAccessoryType;
 }
