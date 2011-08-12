@@ -193,3 +193,10 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
 
 @end
+
+
+//Adds extensions here to avoid importing to much files in client projects
+
+#import "CKFormTableViewController+PropertyGrid.h"
+#import "CKFormTableViewController+Menus.h"
+#import "CKFormTableViewController+Options.h"

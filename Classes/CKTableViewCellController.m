@@ -80,6 +80,8 @@
         self.selectable = YES;
         self.rowHeight = 44.0f;
         self.editable = YES;
+        
+        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(standardLayout:)];
 	}
 	return self;
 }
@@ -391,6 +393,20 @@
 	[super didSelect];
 }
 
+- (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
+    if(thelayoutCallback == nil){
+        thelayoutCallback = [CKCallback callbackWithTarget:self action:@selector(standardLayout:)];
+    }
+    [_layoutCallback release];
+    _layoutCallback = [thelayoutCallback retain];
+}
+
+- (void)layoutCell:(UITableViewCell *)cell{
+    if(_layoutCallback){
+        [_layoutCallback execute:self];
+    }
+}
+
 #ifdef DEBUG 
 - (void)debugGesture:(UILongPressGestureRecognizer *)recognizer{
 	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
@@ -608,8 +624,10 @@
     return [self value3TextFrameForCell:cell];
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-	//You can overload this method if you need to update cell layout when cell is resizing.
+
+- (id)standardLayout:(CKTableViewCellController *)controller{
+    UITableViewCell* cell = controller.tableViewCell;
+    //You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		if(cell.detailTextLabel != nil){
@@ -633,10 +651,7 @@
 			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
-    
-    if(_layoutCallback){
-        [_layoutCallback execute:self];
-    }
+    return (id)nil;
 }
 
 @end

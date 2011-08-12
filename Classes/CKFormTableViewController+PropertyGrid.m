@@ -66,71 +66,10 @@
             cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
         }
         else if(metaData.valuesAndLabels != nil){
-            NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton
-            
-            NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[NSNumber numberWithInt:index] controllerClass:[CKOptionCellController class]];
-            [cellDescriptor setSetupBlock:^(id controller){
-                CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                [optionCellController beginBindingsContextByRemovingPreviousBindings];
-                NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
-                optionCellController.value = [NSNumber numberWithInt:index];
-                optionCellController.text = _(property.name);
-                optionCellController.values = [copyOfValuesAndLabels allValues];
-                optionCellController.labels = [copyOfValuesAndLabels allKeys];
-                [optionCellController bind:@"currentValue" withBlock:^(id value){
-                    [property setValue:value];
-                    [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
-                    
-                    NSInteger index = [[copyOfValuesAndLabels allValues]indexOfObject:[property value]];
-                    cellDescriptor.value = [NSNumber numberWithInt:index];
-                }];
-                [optionCellController endBindingsContext];
-                return (id)nil;
-            }];
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property valuesAndLabels:[metaData.valuesAndLabels copy]];
         }
         else if(metaData.enumDefinition != nil){
-            NSDictionary* copyOfLabelsAndValues = [metaData.enumDefinition copy];//we copy it as metaData is a reused singleton
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:[property value] controllerClass:[CKOptionCellController class]];
-            [cellDescriptor setSetupBlock:^(id controller){
-                CKOptionCellController* optionCellController = (CKOptionCellController*)controller;
-                [optionCellController beginBindingsContextByRemovingPreviousBindings];
-                optionCellController.multiSelectionEnabled = metaData.multiselectionEnabled;
-                if(optionCellController.multiSelectionEnabled){
-                    optionCellController.value = [property value];
-                }
-                else{
-                    NSInteger index = [[copyOfLabelsAndValues allValues]indexOfObject:[property value]];
-                    optionCellController.value = [NSNumber numberWithInt:index];
-                }
-                optionCellController.text = _(property.name);
-                optionCellController.values = [copyOfLabelsAndValues allValues];
-                NSMutableArray* localizedLabels = [NSMutableArray array];
-                for(NSString* str in [copyOfLabelsAndValues allKeys]){
-                    [localizedLabels addObject:_(str)];
-                }
-                optionCellController.labels = localizedLabels;
-                [optionCellController bind:@"currentValue" withBlock:^(id value){
-                    if(value == nil || [value isKindOfClass:[NSNull class]]){
-                        [property setValue:[NSNumber numberWithInt:0]];
-                        cellDescriptor.value = [NSNumber numberWithInt:0];
-                    }
-                    else{
-                        [property setValue:value];
-                        if(optionCellController.multiSelectionEnabled){
-                            optionCellController.value = [property value];
-                        }
-                        else{
-                            NSInteger index = [[copyOfLabelsAndValues allValues]indexOfObject:[property value]];
-                            optionCellController.value = [NSNumber numberWithInt:index];
-                        }
-                    }
-                    [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
-                }];
-                [optionCellController endBindingsContext];
-                
-                return (id)nil;
-            }];
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDefinition:[metaData.enumDefinition copy] multiSelectionEnabled:metaData.multiselectionEnabled];
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
