@@ -8,6 +8,7 @@
 
 #import "CKOptionTableViewController.h"
 #import "CKStandardCellController.h"
+#import "CKLocalization.h"
 
 
 @interface CKOptionTableViewController ()
@@ -160,7 +161,7 @@
         }
     }
     standardController.tableViewCell.textLabel.text = @"";
-	standardController.tableViewCell.detailTextLabel.text = text;
+	standardController.tableViewCell.detailTextLabel.text = _(text);
 	return nil;
 }
 

@@ -21,9 +21,11 @@
 #import "CKNSDatePropertyCellController.h"
 #import "CKCGPropertyCellControllers.h"
 #import "CKUIImagePropertyCellController.h"
+#import "CKOptionPropertyCellController.h"
 
 #import "CKNSObject+Introspection.h"
 #import "CKNSNotificationCenter+Edition.h"
+
 
 @interface CKFormTableViewController(CKPropertyGridPrivate)
 - (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter;
@@ -65,11 +67,9 @@
             NSAssert([NSObject isKindOf:metaData.propertyCellControllerClass parentType:[CKTableViewCellController class]],@"invalid propertyCellControllerClass defined for property : %@",property);
             cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
         }
-        else if(metaData.valuesAndLabels != nil){
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property valuesAndLabels:metaData.valuesAndLabels];
-        }
-        else if(metaData.enumDescriptor != nil){
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property enumDescriptor:metaData.enumDescriptor multiSelectionEnabled:metaData.multiselectionEnabled];
+        else if(metaData.valuesAndLabels != nil
+                || metaData.enumDescriptor != nil ){
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKOptionPropertyCellController class]];
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
