@@ -25,14 +25,14 @@ static CKStyleManager* CKStyleManagerDefault = nil;
 
 - (void)loadContentOfFileNamed:(NSString*)name{
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
-    NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
+   // NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	[self loadContentOfFile:path];
 }
 
 
 - (BOOL)importContentOfFileNamed:(NSString*)name{
 	NSString* path = [[NSBundle mainBundle]pathForResource:name ofType:@"style"];
-    NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
+    //NSLog(@"loadContentOfFileNamed %@ with path %@",name,path);
 	return [self appendContentOfFile:path];
 }
 
