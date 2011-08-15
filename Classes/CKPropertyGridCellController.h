@@ -52,5 +52,6 @@
 
 //Private
 - (void)setInvalidButtonVisible:(BOOL)visible;
+- (void)performValidationLayout:(CKPropertyGridCellController*)controller;
 
 @end

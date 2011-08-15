@@ -115,20 +115,20 @@
 }
 
 - (CGRect)rectForValidationButtonWithCell:(UITableViewCell*)cell{
-    UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)self.validationButton : (UIView*)self.validationImageView;
+    UIImage* img = CLICKABLE_VALIDATION_INFO ? (UIImage*)[self.validationButton currentImage] : (UIImage*)[self.validationImageView image];
     
-    if(!newAccessoryView)
+    if(!img)
         return CGRectMake(0,0,0,0);
     
     UIView* contentView = cell.contentView;
     CGRect contentRect = contentView.frame;
-    CGFloat x = MAX(newAccessoryView.frame.size.width / 2.0,contentRect.origin.x / 2.0);
+    CGFloat x = MAX(img.size.width / 2.0,contentRect.origin.x / 2.0);
     
     
-    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - newAccessoryView.frame.size.width / 2.0,
-                                   self.tableViewCell.frame.size.height / 2.0 - newAccessoryView.frame.size.height / 2.0,
-                                   newAccessoryView.frame.size.width,
-                                   newAccessoryView.frame.size.height);
+    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - img.size.width / 2.0,
+                                   self.tableViewCell.frame.size.height / 2.0 - img.size.height / 2.0,
+                                   img.size.width,
+                                   img.size.height);
     return CGRectIntegral(buttonRect);
 }
 
@@ -204,7 +204,13 @@
 
 - (id)performStandardLayout:(CKPropertyGridCellController*)controller{
     [super performStandardLayout:controller];
-    if(controller.validationButton != nil){
+    [self performValidationLayout:controller];
+    return (id)nil;
+}
+
+- (void)performValidationLayout:(CKPropertyGridCellController*)controller{
+    if(controller.validationButton != nil
+       || controller.validationImageView != nil){
         BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
                                            || [self parentTableView].style == UITableViewStylePlain );
         if(!shouldReplaceAccessoryView){
@@ -212,7 +218,6 @@
             newAccessoryView.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
         }
     }
-    return (id)nil;
 }
 
 @end
