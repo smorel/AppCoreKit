@@ -33,6 +33,7 @@
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
+    _validationDisplayed = NO;
 	return self;
 }
 
@@ -75,7 +76,7 @@
 
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];
-    
+
     [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_validation",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
     if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
         CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
@@ -142,7 +143,7 @@
         BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
                                            || [self parentTableView].style == UITableViewStylePlain );
         
-        if(visible){
+        if(visible && !_validationDisplayed){
             UIImage* image = [CKBundle imageForName:@"form-icon-invalid"];
             if(CLICKABLE_VALIDATION_INFO && _validationButton == nil){
                 self.validationButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -165,8 +166,9 @@
                 newAccessoryView.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
                 [self.tableViewCell addSubview:newAccessoryView];
             }
+            _validationDisplayed = YES;
         }
-        else{
+        else if(!visible && _validationDisplayed){
             UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
             if(newAccessoryView){
                 if(shouldReplaceAccessoryView){
@@ -177,6 +179,7 @@
                     [newAccessoryView removeFromSuperview];
                 }
             }
+            _validationDisplayed = NO;
         }
     }
     

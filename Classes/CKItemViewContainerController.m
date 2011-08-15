@@ -403,6 +403,7 @@
 				NSAssert(_viewsToControllers != nil,@"Should have been created");
 				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
 				
+				controller.createCallback = [factoryItem createCallback];
 				controller.initCallback = [factoryItem initCallback];
 				controller.setupCallback = [factoryItem setupCallback];
 				controller.selectionCallback = [factoryItem selectionCallback];

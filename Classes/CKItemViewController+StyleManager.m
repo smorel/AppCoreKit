@@ -34,6 +34,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 + (CKItemViewController*)controllerForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
     CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
 	CKCallback* callback = [item createCallback];
+    controller.createCallback = callback;
 	if(callback){
 		[callback execute:controller];
 	}

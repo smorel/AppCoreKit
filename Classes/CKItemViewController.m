@@ -28,6 +28,7 @@
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize accessoryAction = _accessoryAction;
+@synthesize createCallback = _createCallback;
 @synthesize initCallback = _initCallback;
 @synthesize setupCallback = _setupCallback;
 @synthesize selectionCallback = _selectionCallback;
@@ -52,6 +53,7 @@
 	[_selectionCallback release];
 	[_becomeFirstResponderCallback release];
 	[_resignFirstResponderCallback release];
+	[_createCallback release];
 	[_layoutCallback release];
 	[_viewRef release];
 	[_weakParentController release];
@@ -148,6 +150,9 @@
 }
 
 - (NSString *)identifier {
+    if(_createCallback){
+        [_createCallback execute:self];
+    }
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
 }

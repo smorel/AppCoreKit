@@ -315,6 +315,7 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	CKItemViewController* controller = [[[self.controllerClass alloc]init]autorelease];
+    controller.createCallback = [self createCallback];
 	controller.initCallback = [self initCallback];
 	controller.setupCallback = [self setupCallback];
 	controller.selectionCallback = [self selectionCallback];

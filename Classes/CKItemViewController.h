@@ -37,6 +37,7 @@ typedef NSUInteger CKItemViewFlags;
 	
 	NSIndexPath *_indexPath;
 	
+	CKCallback* _createCallback;
 	CKCallback* _initCallback;
 	CKCallback* _setupCallback;
 	CKCallback* _selectionCallback;
@@ -58,6 +59,7 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, assign) SEL accessoryAction;
 
+@property (nonatomic, retain) CKCallback* createCallback;
 @property (nonatomic, retain) CKCallback* initCallback;
 @property (nonatomic, retain) CKCallback* setupCallback;
 @property (nonatomic, retain) CKCallback* selectionCallback;

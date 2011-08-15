@@ -138,10 +138,6 @@
 	}
 }
 
-- (void)didReceiveMemoryWarning{
-    int i =3;
-}
-
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 	[self.carouselView reloadData];

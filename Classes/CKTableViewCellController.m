@@ -146,6 +146,9 @@
 }
 
 - (NSString *)identifier {
+    if(_createCallback){
+        [_createCallback execute:self];
+    }
 	NSString* groupedTableModifier = @"";
 	UIView* parentView = [self parentControllerView];
 	if([parentView isKindOfClass:[UITableView class]]){

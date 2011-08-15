@@ -18,6 +18,7 @@
     UIImageView* _validationImageView;
     UIView* _oldAccessoryView;
     UITableViewCellAccessoryType _oldAccessoryType;
+    BOOL _validationDisplayed;
 }
 /** 
  Specify whether the cell should be editable or readonly. Depending on this value, the detail ui view should change.
