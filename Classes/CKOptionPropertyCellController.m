@@ -25,7 +25,8 @@
 
 - (id)init{
     self = [super init];
-    self.optionCellStyle = UITableViewCellStyleValue1;
+    self.cellStyle = CKTableViewCellStylePropertyGrid;
+    self.optionCellStyle = CKTableViewCellStylePropertyGrid;
     return self;
 }
 
