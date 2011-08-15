@@ -220,7 +220,7 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
                 staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
                 [staticCellController.tableViewCell layoutSubviews];
                 if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                    NSAssert(NO,@"TO CHECK WHAT HAPPEND !!!");
+                    //NSAssert(NO,@"TO CHECK WHAT HAPPEND !!!");
                 }
             }
         }

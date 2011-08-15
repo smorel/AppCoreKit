@@ -113,7 +113,7 @@
 - (void)unbindInstance:(id)instance{
 	if(binded){
 		if(instance){
-			[(UIControl*)instance removeTarget:self action:@selector(execute) forControlEvents:controlEvents];
+			[(UIControl*)instance removeTarget:self action:@selector(controlChange) forControlEvents:controlEvents];
 		}
 		binded = NO;
 	}

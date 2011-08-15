@@ -35,7 +35,7 @@
 @synthesize pageControl = _pageControl;
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 	[_carouselView release];
 	_carouselView = nil;
 	[_headerViewsForSections release];
@@ -111,7 +111,7 @@
     [super viewDidLoad];
 	
 	if(_pageControl){
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 		[self.carouselView bind:@"currentPage" target:self action:@selector(updatePageControlPage:)];
 		[self.carouselView bind:@"numberOfPages" toObject:_pageControl withKeyPath:@"numberOfPages"];
 		[_pageControl bindEvent:UIControlEventTouchUpInside target:self action:@selector(scrollToPage:)];
@@ -121,7 +121,7 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 	self.carouselView = nil;
 	self.pageControl = nil;
 }
@@ -136,6 +136,10 @@
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
+}
+
+- (void)didReceiveMemoryWarning{
+    int i =3;
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
