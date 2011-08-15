@@ -84,6 +84,15 @@
             [self setInvalidButtonVisible:!validity];
         }];
     }
+    
+    CKObjectProperty* property = [self objectProperty];
+    Class propertyType = [property type];
+    if(propertyType != nil && [NSObject isKindOf:propertyType parentType:[CKDocumentCollection class]]){
+        [property.object bind:[NSString stringWithFormat:@"%@.count",property.keyPath] withBlock:^(id value) {
+            BOOL validity = [self isValidValue:[[self objectProperty] value]];
+            [self setInvalidButtonVisible:!validity];
+        }];
+    }
     [self endBindingsContext];
 }
 
@@ -170,6 +179,12 @@
             }
         }
     }
+    
+    /* FIXME : Here it can change the height as we set an accessory view ...
+    table view should be notified that it should recompute the size of the cells.
+    [[self parentTableView]beginUpdates];
+    [[self parentTableView]endUpdates];
+     */
 }
 
 - (void)validationInfos:(id)sender{
