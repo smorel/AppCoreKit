@@ -61,7 +61,15 @@
 }
 
 - (NSString *)labelForValue:(NSInteger)intValue {
-	if (intValue < 0) return nil; 
+	if (intValue < 0
+		|| intValue == NSNotFound) {
+		
+		CKObjectProperty* property = [self objectProperty];
+		CKClassPropertyDescriptor* descriptor = [property descriptor];
+		NSString* str = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
+		return _(str);
+	}
+	
 	if(self.multiSelectionEnabled){
 		NSMutableString* str = [NSMutableString string];
 		NSInteger intValue = intValue;
