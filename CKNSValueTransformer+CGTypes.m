@@ -8,6 +8,7 @@
 
 #import "CKNSValueTransformer+CGTypes.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKUIColor+ValueTransformer.h"
 
 
 @implementation NSValueTransformer (CKCGTypes)
@@ -57,6 +58,11 @@
 	}
 	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
 	return (object == nil) ? CGPointMake(10,10) : [object CGPointValue];
+}
+
++ (CGColorRef)convertCGColorRefFromObject:(id)object{
+    UIColor* color = [UIColor convertFromObject:object];
+    return [color CGColor];
 }
 
 @end

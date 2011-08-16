@@ -12,6 +12,7 @@
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
@@ -94,6 +95,16 @@
         }
     }
     
+    
+    CALayer* layer = [controller.textView layer];
+    //layer.borderColor = [[UIColor darkGrayColor]CGColor];
+    //layer.backgroundColor = [[UIColor redColor]CGColor];
+    /*layer.borderWidth = 3;
+    layer.cornerRadius = 10;*/
+    
+    NSLog(@"CKMultilineNSStringPropertyCellController Layer backColor : %@ borderWidth : %f borderColor : %@ cornerRadius : %f",
+          layer.backgroundColor,layer.borderWidth,layer.borderColor,layer.cornerRadius);
+    
     return (id)nil;
 }
 
@@ -154,7 +165,8 @@
 	}
 	else{
         _respondsToFrameChange = NO;
-        _textView.placeholder =  _(descriptor.name);
+        NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+        _textView.placeholder =  _(placeholerText);
         _textView.text = [property value];
         _textView.delegate = self;
         

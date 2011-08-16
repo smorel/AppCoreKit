@@ -169,7 +169,36 @@ NSString* CKSerializerIDTag = @"@id";
 				
 				NSValue* value =  [NSValue value:returnValue withObjCType:[descriptor.encoding UTF8String]];
 				[property setValue:value];
+                
+                free(returnValue);
+                
 				return value;
+			}
+			else{
+				NSAssert(NO,@"No transform selector for struct of type '%@'",typeName);
+			}
+			break;
+		}
+        case CKClassPropertyDescriptorTypeStructPointer:{
+			NSString* typeName = descriptor.className;
+			NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",typeName];
+			SEL selector = NSSelectorFromString(selectorName);
+			if([[NSValueTransformer class]respondsToSelector:selector]){
+				NSMethodSignature *signature = [[NSValueTransformer class] methodSignatureForSelector:selector];
+				
+				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+				[invocation setSelector:selector];
+				[invocation setTarget:[NSValueTransformer class]];
+				[invocation setArgument:&object
+								atIndex:2];
+				[invocation invoke];
+				
+				void* returnValue = nil;
+				[invocation getReturnValue:&returnValue];
+				
+				//NSValue* value =  [NSValue valueWithPointer:returnValue];
+				[property setValue:(id)returnValue];
+				return (id)returnValue;
 			}
 			else{
 				NSAssert(NO,@"No transform selector for struct of type '%@'",typeName);

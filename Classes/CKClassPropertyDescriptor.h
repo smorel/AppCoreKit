@@ -31,6 +31,7 @@ typedef enum{
 	CKClassPropertyDescriptorTypeClass,
 	CKClassPropertyDescriptorTypeSelector,
 	CKClassPropertyDescriptorTypeStruct,
+	CKClassPropertyDescriptorTypeStructPointer,
 	CKClassPropertyDescriptorTypeUnknown
 }CKClassPropertyDescriptorType;
 

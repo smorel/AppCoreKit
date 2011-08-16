@@ -18,5 +18,6 @@
 + (CGRect)convertCGRectFromObject:(id)object;
 + (CGPoint)parseStringToCGPoint:(NSString*)str;
 + (CGPoint)convertCGPointFromObject:(id)object;
++ (CGColorRef)convertCGColorRefFromObject:(id)object;
 
 @end

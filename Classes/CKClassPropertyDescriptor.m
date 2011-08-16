@@ -15,6 +15,7 @@ typedef struct CKStructParsedAttributes{
 	NSString* className;
 	NSString* encoding;
 	NSInteger size;
+    BOOL pointer;
 }CKStructParsedAttributes;
 
 CKStructParsedAttributes parseStructAttributes(NSString* attributes){
@@ -49,6 +50,27 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.size = 0;
 		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
+    results.pointer = NO;
+	return results;
+}
+
+CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
+	CKStructParsedAttributes results;
+	NSRange rangeForClassName = [attributes rangeOfString:@"="];
+	results.className = [attributes substringWithRange:NSMakeRange(3,rangeForClassName.location - 3)];
+	
+	//FIXME : later do it properly by registering descriptors for structs, ...
+	if([results.className hasPrefix:@"CGColor"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGColorRef)];
+		results.size = sizeof(CGColorRef);
+		results.className = @"CGColorRef";
+	}
+    else{
+		results.encoding = nil;
+		results.size = 0;
+		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+	}
+    results.pointer = YES;
 	return results;
 }
 
@@ -243,6 +265,13 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	else if([attributes hasPrefix:@"T{"]){
 		self.propertyType = CKClassPropertyDescriptorTypeStruct;
 		CKStructParsedAttributes result = parseStructAttributes(attributes);
+		self.className = result.className;
+		self.encoding = result.encoding;
+		self.typeSize = result.size;
+	}
+    else if([attributes hasPrefix:@"T^{"]){
+		self.propertyType = CKClassPropertyDescriptorTypeStructPointer;
+		CKStructParsedAttributes result = parseStructPointerAttributes(attributes);
 		self.className = result.className;
 		self.encoding = result.encoding;
 		self.typeSize = result.size;
