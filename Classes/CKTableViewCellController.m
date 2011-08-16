@@ -168,7 +168,7 @@
 	}
 	
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
-	return [NSString stringWithFormat:@"%@-<%p>-%@",[[self class] description],controllerStyle,groupedTableModifier];
+	return [NSString stringWithFormat:@"%@-<%p>-%@-%@",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @""];
 }
 
 - (UITableViewCell *)loadCell {
