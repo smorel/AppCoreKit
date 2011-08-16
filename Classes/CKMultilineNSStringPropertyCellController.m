@@ -94,17 +94,7 @@
             controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
         }
     }
-    
-    
-    CALayer* layer = [controller.textView layer];
-    //layer.borderColor = [[UIColor darkGrayColor]CGColor];
-    //layer.backgroundColor = [[UIColor redColor]CGColor];
-    /*layer.borderWidth = 3;
-    layer.cornerRadius = 10;*/
-    
-    NSLog(@"CKMultilineNSStringPropertyCellController Layer backColor : %@ borderWidth : %f borderColor : %@ cornerRadius : %f",
-          layer.backgroundColor,layer.borderWidth,layer.borderColor,layer.cornerRadius);
-    
+
     return (id)nil;
 }
 

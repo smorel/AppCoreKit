@@ -55,7 +55,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 	[item updateAttributes:attributes];
 	
-	CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
+	//CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 	return item;
 }
 
@@ -76,7 +76,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 			item.name = self.modelName;
 			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 			[item updateAttributes:attributes];
-			CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
+			//CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 		}
 		else{
 			[CKModelObject registerObject:self withUniqueId:self.uniqueId];
