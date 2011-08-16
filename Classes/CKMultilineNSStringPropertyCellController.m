@@ -122,19 +122,11 @@
         NSString* text = staticController.tableViewCell.textLabel.text;
         NSString* detail = [property value];
         
-        CGRect newFrame = [staticController.textView frameForText:detail];        
-        CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,newFrame.size.height);
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            if(text == nil || 
-               [text isKindOfClass:[NSNull class]] ||
-               [text length] <= 0){
-                return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight)];
-            }
-            else{
-                return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight + 30)];
-            }
-        }
-        return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight)];
+        CGRect newFrame = [staticController.textView frameForText:detail];      
+		CGFloat bottomTextView = newFrame.origin.y + newFrame.size.height;
+		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
+		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
     }
     return nil;
 }
