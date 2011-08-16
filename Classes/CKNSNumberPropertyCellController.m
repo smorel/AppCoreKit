@@ -186,7 +186,7 @@
     CGFloat savedComponentRatio = self.componentsRatio;
     if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        controller.componentsRatio = 0;
+        controller.componentsRatio = 0.3;
     }
     
 	[super performStandardLayout:controller];
