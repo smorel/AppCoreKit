@@ -14,6 +14,8 @@
 #import "CKFormTableViewController.h"
 #import "CKBundle.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #define CLICKABLE_VALIDATION_INFO 0
 
 @interface CKPropertyGridCellController () 
@@ -107,8 +109,20 @@
 }
 
 - (void)setValueInObjectProperty:(id)value{
+    CALayer* layer = [self.tableViewCell layer];
+    NSArray* anims = [layer animationKeys];
+    BOOL hasAnimation = ([anims count] > 0);
+    if(!hasAnimation){
+        [[self parentTableView]beginUpdates];
+    }
     BOOL validity = [self isValidValue:value];
     [self setInvalidButtonVisible:!validity];
+
+    [self layoutCell:self.tableViewCell];
+    
+    if(!hasAnimation){
+        [[self parentTableView]endUpdates];
+    }
     
     CKObjectProperty* property = [self objectProperty];
     [property setValue:value];

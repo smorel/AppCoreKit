@@ -810,6 +810,14 @@
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyResignResponder;
 }
 
+- (void)setValidationEnabled:(BOOL)validationEnabled{
+    [self.tableView beginUpdates];
+    [self willChangeValueForKey:@"validationEnabled"];
+    _validationEnabled = validationEnabled;
+    [self didChangeValueForKey:@"validationEnabled"];
+    [self.tableView endUpdates];
+}
+
 - (void)dealloc{
 	[_sections release];
 	_sections = nil;
