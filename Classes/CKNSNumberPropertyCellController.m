@@ -159,8 +159,8 @@
 			}
 			else{
                 
-                if(self.cellStyle == CKTableViewCellStyleValue3 ||
-                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStylePropertyGrid)){
+                if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
+                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
 					[cell.contentView addSubview:self.toggleSwitch];
 				}
 				else{
@@ -207,15 +207,15 @@
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
 			CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
-			s.frame = rectForSwitch;
+			s.frame = CGRectIntegral(rectForSwitch);
 		}
         else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
-			CGRect switchFrame = [self propertyGridDetailFrameForCell:cell];
-			CGFloat height = cell.bounds.size.height;
+			CGFloat height = MAX(44,controller.tableViewCell.textLabel.frame.size.height);
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
                 //align right
-                CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
-                s.frame = rectForSwitch;
+                CGRect rectForSwitch = CGRectMake(controller.tableViewCell.textLabel.frame.origin.x + controller.tableViewCell.textLabel.frame.size.width + 10,
+                                                  (height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
+                s.frame = CGRectIntegral(rectForSwitch);
             }
             //For iphone its an accessory view
 		}
@@ -226,7 +226,17 @@
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    return [CKTableViewCellController viewSizeForObject:object withParams:params];
+    CKNSNumberPropertyCellController* staticController = (CKNSNumberPropertyCellController*)[params staticController];
+    
+	UISwitch* s = (UISwitch*)[staticController.tableViewCell viewWithTag:SwitchTag];
+	UITextField *textField = (UITextField*)[staticController.tableViewCell viewWithTag:50000];
+        
+    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
+    CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
+    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
+    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomSwitch,MAX(bottomTextLabel,bottomDetailTextLabel))) + 10;
+    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{

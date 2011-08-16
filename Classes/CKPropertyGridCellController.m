@@ -59,9 +59,6 @@
     if(![self.value isEqual:value]){
         NSAssert(value == nil || [value isKindOfClass:[CKObjectProperty class]],@"Invalid value type");
         [super setValue:value];
-    
-        BOOL validity = [self isValidValue:[value value]];
-        [self setInvalidButtonVisible:!validity];
     }
 }
 
@@ -97,6 +94,9 @@
         }];
     }
     [self endBindingsContext];
+    
+    BOOL validity = [self isValidValue:[[self objectProperty] value]];
+    [self setInvalidButtonVisible:!validity];
 }
 
 - (BOOL)isValidValue:(id)value{
