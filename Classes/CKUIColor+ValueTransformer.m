@@ -42,7 +42,14 @@
 				return color;
 			}
 			else{
-				NSAssert(NO,@"invalid format for color");
+                UIImage* image = [UIImage imageNamed:str];
+                if(image){
+                    UIColor* color = [UIColor colorWithPatternImage:image];
+                    return color;
+                }
+                else{
+                    NSAssert(NO,@"invalid format for color with text : %@",str);
+                }
 			}
 		}
 	}
