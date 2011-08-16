@@ -148,7 +148,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,CKStyleBackgroundImageContentMode,
-								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,nil]];
+								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,@"@class",nil]];
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
@@ -317,7 +317,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 @implementation NSObject (CKStyle)
 
-+ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object{
++ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	if(reserverKeyWords == nil){
 		reserverKeyWords = [[NSMutableSet set]retain];
 	}
@@ -329,9 +329,28 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 		if([reserverKeyWords containsObject:key] == NO
 		   && [allPropertyNames containsObject:key] == YES){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
-			if(descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == NO){
+            BOOL isUIView = (descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == YES);
+			if(descriptor != nil && !isUIView){
 				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
 			}
+            else if(isUIView){
+                if([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
+                    //DO NOTHING !
+                }
+                else{
+                    id theView = [object valueForKeyPath:key];
+                    if(!theView){
+                        id subViewStyle = [style objectForKey:key];
+                        NSString* className = [subViewStyle objectForKey:@"@class"];
+                        Class theClass = NSClassFromString(className);
+                        if(theClass && [NSObject isKindOf:theClass parentType:[UIView class]] == YES){
+                            UIView* createdView = [[[theClass alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+                            [[createdView class] applyStyle:subViewStyle toView:createdView appliedStack:appliedStack delegate:delegate];
+                            [object setValue:createdView forKeyPath:key];
+                        }
+                    }
+                }
+            }
             else if(descriptor == nil){
                 CKDebugLog(@"invalid property %@ specified in style %@",key,style);
             }
@@ -388,7 +407,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	
 	
 	//if([appliedStack containsObject:self] == NO){
-		[NSObject applyStyleByIntrospection:style toObject:self];
+		[NSObject applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
 	//}
 	[appliedStack addObject:self];
 }
