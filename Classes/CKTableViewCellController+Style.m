@@ -71,6 +71,7 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation UITableViewCell (CKStyle)
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+    //NSLog(@"apply style on UITableViewCell : %@",self);
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UITableViewCell* tableViewCell = (UITableViewCell*)view;
 		NSMutableDictionary* myCellStyle = style;
@@ -87,6 +88,11 @@ NSString* CKStyleCellFlags = @"flags";
 	return NO;
 }
 
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor{
+    //bypass the custom set background color of UITableViewCell
+    [super setBackgroundColor:backgroundColor];
+}
 
 @end
 
@@ -117,6 +123,7 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation CKItemViewController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view{
+    //NSLog(@"apply style on CKItemViewController : %@",self);
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }

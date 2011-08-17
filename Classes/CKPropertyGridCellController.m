@@ -112,7 +112,7 @@
     CALayer* layer = [self.tableViewCell layer];
     NSArray* anims = [layer animationKeys];
     BOOL hasAnimation = ([anims count] > 0);
-    if(!hasAnimation){
+    if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
         [[self parentTableView]beginUpdates];
     }
     BOOL validity = [self isValidValue:value];
@@ -120,7 +120,7 @@
 
     [self layoutCell:self.tableViewCell];
     
-    if(!hasAnimation){
+    if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
         [[self parentTableView]endUpdates];
     }
     

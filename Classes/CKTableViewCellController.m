@@ -207,14 +207,18 @@
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
         
+        /*
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+         */
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
+        /*
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+         */
         
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
@@ -529,7 +533,7 @@
                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];
 	
 	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
-                                     width , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
+                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
 }
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
@@ -548,7 +552,7 @@
     CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                                    constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                        lineBreakMode:cell.textLabel.lineBreakMode];
-    return CGRectMake(10,11,maxWidth,MAX(cell.textLabel.font.lineHeight,size.height));
+    return CGRectIntegral(CGRectMake(10 + maxWidth - size.width,11,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
 }
 
 //PropertyGrid layout

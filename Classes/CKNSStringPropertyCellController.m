@@ -59,15 +59,15 @@
     UITableViewCell* cell = controller.tableViewCell;
 	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	if(textField){
-        if(controller.cellStyle == CKTableViewCellStyleValue3){
-            textField.frame = [controller value3DetailFrameForCell:cell];
-            textField.autoresizingMask = UIViewAutoresizingNone;
+        if(controller.cellStyle == CKTableViewCellStyleValue3
+           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
+            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + 10;
+            CGFloat textFieldWidth = realWidth - 10 - textFieldX;
+			textField.frame = CGRectIntegral(CGRectMake(textFieldX,11,textFieldWidth,textField.font.lineHeight));
+			textField.autoresizingMask = UIViewAutoresizingNone;
         }
-        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            textField.frame = [controller propertyGridDetailFrameForCell:cell];
-            textField.autoresizingMask = UIViewAutoresizingNone;
-        }
-	}
+    }
     return (id)nil;
 }
 

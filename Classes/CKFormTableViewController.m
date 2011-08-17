@@ -60,10 +60,10 @@
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.headerView != nil ){
+	/*if( formSection.headerView != nil ){
 		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.headerView applyStyle:controllerStyle];
-	}
+	}*/
 	return formSection.headerView;
 }
 
@@ -82,10 +82,10 @@
         return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.footerView != nil ){
+	/*if( formSection.footerView != nil ){
 		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.footerView applyStyle:controllerStyle];
-	}
+	}*/
 	return formSection.footerView;
 }
 
@@ -219,6 +219,12 @@
 - (void)setHeaderView:(UIView *)headerView{
     [_headerView release];
     _headerView = [headerView retain];
+    
+    if(_headerView){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
+        [_headerView applyStyle:controllerStyle];
+    }
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -231,6 +237,11 @@
 - (void)setFooterView:(UIView *)footerView{
     [_footerView release];
     _footerView = [footerView retain];
+    if(_footerView){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
+        [_footerView applyStyle:controllerStyle];
+    }
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -403,9 +414,8 @@
 	//Update style for indexpath that have not been applyed
 	NSInteger sectionIndex = [self sectionVisibleIndex];
 	
-	NSArray *visibleCells = [self.parentController.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		if(indexPath.section == sectionIndex){
 			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
@@ -590,9 +600,8 @@
 	//Update style for indexpath that have not been applyed
 	NSInteger sectionIndex = [self sectionVisibleIndex];
 	
-	NSArray *visibleCells = [self.parentController.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
 		   && indexPath.section == sectionIndex){
 			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
