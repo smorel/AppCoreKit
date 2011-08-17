@@ -85,7 +85,6 @@
 	UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
 	theSwitch.tag = SwitchTag;
 	self.toggleSwitch = theSwitch;
-	//creates textfiled and switch here and store them as property for stylesheets ...
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -139,13 +138,6 @@
 				
 				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 				self.textField.placeholder = _(placeholerText);
-				
-				if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-					self.textField.returnKeyType = UIReturnKeyNext;
-				}
-				else{
-					self.textField.returnKeyType = UIReturnKeyDone;
-				}
 			}
 	
 			break;
@@ -182,7 +174,7 @@
 - (id)performStandardLayout:(CKNSNumberPropertyCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
     
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+	UISwitch* s = [controller.toggleSwitch superview] ? controller.toggleSwitch : nil;
     CGFloat savedComponentRatio = self.componentsRatio;
     if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -191,7 +183,7 @@
     
 	[super performStandardLayout:controller];
     
-	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	UITextField *textField = [controller.textField superview] ? controller.textField : nil;
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
@@ -251,6 +243,13 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+        self.textField.returnKeyType = UIReturnKeyNext;
+    }
+    else{
+        self.textField.returnKeyType = UIReturnKeyDone;
+    }
+    
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
                                   atScrollPosition:UITableViewScrollPositionNone 
                                           animated:YES];

@@ -57,7 +57,7 @@
 - (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
 	[super performStandardLayout:controller];
     UITableViewCell* cell = controller.tableViewCell;
-	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	UITextField *textField = controller.textField;
 	if(textField){
         if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
@@ -108,13 +108,6 @@
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		self.textField.placeholder = _(placeholerText);
-		
-		if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-			self.textField.returnKeyType = UIReturnKeyNext;
-		}
-		else{
-			self.textField.returnKeyType = UIReturnKeyDone;
-		}
 		[cell.contentView addSubview:self.textField];
 	}
 }
@@ -134,6 +127,13 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+        self.textField.returnKeyType = UIReturnKeyNext;
+    }
+    else{
+        self.textField.returnKeyType = UIReturnKeyDone;
+    }
+    
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
                                   atScrollPosition:UITableViewScrollPositionNone
                                           animated:YES];

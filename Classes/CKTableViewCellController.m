@@ -39,9 +39,8 @@
 }
 
 - (void)layoutSubviews{
-	[super layoutSubviews];
-	
-	if(_delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
+    [super layoutSubviews];
+    if([_delegate layoutCallback] != nil && _delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
 		[_delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
 }
@@ -81,8 +80,6 @@
         self.selectable = YES;
         self.rowHeight = 44.0f;
         self.editable = YES;
-        
-        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
 	}
 	return self;
 }
@@ -184,18 +181,15 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
-        
         //Ensure detailTextLabel is created !
         if(cell.detailTextLabel == nil){
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,100,44)];
             object_setInstanceVariable(cell, "_detailTextLabel", (void**)(label));
         }
-        
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-		[NSObject endBindingsContext];	
 	}
+    
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 	
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
@@ -207,19 +201,10 @@
         
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
-        
-        /*
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-         */
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
-        /*
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-         */
         
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
@@ -364,12 +349,23 @@
 }
 
 - (void)initView:(UIView*)view{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+    
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self initTableViewCell:(UITableViewCell*)view];
 	[super initView:view];
 }
 
 - (void)setupView:(UIView *)view{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if(_layoutCallback == nil){
+            self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
+        }
+    }
+        
     [CATransaction begin];
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
@@ -381,6 +377,16 @@
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
 	[self endBindingsContext];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        UITableViewCell* cell = (UITableViewCell*)view;
+        
+		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
+        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
+		[NSObject endBindingsContext];	
+	}
     
     [CATransaction commit];
 }
@@ -417,9 +423,6 @@
 }
 
 - (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
-    if(thelayoutCallback == nil){
-        thelayoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
-    }
     [_layoutCallback release];
     _layoutCallback = [thelayoutCallback retain];
 }
