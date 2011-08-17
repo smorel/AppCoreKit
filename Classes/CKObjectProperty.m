@@ -10,13 +10,20 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDocumentCollection.h"
 
+@interface CKObjectProperty()
+@property (nonatomic,retain) id subObject;
+@property (nonatomic,retain) NSString* subKeyPath;
+@end
 
 @implementation CKObjectProperty
 @synthesize object,keyPath;
+@synthesize subObject,subKeyPath;
 
 - (void)dealloc{
 	[object release];
 	[keyPath release];
+	[subObject release];
+	[subKeyPath release];
 	[super dealloc];
 }
 
@@ -25,12 +32,24 @@
 	return p;
 }
 
+- (void)initSubItems{
+    self.subObject = object;
+	
+	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+	for(int i=0;i<[ar count]-1;++i){
+		NSString* path = [ar objectAtIndex:i];
+		self.subObject = [subObject valueForKey:path];
+	}
+    self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
+}
+
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
 	[super init];
 	self.object = theobject;
     if([thekeyPath length] > 0){
         self.keyPath = thekeyPath;
     }
+    [self initSubItems];
 	return self;
 }
 
@@ -42,25 +61,19 @@
 - (id)initWithObject:(id)theobject{
 	[super init];
 	self.object = theobject;
+    [self initSubItems];
 	return self;
 }
 
 - (CKClassPropertyDescriptor*)descriptor{
 	if(keyPath == nil)
 		return nil;
-	
-	id subObject = object;
-	
-	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-	for(int i=0;i<[ar count]-1;++i){
-		NSString* path = [ar objectAtIndex:i];
-		subObject = [subObject valueForKey:path];
-	}
-	if(subObject == nil){
-		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+
+	if(self.subObject == nil){
+		NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 		return nil;
 	}
-	return [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	return [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
 	//return [NSObject propertyDescriptor:[object class] forKeyPath:keyPath];
 }
 
@@ -85,23 +98,15 @@
 
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
 	if(keyPath != nil){
-		id subObject = object;
-		
-		NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-		for(int i=0;i<[ar count]-1;++i){
-			NSString* path = [ar objectAtIndex:i];
-			subObject = [subObject valueForKey:path];
-		}
-		
-		if(subObject == nil){
-			NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject == nil){
+			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
 		SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:descriptor.name];
-		if([subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [subObject performSelector:selector withObject:filter];
+		if([self.subObject respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:filter];
 			return collection;
 		}
 		else{
@@ -125,23 +130,15 @@
 
 - (CKDocumentCollection*)editorCollectionForNewlyCreated{
 	if(keyPath != nil){
-		id subObject = object;
-		
-		NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-		for(int i=0;i<[ar count]-1;++i){
-			NSString* path = [ar objectAtIndex:i];
-			subObject = [subObject valueForKey:path];
-		}
-		
-		if(subObject == nil){
-			NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject == nil){
+			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
 		SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:descriptor.name];
-		if([subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [subObject performSelector:selector];
+		if([self.subObject respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject performSelector:selector];
 			return collection;
 		}
 		else{
@@ -166,23 +163,15 @@
 - (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius{
 	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
 	if(keyPath != nil){
-		id subObject = object;
-		
-		NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-		for(int i=0;i<[ar count]-1;++i){
-			NSString* path = [ar objectAtIndex:i];
-			subObject = [subObject valueForKey:path];
-		}
-		
-		if(subObject == nil){
-			NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject == nil){
+			NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
 		SEL selector = [NSObject propertyeditorCollectionForGeolocalizationSelectorForProperty:descriptor.name];
-		if([subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
+		if([self.subObject respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 			return collection;
 		}
 		else{
@@ -206,23 +195,15 @@
 
 - (Class)tableViewCellControllerType{
 	if(keyPath != nil){
-		id subObject = object;
-		
-		NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-		for(int i=0;i<[ar count]-1;++i){
-			NSString* path = [ar objectAtIndex:i];
-			subObject = [subObject valueForKey:path];
-		}
-		
-		if(subObject == nil){
-			NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject == nil){
+			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
 		SEL selector = [NSObject propertyTableViewCellControllerClassSelectorForProperty:descriptor.name];
-		if([subObject respondsToSelector:selector]){
-			Class controllerClass = [subObject performSelector:selector];
+		if([self.subObject respondsToSelector:selector]){
+			Class controllerClass = [self.subObject performSelector:selector];
 			return controllerClass;
 		}
 		else{
@@ -246,21 +227,13 @@
 
 - (CKModelObjectPropertyMetaData*)metaData{
 	if(keyPath != nil){
-		id subObject = object;
-		
-		NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-		for(int i=0;i<[ar count]-1;++i){
-			NSString* path = [ar objectAtIndex:i];
-			subObject = [subObject valueForKey:path];
-		}
-		
-		if(subObject == nil){
-			NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject == nil){
+			NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:subObject property:descriptor];
+		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
+		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:descriptor];
 		return metaData;
 	}
 	return nil;

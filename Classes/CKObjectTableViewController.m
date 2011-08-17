@@ -149,6 +149,18 @@
     
     [super viewDidLoad];
     
+    //in case it changed in viewDidLoad
+    if(self.tableView.delegate)
+        _storedTableDelegate = self.tableView.delegate;
+    if(self.tableView.dataSource)
+        _storedTableDataSource = self.tableView.dataSource;
+    
+    //ensure they are setup :
+    if(_storedTableDelegate == nil)
+        _storedTableDelegate = self;
+    if(_storedTableDataSource == nil)
+        _storedTableDataSource = self;
+    
     self.placeHolderViewDuringKeyboardOrSheet = [[[UIView alloc]initWithFrame:self.tableViewContainer.frame]autorelease];
     _placeHolderViewDuringKeyboardOrSheet.backgroundColor = [UIColor clearColor];
     _placeHolderViewDuringKeyboardOrSheet.autoresizingMask = self.tableViewContainer.autoresizingMask;

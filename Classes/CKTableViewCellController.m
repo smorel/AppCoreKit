@@ -49,6 +49,7 @@
 
 @interface CKTableViewCellController ()
 @property (nonatomic, retain) id debugModalController;
+@property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
 @end
 
 @implementation CKTableViewCellController
@@ -58,6 +59,7 @@
 @synthesize key = _key;
 @synthesize componentsRatio = _componentsRatio;
 @synthesize componentsSpace = _componentsSpace;
+@synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 
 #ifdef DEBUG 
 @synthesize debugModalController;
@@ -80,15 +82,19 @@
         self.selectable = YES;
         self.rowHeight = 44.0f;
         self.editable = YES;
+        
+        self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+	[NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
 	[self clearBindingsContext];
 	[_key release];
 	_key = nil;
+    [_cacheLayoutBindingContextId release];
+	_cacheLayoutBindingContextId = nil;
 	
 #ifdef DEBUG 
 	[debugModalController release];
@@ -349,7 +355,7 @@
 }
 
 - (void)initView:(UIView*)view{
-    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+    [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self initTableViewCell:(UITableViewCell*)view];
@@ -357,7 +363,7 @@
 }
 
 - (void)setupView:(UIView *)view{
-    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+    [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
@@ -382,7 +388,7 @@
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
         UITableViewCell* cell = (UITableViewCell*)view;
         
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
         [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
 		[NSObject endBindingsContext];	
