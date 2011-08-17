@@ -109,19 +109,27 @@
 }
 
 - (void)setValueInObjectProperty:(id)value{
-    CALayer* layer = [self.tableViewCell layer];
-    NSArray* anims = [layer animationKeys];
-    BOOL hasAnimation = ([anims count] > 0);
-    if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
-        [[self parentTableView]beginUpdates];
-    }
     BOOL validity = [self isValidValue:value];
-    [self setInvalidButtonVisible:!validity];
-
-    [self layoutCell:self.tableViewCell];
     
-    if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
-        [[self parentTableView]endUpdates];
+    CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    BOOL visible = !validity && form.validationEnabled;
+    BOOL validityStateChanged = (_validationDisplayed != visible);
+    if(validityStateChanged){
+        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+        CALayer* layer = [self.tableViewCell layer];
+        NSArray* anims = [layer animationKeys];
+        BOOL hasAnimation = ([anims count] > 0);
+        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+            [[self parentTableView]beginUpdates];
+        }
+        
+        [self setInvalidButtonVisible:!validity];
+        [self layoutCell:self.tableViewCell];
+        
+        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+            [[self parentTableView]endUpdates];
+        }
     }
     
     CKObjectProperty* property = [self objectProperty];

@@ -14,6 +14,7 @@
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
 #import "CKItemViewController+StyleManager.h"
+#import <QuartzCore/QuartzCore.h>
 
 #ifdef DEBUG 
 #import "CKPropertyGridEditorController.h"
@@ -341,10 +342,17 @@
 #pragma mark CKItemViewController Implementation
 
 - (UIView *)loadView{
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	UITableViewCell* cell = [self loadCell];
 	[self initView:cell];
 	[self layoutCell:cell];
 	[self applyStyle];
+    
+    [CATransaction commit];
 	
 #ifdef DEBUG
 	if(ENABLE_DEBUG_GESTURE){
@@ -362,11 +370,19 @@
 }
 
 - (void)setupView:(UIView *)view{
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
+    
 	[self beginBindingsContextByRemovingPreviousBindings];
 	[super setupView:view];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
 	[self endBindingsContext];
+    
+    [CATransaction commit];
 }
 
 - (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
@@ -409,9 +425,16 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
     if(_layoutCallback){
         [_layoutCallback execute:self];
     }
+    
+    [CATransaction commit];
 }
 
 #ifdef DEBUG 
