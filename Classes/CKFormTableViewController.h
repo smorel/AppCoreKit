@@ -35,7 +35,7 @@
 @property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
-@property (nonatomic,assign) BOOL hidden;
+@property (nonatomic,readonly) BOOL hidden;
 
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
@@ -182,6 +182,8 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 - (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
+
+- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
 ///-----------------------------------
 /// @name Accessing the sections
