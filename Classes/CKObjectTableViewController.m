@@ -485,16 +485,16 @@
 	}*/
 	 
 	[super viewWillDisappear:animated];
-    
-    _storedTableDelegate = self.tableView.delegate;
-    self.tableView.delegate = nil;
-    _storedTableDataSource = self.tableView.dataSource;
-    self.tableView.dataSource = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
+    
+    _storedTableDelegate = self.tableView.delegate;
+    self.tableView.delegate = nil;
+    _storedTableDataSource = self.tableView.dataSource;
+    self.tableView.dataSource = nil;
 	
 	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
