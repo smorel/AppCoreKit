@@ -889,8 +889,6 @@
 	if(_currentPage != page){
 		self.currentPage = page;
 	}
-	
-	[self fetchMoreData];
 }
 
 - (void)updateNumberOfPages{
@@ -920,6 +918,7 @@
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+	[self fetchMoreData];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -928,6 +927,7 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+	[self fetchMoreData];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -943,6 +943,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
+	[self fetchMoreData];
 }
 
 #pragma mark CKItemViewContainerController Implementation
