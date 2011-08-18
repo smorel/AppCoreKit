@@ -183,8 +183,8 @@
             
             UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
             if(shouldReplaceAccessoryView){
-                _oldAccessoryView = self.tableViewCell.accessoryView;
-                _oldAccessoryType = self.tableViewCell.accessoryType;
+                self.oldAccessoryView = self.tableViewCell.accessoryView;
+                self.oldAccessoryType = self.tableViewCell.accessoryType;
                 self.tableViewCell.accessoryView = newAccessoryView;
             }
             else{
@@ -197,8 +197,8 @@
             UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
             if(newAccessoryView){
                 if(shouldReplaceAccessoryView){
-                    self.tableViewCell.accessoryView = _oldAccessoryView;
-                    self.tableViewCell.accessoryType = _oldAccessoryType;
+                    self.tableViewCell.accessoryView = self.oldAccessoryView;
+                    self.tableViewCell.accessoryType = self.oldAccessoryType;
                 }
                 else{
                     [newAccessoryView removeFromSuperview];

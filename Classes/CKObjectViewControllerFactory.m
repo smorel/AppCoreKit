@@ -218,6 +218,7 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
                 CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
                 staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
             }
+            [staticCellController.tableViewCell layoutSubviews];
         }
     }
     
