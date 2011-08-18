@@ -275,7 +275,7 @@
 }
 
 - (void)fetchMoreData{
-    return;
+    //return;
     
 	//Fetch data if needed
 	NSInteger minVisibleSectionIndex = INT32_MAX;
