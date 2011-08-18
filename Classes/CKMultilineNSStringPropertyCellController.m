@@ -119,7 +119,7 @@
         NSString* detail = [property value];
         
         CGRect newFrame = [staticController.textView frameForText:detail];      
-		CGFloat bottomTextView = newFrame.origin.y + newFrame.size.height;     
+		CGFloat bottomTextView = staticController.textView.frame.origin.y + newFrame.size.height;     
 		//CGFloat bottomTextView = staticController.textView.frame.origin.y +  staticController.textView.frame.size.height;
 		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
 		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
