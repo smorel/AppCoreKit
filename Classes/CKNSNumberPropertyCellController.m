@@ -133,12 +133,19 @@
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
 			if([model isReadOnly] || self.readOnly){
+                self.fixedSize = YES;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 			}
 			else{
-				
+				if(self.cellStyle == CKTableViewCellStylePropertyGrid
+                   && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+                        self.fixedSize = YES;
+                }
+                else{
+                    self.fixedSize = NO;
+                }
 				[cell.contentView addSubview:self.textField];
 				
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -154,12 +161,13 @@
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
 			if([model isReadOnly] || self.readOnly){
+                self.fixedSize = YES;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 			}
 			else{
-                
+                self.fixedSize = YES;
                 if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
                    ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
 					[cell.contentView addSubview:self.toggleSwitch];

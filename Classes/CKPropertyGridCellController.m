@@ -34,12 +34,14 @@
 @synthesize oldAccessoryType = _oldAccessoryType;
 @synthesize validationImageView = _validationImageView;
 @synthesize validationBindingContext = _validationBindingContext;
+@synthesize fixedSize = _fixedSize;
 
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
     _validationDisplayed = NO;
     self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
+    _fixedSize = NO;
 	return self;
 }
 
@@ -119,19 +121,25 @@
     BOOL validityStateChanged = (_validationDisplayed != visible);
     if(validityStateChanged){
         //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
-        CALayer* layer = [self.tableViewCell layer];
-        NSArray* anims = [layer animationKeys];
-        BOOL hasAnimation = ([anims count] > 0);
-        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
-            [[self parentTableView]beginUpdates];
+        BOOL hasAnimation = NO;
+        if(!_fixedSize){
+            CALayer* layer = [self.tableViewCell layer];
+            NSArray* anims = [layer animationKeys];
+            hasAnimation = ([anims count] > 0);
+            if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+                [[self parentTableView]beginUpdates];
+            }
         }
         
         [self setInvalidButtonVisible:!validity];
         [self layoutCell:self.tableViewCell];
         
-        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
-        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
-            [[self parentTableView]endUpdates];
+        
+        if(!_fixedSize){
+            //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+            if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+                [[self parentTableView]endUpdates];
+            }
         }
     }
     

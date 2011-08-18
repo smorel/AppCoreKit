@@ -98,11 +98,19 @@
 	cell.detailTextLabel.text = nil;
 	
 	if([model isReadOnly] || self.readOnly){
+        self.fixedSize = YES;
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];
 	}
 	else{
+        if(self.cellStyle == CKTableViewCellStylePropertyGrid
+           && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            self.fixedSize = YES;
+        }
+        else{
+            self.fixedSize = NO;
+        }
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
         [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 

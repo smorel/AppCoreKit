@@ -124,9 +124,11 @@
 	[super setupCell:cell];
     
     if(self.readOnly){
+        self.fixedSize = YES;
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
+        self.fixedSize = NO;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     

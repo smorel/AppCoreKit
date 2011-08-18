@@ -113,9 +113,11 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 	
 	CKObjectProperty* model = self.value;
     if([model isReadOnly] || self.readOnly){
+        self.fixedSize = YES;
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
+        self.fixedSize = NO;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 	

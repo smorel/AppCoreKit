@@ -20,11 +20,16 @@
     UITableViewCellAccessoryType _oldAccessoryType;
     BOOL _validationDisplayed;
     NSString* _validationBindingContext;
+
+    BOOL _fixedSize;
 }
 /** 
  Specify whether the cell should be editable or readonly. Depending on this value, the detail ui view should change.
  */
 @property(nonatomic,assign)BOOL readOnly;
+
+//this will avoid to call begin/endUpdates on tableView when the validity state change
+@property(nonatomic,assign)BOOL fixedSize;
 
 ///-----------------------------------
 /// @name Accessing Object Property

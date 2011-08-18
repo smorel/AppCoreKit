@@ -146,6 +146,7 @@
     }
     
     if([property isReadOnly] || self.readOnly){
+        self.fixedSize = YES;
         [self.textView removeFromSuperview];
         
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -153,6 +154,7 @@
 		[NSObject endBindingsContext];
 	}
 	else{
+        self.fixedSize = NO;
         NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
         _textView.placeholder =  _(placeholerText);
         _textView.frameChangeDelegate = nil;
