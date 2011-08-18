@@ -426,14 +426,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	return [self.mapView viewForAnnotation:object];
 }
 
-- (NSArray*)visibleViews{
+- (NSArray*)visibleIndexPaths{
 	NSMutableArray* array = [NSMutableArray array];
 	NSInteger count = [self numberOfObjectsForSection:0];
 	for(int i=0;i<count;++i){
-		UIView* view = [self viewAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-		if(view != nil){
-			[array addObject:view];
-		}
+        [array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 	}
 	return array;
 }

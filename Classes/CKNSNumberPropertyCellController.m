@@ -56,36 +56,44 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-	txtField.tag = 50000;
-	txtField.borderStyle = UITextBorderStyleNone;
-	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	txtField.clearButtonMode = UITextFieldViewModeWhileEditing;
-	txtField.delegate = self;
-	txtField.keyboardType = UIKeyboardTypeDecimalPad;
-	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    if(_textField == nil){
+        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+        self.textField = txtField;
+    }
+    
+	_textField.tag = 50000;
+	_textField.borderStyle = UITextBorderStyleNone;
+	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	_textField.delegate = self;
+	_textField.keyboardType = UIKeyboardTypeDecimalPad;
+	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
-            txtField.textAlignment = UITextAlignmentRight;
+            _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            _textField.textAlignment = UITextAlignmentRight;
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
         }  
         else{
-            txtField.textColor = [UIColor blackColor];
-            txtField.textAlignment = UITextAlignmentLeft;
+            _textField.textColor = [UIColor blackColor];
+            _textField.textAlignment = UITextAlignmentLeft;
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
     
-	self.textField = txtField;
-	
-	UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-	theSwitch.tag = SwitchTag;
-	self.toggleSwitch = theSwitch;
-	//creates textfiled and switch here and store them as property for stylesheets ...
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        _textField.autoresizingMask = UIViewAutoresizingNone;
+    }
+    
+	if(_toggleSwitch == nil){
+        UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+        self.toggleSwitch = theSwitch;
+    }
+    _toggleSwitch.tag = SwitchTag;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -139,13 +147,6 @@
 				
 				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 				self.textField.placeholder = _(placeholerText);
-				
-				if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-					self.textField.returnKeyType = UIReturnKeyNext;
-				}
-				else{
-					self.textField.returnKeyType = UIReturnKeyDone;
-				}
 			}
 	
 			break;
@@ -182,7 +183,7 @@
 - (id)performStandardLayout:(CKNSNumberPropertyCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
     
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+	UISwitch* s = [controller.toggleSwitch superview] ? controller.toggleSwitch : nil;
     CGFloat savedComponentRatio = self.componentsRatio;
     if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -190,15 +191,15 @@
     }
     
 	[super performStandardLayout:controller];
-	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+    
+	UITextField *textField = [controller.textField superview] ? controller.textField : nil;
 	if(textField){
-		if(controller.cellStyle == CKTableViewCellStyleValue3){
-			textField.frame = [controller value3DetailFrameForCell:cell];
-			textField.autoresizingMask = UIViewAutoresizingNone;
-		}
-        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
-			textField.frame = [controller propertyGridDetailFrameForCell:cell];
-			textField.autoresizingMask = UIViewAutoresizingNone;
+		if(controller.cellStyle == CKTableViewCellStyleValue3
+           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
+            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + 10;
+            CGFloat textFieldWidth = realWidth - 10 - textFieldX;
+			textField.frame = CGRectIntegral(CGRectMake(textFieldX,11,textFieldWidth,textField.font.lineHeight));
 		}
 	}
     
@@ -250,6 +251,13 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+        self.textField.returnKeyType = UIReturnKeyNext;
+    }
+    else{
+        self.textField.returnKeyType = UIReturnKeyDone;
+    }
+    
 	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
                                   atScrollPosition:UITableViewScrollPositionNone 
                                           animated:YES];

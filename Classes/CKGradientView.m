@@ -100,7 +100,24 @@
 //HACK to control how to paint using the background color !
 - (void)setBackgroundColor:(UIColor *)color{
 	self.fillColor = color;
-	[super setBackgroundColor:[UIColor clearColor]];
+    CGFloat alpha = CGColorGetAlpha([color CGColor]);
+    if(self.corners == CKRoundedCornerViewTypeNone && alpha >= 1){
+        [super setBackgroundColor:[UIColor blackColor]];
+    }
+    else{
+        [super setBackgroundColor:[UIColor clearColor]];
+    }
+}
+
+- (void)setCorners:(CKRoundedCornerViewType)corners{
+    _corners = corners;
+    CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
+    if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
+        [self setBackgroundColor:[UIColor blackColor]];
+    }
+    else{
+        [self setBackgroundColor:[UIColor clearColor]];
+    }
 }
 
 - (void)setBorderWidth:(CGFloat)width {

@@ -365,14 +365,16 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 
 
 @interface CKClassPropertyDescriptorManager ()
-@property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
-@property (nonatomic, retain, readwrite) NSDictionary *viewPropertiesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertiesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertiesByClassNameByName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertyNamesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *viewPropertiesByClassName;
 @end
 
 static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefault = nil;
 @implementation CKClassPropertyDescriptorManager
 @synthesize propertiesByClassName = _propertiesByClassName;
+@synthesize propertiesByClassNameByName = _propertiesByClassNameByName;
 @synthesize propertyNamesByClassName = _propertyNamesByClassName;
 @synthesize viewPropertiesByClassName = _viewPropertiesByClassName;
 
@@ -385,9 +387,10 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 
 - (id)init{
 	[super init];
-	self.propertiesByClassName = [NSMutableDictionary dictionary];
-	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
-	self.viewPropertiesByClassName = [NSMutableDictionary dictionary];
+	self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
 	return self;
 }
 
@@ -395,6 +398,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 	self.propertiesByClassName = nil;
 	self.viewPropertiesByClassName = nil;
 	self.propertyNamesByClassName = nil;
+	self.propertiesByClassNameByName = nil;
 	[super dealloc];
 }
 
@@ -406,16 +410,19 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 		[NSObject introspection:class array:allProperties];
 		[_propertiesByClassName setObject:allProperties forKey:className];
 		
-		NSMutableArray* allPropertyNames = [NSMutableArray array];
-		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray array];
+		NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
+		NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
+		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
 		for(CKClassPropertyDescriptor* property in allProperties){
 			[allPropertyNames addObject:property.name];
 			if([NSObject isKindOf:property.type parentType:[UIView class]]){
 				[allViewPropertyDescriptors addObject:property];
 			}
+            [propertiesByName setObject:property forKey:property.name];
 		}
 		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
 		[_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
+        [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
 	}
 	
 	return allProperties;
@@ -444,13 +451,13 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class{
-	NSArray* properties = [self allPropertiesForClass:class];
-	//TODO : Optimize this by getting a dictionary of properties instead of an array !
-	for(CKClassPropertyDescriptor* p in properties){
-		if([p.name isEqual:name])
-			return p;
-	}
-	return nil;
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+    NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+    if(!propertiesByName){
+        [self allPropertiesForClass:class];
+        propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+    }
+    return [propertiesByName objectForKey:name];
 }
 
 /*

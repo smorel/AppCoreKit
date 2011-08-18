@@ -14,6 +14,7 @@
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
 #import "CKItemViewController+StyleManager.h"
+#import <QuartzCore/QuartzCore.h>
 
 #ifdef DEBUG 
 #import "CKPropertyGridEditorController.h"
@@ -38,9 +39,8 @@
 }
 
 - (void)layoutSubviews{
-	[super layoutSubviews];
-	
-	if(_delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
+    [super layoutSubviews];
+    if([_delegate layoutCallback] != nil && _delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
 		[_delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
 }
@@ -49,6 +49,7 @@
 
 @interface CKTableViewCellController ()
 @property (nonatomic, retain) id debugModalController;
+@property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
 @end
 
 @implementation CKTableViewCellController
@@ -58,6 +59,7 @@
 @synthesize key = _key;
 @synthesize componentsRatio = _componentsRatio;
 @synthesize componentsSpace = _componentsSpace;
+@synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 
 #ifdef DEBUG 
 @synthesize debugModalController;
@@ -81,16 +83,18 @@
         self.rowHeight = 44.0f;
         self.editable = YES;
         
-        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
+        self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self]];
+	[NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
 	[self clearBindingsContext];
 	[_key release];
 	_key = nil;
+    [_cacheLayoutBindingContextId release];
+	_cacheLayoutBindingContextId = nil;
 	
 #ifdef DEBUG 
 	[debugModalController release];
@@ -183,18 +187,15 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
-        
         //Ensure detailTextLabel is created !
         if(cell.detailTextLabel == nil){
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,100,44)];
             object_setInstanceVariable(cell, "_detailTextLabel", (void**)(label));
         }
-        
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-		[NSObject endBindingsContext];	
 	}
+    
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 	
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
@@ -207,14 +208,14 @@
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
         
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
         
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
@@ -337,10 +338,17 @@
 #pragma mark CKItemViewController Implementation
 
 - (UIView *)loadView{
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	UITableViewCell* cell = [self loadCell];
 	[self initView:cell];
 	[self layoutCell:cell];
 	[self applyStyle];
+    
+    [CATransaction commit];
 	
 #ifdef DEBUG
 	if(ENABLE_DEBUG_GESTURE){
@@ -352,17 +360,45 @@
 }
 
 - (void)initView:(UIView*)view{
+    [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
+    
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self initTableViewCell:(UITableViewCell*)view];
 	[super initView:view];
 }
 
 - (void)setupView:(UIView *)view{
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
+        if(_layoutCallback == nil){
+            self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
+        }
+    }
+        
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
+    
 	[self beginBindingsContextByRemovingPreviousBindings];
 	[super setupView:view];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
 	[self endBindingsContext];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        UITableViewCell* cell = (UITableViewCell*)view;
+        
+		[NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
+        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
+		[NSObject endBindingsContext];	
+	}
+    
+    [CATransaction commit];
 }
 
 - (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
@@ -397,17 +433,21 @@
 }
 
 - (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
-    if(thelayoutCallback == nil){
-        thelayoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
-    }
     [_layoutCallback release];
     _layoutCallback = [thelayoutCallback retain];
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
     if(_layoutCallback){
         [_layoutCallback execute:self];
     }
+    
+    [CATransaction commit];
 }
 
 #ifdef DEBUG 
@@ -529,7 +569,7 @@
                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];
 	
 	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
-                                     width , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
+                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
 }
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
@@ -548,7 +588,7 @@
     CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                                    constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                        lineBreakMode:cell.textLabel.lineBreakMode];
-    return CGRectMake(10,11,maxWidth,MAX(cell.textLabel.font.lineHeight,size.height));
+    return CGRectIntegral(CGRectMake(10 + maxWidth - size.width,11,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
 }
 
 //PropertyGrid layout
@@ -635,23 +675,19 @@
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self value3TextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
     return (id)nil;

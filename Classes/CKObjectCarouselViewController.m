@@ -237,12 +237,14 @@
 
 #pragma mark CKObjectCarouselViewController
 
+/*
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
 	return [self.carouselView viewAtIndexPath:indexPath];
 }
+ */
 
-- (NSArray*)visibleViews{
-	return [self.carouselView visibleViews];
+- (NSArray*)visibleIndexPaths{
+	return [self.carouselView visibleIndexPaths];
 }
 
 @end

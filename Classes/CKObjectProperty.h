@@ -19,17 +19,17 @@
  */
 @interface CKObjectProperty : NSObject {
 }
-@property (nonatomic,retain) id object;
-@property (nonatomic,retain) NSString* keyPath;
+@property (nonatomic,retain,readonly) id object;
+@property (nonatomic,retain,readonly) NSString* keyPath;
 @property (nonatomic,assign) id value;
 @property (nonatomic,readonly) NSString* name;
+@property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
 
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
 + (CKObjectProperty*)propertyWithObject:(id)object;
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;
 
-- (CKClassPropertyDescriptor*)descriptor;
 - (CKModelObjectPropertyMetaData*)metaData;
 - (id)value;
 - (void)setValue:(id)value;

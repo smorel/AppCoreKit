@@ -14,7 +14,7 @@ typedef void(^CKUIControlBlock)();
 
 /** TODO
  */
-@interface CKUIControlBlockBinder : NSObject<CKBinding>{
+@interface CKUIControlBlockBinder : CKBinding{
 	UIControlEvents controlEvents;
 	
 	//We can use block or target/selector

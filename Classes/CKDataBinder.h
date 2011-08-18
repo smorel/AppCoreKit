@@ -13,7 +13,7 @@
 
 /** TODO
  */
-@interface CKDataBinder : NSObject<CKBinding> {
+@interface CKDataBinder : CKBinding {
 	CKWeakRef* instance1Ref;
 	NSString* keyPath1;
 	CKWeakRef* instance2Ref;

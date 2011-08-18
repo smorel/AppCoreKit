@@ -48,6 +48,8 @@ typedef enum CKTableViewCellStyle {
 	NSString* _key;
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
+    
+    NSString* _cacheLayoutBindingContextId;
 	
 #ifdef DEBUG 
 	id debugModalController;

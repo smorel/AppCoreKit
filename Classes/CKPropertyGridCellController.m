@@ -23,6 +23,8 @@
 @property(nonatomic,retain)UIImageView* validationImageView;
 @property(nonatomic,retain)UIView* oldAccessoryView;
 @property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
+@property(nonatomic,retain)NSString* validationBindingContext;
+
 @end
 
 @implementation CKPropertyGridCellController
@@ -31,22 +33,26 @@
 @synthesize oldAccessoryView = _oldAccessoryView;
 @synthesize oldAccessoryType = _oldAccessoryType;
 @synthesize validationImageView = _validationImageView;
+@synthesize validationBindingContext = _validationBindingContext;
 
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
     _validationDisplayed = NO;
+    self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
 	return self;
 }
 
 - (void)dealloc{
-    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_validation",self]];
+    [NSObject removeAllBindingsForContext:_validationBindingContext];
     [_validationButton release];
     _validationButton = nil;
     [_oldAccessoryView release];
     _oldAccessoryView = nil;
     [_validationImageView release];
     _validationImageView = nil;
+    [_validationBindingContext release];
+    _validationBindingContext = nil;
     [super dealloc];
 }
 
@@ -67,16 +73,13 @@
     if(self.readOnly){
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    BOOL validity = [self isValidValue:[[self objectProperty] value]];
-    [self setInvalidButtonVisible:!validity];
 }
 
 
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];
 
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_validation",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [NSObject beginBindingsContext:_validationBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
         CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
         [form bind:@"validationEnabled" withBlock:^(id value) {
@@ -109,19 +112,27 @@
 }
 
 - (void)setValueInObjectProperty:(id)value{
-    CALayer* layer = [self.tableViewCell layer];
-    NSArray* anims = [layer animationKeys];
-    BOOL hasAnimation = ([anims count] > 0);
-    if(!hasAnimation){
-        [[self parentTableView]beginUpdates];
-    }
     BOOL validity = [self isValidValue:value];
-    [self setInvalidButtonVisible:!validity];
-
-    [self layoutCell:self.tableViewCell];
     
-    if(!hasAnimation){
-        [[self parentTableView]endUpdates];
+    CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    BOOL visible = !validity && form.validationEnabled;
+    BOOL validityStateChanged = (_validationDisplayed != visible);
+    if(validityStateChanged){
+        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+        CALayer* layer = [self.tableViewCell layer];
+        NSArray* anims = [layer animationKeys];
+        BOOL hasAnimation = ([anims count] > 0);
+        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+            [[self parentTableView]beginUpdates];
+        }
+        
+        [self setInvalidButtonVisible:!validity];
+        [self layoutCell:self.tableViewCell];
+        
+        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+        if(!hasAnimation && [[self parentTableViewController]viewIsOnScreen]){
+            [[self parentTableView]endUpdates];
+        }
     }
     
     CKObjectProperty* property = [self objectProperty];

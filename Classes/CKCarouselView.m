@@ -394,9 +394,11 @@ double round(double x)
 	return allValues;
 }
 
+
 - (UIView*)viewAtIndexPath:(NSIndexPath*)indexPath{
 	return [_visibleViewsForIndexPaths objectForKey:indexPath];
 }
+
 
 #pragma mark Horizontal Scroll Layout
 

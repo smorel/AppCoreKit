@@ -142,7 +142,24 @@
 }
 
 - (void)viewDidLoad{
+    _storedTableDelegate = self.tableView.delegate;
+    self.tableView.delegate = nil;
+    _storedTableDataSource = self.tableView.dataSource;
+    self.tableView.dataSource = nil;
+    
     [super viewDidLoad];
+    
+    //in case it changed in viewDidLoad
+    if(self.tableView.delegate)
+        _storedTableDelegate = self.tableView.delegate;
+    if(self.tableView.dataSource)
+        _storedTableDataSource = self.tableView.dataSource;
+    
+    //ensure they are setup :
+    if(_storedTableDelegate == nil)
+        _storedTableDelegate = self;
+    if(_storedTableDataSource == nil)
+        _storedTableDataSource = self;
     
     self.placeHolderViewDuringKeyboardOrSheet = [[[UIView alloc]initWithFrame:self.tableViewContainer.frame]autorelease];
     _placeHolderViewDuringKeyboardOrSheet.backgroundColor = [UIColor clearColor];
@@ -298,6 +315,10 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[self.objectController lock];
 	[self updateParams];
+    
+    self.tableView.delegate = _storedTableDelegate;
+    self.tableView.dataSource = _storedTableDataSource;
+    
     [super viewWillAppear:animated];
 	[self updateParams];
 	
@@ -435,9 +456,8 @@
 
 	self.indexPathToReachAfterRotation = nil;
 	
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			self.indexPathToReachAfterRotation = indexPath;
@@ -445,8 +465,8 @@
 		}
 	}
 	
-	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+	if(!_indexPathToReachAfterRotation && [visibleIndexPaths count] > 0){
+		NSIndexPath *indexPath = [visibleIndexPaths objectAtIndex:0];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
@@ -470,6 +490,11 @@
 - (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
+    
+    _storedTableDelegate = self.tableView.delegate;
+    self.tableView.delegate = nil;
+    _storedTableDataSource = self.tableView.dataSource;
+    self.tableView.dataSource = nil;
 	
 	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
@@ -516,9 +541,10 @@
 		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
 	}
 	
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		[self rotateSubViewsForCell:(UITableViewCell*)view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
 	}
 }
 
@@ -532,9 +558,8 @@
 	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
 	
 	self.indexPathToReachAfterRotation = nil;
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			self.indexPathToReachAfterRotation = indexPath;
@@ -542,8 +567,8 @@
 		}
 	}
 	
-	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+	if(!_indexPathToReachAfterRotation && [visibleIndexPaths count] > 0){
+		NSIndexPath *indexPath = [visibleIndexPaths objectAtIndex:0];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
@@ -645,10 +670,18 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(self.editableType == CKObjectTableViewControllerEditableTypeNone
+       || self.editing == NO)
+        return NO;
+    
 	return [self isViewEditableAtIndexPath:indexPath];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(self.editableType == CKObjectTableViewControllerEditableTypeNone
+       || self.editing == NO)
+        return NO;
+    
 	return [self isViewMovableAtIndexPath:indexPath];
 }
 
@@ -896,15 +929,14 @@
 #pragma mark CKItemViewContainerController Implementation
 
 - (void)updateVisibleViewsRotation{
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:view withParams:self.params animated:YES];
+			[controller rotateView:controller.view withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
-				[self rotateSubViewsForCell:(UITableViewCell*)view];
+				[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
 			}
 		}
 	}	

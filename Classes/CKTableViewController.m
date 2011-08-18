@@ -164,8 +164,8 @@
 
 #pragma mark CKItemViewContainerController Implementation
 
-- (NSArray*)visibleViews{
-	return [self.tableView visibleCells];
+- (NSArray*)visibleIndexPaths{
+	return [self.tableView indexPathsForVisibleRows];
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
@@ -173,8 +173,10 @@
 	return [self.tableView indexPathForCell:(UITableViewCell*)view];
 }
 
+/* implemented in parent controller now.
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
 	return [self.tableView cellForRowAtIndexPath:indexPath];
 }
+ */
 
 @end

@@ -190,6 +190,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (void)setFormat:(CKCascadingTreeItemFormat*)format;
 - (void)setDictionary:(NSMutableDictionary*)style forKey:(NSString*)key;
 - (NSMutableDictionary*)parentDictionary;
+- (void)makeAllInherits;
 
 @end
 
@@ -255,10 +256,17 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 		   && [key isEqual:CKCascadingTreeEmpty] == NO
 		   && [key isEqual:CKCascadingTreeFormats] == NO){
 			id sourceObject = [source objectForKey:key];
+            if([sourceObject isKindOfClass:[NSMutableDictionary class]]){
+                NSMutableDictionary* sourceDico = (NSMutableDictionary*)sourceObject;
+                [sourceDico makeAllInherits];
+            }
 			if([mutableTarget containsObjectForKey:key] == NO){
 				if([sourceObject isKindOfClass:[NSDictionary class]]){
 					[mutableTarget setObject:[NSMutableDictionary dictionaryWithDictionary:sourceObject] forKey:key];
 				}
+                else if([sourceObject isKindOfClass:[NSDictionary class]]){
+                    NSAssert(NO,@"Should have been read as a mutable dico !");
+                }
 				else{
 					[mutableTarget setObject:sourceObject forKey:key];
 				}
@@ -312,6 +320,12 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 					   && [obj isEqual:CKCascadingTreeEmpty] == NO
 					   && [obj isEqual:CKCascadingTreeFormats] == NO){
 						id inheritedObject = [inheritedDico objectForKey:obj];
+                
+                        if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
+                            NSMutableDictionary* sourceDico = (NSMutableDictionary*)inheritedObject;
+                            [sourceDico makeAllInherits];
+                        }
+                        
 						if([self containsObjectForKey:obj] == NO){
 							if([inheritedObject isKindOfClass:[NSDictionary class]]){
 								[self setObject:[NSMutableDictionary dictionaryWithDictionary:inheritedObject] forKey:obj];

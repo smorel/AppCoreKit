@@ -60,10 +60,10 @@
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.headerView != nil ){
+	/*if( formSection.headerView != nil ){
 		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.headerView applyStyle:controllerStyle];
-	}
+	}*/
 	return formSection.headerView;
 }
 
@@ -82,10 +82,10 @@
         return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.footerView != nil ){
+	/*if( formSection.footerView != nil ){
 		NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 		[formSection.footerView applyStyle:controllerStyle];
-	}
+	}*/
 	return formSection.footerView;
 }
 
@@ -141,6 +141,10 @@
 
 @end
 
+
+@interface CKFormSectionBase()
+@property (nonatomic,readwrite) BOOL hidden;
+@end
 
 @implementation CKFormSectionBase
 @synthesize headerTitle = _headerTitle;
@@ -219,6 +223,12 @@
 - (void)setHeaderView:(UIView *)headerView{
     [_headerView release];
     _headerView = [headerView retain];
+    
+    if(_headerView){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
+        [_headerView applyStyle:controllerStyle];
+    }
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -231,27 +241,12 @@
 - (void)setFooterView:(UIView *)footerView{
     [_footerView release];
     _footerView = [footerView retain];
+    if(_footerView){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
+        [_footerView applyStyle:controllerStyle];
+    }
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)setHidden:(BOOL)bo{
-	if(_hidden != bo){
-		if([_parentController reloading]){
-			_hidden = bo;
-		}
-		else {
-			[_parentController objectControllerDidBeginUpdating:_parentController.objectController];
-			if(bo){
-				[_parentController objectController:_parentController.objectController removeSectionAtIndex:self.sectionVisibleIndex];
-				_hidden = YES;
-			}
-			else{
-				_hidden = NO;
-				[_parentController objectController:_parentController.objectController insertSectionAtIndex:self.sectionVisibleIndex];
-			}
-			[_parentController objectControllerDidEndUpdating:_parentController.objectController];
-		}
-	}
 }
 
 @end
@@ -403,9 +398,8 @@
 	//Update style for indexpath that have not been applyed
 	NSInteger sectionIndex = [self sectionVisibleIndex];
 	
-	NSArray *visibleCells = [self.parentController.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		if(indexPath.section == sectionIndex){
 			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
 			NSAssert(controller != nil,@"invalid controller");
@@ -590,9 +584,8 @@
 	//Update style for indexpath that have not been applyed
 	NSInteger sectionIndex = [self sectionVisibleIndex];
 	
-	NSArray *visibleCells = [self.parentController.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.parentController.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
 		   && indexPath.section == sectionIndex){
 			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
@@ -614,7 +607,7 @@
 	if(_hidden && _parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount > 0 ){
-			self.hidden = NO;
+            [_parentController setSections:[NSArray arrayWithObject:self] hidden:NO];
 			sectionUpdate = YES;
 			return;
 		}
@@ -623,7 +616,7 @@
 	if(!_hidden && _parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount <= 0 ){
-			self.hidden = YES;
+            [_parentController setSections:[NSArray arrayWithObject:self] hidden:YES];
 			sectionUpdate = YES;
 			return;
 		}
@@ -992,6 +985,35 @@
 		}
 	}	
 	return -1;
+}
+
+- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden{
+    [self objectControllerDidBeginUpdating:self.objectController];
+    if(hidden){
+        for(CKFormSectionBase* section in sections){
+            if(hidden && section.hidden == NO){
+                NSInteger index = section.sectionVisibleIndex;
+                [self objectController:self.objectController removeSectionAtIndex:index];
+            }
+        }
+        for(CKFormSectionBase* section in sections){
+            section.hidden = YES;
+        }
+    }
+    else{
+        NSMutableArray* toInsert = [NSMutableArray array];
+        for(CKFormSectionBase* section in sections){
+            if(!hidden && section.hidden == YES){
+                section.hidden = NO;
+                [toInsert addObject:section];
+            }
+        }
+        for(CKFormSectionBase* section in toInsert){
+            NSInteger index = section.sectionVisibleIndex;
+            [self objectController:self.objectController insertSectionAtIndex:index];
+        }
+    }
+    [self objectControllerDidEndUpdating:self.objectController];
 }
 
 @end

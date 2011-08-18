@@ -185,12 +185,11 @@
 #pragma mark Visible views management
 
 - (void)updateVisibleViewsRotation{
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:view withParams:self.params animated:YES];
+			[controller rotateView:controller.view withParams:self.params animated:YES];
 		}
 	}	
 }
@@ -198,9 +197,8 @@
 //Update the indexPath of the visible controllers as they could have moved.
 - (void)updateVisibleViewsIndexPath{
 	//ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	}
@@ -208,12 +206,11 @@
 
 - (void)updateViewsVisibility:(BOOL)visible{
 	//ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if(visible){
-			[controller viewDidAppear:view];
+			[controller viewDidAppear:controller.view];
 		}
 		else{
 			[controller viewDidDisappear];
@@ -232,19 +229,18 @@
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
-	NSAssert(NO,@"Implement in inheriting class");
-	return nil;
+    NSValue* v = [_indexPathToViews objectForKey:indexPath];
+	return v ? [v nonretainedObjectValue] : nil;
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
 	return [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
 }
 
-- (NSArray*)visibleViews{
+- (NSArray*)visibleIndexPaths{
 	NSAssert(NO,@"Implement in inheriting class");
 	return nil;
 }
-
 
 - (void)updateParams{
 	NSAssert(NO,@"Implement in inheriting class");
@@ -279,13 +275,14 @@
 }
 
 - (void)fetchMoreData{
+    //return;
+    
 	//Fetch data if needed
 	NSInteger minVisibleSectionIndex = INT32_MAX;
 	NSInteger maxVisibleSectionIndex = -1;
 	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
-	NSArray* visibleCells = [self visibleViews];
-	for(UIView* cell in visibleCells){
-		NSIndexPath *indexPath = [self indexPathForView:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		NSInteger section = indexPath.section;
 		if(section < minVisibleSectionIndex) minVisibleSectionIndex = section;
 		if(section > maxVisibleSectionIndex) maxVisibleSectionIndex = section;
@@ -415,9 +412,9 @@
 			
 			NSAssert(view != nil,@"The view has not been created");
 			
-			[controller performSelector:@selector(setParentController:) withObject:self];
-			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-			[controller performSelector:@selector(setView:) withObject:view];
+			[controller setParentController:self];
+			[controller setIndexPath:indexPath];
+			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
 			[_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
@@ -427,7 +424,7 @@
 			[controller setValue:object];
 			[controller setupView:view];	
 			
-			if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			if(controller){
 				[controller rotateView:view withParams:self.params animated:NO];
 			}
 			

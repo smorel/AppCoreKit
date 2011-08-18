@@ -62,6 +62,9 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
 	BOOL _viewIsOnScreen;
 	
 	CGFloat _tableMaximumWidth;
+    
+    id _storedTableDelegate;
+    id _storedTableDataSource;
 }
 
 ///-----------------------------------

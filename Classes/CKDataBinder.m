@@ -28,12 +28,16 @@
 - (id)init{
 	[super init];
 	binded = NO;
+    self.instance1Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance1:)];
+    self.instance2Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance2:)];
 	return self;
 }
 
 - (void)dealloc{
 	[self unbind];
 	[self reset];
+    self.instance1Ref = nil;
+    self.instance2Ref = nil;
 	[super dealloc];
 }
 
@@ -43,9 +47,9 @@
 }
 
 - (void)reset{
-	self.instance1Ref = nil;
+	self.instance1Ref.object = nil;
 	self.keyPath1 = nil;
-	self.instance2Ref = nil;
+	self.instance2Ref.object = nil;
 	self.keyPath2 = nil;
 }
 
@@ -56,12 +60,7 @@
 }
 
 - (void)setInstance1:(id)instance{
-	if(instance){
-		self.instance1Ref = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance1:)];
-	}
-	else{
-		self.instance1Ref = nil;
-	}
+	self.instance1Ref.object = instance;
 }
 
 - (id)releaseInstance2:(CKWeakRef*)weakRef{
@@ -71,12 +70,7 @@
 }
 
 - (void)setInstance2:(id)instance{
-	if(instance){
-		self.instance2Ref = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance2:)];
-	}
-	else{
-		self.instance2Ref = nil;
-	}
+	self.instance2Ref.object = instance;
 }
 
 -(void)bind{

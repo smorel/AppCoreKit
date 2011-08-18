@@ -12,4 +12,12 @@
 
 
 @implementation UITextField (CKIntrospectionAdditions)
+/*
+@dynamic autocapitalizationType;
+@dynamic autocorrectionType;        
+@dynamic keyboardType;   
+@dynamic keyboardAppearance;            
+@dynamic returnKeyType;                       
+@dynamic enablesReturnKeyAutomatically;   
+*/
 @end

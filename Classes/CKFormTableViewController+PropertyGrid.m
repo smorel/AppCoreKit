@@ -160,6 +160,10 @@
 
 @end
 
+@interface CKFormSectionBase ()
+@property (nonatomic,readwrite) BOOL hidden;
+@end
+
 @implementation CKFormTableViewController(CKPropertyGrid)
 
 - (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title{

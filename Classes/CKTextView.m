@@ -9,6 +9,7 @@
 #import "CKTextView.h"
 
 #import <objc/runtime.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface CKTextView ()
 
@@ -23,6 +24,7 @@
 @synthesize placeholderLabel = _placeholderLabel;
 @synthesize maxStretchableHeight = _maxStretchableHeight;
 @synthesize placeholderOffset = _placeholderOffset;
+@synthesize frameChangeDelegate = _frameChangeDelegate;
 
 - (void)postInit {
     self.placeholderOffset = CGPointMake(8, 8);
@@ -41,6 +43,7 @@
 	[self addObserver:self forKeyPath:@"font" options:NSKeyValueObservingOptionNew context:nil];
     
     _oldFrame = self.frame;
+    _frameChangeDelegate = nil;
 }
 
 - (id)init {
@@ -68,6 +71,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self removeObserver:self forKeyPath:@"font"];
 	self.placeholderLabel = nil;
+    _frameChangeDelegate = nil;
 	[super dealloc];
 }
 
@@ -82,7 +86,7 @@
     object_getInstanceVariable(self, "m_marginTop", (void **)(&topMargin));
     
     width = width - 2 * topMargin;
-    NSString* str = (self.text == nil || [self.text isKindOfClass:[NSNull class]] || [self.text length] <= 0 ) ? @"a" : self.text;
+    NSString* str = ([self.text length] <= 0 ) ? @"a" : self.text;
     CGSize size = [str sizeWithFont:self.font 
                   constrainedToSize:CGSizeMake( width  , CGFLOAT_MAX)];
     CGFloat newheight = size.height + insets.top + insets.bottom + topMargin;
@@ -91,16 +95,26 @@
     return newFrame;
 }
 
-- (void)updateHeight {
+- (void)updateHeightAnimated:(BOOL)animated {
 	if (self.maxStretchableHeight > 0) {
         CGRect newFrame = [self frameForText:self.text];
         if(_oldFrame.size.height != newFrame.size.height){
-            [UIView beginAnimations:nil context:nil];
-            self.frame = newFrame;
-            [UIView commitAnimations];
+            if(animated){
+                [UIView beginAnimations:nil context:nil];
+                self.frame = newFrame;
+                [UIView commitAnimations];
+            }
+            else{
+                [CATransaction begin];
+                [CATransaction 
+                 setValue: [NSNumber numberWithBool: YES]
+                 forKey: kCATransactionDisableActions];
+                self.frame = newFrame;
+                [CATransaction commit];
+            }
             
-            if ([self.delegate respondsToSelector:@selector(textViewFrameChanged:)]) {
-                [self.delegate textViewFrameChanged:newFrame];
+            if ([_frameChangeDelegate respondsToSelector:@selector(textViewFrameChanged:)]) {
+                [_frameChangeDelegate textViewFrameChanged:newFrame];
             }
         }
 
@@ -115,10 +129,19 @@
 }
 
 - (void)setText:(NSString *)text {
-	[super setText:text];
-    
-	self.placeholderLabel.hidden = [self hasText];
-	[self updateHeight];
+	[self setText:text animated:YES];
+}
+
+
+- (void)setText:(NSString*)text animated:(BOOL)animated{
+    [super setText:text];
+    self.placeholderLabel.hidden = [self hasText];
+	[self updateHeightAnimated:animated];
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor{
+    [super setBackgroundColor:backgroundColor];
+    self.placeholderLabel.backgroundColor = backgroundColor;
 }
 
 //
@@ -159,7 +182,7 @@
 	if ([self.delegate respondsToSelector:@selector(textViewValueChanged:)]) {
 		[self.delegate textViewValueChanged:self.text];
 	}
-	[self updateHeight];
+	[self updateHeightAnimated:YES];
 }
 
 

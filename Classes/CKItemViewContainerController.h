@@ -37,7 +37,6 @@
  
  - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath
  - (NSIndexPath*)indexPathForView:(UIView*)view
- - (NSArray*)visibleViews
  - (void)updateParams
  - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier
  
@@ -92,7 +91,7 @@
 - (CKItemViewController*)controllerAtIndexPath:(NSIndexPath *)indexPath;
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath*)indexPathForView:(UIView*)view;
-- (NSArray*)visibleViews;
+- (NSArray*)visibleIndexPaths;
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath;
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier;
 - (BOOL)isValidIndexPath:(NSIndexPath*)indexPath;

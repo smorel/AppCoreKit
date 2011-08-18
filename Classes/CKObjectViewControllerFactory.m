@@ -193,8 +193,8 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
     if(controllerStyle){
         [params setObject:controllerStyle forKey:CKTableViewAttributeStaticControllerStyle];
     }
-    [staticController performSelector:@selector(setParentController:) withObject:[params parentController]];
-    [staticController performSelector:@selector(setIndexPath:) withObject:indexPath];
+    [staticController setParentController:[params parentController]];
+    [staticController setIndexPath:indexPath];
     [staticController setValue:object];
     if(staticController.view != nil){
         [staticController initView:staticController.view];
@@ -212,21 +212,19 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
             if(staticCellController.tableViewCell.accessoryType != UITableViewCellAccessoryNone){
                 accessorySize = 22;
             }
-            staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
-            [staticCellController.tableViewCell layoutSubviews];
             CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]] - accessorySize;
+            staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
             if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
                 CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
                 staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
-                [staticCellController.tableViewCell layoutSubviews];
-                if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                    //NSAssert(NO,@"TO CHECK WHAT HAPPEND !!!");
-                }
             }
         }
     }
     
     [staticController clearBindingsContext];
+    /*if([staticController respondsToSelector:@selector(cacheLayoutBindingContextId)]){
+        [NSObject removeAllBindingsForContext:[staticController cacheLayoutBindingContextId]];
+    }*/
     
     return staticController;
 }
@@ -240,13 +238,12 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
 		}
 	}
     
-    [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
-    
 	id flagsObject = [_params objectForKey:CKObjectViewControllerFactoryItemFlags];
 	if(flagsObject != nil){
 		if([flagsObject isKindOfClass:[CKCallback class]]){
 			CKCallback* flagsCallBack = (CKCallback*)flagsObject;
 			if(flagsCallBack != nil){
+                [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
 				NSNumber* number = [flagsCallBack execute:params];
 				CKItemViewFlags flags = (CKItemViewFlags)[number intValue];
 				return flags;
@@ -262,11 +259,10 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
 		}
 	}
 	else{
+        [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
 		Class theClass = self.controllerClass;
-		if(theClass && [theClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-			CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
-			return flags;
-		}
+        CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
+        return flags;
 	}
 	return CKItemViewFlagNone;
 }
@@ -280,14 +276,13 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
 			return [controllerStyle cellSize];
 		}
 	}
-	
-    [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
     
 	id sizeObject = [_params objectForKey:CKObjectViewControllerFactoryItemSize];
 	if(sizeObject != nil){
 		if([sizeObject isKindOfClass:[CKCallback class]]){
 			CKCallback* sizeCallBack = (CKCallback*)sizeObject;
 			if(sizeCallBack != nil){
+                [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
 				NSValue* value = [sizeCallBack execute:params];
 				CGSize size = [value CGSizeValue];
 				return size;
@@ -303,12 +298,11 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
 		}
 	}
 	else{
+        [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
 		Class theClass = self.controllerClass;
-		if(theClass && [theClass respondsToSelector:@selector(viewSizeForObject:withParams:)]){
-			NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
-			CGSize size = [v CGSizeValue];
-			return size;
-		}
+        NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
+        CGSize size = [v CGSizeValue];
+        return size;
 	}
 	return CGSizeMake(100,44);
 }
