@@ -23,6 +23,8 @@
 @property(nonatomic,retain)UIImageView* validationImageView;
 @property(nonatomic,retain)UIView* oldAccessoryView;
 @property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
+@property(nonatomic,retain)NSString* validationBindingContext;
+
 @end
 
 @implementation CKPropertyGridCellController
@@ -31,22 +33,26 @@
 @synthesize oldAccessoryView = _oldAccessoryView;
 @synthesize oldAccessoryType = _oldAccessoryType;
 @synthesize validationImageView = _validationImageView;
+@synthesize validationBindingContext = _validationBindingContext;
 
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
     _validationDisplayed = NO;
+    self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
 	return self;
 }
 
 - (void)dealloc{
-    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_validation",self]];
+    [NSObject removeAllBindingsForContext:_validationBindingContext];
     [_validationButton release];
     _validationButton = nil;
     [_oldAccessoryView release];
     _oldAccessoryView = nil;
     [_validationImageView release];
     _validationImageView = nil;
+    [_validationBindingContext release];
+    _validationBindingContext = nil;
     [super dealloc];
 }
 
@@ -67,16 +73,13 @@
     if(self.readOnly){
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    BOOL validity = [self isValidValue:[[self objectProperty] value]];
-    [self setInvalidButtonVisible:!validity];
 }
 
 
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];
 
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_validation",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [NSObject beginBindingsContext:_validationBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
         CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
         [form bind:@"validationEnabled" withBlock:^(id value) {

@@ -207,10 +207,15 @@
         
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         cell.textLabel.textAlignment = UITextAlignmentRight;
+        
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
         
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
@@ -363,10 +368,9 @@
 }
 
 - (void)setupView:(UIView *)view{
-    [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
-    
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
         if(_layoutCallback == nil){
             self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
         }
@@ -671,23 +675,19 @@
 	if(self.cellStyle == CKTableViewCellStyleValue3){
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self value3TextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
-			cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		}
 	}
     return (id)nil;

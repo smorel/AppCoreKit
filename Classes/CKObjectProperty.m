@@ -13,17 +13,22 @@
 @interface CKObjectProperty()
 @property (nonatomic,retain) id subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
+@property (nonatomic,retain,readwrite) id object;
+@property (nonatomic,retain,readwrite) NSString* keyPath;
+@property (nonatomic,retain,readwrite) CKClassPropertyDescriptor* descriptor;
 @end
 
 @implementation CKObjectProperty
 @synthesize object,keyPath;
 @synthesize subObject,subKeyPath;
+@synthesize descriptor;
 
 - (void)dealloc{
-	[object release];
-	[keyPath release];
-	[subObject release];
-	[subKeyPath release];
+    self.object = nil;
+    self.keyPath = nil;
+    self.subObject = nil;
+    self.subKeyPath = nil;
+    self.descriptor = nil;
 	[super dealloc];
 }
 
@@ -32,7 +37,7 @@
 	return p;
 }
 
-- (void)initSubItems{
+- (void)postInit{
     self.subObject = object;
 	if(self.keyPath){
         NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
@@ -45,6 +50,13 @@
     else{
         self.subKeyPath = nil;
     }
+    
+    if(self.subObject && self.subKeyPath){
+        self.descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
+    }
+    else{
+        self.descriptor = nil;
+    }
 }
 
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
@@ -53,7 +65,7 @@
     if([thekeyPath length] > 0){
         self.keyPath = thekeyPath;
     }
-    [self initSubItems];
+    [self postInit];
 	return self;
 }
 
@@ -65,38 +77,26 @@
 - (id)initWithObject:(id)theobject{
 	[super init];
 	self.object = theobject;
-    [self initSubItems];
+    [self postInit];
 	return self;
 }
 
-- (CKClassPropertyDescriptor*)descriptor{
-	if(keyPath == nil)
-		return nil;
-
-	if(self.subObject == nil){
-		NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
-		return nil;
-	}
-	return [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-	//return [NSObject propertyDescriptor:[object class] forKeyPath:keyPath];
-}
-
 - (Class)type{
-    if(keyPath == nil)
-        return [object class];
-    return [[self descriptor]type];
+    if(self.keyPath == nil)
+        return [self.object class];
+    return self.descriptor.type;
 }
 
 - (id)value{
-	return (keyPath != nil) ? [object valueForKeyPath:keyPath] : object;
+	return (self.subKeyPath != nil) ? [self.subObject valueForKey:self.subKeyPath] : self.subObject;
 }
 
 - (void)setValue:(id)value{
-	if(keyPath != nil && [[self value] isEqual:value] == NO){
-		[object setValue:value forKeyPath:keyPath];
+	if(self.subKeyPath != nil && [[self value] isEqual:value] == NO){
+		[self.subObject setValue:value forKey:self.subKeyPath];
 	}
-	else if(keyPath == nil){
-		[object copy:value];
+	else if(self.subKeyPath == nil){
+		[self.subObject copy:value];
 	}
 }
 
@@ -107,14 +107,13 @@
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-		SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:descriptor.name];
+		SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:self.descriptor.name];
 		if([self.subObject respondsToSelector:selector]){
 			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:filter];
 			return collection;
 		}
 		else{
-			Class type = descriptor.type;
+			Class type = self.descriptor.type;
 			if([type respondsToSelector:@selector(editorCollectionWithFilter:)]){
 				CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionWithFilter:) withObject:filter];
 				return collection;
@@ -139,14 +138,13 @@
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-		SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:descriptor.name];
+		SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:self.descriptor.name];
 		if([self.subObject respondsToSelector:selector]){
 			CKDocumentCollection* collection = [self.subObject performSelector:selector];
 			return collection;
 		}
 		else{
-			Class type = descriptor.type;
+			Class type = self.descriptor.type;
 			if([type respondsToSelector:@selector(editorCollectionForNewlyCreated)]){
 				CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionForNewlyCreated)];
 				return collection;
@@ -172,14 +170,13 @@
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-		SEL selector = [NSObject propertyeditorCollectionForGeolocalizationSelectorForProperty:descriptor.name];
+		SEL selector = [NSObject propertyeditorCollectionForGeolocalizationSelectorForProperty:self.descriptor.name];
 		if([self.subObject respondsToSelector:selector]){
 			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 			return collection;
 		}
 		else{
-			Class type = descriptor.type;
+			Class type = self.descriptor.type;
 			if([type respondsToSelector:@selector(editorCollectionAtLocation:radius:)]){
 				CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionAtLocation:radius:) withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 				return collection;
@@ -204,14 +201,13 @@
 			return nil;
 		}
 		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-		SEL selector = [NSObject propertyTableViewCellControllerClassSelectorForProperty:descriptor.name];
+		SEL selector = [NSObject propertyTableViewCellControllerClassSelectorForProperty:self.descriptor.name];
 		if([self.subObject respondsToSelector:selector]){
 			Class controllerClass = [self.subObject performSelector:selector];
 			return controllerClass;
 		}
 		else{
-			Class type = descriptor.type;
+			Class type = self.descriptor.type;
 			if([type respondsToSelector:@selector(tableViewCellControllerClass)]){
 				Class controllerClass = [type performSelector:@selector(tableViewCellControllerClass)];
 				return controllerClass;
@@ -230,29 +226,21 @@
 
 
 - (CKModelObjectPropertyMetaData*)metaData{
-	if(keyPath != nil){
-		if(self.subObject == nil){
-			NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
-			return nil;
-		}
-		
-		CKClassPropertyDescriptor* descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
-		CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:descriptor];
-		return metaData;
+	if(self.descriptor != nil){
+		return [CKModelObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:self.descriptor];
 	}
 	return nil;
 }
 
 - (NSString*)name{
-	if(keyPath != nil){
-		CKClassPropertyDescriptor* descriptor = [self descriptor];
-		return descriptor.name;
+	if(self.descriptor != nil){
+		return self.descriptor.name;
 	}
 	return nil;
 }
 
 - (id)convertToClass:(Class)type{
-	if(keyPath != nil){
+	if(self.descriptor != nil){
 		return [NSValueTransformer transformProperty:self toClass:type];
 	}
 	return [NSValueTransformer transform:object toClass:type];
@@ -263,8 +251,7 @@
 }
 
 - (BOOL)isReadOnly{
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	return descriptor.isReadOnly;
+	return self.descriptor.isReadOnly;
 }
 
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
@@ -276,10 +263,9 @@
 	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
     if([NSObject isKindOf:selfClass parentType:[NSArray class]]){
-        CKClassPropertyDescriptor* descriptor = [self descriptor];
-        if(descriptor && descriptor.insertSelector && [self.object respondsToSelector:descriptor.insertSelector]){
+        if(self.descriptor && self.descriptor.insertSelector && [self.object respondsToSelector:self.descriptor.insertSelector]){
             [self.object willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
-            [self.object performSelector:descriptor.insertSelector withObject:objects withObject:indexes];
+            [self.object performSelector:self.descriptor.insertSelector withObject:objects withObject:indexes];
             [self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
         }
         else{
@@ -296,10 +282,9 @@
     }
 	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	if(descriptor && descriptor.removeSelector && [self.object respondsToSelector:descriptor.removeSelector]){
+	if(self.descriptor && self.descriptor.removeSelector && [self.object respondsToSelector:self.descriptor.removeSelector]){
 		[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
-		[self.object performSelector:descriptor.removeSelector withObject:indexes];
+		[self.object performSelector:self.descriptor.removeSelector withObject:indexes];
 		[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
 	}
 	else{
@@ -318,9 +303,8 @@
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
 	[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
     
-	CKClassPropertyDescriptor* descriptor = [self descriptor];
-	if(descriptor && descriptor.removeAllSelector && [self.object respondsToSelector:descriptor.removeAllSelector]){
-		[self.object performSelector:descriptor.removeAllSelector];
+	if(self.descriptor && self.descriptor.removeAllSelector && [self.object respondsToSelector:self.descriptor.removeAllSelector]){
+		[self.object performSelector:self.descriptor.removeAllSelector];
 	}
 	else{
 		[[self value]removeAllObjects];

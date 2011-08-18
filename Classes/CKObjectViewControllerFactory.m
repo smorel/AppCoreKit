@@ -212,21 +212,21 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
             if(staticCellController.tableViewCell.accessoryType != UITableViewCellAccessoryNone){
                 accessorySize = 22;
             }
-            staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
-            //[staticCellController.tableViewCell layoutSubviews];
             CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]] - accessorySize;
             if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
-                staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
-                //[staticCellController.tableViewCell layoutSubviews];
+                staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
                 if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                    //NSAssert(NO,@"TO CHECK WHAT HAPPEND !!!");
+                    CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
+                    staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
                 }
             }
         }
     }
     
     [staticController clearBindingsContext];
+    if([staticController respondsToSelector:@selector(cacheLayoutBindingContextId)]){
+        [NSObject removeAllBindingsForContext:[staticController cacheLayoutBindingContextId]];
+    }
     
     return staticController;
 }

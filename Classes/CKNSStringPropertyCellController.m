@@ -29,29 +29,35 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-	txtField.tag = 50000;
-	txtField.borderStyle = UITextBorderStyleNone;
-	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	txtField.clearButtonMode = UITextFieldViewModeWhileEditing;
-	txtField.delegate = self;
-	txtField.textAlignment = UITextAlignmentLeft;
-	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    if(_textField == nil){
+        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+        self.textField = txtField;
+    }
+	_textField.tag = 50000;
+	_textField.borderStyle = UITextBorderStyleNone;
+	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	_textField.delegate = self;
+	_textField.textAlignment = UITextAlignmentLeft;
+	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }  
         else{
-            txtField.textColor = [UIColor blackColor];
+            _textField.textColor = [UIColor blackColor];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
     
-	self.textField = txtField;
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        _textField.autoresizingMask = UIViewAutoresizingNone;
+    }
 }
 
 - (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
@@ -65,7 +71,6 @@
             CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + 10;
             CGFloat textFieldWidth = realWidth - 10 - textFieldX;
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,11,textFieldWidth,textField.font.lineHeight));
-			textField.autoresizingMask = UIViewAutoresizingNone;
         }
     }
     return (id)nil;

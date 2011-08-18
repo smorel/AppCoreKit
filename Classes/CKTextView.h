@@ -17,15 +17,18 @@
 	CGFloat _maxStretchableHeight;
     CGPoint _placeholderOffset;
     CGRect _oldFrame;
+    id _frameChangeDelegate;
 }
 
 @property (nonatomic, readonly, retain) IBOutlet UILabel *placeholderLabel;
 @property (nonatomic, assign) NSString *placeholder;
 @property (nonatomic, assign) CGFloat maxStretchableHeight;
 @property (nonatomic, assign) CGPoint placeholderOffset;
+@property (nonatomic, assign) id frameChangeDelegate;
 
-- (void)updateHeight;
+- (void)updateHeightAnimated:(BOOL)animated;
 - (CGRect)frameForText:(NSString*)text;
+- (void)setText:(NSString*)text animated:(BOOL)animated;
 
 @end
 
