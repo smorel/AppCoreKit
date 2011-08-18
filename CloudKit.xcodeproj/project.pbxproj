@@ -46,6 +46,8 @@
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
+		750A157613FD50E7008BC41F /* CKBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 750A157513FD50E6008BC41F /* CKBinding.m */; };
+		750A157813FD50FB008BC41F /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 750A157713FD50FA008BC41F /* CKBinding.h */; };
 		751F1EE113D0C3990041900C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EDF13D0C3990041900C /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EE213D0C3990041900C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EE013D0C3990041900C /* JSONKit.m */; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,7 +74,6 @@
 		7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2213B8ED3600268D13 /* CKAttribute.m */; };
 		7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2313B8ED3600268D13 /* CKAttributesDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2413B8ED3600268D13 /* CKAttributesDictionary.m */; };
-		7560DC7213B8ED3600268D13 /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2513B8ED3600268D13 /* CKBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2613B8ED3600268D13 /* CKBindingsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7413B8ED3600268D13 /* CKBindingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2713B8ED3600268D13 /* CKBindingsManager.m */; };
 		7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -443,6 +444,8 @@
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
 		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */; };
+		758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */; };
 		758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */; };
 		75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMappingContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -514,6 +517,8 @@
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
 		7506E41013B9028A00EE1471 /* CloudKit.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = CloudKit.xcdatamodeld; path = Resources/CloudKit.xcdatamodeld; sourceTree = "<group>"; };
+		750A157513FD50E6008BC41F /* CKBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBinding.m; path = Classes/CKBinding.m; sourceTree = "<group>"; };
+		750A157713FD50FA008BC41F /* CKBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBinding.h; path = Classes/CKBinding.h; sourceTree = "<group>"; };
 		751F1EDF13D0C3990041900C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = Vendor/JSONKit/JSONKit.h; sourceTree = "<group>"; };
 		751F1EE013D0C3990041900C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = Vendor/JSONKit/JSONKit.m; sourceTree = "<group>"; };
 		751F1EFC13D0E95B0041900C /* CKUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUserDefaults.h; path = Classes/CKUserDefaults.h; sourceTree = "<group>"; };
@@ -543,7 +548,6 @@
 		7560DB2213B8ED3600268D13 /* CKAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttribute.m; path = Classes/CKAttribute.m; sourceTree = "<group>"; };
 		7560DB2313B8ED3600268D13 /* CKAttributesDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttributesDictionary.h; path = Classes/CKAttributesDictionary.h; sourceTree = "<group>"; };
 		7560DB2413B8ED3600268D13 /* CKAttributesDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttributesDictionary.m; path = Classes/CKAttributesDictionary.m; sourceTree = "<group>"; };
-		7560DB2513B8ED3600268D13 /* CKBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBinding.h; path = Classes/CKBinding.h; sourceTree = "<group>"; };
 		7560DB2613B8ED3600268D13 /* CKBindingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBindingsManager.h; path = Classes/CKBindingsManager.h; sourceTree = "<group>"; };
 		7560DB2713B8ED3600268D13 /* CKBindingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindingsManager.m; path = Classes/CKBindingsManager.m; sourceTree = "<group>"; };
 		7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBonjourResolver.h; path = Classes/CKBonjourResolver.h; sourceTree = "<group>"; };
@@ -914,6 +918,8 @@
 		7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+PropertyGrid.h"; path = "Classes/CKFormTableViewController+PropertyGrid.h"; sourceTree = "<group>"; };
 		7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+PropertyGrid.m"; path = "Classes/CKFormTableViewController+PropertyGrid.m"; sourceTree = "<group>"; };
 		7577E00813E32FE40065E098 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
+		758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIFont+ValueTransformer.h"; path = "Classes/CKUIFont+ValueTransformer.h"; sourceTree = "<group>"; };
+		758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIFont+ValueTransformer.m"; path = "Classes/CKUIFont+ValueTransformer.m"; sourceTree = "<group>"; };
 		758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionPropertyCellController.h; path = Classes/CKOptionPropertyCellController.h; sourceTree = "<group>"; };
 		758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKOptionPropertyCellController.m; path = Classes/CKOptionPropertyCellController.m; sourceTree = "<group>"; };
 		75A4058013D87B2000D932B0 /* CKMappingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMappingContext.h; path = Classes/CKMappingContext.h; sourceTree = "<group>"; };
@@ -1162,7 +1168,8 @@
 		7506E3FA13B8FD7A00EE1471 /* Private */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB2513B8ED3600268D13 /* CKBinding.h */,
+				750A157713FD50FA008BC41F /* CKBinding.h */,
+				750A157513FD50E6008BC41F /* CKBinding.m */,
 				7560DB2613B8ED3600268D13 /* CKBindingsManager.h */,
 				7560DB2713B8ED3600268D13 /* CKBindingsManager.m */,
 				7560DB4513B8ED3600268D13 /* CKDataBinder.h */,
@@ -1852,6 +1859,8 @@
 				75CC171C13F46EF700835FE3 /* CKNSIndexPath+ValueTransformer.m */,
 				75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */,
 				75CC172013F4705700835FE3 /* CKNSObject+ValueTransformer.m */,
+				758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */,
+				758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1904,7 +1913,6 @@
 				7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */,
 				7560DC6E13B8ED3600268D13 /* CKAttribute.h in Headers */,
 				7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */,
-				7560DC7213B8ED3600268D13 /* CKBinding.h in Headers */,
 				7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */,
 				7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */,
 				7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */,
@@ -2112,6 +2120,8 @@
 				75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */,
 				75FB52B413F5E2C90053BD4A /* CKModelObjectPropertyMetaData.h in Headers */,
 				758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */,
+				758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */,
+				750A157813FD50FB008BC41F /* CKBinding.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2447,6 +2457,8 @@
 				75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */,
 				75FB52B513F5E2C90053BD4A /* CKModelObjectPropertyMetaData.m in Sources */,
 				758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */,
+				758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */,
+				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

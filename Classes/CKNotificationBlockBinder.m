@@ -28,7 +28,8 @@
 	[super init];
 	//NSLog(@"CKNotificationBlockBinder init %p",self);
 	binded = NO;
-	
+    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+    self.instanceRef =  [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
 	return self;
 }
 
@@ -36,6 +37,8 @@
 	//NSLog(@"CKNotificationBlockBinder dealloc %p",self);
 	[self unbind];
 	[self reset];
+    self.instanceRef = nil;
+    self.targetRef = nil;
 	[super dealloc];
 }
 
@@ -45,10 +48,10 @@
 }
 
 - (void)reset{
-	self.instanceRef = nil;
+	self.instanceRef.object = nil;
 	self.notificationName = nil;
 	self.block = nil;
-	self.targetRef = nil;
+	self.targetRef.object = nil;
 	self.selector = nil;
 }
 
@@ -59,12 +62,7 @@
 }
 
 - (void)setTarget:(id)instance{
-	if(instance){
-		self.targetRef = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseTarget:)];
-	}
-	else{
-		self.targetRef = nil;
-	}
+	self.targetRef.object = instance;
 }
 
 - (id)releaseInstance:(CKWeakRef*)weakRef{
@@ -74,12 +72,7 @@
 }
 
 - (void)setInstance:(id)instance{
-	if(instance){
-		self.instanceRef =  [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseInstance:)];
-	}
-	else {
-		self.instanceRef = nil;
-	}
+	self.instanceRef.object = instance;
 }
 
 - (void)onNotification:(NSNotification*)notification{

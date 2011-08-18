@@ -34,13 +34,17 @@
 
 - (void)initSubItems{
     self.subObject = object;
-	
-	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-	for(int i=0;i<[ar count]-1;++i){
-		NSString* path = [ar objectAtIndex:i];
-		self.subObject = [subObject valueForKey:path];
-	}
-    self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
+	if(self.keyPath){
+        NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
+        for(int i=0;i<[ar count]-1;++i){
+            NSString* path = [ar objectAtIndex:i];
+            self.subObject = [self.subObject valueForKey:path];
+        }
+        self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
+    }
+    else{
+        self.subKeyPath = nil;
+    }
 }
 
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{

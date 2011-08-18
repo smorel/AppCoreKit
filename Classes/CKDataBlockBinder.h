@@ -15,7 +15,7 @@ typedef void(^CKDataBlockBinderExecutionBlock)(id value);
 
 /** TODO
  */
-@interface CKDataBlockBinder : NSObject<CKBinding> {
+@interface CKDataBlockBinder : CKBinding {
 	CKWeakRef* instanceRef;
 	NSString* keyPath;
 	

@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKBinding.h"
 
 
 /** TODO
  */
 @interface CKBindingsManager : NSObject {
 	NSMutableDictionary* _bindingsForContext;
-	NSMutableDictionary* _bindingsToContext;
 	NSMutableDictionary* _bindingsPoolForClass;
 	
 	NSMutableSet* _contexts;
@@ -22,9 +22,9 @@
 + (CKBindingsManager*)defaultManager;
 
 - (id)dequeueReusableBindingWithClass:(Class)bindingClass;
-- (void)bind:(id)binding withContext:(id)context;
-- (void)unbind:(id)binding;
-- (void)unregister:(id)binding;
+- (void)bind:(CKBinding*)binding withContext:(id)context;
+- (void)unbind:(CKBinding*)binding;
+- (void)unregister:(CKBinding*)binding;
 - (void)unbindAllBindingsWithContext:(id)context;
 
 @end

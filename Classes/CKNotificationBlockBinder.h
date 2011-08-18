@@ -15,7 +15,7 @@ typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 
 /** TODO
  */
-@interface CKNotificationBlockBinder : NSObject<CKBinding> {
+@interface CKNotificationBlockBinder : CKBinding {
 	CKWeakRef* instanceRef;
 	NSString* notificationName;
 	

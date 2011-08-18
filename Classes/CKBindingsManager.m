@@ -13,7 +13,6 @@
 @interface CKBindingsManager ()
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
-@property (nonatomic, retain) NSDictionary *bindingsToContext;
 @property (nonatomic, retain) NSMutableSet *contexts;
 @end
 
@@ -21,13 +20,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 @implementation CKBindingsManager
 @synthesize bindingsForContext = _bindingsForContext;
 @synthesize bindingsPoolForClass = _bindingsPoolForClass;
-@synthesize bindingsToContext = _bindingsToContext;
 @synthesize contexts = _contexts;
 
 - (id)init{
 	[super init];
 	self.bindingsForContext = [NSMutableDictionary dictionary];
-	self.bindingsToContext = [NSMutableDictionary dictionary];
 	self.bindingsPoolForClass = [NSMutableDictionary dictionary];
 	self.contexts = [NSMutableSet set];
 	return self;
@@ -36,7 +33,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)dealloc{
 	[_bindingsForContext release];
 	[_bindingsPoolForClass release];
-	[_bindingsToContext release];
 	[_contexts release];
 	[super dealloc];
 }
@@ -64,36 +60,31 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	if([bindings count] > 0){
 		id binding = [[bindings lastObject]retain];
 		[bindings removeLastObject];
-		
-		if([binding respondsToSelector:@selector(reset)]){
-			[binding performSelector:@selector(reset)];
-		}
+        [binding reset];
 		return binding;
 	}
 	
 	return [[bindingClass alloc]init];
 }
 
-- (void)bind:(id)binding withContext:(id)context{
-	if([binding respondsToSelector:@selector(bind)]){
-		[binding performSelector:@selector(bind)];
-	}
+- (void)bind:(CKBinding*)binding withContext:(id)context{
+    [binding bind];
 	
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
+	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		[_contexts addObject:context];
-		bindings = [NSMutableArray array];
+		bindings = [NSMutableSet setWithCapacity:500];
 		[_bindingsForContext setObject:bindings forKey:context];
 	}
 	[bindings addObject:binding];
-	[_bindingsToContext setObject:context forKey:[NSValue valueWithNonretainedObject:binding]];
+    binding.context = context;
 }
 
 
-- (void)unregister:(id)binding{
-	id context = [_bindingsToContext objectForKey:[NSValue valueWithNonretainedObject:binding]];
+- (void)unregister:(CKBinding*)binding{
+	id context = binding.context;
 	
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
+	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		//Already unbinded
 		return;
@@ -107,7 +98,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 	}
 	[queuedBindings addObject:binding];
-	[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
+    binding.context = nil;
 	
 	if([bindings count] <= 0){
 		[_bindingsForContext removeObjectForKey:context];
@@ -116,29 +107,21 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	[bindings removeObject:binding];
 }
 
-- (void)unbind:(id)binding{
-	if([binding respondsToSelector:@selector(unbind)]){
-		[binding performSelector:@selector(unbind)];
-	}
-	if([binding respondsToSelector:@selector(reset)]){
-		[binding performSelector:@selector(reset)];
-	}
+- (void)unbind:(CKBinding*)binding{
+    [binding unbind];
+	[binding reset];
 	[self unregister:binding];
 }
 
 - (void)unbindAllBindingsWithContext:(id)context{
-	NSMutableArray* bindings = [_bindingsForContext objectForKey:context];
+	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		return;
 	}
 	
-	for(id binding in bindings){
-		if([binding respondsToSelector:@selector(unbind)]){
-			[binding performSelector:@selector(unbind)];
-		}
-		if([binding respondsToSelector:@selector(reset)]){
-			[binding performSelector:@selector(reset)];
-		}
+	for(CKBinding* binding in bindings){
+        [binding unbind];
+        [binding reset];
 		
 		NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
 		NSMutableArray* queuedBindings = [_bindingsPoolForClass valueForKey:className];
@@ -147,7 +130,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 			[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 		}
 		[queuedBindings addObject:binding];
-		[_bindingsToContext removeObjectForKey:[NSValue valueWithNonretainedObject:binding]];
+        binding.context = nil;
 	}
 	
 	[_bindingsForContext removeObjectForKey:context];

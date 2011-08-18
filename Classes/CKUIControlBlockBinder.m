@@ -31,12 +31,16 @@
 	[super init];
 	binded = NO;
 	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
+    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+    self.controlRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseControl:)];
 	return self;
 }
 
 -(void)dealloc{
 	[self unbind];
 	[self reset];
+	self.controlRef = nil;
+	self.targetRef = nil;
 	[super dealloc];
 }
 
@@ -48,8 +52,8 @@
 - (void)reset{
 	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	self.block = nil;
-	self.controlRef = nil;
-	self.targetRef = nil;
+	self.controlRef.object = nil;
+	self.targetRef.object = nil;
 	self.selector = nil;
 }
 
@@ -60,12 +64,7 @@
 }
 
 - (void)setTarget:(id)instance{
-	if(instance){
-		self.targetRef = [CKWeakRef weakRefWithObject:instance target:self action:@selector(releaseTarget:)];
-	}
-	else{
-		self.targetRef = nil;
-	}
+	self.targetRef.object = instance;
 }
 
 - (id)releaseControl:(CKWeakRef*)weakRef{
@@ -75,12 +74,7 @@
 }
 
 - (void)setControl:(UIControl*)control{
-	if(control){
-		self.controlRef = [CKWeakRef weakRefWithObject:control target:self action:@selector(releaseControl:)];
-	}
-	else{
-		self.controlRef = nil;
-	}
+    self.controlRef.object = control;
 }
 
 //Update data in model

@@ -12,8 +12,14 @@
 
 /** TODO
  */
-@protocol CKBinding
+@interface CKBinding : NSObject{
+    id _context;
+}
+
+@property(nonatomic,assign) id context;
+
 - (void)bind;
 - (void)unbind;
 - (void)reset;
+
 @end

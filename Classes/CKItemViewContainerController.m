@@ -275,6 +275,8 @@
 }
 
 - (void)fetchMoreData{
+    return;
+    
 	//Fetch data if needed
 	NSInteger minVisibleSectionIndex = INT32_MAX;
 	NSInteger maxVisibleSectionIndex = -1;
@@ -410,9 +412,9 @@
 			
 			NSAssert(view != nil,@"The view has not been created");
 			
-			[controller performSelector:@selector(setParentController:) withObject:self];
-			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-			[controller performSelector:@selector(setView:) withObject:view];
+			[controller setParentController:self];
+			[controller setIndexPath:indexPath];
+			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
 			[_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
@@ -422,7 +424,7 @@
 			[controller setValue:object];
 			[controller setupView:view];	
 			
-			if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			if(controller){
 				[controller rotateView:view withParams:self.params animated:NO];
 			}
 			

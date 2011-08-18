@@ -64,8 +64,8 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	}
 	
 	controller.name = nil;
-	[controller performSelector:@selector(setParentController:) withObject:parentController];
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[controller setParentController:parentController];
+	[controller setIndexPath:indexPath];
 	[controller setValue:object];	
     
 	return controller;
