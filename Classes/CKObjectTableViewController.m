@@ -336,11 +336,26 @@
 	//Adds searchbars if needed
 	CGFloat tableViewOffset = 0;
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
-		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice]orientation];
-		BOOL isPortrait = !UIDeviceOrientationIsLandscape(deviceOrientation);
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+		BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
 		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-		BOOL tooSmall = self.view.bounds.size.width <= 320;
-		tableViewOffset += (!isIpad || (_searchScopeDefinition && (isPortrait || tooSmall))) ? 88 : 44;
+        if(!isIpad){
+            if(_searchScopeDefinition && isPortrait){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
+        else{
+            BOOL tooSmall = self.view.bounds.size.width <= 320;
+            if(_searchScopeDefinition && tooSmall){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
 		
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
 		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -377,6 +392,7 @@
 	if(self.tableViewContainer.frame.origin.y < tableViewOffset){
 		self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
 												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+        _placeHolderViewDuringKeyboardOrSheet.frame = self.tableViewContainer.frame;
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -770,11 +786,14 @@
     if(_modalViewCount == 0){
         if (_resizeOnKeyboardNotification == YES){
             CGRect currentFrame = _placeHolderViewDuringKeyboardOrSheet.frame;
+            CGRect viewFrame = self.view.frame;
             
             self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask | UIViewAutoresizingFlexibleBottomMargin;
             
+            CGRect windowFrame = [[self.tableViewContainer window] frame];
+            CGRect tableFrameInWindow = [_placeHolderViewDuringKeyboardOrSheet convertRect:currentFrame toView:[self.tableViewContainer window]];
             CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:_placeHolderViewDuringKeyboardOrSheet];
-            CGFloat offset = (currentFrame.origin.y + currentFrame.size.height ) - keyboardFrame.origin.y;
+            CGFloat offset = (/*currentFrame.origin.y + */currentFrame.size.height ) - keyboardFrame.origin.y;
             if(offset > 0){
                 [UIView beginAnimations:nil context:nil];
                 [UIView setAnimationDuration:animationDuration];

@@ -10,6 +10,10 @@
 #import "CKTableViewController.h"
 #import "CKTableViewCellController.h"
 
+
+//FIXME :
+   //on rotation, resizer la search bar si besoin !
+
 typedef enum CKObjectTableViewControllerEditableType{
     CKObjectTableViewControllerEditableTypeNone,
     CKObjectTableViewControllerEditableTypeLeft,
