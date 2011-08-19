@@ -86,6 +86,9 @@ static NSString* getPropertyType(objc_property_t property) {
 	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
 	for(int i=0;i<[ar count]-1;++i){
 		NSString* path = [ar objectAtIndex:i];
+        if(!class_getProperty([subObject class],[path UTF8String])){
+            return nil;
+        }
 		//NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}

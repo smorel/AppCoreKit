@@ -281,21 +281,22 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				if([myViewStyle containsObjectForKey:CKStyleAlpha]){
 					backgroundView.alpha = [myViewStyle alpha];
 				}
-				
+                
+                UIColor* backColor = backgroundView.backgroundColor;
 				//Apply color
 				BOOL dontTouchBackgroundColor = NO;
 				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES){
 					dontTouchBackgroundColor = YES;
-                    UIColor* backColor = [myViewStyle backgroundColor];
-					backgroundView.backgroundColor = backColor;
-					CGFloat alpha = CGColorGetAlpha([backColor CGColor]);
-					opaque = opaque && (alpha >= 1);
+                    backColor = [myViewStyle backgroundColor];
 				}
 				
 				if(dontTouchBackgroundColor == NO && (roundedCornerType != CKRoundedCornerViewTypeNone)){
-					backgroundView.backgroundColor = [UIColor clearColor];
-                    opaque = NO;
+                    backColor = [UIColor clearColor];
 				}
+                
+                backgroundView.backgroundColor = backColor;
+                CGFloat alpha = CGColorGetAlpha([backColor CGColor]);
+                opaque = opaque && (alpha >= 1);
                 
                 backgroundView.opaque = opaque;
 				
