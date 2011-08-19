@@ -527,7 +527,27 @@
 	[self updateVisibleViewsIndexPath];
 }
 
+- (void)incrementIndexPathFrom:(NSIndexPath*)indexPath{
+    id view = [_indexPathToViews objectForKey:indexPath];
+    if(view){
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        NSInteger count = [self numberOfObjectsForSection:section];
+        for(int i = count - 1;i >= row ; --i){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:i+1 inSection:section];
+            id v = [_indexPathToViews objectForKey:indexPath];
+            if(v){
+                [_indexPathToViews setObject:v forKey:newIndexPath];
+                [_viewsToIndexPath setObject:newIndexPath forKey:v];
+                [_indexPathToViews removeObjectForKey:indexPath];
+            }
+        }
+    }
+}
+
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    [self incrementIndexPathFrom:indexPath];
 	[self onInsertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
@@ -536,6 +556,9 @@
 }
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    for(NSIndexPath* indexPath in indexPaths){
+        [self incrementIndexPathFrom:indexPath];
+    }
 	[self onInsertObjects:objects atIndexPaths:indexPaths];
 }
 
