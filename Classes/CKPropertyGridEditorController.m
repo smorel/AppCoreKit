@@ -78,7 +78,7 @@
 			useProperty = (range.location != NSNotFound);
 		}
 		if(useProperty){
-			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:_object property:descriptor];
+			CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:_object property:descriptor];
 			if(metaData.editable){
 				CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:theobject keyPath:descriptor.name]autorelease];
 				[theProperties insertObject:property atIndex:0];
@@ -99,7 +99,7 @@
 
 - (void)setup:(NSArray*)properties inSection:(CKFormSection*)section{
 	for(CKObjectProperty* property in properties){
-		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		CKObjectPropertyMetaData* metaData = [property metaData];
 		if(metaData.editable == YES /*&& [property descriptor].isReadOnly == NO*/){
 			if(metaData.valuesAndLabels != nil){
 				NSDictionary* copyOfValuesAndLabels = [metaData.valuesAndLabels copy];//we copy it as metaData is a reused singleton

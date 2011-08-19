@@ -196,7 +196,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	for(NSString* propertyName in allProperties){
 		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		CKObjectPropertyMetaData* metaData = [property metaData];
 		if( (metaData  && metaData.serializable == NO) || descriptor.isReadOnly == YES){}
 		else{
 			id propertyValue = [property value];

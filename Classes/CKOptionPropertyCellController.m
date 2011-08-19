@@ -32,7 +32,7 @@
 
 - (NSArray*)values{
     CKObjectProperty* property = [self objectProperty];
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.valuesAndLabels)
         return [metaData.valuesAndLabels allValues];
     if(metaData.enumDescriptor)
@@ -44,7 +44,7 @@
 
 - (NSArray*)labels{
     CKObjectProperty* property = [self objectProperty];
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.valuesAndLabels)
         return [metaData.valuesAndLabels allKeys];
     if(metaData.enumDescriptor)
@@ -56,7 +56,7 @@
 
 - (BOOL)multiSelectionEnabled{
     CKObjectProperty* property = [self objectProperty];
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     return metaData.multiselectionEnabled;
 }
 

@@ -489,8 +489,8 @@
 		75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */; };
 		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
-		75FB52B413F5E2C90053BD4A /* CKModelObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75FB52B513F5E2C90053BD4A /* CKModelObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */; };
+		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -964,8 +964,8 @@
 		75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSPredicate+Additions.m"; path = "Classes/CKNSPredicate+Additions.m"; sourceTree = "<group>"; };
 		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
-		75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKModelObjectPropertyMetaData.h; path = Classes/CKModelObjectPropertyMetaData.h; sourceTree = "<group>"; };
-		75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKModelObjectPropertyMetaData.m; path = Classes/CKModelObjectPropertyMetaData.m; sourceTree = "<group>"; };
+		75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyMetaData.h; path = Classes/CKObjectPropertyMetaData.h; sourceTree = "<group>"; };
+		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1003,7 +1003,7 @@
 			path = Resources/Styles;
 			sourceTree = "<group>";
 		};
-		7506E3ED13B8FA4F00EE1471 /* Core */ = {
+		7506E3ED13B8FA4F00EE1471 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
@@ -1018,8 +1018,9 @@
 				7506E3F013B8FABB00EE1471 /* Edition */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
 				7506E40813B9002B00EE1471 /* Callback */,
+				75A405EC13D8B66E00D932B0 /* CascadingTrees */,
 			);
-			name = Core;
+			name = Foundation;
 			sourceTree = "<group>";
 		};
 		7506E3EF13B8FA5800EE1471 /* Conversion */ = {
@@ -1079,19 +1080,16 @@
 		7506E3F313B8FBB100EE1471 /* Document */ = {
 			isa = PBXGroup;
 			children = (
+				751F1EFB13D0E93E0041900C /* Settings */,
 				7506E3F613B8FC9500EE1471 /* Storage */,
 				7506E3F513B8FC8300EE1471 /* Controller */,
 				7506E3F413B8FC6D00EE1471 /* Collection */,
 				7560DB9113B8ED3600268D13 /* CKModelObject.h */,
 				7560DB9213B8ED3600268D13 /* CKModelObject.m */,
-				7560DB9313B8ED3600268D13 /* CKModelObject+CKStore.h */,
-				7560DB9413B8ED3600268D13 /* CKModelObject+CKStore.m */,
 				7560DB4C13B8ED3600268D13 /* CKDocument.h */,
 				7560DB4D13B8ED3600268D13 /* CKDocument.m */,
 				7560DB5E13B8ED3600268D13 /* CKFeedSource.h */,
 				7560DB5F13B8ED3600268D13 /* CKFeedSource.m */,
-				75FB52B213F5E2C70053BD4A /* CKModelObjectPropertyMetaData.h */,
-				75FB52B313F5E2C80053BD4A /* CKModelObjectPropertyMetaData.m */,
 			);
 			name = Document;
 			sourceTree = "<group>";
@@ -1142,6 +1140,8 @@
 				7560DBDD13B8ED3600268D13 /* CKObjectProperty.m */,
 				7560DBC113B8ED3600268D13 /* CKNSObject+Introspection.h */,
 				7560DBC213B8ED3600268D13 /* CKNSObject+Introspection.m */,
+				75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */,
+				75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */,
 			);
 			name = Introspection;
 			sourceTree = "<group>";
@@ -1355,6 +1355,8 @@
 		7506E40A13B9009400EE1471 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7560DB9313B8ED3600268D13 /* CKModelObject+CKStore.h */,
+				7560DB9413B8ED3600268D13 /* CKModelObject+CKStore.m */,
 				7506E40B13B900A000EE1471 /* Helpers */,
 				7506E40C13B900A800EE1471 /* CKStore */,
 			);
@@ -1661,11 +1663,9 @@
 		7560DDB713B8EDA300268D13 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				751F1EFB13D0E93E0041900C /* Settings */,
-				7506E3ED13B8FA4F00EE1471 /* Core */,
+				7506E3ED13B8FA4F00EE1471 /* Foundation */,
 				7506E3F313B8FBB100EE1471 /* Document */,
 				7506E3F913B8FD5500EE1471 /* Bindings */,
-				75A405EC13D8B66E00D932B0 /* CascadingTrees */,
 				7506E3FB13B8FD9A00EE1471 /* Mappings */,
 				7506E3F113B8FAE400EE1471 /* Style */,
 				7506E3FC13B8FDC700EE1471 /* UI */,
@@ -2118,7 +2118,7 @@
 				75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */,
 				75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */,
 				75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */,
-				75FB52B413F5E2C90053BD4A /* CKModelObjectPropertyMetaData.h in Headers */,
+				75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */,
 				758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */,
 				758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */,
 				750A157813FD50FB008BC41F /* CKBinding.h in Headers */,
@@ -2455,7 +2455,7 @@
 				75CC172213F4705A00835FE3 /* CKNSObject+ValueTransformer.m in Sources */,
 				75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */,
 				75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */,
-				75FB52B513F5E2C90053BD4A /* CKModelObjectPropertyMetaData.m in Sources */,
+				75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */,
 				758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */,
 				758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */,
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,

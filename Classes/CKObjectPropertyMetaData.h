@@ -1,5 +1,5 @@
 //
-//  CKModelObjectPropertyMetaData.h
+//  CKObjectPropertyMetaData.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-08-12.
@@ -13,13 +13,13 @@
 
 /** Meta data is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
  
- by defining a selector - (void) yourPropertyNameMetaData:(CKModelObjectPropertyMetaData*)metaData in your classes, you will be able to customize how yourProperty will react in all the cases described previously.
+ by defining a selector - (void) yourPropertyNameMetaData:(CKObjectPropertyMetaData*)metaData in your classes, you will be able to customize how yourProperty will react in all the cases described previously.
  
  Concerning the property grid representation, there several ways to customize the representation of your property : enumDescriptor, valuesAndLabels,propertyCellControllerClass or nothing.
  
  propertyCellControllerClass will get used as the top priority. after, we'll use enumDescriptor or valuesAndLabels that should be used independently depending whether your represent an enum property or something else. and finally, property grids will automatically choose a controller class depending on the property type automatically.
  */
-@interface CKModelObjectPropertyMetaData : NSObject{
+@interface CKObjectPropertyMetaData : NSObject{
 	BOOL comparable;
 	BOOL serializable;
 	BOOL copiable;
@@ -81,6 +81,10 @@
 @property (nonatomic, assign) Class propertyCellControllerClass;
 
 - (void)reset;
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
++ (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
+@end
+
+//DEPRECATED_IN_CLOUDKIT_1.7
+@interface CKModelObjectPropertyMetaData : CKObjectPropertyMetaData{}
 @end

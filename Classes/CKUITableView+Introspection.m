@@ -13,7 +13,7 @@
 
 @implementation UITableView (CKIntrospectionAdditions)
 
-- (void)separatorStyleMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)separatorStyleMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellSeparatorStyle",
                                                    UITableViewCellSeparatorStyleNone,
 											   UITableViewCellSeparatorStyleSingleLine,

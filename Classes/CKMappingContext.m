@@ -266,7 +266,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
             NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
             
-            CKModelObjectPropertyMetaData* metaData = [property metaData];
+            CKObjectPropertyMetaData* metaData = [property metaData];
             Class contentType = [self objectClass:subObjectDefinition defaultClass:[metaData contentType]];
            
             id subObjectMappings = [self mappingsDefinition:subObjectDefinition];

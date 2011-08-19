@@ -48,7 +48,7 @@
 			useProperty = (range.location != NSNotFound);
 		}
 		if(useProperty){
-			CKModelObjectPropertyMetaData* metaData = [CKModelObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
+			CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
 			if(metaData.editable){
 				[theProperties insertObject:descriptor.name atIndex:0];
 			}
@@ -61,7 +61,7 @@
 + (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly{
     CKFormCellDescriptor* cellDescriptor = nil;
     
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.editable == YES){
         if(metaData.propertyCellControllerClass != nil){
             NSAssert([NSObject isKindOf:metaData.propertyCellControllerClass parentType:[CKTableViewCellController class]],@"invalid propertyCellControllerClass defined for property : %@",property);

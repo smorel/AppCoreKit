@@ -12,7 +12,7 @@
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKDocumentCollection.h"
-#import "CKModelObjectPropertyMetaData.h"
+#import "CKObjectPropertyMetaData.h"
 
 
 /** TODO
@@ -30,7 +30,7 @@
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;
 
-- (CKModelObjectPropertyMetaData*)metaData;
+- (CKObjectPropertyMetaData*)metaData;
 - (id)value;
 - (void)setValue:(id)value;
 - (id)convertToClass:(Class)type;

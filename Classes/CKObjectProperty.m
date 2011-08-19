@@ -225,9 +225,9 @@
 }
 
 
-- (CKModelObjectPropertyMetaData*)metaData{
+- (CKObjectPropertyMetaData*)metaData{
 	if(self.descriptor != nil){
-		return [CKModelObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:self.descriptor];
+		return [CKObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:self.descriptor];
 	}
 	return nil;
 }

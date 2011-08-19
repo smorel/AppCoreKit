@@ -21,7 +21,7 @@
 	self.property = [CKObjectProperty propertyWithObject:self keyPath:@"objects"];
 }
 
-- (void)objectsMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)objectsMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.creatable = YES;
 }
 

@@ -106,7 +106,7 @@
 
 - (BOOL)isValidValue:(id)value{
     CKObjectProperty* property = [self objectProperty];
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.validationPredicate){
         return [metaData.validationPredicate evaluateWithObject:value];
     }

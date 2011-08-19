@@ -55,7 +55,7 @@ NSString* CKSerializerIDTag = @"@id";
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
-			CKModelObjectPropertyMetaData* metaData = [property metaData];
+			CKObjectPropertyMetaData* metaData = [property metaData];
 			NSInteger i = 0;
 			if(metaData.enumDescriptor != nil){
 				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:metaData.enumDescriptor];
@@ -274,7 +274,7 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
-	CKModelObjectPropertyMetaData* metaData = [property metaData];
+	CKObjectPropertyMetaData* metaData = [property metaData];
 	if(metaData.contentType != nil){
 		NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:metaData.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
@@ -433,7 +433,7 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
 	if([NSObject isKindOf:type parentType:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];

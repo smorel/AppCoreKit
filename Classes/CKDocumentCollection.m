@@ -8,7 +8,7 @@
 
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Invocation.h"
-#import "CKModelObjectPropertyMetaData.h"
+#import "CKObjectPropertyMetaData.h"
 
 
 @implementation CKDocumentCollection
@@ -47,15 +47,15 @@
 	return self;
 }
 
-- (void)feedSourceMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)feedSourceMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }
 
-- (void)storageMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)storageMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }
 
-- (void)delegateMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)delegateMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 	metaData.comparable = NO;
 	metaData.hashable = NO;

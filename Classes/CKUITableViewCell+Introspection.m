@@ -13,7 +13,7 @@
 
 @implementation UITableViewCell (CKIntrospectionAdditions)
 
-- (void)accessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)accessoryTypeMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
                                                    UITableViewCellAccessoryNone, 
 											   UITableViewCellAccessoryDisclosureIndicator, 
@@ -21,7 +21,7 @@
 											   UITableViewCellAccessoryCheckmark);
 }
 
-- (void)editingAccessoryTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)editingAccessoryTypeMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
                                                    UITableViewCellAccessoryNone, 
 											   UITableViewCellAccessoryDisclosureIndicator, 
@@ -29,14 +29,14 @@
 											   UITableViewCellAccessoryCheckmark);
 }
 
-- (void)selectionStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+- (void)selectionStyleMetaData :(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellSelectionStyle",
                                                    UITableViewCellSelectionStyleNone,
 											   UITableViewCellSelectionStyleBlue,
 											   UITableViewCellSelectionStyleGray);
 }
 
-- (void)editingStyleMetaData :(CKModelObjectPropertyMetaData*)metaData{
+- (void)editingStyleMetaData :(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellEditingStyle",
                                                    UITableViewCellEditingStyleNone,
 											   UITableViewCellEditingStyleDelete,

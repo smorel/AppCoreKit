@@ -1,16 +1,16 @@
 //
-//  CKModelObjectPropertyMetaData.m
+//  CKObjectPropertyMetaData.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-08-12.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKModelObjectPropertyMetaData.h"
+#import "CKObjectPropertyMetaData.h"
 
-static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = nil;
+static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 
-@implementation CKModelObjectPropertyMetaData
+@implementation CKObjectPropertyMetaData
 @synthesize comparable;
 @synthesize serializable;
 @synthesize creatable;
@@ -51,18 +51,22 @@ static CKModelObjectPropertyMetaData* CKModelObjectPropertyMetaDataSingleton = n
 	self.validationPredicate = nil;
 }
 
-+ (CKModelObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
-	if(CKModelObjectPropertyMetaDataSingleton == nil){
-		CKModelObjectPropertyMetaDataSingleton = [[CKModelObjectPropertyMetaData alloc]init];
++ (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
+	if(CKObjectPropertyMetaDataSingleton == nil){
+		CKObjectPropertyMetaDataSingleton = [[CKObjectPropertyMetaData alloc]init];
 	}
-	[CKModelObjectPropertyMetaDataSingleton reset];
+	[CKObjectPropertyMetaDataSingleton reset];
 	
 	SEL metaDataSelector = property.metaDataSelector;
 	if([object respondsToSelector:metaDataSelector]){
-		[object performSelector:metaDataSelector withObject:CKModelObjectPropertyMetaDataSingleton];
+		[object performSelector:metaDataSelector withObject:CKObjectPropertyMetaDataSingleton];
 	}
 	
-	return CKModelObjectPropertyMetaDataSingleton;
+	return CKObjectPropertyMetaDataSingleton;
 }
 
+@end
+
+
+@implementation CKModelObjectPropertyMetaData
 @end
