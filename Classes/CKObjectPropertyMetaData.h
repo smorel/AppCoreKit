@@ -85,6 +85,9 @@
 
 @end
 
-//DEPRECATED_IN_CLOUDKIT_1.7
+/** 
+ DEPRECATED_IN_CLOUDKIT_1.7
+ @see CKObjectPropertyMetaData
+ */
 @interface CKModelObjectPropertyMetaData : CKObjectPropertyMetaData{}
 @end

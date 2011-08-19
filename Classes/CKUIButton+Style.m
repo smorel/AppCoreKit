@@ -9,6 +9,7 @@
 #import "CKUIButton+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
+#import "CKUILabel+Style.h"
 
 
 NSString *CKStyleDefaultBackgroundImage = @"defaultBackgroundImage";

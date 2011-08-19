@@ -9,11 +9,11 @@
 #import "CKDocumentArray.h"
 #import "CKNSNotificationCenter+Edition.h"
 
-@interface CKDocumentArray()
+@interface CKDocumentArrayCollection()
 @property (nonatomic,retain) NSMutableArray* objects;
 @end
 
-@implementation CKDocumentArray
+@implementation CKDocumentArrayCollection
 @synthesize objects = _objects;
 
 - (void)postInit{
@@ -25,4 +25,7 @@
 	metaData.creatable = YES;
 }
 
+@end
+
+@implementation CKDocumentArray
 @end
