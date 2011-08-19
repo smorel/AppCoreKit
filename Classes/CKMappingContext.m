@@ -247,7 +247,15 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     
     //Source value validation
     CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
-    if(value == nil || [value isKindOfClass:[NSNull class]]){
+    CKClassPropertyDescriptor* descriptor = [property descriptor];
+	if(keyPath && !descriptor){
+		NSString* details = [NSString stringWithFormat:@"Trying to access to a property that doesn't exist : %@",property];
+		*error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidProperty 
+								 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:details,CKMappingErrorDetailsKey, nil]];
+		
+		return;
+	}
+	if(value == nil || [value isKindOfClass:[NSNull class]]){
         if([self isRequired:options]){
             NSString* details = [NSString stringWithFormat:@"Missing requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
             *error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeMissingRequieredValue 
