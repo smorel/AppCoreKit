@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MapKit/MapKit.h>
-#import "CKModelObject.h"
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
-#import "CKDocumentCollection.h"
 #import "CKObjectPropertyMetaData.h"
 
+//FIXME : try to remove this dependencies by making a CKObjectProperty+CKDocument extension
+#import <MapKit/MapKit.h>
+#import "CKDocumentCollection.h"
 
 /** TODO
  */
@@ -44,6 +44,7 @@
 - (NSInteger)count;
 
 //FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
+//Here we should not have dependencies other than Foundation !
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
 - (CKDocumentCollection*)editorCollectionForNewlyCreated;
 - (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
