@@ -6,6 +6,10 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <objc/runtime.h>
+
 #import "Foundation.h"
 #import "Document.h"
 #import "Bindings.h"

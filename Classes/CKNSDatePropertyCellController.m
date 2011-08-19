@@ -64,7 +64,13 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     _datePicker.datePickerMode = UIDatePickerModeDate;
     _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
           UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [_datePicker setDate:[self.property value] animated:NO];
+    NSDate* date = [self.property value];
+    if(date){
+        [_datePicker setDate:[self.property value] animated:NO];
+    }
+    else{
+        [_datePicker setDate:[NSDate date] animated:NO];
+    }
     
     [[self view]addSubview:_datePicker];
     
@@ -124,17 +130,24 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	cell.textLabel.text = _(descriptor.name);
     
+    NSString* placeholderText = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
     NSDate* date = [model value];
     if(date){
         cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
     }
     else{
-        cell.detailTextLabel.text = @" ";
+        cell.detailTextLabel.text = _(placeholderText);
     }
     
     [self beginBindingsContextByRemovingPreviousBindings];
     [model.object bind:model.keyPath withBlock:^(id value){
-        cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+        NSDate* date = [model value];
+        if(date){
+            cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+        }
+        else{
+            cell.detailTextLabel.text = _(placeholderText);
+        }
     }];
     [self endBindingsContext];
 }

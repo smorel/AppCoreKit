@@ -65,9 +65,10 @@
 		UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
 	
 		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
-		NSAssert(controllerNew != nil,@"invalid controller");
-		UIResponder* responder = [[controllerNew class]responderInView:tableViewCell];
-		[responder becomeFirstResponder];
+		if(controllerNew != nil){
+            UIResponder* responder = [[controllerNew class]responderInView:tableViewCell];
+            [responder becomeFirstResponder];
+        }
 	}
 }
 
