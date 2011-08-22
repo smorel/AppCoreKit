@@ -74,11 +74,12 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     
     [[self view]addSubview:_datePicker];
     
+    __block CKNSDateViewController* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];
     [_datePicker bindEvent:UIControlEventValueChanged withBlock:^() {
-        NSDate* newDate = [_datePicker date];
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:didSetValue:)]){
-            [_delegate performSelector:@selector(dateController:didSetValue:) withObject:self withObject:newDate];
+        NSDate* newDate = [bself.datePicker date];
+        if(bself.delegate && [bself.delegate respondsToSelector:@selector(dateController:didSetValue:)]){
+            [bself.delegate performSelector:@selector(dateController:didSetValue:) withObject:bself withObject:newDate];
         }
     }];
     [self endBindingsContext];

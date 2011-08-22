@@ -14,7 +14,7 @@
 @interface CKObjectProperty()
 @property (nonatomic,retain) CKWeakRef* subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
-@property (nonatomic,retain,readwrite) id object;
+@property (nonatomic,retain) CKWeakRef* objectRef;
 @property (nonatomic,retain,readwrite) NSString* keyPath;
 @property (nonatomic,retain,readwrite) CKClassPropertyDescriptor* descriptor;
 @end
@@ -23,9 +23,10 @@
 @synthesize object,keyPath;
 @synthesize subObject,subKeyPath;
 @synthesize descriptor;
+@synthesize objectRef;
 
 - (void)dealloc{
-    self.object = nil;
+    self.objectRef = nil;
     self.keyPath = nil;
     self.subObject = nil;
     self.subKeyPath = nil;
@@ -43,8 +44,17 @@
     return nil;
 }
 
+- (id)releaseObject:(CKWeakRef*)weakRef{
+    self.keyPath = nil;
+    return nil;
+}
+
+- (id)object{
+    return self.objectRef.object;
+}
+
 - (void)postInit{
-    id target = object;
+    id target = self.object;
 	if(self.keyPath){
         NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
         for(int i=0;i<[ar count]-1;++i){
@@ -69,7 +79,7 @@
 
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
 	[super init];
-	self.object = theobject;
+    self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
     if([thekeyPath length] > 0){
         self.keyPath = thekeyPath;
     }
@@ -84,7 +94,7 @@
 
 - (id)initWithObject:(id)theobject{
 	[super init];
-	self.object = theobject;
+    self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
     [self postInit];
 	return self;
 }
@@ -111,7 +121,7 @@
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
+			NSLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -129,7 +139,7 @@
 		}
 	}
 	else{
-		Class type = [object class];
+		Class type = [self.object class];
 		if([type respondsToSelector:@selector(editorCollectionWithFilter:)]){
 			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionWithFilter:) withObject:filter];
 			return collection;
@@ -142,7 +152,7 @@
 - (CKDocumentCollection*)editorCollectionForNewlyCreated{
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
+			NSLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -160,7 +170,7 @@
 		}
 	}
 	else{
-		Class type = [object class];
+		Class type = [self.object class];
 		if([type respondsToSelector:@selector(editorCollectionForNewlyCreated)]){
 			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionForNewlyCreated)];
 			return collection;
@@ -174,7 +184,7 @@
 	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(self.subObject.object,@"unable to find property '%@' in '%@'",keyPath,object);
+			NSLog(self.subObject.object,@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -192,7 +202,7 @@
 		}
 	}
 	else{
-		Class type = [object class];
+		Class type = [self.object class];
 		if([type respondsToSelector:@selector(editorCollectionAtLocation:radius:)]){
 			CKDocumentCollection* collection = [type performSelector:@selector(editorCollectionAtLocation:radius:) withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 			return collection;
@@ -203,9 +213,9 @@
 
 
 - (Class)tableViewCellControllerType{
-	if(keyPath != nil){
+	if(self.keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
+			NSLog(@"unable to find property '%@' in '%@'",self.keyPath,self.object);
 			return nil;
 		}
 		
@@ -223,7 +233,7 @@
 		}
 	}
 	else{
-		Class type = [object class];
+		Class type = [self.object class];
 		if([type respondsToSelector:@selector(tableViewCellControllerClass)]){
 			Class controllerClass = [type performSelector:@selector(tableViewCellControllerClass)];
 			return controllerClass;
@@ -251,7 +261,7 @@
 	if(self.descriptor != nil){
 		return [NSValueTransformer transformProperty:self toClass:type];
 	}
-	return [NSValueTransformer transform:object toClass:type];
+	return [NSValueTransformer transform:self.object toClass:type];
 }
 
 - (NSString*)description{
