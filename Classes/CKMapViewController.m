@@ -25,9 +25,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 {
 	CLLocationCoordinate2D* centerCoordinate = (CLLocationCoordinate2D*)context;
 	
-	CLLocation *centerLoc = [[CLLocation alloc] initWithLatitude:centerCoordinate->latitude longitude:centerCoordinate->longitude];
-	CLLocation *obj1Loc = [[CLLocation alloc] initWithLatitude:obj1.coordinate.latitude longitude:obj1.coordinate.longitude];
-	CLLocation *obj2Loc = [[CLLocation alloc] initWithLatitude:obj2.coordinate.latitude longitude:obj2.coordinate.longitude];
+	CLLocation *centerLoc = [[[CLLocation alloc] initWithLatitude:centerCoordinate->latitude longitude:centerCoordinate->longitude]autorelease];
+	CLLocation *obj1Loc = [[[CLLocation alloc] initWithLatitude:obj1.coordinate.latitude longitude:obj1.coordinate.longitude]autorelease];
+	CLLocation *obj2Loc = [[[CLLocation alloc] initWithLatitude:obj2.coordinate.latitude longitude:obj2.coordinate.longitude]autorelease];
 	
 	CLLocationDistance dist1 = [obj1Loc distanceFromLocation:centerLoc];
 	CLLocationDistance dist2 = [obj2Loc distanceFromLocation:centerLoc];
@@ -169,7 +169,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		documentController = (CKDocumentController*)self.objectController;
 	}
 	else{
-		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
+		CKDocumentArray* collection = [[[CKDocumentArray alloc]init]autorelease];
 		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
 		if([self isViewLoaded] && [self.view superview] != nil){
 			if([self.objectController respondsToSelector:@selector(setDelegate:)]){

@@ -98,7 +98,7 @@ typedef enum{
 	NSString* className = [NSString stringWithUTF8String:class_getName(transformerClass)];
 	NSValueTransformer * transformer = [NSValueTransformer valueTransformerForName:className];
 	if(transformer == nil){
-		transformer = [[transformerClass alloc]init];
+		transformer = [[[transformerClass alloc]init]autorelease];
 		[NSValueTransformer setValueTransformer:transformer forName:className];
 	}
 	return transformer;

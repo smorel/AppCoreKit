@@ -9,9 +9,10 @@
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDocumentCollection.h"
+#import "CKWeakRef.h"
 
 @interface CKObjectProperty()
-@property (nonatomic,retain) id subObject;
+@property (nonatomic,retain) CKWeakRef* subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
 @property (nonatomic,retain,readwrite) id object;
 @property (nonatomic,retain,readwrite) NSString* keyPath;
@@ -37,13 +38,18 @@
 	return p;
 }
 
+- (id)releaseSubObject:(CKWeakRef*)weakRef{
+    self.subKeyPath = nil;
+    return nil;
+}
+
 - (void)postInit{
-    self.subObject = object;
+    id target = object;
 	if(self.keyPath){
         NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
         for(int i=0;i<[ar count]-1;++i){
             NSString* path = [ar objectAtIndex:i];
-            self.subObject = [self.subObject valueForKey:path];
+            target = [target valueForKey:path];
         }
         self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
     }
@@ -51,8 +57,10 @@
         self.subKeyPath = nil;
     }
     
-    if(self.subObject && self.subKeyPath){
-        self.descriptor = [NSObject propertyDescriptor:[self.subObject class] forKey:self.subKeyPath];
+    
+    self.subObject = [CKWeakRef weakRefWithObject:target target:self action:@selector(releaseSubObject:)];
+    if(self.subObject.object && self.subKeyPath){
+        self.descriptor = [NSObject propertyDescriptor:[self.subObject.object class] forKey:self.subKeyPath];
     }
     else{
         self.descriptor = nil;
@@ -88,28 +96,28 @@
 }
 
 - (id)value{
-	return (self.subKeyPath != nil) ? [self.subObject valueForKey:self.subKeyPath] : self.subObject;
+	return (self.subKeyPath != nil) ? [self.subObject.object valueForKey:self.subKeyPath] : self.subObject.object;
 }
 
 - (void)setValue:(id)value{
 	if(self.subKeyPath != nil && [[self value] isEqual:value] == NO){
-		[self.subObject setValue:value forKey:self.subKeyPath];
+		[self.subObject.object setValue:value forKey:self.subKeyPath];
 	}
 	else if(self.subKeyPath == nil){
-		[self.subObject copy:value];
+		[self.subObject.object copy:value];
 	}
 }
 
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
 	if(keyPath != nil){
-		if(self.subObject == nil){
+		if(self.subObject.object == nil){
 			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
 		SEL selector = [NSObject propertyeditorCollectionSelectorForProperty:self.descriptor.name];
-		if([self.subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:filter];
+		if([self.subObject.object respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject.object performSelector:selector withObject:filter];
 			return collection;
 		}
 		else{
@@ -133,14 +141,14 @@
 
 - (CKDocumentCollection*)editorCollectionForNewlyCreated{
 	if(keyPath != nil){
-		if(self.subObject == nil){
+		if(self.subObject.object == nil){
 			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
 		SEL selector = [NSObject propertyeditorCollectionForNewlyCreatedSelectorForProperty:self.descriptor.name];
-		if([self.subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [self.subObject performSelector:selector];
+		if([self.subObject.object respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject.object performSelector:selector];
 			return collection;
 		}
 		else{
@@ -165,14 +173,14 @@
 - (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius{
 	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
 	if(keyPath != nil){
-		if(self.subObject == nil){
-			NSLog(self.subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		if(self.subObject.object == nil){
+			NSLog(self.subObject.object,@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
 		SEL selector = [NSObject propertyeditorCollectionForGeolocalizationSelectorForProperty:self.descriptor.name];
-		if([self.subObject respondsToSelector:selector]){
-			CKDocumentCollection* collection = [self.subObject performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
+		if([self.subObject.object respondsToSelector:selector]){
+			CKDocumentCollection* collection = [self.subObject.object performSelector:selector withObject:valueCoordinate withObject:[NSNumber numberWithFloat:radius]];
 			return collection;
 		}
 		else{
@@ -196,14 +204,14 @@
 
 - (Class)tableViewCellControllerType{
 	if(keyPath != nil){
-		if(self.subObject == nil){
+		if(self.subObject.object == nil){
 			NSLog(@"unable to find property '%@' in '%@'",keyPath,object);
 			return nil;
 		}
 		
 		SEL selector = [NSObject propertyTableViewCellControllerClassSelectorForProperty:self.descriptor.name];
-		if([self.subObject respondsToSelector:selector]){
-			Class controllerClass = [self.subObject performSelector:selector];
+		if([self.subObject.object respondsToSelector:selector]){
+			Class controllerClass = [self.subObject.object performSelector:selector];
 			return controllerClass;
 		}
 		else{
@@ -227,7 +235,7 @@
 
 - (CKObjectPropertyMetaData*)metaData{
 	if(self.descriptor != nil){
-		return [CKObjectPropertyMetaData propertyMetaDataForObject:self.subObject property:self.descriptor];
+		return [CKObjectPropertyMetaData propertyMetaDataForObject:self.subObject.object property:self.descriptor];
 	}
 	return nil;
 }

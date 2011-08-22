@@ -510,7 +510,6 @@ double round(double x)
 		}
 	}
 	
-	page = [self pageForIndexPath:indexPath];
 	CGPoint viewTopLeft = CGPointMake(center.x + xOffset - viewSize.width / 2,center.y - viewSize.height / 2);
 	CGRect rect = CGRectIntegral(CGRectMake(viewTopLeft.x,viewTopLeft.y,viewSize.width,viewSize.height));
 	return rect;

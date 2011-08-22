@@ -78,7 +78,6 @@
 	
 	if(self.multiSelectionEnabled){
 		NSMutableString* str = [NSMutableString string];
-		NSInteger intValue = intValue;
 		for(int i= 0;i < [self.values count]; ++i){
 			NSNumber* v = [self.values objectAtIndex:i];
 			NSString* l = [self.labels objectAtIndex:i];

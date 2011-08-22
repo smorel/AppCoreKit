@@ -87,8 +87,7 @@
             }
             else{
                 //sets the textLabel on one full line and the textView beside
-                CGRect textFrame = [controller propertyGridTextFrameForCell:cell];
-                textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
+                CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
                 cell.textLabel.frame = textFrame;
                 
                 CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);

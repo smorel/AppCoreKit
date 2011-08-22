@@ -28,9 +28,10 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 @synthesize validationPredicate;
 
 - (void)dealloc{
-	self.enumDescriptor = nil;
 	self.dateFormat = nil;
-	self.contentProtocol = nil;
+	self.validationPredicate = nil;
+	self.enumDescriptor = nil;
+	self.valuesAndLabels = nil;
 	[super dealloc];
 }
 

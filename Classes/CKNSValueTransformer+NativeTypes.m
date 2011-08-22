@@ -33,6 +33,11 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
 
 @implementation CKEnumDescriptor
 @synthesize name,valuesAndLabels;
+-(void)dealloc{
+    self.name = nil;
+    self.valuesAndLabels = nil;
+    [super dealloc];
+}
 @end
 
 @implementation NSValueTransformer (CKNativeTypes)

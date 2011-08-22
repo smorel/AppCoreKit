@@ -786,12 +786,7 @@
     if(_modalViewCount == 0){
         if (_resizeOnKeyboardNotification == YES){
             CGRect currentFrame = _placeHolderViewDuringKeyboardOrSheet.frame;
-            CGRect viewFrame = self.view.frame;
-            
             self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask | UIViewAutoresizingFlexibleBottomMargin;
-            
-            CGRect windowFrame = [[self.tableViewContainer window] frame];
-            CGRect tableFrameInWindow = [_placeHolderViewDuringKeyboardOrSheet convertRect:currentFrame toView:[self.tableViewContainer window]];
             CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:_placeHolderViewDuringKeyboardOrSheet];
             CGFloat offset = (/*currentFrame.origin.y + */currentFrame.size.height ) - keyboardFrame.origin.y;
             if(offset > 0){
