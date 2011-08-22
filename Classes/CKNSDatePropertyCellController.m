@@ -93,7 +93,8 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 - (void)setProperty:(CKObjectProperty *)property{
     [_property release];
     _property = [property retain];
-    [_datePicker setDate:[_property value]];
+    NSDate* date = [_property value];
+    [_datePicker setDate:(date ? date : [NSDate date])];
 }
 
 - (CGSize)contentSizeForViewInPopover{
