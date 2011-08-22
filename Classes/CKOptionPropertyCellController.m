@@ -12,8 +12,8 @@
 
 
 @interface CKOptionPropertyCellController ()
-@property (nonatomic,readonly) NSArray* values;
-@property (nonatomic,readonly) NSArray* labels;
+@property (nonatomic,retain) NSArray* values;
+@property (nonatomic,retain) NSArray* labels;
 @property (nonatomic,readonly) BOOL multiSelectionEnabled;
 @end
 
@@ -30,28 +30,34 @@
     return self;
 }
 
-- (NSArray*)values{
-    CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
-    if(metaData.valuesAndLabels)
-        return [metaData.valuesAndLabels allValues];
-    if(metaData.enumDescriptor)
-        return [metaData.enumDescriptor.valuesAndLabels allValues];
-    
-    NSAssert(NO,@"This cell should be used with properties defining valuesAndLabels or enumDescriptor");
-    return nil;
+- (void)dealloc{
+    self.values = nil;
+    self.labels = nil;
+    [super dealloc];
 }
 
-- (NSArray*)labels{
+- (void)setupLabelsAndValues{
     CKObjectProperty* property = [self objectProperty];
     CKObjectPropertyMetaData* metaData = [property metaData];
-    if(metaData.valuesAndLabels)
-        return [metaData.valuesAndLabels allKeys];
-    if(metaData.enumDescriptor)
-        return [metaData.enumDescriptor.valuesAndLabels allKeys];
+    NSDictionary* valuesAndLabels = nil;
+    if(metaData.valuesAndLabels) valuesAndLabels = metaData.valuesAndLabels;
+    else if(metaData.enumDescriptor) valuesAndLabels = metaData.enumDescriptor.valuesAndLabels;
+
+    NSAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
+    NSArray* orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString* str1 = _(obj1);
+        NSString* str2 = _(obj2);
+        return [str1 compare:str2];
+    }];
     
-    NSAssert(NO,@"This cell should be used with properties defining valuesAndLabels or enumDescriptor");
-    return nil;
+    NSMutableArray* orderedValues = [NSMutableArray array];
+    for(NSString* label in orderedLabels){
+        id value = [valuesAndLabels objectForKey:label];
+        [orderedValues addObject:value];
+    }
+    
+    self.labels = orderedLabels;
+    self.values = orderedValues;
 }
 
 - (BOOL)multiSelectionEnabled{
@@ -122,6 +128,8 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+    
+    [self setupLabelsAndValues];
     
     if(self.readOnly){
         self.fixedSize = YES;
