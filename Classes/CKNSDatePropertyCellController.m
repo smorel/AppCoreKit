@@ -53,7 +53,7 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     
     CGRect frame = [[self view]frame];
     
-    CGFloat height = 160;
+    CGFloat height = 162;
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
     if(UIInterfaceOrientationIsPortrait(orientation)){
         height = 216;
