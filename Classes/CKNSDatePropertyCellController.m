@@ -44,6 +44,13 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     [self clearBindingsContext];
     [_datePicker release];
     _datePicker = nil;
+    
+    if(_delegate){
+        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:nil];
+        }
+    }
+    
     _delegate = nil;
     [super dealloc];
 }
@@ -60,7 +67,7 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     }
     
     CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - height / 2.0,320.0, height);
-    self.datePicker = [[[UIDatePicker alloc]initWithFrame:theFrame]autorelease];
+    self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
     _datePicker.datePickerMode = UIDatePickerModeDate;
     _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
           UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -107,10 +114,19 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
     return CGSizeMake(320,height);
 }
 
+- (void)setDelegate:(id)thedelegate{
+    if(_delegate){
+        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:thedelegate];
+        }
+    }
+    _delegate = thedelegate;
+}
+
 @end
 
-
 @implementation CKNSDatePropertyCellController
+
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
@@ -168,7 +184,6 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 	CKObjectProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         if(CKNSDateSheetControllerSingleton == nil){
             CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
@@ -184,6 +199,9 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         }
         else{
             CKNSDateViewController* dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
+            dateController.title = _(descriptor.name);
+            dateController.delegate = self;
+            CKNSDateSheetControllerSingleton.delegate = self;
             [dateController setProperty:self.value];
         }
     }
@@ -194,7 +212,7 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         dateController.title = _(descriptor.name);
         dateController.delegate = self;
         
-        CKPopoverController* popoverController = [[CKPopoverController alloc]initWithContentViewController:dateController];
+        CKPopoverController* popoverController = [[[CKPopoverController alloc]initWithContentViewController:dateController]autorelease];
         
         UITableViewCell* cell = [self tableViewCell];
         [popoverController presentPopoverFromRect:[cell bounds] 
@@ -224,17 +242,18 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{
-    
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
-
     [CKNSDateSheetControllerSingleton release];
     CKNSDateSheetControllerSingleton = nil;
 }
 
 - (void)dateController:(CKNSDateViewController*)controller didSetValue:(NSDate*)value{
     [self setValueInObjectProperty:value];
+}
+
+- (void)dateController:(CKNSDateViewController*)controller delegateChanged:(id)delegate{
 }
 
 @end
