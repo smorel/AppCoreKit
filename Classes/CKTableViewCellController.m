@@ -474,6 +474,19 @@
 	self.debugModalController = nil;
 }
 
+
+- (void)scrollToRow{
+    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+    CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+    [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
+                                         atScrollPosition:UITableViewScrollPositionNone 
+                                                 animated:YES];
+}
+
+- (void)scrollToRowAfterDelay:(NSTimeInterval)delay{
+    [self performSelector:@selector(scrollToRow) withObject:nil afterDelay:delay];
+}
+
 #endif
 @end
 

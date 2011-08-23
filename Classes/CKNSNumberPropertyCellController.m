@@ -265,10 +265,8 @@
     else{
         self.textField.returnKeyType = UIReturnKeyDone;
     }
-    
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone 
-                                          animated:YES];
+  
+    [self scrollToRow];
     
 	[self beginBindingsContextByRemovingPreviousBindings];
 	[textField bindEvent:UIControlEventEditingChanged target:self action:@selector(textFieldChanged:)];
@@ -307,9 +305,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone 
-                                          animated:YES];
+    [self scrollToRowAfterDelay:0.3];
 }
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{

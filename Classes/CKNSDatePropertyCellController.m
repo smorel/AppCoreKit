@@ -15,20 +15,6 @@
 
 static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 
-@interface CKNSDateViewController : CKUIViewController{
-    CKObjectProperty* _property;
-    UIDatePicker* _datePicker;
-    id _delegate;
-}
-
-@property(nonatomic,assign)CKObjectProperty* property;
-@property(nonatomic,retain)UIDatePicker* datePicker;
-@property(nonatomic,assign)id delegate;
-
-- (id)initWithProperty:(CKObjectProperty*)property;
-
-@end
-
 @implementation CKNSDateViewController
 @synthesize property = _property;
 @synthesize datePicker = _datePicker;
@@ -126,7 +112,23 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 @end
 
 @implementation CKNSDatePropertyCellController
+@synthesize onBeginEditingCallback = _onBeginEditingCallback;
+@synthesize onEndEditingCallback = _onEndEditingCallback;
+@synthesize enableAccessoryView = _enableAccessoryView;
 
+- (id)init{
+    self = [super init];
+    _enableAccessoryView = NO;
+    return self;
+}
+
+- (void)dealloc{
+    [_onBeginEditingCallback release];
+    _onBeginEditingCallback = nil;
+    [_onEndEditingCallback release];
+    _onEndEditingCallback = nil;
+    [super dealloc];
+}
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
@@ -189,7 +191,16 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
             CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value]autorelease];
             dateController.title = _(descriptor.name);
             dateController.delegate = self;
-            CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];
+            
+            if(_enableAccessoryView){
+                UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:dateController]autorelease];
+                CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:navController];
+            }
+            else{
+                CKNSDateSheetControllerSingleton = [[CKSheetController alloc]initWithContentViewController:dateController];            
+            }
+            
+            [self onBeginEditingUsingViewController:dateController];
             
             CKNSDateSheetControllerSingleton.delegate = self;
             UIView* parentView = self.parentController.view;
@@ -198,9 +209,19 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
                                                   animated:YES];
         }
         else{
-            CKNSDateViewController* dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
+            CKNSDateViewController* dateController = nil;
+            if(_enableAccessoryView){
+                UINavigationController* navController = (UINavigationController*)[CKNSDateSheetControllerSingleton contentViewController];
+                dateController = (CKNSDateViewController*)navController.topViewController;
+            }
+            else{
+                dateController = (CKNSDateViewController*)[CKNSDateSheetControllerSingleton contentViewController];
+            }
             dateController.title = _(descriptor.name);
             dateController.delegate = self;
+            
+            [self onBeginEditingUsingViewController:dateController];
+            
             CKNSDateSheetControllerSingleton.delegate = self;
             [dateController setProperty:self.value];
         }
@@ -212,20 +233,25 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
         dateController.title = _(descriptor.name);
         dateController.delegate = self;
         
-        CKPopoverController* popoverController = [[[CKPopoverController alloc]initWithContentViewController:dateController]autorelease];
+        [self onBeginEditingUsingViewController:dateController];
+        
+        CKPopoverController* popoverController = nil;
+        if(_enableAccessoryView){
+            UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:dateController]autorelease];
+            popoverController = [[[CKPopoverController alloc]initWithContentViewController:navController]autorelease];
+        }
+        else{
+            popoverController = [[[CKPopoverController alloc]initWithContentViewController:dateController]autorelease];
+        }
         
         UITableViewCell* cell = [self tableViewCell];
         [popoverController presentPopoverFromRect:[cell bounds] 
                                  inView:cell 
                permittedArrowDirections:UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown
                                animated:YES];
-    }
-    
-    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
-	CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-	[tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
-                                         atScrollPosition:UITableViewScrollPositionNone 
-                                                 animated:YES];
+        
+        [self scrollToRow];
+    }    
 }
 
 
@@ -234,14 +260,11 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 }
 
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
-    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
-	CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-	[tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
-                                         atScrollPosition:UITableViewScrollPositionNone 
-                                                 animated:YES];
+    [self scrollToRowAfterDelay:0.3];
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{
+    [self onEndEditing];
 }
 
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController{
@@ -254,6 +277,21 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 }
 
 - (void)dateController:(CKNSDateViewController*)controller delegateChanged:(id)delegate{
+    if(delegate != self){
+        [self onEndEditing];
+    }
+}
+
+- (void)onBeginEditingUsingViewController:(CKNSDateViewController*)dateViewController{
+    if(_onBeginEditingCallback){
+        [_onBeginEditingCallback execute:dateViewController];
+    }
+}
+
+- (void)onEndEditing{
+    if(_onEndEditingCallback){
+        [_onEndEditingCallback execute:self];
+    }
 }
 
 @end

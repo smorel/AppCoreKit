@@ -397,7 +397,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
 	
 	if(self.rightButton){
@@ -783,13 +783,14 @@
 
 #pragma mark Keyboard Notifications
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
-    if(_modalViewCount == 0){
+    if(_modalViewCount == 0 || endFrame.size.height != _lastModalFrame.size.height){
         if (_resizeOnKeyboardNotification == YES){
             CGRect currentFrame = _placeHolderViewDuringKeyboardOrSheet.frame;
             self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask | UIViewAutoresizingFlexibleBottomMargin;
             CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:_placeHolderViewDuringKeyboardOrSheet];
             CGFloat offset = (/*currentFrame.origin.y + */currentFrame.size.height ) - keyboardFrame.origin.y;
             if(offset > 0){
+                self.tableViewContainer.frame = currentFrame;
                 [UIView beginAnimations:nil context:nil];
                 [UIView setAnimationDuration:animationDuration];
                 [UIView setAnimationCurve:animationCurve];
@@ -800,6 +801,8 @@
                 
                 [UIView commitAnimations];
             }
+            
+            _lastModalFrame = endFrame;
         }
     }
 }

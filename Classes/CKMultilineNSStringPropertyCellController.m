@@ -186,9 +186,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     _textView.frameChangeDelegate = self;
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -219,9 +217,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+    [self scrollToRowAfterDelay:0.3];
 }
 
 

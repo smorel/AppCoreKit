@@ -11,7 +11,9 @@
 
 extern NSString *const CKSheetResignNotification;
 extern NSString *const CKSheetWillShowNotification;
+extern NSString *const CKSheetDidShowNotification;
 extern NSString *const CKSheetWillHideNotification;
+extern NSString *const CKSheetDidHideNotification;
 extern NSString *const CKSheetFrameEndUserInfoKey;
 extern NSString *const CKSheetAnimationDurationUserInfoKey;
 extern NSString *const CKSheetAnimationCurveUserInfoKey;

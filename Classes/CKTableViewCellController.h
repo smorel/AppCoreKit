@@ -100,6 +100,9 @@ typedef enum CKTableViewCellStyle {
 
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
 
+- (void)scrollToRow;
+- (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
+
 @end
 
 @interface CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
