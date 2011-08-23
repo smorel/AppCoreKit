@@ -306,7 +306,11 @@
 }
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section];
+    BOOL feedSourceCellEnabled = NO;
+    if([_objectController respondsToSelector:@selector(displayFeedSourceCell)]){
+        feedSourceCellEnabled = [_objectController displayFeedSourceCell];
+    }
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (feedSourceCellEnabled ? 1 : 0);
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
