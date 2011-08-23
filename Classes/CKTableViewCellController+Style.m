@@ -88,7 +88,7 @@ NSString* CKStyleCellFlags = @"flags";
 	return NO;
 }
 
-
+/*
 - (void)setBackgroundColor:(UIColor *)backgroundColor{
     UIColor* previousColor = nil;
     object_getInstanceVariable(self, "_backgroundColor", (void **)(&previousColor));
@@ -98,7 +98,7 @@ NSString* CKStyleCellFlags = @"flags";
     //bypass the custom set background color of UITableViewCell
     [super setBackgroundColor:backgroundColor];
 }
-
+*/
 
 @end
 
