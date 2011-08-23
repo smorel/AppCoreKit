@@ -533,7 +533,7 @@
 			for(UIView* v in view.subviews){
 				//UIViewAutoresizing resizingMasks = v.autoresizingMask;
 				v.autoresizingMask = UIViewAutoresizingNone;
-				v.center = CGPointMake(cell.contentView.bounds.size.width / 2,cell.contentView.bounds.size.height / 2);
+				v.center = CGPointMake((NSInteger)(cell.contentView.bounds.size.width / 2.0),(NSInteger)(cell.contentView.bounds.size.height / 2.0));
 				v.frame = cell.contentView.bounds;
 				//v.autoresizingMask = resizingMasks; //reizing masks break the layout on os 3
 			}
