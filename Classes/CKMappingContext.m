@@ -295,6 +295,29 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                                          userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@\n%@",details,details2],CKMappingErrorDetailsKey, nil]];
                 return;
             }
+			
+			if([NSObject isKindOf:targetType parentType:[NSArray class]]){
+				id propertyArray = [property value];
+				if(!propertyArray){
+					[property setValue:[NSMutableArray array]];
+				}
+				else if(![propertyArray isKindOfClass:[NSMutableArray class]]){
+					NSString* details = [NSString stringWithFormat:@"The property %@ must inherit NSMutableArray",property];
+					*error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidProperty 
+											 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:details,CKMappingErrorDetailsKey, nil]];
+					return;
+
+				}
+			}
+			else{
+				id propertyCollection = [property value];
+				if(!propertyCollection){
+					NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its metaData as creatable or set the property in the postInit method of its object.",property];
+					*error = [NSError errorWithDomain:CKMappingErrorDomain code:CKMappingErrorCodeInvalidProperty 
+											 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:details,CKMappingErrorDetailsKey, nil]];
+					return;
+				}
+			}
             
             if([self needsToBeCleared:options]){
                 [property removeAllObjects];
