@@ -110,6 +110,9 @@
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+	if ([newValue isKindOfClass:[NSNull class]]) {
+		newValue = nil;
+	}
 	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2] ];
 }
 
