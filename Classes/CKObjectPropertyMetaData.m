@@ -26,12 +26,20 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 @synthesize contentProtocol;
 @synthesize propertyCellControllerClass;
 @synthesize validationPredicate;
+@synthesize options;
+
+- (id)init{
+    self = [super init];
+    self.options = [NSMutableDictionary dictionary];
+    return self;
+}
 
 - (void)dealloc{
 	self.dateFormat = nil;
 	self.validationPredicate = nil;
 	self.enumDescriptor = nil;
 	self.valuesAndLabels = nil;
+	self.options = nil;
 	[super dealloc];
 }
 
@@ -50,6 +58,7 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 	self.dateFormat = nil;
 	self.propertyCellControllerClass = nil;
 	self.validationPredicate = nil;
+	[self.options removeAllObjects];
 }
 
 + (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{

@@ -10,6 +10,7 @@
 
 #import "CKNSValueTransformer+NativeTypes.h"//for CKEnumDescriptor
 #import "CKNSObject+Introspection.h"
+#import "CKNSMutableDictionary+CKObjectPropertyMetaData.h"
 
 /** Meta data is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
  
@@ -39,6 +40,8 @@
 	BOOL editable;
 	NSDictionary* valuesAndLabels;
     Class propertyCellControllerClass;
+    
+    NSMutableDictionary* options;
 }
 
 @property (nonatomic, assign) BOOL comparable;
@@ -79,6 +82,11 @@
  This cell controller should accept CKObjectProperty as value.
  */
 @property (nonatomic, assign) Class propertyCellControllerClass;
+
+/** 
+ Specify options that could be used by various behaviours in app or in the cloudkit.
+ */
+@property (nonatomic, retain) NSMutableDictionary* options;
 
 - (void)reset;
 + (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;

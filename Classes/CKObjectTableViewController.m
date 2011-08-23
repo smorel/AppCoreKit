@@ -395,11 +395,6 @@
         _placeHolderViewDuringKeyboardOrSheet.frame = self.tableViewContainer.frame;
 	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
-	
 	if(self.rightButton){
 		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
 	}
@@ -501,6 +496,15 @@
 	}*/
 	 
 	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{

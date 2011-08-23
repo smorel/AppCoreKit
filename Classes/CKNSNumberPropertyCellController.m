@@ -298,8 +298,22 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-	//TODO : filter numbers
-	return YES;
+    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
+    NSInteger min = [metaData.options minimumLength];
+    NSInteger max = [metaData.options maximumLength];
+	if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+		return YES;
+	} else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }
+		NSCharacterSet *nonNumberSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+		return ([string stringByTrimmingCharactersInSet:nonNumberSet].length > 0);
+	}
+    return YES;
 }
 
 #pragma mark Keyboard

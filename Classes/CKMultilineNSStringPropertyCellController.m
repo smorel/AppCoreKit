@@ -214,6 +214,24 @@
     [[self parentTableView]endUpdates];
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
+    NSInteger min = [metaData.options minimumLength];
+    NSInteger max = [metaData.options maximumLength];
+	if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+		return YES;
+	} else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }
+        return YES;
+	}
+    return YES;
+}
+
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
