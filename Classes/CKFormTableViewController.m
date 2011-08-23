@@ -390,8 +390,11 @@
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
-	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	return (CKObjectViewControllerFactoryItem*)cellDescriptor;
+    if([_cellDescriptors count] > index){
+        CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+        return (CKObjectViewControllerFactoryItem*)cellDescriptor;
+    }
+    return nil;
 }
 
 - (void)updateStyleForNonNewVisibleCells{

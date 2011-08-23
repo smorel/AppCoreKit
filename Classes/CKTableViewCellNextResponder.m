@@ -24,9 +24,9 @@
 		NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
 		while(nextIndexPath != nil){
 			NSInteger rowCountForSection = [parentController numberOfObjectsForSection:section];
-			if(nextIndexPath.row >= rowCountForSection - 1){
+			if((NSInteger)nextIndexPath.row >= (rowCountForSection - 1)){
 				NSInteger sectionCount = [tableView numberOfSections];
-				if(nextIndexPath.section >= sectionCount - 1){
+				if((NSInteger)nextIndexPath.section >= (sectionCount - 1)){
 					return nil;
 				}
 				section++;
