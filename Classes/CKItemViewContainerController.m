@@ -380,13 +380,6 @@
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
         
-        NSIndexPath* testIndexPath = [NSIndexPath indexPathForRow:1 inSection:4];
-        NSIndexPath* testIndexPath2 = [NSIndexPath indexPathForRow:0 inSection:5];
-        if([indexPath isEqual:testIndexPath]
-           ||[indexPath isEqual:testIndexPath2]){
-            int i =3;
-        }
-        
         UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
         if(previousView){
             [_indexPathToViews removeObjectForKey:indexPath];
@@ -417,24 +410,14 @@
 			else{
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
                 if(previousPath){
-                    if([indexPath isEqual:testIndexPath]
-                       ||[indexPath isEqual:testIndexPath2]){
-                        NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
-                    }
                     [_indexPathToViews removeObjectForKey:previousPath];
                     [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
                     //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
                 }
-                
-               
 				
 				//Reuse controller
 				NSAssert(_viewsToControllers != nil,@"Should have been created");
 				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-                NSIndexPath* previousControllerIndexPath = [controller indexPath];
-                if(![previousPath isEqual:previousControllerIndexPath]){
-                    int i = 3;
-                }
 				
 				controller.createCallback = [factoryItem createCallback];
 				controller.initCallback = [factoryItem initCallback];
@@ -450,11 +433,6 @@
 			
 			[controller setParentController:self];
 			[controller setIndexPath:indexPath];
-            
-            if(controller.view != view){
-                int i =3;
-            }
-            
 			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
@@ -462,13 +440,7 @@
 			if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
 			[_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
             //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
-			
-            if([indexPath isEqual:testIndexPath]
-               ||[indexPath isEqual:testIndexPath2]){
-                NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
-            }
 
-            
 			[controller setValue:object];
 			[controller setupView:view];	
 			
