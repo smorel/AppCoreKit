@@ -25,7 +25,17 @@
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)())action{
-    id value = ((title != nil) ? title : ((subTitle != nil) ? subTitle : ((image != nil) ? image : nil)));
+    id value = nil;
+    if(title != nil){
+        value = title;
+    }
+    else if(subTitle != nil){
+        value = subTitle;
+    }
+    else if(image != nil){
+        value = image;
+    }
+    
     if(value == nil)
         return nil;
     

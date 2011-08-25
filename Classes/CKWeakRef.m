@@ -25,7 +25,6 @@ static char NSObjectWeakRefObjectKey;
 
 @interface CKWeakRef ()
 @property(nonatomic,retain)CKCallback* callback;
-- (CKWeakRefAssociatedObject*)setupAssociatedObject;
 @end
 
 

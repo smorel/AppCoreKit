@@ -20,6 +20,11 @@
 #import "CKObjectTableViewController.h"
 #import "CKNSObject+Bindings.h"
 
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@end
+
 @interface CKObjectViewControllerFactory ()
 
 @property (nonatomic, retain, readwrite) NSMutableArray* mappings;

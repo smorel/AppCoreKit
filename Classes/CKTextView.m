@@ -47,23 +47,20 @@
 }
 
 - (id)init {
-	if (self = [super init]) {
-		[self postInit];
-	}
+	self = [super init];
+    [self postInit];
 	return self;
 }
 
 - (id)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
-		[self postInit];
-	}
+	self = [super initWithFrame:frame];
+    [self postInit];
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		[self postInit];
-	}
+	self = [super initWithCoder:aDecoder];
+    [self postInit];
 	return self;
 }
 
@@ -180,7 +177,7 @@
 	self.placeholderLabel.hidden = [self hasText];
 	
 	if ([self.delegate respondsToSelector:@selector(textViewValueChanged:)]) {
-		[self.delegate textViewValueChanged:self.text];
+		[self.delegate performSelector:@selector(textViewValueChanged:) withObject:self.text];
 	}
 	[self updateHeightAnimated:YES];
 }

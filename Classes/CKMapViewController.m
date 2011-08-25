@@ -75,7 +75,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
 		[collection addObjectsFromArray:annotations];
 		
-		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+		self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 		
 		_centerCoordinate = centerCoordinate;
 		[self postInit];
@@ -164,13 +164,13 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark Annotations
 
 - (void)setAnnotations:(NSArray *)theAnnotations {
-	CKDocumentController* documentController = nil;
-	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		documentController = (CKDocumentController*)self.objectController;
+	CKDocumentCollectionController* documentController = nil;
+	if([self.objectController isKindOfClass:[CKDocumentCollectionController class]]){
+		documentController = (CKDocumentCollectionController*)self.objectController;
 	}
 	else{
 		CKDocumentArray* collection = [[[CKDocumentArray alloc]init]autorelease];
-		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+		self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 		if([self isViewLoaded] && [self.view superview] != nil){
 			if([self.objectController respondsToSelector:@selector(setDelegate:)]){
 				[self.objectController performSelector:@selector(setDelegate:) withObject:self];

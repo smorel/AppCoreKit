@@ -15,6 +15,7 @@
 #import "CKDocumentCollection.h"
 #import "CKDocumentCollectionViewCellController+Style.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
 

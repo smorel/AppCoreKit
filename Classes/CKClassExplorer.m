@@ -258,7 +258,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 			collection = [[[CKDocumentArray alloc]initWithFeedSource:source]autorelease];
 		}
 	}
-	self.objectController = [CKDocumentController controllerWithCollection:collection];
+	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
 }
 
 @end

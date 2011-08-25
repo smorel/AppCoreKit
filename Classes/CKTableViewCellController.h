@@ -98,6 +98,7 @@ typedef enum CKTableViewCellStyle {
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params;
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
 
 - (void)scrollToRow;

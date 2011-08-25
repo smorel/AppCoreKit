@@ -131,7 +131,15 @@
             CKTableViewCellController* cellController = (CKTableViewCellController*)controller;
             cellController.cellStyle = CKTableViewCellStylePropertyGrid;
             if([cellController respondsToSelector:@selector(setOptionCellStyle:)]){
-                [cellController setOptionCellStyle:CKTableViewCellStylePropertyGrid];
+                CKTableViewCellStyle subStyle = CKTableViewCellStylePropertyGrid;
+                
+                NSMethodSignature *signature = [controller methodSignatureForSelector:@selector(setOptionCellStyle:)];
+				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+				[invocation setSelector:@selector(setOptionCellStyle:)];
+				[invocation setTarget:controller];
+				[invocation setArgument:(void*)&subStyle
+								atIndex:2];
+				[invocation invoke];
             }
             
             if([cellController respondsToSelector:@selector(setReadOnly:)]){

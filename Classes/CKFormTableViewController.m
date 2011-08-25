@@ -11,6 +11,7 @@
 #import "CKObjectViewControllerFactory.h";
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
+#import "CKUIView+Style.h"
 
 #import "CKDebug.h"
 
@@ -418,7 +419,7 @@
 @end
 
 @interface CKFormDocumentCollectionSection()
-@property (nonatomic,retain) CKDocumentController* objectController;
+@property (nonatomic,retain) CKDocumentCollectionController* objectController;
 @property (nonatomic,retain) CKObjectViewControllerFactory* controllerFactory;
 @property (nonatomic,retain) NSMutableArray* changeSet;
 
@@ -436,7 +437,7 @@
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
 	[super init];
-	self.objectController = [CKDocumentController controllerWithCollection:collection];
+	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
 	
 	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
@@ -942,7 +943,7 @@
 }
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
-	if(index >= 0 && index < [_sections count]){
+	if(index < [_sections count]){
 		CKFormSectionBase* section = [_sections objectAtIndex:index];
 		return section;
 	}

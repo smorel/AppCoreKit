@@ -53,7 +53,7 @@
 	if ([view isKindOfClass:[CKTextView class]]) {
 		// FIXME: layoutSubviews isn't always called on CKTextView
 		// when orientation changes
-		[(CKTextView *)view updateHeight];
+		[(CKTextView *)view updateHeightAnimated:YES];
 		// ---
 		
 		NSAssert(NO,@"implement viewSizeForObject:params: and compute the correct size");

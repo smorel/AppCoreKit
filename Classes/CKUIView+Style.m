@@ -321,6 +321,10 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 @implementation NSObject (CKStyle)
 
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    
+}
+
 + (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
     if([style isEmpty])
         return;

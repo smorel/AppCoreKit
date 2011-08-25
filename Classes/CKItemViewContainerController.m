@@ -13,6 +13,11 @@
 
 //CKItemViewContainerController
 
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@end
+
 @interface CKItemViewContainerController ()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
@@ -58,7 +63,7 @@
 }
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
@@ -625,8 +630,8 @@
 }
 
 - (CKFeedSource*)collectionDataSource{
-	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		CKDocumentController* documentController = (CKDocumentController*)self.objectController;
+	if([self.objectController isKindOfClass:[CKDocumentCollectionController class]]){
+		CKDocumentCollectionController* documentController = (CKDocumentCollectionController*)self.objectController;
 		return documentController.collection.feedSource;
 	}
 	return nil;

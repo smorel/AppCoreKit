@@ -96,7 +96,7 @@
 /** TODO
  */
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
-	CKDocumentController* _objectController;
+	CKDocumentCollectionController* _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
@@ -106,7 +106,7 @@
 	BOOL sectionUpdate;
 }
 
-@property (nonatomic,retain,readonly) CKDocumentController* objectController;
+@property (nonatomic,retain,readonly) CKDocumentCollectionController* objectController;
 @property (nonatomic,retain,readonly) NSMutableArray* headerCellDescriptors;
 @property (nonatomic,retain,readonly) NSMutableArray* footerCellDescriptors;
 
