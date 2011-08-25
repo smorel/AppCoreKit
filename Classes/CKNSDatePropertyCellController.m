@@ -224,6 +224,8 @@ static CKSheetController* CKNSDateSheetControllerSingleton = nil;
             
             CKNSDateSheetControllerSingleton.delegate = self;
             [dateController setProperty:self.value];
+            
+            [self scrollToRow];
         }
     }
     else{
