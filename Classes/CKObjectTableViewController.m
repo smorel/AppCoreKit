@@ -661,6 +661,7 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
 		return indexPath;
 	}

@@ -199,8 +199,12 @@
 	//ptet utiliser tous les controllers de _viewsToControllers
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
+        UIView* view = [self viewAtIndexPath:indexPath];
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+        if(![[controller indexPath]isEqual:indexPath]){
+            //NSLog(@"updateVisibleViewsIndexPath -- controller <%p> view : <%p> cell controller : %@ changeindexpath from :%@ to %@",self,view,controller,[controller indexPath],indexPath);
+            [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+        }
 	}
 }
 
@@ -375,6 +379,19 @@
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
+        
+        NSIndexPath* testIndexPath = [NSIndexPath indexPathForRow:1 inSection:4];
+        NSIndexPath* testIndexPath2 = [NSIndexPath indexPathForRow:0 inSection:5];
+        if([indexPath isEqual:testIndexPath]
+           ||[indexPath isEqual:testIndexPath2]){
+            int i =3;
+        }
+        
+        UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
+        if(previousView){
+            [_indexPathToViews removeObjectForKey:indexPath];
+            [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
+        }
 		
 		CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 		if(factoryItem != nil && factoryItem.controllerClass){
@@ -394,15 +411,30 @@
 				
 				CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
 				[_weakViews addObject:viewRef];
-				[_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
+                
+                [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
 			}
 			else{
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
-				[_indexPathToViews removeObjectForKey:previousPath];
+                if(previousPath){
+                    if([indexPath isEqual:testIndexPath]
+                       ||[indexPath isEqual:testIndexPath2]){
+                        NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
+                    }
+                    [_indexPathToViews removeObjectForKey:previousPath];
+                    [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+                    //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
+                }
+                
+               
 				
 				//Reuse controller
 				NSAssert(_viewsToControllers != nil,@"Should have been created");
 				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
+                NSIndexPath* previousControllerIndexPath = [controller indexPath];
+                if(![previousPath isEqual:previousControllerIndexPath]){
+                    int i = 3;
+                }
 				
 				controller.createCallback = [factoryItem createCallback];
 				controller.initCallback = [factoryItem initCallback];
@@ -418,13 +450,25 @@
 			
 			[controller setParentController:self];
 			[controller setIndexPath:indexPath];
+            
+            if(controller.view != view){
+                int i =3;
+            }
+            
 			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
 			[_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
 			if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
 			[_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
+            //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
 			
+            if([indexPath isEqual:testIndexPath]
+               ||[indexPath isEqual:testIndexPath2]){
+                NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
+            }
+
+            
 			[controller setValue:object];
 			[controller setupView:view];	
 			
@@ -543,8 +587,10 @@
             id v = [_indexPathToViews objectForKey:indexPath];
             if(v){
                 [_indexPathToViews setObject:v forKey:newIndexPath];
+                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,v,newIndexPath);
                 [_viewsToIndexPath setObject:newIndexPath forKey:v];
                 [_indexPathToViews removeObjectForKey:indexPath];
+                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,indexPath);
             }
         }
     }
