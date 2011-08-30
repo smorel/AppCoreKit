@@ -334,14 +334,15 @@
 #pragma mark View/Controller life management
 
 - (id)releaseView:(CKWeakRef*)weakref{
-	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
-	[_indexPathToViews removeObjectForKey:previousPath];
+    NSAssert(weakref,@"Weird ... Should never happend");
+    NSValue* weakViewValue = [NSValue valueWithNonretainedObject:weakref.object];
+	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:weakViewValue];
+    if(previousPath){
+        [_indexPathToViews removeObjectForKey:previousPath];
+    }
 	
-	//CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
-	//[controller performSelector:@selector(setView:) withObject:nil];
+	[_viewsToControllers removeObjectForKey:weakViewValue];
 	[_weakViews removeObject:weakref];
-	
 	return (id)nil;
 }
 
