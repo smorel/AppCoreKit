@@ -104,6 +104,7 @@ double round(double x)
 	self.rowSizes = [NSMutableArray array];
 	self.displayType = CKCarouselViewDisplayTypeHorizontal;
 	self.layer.delegate = self;
+    self.backgroundColor = [UIColor clearColor];
 	
 	//self.scrollEnabled = NO;
 	self.showsHorizontalScrollIndicator = NO;
@@ -546,6 +547,7 @@ double round(double x)
 }
 
 -(void)drawLayer:(CALayer*)l inContext:(CGContextRef)context{
+    [super drawLayer:l inContext:context];
 	CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)l;
 	[self updateOffset:carouselLayer.contentOffset];
 }
