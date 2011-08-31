@@ -83,13 +83,14 @@
 			NSString* l = [self.labels objectAtIndex:i];
 			if(intValue & [v intValue]){
 				if([str length] > 0){
-					[str appendFormat:@" | %@",_(l)];
+					[str appendFormat:@"%@%@",_(@"_|_"),_(l)];
 				}
 				else{
 					[str appendString:_(l)];
 				}
 			}
 		}
+        return str;
 	}
 	else{
 		NSInteger index = intValue;
@@ -144,7 +145,7 @@
     cell.textLabel.text = _(property.name);
 	cell.detailTextLabel.text = [self labelForValue:[self currentValue]];
 
-    [self beginBindingsContextByRemovingPreviousBindings];
+    [self beginBindingsContextByKeepingPreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
         self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
     }];
@@ -185,7 +186,7 @@
     CKTableViewController* tableController = (CKTableViewController*)[self parentController];
 	CKOptionTableViewController *optionTableController = nil;
 	if(self.multiSelectionEnabled){
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
+		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}
 	else{
 		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
