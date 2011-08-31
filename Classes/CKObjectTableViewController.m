@@ -61,8 +61,6 @@
 
 @synthesize editButton;
 @synthesize doneButton;
-@synthesize rightButton;
-@synthesize leftButton;
 @dynamic selectedIndexPath;
 
 - (void)didSearch:(NSString*)text{
@@ -190,10 +188,7 @@
 	_indexPathToReachAfterRotation = nil;
 	[editButton release];
 	editButton = nil;
-	[rightButton release];
-	rightButton = nil;
-	[leftButton release];
-	leftButton = nil;
+	
 	[doneButton release];
 	doneButton = nil;
 	[_searchBar release];
@@ -393,14 +388,6 @@
 		self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
 												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
         _placeHolderViewDuringKeyboardOrSheet.frame = self.tableViewContainer.frame;
-	}
-	
-	if(self.rightButton){
-		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
-	}
-	
-	if(self.leftButton){
-		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
 	}
 	
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];

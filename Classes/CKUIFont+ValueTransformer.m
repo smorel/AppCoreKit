@@ -15,10 +15,10 @@
     NSAssert(NO,@"Not implemented");
     return nil;
     
-	NSArray* components = [str componentsSeparatedByString:@" "];
+	/*NSArray* components = [str componentsSeparatedByString:@" "];
     if([components count] == 1){
         NSString* str = [components objectAtIndex:0];
-    }
+    }*/
 }
 
 + (UIFont*)convertFromNSNumber:(NSNumber*)n{
