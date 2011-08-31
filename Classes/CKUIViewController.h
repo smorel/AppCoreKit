@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+typedef void(^CKUIViewControllerAnimatedBlock)(UIViewController* controller,BOOL animated);
+typedef void(^CKUIViewControllerBlock)(UIViewController* controller);
 
 /** TODO
  */
@@ -17,6 +19,13 @@
 }
 
 @property (nonatomic,retain) NSString* name;
+
+@property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewWillAppearBlock;
+@property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewDidAppearBlock;
+@property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewWillDisappearBlock;
+@property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewDidDisappearBlock;
+@property (nonatomic,copy) CKUIViewControllerBlock viewDidLoadBlock;
+@property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
 
 /** 
  This method is called upon initialization. Subclasses can override this method.

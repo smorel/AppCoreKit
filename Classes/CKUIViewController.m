@@ -21,6 +21,12 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 
 @implementation CKUIViewController
 @synthesize name = _name;
+@synthesize viewWillAppearBlock = _viewWillAppearBlock;
+@synthesize viewDidAppearBlock = _viewDidAppearBlock;
+@synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
+@synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
+@synthesize viewDidLoadBlock = _viewDidLoadBlock;
+@synthesize viewDidUnloadBlock = _viewDidUnloadBlock;
 
 - (void)postInit {	
 }
@@ -51,14 +57,58 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 
 - (void)dealloc{
 	[_name release];
+    [_viewWillAppearBlock release];
+    [_viewDidAppearBlock release];
+    [_viewWillDisappearBlock release];
+    [_viewDidDisappearBlock release];
+    [_viewDidLoadBlock release];
+    [_viewDidUnloadBlock release];
 	[super dealloc];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(_viewWillAppearBlock){
+        _viewWillAppearBlock(self,animated);
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if(_viewWillDisappearBlock){
+        _viewWillDisappearBlock(self,animated);
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if(_viewDidAppearBlock){
+        _viewDidAppearBlock(self,animated);
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    if(_viewDidDisappearBlock){
+        _viewDidDisappearBlock(self,animated);
+    }
 }
 
 #pragma mark - View lifecycle
 
 -(void) viewDidLoad{
 	[super viewDidLoad];
+    if(_viewDidLoadBlock){
+        _viewDidLoadBlock(self);
+    }
 	[self applyStyle];
+}
+
+-(void) viewDidUnload{
+	[super viewDidUnload];
+    if(_viewDidUnloadBlock){
+        _viewDidUnloadBlock(self);
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
