@@ -38,9 +38,6 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
     CKObjectTableViewControllerScrollingPolicy _scrollingPolicy;
     
     CKObjectTableViewControllerEditableType _editableType;
-	
-	UIBarButtonItem *rightButton;
-	UIBarButtonItem *leftButton;
     
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -167,18 +164,6 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 
 //private
 - (void)didSearch:(NSString*)text;
-
-///-----------------------------------
-/// @name Navigation Buttons
-///-----------------------------------
-/** 
- Specify the bar button item that should be displayed at the right of the navigation bar.
- */
-@property (nonatomic, retain) UIBarButtonItem *rightButton;
-/** 
- Specify the bar button item that should be displayed at the left of the navigation bar.
- */
-@property (nonatomic, retain) UIBarButtonItem *leftButton;
 
 @end
 

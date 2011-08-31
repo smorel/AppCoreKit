@@ -204,7 +204,7 @@
 	//ptet utiliser tous les controllers de _viewsToControllers
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-        UIView* view = [self viewAtIndexPath:indexPath];
+        //UIView* view = [self viewAtIndexPath:indexPath];
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
         if(![[controller indexPath]isEqual:indexPath]){
             //NSLog(@"updateVisibleViewsIndexPath -- controller <%p> view : <%p> cell controller : %@ changeindexpath from :%@ to %@",self,view,controller,[controller indexPath],indexPath);

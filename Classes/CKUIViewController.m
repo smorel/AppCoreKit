@@ -27,6 +27,8 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 @synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
 @synthesize viewDidLoadBlock = _viewDidLoadBlock;
 @synthesize viewDidUnloadBlock = _viewDidUnloadBlock;
+@synthesize rightButton = _rightButton;
+@synthesize leftButton = _leftButton;
 
 - (void)postInit {	
 }
@@ -63,6 +65,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     [_viewDidDisappearBlock release];
     [_viewDidLoadBlock release];
     [_viewDidUnloadBlock release];
+    [_rightButton release];
+	_rightButton = nil;
+	[_leftButton release];
+	_leftButton = nil;
 	[super dealloc];
 }
 
@@ -71,6 +77,14 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
+    
+    if(self.rightButton){
+		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
+	}
+	
+	if(self.leftButton){
+		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

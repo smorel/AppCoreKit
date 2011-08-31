@@ -27,6 +27,19 @@ typedef void(^CKUIViewControllerBlock)(UIViewController* controller);
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidLoadBlock;
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
 
+///-----------------------------------
+/// @name Navigation Buttons
+///-----------------------------------
+/** 
+ Specify the bar button item that should be displayed at the right of the navigation bar.
+ */
+@property (nonatomic, retain) UIBarButtonItem *rightButton;
+/** 
+ Specify the bar button item that should be displayed at the left of the navigation bar.
+ */
+@property (nonatomic, retain) UIBarButtonItem *leftButton;
+
+
 /** 
  This method is called upon initialization. Subclasses can override this method.
  @warning You should not call this method directly.
