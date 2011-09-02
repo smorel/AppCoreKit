@@ -14,6 +14,7 @@
 	NSMutableDictionary* _tree;
 	NSMutableSet* _loadedFiles;
 }
+@property (nonatomic,retain,readonly) NSMutableDictionary* tree;
 
 + (CKCascadingTree*)treeWithContentOfFile:(NSString*)path;
 - (id)initWithContentOfFile:(NSString*)path;

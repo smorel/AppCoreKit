@@ -594,7 +594,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 //CKCascadingTree
 
 @interface CKCascadingTree()
-@property (nonatomic,retain) NSMutableDictionary* tree;
+@property (nonatomic,retain,readwrite) NSMutableDictionary* tree;
 @property (nonatomic,retain) NSMutableSet* loadedFiles;
 - (void)processImportsForDictionary:(NSMutableDictionary*)dictionary withMainExtension:(NSString*)mainExtension;
 - (BOOL)importContentOfFile:(NSString*)path;
@@ -632,7 +632,8 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	}
 	if([self importContentOfFile:path]){
 		[_tree initAfterLoading];
-		[_tree postInitAfterLoading];return YES;
+		[_tree postInitAfterLoading];
+        return YES;
 	}
     return NO;
 }
