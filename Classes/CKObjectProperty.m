@@ -9,6 +9,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDocumentCollection.h"
+#import "CKNSObject+Introspection.h"
 #import "CKWeakRef.h"
 
 @interface CKObjectProperty()
@@ -110,7 +111,20 @@
 }
 
 - (void)setValue:(id)value{
-	if(self.subKeyPath != nil && [[self value] isEqual:value] == NO){
+    if([self descriptor].propertyType == CKClassPropertyDescriptorTypeSelector){
+        SEL selector = [NSObject selectorForProperty:[self descriptor].name prefix:@"set" suffix:@":"];
+        SEL selValue = [value pointerValue];
+        
+        NSMethodSignature *signature = [self.subObject.object methodSignatureForSelector:selector];
+        
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+        [invocation setSelector:selector];
+        [invocation setTarget:self.subObject.object];
+        [invocation setArgument:&selValue
+                        atIndex:2];
+        [invocation invoke];
+    }
+	else if(self.subKeyPath != nil && [[self value] isEqual:value] == NO){
 		[self.subObject.object setValue:value forKey:self.subKeyPath];
 	}
 	else if(self.subKeyPath == nil){
@@ -337,6 +351,12 @@
 	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]]
              ||[NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]],@"invalid property type");
     return [[self value]count];
+}
+
+- (id) copyWithZone:(NSZone *)zone {
+	CKObjectProperty* copied = [[[self class] alloc] init];
+	[copied copy:self];
+	return copied;
 }
 
 @end
