@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef void(^CKUIViewControllerAnimatedBlock)(UIViewController* controller,BOOL animated);
-typedef void(^CKUIViewControllerBlock)(UIViewController* controller);
+@class CKUIViewController;
+typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
+typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 
 /** TODO
  */
