@@ -71,6 +71,10 @@
 	return nil;
 }
 
+- (void)addObject:(id)object{
+    [self addObjectsFromArray:[NSArray arrayWithObject:object]];
+}
+
 - (void)addObjectsFromArray:(NSArray *)otherArray{
 	[self insertObjects:otherArray atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [otherArray count])]];
 }
