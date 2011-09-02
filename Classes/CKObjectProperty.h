@@ -17,7 +17,7 @@
 
 /** TODO
  */
-@interface CKObjectProperty : NSObject {
+@interface CKObjectProperty : NSObject<NSCopying> {
 }
 @property (nonatomic,retain,readonly) id object;
 @property (nonatomic,retain,readonly) NSString* keyPath;
