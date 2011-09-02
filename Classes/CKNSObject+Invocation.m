@@ -29,11 +29,11 @@
 	[self performSelector:selector onThread:[NSThread mainThread] withObjects:[NSArray arrayWithObjects:arg, arg2, arg3, nil] waitUntilDone:wait];
 }
 
-- (void)performSelector:(SEL)selector withObjects:(NSArray*)objects{
-	[self performSelector:selector onThread:[NSThread currentThread] withObjects:objects waitUntilDone:YES];
+- (id)performSelector:(SEL)selector withObjects:(NSArray*)objects{
+	return [self performSelector:selector onThread:[NSThread currentThread] withObjects:objects waitUntilDone:YES];
 }
 
-- (void)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait {
+- (id)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait {
     if ([self respondsToSelector:selector]) {
         NSMethodSignature *signature = [self methodSignatureForSelector:selector];
         if (signature) {
@@ -45,7 +45,10 @@
 			if (args) {
 				NSInteger i = 2;
 				for (NSObject *object in args) {
-					[invocation setArgument:&object atIndex:i++];
+                    if(i < [signature numberOfArguments]){
+                        [invocation setArgument:&object atIndex:i];
+                    }
+                    ++i;
 				}
 			}
 				
@@ -55,8 +58,15 @@
 							   onThread:thread
 							 withObject:nil
 						  waitUntilDone:wait];
+            
+            if([signature methodReturnLength] > 0){
+                void* returnValue = nil;
+                [invocation getReturnValue:&returnValue];
+                return (id)returnValue;      
+            }
 		}
 	}
+    return nil;
 }
 
 @end
