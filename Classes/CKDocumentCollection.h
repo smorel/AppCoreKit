@@ -12,7 +12,7 @@
 #import "CKDocumentStorage.h"
 
 
-/** TODO
+/** TODO : Implements fast enumeration protocol
  */
 @interface CKDocumentCollection : CKModelObject<CKFeedSourceDelegate> {
 	CKFeedSource* _feedSource;
@@ -35,6 +35,7 @@
 - (NSArray*)allObjects;
 - (BOOL)containsObject:(id)object;
 - (id)objectAtIndex:(NSInteger)index;
+- (void)addObject:(id)object;
 - (void)addObjectsFromArray:(NSArray *)otherArray;
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet;
