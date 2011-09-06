@@ -83,6 +83,8 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 
 - (void)unregister:(CKBinding*)binding{
 	id context = binding.context;
+    if(context == nil)
+        return;
 	
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
@@ -119,7 +121,14 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		return;
 	}
 	
+    //prevents unregistration while unbinding dependencies :
+    //for example a block binding release a value that gets deallocated
+    //another binding depends on this value and is notified via weakref
 	for(CKBinding* binding in bindings){
+        binding.context = nil;
+    }
+    
+    for(CKBinding* binding in bindings){
         [binding unbind];
         [binding reset];
 		
@@ -130,7 +139,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 			[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 		}
 		[queuedBindings addObject:binding];
-        binding.context = nil;
 	}
 	
 	[_bindingsForContext removeObjectForKey:context];
