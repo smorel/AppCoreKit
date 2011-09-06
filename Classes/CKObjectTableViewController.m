@@ -305,6 +305,8 @@
         }
         case CKObjectTableViewControllerEditableTypeNone:break;
 	}
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
