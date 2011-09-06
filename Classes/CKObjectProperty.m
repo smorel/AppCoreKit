@@ -301,7 +301,8 @@
             [self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
         }
         else{
-            [[self value]insertObjects:objects atIndexes:indexes];
+            id theValue = [self value];
+            [theValue insertObjects:objects atIndexes:indexes];
         }
     }
 }
@@ -320,7 +321,8 @@
 		[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
 	}
 	else{
-		[[self value]removeObjectsAtIndexes:indexes];
+        id theValue = [self value];
+		[theValue removeObjectsAtIndexes:indexes];
 	}
 }
 
@@ -339,7 +341,8 @@
 		[self.object performSelector:self.descriptor.removeAllSelector];
 	}
 	else{
-		[[self value]removeAllObjects];
+        id theValue = [self value];
+		[theValue removeAllObjects];
 	}
 	
 	[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
@@ -354,9 +357,7 @@
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	CKObjectProperty* copied = [[[self class] alloc] init];
-	[copied copy:self];
-	return copied;
+    return [[CKObjectProperty alloc]initWithObject:self.object keyPath:self.keyPath];
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "CKNSNotificationCenter+Edition.h"
 
 @interface CKDocumentArrayCollection()
-@property (nonatomic,retain) NSMutableArray* objects;
+@property (nonatomic,copy) NSMutableArray* objects;
 @end
 
 @implementation CKDocumentArrayCollection
@@ -18,11 +18,20 @@
 
 - (void)postInit{
 	[super postInit];
+    self.objects = [NSMutableArray array];
 	self.property = [CKObjectProperty propertyWithObject:self keyPath:@"objects"];
 }
 
-- (void)objectsMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.creatable = YES;
+- (void)setObjects:(NSMutableArray *)theobjects{
+    [_objects release];
+    _objects = [[NSMutableArray arrayWithArray:theobjects]retain];
+	self.property = [CKObjectProperty propertyWithObject:self keyPath:@"objects"];
+}
+
+- (id) copyWithZone:(NSZone *)zone {
+    CKDocumentArrayCollection* collection = [super copyWithZone:zone];
+    collection.property = [CKObjectProperty propertyWithObject:collection keyPath:@"objects"];
+    return collection;
 }
 
 @end
