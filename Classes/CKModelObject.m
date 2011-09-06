@@ -363,46 +363,61 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:other property:property];
 			if(metaData.copiable){
 				id value = [other valueForKey:property.name];
-				if([value isKindOfClass:[CKDocumentCollection class]]){
-					CKDocumentCollection* collection = value;
-					value = [[property.type alloc]init];
-					NSMutableArray* copiedObjects = [NSMutableArray array];
-					for(id object in [collection allObjects]){
-						[copiedObjects addObject:[object copy]];
-					}
-					[value addObjectsFromArray:copiedObjects];
-				}
-				else if(metaData.deepCopy && property.assignementType != CKClassPropertyDescriptorAssignementTypeCopy){
-					if([value isKindOfClass:[NSArray class]]){
-						NSArray* array = value;
-						value = [[property.type alloc]init];
-						for(id object in array){
-							[value addObject:[object copy]];
-						}
-					}
-					else if([value isKindOfClass:[NSDictionary class]]){
-						NSDictionary* dico = value;
-						value = [[property.type alloc]init];
-						for(id key in [dico allKeys]){
-							id object = [dico objectForKey:key];
-							[value setObject:[object copy] forKey:key];
-						}
-					}
-					else if([value isKindOfClass:[NSSet class]]){
-						NSMutableSet* set = value;
-						value = [[property.type alloc]init];
-						for(id object in set){
-							[value addObject:[object copy]];
-						}
-					}
-					else{
-						value = [value copyWithZone:nil];
-					}
-					if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy
-					   || property.assignementType == CKClassPropertyDescriptorAssignementTypeRetain){
-						[value autorelease];
-					}
-				}
+				if(metaData.deepCopy){
+                    if([value isKindOfClass:[CKDocumentCollection class]]){
+                        CKDocumentCollection* collection = value;
+                        if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
+                            value = [[property.type alloc]init];
+                            [value setFeedSource:collection.feedSource];
+                        }
+                        else{
+                            [collection removeAllObjects];
+                        }
+                        for(id object in [collection allObjects]){
+                            [value addObject:[object copy]];
+                        }
+                    }
+                    else if([value isKindOfClass:[NSArray class]]){
+                        NSArray* array = value;
+                        if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
+                            value = [[NSMutableArray array]retain];
+                        }
+                        else{
+                            [value removeAllObjects];
+                        }
+                        for(id object in array){
+                            [value addObject:[object copy]];
+                        }
+                    }
+                    else if([value isKindOfClass:[NSDictionary class]]){
+                        NSDictionary* dico = value;
+                        if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
+                            value = [[NSMutableDictionary dictionary]retain];
+                        }
+                        else{
+                            [value removeAllObjects];
+                        }
+                        for(id key in [dico allKeys]){
+                            id object = [dico objectForKey:key];
+                            [value setObject:[object copy] forKey:key];
+                        }
+                    }
+                    else if([value isKindOfClass:[NSSet class]]){
+                        NSMutableSet* set = value;
+                        if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
+                            value = [[NSMutableSet set]retain];
+                        }
+                        else{
+                            [value removeAllObjects];
+                        }
+                        for(id object in set){
+                            [value addObject:[object copy]];
+                        }
+                    }
+                    if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
+                        [value autorelease];
+                    }
+                }
 				[self setValue:value forKey:property.name];
 			}
 		}
