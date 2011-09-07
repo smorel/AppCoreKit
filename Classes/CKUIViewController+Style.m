@@ -13,11 +13,26 @@
 
 @implementation UIViewController (CKStyle)
 
-- (void)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+- (NSMutableDictionary*)applyStyle{
+	return [self applyStyleWithParentStyle:nil];
+}
+
+- (NSMutableDictionary*)applyStyleWithParentStyle:(NSMutableDictionary*)style{
+    NSMutableDictionary* controllerStyle = style ? [style styleForObject:self  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	
+    if([CKStyleManager logEnabled]){
+        if([controllerStyle isEmpty]){
+            NSLog(@"did not find style for controller %@",self);
+        }
+        else{
+            NSLog(@"found style for controller %@",self);
+        }
+    }
+    
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
+    
+    return controllerStyle;
 }
 
 @end

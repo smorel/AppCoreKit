@@ -47,4 +47,7 @@ typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
  */
 - (void)postInit;
 
+- (void)applyStyleForLeftBarButtonItem;
+- (void)applyStyleForRightBarButtonItem;
+
 @end

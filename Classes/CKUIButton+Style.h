@@ -36,6 +36,17 @@ extern NSString *CKStyleDefaultTextColor;
 - (UIImage *)defaultImage;
 - (UIColor *)defaultTextColor;
 
+- (UIImage *)highlightedBackgroundImage;
+- (UIImage *)highlightedImage;
+- (UIColor *)highlightedTextColor;
+
+- (UIImage *)selectedBackgroundImage;
+- (UIImage *)selectedImage;
+- (UIColor *)selectedTextColor;
+
+- (UIImage *)disabledBackgroundImage;
+- (UIImage *)disabledImage;
+- (UIColor *)disabledTextColor;
 @end
 
 

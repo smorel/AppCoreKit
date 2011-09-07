@@ -146,9 +146,11 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	int i =0;
 	for(NSString* subPropertyName in properties){
 		CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:subPropertyName];
-		NSString* valueString = [NSValueTransformer transformProperty:property toClass:[NSString class]];
-		[str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
-		++i;
+        if([property descriptor]){
+            NSString* valueString = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+            [str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
+            ++i;
+        }
 	}
 	
 	if([properties count] > 0){
@@ -305,34 +307,59 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
     }
 }
 
+- (NSMutableDictionary*)deepCleanCopy:(NSMutableDictionary*)dico{
+    NSMutableDictionary* res = [NSMutableDictionary dictionaryWithDictionary:dico];
+    [res removeObjectForKey:CKCascadingTreeParent];
+    [res removeObjectForKey:CKCascadingTreeEmpty];
+    [res removeObjectForKey:CKCascadingTreeFormats];
+    for(id key in res){
+        id object = [res objectForKey:key];
+        if([object isKindOfClass:[NSDictionary class]]){
+            [res setObject:[self deepCleanCopy:object] forKey:key];
+        }
+        else if([object isKindOfClass:[NSArray class]]){
+            NSMutableArray* ar = [NSMutableArray array];
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    [ar addObject:[self deepCleanCopy:subObject]];
+                }
+                else{
+                    [ar addObject:subObject];
+                }
+            }
+            [res setObject:ar forKey:key];
+        }
+    }
+    return res;
+}
+
 - (void)makeAllInherits{
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
+            if([key isEqualToString:@"$blueNavigationBar"]){
+                int i =3;
+            }
 			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
 			NSMutableDictionary* inheritedDico = [self findDictionaryInHierarchy:normalizedKey];
 			if(inheritedDico != nil){
 				//ensure inherits is threated on inheritedStyle
 				[inheritedDico makeAllInherits];
+                
+                NSMutableDictionary* deepCopy = [self deepCleanCopy:inheritedDico];
 				//Apply inheritedStyle to self
-				for(NSString* obj in [inheritedDico allKeys]){
+				for(NSString* obj in [deepCopy allKeys]){
 					if([obj isEqual:CKCascadingTreeParent] == NO
 					   && [obj isEqual:CKCascadingTreeEmpty] == NO
 					   && [obj isEqual:CKCascadingTreeFormats] == NO){
-						id inheritedObject = [inheritedDico objectForKey:obj];
-                
+						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
-                            NSMutableDictionary* sourceDico = (NSMutableDictionary*)inheritedObject;
+                            NSMutableDictionary* sourceDico = inheritedObject;
                             [sourceDico makeAllInherits];
                         }
                         
 						if([self containsObjectForKey:obj] == NO){
-							if([inheritedObject isKindOfClass:[NSDictionary class]]){
-								[self setObject:[NSMutableDictionary dictionaryWithDictionary:inheritedObject] forKey:obj];
-							}
-							else{
-								[self setObject:inheritedObject forKey:obj];
-							}
+                            [self setObject:inheritedObject forKey:obj];
 						}
 						else if([inheritedObject isKindOfClass:[NSDictionary class]]){
 							[self applyHierarchically:inheritedObject toDictionary:[self objectForKey:obj] forKey:obj];
@@ -407,7 +434,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 		   && [key isEqual:CKCascadingTreeFormats] == NO
 		   && [key isEqual:CKCascadingTreeParent] == NO
 		   && [key isEqual:CKCascadingTreeEmpty] == NO){
-			
 			CKCascadingTreeItemFormat* format = [[[CKCascadingTreeItemFormat alloc]initFormatWithFormat:key]autorelease];
 			[self setFormat:format];
 			

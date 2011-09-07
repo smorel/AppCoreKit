@@ -8,8 +8,10 @@
 
 #import "CKUIViewController.h"
 #import "CKUIViewController+Style.h"
+#import "CKStyleManager.h"
 #import "CKDebug.h"
 #include <execinfo.h>
+#import "CKNSObject+Bindings.h"
 
 typedef enum CKDebugCheckForBlockCopyState{
     CKDebugCheckForBlockCopyState_none,
@@ -18,6 +20,10 @@ typedef enum CKDebugCheckForBlockCopyState{
 }CKDebugCheckForBlockCopyState;
 
 static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckForBlockCopyState_none;
+
+@interface CKUIViewController()
+@property(nonatomic,retain)NSString* navigationItemsBindingContext;
+@end
 
 @implementation CKUIViewController
 @synthesize name = _name;
@@ -29,8 +35,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 @synthesize viewDidUnloadBlock = _viewDidUnloadBlock;
 @synthesize rightButton = _rightButton;
 @synthesize leftButton = _leftButton;
+@synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
 
 - (void)postInit {	
+    self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
 }
 
 - (id)init {
@@ -58,6 +66,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
 	[_name release];
     [_viewWillAppearBlock release];
     [_viewDidAppearBlock release];
@@ -69,7 +78,40 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	_rightButton = nil;
 	[_leftButton release];
 	_leftButton = nil;
+	[_navigationItemsBindingContext release];
+	_navigationItemsBindingContext = nil;
 	[super dealloc];
+}
+
+
+- (void)applyStyleForLeftBarButtonItem{
+    if(self.navigationItem.leftBarButtonItem){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+        NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+        
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:nil];
+        [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+}
+
+- (void)applyStyleForRightBarButtonItem{
+    if(self.navigationItem.rightBarButtonItem){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+        NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+        
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:nil];
+        [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+}
+
+- (void)leftItemChanged:(UIBarButtonItem*)item{
+    [self applyStyleForLeftBarButtonItem];
+}
+
+- (void)rightItemChanged:(UIBarButtonItem*)item{
+    [self applyStyleForRightBarButtonItem];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -85,6 +127,24 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	if(self.leftButton){
 		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
 	}
+    
+	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+
+    if(self.navigationItem.leftBarButtonItem){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:nil];
+        [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    if(self.navigationItem.rightBarButtonItem){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:nil];
+        [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    
+    [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [self bind:@"navigationItem.leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
+    [self bind:@"navigationItem.rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
+    [NSObject endBindingsContext];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -106,6 +166,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     if(_viewDidDisappearBlock){
         _viewDidDisappearBlock(self,animated);
     }
+    [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
 }
 
 #pragma mark - View lifecycle

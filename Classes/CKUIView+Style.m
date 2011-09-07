@@ -384,6 +384,16 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
         }
 
 		NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
+        
+        if([CKStyleManager logEnabled]){
+            if([myViewStyle isEmpty]){
+                NSLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
+            }
+            else{
+                NSLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
+            }
+        }
+        
 		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
 			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){

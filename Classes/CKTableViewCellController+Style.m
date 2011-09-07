@@ -137,6 +137,16 @@ NSString* CKStyleCellFlags = @"flags";
 - (NSMutableDictionary*)controllerStyle{
 	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
+    
+    if([CKStyleManager logEnabled]){
+        if([controllerStyle isEmpty]){
+            NSLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
+        }
+        else{
+            NSLog(@"found style for item controller %@",self);
+        }
+    }
+    
 	return controllerStyle;
 }
 
