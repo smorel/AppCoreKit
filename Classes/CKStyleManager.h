@@ -22,6 +22,8 @@
 - (void)loadContentOfFileNamed:(NSString*)name;
 - (BOOL)importContentOfFileNamed:(NSString*)name;
 
++ (BOOL)logEnabled;
+
 @end
 
 @interface NSMutableDictionary (CKStyleManager)

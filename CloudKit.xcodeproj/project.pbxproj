@@ -50,6 +50,18 @@
 		751F1EE213D0C3990041900C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EE013D0C3990041900C /* JSONKit.m */; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EFD13D0E95B0041900C /* CKUserDefaults.m */; };
+		753178141417E4E4009310A8 /* CKNavigationBar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178121417E4E4009310A8 /* CKNavigationBar+Style.h */; };
+		753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178131417E4E4009310A8 /* CKNavigationBar+Style.m */; };
+		753178191417E4F9009310A8 /* CKUIToolbar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178171417E4F9009310A8 /* CKUIToolbar+Style.h */; };
+		7531781A1417E4F9009310A8 /* CKUIToolbar+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178181417E4F9009310A8 /* CKUIToolbar+Style.m */; };
+		7531781D1417E5A1009310A8 /* CKUILabel+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */; };
+		7531781E1417E5A1009310A8 /* CKUILabel+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */; };
+		753178211417E61D009310A8 /* CKUINavigationBar+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */; };
+		753178221417E61D009310A8 /* CKUINavigationBar+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178201417E61D009310A8 /* CKUINavigationBar+Introspection.m */; };
+		753178251417E64C009310A8 /* CKUIToolbar+introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178231417E64B009310A8 /* CKUIToolbar+introspection.h */; };
+		753178261417E64C009310A8 /* CKUIToolbar+introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178241417E64C009310A8 /* CKUIToolbar+introspection.m */; };
+		753178291417E9E3009310A8 /* CKUIBarButtonItem+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178271417E9E2009310A8 /* CKUIBarButtonItem+Introspection.h */; };
+		7531782A1417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178281417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m */; };
 		7536F9E013CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */; };
 		7536F9E113CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */; };
 		7536F9E213CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */; };
@@ -531,6 +543,18 @@
 		751F1EE013D0C3990041900C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = Vendor/JSONKit/JSONKit.m; sourceTree = "<group>"; };
 		751F1EFC13D0E95B0041900C /* CKUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUserDefaults.h; path = Classes/CKUserDefaults.h; sourceTree = "<group>"; };
 		751F1EFD13D0E95B0041900C /* CKUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUserDefaults.m; path = Classes/CKUserDefaults.m; sourceTree = "<group>"; };
+		753178121417E4E4009310A8 /* CKNavigationBar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNavigationBar+Style.h"; path = "Classes/CKNavigationBar+Style.h"; sourceTree = "<group>"; };
+		753178131417E4E4009310A8 /* CKNavigationBar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNavigationBar+Style.m"; path = "Classes/CKNavigationBar+Style.m"; sourceTree = "<group>"; };
+		753178171417E4F9009310A8 /* CKUIToolbar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIToolbar+Style.h"; sourceTree = "<group>"; };
+		753178181417E4F9009310A8 /* CKUIToolbar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIToolbar+Style.m"; sourceTree = "<group>"; };
+		7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+Introspection.h"; path = "Classes/CKUILabel+Introspection.h"; sourceTree = "<group>"; };
+		7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+Introspection.m"; path = "Classes/CKUILabel+Introspection.m"; sourceTree = "<group>"; };
+		7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUINavigationBar+Introspection.h"; path = "Classes/CKUINavigationBar+Introspection.h"; sourceTree = "<group>"; };
+		753178201417E61D009310A8 /* CKUINavigationBar+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUINavigationBar+Introspection.m"; path = "Classes/CKUINavigationBar+Introspection.m"; sourceTree = "<group>"; };
+		753178231417E64B009310A8 /* CKUIToolbar+introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIToolbar+introspection.h"; path = "Classes/CKUIToolbar+introspection.h"; sourceTree = "<group>"; };
+		753178241417E64C009310A8 /* CKUIToolbar+introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIToolbar+introspection.m"; path = "Classes/CKUIToolbar+introspection.m"; sourceTree = "<group>"; };
+		753178271417E9E2009310A8 /* CKUIBarButtonItem+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIBarButtonItem+Introspection.h"; path = "Classes/CKUIBarButtonItem+Introspection.h"; sourceTree = "<group>"; };
+		753178281417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIBarButtonItem+Introspection.m"; path = "Classes/CKUIBarButtonItem+Introspection.m"; sourceTree = "<group>"; };
 		7536F9D213CE0BE900720C17 /* CKCreditsFooterViewWCLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKCreditsFooterViewWCLogo.png; sourceTree = "<group>"; };
 		7536F9D313CE0BE900720C17 /* CKCreditsFooterViewWCLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKCreditsFooterViewWCLogo@2x.png"; sourceTree = "<group>"; };
 		7536F9D413CE0BE900720C17 /* CKKeypadViewBackspaceButton-Highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKKeypadViewBackspaceButton-Highlighted.png"; sourceTree = "<group>"; };
@@ -1091,6 +1115,10 @@
 				7560DC4D13B8ED3600268D13 /* CKUIViewController+Style.m */,
 				7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */,
 				7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */,
+				753178121417E4E4009310A8 /* CKNavigationBar+Style.h */,
+				753178131417E4E4009310A8 /* CKNavigationBar+Style.m */,
+				753178171417E4F9009310A8 /* CKUIToolbar+Style.h */,
+				753178181417E4F9009310A8 /* CKUIToolbar+Style.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1847,6 +1875,14 @@
 				7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */,
 				7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */,
 				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
+				7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */,
+				7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */,
+				7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */,
+				753178201417E61D009310A8 /* CKUINavigationBar+Introspection.m */,
+				753178231417E64B009310A8 /* CKUIToolbar+introspection.h */,
+				753178241417E64C009310A8 /* CKUIToolbar+introspection.m */,
+				753178271417E9E2009310A8 /* CKUIBarButtonItem+Introspection.h */,
+				753178281417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2158,6 +2194,12 @@
 				75C6DF6813FEE96C00E4AE4F /* Network.h in Headers */,
 				75C6DF6A13FEE9D200E4AE4F /* Support.h in Headers */,
 				75043E651404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h in Headers */,
+				753178141417E4E4009310A8 /* CKNavigationBar+Style.h in Headers */,
+				753178191417E4F9009310A8 /* CKUIToolbar+Style.h in Headers */,
+				7531781D1417E5A1009310A8 /* CKUILabel+Introspection.h in Headers */,
+				753178211417E61D009310A8 /* CKUINavigationBar+Introspection.h in Headers */,
+				753178251417E64C009310A8 /* CKUIToolbar+introspection.h in Headers */,
+				753178291417E9E3009310A8 /* CKUIBarButtonItem+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2491,6 +2533,12 @@
 				758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */,
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
 				75043E661404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m in Sources */,
+				753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */,
+				7531781A1417E4F9009310A8 /* CKUIToolbar+Style.m in Sources */,
+				7531781E1417E5A1009310A8 /* CKUILabel+Introspection.m in Sources */,
+				753178221417E61D009310A8 /* CKUINavigationBar+Introspection.m in Sources */,
+				753178261417E64C009310A8 /* CKUIToolbar+introspection.m in Sources */,
+				7531782A1417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

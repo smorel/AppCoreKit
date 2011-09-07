@@ -26,34 +26,6 @@ NSString* CKStyleFontName = @"fontName";
 
 @end
 
-@implementation UILabel (CKValueTransformer)
-
-- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
-                                                   UITextAlignmentLeft,
-											   UITextAlignmentCenter,
-											   UITextAlignmentRight);
-}
-
-- (void)lineBreakModeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UILineBreakMode",
-                                                   UILineBreakModeWordWrap,
-											   UILineBreakModeCharacterWrap,
-											   UILineBreakModeClip,
-											   UILineBreakModeHeadTruncation,
-											   UILineBreakModeTailTruncation,
-											   UILineBreakModeMiddleTruncation);
-}
-
-- (void)baselineAdjustmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIBaselineAdjustment",
-                                                   UIBaselineAdjustmentAlignBaselines,
-											   UIBaselineAdjustmentAlignCenters,
-											   UIBaselineAdjustmentNone);
-}
-
-@end
-
 @implementation UILabel (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
