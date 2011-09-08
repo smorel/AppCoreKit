@@ -26,9 +26,12 @@
 @end
 
 @interface CKObjectViewControllerFactory ()
-
 @property (nonatomic, retain, readwrite) NSMutableArray* mappings;
 @property (nonatomic, assign, readwrite) id objectController;
+@end
+
+@interface UITableViewCell()
+-(void)setEditingStyle:(UITableViewCellEditingStyle)style;
 @end
 
 

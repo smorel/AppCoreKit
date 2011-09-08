@@ -643,9 +643,9 @@
                    [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
                    [cell.detailTextLabel.text length] > 0 &&
                    cell.detailTextLabel.numberOfLines != 1){
-                    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                    /*CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
+                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];*/
                     return CGRectMake(x,11, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
                 }
                 else{
