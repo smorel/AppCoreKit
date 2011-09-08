@@ -128,13 +128,13 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
             
             //disabled state
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedBackgroundImage]) {
-                [button setBackgroundImage:[myButtonStyle selectedBackgroundImage] forState:UIControlStateDisabled];
+                [button setBackgroundImage:[myButtonStyle selectedBackgroundImage] forState:UIControlStateSelected];
             }
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedImage]){
-                [button setImage:[myButtonStyle selectedImage] forState:UIControlStateDisabled];
+                [button setImage:[myButtonStyle selectedImage] forState:UIControlStateSelected];
             }
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedTextColor]) {
-                [button setTitleColor:[myButtonStyle selectedTextColor] forState:UIControlStateDisabled];
+                [button setTitleColor:[myButtonStyle selectedTextColor] forState:UIControlStateSelected];
             }
             
             //Font
