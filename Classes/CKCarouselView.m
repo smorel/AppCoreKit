@@ -209,7 +209,7 @@ double round(double x)
 	
 	self.numberOfPages = count;
 	self.currentPage = self.currentPage;
-	[self updateViewsAnimated:NO];
+	[self updateViewsAnimated:YES];
 }
 
 - (void)enqueueReusableView:(UIView*)view{
@@ -267,7 +267,7 @@ double round(double x)
 			}
 		}
 	}
-	
+    
 	for(NSIndexPath* indexPath in toAdd){
 		if(_dataSource && [_dataSource respondsToSelector:@selector(carouselView:viewForRowAtIndexPath:)]){
 			UIView* view = [_dataSource carouselView:self viewForRowAtIndexPath:indexPath];
@@ -281,6 +281,13 @@ double round(double x)
 				if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
 					[self.delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
 				}
+                
+                if(animated){
+                    view.alpha = 0;
+                    [UIView beginAnimations:@"carouselAppear" context:view];
+                    view.alpha = 1;
+                    [UIView commitAnimations];
+                }
 			}
 		}
 	}
