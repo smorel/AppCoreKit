@@ -410,7 +410,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 			}
 			
 			if(view){
-				[descriptor.type applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 			}
 		//}
 	}
