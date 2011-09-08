@@ -308,26 +308,32 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (NSMutableDictionary*)deepCleanCopy:(NSMutableDictionary*)dico{
-    NSMutableDictionary* res = [NSMutableDictionary dictionaryWithDictionary:dico];
-    [res removeObjectForKey:CKCascadingTreeParent];
-    [res removeObjectForKey:CKCascadingTreeEmpty];
-    [res removeObjectForKey:CKCascadingTreeFormats];
-    for(id key in res){
-        id object = [res objectForKey:key];
-        if([object isKindOfClass:[NSDictionary class]]){
-            [res setObject:[self deepCleanCopy:object] forKey:key];
+    NSMutableDictionary* res = [NSMutableDictionary dictionary];
+    for(id key in dico){
+        if([key isEqualToString:CKCascadingTreeParent]
+           || [key isEqualToString:CKCascadingTreeEmpty]
+           || [key isEqualToString:CKCascadingTreeFormats]){
         }
-        else if([object isKindOfClass:[NSArray class]]){
-            NSMutableArray* ar = [NSMutableArray array];
-            for(id subObject in object){
-                if([subObject isKindOfClass:[NSDictionary class]]){
-                    [ar addObject:[self deepCleanCopy:subObject]];
-                }
-                else{
-                    [ar addObject:subObject];
-                }
+        else{
+            id object = [dico objectForKey:key];
+            if([object isKindOfClass:[NSDictionary class]]){
+                [res setObject:[self deepCleanCopy:object] forKey:key];
             }
-            [res setObject:ar forKey:key];
+            else if([object isKindOfClass:[NSArray class]]){
+                NSMutableArray* ar = [NSMutableArray array];
+                for(id subObject in object){
+                    if([subObject isKindOfClass:[NSDictionary class]]){
+                        [ar addObject:[self deepCleanCopy:subObject]];
+                    }
+                    else{
+                        [ar addObject:subObject];
+                    }
+                }
+                [res setObject:ar forKey:key];
+            }
+            else{
+                [res setObject:object forKey:key];
+            }
         }
     }
     return res;
@@ -337,9 +343,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
-            if([key isEqualToString:@"$blueNavigationBar"]){
-                int i =3;
-            }
 			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
 			NSMutableDictionary* inheritedDico = [self findDictionaryInHierarchy:normalizedKey];
 			if(inheritedDico != nil){
