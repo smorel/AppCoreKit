@@ -55,7 +55,7 @@
 	}
 	
 	if (self.carouselView == nil) {
-		if ([self.view isKindOfClass:[UITableView class]]) {
+		if ([self.view isKindOfClass:[CKCarouselView class]]) {
 			// TODO: Assert - Should not be allowed
 			self.carouselView = (CKCarouselView *)self.view;
 		} else {
@@ -89,7 +89,7 @@
 		self.params = [NSMutableDictionary dictionary];
 	}
 	
-	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSValue valueWithCGSize:self.carouselView.bounds.size] forKey:CKTableViewAttributeBounds];
 	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
