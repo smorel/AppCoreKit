@@ -109,6 +109,7 @@ typedef enum{
 @property (nonatomic,assign) IBOutlet id dataSource;
 //@property (nonatomic,assign) IBOutlet id delegate;
 @property (nonatomic,assign) CKCarouselViewDisplayType displayType;
+@property (nonatomic,assign,readonly) CGFloat internalContentOffset;
 
 - (void)reloadData;
 - (UIView*)dequeueReusableViewWithIdentifier:(id)identifier;

@@ -63,7 +63,7 @@ double round(double x)
 @property (nonatomic,retain) NSMutableDictionary* visibleViewsForIndexPaths;
 @property (nonatomic,retain) NSMutableDictionary* reusableViews;
 @property (nonatomic,retain) NSMutableArray* rowSizes;
-@property (nonatomic,assign) CGFloat internalContentOffset;
+@property (nonatomic,assign,readwrite) CGFloat internalContentOffset;
 @property (nonatomic, assign) id delegate;
 
 - (void)enqueueReusableView:(UIView*)view;
