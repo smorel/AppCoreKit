@@ -10,6 +10,7 @@
 #import "CKCache.h"
 #import "CKUIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKNSValueTransformer+Additions.h"
 
 @interface CKImageView ()
 
@@ -271,6 +272,17 @@
 	else{
 		[self hideAllViews];
 	}
+}
+
+- (void)spinnerStyleMetaData:(CKObjectPropertyMetaData*)metaData{
+    metaData.enumDescriptor = CKEnumDefinition(@"CKImageViewSpinnerStyle", 
+                                               CKImageViewSpinnerStyleWhiteLarge,
+                                               CKImageViewSpinnerStyleWhite,
+                                               CKImageViewSpinnerStyleGray,
+                                               CKImageViewSpinnerStyleNone,
+                                               UIActivityIndicatorViewStyleWhiteLarge,
+                                               UIActivityIndicatorViewStyleWhite,
+                                               UIActivityIndicatorViewStyleGray);
 }
 
 @end
