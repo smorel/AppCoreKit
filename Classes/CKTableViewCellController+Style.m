@@ -88,6 +88,18 @@ NSString* CKStyleCellFlags = @"flags";
 	return NO;
 }
 
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
+    CKGradientView* backgroundView = nil;
+    for(UIView* view in [self subviews]){
+        if([view isKindOfClass:[CKGradientView class]]
+           && view != self.backgroundView){
+            backgroundView = (CKGradientView*)view;
+            break;
+        }
+    }
+    [super insertSubview:view atIndex:backgroundView ? index + 1 : index];
+}
+
 /*
 - (void)setBackgroundColor:(UIColor *)backgroundColor{
     UIColor* previousColor = nil;
@@ -244,3 +256,45 @@ NSString* CKStyleCellFlags = @"flags";
 
 @end
 
+
+@implementation UITableView (CKStyle)
+
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
+    if([view isKindOfClass:[UITableViewCell class]]){
+        id dataSource = [self dataSource];
+        if([dataSource isKindOfClass:[CKItemViewContainerController class]]){
+            CKItemViewContainerController* controller = (CKItemViewContainerController*)dataSource;
+            NSIndexPath* indexPath = [controller indexPathForView:view];
+            if(indexPath.row > 0){
+                NSIndexPath* previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row -1 inSection:indexPath.section];
+                UIView* previousView = [controller viewAtIndexPath:previousIndexPath];
+                NSInteger index = previousView ? [[self subviews]indexOfObjectIdenticalTo:previousView] : NSNotFound;
+                if(index != NSNotFound){
+                    [super insertSubview:view atIndex:index+1];
+                    return;
+                }
+                else{
+                    NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+                    if([controller isValidIndexPath:nextIndexPath]){
+                        UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
+                        NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
+                        if(index != NSNotFound){
+                            [super insertSubview:view atIndex:index];
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    [super insertSubview:view atIndex:index];
+}
+
+- (void)addSubview:(UIView *)view{
+    if([view isKindOfClass:[UITableViewCell class]]){
+        int i =3;
+    }
+    [super addSubview:view];
+}
+
+@end

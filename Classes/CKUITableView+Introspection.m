@@ -15,7 +15,7 @@
 
 - (void)separatorStyleMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellSeparatorStyle",
-                                                   UITableViewCellSeparatorStyleNone,
+                                               UITableViewCellSeparatorStyleNone,
 											   UITableViewCellSeparatorStyleSingleLine,
 											   UITableViewCellSeparatorStyleSingleLineEtched);
 }
