@@ -15,6 +15,7 @@
 @property (nonatomic,retain) NSArray* values;
 @property (nonatomic,retain) NSArray* labels;
 @property (nonatomic,readonly) BOOL multiSelectionEnabled;
+@property (nonatomic,retain,readwrite) CKOptionTableViewController* optionsViewController;
 @end
 
 @implementation CKOptionPropertyCellController
@@ -22,6 +23,7 @@
 @synthesize values;
 @synthesize labels;
 @synthesize multiSelectionEnabled;
+@synthesize optionsViewController = _optionsViewController;
 
 - (id)init{
     self = [super init];
@@ -33,6 +35,7 @@
 - (void)dealloc{
     self.values = nil;
     self.labels = nil;
+    [_optionsViewController release];
     [super dealloc];
 }
 
@@ -178,23 +181,22 @@
     return CKItemViewFlagSelectable;
 }
 
-- (void)didSelectRow {
-	[super didSelectRow];
-    
+- (void)didSelect {
     CKObjectProperty* property = [self objectProperty];
     
     CKTableViewController* tableController = (CKTableViewController*)[self parentController];
-	CKOptionTableViewController *optionTableController = nil;
 	if(self.multiSelectionEnabled){
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
+		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}
 	else{
-		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
+		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
 	}
-    optionTableController.optionCellStyle = self.optionCellStyle;
-	optionTableController.title = _(property.name);
-	optionTableController.optionTableDelegate = self;
-	[self.parentController.navigationController pushViewController:optionTableController animated:YES];
+    self.optionsViewController.optionCellStyle = self.optionCellStyle;
+	self.optionsViewController.title = _(property.name);
+	self.optionsViewController.optionTableDelegate = self;
+    
+    [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
+	[self.parentController.navigationController pushViewController:self.optionsViewController animated:YES];
 }
 
 //
