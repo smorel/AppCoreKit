@@ -170,7 +170,11 @@
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
-	return [self.tableView indexPathForCell:(UITableViewCell*)view];
+	NSIndexPath* indexPath =  [self.tableView indexPathForCell:(UITableViewCell*)view];
+    if(!indexPath){
+        indexPath = [super indexPathForView:view];
+    }
+    return indexPath;
 }
 
 /* implemented in parent controller now.

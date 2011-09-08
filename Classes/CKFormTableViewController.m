@@ -385,9 +385,12 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index{
-	CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-	id object =  cellDescriptor.value;
-	return object;
+    if(index < [_cellDescriptors count]){
+        CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
+        id object =  cellDescriptor.value;
+        return object;
+    }
+    return nil;
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
