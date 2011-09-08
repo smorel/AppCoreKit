@@ -34,4 +34,9 @@
 	return NO;
 }
 
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
+    BOOL hasBackgroundGradientView = [[self subviews]count] > 0 && [[[self subviews]objectAtIndex:0]isKindOfClass:[CKGradientView class]];
+    [super insertSubview:view atIndex:hasBackgroundGradientView ? index + 1 : index];
+}
+
 @end
