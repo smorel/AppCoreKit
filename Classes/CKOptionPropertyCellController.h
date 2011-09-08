@@ -14,5 +14,8 @@
 }
 
 @property (nonatomic,assign) CKTableViewCellStyle optionCellStyle;
+@property (nonatomic,retain,readonly) CKOptionTableViewController* optionsViewController;
+
+
 
 @end
