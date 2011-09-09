@@ -251,7 +251,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 
 - (void)applyHierarchically:(NSDictionary*)source toDictionary:(NSDictionary*)target forKey:(NSString*)identifier{
 	NSMutableDictionary* mutableTarget = [NSMutableDictionary dictionaryWithDictionary:target];
-	[self setObject:mutableTarget forKey:identifier];
 	
 	for(id key in [source allKeys]){
 		if([key isEqual:CKCascadingTreeParent] == NO
@@ -274,10 +273,12 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 				}
 			}
 			else if([sourceObject isKindOfClass:[NSMutableDictionary class]]){
-				[self applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key] forKey:key];
+				[mutableTarget applyHierarchically:sourceObject toDictionary:[mutableTarget objectForKey:key] forKey:key];
 			}
 		}
 	}
+    
+	[self setObject:mutableTarget forKey:identifier];
 }
 
 - (void)makeAllPlatformSpecific{
