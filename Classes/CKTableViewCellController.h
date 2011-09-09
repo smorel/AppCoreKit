@@ -15,6 +15,24 @@
 
 @class CKObjectTableViewController;
 
+
+/** TODO
+ */
+@interface CKUITableViewCell : UITableViewCell
+
+@property(nonatomic,assign) CKTableViewCellController* delegate;
+@property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
+
+@end
+
+
+
+
+
 /** TODO
  */
 enum{
