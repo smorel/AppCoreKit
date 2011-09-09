@@ -23,15 +23,17 @@
 
 #define ENABLE_DEBUG_GESTURE 1
 
-@interface CKUITableViewCell : UITableViewCell{
-	CKTableViewCellController* _delegate;
-}
-@property(nonatomic,assign) CKTableViewCellController* delegate;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
-@end
-
 @implementation CKUITableViewCell
 @synthesize delegate = _delegate;
+@synthesize disclosureIndicatorImage = _disclosureIndicatorImage;
+@synthesize disclosureButton = _disclosureButton;
+@synthesize checkMarkImage = _checkMarkImage;
+
+- (void)dealloc{
+    [_disclosureIndicatorImage release];
+    [_disclosureButton release];
+    [super dealloc];
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -44,6 +46,41 @@
     if([_delegate layoutCallback] != nil && _delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
 		[_delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)theAccessoryType{
+    bool shouldRemoveAccessoryView = (self.accessoryType != theAccessoryType) && (
+          (self.accessoryType == UITableViewCellAccessoryDisclosureIndicator && _disclosureIndicatorImage)
+        ||(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton && _disclosureButton)
+        ||(self.accessoryType == UITableViewCellAccessoryCheckmark && _checkMarkImage));
+    
+    if(shouldRemoveAccessoryView){
+        self.accessoryView = nil;
+    }
+    
+    switch (theAccessoryType) {
+        case UITableViewCellAccessoryDisclosureIndicator:{
+            if(_disclosureIndicatorImage){
+                UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+                self.accessoryView = view;
+            }
+            break;
+        }
+        case UITableViewCellAccessoryDetailDisclosureButton:{
+            if(_disclosureButton){
+                self.accessoryView = _disclosureButton;
+            }
+            break;        }
+        case UITableViewCellAccessoryCheckmark:{
+            if(_checkMarkImage){
+                UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+                self.accessoryView = view;
+            }
+            break;
+        }
+    }
+    
+    [super setAccessoryType:theAccessoryType];
 }
 
 @end
@@ -388,9 +425,9 @@
     
     
 	[self beginBindingsContextByRemovingPreviousBindings];
-	[super setupView:view];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
+	[super setupView:view];
 	[self endBindingsContext];
     
     if(self.cellStyle == CKTableViewCellStyleValue3
