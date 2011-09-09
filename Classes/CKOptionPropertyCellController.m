@@ -14,6 +14,8 @@
 @interface CKOptionPropertyCellController ()
 @property (nonatomic,retain) NSArray* values;
 @property (nonatomic,retain) NSArray* labels;
+@property (nonatomic,retain) NSString* internalBindingContext;
+
 @property (nonatomic,readonly) BOOL multiSelectionEnabled;
 @property (nonatomic,retain,readwrite) CKOptionTableViewController* optionsViewController;
 @end
@@ -24,18 +26,22 @@
 @synthesize labels;
 @synthesize multiSelectionEnabled;
 @synthesize optionsViewController = _optionsViewController;
+@synthesize internalBindingContext = _internalBindingContext;
 
 - (id)init{
     self = [super init];
     self.cellStyle = CKTableViewCellStylePropertyGrid;
     self.optionCellStyle = CKTableViewCellStylePropertyGrid;
+    self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
     return self;
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:self.internalBindingContext];
     self.values = nil;
     self.labels = nil;
     [_optionsViewController release];
+    [_internalBindingContext release];
     [super dealloc];
 }
 
@@ -147,12 +153,15 @@
     
     cell.textLabel.text = _(property.name);
 	cell.detailTextLabel.text = [self labelForValue:[self currentValue]];
+    if(cell.detailTextLabel.text == nil){
+        cell.detailTextLabel.text = @" ";
+    }
 
-    [self beginBindingsContextByKeepingPreviousBindings];
+    [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
         self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
     }];
-    [self endBindingsContext];
+    [NSObject endBindingsContext];
 }
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
@@ -202,17 +211,21 @@
 //
 
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index {
-	if(self.multiSelectionEnabled){
+    [NSObject removeAllBindingsForContext:self.internalBindingContext];
+    
+    if(self.multiSelectionEnabled){
 		NSArray* indexes = tableViewController.selectedIndexes;
 		NSInteger v = 0;
 		for(NSNumber* index in indexes){
 			v |= [[self.values objectAtIndex:[index intValue]]intValue];
 		}
         
+        self.tableViewCell.detailTextLabel.text = [self labelForValue:v];
         [self setValueInObjectProperty:[NSNumber numberWithInt:v]];
     }
 	else{
         NSInteger index = tableViewController.selectedIndex;
+        self.tableViewCell.detailTextLabel.text = [self labelForValue:index];
         id value = [self.values objectAtIndex:index];
         [self setValueInObjectProperty:value];
 	}
@@ -220,6 +233,13 @@
 	if(!self.multiSelectionEnabled){
 		[self.parentController.navigationController popViewControllerAnimated:YES];
 	}
+    
+    CKObjectProperty* property = [self objectProperty];
+    [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [property.object bind:property.keyPath withBlock:^(id value){
+        self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
+    }];
+    [NSObject endBindingsContext];
 }
 
 @end
