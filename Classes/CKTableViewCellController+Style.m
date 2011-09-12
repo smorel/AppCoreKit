@@ -290,11 +290,4 @@ NSString* CKStyleCellFlags = @"flags";
     [super insertSubview:view atIndex:index];
 }
 
-- (void)addSubview:(UIView *)view{
-    if([view isKindOfClass:[UITableViewCell class]]){
-        int i =3;
-    }
-    [super addSubview:view];
-}
-
 @end

@@ -16,6 +16,9 @@
 #import "CKItemViewController+StyleManager.h"
 #import "CKNSObject+bindings.h"
 #include "CKSheetController.h"
+#import "CKStyleManager.h"
+#import "CKUIView+Style.h"
+#import "CKUIViewController+Style.h"
 
 //
 
@@ -23,8 +26,6 @@
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 @property (nonatomic, retain) UIView* placeHolderViewDuringKeyboardOrSheet;
-@property (nonatomic, retain) UIBarButtonItem *editButton;
-@property (nonatomic, retain) UIBarButtonItem *doneButton;
 @property (nonatomic, assign, readwrite) int currentPage;
 @property (nonatomic, assign, readwrite) int numberOfPages;
 @property (nonatomic, retain, readwrite) UISearchBar* searchBar;
@@ -239,15 +240,23 @@
     switch(type){
         case CKObjectTableViewControllerEditableTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            if(!self.editButton){
+                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            }
+            if(!self.doneButton){
+                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            }
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            if(!self.editButton){
+                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            }
+            if(!self.doneButton){
+                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            }
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
@@ -392,6 +401,20 @@
         _placeHolderViewDuringKeyboardOrSheet.frame = self.tableViewContainer.frame;
 	}
 	
+    
+    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+    
+    if(self.editButton){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:nil];
+        [self.editButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    if(self.doneButton){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:nil];
+        [self.doneButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {

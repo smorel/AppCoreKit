@@ -162,6 +162,13 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
  */
 @property (nonatomic, retain, readonly) UISegmentedControl* segmentedControl;
 
+
+///-----------------------------------
+/// @name Editing Customization
+///-----------------------------------
+@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
+
 //private
 - (void)didSearch:(NSString*)text;
 
