@@ -20,4 +20,10 @@
 											   UITableViewCellSeparatorStyleSingleLineEtched);
 }
 
+- (void)styleMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewStyle",
+                                               UITableViewStylePlain,
+											   UITableViewStyleGrouped);
+}
+
 @end

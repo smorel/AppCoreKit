@@ -60,6 +60,20 @@
 	return (object == nil) ? CGPointMake(10,10) : [object CGPointValue];
 }
 
++ (UIEdgeInsets)parseStringToUIEdgeInsets:(NSString*)str{
+    NSArray* components = [str componentsSeparatedByString:@" "];
+	NSAssert([components count] == 4,@"invalid insets format");
+	return UIEdgeInsetsMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue],[[components objectAtIndex:2]floatValue],[[components objectAtIndex:3]floatValue]);
+}
+
++ (UIEdgeInsets)convertUIEdgeInsetsFromObject:(id)object{
+    if([object isKindOfClass:[NSString class]]){
+		UIEdgeInsets insets = [NSValueTransformer parseStringToUIEdgeInsets:object];
+		return insets;
+	}
+	return UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
 + (CGColorRef)convertCGColorRefFromObject:(id)object{
     UIColor* color = [UIColor convertFromObject:object];
     return [color CGColor];

@@ -27,6 +27,7 @@
 	UITableViewStyle _style;
 	BOOL _stickySelection;
 	NSIndexPath *_selectedIndexPath;
+    UIEdgeInsets _tableInsets;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
@@ -34,6 +35,7 @@
 @property (nonatomic, assign) UITableViewStyle style;
 @property (nonatomic, retain) UIView *backgroundView;
 @property (nonatomic, assign) BOOL stickySelection;
+@property (nonatomic, assign) UIEdgeInsets tableInsets;
 
 - (id)initWithStyle:(UITableViewStyle)style;
 - (void)clearSelection:(BOOL)animated;

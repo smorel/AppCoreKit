@@ -40,6 +40,10 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(CGAffineTransform)];
 		results.size = sizeof(CGAffineTransform);
 	}
+    else if([results.className isEqual:@"UIEdgeInsets"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(UIEdgeInsets)];
+		results.size = sizeof(UIEdgeInsets);
+	}
 	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);

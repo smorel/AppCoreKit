@@ -190,6 +190,17 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
                                                                                                    indexPath:indexPath 
                                                                                             parentController:[params parentController]];
     
+    if([staticController isKindOfClass:[CKTableViewCellController class]]){
+        CKTableViewCellController* staticCellController = (CKTableViewCellController*)staticController;
+        if(staticCellController.cellStyle != CKTableViewCellStylePropertyGrid
+           && staticCellController.cellStyle != CKTableViewCellStyleValue3){
+            return nil;
+        }
+    }
+    else{
+        return nil;
+    }
+    
     staticController.initCallback = [self initCallback];
     staticController.setupCallback = [self setupCallback];
     staticController.selectionCallback = [self selectionCallback];
