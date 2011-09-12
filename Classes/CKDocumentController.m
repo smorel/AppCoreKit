@@ -259,6 +259,23 @@
 	}
 }
 
+
+- (NSString*)headerTitleForSection:(NSInteger)section{
+    return nil;
+}
+
+- (UIView*)headerViewForSection:(NSInteger)section{
+    return nil;
+}
+
+- (NSString*)footerTitleForSection:(NSInteger)section{
+    return nil;
+}
+
+- (UIView*)footerViewForSection:(NSInteger)section{
+    return nil;
+}
+
 @end
 
 @implementation CKDocumentController
