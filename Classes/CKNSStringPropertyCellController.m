@@ -88,7 +88,8 @@
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+       || self.cellStyle != CKTableViewCellStylePropertyGrid){
         cell.textLabel.text = _(descriptor.name);
     }
 	

@@ -16,6 +16,9 @@
 #import "CKNSObject+Bindings.h"
 #import "CKItemViewController+StyleManager.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKUIView+Style.h"
+
+//#import <objc/runtime.h>
 
 #ifdef DEBUG 
 #import "CKPropertyGridEditorController.h"
@@ -82,6 +85,62 @@
     
     [super setAccessoryType:theAccessoryType];
 }
+
+/* Tests for customizing Delete button and editing control
+- (void)willTransitionToState:(UITableViewCellStateMask)state{
+    [super willTransitionToState:state];
+    
+    NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
+    NSMutableDictionary* myStyle = [controllerStyle styleForObject:self propertyName:@"tableViewCell"];
+    
+    switch(state){
+        case UITableViewCellStateShowingEditControlMask:{
+            for(UIView* view in [self subviews]){
+                if([[[view class]description]isEqualToString:@"UITableViewCellEditControl"]){
+                    NSMutableDictionary* editControlStyle = [myStyle styleForObject:view propertyName:nil];
+                    [[view class] applyStyle:editControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
+                }
+            }
+            break;
+        }
+        case 3:
+        case UITableViewCellStateShowingDeleteConfirmationMask:{
+            for(UIView* view in [self subviews]){
+                if([[[view class]description]isEqualToString:@"UITableViewCellDeleteConfirmationControl"]){
+                    Class type = [view class];
+                    while(type){
+                        NSLog(@"%@",[type description]);
+                        type = class_getSuperclass(type);
+                    }
+                    
+                    NSArray* allProperties = [view allPropertyDescriptors];
+                    for(CKClassPropertyDescriptor* desc in allProperties){
+                        NSLog(@"%@",desc.name);
+                    }
+                    
+                     for(UIView* subview in [view subviews]){
+                         Class type = [subview class];
+                         while(type){
+                             NSLog(@"%@",[type description]);
+                             type = class_getSuperclass(type);
+                         }
+                         
+                         NSArray* allProperties = [subview allPropertyDescriptors];
+                         for(CKClassPropertyDescriptor* desc in allProperties){
+                             NSLog(@"%@",desc.name);
+                         }
+                     }
+                    
+                    
+                    NSMutableDictionary* deleteControlStyle = [myStyle styleForObject:view propertyName:nil];
+                    [[view class] applyStyle:deleteControlStyle toView:view appliedStack:[NSMutableSet set] delegate:nil];
+                }
+            }
+            break;
+        }
+    }
+}
+ */
 
 @end
 
