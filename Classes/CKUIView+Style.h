@@ -125,6 +125,7 @@ extern NSString* CKStyleBorderStyle;
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
++ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 
 @end
 
