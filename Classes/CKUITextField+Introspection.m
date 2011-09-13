@@ -20,4 +20,48 @@
 @dynamic returnKeyType;                       
 @dynamic enablesReturnKeyAutomatically;   
 */
+
+- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+                                               UITextAlignmentLeft,
+											   UITextAlignmentCenter,
+											   UITextAlignmentRight);
+}
+
+- (void)borderStyleMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextBorderStyle",
+                                               UITextBorderStyleNone,
+                                               UITextBorderStyleLine,
+                                               UITextBorderStyleBezel,
+                                               UITextBorderStyleRoundedRect
+                                               );
+}
+
+- (void)clearButtonModeMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+                                               UITextFieldViewModeNever,
+                                               UITextFieldViewModeWhileEditing,
+                                               UITextFieldViewModeUnlessEditing,
+                                               UITextFieldViewModeAlways
+                                               );
+}
+
+- (void)leftViewModeMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+                                               UITextFieldViewModeNever,
+                                               UITextFieldViewModeWhileEditing,
+                                               UITextFieldViewModeUnlessEditing,
+                                               UITextFieldViewModeAlways
+                                               );
+}
+
+- (void)rightViewModeMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+                                               UITextFieldViewModeNever,
+                                               UITextFieldViewModeWhileEditing,
+                                               UITextFieldViewModeUnlessEditing,
+                                               UITextFieldViewModeAlways
+                                               );
+}
+
 @end

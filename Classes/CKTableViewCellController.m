@@ -232,8 +232,9 @@
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style {
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	CKTableViewCellStyle thecellStyle = style;
-	if([controllerStyle containsObjectForKey:CKStyleCellType])
+	if([controllerStyle containsObjectForKey:CKStyleCellType]){
 		thecellStyle = [controllerStyle cellStyle];
+    }
     
 	self.cellStyle = thecellStyle;
 	
@@ -251,8 +252,12 @@
 }
 
 - (NSString *)identifier {
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
     if(_createCallback){
         [_createCallback execute:self];
+        if([controllerStyle containsObjectForKey:CKStyleCellType]){
+            self.cellStyle = [controllerStyle cellStyle];
+        }
     }
 	NSString* groupedTableModifier = @"";
 	UIView* parentView = [self parentControllerView];
@@ -272,7 +277,6 @@
 		}
 	}
 	
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	return [NSString stringWithFormat:@"%@-<%p>-%@-%@",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @""];
 }
 
@@ -682,7 +686,9 @@
                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];
 	
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, 11, 
+    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : 11;
+	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
                                      MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
 }
 
@@ -702,7 +708,18 @@
     CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                                    constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                        lineBreakMode:cell.textLabel.lineBreakMode];
-    return CGRectIntegral(CGRectMake(10 + maxWidth - size.width,11,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+    
+    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : 11;
+    if(cell.textLabel.textAlignment == UITextAlignmentRight){
+        return CGRectIntegral(CGRectMake(10 + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+    }
+    else if(cell.textLabel.textAlignment == UITextAlignmentLeft){
+        return CGRectIntegral(CGRectMake(10,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+    }
+    
+    //else Center
+    return CGRectIntegral(CGRectMake(10 + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
 }
 
 //PropertyGrid layout
@@ -787,6 +804,12 @@
     //You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
 	if(self.cellStyle == CKTableViewCellStyleValue3){
+        
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        }
+        
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
 		}

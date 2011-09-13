@@ -31,3 +31,8 @@ extern NSString* CKStyleFontName;
 @interface UILabel (CKStyle)
 
 @end
+
+
+@interface UITextField (CKStyle)
+
+@end
