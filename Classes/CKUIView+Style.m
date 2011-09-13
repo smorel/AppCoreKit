@@ -174,6 +174,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 						view.backgroundColor = [UIColor clearColor];
 						[view insertSubview:gradientView atIndex:0];
 					}
+                    
+                    [NSObject applyStyleByIntrospection:myViewStyle toObject:gradientView appliedStack:appliedStack delegate:(id)delegate];
 		
 					backgroundView = gradientView;
 				}
