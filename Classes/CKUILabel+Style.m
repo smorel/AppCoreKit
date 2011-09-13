@@ -54,4 +54,32 @@ NSString* CKStyleFontName = @"fontName";
 
 @end
 
+@implementation UITextField (CKStyle)
+
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleFontName,CKStyleFontSize,nil]];
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
+	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
+		UITextField* txtField = (UITextField*)view;
+		NSMutableDictionary* myLabelStyle = style;
+		if(myLabelStyle){
+			
+			NSString* fontName = txtField.font.fontName;
+			if([myLabelStyle containsObjectForKey:CKStyleFontName])
+				fontName= [myLabelStyle fontName];
+			CGFloat fontSize = txtField.font.pointSize;
+			if([myLabelStyle containsObjectForKey:CKStyleFontSize])
+				fontSize= [myLabelStyle fontSize];
+			txtField.font = [UIFont fontWithName:fontName size:fontSize];
+			
+			return YES;
+		}
+	}
+	return NO;
+}
+
+@end
+
 //special case for font as fonts have no property size !
