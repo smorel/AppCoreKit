@@ -73,6 +73,18 @@ NSString* CKStyleFontName = @"fontName";
 			if([myLabelStyle containsObjectForKey:CKStyleFontSize])
 				fontSize= [myLabelStyle fontSize];
 			txtField.font = [UIFont fontWithName:fontName size:fontSize];
+            
+            
+			if([myLabelStyle containsObjectForKey:@"borderStyle"]){
+                //As it is a keyword for background windows ... we should apply it manually here
+                txtField.borderStyle = [myLabelStyle enumValueForKey:@"borderStyle" 
+                   withEnumDescriptor:CKEnumDefinition(@"UITextBorderStyle",
+                                                       UITextBorderStyleNone,
+                                                       UITextBorderStyleLine,
+                                                       UITextBorderStyleBezel,
+                                                       UITextBorderStyleRoundedRect
+                                                       )];
+            }
 			
 			return YES;
 		}
