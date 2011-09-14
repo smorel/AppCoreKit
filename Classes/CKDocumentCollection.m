@@ -18,6 +18,11 @@
 @synthesize delegate = _delegate;
 @synthesize count = _count;
 
+@synthesize addObjectsBlock;
+@synthesize removeObjectsBlock;
+@synthesize replaceObjectBlock;
+@synthesize clearBlock;
+
 - (id)init{
 	[super init];
 	self.autosave = NO;
