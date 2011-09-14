@@ -164,18 +164,76 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	[super dealloc];
 }
 
+/*
++ (void)printArray:(NSArray*)array inString:(NSMutableString*)str{
+}
+
+- (NSString*)deepDescription:(NSMutableDictionary*)stack{
+    NSString* d = [stack objectForKey:self];
+    if(d){
+        return d;
+    }
+    
+    
+    NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
+    [stack setObject:desc forKey:self];
+	NSArray* allProperties = [self allPropertyDescriptors];
+	for(CKClassPropertyDescriptor* property in allProperties){
+		if(property.isReadOnly == NO){
+			id object = [self valueForKey:property.name];
+            NSString* propertyString = nil;
+            if([object isKindOfClass:[CKModelObject class]]){
+                propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object printDebug:stack]];
+            }
+            else if([object isKindOfClass:[NSArray class]]){
+                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
+                [CKModelObject printArray:object inString:descArray];
+                [desc appendString:descArray];
+            }
+            else if([object isKindOfClass:[CKDocumentCollection class]]){
+                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
+                [CKModelObject printArray:[object allObjects] inString:descArray];
+                [desc appendString:descArray];
+            }
+            else if([object isKindOfClass:[NSSet class]]){
+                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
+                [CKModelObject printArray:[object allObjects] inString:descArray];
+                [desc appendString:descArray];
+            }
+            else if([object isKindOfClass:[NSDictionary class]]){
+                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
+                [CKModelObject printArray:[object allObjects] inString:descArray];
+                [desc appendString:descArray];
+            }
+            else{
+                propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
+            }
+			[desc appendString:propertyString];
+		}
+	}
+	[desc appendString:@"}"];
+    
+	return desc;
+}*/
+
 - (NSString*)description{
 	NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
 			id object = [self valueForKey:property.name];
-			NSString* propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
+            NSString* propertyString = nil;
+            if([object isKindOfClass:[CKModelObject class]]){
+                propertyString = [NSMutableString stringWithFormat:@"%@ : {%@ : <%p>}\n",property.name,[object className],object];
+            }
+            else{
+                propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
+            }
 			[desc appendString:propertyString];
 		}
 	}
 	[desc appendString:@"}"];
-	 
+    
 	return desc;
 }
 
