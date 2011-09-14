@@ -76,12 +76,10 @@
             CGFloat realWidth = cell.contentView.frame.size.width;
             CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - 10;
             CGFloat textFieldX = realWidth - 10 - textFieldWidth;
-            
-            /*CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + 10;
-            CGFloat textFieldWidth = realWidth - 10 - textFieldX;
-             */
-            
+            if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
+                textFieldWidth = realWidth - 10;
+                textFieldX = 10;
+            }
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
         }
     }
