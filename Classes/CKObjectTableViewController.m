@@ -166,6 +166,13 @@
     [self.view insertSubview:_placeHolderViewDuringKeyboardOrSheet atIndex:0];
 }
 
+- (void)viewDidUnload{
+    [super viewDidUnload];
+    self.placeHolderViewDuringKeyboardOrSheet = nil;
+	self.searchBar = nil;
+	self.segmentedControl = nil;
+}
+
 - (void)postInit{
 	[super postInit];
 	_rowInsertAnimation = UITableViewRowAnimationFade;
