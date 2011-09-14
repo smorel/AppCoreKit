@@ -45,6 +45,10 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
 //private
 - (void)postInit;
 
+/*
+- (NSString*)deepDescription;
+*/
+
 @end
 
 
