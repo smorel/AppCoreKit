@@ -389,10 +389,10 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
         
         if([CKStyleManager logEnabled]){
             if([myViewStyle isEmpty]){
-                NSLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
+                CKDebugLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
             }
             else{
-                NSLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
+                CKDebugLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
             }
         }
         

@@ -11,6 +11,7 @@
 
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKDebug.h"
 
 //CKCascadingTreeItemFormat
 
@@ -65,7 +66,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 			}
 		}
 		else{
-			NSLog(@"Invalid format for '%@' : Cannot find end selector character ']'",format);
+			CKDebugLog(@"Invalid format for '%@' : Cannot find end selector character ']'",format);
 		}
 	}
 	else{//no selectors
@@ -709,7 +710,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
             importFileExtension = mainExtension;
         }
         NSString* path = [[NSBundle mainBundle]pathForResource:importFileName ofType:importFileExtension];
-        //NSLog(@"processImportsForDictionary %@ with path %@",importFileName,path);
+        //CKDebugLog(@"processImportsForDictionary %@ with path %@",importFileName,path);
         [self importContentOfFile:path];
 	}
 	[dictionary removeObjectForKey:CKCascadingTreeImport];

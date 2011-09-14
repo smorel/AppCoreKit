@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>
+#import "CKDebug.h"
 
 #include <execinfo.h>
 #import "CKUIView+Introspection.h"
@@ -93,7 +94,7 @@ static NSString* getPropertyType(objc_property_t property) {
 		subObject = [subObject valueForKey:path];
 	}
 	if(subObject == nil){
-		NSLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
+		CKDebugLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 		return nil;
 	}
 	return [self propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];

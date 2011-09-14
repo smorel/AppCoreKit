@@ -11,6 +11,7 @@
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Introspection.h"
 #import "CKWeakRef.h"
+#import "CKDebug.h"
 
 @interface CKObjectProperty()
 @property (nonatomic,retain) CKWeakRef* subObject;
@@ -135,7 +136,7 @@
 - (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter{
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
+			CKDebugLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -166,7 +167,7 @@
 - (CKDocumentCollection*)editorCollectionForNewlyCreated{
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
+			CKDebugLog(@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -198,7 +199,7 @@
 	NSValue* valueCoordinate = [NSValue value:&coordinate withObjCType:@encode(CLLocationCoordinate2D)];
 	if(keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(self.subObject.object,@"unable to find property '%@' in '%@'",keyPath,self.object);
+			CKDebugLog(self.subObject.object,@"unable to find property '%@' in '%@'",keyPath,self.object);
 			return nil;
 		}
 		
@@ -229,7 +230,7 @@
 - (Class)tableViewCellControllerType{
 	if(self.keyPath != nil){
 		if(self.subObject.object == nil){
-			NSLog(@"unable to find property '%@' in '%@'",self.keyPath,self.object);
+			CKDebugLog(@"unable to find property '%@' in '%@'",self.keyPath,self.object);
 			return nil;
 		}
 		
