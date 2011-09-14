@@ -52,6 +52,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.addObjectsBlock){
+        self.addObjectsBlock(theObjects,indexes); 
+    }
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
@@ -68,6 +72,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.removeObjectsBlock){
+        self.removeObjectsBlock(toRemove,indexSet); 
+    }
 }
 
 - (void)removeAllObjects{
@@ -86,6 +94,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.clearBlock){
+        self.clearBlock(); 
+    }
 }
 
 - (BOOL)containsObject:(id)object{
@@ -114,6 +126,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.replaceObjectBlock){
+        self.replaceObjectBlock(other,object,index); 
+    }
 }
 
 @end

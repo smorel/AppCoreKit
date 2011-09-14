@@ -11,6 +11,9 @@
 #import "CKFeedSource.h"
 #import "CKDocumentStorage.h"
 
+typedef void(^CKDocumentCollectionBlock)(NSArray* objects,NSIndexSet* indexes);
+typedef void(^CKDocumentCollectionReplaceBlock)(id object,id replacedObject,NSInteger index);
+typedef void(^CKDocumentCollectionClearBlock)();
 
 /** TODO : Implements fast enumeration protocol
  */
@@ -27,6 +30,11 @@
 @property (nonatomic,assign) BOOL autosave;
 @property (nonatomic,assign) id delegate;
 @property (nonatomic,assign) NSInteger count;
+
+@property (nonatomic,copy) CKDocumentCollectionBlock addObjectsBlock;
+@property (nonatomic,copy) CKDocumentCollectionBlock removeObjectsBlock;
+@property (nonatomic,copy) CKDocumentCollectionReplaceBlock replaceObjectBlock;
+@property (nonatomic,copy) CKDocumentCollectionClearBlock clearBlock;
 
 - (id)initWithFeedSource:(CKFeedSource*)source;
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
