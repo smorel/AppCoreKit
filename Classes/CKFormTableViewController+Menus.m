@@ -43,6 +43,7 @@
     [descriptor setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         controller.cellStyle = ((subTitle != nil) ? UITableViewCellStyleSubtitle : UITableViewCellStyleDefault);
+        controller.name = [NSString stringWithFormat:@"cellDescriptorWithTitle<%d>",controller.cellStyle];
         return (id)nil;
     }];
     [descriptor setSetupBlock:^id(id value) {
