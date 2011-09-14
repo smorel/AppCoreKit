@@ -17,6 +17,7 @@
 #import "CKGradientView.h"
 #import "CKNSArrayAdditions.h"
 #import "CKStyle+Parsing.h"
+#import "CKDebug.h"
 
 NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
@@ -153,10 +154,10 @@ NSString* CKStyleCellFlags = @"flags";
     
     if([CKStyleManager logEnabled]){
         if([controllerStyle isEmpty]){
-            NSLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
+            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
         }
         else{
-            NSLog(@"found style for item controller %@",self);
+            CKDebugLog(@"found style for item controller %@",self);
         }
     }
     

@@ -9,6 +9,7 @@
 #import "CKUIViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
+#import "CKDebug.h"
 
 
 @implementation UIViewController (CKStyle)
@@ -22,10 +23,10 @@
 	
     if([CKStyleManager logEnabled]){
         if([controllerStyle isEmpty]){
-            NSLog(@"did not find style for controller %@",self);
+            CKDebugLog(@"did not find style for controller %@",self);
         }
         else{
-            NSLog(@"found style for controller %@",self);
+            CKDebugLog(@"found style for controller %@",self);
         }
     }
     

@@ -340,15 +340,15 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 //For Migration
 - (void)propertyChanged:(CKClassPropertyDescriptor*)property serializedObject:(id)object{
-	NSLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
+	CKDebugLog(@"property %@ type %@ found in archive has differs from current property type %@\nDo migration if needed.",property.name,[object className],[property className]);
 }
 
 - (void)propertyRemoved:(NSString*)propertyName serializedObject:(id)object{
-	NSLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
+	CKDebugLog(@"property %@ in archive disappeard in model object of type %@\nDo migration if needed.",propertyName,[self className]);
 }
 
 - (void)propertyAdded:(CKClassPropertyDescriptor*)property{
-	NSLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
+	CKDebugLog(@"property %@ not found in archive for object of type %@\nDo migration if needed.",property.name,[self className]);
 }
 
 - (id)valueForUndefinedKey:(NSString *)key{

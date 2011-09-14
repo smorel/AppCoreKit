@@ -11,6 +11,7 @@
 
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
+#import "CKDebug.h"
 
 @interface CKItemViewController()
 @property (nonatomic, retain) CKWeakRef *viewRef;
