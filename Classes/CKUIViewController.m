@@ -90,7 +90,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
         NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
     }
 }
@@ -101,7 +101,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
         NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
         [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
     }
 }
@@ -133,11 +133,11 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
 
     if(self.navigationItem.leftBarButtonItem){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
     }
     if(self.navigationItem.rightBarButtonItem){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
         [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
     }
     
