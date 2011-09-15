@@ -190,6 +190,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	return YES;
 }
 
+#ifdef DEBUG
 - (void)CheckForBlockCopy{
     if(CKDebugCheckForBlockCopyCurrentState == CKDebugCheckForBlockCopyState_none){
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugCheckForBlockCopy"]boolValue];
@@ -217,5 +218,6 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     [self CheckForBlockCopy];
     return [super retain];
 }
+#endif
 
 @end
