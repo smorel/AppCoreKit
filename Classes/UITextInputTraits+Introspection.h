@@ -64,7 +64,7 @@ void introspectTraitsProperties();
 }\
 \
 - (id)valueForKey:(NSString *)key{\
-	[self introspectTraitsProperties];\
+	introspectTraitsProperties();\
 	if ([textInputTraitsProperties containsObject:key])\
 	{\
         UITextInputTraits* textInputTraits = nil;\
@@ -75,7 +75,7 @@ void introspectTraitsProperties();
 }\
 \
 - (void)setValue:(id)value forKey:(NSString *)key{\
-	[self introspectTraitsProperties];\
+    introspectTraitsProperties();\
 	if ([textInputTraitsProperties containsObject:key])\
 	{\
         UITextInputTraits* textInputTraits = nil;\
@@ -86,7 +86,7 @@ void introspectTraitsProperties();
 }\
 \
 - (void)setValue:(id)value forKeyPath:(NSString *)keyPath{\
-	[self introspectTraitsProperties];\
+    introspectTraitsProperties();\
 	if ([textInputTraitsProperties containsObject:keyPath])\
 	{\
         UITextInputTraits* textInputTraits = nil;\
