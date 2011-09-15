@@ -12,12 +12,4 @@
 /** TODO
  */
 @interface UITextField (CKIntrospectionAdditions)
-/* SEE HOW TO MAKE UITextResponder KVO complient
-@property(nonatomic,assign) UITextAutocapitalizationType autocapitalizationType;
-@property(nonatomic,assign) UITextAutocorrectionType autocorrectionType;        
-@property(nonatomic,assign) UIKeyboardType keyboardType;   
-@property(nonatomic,assign) UIKeyboardAppearance keyboardAppearance;            
-@property(nonatomic,assign) UIReturnKeyType returnKeyType;                       
-@property(nonatomic,assign) BOOL enablesReturnKeyAutomatically;                  
-*/
 @end

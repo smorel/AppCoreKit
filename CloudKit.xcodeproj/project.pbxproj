@@ -50,6 +50,10 @@
 		751F1EE213D0C3990041900C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EE013D0C3990041900C /* JSONKit.m */; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EFD13D0E95B0041900C /* CKUserDefaults.m */; };
+		75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7114228D0D0003EBB6 /* UITextInputTraits+Introspection.h */; };
+		75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 75305B7214228D0E0003EBB6 /* UITextInputTraits+Introspection.m */; };
+		75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7614228EC10003EBB6 /* UITextView+Introspection.h */; };
+		75305B7914228EC20003EBB6 /* UITextView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 75305B7714228EC10003EBB6 /* UITextView+Introspection.m */; };
 		753178141417E4E4009310A8 /* CKNavigationBar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178121417E4E4009310A8 /* CKNavigationBar+Style.h */; };
 		753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178131417E4E4009310A8 /* CKNavigationBar+Style.m */; };
 		753178191417E4F9009310A8 /* CKUIToolbar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178171417E4F9009310A8 /* CKUIToolbar+Style.h */; };
@@ -543,6 +547,10 @@
 		751F1EE013D0C3990041900C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = Vendor/JSONKit/JSONKit.m; sourceTree = "<group>"; };
 		751F1EFC13D0E95B0041900C /* CKUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUserDefaults.h; path = Classes/CKUserDefaults.h; sourceTree = "<group>"; };
 		751F1EFD13D0E95B0041900C /* CKUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUserDefaults.m; path = Classes/CKUserDefaults.m; sourceTree = "<group>"; };
+		75305B7114228D0D0003EBB6 /* UITextInputTraits+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextInputTraits+Introspection.h"; path = "Classes/UITextInputTraits+Introspection.h"; sourceTree = "<group>"; };
+		75305B7214228D0E0003EBB6 /* UITextInputTraits+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextInputTraits+Introspection.m"; path = "Classes/UITextInputTraits+Introspection.m"; sourceTree = "<group>"; };
+		75305B7614228EC10003EBB6 /* UITextView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Introspection.h"; path = "Classes/UITextView+Introspection.h"; sourceTree = "<group>"; };
+		75305B7714228EC10003EBB6 /* UITextView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Introspection.m"; path = "Classes/UITextView+Introspection.m"; sourceTree = "<group>"; };
 		753178121417E4E4009310A8 /* CKNavigationBar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNavigationBar+Style.h"; path = "Classes/CKNavigationBar+Style.h"; sourceTree = "<group>"; };
 		753178131417E4E4009310A8 /* CKNavigationBar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNavigationBar+Style.m"; path = "Classes/CKNavigationBar+Style.m"; sourceTree = "<group>"; };
 		753178171417E4F9009310A8 /* CKUIToolbar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIToolbar+Style.h"; sourceTree = "<group>"; };
@@ -1873,6 +1881,8 @@
 				7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */,
 				7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */,
 				7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */,
+				75305B7614228EC10003EBB6 /* UITextView+Introspection.h */,
+				75305B7714228EC10003EBB6 /* UITextView+Introspection.m */,
 				7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */,
 				7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */,
 				7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */,
@@ -1883,6 +1893,8 @@
 				753178241417E64C009310A8 /* CKUIToolbar+introspection.m */,
 				753178271417E9E2009310A8 /* CKUIBarButtonItem+Introspection.h */,
 				753178281417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m */,
+				75305B7114228D0D0003EBB6 /* UITextInputTraits+Introspection.h */,
+				75305B7214228D0E0003EBB6 /* UITextInputTraits+Introspection.m */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -2200,6 +2212,8 @@
 				753178211417E61D009310A8 /* CKUINavigationBar+Introspection.h in Headers */,
 				753178251417E64C009310A8 /* CKUIToolbar+introspection.h in Headers */,
 				753178291417E9E3009310A8 /* CKUIBarButtonItem+Introspection.h in Headers */,
+				75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */,
+				75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2539,6 +2553,8 @@
 				753178221417E61D009310A8 /* CKUINavigationBar+Introspection.m in Sources */,
 				753178261417E64C009310A8 /* CKUIToolbar+introspection.m in Sources */,
 				7531782A1417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m in Sources */,
+				75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */,
+				75305B7914228EC20003EBB6 /* UITextView+Introspection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
