@@ -9,60 +9,10 @@
 #import "CKUITableViewCell+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKModelObject.h"
-
-static NSMutableSet *textInputTraitsProperties = nil;
+#import "UITextInputTraits+Introspection.h"
 
 @implementation UITextField (CKIntrospectionAdditions)
 
-- (void)autocapitalizationTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAutocapitalizationType",
-                                               UITextAutocapitalizationTypeNone,
-                                               UITextAutocapitalizationTypeWords,
-                                               UITextAutocapitalizationTypeSentences,
-                                               UITextAutocapitalizationTypeAllCharacters);
-}
-
-- (void)autocorrectionTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAutocorrectionType",
-                                               UITextAutocorrectionTypeDefault,
-                                               UITextAutocorrectionTypeNo,
-                                               UITextAutocorrectionTypeYes);
-}
-
-- (void)keyboardTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIKeyboardType",
-                                               UIKeyboardTypeDefault,                
-                                               UIKeyboardTypeASCIICapable,           
-                                               UIKeyboardTypeNumbersAndPunctuation,  
-                                               UIKeyboardTypeURL,                    
-                                               UIKeyboardTypeNumberPad,              
-                                               UIKeyboardTypePhonePad,               
-                                               UIKeyboardTypeNamePhonePad,          
-                                               UIKeyboardTypeEmailAddress,      
-                                               UIKeyboardTypeDecimalPad,                                                            
-                                               UIKeyboardTypeAlphabet);
-}
-
-- (void)keyboardAppearanceMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIKeyboardAppearance",
-                                               UIKeyboardAppearanceDefault,
-                                               UIKeyboardAppearanceAlert  );
-}
-
-- (void)returnKeyTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIReturnKeyType",
-                                               UIReturnKeyDefault,
-                                               UIReturnKeyGo,
-                                               UIReturnKeyGoogle,
-                                               UIReturnKeyJoin,
-                                               UIReturnKeyNext,
-                                               UIReturnKeyRoute,
-                                               UIReturnKeySearch,
-                                               UIReturnKeySend,
-                                               UIReturnKeyYahoo,
-                                               UIReturnKeyDone,
-                                               UIReturnKeyEmergencyCall  );
-}
 
 - (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
@@ -107,57 +57,6 @@ static NSMutableSet *textInputTraitsProperties = nil;
                                                );
 }
 
-- (void)introspectTraitsProperties{
-    if (!textInputTraitsProperties)
-	{
-		textInputTraitsProperties = [[NSMutableSet alloc] init];
-		unsigned int count = 0;
-		objc_property_t *properties = protocol_copyPropertyList(@protocol(UITextInputTraits), &count);
-		for (unsigned int i = 0; i < count; i++)
-		{
-			objc_property_t property = properties[i];
-			NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
-			[textInputTraitsProperties addObject:propertyName];
-		}
-		free(properties);
-	}
-}
-
-//Overload to support KVO on traits properties!
-- (id)valueForKey:(NSString *)key{
-	[self introspectTraitsProperties];
-	if ([textInputTraitsProperties containsObject:key])
-	{
-        UITextInputTraits* textInputTraits = nil;
-        object_getInstanceVariable(self, "_traits", (void **)(&textInputTraits));
-		return [textInputTraits valueForKey:key];
-	}
-		
-    return [super valueForKey:key];
-}
-
-- (void)setValue:(id)value forKey:(NSString *)key{
-	[self introspectTraitsProperties];
-	if ([textInputTraitsProperties containsObject:key])
-	{
-        UITextInputTraits* textInputTraits = nil;
-        object_getInstanceVariable(self, "_traits", (void **)(&textInputTraits));
-		return [textInputTraits setValue:value forKey:key];
-	}
-    
-    return [super setValue:value forKey:key];
-}
-
-- (void)setValue:(id)value forKeyPath:(NSString *)keyPath{
-	[self introspectTraitsProperties];
-	if ([textInputTraitsProperties containsObject:keyPath])
-	{
-        UITextInputTraits* textInputTraits = nil;
-        object_getInstanceVariable(self, "_traits", (void **)(&textInputTraits));
-		return [textInputTraits setValue:value forKeyPath:keyPath];
-	}
-    
-    return [super setValue:value forKeyPath:keyPath];
-}
+UITEXTINPUTTRAITS_IMPLEMENTATION;
 
 @end
