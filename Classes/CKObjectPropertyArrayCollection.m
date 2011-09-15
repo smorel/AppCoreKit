@@ -119,7 +119,8 @@
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
 	id object = [[_property value] objectAtIndex:index];
 	[[_property value] removeObjectAtIndex:index];
-	[[_property value] insertObject:other atIndex:index];	
+	[[_property value] insertObject:other atIndex:index];
+	self.count = [[_property value] count];	
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
 	
