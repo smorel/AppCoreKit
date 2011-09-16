@@ -56,5 +56,6 @@ typedef enum CKInterfaceOrientation{
 
 - (void)applyStyleForLeftBarButtonItem;
 - (void)applyStyleForRightBarButtonItem;
+- (void)applyStyleForNavigation;
 
 @end
