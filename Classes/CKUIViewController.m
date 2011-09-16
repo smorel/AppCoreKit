@@ -12,6 +12,7 @@
 #import "CKDebug.h"
 #include <execinfo.h>
 #import "CKNSObject+Bindings.h"
+#import "CKModelObject.h"
 
 typedef enum CKDebugCheckForBlockCopyState{
     CKDebugCheckForBlockCopyState_none,
@@ -36,9 +37,18 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 @synthesize rightButton = _rightButton;
 @synthesize leftButton = _leftButton;
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
+@synthesize supportedInterfaceOrientations;
+
+- (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
+    metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
+                                               CKInterfaceOrientationPortrait,
+                                               CKInterfaceOrientationLandscape,
+                                               CKInterfaceOrientationAll);
+}
 
 - (void)postInit {	
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
+    self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
 }
 
 - (id)init {
@@ -187,7 +197,13 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return YES;
+    if(UIInterfaceOrientationIsPortrait(interfaceOrientation)
+       && (self.supportedInterfaceOrientations & CKInterfaceOrientationPortrait))
+        return YES;
+    if(UIInterfaceOrientationIsLandscape(interfaceOrientation)
+       && (self.supportedInterfaceOrientations & CKInterfaceOrientationLandscape))
+        return YES;
+    return NO;
 }
 
 #ifdef DEBUG
