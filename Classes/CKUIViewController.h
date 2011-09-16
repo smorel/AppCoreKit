@@ -13,6 +13,12 @@
 typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
 typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 
+typedef enum CKInterfaceOrientation{
+    CKInterfaceOrientationPortrait  = 1 << 0,
+    CKInterfaceOrientationLandscape = 1 << 1,
+    CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
+}CKInterfaceOrientation;
+
 /** TODO
  */
 @interface CKUIViewController : UIViewController {
@@ -27,6 +33,7 @@ typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 @property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewDidDisappearBlock;
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidLoadBlock;
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
+@property (nonatomic,assign) CKInterfaceOrientation supportedInterfaceOrientations;
 
 ///-----------------------------------
 /// @name Navigation Buttons
