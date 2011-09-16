@@ -135,8 +135,9 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		case CKClassPropertyDescriptorTypeClass:{
 			Class c =  [NSValueTransformer convertClassFromObject:object];
-			[property setValue:[NSValue valueWithPointer:c]];
-			return [NSValue valueWithPointer:c];
+			/*[property setValue:[NSValue valueWithPointer:c]];
+			return [NSValue valueWithPointer:c];*/
+            return c;
 			break;
 		}
 		case CKClassPropertyDescriptorTypeSelector:{
