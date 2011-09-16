@@ -302,7 +302,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
 	
-	if ([theResponse statusCode] > 400) {
+	if ([theResponse statusCode] >= 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
 		NSError *error = [NSError errorWithDomain:CKWebRequestHTTPErrorDomain
 											 code:[theResponse statusCode]
@@ -354,6 +354,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	NSDictionary *responseHeaders = [theResponse allHeaderFields];
 	NSError *error = nil;
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
+    CKDebugLog(@"Recv Content-Type: %@", contentType);
 	
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
@@ -372,6 +373,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	
 	if (error) {
 		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
+        if (theFailureBlock) { theFailureBlock(error); }
 		[self markAsFinished];
 		return;
 	}
