@@ -247,6 +247,20 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[self markAsCancelled];
 }
 
+#pragma mark Connection Authentication
+
+// TODO: Implements a CKWebRequestAuthenticationDelegate to delegate all authentication challenge to the client
+// For now, this implementation disable the checking of self-signed certificates.
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    return ([[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]);
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+}
+
 #pragma mark URL Loading
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
