@@ -930,6 +930,11 @@
 	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
 	return section;
 }
 
@@ -941,6 +946,11 @@
 	if(section.hidden == YES){
 		[collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 	}
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
 	return section;
 	
 }
