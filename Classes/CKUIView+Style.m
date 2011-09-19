@@ -18,7 +18,7 @@
 #import "CKDebug.h"
 
 
-NSMutableSet* reserverKeyWords = nil;
+//NSMutableSet* reserverKeyWords = nil;
 
 NSString* CKStyleBackgroundColor = @"backgroundColor";
 NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
@@ -331,10 +331,10 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
     if([style isEmpty])
         return;
     
-	if(reserverKeyWords == nil){
-		reserverKeyWords = [[NSMutableSet set]retain];
-	}
+	/*if(reserverKeyWords == nil){
+	}*/
 	
+    NSMutableSet* reserverKeyWords = [[NSMutableSet set]retain];
 	[[self class]updateReservedKeyWords:reserverKeyWords];
 	
 	for(NSString* key in [style allKeys]){
