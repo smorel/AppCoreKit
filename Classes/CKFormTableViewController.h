@@ -174,6 +174,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 ///-----------------------------------
 
 - (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
+- (NSArray*)addSections:(NSArray *)sections;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
 

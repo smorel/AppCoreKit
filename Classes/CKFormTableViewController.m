@@ -907,7 +907,37 @@
 			[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 		}
 	}
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
 	return section;
+}
+
+
+- (NSArray*)addSections:(NSArray *)sections{
+	[_sections addObjectsFromArray:sections];
+    
+    NSMutableIndexSet* indexSet = nil;
+    for(CKFormSectionBase* section in sections){
+        section.parentController = self;
+        if(!section.hidden){
+            if(indexSet == nil){
+                indexSet = [NSMutableIndexSet indexSet];
+            }
+            NSInteger index = section.sectionVisibleIndex;
+            [indexSet addIndex:index];
+        }
+    }
+    
+    if(indexSet){
+        [self.tableView beginUpdates];
+        [self.tableView insertSections:indexSet withRowAnimation:self.rowInsertAnimation];
+        [self.tableView endUpdates];
+    }
+    
+    return sections;
 }
 
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
