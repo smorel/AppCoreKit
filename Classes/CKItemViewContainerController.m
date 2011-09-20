@@ -55,6 +55,11 @@
 	return self;
 }
 
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+}
+
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
 	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
@@ -141,10 +146,12 @@
 #pragma mark View management
 
 - (void)viewWillAppear:(BOOL)animated{
+	[super viewWillAppear:animated];
+    
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
-	[super viewWillAppear:animated];
+    
 	[self updateParams];
 }
 
