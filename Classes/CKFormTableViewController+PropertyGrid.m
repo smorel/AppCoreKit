@@ -187,7 +187,7 @@
 }
 
 - (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden{
-    return [self addSectionWithObject:object properties:[self propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
+    return [self addSectionWithObject:object properties:[CKFormSection propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
 }
 
 - (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title{
