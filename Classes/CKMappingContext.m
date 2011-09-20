@@ -264,7 +264,7 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
             *error = aggregateError(*error,CKMappingErrorCodeMissingRequieredValue,details);
             return;
         }
-        else{
+        else if([options containsObjectForKey:CKMappingDefaultValueKey]){
             [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
         }
     }
