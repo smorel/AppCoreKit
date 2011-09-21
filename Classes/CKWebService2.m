@@ -96,7 +96,7 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingString:path] : path;
 	
 	NSDictionary *theParams = nil;
-	if (self.defaultParams) {
+	if (self.defaultParams && [self.defaultParams count] > 0) {
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.defaultParams];
 		[dic addEntriesFromDictionary:params];
 		theParams = dic;
