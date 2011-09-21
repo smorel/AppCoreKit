@@ -8,6 +8,7 @@
 
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Invocation.h"
+#import "CKObjectPropertyMetaData.h"
 
 
 @implementation CKDocumentCollection
@@ -16,6 +17,11 @@
 @synthesize autosave = _autosave;
 @synthesize delegate = _delegate;
 @synthesize count = _count;
+
+@synthesize addObjectsBlock;
+@synthesize removeObjectsBlock;
+@synthesize replaceObjectBlock;
+@synthesize clearBlock;
 
 - (id)init{
 	[super init];
@@ -46,15 +52,15 @@
 	return self;
 }
 
-- (void)feedSourceMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)feedSourceMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }
 
-- (void)storageMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)storageMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }
 
-- (void)delegateMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)delegateMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 	metaData.comparable = NO;
 	metaData.hashable = NO;
@@ -68,6 +74,10 @@
 - (id)objectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Abstract Implementation");
 	return nil;
+}
+
+- (void)addObject:(id)object{
+    [self addObjectsFromArray:[NSArray arrayWithObject:object]];
 }
 
 - (void)addObjectsFromArray:(NSArray *)otherArray{

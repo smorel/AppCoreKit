@@ -13,7 +13,7 @@
 
 @implementation UIView (CKIntrospectionAdditions)
 
-- (void)subviewsMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)subviewsMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.contentType = [UIView class];
 }
 
@@ -49,8 +49,9 @@
 	}
 }
 
-- (void)autoresizingMaskMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UIViewAutoresizingNone,
+- (void)autoresizingMaskMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UIViewAutoresizing",
+                                                   UIViewAutoresizingNone,
 											   UIViewAutoresizingFlexibleLeftMargin,
 											   UIViewAutoresizingFlexibleWidth,
 											   UIViewAutoresizingFlexibleRightMargin,
@@ -59,8 +60,9 @@
 											   UIViewAutoresizingFlexibleBottomMargin);
 }
 
-- (void)contentModeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(UIViewContentModeScaleToFill,
+- (void)contentModeMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"UIViewContentMode",
+                                                   UIViewContentModeScaleToFill,
 											   UIViewContentModeScaleAspectFit,
 											   UIViewContentModeScaleAspectFill,
 											   UIViewContentModeRedraw,

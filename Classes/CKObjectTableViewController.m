@@ -16,6 +16,9 @@
 #import "CKItemViewController+StyleManager.h"
 #import "CKNSObject+bindings.h"
 #include "CKSheetController.h"
+#import "CKStyleManager.h"
+#import "CKUIView+Style.h"
+#import "CKUIViewController+Style.h"
 
 //
 
@@ -23,8 +26,6 @@
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 @property (nonatomic, retain) UIView* placeHolderViewDuringKeyboardOrSheet;
-@property (nonatomic, retain) UIBarButtonItem *editButton;
-@property (nonatomic, retain) UIBarButtonItem *doneButton;
 @property (nonatomic, assign, readwrite) int currentPage;
 @property (nonatomic, assign, readwrite) int numberOfPages;
 @property (nonatomic, retain, readwrite) UISearchBar* searchBar;
@@ -61,8 +62,6 @@
 
 @synthesize editButton;
 @synthesize doneButton;
-@synthesize rightButton;
-@synthesize leftButton;
 @dynamic selectedIndexPath;
 
 - (void)didSearch:(NSString*)text{
@@ -142,12 +141,36 @@
 }
 
 - (void)viewDidLoad{
+    _storedTableDelegate = self.tableView.delegate;
+    self.tableView.delegate = nil;
+    _storedTableDataSource = self.tableView.dataSource;
+    self.tableView.dataSource = nil;
+    
     [super viewDidLoad];
+    
+    //in case it changed in viewDidLoad
+    if(self.tableView.delegate)
+        _storedTableDelegate = self.tableView.delegate;
+    if(self.tableView.dataSource)
+        _storedTableDataSource = self.tableView.dataSource;
+    
+    //ensure they are setup :
+    if(_storedTableDelegate == nil)
+        _storedTableDelegate = self;
+    if(_storedTableDataSource == nil)
+        _storedTableDataSource = self;
     
     self.placeHolderViewDuringKeyboardOrSheet = [[[UIView alloc]initWithFrame:self.tableViewContainer.frame]autorelease];
     _placeHolderViewDuringKeyboardOrSheet.backgroundColor = [UIColor clearColor];
     _placeHolderViewDuringKeyboardOrSheet.autoresizingMask = self.tableViewContainer.autoresizingMask;
     [self.view insertSubview:_placeHolderViewDuringKeyboardOrSheet atIndex:0];
+}
+
+- (void)viewDidUnload{
+    [super viewDidUnload];
+    self.placeHolderViewDuringKeyboardOrSheet = nil;
+	self.searchBar = nil;
+	self.segmentedControl = nil;
 }
 
 - (void)postInit{
@@ -173,10 +196,7 @@
 	_indexPathToReachAfterRotation = nil;
 	[editButton release];
 	editButton = nil;
-	[rightButton release];
-	rightButton = nil;
-	[leftButton release];
-	leftButton = nil;
+	
 	[doneButton release];
 	doneButton = nil;
 	[_searchBar release];
@@ -205,7 +225,7 @@
 		self.params = [NSMutableDictionary dictionary];
 	}
 	
-	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
 	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
 	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
@@ -227,15 +247,23 @@
     switch(type){
         case CKObjectTableViewControllerEditableTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            if(!self.editButton){
+                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            }
+            if(!self.doneButton){
+                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            }
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
-            self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            if(!self.editButton){
+                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
+            }
+            if(!self.doneButton){
+                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
+            }
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
@@ -293,11 +321,17 @@
         }
         case CKObjectTableViewControllerEditableTypeNone:break;
 	}
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[self.objectController lock];
 	[self updateParams];
+    
+    self.tableView.delegate = _storedTableDelegate;
+    self.tableView.dataSource = _storedTableDataSource;
+    
     [super viewWillAppear:animated];
 	[self updateParams];
 	
@@ -315,11 +349,26 @@
 	//Adds searchbars if needed
 	CGFloat tableViewOffset = 0;
 	if(self.searchEnabled && self.searchDisplayController == nil && _searchBar == nil){
-		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice]orientation];
-		BOOL isPortrait = !UIDeviceOrientationIsLandscape(deviceOrientation);
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
+		BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
 		BOOL isIpad = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad);
-		BOOL tooSmall = self.view.bounds.size.width <= 320;
-		tableViewOffset += (!isIpad || (_searchScopeDefinition && (isPortrait || tooSmall))) ? 88 : 44;
+        if(!isIpad){
+            if(_searchScopeDefinition && isPortrait){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
+        else{
+            BOOL tooSmall = self.view.bounds.size.width <= 320;
+            if(_searchScopeDefinition && tooSmall){
+                tableViewOffset = 88;
+            }
+            else{
+                tableViewOffset = 44;
+            }
+        }
 		
 		self.searchBar = [[[UISearchBar alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,tableViewOffset)]autorelease];
 		_searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -356,21 +405,23 @@
 	if(self.tableViewContainer.frame.origin.y < tableViewOffset){
 		self.tableViewContainer.frame = CGRectMake(self.tableViewContainer.frame.origin.x,self.tableViewContainer.frame.origin.y + tableViewOffset,
 												   self.tableViewContainer.frame.size.width,self.tableViewContainer.frame.size.height - tableViewOffset);
+        _placeHolderViewDuringKeyboardOrSheet.frame = self.tableViewContainer.frame;
 	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
-	
-	if(self.rightButton){
-		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
-	}
-	
-	if(self.leftButton){
-		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
-	}
-	
+    
+    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+    
+    if(self.editButton){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:nil];
+        [self.editButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    if(self.doneButton){
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:nil];
+        [self.doneButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+    }
+    
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
@@ -435,9 +486,8 @@
 
 	self.indexPathToReachAfterRotation = nil;
 	
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			self.indexPathToReachAfterRotation = indexPath;
@@ -445,8 +495,8 @@
 		}
 	}
 	
-	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+	if(!_indexPathToReachAfterRotation && [visibleIndexPaths count] > 0){
+		NSIndexPath *indexPath = [visibleIndexPaths objectAtIndex:0];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
@@ -467,14 +517,28 @@
 	[super viewWillDisappear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillShow:) name:CKSheetDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sheetWillHide:) name:CKSheetWillHideNotification object:nil];
+}
+
 - (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
+    
+    _storedTableDelegate = self.tableView.delegate;
+    self.tableView.delegate = nil;
+    _storedTableDataSource = self.tableView.dataSource;
+    self.tableView.dataSource = nil;
 	
 	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetDidShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillHideNotification object:nil];
 }
 
@@ -492,7 +556,7 @@
 			for(UIView* v in view.subviews){
 				//UIViewAutoresizing resizingMasks = v.autoresizingMask;
 				v.autoresizingMask = UIViewAutoresizingNone;
-				v.center = CGPointMake(cell.contentView.bounds.size.width / 2,cell.contentView.bounds.size.height / 2);
+				v.center = CGPointMake((NSInteger)(cell.contentView.bounds.size.width / 2.0),(NSInteger)(cell.contentView.bounds.size.height / 2.0));
 				v.frame = cell.contentView.bounds;
 				//v.autoresizingMask = resizingMasks; //reizing masks break the layout on os 3
 			}
@@ -516,9 +580,10 @@
 		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
 	}
 	
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		[self rotateSubViewsForCell:(UITableViewCell*)view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
 	}
 }
 
@@ -532,9 +597,8 @@
 	[self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y) animated:NO];
 	
 	self.indexPathToReachAfterRotation = nil;
-	NSArray *visibleCells = [self.tableView visibleCells];
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CGRect f = [self.tableView rectForRowAtIndexPath:indexPath];
 		if(f.origin.y >= self.tableView.contentOffset.y){
 			self.indexPathToReachAfterRotation = indexPath;
@@ -542,8 +606,8 @@
 		}
 	}
 	
-	if(!_indexPathToReachAfterRotation && [visibleCells count] > 0){
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:[visibleCells objectAtIndex:0]];
+	if(!_indexPathToReachAfterRotation && [visibleIndexPaths count] > 0){
+		NSIndexPath *indexPath = [visibleIndexPaths objectAtIndex:0];
 		self.indexPathToReachAfterRotation = indexPath;
 	}
 	
@@ -616,6 +680,7 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
 		return indexPath;
 	}
@@ -645,10 +710,18 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(self.editableType == CKObjectTableViewControllerEditableTypeNone
+       || self.editing == NO)
+        return NO;
+    
 	return [self isViewEditableAtIndexPath:indexPath];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(self.editableType == CKObjectTableViewControllerEditableTypeNone
+       || self.editing == NO)
+        return NO;
+    
 	return [self isViewMovableAtIndexPath:indexPath];
 }
 
@@ -734,15 +807,14 @@
 
 #pragma mark Keyboard Notifications
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
-    if(_modalViewCount == 0){
+    if(_modalViewCount == 0 || endFrame.size.height != _lastModalFrame.size.height){
         if (_resizeOnKeyboardNotification == YES){
             CGRect currentFrame = _placeHolderViewDuringKeyboardOrSheet.frame;
-            
             self.tableViewContainer.autoresizingMask = _placeHolderViewDuringKeyboardOrSheet.autoresizingMask | UIViewAutoresizingFlexibleBottomMargin;
-            
             CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:_placeHolderViewDuringKeyboardOrSheet];
-            CGFloat offset = (currentFrame.origin.y + currentFrame.size.height ) - keyboardFrame.origin.y;
+            CGFloat offset = (/*currentFrame.origin.y + */currentFrame.size.height ) - keyboardFrame.origin.y;
             if(offset > 0){
+                self.tableViewContainer.frame = currentFrame;
                 [UIView beginAnimations:nil context:nil];
                 [UIView setAnimationDuration:animationDuration];
                 [UIView setAnimationCurve:animationCurve];
@@ -753,6 +825,8 @@
                 
                 [UIView commitAnimations];
             }
+            
+            _lastModalFrame = endFrame;
         }
     }
 }
@@ -837,8 +911,6 @@
 	if(_currentPage != page){
 		self.currentPage = page;
 	}
-	
-	[self fetchMoreData];
 }
 
 - (void)updateNumberOfPages{
@@ -868,6 +940,7 @@
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+	[self fetchMoreData];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -876,6 +949,7 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+	[self fetchMoreData];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -891,20 +965,20 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
+	[self fetchMoreData];
 }
 
 #pragma mark CKItemViewContainerController Implementation
 
 - (void)updateVisibleViewsRotation{
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:view withParams:self.params animated:YES];
+			[controller rotateView:controller.view withParams:self.params animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
-				[self rotateSubViewsForCell:(UITableViewCell*)view];
+				[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
 			}
 		}
 	}	

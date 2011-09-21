@@ -32,7 +32,8 @@ NSString* CKStyleIndicatorStyle = @"indicatorStyle";
 
 - (UIActivityIndicatorViewStyle)indicatorStyle{
 	return (UIActivityIndicatorViewStyle)[self enumValueForKey:CKStyleIndicatorStyle 
-												withDictionary:CKEnumDictionary( UIActivityIndicatorViewStyleWhiteLarge,
+												withEnumDescriptor:CKEnumDefinition(@"UIActivityIndicatorViewStyle",
+                                                                                UIActivityIndicatorViewStyleWhiteLarge,
 																				UIActivityIndicatorViewStyleWhite,
 																				UIActivityIndicatorViewStyleGray																				
 																				)];

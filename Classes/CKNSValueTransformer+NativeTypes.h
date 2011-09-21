@@ -9,18 +9,24 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-/** TODO
- */
-NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...);
+@interface CKEnumDescriptor : NSObject{}
+@property(nonatomic,retain)NSString* name;
+@property(nonatomic,retain)NSDictionary* valuesAndLabels;
+@end
+
 
 /** TODO
  */
-#define CKEnumDictionary(...) CKEnumDictionaryFunc([NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...);
+
+/** TODO
+ */
+#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
 
 @interface NSValueTransformer (CKNativeTypes)
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition;
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDefinition:(NSDictionary*)enumDefinition;
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition;
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition;
 
 + (char)convertCharFromObject:(id)object;
 + (NSInteger)convertIntegerFromObject:(id)object;

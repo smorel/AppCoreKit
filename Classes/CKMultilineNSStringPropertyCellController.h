@@ -12,7 +12,6 @@
 
 @interface CKMultilineNSStringPropertyCellController : CKPropertyGridCellController<UITextViewDelegate> {
     CKTextView* _textView;
-    BOOL _respondsToFrameChange;
 }
 
 @property(nonatomic,retain,readonly)CKTextView* textView;

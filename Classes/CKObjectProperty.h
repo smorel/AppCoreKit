@@ -7,39 +7,34 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MapKit/MapKit.h>
-#import "CKModelObject.h"
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
-#import "CKDocumentCollection.h"
+#import "CKObjectPropertyMetaData.h"
 
+//FIXME : try to remove this dependencies by making a CKObjectProperty+CKDocument extension
+#import <MapKit/MapKit.h>
+#import "CKDocumentCollection.h"
 
 /** TODO
  */
-@interface CKObjectProperty : NSObject {
+@interface CKObjectProperty : NSObject<NSCopying> {
 }
-@property (nonatomic,retain) id object;
-@property (nonatomic,retain) NSString* keyPath;
+@property (nonatomic,retain,readonly) id object;
+@property (nonatomic,retain,readonly) NSString* keyPath;
 @property (nonatomic,assign) id value;
 @property (nonatomic,readonly) NSString* name;
+@property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
 
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
 + (CKObjectProperty*)propertyWithObject:(id)object;
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;
 
-- (CKClassPropertyDescriptor*)descriptor;
-- (CKModelObjectPropertyMetaData*)metaData;
+- (CKObjectPropertyMetaData*)metaData;
 - (id)value;
 - (void)setValue:(id)value;
 - (id)convertToClass:(Class)type;
 - (Class)type;
-
-//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
-- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
-- (CKDocumentCollection*)editorCollectionForNewlyCreated;
-- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
-- (Class)tableViewCellControllerType;
 
 - (BOOL)isReadOnly;
 
@@ -47,5 +42,12 @@
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
 - (void)removeAllObjects;
 - (NSInteger)count;
+
+//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
+//Here we should not have dependencies other than Foundation !
+- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
+- (CKDocumentCollection*)editorCollectionForNewlyCreated;
+- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
+- (Class)tableViewCellControllerType DEPRECATED_ATTRIBUTE;
 
 @end

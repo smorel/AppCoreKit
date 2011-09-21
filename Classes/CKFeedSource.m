@@ -10,7 +10,6 @@
 #import "CKNSObject+Invocation.h"
 
 @interface CKFeedSource ()
-@property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
 @property (nonatomic, assign) NSRange range;
 @end

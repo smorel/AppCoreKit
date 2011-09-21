@@ -19,4 +19,9 @@
 + (CGPoint)parseStringToCGPoint:(NSString*)str;
 + (CGPoint)convertCGPointFromObject:(id)object;
 
++ (UIEdgeInsets)parseStringToUIEdgeInsets:(NSString*)str;
++ (UIEdgeInsets)convertUIEdgeInsetsFromObject:(id)object;
+
++ (CGColorRef)convertCGColorRefFromObject:(id)object;
+
 @end

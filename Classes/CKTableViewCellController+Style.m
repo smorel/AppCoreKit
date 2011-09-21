@@ -17,6 +17,7 @@
 #import "CKGradientView.h"
 #import "CKNSArrayAdditions.h"
 #import "CKStyle+Parsing.h"
+#import "CKDebug.h"
 
 NSString* CKStyleCellType = @"cellType";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
@@ -27,7 +28,8 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (CKTableViewCellStyle)cellStyle{
 	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
-									 withDictionary:CKEnumDictionary(UITableViewCellStyleDefault, 
+									 withEnumDescriptor:CKEnumDefinition(@"UITableViewCellStyle",
+                                                                         UITableViewCellStyleDefault, 
 																	 UITableViewCellStyleValue1, 
 																	 UITableViewCellStyleValue2,
 																	 UITableViewCellStyleSubtitle,
@@ -49,7 +51,8 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (CKItemViewFlags)cellFlags{
 	return (CKItemViewFlags)[self enumValueForKey:CKStyleCellFlags 
-										withDictionary:CKEnumDictionary(CKItemViewFlagNone,
+										withEnumDescriptor:CKEnumDefinition(@"CKItemViewFlags",
+                                                                            CKItemViewFlagNone,
 																		CKItemViewFlagSelectable,
 																		CKItemViewFlagEditable,
 																		CKItemViewFlagRemovable,
@@ -69,6 +72,7 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation UITableViewCell (CKStyle)
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+    //NSLog(@"apply style on UITableViewCell : %@",self);
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UITableViewCell* tableViewCell = (UITableViewCell*)view;
 		NSMutableDictionary* myCellStyle = style;
@@ -85,6 +89,29 @@ NSString* CKStyleCellFlags = @"flags";
 	return NO;
 }
 
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
+    CKGradientView* backgroundView = nil;
+    for(UIView* view in [self subviews]){
+        if([view isKindOfClass:[CKGradientView class]]
+           && view != self.backgroundView){
+            backgroundView = (CKGradientView*)view;
+            break;
+        }
+    }
+    [super insertSubview:view atIndex:backgroundView ? index + 1 : index];
+}
+
+/*
+- (void)setBackgroundColor:(UIColor *)backgroundColor{
+    UIColor* previousColor = nil;
+    object_getInstanceVariable(self, "_backgroundColor", (void **)(&previousColor));
+    [previousColor release];
+    object_setInstanceVariable(self, "_backgroundColor", (void**)([backgroundColor retain]));
+
+    //bypass the custom set background color of UITableViewCell
+    [super setBackgroundColor:backgroundColor];
+}
+*/
 
 @end
 
@@ -102,11 +129,12 @@ NSString* CKStyleCellFlags = @"flags";
 	return NO;
 }
 
-- (void)applyStyle{
+- (NSMutableDictionary*)applyStyle{
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];
+    return controllerStyle;
 }
 
 @end
@@ -115,6 +143,7 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation CKItemViewController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view{
+    //NSLog(@"apply style on CKItemViewController : %@",self);
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
@@ -122,6 +151,16 @@ NSString* CKStyleCellFlags = @"flags";
 - (NSMutableDictionary*)controllerStyle{
 	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
+    
+    if([CKStyleManager logEnabled]){
+        if([controllerStyle isEmpty]){
+            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
+        }
+        else{
+            CKDebugLog(@"found style for item controller %@",self);
+        }
+    }
+    
 	return controllerStyle;
 }
 
@@ -218,3 +257,90 @@ NSString* CKStyleCellFlags = @"flags";
 
 @end
 
+
+@implementation UITableView (CKStyle)
+
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
+    if([view isKindOfClass:[UITableViewCell class]]){
+        id dataSource = [self dataSource];
+        if([dataSource isKindOfClass:[CKItemViewContainerController class]]){
+            CKItemViewContainerController* controller = (CKItemViewContainerController*)dataSource;
+            NSIndexPath* indexPath = [controller indexPathForView:view];
+            if(indexPath.row > 0){
+                NSIndexPath* previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row -1 inSection:indexPath.section];
+                UIView* previousView = [controller viewAtIndexPath:previousIndexPath];
+                NSInteger index = previousView ? [[self subviews]indexOfObjectIdenticalTo:previousView] : NSNotFound;
+                if(index != NSNotFound){
+                    [super insertSubview:view atIndex:index+1];
+                    return;
+                }
+                else{
+                    NSInteger count = [controller numberOfObjectsForSection:indexPath.section];
+                    if(indexPath.row < count){
+                        NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+                        if([controller isValidIndexPath:nextIndexPath]){
+                            UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
+                            NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
+                            if(index != NSNotFound){
+                                [super insertSubview:view atIndex:index];
+                                return;
+                            }
+                        }
+                    }
+                    else{
+                        NSInteger sectionCount = [controller numberOfSections];
+                        if(indexPath.section < (sectionCount - 1)){
+                            NSInteger section = indexPath.section + 1;
+                            UIView* headerView = [controller.objectController headerViewForSection:section];
+                            //TODO find the headerView if headerTitle !
+                            if(headerView){
+                                NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
+                                if(index != NSNotFound){
+                                    [super insertSubview:view atIndex:index];
+                                    return;
+                                }
+                            }
+                            else{
+                                NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:section];
+                                if([controller isValidIndexPath:nextIndexPath]){
+                                    UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
+                                    NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
+                                    if(index != NSNotFound){
+                                        [super insertSubview:view atIndex:index];
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                NSInteger section = indexPath.section;
+                UIView* headerView = [controller.objectController headerViewForSection:section];
+                //TODO find the headerView if headerTitle !
+                if(headerView){
+                    NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
+                    if(index != NSNotFound){
+                        [super insertSubview:view atIndex:index + 1];
+                        return;
+                    }
+                }
+                else{
+                    NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:([controller numberOfObjectsForSection:section-1] - 1) inSection:section-1];
+                    if([controller isValidIndexPath:nextIndexPath]){
+                        UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
+                        NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
+                        if(index != NSNotFound){
+                            [super insertSubview:view atIndex:index + 1];
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    [super insertSubview:view atIndex:index];
+}
+
+@end

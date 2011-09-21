@@ -13,7 +13,7 @@
 
 /** TODO
  */
-@interface CKDocumentController : NSObject<CKObjectController> {
+@interface CKDocumentCollectionController : NSObject<CKObjectController> {
 	CKDocumentCollection* _collection;
 	id _delegate;
 	BOOL observing;
@@ -31,6 +31,14 @@
 @property (nonatomic, retain) CKDocumentCollection* collection;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection;
-+ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection;
++ (CKDocumentCollectionController*) controllerWithCollection:(CKDocumentCollection*)collection;
 
+@end
+
+
+/** 
+ DEPRECATED_IN_CLOUDKIT_1.7
+ @see CKDocumentCollectionController
+ */
+@interface CKDocumentController : CKDocumentCollectionController{}
 @end

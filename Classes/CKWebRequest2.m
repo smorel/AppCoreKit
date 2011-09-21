@@ -247,6 +247,20 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[self markAsCancelled];
 }
 
+#pragma mark Connection Authentication
+
+// TODO: Implements a CKWebRequestAuthenticationDelegate to delegate all authentication challenge to the client
+// For now, this implementation disable the checking of self-signed certificates.
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    return ([[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]);
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+}
+
 #pragma mark URL Loading
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
@@ -302,7 +316,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
 	
-	if ([theResponse statusCode] > 400) {
+	if ([theResponse statusCode] >= 400) {
 		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
 		NSError *error = [NSError errorWithDomain:CKWebRequestHTTPErrorDomain
 											 code:[theResponse statusCode]
@@ -354,6 +368,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	NSDictionary *responseHeaders = [theResponse allHeaderFields];
 	NSError *error = nil;
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
+    CKDebugLog(@"Recv Content-Type: %@", contentType);
 	
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
 		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
@@ -372,6 +387,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	
 	if (error) {
 		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
+        if (theFailureBlock) { theFailureBlock(error); }
 		[self markAsFinished];
 		return;
 	}

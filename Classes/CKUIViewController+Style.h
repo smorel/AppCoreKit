@@ -14,6 +14,7 @@
  */
 @interface UIViewController (CKStyle)
 
-- (void)applyStyle;
+- (NSMutableDictionary*)applyStyle;
+- (NSMutableDictionary*)applyStyleWithParentStyle:(NSMutableDictionary*)style;
 
 @end

@@ -31,6 +31,7 @@
 - (CKCallback*)accessorySelectionCallback;
 - (CKCallback*)becomeFirstResponderCallback;
 - (CKCallback*)resignFirstResponderCallback;
+- (CKCallback*)layoutCallback;
 
 - (void)setCreateBlock:(CKCallbackBlock)block;
 - (void)setInitBlock:(CKCallbackBlock)block;
@@ -42,6 +43,7 @@
 - (void)setSizeBlock:(CKCallbackBlock)block;
 - (void)setBecomeFirstResponderBlock:(CKCallbackBlock)block;
 - (void)setResignFirstResponderBlock:(CKCallbackBlock)block;
+- (void)setLayoutBlock:(CKCallbackBlock)block;
 
 
 - (void)setCreateTarget:(id)target action:(SEL)action;
@@ -54,6 +56,7 @@
 - (void)setSizeTarget:(id)target action:(SEL)action;
 - (void)setBecomeFirstResponderTarget:(id)target action:(SEL)action;
 - (void)setResignFirstResponderTarget:(id)target action:(SEL)action;
+- (void)setLayoutTarget:(id)target action:(SEL)action;
 
 - (void)setFlags:(CKItemViewFlags)flags;
 - (void)setFilterPredicate:(NSPredicate*)predicate;

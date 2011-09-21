@@ -29,44 +29,61 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-	txtField.tag = 50000;
-	txtField.borderStyle = UITextBorderStyleNone;
-	txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-	txtField.clearButtonMode = UITextFieldViewModeWhileEditing;
-	txtField.delegate = self;
-	txtField.textAlignment = UITextAlignmentLeft;
-	txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    if(_textField == nil){
+        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+        self.textField = txtField;
+    }
+	_textField.tag = 50000;
+	_textField.borderStyle = UITextBorderStyleNone;
+	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+	_textField.delegate = self;
+	_textField.textAlignment = UITextAlignmentLeft;
+	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            txtField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+            _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }  
         else{
-            txtField.textColor = [UIColor blackColor];
+            _textField.textColor = [UIColor blackColor];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
     
-	self.textField = txtField;
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        _textField.autoresizingMask = UIViewAutoresizingNone;
+    }
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-	[super layoutCell:cell];
-	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
+- (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
+	[super performStandardLayout:controller];
+    UITableViewCell* cell = controller.tableViewCell;
+	UITextField *textField = controller.textField;
 	if(textField){
-        if(self.cellStyle == CKTableViewCellStyleValue3){
-            textField.frame = [self value3DetailFrameForCell:cell];
-            textField.autoresizingMask = UIViewAutoresizingNone;
+        if(controller.cellStyle == CKTableViewCellStyleValue3
+           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
+            
+            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            
+            BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+            CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : 11;
+            
+            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - 10;
+            CGFloat textFieldX = realWidth - 10 - textFieldWidth;
+            if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
+                textFieldWidth = realWidth - 10;
+                textFieldX = 10;
+            }
+			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
         }
-        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-            textField.frame = [self propertyGridDetailFrameForCell:cell];
-            textField.autoresizingMask = UIViewAutoresizingNone;
-        }
-	}
+    }
+    return (id)nil;
 }
 
 - (void)textFieldChanged:(id)value{
@@ -81,7 +98,8 @@
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+       || self.cellStyle != CKTableViewCellStylePropertyGrid){
         cell.textLabel.text = _(descriptor.name);
     }
 	
@@ -91,11 +109,19 @@
 	cell.detailTextLabel.text = nil;
 	
 	if([model isReadOnly] || self.readOnly){
+        self.fixedSize = YES;
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];
 	}
 	else{
+        if(self.cellStyle == CKTableViewCellStylePropertyGrid
+           && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            self.fixedSize = YES;
+        }
+        else{
+            self.fixedSize = NO;
+        }
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
         [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
@@ -106,13 +132,6 @@
 		
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		self.textField.placeholder = _(placeholerText);
-		
-		if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
-			self.textField.returnKeyType = UIReturnKeyNext;
-		}
-		else{
-			self.textField.returnKeyType = UIReturnKeyDone;
-		}
 		[cell.contentView addSubview:self.textField];
 	}
 }
@@ -132,9 +151,14 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+        self.textField.returnKeyType = UIReturnKeyNext;
+    }
+    else{
+        self.textField.returnKeyType = UIReturnKeyDone;
+    }
+    
+	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -156,12 +180,28 @@
 	return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
+    NSInteger min = [metaData.options minimumLength];
+    NSInteger max = [metaData.options maximumLength];
+	if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+		return YES;
+	} else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }
+        return YES;
+	}
+    return YES;
+}
+
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+    [self scrollToRowAfterDelay:0.3];
 }
 
 

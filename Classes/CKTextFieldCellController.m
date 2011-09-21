@@ -54,12 +54,14 @@
 	cell.accessoryView = textField;
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
+- (id)performStandardLayout:(CKTextFieldCellController*)controller{
+    UITableViewCell* cell = controller.tableViewCell;
 	UITextField *textField = (UITextField*)cell.accessoryView;
 	//update accessory view frame
 	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
 	textField.frame = frame;
 	cell.accessoryView.frame = frame;
+    return (id)nil;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

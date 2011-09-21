@@ -12,7 +12,7 @@
 #import "CKNSObject+Invocation.h"
 #import "CKVersion.h"
 
-@implementation CKDocumentController
+@implementation CKDocumentCollectionController
 @synthesize collection = _collection;
 @synthesize delegate = _delegate;
 @synthesize displayFeedSourceCell;
@@ -34,8 +34,8 @@
 	[super dealloc];
 }
 
-+ (CKDocumentController*) controllerWithCollection:(CKDocumentCollection*)collection{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
++ (CKDocumentCollectionController*) controllerWithCollection:(CKDocumentCollection*)collection{
+	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 	return controller;
 }
 
@@ -259,4 +259,24 @@
 	}
 }
 
+
+- (NSString*)headerTitleForSection:(NSInteger)section{
+    return nil;
+}
+
+- (UIView*)headerViewForSection:(NSInteger)section{
+    return nil;
+}
+
+- (NSString*)footerTitleForSection:(NSInteger)section{
+    return nil;
+}
+
+- (UIView*)footerViewForSection:(NSInteger)section{
+    return nil;
+}
+
+@end
+
+@implementation CKDocumentController
 @end

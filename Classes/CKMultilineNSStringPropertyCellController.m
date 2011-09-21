@@ -12,6 +12,7 @@
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
@@ -38,7 +39,9 @@
 	cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    if(_textView == nil){
+        self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    }
 	_textView.backgroundColor = [UIColor clearColor];
     _textView.tag = 50000;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
@@ -60,40 +63,45 @@
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
         }
     }  
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+        _textView.autoresizingMask = UIViewAutoresizingNone;
+    }
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-	[super layoutCell:cell];
+- (id)performStandardLayout:(CKMultilineNSStringPropertyCellController*)controller{
+    [super performStandardLayout:controller];
     
-    _textView.autoresizingMask = UIViewAutoresizingNone;
-    if(self.cellStyle == CKTableViewCellStyleValue3){
-        _textView.frame = [self value3DetailFrameForCell:cell];
+    UITableViewCell* cell = controller.tableViewCell;
+    if(controller.cellStyle == CKTableViewCellStyleValue3){
+        controller.textView.frame = [controller value3DetailFrameForCell:cell];
     }
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+    else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             if(cell.textLabel.text == nil || 
                [cell.textLabel.text isKindOfClass:[NSNull class]] ||
                [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
-                _textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
+                controller.textView.frame = textViewFrame;
             }
             else{
                 //sets the textLabel on one full line and the textView beside
-                CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-                textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
+                CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
                 cell.textLabel.frame = textFrame;
                 
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,_textView.frame.size.height);
-                _textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
+                controller.textView.frame = textViewFrame;
             }
         }
         else{
-            CGRect f = [self propertyGridDetailFrameForCell:cell];
-            _textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,_textView.frame.size.height);
+            CGRect f = [controller propertyGridDetailFrameForCell:cell];
+            controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
         }
     }
-}
 
+    return (id)nil;
+}
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
     UIViewController* controller = [params parentController];
@@ -106,22 +114,15 @@
         return [CKTableViewCellController viewSizeForObject:object withParams:params];
     }
     else{
-        NSString* text = staticController.tableViewCell.textLabel.text;
+        //NSString* text = staticController.tableViewCell.textLabel.text;
         NSString* detail = [property value];
         
-        CGRect newFrame = [staticController.textView frameForText:detail];        
-        CGFloat detailHeight = MAX(CKNSStringMultilinePropertyCellControllerDefaultHeight,newFrame.size.height);
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            if(text == nil || 
-               [text isKindOfClass:[NSNull class]] ||
-               [text length] <= 0){
-                return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight)];
-            }
-            else{
-                return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight + 30)];
-            }
-        }
-        return [NSValue valueWithCGSize:CGSizeMake(100,detailHeight)];
+        CGRect newFrame = [staticController.textView frameForText:detail];      
+		CGFloat bottomTextView = staticController.textView.frame.origin.y + newFrame.size.height;     
+		//CGFloat bottomTextView = staticController.textView.frame.origin.y +  staticController.textView.frame.size.height;
+		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
+		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
     }
     return nil;
 }
@@ -144,6 +145,7 @@
     }
     
     if([property isReadOnly] || self.readOnly){
+        self.fixedSize = YES;
         [self.textView removeFromSuperview];
         
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -151,17 +153,22 @@
 		[NSObject endBindingsContext];
 	}
 	else{
-        _respondsToFrameChange = NO;
-        _textView.placeholder =  _(descriptor.name);
-        _textView.text = [property value];
+        self.fixedSize = NO;
+        NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+        _textView.placeholder =  _(placeholerText);
+        _textView.frameChangeDelegate = nil;
+        _textView.delegate = nil;
+        [_textView setText:[property value] animated:NO];
         _textView.delegate = self;
         
         [self beginBindingsContextByRemovingPreviousBindings];
         [property.object bind:property.keyPath withBlock:^(id value) {
-            if(![_textView.text isEqualToString:value]){
-                _respondsToFrameChange = YES;
-                _textView.text = value;
-                _respondsToFrameChange = NO;
+            if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
+                _textView.frameChangeDelegate = self;
+                _textView.delegate = nil;
+                [_textView setText:[property value] animated:YES];
+                _textView.delegate = self;
+                _textView.frameChangeDelegate = nil;
             }
         }];
         [self endBindingsContext];
@@ -178,10 +185,8 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    _respondsToFrameChange = YES;
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+    _textView.frameChangeDelegate = self;
+	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -194,7 +199,7 @@
     /*if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
         [textView resignFirstResponder];
      }*/
-    _respondsToFrameChange = NO;
+    _textView.frameChangeDelegate = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     return YES;
 }
@@ -205,19 +210,32 @@
 
 
 -(void)textViewFrameChanged:(CGRect)frame{
-    if(!_respondsToFrameChange)
-        return;
-    
     [[self parentTableView]beginUpdates];
     [[self parentTableView]endUpdates];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
+    NSInteger min = [metaData.options minimumLength];
+    NSInteger max = [metaData.options maximumLength];
+	if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+		return YES;
+	} else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }
+        return YES;
+	}
+    return YES;
 }
 
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-                                  atScrollPosition:UITableViewScrollPositionNone
-                                          animated:YES];
+    [self scrollToRowAfterDelay:0.3];
 }
 
 

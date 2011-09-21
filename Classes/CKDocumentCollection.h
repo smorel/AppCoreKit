@@ -11,8 +11,11 @@
 #import "CKFeedSource.h"
 #import "CKDocumentStorage.h"
 
+typedef void(^CKDocumentCollectionBlock)(NSArray* objects,NSIndexSet* indexes);
+typedef void(^CKDocumentCollectionReplaceBlock)(id object,id replacedObject,NSInteger index);
+typedef void(^CKDocumentCollectionClearBlock)();
 
-/** TODO
+/** TODO : Implements fast enumeration protocol
  */
 @interface CKDocumentCollection : CKModelObject<CKFeedSourceDelegate> {
 	CKFeedSource* _feedSource;
@@ -28,6 +31,11 @@
 @property (nonatomic,assign) id delegate;
 @property (nonatomic,assign) NSInteger count;
 
+@property (nonatomic,copy) CKDocumentCollectionBlock addObjectsBlock;
+@property (nonatomic,copy) CKDocumentCollectionBlock removeObjectsBlock;
+@property (nonatomic,copy) CKDocumentCollectionReplaceBlock replaceObjectBlock;
+@property (nonatomic,copy) CKDocumentCollectionClearBlock clearBlock;
+
 - (id)initWithFeedSource:(CKFeedSource*)source;
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
 - (id)initWithStorage:(id)storage;
@@ -35,6 +43,7 @@
 - (NSArray*)allObjects;
 - (BOOL)containsObject:(id)object;
 - (id)objectAtIndex:(NSInteger)index;
+- (void)addObject:(id)object;
 - (void)addObjectsFromArray:(NSArray *)otherArray;
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes;
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet;

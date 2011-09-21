@@ -78,24 +78,27 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
-	CGRect detailFrame = [self value3DetailFrameForCell:cell];
+	CGRect textFrame = [self value3TextFrameForCell:cell];
 	
 	int i =0 ;
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	for(NSString* property in properties){
+        CGFloat width = cell.contentView.frame.size.width;
+        CGFloat detailX = textFrame.origin.x + textFrame.size.width + 10;
+        CGFloat detailWidth = width - detailX - 10;
 		UILabel *label = [_labels objectForKey:property];
 		UITextField *txtField = [_textFields objectForKey:property];
-		CGRect frame = CGRectMake(detailFrame.origin.x,44 + i * 44,detailFrame.size.width,44);
+		CGRect frame = CGRectMake(detailX,44 + i * 44,detailWidth,44);
 		label.frame = frame;
 		txtField.frame = frame;
 		
 		UILabel *namelabel = [_namelabels objectForKey:property];
-		CGRect nameFrame = CGRectMake(10,frame.origin.y - 1,frame.origin.x - 10 - self.value3LabelsSpace,frame.size.height);
+		CGRect nameFrame = CGRectMake(10,frame.origin.y - 1,detailX - 20,44);
 		namelabel.frame = nameFrame;
 		++i;
 	}
 	
-	cell.textLabel.frame = CGRectMake(10,10,cell.bounds.size.width - 20,44);
+	cell.textLabel.frame = CGRectMake(10,10,cell.contentView.frame.size.width - 20,44);
 	cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 }
 

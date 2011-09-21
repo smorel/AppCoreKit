@@ -67,3 +67,9 @@ extern NSString* CKStyleCellFlags;
 - (UIView*)parentControllerView;
 
 @end
+
+
+/** TODO
+ */
+@interface UITableView (CKStyle)
+@end

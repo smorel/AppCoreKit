@@ -37,7 +37,6 @@
  
  - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath
  - (NSIndexPath*)indexPathForView:(UIView*)view
- - (NSArray*)visibleViews
  - (void)updateParams
  - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier
  
@@ -83,6 +82,9 @@
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
 
+//setup
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
+
 //update
 - (void)updateVisibleViewsIndexPath;
 - (void)updateVisibleViewsRotation;
@@ -92,7 +94,7 @@
 - (CKItemViewController*)controllerAtIndexPath:(NSIndexPath *)indexPath;
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath*)indexPathForView:(UIView*)view;
-- (NSArray*)visibleViews;
+- (NSArray*)visibleIndexPaths;
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath;
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier;
 - (BOOL)isValidIndexPath:(NSIndexPath*)indexPath;

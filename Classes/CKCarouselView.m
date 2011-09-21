@@ -63,7 +63,7 @@ double round(double x)
 @property (nonatomic,retain) NSMutableDictionary* visibleViewsForIndexPaths;
 @property (nonatomic,retain) NSMutableDictionary* reusableViews;
 @property (nonatomic,retain) NSMutableArray* rowSizes;
-@property (nonatomic,assign) CGFloat internalContentOffset;
+@property (nonatomic,assign,readwrite) CGFloat internalContentOffset;
 @property (nonatomic, assign) id delegate;
 
 - (void)enqueueReusableView:(UIView*)view;
@@ -104,6 +104,7 @@ double round(double x)
 	self.rowSizes = [NSMutableArray array];
 	self.displayType = CKCarouselViewDisplayTypeHorizontal;
 	self.layer.delegate = self;
+    self.backgroundColor = [UIColor clearColor];
 	
 	//self.scrollEnabled = NO;
 	self.showsHorizontalScrollIndicator = NO;
@@ -208,7 +209,7 @@ double round(double x)
 	
 	self.numberOfPages = count;
 	self.currentPage = self.currentPage;
-	[self updateViewsAnimated:NO];
+	[self updateViewsAnimated:YES];
 }
 
 - (void)enqueueReusableView:(UIView*)view{
@@ -266,7 +267,7 @@ double round(double x)
 			}
 		}
 	}
-	
+    
 	for(NSIndexPath* indexPath in toAdd){
 		if(_dataSource && [_dataSource respondsToSelector:@selector(carouselView:viewForRowAtIndexPath:)]){
 			UIView* view = [_dataSource carouselView:self viewForRowAtIndexPath:indexPath];
@@ -280,6 +281,13 @@ double round(double x)
 				if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewDidAppearAtIndexPath:)]){
 					[self.delegate carouselView:self viewDidAppearAtIndexPath:indexPath];
 				}
+                
+                if(animated){
+                    view.alpha = 0;
+                    [UIView beginAnimations:@"carouselAppear" context:view];
+                    view.alpha = 1;
+                    [UIView commitAnimations];
+                }
 			}
 		}
 	}
@@ -394,9 +402,11 @@ double round(double x)
 	return allValues;
 }
 
+
 - (UIView*)viewAtIndexPath:(NSIndexPath*)indexPath{
 	return [_visibleViewsForIndexPaths objectForKey:indexPath];
 }
+
 
 #pragma mark Horizontal Scroll Layout
 
@@ -508,7 +518,6 @@ double round(double x)
 		}
 	}
 	
-	page = [self pageForIndexPath:indexPath];
 	CGPoint viewTopLeft = CGPointMake(center.x + xOffset - viewSize.width / 2,center.y - viewSize.height / 2);
 	CGRect rect = CGRectIntegral(CGRectMake(viewTopLeft.x,viewTopLeft.y,viewSize.width,viewSize.height));
 	return rect;
@@ -545,6 +554,7 @@ double round(double x)
 }
 
 -(void)drawLayer:(CALayer*)l inContext:(CGContextRef)context{
+    [super drawLayer:l inContext:context];
 	CKCarouselViewLayer* carouselLayer = (CKCarouselViewLayer*)l;
 	[self updateOffset:carouselLayer.contentOffset];
 }

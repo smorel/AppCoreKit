@@ -11,24 +11,50 @@
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
+#import "CKFormTableViewController.h"
+#import "CKBundle.h"
+
+#import <QuartzCore/QuartzCore.h>
+
+#define CLICKABLE_VALIDATION_INFO 0
 
 @interface CKPropertyGridCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
+@property(nonatomic,retain)UIImageView* validationImageView;
+@property(nonatomic,retain)UIView* oldAccessoryView;
+@property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
+@property(nonatomic,retain)NSString* validationBindingContext;
+
 @end
 
 @implementation CKPropertyGridCellController
 @synthesize readOnly = _readOnly;
 @synthesize validationButton = _validationButton;
+@synthesize oldAccessoryView = _oldAccessoryView;
+@synthesize oldAccessoryType = _oldAccessoryType;
+@synthesize validationImageView = _validationImageView;
+@synthesize validationBindingContext = _validationBindingContext;
+@synthesize fixedSize = _fixedSize;
 
 - (id)init{
 	[super init];
 	self.cellStyle = CKTableViewCellStylePropertyGrid;
+    _validationDisplayed = NO;
+    self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
+    _fixedSize = NO;
 	return self;
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:_validationBindingContext];
     [_validationButton release];
     _validationButton = nil;
+    [_oldAccessoryView release];
+    _oldAccessoryView = nil;
+    [_validationImageView release];
+    _validationImageView = nil;
+    [_validationBindingContext release];
+    _validationBindingContext = nil;
     [super dealloc];
 }
 
@@ -41,9 +67,6 @@
     if(![self.value isEqual:value]){
         NSAssert(value == nil || [value isKindOfClass:[CKObjectProperty class]],@"Invalid value type");
         [super setValue:value];
-    
-        BOOL validity = [self isValidValue:[value value]];
-        [self setInvalidButtonVisible:!validity];
     }
 }
 
@@ -52,26 +75,38 @@
     if(self.readOnly){
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    BOOL validity = [self isValidValue:[[self objectProperty] value]];
-    [self setInvalidButtonVisible:!validity];
 }
 
 
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];
+
+    [NSObject beginBindingsContext:_validationBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+        [form bind:@"validationEnabled" withBlock:^(id value) {
+            BOOL validity = [self isValidValue:[[self objectProperty] value]];
+            [self setInvalidButtonVisible:!validity];
+        }];
+    }
     
-    [self beginBindingsContextByKeepingPreviousBindings];
-    [cell bind:@"backgroundColor" withBlock:^(id value) {
-        BOOL validity = [self isValidValue:[[self objectProperty] value]];
-        [self setInvalidButtonVisible:!validity];
-    }];
+    CKObjectProperty* property = [self objectProperty];
+    Class propertyType = [property type];
+    if(propertyType != nil && [NSObject isKindOf:propertyType parentType:[CKDocumentCollection class]]){
+        [property.object bind:[NSString stringWithFormat:@"%@.count",property.keyPath] withBlock:^(id value) {
+            BOOL validity = [self isValidValue:[[self objectProperty] value]];
+            [self setInvalidButtonVisible:!validity];
+        }];
+    }
     [self endBindingsContext];
+    
+    BOOL validity = [self isValidValue:[[self objectProperty] value]];
+    [self setInvalidButtonVisible:!validity];
 }
 
 - (BOOL)isValidValue:(id)value{
     CKObjectProperty* property = [self objectProperty];
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
     if(metaData.validationPredicate){
         return [metaData.validationPredicate evaluateWithObject:value];
     }
@@ -80,7 +115,33 @@
 
 - (void)setValueInObjectProperty:(id)value{
     BOOL validity = [self isValidValue:value];
-    [self setInvalidButtonVisible:!validity];
+    
+    CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    BOOL visible = !validity && form.validationEnabled;
+    BOOL validityStateChanged = (_validationDisplayed != visible);
+    if(validityStateChanged){
+        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+        BOOL hasAnimation = NO;
+        if(!_fixedSize){
+            CALayer* layer = [self.tableViewCell layer];
+            NSArray* anims = [layer animationKeys];
+            hasAnimation = ([anims count] > 0);
+            if(!hasAnimation && [form viewIsOnScreen]){
+                [[self parentTableView]beginUpdates];
+            }
+        }
+        
+        [self setInvalidButtonVisible:!validity];
+        [self layoutCell:self.tableViewCell];
+        
+        
+        if(!_fixedSize){
+            //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
+            if(!hasAnimation && [form viewIsOnScreen]){
+                [[self parentTableView]endUpdates];
+            }
+        }
+    }
     
     CKObjectProperty* property = [self objectProperty];
     [property setValue:value];
@@ -88,18 +149,20 @@
 }
 
 - (CGRect)rectForValidationButtonWithCell:(UITableViewCell*)cell{
-    if(!_validationButton)
+    UIImage* img = CLICKABLE_VALIDATION_INFO ? (UIImage*)[self.validationButton currentImage] : (UIImage*)[self.validationImageView image];
+    
+    if(!img)
         return CGRectMake(0,0,0,0);
     
     UIView* contentView = cell.contentView;
     CGRect contentRect = contentView.frame;
-    CGFloat x = MAX(_validationButton.frame.size.width / 2.0,contentRect.origin.x / 2.0);
+    CGFloat x = MAX(img.size.width / 2.0,contentRect.origin.x / 2.0);
     
     
-    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - _validationButton.frame.size.width / 2.0,
-                                   self.tableViewCell.frame.size.height / 2.0 - _validationButton.frame.size.height / 2.0,
-                                   _validationButton.frame.size.width,
-                                   _validationButton.frame.size.height);
+    CGRect buttonRect = CGRectMake( self.tableViewCell.frame.size.width - x - img.size.width / 2.0,
+                                   self.tableViewCell.frame.size.height / 2.0 - img.size.height / 2.0,
+                                   img.size.width,
+                                   img.size.height);
     return CGRectIntegral(buttonRect);
 }
 
@@ -107,18 +170,57 @@
     if(self.view == nil)
         return;
     
-   if(visible){
-        if(_validationButton == nil){
-            self.validationButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-            [_validationButton addTarget:self action:@selector(validationInfos:) forControlEvents:UIControlEventTouchUpInside];
+    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+        visible = visible && form.validationEnabled;
+        BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+                                           || [self parentTableView].style == UITableViewStylePlain );
+        
+        if(visible && !_validationDisplayed){
+            UIImage* image = [CKBundle imageForName:@"form-icon-invalid"];
+            if(CLICKABLE_VALIDATION_INFO && _validationButton == nil){
+                self.validationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                _validationButton.frame = CGRectMake(0,0,image.size.width,image.size.height);
+                [_validationButton setImage:image forState:UIControlStateNormal];
+                [_validationButton addTarget:self action:@selector(validationInfos:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if(!CLICKABLE_VALIDATION_INFO && _validationImageView == nil){
+                self.validationImageView = [[[UIImageView alloc]initWithImage:image]autorelease];
+                _validationImageView.frame = CGRectMake(0,0,image.size.width,image.size.height);
+            }
+            
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
+            if(shouldReplaceAccessoryView){
+                self.oldAccessoryView = self.tableViewCell.accessoryView;
+                self.oldAccessoryType = self.tableViewCell.accessoryType;
+                self.tableViewCell.accessoryView = newAccessoryView;
+            }
+            else{
+                newAccessoryView.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
+                [self.tableViewCell addSubview:newAccessoryView];
+            }
+            _validationDisplayed = YES;
         }
-         
-       _validationButton.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
-        [self.tableViewCell addSubview:_validationButton];
+        else if(!visible && _validationDisplayed){
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)_validationButton : (UIView*)_validationImageView;
+            if(newAccessoryView){
+                if(shouldReplaceAccessoryView){
+                    self.tableViewCell.accessoryView = self.oldAccessoryView;
+                    self.tableViewCell.accessoryType = self.oldAccessoryType;
+                }
+                else{
+                    [newAccessoryView removeFromSuperview];
+                }
+            }
+            _validationDisplayed = NO;
+        }
     }
-    else if(_validationButton){
-        [_validationButton removeFromSuperview];
-    }
+    
+    /* FIXME : Here it can change the height as we set an accessory view ...
+    table view should be notified that it should recompute the size of the cells.
+    [[self parentTableView]beginUpdates];
+    [[self parentTableView]endUpdates];
+     */
 }
 
 - (void)validationInfos:(id)sender{
@@ -136,11 +238,22 @@
     }
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
-    [super layoutCell:cell];
-    if(_validationButton != nil){
-        _validationButton.frame = [self rectForValidationButtonWithCell:cell];
-     }
+- (id)performStandardLayout:(CKPropertyGridCellController*)controller{
+    [super performStandardLayout:controller];
+    [self performValidationLayout:controller];
+    return (id)nil;
+}
+
+- (void)performValidationLayout:(CKPropertyGridCellController*)controller{
+    if(controller.validationButton != nil
+       || controller.validationImageView != nil){
+        BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+                                           || [self parentTableView].style == UITableViewStylePlain );
+        if(!shouldReplaceAccessoryView){
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)controller.validationButton : (UIView*)controller.validationImageView;
+            newAccessoryView.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+        }
+    }
 }
 
 @end

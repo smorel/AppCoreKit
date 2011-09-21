@@ -10,6 +10,11 @@
 
 #pragma mark - UIView
 
+NSString* cleanString(NSString* str){
+    NSString* str1 = [str stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
+    return [str1 stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
+}
+
 @implementation UIView (CKDebug)
 
 - (void)printViewHierarchyWithIndentString:(NSString *)indentString {

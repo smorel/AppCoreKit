@@ -25,7 +25,17 @@
 }
 
 + (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)())action{
-    id value = ((title != nil) ? title : ((subTitle != nil) ? subTitle : ((image != nil) ? image : nil)));
+    id value = nil;
+    if(title != nil){
+        value = title;
+    }
+    else if(subTitle != nil){
+        value = subTitle;
+    }
+    else if(image != nil){
+        value = image;
+    }
+    
     if(value == nil)
         return nil;
     
@@ -33,6 +43,7 @@
     [descriptor setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         controller.cellStyle = ((subTitle != nil) ? UITableViewCellStyleSubtitle : UITableViewCellStyleDefault);
+        controller.name = [NSString stringWithFormat:@"cellDescriptorWithTitle<%d>",controller.cellStyle];
         return (id)nil;
     }];
     [descriptor setSetupBlock:^id(id value) {

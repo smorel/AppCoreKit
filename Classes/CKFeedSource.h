@@ -18,7 +18,7 @@
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, readonly) BOOL hasMore;
+@property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, readonly) BOOL isFetching;
 
 - (BOOL)fetchRange:(NSRange)range;

@@ -20,10 +20,18 @@
 #import "CKObjectTableViewController.h"
 #import "CKNSObject+Bindings.h"
 
-@interface CKObjectViewControllerFactory ()
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@end
 
+@interface CKObjectViewControllerFactory ()
 @property (nonatomic, retain, readwrite) NSMutableArray* mappings;
 @property (nonatomic, assign, readwrite) id objectController;
+@end
+
+@interface UITableViewCell()
+-(void)setEditingStyle:(UITableViewCellEditingStyle)style;
 @end
 
 
@@ -102,6 +110,7 @@ NSString* CKObjectViewControllerFactoryItemFilter = @"CKObjectViewControllerFact
 NSString* CKObjectViewControllerFactoryItemSize = @"CKObjectViewControllerFactoryItemSize";
 NSString* CKObjectViewControllerFactoryItemBecomeFirstResponder = @"CKObjectViewControllerFactoryItemBecomeFirstResponder";
 NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectViewControllerFactoryItemResignFirstResponder";
+NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFactoryItemLayout";
 
 @interface CKObjectViewControllerFactoryItem() 
 @property(nonatomic,retain,readwrite)NSMutableDictionary* params;
@@ -171,12 +180,38 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	return [_params objectForKey:CKObjectViewControllerFactoryItemResignFirstResponder];
 }
 
+- (CKCallback*)layoutCallback{
+	return [_params objectForKey:CKObjectViewControllerFactoryItemLayout];
+}
 
-- (CKItemViewController*)setupStaticControllerWithParams:(NSMutableDictionary*)params withStyle:(NSMutableDictionary*)controllerStyle withObject:(id)object withIndexPath:(NSIndexPath*)indexPath{
+- (CKItemViewController*)setupStaticControllerWithParams:(NSMutableDictionary*)params withStyle:(NSMutableDictionary*)controllerStyle withObject:(id)object withIndexPath:(NSIndexPath*)indexPath  forSize:(BOOL)forSize{
     CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForItem:self
                                                                                                       object:object 
                                                                                                    indexPath:indexPath 
                                                                                             parentController:[params parentController]];
+    
+    if([staticController isKindOfClass:[CKTableViewCellController class]]){
+        CKTableViewCellController* staticCellController = (CKTableViewCellController*)staticController;
+        //Those conditions means values of interest are hardcoded in stylesheets
+        if(forSize && [controllerStyle containsObjectForKey:CKStyleCellSize]){
+            return nil;
+        }
+        if(!forSize && [controllerStyle containsObjectForKey:CKStyleCellFlags]){
+            return nil;
+        }
+        
+        //Retrieves the right style
+        if([controllerStyle containsObjectForKey:CKStyleCellType]){
+            staticCellController.cellStyle = [controllerStyle cellStyle];
+        }
+        if(staticCellController.cellStyle != CKTableViewCellStylePropertyGrid
+           && staticCellController.cellStyle != CKTableViewCellStyleValue3){
+            return nil;
+        }
+    }
+    else{
+        return nil;
+    }
     
     staticController.initCallback = [self initCallback];
     staticController.setupCallback = [self setupCallback];
@@ -184,44 +219,61 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
     staticController.accessorySelectionCallback = [self accessorySelectionCallback];
     staticController.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
     staticController.resignFirstResponderCallback = [self resignFirstResponderCallback];
+    staticController.layoutCallback = [self layoutCallback];
     [params setObject:staticController forKey:CKTableViewAttributeStaticController];
     if(controllerStyle){
         [params setObject:controllerStyle forKey:CKTableViewAttributeStaticControllerStyle];
     }
-    [staticController performSelector:@selector(setParentController:) withObject:[params parentController]];
-    [staticController performSelector:@selector(setIndexPath:) withObject:indexPath];
+    [staticController setParentController:[params parentController]];
+    [staticController setIndexPath:indexPath];
     [staticController setValue:object];
     if(staticController.view != nil){
         [staticController initView:staticController.view];
         [staticController setupView:staticController.view];	
     }
     
-    //Resize for table views
-    UIViewController* parentController = [params parentController];
-    if([parentController isKindOfClass:[CKObjectTableViewController class]]){
-        CKTableViewCellController* staticCellController = (CKTableViewCellController*)staticController;
-        CGFloat tableWidth = [params bounds].width;
-        if(staticController.view){
-            UIView* accessoryView = staticCellController.tableViewCell.accessoryView;
-            CGFloat accessorySize = accessoryView ? accessoryView.frame.size.width : 0;
-            if(staticCellController.tableViewCell.accessoryType != UITableViewCellAccessoryNone){
-                accessorySize = 22;
-            }
-            staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
-            [staticCellController.tableViewCell layoutSubviews];
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]] - accessorySize;
-            if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
-                staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
-                [staticCellController.tableViewCell layoutSubviews];
-                if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
-                    NSAssert(NO,@"TO CHECK WHAT HAPPEND !!!");
+    if(forSize){
+        //Resize for table views
+        UIViewController* parentController = [params parentController];
+        if([parentController isKindOfClass:[CKObjectTableViewController class]]){
+            CKTableViewCellController* staticCellController = (CKTableViewCellController*)staticController;
+            [staticCellController.tableViewCell setEditing:NO animated:NO];
+            
+            CGFloat tableWidth = [params bounds].width;
+            if(staticController.view){
+                UIView* accessoryView = staticCellController.tableViewCell.accessoryView;
+                CGFloat accessorySize = accessoryView ? accessoryView.frame.size.width : 0;
+                if(staticCellController.tableViewCell.accessoryType != UITableViewCellAccessoryNone){
+                    accessorySize = 22;
                 }
+                CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]] - accessorySize;
+                staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);
+                if(staticCellController.tableViewCell.contentView.frame.size.width != rowWidth){
+                    CGFloat offset = rowWidth - staticCellController.tableViewCell.contentView.frame.size.width;
+                    staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth - accessorySize + offset,staticCellController.tableViewCell.frame.size.height);
+                }
+                [staticCellController.tableViewCell layoutSubviews];
+            }
+            
+            UITableView* tableView = [(CKObjectTableViewController*)parentController tableView];
+            BOOL tableEditing = [tableView isEditing];
+            BOOL cellEditing = [staticCellController.tableViewCell isEditing];
+            if(tableEditing != cellEditing){
+                if([staticCellController.tableViewCell respondsToSelector:@selector(setEditingStyle:)]){
+                    CKItemViewFlags flags = [self flagsForObject:object atIndexPath:indexPath  withParams:params];
+                    [staticCellController.tableViewCell setEditingStyle:flags & CKItemViewFlagRemovable ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone];
+                }
+                [staticCellController.tableViewCell setEditing:tableEditing animated:NO];
+                [staticCellController.tableViewCell layoutSubviews];
             }
         }
     }
     
+       
     [staticController clearBindingsContext];
+    /*if([staticController respondsToSelector:@selector(cacheLayoutBindingContextId)]){
+        [NSObject removeAllBindingsForContext:[staticController cacheLayoutBindingContextId]];
+    }*/
     
     return staticController;
 }
@@ -235,13 +287,12 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 		}
 	}
     
-    [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
-    
 	id flagsObject = [_params objectForKey:CKObjectViewControllerFactoryItemFlags];
 	if(flagsObject != nil){
 		if([flagsObject isKindOfClass:[CKCallback class]]){
 			CKCallback* flagsCallBack = (CKCallback*)flagsObject;
 			if(flagsCallBack != nil){
+                [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
 				NSNumber* number = [flagsCallBack execute:params];
 				CKItemViewFlags flags = (CKItemViewFlags)[number intValue];
 				return flags;
@@ -257,11 +308,10 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 		}
 	}
 	else{
+        [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
 		Class theClass = self.controllerClass;
-		if(theClass && [theClass respondsToSelector:@selector(flagsForObject:withParams:)]){
-			CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
-			return flags;
-		}
+        CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
+        return flags;
 	}
 	return CKItemViewFlagNone;
 }
@@ -275,14 +325,13 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 			return [controllerStyle cellSize];
 		}
 	}
-	
-    [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath];
     
 	id sizeObject = [_params objectForKey:CKObjectViewControllerFactoryItemSize];
 	if(sizeObject != nil){
 		if([sizeObject isKindOfClass:[CKCallback class]]){
 			CKCallback* sizeCallBack = (CKCallback*)sizeObject;
 			if(sizeCallBack != nil){
+                [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:YES];
 				NSValue* value = [sizeCallBack execute:params];
 				CGSize size = [value CGSizeValue];
 				return size;
@@ -298,24 +347,25 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 		}
 	}
 	else{
+        [self setupStaticControllerWithParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath  forSize:YES];
 		Class theClass = self.controllerClass;
-		if(theClass && [theClass respondsToSelector:@selector(viewSizeForObject:withParams:)]){
-			NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
-			CGSize size = [v CGSizeValue];
-			return size;
-		}
+        NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
+        CGSize size = [v CGSizeValue];
+        return size;
 	}
 	return CGSizeMake(100,44);
 }
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	CKItemViewController* controller = [[[self.controllerClass alloc]init]autorelease];
+    controller.createCallback = [self createCallback];
 	controller.initCallback = [self initCallback];
 	controller.setupCallback = [self setupCallback];
 	controller.selectionCallback = [self selectionCallback];
 	controller.accessorySelectionCallback = [self accessorySelectionCallback];
 	controller.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
 	controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
+	controller.layoutCallback = [self layoutCallback];
 	
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];
@@ -369,6 +419,9 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
 }
 
+- (void)setLayoutBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKObjectViewControllerFactoryItemLayout];
+}
 
 - (void)setCreateTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemCreate];
@@ -408,6 +461,10 @@ NSString* CKObjectViewControllerFactoryItemResignFirstResponder = @"CKObjectView
 
 - (void)setResignFirstResponderTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemResignFirstResponder];
+}
+
+- (void)setLayoutTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKObjectViewControllerFactoryItemLayout];
 }
 
 - (void)setFlags:(CKItemViewFlags)flags{

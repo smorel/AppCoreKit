@@ -9,11 +9,12 @@
 #import "CKMKMapView+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKModelObject.h"
+#import <MapKit/MKTypes.h>
 
 
 @implementation MKMapView (CKIntrospectionAdditions)
 
-- (void)annotationsMetaData:(CKModelObjectPropertyMetaData*)metaData{
+- (void)annotationsMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.contentProtocol = @protocol(MKAnnotation);
 }
 
@@ -36,10 +37,11 @@
 	[self removeAnnotations:self.annotations];
 }
 
-- (void)mapTypeMetaData:(CKModelObjectPropertyMetaData*)metaData{
-	metaData.enumDefinition = CKEnumDictionary(MKMapTypeStandard,
-											   MKMapTypeSatellite,
-											   MKMapTypeHybrid);
+- (void)mapTypeMetaData:(CKObjectPropertyMetaData*)metaData{
+	metaData.enumDescriptor = CKEnumDefinition(@"MKMapType",
+                                                   MKMapTypeStandard,
+                                                   MKMapTypeSatellite,
+                                                   MKMapTypeHybrid);
 }
 
 @end

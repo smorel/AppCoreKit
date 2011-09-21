@@ -52,6 +52,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.addObjectsBlock){
+        self.addObjectsBlock(theObjects,indexes); 
+    }
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
@@ -68,6 +72,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.removeObjectsBlock){
+        self.removeObjectsBlock(toRemove,indexSet); 
+    }
 }
 
 - (void)removeAllObjects{
@@ -86,6 +94,10 @@
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.clearBlock){
+        self.clearBlock(); 
+    }
 }
 
 - (BOOL)containsObject:(id)object{
@@ -107,13 +119,18 @@
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
 	id object = [[_property value] objectAtIndex:index];
 	[[_property value] removeObjectAtIndex:index];
-	[[_property value] insertObject:other atIndex:index];	
+	[[_property value] insertObject:other atIndex:index];
+	self.count = [[_property value] count];	
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
 	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
+    
+    if(self.replaceObjectBlock){
+        self.replaceObjectBlock(other,object,index); 
+    }
 }
 
 @end

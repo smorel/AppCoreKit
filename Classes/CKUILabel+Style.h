@@ -9,13 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "CKUIView+Style.h"
 
-
-/** TODO
- */
-@interface UILabel (CKValueTransformer)
-@end
-
-
 /** TODO
  */
 extern NSString* CKStyleFontSize;
@@ -36,5 +29,10 @@ extern NSString* CKStyleFontName;
 /** TODO
  */
 @interface UILabel (CKStyle)
+
+@end
+
+
+@interface UITextField (CKStyle)
 
 @end

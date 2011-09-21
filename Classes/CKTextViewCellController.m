@@ -53,7 +53,7 @@
 	if ([view isKindOfClass:[CKTextView class]]) {
 		// FIXME: layoutSubviews isn't always called on CKTextView
 		// when orientation changes
-		[(CKTextView *)view updateHeight];
+		[(CKTextView *)view updateHeightAnimated:YES];
 		// ---
 		
 		NSAssert(NO,@"implement viewSizeForObject:params: and compute the correct size");
@@ -78,12 +78,14 @@
 	[cell.contentView addSubview:textView];
 }
 
-- (void)layoutCell:(UITableViewCell *)cell{
+- (id)performStandardLayout:(CKTextViewCellController*)controller{
+    UITableViewCell* cell = controller.tableViewCell;
 	CKTextView *textField = (CKTextView*)[cell.contentView viewWithTag:kTextViewTag];
 	//update accessory view frame
 	CGRect frame = CGRectIntegral(CGRectMake(0, 0, cell.bounds.size.width * (2.0f / 3.5f), cell.bounds.size.height));
 	textField.frame = frame;
 	cell.accessoryView.frame = frame;
+    return (id)nil;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

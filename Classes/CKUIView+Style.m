@@ -18,7 +18,7 @@
 #import "CKDebug.h"
 
 
-NSMutableSet* reserverKeyWords = nil;
+//NSMutableSet* reserverKeyWords = nil;
 
 NSString* CKStyleBackgroundColor = @"backgroundColor";
 NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
@@ -53,7 +53,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (UIViewContentMode)backgroundImageContentMode{
 	return (UIViewContentMode)[self enumValueForKey:CKStyleBackgroundImageContentMode 
-									 withDictionary:CKEnumDictionary(UIViewContentModeScaleToFill,
+									 withEnumDescriptor:CKEnumDefinition(@"UIViewContentMode",
+                                                                     UIViewContentModeScaleToFill,
 																	 UIViewContentModeScaleAspectFit,
 																	 UIViewContentModeScaleAspectFill,
 																	 UIViewContentModeRedraw,
@@ -71,7 +72,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
-									 withDictionary:CKEnumDictionary(CKViewCornerStyleDefault, 
+									 withEnumDescriptor:CKEnumDefinition(@"CKViewCornerStyle",
+                                                                     CKViewCornerStyleDefault, 
 																	 CKViewCornerStyleRounded,
 																	 CKViewCornerStyleRoundedTop,
 																	 CKViewCornerStyleRoundedBottom, 
@@ -96,7 +98,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
-									 withDictionary:CKEnumDictionary(CKViewBorderStyleDefault,
+									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
+                                                                     CKViewBorderStyleDefault,
 																	 CKViewBorderStyleAll,
 																	 CKViewBorderStyleNone)];
 }
@@ -145,20 +148,16 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,CKStyleBackgroundImageContentMode,
-								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,nil]];
+								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,@"@class",nil]];
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
                    delegate:(id)delegate {
 	if(view == nil)
 		return NO;
-	
+    
 	NSMutableDictionary* myViewStyle = style;
 	if([appliedStack containsObject:view] == NO){
-		[appliedStack addObject:view];
-		//Apply before adding background subView
-		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
-	
 		if(myViewStyle){
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
@@ -175,6 +174,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 						view.backgroundColor = [UIColor clearColor];
 						[view insertSubview:gradientView atIndex:0];
 					}
+                    
+                    [NSObject applyStyleByIntrospection:myViewStyle toObject:gradientView appliedStack:appliedStack delegate:(id)delegate];
 		
 					backgroundView = gradientView;
 				}
@@ -282,19 +283,24 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				if([myViewStyle containsObjectForKey:CKStyleAlpha]){
 					backgroundView.alpha = [myViewStyle alpha];
 				}
-				
+                
+                UIColor* backColor = backgroundView.backgroundColor;
 				//Apply color
 				BOOL dontTouchBackgroundColor = NO;
 				if([myViewStyle containsObjectForKey:CKStyleBackgroundColor] == YES){
 					dontTouchBackgroundColor = YES;
-					backgroundView.backgroundColor = [myViewStyle backgroundColor];
-					CGFloat alpha = CGColorGetAlpha([backgroundView.backgroundColor CGColor]);
-					opaque = opaque && (alpha >= 1);
+                    backColor = [myViewStyle backgroundColor];
 				}
 				
 				if(dontTouchBackgroundColor == NO && (roundedCornerType != CKRoundedCornerViewTypeNone)){
-					backgroundView.backgroundColor = [UIColor clearColor];
+                    backColor = [UIColor clearColor];
 				}
+                
+                backgroundView.backgroundColor = backColor;
+                CGFloat alpha = CGColorGetAlpha([backColor CGColor]);
+                opaque = opaque && (alpha >= 1);
+                
+                backgroundView.opaque = opaque;
 				
 				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
 				if(dontTouchBackgroundColor == NO){
@@ -303,34 +309,60 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				}*/
 			}
 		}
+        
+        [appliedStack addObject:view];
+		//Root to leaf instead of leaf to root like before.
+		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
 		return YES;
 	}
 	return NO;
 }
-
 
 @end
 
 
 @implementation NSObject (CKStyle)
 
-+ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object{
-	if(reserverKeyWords == nil){
-		reserverKeyWords = [[NSMutableSet set]retain];
-	}
++ (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    
+}
+
++ (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+    if([style isEmpty])
+        return;
+    
+	/*if(reserverKeyWords == nil){
+	}*/
 	
+    NSMutableSet* reserverKeyWords = [[NSMutableSet set]retain];
 	[[self class]updateReservedKeyWords:reserverKeyWords];
 	
-	NSArray* allPropertyNames = [object allPropertyNames];
 	for(NSString* key in [style allKeys]){
-		if([reserverKeyWords containsObject:key] == NO
-		   && [allPropertyNames containsObject:key] == YES){
+		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
-			if(descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == NO){
-				[style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
-			}
-            else if(descriptor == nil){
-                CKDebugLog(@"invalid property %@ specified in style %@",key,style);
+            if(descriptor){
+                BOOL isUIView = (descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == YES);
+                if(!isUIView){
+                    [style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
+                }
+                else if(isUIView){
+                    if([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
+                        //DO NOTHING !
+                    }
+                    else{
+                        id theView = [object valueForKeyPath:key];
+                        if(!theView){
+                            id subViewStyle = [style objectForKey:key];
+                            NSString* className = [subViewStyle objectForKey:@"@class"];
+                            Class theClass = NSClassFromString(className);
+                            if(theClass && [NSObject isKindOf:theClass parentType:[UIView class]] == YES){
+                                UIView* createdView = [[[theClass alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
+                                [[createdView class] applyStyle:subViewStyle toView:createdView appliedStack:appliedStack delegate:delegate];
+                                [object setValue:createdView forKeyPath:key];
+                            }
+                        }
+                    }
+                }
             }
 		}
 	}
@@ -354,7 +386,17 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
         }
 
 		NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:descriptor.name];
-		//if(myViewStyle != nil && [myViewStyle isEmpty] == NO){
+        
+        if([CKStyleManager logEnabled]){
+            if([myViewStyle isEmpty]){
+                CKDebugLog(@"did not find style for view %@ in parent %@ with style %@",descriptor.name,self,style);
+            }
+            else{
+                CKDebugLog(@"found style %@ for view %@ in parent %@",myViewStyle,descriptor.name,self);
+            }
+        }
+        
+		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
 			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){
 				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
@@ -370,7 +412,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 			}
 			
 			if(view){
-				[descriptor.type applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 			}
 		//}
 	}
@@ -378,14 +420,16 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	if([self isKindOfClass:[UIView class]] == YES){
 		UIView* selfView = (UIView*)self;
 		for(UIView* view in [selfView subviews]){
-			NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
-			[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+            if(![appliedStack containsObject:view]){
+                NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
+                [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+            }
 		}
 	}
 	
 	
 	//if([appliedStack containsObject:self] == NO){
-		[NSObject applyStyleByIntrospection:style toObject:self];
+		[[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
 	//}
 	[appliedStack addObject:self];
 }

@@ -25,9 +25,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 {
 	CLLocationCoordinate2D* centerCoordinate = (CLLocationCoordinate2D*)context;
 	
-	CLLocation *centerLoc = [[CLLocation alloc] initWithLatitude:centerCoordinate->latitude longitude:centerCoordinate->longitude];
-	CLLocation *obj1Loc = [[CLLocation alloc] initWithLatitude:obj1.coordinate.latitude longitude:obj1.coordinate.longitude];
-	CLLocation *obj2Loc = [[CLLocation alloc] initWithLatitude:obj2.coordinate.latitude longitude:obj2.coordinate.longitude];
+	CLLocation *centerLoc = [[[CLLocation alloc] initWithLatitude:centerCoordinate->latitude longitude:centerCoordinate->longitude]autorelease];
+	CLLocation *obj1Loc = [[[CLLocation alloc] initWithLatitude:obj1.coordinate.latitude longitude:obj1.coordinate.longitude]autorelease];
+	CLLocation *obj2Loc = [[[CLLocation alloc] initWithLatitude:obj2.coordinate.latitude longitude:obj2.coordinate.longitude]autorelease];
 	
 	CLLocationDistance dist1 = [obj1Loc distanceFromLocation:centerLoc];
 	CLLocationDistance dist2 = [obj2Loc distanceFromLocation:centerLoc];
@@ -75,7 +75,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
 		[collection addObjectsFromArray:annotations];
 		
-		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+		self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 		
 		_centerCoordinate = centerCoordinate;
 		[self postInit];
@@ -164,13 +164,13 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark Annotations
 
 - (void)setAnnotations:(NSArray *)theAnnotations {
-	CKDocumentController* documentController = nil;
-	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		documentController = (CKDocumentController*)self.objectController;
+	CKDocumentCollectionController* documentController = nil;
+	if([self.objectController isKindOfClass:[CKDocumentCollectionController class]]){
+		documentController = (CKDocumentCollectionController*)self.objectController;
 	}
 	else{
-		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
-		self.objectController = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+		CKDocumentArray* collection = [[[CKDocumentArray alloc]init]autorelease];
+		self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 		if([self isViewLoaded] && [self.view superview] != nil){
 			if([self.objectController respondsToSelector:@selector(setDelegate:)]){
 				[self.objectController performSelector:@selector(setDelegate:) withObject:self];
@@ -426,14 +426,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	return [self.mapView viewForAnnotation:object];
 }
 
-- (NSArray*)visibleViews{
+- (NSArray*)visibleIndexPaths{
 	NSMutableArray* array = [NSMutableArray array];
 	NSInteger count = [self numberOfObjectsForSection:0];
 	for(int i=0;i<count;++i){
-		UIView* view = [self viewAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-		if(view != nil){
-			[array addObject:view];
-		}
+        [array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 	}
 	return array;
 }

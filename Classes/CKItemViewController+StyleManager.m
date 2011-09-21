@@ -10,6 +10,11 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKNSObject+Bindings.h"
 
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@end
+
 static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 
 @implementation CKItemViewController (CKStyleManager)
@@ -34,6 +39,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 + (CKItemViewController*)controllerForItem:(CKObjectViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
     CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
 	CKCallback* callback = [item createCallback];
+    controller.createCallback = callback;
 	if(callback){
 		[callback execute:controller];
 	}
@@ -63,8 +69,8 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	}
 	
 	controller.name = nil;
-	[controller performSelector:@selector(setParentController:) withObject:parentController];
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+	[controller setParentController:parentController];
+	[controller setIndexPath:indexPath];
 	[controller setValue:object];	
     
 	return controller;

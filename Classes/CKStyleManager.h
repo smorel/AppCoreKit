@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "CKCascadingTree.h"
-#import "CKUIView+Style.h"
-#import "CKTableViewCellController+Style.h"
-#import "CKUILabel+Style.h"
-#import "CKUIViewController+Style.h"
 
 
 /** TODO
@@ -25,6 +21,8 @@
 
 - (void)loadContentOfFileNamed:(NSString*)name;
 - (BOOL)importContentOfFileNamed:(NSString*)name;
+
++ (BOOL)logEnabled;
 
 @end
 

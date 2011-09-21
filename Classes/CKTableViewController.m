@@ -9,6 +9,8 @@
 //  Copyright 2009 toxicsoftware.com. All rights reserved.
 
 #import "CKTableViewController.h"
+#import "CKStyleManager.h"
+#import "CKStyle+Parsing.h"
 
 
 @interface CKTableViewController ()
@@ -24,10 +26,12 @@
 @synthesize stickySelection = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
 @synthesize tableViewContainer = _tableViewContainer;
+@synthesize tableInsets = _tableInsets;
 
 - (void)postInit {
 	[super postInit];
 	self.style = UITableViewStylePlain;
+    self.tableInsets = UIEdgeInsetsMake(0,0,0,0);
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -51,6 +55,14 @@
 
 - (void)loadView {
 	[super loadView];
+    
+    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+    if([controllerStyle containsObjectForKey:@"tableViewStyle"]){
+        self.style = [controllerStyle enumValueForKey:@"tableViewStyle" 
+									 withEnumDescriptor:CKEnumDefinition(@"UITableViewStyle",
+                                                                         UITableViewStylePlain, 
+                                                                         UITableViewStyleGrouped)];
+    }
 
 	if (self.view == nil) {
 		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
@@ -82,8 +94,18 @@
 			self.tableView = theTableView;
 		}
 	}
-	
 	//self.tableView.clipsToBounds = NO;
+}
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
+    CGRect frame = self.tableViewContainer.frame;
+    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableInsets.left,
+                                                              frame.origin.y/* + self.tableInsets.top*/,
+                                                              frame.size.width - (self.tableInsets.left + self.tableInsets.right),
+                                                              frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
+    self.tableView.contentInset = UIEdgeInsetsMake(self.tableInsets.top,0,self.tableInsets.bottom,0);
 }
 
 - (void)viewDidUnload {
@@ -164,17 +186,23 @@
 
 #pragma mark CKItemViewContainerController Implementation
 
-- (NSArray*)visibleViews{
-	return [self.tableView visibleCells];
+- (NSArray*)visibleIndexPaths{
+	return [self.tableView indexPathsForVisibleRows];
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
-	return [self.tableView indexPathForCell:(UITableViewCell*)view];
+	NSIndexPath* indexPath =  [self.tableView indexPathForCell:(UITableViewCell*)view];
+    if(!indexPath){
+        indexPath = [super indexPathForView:view];
+    }
+    return indexPath;
 }
 
+/* implemented in parent controller now.
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
 	return [self.tableView cellForRowAtIndexPath:indexPath];
 }
+ */
 
 @end

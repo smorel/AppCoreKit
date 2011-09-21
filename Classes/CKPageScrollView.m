@@ -128,7 +128,7 @@
 }
 
 - (void)insertView:(UIView *)view atIndex:(NSUInteger)index {
-	view.center = CGPointMake((self.pageWidth / 2) + (self.pageWidth * index), self.bounds.size.height / 2);
+	view.center = CGPointMake((NSInteger)((self.pageWidth / 2.0) + (self.pageWidth * index)),(NSInteger)( self.bounds.size.height / 2.0));
 	[self.scrollView addSubview:view];
 }
 

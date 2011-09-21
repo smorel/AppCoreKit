@@ -15,6 +15,7 @@ typedef struct CKStructParsedAttributes{
 	NSString* className;
 	NSString* encoding;
 	NSInteger size;
+    BOOL pointer;
 }CKStructParsedAttributes;
 
 CKStructParsedAttributes parseStructAttributes(NSString* attributes){
@@ -39,6 +40,10 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(CGAffineTransform)];
 		results.size = sizeof(CGAffineTransform);
 	}
+    else if([results.className isEqual:@"UIEdgeInsets"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(UIEdgeInsets)];
+		results.size = sizeof(UIEdgeInsets);
+	}
 	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);
@@ -49,6 +54,27 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.size = 0;
 		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
+    results.pointer = NO;
+	return results;
+}
+
+CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
+	CKStructParsedAttributes results;
+	NSRange rangeForClassName = [attributes rangeOfString:@"="];
+	results.className = [attributes substringWithRange:NSMakeRange(3,rangeForClassName.location - 3)];
+	
+	//FIXME : later do it properly by registering descriptors for structs, ...
+	if([results.className hasPrefix:@"CGColor"]){
+		results.encoding = [NSString stringWithUTF8String:@encode(CGColorRef)];
+		results.size = sizeof(CGColorRef);
+		results.className = @"CGColorRef";
+	}
+    else{
+		results.encoding = nil;
+		results.size = 0;
+		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+	}
+    results.pointer = YES;
 	return results;
 }
 
@@ -247,6 +273,13 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		self.encoding = result.encoding;
 		self.typeSize = result.size;
 	}
+    else if([attributes hasPrefix:@"T^{"]){
+		self.propertyType = CKClassPropertyDescriptorTypeStructPointer;
+		CKStructParsedAttributes result = parseStructPointerAttributes(attributes);
+		self.className = result.className;
+		self.encoding = result.encoding;
+		self.typeSize = result.size;
+	}
 	else{
 		/*
 		 [array type] : array
@@ -336,14 +369,16 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 
 
 @interface CKClassPropertyDescriptorManager ()
-@property (nonatomic, retain, readwrite) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readwrite) NSDictionary *propertyNamesByClassName;
-@property (nonatomic, retain, readwrite) NSDictionary *viewPropertiesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertiesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertiesByClassNameByName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *propertyNamesByClassName;
+@property (nonatomic, retain, readwrite) NSMutableDictionary *viewPropertiesByClassName;
 @end
 
 static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefault = nil;
 @implementation CKClassPropertyDescriptorManager
 @synthesize propertiesByClassName = _propertiesByClassName;
+@synthesize propertiesByClassNameByName = _propertiesByClassNameByName;
 @synthesize propertyNamesByClassName = _propertyNamesByClassName;
 @synthesize viewPropertiesByClassName = _viewPropertiesByClassName;
 
@@ -356,9 +391,10 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 
 - (id)init{
 	[super init];
-	self.propertiesByClassName = [NSMutableDictionary dictionary];
-	self.propertyNamesByClassName = [NSMutableDictionary dictionary];
-	self.viewPropertiesByClassName = [NSMutableDictionary dictionary];
+	self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+	self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
 	return self;
 }
 
@@ -366,6 +402,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 	self.propertiesByClassName = nil;
 	self.viewPropertiesByClassName = nil;
 	self.propertyNamesByClassName = nil;
+	self.propertiesByClassNameByName = nil;
 	[super dealloc];
 }
 
@@ -377,16 +414,19 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 		[NSObject introspection:class array:allProperties];
 		[_propertiesByClassName setObject:allProperties forKey:className];
 		
-		NSMutableArray* allPropertyNames = [NSMutableArray array];
-		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray array];
+		NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
+		NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
+		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
 		for(CKClassPropertyDescriptor* property in allProperties){
 			[allPropertyNames addObject:property.name];
 			if([NSObject isKindOf:property.type parentType:[UIView class]]){
 				[allViewPropertyDescriptors addObject:property];
 			}
+            [propertiesByName setObject:property forKey:property.name];
 		}
 		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
 		[_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
+        [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
 	}
 	
 	return allProperties;
@@ -415,13 +455,13 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class{
-	NSArray* properties = [self allPropertiesForClass:class];
-	//TODO : Optimize this by getting a dictionary of properties instead of an array !
-	for(CKClassPropertyDescriptor* p in properties){
-		if([p.name isEqual:name])
-			return p;
-	}
-	return nil;
+	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+    NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+    if(!propertiesByName){
+        [self allPropertiesForClass:class];
+        propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+    }
+    return [propertiesByName objectForKey:name];
 }
 
 /*

@@ -145,7 +145,7 @@
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		
-		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		CKObjectPropertyMetaData* metaData = [property metaData];
 		contentType = [metaData contentType];
 		contentProtocol = [metaData contentProtocol];
 		

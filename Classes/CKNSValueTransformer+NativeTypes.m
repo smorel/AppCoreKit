@@ -9,38 +9,51 @@
 #import "CKNSValueTransformer+NativeTypes.h"
 #import "CKNSValueTransformer+Additions.h"
 
-NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
-	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) {
 	NSArray* components = [strValues componentsSeparatedByString:@","];
 	
 	va_list ArgumentList;
 	va_start(ArgumentList,strValues);
 	
 	int i = 0;
+	NSMutableDictionary* valuesAndLabels = [NSMutableDictionary dictionary];
 	while (i < [components count]){
 		int value = va_arg(ArgumentList, int);
-		[dico setObject:[NSNumber numberWithInt:value] forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [valuesAndLabels setObject:[NSNumber numberWithInt:value] 
+                     forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 		++i;
     }
     va_end(ArgumentList);
 	
-	return dico;
+    CKEnumDescriptor* descriptor = [[[CKEnumDescriptor alloc]init]autorelease];
+    descriptor.name = name;
+    descriptor.valuesAndLabels = valuesAndLabels;
+	return descriptor;
 }
+
+@implementation CKEnumDescriptor
+@synthesize name,valuesAndLabels;
+-(void)dealloc{
+    self.name = nil;
+    self.valuesAndLabels = nil;
+    [super dealloc];
+}
+@end
 
 @implementation NSValueTransformer (CKNativeTypes)
 
 
-+ (NSInteger)parseString:(NSString*)str toEnum:(NSDictionary*)keyValues{
++ (NSInteger)parseString:(NSString*)str toEnum:(CKEnumDescriptor*)descriptor{
 	NSInteger integer = 0;
 	NSArray* components = [str componentsSeparatedByString:@"|"];
 	for(NSString* c in components){
-		NSInteger ci = [[keyValues objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
+		NSInteger ci = [[descriptor.valuesAndLabels objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
 		integer |= ci;
 	}
 	return integer;
 }
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDefinition:(NSDictionary*)enumDefinition{
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition{
 	if([object isKindOfClass:[NSString class]]){
 		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition];
 		return result;
@@ -50,10 +63,10 @@ NSDictionary* CKEnumDictionaryFunc(NSString* strValues, ...) {
 }
 
 
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDefinition:(NSDictionary*)enumDefinition{
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition{
 	NSMutableString* str = [NSMutableString string];
-	for(NSString* e in [enumDefinition allKeys]){
-		NSInteger ci = [[enumDefinition objectForKey:e]intValue];
+	for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
+		NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
 		if(value & ci){
 			if([str length] > 0){
 				[str appendString:@" | "];

@@ -15,6 +15,24 @@
 
 @class CKObjectTableViewController;
 
+
+/** TODO
+ */
+@interface CKUITableViewCell : UITableViewCell
+
+@property(nonatomic,assign) CKTableViewCellController* delegate;
+@property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
+
+@end
+
+
+
+
+
 /** TODO
  */
 enum{
@@ -48,7 +66,8 @@ typedef enum CKTableViewCellStyle {
 	NSString* _key;
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
-	
+    
+    NSString* _cacheLayoutBindingContextId;
 	
 #ifdef DEBUG 
 	id debugModalController;
@@ -89,6 +108,7 @@ typedef enum CKTableViewCellStyle {
 
 //private
 - (void)initTableViewCell:(UITableViewCell*)cell;
+- (void)layoutCell:(UITableViewCell*)cell;
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object;
 + (UIResponder*)responderInView:(UIView*)view;
@@ -96,7 +116,11 @@ typedef enum CKTableViewCellStyle {
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params;
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
+
+- (void)scrollToRow;
+- (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
 
 @end
 
@@ -120,9 +144,15 @@ typedef enum CKTableViewCellStyle {
 @end
 
 
+
+
+
+
+//FIXME use layout when available !
+
 @interface CKTableViewCellController (CKLayout)
 
-- (void)layoutCell:(UITableViewCell *)cell;
+- (id)performStandardLayout:(CKTableViewCellController *)controller;
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;

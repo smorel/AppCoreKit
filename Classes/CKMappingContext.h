@@ -13,10 +13,14 @@
  */
 extern NSString* const CKMappingErrorDomain;
 extern NSString* const CKMappingErrorDetailsKey;
+extern NSString* const CKMappingErrorCodeKey;
+
 #define CKMappingErrorCodeInvalidSourceData     1
 #define CKMappingErrorCodeInvalidObjectClass    2
 #define CKMappingErrorCodeMissingRequieredValue 3
- 
+#define CKMappingErrorCodeInvalidProperty       4
+
+
 /** TODO
  */
 @interface CKMappingContext : NSObject{
@@ -66,15 +70,15 @@ extern NSString* const CKMappingErrorDetailsKey;
 - (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value;
 - (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformBlock:(id(^)(id source))transformBlock;
 - (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath defaultValue:(id)value transformTarget:(id)target action:(SEL)action;
-- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered;
-- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformBlock:(id(^)(id source))transformBlock;
-- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered transformTarget:(id)target action:(SEL)action;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath optional:(BOOL)optional;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath optional:(BOOL)optional transformBlock:(id(^)(id source))transformBlock;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath optional:(BOOL)optional transformTarget:(id)target action:(SEL)action;
 
 //valid for object property or array, collection sub objects
 - (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier;
-- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath optional:(BOOL)optional objectClass:(Class)objectClass withMappingsContextIdentifier:(id)contextIdentifier;
 - (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath withMappingsContextIdentifier:(id)contextIdentifier;
-- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath requiered:(BOOL)requiered withMappingsContextIdentifier:(id)contextIdentifier;
+- (void)setKeyPath:(NSString*)keyPath fromKeyPath:(NSString*)sourceKeyPath optional:(BOOL)optional withMappingsContextIdentifier:(id)contextIdentifier;
 
 - (BOOL)isEmpty;
 

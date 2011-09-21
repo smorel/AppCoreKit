@@ -13,6 +13,11 @@
 
 //CKItemViewContainerController
 
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@end
+
 @interface CKItemViewContainerController ()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
@@ -50,6 +55,11 @@
 	return self;
 }
 
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+}
+
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
 	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
@@ -58,7 +68,7 @@
 }
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentController* controller = [[[CKDocumentController alloc]initWithCollection:collection]autorelease];
+	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
@@ -136,10 +146,12 @@
 #pragma mark View management
 
 - (void)viewWillAppear:(BOOL)animated{
+	[super viewWillAppear:animated];
+    
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
-	[super viewWillAppear:animated];
+    
 	[self updateParams];
 }
 
@@ -185,12 +197,11 @@
 #pragma mark Visible views management
 
 - (void)updateVisibleViewsRotation{
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:view withParams:self.params animated:YES];
+			[controller rotateView:controller.view withParams:self.params animated:YES];
 		}
 	}	
 }
@@ -198,22 +209,24 @@
 //Update the indexPath of the visible controllers as they could have moved.
 - (void)updateVisibleViewsIndexPath{
 	//ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+        //UIView* view = [self viewAtIndexPath:indexPath];
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+        if(![[controller indexPath]isEqual:indexPath]){
+            //NSLog(@"updateVisibleViewsIndexPath -- controller <%p> view : <%p> cell controller : %@ changeindexpath from :%@ to %@",self,view,controller,[controller indexPath],indexPath);
+            [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+        }
 	}
 }
 
 - (void)updateViewsVisibility:(BOOL)visible{
 	//ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleViews = [self visibleViews];
-	for (UIView *view in visibleViews) {
-		NSIndexPath *indexPath = [self indexPathForView:view];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if(visible){
-			[controller viewDidAppear:view];
+			[controller viewDidAppear:controller.view];
 		}
 		else{
 			[controller viewDidDisappear];
@@ -232,19 +245,18 @@
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
-	NSAssert(NO,@"Implement in inheriting class");
-	return nil;
+    NSValue* v = [_indexPathToViews objectForKey:indexPath];
+	return v ? [v nonretainedObjectValue] : nil;
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
 	return [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
 }
 
-- (NSArray*)visibleViews{
+- (NSArray*)visibleIndexPaths{
 	NSAssert(NO,@"Implement in inheriting class");
 	return nil;
 }
-
 
 - (void)updateParams{
 	NSAssert(NO,@"Implement in inheriting class");
@@ -279,13 +291,14 @@
 }
 
 - (void)fetchMoreData{
+    //return;
+    
 	//Fetch data if needed
 	NSInteger minVisibleSectionIndex = INT32_MAX;
 	NSInteger maxVisibleSectionIndex = -1;
 	NSMutableDictionary* maxIndexPaths = [NSMutableDictionary dictionary];
-	NSArray* visibleCells = [self visibleViews];
-	for(UIView* cell in visibleCells){
-		NSIndexPath *indexPath = [self indexPathForView:cell];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		NSInteger section = indexPath.section;
 		if(section < minVisibleSectionIndex) minVisibleSectionIndex = section;
 		if(section > maxVisibleSectionIndex) maxVisibleSectionIndex = section;
@@ -309,7 +322,11 @@
 }
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section];
+    BOOL feedSourceCellEnabled = NO;
+    if([_objectController respondsToSelector:@selector(displayFeedSourceCell)]){
+        feedSourceCellEnabled = [_objectController displayFeedSourceCell];
+    }
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (feedSourceCellEnabled ? 1 : 0);
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
@@ -324,14 +341,15 @@
 #pragma mark View/Controller life management
 
 - (id)releaseView:(CKWeakRef*)weakref{
-	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
-	[_indexPathToViews removeObjectForKey:previousPath];
+    NSAssert(weakref,@"Weird ... Should never happend");
+    NSValue* weakViewValue = [NSValue valueWithNonretainedObject:weakref.object];
+	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:weakViewValue];
+    if(previousPath){
+        [_indexPathToViews removeObjectForKey:previousPath];
+    }
 	
-	//CKItemViewController* controller = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:target]];
-	[_viewsToControllers removeObjectForKey:[NSValue valueWithNonretainedObject:weakref.object]];
-	//[controller performSelector:@selector(setView:) withObject:nil];
+	[_viewsToControllers removeObjectForKey:weakViewValue];
 	[_weakViews removeObject:weakref];
-	
 	return (id)nil;
 }
 
@@ -374,6 +392,12 @@
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
+        
+        UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
+        if(previousView){
+            [_indexPathToViews removeObjectForKey:indexPath];
+            [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
+        }
 		
 		CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 		if(factoryItem != nil && factoryItem.controllerClass){
@@ -393,39 +417,47 @@
 				
 				CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
 				[_weakViews addObject:viewRef];
-				[_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
+                
+                [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
 			}
 			else{
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
-				[_indexPathToViews removeObjectForKey:previousPath];
+                if(previousPath){
+                    [_indexPathToViews removeObjectForKey:previousPath];
+                    [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+                    //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
+                }
 				
 				//Reuse controller
 				NSAssert(_viewsToControllers != nil,@"Should have been created");
 				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
 				
+				controller.createCallback = [factoryItem createCallback];
 				controller.initCallback = [factoryItem initCallback];
 				controller.setupCallback = [factoryItem setupCallback];
 				controller.selectionCallback = [factoryItem selectionCallback];
 				controller.accessorySelectionCallback = [factoryItem accessorySelectionCallback];
 				controller.becomeFirstResponderCallback = [factoryItem becomeFirstResponderCallback];
 				controller.resignFirstResponderCallback = [factoryItem resignFirstResponderCallback];
+				controller.layoutCallback = [factoryItem layoutCallback];
 			}
 			
 			NSAssert(view != nil,@"The view has not been created");
 			
-			[controller performSelector:@selector(setParentController:) withObject:self];
-			[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-			[controller performSelector:@selector(setView:) withObject:view];
+			[controller setParentController:self];
+			[controller setIndexPath:indexPath];
+			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
 			[_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
 			if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
 			[_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
-			
+            //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
+
 			[controller setValue:object];
 			[controller setupView:view];	
 			
-			if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			if(controller){
 				[controller rotateView:view withParams:self.params animated:NO];
 			}
 			
@@ -528,7 +560,29 @@
 	[self updateVisibleViewsIndexPath];
 }
 
+- (void)incrementIndexPathFrom:(NSIndexPath*)indexPath{
+    id view = [_indexPathToViews objectForKey:indexPath];
+    if(view){
+        NSInteger section = indexPath.section;
+        NSInteger row = indexPath.row;
+        NSInteger count = [self numberOfObjectsForSection:section];
+        for(int i = count - 1;i >= row ; --i){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:i+1 inSection:section];
+            id v = [_indexPathToViews objectForKey:indexPath];
+            if(v){
+                [_indexPathToViews setObject:v forKey:newIndexPath];
+                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,v,newIndexPath);
+                [_viewsToIndexPath setObject:newIndexPath forKey:v];
+                [_indexPathToViews removeObjectForKey:indexPath];
+                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,indexPath);
+            }
+        }
+    }
+}
+
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    [self incrementIndexPathFrom:indexPath];
 	[self onInsertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
@@ -537,6 +591,9 @@
 }
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    for(NSIndexPath* indexPath in indexPaths){
+        [self incrementIndexPathFrom:indexPath];
+    }
 	[self onInsertObjects:objects atIndexPaths:indexPaths];
 }
 
@@ -581,8 +638,8 @@
 }
 
 - (CKFeedSource*)collectionDataSource{
-	if([self.objectController isKindOfClass:[CKDocumentController class]]){
-		CKDocumentController* documentController = (CKDocumentController*)self.objectController;
+	if([self.objectController isKindOfClass:[CKDocumentCollectionController class]]){
+		CKDocumentCollectionController* documentController = (CKDocumentCollectionController*)self.objectController;
 		return documentController.collection.feedSource;
 	}
 	return nil;

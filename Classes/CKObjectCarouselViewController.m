@@ -35,7 +35,7 @@
 @synthesize pageControl = _pageControl;
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 	[_carouselView release];
 	_carouselView = nil;
 	[_headerViewsForSections release];
@@ -55,7 +55,7 @@
 	}
 	
 	if (self.carouselView == nil) {
-		if ([self.view isKindOfClass:[UITableView class]]) {
+		if ([self.view isKindOfClass:[CKCarouselView class]]) {
 			// TODO: Assert - Should not be allowed
 			self.carouselView = (CKCarouselView *)self.view;
 		} else {
@@ -89,7 +89,7 @@
 		self.params = [NSMutableDictionary dictionary];
 	}
 	
-	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSValue valueWithCGSize:self.carouselView.bounds.size] forKey:CKTableViewAttributeBounds];
 	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
 	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
 	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
@@ -111,7 +111,7 @@
     [super viewDidLoad];
 	
 	if(_pageControl){
-		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+		[NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 		[self.carouselView bind:@"currentPage" target:self action:@selector(updatePageControlPage:)];
 		[self.carouselView bind:@"numberOfPages" toObject:_pageControl withKeyPath:@"numberOfPages"];
 		[_pageControl bindEvent:UIControlEventTouchUpInside target:self action:@selector(scrollToPage:)];
@@ -121,7 +121,7 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl"]];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_pageControl",self]];
 	self.carouselView = nil;
 	self.pageControl = nil;
 }
@@ -237,12 +237,14 @@
 
 #pragma mark CKObjectCarouselViewController
 
+/*
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
 	return [self.carouselView viewAtIndexPath:indexPath];
 }
+ */
 
-- (NSArray*)visibleViews{
-	return [self.carouselView visibleViews];
+- (NSArray*)visibleIndexPaths{
+	return [self.carouselView visibleIndexPaths];
 }
 
 @end

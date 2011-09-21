@@ -55,10 +55,10 @@ NSString* CKSerializerIDTag = @"@id";
 			break;
 		}
 		case CKClassPropertyDescriptorTypeInt:{
-			CKModelObjectPropertyMetaData* metaData = [property metaData];
+			CKObjectPropertyMetaData* metaData = [property metaData];
 			NSInteger i = 0;
-			if(metaData.enumDefinition != nil){
-				i = [NSValueTransformer convertEnumFromObject:object withEnumDefinition:metaData.enumDefinition];
+			if(metaData.enumDescriptor != nil){
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:metaData.enumDescriptor];
 			}
 			else{
 				i = [NSValueTransformer convertIntegerFromObject:object];
@@ -135,8 +135,10 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		case CKClassPropertyDescriptorTypeClass:{
 			Class c =  [NSValueTransformer convertClassFromObject:object];
-			[property setValue:[NSValue valueWithPointer:c]];
-			return [NSValue valueWithPointer:c];
+            [property setValue:(id)c];
+			/*[property setValue:[NSValue valueWithPointer:c]];
+			return [NSValue valueWithPointer:c];*/
+            return c;
 			break;
 		}
 		case CKClassPropertyDescriptorTypeSelector:{
@@ -169,7 +171,36 @@ NSString* CKSerializerIDTag = @"@id";
 				
 				NSValue* value =  [NSValue value:returnValue withObjCType:[descriptor.encoding UTF8String]];
 				[property setValue:value];
+                
+                free(returnValue);
+                
 				return value;
+			}
+			else{
+				NSAssert(NO,@"No transform selector for struct of type '%@'",typeName);
+			}
+			break;
+		}
+        case CKClassPropertyDescriptorTypeStructPointer:{
+			NSString* typeName = descriptor.className;
+			NSString* selectorName = [NSString stringWithFormat:@"convert%@FromObject:",typeName];
+			SEL selector = NSSelectorFromString(selectorName);
+			if([[NSValueTransformer class]respondsToSelector:selector]){
+				NSMethodSignature *signature = [[NSValueTransformer class] methodSignatureForSelector:selector];
+				
+				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+				[invocation setSelector:selector];
+				[invocation setTarget:[NSValueTransformer class]];
+				[invocation setArgument:&object
+								atIndex:2];
+				[invocation invoke];
+				
+				void* returnValue = nil;
+				[invocation getReturnValue:&returnValue];
+				
+				//NSValue* value =  [NSValue valueWithPointer:returnValue];
+				[property setValue:(id)returnValue];
+				return (id)returnValue;
 			}
 			else{
 				NSAssert(NO,@"No transform selector for struct of type '%@'",typeName);
@@ -245,7 +276,7 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	//Can extend here with string : exemple "@id[theid]" ou "@selector[@class:type,selectorname:]" ou "@selector[@id:theid,selectorname:params:]"
 	
-	CKModelObjectPropertyMetaData* metaData = [property metaData];
+	CKObjectPropertyMetaData* metaData = [property metaData];
 	if(metaData.contentType != nil){
 		NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:metaData.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
@@ -404,14 +435,14 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
-    CKModelObjectPropertyMetaData* metaData = [property metaData];
+    CKObjectPropertyMetaData* metaData = [property metaData];
 	if([NSObject isKindOf:type parentType:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
-				if(metaData.enumDefinition != nil){
-					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDefinition:metaData.enumDefinition];
+				if(metaData.enumDescriptor != nil){
+					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:metaData.enumDescriptor];
 				}
 				break;
 			}

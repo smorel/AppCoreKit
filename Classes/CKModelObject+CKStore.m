@@ -55,7 +55,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 	[item updateAttributes:attributes];
 	
-	CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
+	//CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 	return item;
 }
 
@@ -76,7 +76,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 			item.name = self.modelName;
 			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 			[item updateAttributes:attributes];
-			CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
+			//CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 		}
 		else{
 			[CKModelObject registerObject:self withUniqueId:self.uniqueId];
@@ -196,7 +196,7 @@ NSMutableDictionary* CKModelObjectManager = nil;
 	for(NSString* propertyName in allProperties){
 		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		CKModelObjectPropertyMetaData* metaData = [property metaData];
+		CKObjectPropertyMetaData* metaData = [property metaData];
 		if( (metaData  && metaData.serializable == NO) || descriptor.isReadOnly == YES){}
 		else{
 			id propertyValue = [property value];

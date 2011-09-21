@@ -418,11 +418,10 @@
 	// the cells; maybe it's because it "loads" the cell, or maybe there is a bug in the framework.
 	// The documentation doesn't say anything about this.	
 	
-	NSArray *visibleCells = [self.tableView visibleCells];
-	
-	for (UITableViewCell *cell in visibleCells) {
-		NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-		[[self cellControllerForIndexPath:indexPath] viewDidAppear:[self.tableView cellForRowAtIndexPath:indexPath]];
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+        CKItemViewController* controller = [self cellControllerForIndexPath:indexPath];
+		[controller viewDidAppear:controller.view];
 	}
 }
 

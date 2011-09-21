@@ -25,7 +25,6 @@ static char NSObjectWeakRefObjectKey;
 
 @interface CKWeakRef ()
 @property(nonatomic,retain)CKCallback* callback;
-- (CKWeakRefAssociatedObject*)setupAssociatedObject;
 @end
 
 
@@ -88,8 +87,7 @@ static char NSObjectWeakRefObjectKey;
 				[ref.callback execute:ref];
 			}
 			
-			ref.object = nil;
-			[weakRefObj.weakRefs removeObject:refValue];
+			ref.object = nil;//this will call unregister ...
 			[ref release];
 		}
 		
@@ -105,6 +103,11 @@ static char NSObjectWeakRefObjectKey;
 @end
 
 //CKWeakRef
+
+@interface CKWeakRef ()
+- (void)registerToObject:(id)object;
+- (void)unregisterToObject:(id)object;
+@end
 
 static BOOL swizzlingDone = NO;
 
@@ -131,12 +134,7 @@ static BOOL swizzlingDone = NO;
 }
 
 - (void)dealloc{
-	if(_object){
-		CKWeakRefAssociatedObject* targetWeakRefObject = [_object weakRefObject];
-		if(targetWeakRefObject){
-			[targetWeakRefObject unregisterWeakRef:self];
-		}
-	}
+    [self unregisterToObject:_object];
 	
 	_object = nil;
 	[_callback release];
@@ -144,21 +142,11 @@ static BOOL swizzlingDone = NO;
 	[super dealloc];
 }
 
-- (CKWeakRefAssociatedObject*)setupAssociatedObject{
-	CKWeakRefAssociatedObject* targetWeakRefObject = [_object weakRefObject];
-	if(targetWeakRefObject == nil){
-		targetWeakRefObject = [[[CKWeakRefAssociatedObject alloc]init]autorelease];
-		[_object setWeakRefObject:targetWeakRefObject];
-	}
-	[targetWeakRefObject registerWeakRef:self];
-	return targetWeakRefObject;
-}
-
 - (id)initWithObject:(id)theObject{
 	[[self class] executeSwizzling];
 	[super init];
 	self.object = theObject;
-	[self setupAssociatedObject];
+	[self registerToObject:theObject];
 	return self;
 }
 
@@ -167,7 +155,7 @@ static BOOL swizzlingDone = NO;
 	[super init];
 	self.object = theObject;
 	self.callback = callback;
-	[self setupAssociatedObject];
+	[self registerToObject:theObject];
 	return self;
 }
 
@@ -182,6 +170,33 @@ static BOOL swizzlingDone = NO;
 - (id)initWithObject:(id)object target:(id)target action:(SEL)action{
 	[self initWithObject:object callback:[CKCallback callbackWithTarget:target action:action]];
 	return self;
+}
+
+
+- (void)registerToObject:(id)theobject{
+    if(theobject){
+        CKWeakRefAssociatedObject* targetWeakRefObject = [theobject weakRefObject];
+        if(targetWeakRefObject == nil){
+            targetWeakRefObject = [[[CKWeakRefAssociatedObject alloc]init]autorelease];
+            [theobject setWeakRefObject:targetWeakRefObject];
+        }
+        [targetWeakRefObject registerWeakRef:self];
+    }
+}
+
+- (void)unregisterToObject:(id)theobject{
+    if(theobject){
+		CKWeakRefAssociatedObject* targetWeakRefObject = [theobject weakRefObject];
+		if(targetWeakRefObject){
+			[targetWeakRefObject unregisterWeakRef:self];
+		}
+	}
+}
+
+- (void)setObject:(id)theobject{
+    [self unregisterToObject:_object];
+    _object = theobject;
+    [self registerToObject:_object];
 }
 
 + (CKWeakRef*)weakRefWithObject:(id)object{

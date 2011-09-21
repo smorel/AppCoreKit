@@ -9,15 +9,31 @@
 #import "CKUIViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
+#import "CKDebug.h"
 
 
 @implementation UIViewController (CKStyle)
 
-- (void)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+- (NSMutableDictionary*)applyStyle{
+	return [self applyStyleWithParentStyle:nil];
+}
+
+- (NSMutableDictionary*)applyStyleWithParentStyle:(NSMutableDictionary*)style{
+    NSMutableDictionary* controllerStyle = style ? [style styleForObject:self  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	
+    if([CKStyleManager logEnabled]){
+        if([controllerStyle isEmpty]){
+            CKDebugLog(@"did not find style for controller %@",self);
+        }
+        else{
+            CKDebugLog(@"found style for controller %@",self);
+        }
+    }
+    
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
+    
+    return controllerStyle;
 }
 
 @end

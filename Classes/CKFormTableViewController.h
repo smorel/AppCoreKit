@@ -35,7 +35,7 @@
 @property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
-@property (nonatomic,assign) BOOL hidden;
+@property (nonatomic,readonly) BOOL hidden;
 
 - (NSInteger)numberOfObjects;
 - (id)objectAtIndex:(NSInteger)index;
@@ -96,7 +96,7 @@
 /** TODO
  */
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
-	CKDocumentController* _objectController;
+	CKDocumentCollectionController* _objectController;
 	CKObjectViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
@@ -106,7 +106,7 @@
 	BOOL sectionUpdate;
 }
 
-@property (nonatomic,retain,readonly) CKDocumentController* objectController;
+@property (nonatomic,retain,readonly) CKDocumentCollectionController* objectController;
 @property (nonatomic,retain,readonly) NSMutableArray* headerCellDescriptors;
 @property (nonatomic,retain,readonly) NSMutableArray* footerCellDescriptors;
 
@@ -148,11 +148,13 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 	BOOL _autoHideSections;
 	BOOL _autoHideSectionHeaders;
 	BOOL reloading;
+    BOOL _validationEnabled;
 }
 @property (nonatomic,retain, readonly) NSMutableArray* sections;
 @property (nonatomic,readonly) BOOL reloading;
 @property (nonatomic,assign) BOOL autoHideSections;
 @property (nonatomic,assign) BOOL autoHideSectionHeaders;
+@property (nonatomic,assign) BOOL validationEnabled;
 
 ///-----------------------------------
 /// @name Initializing CKFormTableViewController
@@ -172,6 +174,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 ///-----------------------------------
 
 - (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
+- (NSArray*)addSections:(NSArray *)sections;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
 
@@ -180,6 +183,8 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 - (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
+
+- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
 ///-----------------------------------
 /// @name Accessing the sections
@@ -193,3 +198,9 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
 
 @end
+
+
+//Adds extensions here to avoid importing to much files in client projects
+
+#import "CKFormTableViewController+PropertyGrid.h"
+#import "CKFormTableViewController+Menus.h"

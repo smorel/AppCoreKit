@@ -24,9 +24,9 @@
 		NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
 		while(nextIndexPath != nil){
 			NSInteger rowCountForSection = [parentController numberOfObjectsForSection:section];
-			if(nextIndexPath.row >= rowCountForSection - 1){
+			if((NSInteger)nextIndexPath.row >= (rowCountForSection - 1)){
 				NSInteger sectionCount = [tableView numberOfSections];
-				if(nextIndexPath.section >= sectionCount - 1){
+				if((NSInteger)nextIndexPath.section >= (sectionCount - 1)){
 					return nil;
 				}
 				section++;
@@ -65,9 +65,10 @@
 		UITableViewCell* tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
 	
 		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
-		NSAssert(controllerNew != nil,@"invalid controller");
-		UIResponder* responder = [[controllerNew class]responderInView:tableViewCell];
-		[responder becomeFirstResponder];
+		if(controllerNew != nil){
+            UIResponder* responder = [[controllerNew class]responderInView:tableViewCell];
+            [responder becomeFirstResponder];
+        }
 	}
 }
 

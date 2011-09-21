@@ -7,8 +7,3 @@
 //
 
 #import "CKDocumentStorage.h"
-
-
-@implementation CKDocumentStorage
-
-@end

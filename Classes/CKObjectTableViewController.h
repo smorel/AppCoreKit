@@ -10,6 +10,10 @@
 #import "CKTableViewController.h"
 #import "CKTableViewCellController.h"
 
+
+//FIXME :
+   //on rotation, resizer la search bar si besoin !
+
 typedef enum CKObjectTableViewControllerEditableType{
     CKObjectTableViewControllerEditableTypeNone,
     CKObjectTableViewControllerEditableTypeLeft,
@@ -34,9 +38,6 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
     CKObjectTableViewControllerScrollingPolicy _scrollingPolicy;
     
     CKObjectTableViewControllerEditableType _editableType;
-	
-	UIBarButtonItem *rightButton;
-	UIBarButtonItem *leftButton;
     
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -57,11 +58,15 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
 	id _defaultSearchScope;
 	
     int _modalViewCount;
+    CGRect _lastModalFrame;
     UIView* _placeHolderViewDuringKeyboardOrSheet;
     
 	BOOL _viewIsOnScreen;
 	
 	CGFloat _tableMaximumWidth;
+    
+    id _storedTableDelegate;
+    id _storedTableDataSource;
 }
 
 ///-----------------------------------
@@ -157,20 +162,15 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
  */
 @property (nonatomic, retain, readonly) UISegmentedControl* segmentedControl;
 
-//private
-- (void)didSearch:(NSString*)text;
 
 ///-----------------------------------
-/// @name Navigation Buttons
+/// @name Editing Customization
 ///-----------------------------------
-/** 
- Specify the bar button item that should be displayed at the right of the navigation bar.
- */
-@property (nonatomic, retain) UIBarButtonItem *rightButton;
-/** 
- Specify the bar button item that should be displayed at the left of the navigation bar.
- */
-@property (nonatomic, retain) UIBarButtonItem *leftButton;
+@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
+
+//private
+- (void)didSearch:(NSString*)text;
 
 @end
 

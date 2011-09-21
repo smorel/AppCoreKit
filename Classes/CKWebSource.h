@@ -39,7 +39,6 @@ typedef void (^CKWebSourceSuccessBlock)();
 @property (nonatomic, copy) CKWebSourceSuccessBlock successBlock;
 @property (nonatomic, assign) id webSourceDelegate;
 
-- (void)setHasMore:(BOOL)bo;
 
 @end
 

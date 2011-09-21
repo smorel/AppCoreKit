@@ -12,8 +12,12 @@
 
 /** TODO
  */
-@interface CKDocumentArray : CKObjectPropertyArrayCollection {
+@interface CKDocumentArrayCollection : CKObjectPropertyArrayCollection {
 	NSMutableArray* _objects;
 }
 
+@end
+
+//DEPRECATED_IN_CLOUDKIT_1.7
+@interface CKDocumentArray : CKDocumentArrayCollection{}
 @end

@@ -8,6 +8,7 @@
 
 #import "CKOptionTableViewController.h"
 #import "CKStandardCellController.h"
+#import "CKLocalization.h"
 
 
 @interface CKOptionTableViewController ()
@@ -59,6 +60,37 @@
 	}
 	return self;	
 }
+
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index style:(UITableViewStyle)thestyle{
+	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		self.values = values;
+		self.labels = labels;
+		self.stickySelection = YES;
+		self.multiSelectionEnabled = NO;
+		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
+        self.optionCellStyle = CKTableViewCellStyleValue1;
+        self.style = thestyle;
+	}
+	return self;	
+}
+
+- (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelect style:(UITableViewStyle)thestyle{
+	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		self.values = values;
+		self.labels = labels;
+		self.stickySelection = !multiSelect;
+		self.multiSelectionEnabled = multiSelect;
+		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
+        self.optionCellStyle = CKTableViewCellStyleValue1;
+        self.style = thestyle;
+	}
+	return self;	
+}
+
 
 - (void)dealloc {
 	[self.values release];
@@ -129,7 +161,7 @@
         }
     }
     standardController.tableViewCell.textLabel.text = @"";
-	standardController.tableViewCell.detailTextLabel.text = text;
+	standardController.tableViewCell.detailTextLabel.text = _(text);
 	return nil;
 }
 

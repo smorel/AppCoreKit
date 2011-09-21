@@ -12,7 +12,7 @@
 
 /** TODO
  */
-@interface CKNSObjectPropertyCellController : CKPropertyGridCellController {
+@interface CKNSObjectPropertyCellController : CKTableViewCellController {
 
 }
 

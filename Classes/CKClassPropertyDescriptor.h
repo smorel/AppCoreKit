@@ -31,6 +31,7 @@ typedef enum{
 	CKClassPropertyDescriptorTypeClass,
 	CKClassPropertyDescriptorTypeSelector,
 	CKClassPropertyDescriptorTypeStruct,
+	CKClassPropertyDescriptorTypeStructPointer,
 	CKClassPropertyDescriptorTypeUnknown
 }CKClassPropertyDescriptorType;
 
@@ -93,6 +94,7 @@ typedef enum{
  */
 @interface CKClassPropertyDescriptorManager : NSObject{
 	NSMutableDictionary* _propertiesByClassName;
+	NSMutableDictionary* propertiesByClassNameByName;
 	NSMutableDictionary* _viewPropertiesByClassName;
 	NSMutableDictionary* _propertyNamesByClassName;
 	
@@ -110,8 +112,8 @@ typedef enum{
 - (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname;
 - (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name;
 */
-@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
+/*@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
 @property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;
-
+*/
 @end
 

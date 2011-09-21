@@ -68,7 +68,7 @@ static NSMutableDictionary* CKUserDefaultsSharedInstances = nil;
 - (void)initFromPlist{
     NSString *filePath = [[NSBundle mainBundle] pathForResource:[[self class]description] ofType:@"plist"];
     if([filePath length] > 0 && [filePath isKindOfClass:[NSNull class]] == NO){
-        NSMutableDictionary* params = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+        NSMutableDictionary* params = [[[NSMutableDictionary alloc] initWithContentsOfFile:filePath]autorelease];
         NSArray* allProperties = [self allPropertyDescriptors];
         for(CKClassPropertyDescriptor* property in allProperties){
             if(property.isReadOnly == NO){
