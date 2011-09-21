@@ -62,8 +62,6 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	cell.backgroundView = [[[UIView alloc] initWithFrame:cell.bounds] autorelease];
-	cell.backgroundView.backgroundColor = [UIColor clearColor];
 	cell.clipsToBounds = YES;
 	
 	if(_portraitNibName != nil){
