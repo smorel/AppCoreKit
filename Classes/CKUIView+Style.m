@@ -147,6 +147,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 }
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,CKStyleBackgroundImageContentMode,
 								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,@"@class",nil]];
 }
