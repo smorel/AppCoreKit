@@ -359,16 +359,41 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
         }
         //property is an object or a simple property
         else{
+            //FIXME regroup the error for requiered and optional in a method not to repeet code !
             SEL transformSelector = [self transformSelector:options];
             CKCallback* callback = [self transformCallback:options];
             if(callback){
                 id transformedValue = [callback execute:value];
-                [property setValue:transformedValue];
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorCodeMissingRequieredValue,details);
+                        return;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
+                }
             }
             else if(transformSelector){
                 Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
-                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value];
-                [property setValue:transformedValue];
+                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value withObject:(id)error];
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorCodeMissingRequieredValue,details);
+                        return;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
+                }
             }
             else{
                 NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
