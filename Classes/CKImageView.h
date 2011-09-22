@@ -63,13 +63,12 @@ typedef enum{
 	
 	//Background View Management
 	UIImage *_defaultImage;	
-	UIImageView* _defaultImageView;
+	UIView* _defaultImageView;
 	UIActivityIndicatorView* _activityIndicator;
 	CKImageViewSpinnerStyle _spinnerStyle;
 	
 	//View Management
 	UIImageView* _imageView;
-	UIButton* _button;
 	BOOL _interactive;
 	
 	NSTimeInterval _fadeInDuration;
@@ -84,11 +83,19 @@ typedef enum{
 @property (nonatomic, assign, readwrite) NSTimeInterval fadeInDuration;
 @property (nonatomic, assign, readwrite) BOOL interactive;
 @property (nonatomic, retain, readonly) UIButton *button;
+@property (nonatomic, retain, readonly) UIView *defaultImageView;
 @property (nonatomic, assign, readwrite) CKImageViewSpinnerStyle spinnerStyle;
 
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)reload;
 - (void)reset;
 - (void)cancel;
+
+@end
+
+@interface CKImageView (CKBindings)
+
+- (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block;
+- (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector;
 
 @end
