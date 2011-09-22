@@ -342,9 +342,8 @@
 }
 
 - (void)updateLayout:(id)value{
-	[self layoutCell:self.tableViewCell];
+    [self.tableViewCell setNeedsLayout];
 }
-
 
 
 #pragma mark CKManagedTableViewController Protocol
@@ -493,8 +492,8 @@
 	[super setupView:view];
 	[self endBindingsContext];
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+    /*if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid)*/{
         UITableViewCell* cell = (UITableViewCell*)view;
         
 		[NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];

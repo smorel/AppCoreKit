@@ -513,15 +513,18 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index{
+    if(index < 0)
+        return nil;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		id object =  cellDescriptor.value;
 		return object;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 			return object;
@@ -530,7 +533,7 @@
 	
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount +footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
 		id object =  cellDescriptor.value;
 		return object;
@@ -548,19 +551,22 @@
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+    if(index < 0)
+        return nil;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		return cellDescriptor;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		return [_controllerFactory factoryItemAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 	}
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount +footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
 		return cellDescriptor;
 	}
@@ -569,20 +575,23 @@
 }
 
 - (void)removeObjectAtIndex:(NSInteger)index{
+    if(index < 0)
+        return;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 			return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 		}
 	}
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount + footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount + footerCount)){
 		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 }
