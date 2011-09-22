@@ -242,6 +242,7 @@
         UIButton* bu = (UIButton*)self.defaultImageView;
         [bu setBackgroundImage:self.defaultImage forState:UIControlStateNormal];
     }
+    [self addSubview:self.defaultImageView];
 
 }
 
@@ -270,20 +271,17 @@
 			}
 		}
 	}
-	else if(_defaultImage && !image){//_defaultImageView
-		if(_currentState != CKImageViewStateDefaultImage){           
-            [self createsDefaultImageView];
-            [self addSubview:self.defaultImageView];
-            
-			[self.imageView removeFromSuperview];
-			[self.button removeFromSuperview];
-            [self.activityIndicator stopAnimating];
-			[self.activityIndicator removeFromSuperview];
-            
-			self.defaultImageView.alpha = 1;
-			self.defaultImageView.frame = self.bounds;
-			_currentState = CKImageViewStateDefaultImage;
-		}
+	else if(_defaultImage && !image){//_defaultImageView       
+        [self createsDefaultImageView];
+        
+        [self.imageView removeFromSuperview];
+        [self.button removeFromSuperview];
+        [self.activityIndicator stopAnimating];
+        [self.activityIndicator removeFromSuperview];
+        
+        self.defaultImageView.alpha = 1;
+        self.defaultImageView.frame = self.bounds;
+        _currentState = CKImageViewStateDefaultImage;
 	}
 	else {//image or button
         if(animated){
