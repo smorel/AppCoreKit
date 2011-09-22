@@ -29,6 +29,7 @@ NSString* CKStyleFontName = @"fontName";
 @implementation UILabel (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleFontName,CKStyleFontSize,nil]];
 }
 
@@ -57,6 +58,7 @@ NSString* CKStyleFontName = @"fontName";
 @implementation UITextField (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleFontName,CKStyleFontSize,nil]];
 }
 
