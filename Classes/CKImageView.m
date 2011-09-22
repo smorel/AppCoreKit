@@ -11,6 +11,7 @@
 #import "CKUIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKNSValueTransformer+Additions.h"
+#import "CKDebug.h"
 
 @interface CKImageView ()
 
@@ -186,6 +187,7 @@
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
 	[self.delegate imageView:self didFailLoadWithError:error];
 	[self reset];
+    CKDebugLog(@"CKImageView ERROR : Could not fetch image with URL : %@",self.imageURL);
 }
 
 - (void)hideAllViews{
