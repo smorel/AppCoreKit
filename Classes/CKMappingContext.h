@@ -21,8 +21,6 @@ extern NSString* const CKMappingErrorCodeKey;
 #define CKMappingErrorCodeInvalidProperty       4
 
 
-NSError* aggregateError(NSError* error,NSInteger code,NSString* str);
-
 /** TODO
  */
 @interface CKMappingContext : NSObject{
