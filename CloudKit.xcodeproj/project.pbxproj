@@ -80,6 +80,8 @@
 		7536F9EB13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */; };
 		7536F9EC13CE0BE900720C17 /* CKWebViewControllerGoBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */; };
 		7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */; };
+		7539FF92142CE94700688E2D /* CKNSError+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7539FF90142CE94700688E2D /* CKNSError+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7539FF93142CE94700688E2D /* CKNSError+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7539FF91142CE94700688E2D /* CKNSError+Additions.m */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -577,6 +579,8 @@
 		7536F9DD13CE0BE900720C17 /* CKSlideShowViewControllerArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CKSlideShowViewControllerArrowRight@2x.png"; sourceTree = "<group>"; };
 		7536F9DE13CE0BE900720C17 /* CKWebViewControllerGoBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoBack.png; sourceTree = "<group>"; };
 		7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoForward.png; sourceTree = "<group>"; };
+		7539FF90142CE94700688E2D /* CKNSError+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSError+Additions.h"; path = "Classes/CKNSError+Additions.h"; sourceTree = "<group>"; };
+		7539FF91142CE94700688E2D /* CKNSError+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSError+Additions.m"; path = "Classes/CKNSError+Additions.m"; sourceTree = "<group>"; };
 		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
@@ -1480,6 +1484,12 @@
 				7560DC6313B8ED3600268D13 /* CKWebService2.m */,
 				7560DC6413B8ED3600268D13 /* CKWebSource.h */,
 				7560DC6513B8ED3600268D13 /* CKWebSource.m */,
+				7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */,
+				7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */,
+				7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */,
+				7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */,
+				7560DB6713B8ED3600268D13 /* CKHost.h */,
+				7560DB6813B8ED3600268D13 /* CKHost.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -1490,21 +1500,15 @@
 				75C6DF6913FEE9D200E4AE4F /* Support.h */,
 				7506E40913B9005700EE1471 /* AddressBook */,
 				7506E40713B8FFFE00EE1471 /* Location */,
-				7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */,
-				7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */,
 				7560DB3C13B8ED3600268D13 /* CKCompatibility.h */,
 				7560DB3D13B8ED3600268D13 /* CKCompatibility.m */,
 				7560DB3E13B8ED3600268D13 /* CKConstants.h */,
 				7560DB4113B8ED3600268D13 /* CKCoreGraphicsAdditions.h */,
 				7560DB4213B8ED3600268D13 /* CKCoreGraphicsAdditions.m */,
-				7560DB6713B8ED3600268D13 /* CKHost.h */,
-				7560DB6813B8ED3600268D13 /* CKHost.m */,
 				7560DB6B13B8ED3600268D13 /* CKImageLoader.h */,
 				7560DB6C13B8ED3600268D13 /* CKImageLoader.m */,
 				7560DB6D13B8ED3600268D13 /* CKImageTransformer.h */,
 				7560DB6E13B8ED3600268D13 /* CKImageTransformer.m */,
-				7560DB7113B8ED3600268D13 /* CKInetEndPoint.h */,
-				7560DB7213B8ED3600268D13 /* CKInetEndPoint.m */,
 				7560DB7D13B8ED3600268D13 /* CKLayout.h */,
 				7560DB7E13B8ED3600268D13 /* CKLayout.m */,
 				7560DB7F13B8ED3600268D13 /* CKLocalization.h */,
@@ -1565,6 +1569,8 @@
 				7560DC5513B8ED3600268D13 /* CKVersion.m */,
 				75F2961013F196F9009CCC70 /* CKNSPredicate+Additions.h */,
 				75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */,
+				7539FF90142CE94700688E2D /* CKNSError+Additions.h */,
+				7539FF91142CE94700688E2D /* CKNSError+Additions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -2214,6 +2220,7 @@
 				753178291417E9E3009310A8 /* CKUIBarButtonItem+Introspection.h in Headers */,
 				75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */,
 				75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */,
+				7539FF92142CE94700688E2D /* CKNSError+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2555,6 +2562,7 @@
 				7531782A1417E9E3009310A8 /* CKUIBarButtonItem+Introspection.m in Sources */,
 				75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */,
 				75305B7914228EC20003EBB6 /* UITextView+Introspection.m in Sources */,
+				7539FF93142CE94700688E2D /* CKNSError+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
