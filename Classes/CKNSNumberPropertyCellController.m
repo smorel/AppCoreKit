@@ -205,9 +205,9 @@
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
             CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + 10;
-            CGFloat textFieldWidth = realWidth - 10 - textFieldX;
-			textField.frame = CGRectIntegral(CGRectMake(textFieldX,11,textFieldWidth,textField.font.lineHeight));
+            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
+            CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
+			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight));
 		}
 	}
     
@@ -244,7 +244,7 @@
     CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
     CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
     CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
-    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomSwitch,MAX(bottomTextLabel,bottomDetailTextLabel))) + 10;
+    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomSwitch,MAX(bottomTextLabel,bottomDetailTextLabel))) + staticController.contentInsets.bottom;
     return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
 }
 

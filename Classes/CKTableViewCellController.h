@@ -66,6 +66,7 @@ typedef enum CKTableViewCellStyle {
 	NSString* _key;
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
+    UIEdgeInsets _contentInsets;
     
     NSString* _cacheLayoutBindingContextId;
 	
@@ -86,8 +87,10 @@ typedef enum CKTableViewCellStyle {
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
 
+//for propertygrid and value3 only ...
 @property (nonatomic, assign) CGFloat componentsRatio;
 @property (nonatomic, assign) CGFloat componentsSpace;
+@property (nonatomic, assign) UIEdgeInsets contentInsets;
 
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;

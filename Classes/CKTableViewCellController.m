@@ -161,6 +161,7 @@
 @synthesize componentsRatio = _componentsRatio;
 @synthesize componentsSpace = _componentsSpace;
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
+@synthesize contentInsets = _contentInsets;
 
 #ifdef DEBUG 
 @synthesize debugModalController;
@@ -183,6 +184,7 @@
         self.selectable = YES;
         self.rowHeight = 44.0f;
         self.editable = YES;
+        self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         
         self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
 	}
@@ -421,7 +423,7 @@
         CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
         CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
                
-        CGFloat maxHeight = MAX(bottomText,MAX(34,bottomDetails)) + 10;
+        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
         return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
     }
     return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
@@ -679,14 +681,14 @@
     CGRect textFrame = [self value3TextFrameForCell:cell];
     
     CGFloat realWidth = cell.contentView.frame.size.width;
-	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - 10;
+	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - self.contentInsets.right;
     
     CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];
 	
     BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : 11;
+    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
 	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
                                      MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
 }
@@ -709,16 +711,16 @@
                                        lineBreakMode:cell.textLabel.lineBreakMode];
     
     BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : 11;
+    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
     if(cell.textLabel.textAlignment == UITextAlignmentRight){
-        return CGRectIntegral(CGRectMake(10 + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+        return CGRectIntegral(CGRectMake(self.contentInsets.left + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
     }
     else if(cell.textLabel.textAlignment == UITextAlignmentLeft){
-        return CGRectIntegral(CGRectMake(10,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+        return CGRectIntegral(CGRectMake(self.contentInsets.left,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
     }
     
     //else Center
-    return CGRectIntegral(CGRectMake(10 + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+    return CGRectIntegral(CGRectMake(self.contentInsets.left + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
 }
 
 //PropertyGrid layout
@@ -735,21 +737,21 @@
                cell.detailTextLabel.numberOfLines != 1){
                 
                 CGFloat realWidth = cell.contentView.frame.size.width;
-                CGFloat maxWidth = realWidth - 20;
+                CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
                 
                 CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                                      constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                                          lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, size.height);
+                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), size.height);
             }
             else{
-                return CGRectMake(10,11, cell.contentView.frame.size.width - 20, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
             }
         }
         else{
             //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
             CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.frame.size.width - 10 - x;
+            CGFloat width = cell.contentView.frame.size.width - self.contentInsets.right - x;
             if(width > 0 ){
                 if(cell.detailTextLabel.text != nil && 
                    [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
@@ -758,10 +760,10 @@
                     /*CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                                              lineBreakMode:cell.detailTextLabel.lineBreakMode];*/
-                    return CGRectMake(x,11, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
                 }
                 else{
-                    return CGRectMake(x,11, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
                 }
             }
             else{
@@ -784,14 +786,14 @@
             CGFloat realWidth = rowWidth;
             CGFloat width = realWidth * self.componentsRatio;
             
-            CGFloat maxWidth = realWidth - width - 10 - self.componentsSpace;
+            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
             CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                                            constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                                lineBreakMode:cell.textLabel.lineBreakMode];
             // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
             //NSLog(@"cell width : %f",realWidth);
             //NSLog(@"textLabel size %f %f",size.width,size.height);
-            return CGRectMake(10,11, size.width, size.height);
+            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
         }
     }
     return [self value3TextFrameForCell:cell];
