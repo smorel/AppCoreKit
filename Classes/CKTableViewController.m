@@ -26,12 +26,12 @@
 @synthesize stickySelection = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
 @synthesize tableViewContainer = _tableViewContainer;
-@synthesize tableInsets = _tableInsets;
+@synthesize tableViewInsets = _tableViewInsets;
 
 - (void)postInit {
 	[super postInit];
 	self.style = UITableViewStylePlain;
-    self.tableInsets = UIEdgeInsetsMake(0,0,0,0);
+    self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -97,15 +97,19 @@
 	//self.tableView.clipsToBounds = NO;
 }
 
+- (void)sizeToFit{
+    CGRect frame = self.tableViewContainer.frame;
+    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
+                                                              frame.origin.y/* + self.tableInsets.top*/,
+                                                              frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                              frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
+    self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+}
+
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
-    CGRect frame = self.tableViewContainer.frame;
-    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableInsets.left,
-                                                              frame.origin.y/* + self.tableInsets.top*/,
-                                                              frame.size.width - (self.tableInsets.left + self.tableInsets.right),
-                                                              frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
-    self.tableView.contentInset = UIEdgeInsetsMake(self.tableInsets.top,0,self.tableInsets.bottom,0);
+    [self sizeToFit];
 }
 
 - (void)viewDidUnload {

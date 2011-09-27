@@ -331,7 +331,7 @@
 		case CKClassPropertyDescriptorTypeCppBool:
 			return NO;
 	}
-	return YES;
+	return ![model isReadOnly];
 }
 
 + (UIResponder*)responderInView:(UIView*)view{

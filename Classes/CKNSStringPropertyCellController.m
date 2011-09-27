@@ -14,6 +14,8 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
+#import "CKSheetController.h"
+
 
 @implementation CKNSStringPropertyCellController
 @synthesize textField = _textField;
@@ -150,8 +152,43 @@
 	return YES;
 }
 
+- (void)next:(id)sender{
+    [CKTableViewCellNextResponder activateNextResponderFromController:self];
+}
+
+- (void)done:(id)sender{
+    [self.parentController.view endEditing:YES];
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+}
+
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+    BOOL hasNextResponder = [CKTableViewCellNextResponder needsNextKeyboard:self];
+    switch(self.textField.keyboardType){
+        case UIKeyboardTypeDecimalPad:{
+            UIToolbar* toolbar = nil;
+            if([self.textField.inputAccessoryView isKindOfClass:[UIToolbar class]]){
+                toolbar = (UIToolbar*)self.textField.inputAccessoryView;
+            }
+            if(!toolbar){
+                toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
+                toolbar.barStyle = UIBarStyleBlackTranslucent;
+            }
+            UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:hasNextResponder ? _(@"Next") : _(@"Done") 
+                                                                       style:hasNextResponder ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone 
+                                                                      target:self 
+                                                                      action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
+            toolbar.items = [NSArray arrayWithObject:button];
+            self.textField.inputAccessoryView = toolbar;
+            break;
+        }
+        default:{
+            self.textField.inputAccessoryView = nil;
+            break;
+        }
+    }
+    
+    if(hasNextResponder){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
     else{
@@ -206,7 +243,8 @@
 
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
-	return YES;
+	CKObjectProperty* model = object;// || self.readonly
+	return ![model isReadOnly];
 }
 
 + (UIResponder*)responderInView:(UIView*)view{
