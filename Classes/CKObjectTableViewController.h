@@ -58,8 +58,6 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
 	id _defaultSearchScope;
 	
     int _modalViewCount;
-    CGRect _lastModalFrame;
-    UIView* _placeHolderViewDuringKeyboardOrSheet;
     
 	BOOL _viewIsOnScreen;
 	

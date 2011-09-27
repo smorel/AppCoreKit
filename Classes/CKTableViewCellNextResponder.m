@@ -9,6 +9,7 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
 #import "CKNSObject+Invocation.h"
+#import "CKPropertyGridCellController.h"
 
 
 @implementation CKTableViewCellNextResponder
@@ -44,7 +45,16 @@
 				CKObjectViewControllerFactoryItem* factoryItem = [tableViewController.controllerFactory factoryItemAtIndexPath:nextIndexPath];
 				if([factoryItem.controllerClass respondsToSelector:@selector(hasAccessoryResponderWithValue:)]){
 					id object = [tableViewController.objectController objectAtIndexPath:nextIndexPath];
-					if([factoryItem.controllerClass hasAccessoryResponderWithValue:object] == YES)
+                    CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:nextIndexPath];
+                    //This is a hack because the system do not works well ...
+                    if(cellController && [cellController isKindOfClass:[CKPropertyGridCellController class]]){
+                        CKPropertyGridCellController* pcell = (CKPropertyGridCellController*)cellController;
+                        if(!pcell.readOnly){
+                            if([factoryItem.controllerClass hasAccessoryResponderWithValue:object] == YES)
+                                return nextIndexPath;
+                        }
+                    }
+                    else if([factoryItem.controllerClass hasAccessoryResponderWithValue:object] == YES)
 						return nextIndexPath;
 				}
 			}
