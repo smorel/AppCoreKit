@@ -37,4 +37,7 @@
 - (CKDocumentArray*)arrayWithStorage:(id)storage autoSave:(BOOL)autoSave forKey:(NSString*)key;
 - (CKDocumentArray*)arrayForKey:(NSString*)key;
 
+//PostInit
+- (void)postInit;
+
 @end
