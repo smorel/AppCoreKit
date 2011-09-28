@@ -494,15 +494,13 @@
 	[super setupView:view];
 	[self endBindingsContext];
     
-    /*if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid)*/{
-        UITableViewCell* cell = (UITableViewCell*)view;
-        
-		[NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-		[NSObject endBindingsContext];	
-	}
+    UITableViewCell* cell = (UITableViewCell*)view;
+    
+    [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
+    [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
+    [cell.imageView bind:@"hidden" target:self action:@selector(updateLayout:)];
+    [NSObject endBindingsContext];	
     
     [CATransaction commit];
 }

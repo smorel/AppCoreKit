@@ -82,4 +82,8 @@
 	return (id)nil;
 }
 
++ (NSString*)convertToNSString:(id)object{
+    return [NSString stringWithFormat:@"%@ : <%p>",object,[object class]];
+}
+
 @end
