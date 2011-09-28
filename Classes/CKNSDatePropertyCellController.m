@@ -306,7 +306,21 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 - (void)didSelectRow{
-	CKObjectProperty* model = self.value;
+	[self becomeFirstResponder];
+}
+
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object{
+	CKObjectProperty* model = object;// || self.readonly
+	return ![model isReadOnly];
+}
+
++ (UIView*)responderInView:(UIView*)view{
+    return view;
+}
+
+- (void)becomeFirstResponder{
+    CKObjectProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -323,6 +337,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                 sheetController = [[CKSheetController alloc]initWithContentViewController:navController];
             }
             else{
+                if(self.enableNavigationToolbar){
+                    dateController.navigationItem.titleView = [self navigationToolbar];
+                }
                 sheetController = [[CKSheetController alloc]initWithContentViewController:dateController];            
             }
             
@@ -331,8 +348,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             sheetController.delegate = self;
             UIView* parentView = self.parentController.view;
             [sheetController showFromRect:[parentView bounds] 
-                                                    inView:parentView 
-                                                  animated:YES];
+                                   inView:parentView 
+                                 animated:YES];
             
             if(CKNSDateSheetControllersSingleton == nil){
                 CKNSDateSheetControllersSingleton = [[NSMutableDictionary dictionary]retain];
@@ -379,9 +396,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         
         UITableViewCell* cell = [self tableViewCell];
         [popoverController presentPopoverFromRect:[cell bounds] 
-                                 inView:cell 
-               permittedArrowDirections:UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown
-                               animated:YES];
+                                           inView:cell 
+                         permittedArrowDirections:UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown
+                                         animated:YES];
         
         [self scrollToRow];
     }    

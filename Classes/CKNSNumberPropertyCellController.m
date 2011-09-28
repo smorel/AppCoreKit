@@ -259,6 +259,7 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    self.textField.inputAccessoryView = [self navigationToolbar];
     if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
@@ -334,7 +335,7 @@
 	return ![model isReadOnly];
 }
 
-+ (UIResponder*)responderInView:(UIView*)view{
++ (UIView*)responderInView:(UIView*)view{
 	UITextField *textField = (UITextField*)[view viewWithTag:50000];
 	return textField;
 }
