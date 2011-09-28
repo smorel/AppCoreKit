@@ -383,8 +383,12 @@
 	return NO;
 }
 
-+ (UIResponder*)responderInView:(UIView*)view{
++ (UIView*)responderInView:(UIView*)view{
 	return nil;
+}
+
+- (void)becomeFirstResponder{
+    
 }
 
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{

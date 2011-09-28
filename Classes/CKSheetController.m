@@ -19,11 +19,13 @@ NSString *const CKSheetAnimationCurveUserInfoKey    = @"CKSheetAnimationCurveUse
 NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowInfoKey";
 
 @interface CKSheetController()//PRIVATE
+@property(nonatomic,retain) UIView* sheetView;
 @end
 
 @implementation CKSheetController
 @synthesize delegate = _delegate;
 @synthesize contentViewController = _contentViewController;
+@synthesize sheetView = _sheetView;
 
 - (id)initWithContentViewController:(UIViewController *)viewController{
     self = [super init];
@@ -34,21 +36,38 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated{
    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
     
     //this will retain the CKSheetController until it will get dismissed.
     //this avoid us to explicitelly retain it in the client code.
     [self retain];
     
+    
     UIView* contentView = self.contentViewController.view;
-    //contentView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    contentView.backgroundColor = [UIColor redColor];
+    UIView* toolbar = self.contentViewController.navigationItem.titleView;
     
     CGSize size = self.contentViewController.contentSizeForViewInPopover;
-    CGFloat height = size.height;
+                                                            
+    CGFloat height = size.height + (toolbar ? toolbar.frame.size.height : 0);
     CGRect contentEndRect = CGRectMake(rect.origin.x,rect.origin.y + rect.size.height - height,
                                        rect.size.width,height);
+    
+    
+    self.sheetView = [[[UIView alloc]initWithFrame:contentEndRect]autorelease];
+    CGFloat y = 0;
+    if(toolbar){
+        toolbar.frame = CGRectMake(0,0,contentEndRect.size.width,toolbar.frame.size.height);
+        toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [self.sheetView addSubview:toolbar];
+        y = toolbar.frame.size.height;
+    }
+    
+    contentView.frame = CGRectMake(0,y,contentEndRect.size.width,contentEndRect.size.height - y);
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.sheetView addSubview:contentView];
+    //add toolbar 
+    //add contentview
     
     UIWindow* window = [view window];
     CGRect contentEndRectInWindow = [window convertRect:contentEndRect fromView:view];
@@ -60,7 +79,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
     CGRect contentOriginRect = CGRectMake(rect.origin.x,rect.origin.y + rect.size.height,
                                           rect.size.width,height);
-    contentView.frame = contentOriginRect;
+    self.sheetView.frame = contentOriginRect;
     
     [_contentViewController viewWillAppear:animated];
     
@@ -77,12 +96,12 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     
 
     
-    [view addSubview:contentView];
+    [view addSubview:self.sheetView];
     if(animated){
+        [[view window]endEditing:YES];//resign keyboard
         [UIView animateWithDuration:0.3
-                         animations:^{contentView.frame = contentEndRect;}
+                         animations:^{self.sheetView.frame = contentEndRect;}
                          completion:^(BOOL finished){
-                             [[view window]endEditing:YES];//resign keyboard
                              if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
                                  [_delegate sheetControllerDidShowSheet:self];
                              }
@@ -101,7 +120,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                          }];
     }
     else{
-        contentView.frame = contentEndRect;    
+        self.sheetView.frame = contentEndRect;    
         [[view window]endEditing:YES];//resign keyboard
         if(_delegate && [_delegate respondsToSelector:@selector(sheetControllerDidShowSheet:)]){
             [_delegate sheetControllerDidShowSheet:self];
@@ -122,10 +141,10 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated  causedByKeyboard:(BOOL)causedByKeyboard{
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
     
-    UIView* contentView = self.contentViewController.view;
+    UIView* contentView = self.sheetView;
     
     CGRect contentEndRect = CGRectMake(contentView.frame.origin.x,contentView.frame.origin.y + contentView.frame.size.height,
                                        contentView.frame.size.width,contentView.frame.size.height);
@@ -148,7 +167,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                                                                 CKSheetAnimationDurationUserInfoKey, 
                                                                 [NSNumber numberWithInt:UIViewAnimationOptionCurveEaseInOut],
                                                                 CKSheetAnimationCurveUserInfoKey,
-                                                                [NSNumber numberWithBool:causedByKeyboard],
+                                                                [NSNumber numberWithBool:NO],
                                                                 CKSheetKeyboardWillShowInfoKey,
                                                                 nil]];
 
@@ -178,7 +197,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                                                                                          CKSheetKeyboardWillShowInfoKey,
                                                                                          nil]];
 
-                             
+                             self.sheetView = nil;
                              [self autorelease];
                          }];
     }
@@ -203,8 +222,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                                                                     [NSNumber numberWithBool:causedByKeyboard],
                                                                     CKSheetKeyboardWillShowInfoKey,
                                                                     nil]];
-
         
+        self.sheetView = nil;
         [self autorelease];
     }    
 }
