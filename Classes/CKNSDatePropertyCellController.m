@@ -102,6 +102,14 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                 }
             }];
             [self endBindingsContext];
+            
+            //Adjust if navigationController with transparent toolbar
+            CGFloat y = self.view.frame.size.height - self.datePicker.frame.size.height;
+            self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x,
+                                                         y,
+                                                         self.datePicker.frame.size.width,
+                                                         self.datePicker.frame.size.height);
+            
             break;
         }
         case CKDatePickerModeCreditCardExpirationDate:{
@@ -113,6 +121,13 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             _pickerView.showsSelectionIndicator = YES;
             _pickerView.dataSource = self;
             _pickerView.delegate = self;
+            
+            //Adjust if navigationController with transparent toolbar
+            CGFloat y = self.view.frame.size.height - self.pickerView.frame.size.height;
+            self.pickerView.frame = CGRectMake(self.pickerView.frame.origin.x,
+                                               y,
+                                               self.pickerView.frame.size.width,
+                                               self.pickerView.frame.size.height);
             break;
         }
     }
