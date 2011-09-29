@@ -317,7 +317,10 @@
         
         toolbar.items = buttons;
         
-        _navigationToolbar = [toolbar retain];
+        return toolbar;
+        
+        //Do not retain it as we reuse controllers : To fix when no more controller reuse.
+        //_navigationToolbar = [toolbar retain];
     }
     
     return _navigationToolbar;
