@@ -85,6 +85,7 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 @implementation UIButton (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,nil]];
 }
 

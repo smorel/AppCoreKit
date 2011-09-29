@@ -15,4 +15,5 @@
 + (id)objectFromDictionary:(NSDictionary*)dictionary;
 + (id)convertFromObject:(id)object;
 + (id)convertFromNSArray:(NSArray*)array;
++ (NSString*)convertToNSString:(id)object;
 @end
