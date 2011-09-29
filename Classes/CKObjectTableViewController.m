@@ -398,7 +398,7 @@
 	
     
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-    NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+    NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
 	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
     
     if(self.editButton){

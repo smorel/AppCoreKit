@@ -97,7 +97,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 - (void)applyStyleForLeftBarButtonItem{
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-        NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
@@ -108,7 +108,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 - (void)applyStyleForRightBarButtonItem{
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-        NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
@@ -126,8 +126,12 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 
 - (void)applyStyleForNavigation{
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-    NSMutableDictionary* navControllerStyle = [self.navigationController applyStyleWithParentStyle:controllerStyle];
-	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+    NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
+    NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
+    /*NSMutableDictionary* toolbarBarStyle = */[self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
+    
+	//NSMutableDictionary* toolbarBarStyle = [navControllerStyle styleForObject:self.navigationController.toolbar  propertyName:@"toolbar"];
+	//NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController.navigationBar  propertyName:@"navigationBar"];
 
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
