@@ -132,13 +132,14 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	return NO;
 }
 
-- (void)applyStyle:(NSMutableDictionary*)style{
-	[self applyStyle:style propertyName:nil];
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
+	return [self applyStyle:style propertyName:nil];
 }
 
-- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
 	NSMutableDictionary* myViewStyle = [style styleForObject:self propertyName:propertyName];
 	[[self class] applyStyle:myViewStyle toView:self appliedStack:[NSMutableSet set] delegate:nil];
+    return myViewStyle;
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{

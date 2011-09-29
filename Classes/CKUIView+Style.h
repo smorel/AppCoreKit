@@ -107,8 +107,8 @@ extern NSString* CKStyleBorderStyle;
  */
 @interface UIView (CKStyle) 
 
-- (void)applyStyle:(NSMutableDictionary*)style;
-- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style;
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
