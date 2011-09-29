@@ -346,6 +346,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
+            
 			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
 			NSMutableDictionary* inheritedDico = [self findDictionaryInHierarchy:normalizedKey];
 			if(inheritedDico != nil){
@@ -361,6 +362,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 						id inheritedObject = [deepCopy objectForKey:obj];
                         if([inheritedObject isKindOfClass:[NSMutableDictionary class]]){
                             NSMutableDictionary* sourceDico = inheritedObject;
+                            [sourceDico setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                             [sourceDico makeAllInherits];
                         }
                         
