@@ -10,21 +10,31 @@
 #import "CKPropertyGridCellController.h"
 #include "CKSheetController.h"
 
+typedef enum CKDatePickerMode{
+    CKDatePickerModeTime = UIDatePickerModeTime,   
+    CKDatePickerModeDate = UIDatePickerModeDate,
+    CKDatePickerModeDateAndTime = UIDatePickerModeDateAndTime,   
+    CKDatePickerModeCountDownTime = UIDatePickerModeCountDownTimer,
+    CKDatePickerModeCreditCardExpirationDate
+} CKDatePickerMode;
 
-@interface CKNSDateViewController : CKUIViewController{
+@interface CKNSDateViewController : CKUIViewController<UIPickerViewDataSource,UIPickerViewDelegate>{
     CKObjectProperty* _property;
     UIDatePicker* _datePicker;
+    UIPickerView* _pickerView;
+    CKDatePickerMode _datePickerMode;
     id _delegate;
 }
 
 @property(nonatomic,assign)CKObjectProperty* property;
 @property(nonatomic,retain)UIDatePicker* datePicker;
+@property(nonatomic,retain)UIPickerView* pickerView;//if mode == CKDatePickerModeCreditCardExpirationDate
 @property(nonatomic,assign)id delegate;
+@property(nonatomic,assign)CKDatePickerMode datePickerMode;
 
-- (id)initWithProperty:(CKObjectProperty*)property;
+- (id)initWithProperty:(CKObjectProperty*)property mode:(CKDatePickerMode)mode;
 
 @end
-
 
 /** TODO
  */
@@ -32,6 +42,7 @@
     CKCallback* _onBeginEditingCallback;
     CKCallback* _onEndEditingCallback;
     BOOL _enableAccessoryView;
+    CKDatePickerMode _datePickerMode;
 }
 
 //the value of the callback is the CKNSDateViewController with the picker
@@ -39,6 +50,7 @@
 //the value of the callback is CKNSDatePropertyCellController
 @property(nonatomic,retain)CKCallback* onEndEditingCallback;
 @property(nonatomic,assign)BOOL enableAccessoryView;
+@property(nonatomic,assign)CKDatePickerMode datePickerMode;
 
 //private
 - (void)onBeginEditingUsingViewController:(CKNSDateViewController*)dateViewController;

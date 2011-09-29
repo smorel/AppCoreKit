@@ -22,10 +22,14 @@
 	static id CKDocumentSharedInstance = nil;
 	if (CKDocumentSharedInstance == nil) {
 		CKDocumentSharedInstance = [[[self class] alloc] init];
+        [CKDocumentSharedInstance postInit];
 	}
 	return CKDocumentSharedInstance;
 }
 
+- (void)postInit{
+    
+}
 
 - (id)init{
 	[super init];

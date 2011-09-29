@@ -11,13 +11,15 @@
 #import "CKUIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKNSValueTransformer+Additions.h"
+#import "CKDebug.h"
+#import "CKNSObject+Bindings.h"
 
 @interface CKImageView ()
 
 @property (nonatomic, retain, readwrite) CKImageLoader *imageLoader;
 @property (nonatomic, retain, readwrite) UIImageView *imageView;
 @property (nonatomic, retain, readwrite) UIButton *button;
-@property (nonatomic, retain, readwrite) UIImageView *defaultImageView;
+@property (nonatomic, retain, readwrite) UIView *defaultImageView;
 @property (nonatomic, retain, readwrite) UIActivityIndicatorView *activityIndicator;
 
 - (void)updateViews:(BOOL)animated;
@@ -47,18 +49,6 @@
 	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 	[self addSubview:self.imageView];
 	
-	self.defaultImageView = [[[UIImageView alloc] initWithFrame:self.bounds]autorelease];
-	self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	self.defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
-	[self addSubview:self.defaultImageView];
-
-	self.button = [UIButton buttonWithType:UIButtonTypeCustom];
-	self.button.frame = self.bounds;
-	self.button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	self.button.contentMode = UIViewContentModeScaleAspectFit;
-	self.button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-	self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-	
 	self.fadeInDuration = 0;
 	self.interactive = NO;
 	_currentState = CKImageViewStateNone;
@@ -72,9 +62,8 @@
 }
 
 - (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-		[self postInit];
-    }
+    self = [super initWithFrame:frame];
+    [self postInit];
     return self;
 }
 
@@ -101,7 +90,10 @@
 		return;
 	
 	self.imageView.image = image;
-	[self.button setBackgroundImage:image forState:UIControlStateNormal];
+    if(self.button){
+        [self.button setBackgroundImage:image forState:UIControlStateNormal];
+    }
+    
 	if(updateViews){
 		[self updateViews:animated];
 	}
@@ -109,16 +101,18 @@
 
 - (void)setInteractive:(BOOL)bo{
 	_interactive = bo;
-	if(_interactive){
-		[self.imageView removeFromSuperview];
-		[self addSubview:self.button];
-	}
-	else{
-		[self.button removeFromSuperview];
-		[self addSubview:self.imageView];
-	}
-	
-	[self updateViews:YES];
+    if(_interactive){
+        if(!self.button){
+            self.button = [UIButton buttonWithType:UIButtonTypeCustom];
+            self.button.frame = self.bounds;
+            self.button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            self.button.contentMode = self.imageView.contentMode;
+            self.button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+            self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+            [self.button setBackgroundImage:self.imageView.image forState:UIControlStateNormal];
+        }
+    }
+	[self updateViews:NO];
 }
 
 - (void)setImageURL:(NSURL *)url {
@@ -163,14 +157,22 @@
 - (void)setDefaultImage:(UIImage *)image {
 	[_defaultImage release];
 	_defaultImage = [image retain];
-	self.defaultImageView.image = image;
-	
 	[self updateViews:YES];
 }
 
 - (void)setImageViewContentMode:(UIViewContentMode)theContentMode {
 	self.imageView.contentMode = theContentMode;
-	self.defaultImageView.contentMode = theContentMode;
+    if(self.button){
+        self.imageView.contentMode = theContentMode;
+    }
+    
+    if([self.defaultImageView isKindOfClass:[UIImageView class]]){
+        self.defaultImageView.contentMode = theContentMode;
+    }
+    else if([self.defaultImageView isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)self.defaultImageView ;
+        bu.imageView.contentMode = theContentMode;
+    }
 }
 
 - (UIViewContentMode)imageViewContentMode {
@@ -186,18 +188,11 @@
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error {
 	[self.delegate imageView:self didFailLoadWithError:error];
 	[self reset];
+	[self updateViews:YES];
+    CKDebugLog(@"CKImageView ERROR : Could not fetch image with URL : %@",self.imageURL);
 }
 
-- (void)hideAllViews{
-	if(self.activityIndicator){
-		[self.activityIndicator stopAnimating];
-		self.activityIndicator.alpha = 0;
-	}
-	
-	self.defaultImageView.alpha = 0;
-	self.button.alpha = 0;
-	self.imageView.alpha = 0;
-}
+#pragma mark Views management
 
 - (void)setSpinnerStyle:(CKImageViewSpinnerStyle)style{
 	_spinnerStyle = style;
@@ -206,16 +201,60 @@
 	}
 	self.activityIndicator = (style != CKImageViewSpinnerStyleNone) ? 
 				[[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)_spinnerStyle] autorelease]
-				: nil;
-	[self addSubview:self.activityIndicator];
+    : nil;
+	[self updateViews:NO];
+}
+
+- (void)createsDefaultImageView{
+    if(self.interactive && self.defaultImageView && ![self.defaultImageView isKindOfClass:[UIButton class]]){
+        [self.defaultImageView removeFromSuperview];
+        self.defaultImageView = nil;
+    }
+    else if(!self.interactive && self.defaultImageView && [self.defaultImageView isKindOfClass:[UIButton class]]){
+        [self.defaultImageView removeFromSuperview];
+        self.defaultImageView = nil;
+    }
+    
+    if(!self.defaultImageView){
+        if(self.interactive){
+            self.defaultImageView = [UIButton buttonWithType:UIButtonTypeCustom];
+            self.defaultImageView.frame = self.bounds;
+        }
+        else{
+            self.defaultImageView = [[[UIImageView alloc] initWithFrame:self.bounds]autorelease];
+        }
+        self.defaultImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        if([self.defaultImageView isKindOfClass:[UIImageView class]]){
+            self.defaultImageView.contentMode = self.imageView.contentMode;
+        }
+        else if([self.defaultImageView isKindOfClass:[UIButton class]]){
+            UIButton* bu = (UIButton*)self.defaultImageView;
+            bu.imageView.contentMode = self.imageView.contentMode;
+        }
+    }
+    
+    if([self.defaultImageView isKindOfClass:[UIImageView class]]){
+        UIImageView* imageView = (UIImageView*)self.defaultImageView;
+        imageView.image = self.defaultImage;
+    }
+    else if([self.defaultImageView isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)self.defaultImageView;
+        [bu setBackgroundImage:self.defaultImage forState:UIControlStateNormal];
+    }
+    [self addSubview:self.defaultImageView];
+
 }
 
 - (void)updateViews:(BOOL)animated{
 	UIImage* image = [self image];
-	if(!_defaultImage && !image){//spinner
+	if(!_defaultImage && !image && self.imageLoader){//spinner
 		if(_currentState != CKImageViewStateSpinner){
 			[self.layer removeAnimationForKey:[NSString stringWithFormat:@"CKImageView<%p>",self]];
-			[self hideAllViews];
+            
+			[self.imageView removeFromSuperview];
+			[self.button removeFromSuperview];
+			[self.defaultImageView removeFromSuperview];
 			
 			if(self.imageLoader){
 				if(self.activityIndicator){
@@ -226,51 +265,52 @@
 															  self.activityIndicator.bounds.size.width,
 															  self.activityIndicator.bounds.size.height);
 					[self.activityIndicator startAnimating];
-					self.activityIndicator.alpha = 1;
 					_currentState = CKImageViewStateSpinner;
+                    [self addSubview:self.activityIndicator];
 				}
 			}
-			else{
-				_currentState = CKImageViewStateNone;
-			}
 		}
 	}
-	else if(_defaultImage && !image){//_defaultImageView
-		if(_currentState != CKImageViewStateDefaultImage){
-			[self hideAllViews];
-			self.defaultImageView.alpha = 1;
-			self.defaultImageView.frame = self.bounds;
-			_currentState = CKImageViewStateDefaultImage;
-		}
+	else if(_defaultImage && !image){//_defaultImageView       
+        [self createsDefaultImageView];
+        
+        [self.imageView removeFromSuperview];
+        [self.button removeFromSuperview];
+        [self.activityIndicator stopAnimating];
+        [self.activityIndicator removeFromSuperview];
+        
+        self.defaultImageView.alpha = 1;
+        self.defaultImageView.frame = self.bounds;
+        _currentState = CKImageViewStateDefaultImage;
 	}
-	else if(image){//image or button
-		if(_currentState != CKImageViewStateImage){
-			if(animated){
-				[UIView beginAnimations:[NSString stringWithFormat:@"<%p>",self] context:nil];
-				[UIView setAnimationDuration:_fadeInDuration];
-			}
-			
-			[self hideAllViews];
-			//animation 
-			
-			if(_interactive){
-				self.button.alpha = 1;
-				self.button.frame = self.bounds;
-			}
-			else{
-				self.imageView.alpha = 1;
-				self.imageView.frame = self.bounds;
-			}
-			
-			if(animated){
-				[UIView commitAnimations];
-			}
-			
-			_currentState = CKImageViewStateImage;
-		}
-	}
-	else{
-		[self hideAllViews];
+	else {//image or button
+        if(animated){
+            [UIView beginAnimations:[NSString stringWithFormat:@"<%p>",self] context:nil];
+            [UIView setAnimationDuration:_fadeInDuration];
+        }
+        
+        [self.defaultImageView removeFromSuperview];
+        [self.activityIndicator stopAnimating];
+        [self.activityIndicator removeFromSuperview];
+        
+        if(_interactive){
+            [self.imageView removeFromSuperview];
+            self.button.frame = self.bounds;
+            [self addSubview:self.button];
+        }
+        else{
+            if(self.button){
+                [self.button removeFromSuperview];
+            }
+            self.imageView.frame = self.bounds;
+            [self addSubview:self.imageView];
+        }
+        
+        if(animated){
+            [UIView commitAnimations];
+        }
+        
+        _currentState = CKImageViewStateImage;
 	}
 }
 
@@ -283,6 +323,31 @@
                                                UIActivityIndicatorViewStyleWhiteLarge,
                                                UIActivityIndicatorViewStyleWhite,
                                                UIActivityIndicatorViewStyleGray);
+}
+
+@end
+
+
+@implementation CKImageView (CKBindings)
+
+- (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block{
+    if(self.button){
+        [self.button bindEvent:UIControlEventTouchUpInside withBlock:block];
+    }
+    if(self.defaultImageView && [self.defaultImageView isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)self.defaultImageView;
+        [bu bindEvent:UIControlEventTouchUpInside withBlock:block];
+    }
+}
+
+- (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector{
+    if(self.button){
+        [self.button bindEvent:UIControlEventTouchUpInside target:target action:selector];
+    }
+    if(self.defaultImageView && [self.defaultImageView isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)self.defaultImageView;
+        [bu bindEvent:UIControlEventTouchUpInside target:target action:selector];
+    }
 }
 
 @end

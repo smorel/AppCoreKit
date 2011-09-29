@@ -109,6 +109,10 @@
     }
 }
 
+- (UIColor*)backgroundColor{
+    return (self.gradientColors == nil) ? self.fillColor : [UIColor clearColor];
+}
+
 - (void)setCorners:(CKRoundedCornerViewType)corners{
     _corners = corners;
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);

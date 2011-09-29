@@ -31,6 +31,10 @@
 //this will avoid to call begin/endUpdates on tableView when the validity state change
 @property(nonatomic,assign)BOOL fixedSize;
 
+
+@property(nonatomic,assign)BOOL enableNavigationToolbar;
+@property(nonatomic,retain)UIToolbar* navigationToolbar;
+
 ///-----------------------------------
 /// @name Accessing Object Property
 ///-----------------------------------
@@ -60,5 +64,7 @@
 //Private
 - (void)setInvalidButtonVisible:(BOOL)visible;
 - (void)performValidationLayout:(CKPropertyGridCellController*)controller;
+
+- (UIToolbar*)navigationToolbar;
 
 @end

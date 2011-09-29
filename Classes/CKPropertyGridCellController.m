@@ -13,6 +13,8 @@
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
 #import "CKBundle.h"
+#import "CKTableViewCellNextResponder.h"
+#import "CKSheetController.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -35,6 +37,8 @@
 @synthesize validationImageView = _validationImageView;
 @synthesize validationBindingContext = _validationBindingContext;
 @synthesize fixedSize = _fixedSize;
+@synthesize enableNavigationToolbar;
+@synthesize navigationToolbar = _navigationToolbar;
 
 - (id)init{
 	[super init];
@@ -42,6 +46,7 @@
     _validationDisplayed = NO;
     self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
     _fixedSize = NO;
+    self.enableNavigationToolbar = NO;
 	return self;
 }
 
@@ -55,6 +60,8 @@
     _validationImageView = nil;
     [_validationBindingContext release];
     _validationBindingContext = nil;
+    [_navigationToolbar release];
+    _navigationToolbar = nil;
     [super dealloc];
 }
 
@@ -254,6 +261,66 @@
             newAccessoryView.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
         }
     }
+}
+
+- (void)previous:(id)sender{
+    [CKTableViewCellNextResponder activatePreviousResponderFromController:self];
+}
+
+- (void)next:(id)sender{
+    [CKTableViewCellNextResponder activateNextResponderFromController:self];
+}
+
+- (void)done:(id)sender{
+    [self.parentController.view endEditing:YES];
+    [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
+}
+
+- (UIToolbar*)navigationToolbar{
+    if(!self.enableNavigationToolbar)
+        return nil;
+    
+    if(_navigationToolbar == nil){
+        UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
+        toolbar.barStyle = UIBarStyleBlackTranslucent;
+        
+        BOOL hasNextResponder = [CKTableViewCellNextResponder needsNextKeyboard:self];
+        BOOL hasPreviousResponder = [CKTableViewCellNextResponder needsPreviousKeyboard:self];
+        NSMutableArray* buttons = [NSMutableArray array];
+        {
+            UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:_(@"Previous")
+                                                                       style:UIBarButtonItemStyleBordered 
+                                                                      target:self 
+                                                                      action:@selector(previous:)]autorelease];
+            button.enabled = hasPreviousResponder;
+            [buttons addObject:button];
+        }
+        
+        UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:hasNextResponder ? _(@"Next") : _(@"Done") 
+                                                                   style:hasNextResponder ? UIBarButtonItemStyleBordered : UIBarButtonItemStyleDone 
+                                                                  target:self 
+                                                                  action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
+        [buttons addObject:button];
+        
+        CKObjectProperty* model = self.value;
+        CKClassPropertyDescriptor* descriptor = [model descriptor];
+        NSString* str = [NSString stringWithFormat:@"%@_NavigationBar",descriptor.name];
+        NSString* title = _(str);
+        if([title isKindOfClass:[NSString class]] && [title length] > 0){
+            UILabel* titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0,0,200,44)]autorelease];
+            titleLabel.text = title;
+            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.backgroundColor = [UIColor clearColor];
+            UIBarButtonItem* titleItem = [[[UIBarButtonItem alloc]initWithCustomView:titleLabel]autorelease];
+            [buttons addObject:titleItem];
+        }
+        
+        toolbar.items = buttons;
+        
+        _navigationToolbar = [toolbar retain];
+    }
+    
+    return _navigationToolbar;
 }
 
 @end

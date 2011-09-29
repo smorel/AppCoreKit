@@ -14,11 +14,9 @@
 #import "CKCallback.h"
 #import "JSONKit.h"
 #import <objc/runtime.h>
+#import "CKNSError+Additions.h"
 
 NSString * const CKMappingErrorDomain = @"CKMappingErrorDomain";
-NSString * const CKMappingErrorsKey = @"CKMappingErrorsKey";
-NSString * const CKMappingErrorDetailsKey = @"CKMappingErrorDetailsKey";
-NSString * const CKMappingErrorCodeKey = @"CKMappingErrorCodeKey";
 
 //behaviour
 NSString* CKMappingObjectKey = @"@object";
@@ -38,17 +36,6 @@ NSString* CKMappingTransformCallbackKey = @"@transformCallback";
 //list managememt
 NSString* CKMappingClearContainerKey = @"@clearContent";
 NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
-
-NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
-    if(error == nil){
-        error = [NSError errorWithDomain:CKMappingErrorDomain code:code userInfo:[NSDictionary dictionaryWithObject:[NSMutableArray array] forKey:CKMappingErrorsKey]];
-    }
-    
-    NSMutableArray* array = (NSMutableArray*)[[error userInfo]objectForKey:CKMappingErrorsKey];
-    [array addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:code],CKMappingErrorCodeKey,
-                      str,CKMappingErrorDetailsKey,nil]];
-    return error;
-}
 
 //CKMappingManager
 
@@ -255,13 +242,13 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
     CKClassPropertyDescriptor* descriptor = [property descriptor];
 	if(keyPath && !descriptor){
 		NSString* details = [NSString stringWithFormat:@"Trying to access to a property that doesn't exist : %@",property];
-        *error = aggregateError(*error,CKMappingErrorCodeInvalidProperty,details);
+        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
 		return;
 	}
 	if(value == nil || [value isKindOfClass:[NSNull class]]){
         if([self isRequired:options]){
             NSString* details = [NSString stringWithFormat:@"Missing requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
-            *error = aggregateError(*error,CKMappingErrorCodeMissingRequieredValue,details);
+            *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeMissingRequieredValue,details);
             return;
         }
         else if([options containsObjectForKey:CKMappingDefaultValueKey]){
@@ -293,7 +280,7 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
             if(contentType == nil){
                 NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
                 NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property metaData",CKMappingClassKey];
-                *error = aggregateError(*error,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
+                *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
                 return;
             }
 			
@@ -304,7 +291,7 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
 				}
 				else if(![propertyArray isKindOfClass:[NSMutableArray class]]){
 					NSString* details = [NSString stringWithFormat:@"The property %@ must inherit NSMutableArray",property];
-                    *error = aggregateError(*error,CKMappingErrorCodeInvalidProperty,details);
+                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
 					return;
 
 				}
@@ -313,7 +300,7 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
 				id propertyCollection = [property value];
 				if(!propertyCollection){
 					NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its metaData as creatable or set the property in the postInit method of its object.",property];
-                    *error = aggregateError(*error,CKMappingErrorCodeInvalidProperty,details);
+                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
 					return;
 				}
 			}
@@ -359,16 +346,41 @@ NSError* aggregateError(NSError* error,NSInteger code,NSString* str){
         }
         //property is an object or a simple property
         else{
+            //FIXME regroup the error for requiered and optional in a method not to repeet code !
             SEL transformSelector = [self transformSelector:options];
             CKCallback* callback = [self transformCallback:options];
             if(callback){
                 id transformedValue = [callback execute:value];
-                [property setValue:transformedValue];
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeMissingRequieredValue,details);
+                        return;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
+                }
             }
             else if(transformSelector){
                 Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
-                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value];
-                [property setValue:transformedValue];
+                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value withObject:(id)error];
+                if(!transformedValue){
+                    if([self isRequired:options]){
+                        NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeMissingRequieredValue,details);
+                        return;
+                    }
+                    else if([options containsObjectForKey:CKMappingDefaultValueKey]){
+                        [NSValueTransformer transform:[self defaultValue:options] inProperty:property];
+                    }
+                }
+                else{
+                    [property setValue:transformedValue];
+                }
             }
             else{
                 NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
@@ -562,7 +574,7 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error{
     if(![value isKindOfClass:[NSArray class]] && ![value isKindOfClass:[CKDocumentCollection class]]){
-        *error = aggregateError(*error,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSArray or a CKDocumentCollection");
+        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSArray or a CKDocumentCollection");
         return nil;
     }
     return [NSObject objectFromValue:value withMappings:[self arrayDefinitionWithMappings:[self dictionary] objectClass:type] reversed:reversed error:error];
@@ -596,7 +608,7 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 
 - (id)objectFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error{
     if(![value isKindOfClass:[NSDictionary class]]){
-        *error = aggregateError(*error,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSDictionary");
+        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSDictionary");
         return nil;
     }
     id object = [[[type alloc]init] autorelease];

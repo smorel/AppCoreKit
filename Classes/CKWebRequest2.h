@@ -20,6 +20,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 typedef id   (^CKWebRequestTransformBlock)(id value);
 typedef void (^CKWebRequestSuccessBlock)(id value);
 typedef void (^CKWebRequestFailureBlock)(NSError* error);
+typedef void (^CKWebRequestCompletionBlock)(id value, NSHTTPURLResponse* response, NSError* error);
 
 
 @protocol  CKWebRequestDelegate;
@@ -47,12 +48,14 @@ typedef void (^CKWebRequestFailureBlock)(NSError* error);
 	CKWebRequestTransformBlock theTransformBlock;
 	CKWebRequestSuccessBlock theSuccessBlock;
 	CKWebRequestFailureBlock theFailureBlock;
+	CKWebRequestCompletionBlock theCompletedBlock;
 }
 
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, retain) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
 @property (nonatomic, assign) NSObject<CKWebRequestDelegate> *delegate;
+@property (nonatomic, copy) CKWebRequestCompletionBlock completedBlock;//Wanted to call it completionBlock but there is already one in NSOperation called asynchroneously using GCD
 @property (nonatomic, copy) CKWebRequestTransformBlock transformBlock;
 @property (nonatomic, copy) CKWebRequestSuccessBlock successBlock;
 @property (nonatomic, copy) CKWebRequestFailureBlock failureBlock;
