@@ -109,9 +109,31 @@
 	if(self.text){
 		cell.textLabel.text = self.text;
 	}
+    if(self.textColor){
+        cell.textLabel.textColor = self.textColor;
+    }
 	if(self.detailedText){
 		cell.detailTextLabel.text = self.detailedText;
 	}
+    if(self.detailedTextColor){
+        cell.detailTextLabel.textColor = self.detailedTextColor;
+    }
+}
+
+- (void)setText:(NSString*)str{
+    if(self.tableViewCell){
+        self.tableViewCell.textLabel.text = str;
+    }
+    [_text release];
+    _text = [str retain];
+}
+
+- (void)setDetailedText:(NSString*)str{
+    if(self.tableViewCell){
+        self.tableViewCell.detailTextLabel.text = str;
+    }
+    [_detailedText release];
+    _detailedText = [str retain];
 }
 
 #pragma mark CKWebRequestDelegate Protocol
