@@ -161,6 +161,17 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	return str;
 }
 
+- (NSString*)description{
+    NSMutableString* str = [NSMutableString string];
+    [str appendFormat:@"CKCascadingTreeItemFormat <%p> : {\n",self];
+    [str appendFormat:@"format : %@\n",self.format];
+    [str appendFormat:@"objectClass : %@\n",self.objectClass];
+    [str appendFormat:@"propertyName : %@\n",self.propertyName];
+    [str appendFormat:@"properties : %@\n",self.properties];
+    [str appendString:@"}"];
+    return str;
+}
+
 @end
 
 //Constants
