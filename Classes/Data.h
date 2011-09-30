@@ -17,8 +17,6 @@
 #import "CKStore.h"
 #import "CKStoreDataSource.h"
 
-#import "CKStoreDomainExplorer.h"
 #import "CKStoreExplorer.h"
-#import "CKStoreItemExplorer.h"
 
 #import "CKModelObject+CKStore.h"

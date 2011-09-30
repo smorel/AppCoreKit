@@ -304,12 +304,8 @@
 		7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBFF13B8ED3600268D13 /* CKStore.m */; };
 		7560DD4D13B8ED3600268D13 /* CKStoreDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0013B8ED3600268D13 /* CKStoreDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD4E13B8ED3600268D13 /* CKStoreDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0113B8ED3600268D13 /* CKStoreDataSource.m */; };
-		7560DD4F13B8ED3600268D13 /* CKStoreDomainExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0213B8ED3600268D13 /* CKStoreDomainExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD5013B8ED3600268D13 /* CKStoreDomainExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0313B8ED3600268D13 /* CKStoreDomainExplorer.m */; };
 		7560DD5113B8ED3600268D13 /* CKStoreExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0413B8ED3600268D13 /* CKStoreExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0513B8ED3600268D13 /* CKStoreExplorer.m */; };
-		7560DD5313B8ED3600268D13 /* CKStoreItemExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0613B8ED3600268D13 /* CKStoreItemExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD5413B8ED3600268D13 /* CKStoreItemExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0713B8ED3600268D13 /* CKStoreItemExplorer.m */; };
 		7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */; };
 		7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0A13B8ED3600268D13 /* CKStyleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -808,12 +804,8 @@
 		7560DBFF13B8ED3600268D13 /* CKStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStore.m; path = Classes/CKStore.m; sourceTree = "<group>"; };
 		7560DC0013B8ED3600268D13 /* CKStoreDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreDataSource.h; path = Classes/CKStoreDataSource.h; sourceTree = "<group>"; };
 		7560DC0113B8ED3600268D13 /* CKStoreDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreDataSource.m; path = Classes/CKStoreDataSource.m; sourceTree = "<group>"; };
-		7560DC0213B8ED3600268D13 /* CKStoreDomainExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreDomainExplorer.h; path = Classes/CKStoreDomainExplorer.h; sourceTree = "<group>"; };
-		7560DC0313B8ED3600268D13 /* CKStoreDomainExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreDomainExplorer.m; path = Classes/CKStoreDomainExplorer.m; sourceTree = "<group>"; };
 		7560DC0413B8ED3600268D13 /* CKStoreExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreExplorer.h; path = Classes/CKStoreExplorer.h; sourceTree = "<group>"; };
 		7560DC0513B8ED3600268D13 /* CKStoreExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreExplorer.m; path = Classes/CKStoreExplorer.m; sourceTree = "<group>"; };
-		7560DC0613B8ED3600268D13 /* CKStoreItemExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreItemExplorer.h; path = Classes/CKStoreItemExplorer.h; sourceTree = "<group>"; };
-		7560DC0713B8ED3600268D13 /* CKStoreItemExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStoreItemExplorer.m; path = Classes/CKStoreItemExplorer.m; sourceTree = "<group>"; };
 		7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKStyle+Parsing.h"; path = "Classes/CKStyle+Parsing.h"; sourceTree = "<group>"; };
 		7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKStyle+Parsing.m"; path = "Classes/CKStyle+Parsing.m"; sourceTree = "<group>"; };
 		7560DC0A13B8ED3600268D13 /* CKStyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStyleManager.h; path = Classes/CKStyleManager.h; sourceTree = "<group>"; };
@@ -1444,16 +1436,11 @@
 		7506E40C13B900A800EE1471 /* CKStore */ = {
 			isa = PBXGroup;
 			children = (
+				750F65BD143650110006289B /* Explorer */,
 				7560DBFE13B8ED3600268D13 /* CKStore.h */,
 				7560DBFF13B8ED3600268D13 /* CKStore.m */,
 				7560DC0013B8ED3600268D13 /* CKStoreDataSource.h */,
 				7560DC0113B8ED3600268D13 /* CKStoreDataSource.m */,
-				7560DC0213B8ED3600268D13 /* CKStoreDomainExplorer.h */,
-				7560DC0313B8ED3600268D13 /* CKStoreDomainExplorer.m */,
-				7560DC0413B8ED3600268D13 /* CKStoreExplorer.h */,
-				7560DC0513B8ED3600268D13 /* CKStoreExplorer.m */,
-				7560DC0613B8ED3600268D13 /* CKStoreItemExplorer.h */,
-				7560DC0713B8ED3600268D13 /* CKStoreItemExplorer.m */,
 				7560DB7313B8ED3600268D13 /* CKItem.h */,
 				7560DB7413B8ED3600268D13 /* CKItem.m */,
 				7560DB7513B8ED3600268D13 /* CKItemAttributeReference.h */,
@@ -1588,6 +1575,15 @@
 				75A83AC213D75A8400413C17 /* CloudKit.strings */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		750F65BD143650110006289B /* Explorer */ = {
+			isa = PBXGroup;
+			children = (
+				7560DC0413B8ED3600268D13 /* CKStoreExplorer.h */,
+				7560DC0513B8ED3600268D13 /* CKStoreExplorer.m */,
+			);
+			name = Explorer;
 			sourceTree = "<group>";
 		};
 		751F1EDE13D0C37F0041900C /* JSONKit */ = {
@@ -2108,9 +2104,7 @@
 				7560DD4913B8ED3600268D13 /* CKStandardCellController.h in Headers */,
 				7560DD4B13B8ED3600268D13 /* CKStore.h in Headers */,
 				7560DD4D13B8ED3600268D13 /* CKStoreDataSource.h in Headers */,
-				7560DD4F13B8ED3600268D13 /* CKStoreDomainExplorer.h in Headers */,
 				7560DD5113B8ED3600268D13 /* CKStoreExplorer.h in Headers */,
-				7560DD5313B8ED3600268D13 /* CKStoreItemExplorer.h in Headers */,
 				7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */,
 				7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */,
 				7560DD5B13B8ED3600268D13 /* CKTableViewCellController.h in Headers */,
@@ -2466,9 +2460,7 @@
 				7560DD4A13B8ED3600268D13 /* CKStandardCellController.m in Sources */,
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,
 				7560DD4E13B8ED3600268D13 /* CKStoreDataSource.m in Sources */,
-				7560DD5013B8ED3600268D13 /* CKStoreDomainExplorer.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
-				7560DD5413B8ED3600268D13 /* CKStoreItemExplorer.m in Sources */,
 				7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */,
 				7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */,
 				7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */,
