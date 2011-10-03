@@ -491,8 +491,8 @@
 		75CC171213F46E9800835FE3 /* CKNSDate+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171013F46E9800835FE3 /* CKNSDate+ValueTransformer.m */; };
 		75CC171513F46EAF00835FE3 /* CKNSArray+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171313F46EAD00835FE3 /* CKNSArray+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75CC171613F46EAF00835FE3 /* CKNSArray+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171413F46EAE00835FE3 /* CKNSArray+ValueTransformer.m */; };
-		75CC171913F46EC800835FE3 /* CKDocumentArray+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171713F46EC700835FE3 /* CKDocumentArray+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75CC171A13F46EC800835FE3 /* CKDocumentArray+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171813F46EC700835FE3 /* CKDocumentArray+ValueTransformer.m */; };
+		75CC171913F46EC800835FE3 /* CKDocumentCollection+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171713F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC171A13F46EC800835FE3 /* CKDocumentCollection+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171813F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.m */; };
 		75CC171D13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171B13F46EF600835FE3 /* CKNSIndexPath+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75CC171E13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171C13F46EF700835FE3 /* CKNSIndexPath+ValueTransformer.m */; };
 		75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -992,8 +992,8 @@
 		75CC171013F46E9800835FE3 /* CKNSDate+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDate+ValueTransformer.m"; path = "Classes/CKNSDate+ValueTransformer.m"; sourceTree = "<group>"; };
 		75CC171313F46EAD00835FE3 /* CKNSArray+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSArray+ValueTransformer.h"; path = "Classes/CKNSArray+ValueTransformer.h"; sourceTree = "<group>"; };
 		75CC171413F46EAE00835FE3 /* CKNSArray+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSArray+ValueTransformer.m"; path = "Classes/CKNSArray+ValueTransformer.m"; sourceTree = "<group>"; };
-		75CC171713F46EC700835FE3 /* CKDocumentArray+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDocumentArray+ValueTransformer.h"; path = "Classes/CKDocumentArray+ValueTransformer.h"; sourceTree = "<group>"; };
-		75CC171813F46EC700835FE3 /* CKDocumentArray+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKDocumentArray+ValueTransformer.m"; path = "Classes/CKDocumentArray+ValueTransformer.m"; sourceTree = "<group>"; };
+		75CC171713F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDocumentCollection+ValueTransformer.h"; path = "Classes/CKDocumentCollection+ValueTransformer.h"; sourceTree = "<group>"; };
+		75CC171813F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKDocumentCollection+ValueTransformer.m"; path = "Classes/CKDocumentCollection+ValueTransformer.m"; sourceTree = "<group>"; };
 		75CC171B13F46EF600835FE3 /* CKNSIndexPath+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSIndexPath+ValueTransformer.h"; path = "Classes/CKNSIndexPath+ValueTransformer.h"; sourceTree = "<group>"; };
 		75CC171C13F46EF700835FE3 /* CKNSIndexPath+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSIndexPath+ValueTransformer.m"; path = "Classes/CKNSIndexPath+ValueTransformer.m"; sourceTree = "<group>"; };
 		75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+ValueTransformer.h"; path = "Classes/CKNSObject+ValueTransformer.h"; sourceTree = "<group>"; };
@@ -1935,8 +1935,8 @@
 				75CC171013F46E9800835FE3 /* CKNSDate+ValueTransformer.m */,
 				75CC171313F46EAD00835FE3 /* CKNSArray+ValueTransformer.h */,
 				75CC171413F46EAE00835FE3 /* CKNSArray+ValueTransformer.m */,
-				75CC171713F46EC700835FE3 /* CKDocumentArray+ValueTransformer.h */,
-				75CC171813F46EC700835FE3 /* CKDocumentArray+ValueTransformer.m */,
+				75CC171713F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.h */,
+				75CC171813F46EC700835FE3 /* CKDocumentCollection+ValueTransformer.m */,
 				75CC171B13F46EF600835FE3 /* CKNSIndexPath+ValueTransformer.h */,
 				75CC171C13F46EF700835FE3 /* CKNSIndexPath+ValueTransformer.m */,
 				75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */,
@@ -2192,7 +2192,7 @@
 				75CC170D13F46E8200835FE3 /* CKNSURL+ValueTransformer.h in Headers */,
 				75CC171113F46E9800835FE3 /* CKNSDate+ValueTransformer.h in Headers */,
 				75CC171513F46EAF00835FE3 /* CKNSArray+ValueTransformer.h in Headers */,
-				75CC171913F46EC800835FE3 /* CKDocumentArray+ValueTransformer.h in Headers */,
+				75CC171913F46EC800835FE3 /* CKDocumentCollection+ValueTransformer.h in Headers */,
 				75CC171D13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.h in Headers */,
 				75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */,
 				75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */,
@@ -2543,7 +2543,7 @@
 				75CC170E13F46E8200835FE3 /* CKNSURL+ValueTransformer.m in Sources */,
 				75CC171213F46E9800835FE3 /* CKNSDate+ValueTransformer.m in Sources */,
 				75CC171613F46EAF00835FE3 /* CKNSArray+ValueTransformer.m in Sources */,
-				75CC171A13F46EC800835FE3 /* CKDocumentArray+ValueTransformer.m in Sources */,
+				75CC171A13F46EC800835FE3 /* CKDocumentCollection+ValueTransformer.m in Sources */,
 				75CC171E13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.m in Sources */,
 				75CC172213F4705A00835FE3 /* CKNSObject+ValueTransformer.m in Sources */,
 				75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */,
