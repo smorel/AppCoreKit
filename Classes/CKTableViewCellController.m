@@ -51,6 +51,32 @@
 	}
 }
 
+- (void)setDisclosureIndicatorImage:(UIImage*)img{
+    [_disclosureIndicatorImage release];
+    _disclosureIndicatorImage = [img retain];
+    if(self.accessoryType == UITableViewCellAccessoryDisclosureIndicator){
+        UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+        self.accessoryView = view;
+    }
+}
+
+- (void)setCheckMarkImage:(UIImage*)img{
+    [_checkMarkImage release];
+    _checkMarkImage = [img retain];
+    if(self.accessoryType == UITableViewCellAccessoryCheckmark){
+        UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+        self.accessoryView = view;
+    }
+}
+
+- (void)setDisclosureButton:(UIButton*)button{
+    [_disclosureButton release];
+    _disclosureButton = [button retain];
+    if(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton){
+        self.accessoryView = _disclosureButton;
+    }
+}
+
 - (void)setAccessoryType:(UITableViewCellAccessoryType)theAccessoryType{
     bool shouldRemoveAccessoryView = (self.accessoryType != theAccessoryType) && (
           (self.accessoryType == UITableViewCellAccessoryDisclosureIndicator && _disclosureIndicatorImage)
