@@ -302,8 +302,14 @@
             [self.object didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
         }
         else{
-            id theValue = [self value];
-            [theValue insertObjects:objects atIndexes:indexes];
+            id proxy= nil;
+            if(self.subKeyPath != nil) {
+                proxy = [self.subObject.object mutableArrayValueForKey:self.subKeyPath];
+            }
+            else{
+                proxy = self.subObject.object;
+            }
+            [proxy insertObjects:objects atIndexes:indexes];
         }
     }
 }
@@ -323,6 +329,7 @@
 	}
 	else{
         id theValue = [self value];
+        //FIXME : Probable fix to do for to-many KVO observers (cf. insertObjects)
 		[theValue removeObjectsAtIndexes:indexes];
 	}
 }
@@ -343,6 +350,7 @@
 	}
 	else{
         id theValue = [self value];
+        //FIXME : Probable fix to do for to-many KVO observers (cf. insertObjects)
 		[theValue removeAllObjects];
 	}
 	
