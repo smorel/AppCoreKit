@@ -179,6 +179,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 NSString* CKCascadingTreeFormats  = @"CKCascadingTreeFormats";
 NSString* CKCascadingTreeParent   = @"CKCascadingTreeParent";
 NSString* CKCascadingTreeEmpty    = @"CKCascadingTreeEmpty";
+NSString* CKCascadingTreeNode     = @"CKCascadingTreeNode";
 NSString* CKCascadingTreeInherits = @"@inherits";
 NSString* CKCascadingTreeImport   = @"@import";
 NSString* CKCascadingTreeIPad     = @"@ipad";
@@ -361,7 +362,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	NSArray* inheritsArray = [self objectForKey:CKCascadingTreeInherits];
 	if(inheritsArray){
 		for(NSString* key in inheritsArray){
-            
 			NSString* normalizedKey = [CKCascadingTreeItemFormat normalizeFormat:key];
 			NSMutableDictionary* inheritedDico = [self findDictionaryInHierarchy:normalizedKey];
 			if(inheritedDico != nil){
@@ -450,7 +450,27 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 
 - (void)postInitAfterLoading{
     [self makeAllPlatformSpecific];
+    //Setup parent for hierarchical searchs
+    for(id key in [self allKeys]){
+		id object = [self objectForKey:key];
+		if([object isKindOfClass:[NSDictionary class]]
+		   && [key isEqual:CKCascadingTreeFormats] == NO
+		   && [key isEqual:CKCascadingTreeParent] == NO
+		   && [key isEqual:CKCascadingTreeEmpty] == NO){
+			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+		}
+        else if([object isKindOfClass:[NSArray class]]){
+            for(id subObject in object){
+                if([subObject isKindOfClass:[NSDictionary class]]){
+                    [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+                }
+            }
+        }
+	}
+    
     [self makeAllInherits];
+    
+    //Init formats
 	for(id key in [self allKeys]){
 		id object = [self objectForKey:key];
 		if([object isKindOfClass:[NSDictionary class]]
@@ -462,11 +482,13 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 			
 			[object postInitAfterLoading];
 			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
+            [object setObject:key forKey:CKCascadingTreeNode];
 		}
         else if([object isKindOfClass:[NSArray class]]){
             for(id subObject in object){
                 if([subObject isKindOfClass:[NSDictionary class]]){
                     [subObject postInitAfterLoading];
+                    [subObject setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
                 }
             }
         }
