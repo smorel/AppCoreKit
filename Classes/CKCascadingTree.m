@@ -331,13 +331,17 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
         else{
             id object = [dico objectForKey:key];
             if([object isKindOfClass:[NSDictionary class]]){
-                [res setObject:[self deepCleanCopy:object] forKey:key];
+                NSMutableDictionary* copiedDico = [self deepCleanCopy:object];
+                [copiedDico setObject:[NSValue valueWithNonretainedObject:dico] forKey:CKCascadingTreeParent];
+                [res setObject:copiedDico forKey:key];
             }
             else if([object isKindOfClass:[NSArray class]]){
                 NSMutableArray* ar = [NSMutableArray array];
                 for(id subObject in object){
                     if([subObject isKindOfClass:[NSDictionary class]]){
-                        [ar addObject:[self deepCleanCopy:subObject]];
+                        NSMutableDictionary* copiedDico = [self deepCleanCopy:subObject];
+                        [copiedDico setObject:[NSValue valueWithNonretainedObject:dico] forKey:CKCascadingTreeParent];
+                        [ar addObject:copiedDico];
                     }
                     else{
                         [ar addObject:subObject];
