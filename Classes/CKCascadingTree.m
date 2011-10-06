@@ -192,7 +192,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 @implementation NSObject (CKCascadingTree)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
-	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKCascadingTreeFormats,CKCascadingTreeParent,CKCascadingTreeEmpty,CKCascadingTreeInherits,CKCascadingTreeImport,nil]];
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects: CKCascadingTreeFormats,CKCascadingTreeParent,CKCascadingTreeEmpty,CKCascadingTreeInherits,CKCascadingTreeImport,CKCascadingTreeNode,nil]];
 }
 
 @end
