@@ -15,6 +15,7 @@ typedef void (^CKAlertViewActionBlock)();
  */
 @interface CKAlertView : NSObject <UIAlertViewDelegate> {
 }
+@property (nonatomic, retain, readonly) UIAlertView *alertView;
 
 ///-----------------------------------
 /// @name Creating the CKAlertView

@@ -7,6 +7,7 @@
 //
 
 #import "CKAlertView.h"
+#import "CKNSObject+Bindings.h"
 
 
 @interface CKAlertViewAction : NSObject {
@@ -24,7 +25,7 @@
 
 @interface CKAlertView ()
 
-@property (nonatomic, retain) UIAlertView *alertView;
+@property (nonatomic, retain, readwrite) UIAlertView *alertView;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSMutableArray *actions;
@@ -44,6 +45,9 @@
 	self.title = nil;
 	self.message = nil;
 	self.actions = [NSMutableArray array];
+    
+	self.alertView = [[[UIAlertView alloc] init] autorelease];
+	self.alertView.delegate = self;
 }
 
 - (id)init {
@@ -65,6 +69,7 @@
 }
 
 - (void)dealloc {
+    [self clearBindingsContext];
 	self.title = nil;
 	self.message = nil;
 //	self.alertView.delegate = nil;
@@ -82,8 +87,6 @@
 #pragma mark - Setup the AlertView
 
 - (void)setupAlertView {
-	self.alertView = [[[UIAlertView alloc] init] autorelease];
-	self.alertView.delegate = self;
 	self.alertView.title = self.title;
 	self.alertView.message = self.message;
 	
