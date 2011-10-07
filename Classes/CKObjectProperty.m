@@ -348,10 +348,11 @@
 	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
-	[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
-    
+	    
 	if(self.descriptor && self.descriptor.removeAllSelector && [self.object respondsToSelector:self.descriptor.removeAllSelector]){
+        [self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 		[self.object performSelector:self.descriptor.removeAllSelector];
+        [self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 	}
 	else{
         id proxy= nil;
@@ -363,8 +364,6 @@
         }
 		[proxy removeAllObjects];
 	}
-	
-	[self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 }
 
 
