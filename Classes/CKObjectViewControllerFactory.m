@@ -30,10 +30,6 @@
 @property (nonatomic, assign, readwrite) id objectController;
 @end
 
-@interface UITableViewCell()
--(void)setEditingStyle:(UITableViewCellEditingStyle)style;
-@end
-
 
 @implementation CKObjectViewControllerFactory
 @synthesize mappings = _mappings;
@@ -258,11 +254,14 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
             UITableView* tableView = [(CKObjectTableViewController*)parentController tableView];
             BOOL tableEditing = [tableView isEditing];
             BOOL cellEditing = [staticCellController.tableViewCell isEditing];
+            //FIXME : this is a private call.
             if(tableEditing != cellEditing){
-                if([staticCellController.tableViewCell respondsToSelector:@selector(setEditingStyle:)]){
+                /*UITableViewCellEditingStyle
+                 */
+                /*if([staticCellController.tableViewCell respondsToSelector:@selector(setEditingStyle:)]){
                     CKItemViewFlags flags = [self flagsForObject:object atIndexPath:indexPath  withParams:params];
                     [staticCellController.tableViewCell setEditingStyle:flags & CKItemViewFlagRemovable ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone];
-                }
+                }*/
                 [staticCellController.tableViewCell setEditing:tableEditing animated:NO];
                 [staticCellController.tableViewCell layoutSubviews];
             }
