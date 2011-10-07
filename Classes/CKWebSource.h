@@ -18,6 +18,7 @@ typedef CKWebRequest2 *(^CKWebSourceRequestBlock)(NSRange range);
 typedef id (^CKWebSourceTransformBlock)(id value);
 typedef void (^CKWebSourceFailureBlock)(NSError *error);
 typedef void (^CKWebSourceSuccessBlock)();
+typedef void (^CKWebSourceStartBlock)(CKWebRequest2* request);
 
 
 /** TODO
@@ -29,6 +30,7 @@ typedef void (^CKWebSourceSuccessBlock)();
 	CKWebSourceTransformBlock _transformBlock;
 	CKWebSourceFailureBlock _failureBlock;
 	CKWebSourceSuccessBlock _successBlock;
+	CKWebSourceStartBlock _launchRequestBlock;
 	
 	id _webSourceDelegate;
 }
@@ -37,6 +39,7 @@ typedef void (^CKWebSourceSuccessBlock)();
 @property (nonatomic, copy) CKWebSourceTransformBlock transformBlock;
 @property (nonatomic, copy) CKWebSourceFailureBlock failureBlock;
 @property (nonatomic, copy) CKWebSourceSuccessBlock successBlock;
+@property (nonatomic, copy) CKWebSourceStartBlock launchRequestBlock;
 @property (nonatomic, assign) id webSourceDelegate;
 
 
