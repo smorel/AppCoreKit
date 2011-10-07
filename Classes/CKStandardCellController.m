@@ -67,15 +67,25 @@
 
 - (void)dealloc {
 	//DEPRECATED ATTRIBUTES
-	self.image = nil;
-	self.backgroundColor = nil;
-	self.textColor = nil;
-	self.detailedTextColor = nil;
+	[_image release];
+    _image = nil;
+	[_textColor release];
+    _textColor = nil;
+	[_backgroundColor release];
+    _backgroundColor = nil;
+	[_detailedTextColor release];
+    _detailedTextColor = nil;
+	[_text release];
+    _text = nil;
+	[_detailedText release];
+    _detailedText = nil;
+	[_imageURL release];
+    _imageURL = nil;
+	[_fetchedImage release];
+    _fetchedImage = nil;
+	[_image release];
+    _image = nil;
 	
-	self.text = nil;
-	self.detailedText = nil;
-	self.imageURL = nil;
-	self.fetchedImage = nil;
 	[self.request cancel];
 	self.request = nil;
 	[super dealloc];
