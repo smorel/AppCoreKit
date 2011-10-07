@@ -16,6 +16,7 @@
 #import "RegexKitLite.h"
 #import "CKDebug.h"
 #import "CKNetworkActivityManager.h"
+#import "CKNSError+Additions.h"
 
 //
 
@@ -56,6 +57,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize transformBlock = theTransformBlock;
 @synthesize successBlock = theSuccessBlock;
 @synthesize failureBlock = theFailureBlock;
+@synthesize completedBlock = theCompletedBlock;
 
 #pragma mark Initialization
 
@@ -92,6 +94,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theTransformBlock release];
 	[theSuccessBlock release];
 	[theFailureBlock release];
+	[theCompletedBlock release];
 	self.destinationPath = nil;
 	self.destinationStream = nil;
 	[super dealloc];
@@ -316,25 +319,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
 	
-	if ([theResponse statusCode] >= 400) {
-		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
-		NSError *error = [NSError errorWithDomain:CKWebRequestHTTPErrorDomain
-											 code:[theResponse statusCode]
-										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:stringForStatusCode, NSLocalizedDescriptionKey, nil]];
-
-		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) 
-									  withObject:self 
-									  withObject:error 
-								   waitUntilDone:NO];
-        
-        if (theFailureBlock) {
-            theFailureBlock(error);
-        }
-        
-		[self markAsFinished];
-		return;
-	}
-	
 	// FIXME: This perform needs to be tested before called because its the one from the framework.
 	// The other calls are implemented in CKNSObject+Invocation and test that the receiver responds to the
 	// message
@@ -364,10 +348,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	// Try to process the response according to the Content-Type (e.g., XML, JSON).
 	// FIXME: The processing should happen in a different class (a default transformer).
 	
-	id responseValue;
+	id responseValue = nil;
 	NSDictionary *responseHeaders = [theResponse allHeaderFields];
 	NSError *error = nil;
 	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
+    if(contentType == nil){
+        contentType = [theResponse MIMEType];
+    }
     CKDebugLog(@"Recv Content-Type: %@", contentType);
 	
 	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
@@ -382,12 +369,28 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	} else {
 		responseValue = [[theReceivedData copy] autorelease];
 	}
-	
-	// Notifies the delegate if a parsing error has occured
-	
-	if (error) {
-		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
-        if (theFailureBlock) { theFailureBlock(error); }
+    
+    if ([theResponse statusCode] >= 400 || error) {
+        //aggregate error !
+		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
+		/*NSError *error2 = [NSError errorWithDomain:CKWebRequestHTTPErrorDomain
+											 code:[theResponse statusCode]
+										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:stringForStatusCode, NSLocalizedDescriptionKey, nil]];*/
+        error = aggregateError(error, CKWebRequestHTTPErrorDomain, [theResponse statusCode], stringForStatusCode);
+        
+		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) 
+									  withObject:self 
+									  withObject:error 
+								   waitUntilDone:NO];
+        
+        if (theFailureBlock) {
+            theFailureBlock(error);
+        }
+        
+        if(theCompletedBlock){
+            theCompletedBlock(responseValue,theResponse,error);
+        }
+        
 		[self markAsFinished];
 		return;
 	}
@@ -412,8 +415,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 		theSuccessBlock(value);
 	}
     
+    
+    if(theCompletedBlock){
+        theCompletedBlock(value,theResponse,error);
+    }
+    
 	[self markAsFinished];
 }
+
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	//NSURLErrorFailingURLStringErrorKey incompatible os3

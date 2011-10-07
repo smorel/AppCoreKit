@@ -18,7 +18,7 @@
 #import "CKDebug.h"
 
 
-NSMutableSet* reserverKeyWords = nil;
+//NSMutableSet* reserverKeyWords = nil;
 
 NSString* CKStyleBackgroundColor = @"backgroundColor";
 NSString* CKStyleBackgroundGradientColors = @"backgroundGradientColors";
@@ -132,13 +132,14 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	return NO;
 }
 
-- (void)applyStyle:(NSMutableDictionary*)style{
-	[self applyStyle:style propertyName:nil];
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
+	return [self applyStyle:style propertyName:nil];
 }
 
-- (void)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
 	NSMutableDictionary* myViewStyle = [style styleForObject:self propertyName:propertyName];
 	[[self class] applyStyle:myViewStyle toView:self appliedStack:[NSMutableSet set] delegate:nil];
+    return myViewStyle;
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
@@ -147,6 +148,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 }
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleBackgroundColor,CKStyleBackgroundGradientColors,CKStyleBackgroundGradientLocations,CKStyleBackgroundImageContentMode,
 								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,@"@class",nil]];
 }
@@ -331,10 +333,10 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
     if([style isEmpty])
         return;
     
-	if(reserverKeyWords == nil){
-		reserverKeyWords = [[NSMutableSet set]retain];
-	}
+	/*if(reserverKeyWords == nil){
+	}*/
 	
+    NSMutableSet* reserverKeyWords = [[NSMutableSet set]retain];
 	[[self class]updateReservedKeyWords:reserverKeyWords];
 	
 	for(NSString* key in [style allKeys]){

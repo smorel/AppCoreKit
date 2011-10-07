@@ -192,6 +192,18 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
     
     if([staticController isKindOfClass:[CKTableViewCellController class]]){
         CKTableViewCellController* staticCellController = (CKTableViewCellController*)staticController;
+        //Those conditions means values of interest are hardcoded in stylesheets
+        if(forSize && [controllerStyle containsObjectForKey:CKStyleCellSize]){
+            return nil;
+        }
+        if(!forSize && [controllerStyle containsObjectForKey:CKStyleCellFlags]){
+            return nil;
+        }
+        
+        //Retrieves the right style
+        if([controllerStyle containsObjectForKey:CKStyleCellType]){
+            staticCellController.cellStyle = [controllerStyle cellStyle];
+        }
         if(staticCellController.cellStyle != CKTableViewCellStylePropertyGrid
            && staticCellController.cellStyle != CKTableViewCellStyleValue3){
             return nil;

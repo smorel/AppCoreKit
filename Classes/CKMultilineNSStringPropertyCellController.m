@@ -243,7 +243,7 @@
 	return YES;
 }
 
-+ (UIResponder*)responderInView:(UIView*)view{
++ (UIView*)responderInView:(UIView*)view{
 	UITextView *textView = (UITextView*)[view viewWithTag:50000];
 	return textView;
 }

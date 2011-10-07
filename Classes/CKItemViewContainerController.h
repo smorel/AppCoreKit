@@ -82,6 +82,9 @@
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib;
 - (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
 
+//setup
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
+
 //update
 - (void)updateVisibleViewsIndexPath;
 - (void)updateVisibleViewsRotation;

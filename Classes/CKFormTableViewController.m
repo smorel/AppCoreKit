@@ -513,15 +513,18 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index{
+    if(index < 0)
+        return nil;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		id object =  cellDescriptor.value;
 		return object;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 			id object = [_objectController objectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 			return object;
@@ -530,7 +533,7 @@
 	
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount +footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
 		id object =  cellDescriptor.value;
 		return object;
@@ -548,19 +551,22 @@
 }
 
 - (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+    if(index < 0)
+        return nil;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		CKFormCellDescriptor* cellDescriptor = [_headerCellDescriptors objectAtIndex:index];
 		return cellDescriptor;
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		return [_controllerFactory factoryItemAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 	}
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount +footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount +footerCount)){
 		CKFormCellDescriptor* cellDescriptor = [_footerCellDescriptors objectAtIndex:index - (count + headerCount)];
 		return cellDescriptor;
 	}
@@ -569,20 +575,23 @@
 }
 
 - (void)removeObjectAtIndex:(NSInteger)index{
+    if(index < 0)
+        return;
+    
 	int headerCount = [_headerCellDescriptors count];
-	if(index < headerCount){
+	if((NSInteger)index < (NSInteger)headerCount){
 		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
-	if(index < count + headerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount)){
 		if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 			return [_objectController removeObjectAtIndexPath:[NSIndexPath indexPathForRow:(index - headerCount) inSection:0]];
 		}
 	}
 	
 	int footerCount = [_footerCellDescriptors count];
-	if(index < count + headerCount + footerCount){
+	if((NSInteger)index < (NSInteger)(count + headerCount + footerCount)){
 		NSAssert(NO,@"NOT IMPLEMENTED");
 	}
 }
@@ -766,6 +775,10 @@
 	}
 }
 
+- (void)dealloc{
+    [super dealloc];
+}
+
 @end
 
 
@@ -854,7 +867,7 @@
 				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
 					CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-					[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+					[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 				}
 			}
 		}
@@ -886,7 +899,7 @@
 		if(section.hidden == YES){
 			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 				CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-				[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+				[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 			}
 		}
 	}
@@ -898,30 +911,38 @@
 	return self;
 }
 
-- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section{
-	section.parentController = self;
-	[_sections addObject:section];
-	if(section.hidden == YES){
-		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+
+- (NSArray*)addSections:(NSArray *)sections{
+	[_sections addObjectsFromArray:sections];
+    
+    NSMutableIndexSet* indexSet = nil;
+    for(CKFormSectionBase* section in sections){
+        section.parentController = self;
+        
+        if(self.viewIsOnScreen){
+            [section start];
+        }
+        if(!section.hidden){
+            if(indexSet == nil){
+                indexSet = [NSMutableIndexSet indexSet];
+            }
+            NSInteger index = section.sectionVisibleIndex;
+            [indexSet addIndex:index];
+        }
+        if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 			CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-			[collecSection.objectController.collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 		}
-	}
-	return section;
+    }
+    
+    if(indexSet && self.viewIsOnScreen){
+        [self.tableView beginUpdates];
+        [self.tableView insertSections:indexSet withRowAnimation:self.rowInsertAnimation];
+        [self.tableView endUpdates];
+    }
+    
+    return sections;
 }
-
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
-	return [self addSectionWithCellDescriptors:cellDescriptors headerTitle:@""];
-}
-
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
-	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle atIndex:[_sections count]];
-}
-
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	return [self insertSectionWithCollection:collection mappings:mappings atIndex:[_sections count]];
-}
-
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index{
 	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:@"" atIndex:index];
 }
@@ -930,6 +951,11 @@
 	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
 	return section;
 }
 
@@ -939,8 +965,13 @@
 	[_sections insertObject:section atIndex:index];
 	
 	if(section.hidden == YES){
-		[collection.feedSource fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+		[collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 	}
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
 	return section;
 	
 }
@@ -1021,6 +1052,41 @@
         }
     }
     [self objectControllerDidEndUpdating:self.objectController];
+}
+
+@end
+
+
+@implementation CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+
+- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section{
+	section.parentController = self;
+	[_sections addObject:section];
+	if(section.hidden == YES){
+		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+			CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
+			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+		}
+	}
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
+	return section;
+}
+
+
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
+	return [self addSectionWithCellDescriptors:cellDescriptors headerTitle:@""];
+}
+
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
+	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle atIndex:[_sections count]];
+}
+
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	return [self insertSectionWithCollection:collection mappings:mappings atIndex:[_sections count]];
 }
 
 @end

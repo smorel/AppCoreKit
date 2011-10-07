@@ -16,7 +16,7 @@
 #import "CKNSURL+ValueTransformer.h"
 #import "CKNSDate+ValueTransformer.h"
 #import "CKNSArray+ValueTransformer.h"
-#import "CKDocumentArray+ValueTransformer.h"
+#import "CKDocumentCollection+ValueTransformer.h"
 #import "CKNSIndexPath+ValueTransformer.h"
 #import "CKNSObject+ValueTransformer.h"
 #import "CKNSValueTransformer+NativeTypes.h"

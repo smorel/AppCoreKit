@@ -36,6 +36,7 @@
 @property (nonatomic, retain) UIImageView *titleView;
 @property (nonatomic, retain) UIImageView *plateView;
 @property (nonatomic, retain) UIImageView *plateBackView;
+@property (nonatomic, retain) UILabel *versionLabel;
 
 @end
 
@@ -48,6 +49,8 @@
 @synthesize titleView = _titleView;
 @synthesize plateView = _plateView;
 @synthesize plateBackView = _plateBackView;
+@synthesize versionLabel = _versionLabel;
+
 
 - (id)initWithStyle:(CKCreditsViewStyle)style {
 	self = [super init];
@@ -78,14 +81,14 @@
 				break;
 		}
 
-		UILabel *versionLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
-		versionLabel.backgroundColor = [UIColor clearColor];
-		versionLabel.textAlignment = UITextAlignmentCenter;
-		versionLabel.shadowOffset = CGSizeMake(0, 1);
-		versionLabel.font = [UIFont systemFontOfSize:14];
-		versionLabel.text = appVersion;
-		versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		[versionLabel sizeToFit];
+		self.versionLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
+		_versionLabel.backgroundColor = [UIColor clearColor];
+		_versionLabel.textAlignment = UITextAlignmentCenter;
+		_versionLabel.shadowOffset = CGSizeMake(0, 1);
+		_versionLabel.font = [UIFont systemFontOfSize:14];
+		_versionLabel.text = appVersion;
+		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		[_versionLabel sizeToFit];
 		
 		UIView *plateContainerView = [[[UIView alloc] initWithFrame:self.plateView.frame] autorelease];
 		[plateContainerView addSubview:self.plateView];
@@ -102,13 +105,13 @@
 		plateContainerView.frame = CGRectOffset(plateContainerView.frame, plateViewOffsetX, plateViewOffsetY);
 		plateContainerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		
-		CGFloat versionLabelOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(versionLabel.bounds)) / 2);
+		CGFloat versionLabelOffsetX = roundf((CGRectGetMaxX(self.bounds) - CGRectGetMaxX(_versionLabel.bounds)) / 2);
 		CGFloat versionLabelOffsetY = roundf(CGRectGetMaxY(plateContainerView.frame) + plateVersionMargin);
-		versionLabel.frame = CGRectOffset(versionLabel.frame, versionLabelOffsetX, versionLabelOffsetY);
+		_versionLabel.frame = CGRectOffset(_versionLabel.frame, versionLabelOffsetX, versionLabelOffsetY);
 		
 		[self addSubview:self.titleView];
 		[self addSubview:plateContainerView];
-		[self addSubview:versionLabel];
+		[self addSubview:_versionLabel];
 		
 		/*
 		UISwipeGestureRecognizer *leftSwipeGesture = [[[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftSwipeGesture:)] autorelease];
@@ -130,6 +133,7 @@
 	self.titleView = nil;
 	self.plateView = nil;
 	self.plateBackView = nil;
+	self.versionLabel = nil;
 	[super dealloc];
 }
 

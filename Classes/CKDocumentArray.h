@@ -13,7 +13,7 @@
 /** TODO
  */
 @interface CKDocumentArrayCollection : CKObjectPropertyArrayCollection {
-	NSMutableArray* _objects;
+	NSMutableArray* _collectionObjects;
 }
 
 @end

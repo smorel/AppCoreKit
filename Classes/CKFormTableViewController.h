@@ -173,17 +173,15 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 /// @name Creating or inserting the sections
 ///-----------------------------------
 
-- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section;
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors;
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle;
+- (NSArray*)addSections:(NSArray *)sections;
+- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
+/* FIXME : do a InsertSections atIndexes to batch the animations and depreciate the following methods
+ */
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
-
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
 
-- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
 ///-----------------------------------
 /// @name Accessing the sections
@@ -196,6 +194,13 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 - (CKFormSectionBase*)visibleSectionAtIndex:(NSInteger)index;
 - (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
 
+@end
+
+@interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors DEPRECATED_ATTRIBUTE;
+- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section DEPRECATED_ATTRIBUTE;
+- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
 @end
 
 

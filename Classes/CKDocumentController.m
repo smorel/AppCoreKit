@@ -93,6 +93,9 @@
 	/*if(_collection && _collection.feedSource){
 		range.location--;
 	}*/
+    
+    if(self.numberOfFeedObjectsLimit > 0 && [_collection count] > self.numberOfFeedObjectsLimit)
+        return;
 			
 	//Adjust range using limit
 	range.location = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,range.location) : range.location;

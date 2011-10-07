@@ -16,6 +16,8 @@
 }
 
 + (BOOL)needsNextKeyboard:(CKTableViewCellController*)controller;
++ (BOOL)needsPreviousKeyboard:(CKTableViewCellController*)controller;
 + (BOOL)activateNextResponderFromController:(CKTableViewCellController*)controller;
++ (BOOL)activatePreviousResponderFromController:(CKTableViewCellController*)controller;
 
 @end

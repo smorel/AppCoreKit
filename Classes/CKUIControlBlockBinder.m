@@ -58,7 +58,7 @@
 }
 
 - (id)releaseTarget:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
+	//[self unbindInstance:weakRef.object];
 	[[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }

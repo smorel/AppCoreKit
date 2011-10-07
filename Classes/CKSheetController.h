@@ -22,10 +22,12 @@ extern NSString *const CKSheetKeyboardWillShowInfoKey;
 @interface CKSheetController : NSObject{
     id _delegate;
     UIViewController* _contentViewController;
+    UIView* _sheetView;
 }
 
 @property(nonatomic,assign) id delegate;
 @property(nonatomic,retain) UIViewController* contentViewController;
+@property(nonatomic,retain, readonly) UIView* sheetView;
 
 - (id)initWithContentViewController:(UIViewController *)viewController;
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;

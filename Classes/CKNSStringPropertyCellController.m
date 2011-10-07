@@ -14,6 +14,8 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
+#import "CKSheetController.h"
+
 
 @implementation CKNSStringPropertyCellController
 @synthesize textField = _textField;
@@ -71,14 +73,14 @@
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
             
             BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-            CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : 11;
+            CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : self.contentInsets.top;
             
             CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - 10;
-            CGFloat textFieldX = realWidth - 10 - textFieldWidth;
+            CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - self.contentInsets.right;
+            CGFloat textFieldX = realWidth - self.contentInsets.right - textFieldWidth;
             if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
-                textFieldWidth = realWidth - 10;
-                textFieldX = 10;
+                textFieldWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
+                textFieldX = self.contentInsets.left;
             }
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
         }
@@ -150,8 +152,11 @@
 	return YES;
 }
 
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+    self.textField.inputAccessoryView = [self navigationToolbar];
+
+    if([CKTableViewCellNextResponder needsNextKeyboard:self]){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
     else{
@@ -206,10 +211,11 @@
 
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
-	return YES;
+	CKObjectProperty* model = object;// || self.readonly
+	return ![model isReadOnly];
 }
 
-+ (UIResponder*)responderInView:(UIView*)view{
++ (UIView*)responderInView:(UIView*)view{
 	UITextField *textField = (UITextField*)[view viewWithTag:50000];
 	return textField;
 }

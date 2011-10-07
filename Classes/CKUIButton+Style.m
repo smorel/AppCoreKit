@@ -15,18 +15,22 @@
 NSString *CKStyleDefaultBackgroundImage = @"defaultBackgroundImage";
 NSString *CKStyleDefaultImage = @"defaultImage";
 NSString *CKStyleDefaultTextColor = @"defaultTextColor";
+NSString *CKStyleDefaultTitle = @"defaultTitle";
 
 NSString *CKStyleHighlightedBackgroundImage = @"highlightedBackgroundImage";
 NSString *CKStyleHighlightedImage = @"highlightedImage";
 NSString *CKStyleHighlightedTextColor = @"highlightedTextColor";
+NSString *CKStyleHighlightedTitle = @"highlightedTitle";
 
 NSString *CKStyleDisabledBackgroundImage = @"disabledBackgroundImage";
 NSString *CKStyleDisabledImage = @"disabledImage";
 NSString *CKStyleDisabledTextColor = @"disabledTextColor";
+NSString *CKStyleDisabledTitle = @"disabledTitle";
 
 NSString *CKStyleSelectedBackgroundImage = @"selectedBackgroundImage";
 NSString *CKStyleSelectedImage = @"selectedImage";
 NSString *CKStyleSelectedTextColor = @"selectedTextColor";
+NSString *CKStyleSelectedTitle = @"selectedTitle";
 
 @implementation NSMutableDictionary (CKUIButtonStyle)
 
@@ -42,6 +46,10 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 	return [self colorForKey:CKStyleDefaultTextColor];
 }
 
+- (NSString *)defaultTitle {
+	return [self stringForKey:CKStyleDefaultTitle];
+}
+
 - (UIImage*)highlightedBackgroundImage {
 	return [self imageForKey:CKStyleHighlightedBackgroundImage];
 }
@@ -52,6 +60,10 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 
 - (UIColor *)highlightedTextColor {
 	return [self colorForKey:CKStyleHighlightedTextColor];
+}
+
+- (NSString *)highlightedTitle {
+	return [self stringForKey:CKStyleHighlightedTitle];
 }
 
 - (UIImage*)disabledBackgroundImage {
@@ -66,6 +78,10 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 	return [self colorForKey:CKStyleDisabledTextColor];
 }
 
+- (NSString *)disabledTitle {
+	return [self stringForKey:CKStyleDisabledTitle];
+}
+
 - (UIImage*)selectedBackgroundImage {
 	return [self imageForKey:CKStyleSelectedBackgroundImage];
 }
@@ -78,6 +94,10 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 	return [self colorForKey:CKStyleSelectedTextColor];
 }
 
+- (NSString *)selectedTitle {
+	return [self stringForKey:CKStyleSelectedTitle];
+}
+
 @end
 
 //
@@ -85,6 +105,7 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 @implementation UIButton (CKStyle)
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
+    [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,nil]];
 }
 
@@ -103,6 +124,9 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 			if ([myButtonStyle containsObjectForKey:CKStyleDefaultTextColor]) {
                 [button setTitleColor:[myButtonStyle defaultTextColor] forState:UIControlStateNormal];
             }
+            if ([myButtonStyle containsObjectForKey:CKStyleDefaultTitle]) {
+                [button setTitle:[myButtonStyle defaultTitle] forState:UIControlStateNormal];
+            }
             
             //highlighted state
 			if ([myButtonStyle containsObjectForKey:CKStyleHighlightedBackgroundImage]) {
@@ -113,6 +137,9 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
             }
 			if ([myButtonStyle containsObjectForKey:CKStyleHighlightedTextColor]) {
                 [button setTitleColor:[myButtonStyle highlightedTextColor] forState:UIControlStateHighlighted];
+            }
+            if ([myButtonStyle containsObjectForKey:CKStyleHighlightedTitle]) {
+                [button setTitle:[myButtonStyle highlightedTitle] forState:UIControlStateHighlighted];
             }
             
             //disabled state
@@ -125,6 +152,9 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
 			if ([myButtonStyle containsObjectForKey:CKStyleDisabledTextColor]) {
                 [button setTitleColor:[myButtonStyle disabledTextColor] forState:UIControlStateDisabled];
             }
+            if ([myButtonStyle containsObjectForKey:CKStyleDisabledTitle]) {
+                [button setTitle:[myButtonStyle disabledTitle] forState:UIControlStateDisabled];
+            }
             
             //disabled state
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedBackgroundImage]) {
@@ -135,6 +165,9 @@ NSString *CKStyleSelectedTextColor = @"selectedTextColor";
             }
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedTextColor]) {
                 [button setTitleColor:[myButtonStyle selectedTextColor] forState:UIControlStateSelected];
+            }
+            if ([myButtonStyle containsObjectForKey:CKStyleSelectedTitle]) {
+                [button setTitle:[myButtonStyle selectedTitle] forState:UIControlStateSelected];
             }
             
             //Font

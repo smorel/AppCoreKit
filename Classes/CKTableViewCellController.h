@@ -66,6 +66,7 @@ typedef enum CKTableViewCellStyle {
 	NSString* _key;
 	CGFloat _componentsRatio;
 	CGFloat _componentsSpace;
+    UIEdgeInsets _contentInsets;
     
     NSString* _cacheLayoutBindingContextId;
 	
@@ -86,8 +87,10 @@ typedef enum CKTableViewCellStyle {
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
 
+//for propertygrid and value3 only ...
 @property (nonatomic, assign) CGFloat componentsRatio;
 @property (nonatomic, assign) CGFloat componentsSpace;
+@property (nonatomic, assign) UIEdgeInsets contentInsets;
 
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
@@ -110,9 +113,6 @@ typedef enum CKTableViewCellStyle {
 - (void)initTableViewCell:(UITableViewCell*)cell;
 - (void)layoutCell:(UITableViewCell*)cell;
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object;
-+ (UIResponder*)responderInView:(UIView*)view;
-
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
@@ -121,6 +121,10 @@ typedef enum CKTableViewCellStyle {
 
 - (void)scrollToRow;
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
+
++ (BOOL)hasAccessoryResponderWithValue:(id)object;
++ (UIView*)responderInView:(UIView*)view;
+- (void)becomeFirstResponder;
 
 @end
 
