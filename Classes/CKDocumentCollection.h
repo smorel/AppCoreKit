@@ -14,6 +14,7 @@
 typedef void(^CKDocumentCollectionBlock)(NSArray* objects,NSIndexSet* indexes);
 typedef void(^CKDocumentCollectionReplaceBlock)(id object,id replacedObject,NSInteger index);
 typedef void(^CKDocumentCollectionClearBlock)();
+typedef void(^CKDocumentCollectionFetchBlock)(NSRange range);
 
 /** TODO : Implements fast enumeration protocol
  */
@@ -35,6 +36,8 @@ typedef void(^CKDocumentCollectionClearBlock)();
 @property (nonatomic,copy) CKDocumentCollectionBlock removeObjectsBlock;
 @property (nonatomic,copy) CKDocumentCollectionReplaceBlock replaceObjectBlock;
 @property (nonatomic,copy) CKDocumentCollectionClearBlock clearBlock;
+@property (nonatomic,copy) CKDocumentCollectionFetchBlock startFetchingBlock;
+@property (nonatomic,copy) CKDocumentCollectionBlock endFetchingBlock;
 
 - (id)initWithFeedSource:(CKFeedSource*)source;
 - (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)storage;
