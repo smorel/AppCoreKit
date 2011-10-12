@@ -123,9 +123,9 @@ extern NSString* CKStyleBorderStyle;
 /** TODO
  */
 @interface NSObject (CKStyle)
-@property(nonatomic,retain)NSMutableDictionary* applyedStyle;
+@property(nonatomic,retain)NSMutableDictionary* appliedStyle;
 
-- (NSString*)applyedStyleDescription;
+- (NSString*)appliedStyleDescription;
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style;

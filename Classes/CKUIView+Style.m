@@ -125,7 +125,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
                 [str appendFormat:@"%@%@ : %@",indentationString,key,object];
             }
             else{
-                [str appendFormat:@"%@%@ : {\n%@ \n}",indentationString,key,[object lightStyleDescriptionWithIndentation:(indentation + 1)]];
+                [str appendFormat:@"%@%@ : {\n%@ \n%@}",indentationString,key,[object lightStyleDescriptionWithIndentation:(indentation + 1)],indentationString];
             }
         }
     }
@@ -351,24 +351,24 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 @end
 
 
-static char NSObjectApplyedStyleObjectKey;
+static char NSObjectAppliedStyleObjectKey;
 
 @implementation NSObject (CKStyle)
-@dynamic applyedStyle;
+@dynamic appliedStyle;
 
-- (void)setApplyedStyle:(NSMutableDictionary*)applyedStyle{
+- (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
     objc_setAssociatedObject(self, 
-                             &NSObjectApplyedStyleObjectKey,
-                             applyedStyle,
+                             &NSObjectAppliedStyleObjectKey,
+                             appliedStyle,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSMutableDictionary*)applyedStyle{
-    return objc_getAssociatedObject(self, &NSObjectApplyedStyleObjectKey);
+- (NSMutableDictionary*)appliedStyle{
+    return objc_getAssociatedObject(self, &NSObjectAppliedStyleObjectKey);
 }
 
-- (NSString*)applyedStyleDescription{
-    NSMutableDictionary* style = [self applyedStyle];
+- (NSString*)appliedStyleDescription{
+    NSMutableDictionary* style = [self appliedStyle];
     
     NSMutableString* stylePath = [NSMutableString string];
     NSMutableDictionary* currentDico = style;
@@ -384,7 +384,7 @@ static char NSObjectApplyedStyleObjectKey;
         currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
     }
     
-    return [NSString stringWithFormat:@"Path : %@ \nStyle : {\n%@\n}",stylePath,[style lightStyleDescriptionWithIndentation:1]];
+    return cleanString([NSString stringWithFormat:@"Path : %@ \nStyle : {\n%@\n}",stylePath,[style lightStyleDescriptionWithIndentation:1]]);
 }
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
@@ -447,7 +447,7 @@ static char NSObjectApplyedStyleObjectKey;
 	if(style == nil)
 		return;
     
-    [self setApplyedStyle:style];
+    [self setAppliedStyle:style];
 	
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];

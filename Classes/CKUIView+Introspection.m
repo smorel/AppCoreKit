@@ -83,7 +83,7 @@
 																		   withClass:[UIColor class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
 																			readOnly:NO]];
-	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"applyedStyle"
+	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"appliedStyle"
 																		   withClass:[NSMutableDictionary class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeRetain
 																			readOnly:YES]];
