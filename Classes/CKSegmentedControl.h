@@ -8,6 +8,30 @@
 
 #import <UIKit/UIKit.h>
 
+/* This is a sample of how to customize style for CKSegmentedControl in stylesheets :
+ 
+"CKSegmentedControl" : {
+    "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionFirst]" : {
+        "defaultBackgroundImage" : ["navbar-back","13 0"],
+        "highlightedBackgroundImage" : ["navbar-back-press","13 0"],
+        "selectedBackgroundImage" : ["navbar-back-press","13 0"],
+        "contentEdgeInsets" : "3 30 3 10"
+    },
+    "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionLast]" : {
+        "defaultBackgroundImage" : "navbar-button-blue",
+        "highlightedBackgroundImage" : "navbar-button-blue-press",
+        "selectedBackgroundImage" : "navbar-button-blue-press"
+    },
+    "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionMiddle]" : {
+        "backgroundColor" : "yellowColor"
+    },
+    "CKSegmentedControlButton[position=CKSegmentedControlButtonPositionAlone]" : {
+        "backgroundColor" : "redColor"
+    }
+}
+*/
+ 
+
 typedef enum CKSegmentedControlButtonPosition{
     CKSegmentedControlButtonPositionFirst  = 1 << 0,
     CKSegmentedControlButtonPositionMiddle = 1 << 1,
