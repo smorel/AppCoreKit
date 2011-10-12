@@ -337,13 +337,19 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 - (void)becomeFirstResponder{
     CKObjectProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
+	
+	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name];
+	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
+	if ([propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name]]) {
+		propertyNavBarTitleLocalized = _(descriptor.name);
+	}
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
         CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
         if(sheetController == nil){
             CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
-            dateController.title = _(descriptor.name);
+            dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
             
             if(_enableAccessoryView){
@@ -380,7 +386,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             else{
                 dateController = (CKNSDateViewController*)[sheetController contentViewController];
             }
-            dateController.title = _(descriptor.name);
+            dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
             
             [self onBeginEditingUsingViewController:dateController];
@@ -395,7 +401,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         [[[self parentController]view]endEditing:YES];//Hides keyboard if needed
         
         CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
-        dateController.title = _(descriptor.name);
+        dateController.title = propertyNavBarTitleLocalized;
         dateController.delegate = self;
         
         [self onBeginEditingUsingViewController:dateController];
