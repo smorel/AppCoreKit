@@ -442,7 +442,6 @@
 		7560DE5813B8F00F00268D13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4813B8F00F00268D13 /* Foundation.framework */; };
 		7560DE5913B8F00F00268D13 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */; };
 		7560DE5A13B8F00F00268D13 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4A13B8F00F00268D13 /* CFNetwork.framework */; };
-		7560DE5B13B8F00F00268D13 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4B13B8F00F00268D13 /* libz.1.2.3.dylib */; };
 		7560DE5C13B8F00F00268D13 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4C13B8F00F00268D13 /* libicucore.dylib */; };
 		7560DE5D13B8F00F00268D13 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4D13B8F00F00268D13 /* libxml2.dylib */; };
 		7560DE5E13B8F00F00268D13 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */; };
@@ -519,6 +518,7 @@
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
+		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -948,7 +948,6 @@
 		7560DE4813B8F00F00268D13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7560DE4A13B8F00F00268D13 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		7560DE4B13B8F00F00268D13 /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		7560DE4C13B8F00F00268D13 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		7560DE4D13B8F00F00268D13 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1026,6 +1025,7 @@
 		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
+		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1042,9 +1042,9 @@
 				7560DE5813B8F00F00268D13 /* Foundation.framework in Frameworks */,
 				7560DE5913B8F00F00268D13 /* SystemConfiguration.framework in Frameworks */,
 				7560DE5A13B8F00F00268D13 /* CFNetwork.framework in Frameworks */,
-				7560DE5B13B8F00F00268D13 /* libz.1.2.3.dylib in Frameworks */,
 				7560DE5C13B8F00F00268D13 /* libicucore.dylib in Frameworks */,
 				7560DE5D13B8F00F00268D13 /* libxml2.dylib in Frameworks */,
+				EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */,
 				7560DE5E13B8F00F00268D13 /* CoreGraphics.framework in Frameworks */,
 				7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */,
 				7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */,
@@ -1716,8 +1716,8 @@
 				7560DE4813B8F00F00268D13 /* Foundation.framework */,
 				7560DE4913B8F00F00268D13 /* SystemConfiguration.framework */,
 				7560DE4A13B8F00F00268D13 /* CFNetwork.framework */,
-				7560DE4B13B8F00F00268D13 /* libz.1.2.3.dylib */,
 				7560DE4C13B8F00F00268D13 /* libicucore.dylib */,
+				EDF472F01446469400DBA2B5 /* libz.1.dylib */,
 				7560DE4D13B8F00F00268D13 /* libxml2.dylib */,
 				7560DE4E13B8F00F00268D13 /* CoreGraphics.framework */,
 				7560DE4F13B8F00F00268D13 /* MapKit.framework */,
