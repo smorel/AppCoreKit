@@ -78,17 +78,16 @@
     NSMutableArray* theProperties = [NSMutableArray array];
     if([theobject isKindOfClass:[NSDictionary class]]){
         for(id key in [theobject allKeys]){
-            if([key isKindOfClass:[NSString class]]){
-                NSString* lowerCaseProperty = [key lowercaseString];
-                BOOL useProperty = YES;
-                if(filter != nil){
-                    NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
-                    useProperty = (range.location != NSNotFound);
-                }
-                if(useProperty){
-                    CKObjectProperty* property = [[[CKObjectProperty alloc]initWithObject:theobject keyPath:key]autorelease];
-                    [theProperties insertObject:property atIndex:0];
-                }
+            NSString* strKey = [NSValueTransformer transform:key toClass:[NSString class]];
+            NSString* lowerCaseProperty = [strKey lowercaseString];
+            BOOL useProperty = YES;
+            if(filter != nil){
+                NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
+                useProperty = (range.location != NSNotFound);
+            }
+            if(useProperty){
+                CKObjectProperty* property = [[[CKObjectProperty alloc]initWithDictionary:theobject key:key]autorelease];
+                [theProperties insertObject:property atIndex:0];
             }
         }
     }

@@ -11,4 +11,23 @@
 
 @implementation CKUIImagePropertyCellController
 
+- (id)init{
+    self = [super init];
+    self.cellStyle = UITableViewCellStyleSubtitle;
+    return self;
+}
+
+- (void)setupCell:(UITableViewCell *)cell{
+    [super setupCell:cell];
+    CKObjectProperty* property = self.value;
+    UIImage* image = [property value];
+    cell.imageView.image = image;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.accessoryType = UITableViewCellAccessoryNone;
+}
+
++ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
+    return CKItemViewFlagNone;
+}
+
 @end

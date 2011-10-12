@@ -105,11 +105,21 @@
 }
 
 - (void)addObserver:(id)object{
-	[_property.object addObserver:object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+    if([_property.keyPath isKindOfClass:[NSString class]]){
+        [_property.object addObserver:object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+    }
+    else{
+        NSLog(@"could not observe non string keypath for array property : %@",_property);
+    }
 }
 
 - (void)removeObserver:(id)object{
-	[_property.object removeObserver:object forKeyPath:_property.keyPath];
+    if([_property.keyPath isKindOfClass:[NSString class]]){
+        [_property.object removeObserver:object forKeyPath:_property.keyPath];
+    }
+    else{
+        NSLog(@"could not observe non string keypath for array property : %@",_property);
+    }
 }
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{

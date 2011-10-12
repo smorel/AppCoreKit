@@ -126,7 +126,8 @@
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
 		id value = [property value];
-		if(![value isKindOfClass:[CKDocumentCollection class]]){
+		if(![value isKindOfClass:[CKDocumentCollection class]]
+           && ![property.object isKindOfClass:[NSDictionary class]]){
 			[self beginBindingsContextByRemovingPreviousBindings];
 			[property.object bind:property.keyPath withBlock:^(id value){
 				[self setup];
@@ -160,6 +161,8 @@
 	
 	if([thevalue isKindOfClass:[CKDocumentCollection class]]){
 		NSMutableArray* mappings = [NSMutableArray array]; 
+        //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKObjectProperty :
+        //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKObjectProperty
 		[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
 		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];

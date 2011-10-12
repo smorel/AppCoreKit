@@ -17,7 +17,7 @@
 @property (nonatomic,retain) CKWeakRef* subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
 @property (nonatomic,retain) CKWeakRef* objectRef;
-@property (nonatomic,retain,readwrite) NSString* keyPath;
+@property (nonatomic,retain,readwrite) id keyPath;
 @property (nonatomic,retain,readwrite) CKClassPropertyDescriptor* descriptor;
 @end
 
@@ -57,25 +57,32 @@
 
 - (void)postInit{
     id target = self.object;
-	if(self.keyPath){
-        NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
-        for(int i=0;i<[ar count]-1;++i){
-            NSString* path = [ar objectAtIndex:i];
-            target = [target valueForKey:path];
+    if([target isKindOfClass:[NSDictionary class]]){
+        id value = [target objectForKey:self.keyPath];
+        NSString* name = [NSValueTransformer transform:self.keyPath toClass:[NSString class]];
+        self.descriptor = [CKClassPropertyDescriptor classDescriptorForPropertyNamed:name withClass:[value class] assignment:CKClassPropertyDescriptorAssignementTypeRetain readOnly:YES];
+    }
+    else{
+        if(self.keyPath){
+            NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
+            for(int i=0;i<[ar count]-1;++i){
+                NSString* path = [ar objectAtIndex:i];
+                target = [target valueForKey:path];
+            }
+            self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
         }
-        self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
-    }
-    else{
-        self.subKeyPath = nil;
-    }
-    
-    
-    self.subObject = [CKWeakRef weakRefWithObject:target target:self action:@selector(releaseSubObject:)];
-    if(self.subObject.object && self.subKeyPath){
-        self.descriptor = [NSObject propertyDescriptor:[self.subObject.object class] forKey:self.subKeyPath];
-    }
-    else{
-        self.descriptor = nil;
+        else{
+            self.subKeyPath = nil;
+        }
+        
+        
+        self.subObject = [CKWeakRef weakRefWithObject:target target:self action:@selector(releaseSubObject:)];
+        if(self.subObject.object && self.subKeyPath){
+            self.descriptor = [NSObject propertyDescriptor:[self.subObject.object class] forKey:self.subKeyPath];
+        }
+        else{
+            self.descriptor = nil;
+        }
     }
 }
 
@@ -85,6 +92,14 @@
     if([thekeyPath length] > 0){
         self.keyPath = thekeyPath;
     }
+    [self postInit];
+	return self;
+}
+
+- (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key{
+    [super init];
+    self.objectRef = [CKWeakRef weakRefWithObject:dictionary target:self action:@selector(releaseObject:)];
+    self.keyPath = key;
     [self postInit];
 	return self;
 }
@@ -108,11 +123,17 @@
 }
 
 - (id)value{
+    if([self.object isKindOfClass:[NSDictionary class]]){
+        return [self.object objectForKey:self.keyPath];
+    }
 	return (self.subKeyPath != nil) ? [self.subObject.object valueForKey:self.subKeyPath] : self.subObject.object;
 }
 
 - (void)setValue:(id)value{
-    if([self descriptor].propertyType == CKClassPropertyDescriptorTypeSelector){
+    if([self.object isKindOfClass:[NSDictionary class]]){
+        [self.object setObject:value forKey:self.keyPath];
+    }
+    else if([self descriptor].propertyType == CKClassPropertyDescriptorTypeSelector){
         SEL selector = [NSObject selectorForProperty:[self descriptor].name prefix:@"set" suffix:@":"];
         SEL selValue = [value pointerValue];
         
@@ -266,7 +287,7 @@
 }
 
 - (NSString*)name{
-	if(self.descriptor != nil){
+    if(self.descriptor != nil){
 		return self.descriptor.name;
 	}
 	return self.keyPath;
