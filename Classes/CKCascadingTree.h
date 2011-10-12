@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+
+extern NSString* CKCascadingTreeFormats;
+extern NSString* CKCascadingTreeParent;
+extern NSString* CKCascadingTreeEmpty;
+extern NSString* CKCascadingTreeNode;
+extern NSString* CKCascadingTreeInherits;
+extern NSString* CKCascadingTreeImport;
+extern NSString* CKCascadingTreeIPad;
+extern NSString* CKCascadingTreeIPhone;
+
 /** TODO
  */
 @interface CKCascadingTree : NSObject {

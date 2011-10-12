@@ -103,6 +103,8 @@ extern NSString* CKStyleBorderStyle;
 @end
 
 
+//TODO : rename style by parentStyle in some APIs
+
 /** TODO
  */
 @interface UIView (CKStyle) 
@@ -111,7 +113,6 @@ extern NSString* CKStyleBorderStyle;
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
-+ (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack;
 
 //private
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
@@ -122,8 +123,14 @@ extern NSString* CKStyleBorderStyle;
 /** TODO
  */
 @interface NSObject (CKStyle)
+@property(nonatomic,retain)NSMutableDictionary* applyedStyle;
+
+- (NSString*)applyedStyleDescription;
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords;
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style;
++ (BOOL)applyStyle:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
+
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 + (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate;
 

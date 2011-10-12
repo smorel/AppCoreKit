@@ -83,6 +83,10 @@
 																		   withClass:[UIColor class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
 																			readOnly:NO]];
+	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"applyedStyle"
+																		   withClass:[NSMutableDictionary class]
+																		  assignment:CKClassPropertyDescriptorAssignementTypeRetain
+																			readOnly:YES]];
 	[properties addObject:[CKClassPropertyDescriptor structDescriptorForPropertyNamed:@"bounds"
 																		   structName:@"CGRect"
 																	   structEncoding:[NSString stringWithUTF8String:@encode(CGRect)]

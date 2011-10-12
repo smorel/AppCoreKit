@@ -101,7 +101,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
-        [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
     }
 }
 
@@ -112,16 +112,40 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
-        [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        [self.navigationItem.rightBarButtonItem applyStyle:barItemStyle];
+    }
+}
+
+- (void)applyStyleForBackBarButtonItem{
+    if(self.navigationItem.backBarButtonItem){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
+        NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+        
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
+        [self.navigationItem.backBarButtonItem applyStyle:barItemStyle];
     }
 }
 
 - (void)leftItemChanged:(UIBarButtonItem*)item{
-    [self applyStyleForLeftBarButtonItem];
+    if(self.navigationItem.backBarButtonItem == self.navigationItem.leftBarButtonItem){
+        [self applyStyleForBackBarButtonItem];
+    }
+    else{
+        [self applyStyleForLeftBarButtonItem];
+    }
 }
 
 - (void)rightItemChanged:(UIBarButtonItem*)item{
     [self applyStyleForRightBarButtonItem];
+}
+
+- (void)backItemChanged:(UIBarButtonItem*)item{
+    [self applyStyleForBackBarButtonItem];
+}
+
+- (void)popViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)applyStyleForNavigation{
@@ -135,16 +159,34 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
-        [self.navigationItem.leftBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
     }
+    
+    if(self.navigationItem.backBarButtonItem){
+        NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
+        [self.navigationItem.backBarButtonItem applyStyle:backBarItemStyle];
+    }
+    else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == self){
+        NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
+        if(![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
+            UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 1];
+            self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
+            [self.navigationItem.leftBarButtonItem applyStyle:backBarItemStyle];
+            self.navigationItem.backBarButtonItem = self.navigationItem.leftBarButtonItem;
+        }
+    }
+    
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
-        [self.navigationItem.rightBarButtonItem applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        [self.navigationItem.rightBarButtonItem applyStyle:barItemStyle];
+    }
+    
+    if(self.navigationItem.titleView){
+        [self.navigationItem.titleView applyStyle:navBarStyle propertyName:@"titleView"];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -163,7 +205,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [self bind:@"navigationItem.leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
     [self bind:@"navigationItem.rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
+    [self bind:@"navigationItem.backBarButtonItem" target:self action:@selector(backItemChanged:)];
     [NSObject endBindingsContext];
+    
+    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

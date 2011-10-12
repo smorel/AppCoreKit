@@ -269,7 +269,7 @@
 	if(self.descriptor != nil){
 		return self.descriptor.name;
 	}
-	return nil;
+	return self.keyPath;
 }
 
 - (id)convertToClass:(Class)type{
