@@ -179,6 +179,11 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 				fontSize= [myButtonStyle fontSize];
 			button.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
             
+            CGFloat height = button.bounds.size.height;
+            CGFloat width = button.bounds.size.width;
+            [button sizeToFit];
+            button.frame = CGRectMake(button.frame.origin.x,button.frame.origin.y,MAX(width,button.frame.size.width),height);
+            
 			return YES;
 		}
 		return YES;

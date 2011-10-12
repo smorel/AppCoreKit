@@ -460,6 +460,10 @@
 		758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */; };
 		759569691444E9FD0092F317 /* CKUISegmentedControl+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 759569671444E9FD0092F317 /* CKUISegmentedControl+Introspection.h */; };
 		7595696A1444E9FD0092F317 /* CKUISegmentedControl+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 759569681444E9FD0092F317 /* CKUISegmentedControl+Introspection.m */; };
+		75956970144626550092F317 /* CKSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 7595696F144626530092F317 /* CKSegmentedControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75956972144626680092F317 /* CKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 75956971144626670092F317 /* CKSegmentedControl.m */; };
+		759569741446268B0092F317 /* CKUIBarButtonItem+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */; };
+		75956976144626960092F317 /* CKUIBarButtonItem+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 75956975144626960092F317 /* CKUIBarButtonItem+Style.h */; };
 		75A4058213D87B2000D932B0 /* CKMappingContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4058013D87B2000D932B0 /* CKMappingContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A4058313D87B2000D932B0 /* CKMappingContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4058113D87B2000D932B0 /* CKMappingContext.m */; };
 		75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -962,6 +966,10 @@
 		758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKOptionPropertyCellController.m; path = Classes/CKOptionPropertyCellController.m; sourceTree = "<group>"; };
 		759569671444E9FD0092F317 /* CKUISegmentedControl+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUISegmentedControl+Introspection.h"; path = "Classes/CKUISegmentedControl+Introspection.h"; sourceTree = "<group>"; };
 		759569681444E9FD0092F317 /* CKUISegmentedControl+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUISegmentedControl+Introspection.m"; path = "Classes/CKUISegmentedControl+Introspection.m"; sourceTree = "<group>"; };
+		7595696F144626530092F317 /* CKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSegmentedControl.h; path = Classes/CKSegmentedControl.h; sourceTree = "<group>"; };
+		75956971144626670092F317 /* CKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSegmentedControl.m; path = Classes/CKSegmentedControl.m; sourceTree = "<group>"; };
+		759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIBarButtonItem+Style.m"; path = "Classes/CKUIBarButtonItem+Style.m"; sourceTree = "<group>"; };
+		75956975144626960092F317 /* CKUIBarButtonItem+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIBarButtonItem+Style.h"; path = "Classes/CKUIBarButtonItem+Style.h"; sourceTree = "<group>"; };
 		75A4058013D87B2000D932B0 /* CKMappingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMappingContext.h; path = Classes/CKMappingContext.h; sourceTree = "<group>"; };
 		75A4058113D87B2000D932B0 /* CKMappingContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMappingContext.m; path = Classes/CKMappingContext.m; sourceTree = "<group>"; };
 		75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCascadingTree.h; path = Classes/CKCascadingTree.h; sourceTree = "<group>"; };
@@ -1131,6 +1139,8 @@
 				753178131417E4E4009310A8 /* CKNavigationBar+Style.m */,
 				753178171417E4F9009310A8 /* CKUIToolbar+Style.h */,
 				753178181417E4F9009310A8 /* CKUIToolbar+Style.m */,
+				759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */,
+				75956975144626960092F317 /* CKUIBarButtonItem+Style.h */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1274,6 +1284,8 @@
 				757578FA13E71C000082C247 /* CKSheetController.m */,
 				75CC16BF13F32B4500835FE3 /* CKPopoverController.h */,
 				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
+				7595696F144626530092F317 /* CKSegmentedControl.h */,
+				75956971144626670092F317 /* CKSegmentedControl.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -2229,6 +2241,8 @@
 				7539FF92142CE94700688E2D /* CKNSError+Additions.h in Headers */,
 				EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */,
 				759569691444E9FD0092F317 /* CKUISegmentedControl+Introspection.h in Headers */,
+				75956970144626550092F317 /* CKSegmentedControl.h in Headers */,
+				75956976144626960092F317 /* CKUIBarButtonItem+Style.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2571,6 +2585,8 @@
 				7539FF93142CE94700688E2D /* CKNSError+Additions.m in Sources */,
 				EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */,
 				7595696A1444E9FD0092F317 /* CKUISegmentedControl+Introspection.m in Sources */,
+				75956972144626680092F317 /* CKSegmentedControl.m in Sources */,
+				759569741446268B0092F317 /* CKUIBarButtonItem+Style.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

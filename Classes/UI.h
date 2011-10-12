@@ -74,3 +74,5 @@
 #import "CKUIView+Layout.h"
 #import "CKWebViewController.h"
 #import "CKWebViewControllerRef.h"
+
+#import "CKSegmentedControl.h"
