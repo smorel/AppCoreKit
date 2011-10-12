@@ -8,7 +8,7 @@
 
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h";
+#import "CKObjectViewControllerFactory.h"
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
