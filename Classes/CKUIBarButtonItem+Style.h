@@ -1,6 +1,6 @@
 //
 //  CKUIBarButtonItem+Style.h
-//  customNav
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-10-11.
 //  Copyright 2011 Wherecloud. All rights reserved.

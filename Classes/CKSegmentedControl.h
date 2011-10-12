@@ -1,6 +1,6 @@
 //
 //  CKSegmentedControl.h
-//  customNav
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-10-12.
 //  Copyright 2011 Wherecloud. All rights reserved.
