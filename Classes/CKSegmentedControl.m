@@ -304,6 +304,9 @@ typedef void(^CKSegmentedControlButtonBlock)();
 - (void)setSelectedSegment:(CKSegmentedControlButton*)segment{
     if(self.momentary){
         CKSegmentedControlButton* oldSegment = [self segmentAtIndex:_selectedSegmentIndex];
+        if(oldSegment == segment){
+            return;
+        }
         if(oldSegment){
             oldSegment.selected = NO;
         }
