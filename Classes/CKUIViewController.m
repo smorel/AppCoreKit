@@ -127,6 +127,16 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     }
 }
 
+- (void)applyStyleForTitleView{
+    if(self.navigationItem.titleView){
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
+        NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
+        
+        [self.navigationItem.titleView applyStyle:navBarStyle propertyName:@"titleView"];
+    }
+}
+
 - (void)leftItemChanged:(UIBarButtonItem*)item{
     if(self.navigationItem.backBarButtonItem == self.navigationItem.leftBarButtonItem){
         [self applyStyleForBackBarButtonItem];
@@ -144,6 +154,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     [self applyStyleForBackBarButtonItem];
 }
 
+- (void)titleViewChanged:(UIBarButtonItem*)item{
+    [self applyStyleForTitleView];
+}
+
 - (void)popViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -152,10 +166,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
-    /*NSMutableDictionary* toolbarBarStyle = */[self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
-    
-	//NSMutableDictionary* toolbarBarStyle = [navControllerStyle styleForObject:self.navigationController.toolbar  propertyName:@"toolbar"];
-	//NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController.navigationBar  propertyName:@"navigationBar"];
+    [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
 
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
@@ -169,7 +180,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == self){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
-            UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 1];
+            UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
             self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
             [self.navigationItem.leftBarButtonItem applyStyle:backBarItemStyle];
             self.navigationItem.backBarButtonItem = self.navigationItem.leftBarButtonItem;
@@ -206,6 +217,7 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     [self bind:@"navigationItem.leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
     [self bind:@"navigationItem.rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
     [self bind:@"navigationItem.backBarButtonItem" target:self action:@selector(backItemChanged:)];
+    [self bind:@"navigationItem.titleView" target:self action:@selector(titleViewChanged:)];
     [NSObject endBindingsContext];
     
     [super viewWillAppear:animated];
