@@ -1139,8 +1139,8 @@
 				753178131417E4E4009310A8 /* CKNavigationBar+Style.m */,
 				753178171417E4F9009310A8 /* CKUIToolbar+Style.h */,
 				753178181417E4F9009310A8 /* CKUIToolbar+Style.m */,
-				759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */,
 				75956975144626960092F317 /* CKUIBarButtonItem+Style.h */,
+				759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";

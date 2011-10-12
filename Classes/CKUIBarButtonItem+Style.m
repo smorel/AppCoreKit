@@ -7,6 +7,9 @@
 //
 
 #import "CKUIBarButtonItem+Style.h"
+#import "CKStyleManager.h"
+#import "CKStyle+Parsing.h"
+#import "CKUIView+Style.h"
 
 
 @implementation UIBarButtonItem (CKStyle)

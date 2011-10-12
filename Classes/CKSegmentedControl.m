@@ -7,7 +7,7 @@
 //
 
 #import "CKSegmentedControl.h"
-#import <CloudKit/CloudKit.h>
+#import "CKNSValueTransformer+Additions.h"
 
 typedef void(^CKSegmentedControlButtonBlock)();
 

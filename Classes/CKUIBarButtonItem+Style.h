@@ -6,9 +6,8 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import <CloudKit/CloudKit.h>
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
 
 @interface UIBarButtonItem (CKStyle)
 
