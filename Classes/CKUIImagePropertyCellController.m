@@ -13,7 +13,7 @@
 
 - (id)init{
     self = [super init];
-    self.cellStyle = UITableViewCellStyleSubtitle;
+    self.cellStyle = CKTableViewCellStyleSubtitle;
     return self;
 }
 

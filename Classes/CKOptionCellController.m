@@ -28,8 +28,8 @@
 	self = [super initWithText:title]; 
     self.values = values;
     self.labels = labels;
-    self.cellStyle = UITableViewCellStyleValue1;
-    self.optionCellStyle = UITableViewCellStyleValue1;
+    self.cellStyle = CKTableViewCellStyleValue1;
+    self.optionCellStyle = CKTableViewCellStyleValue1;
 	
 	return self;
 }

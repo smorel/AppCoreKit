@@ -111,7 +111,7 @@
 	// Setup image views
 	
 	if (imagesPaths.count > 0) {	
-		if ((currentImageIndex - 1) >= 0) {
+		if ((NSInteger)(currentImageIndex - 1) >= 0) {
 			self.leftImageView = [self createImageView:currentImageIndex - 1];
 			[self.view addSubview:leftImageView];
 		}

@@ -93,7 +93,7 @@
         }
         else{
             CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(){
-                CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:attribute.items]autorelease];
+                CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
                 controller.title = attribute.name;
                 [self.navigationController pushViewController:controller animated:YES];
             }];

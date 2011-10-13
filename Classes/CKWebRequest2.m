@@ -61,7 +61,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark Initialization
 
-+ (NSURLRequest *)defaultURLRequestForURL:(NSURL*)anURL{
++ (NSMutableURLRequest *)defaultURLRequestForURL:(NSURL*)anURL{
 	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:anURL
 																cachePolicy:NSURLRequestUseProtocolCachePolicy
 															timeoutInterval:60.0];

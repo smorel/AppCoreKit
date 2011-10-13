@@ -42,7 +42,7 @@
     CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:value controllerClass:[CKTableViewCellController class]];
     [descriptor setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.cellStyle = ((subTitle != nil) ? UITableViewCellStyleSubtitle : UITableViewCellStyleDefault);
+        controller.cellStyle = ((subTitle != nil) ? CKTableViewCellStyleSubtitle : CKTableViewCellStyleDefault);
         controller.name = [NSString stringWithFormat:@"cellDescriptorWithTitle<%d>",controller.cellStyle];
         return (id)nil;
     }];

@@ -196,7 +196,7 @@
 - (id)init {
 	self = [super init];
 	if (self != nil) {
-		self.cellStyle = UITableViewCellStyleDefault;
+		self.cellStyle = CKTableViewCellStyleDefault;
         
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             self.componentsRatio = 1.0 / 3.0;
@@ -273,7 +273,7 @@
        ||toUseCellStyle == CKTableViewCellStylePropertyGrid){
 		toUseCellStyle = CKTableViewCellStyleValue1;
 	}
-	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
+	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	self.view = cell;
 	
 	return cell;

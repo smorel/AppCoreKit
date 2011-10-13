@@ -132,7 +132,7 @@
 	// Setup image views
 	
 	if ([self numberOfImages] > 0) {
-		if ((_currentImageIndex - 1) >= 0) {
+		if ((NSInteger)(_currentImageIndex - 1) >= 0) {
 			self.leftImageView = [self createImageView:_currentImageIndex - 1];
 			[self.imageContainerView addSubview:leftImageView];
 		}				
