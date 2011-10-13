@@ -448,6 +448,8 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
+		7566AF8B14476A5C00748BB1 /* CKUIView+Positioning.h in Headers */ = {isa = PBXBuildFile; fileRef = 7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */; };
+		7566AF8D14476A6800748BB1 /* CKUIView+Positioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 7566AF8C14476A6800748BB1 /* CKUIView+Positioning.m */; };
 		757578FB13E71C000082C247 /* CKSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757578F913E71C000082C247 /* CKSheetController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757578FC13E71C000082C247 /* CKSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757578FA13E71C000082C247 /* CKSheetController.m */; };
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -954,6 +956,8 @@
 		7560DE4F13B8F00F00268D13 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7560DE5113B8F00F00268D13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+Positioning.h"; path = "Classes/CKUIView+Positioning.h"; sourceTree = "<group>"; };
+		7566AF8C14476A6800748BB1 /* CKUIView+Positioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+Positioning.m"; path = "Classes/CKUIView+Positioning.m"; sourceTree = "<group>"; };
 		757578F913E71C000082C247 /* CKSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSheetController.h; path = Classes/CKSheetController.h; sourceTree = "<group>"; };
 		757578FA13E71C000082C247 /* CKSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSheetController.m; path = Classes/CKSheetController.m; sourceTree = "<group>"; };
 		7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+PropertyGrid.h"; path = "Classes/CKFormTableViewController+PropertyGrid.h"; sourceTree = "<group>"; };
@@ -1326,6 +1330,8 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */,
+				7566AF8C14476A6800748BB1 /* CKUIView+Positioning.m */,
 				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
 				4F4F052E13C5F5410009DE31 /* CKActionSheet.m */,
 				7560DB1F13B8ED3600268D13 /* CKAlertView.h */,
@@ -2243,6 +2249,7 @@
 				759569691444E9FD0092F317 /* CKUISegmentedControl+Introspection.h in Headers */,
 				75956970144626550092F317 /* CKSegmentedControl.h in Headers */,
 				75956976144626960092F317 /* CKUIBarButtonItem+Style.h in Headers */,
+				7566AF8B14476A5C00748BB1 /* CKUIView+Positioning.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2274,6 +2281,7 @@
 		7550152613B8EA08002DAE8B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = Wherecloud;
 			};
 			buildConfigurationList = 7550152913B8EA08002DAE8B /* Build configuration list for PBXProject "CloudKit" */;
@@ -2587,6 +2595,7 @@
 				7595696A1444E9FD0092F317 /* CKUISegmentedControl+Introspection.m in Sources */,
 				75956972144626680092F317 /* CKSegmentedControl.m in Sources */,
 				759569741446268B0092F317 /* CKUIBarButtonItem+Style.m in Sources */,
+				7566AF8D14476A6800748BB1 /* CKUIView+Positioning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2691,12 +2700,13 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2707,12 +2717,13 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
