@@ -19,6 +19,7 @@
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
 #import "CKUIViewController+Style.h"
+#import "CKLocalization.h"
 
 //
 
@@ -236,23 +237,11 @@
     switch(type){
         case CKObjectTableViewControllerEditableTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
-            if(!self.editButton){
-                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            }
-            if(!self.doneButton){
-                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            }
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
-            if(!self.editButton){
-                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            }
-            if(!self.doneButton){
-                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            }
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
@@ -401,13 +390,20 @@
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
 	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
     
+    if(!self.editButton){
+        self.editButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Edit") style:UIBarButtonItemStyleBordered target:self action:@selector(edit:)]autorelease];
+    }
+    if(!self.doneButton){
+        self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleDone target:self action:@selector(edit:)]autorelease];
+    }
+    
     if(self.editButton){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:nil];
-        [self.editButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:@"editBarButtonItem"];
+        [self.editButton applyStyle:barItemStyle];
     }
     if(self.doneButton){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:nil];
-        [self.doneButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:@"doneBarButtonItem"];
+        [self.doneButton applyStyle:barItemStyle];
     }
     
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
