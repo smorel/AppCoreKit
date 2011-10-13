@@ -41,7 +41,7 @@
 	[s setOn:bo animated:YES];
 }
 
-- (void)textFieldChanged:(id)value{
+- (void)textFieldChanged:(id)thevalue{
 	NSNumber* number = (NSNumber*)[self.value value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
 	if(newNumber == nil){
