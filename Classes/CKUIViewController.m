@@ -214,10 +214,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     
     
     [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [self bind:@"navigationItem.leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
-    [self bind:@"navigationItem.rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
-    [self bind:@"navigationItem.backBarButtonItem" target:self action:@selector(backItemChanged:)];
-    [self bind:@"navigationItem.titleView" target:self action:@selector(titleViewChanged:)];
+    [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
+    [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
+    [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
+    [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
     [NSObject endBindingsContext];
     
     [super viewWillAppear:animated];

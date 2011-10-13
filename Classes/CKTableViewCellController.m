@@ -17,6 +17,7 @@
 #import "CKItemViewController+StyleManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Style.h"
+#import "CKLocalization.h"
 
 //#import <objc/runtime.h>
 
@@ -606,7 +607,7 @@
 	
 	CKPropertyGridEditorController* editor = [[[CKPropertyGridEditorController alloc]initWithObject:self]autorelease];
 	editor.title = [NSString stringWithFormat:@"%@ <%p>",[self class],self];
-	UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeDebug:)]autorelease];
+	UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
 	editor.leftButton = close;
 	UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:editor]autorelease];
 	navc.modalPresentationStyle = UIModalPresentationPageSheet;
