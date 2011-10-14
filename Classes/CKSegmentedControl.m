@@ -112,6 +112,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
         }
     }
     [self postInit];
+    [self layoutSubviews];
     return self;
 }
 

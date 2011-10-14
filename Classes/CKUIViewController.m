@@ -13,6 +13,7 @@
 #include <execinfo.h>
 #import "CKNSObject+Bindings.h"
 #import "CKModelObject.h"
+#import <QuartzCore/QuartzCore.h>
 
 typedef enum CKDebugCheckForBlockCopyState{
     CKDebugCheckForBlockCopyState_none,
@@ -163,6 +164,12 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 }
 
 - (void)applyStyleForNavigation{
+    //disable animations in case frames are set in stylesheets and currently in animation...
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
@@ -195,6 +202,8 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     if(self.navigationItem.titleView){
         [self.navigationItem.titleView applyStyle:navBarStyle propertyName:@"titleView"];
     }
+    
+    [CATransaction commit];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -252,7 +261,17 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
     }
+    
+    
+    //disable animations in case frames are set in stylesheets and currently in animation (ex : controller created when showing a container controller) ...
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	[self applyStyle];
+    
+    [CATransaction commit];
 }
 
 -(void) viewDidUnload{
