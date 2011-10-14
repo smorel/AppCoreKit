@@ -176,9 +176,22 @@
 		[self.parentController.navigationController pushViewController:controller animated:YES];
 	}
 	else{
-		CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:thevalue]autorelease];
-		propertyGrid.title = self.tableViewCell.textLabel.text;
-		[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
+        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        debugger.title = self.tableViewCell.textLabel.text;
+        debugger.searchEnabled = YES;
+        
+        CKFormSection* controllerSection = [CKFormSection sectionWithObject:thevalue  headerTitle:nil];
+        [debugger addSections:[NSArray arrayWithObject:controllerSection]];
+        
+        __block CKFormTableViewController* bController = debugger;
+        debugger.searchBlock = ^(NSString* filter){
+            [bController clear];
+            
+            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:thevalue propertyFilter:filter headerTitle:nil];
+            [bController addSections:[NSArray arrayWithObject:newControllerSection]];
+        };
+
+		[self.parentController.navigationController pushViewController:debugger animated:YES];
 	}
 }
 
@@ -248,10 +261,21 @@
 		title = [instance valueForKeyPath:@"modelName"];
 	}
 	
-	CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:instance]autorelease];
-	propertyGrid.title = title;
-	[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
-	
+    
+    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+	debugger.title = title;
+    debugger.searchEnabled = YES;
+    
+    CKFormSection* controllerSection = [CKFormSection sectionWithObject:instance  headerTitle:nil];
+    [debugger addSections:[NSArray arrayWithObject:controllerSection]];
+    
+    __block CKFormTableViewController* bController = debugger;
+    debugger.searchBlock = ^(NSString* filter){
+        [bController clear];
+        
+        CKFormSection* newControllerSection = [CKFormSection sectionWithObject:instance propertyFilter:filter headerTitle:nil];
+        [bController addSections:[NSArray arrayWithObject:newControllerSection]];
+    };
 
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];

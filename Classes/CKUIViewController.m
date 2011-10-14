@@ -14,20 +14,25 @@
 #import "CKNSObject+Bindings.h"
 #import "CKModelObject.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKFormTableViewController.h"
+#import "CKLocalization.h"
 
-typedef enum CKDebugCheckForBlockCopyState{
-    CKDebugCheckForBlockCopyState_none,
-    CKDebugCheckForBlockCopyState_NO,
-    CKDebugCheckForBlockCopyState_YES
-}CKDebugCheckForBlockCopyState;
+typedef enum CKDebugCheckState{
+    CKDebugCheckState_none,
+    CKDebugCheckState_NO,
+    CKDebugCheckState_YES
+}CKDebugCheckState;
 
-static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckForBlockCopyState_none;
+static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
+static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_none;
 
 @interface CKUIViewController()
 @property(nonatomic,retain)NSString* navigationItemsBindingContext;
 @end
 
 @implementation CKUIViewController
+
+@synthesize debugModalController = _debugModalController;
 @synthesize name = _name;
 @synthesize viewWillAppearBlock = _viewWillAppearBlock;
 @synthesize viewDidAppearBlock = _viewDidAppearBlock;
@@ -91,6 +96,10 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	_leftButton = nil;
 	[_navigationItemsBindingContext release];
 	_navigationItemsBindingContext = nil;
+     
+	[_debugModalController release];
+	_debugModalController = nil;
+    
 	[super dealloc];
 }
 
@@ -272,6 +281,15 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 	[self applyStyle];
     
     [CATransaction commit];
+    
+    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
+        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
+        CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
+    }
+    
+    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
+        [self.view addGestureRecognizer:[[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(debugGesture:)]autorelease]];
+    }
 }
 
 -(void) viewDidUnload{
@@ -293,12 +311,12 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
 
 #ifdef DEBUG
 - (void)CheckForBlockCopy{
-    if(CKDebugCheckForBlockCopyCurrentState == CKDebugCheckForBlockCopyState_none){
+    if(CKDebugCheckForBlockCopyCurrentState == CKDebugCheckState_none){
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugCheckForBlockCopy"]boolValue];
-        CKDebugCheckForBlockCopyCurrentState = bo ? CKDebugCheckForBlockCopyState_YES : CKDebugCheckForBlockCopyState_NO;
+        CKDebugCheckForBlockCopyCurrentState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
     }
     
-    if(CKDebugCheckForBlockCopyCurrentState != CKDebugCheckForBlockCopyState_YES)
+    if(CKDebugCheckForBlockCopyCurrentState != CKDebugCheckState_YES)
         return;
     
     void *frames[128];
@@ -320,5 +338,126 @@ static CKDebugCheckForBlockCopyState CKDebugCheckForBlockCopyCurrentState = CKDe
     return [super retain];
 }
 #endif
+
+
+
+// ***************** INLINE DEBUGGER ******************** //
+
++ (CKFormCellDescriptor*)cellDescriptorForController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
+    NSString* title = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
+    NSString* subtitle = nil;
+    if([c respondsToSelector:@selector(name)]){
+        subtitle = title;
+        title = [c performSelector:@selector(name)];
+    }
+    
+    __block UIViewController* bController = c;
+    __block UIViewController* bDebugger = debugger;
+    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
+        CKFormTableViewController* controllerForm = [[[CKFormTableViewController alloc]init]autorelease];
+        controllerForm.searchEnabled = YES;
+        
+        controllerForm.title = title;
+        CKFormSection* controllerSection = [CKFormSection sectionWithObject:bController headerTitle:nil];
+        [controllerForm addSections:[NSArray arrayWithObject:controllerSection]];
+        
+        __block CKFormTableViewController* bControllerForm = controllerForm;
+        __block UIViewController* bbController = bController;
+        controllerForm.searchBlock = ^(NSString* filter){
+            [bControllerForm clear];
+            
+            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:bbController propertyFilter:filter headerTitle:nil];
+            [bControllerForm addSections:[NSArray arrayWithObject:newControllerSection]];
+        };
+        
+        [bDebugger.navigationController pushViewController:controllerForm animated:YES];
+    }];
+    return controllerCell;
+}
+
+- (void)setupDebugger:(CKFormTableViewController*)controller forView:(UIView*)view withFilter:(NSString*)filter{
+    [controller clear];
+    
+    NSMutableArray* controllerCells = [NSMutableArray array];
+    UIViewController* c = self;
+    while(c){
+        [controllerCells insertObject:[CKUIViewController cellDescriptorForController:c withDebugger:controller] atIndex:0];
+        
+        if([c respondsToSelector:@selector(containerViewController)]){
+            c = [c performSelector:@selector(containerViewController)];
+        }
+    }
+    
+    [controllerCells insertObject:[CKUIViewController cellDescriptorForController:self.navigationController withDebugger:controller] atIndex:0];
+    
+    CKFormSection* controllerSection = [CKFormSection sectionWithCellDescriptors:controllerCells headerTitle:@"Controllers"];
+    CKFormSection* viewSection = [CKFormSection sectionWithObject:view propertyFilter:filter headerTitle:@"View"];
+    
+    __block CKFormTableViewController* bController = controller;
+    if([view superview]){
+        NSString* title = [NSString stringWithFormat:@"%@ <%p>",[[view superview] class],[view superview]];
+        CKFormCellDescriptor* superViewCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
+            CKFormTableViewController* superViewForm = [bController inlineDebuggerForSubView:[view superview]];
+            superViewForm.title = title;
+            [bController.navigationController pushViewController:superViewForm animated:YES];
+        }];
+        
+        CKFormSection* superViewSection = [CKFormSection sectionWithCellDescriptors:[NSArray arrayWithObject:superViewCell] headerTitle:@"Supper View"];
+        [controller addSections:[NSArray arrayWithObjects:controllerSection,superViewSection,viewSection,nil]];
+    }
+    else{
+        [controller addSections:[NSArray arrayWithObjects:controllerSection,viewSection,nil]];
+    }
+}
+
+- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
+    CKFormTableViewController* controller = [[[CKFormTableViewController alloc]init]autorelease];
+    controller.searchEnabled = YES;
+    
+    [self setupDebugger:controller forView:view withFilter:nil];
+    
+    __block CKFormTableViewController* bController = controller;
+    __block CKUIViewController* bSelf = self;
+    controller.searchBlock = ^(NSString* filter){
+        [bSelf setupDebugger:bController forView:view withFilter:filter];
+    };
+    
+    return controller;
+}
+
+- (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller{
+    CKFormTableViewController* debugger = [self inlineDebuggerForSubView:view];
+    
+    debugger.title = [NSString stringWithFormat:@"%@ <%p>",[view class],view];
+    UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
+    debugger.leftButton = close;
+    UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:debugger]autorelease];
+    navc.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    self.debugModalController = debugger;
+    
+    [controller presentModalViewController:navc animated:YES];
+}
+
+- (void)debugGesture:(UILongPressGestureRecognizer *)recognizer{
+	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
+		(recognizer.state == UIGestureRecognizerStateFailed)
+		|| self.debugModalController != nil){
+		return;
+	}
+    
+    CGPoint point = [recognizer locationInView:self.view];
+    UIView* touchedView = [self.view hitTest:point withEvent:nil];	
+    
+    
+    UINavigationController* myNavigationController = self.navigationController;
+    UIViewController* topController = [myNavigationController topViewController];
+    [self presentInlineDebuggerForSubView:touchedView fromParentController:topController];
+}
+
+- (void)closeDebug:(id)sender{
+	[self.debugModalController dismissModalViewControllerAnimated:YES];
+	self.debugModalController = nil;
+}
 
 @end

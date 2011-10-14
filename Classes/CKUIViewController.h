@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 @class CKUIViewController;
+@class CKFormTableViewController;
+
 typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
 typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 
@@ -23,7 +25,11 @@ typedef enum CKInterfaceOrientation{
  */
 @interface CKUIViewController : UIViewController {
 	NSString* _name;
+    
+	id _debugModalController;
 }
+
+@property (nonatomic,retain) id debugModalController;
 
 @property (nonatomic,retain) NSString* name;
 
@@ -57,5 +63,9 @@ typedef enum CKInterfaceOrientation{
 - (void)applyStyleForLeftBarButtonItem;
 - (void)applyStyleForRightBarButtonItem;
 - (void)applyStyleForNavigation;
+
+//You can override those methods to present the debugger from another controller or customize the debugger with additional informations
+- (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller;
+- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view;
 
 @end

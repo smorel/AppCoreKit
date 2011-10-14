@@ -25,6 +25,9 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
     CKObjectTableViewControllerScrollingPolicyResignResponder
 }CKObjectTableViewControllerScrollingPolicy;
 
+
+typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
+
 /** TODO
  */
 @interface CKObjectTableViewController : CKTableViewController<UISearchBarDelegate> {
@@ -70,6 +73,8 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
 ///-----------------------------------
 /// @name Current State
 ///-----------------------------------
+
+@property(nonatomic,copy)CKObjectTableViewControllerSearchBlock searchBlock;
 
 /** 
  Returns the current page computed using tableView height or width depending on the orientation

@@ -38,12 +38,19 @@
 + (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter{
 	NSString* lowerCaseFilter = [filter lowercaseString];
     
+    if([object isKindOfClass:[NSValue class]]){
+        id nonRetainedValue = [object nonretainedObjectValue];
+        if(nonRetainedValue){
+            object = nonRetainedValue;
+        }
+    }
+    
     NSArray* propertyDescriptors = [object allPropertyDescriptors];
 	NSMutableArray* theProperties = [NSMutableArray array];
 	for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
 		NSString* lowerCaseProperty = [descriptor.name lowercaseString];
 		BOOL useProperty = YES;
-		if(filter != nil){
+		if(filter != nil && [filter length] > 0){
 			NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
 			useProperty = (range.location != NSNotFound);
 		}
@@ -73,54 +80,66 @@
         }
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
-            switch(descriptor.propertyType){
-                case CKClassPropertyDescriptorTypeChar:
-                case CKClassPropertyDescriptorTypeInt:
-                case CKClassPropertyDescriptorTypeShort:
-                case CKClassPropertyDescriptorTypeLong:
-                case CKClassPropertyDescriptorTypeLongLong:
-                case CKClassPropertyDescriptorTypeUnsignedChar:
-                case CKClassPropertyDescriptorTypeUnsignedInt:
-                case CKClassPropertyDescriptorTypeUnsignedShort:
-                case CKClassPropertyDescriptorTypeUnsignedLong:
-                case CKClassPropertyDescriptorTypeUnsignedLongLong:
-                case CKClassPropertyDescriptorTypeFloat:
-                case CKClassPropertyDescriptorTypeDouble:
-                case CKClassPropertyDescriptorTypeCppBool:
-                case CKClassPropertyDescriptorTypeVoid:
-                case CKClassPropertyDescriptorTypeCharString:{
+            if(descriptor == nil || descriptor.propertyType == CKClassPropertyDescriptorTypeObject){
+                id value = [property value];
+                if(descriptor == nil && [value isKindOfClass:[NSValue class]]){
+                    id nonRetainedValue = [value nonretainedObjectValue];
+                    if(nonRetainedValue){
+                        value = nonRetainedValue;
+                    }
+                }
+                
+                Class propertyType = descriptor ? descriptor.type : [value class];
+                
+                if([NSObject isKindOf:propertyType parentType:[NSString class]]){
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSStringPropertyCellController class]];
+                }
+                else if([NSObject isKindOf:propertyType parentType:[NSNumber class]]){
                     cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
-                    break;
                 }
-                case CKClassPropertyDescriptorTypeObject:{
-                    if([NSObject isKindOf:descriptor.type parentType:[NSString class]]){
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSStringPropertyCellController class]];
-                    }
-                    else if([NSObject isKindOf:descriptor.type parentType:[NSNumber class]]){
+                else if([NSObject isKindOf:propertyType parentType:[UIColor class]]){
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIColorPropertyCellController class]];
+                }
+                else if([NSObject isKindOf:propertyType parentType:[NSDate class]]){
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]];
+                }
+                else if([NSObject isKindOf:propertyType parentType:[UIImage class]]){
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIImagePropertyCellController class]];
+                }
+                else{
+                    cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]];
+                }
+            }
+            else{
+                CKClassPropertyDescriptor* descriptor = [property descriptor];
+                switch(descriptor.propertyType){
+                    case CKClassPropertyDescriptorTypeChar:
+                    case CKClassPropertyDescriptorTypeInt:
+                    case CKClassPropertyDescriptorTypeShort:
+                    case CKClassPropertyDescriptorTypeLong:
+                    case CKClassPropertyDescriptorTypeLongLong:
+                    case CKClassPropertyDescriptorTypeUnsignedChar:
+                    case CKClassPropertyDescriptorTypeUnsignedInt:
+                    case CKClassPropertyDescriptorTypeUnsignedShort:
+                    case CKClassPropertyDescriptorTypeUnsignedLong:
+                    case CKClassPropertyDescriptorTypeUnsignedLongLong:
+                    case CKClassPropertyDescriptorTypeFloat:
+                    case CKClassPropertyDescriptorTypeDouble:
+                    case CKClassPropertyDescriptorTypeCppBool:
+                    case CKClassPropertyDescriptorTypeVoid:
+                    case CKClassPropertyDescriptorTypeCharString:{
                         cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSNumberPropertyCellController class]];
+                        break;
                     }
-                    else if([NSObject isKindOf:descriptor.type parentType:[UIColor class]]){
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIColorPropertyCellController class]];
+                    case CKClassPropertyDescriptorTypeStruct:
+                    {
+                        NSString* controllerClassName = [NSString stringWithFormat:@"CK%@PropertyCellController",descriptor.className];
+                        Class controllerClass = NSClassFromString(controllerClassName);
+                        if(controllerClass){
+                            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:controllerClass];
+                        }
+                        break;
                     }
-                    else if([NSObject isKindOf:descriptor.type parentType:[NSDate class]]){
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSDatePropertyCellController class]];
-                    }
-                    else if([NSObject isKindOf:descriptor.type parentType:[UIImage class]]){
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKUIImagePropertyCellController class]];
-                    }
-                    else{
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSObjectPropertyCellController class]];
-                    }
-                    break;
-                }
-                case CKClassPropertyDescriptorTypeStruct:
-                {
-                    NSString* controllerClassName = [NSString stringWithFormat:@"CK%@PropertyCellController",descriptor.className];
-                    Class controllerClass = NSClassFromString(controllerClassName);
-                    if(controllerClass){
-                        cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:controllerClass];
-                    }
-                    break;
                 }
             }
         }
@@ -297,6 +316,14 @@
 }
 
 + (CKFormSection*)sectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    
+    if([object isKindOfClass:[NSValue class]]){
+        id nonRetainedValue = [object nonretainedObjectValue];
+        if(nonRetainedValue){
+            object = nonRetainedValue;
+        }
+    }
+    
     NSMutableArray* theProperties = [NSMutableArray array];
     for(NSString* propertyName in properties){
         CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:propertyName];

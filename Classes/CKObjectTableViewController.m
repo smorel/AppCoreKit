@@ -58,6 +58,7 @@
 @synthesize tableMaximumWidth = _tableMaximumWidth;
 @synthesize scrollingPolicy = _scrollingPolicy;
 @synthesize editableType = _editableType;
+@synthesize searchBlock = _searchBlock;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -75,6 +76,9 @@
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 			[_delegate objectTableViewController:self didSearch:searchBar.text];
 		}
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
 		[self didSearch:searchBar.text];
 	}
 }
@@ -85,6 +89,10 @@
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 			[_delegate objectTableViewController:self didSearch:@""];
 		}
+        
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
 		[self didSearch:searchBar.text];
 	}
 }
@@ -93,6 +101,10 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 		[_delegate objectTableViewController:self didSearch:str];
 	}
+    
+    if(_searchBlock){
+        _searchBlock(str);
+    }
 	[self didSearch:str];
 }
 
@@ -200,6 +212,8 @@
 	_searchScopeDefinition = nil;
 	[_defaultSearchScope release];
 	_defaultSearchScope = nil;
+    [_searchBlock release];
+    _searchBlock = nil;
     [super dealloc];
 }
 
