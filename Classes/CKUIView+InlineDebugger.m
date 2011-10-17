@@ -14,12 +14,9 @@
 + (CKFormCellDescriptor*)cellDescriptorForStylesheetInView:(UIView*)view withDebugger:(UIViewController*)debugger{
     /*
     
-    //************************* TODO
     
     Creates a cell for the style with name = the PATH + action displaying the content of the style !
         Header section should be @"Applied Style"
-        
-        //*******************************************************
         
         NSMutableDictionary* style = [view appliedStyle];
     
