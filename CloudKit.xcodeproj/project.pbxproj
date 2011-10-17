@@ -470,6 +470,14 @@
 		75A405EF13D8B6A300D932B0 /* CKCascadingTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A405F013D8B6A300D932B0 /* CKCascadingTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */; };
 		75A83AC013D75A8400413C17 /* CloudKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75A83AC213D75A8400413C17 /* CloudKit.strings */; };
+		75AD5D8E144C68BA0008F53A /* CKNSObject+InlineDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */; };
+		75AD5D8F144C68BA0008F53A /* CKNSObject+InlineDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */; };
+		75AD5D9C144C71740008F53A /* CKUIView+InlineDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */; };
+		75AD5D9D144C71740008F53A /* CKUIView+InlineDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AD5D9B144C71740008F53A /* CKUIView+InlineDebugger.m */; };
+		75AD5DA0144C72960008F53A /* CKUIViewController+InlineDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AD5D9E144C72950008F53A /* CKUIViewController+InlineDebugger.h */; };
+		75AD5DA1144C72960008F53A /* CKUIViewController+InlineDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AD5D9F144C72960008F53A /* CKUIViewController+InlineDebugger.m */; };
+		75AD5DA4144C73290008F53A /* CKItemViewContainerController+InlineDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */; };
+		75AD5DA5144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */; };
 		75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */; };
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -979,6 +987,14 @@
 		75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCascadingTree.m; path = Classes/CKCascadingTree.m; sourceTree = "<group>"; };
 		75A83AC113D75A8400413C17 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CloudKit.strings; sourceTree = "<group>"; };
 		75A83AC313D75A9000413C17 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CloudKit.strings; sourceTree = "<group>"; };
+		75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+InlineDebugger.h"; path = "Classes/CKNSObject+InlineDebugger.h"; sourceTree = "<group>"; };
+		75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+InlineDebugger.m"; path = "Classes/CKNSObject+InlineDebugger.m"; sourceTree = "<group>"; };
+		75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIView+InlineDebugger.h"; path = "Classes/CKUIView+InlineDebugger.h"; sourceTree = "<group>"; };
+		75AD5D9B144C71740008F53A /* CKUIView+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIView+InlineDebugger.m"; path = "Classes/CKUIView+InlineDebugger.m"; sourceTree = "<group>"; };
+		75AD5D9E144C72950008F53A /* CKUIViewController+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+InlineDebugger.h"; path = "Classes/CKUIViewController+InlineDebugger.h"; sourceTree = "<group>"; };
+		75AD5D9F144C72960008F53A /* CKUIViewController+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+InlineDebugger.m"; path = "Classes/CKUIViewController+InlineDebugger.m"; sourceTree = "<group>"; };
+		75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewContainerController+InlineDebugger.h"; path = "Classes/CKItemViewContainerController+InlineDebugger.h"; sourceTree = "<group>"; };
+		75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewContainerController+InlineDebugger.m"; path = "Classes/CKItemViewContainerController+InlineDebugger.m"; sourceTree = "<group>"; };
 		75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultilineNSStringPropertyCellController.h; path = Classes/CKMultilineNSStringPropertyCellController.h; sourceTree = "<group>"; };
 		75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultilineNSStringPropertyCellController.m; path = Classes/CKMultilineNSStringPropertyCellController.m; sourceTree = "<group>"; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
@@ -1308,6 +1324,7 @@
 		7506E40213B8FE6100EE1471 /* Tables */ = {
 			isa = PBXGroup;
 			children = (
+				75AD5D8A144C687E0008F53A /* Inline Debugger */,
 				7577DFE913E2EE6D0065E098 /* Responder */,
 				7577DFE813E2EE4E0065E098 /* Form */,
 				7528070913D4B35F0010A300 /* CellControllers */,
@@ -1940,6 +1957,21 @@
 			name = CascadingTrees;
 			sourceTree = "<group>";
 		};
+		75AD5D8A144C687E0008F53A /* Inline Debugger */ = {
+			isa = PBXGroup;
+			children = (
+				75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */,
+				75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */,
+				75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */,
+				75AD5D9B144C71740008F53A /* CKUIView+InlineDebugger.m */,
+				75AD5D9E144C72950008F53A /* CKUIViewController+InlineDebugger.h */,
+				75AD5D9F144C72960008F53A /* CKUIViewController+InlineDebugger.m */,
+				75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */,
+				75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */,
+			);
+			name = "Inline Debugger";
+			sourceTree = "<group>";
+		};
 		75CC16FE13F46E0800835FE3 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
@@ -2250,6 +2282,10 @@
 				75956970144626550092F317 /* CKSegmentedControl.h in Headers */,
 				75956976144626960092F317 /* CKUIBarButtonItem+Style.h in Headers */,
 				7566AF8B14476A5C00748BB1 /* CKUIView+Positioning.h in Headers */,
+				75AD5D8E144C68BA0008F53A /* CKNSObject+InlineDebugger.h in Headers */,
+				75AD5D9C144C71740008F53A /* CKUIView+InlineDebugger.h in Headers */,
+				75AD5DA0144C72960008F53A /* CKUIViewController+InlineDebugger.h in Headers */,
+				75AD5DA4144C73290008F53A /* CKItemViewContainerController+InlineDebugger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2596,6 +2632,10 @@
 				75956972144626680092F317 /* CKSegmentedControl.m in Sources */,
 				759569741446268B0092F317 /* CKUIBarButtonItem+Style.m in Sources */,
 				7566AF8D14476A6800748BB1 /* CKUIView+Positioning.m in Sources */,
+				75AD5D8F144C68BA0008F53A /* CKNSObject+InlineDebugger.m in Sources */,
+				75AD5D9D144C71740008F53A /* CKUIView+InlineDebugger.m in Sources */,
+				75AD5DA1144C72960008F53A /* CKUIViewController+InlineDebugger.m in Sources */,
+				75AD5DA5144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

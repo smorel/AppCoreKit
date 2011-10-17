@@ -47,20 +47,36 @@
     
     NSArray* propertyDescriptors = [object allPropertyDescriptors];
 	NSMutableArray* theProperties = [NSMutableArray array];
-	for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
-		NSString* lowerCaseProperty = [descriptor.name lowercaseString];
-		BOOL useProperty = YES;
-		if(filter != nil && [filter length] > 0){
-			NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
-			useProperty = (range.location != NSNotFound);
-		}
-		if(useProperty){
-			CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
-			if(metaData.editable){
-				[theProperties insertObject:descriptor.name atIndex:0];
-			}
-		}
-	}
+    if([object isKindOfClass:[NSDictionary class]]){
+        for(id key in [object allKeys]){
+            NSString* strKey = [NSValueTransformer transform:key toClass:[NSString class]];
+            NSString* lowerCaseProperty = [strKey lowercaseString];
+            BOOL useProperty = YES;
+            if(filter != nil){
+                NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
+                useProperty = (range.location != NSNotFound);
+            }
+            if(useProperty){
+                [theProperties addObject:key];
+            }
+        }
+    }
+    else{
+        for(CKClassPropertyDescriptor* descriptor in propertyDescriptors){
+            NSString* lowerCaseProperty = [descriptor.name lowercaseString];
+            BOOL useProperty = YES;
+            if(filter != nil && [filter length] > 0){
+                NSRange range = [lowerCaseProperty rangeOfString:lowerCaseFilter];
+                useProperty = (range.location != NSNotFound);
+            }
+            if(useProperty){
+                CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
+                if(metaData.editable){
+                    [theProperties insertObject:descriptor.name atIndex:0];
+                }
+            }
+        }
+    }
     return theProperties;
 }
 
@@ -326,7 +342,13 @@
     
     NSMutableArray* theProperties = [NSMutableArray array];
     for(NSString* propertyName in properties){
-        CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:propertyName];
+        CKObjectProperty* property = nil;
+        if([object isKindOfClass:[NSDictionary class]]){
+            property = [[[CKObjectProperty alloc]initWithDictionary:object key:propertyName]autorelease];
+        }
+        else{
+            property = [CKObjectProperty propertyWithObject:object keyPath:propertyName];
+        }
         [theProperties addObject:property];
     }
     

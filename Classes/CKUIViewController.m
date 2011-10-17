@@ -16,6 +16,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
 #import "CKLocalization.h"
+#import "CKUIViewController+InlineDebugger.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -342,88 +343,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 
 
 // ***************** INLINE DEBUGGER ******************** //
-
-+ (CKFormCellDescriptor*)cellDescriptorForController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
-    NSString* title = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
-    NSString* subtitle = nil;
-    if([c respondsToSelector:@selector(name)]){
-        subtitle = title;
-        title = [c performSelector:@selector(name)];
-    }
-    
-    __block UIViewController* bController = c;
-    __block UIViewController* bDebugger = debugger;
-    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
-        CKFormTableViewController* controllerForm = [[[CKFormTableViewController alloc]init]autorelease];
-        controllerForm.searchEnabled = YES;
-        
-        controllerForm.title = title;
-        CKFormSection* controllerSection = [CKFormSection sectionWithObject:bController headerTitle:nil];
-        [controllerForm addSections:[NSArray arrayWithObject:controllerSection]];
-        
-        __block CKFormTableViewController* bControllerForm = controllerForm;
-        __block UIViewController* bbController = bController;
-        controllerForm.searchBlock = ^(NSString* filter){
-            [bControllerForm clear];
-            
-            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:bbController propertyFilter:filter headerTitle:nil];
-            [bControllerForm addSections:[NSArray arrayWithObject:newControllerSection]];
-        };
-        
-        [bDebugger.navigationController pushViewController:controllerForm animated:YES];
-    }];
-    return controllerCell;
-}
-
-- (void)setupDebugger:(CKFormTableViewController*)controller forView:(UIView*)view withFilter:(NSString*)filter{
-    [controller clear];
-    
-    NSMutableArray* controllerCells = [NSMutableArray array];
-    UIViewController* c = self;
-    while(c){
-        [controllerCells insertObject:[CKUIViewController cellDescriptorForController:c withDebugger:controller] atIndex:0];
-        
-        if([c respondsToSelector:@selector(containerViewController)]){
-            c = [c performSelector:@selector(containerViewController)];
-        }
-    }
-    
-    [controllerCells insertObject:[CKUIViewController cellDescriptorForController:self.navigationController withDebugger:controller] atIndex:0];
-    
-    CKFormSection* controllerSection = [CKFormSection sectionWithCellDescriptors:controllerCells headerTitle:@"Controllers"];
-    CKFormSection* viewSection = [CKFormSection sectionWithObject:view propertyFilter:filter headerTitle:@"View"];
-    
-    __block CKFormTableViewController* bController = controller;
-    if([view superview]){
-        NSString* title = [NSString stringWithFormat:@"%@ <%p>",[[view superview] class],[view superview]];
-        CKFormCellDescriptor* superViewCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
-            CKFormTableViewController* superViewForm = [bController inlineDebuggerForSubView:[view superview]];
-            superViewForm.title = title;
-            [bController.navigationController pushViewController:superViewForm animated:YES];
-        }];
-        
-        CKFormSection* superViewSection = [CKFormSection sectionWithCellDescriptors:[NSArray arrayWithObject:superViewCell] headerTitle:@"Supper View"];
-        [controller addSections:[NSArray arrayWithObjects:controllerSection,superViewSection,viewSection,nil]];
-    }
-    else{
-        [controller addSections:[NSArray arrayWithObjects:controllerSection,viewSection,nil]];
-    }
-}
-
-- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
-    CKFormTableViewController* controller = [[[CKFormTableViewController alloc]init]autorelease];
-    controller.searchEnabled = YES;
-    
-    [self setupDebugger:controller forView:view withFilter:nil];
-    
-    __block CKFormTableViewController* bController = controller;
-    __block CKUIViewController* bSelf = self;
-    controller.searchBlock = ^(NSString* filter){
-        [bSelf setupDebugger:bController forView:view withFilter:filter];
-    };
-    
-    return controller;
-}
 
 - (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller{
     CKFormTableViewController* debugger = [self inlineDebuggerForSubView:view];

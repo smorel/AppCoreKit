@@ -959,6 +959,30 @@
 	return section;
 }
 
+
+- (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index{
+	section.parentController = self;
+	[_sections insertObject:section atIndex:index];
+    
+    if(self.viewIsOnScreen && section.hidden == NO){
+        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
+    }
+    
+	return section;
+}
+
+- (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index{
+    CKFormSectionBase* section = (CKFormSectionBase*)[_sections objectAtIndex:index];
+    NSInteger visibleIndex = section.sectionVisibleIndex;
+    [_sections removeObjectAtIndex:index];
+    
+    if(self.viewIsOnScreen && section.hidden == NO && visibleIndex >= 0){
+        [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
+    }
+    
+	return section;
+}
+
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings atIndex:(NSInteger)index{
 	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
 	section.parentController = self;

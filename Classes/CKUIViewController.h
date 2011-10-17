@@ -66,6 +66,5 @@ typedef enum CKInterfaceOrientation{
 
 //You can override those methods to present the debugger from another controller or customize the debugger with additional informations
 - (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller;
-- (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view;
 
 @end
