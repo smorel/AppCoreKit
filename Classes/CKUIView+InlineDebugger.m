@@ -10,55 +10,9 @@
 
 @implementation UIView (CKInlineDebugger)
 
-
-+ (CKFormCellDescriptor*)cellDescriptorForStylesheetInView:(UIView*)view withDebugger:(UIViewController*)debugger{
-    /*
-    
-    
-    Creates a cell for the style with name = the PATH + action displaying the content of the style !
-        Header section should be @"Applied Style"
-        
-        NSMutableDictionary* style = [view appliedStyle];
-    
-    NSString* title = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
-    NSString* subtitle = nil;
-    if([c respondsToSelector:@selector(name)]){
-        subtitle = title;
-        title = [c performSelector:@selector(name)];
-    }
-    
-    __block UIViewController* bController = c;
-    __block UIViewController* bDebugger = debugger;
-    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
-        CKFormTableViewController* controllerForm = [[[CKFormTableViewController alloc]init]autorelease];
-        controllerForm.searchEnabled = YES;
-        
-        controllerForm.title = title;
-        CKFormSection* controllerSection = [CKFormSection sectionWithObject:bController headerTitle:nil];
-        [controllerForm addSections:[NSArray arrayWithObject:controllerSection]];
-        
-        __block CKFormTableViewController* bControllerForm = controllerForm;
-        __block UIViewController* bbController = bController;
-        controllerForm.searchBlock = ^(NSString* filter){
-            [bControllerForm clear];
-            
-            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:bbController propertyFilter:filter headerTitle:nil];
-            [bControllerForm addSections:[NSArray arrayWithObject:newControllerSection]];
-        };
-        
-        [bDebugger.navigationController pushViewController:controllerForm animated:YES];
-    }];
-    return controllerCell;
-     */
-    
-    return nil;
-}
-
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
     CKFormTableViewController* debugger = [NSObject inlineDebuggerForObject:object];
     UIView* view = (UIView*)object;
-    
-    //adds style section
     
     __block CKFormTableViewController* bController = debugger;
     if([view superview]){

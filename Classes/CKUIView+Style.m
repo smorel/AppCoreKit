@@ -367,7 +367,7 @@ static char NSObjectAppliedStyleObjectKey;
     return objc_getAssociatedObject(self, &NSObjectAppliedStyleObjectKey);
 }
 
-- (NSString*)appliedStyleDescription{
+- (NSString*)appliedStylePath{
     NSMutableDictionary* style = [self appliedStyle];
     
     NSMutableString* stylePath = [NSMutableString string];
@@ -383,8 +383,11 @@ static char NSObjectAppliedStyleObjectKey;
         }
         currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
     }
-    
-    return cleanString([NSString stringWithFormat:@"Path : %@ \nStyle : {\n%@\n}",stylePath,[style lightStyleDescriptionWithIndentation:1]]);
+    return stylePath;
+}
+
+- (NSString*)appliedStyleDescription{
+    return cleanString([NSString stringWithFormat:@"Path : %@ \nStyle : {\n%@\n}",[self appliedStylePath],[[self appliedStyle] lightStyleDescriptionWithIndentation:1]]);
 }
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{

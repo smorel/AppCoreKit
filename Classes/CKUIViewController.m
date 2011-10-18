@@ -16,7 +16,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
 #import "CKLocalization.h"
-#import "CKUIViewController+InlineDebugger.h"
+#import "CKInlineDebuggerController.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -25,15 +25,14 @@ typedef enum CKDebugCheckState{
 }CKDebugCheckState;
 
 static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
-static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_none;
 
 @interface CKUIViewController()
 @property(nonatomic,retain)NSString* navigationItemsBindingContext;
+@property(nonatomic,retain)CKInlineDebuggerController* inlineDebuggerController;
 @end
 
 @implementation CKUIViewController
 
-@synthesize debugModalController = _debugModalController;
 @synthesize name = _name;
 @synthesize viewWillAppearBlock = _viewWillAppearBlock;
 @synthesize viewDidAppearBlock = _viewDidAppearBlock;
@@ -45,6 +44,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 @synthesize leftButton = _leftButton;
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
 @synthesize supportedInterfaceOrientations;
+@synthesize inlineDebuggerController = _inlineDebuggerController;
 
 - (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
     metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
@@ -56,6 +56,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 - (void)postInit {	
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
+    self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
 }
 
 - (id)init {
@@ -97,9 +98,8 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 	_leftButton = nil;
 	[_navigationItemsBindingContext release];
 	_navigationItemsBindingContext = nil;
-     
-	[_debugModalController release];
-	_debugModalController = nil;
+	[_inlineDebuggerController release];
+	_inlineDebuggerController = nil;
     
 	[super dealloc];
 }
@@ -217,6 +217,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [self.inlineDebuggerController start];
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -247,6 +248,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
     }
+    [self.inlineDebuggerController stop];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -282,15 +284,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 	[self applyStyle];
     
     [CATransaction commit];
-    
-    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
-        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
-        CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
-    }
-    
-    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
-        [self.view addGestureRecognizer:[[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(debugGesture:)]autorelease]];
-    }
 }
 
 -(void) viewDidUnload{
@@ -340,43 +333,5 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 #endif
 
-
-
-// ***************** INLINE DEBUGGER ******************** //
-
-- (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller{
-    CKFormTableViewController* debugger = [self inlineDebuggerForSubView:view];
-    
-    debugger.title = [NSString stringWithFormat:@"%@ <%p>",[view class],view];
-    UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
-    debugger.leftButton = close;
-    UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:debugger]autorelease];
-    navc.modalPresentationStyle = UIModalPresentationPageSheet;
-    
-    self.debugModalController = debugger;
-    
-    [controller presentModalViewController:navc animated:YES];
-}
-
-- (void)debugGesture:(UILongPressGestureRecognizer *)recognizer{
-	if ((recognizer.state == UIGestureRecognizerStatePossible) ||
-		(recognizer.state == UIGestureRecognizerStateFailed)
-		|| self.debugModalController != nil){
-		return;
-	}
-    
-    CGPoint point = [recognizer locationInView:self.view];
-    UIView* touchedView = [self.view hitTest:point withEvent:nil];	
-    
-    
-    UINavigationController* myNavigationController = self.navigationController;
-    UIViewController* topController = [myNavigationController topViewController];
-    [self presentInlineDebuggerForSubView:touchedView fromParentController:topController];
-}
-
-- (void)closeDebug:(id)sender{
-	[self.debugModalController dismissModalViewControllerAnimated:YES];
-	self.debugModalController = nil;
-}
 
 @end

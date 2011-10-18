@@ -18,6 +18,7 @@
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
+#import "CKNSObject+InlineDebugger.h"
 
 #import "CKClassExplorer.h"
 
@@ -176,21 +177,8 @@
 		[self.parentController.navigationController pushViewController:controller animated:YES];
 	}
 	else{
-        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        CKFormTableViewController* debugger = [[thevalue class]inlineDebuggerForObject:thevalue];
         debugger.title = self.tableViewCell.textLabel.text;
-        debugger.searchEnabled = YES;
-        
-        CKFormSection* controllerSection = [CKFormSection sectionWithObject:thevalue  headerTitle:nil];
-        [debugger addSections:[NSArray arrayWithObject:controllerSection]];
-        
-        __block CKFormTableViewController* bController = debugger;
-        debugger.searchBlock = ^(NSString* filter){
-            [bController clear];
-            
-            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:thevalue propertyFilter:filter headerTitle:nil];
-            [bController addSections:[NSArray arrayWithObject:newControllerSection]];
-        };
-
 		[self.parentController.navigationController pushViewController:debugger animated:YES];
 	}
 }
@@ -261,22 +249,9 @@
 		title = [instance valueForKeyPath:@"modelName"];
 	}
 	
-    
-    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+    CKFormTableViewController* debugger = [[instance class]inlineDebuggerForObject:instance];
 	debugger.title = title;
-    debugger.searchEnabled = YES;
     
-    CKFormSection* controllerSection = [CKFormSection sectionWithObject:instance  headerTitle:nil];
-    [debugger addSections:[NSArray arrayWithObject:controllerSection]];
-    
-    __block CKFormTableViewController* bController = debugger;
-    debugger.searchBlock = ^(NSString* filter){
-        [bController clear];
-        
-        CKFormSection* newControllerSection = [CKFormSection sectionWithObject:instance propertyFilter:filter headerTitle:nil];
-        [bController addSections:[NSArray arrayWithObject:newControllerSection]];
-    };
-
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];
 	 [controller.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];

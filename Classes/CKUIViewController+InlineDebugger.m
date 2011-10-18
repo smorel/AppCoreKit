@@ -9,7 +9,7 @@
 #import "CKUIViewController+InlineDebugger.h"
 #import "CKNSObject+InlineDebugger.h"
 
-@implementation CKUIViewController (CKInlineDebugger)
+@implementation UIViewController (CKInlineDebugger)
 
 + (CKFormCellDescriptor*)cellDescriptorForController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
     NSString* title = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
@@ -22,23 +22,14 @@
     __block UIViewController* bController = c;
     __block UIViewController* bDebugger = debugger;
     CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
-        CKFormTableViewController* controllerForm = [[[CKFormTableViewController alloc]init]autorelease];
-        controllerForm.searchEnabled = YES;
-        
-        controllerForm.title = title;
-        CKFormSection* controllerSection = [CKFormSection sectionWithObject:bController headerTitle:nil];
-        [controllerForm addSections:[NSArray arrayWithObject:controllerSection]];
-        
-        __block CKFormTableViewController* bControllerForm = controllerForm;
-        __block UIViewController* bbController = bController;
-        controllerForm.searchBlock = ^(NSString* filter){
-            [bControllerForm clear];
-            
-            CKFormSection* newControllerSection = [CKFormSection sectionWithObject:bbController propertyFilter:filter headerTitle:nil];
-            [bControllerForm addSections:[NSArray arrayWithObject:newControllerSection]];
-        };
-        
+        CKFormTableViewController* controllerForm = [[bController class]inlineDebuggerForObject:bController];
         [bDebugger.navigationController pushViewController:controllerForm animated:YES];
+    }];
+    
+    [controllerCell setCreateBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.cellStyle = CKTableViewCellStylePropertyGrid;
+        return (id)nil;
     }];
     return controllerCell;
 }

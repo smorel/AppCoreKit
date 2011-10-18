@@ -448,13 +448,15 @@
 		7560DE5F13B8F00F00268D13 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4F13B8F00F00268D13 /* MapKit.framework */; };
 		7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5013B8F00F00268D13 /* MobileCoreServices.framework */; };
 		7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE5113B8F00F00268D13 /* CoreFoundation.framework */; };
-		7566AF8B14476A5C00748BB1 /* CKUIView+Positioning.h in Headers */ = {isa = PBXBuildFile; fileRef = 7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */; };
+		7566AF8B14476A5C00748BB1 /* CKUIView+Positioning.h in Headers */ = {isa = PBXBuildFile; fileRef = 7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7566AF8D14476A6800748BB1 /* CKUIView+Positioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 7566AF8C14476A6800748BB1 /* CKUIView+Positioning.m */; };
 		757578FB13E71C000082C247 /* CKSheetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757578F913E71C000082C247 /* CKSheetController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757578FC13E71C000082C247 /* CKSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757578FA13E71C000082C247 /* CKSheetController.m */; };
 		7577DFE613E2EE480065E098 /* CKFormTableViewController+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7577DFE713E2EE480065E098 /* CKFormTableViewController+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */; };
 		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */; };
 		758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */; };
 		758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */; };
 		758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -971,6 +973,8 @@
 		7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormTableViewController+PropertyGrid.h"; path = "Classes/CKFormTableViewController+PropertyGrid.h"; sourceTree = "<group>"; };
 		7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormTableViewController+PropertyGrid.m"; path = "Classes/CKFormTableViewController+PropertyGrid.m"; sourceTree = "<group>"; };
 		7577E00813E32FE40065E098 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
+		757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKInlineDebuggerController.h; path = Classes/CKInlineDebuggerController.h; sourceTree = "<group>"; };
+		757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKInlineDebuggerController.m; path = Classes/CKInlineDebuggerController.m; sourceTree = "<group>"; };
 		758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIFont+ValueTransformer.h"; path = "Classes/CKUIFont+ValueTransformer.h"; sourceTree = "<group>"; };
 		758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIFont+ValueTransformer.m"; path = "Classes/CKUIFont+ValueTransformer.m"; sourceTree = "<group>"; };
 		758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionPropertyCellController.h; path = Classes/CKOptionPropertyCellController.h; sourceTree = "<group>"; };
@@ -1960,6 +1964,8 @@
 		75AD5D8A144C687E0008F53A /* Inline Debugger */ = {
 			isa = PBXGroup;
 			children = (
+				757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */,
+				757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */,
 				75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */,
 				75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */,
 				75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */,
@@ -2286,6 +2292,7 @@
 				75AD5D9C144C71740008F53A /* CKUIView+InlineDebugger.h in Headers */,
 				75AD5DA0144C72960008F53A /* CKUIViewController+InlineDebugger.h in Headers */,
 				75AD5DA4144C73290008F53A /* CKItemViewContainerController+InlineDebugger.h in Headers */,
+				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2636,6 +2643,7 @@
 				75AD5D9D144C71740008F53A /* CKUIView+InlineDebugger.m in Sources */,
 				75AD5DA1144C72960008F53A /* CKUIViewController+InlineDebugger.m in Sources */,
 				75AD5DA5144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m in Sources */,
+				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

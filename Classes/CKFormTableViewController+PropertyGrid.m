@@ -105,7 +105,7 @@
                     }
                 }
                 
-                Class propertyType = descriptor ? descriptor.type : [value class];
+                Class propertyType = value ? [value class] : (descriptor ? descriptor.type : nil);
                 
                 if([NSObject isKindOf:propertyType parentType:[NSString class]]){
                     cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKNSStringPropertyCellController class]];
