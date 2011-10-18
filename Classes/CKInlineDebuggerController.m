@@ -81,6 +81,10 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         if(self.state == CKInlineDebuggerControllerStateDebugging){
             self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
             self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+            
+            for(UIGestureRecognizer* gesture in self.customGestures){
+                [self.viewController.view addGestureRecognizer:gesture];
+            }
         }
     }
 #endif
@@ -92,6 +96,9 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
     self.oldRightButtonItem = nil;
     
+    for(UIGestureRecognizer* gesture in self.customGestures){
+        [self.viewController.view removeGestureRecognizer:gesture];
+    }
     for(UIView* v in [self.viewController.view subviews]){
         v.userInteractionEnabled = YES;
     }
@@ -137,6 +144,10 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
  */
 
 - (void)hitTest:(CGPoint)point currentOrigin:(CGPoint)origin inView:(UIView*)view stack:(NSMutableArray*)stack{
+    if(view.hidden == YES || view.alpha == 0){
+        return;
+    }
+    
     if(view == self.debuggingHighlightView
        || view == self.highlightLabel
        || ( _supperHighlightViews && [self.supperHighlightViews indexOfObjectIdenticalTo:view] != NSNotFound)){
