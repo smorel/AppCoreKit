@@ -12,6 +12,7 @@
 #import "CKModelObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
+#import "CKWeakRef.h"
 
 @class CKObjectTableViewController;
 
@@ -20,7 +21,8 @@
  */
 @interface CKUITableViewCell : UITableViewCell
 
-@property(nonatomic,assign) CKTableViewCellController* delegate;
+@property(nonatomic,readonly) CKTableViewCellController* delegate;
+@property(nonatomic,retain) CKWeakRef* delegateRef;
 @property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
 @property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
 @property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets

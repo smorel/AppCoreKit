@@ -22,7 +22,8 @@
 //#import <objc/runtime.h>
 
 @implementation CKUITableViewCell
-@synthesize delegate = _delegate;
+@synthesize delegate;
+@synthesize delegateRef = _delegateRef;
 @synthesize disclosureIndicatorImage = _disclosureIndicatorImage;
 @synthesize disclosureButton = _disclosureButton;
 @synthesize checkMarkImage = _checkMarkImage;
@@ -30,19 +31,24 @@
 - (void)dealloc{
     [_disclosureIndicatorImage release];
     [_disclosureButton release];
+    [_delegateRef release];
     [super dealloc];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-	self.delegate = thedelegate;
+	self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
 	return self;
+}
+
+- (id)delegate{
+    return self.delegateRef.object;
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    if([_delegate layoutCallback] != nil && _delegate && [_delegate respondsToSelector:@selector(layoutCell:)]){
-		[_delegate performSelector:@selector(layoutCell:) withObject:self];
+    if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
+		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
 }
 
@@ -222,7 +228,7 @@
 	[super setView:view];
 	if([view isKindOfClass:[CKUITableViewCell class]]){
 		CKUITableViewCell* customCell = (CKUITableViewCell*)view;
-		customCell.delegate = self;
+		customCell.delegateRef.object = self;
 	}
 }
 
