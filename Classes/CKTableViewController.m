@@ -73,7 +73,7 @@
 	//self.view.clipsToBounds = YES;
 	
 	if ([self.view isKindOfClass:[UITableView class]] == NO && self.tableViewContainer == nil) {
-        UITableView* theTableView = self.view;
+        UITableView* theTableView = (UITableView*)self.view;
         CGRect theViewFrame = self.view.bounds;
 		UIView *theView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
