@@ -109,7 +109,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     if(self.viewController){
         [self highlightView:nil];
         [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
-        self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
     }
     [_viewControllerRef release];
     _viewControllerRef = nil;

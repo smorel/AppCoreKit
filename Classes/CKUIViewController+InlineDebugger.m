@@ -44,6 +44,9 @@
         if([c respondsToSelector:@selector(containerViewController)]){
             c = [c performSelector:@selector(containerViewController)];
         }
+        else{
+            c = nil;
+        }
     }
     
     [controllerCells insertObject:[CKUIViewController cellDescriptorForController:self.navigationController withDebugger:debugger] atIndex:0];
