@@ -64,7 +64,7 @@
 + (BOOL)applyStyle:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
     UIBarButtonItem* barButtonItem = (UIBarButtonItem*)object;
     
-    if([style isEmpty] == NO && barButtonItem.customView == nil){
+    if(style && [style isEmpty] == NO && barButtonItem.customView == nil){
         UIButton* button = [[[CKBarButtonItemButton alloc]initWithBarButtonItem:barButtonItem]autorelease];
         if([UIButton applyStyle:style toView:button appliedStack:appliedStack delegate:delegate]){
             return YES;

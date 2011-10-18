@@ -196,7 +196,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == self){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
-        if(![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
+        if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
             self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
             [self.navigationItem.leftBarButtonItem applyStyle:backBarItemStyle];
