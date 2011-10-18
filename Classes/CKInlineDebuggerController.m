@@ -65,6 +65,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 
 - (void)start{
+#ifdef DEBUG
     if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
         CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
@@ -77,10 +78,13 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         _mainGesture.numberOfTapsRequired = 2;
         [self.viewController.navigationController.navigationBar addGestureRecognizer:_mainGesture];
     }
+#endif
 }
 
 - (void)stop{
+#ifdef DEBUG
     [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
+#endif
 }
 
 - (void)dealloc{
