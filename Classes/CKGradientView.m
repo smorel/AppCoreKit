@@ -488,7 +488,11 @@
 		[self generateTopEmbossPath:topEmbossPath];
 		CGContextAddPath(gc, topEmbossPath);
 		CFRelease(topEmbossPath);
-		[[self.gradientColors objectAtIndex:0] setFill];
+        
+        UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
+        thecolor = [thecolor colorWithAlphaComponent:1];
+		[thecolor setFill];
+        
 		CGContextFillPath(gc);
 		CGContextRestoreGState(gc);
 	}
@@ -505,7 +509,11 @@
 		[self generateBottomEmbossPath:bottomEmbossPath];
 		CGContextAddPath(gc, bottomEmbossPath);
 		CFRelease(bottomEmbossPath);
-		[[self.gradientColors last] setFill];
+        
+        UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors last] : self.fillColor;
+        thecolor = [thecolor colorWithAlphaComponent:1];
+		[thecolor setFill];
+        
 		CGContextFillPath(gc);
 		CGContextRestoreGState(gc);
 	}
