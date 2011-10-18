@@ -43,6 +43,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style {
 	if (self = [super init]) {
 		self.style = style;
+        self.cellStyle = (CKTableViewCellStyle)style;
 	}
 	return self;
 }
