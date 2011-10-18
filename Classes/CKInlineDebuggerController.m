@@ -77,6 +77,11 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         self.mainGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(twoTapGesture:)]autorelease];
         _mainGesture.numberOfTapsRequired = 2;
         [self.viewController.navigationController.navigationBar addGestureRecognizer:_mainGesture];
+        
+        if(self.state == CKInlineDebuggerControllerStateDebugging){
+            self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+            self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+        }
     }
 #endif
 }
@@ -84,6 +89,12 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 - (void)stop{
 #ifdef DEBUG
     [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
+    self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+    self.oldRightButtonItem = nil;
+    
+    for(UIView* v in [self.viewController.view subviews]){
+        v.userInteractionEnabled = YES;
+    }
 #endif
 }
 
@@ -225,6 +236,8 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                 self.debuggingHighlightView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];
                 _debuggingHighlightView.backgroundColor = [UIColor redColor];
                 _debuggingHighlightView.alpha = 0.4;
+                _debuggingHighlightView.layer.borderWidth = 3;
+                _debuggingHighlightView.layer.borderColor = [[UIColor redColor]CGColor];
             }
             
             self.debuggingView = view;
@@ -243,7 +256,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                     if(i >= [_supperHighlightViews count]){
                         UIView* subViewHighlight = [[[UIView alloc]initWithFrame:v.bounds]autorelease];
                         subViewHighlight.backgroundColor = [UIColor clearColor];
-                        subViewHighlight.layer.borderWidth = 1;
+                        subViewHighlight.layer.borderWidth = 2;
                         subViewHighlight.layer.borderColor = [[UIColor colorWithRed:((float)rand()/(float)RAND_MAX) 
                                                                              green:((float)rand()/(float)RAND_MAX) 
                                                                               blue:((float)rand()/(float)RAND_MAX)  
@@ -278,6 +291,48 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     }
 }
 
+- (void)updateGestureWithPoint:(CGPoint)point allowSuperView:(BOOL)allowSuperView{
+    UIView* thetouchedView = [self hitTest:point];	
+    if(thetouchedView == _debuggingHighlightView){
+        thetouchedView = [_debuggingHighlightView superview];
+    }
+    
+    if(thetouchedView != self.touchedView){
+        [self highlightView:thetouchedView];
+    }
+    else{
+        NSMutableArray* stack = [NSMutableArray array];
+        [self hitTest:point stack:stack];
+        
+        UIView* touchedSuperView = self.debuggingView;
+        for(UIView* v in self.possibleSuperViews){
+            NSInteger index = [stack indexOfObjectIdenticalTo:v];
+            if(index != NSNotFound){
+                touchedSuperView = v;
+                break;
+            }
+        }
+        
+        NSInteger index = [stack indexOfObjectIdenticalTo:touchedSuperView];
+        if(index != NSNotFound){
+            if(allowSuperView && touchedSuperView == self.debuggingView && index < [stack count] - 2){
+                [self highlightView:[stack objectAtIndex:index + 1]];
+            }
+            else if(allowSuperView && touchedSuperView == self.debuggingView && index != NSNotFound){
+                [self highlightView:[stack objectAtIndex:0]];
+            }
+            else if(!allowSuperView || touchedSuperView != self.debuggingView){
+                [self highlightView:touchedSuperView];
+            }
+        }
+        else{
+            [self highlightView:thetouchedView];
+        }
+    }
+    
+    self.touchedView = thetouchedView;
+}
+
 - (void)tapGesture:(UILongPressGestureRecognizer *)recognizer{
     if(self.state == CKInlineDebuggerControllerStatePending
        || self.debuggingView == nil){
@@ -286,45 +341,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     
     if(recognizer.state == UIGestureRecognizerStateRecognized){
         CGPoint point = [recognizer locationInView:self.viewController.view];
-        UIView* thetouchedView = [self hitTest:point];	
-        if(thetouchedView == _debuggingHighlightView){
-            thetouchedView = [_debuggingHighlightView superview];
-        }
-        
-        if(thetouchedView != self.touchedView){
-            [self highlightView:thetouchedView];
-        }
-        else{
-            NSMutableArray* stack = [NSMutableArray array];
-            [self hitTest:point stack:stack];
-            
-            UIView* touchedSuperView = self.debuggingView;
-            for(UIView* v in self.possibleSuperViews){
-                NSInteger index = [stack indexOfObjectIdenticalTo:v];
-                if(index != NSNotFound){
-                    touchedSuperView = v;
-                    break;
-                }
-            }
-            
-            NSInteger index = [stack indexOfObjectIdenticalTo:touchedSuperView];
-            if(index != NSNotFound){
-                if(touchedSuperView == self.debuggingView && index < [stack count] - 2){
-                    [self highlightView:[stack objectAtIndex:index + 1]];
-                }
-                else if(touchedSuperView == self.debuggingView && index != NSNotFound){
-                    [self highlightView:[stack objectAtIndex:0]];
-                }
-                else if(touchedSuperView != self.debuggingView){
-                    [self highlightView:touchedSuperView];
-                }
-            }
-            else{
-                [self highlightView:thetouchedView];
-            }
-        }
-        
-        self.touchedView = thetouchedView;
+        [self updateGestureWithPoint:point allowSuperView:YES];
     }
 }
 
@@ -375,12 +392,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     }
     
     CGPoint point = [recognizer locationInView:self.viewController.view];
-    UIView* touchedView = [self hitTest:point];	
-    if(touchedView == _debuggingHighlightView){
-        touchedView = [_debuggingHighlightView superview];
-    }
-    
-    [self highlightView:touchedView];
+    [self updateGestureWithPoint:point allowSuperView:NO];
 }
 
 - (void)inspector:(id)sender{
