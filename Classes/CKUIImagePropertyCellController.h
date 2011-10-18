@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "CKPropertyGridCellController.h"
+#import "CKNSObjectPropertyCellController.h"
 
 
 /** TODO
  */
-@interface CKUIImagePropertyCellController : CKPropertyGridCellController {
+@interface CKUIImagePropertyCellController : CKNSObjectPropertyCellController/*CKPropertyGridCellController*/ {
 
 }
 

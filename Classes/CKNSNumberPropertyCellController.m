@@ -41,8 +41,9 @@
 	[s setOn:bo animated:YES];
 }
 
-- (void)textFieldChanged:(id)value{
-	NSNumber* number = (NSNumber*)[self.value value];
+- (void)textFieldChanged:(id)thevalue{
+    CKObjectProperty* property = (CKObjectProperty*)self.value;
+	NSNumber* number = (NSNumber*)[property value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
 	if(newNumber == nil){
         [self setValueInObjectProperty:[NSNumber numberWithInt:0]];

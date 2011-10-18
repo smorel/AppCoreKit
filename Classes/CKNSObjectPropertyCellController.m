@@ -18,6 +18,7 @@
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
+#import "CKNSObject+InlineDebugger.h"
 
 #import "CKClassExplorer.h"
 
@@ -126,7 +127,8 @@
 	if([self.value isKindOfClass:[CKObjectProperty class]]){
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
 		id value = [property value];
-		if(![value isKindOfClass:[CKDocumentCollection class]]){
+		if(![value isKindOfClass:[CKDocumentCollection class]]
+           && ![property.object isKindOfClass:[NSDictionary class]]){
 			[self beginBindingsContextByRemovingPreviousBindings];
 			[property.object bind:property.keyPath withBlock:^(id value){
 				[self setup];
@@ -160,6 +162,8 @@
 	
 	if([thevalue isKindOfClass:[CKDocumentCollection class]]){
 		NSMutableArray* mappings = [NSMutableArray array]; 
+        //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKObjectProperty :
+        //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKObjectProperty
 		[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
 		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
@@ -173,9 +177,9 @@
 		[self.parentController.navigationController pushViewController:controller animated:YES];
 	}
 	else{
-		CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:thevalue]autorelease];
-		propertyGrid.title = self.tableViewCell.textLabel.text;
-		[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
+        CKFormTableViewController* debugger = [[thevalue class]inlineDebuggerForObject:thevalue];
+        debugger.title = self.tableViewCell.textLabel.text;
+		[self.parentController.navigationController pushViewController:debugger animated:YES];
 	}
 }
 
@@ -245,19 +249,13 @@
 		title = [instance valueForKeyPath:@"modelName"];
 	}
 	
-	CKPropertyGridEditorController* propertyGrid = [[[CKPropertyGridEditorController alloc]initWithObject:instance]autorelease];
-	propertyGrid.title = title;
-	[self.parentController.navigationController pushViewController:propertyGrid animated:YES];
-	
-
+    CKFormTableViewController* debugger = [[instance class]inlineDebuggerForObject:instance];
+	debugger.title = title;
+    
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];
 	 [controller.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	 */
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
 }
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{

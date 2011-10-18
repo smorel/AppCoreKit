@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 
 @class CKUIViewController;
+@class CKFormTableViewController;
+
 typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
 typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 

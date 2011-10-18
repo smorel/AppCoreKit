@@ -178,6 +178,9 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 /* FIXME : do a InsertSections atIndexes to batch the animations and depreciate the following methods
  */
+- (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index;
+- (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index;
+
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;

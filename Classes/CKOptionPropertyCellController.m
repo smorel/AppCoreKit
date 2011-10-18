@@ -192,6 +192,12 @@
 
 - (void)didSelect {
     CKObjectProperty* property = [self objectProperty];
+	
+	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",property.name];
+	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
+	if ([propertyNavBarTitleLocalized isEqualToString:[NSString stringWithFormat:@"%@_NavBarTitle",property.name]]) {
+		propertyNavBarTitleLocalized = _(property.name);
+	}
     
     CKTableViewController* tableController = (CKTableViewController*)[self parentController];
 	if(self.multiSelectionEnabled){
@@ -201,7 +207,7 @@
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self  currentValue] style:[tableController style]] autorelease];
 	}
     self.optionsViewController.optionCellStyle = self.optionCellStyle;
-	self.optionsViewController.title = _(property.name);
+	self.optionsViewController.title = propertyNavBarTitleLocalized;
 	self.optionsViewController.optionTableDelegate = self;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock

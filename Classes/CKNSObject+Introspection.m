@@ -33,6 +33,25 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 
+NSMutableSet *textInputsProperties = nil;
+void introspectTextInputsProperties(){
+    if (!textInputsProperties)
+	{
+		textInputsProperties = [[NSMutableSet alloc] init];
+		unsigned int count = 0;
+		objc_property_t *properties = protocol_copyPropertyList(@protocol(UITextInput), &count);
+		for (unsigned int i = 0; i < count; i++)
+		{
+			objc_property_t property = properties[i];
+			NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
+			[textInputsProperties addObject:propertyName];
+		}
+		free(properties);
+        
+        [textInputsProperties addObject:@"caretRect"];
+	}
+}
+
 @interface NSObject ()
 - (void)filterProperties:(NSMutableArray*)results 
 					explored:(NSMutableSet*)explored 
@@ -110,12 +129,20 @@ static NSString* getPropertyType(objc_property_t property) {
 }
 
 - (void)_introspection:(Class)c array:(NSMutableArray*)array{
+    introspectTextInputsProperties();
+    
 	unsigned int outCount, i;
     objc_property_t *ps = class_copyPropertyList(c, &outCount);
     for(i = 0; i < outCount; i++) {
         objc_property_t property = ps[i];
-        CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
-		[array addObject:objectProperty];
+        const char *propName = property_getName(property);
+        if([textInputsProperties containsObject:[NSString stringWithUTF8String:property_getName(property)]]){
+            CKDebugLog(@"INTROSPECTION : Skipping property %ls on class %@ because it is an unsupported protocol UITextInput yet",propName,c);
+        }
+        else{
+            CKClassPropertyDescriptor* objectProperty = [NSObject propertyForDescriptor:property ];
+            [array addObject:objectProperty];
+        }
     }
     free(ps);	
 	

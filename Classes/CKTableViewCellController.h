@@ -69,10 +69,6 @@ typedef enum CKTableViewCellStyle {
     UIEdgeInsets _contentInsets;
     
     NSString* _cacheLayoutBindingContextId;
-	
-#ifdef DEBUG 
-	id debugModalController;
-#endif
     
     //DEPRECATED 1.5
     CGFloat _rowHeight;

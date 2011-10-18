@@ -19,6 +19,7 @@
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
 #import "CKUIViewController+Style.h"
+#import "CKLocalization.h"
 
 //
 
@@ -57,6 +58,7 @@
 @synthesize tableMaximumWidth = _tableMaximumWidth;
 @synthesize scrollingPolicy = _scrollingPolicy;
 @synthesize editableType = _editableType;
+@synthesize searchBlock = _searchBlock;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -74,6 +76,9 @@
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 			[_delegate objectTableViewController:self didSearch:searchBar.text];
 		}
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
 		[self didSearch:searchBar.text];
 	}
 }
@@ -84,6 +89,10 @@
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 			[_delegate objectTableViewController:self didSearch:@""];
 		}
+        
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
 		[self didSearch:searchBar.text];
 	}
 }
@@ -92,6 +101,10 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 		[_delegate objectTableViewController:self didSearch:str];
 	}
+    
+    if(_searchBlock){
+        _searchBlock(str);
+    }
 	[self didSearch:str];
 }
 
@@ -199,6 +212,8 @@
 	_searchScopeDefinition = nil;
 	[_defaultSearchScope release];
 	_defaultSearchScope = nil;
+    [_searchBlock release];
+    _searchBlock = nil;
     [super dealloc];
 }
 
@@ -236,23 +251,11 @@
     switch(type){
         case CKObjectTableViewControllerEditableTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
-            if(!self.editButton){
-                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            }
-            if(!self.doneButton){
-                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            }
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
-            if(!self.editButton){
-                self.editButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)]autorelease];
-            }
-            if(!self.doneButton){
-                self.doneButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)]autorelease];
-            }
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
@@ -401,13 +404,20 @@
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
 	NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
     
+    if(!self.editButton){
+        self.editButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Edit") style:UIBarButtonItemStyleBordered target:self action:@selector(edit:)]autorelease];
+    }
+    if(!self.doneButton){
+        self.doneButton = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleDone target:self action:@selector(edit:)]autorelease];
+    }
+    
     if(self.editButton){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:nil];
-        [self.editButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.editButton propertyName:@"editBarButtonItem"];
+        [self.editButton applyStyle:barItemStyle];
     }
     if(self.doneButton){
-        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:nil];
-        [self.doneButton applySubViewsStyle:barItemStyle appliedStack:[NSMutableSet set] delegate:nil];
+        NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.doneButton propertyName:@"doneBarButtonItem"];
+        [self.doneButton applyStyle:barItemStyle];
     }
     
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
@@ -679,6 +689,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete){
 		[self didRemoveViewAtIndexPath:indexPath];
+        //[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:self.rowRemoveAnimation];
 		[self fetchMoreIfNeededAtIndexPath:indexPath];
 	}
 }

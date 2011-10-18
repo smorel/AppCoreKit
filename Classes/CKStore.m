@@ -209,6 +209,7 @@ static NSMutableDictionary* CKStoreCache = nil;
 
 
 @implementation CKStore (CKStorePrivateAddition)
+@dynamic domain;
 
 - (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated{
 	return [self.manager.objectContext fetchObjectForEntityForName:@"CKAttribute"

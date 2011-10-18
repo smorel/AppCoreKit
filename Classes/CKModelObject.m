@@ -514,7 +514,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
     CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
 	NSArray* allProperties = [self allPropertyDescriptors];
     for(CKClassPropertyDescriptor* property in allProperties){
-        if(property.isReadOnly == NO){
+       // if(property.isReadOnly == NO){
             CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:self property:property];
             if(metaData.validationPredicate){
                 id object = [self valueForKey:property.name];
@@ -522,7 +522,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
                     [results.invalidProperties addObject:property.name];
                 }
             }
-        }
+        //}
     }
 	return results;
 }

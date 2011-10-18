@@ -20,7 +20,7 @@
 @interface CKObjectProperty : NSObject<NSCopying> {
 }
 @property (nonatomic,retain,readonly) id object;
-@property (nonatomic,retain,readonly) NSString* keyPath;
+@property (nonatomic,retain,readonly) id keyPath;
 @property (nonatomic,assign) id value;
 @property (nonatomic,readonly) NSString* name;
 @property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
@@ -29,6 +29,7 @@
 + (CKObjectProperty*)propertyWithObject:(id)object;
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;
+- (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key;
 
 - (CKObjectPropertyMetaData*)metaData;
 - (id)value;

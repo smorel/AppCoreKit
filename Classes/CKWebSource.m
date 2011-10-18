@@ -29,6 +29,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @synthesize failureBlock = _failureBlock;
 @synthesize webSourceDelegate = _webSourceDelegate;
 @synthesize successBlock = _successBlock;
+@synthesize launchRequestBlock = _launchRequestBlock;
 @dynamic hasMore;
 @dynamic isFetching;
 @dynamic currentIndex;
@@ -46,6 +47,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[_transformBlock release];
 	[_failureBlock release];
 	[_successBlock release];
+	[_launchRequestBlock release];
 	_webSourceDelegate = nil;
 	[super dealloc];
 }
@@ -70,7 +72,12 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	
 	if (self.request) {
 		self.request.delegate = self;
-		[self.request startAsynchronous];
+        if(_launchRequestBlock){
+            _launchRequestBlock(self.request);
+        }
+        else{
+            [self.request startAsynchronous];
+        }
 		self.isFetching = YES;
 		return YES;
 	}

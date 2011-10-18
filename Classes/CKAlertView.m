@@ -40,6 +40,7 @@
 @synthesize title = _title;
 @synthesize message = _message;
 @synthesize actions = _actions;
+@synthesize deallocBlock = _deallocBlock;
 
 - (void)postInit {
 	self.title = nil;
@@ -69,12 +70,17 @@
 }
 
 - (void)dealloc {
+    if(_deallocBlock){
+        _deallocBlock();
+    }
     [self clearBindingsContext];
 	self.title = nil;
 	self.message = nil;
 //	self.alertView.delegate = nil;
 	self.alertView = nil;
 	self.actions = nil;
+    [_deallocBlock release];
+    _deallocBlock = nil;
 	[super dealloc];
 }
 

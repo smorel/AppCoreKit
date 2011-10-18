@@ -104,6 +104,34 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 																	 CKViewBorderStyleNone)];
 }
 
+
+- (NSString*)lightStyleDescriptionWithIndentation:(NSInteger)indentation{
+    NSMutableSet* cascadingTreeReservedKeys = [NSMutableSet set];
+    [NSObject updateReservedKeyWords:cascadingTreeReservedKeys];
+    
+    NSMutableString* indentationString = [NSMutableString string];
+    for(int i =0; i< indentation; ++i){
+        [indentationString appendString:@"    "];
+    }
+    
+    NSMutableString* str = [NSMutableString string];
+    for(id key in [self allKeys]){
+        if(![cascadingTreeReservedKeys containsObject:key] ){
+            id object = [self objectForKey:key];
+            if([str length] > 0){
+                [str appendString:@"\n"];
+            }
+            if(![object isKindOfClass:[NSMutableDictionary class]]){
+                [str appendFormat:@"%@%@ : %@",indentationString,key,object];
+            }
+            else{
+                [str appendFormat:@"%@%@ : {\n%@ \n%@}",indentationString,key,[object lightStyleDescriptionWithIndentation:(indentation + 1)],indentationString];
+            }
+        }
+    }
+    return str;
+}
+
 @end
 
 @implementation UIView (CKStyle)
@@ -323,10 +351,57 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 @end
 
 
+static char NSObjectAppliedStyleObjectKey;
+
 @implementation NSObject (CKStyle)
+@dynamic appliedStyle;
+
+- (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
+    objc_setAssociatedObject(self, 
+                             &NSObjectAppliedStyleObjectKey,
+                             appliedStyle,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableDictionary*)appliedStyle{
+    return objc_getAssociatedObject(self, &NSObjectAppliedStyleObjectKey);
+}
+
+- (NSString*)appliedStylePath{
+    NSMutableDictionary* style = [self appliedStyle];
+    
+    NSMutableString* stylePath = [NSMutableString string];
+    NSMutableDictionary* currentDico = style;
+    while(currentDico){
+        NSMutableDictionary* node = [currentDico objectForKey:CKCascadingTreeNode];
+        if(node){
+            NSString* nodeName = [node objectForKey:@"name"];
+            if([stylePath length] > 0){
+                nodeName = [NSString stringWithFormat:@"%@/",nodeName];
+            }
+            [stylePath insertString:nodeName atIndex:0];
+        }
+        currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+    }
+    return stylePath;
+}
+
+- (NSString*)appliedStyleDescription{
+    return cleanString([NSString stringWithFormat:@"Path : %@ \nStyle : {\n%@\n}",[self appliedStylePath],[[self appliedStyle] lightStyleDescriptionWithIndentation:1]]);
+}
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
     
+}
+
+- (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style{
+	[[self class] applyStyle:style toObject:self appliedStack:[NSMutableSet set] delegate:nil];
+    return style;
+}
+
++ (BOOL)applyStyle:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
+    [object applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
+    return YES;
 }
 
 + (void)applyStyleByIntrospection:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
@@ -374,7 +449,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	if(style == nil)
 		return;
-	
+    
+    [self setAppliedStyle:style];
 	
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];

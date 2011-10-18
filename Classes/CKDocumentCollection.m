@@ -22,6 +22,8 @@
 @synthesize removeObjectsBlock;
 @synthesize replaceObjectBlock;
 @synthesize clearBlock;
+@synthesize startFetchingBlock;
+@synthesize endFetchingBlock;
 
 - (id)init{
 	[super init];
@@ -126,6 +128,10 @@
 	NSInteger requested = range.location + range.length;
 	if(requested > self.count){
 		[_feedSource fetchRange:NSMakeRange(self.count, requested - self.count)];
+        
+        if(self.startFetchingBlock){
+            self.startFetchingBlock(range);
+        }
 	}
 }
 
@@ -139,6 +145,10 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:didFetchItems:atRange:)]) {
 		[_delegate documentCollection:self didFetchItems:items atRange:range];
 	}
+    
+    if(self.endFetchingBlock){
+        self.endFetchingBlock(items,[NSIndexSet indexSetWithIndexesInRange:range]);
+    }
 }
 
 - (void)feedSource:(CKFeedSource *)feedSource didFailWithError:(NSError *)error {
