@@ -31,12 +31,8 @@
 		4F4A912F13F03D7B0093293F /* wc-appsignature-light-front@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A912713F03D7B0093293F /* wc-appsignature-light-front@2x.png */; };
 		4F4A914113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */; };
 		4F4A914213F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913313F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png */; };
-		4F4A914313F040CE0093293F /* wc-appsignature-type-dark-craftedwith.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913513F040CE0093293F /* wc-appsignature-type-dark-craftedwith.png */; };
-		4F4A914413F040CE0093293F /* wc-appsignature-type-dark-craftedwith@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913713F040CE0093293F /* wc-appsignature-type-dark-craftedwith@2x.png */; };
 		4F4A914513F040CE0093293F /* wc-appsignature-type-light-craftedby.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */; };
 		4F4A914613F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913B13F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png */; };
-		4F4A914713F040CE0093293F /* wc-appsignature-type-light-craftedwith.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913D13F040CE0093293F /* wc-appsignature-type-light-craftedwith.png */; };
-		4F4A914813F040CE0093293F /* wc-appsignature-type-light-craftedwith@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A913F13F040CE0093293F /* wc-appsignature-type-light-craftedwith@2x.png */; };
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
@@ -457,7 +453,6 @@
 		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */; };
-		7580AFCE144E314B004DCF7A /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
 		758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */; };
 		758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */; };
 		758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2379,12 +2374,8 @@
 				4F4A912F13F03D7B0093293F /* wc-appsignature-light-front@2x.png in Resources */,
 				4F4A914113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png in Resources */,
 				4F4A914213F040CE0093293F /* wc-appsignature-type-dark-craftedby@2x.png in Resources */,
-				4F4A914313F040CE0093293F /* wc-appsignature-type-dark-craftedwith.png in Resources */,
-				4F4A914413F040CE0093293F /* wc-appsignature-type-dark-craftedwith@2x.png in Resources */,
 				4F4A914513F040CE0093293F /* wc-appsignature-type-light-craftedby.png in Resources */,
 				4F4A914613F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */,
-				4F4A914713F040CE0093293F /* wc-appsignature-type-light-craftedwith.png in Resources */,
-				4F4A914813F040CE0093293F /* wc-appsignature-type-light-craftedwith@2x.png in Resources */,
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 			);
@@ -2647,7 +2638,6 @@
 				75AD5DA1144C72960008F53A /* CKUIViewController+InlineDebugger.m in Sources */,
 				75AD5DA5144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m in Sources */,
 				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
-				7580AFCE144E314B004DCF7A /* CloudKit.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2672,22 +2662,6 @@
 			name = "wc-appsignature-type-dark-craftedby@2x.png";
 			sourceTree = "<group>";
 		};
-		4F4A913513F040CE0093293F /* wc-appsignature-type-dark-craftedwith.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = "wc-appsignature-type-dark-craftedwith.png";
-			path = "/Users/oli/Documents/WORK/WhereCloud/CloudKit+RFD/Resources/Images";
-			sourceTree = "<absolute>";
-		};
-		4F4A913713F040CE0093293F /* wc-appsignature-type-dark-craftedwith@2x.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = "wc-appsignature-type-dark-craftedwith@2x.png";
-			path = "/Users/oli/Documents/WORK/WhereCloud/CloudKit+RFD/Resources/Images";
-			sourceTree = "<absolute>";
-		};
 		4F4A913913F040CE0093293F /* wc-appsignature-type-light-craftedby.png */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2705,22 +2679,6 @@
 			);
 			name = "wc-appsignature-type-light-craftedby@2x.png";
 			sourceTree = "<group>";
-		};
-		4F4A913D13F040CE0093293F /* wc-appsignature-type-light-craftedwith.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = "wc-appsignature-type-light-craftedwith.png";
-			path = "/Users/oli/Documents/WORK/WhereCloud/CloudKit+RFD/Resources/Images";
-			sourceTree = "<absolute>";
-		};
-		4F4A913F13F040CE0093293F /* wc-appsignature-type-light-craftedwith@2x.png */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = "wc-appsignature-type-light-craftedwith@2x.png";
-			path = "/Users/oli/Documents/WORK/WhereCloud/CloudKit+RFD/Resources/Images";
-			sourceTree = "<absolute>";
 		};
 		7550153A13B8EA08002DAE8B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
