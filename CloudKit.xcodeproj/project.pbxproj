@@ -975,8 +975,9 @@
 		7577E00813E32FE40065E098 /* CKMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapping.h; path = Classes/CKMapping.h; sourceTree = "<group>"; };
 		757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKInlineDebuggerController.h; path = Classes/CKInlineDebuggerController.h; sourceTree = "<group>"; };
 		757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKInlineDebuggerController.m; path = Classes/CKInlineDebuggerController.m; sourceTree = "<group>"; };
-		7580AFCC144E314B004DCF7A /* CloudKit-1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1.xcdatamodel"; sourceTree = "<group>"; };
+		7580AFCC144E314B004DCF7A /* CloudKit-1.1000.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1000.xcdatamodel"; sourceTree = "<group>"; };
 		7580AFCD144E314B004DCF7A /* CloudKit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CloudKit.xcdatamodel; sourceTree = "<group>"; };
+		7580AFCF144E32A0004DCF7A /* CloudKit-1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1.xcdatamodel"; sourceTree = "<group>"; };
 		758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIFont+ValueTransformer.h"; path = "Classes/CKUIFont+ValueTransformer.h"; sourceTree = "<group>"; };
 		758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIFont+ValueTransformer.m"; path = "Classes/CKUIFont+ValueTransformer.m"; sourceTree = "<group>"; };
 		758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionPropertyCellController.h; path = Classes/CKOptionPropertyCellController.h; sourceTree = "<group>"; };
@@ -2875,10 +2876,11 @@
 		7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				7580AFCC144E314B004DCF7A /* CloudKit-1.1.xcdatamodel */,
+				7580AFCC144E314B004DCF7A /* CloudKit-1.1000.xcdatamodel */,
 				7580AFCD144E314B004DCF7A /* CloudKit.xcdatamodel */,
+				7580AFCF144E32A0004DCF7A /* CloudKit-1.1.xcdatamodel */,
 			);
-			currentVersion = 7580AFCC144E314B004DCF7A /* CloudKit-1.1.xcdatamodel */;
+			currentVersion = 7580AFCF144E32A0004DCF7A /* CloudKit-1.1.xcdatamodel */;
 			name = CloudKit.xcdatamodeld;
 			path = Resources/CloudKit.xcdatamodeld;
 			sourceTree = "<group>";
