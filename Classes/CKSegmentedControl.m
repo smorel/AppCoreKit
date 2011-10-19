@@ -8,6 +8,7 @@
 
 #import "CKSegmentedControl.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKDebug.h"
 
 typedef void(^CKSegmentedControlButtonBlock)();
 
@@ -81,6 +82,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
 
 - (void)postInit{
     self.momentary = YES;
+    _selectedSegmentIndex = -1;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -304,7 +306,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
 
 - (void)setSelectedSegment:(CKSegmentedControlButton*)segment{
     if(self.momentary){
-        CKSegmentedControlButton* oldSegment = [self segmentAtIndex:_selectedSegmentIndex];
+        CKSegmentedControlButton* oldSegment = _selectedSegmentIndex >= 0 ? [self segmentAtIndex:_selectedSegmentIndex] : nil;
         if(oldSegment == segment){
             return;
         }
