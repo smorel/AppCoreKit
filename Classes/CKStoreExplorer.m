@@ -12,12 +12,13 @@
 #import "CKStore.h"
 #import "CKItem.h"
 #import "CKLocalization.h"
+#import "CKCoreDataManager.h"
+#import "CKDomain.h"
 
 
 @implementation CKStoreExplorer
 
-- (id)initWithDomains:(NSArray *)domains {
-    self = [super initWithStyle:UITableViewStylePlain];
+- (void)setupWithDomains:(NSArray *)domains{
     self.title = @"Domains";
     
     NSMutableArray* cellDescriptors = [NSMutableArray array];
@@ -31,7 +32,27 @@
         [cellDescriptors addObject:desc];
     }
     [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellDescriptors:cellDescriptors]]];
+}
+
+- (id)init{
+    self = [super initWithStyle:UITableViewStylePlain];
     
+    NSMutableArray* domains = [NSMutableArray array];
+    NSArray* objects = [[[CKCoreDataManager sharedManager]objectContext]fetchObjectsForEntityForName:@"CKDomain" predicate:nil sortedBy:nil range:NSMakeRange(0, INT_MAX)];
+    for(CKDomain* domain in objects){
+        if(![domain.name isEqualToString:@"whatever"]){
+            [domains addObject:domain.name];
+        }
+    }
+    
+    [self setupWithDomains:domains];
+    
+    return self;
+}
+
+- (id)initWithDomains:(NSArray *)domains {
+    self = [super initWithStyle:UITableViewStylePlain];
+    [self setupWithDomains:domains];
     return self;
 }
 
