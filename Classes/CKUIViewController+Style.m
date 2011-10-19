@@ -14,8 +14,42 @@
 
 @implementation UIViewController (CKStyle)
 
-- (NSMutableDictionary*)applyStyle{
-	return [self applyStyleWithParentStyle:nil];
+- (NSMutableDictionary*)controllerStyle{
+    NSMutableDictionary* previousControllerStyle = nil;
+    NSInteger index = [self.navigationController.viewControllers indexOfObjectIdenticalTo:self];
+    if(index != NSNotFound && index >= 1){
+        UIViewController* previousViewController = [self.navigationController.viewControllers objectAtIndex:index - 1];
+        previousControllerStyle = [[CKStyleManager defaultManager] styleForObject:previousViewController  propertyName:nil];
+    }
+    
+    NSMutableArray* controllerStack = [NSMutableArray array];
+    UIViewController* c = self;
+    while(c){
+        if([c respondsToSelector:@selector(containerViewController)]){
+            c = [c performSelector:@selector(containerViewController)];
+            if(c){
+                [controllerStack insertObject:c atIndex:0];
+            }
+        }
+        else{
+            c = nil;
+        }
+    }
+    
+    for(UIViewController* controller in controllerStack){
+        previousControllerStyle = previousControllerStyle ? [previousControllerStyle styleForObject:controller  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:controller  propertyName:nil];
+    }
+    
+    return previousControllerStyle ? [previousControllerStyle styleForObject:self  propertyName:nil] : [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+}
+
+- (NSMutableDictionary* )applyStyle{
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
+    
+    NSMutableSet* appliedStack = [NSMutableSet set];
+	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
+
+    return controllerStyle;
 }
 
 - (NSMutableDictionary*)applyStyleWithParentStyle:(NSMutableDictionary*)style{

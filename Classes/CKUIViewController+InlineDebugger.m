@@ -12,11 +12,21 @@
 @implementation UIViewController (CKInlineDebugger)
 
 + (CKFormCellDescriptor*)cellDescriptorForController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
-    NSString* title = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
+    NSString* title = nil;
     NSString* subtitle = nil;
     if([c respondsToSelector:@selector(name)]){
-        subtitle = title;
-        title = [c performSelector:@selector(name)];
+        NSString* name = [c performSelector:@selector(name)];
+        if(name != nil && [name isKindOfClass:[NSString class]] && [name length] > 0){
+            title = name;
+        }
+    }
+    
+    if(title == nil){
+        title = [[c class]description];
+        subtitle = [NSString stringWithFormat:@"<%p>",c];
+    }
+    else{
+        subtitle = [NSString stringWithFormat:@"%@ <%p>",[c class],c];
     }
     
     __block UIViewController* bController = c;
@@ -26,11 +36,6 @@
         [bDebugger.navigationController pushViewController:controllerForm animated:YES];
     }];
     
-    [controllerCell setCreateBlock:^id(id value) {
-        CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.cellStyle = CKTableViewCellStyleSubtitle;
-        return (id)nil;
-    }];
     return controllerCell;
 }
 

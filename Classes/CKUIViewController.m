@@ -29,6 +29,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @interface CKUIViewController()
 @property(nonatomic,retain)NSString* navigationItemsBindingContext;
 @property(nonatomic,retain)CKInlineDebuggerController* inlineDebuggerController;
+@property(nonatomic,assign)BOOL styleHasBeenApplied;
 @end
 
 @implementation CKUIViewController
@@ -45,6 +46,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
 @synthesize supportedInterfaceOrientations;
 @synthesize inlineDebuggerController = _inlineDebuggerController;
+@synthesize styleHasBeenApplied;
 
 - (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
     metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
@@ -54,6 +56,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)postInit {	
+    self.styleHasBeenApplied = NO;
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
@@ -107,7 +110,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForLeftBarButtonItem{
     if(self.navigationItem.leftBarButtonItem){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
@@ -118,7 +121,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForRightBarButtonItem{
     if(self.navigationItem.rightBarButtonItem){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
@@ -129,7 +132,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForBackBarButtonItem{
     if(self.navigationItem.backBarButtonItem){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
@@ -140,7 +143,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForTitleView{
     if(self.navigationItem.titleView){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
@@ -180,7 +183,16 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
      setValue: [NSNumber numberWithBool: YES]
      forKey: kCATransactionDisableActions];
     
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+
+    NSMutableDictionary* controllerStyle = nil;
+    if(!self.styleHasBeenApplied){
+        controllerStyle = [self applyStyle];
+        self.styleHasBeenApplied = YES;
+    }
+    else{
+        controllerStyle = [self controllerStyle];
+    }
+    
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
     [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
@@ -276,17 +288,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
     }
-    
-    
-    //disable animations in case frames are set in stylesheets and currently in animation (ex : controller created when showing a container controller) ...
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
-    
-	[self applyStyle];
-    
-    [CATransaction commit];
+    self.styleHasBeenApplied = NO;
 }
 
 -(void) viewDidUnload{

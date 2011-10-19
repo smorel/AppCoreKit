@@ -116,12 +116,6 @@
         NSString* title = [object appliedStylePath];
         CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
         }];
-        [controllerCell setCreateBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            controller.cellStyle = CKTableViewCellStylePropertyGrid;
-            controller.componentsRatio = 0.05;
-            return (id)nil;
-        }];
         [controllerCell setSelectionBlock:^id(id value) {
             CKTableViewCellController* controller = (CKTableViewCellController*)value;
             CKFormTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object]; 

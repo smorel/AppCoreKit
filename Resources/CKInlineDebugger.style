@@ -12,6 +12,11 @@
         
         "CKNSNumberPropertyCellController" : {
             "cellType" : "CKTableViewCellStylePropertyGrid"
+        },
+        
+        "CKOptionTableViewController" : {
+            "UINavigationController" : {
+            }
         }
     }
 }

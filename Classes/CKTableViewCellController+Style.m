@@ -131,7 +131,7 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (NSMutableDictionary*)applyStyle{
-	NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:self];

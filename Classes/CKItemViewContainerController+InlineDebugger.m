@@ -19,12 +19,24 @@
         if(itemController){
             CKFormSection* controllerSection = (CKFormSection*)[debugger sectionAtIndex:0];
             
-            NSString* title = [NSString stringWithFormat:@"%@ <%p>",[itemController class],itemController];
+            NSString* title = nil;
             NSString* subtitle = nil;
             if([itemController respondsToSelector:@selector(name)]){
-                subtitle = title;
-                title = [itemController performSelector:@selector(name)];
+                NSString* name = [itemController performSelector:@selector(name)];
+                if(name != nil && [name isKindOfClass:[NSString class]] && [name length] > 0
+                   && ![name hasPrefix:@"cellDescriptorWithTitle<"]){
+                    title = name;
+                }
             }
+            
+            if(title == nil){
+                title = [[itemController class]description];
+                subtitle = [NSString stringWithFormat:@"<%p>",itemController];
+            }
+            else{
+                subtitle = [NSString stringWithFormat:@"%@ <%p>",[itemController class],itemController];
+            }
+
             __block id bItemController = itemController;
             __block CKFormTableViewController* bDebugger = debugger;
             CKFormCellDescriptor* itemControllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
