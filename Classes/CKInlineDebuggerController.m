@@ -12,6 +12,10 @@
 #import "CKLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"
+#import "CKStoreExplorer.h"
+#import "CKDocument.h"
+#import "CKUserDefaults.h"
+#import <objc/runtime.h>
 
 
 typedef enum CKDebugCheckState{
@@ -36,6 +40,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 @property(nonatomic,retain)NSMutableArray* customGestures;
 @property(nonatomic,retain)UITapGestureRecognizer* mainGesture;
 @property(nonatomic,retain)UIBarButtonItem* oldRightButtonItem;
+@property(nonatomic,retain)UIBarButtonItem* oldLeftButtonItem;
 
 - (void)highlightView:(UIView*)view;
 
@@ -53,6 +58,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 @synthesize customGestures = _customGestures;
 @synthesize mainGesture = _mainGesture;
 @synthesize oldRightButtonItem = _oldRightButtonItem;
+@synthesize oldLeftButtonItem = _oldLeftButtonItem;
 @synthesize state;
 @synthesize viewController;
 
@@ -80,7 +86,9 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         
         if(self.state == CKInlineDebuggerControllerStateDebugging){
             self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+            self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
             self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+            self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
             
             for(UIGestureRecognizer* gesture in self.customGestures){
                 [self.viewController.view addGestureRecognizer:gesture];
@@ -92,15 +100,19 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 
 - (void)stop{
 #ifdef DEBUG
-    [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
-    self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
-    self.oldRightButtonItem = nil;
-    
-    for(UIGestureRecognizer* gesture in self.customGestures){
-        [self.viewController.view removeGestureRecognizer:gesture];
-    }
-    for(UIView* v in [self.viewController.view subviews]){
-        v.userInteractionEnabled = YES;
+    if(self.state == CKInlineDebuggerControllerStateDebugging){
+        [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
+        self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+        self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+        self.oldRightButtonItem = nil;
+        self.oldLeftButtonItem = nil;
+        
+        for(UIGestureRecognizer* gesture in self.customGestures){
+            [self.viewController.view removeGestureRecognizer:gesture];
+        }
+        for(UIView* v in [self.viewController.view subviews]){
+            v.userInteractionEnabled = YES;
+        }
     }
 #endif
 }
@@ -132,6 +144,8 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     _mainGesture = nil;
     [_oldRightButtonItem release];
     _oldRightButtonItem = nil;
+    [_oldLeftButtonItem release];
+    _oldLeftButtonItem = nil;
     [super dealloc];
 }
 
@@ -194,6 +208,66 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     CKFormTableViewController* debugger = [self.viewController inlineDebuggerForSubView:view];
     
     debugger.title = [NSString stringWithFormat:@"%@ <%p>",[view class],view];
+    UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
+    debugger.leftButton = close;
+    UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:debugger]autorelease];
+    navc.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    self.debugModalController = debugger;
+    
+    [controller presentModalViewController:navc animated:YES];
+}
+
+- (void)presentInlineDebuggerForDocumentsfromParentController:(UIViewController*)controller{
+    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init] autorelease];
+    
+    __block CKFormTableViewController* bDebugger = debugger;
+    
+    //User Defaults
+    NSArray* userDefaultsClasses = [NSObject allClassesKindOfClass:[CKUserDefaults class]];
+    NSMutableSet* userDefaultInstances = [NSMutableSet set];
+    for(Class c in userDefaultsClasses){
+        [userDefaultInstances addObject:[c sharedInstance]];
+    }
+    
+    NSMutableArray* userDefaultsCells = [NSMutableArray array];
+    for(id userDefault in userDefaultInstances){
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^{
+            CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
+            [bDebugger.navigationController pushViewController:udDebugger animated:YES];
+        }];
+        [userDefaultsCells addObject:cell];
+    }
+    CKFormSection* userDefaultsSection = [CKFormSection sectionWithCellDescriptors:userDefaultsCells headerTitle:@"User Defaults"];
+    
+    
+    //Documents
+    NSArray* documentClasses = [NSObject allClassesKindOfClass:[CKDocument class]];
+    NSMutableSet* documentInstances = [NSMutableSet set];
+    for(Class c in documentClasses){
+        [documentInstances addObject:[c sharedDocument]];
+    }
+    
+    NSMutableArray* documentCells = [NSMutableArray array];
+    for(id document in documentInstances){
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^{
+            CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
+            [bDebugger.navigationController pushViewController:udDebugger animated:YES];
+        }];
+        [documentCells addObject:cell];
+    }
+    CKFormSection* documentSection = [CKFormSection sectionWithCellDescriptors:documentCells headerTitle:@"Documents"];
+    
+    //Core Data
+    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^{
+        CKStoreExplorer* storeExplorer = [[[CKStoreExplorer alloc]init]autorelease];
+        [bDebugger.navigationController pushViewController:storeExplorer animated:YES];
+    }];
+    CKFormSection* coreDataSection = [CKFormSection sectionWithCellDescriptors:[NSArray arrayWithObject:storeExplorerCell] headerTitle:@"Core Data"];
+    [debugger addSections:[NSArray arrayWithObjects:userDefaultsSection,documentSection,coreDataSection,nil]];
+    
+    //Init
+    debugger.title = @"Documents";
     UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];
     debugger.leftButton = close;
     UINavigationController* navc = [[[UINavigationController alloc]initWithRootViewController:debugger]autorelease];
@@ -373,10 +447,13 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             }
             [self highlightView:nil];
             self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+            self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
         }
         else{
             self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+            self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
             self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+            self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
             
             UITapGestureRecognizer* tapGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)]autorelease];
             tapGesture.numberOfTapsRequired = 1;
@@ -409,6 +486,12 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     UINavigationController* myNavigationController = self.viewController.navigationController;
     UIViewController* topController = [myNavigationController topViewController];
     [self presentInlineDebuggerForSubView:self.debuggingView fromParentController:topController];
+}
+
+- (void)documents:(id)sender{
+    UINavigationController* myNavigationController = self.viewController.navigationController;
+    UIViewController* topController = [myNavigationController topViewController];
+    [self presentInlineDebuggerForDocumentsfromParentController:topController];
 }
 
 @end
