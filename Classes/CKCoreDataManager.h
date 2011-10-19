@@ -13,6 +13,7 @@
  */
 @interface CKCoreDataManager : NSObject {
 	NSURL *_storeURL;
+    NSURL *_modelURL;
 	NSString *_storeType;
 	NSDictionary *_storeOptions;
     NSManagedObjectModel *_objectModel;
@@ -21,6 +22,7 @@
 }
 
 @property (retain, readonly) NSURL *storeURL;
+@property (retain, readonly) NSURL *modelURL;
 @property (retain, readonly) NSString *storeType;
 @property (retain, readonly) NSDictionary *storeOptions;
 
@@ -28,14 +30,10 @@
 @property (retain, readonly) NSManagedObjectContext *objectContext;
 @property (retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-+ (CKCoreDataManager *)sharedManager;
-+ (void)setSharedManager:(CKCoreDataManager *)manager;
-
 //
 
-- (CKCoreDataManager *)initWithDefault;
-- (CKCoreDataManager *)initWithPersistentStoreURL:(NSURL *)storeURL storeType:(NSString *)storeType storeOptions:(NSDictionary *)storeOptions;
-
+- (CKCoreDataManager *)initWithModelURL:(NSURL *)modelURL;
+- (CKCoreDataManager *)initWithPersistentStoreURL:(NSURL *)storeURL modelURL:(NSURL *)modelURL storeType:(NSString *)storeType storeOptions:(NSDictionary *)storeOptions;
 - (void)save;
 
 @end

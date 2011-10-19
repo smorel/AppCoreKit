@@ -38,7 +38,7 @@
     self = [super initWithStyle:UITableViewStylePlain];
     
     NSMutableArray* domains = [NSMutableArray array];
-    NSArray* objects = [[[CKCoreDataManager sharedManager]objectContext]fetchObjectsForEntityForName:@"CKDomain" predicate:nil sortedBy:nil range:NSMakeRange(0, INT_MAX)];
+    NSArray* objects = [[[CKStore storeCoreDataManager]objectContext]fetchObjectsForEntityForName:@"CKDomain" predicate:nil sortedBy:nil range:NSMakeRange(0, INT_MAX)];
     for(CKDomain* domain in objects){
         if(![domain.name isEqualToString:@"whatever"]){
             [domains addObject:domain.name];
@@ -69,9 +69,8 @@
                                                                             action:^(){
                                                                                 CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
                                                                                 [self.navigationController pushViewController:itemExplorer animated:YES];
-                                                                            }];
+                                                                                }];
         [cellDescriptors addObject:desc];
-        
     }
     [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellDescriptors:cellDescriptors]]];
 }

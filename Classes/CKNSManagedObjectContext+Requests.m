@@ -155,6 +155,9 @@
 	NSArray *fetchResults = [self fetchObjectsForEntityForName:entityName predicate:predicate sortedBy:nil limit:0];	
 	BOOL created = NO;
 	id object = nil;
+    
+    if ((fetchResults.count == 0) && (createIfNotFound == NO))
+        return nil;
 	
 	if ((fetchResults.count == 0) && createIfNotFound) {
 		created = YES;
