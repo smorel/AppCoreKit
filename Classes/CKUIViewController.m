@@ -217,7 +217,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    [self.inlineDebuggerController start];
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -241,6 +240,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [NSObject endBindingsContext];
     
     [super viewWillAppear:animated];
+    
+    [self.inlineDebuggerController start];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -248,7 +249,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
     }
-    [self.inlineDebuggerController stop];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -256,6 +256,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
     }
+    [self.inlineDebuggerController stop];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
