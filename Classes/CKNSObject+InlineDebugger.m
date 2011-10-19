@@ -26,6 +26,7 @@
 + (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
     if([stylesheet isEmpty]){
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        debugger.name = @"CKInlineDebugger";
         debugger.viewDidLoadBlock = ^(CKUIViewController* controller){
             UILabel* label = [[[UILabel alloc]initWithFrame:CGRectInset(controller.view.bounds,10,10)]autorelease];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -85,6 +86,7 @@
         
         
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        debugger.name = @"CKInlineDebugger";
         
         NSMutableArray* sections = [NSMutableArray array];
         if([appliedKeys count] > 0){
@@ -114,12 +116,6 @@
         NSString* title = [object appliedStylePath];
         CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
         }];
-        [controllerCell setCreateBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            controller.cellStyle = CKTableViewCellStylePropertyGrid;
-            controller.componentsRatio = 0.05;
-            return (id)nil;
-        }];
         [controllerCell setSelectionBlock:^id(id value) {
             CKTableViewCellController* controller = (CKTableViewCellController*)value;
             CKFormTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object]; 
@@ -134,6 +130,7 @@
 
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
     CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+    debugger.name = @"CKInlineDebugger";
     debugger.searchEnabled = YES;
     
     CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:[[object class]description]];

@@ -10,6 +10,9 @@
 #import "CKLocalization.h"
 #import "CKNSObject+Bindings.h"
 
+#import "CKUIViewController+Style.h"
+#import "CKStyleManager.h"
+
 
 @interface CKOptionPropertyCellController ()
 @property (nonatomic,retain) NSArray* values;
@@ -211,6 +214,7 @@
 	self.optionsViewController.optionTableDelegate = self;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
+    
 	[self.parentController.navigationController pushViewController:self.optionsViewController animated:YES];
 }
 

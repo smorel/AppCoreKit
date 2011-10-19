@@ -15,6 +15,7 @@
 #import "CKStoreExplorer.h"
 #import "CKDocument.h"
 #import "CKUserDefaults.h"
+#import "CKStyleManager.h"
 #import <objc/runtime.h>
 
 
@@ -75,6 +76,10 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
         CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
+        
+        if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
+            [[CKStyleManager defaultManager]loadContentOfFileNamed:@"CKInlineDebugger"];
+        }
     }
     
     if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
@@ -166,11 +171,11 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
        || ( _supperHighlightViews && [self.supperHighlightViews indexOfObjectIdenticalTo:view] != NSNotFound)){
     }
     else{
-        origin = CGPointMake(origin.x + view.frame.origin.x,origin.y + view.frame.origin.y);
-        CGPoint offset = CGPointMake(point.x - origin.x,point.y - origin.y);
-        if(offset.x >= 0 && offset.y >= 0
-           && offset.x <= view.frame.size.width
-           && offset.y <= view.frame.size.height){
+        if([view superview]){
+            point = [view convertPoint:point fromView:[view superview]];
+        }
+        
+        if([view pointInside:point withEvent:nil]){
             [stack insertObject:view atIndex:0];
         }
     }
@@ -220,6 +225,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 
 - (void)presentInlineDebuggerForDocumentsfromParentController:(UIViewController*)controller{
     CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init] autorelease];
+    debugger.name = @"CKInlineDebugger";
     
     __block CKFormTableViewController* bDebugger = debugger;
     

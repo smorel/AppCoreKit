@@ -15,6 +15,7 @@
 
 @interface CKTableViewController ()
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
+@property (nonatomic, assign) BOOL insetsApplied;
 @end
 
 
@@ -27,9 +28,11 @@
 @synthesize selectedIndexPath = _selectedIndexPath;
 @synthesize tableViewContainer = _tableViewContainer;
 @synthesize tableViewInsets = _tableViewInsets;
+@synthesize insetsApplied;
 
 - (void)postInit {
 	[super postInit];
+    self.insetsApplied = NO;
 	self.style = UITableViewStylePlain;
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
 }
@@ -105,18 +108,21 @@
 }
 
 - (void)sizeToFit{
-    CGRect frame = self.tableViewContainer.frame;
-    self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
-                                                              frame.origin.y/* + self.tableInsets.top*/,
-                                                              frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                              frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
-    self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    if(!self.insetsApplied){
+        CGRect frame = self.tableViewContainer.frame;
+        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
+                                                                  frame.origin.y/* + self.tableInsets.top*/,
+                                                                  frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                                  frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
+        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        self.insetsApplied = YES;
+    }
 }
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self sizeToFit];
+    self.insetsApplied = NO;
 }
 
 - (void)viewDidUnload {
@@ -126,6 +132,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    [self sizeToFit];
+    
 	[self.tableView reloadData];
 	if (self.stickySelection == NO){
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];

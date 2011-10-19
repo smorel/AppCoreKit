@@ -1,0 +1,22 @@
+{
+    "CKUIViewController[name=CKInlineDebugger]" : {
+        "UINavigationController" : {
+            "navigationBar" : {
+                "tintColor" : "blueColor"
+            }
+        },
+        
+        "CKTableViewCellController" : {
+            "cellType" : "CKTableViewCellStyleSubtitle2"
+        },
+        
+        "CKNSNumberPropertyCellController" : {
+            "cellType" : "CKTableViewCellStylePropertyGrid"
+        },
+        
+        "CKOptionTableViewController" : {
+            "UINavigationController" : {
+            }
+        }
+    }
+}

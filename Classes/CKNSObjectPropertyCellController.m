@@ -89,7 +89,7 @@
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		
-		if([self.value isKindOfClass:[CKObjectProperty class]]){
+		/*if([self.value isKindOfClass:[CKObjectProperty class]]){
 			CKObjectProperty* property = (CKObjectProperty*)self.value;
 			CKClassPropertyDescriptor* descriptor = [property descriptor];
 			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
@@ -98,13 +98,13 @@
 			[button setTitle:@"Create" forState:UIControlStateNormal];
 			[button addTarget:self action:@selector(createObject:) forControlEvents:UIControlEventTouchUpInside];
 			self.tableViewCell.accessoryView = button;
-		}
+		}*/
 	}
 	else{
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		if([self.value isKindOfClass:[CKObjectProperty class]]){
+		/*if([self.value isKindOfClass:[CKObjectProperty class]]){
 			CKObjectProperty* property = (CKObjectProperty*)self.value;
 			CKClassPropertyDescriptor* descriptor = [property descriptor];
 			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
@@ -113,7 +113,7 @@
 			[button setTitle:@"Delete" forState:UIControlStateNormal];
 			[button addTarget:self action:@selector(deleteObject:) forControlEvents:UIControlEventTouchUpInside];
 			self.tableViewCell.accessoryView = button;
-		}
+		}*/
 	}
 	
 	cell.textLabel.text = title;

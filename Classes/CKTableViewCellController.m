@@ -19,6 +19,8 @@
 #import "CKUIView+Style.h"
 #import "CKLocalization.h"
 
+#import "CKUIView+Positioning.h"
+
 //#import <objc/runtime.h>
 
 @implementation CKUITableViewCell
@@ -221,6 +223,22 @@
 	[super dealloc];
 }
 
+- (void)cellStyleMetaData:(CKObjectPropertyMetaData*)metaData{
+    metaData.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
+                                               CKTableViewCellStyleDefault,
+                                               UITableViewCellStyleDefault,
+                                               CKTableViewCellStyleValue1,
+                                               UITableViewCellStyleValue1,
+                                               CKTableViewCellStyleValue2,
+                                               UITableViewCellStyleValue2,
+                                               CKTableViewCellStyleSubtitle,
+                                               UITableViewCellStyleSubtitle,
+                                               CKTableViewCellStyleValue3,
+                                               CKTableViewCellStylePropertyGrid,
+                                               CKTableViewCellStyleSubtitle2
+                                               );
+}
+
 
 #pragma mark TableViewCell Setter getter
 
@@ -261,6 +279,9 @@
        ||toUseCellStyle == CKTableViewCellStylePropertyGrid){
 		toUseCellStyle = CKTableViewCellStyleValue1;
 	}
+    else if(toUseCellStyle == CKTableViewCellStyleSubtitle2){
+		toUseCellStyle = CKTableViewCellStyleSubtitle;
+    }
 	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	self.view = cell;
     cell.accessoryType = self.accessoryType;
@@ -308,7 +329,8 @@
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         //Ensure detailTextLabel is created !
         if(cell.detailTextLabel == nil){
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,100,44)];
@@ -355,6 +377,12 @@
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
             cell.textLabel.textAlignment = UITextAlignmentRight;
         }
+    }
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        cell.textLabel.numberOfLines = 0;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     }
 }
 
@@ -438,7 +466,8 @@
     CGFloat tableWidth = [params bounds].width;
     CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
     if(staticController.cellStyle == CKTableViewCellStyleValue3
-       || staticController.cellStyle == CKTableViewCellStylePropertyGrid){
+       || staticController.cellStyle == CKTableViewCellStylePropertyGrid
+       || staticController.cellStyle == CKTableViewCellStyleSubtitle2){
         CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
         CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
                
@@ -488,7 +517,8 @@
 
 - (void)setupView:(UIView *)view{
     if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
         if(_layoutCallback == nil){
             self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
@@ -512,7 +542,9 @@
     [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
     [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
     [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-    [cell.imageView bind:@"hidden" target:self action:@selector(updateLayout:)];
+    /*[cell.imageView bind:@"hidden" target:self action:@selector(updateLayout:)];
+    [cell.imageView bind:@"image" target:self action:@selector(updateLayout:)];
+    [cell bind:@"accessoryView" target:self action:@selector(updateLayout:)];*/
     [NSObject endBindingsContext];	
     
     [CATransaction commit];
@@ -784,6 +816,42 @@
     return [self value3TextFrameForCell:cell];
 }
 
+- (CGRect)subtitleTextFrameForCell:(UITableViewCell*)cell{
+    if(cell.textLabel.text == nil || 
+       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
+       [cell.textLabel.text length] <= 0){
+        return CGRectMake(0,0,0,0);
+    }
+    
+    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
+    CGFloat width = cell.contentView.width - x - 10;
+    
+    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
+                                   constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                       lineBreakMode:cell.textLabel.lineBreakMode];
+    
+    return CGRectMake(x,11, size.width, size.height);
+}
+
+
+- (CGRect)subtitleDetailFrameForCell:(UITableViewCell*)cell{
+    if(cell.detailTextLabel.text == nil || 
+       [cell.detailTextLabel.text isKindOfClass:[NSNull class]] ||
+       [cell.detailTextLabel.text length] <= 0){
+        return CGRectMake(0,0,0,0);
+    }
+    
+    CGRect textFrame = [self subtitleTextFrameForCell:cell];
+    
+    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
+    CGFloat width = cell.contentView.width - x - 10;
+    
+    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                   constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                       lineBreakMode:cell.detailTextLabel.lineBreakMode];
+    
+    return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, size.width, size.height);
+}
 
 - (id)performStandardLayout:(CKTableViewCellController *)controller{
     UITableViewCell* cell = controller.tableViewCell;
@@ -811,6 +879,17 @@
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
+		}
+	}
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+		if(cell.textLabel != nil){
+			CGRect textFrame = [self subtitleTextFrameForCell:cell];
+			cell.textLabel.frame = textFrame;
+		}
+		if(cell.detailTextLabel != nil){
+			cell.detailTextLabel.frame = [self subtitleDetailFrameForCell:cell];
 		}
 	}
     return (id)nil;
