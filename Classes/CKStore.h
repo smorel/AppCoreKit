@@ -51,12 +51,11 @@ typedef enum {
 /** TODO
  */
 @interface CKStore : NSObject {
-	CKCoreDataManager *_manager;
 	CKDomain *_domain;
 }
 
++ (CKCoreDataManager *)storeCoreDataManager;
 + (id)storeWithDomainName:(NSString *)domainName;
-- (id)initWithDomainName:(NSString *)domainName;
 
 // Fetch Items
 
