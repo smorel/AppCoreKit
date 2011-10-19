@@ -64,9 +64,21 @@
 + (BOOL)applyStyle:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
     UIBarButtonItem* barButtonItem = (UIBarButtonItem*)object;
     
-    if(style && [style isEmpty] == NO && barButtonItem.customView == nil){
-        UIButton* button = [[[CKBarButtonItemButton alloc]initWithBarButtonItem:barButtonItem]autorelease];
-        if([UIButton applyStyle:style toView:button appliedStack:appliedStack delegate:delegate]){
+    if(style && [style isEmpty] == NO){
+        UIButton* button = nil;
+        if(barButtonItem.customView == nil){
+            button = [[[CKBarButtonItemButton alloc]initWithBarButtonItem:barButtonItem]autorelease];
+        }
+        else if([barButtonItem.customView isKindOfClass:[CKBarButtonItemButton class]]){
+            button = (UIButton*)barButtonItem.customView;
+        }
+        
+        if(button){
+            if([UIButton applyStyle:style toView:button appliedStack:appliedStack delegate:delegate]){
+                return YES;
+            }
+        }
+        else if([NSObject applyStyle:style toObject:object appliedStack:appliedStack delegate:delegate]){
             return YES;
         }
     }

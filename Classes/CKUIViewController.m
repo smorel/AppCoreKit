@@ -184,8 +184,25 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
     [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
-
-    if(self.navigationItem.leftBarButtonItem){
+    
+    UIViewController* topStackController = self;
+    while(topStackController){
+        if([topStackController respondsToSelector:@selector(containerViewController)]){
+            UIViewController* container = [topStackController performSelector:@selector(containerViewController)];
+            if(container){
+                topStackController = container;
+            }
+            else{
+                break;
+            }
+        }
+        else{
+            break;
+        }
+    }
+    
+    if(self.navigationItem.leftBarButtonItem 
+       && self.navigationItem.leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
     }
@@ -194,7 +211,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         [self.navigationItem.backBarButtonItem applyStyle:backBarItemStyle];
     }
-    else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == self){
+    else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
