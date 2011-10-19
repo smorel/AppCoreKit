@@ -234,6 +234,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     for(id userDefault in userDefaultInstances){
         CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^{
             CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
+            udDebugger.title = [[userDefault  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
         [userDefaultsCells addObject:cell];
@@ -252,6 +253,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     for(id document in documentInstances){
         CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^{
             CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
+            udDebugger.title = [[document  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
         [documentCells addObject:cell];
