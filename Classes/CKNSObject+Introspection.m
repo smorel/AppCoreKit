@@ -354,4 +354,50 @@ void introspectTextInputsProperties(){
 	return NSSelectorFromString(selectorName);
 }
 
+
++ (NSArray*)allClasses{
+    return [NSObject allClassesKindOfClass:nil];
+}
+
++ (NSArray*)allClassesKindOfClass:(Class)filter{
+    int numClasses;
+    Class * classes = NULL;
+    
+    classes = NULL;
+    numClasses = objc_getClassList(NULL, 0);
+    
+    if (numClasses > 0 )
+    {
+        classes = malloc(sizeof(Class) * numClasses);
+        numClasses = objc_getClassList(classes, numClasses);
+     
+        NSMutableArray* ret = [NSMutableArray arrayWithCapacity:numClasses];
+        for(int i =0;i<numClasses; ++i){
+            Class theClass = classes[i];
+            NSString* className = [NSString stringWithUTF8String:class_getName(theClass)];
+            if([className hasPrefix:@"NSKVONotifying_"]){
+                //IGNORE
+            }
+            else{
+                if(filter){
+                    if([NSObject isKindOf:theClass parentType:filter]){
+                        [ret addObject:(id)theClass];
+                    }
+                }
+                else{
+                    [ret addObject:(id)theClass];
+                }
+            }
+        }
+        
+        free(classes);
+        
+        return ret;
+    } 
+    
+    return nil;
+}
+
+
+
 @end
