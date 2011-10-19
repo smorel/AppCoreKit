@@ -100,19 +100,19 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 
 - (void)stop{
 #ifdef DEBUG
+    [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
+    for(UIGestureRecognizer* gesture in self.customGestures){
+        [self.viewController.view removeGestureRecognizer:gesture];
+    }
+    for(UIView* v in [self.viewController.view subviews]){
+        v.userInteractionEnabled = YES;
+    }
+    
     if(self.state == CKInlineDebuggerControllerStateDebugging){
-        [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
         self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
         self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
         self.oldRightButtonItem = nil;
         self.oldLeftButtonItem = nil;
-        
-        for(UIGestureRecognizer* gesture in self.customGestures){
-            [self.viewController.view removeGestureRecognizer:gesture];
-        }
-        for(UIView* v in [self.viewController.view subviews]){
-            v.userInteractionEnabled = YES;
-        }
     }
 #endif
 }
