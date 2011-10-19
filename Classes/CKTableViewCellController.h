@@ -56,7 +56,8 @@ typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
     CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
 	CKTableViewCellStyleValue3,
-	CKTableViewCellStylePropertyGrid
+	CKTableViewCellStylePropertyGrid,
+	CKTableViewCellStyleSubtitle2
 } CKTableViewCellStyle;             
 
 /** TODO

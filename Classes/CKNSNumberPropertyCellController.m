@@ -12,6 +12,7 @@
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKUIView+Positioning.h"
 
 #define TextEditTag 1
 #define SwitchTag 2
@@ -210,6 +211,14 @@
             CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight));
 		}
+        else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
+            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+            CGFloat x = cell.textLabel.x;
+            CGRect textFrame = cell.textLabel.frame;
+            CGFloat width = cell.contentView.width - x - 10;
+            
+			textField.frame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,(textField.font.lineHeight + 10)));
+        }
 	}
     
 	if(s){

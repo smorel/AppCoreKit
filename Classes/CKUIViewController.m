@@ -186,21 +186,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
     
     UIViewController* topStackController = self;
-    while(topStackController){
-        if([topStackController respondsToSelector:@selector(containerViewController)]){
-            UIViewController* container = [topStackController performSelector:@selector(containerViewController)];
-            if(container){
-                topStackController = container;
-            }
-            else{
-                break;
-            }
-        }
-        else{
-            break;
-        }
-    }
-    
     if(self.navigationItem.leftBarButtonItem 
        && self.navigationItem.leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];

@@ -9,6 +9,8 @@
 #import "CKUIColorPropertyCellController.h"
 #import "CKUIColorAdditions.h"
 #import "CKObjectProperty.h"
+#import "CKNSObject+Bindings.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CGUIColorWrapper : NSObject{}
 @property(nonatomic,assign)CGFloat a;
@@ -26,6 +28,22 @@
 	[super init];
 	self.multiFloatValue = [[[CGUIColorWrapper alloc]init]autorelease];
 	return self;
+}
+
+
+- (void)initTableViewCell:(UITableViewCell *)cell {
+    [super initTableViewCell:cell];
+    
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	UIColor* color = [p value];
+    
+    UIView* colorView = [[[UIView alloc]initWithFrame:CGRectMake(10,80,80,80)]autorelease];
+    colorView.backgroundColor = color;
+    colorView.layer.borderColor = [[UIColor blackColor]CGColor];
+    colorView.layer.borderWidth = 2;
+    colorView.tag = 78;
+    
+    [cell.contentView addSubview:colorView];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -55,6 +73,9 @@
 					 blue:colorWrapper.b
 					alpha:colorWrapper.a];
 	[p setValue:color];
+    
+    UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
+    colorView.backgroundColor = color;
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{

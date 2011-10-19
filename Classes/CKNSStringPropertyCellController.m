@@ -15,6 +15,7 @@
 #import "CKNSValueTransformer+Additions.h"
 
 #import "CKSheetController.h"
+#import "CKUIView+Positioning.h"
 
 
 @implementation CKNSStringPropertyCellController
@@ -57,7 +58,8 @@
     }  
     
     if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         _textField.autoresizingMask = UIViewAutoresizingNone;
     }
 }
@@ -69,7 +71,6 @@
 	if(textField){
         if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
             
             BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
@@ -83,6 +84,14 @@
                 textFieldX = self.contentInsets.left;
             }
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
+        }
+        else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
+            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+            CGFloat x = cell.textLabel.x;
+            CGRect textFrame = cell.textLabel.frame;
+            CGFloat width = cell.contentView.width - x - 10;
+            
+			textField.frame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,(textField.font.lineHeight + 10)));
         }
     }
     return (id)nil;

@@ -28,7 +28,7 @@
     
     [controllerCell setCreateBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.cellStyle = CKTableViewCellStylePropertyGrid;
+        controller.cellStyle = CKTableViewCellStyleSubtitle;
         return (id)nil;
     }];
     return controllerCell;

@@ -453,6 +453,7 @@
 		7577E00913E32FE40065E098 /* CKMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 7577E00813E32FE40065E098 /* CKMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */; };
+		7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */ = {isa = PBXBuildFile; fileRef = 7580AFEF144F59C2004DCF7A /* CKInlineDebugger.style */; };
 		758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */; };
 		758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */; };
 		758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -973,6 +974,7 @@
 		7580AFCC144E314B004DCF7A /* CloudKit-1.1000.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1000.xcdatamodel"; sourceTree = "<group>"; };
 		7580AFCD144E314B004DCF7A /* CloudKit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CloudKit.xcdatamodel; sourceTree = "<group>"; };
 		7580AFCF144E32A0004DCF7A /* CloudKit-1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "CloudKit-1.1.xcdatamodel"; sourceTree = "<group>"; };
+		7580AFEF144F59C2004DCF7A /* CKInlineDebugger.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CKInlineDebugger.style; path = Resources/CKInlineDebugger.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.plist; };
 		758523E913FAEF7700EE75CE /* CKUIFont+ValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIFont+ValueTransformer.h"; path = "Classes/CKUIFont+ValueTransformer.h"; sourceTree = "<group>"; };
 		758523EA13FAEF7900EE75CE /* CKUIFont+ValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIFont+ValueTransformer.m"; path = "Classes/CKUIFont+ValueTransformer.m"; sourceTree = "<group>"; };
 		758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionPropertyCellController.h; path = Classes/CKOptionPropertyCellController.h; sourceTree = "<group>"; };
@@ -1962,6 +1964,7 @@
 		75AD5D8A144C687E0008F53A /* Inline Debugger */ = {
 			isa = PBXGroup;
 			children = (
+				7580AFEF144F59C2004DCF7A /* CKInlineDebugger.style */,
 				757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */,
 				757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */,
 				75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */,
@@ -2378,6 +2381,7 @@
 				4F4A914613F040CE0093293F /* wc-appsignature-type-light-craftedby@2x.png in Resources */,
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
+				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,17 +28,18 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (CKTableViewCellStyle)cellStyle{
 	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
-									 withEnumDescriptor:CKEnumDefinition(@"UITableViewCellStyle",
-                                                                         UITableViewCellStyleDefault, 
-																	 UITableViewCellStyleValue1, 
-																	 UITableViewCellStyleValue2,
-																	 UITableViewCellStyleSubtitle,
-																	 CKTableViewCellStyleDefault, 
-																	 CKTableViewCellStyleValue1, 
-																	 CKTableViewCellStyleValue2,
-																	 CKTableViewCellStyleSubtitle,
-																	 CKTableViewCellStyleValue3,
-                                                                     CKTableViewCellStylePropertyGrid)];
+                                    withEnumDescriptor:CKEnumDefinition(@"CKTableViewCellStyle",
+                                                                        CKTableViewCellStyleDefault,
+                                                                        UITableViewCellStyleDefault,
+                                                                        CKTableViewCellStyleValue1,
+                                                                        UITableViewCellStyleValue1,
+                                                                        CKTableViewCellStyleValue2,
+                                                                        UITableViewCellStyleValue2,
+                                                                        CKTableViewCellStyleSubtitle,
+                                                                        UITableViewCellStyleSubtitle,
+                                                                        CKTableViewCellStyleValue3,
+                                                                        CKTableViewCellStylePropertyGrid,
+                                                                        CKTableViewCellStyleSubtitle2)];
 }
 
 - (UIImage*)accessoryImage{

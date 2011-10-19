@@ -13,6 +13,7 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKObjectTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKUIView+Positioning.h"
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
@@ -65,7 +66,8 @@
     }  
     
     if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
         _textView.autoresizingMask = UIViewAutoresizingNone;
     }
 }
@@ -98,6 +100,10 @@
             CGRect f = [controller propertyGridDetailFrameForCell:cell];
             controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
         }
+    }
+    else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
+        CGRect textViewFrame = CGRectMake(cell.imageView.x + 10,cell.textLabel.y + cell.textLabel.height,cell.contentView.width - (cell.imageView.x + 10) - 10,controller.textView.frame.size.height);
+        controller.textView.frame = textViewFrame;
     }
 
     return (id)nil;

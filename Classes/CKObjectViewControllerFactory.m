@@ -201,7 +201,8 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
             staticCellController.cellStyle = [controllerStyle cellStyle];
         }
         if(staticCellController.cellStyle != CKTableViewCellStylePropertyGrid
-           && staticCellController.cellStyle != CKTableViewCellStyleValue3){
+           && staticCellController.cellStyle != CKTableViewCellStyleValue3
+           && staticCellController.cellStyle != CKTableViewCellStyleSubtitle2){
             return nil;
         }
     }

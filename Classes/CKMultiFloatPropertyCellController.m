@@ -44,6 +44,7 @@
 		CGRect textFieldFrame = CGRectMake(110,44 + i * 44,cell.contentView.bounds.size.width - 110,44);
 		
 		UITextField *txtField = [[[UITextField alloc] initWithFrame:textFieldFrame] autorelease];
+        txtField.autoresizingMask = UIViewAutoresizingNone;
 		txtField.tag = 50000;
 		txtField.borderStyle = UITextBorderStyleNone;
 		txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -58,6 +59,7 @@
 		[_textFields setObject:txtField forKey:property];
 		
 		UILabel* namelabel = [[[UILabel alloc]initWithFrame:labelFrame]autorelease];
+        namelabel.autoresizingMask = UIViewAutoresizingNone;
 		namelabel.text = property;
 		namelabel.textAlignment = UITextAlignmentRight;
 		namelabel.backgroundColor = [UIColor clearColor];
@@ -67,6 +69,7 @@
 		
 		
 		UILabel* label = [[[UILabel alloc]initWithFrame:textFieldFrame]autorelease];
+        label.autoresizingMask = UIViewAutoresizingNone;
 		label.backgroundColor = [UIColor clearColor];
 		txtField.autoresizingMask = UIViewAutoresizingNone;
 		[_labels setObject:label forKey:property];
@@ -78,21 +81,23 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
-	CGRect textFrame = [self value3TextFrameForCell:cell];
-	
 	int i =0 ;
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	for(NSString* property in properties){
         CGFloat width = cell.contentView.frame.size.width;
-        CGFloat detailX = textFrame.origin.x + textFrame.size.width + 10;
+        CGFloat detailX = width / 2.0;
         CGFloat detailWidth = width - detailX - 10;
 		UILabel *label = [_labels objectForKey:property];
+        
 		UITextField *txtField = [_textFields objectForKey:property];
+        txtField.autoresizingMask = UIViewAutoresizingNone;
+        
 		CGRect frame = CGRectMake(detailX,44 + i * 44,detailWidth,44);
 		label.frame = frame;
 		txtField.frame = frame;
 		
 		UILabel *namelabel = [_namelabels objectForKey:property];
+        namelabel.autoresizingMask = UIViewAutoresizingNone;
 		CGRect nameFrame = CGRectMake(10,frame.origin.y - 1,detailX - 20,44);
 		namelabel.frame = nameFrame;
 		++i;

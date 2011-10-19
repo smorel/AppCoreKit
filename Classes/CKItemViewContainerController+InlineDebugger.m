@@ -28,10 +28,7 @@
             __block id bItemController = itemController;
             __block CKFormTableViewController* bDebugger = debugger;
             CKFormCellDescriptor* itemControllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
-                CKFormTableViewController* controllerForm = [[[CKFormTableViewController alloc]init]autorelease];
-                controllerForm.title = title;
-                CKFormSection* controllerSection = [CKFormSection sectionWithObject:bItemController headerTitle:nil];
-                [controllerForm addSections:[NSArray arrayWithObject:controllerSection]];
+                CKFormTableViewController* controllerForm = [[bItemController class]inlineDebuggerForObject:bItemController];
                 [bDebugger.navigationController pushViewController:controllerForm animated:YES];
             }];
             

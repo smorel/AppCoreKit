@@ -26,6 +26,7 @@
 + (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
     if([stylesheet isEmpty]){
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        debugger.name = @"CKInlineDebugger";
         debugger.viewDidLoadBlock = ^(CKUIViewController* controller){
             UILabel* label = [[[UILabel alloc]initWithFrame:CGRectInset(controller.view.bounds,10,10)]autorelease];
             label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -85,6 +86,7 @@
         
         
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        debugger.name = @"CKInlineDebugger";
         
         NSMutableArray* sections = [NSMutableArray array];
         if([appliedKeys count] > 0){
@@ -134,6 +136,7 @@
 
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
     CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+    debugger.name = @"CKInlineDebugger";
     debugger.searchEnabled = YES;
     
     CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:[[object class]description]];

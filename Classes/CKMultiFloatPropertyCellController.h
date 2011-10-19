@@ -26,5 +26,6 @@
 
 //private
 -(void)valueChanged;
+- (void)rebind;
 
 @end
