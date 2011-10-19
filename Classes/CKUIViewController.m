@@ -273,7 +273,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
     }
-    [self.inlineDebuggerController stop];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -282,6 +281,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         _viewDidDisappearBlock(self,animated);
     }
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    [self.inlineDebuggerController stop];
 }
 
 #pragma mark - View lifecycle
