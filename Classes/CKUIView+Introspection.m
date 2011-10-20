@@ -58,6 +58,7 @@
 											   UIViewAutoresizingFlexibleTopMargin,
 											   UIViewAutoresizingFlexibleHeight,
 											   UIViewAutoresizingFlexibleBottomMargin);
+    metaData.multiselectionEnabled = YES;
 }
 
 - (void)contentModeMetaData:(CKObjectPropertyMetaData*)metaData{
