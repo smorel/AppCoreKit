@@ -445,7 +445,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		//return NO;
 	}
 	
-	[self.mapView removeAnnotations:self.mapView.annotations];
+    while([self.mapView.annotations count] > 0){
+        [self.mapView removeAnnotation:[self.mapView.annotations lastObject]];
+    }
+    
 	NSArray* objects = [self objectsForSection:0];
 	[self addAnnotations:objects];
 
