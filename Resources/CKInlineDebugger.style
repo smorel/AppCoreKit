@@ -14,7 +14,7 @@
             "cellType" : "CKTableViewCellStylePropertyGrid"
         },
         
-        "CKOptionTableViewController" : {
+        "CKOptionTableViewController, CKUIViewController[name=CKClassExplorer]" : {
             "UINavigationController" : {
             }
         }

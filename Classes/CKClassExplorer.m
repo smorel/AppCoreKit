@@ -44,6 +44,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[super postInit];
 	self.searchEnabled = YES;
 	self.liveSearchDelay = 0.5;
+    self.name = @"CKClassExplorer";
 	
 	self.searchScopeDefinition = [NSDictionary dictionaryWithObjectsAndKeys:
 	    [CKCallback callbackWithBlock:^(id object){

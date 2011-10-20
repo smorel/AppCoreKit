@@ -168,6 +168,8 @@
 		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
 		CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:thevalue mappings:mappings]autorelease];
+        controller.style = [[(CKTableViewController*)self.parentController tableView]style];
+        controller.name = @"CKInlineDebugger";
 		controller.title = self.tableViewCell.textLabel.text;
 		if(contentType != nil || contentProtocol != nil){
 			CKUIBarButtonItemWithInfo* button = [[[CKUIBarButtonItemWithInfo alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(createObject:)]autorelease];
