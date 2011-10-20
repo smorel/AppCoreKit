@@ -444,9 +444,18 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	if ((source != nil) && source.isFetching) {
 		//return NO;
 	}
-	
+    
+    id <MKAnnotation> userAnnotation = nil; 
     while([self.mapView.annotations count] > 0){
-        [self.mapView removeAnnotation:[self.mapView.annotations lastObject]];
+        id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
+        if (annotation == self.mapView.userLocation) {
+            userAnnotation = annotation;
+        }
+        [self.mapView removeAnnotation:annotation];
+    }
+    
+    if(userAnnotation){
+        [self.mapView addAnnotation:userAnnotation];
     }
     
 	NSArray* objects = [self objectsForSection:0];

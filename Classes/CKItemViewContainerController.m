@@ -169,9 +169,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[self updateViewsVisibility:NO];
 	[super viewWillDisappear:animated];
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+	/*if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
+	}*/
 }
 
 #pragma mark Interface Orientation Management

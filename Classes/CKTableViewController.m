@@ -16,6 +16,7 @@
 @interface CKTableViewController ()
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL insetsApplied;
+@property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
 
@@ -29,9 +30,11 @@
 @synthesize tableViewContainer = _tableViewContainer;
 @synthesize tableViewInsets = _tableViewInsets;
 @synthesize insetsApplied;
+@synthesize tableViewHasBeenReloaded;
 
 - (void)postInit {
 	[super postInit];
+    self.tableViewHasBeenReloaded = NO;
     self.insetsApplied = NO;
 	self.style = UITableViewStylePlain;
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
@@ -56,17 +59,31 @@
 
 #pragma mark View Management
 
-- (void)loadView {
-	[super loadView];
+- (void)sizeToFit{
+    if(!self.insetsApplied){
+        CGRect frame = self.tableViewContainer.frame;
+        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
+                                                                  frame.origin.y/* + self.tableInsets.top*/,
+                                                                  frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                                  frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
+        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        self.insetsApplied = YES;
+    }
+}
+
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    
     
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     if([controllerStyle containsObjectForKey:@"tableViewStyle"]){
         self.style = [controllerStyle enumValueForKey:@"tableViewStyle" 
-									 withEnumDescriptor:CKEnumDefinition(@"UITableViewStyle",
-                                                                         UITableViewStylePlain, 
-                                                                         UITableViewStyleGrouped)];
+                                   withEnumDescriptor:CKEnumDefinition(@"UITableViewStyle",
+                                                                       UITableViewStylePlain, 
+                                                                       UITableViewStyleGrouped)];
     }
-
+    
 	if (self.view == nil) {
 		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
 		UIView *theView = [[[UITableView alloc] initWithFrame:theViewFrame] autorelease];
@@ -89,7 +106,7 @@
         
 		[containerView addSubview:theTableView];
 	}
-
+    
 	if (self.tableView == nil) {
 		if ([self.view isKindOfClass:[UITableView class]]) {
 			// TODO: Assert - Should not be allowed
@@ -104,25 +121,10 @@
 			self.tableView = theTableView;
 		}
 	}
-	//self.tableView.clipsToBounds = NO;
-}
-
-- (void)sizeToFit{
-    if(!self.insetsApplied){
-        CGRect frame = self.tableViewContainer.frame;
-        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
-                                                                  frame.origin.y/* + self.tableInsets.top*/,
-                                                                  frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                                  frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
-        self.insetsApplied = YES;
-    }
-}
-
-- (void)viewDidLoad{
-    [super viewDidLoad];
+    
+    
     self.insetsApplied = NO;
+    self.tableViewHasBeenReloaded = NO;
 }
 
 - (void)viewDidUnload {
@@ -134,7 +136,12 @@
 	[super viewWillAppear:animated];
     [self sizeToFit];
     
-	[self.tableView reloadData];
+    if(self.tableViewHasBeenReloaded == NO){
+        NSLog(@"tableView reloadData <%@>",self);
+        [self.tableView reloadData];
+        self.tableViewHasBeenReloaded = YES;
+    }
+    
 	if (self.stickySelection == NO){
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
 		if([self isValidIndexPath:indexPath]){

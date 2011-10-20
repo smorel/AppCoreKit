@@ -30,6 +30,7 @@
 @property (nonatomic, assign, readwrite) int numberOfPages;
 @property (nonatomic, retain, readwrite) UISearchBar* searchBar;
 @property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
+@property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -63,6 +64,7 @@
 @synthesize editButton;
 @synthesize doneButton;
 @dynamic selectedIndexPath;
+@dynamic tableViewHasBeenReloaded;
 
 - (void)didSearch:(NSString*)text{
 	//if we want to implement it in subclass ..
@@ -152,24 +154,36 @@
 }
 
 - (void)viewDidLoad{
+    /*
     _storedTableDelegate = self.tableView.delegate;
     self.tableView.delegate = nil;
     _storedTableDataSource = self.tableView.dataSource;
     self.tableView.dataSource = nil;
+     */
     
     [super viewDidLoad];
     
+    /*
     //in case it changed in viewDidLoad
     if(self.tableView.delegate)
         _storedTableDelegate = self.tableView.delegate;
     if(self.tableView.dataSource)
         _storedTableDataSource = self.tableView.dataSource;
+     
     
     //ensure they are setup :
     if(_storedTableDelegate == nil)
         _storedTableDelegate = self;
     if(_storedTableDataSource == nil)
         _storedTableDataSource = self;
+     */
+    
+    if(self.tableView.delegate == nil){
+        self.tableView.delegate = self;
+    }
+    if(self.tableView.dataSource == nil){
+        self.tableView.dataSource = self;
+    }
 }
 
 - (void)viewDidUnload{
@@ -321,8 +335,10 @@
 	[self.objectController lock];
 	[self updateParams];
     
+    /*
     self.tableView.delegate = _storedTableDelegate;
     self.tableView.dataSource = _storedTableDataSource;
+    */
     
     [super viewWillAppear:animated];
 	[self updateParams];
@@ -474,6 +490,7 @@
 }
 
 - (void)reload{
+    NSLog(@"reload <%@>",self);
 	if(self.viewIsOnScreen){
 		[super reload];
 		[self fetchMoreData];
@@ -481,7 +498,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-
 	self.indexPathToReachAfterRotation = nil;
 	
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
@@ -513,11 +529,12 @@
 - (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
 	_viewIsOnScreen = NO;
-    
+    /*
     _storedTableDelegate = self.tableView.delegate;
     self.tableView.delegate = nil;
     _storedTableDataSource = self.tableView.dataSource;
     self.tableView.dataSource = nil;
+     */
 	
 	//keyboard notifications
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
@@ -961,23 +978,32 @@
 }
 
 - (void)onReload{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
 	
 	[self.tableView reloadData];
+    NSLog(@"onReload <%@>",self);
 }
 
 - (void)onBeginUpdates{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
 	
 	[self.tableView beginUpdates];
+    NSLog(@"onBeginUpdates <%@>",self);
 }
 
 - (void)onEndUpdates{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
 	
+    NSLog(@"onEndUpdates <%@>",self);
 	[self.tableView endUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -987,8 +1013,11 @@
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
+    NSLog(@"onInsertObjects <%@>",self);
 	
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
 	
@@ -1007,8 +1036,11 @@
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
+    NSLog(@"onRemoveObjects <%@>",self);
 	
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
 	
@@ -1035,8 +1067,11 @@
 }
 
 - (void)onInsertSectionAtIndex:(NSInteger)index{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
+    NSLog(@"onInsertSectionAtIndex <%@>",self);
 	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
@@ -1046,8 +1081,11 @@
 }
 
 - (void)onRemoveSectionAtIndex:(NSInteger)index{
-	if(!_viewIsOnScreen)
+	if(!_viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
 		return;
+    }
+    NSLog(@"onRemoveSectionAtIndex <%@>",self);
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
