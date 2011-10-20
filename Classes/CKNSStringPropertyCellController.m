@@ -97,6 +97,18 @@
     return (id)nil;
 }
 
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    CKNSStringPropertyCellController* staticController = (CKNSStringPropertyCellController*)[params staticController];
+    
+	UITextField *textField = staticController.textField;
+    
+    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
+    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
+    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomTextLabel,bottomDetailTextLabel)) + staticController.contentInsets.bottom;
+    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
+}
+
 - (void)textFieldChanged:(id)value{
     [self setValueInObjectProperty:value];
 }
