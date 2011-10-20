@@ -12,6 +12,7 @@
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
 #import "CKPopoverController.h"
+#import "CKUIView+Positioning.h"
 
 //static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
@@ -64,15 +65,17 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    CGRect frame = [[self view]frame];
-    
     CGFloat height = 162;
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication]statusBarOrientation];
     if(UIInterfaceOrientationIsPortrait(orientation)){
         height = 216;
     }
     
-    CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - height / 2.0,320.0, height);
+    self.view.height = height;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    CGRect frame = [[self view]frame];
+    CGRect theFrame = CGRectMake((frame.size.width / 2.0) - 160.0,(frame.size.height / 2.0) - (height / 2.0),320.0, height);
     
     switch(self.datePickerMode){
         case  CKDatePickerModeTime:
@@ -81,8 +84,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         case CKDatePickerModeCountDownTime :{
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
             _datePicker.datePickerMode = UIDatePickerModeDate;
-            _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
-            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];
             if(date){
                 [_datePicker setDate:[self.property value] animated:NO];
@@ -114,8 +116,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         }
         case CKDatePickerModeCreditCardExpirationDate:{
             self.pickerView = [[[UIPickerView alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
-            _pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | 
-            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            /*_pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             [[self view]addSubview:_pickerView];
             
             _pickerView.showsSelectionIndicator = YES;
