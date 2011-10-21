@@ -376,14 +376,14 @@
         [self.object didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexSet forKey:self.keyPath];
 	}
 	else{
-        id proxy= nil;
+        NSMutableArray* proxy= nil;
         if(self.subKeyPath != nil) {
             proxy = [self.subObject.object mutableArrayValueForKey:self.subKeyPath];
         }
         else{
             proxy = self.subObject.object;
         }
-		[proxy removeAllObjects];
+		[proxy removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [proxy count])]];
 	}
 }
 
