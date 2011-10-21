@@ -2710,7 +2710,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
+					armv7,
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2722,7 +2722,6 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2732,7 +2731,7 @@
 			buildSettings = {
 				ARCHS = (
 					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
+					armv7,
 				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2741,7 +2740,6 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -2750,10 +2748,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"Standard(armv6",
-					"armv7)",
-				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
@@ -2777,10 +2771,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"Standard(armv6",
-					"armv7)",
-				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
