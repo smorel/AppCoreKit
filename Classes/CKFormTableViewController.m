@@ -466,9 +466,9 @@
 }
 
 - (void)stop{
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+	/*if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}
+	}*/
 }
 
 - (void)lock{
@@ -597,6 +597,7 @@
 }
 
 - (void)updateStyleForNonNewVisibleCells{
+    [self.parentController updateVisibleViewsIndexPath];
 	//Update style for indexpath that have not been applyed
 	NSInteger sectionIndex = [self sectionVisibleIndex];
 	
@@ -844,6 +845,7 @@
 		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
+        [section updateStyleForExistingCells];
 	 }
 	
 	[super viewWillAppear:animated];
