@@ -36,6 +36,7 @@ typedef enum CKMapViewControllerZoomStrategy{
 	MKMapView *_mapView;
 	
 	CKMapViewControllerZoomStrategy _zoomStrategy;
+    BOOL _includeUserLocationWhenZooming;
 	CGFloat _smartZoomDefaultRadius;
 	NSInteger _smartZoomMinimumNumberOfAnnotations;
 	
@@ -50,6 +51,7 @@ typedef enum CKMapViewControllerZoomStrategy{
 @property (nonatomic, assign) CKMapViewControllerZoomStrategy zoomStrategy;
 @property (nonatomic, assign) CGFloat smartZoomDefaultRadius;
 @property (nonatomic, assign) NSInteger smartZoomMinimumNumberOfAnnotations;
+@property (nonatomic, assign) BOOL includeUserLocationWhenZooming;
 @property (nonatomic, retain) id annotationToSelect;
 
 
