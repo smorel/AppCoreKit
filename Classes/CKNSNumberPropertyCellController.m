@@ -320,9 +320,18 @@
 	} else {
         if(max >= 0 && range.location >= max){
             return NO;
+        }    
+		NSMutableCharacterSet *numberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
+        
+        CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+        switch(descriptor.propertyType){
+            case CKClassPropertyDescriptorTypeFloat:
+            case CKClassPropertyDescriptorTypeDouble:{
+                [numberSet addCharactersInString:@".,"];
+            }
         }
-		NSCharacterSet *nonNumberSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-		return ([string stringByTrimmingCharactersInSet:nonNumberSet].length > 0);
+                
+		return ([string stringByTrimmingCharactersInSet:[numberSet invertedSet]].length > 0);
 	}
     return YES;
 }
