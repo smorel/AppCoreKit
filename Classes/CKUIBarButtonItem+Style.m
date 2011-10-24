@@ -36,7 +36,7 @@
     CGFloat height = self.bounds.size.height;
     CGFloat width = self.bounds.size.width;
     [self sizeToFit];
-    self.frame = CGRectMake(self.frame.origin.x,self.frame.origin.y,MAX(width,self.frame.size.width),height);
+    self.frame = CGRectMake(self.frame.origin.x,self.frame.origin.y,MAX(width,self.frame.size.width),MAX(height,self.frame.size.height));
 }
 
 - (id)initWithBarButtonItem:(UIBarButtonItem*)theBarButtonItem{
@@ -66,7 +66,7 @@
     
     if(style && [style isEmpty] == NO){
         UIButton* button = nil;
-        if(barButtonItem.customView == nil){
+        if(barButtonItem.customView == nil || [[[barButtonItem.customView class]description]isEqualToString:@"UINavigationButton"]){
             button = [[[CKBarButtonItemButton alloc]initWithBarButtonItem:barButtonItem]autorelease];
         }
         else if([barButtonItem.customView isKindOfClass:[CKBarButtonItemButton class]]){

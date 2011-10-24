@@ -845,7 +845,9 @@
 		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
-        [section updateStyleForExistingCells];
+        if(self.viewIsOnScreen){
+            [section updateStyleForExistingCells];
+        }
 	 }
 	
 	[super viewWillAppear:animated];
