@@ -315,7 +315,7 @@
 		}
 	}
 	
-	return [NSString stringWithFormat:@"%@-<%p>-%@-%@",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @""];
+	return [NSString stringWithFormat:@"%@-<%p>-%@-[%@]-<%d>",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @"", self.cellStyle];
 }
 
 - (UITableViewCell *)loadCell {

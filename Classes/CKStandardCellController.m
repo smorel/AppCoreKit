@@ -113,7 +113,7 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	[self.request cancel];
-	
+    
 	if(self.fetchedImage != nil || self.image != nil){
 		cell.imageView.image = self.fetchedImage ? self.fetchedImage : self.image;
 	}
@@ -129,6 +129,9 @@
     if(self.detailedTextColor){
         cell.detailTextLabel.textColor = self.detailedTextColor;
     }
+    
+    cell.textLabel.numberOfLines = self.multilineText ? 0 : 1;
+    cell.detailTextLabel.numberOfLines = self.multilineDetailText ? 0 : 1;
 }
 
 - (void)setText:(NSString*)str{
