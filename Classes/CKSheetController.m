@@ -64,7 +64,7 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     }
     
     contentView.frame = CGRectMake(0,y,contentEndRect.size.width,contentEndRect.size.height - y);
-    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.sheetView addSubview:contentView];
     //add toolbar 
     //add contentview
