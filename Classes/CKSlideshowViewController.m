@@ -102,9 +102,9 @@
 	
 	if (useModalStyle == NO) {
 		self.styles = [self.navigationController getStyles];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
 	}
 		
-	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES] ;
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	self.navigationController.navigationBar.tintColor = nil;
 	self.navigationController.navigationBar.translucent = YES;

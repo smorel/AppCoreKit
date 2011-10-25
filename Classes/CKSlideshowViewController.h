@@ -10,11 +10,12 @@
 #import <UIKit/UIKit.h>
 
 #import "CKImageView.h"
+#import "CKUIViewController.h"
 
 
 /** TODO
  */
-@interface CKSlideshowViewController : UIViewController {
+@interface CKSlideshowViewController : CKUIViewController {
 	id _delegate;
 	NSArray *imagesPaths; // Contains the paths to the images
 	IBOutlet UIView *_imageContainerView;
