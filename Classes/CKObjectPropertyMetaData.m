@@ -58,6 +58,7 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 	self.dateFormat = nil;
 	self.propertyCellControllerClass = nil;
 	self.validationPredicate = nil;
+	self.multiselectionEnabled = NO;
 	[self.options removeAllObjects];
 }
 
