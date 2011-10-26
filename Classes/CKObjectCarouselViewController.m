@@ -199,9 +199,9 @@
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath{
 	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-	if(controller && [controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+	if(controller && [controller respondsToSelector:@selector(viewDidAppear:)]){
 		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
-		[controller rotateView:view withParams:self.params animated:NO];
+		[controller viewDidAppear:view];
 	}	
 }
 
