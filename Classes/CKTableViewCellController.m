@@ -520,9 +520,10 @@
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
-        if(_layoutCallback == nil){
-            self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
-        }
+    }
+    
+    if(_layoutCallback == nil){
+        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
     }
         
     [CATransaction begin];
@@ -539,13 +540,14 @@
     
     UITableViewCell* cell = (UITableViewCell*)view;
     
-    [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-    [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-    /*[cell.imageView bind:@"hidden" target:self action:@selector(updateLayout:)];
-    [cell.imageView bind:@"image" target:self action:@selector(updateLayout:)];
-    [cell bind:@"accessoryView" target:self action:@selector(updateLayout:)];*/
-    [NSObject endBindingsContext];	
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+        [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
+        [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
+        [NSObject endBindingsContext];	
+    }
     
     [CATransaction commit];
 }
