@@ -161,27 +161,27 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 //
 
-+ (CKWebRequest2 *)requestWithURL:(NSURL *)URL {
++ (id)requestWithURL:(NSURL *)URL {
 	NSAssert(URL != nil && [[URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
-	return [[[CKWebRequest2 alloc] initWithURL:URL] autorelease];
+	return [[[[self class] alloc] initWithURL:URL] autorelease];
 }
 
-+ (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params {
++ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params {
 	NSURL *URL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", URLString, [NSString stringWithQueryDictionary:params]] : URLString)];
 	if(URL != nil){
-		return [[[CKWebRequest2 alloc] initWithURL:URL] autorelease];
+		return [[[[self class] alloc] initWithURL:URL] autorelease];
 	}
 	return nil;
 }
 
-+ (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest2 *request = [CKWebRequest2 requestWithURLString:URLString params:params];
++ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
+	CKWebRequest2 *request = [[self class] requestWithURLString:URLString params:params];
 	request.delegate = delegate;
 	return request;
 }
 
-+ (CKWebRequest2 *)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest2 *request = [CKWebRequest2 requestWithURLString:URLString params:params delegate:delegate];
++ (id)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
+	CKWebRequest2 *request = [[self class] requestWithURLString:URLString params:params delegate:delegate];
 	[request setMethod:method];
 	return request;
 }
