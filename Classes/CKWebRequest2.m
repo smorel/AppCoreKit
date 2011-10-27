@@ -59,6 +59,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize failureBlock = theFailureBlock;
 @synthesize completedBlock = theCompletedBlock;
 
+@synthesize validatesSecureCertificates;
+@synthesize credential = _credential;
+
 #pragma mark Initialization
 
 + (NSMutableURLRequest *)defaultURLRequestForURL:(NSURL*)anURL{
@@ -97,6 +100,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 	[theCompletedBlock release];
 	self.destinationPath = nil;
 	self.destinationStream = nil;
+    [_credential release];
 	[super dealloc];
 }
 
@@ -252,16 +256,28 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark Connection Authentication
 
-// TODO: Implements a CKWebRequestAuthenticationDelegate to delegate all authentication challenge to the client
-// For now, this implementation disable the checking of self-signed certificates.
-
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return ([[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]);
+    return YES;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+
+    if (([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) && (validatesSecureCertificate == NO)) {
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+            return;
+    }
+    
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredential *credential = _credential ? 
+          _credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+        
+        if (credential) {
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            return;
+        }
+    }
+        
+    [[challenge sender] cancelAuthenticationChallenge:challenge];
 }
 
 #pragma mark URL Loading

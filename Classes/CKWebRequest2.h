@@ -45,6 +45,13 @@ typedef void (^CKWebRequestCompletionBlock)(id value, NSHTTPURLResponse* respons
 	BOOL finished;
 	BOOL cancelled;
 
+    // Authentication
+    
+    BOOL validatesSecureCertificate;
+    NSURLCredential *_credential;
+    
+    // Callbacks
+    
 	CKWebRequestTransformBlock theTransformBlock;
 	CKWebRequestSuccessBlock theSuccessBlock;
 	CKWebRequestFailureBlock theFailureBlock;
@@ -54,6 +61,8 @@ typedef void (^CKWebRequestCompletionBlock)(id value, NSHTTPURLResponse* respons
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, retain) NSDictionary *headers;
 @property (nonatomic, retain) id userInfo;
+@property (nonatomic, assign) BOOL validatesSecureCertificates;
+@property (nonatomic, retain) NSURLCredential *credential;
 @property (nonatomic, assign) NSObject<CKWebRequestDelegate> *delegate;
 @property (nonatomic, copy) CKWebRequestCompletionBlock completedBlock;//Wanted to call it completionBlock but there is already one in NSOperation called asynchroneously using GCD
 @property (nonatomic, copy) CKWebRequestTransformBlock transformBlock;
