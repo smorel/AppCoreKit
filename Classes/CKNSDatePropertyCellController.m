@@ -355,7 +355,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             
             if(_enableAccessoryView){
                 UINavigationController* navController = [[[UINavigationController alloc]initWithRootViewController:dateController]autorelease];
-                navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+                
+                //FIXME : This has been commented because it offsets the view up and she appears behind the navigation bar.
+                //navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
                 sheetController = [[CKSheetController alloc]initWithContentViewController:navController];
             }
             else{

@@ -62,7 +62,6 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
 	
     int _modalViewCount;
     
-	BOOL _viewIsOnScreen;
 	
 	CGFloat _tableMaximumWidth;
     
@@ -84,10 +83,6 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
  Returns the number of pages computed using tableView height or width depending on the orientation
  */
 @property (nonatomic, assign, readonly) int numberOfPages;
-/** 
- Returns whether the view is on screen or not
- */
-@property (nonatomic, assign,readonly)  BOOL viewIsOnScreen;
 
 ///-----------------------------------
 /// @name Scrolling

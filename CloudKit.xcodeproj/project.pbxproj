@@ -46,6 +46,7 @@
 		751F1EE213D0C3990041900C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EE013D0C3990041900C /* JSONKit.m */; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EFD13D0E95B0041900C /* CKUserDefaults.m */; };
+		7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */; };
 		75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7114228D0D0003EBB6 /* UITextInputTraits+Introspection.h */; };
 		75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 75305B7214228D0E0003EBB6 /* UITextInputTraits+Introspection.m */; };
 		75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7614228EC10003EBB6 /* UITextView+Introspection.h */; };
@@ -2294,6 +2295,7 @@
 				75AD5DA0144C72960008F53A /* CKUIViewController+InlineDebugger.h in Headers */,
 				75AD5DA4144C73290008F53A /* CKItemViewContainerController+InlineDebugger.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
+				7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2708,10 +2710,6 @@
 		7550153E13B8EA08002DAE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2722,7 +2720,6 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2730,10 +2727,6 @@
 		7550153F13B8EA08002DAE8B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2741,7 +2734,6 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "i386 armv6 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -2750,6 +2742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
@@ -2773,6 +2766,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";

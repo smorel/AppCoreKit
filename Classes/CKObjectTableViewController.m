@@ -52,7 +52,6 @@
 @synthesize searchEnabled = _searchEnabled;
 @synthesize searchBar = _searchBar;
 @synthesize liveSearchDelay = _liveSearchDelay;
-@synthesize viewIsOnScreen = _viewIsOnScreen;
 @synthesize segmentedControl = _segmentedControl;
 @synthesize searchScopeDefinition = _searchScopeDefinition;
 @synthesize defaultSearchScope = _defaultSearchScope;
@@ -204,7 +203,6 @@
 	_editableType = CKObjectTableViewControllerEditableTypeNone;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
-	_viewIsOnScreen = NO;
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyNone;
 }
@@ -278,7 +276,7 @@
 }
 
 - (void)setEditableType:(CKObjectTableViewControllerEditableType)theEditableType{
-    if(theEditableType != _editableType && _viewIsOnScreen){
+    if(theEditableType != _editableType && self.viewIsOnScreen){
         switch(_editableType){
             case CKObjectTableViewControllerEditableTypeLeft:{
                 if(self.leftButton){
@@ -481,7 +479,6 @@
 	[self updateNumberOfPages];
 	[self updateVisibleViewsIndexPath];
 	
-	_viewIsOnScreen = YES;
 	[self.objectController unlock];
 	
 	for(int i =0; i< [self numberOfSections];++i){
@@ -528,7 +525,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated{
 	[super viewDidDisappear:animated];
-	_viewIsOnScreen = NO;
     /*
     _storedTableDelegate = self.tableView.delegate;
     self.tableView.delegate = nil;
@@ -630,11 +626,11 @@
 
 #pragma mark UITableView DataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [self numberOfSections];
+	return self.tableViewHasBeenReloaded ? [self numberOfSections] : 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-	return [self numberOfObjectsForSection:section];
+	return self.tableViewHasBeenReloaded ? [self numberOfObjectsForSection:section] : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {	CGFloat height = 0;
@@ -978,7 +974,7 @@
 }
 
 - (void)onReload{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -988,7 +984,7 @@
 }
 
 - (void)onBeginUpdates{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -998,7 +994,7 @@
 }
 
 - (void)onEndUpdates{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -1013,7 +1009,7 @@
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -1036,7 +1032,7 @@
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -1067,7 +1063,7 @@
 }
 
 - (void)onInsertSectionAtIndex:(NSInteger)index{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -1081,7 +1077,7 @@
 }
 
 - (void)onRemoveSectionAtIndex:(NSInteger)index{
-	if(!_viewIsOnScreen){
+	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }

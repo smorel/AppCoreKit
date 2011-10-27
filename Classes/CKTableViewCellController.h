@@ -55,6 +55,8 @@ typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleValue1 = UITableViewCellStyleValue1,		
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
     CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
+    
+    //The following styles are not compatible with CKManagedTableViewController that do not support dynamic layout for cells.
 	CKTableViewCellStyleValue3,
 	CKTableViewCellStylePropertyGrid,
 	CKTableViewCellStyleSubtitle2

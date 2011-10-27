@@ -76,10 +76,10 @@ typedef void (^CKWebRequestCompletionBlock)(id value, NSHTTPURLResponse* respons
 
 - (id)initWithURL:(NSURL *)URL;
 
-+ (CKWebRequest2 *)requestWithURL:(NSURL *)URL;
-+ (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params;
-+ (CKWebRequest2 *)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
-+ (CKWebRequest2 *)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
++ (id)requestWithURL:(NSURL *)URL;
++ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params;
++ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
++ (id)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate;
 
 + (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)URL;
 

@@ -17,6 +17,7 @@
 #import "CKFormTableViewController.h"
 #import "CKLocalization.h"
 #import "CKInlineDebuggerController.h"
+#import "CKVersion.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -47,6 +48,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize supportedInterfaceOrientations;
 @synthesize inlineDebuggerController = _inlineDebuggerController;
 @synthesize styleHasBeenApplied;
+@synthesize viewIsOnScreen = _viewIsOnScreen;
 
 - (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
     metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
@@ -56,6 +58,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)postInit {	
+	_viewIsOnScreen = NO;
     self.styleHasBeenApplied = NO;
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
@@ -116,6 +119,13 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
         [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            UIBarButtonItem* bu = self.navigationItem.leftBarButtonItem;
+            self.navigationItem.leftBarButtonItem = nil;
+            [self.navigationItem setLeftBarButtonItem:bu animated:YES];
+        }
     }
 }
 
@@ -127,6 +137,13 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
         [self.navigationItem.rightBarButtonItem applyStyle:barItemStyle];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            UIBarButtonItem* bu = self.navigationItem.rightBarButtonItem;
+            self.navigationItem.rightBarButtonItem = nil;
+            [self.navigationItem setRightBarButtonItem:bu animated:YES];
+        }
     }
 }
 
@@ -138,6 +155,15 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         [self.navigationItem.backBarButtonItem applyStyle:barItemStyle];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            if(self.navigationItem.backBarButtonItem == self.navigationItem.leftBarButtonItem){
+                UIBarButtonItem* bu = self.navigationItem.backBarButtonItem;
+                self.navigationItem.leftBarButtonItem = nil;
+                [self.navigationItem setLeftBarButtonItem:bu animated:YES];
+            }
+        }
     }
 }
 
@@ -182,7 +208,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
      forKey: kCATransactionDisableActions];
-    
+
 
     NSMutableDictionary* controllerStyle = nil;
     if(!self.styleHasBeenApplied){
@@ -212,9 +238,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
-            self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
-            [self.navigationItem.leftBarButtonItem applyStyle:backBarItemStyle];
-            self.navigationItem.backBarButtonItem = self.navigationItem.leftBarButtonItem;
+            self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
+            [self.navigationItem.backBarButtonItem applyStyle:backBarItemStyle];
+
+            self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
         }
     }
     
@@ -231,6 +258,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    NSLog(@"viewWillAppear <%@>",self);
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -245,6 +273,15 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     
     [self applyStyleForNavigation];
     
+    //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+    if([CKOSVersion() floatValue]< 4.2){
+        UIBarButtonItem* left = self.navigationItem.leftBarButtonItem;
+        UIBarButtonItem* right = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.rightBarButtonItem = nil;
+		[self.navigationItem setLeftBarButtonItem:left animated:animated];
+		[self.navigationItem setRightBarButtonItem:right animated:animated];
+    }
     
     [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
@@ -256,16 +293,50 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [super viewWillAppear:animated];
     
     [self.inlineDebuggerController start];
+	_viewIsOnScreen = YES;
+}
+
+- (void)setLeftButton:(UIBarButtonItem *)theleftButton{
+    [_leftButton release];
+    _leftButton = [theleftButton retain];
+    if(self.viewIsOnScreen){
+        [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
+        [self applyStyleForLeftBarButtonItem];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            self.navigationItem.leftBarButtonItem = nil;
+            [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
+        }
+    }
+}
+
+- (void)setRightButton:(UIBarButtonItem *)theRightButton{
+    [_rightButton release];
+    _rightButton = [theRightButton retain];
+    if(self.viewIsOnScreen){
+        [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
+        [self applyStyleForRightBarButtonItem];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            self.navigationItem.rightBarButtonItem = nil;
+            [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"viewWillDisappear <%@>",self);
     [super viewWillDisappear:animated];
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
     }
+	_viewIsOnScreen = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    NSLog(@"viewDidAppear <%@>",self);
     [super viewDidAppear:animated];
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
@@ -273,6 +344,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
+    NSLog(@"viewDidDisappear <%@>",self);
     [super viewDidDisappear:animated];
     if(_viewDidDisappearBlock){
         _viewDidDisappearBlock(self,animated);
@@ -284,14 +356,17 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 #pragma mark - View lifecycle
 
 -(void) viewDidLoad{
+    NSLog(@"viewDidLoad <%@>",self);
 	[super viewDidLoad];
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
     }
     self.styleHasBeenApplied = NO;
+    
 }
 
 -(void) viewDidUnload{
+    NSLog(@"viewDidUnload <%@>",self);
 	[super viewDidUnload];
     if(_viewDidUnloadBlock){
         _viewDidUnloadBlock(self);
