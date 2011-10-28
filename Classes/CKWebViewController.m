@@ -14,7 +14,6 @@
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
 
 @interface CKWebViewController ()
-@property (nonatomic, readwrite, retain) NSURL *homeURL;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *backButton;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *forwardButton;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *reloadButton;
@@ -58,6 +57,9 @@
 	self.reloadButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
 	self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
 	
+    self.minContentSizeForViewInPopover = CGSizeMake(400, 400);
+    self.maxContentSizeForViewInPopover = CGSizeMake(400, 400);
+    
 	[self generateToolbar];	
 }
 
@@ -67,6 +69,16 @@
 		[self setup];
 	}
     return self;	
+}
+
+- (void)setHomeURL:(NSURL *)theHomeURL{
+    [_homeURL release];
+    _homeURL = [theHomeURL retain];
+    if(_webView){
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
+		[_webView loadRequest:request];
+		[request release];
+    }
 }
 
 - (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL {
