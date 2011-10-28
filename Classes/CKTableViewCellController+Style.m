@@ -102,18 +102,6 @@ NSString* CKStyleCellFlags = @"flags";
     [super insertSubview:view atIndex:backgroundView ? index + 1 : index];
 }
 
-/*
-- (void)setBackgroundColor:(UIColor *)backgroundColor{
-    UIColor* previousColor = nil;
-    object_getInstanceVariable(self, "_backgroundColor", (void **)(&previousColor));
-    [previousColor release];
-    object_setInstanceVariable(self, "_backgroundColor", (void**)([backgroundColor retain]));
-
-    //bypass the custom set background color of UITableViewCell
-    [super setBackgroundColor:backgroundColor];
-}
-*/
-
 @end
 
 @implementation CKTableViewController (CKStyle)
@@ -254,94 +242,6 @@ NSString* CKStyleCellFlags = @"flags";
 		}
 	}
 	return NO;
-}
-
-@end
-
-
-@implementation UITableView (CKStyle)
-
-- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
-    if([view isKindOfClass:[UITableViewCell class]]){
-        id dataSource = [self dataSource];
-        if([dataSource isKindOfClass:[CKItemViewContainerController class]]){
-            CKItemViewContainerController* controller = (CKItemViewContainerController*)dataSource;
-            NSIndexPath* indexPath = [controller indexPathForView:view];
-            if(indexPath.row > 0){
-                NSIndexPath* previousIndexPath = [NSIndexPath indexPathForRow:indexPath.row -1 inSection:indexPath.section];
-                UIView* previousView = [controller viewAtIndexPath:previousIndexPath];
-                NSInteger index = previousView ? [[self subviews]indexOfObjectIdenticalTo:previousView] : NSNotFound;
-                if(index != NSNotFound){
-                    [super insertSubview:view atIndex:index+1];
-                    return;
-                }
-                else{
-                    NSInteger count = [controller numberOfObjectsForSection:indexPath.section];
-                    if(indexPath.row < count){
-                        NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-                        if([controller isValidIndexPath:nextIndexPath]){
-                            UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                            NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                            if(index != NSNotFound){
-                                [super insertSubview:view atIndex:index];
-                                return;
-                            }
-                        }
-                    }
-                    else{
-                        NSInteger sectionCount = [controller numberOfSections];
-                        if(indexPath.section < (sectionCount - 1)){
-                            NSInteger section = indexPath.section + 1;
-                            UIView* headerView = [controller.objectController headerViewForSection:section];
-                            //TODO find the headerView if headerTitle !
-                            if(headerView){
-                                NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
-                                if(index != NSNotFound){
-                                    [super insertSubview:view atIndex:index];
-                                    return;
-                                }
-                            }
-                            else{
-                                NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:0 inSection:section];
-                                if([controller isValidIndexPath:nextIndexPath]){
-                                    UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                                    NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                                    if(index != NSNotFound){
-                                        [super insertSubview:view atIndex:index];
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else{
-                NSInteger section = indexPath.section;
-                UIView* headerView = [controller.objectController headerViewForSection:section];
-                //TODO find the headerView if headerTitle !
-                if(headerView){
-                    NSInteger index = [[self subviews]indexOfObjectIdenticalTo:headerView];
-                    if(index != NSNotFound){
-                        [super insertSubview:view atIndex:index + 1];
-                        return;
-                    }
-                }
-                else{
-                    NSIndexPath* nextIndexPath = [NSIndexPath indexPathForRow:([controller numberOfObjectsForSection:section-1] - 1) inSection:section-1];
-                    if([controller isValidIndexPath:nextIndexPath]){
-                        UIView* nextView = [controller viewAtIndexPath:nextIndexPath];
-                        NSInteger index = nextView ? [[self subviews]indexOfObjectIdenticalTo:nextView] : NSNotFound;
-                        if(index != NSNotFound){
-                            [super insertSubview:view atIndex:index + 1];
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    [super insertSubview:view atIndex:index];
 }
 
 @end

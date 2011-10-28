@@ -45,13 +45,6 @@ extern NSString* CKStyleCellFlags;
 @interface CKTableViewCellController (CKStyle)
 @end
 
-
-/** TODO
- */
-@interface UITableViewCell (CKStyle)
-@end
-
-
 /** TODO
  */
 @interface CKTableViewController (CKStyle)
