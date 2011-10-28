@@ -219,8 +219,11 @@
 - (NSIndexPath*)indexPathForView:(UIView*)view{
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
 	NSIndexPath* indexPath =  [self.tableView indexPathForCell:(UITableViewCell*)view];
-    if(!indexPath){
+    /*if(!indexPath){
         indexPath = [super indexPathForView:view];
+    }*/
+    if(!indexPath){
+        int i =3;
     }
     return indexPath;
 }

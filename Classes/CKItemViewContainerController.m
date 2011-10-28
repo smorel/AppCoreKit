@@ -169,9 +169,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[self updateViewsVisibility:NO];
 	[super viewWillDisappear:animated];
-	/*if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:nil];
-	}*/
 }
 
 #pragma mark Interface Orientation Management
@@ -209,20 +206,21 @@
 
 //Update the indexPath of the visible controllers as they could have moved.
 - (void)updateVisibleViewsIndexPath{
-	//ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleIndexPaths = [self visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-        //UIView* view = [self viewAtIndexPath:indexPath];
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-        if(![[controller indexPath]isEqual:indexPath]){
-            //NSLog(@"updateVisibleViewsIndexPath -- controller <%p> view : <%p> cell controller : %@ changeindexpath from :%@ to %@",self,view,controller,[controller indexPath],indexPath);
+    for(NSValue* weakView in [self.viewsToIndexPath allKeys]){
+        //indexPathForView is overloaded to point on the real views and not out reference maps
+        //by using this method, we're "sure" to retrieve the right indexPath corresponding to an item view.
+        NSIndexPath* indexPath = [self indexPathForView:[weakView nonretainedObjectValue]];
+        if(indexPath){
+            CKItemViewController* controller = [self.viewsToControllers objectForKey:weakView];
             [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+            [self.viewsToIndexPath setObject:indexPath forKey:weakView];
+            [self.indexPathToViews setObject:weakView forKey:indexPath];
         }
-	}
+    }
 }
 
 - (void)updateViewsVisibility:(BOOL)visible{
-	//ptet utiliser tous les controllers de _viewsToControllers
+	//FIXME : a verifier .... ptet utiliser tous les controllers de _viewsToControllers
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
@@ -348,7 +346,7 @@
     if(previousPath){
         [_indexPathToViews removeObjectForKey:previousPath];
     }
-	
+	[_viewsToIndexPath removeObjectForKey:weakViewValue];
 	[_viewsToControllers removeObjectForKey:weakViewValue];
 	[_weakViews removeObject:weakref];
 	return (id)nil;
