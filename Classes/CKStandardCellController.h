@@ -33,7 +33,8 @@
 @property (nonatomic, assign) UITableViewCellStyle style;
 @property (nonatomic, retain) NSString *text;
 @property (nonatomic, retain) NSString *detailedText;
-@property (nonatomic, retain) UIImage *image                     DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
+@property (nonatomic, retain) UIImage *image                     DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead
+@property (nonatomic, retain) NSString *imageURL;
 @property (nonatomic, retain) UIColor *backgroundColor           DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
 @property (nonatomic, retain) UIColor *textColor                 DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
 @property (nonatomic, retain) UIColor *detailedTextColor         DEPRECATED_ATTRIBUTE;//use CKStandardCellControllerStyle instead 
