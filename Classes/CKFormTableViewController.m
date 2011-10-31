@@ -803,6 +803,7 @@
 @interface CKFormTableViewController()
 @property (nonatomic,retain, readwrite) NSMutableArray* sections;
 @property (nonatomic,readwrite) BOOL reloading;
+@property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
 @implementation CKFormTableViewController
@@ -811,6 +812,7 @@
 @synthesize autoHideSectionHeaders = _autoHideSectionHeaders;
 @synthesize reloading;
 @synthesize validationEnabled = _validationEnabled;
+@dynamic tableViewHasBeenReloaded;
 
 - (void)postInit{
 	[super postInit];
@@ -923,7 +925,7 @@
     for(CKFormSectionBase* section in sections){
         section.parentController = self;
         
-        if(self.viewIsOnScreen){
+        /*if(self.viewIsOnScreen)*/{
             [section start];
         }
         if(!section.hidden){
@@ -944,6 +946,9 @@
         [self.tableView insertSections:indexSet withRowAnimation:self.rowInsertAnimation];
         [self.tableView endUpdates];
     }
+    else if(indexSet && !self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+    }
     
     return sections;
 }
@@ -956,7 +961,7 @@
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
     
-    if(self.viewIsOnScreen && section.hidden == NO){
+    if(/*self.viewIsOnScreen && */section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -968,7 +973,7 @@
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
     
-    if(self.viewIsOnScreen && section.hidden == NO){
+    if(/*self.viewIsOnScreen && */section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -980,7 +985,7 @@
     NSInteger visibleIndex = section.sectionVisibleIndex;
     [_sections removeObjectAtIndex:index];
     
-    if(self.viewIsOnScreen && section.hidden == NO && visibleIndex >= 0){
+    if(/*self.viewIsOnScreen && */section.hidden == NO && visibleIndex >= 0){
         [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
     }
     
@@ -996,7 +1001,7 @@
 		[collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 	}
     
-    if(self.viewIsOnScreen && section.hidden == NO){
+    if(/*self.viewIsOnScreen && */section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -1097,7 +1102,7 @@
 		}
 	}
     
-    if(self.viewIsOnScreen && section.hidden == NO){
+    if(/*self.viewIsOnScreen && */section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
