@@ -20,5 +20,6 @@ typedef enum CKInlineDebuggerControllerState{
 - (id)initWithViewController:(UIViewController*)viewController;
 - (void)start;
 - (void)stop;
+- (void)setActive:(BOOL)bo  withView:(UIView*)view;
 
 @end

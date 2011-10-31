@@ -15,8 +15,6 @@
 #import "CKModelObject.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
-#import "CKLocalization.h"
-#import "CKInlineDebuggerController.h"
 #import "CKVersion.h"
 
 typedef enum CKDebugCheckState{
@@ -29,7 +27,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 @interface CKUIViewController()
 @property(nonatomic,retain)NSString* navigationItemsBindingContext;
-@property(nonatomic,retain)CKInlineDebuggerController* inlineDebuggerController;
+@property(nonatomic,retain,readwrite)CKInlineDebuggerController* inlineDebuggerController;
 @property(nonatomic,assign)BOOL styleHasBeenApplied;
 @end
 
@@ -91,6 +89,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)dealloc{
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    [self clearBindingsContext];
+    
 	[_name release];
     [_viewWillAppearBlock release];
     [_viewDidAppearBlock release];

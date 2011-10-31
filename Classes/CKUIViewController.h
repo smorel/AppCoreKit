@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "CKLocalization.h"
+#import "CKInlineDebuggerController.h"
 
 @class CKUIViewController;
 @class CKFormTableViewController;
@@ -36,6 +38,8 @@ typedef enum CKInterfaceOrientation{
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidLoadBlock;
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
 @property (nonatomic,assign) CKInterfaceOrientation supportedInterfaceOrientations;
+
+@property(nonatomic,retain,readonly)CKInlineDebuggerController* inlineDebuggerController;
 
 ///-----------------------------------
 /// @name Navigation Buttons
