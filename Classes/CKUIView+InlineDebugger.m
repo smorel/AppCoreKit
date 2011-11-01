@@ -17,7 +17,7 @@
     __block CKFormTableViewController* bController = debugger;
     if([view superview]){
         NSString* title = [NSString stringWithFormat:@"%@ <%p>",[[view superview] class],[view superview]];
-        CKFormCellDescriptor* superViewCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
+        CKFormCellDescriptor* superViewCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^(CKTableViewCellController* controller){
             CKFormTableViewController* superViewForm = [[[view superview]class] inlineDebuggerForObject:[view superview]];
             superViewForm.title = title;
             [bController.navigationController pushViewController:superViewForm animated:YES];

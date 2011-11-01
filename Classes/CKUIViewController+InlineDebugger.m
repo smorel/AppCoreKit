@@ -31,7 +31,7 @@
     
     __block UIViewController* bController = c;
     __block UIViewController* bDebugger = debugger;
-    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^{
+    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
         CKFormTableViewController* controllerForm = [[bController class]inlineDebuggerForObject:bController];
         [bDebugger.navigationController pushViewController:controllerForm animated:YES];
     }];
