@@ -24,7 +24,7 @@
     NSMutableArray* cellDescriptors = [NSMutableArray array];
     for (NSString *domain in domains) {
         //CKStore *store = [CKStore storeWithDomainName:domain];
-        CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:domain action:^(){
+        CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:domain action:^(CKTableViewCellController* controller){
             CKStoreDomainExplorer *domainExplorer = [[CKStoreDomainExplorer alloc] initWithDomain:domain];
             [self.navigationController pushViewController:domainExplorer animated:YES];
             [domainExplorer release];
@@ -66,7 +66,7 @@
         CKAttribute* typeAttribute = [item attributeNamed:@"@class" createIfNotFound:NO];
         CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:typeAttribute ? [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name 
                                                                           subtitle:[NSString stringWithFormat:@"%@", item.createdAt]  
-                                                                            action:^(){
+                                                                            action:^(CKTableViewCellController* controller){
                                                                                 CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
                                                                                 [self.navigationController pushViewController:itemExplorer animated:YES];
                                                                                 }];
@@ -112,9 +112,9 @@
             [cellDescriptors addObject:desc];
         }
         else{
-            CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(){
-                CKStoreDomainExplorer* controller = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
-                controller.title = attribute.name;
+            CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
+                CKStoreDomainExplorer* domainController = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
+                domainController.title = attribute.name;
                 [self.navigationController pushViewController:controller animated:YES];
             }];
             [cellDescriptors addObject:desc];

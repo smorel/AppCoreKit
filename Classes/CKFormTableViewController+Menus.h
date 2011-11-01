@@ -10,9 +10,9 @@
 
 @interface CKFormCellDescriptor(CKMenus)
 
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title action:(void(^)())action;
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle action:(void(^)())action;
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title image:(UIImage*)image action:(void(^)())action;
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)())action;
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title action:(void(^)(CKTableViewCellController* controller))action;
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle action:(void(^)(CKTableViewCellController* controller))action;
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title image:(UIImage*)image action:(void(^)(CKTableViewCellController* controller))action;
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)(CKTableViewCellController* controller))action;
 
 @end

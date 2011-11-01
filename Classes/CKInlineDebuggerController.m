@@ -238,7 +238,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     
     NSMutableArray* userDefaultsCells = [NSMutableArray array];
     for(id userDefault in userDefaultInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^{
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
             udDebugger.title = [[userDefault  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
@@ -257,7 +257,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     
     NSMutableArray* documentCells = [NSMutableArray array];
     for(id document in documentInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^{
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
             udDebugger.title = [[document  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
@@ -267,7 +267,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     CKFormSection* documentSection = [CKFormSection sectionWithCellDescriptors:documentCells headerTitle:@"Documents"];
     
     //Core Data
-    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^{
+    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^(CKTableViewCellController* controller){
         CKStoreExplorer* storeExplorer = [[[CKStoreExplorer alloc]init]autorelease];
         [bDebugger.navigationController pushViewController:storeExplorer animated:YES];
     }];
