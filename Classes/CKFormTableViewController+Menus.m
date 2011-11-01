@@ -52,6 +52,7 @@
         controller.tableViewCell.detailTextLabel.text = subTitle;
         controller.tableViewCell.imageView.image = image;
         controller.tableViewCell.accessoryType = ((action != nil) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone);
+        controller.tableViewCell.selectionStyle = ((action != nil) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone);
         return (id)nil;
     }];
     [descriptor setFlags:((action != nil) ? CKItemViewFlagSelectable : CKItemViewFlagNone)];
