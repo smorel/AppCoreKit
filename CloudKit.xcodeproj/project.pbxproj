@@ -1415,8 +1415,8 @@
 		7506E40613B8FFB400EE1471 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB8913B8ED3600268D13 /* CKMapCellController.h */,
-				7560DB8A13B8ED3600268D13 /* CKMapCellController.m */,
+				7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */,
+				7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */,
 				7560DB8D13B8ED3600268D13 /* CKMapViewController.h */,
 				7560DB8E13B8ED3600268D13 /* CKMapViewController.m */,
 			);
@@ -1548,8 +1548,6 @@
 				7560DB7E13B8ED3600268D13 /* CKLayout.m */,
 				7560DB7F13B8ED3600268D13 /* CKLocalization.h */,
 				7560DB8013B8ED3600268D13 /* CKLocalization.m */,
-				7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */,
-				7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */,
 				7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */,
 				7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */,
 				7560DBA313B8ED3600268D13 /* CKNSArrayAdditions.h */,
@@ -1672,6 +1670,8 @@
 				7560DC1D13B8ED3600268D13 /* CKTextViewCellController.m */,
 				7560DC2013B8ED3600268D13 /* CKToggleSwitchCellController.h */,
 				7560DC2113B8ED3600268D13 /* CKToggleSwitchCellController.m */,
+				7560DB8913B8ED3600268D13 /* CKMapCellController.h */,
+				7560DB8A13B8ED3600268D13 /* CKMapCellController.m */,
 			);
 			name = CellControllers;
 			sourceTree = "<group>";
