@@ -75,9 +75,6 @@
 }
 
 - (void)viewDidLoad{
-    [super viewDidLoad];
-    
-    
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     if([controllerStyle containsObjectForKey:@"tableViewStyle"]){
         self.style = [controllerStyle enumValueForKey:@"tableViewStyle" 
@@ -127,6 +124,8 @@
     
     self.insetsApplied = NO;
     self.tableViewHasBeenReloaded = NO;
+    
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {
