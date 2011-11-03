@@ -258,7 +258,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    NSLog(@"viewWillAppear <%@>",self);
+    //NSLog(@"viewWillAppear <%@>",self);
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -327,7 +327,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"viewWillDisappear <%@>",self);
+    //NSLog(@"viewWillDisappear <%@>",self);
     [super viewWillDisappear:animated];
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
@@ -336,7 +336,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    NSLog(@"viewDidAppear <%@>",self);
+    //NSLog(@"viewDidAppear <%@>",self);
     [super viewDidAppear:animated];
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
@@ -344,7 +344,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-    NSLog(@"viewDidDisappear <%@>",self);
+    //NSLog(@"viewDidDisappear <%@>",self);
     [super viewDidDisappear:animated];
     if(_viewDidDisappearBlock){
         _viewDidDisappearBlock(self,animated);
@@ -356,7 +356,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 #pragma mark - View lifecycle
 
 -(void) viewDidLoad{
-    NSLog(@"viewDidLoad <%@>",self);
+    //NSLog(@"viewDidLoad <%@>",self);
 	[super viewDidLoad];
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
@@ -366,7 +366,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 -(void) viewDidUnload{
-    NSLog(@"viewDidUnload <%@>",self);
+    //NSLog(@"viewDidUnload <%@>",self);
 	[super viewDidUnload];
     if(_viewDidUnloadBlock){
         _viewDidUnloadBlock(self);

@@ -8,6 +8,7 @@
 
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKDebug.h"
 
 @implementation CKObjectPropertyArrayCollection
 @synthesize property = _property;
@@ -109,7 +110,7 @@
         [_property.object addObserver:object forKeyPath:_property.keyPath options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
     }
     else{
-        NSLog(@"could not observe non string keypath for array property : %@",_property);
+        CKDebugLog(@"could not observe non string keypath for array property : %@",_property);
     }
 }
 
@@ -118,7 +119,7 @@
         [_property.object removeObserver:object forKeyPath:_property.keyPath];
     }
     else{
-        NSLog(@"could not observe non string keypath for array property : %@",_property);
+        CKDebugLog(@"could not observe non string keypath for array property : %@",_property);
     }
 }
 

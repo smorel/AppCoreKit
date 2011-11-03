@@ -206,15 +206,19 @@
 
 //Update the indexPath of the visible controllers as they could have moved.
 - (void)updateVisibleViewsIndexPath{
-    for(NSValue* weakView in [self.viewsToIndexPath allKeys]){
-        //indexPathForView is overloaded to point on the real views and not out reference maps
-        //by using this method, we're "sure" to retrieve the right indexPath corresponding to an item view.
-        NSIndexPath* indexPath = [self indexPathForView:[weakView nonretainedObjectValue]];
-        if(indexPath){
-            CKItemViewController* controller = [self.viewsToControllers objectForKey:weakView];
-            [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-            [self.viewsToIndexPath setObject:indexPath forKey:weakView];
-            [self.indexPathToViews setObject:weakView forKey:indexPath];
+    for(CKWeakRef* weakView in self.weakViews){
+        UIView* view = weakView.object;
+        if(view){
+            //indexPathForView is overloaded to point on the real views and not out reference maps
+            //by using this method, we're "sure" to retrieve the right indexPath corresponding to an item view.
+            NSIndexPath* indexPath = [self indexPathForView:view];
+            if(indexPath){
+                NSValue* weakViewValue = [NSValue valueWithNonretainedObject:view];
+                CKItemViewController* controller = [self.viewsToControllers objectForKey:weakViewValue];
+                [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
+                [self.viewsToIndexPath setObject:indexPath forKey:weakViewValue];
+                [self.indexPathToViews setObject:weakViewValue forKey:indexPath];
+            }
         }
     }
 }

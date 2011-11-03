@@ -1065,7 +1065,7 @@
     }
 	
 	[self.tableView reloadData];
-    NSLog(@"onReload <%@>",self);
+    //NSLog(@"onReload <%@>",self);
 }
 
 - (void)onBeginUpdates{
@@ -1075,7 +1075,7 @@
     }
 	
 	[self.tableView beginUpdates];
-    NSLog(@"onBeginUpdates <%@>",self);
+    //NSLog(@"onBeginUpdates <%@>",self);
 }
 
 - (void)onEndUpdates{
@@ -1084,7 +1084,7 @@
 		return;
     }
 	
-    NSLog(@"onEndUpdates <%@>",self);
+    //NSLog(@"onEndUpdates <%@>",self);
 	[self.tableView endUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -1098,7 +1098,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"onInsertObjects <%@>",self);
+    //NSLog(@"onInsertObjects <%@>",self);
 	
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
 	
@@ -1121,7 +1121,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"onRemoveObjects <%@>",self);
+    //NSLog(@"onRemoveObjects <%@>",self);
 	
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
 	
@@ -1152,7 +1152,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"onInsertSectionAtIndex <%@>",self);
+    //NSLog(@"onInsertSectionAtIndex <%@>",self);
 	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
@@ -1166,7 +1166,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"onRemoveSectionAtIndex <%@>",self);
+    //NSLog(@"onRemoveSectionAtIndex <%@>",self);
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
