@@ -236,7 +236,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     if(otherKeyPath != nil && [otherKeyPath length] > 0){
         value = [other valueForKeyPath:otherKeyPath];
     }
-    
+
     //Source value validation
     CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
     CKClassPropertyDescriptor* descriptor = [property descriptor];
@@ -327,6 +327,14 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                     //map sub object
                     [targetSubObject setupWithObject:sourceSubObject withMappings:subObjectMappings reversed:([self reverseMappings:subObjectMappings] || reversed) error:error];
                     //adds sub object
+                    [createdObjects addObject:targetSubObject];
+                }
+                results = createdObjects;
+            }
+            else if(contentType){
+                NSMutableArray* createdObjects = [NSMutableArray array];
+                for(id sourceSubObject in ar){
+                    id targetSubObject = [NSValueTransformer transform:sourceSubObject toClass:contentType];
                     [createdObjects addObject:targetSubObject];
                 }
                 results = createdObjects;
