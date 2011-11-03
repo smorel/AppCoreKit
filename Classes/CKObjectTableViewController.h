@@ -176,6 +176,8 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 //private
 - (void)didSearch:(NSString*)text;
 
+- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
+
 @end
 
 @interface CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)

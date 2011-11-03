@@ -689,19 +689,28 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
-        if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-            CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
-            CGFloat offset = r.origin.y + (r.size.height / 2.0);
-            offset -= self.tableView.contentInset.top;
-            [self.tableView selectRowAtIndexPath:indexPath
-                                        animated:NO
-                                  scrollPosition:UITableViewScrollPositionNone];
-            [self.tableView setContentOffset:CGPointMake(0,offset) animated:YES];
-        }
-        self.selectedIndexPath = indexPath;
+        [self selectRowAtIndexPath:indexPath animated:YES];
 		return indexPath;
 	}
 	return nil;
+}
+
+- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+        CGFloat offset = r.origin.y + (r.size.height / 2.0);
+        offset -= self.tableView.contentInset.top;
+        [self.tableView selectRowAtIndexPath:indexPath
+                                    animated:NO
+                              scrollPosition:UITableViewScrollPositionNone];
+        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
+    }
+    else{
+        [self.tableView selectRowAtIndexPath:indexPath
+                                    animated:NO
+                              scrollPosition:UITableViewScrollPositionMiddle];
+    }
+    self.selectedIndexPath = indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -992,13 +1001,7 @@
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
                 && self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-                CGRect r = [self.tableView rectForRowAtIndexPath:self.selectedIndexPath];
-                CGFloat offset = r.origin.y + (r.size.height / 2.0);
-                offset -= self.tableView.contentInset.top;
-                [self.tableView selectRowAtIndexPath:self.selectedIndexPath
-                                            animated:NO
-                                      scrollPosition:UITableViewScrollPositionNone];
-                [self.tableView setContentOffset:CGPointMake(0,offset) animated:YES];
+                [self selectRowAtIndexPath:self.selectedIndexPath animated:YES];
             }
             
             break;
