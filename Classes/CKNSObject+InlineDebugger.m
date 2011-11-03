@@ -114,7 +114,7 @@
     NSMutableDictionary* styleSheet = [object appliedStyle];
     if(styleSheet){
         NSString* title = [object appliedStylePath];
-        CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^{
+        CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^(CKTableViewCellController* controller){
         }];
         [controllerCell setSelectionBlock:^id(id value) {
             CKTableViewCellController* controller = (CKTableViewCellController*)value;

@@ -51,7 +51,7 @@ typedef enum {
 	BOOL _canBeDismissed;
 }
 
-@property (readonly, nonatomic, retain) NSURL *homeURL;
+@property (nonatomic, retain) NSURL *homeURL;
 @property (readonly, nonatomic) NSURL *currentURL;
 @property (nonatomic, assign, getter=isURLInTitle, setter=showURLInTitle:) BOOL _showURLInTitle;
 @property (nonatomic, assign) BOOL hidesToolbar;

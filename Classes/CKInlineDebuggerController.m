@@ -238,7 +238,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     
     NSMutableArray* userDefaultsCells = [NSMutableArray array];
     for(id userDefault in userDefaultInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^{
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
             udDebugger.title = [[userDefault  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
@@ -257,7 +257,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     
     NSMutableArray* documentCells = [NSMutableArray array];
     for(id document in documentInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^{
+        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
             udDebugger.title = [[document  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
@@ -267,7 +267,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     CKFormSection* documentSection = [CKFormSection sectionWithCellDescriptors:documentCells headerTitle:@"Documents"];
     
     //Core Data
-    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^{
+    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^(CKTableViewCellController* controller){
         CKStoreExplorer* storeExplorer = [[[CKStoreExplorer alloc]init]autorelease];
         [bDebugger.navigationController pushViewController:storeExplorer animated:YES];
     }];
@@ -445,39 +445,47 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             touchedView = [_debuggingHighlightView superview];
         }
         
-        self.state = (self.state == CKInlineDebuggerControllerStatePending) ? CKInlineDebuggerControllerStateDebugging : CKInlineDebuggerControllerStatePending;
-        if(self.state == CKInlineDebuggerControllerStatePending){
-            for(UIGestureRecognizer* gesture in self.customGestures){
-                [self.viewController.view removeGestureRecognizer:gesture];
-            }
-            for(UIView* v in [self.viewController.view subviews]){
-                v.userInteractionEnabled = YES;
-            }
-            [self highlightView:nil];
-            self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
-            self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+        //Switch
+        BOOL active = (self.state == CKInlineDebuggerControllerStateDebugging) ? NO: YES;
+        [self setActive:active withView:touchedView];
+    }
+}
+
+
+- (void)setActive:(BOOL)bo withView:(UIView*)touchedView{
+    if(!bo){
+        self.state = CKInlineDebuggerControllerStatePending;
+        for(UIGestureRecognizer* gesture in self.customGestures){
+            [self.viewController.view removeGestureRecognizer:gesture];
         }
-        else{
-            self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
-            self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
-            self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
-            self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
-            
-            UITapGestureRecognizer* tapGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)]autorelease];
-            tapGesture.numberOfTapsRequired = 1;
-            [self.viewController.view addGestureRecognizer:tapGesture];
-            [self.customGestures addObject:tapGesture];
-            
-            UILongPressGestureRecognizer* longGesture = [[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longGesture:)]autorelease];
-            longGesture.allowableMovement = 10000;
-            [self.viewController.view addGestureRecognizer:longGesture];
-            [self.customGestures addObject:longGesture];
-            
-            for(UIView* v in [self.viewController.view subviews]){
-                v.userInteractionEnabled = NO;
-            }
-            [self highlightView:touchedView ? touchedView : self.viewController.view];
+        for(UIView* v in [self.viewController.view subviews]){
+            v.userInteractionEnabled = YES;
         }
+        [self highlightView:nil];
+        self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
+        self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
+    }
+    else{
+        self.state = CKInlineDebuggerControllerStateDebugging;
+        self.oldRightButtonItem = self.viewController.navigationItem.rightBarButtonItem;
+        self.oldLeftButtonItem = self.viewController.navigationItem.leftBarButtonItem;
+        self.viewController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Inspector") style:UIBarButtonItemStyleBordered target:self action:@selector(inspector:)]autorelease];
+        self.viewController.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:_(@"Documents") style:UIBarButtonItemStyleBordered target:self action:@selector(documents:)]autorelease];
+        
+        UITapGestureRecognizer* tapGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)]autorelease];
+        tapGesture.numberOfTapsRequired = 1;
+        [self.viewController.view addGestureRecognizer:tapGesture];
+        [self.customGestures addObject:tapGesture];
+        
+        UILongPressGestureRecognizer* longGesture = [[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longGesture:)]autorelease];
+        longGesture.allowableMovement = 10000;
+        [self.viewController.view addGestureRecognizer:longGesture];
+        [self.customGestures addObject:longGesture];
+        
+        for(UIView* v in [self.viewController.view subviews]){
+            v.userInteractionEnabled = NO;
+        }
+        [self highlightView:touchedView ? touchedView : self.viewController.view];
     }
 }
 

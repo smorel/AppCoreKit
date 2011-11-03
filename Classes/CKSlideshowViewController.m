@@ -288,7 +288,6 @@
 	
 	[UIView beginAnimations:@"swipe" context:NULL];
 	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	[UIView setAnimationDuration:0.3f];
 	[UIView setAnimationWillStartSelector:@selector(scrollingAnimationWillStart:context:)];

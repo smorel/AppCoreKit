@@ -61,21 +61,20 @@
 
 - (void)sizeToFit{
     if(!self.insetsApplied){
+        //FIXME : We do not take the table view orientation in account here (Portrait, Landscape)
+        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        
         CGRect frame = self.tableViewContainer.frame;
         self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
                                                                   frame.origin.y/* + self.tableInsets.top*/,
                                                                   frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
                                                                   frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
         self.insetsApplied = YES;
     }
 }
 
 - (void)viewDidLoad{
-    [super viewDidLoad];
-    
-    
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
     if([controllerStyle containsObjectForKey:@"tableViewStyle"]){
         self.style = [controllerStyle enumValueForKey:@"tableViewStyle" 
@@ -125,6 +124,8 @@
     
     self.insetsApplied = NO;
     self.tableViewHasBeenReloaded = NO;
+    
+    [super viewDidLoad];
 }
 
 - (void)viewDidUnload {

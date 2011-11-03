@@ -35,6 +35,7 @@
 - (void)updateNumberOfPages;
 - (void)adjustView;
 - (void)adjustTableView;
+- (void)tableViewFrameChanged:(id)value;
 
 @end
 
@@ -59,6 +60,7 @@
 @synthesize scrollingPolicy = _scrollingPolicy;
 @synthesize editableType = _editableType;
 @synthesize searchBlock = _searchBlock;
+@synthesize snapPolicy = _snapPolicy;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -183,9 +185,14 @@
     if(self.tableView.dataSource == nil){
         self.tableView.dataSource = self;
     }
+    
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[self.tableViewContainer bind:@"frame" target:self action:@selector(tableViewFrameChanged:)];
+	[NSObject endBindingsContext];
 }
 
 - (void)viewDidUnload{
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
     [super viewDidUnload];
 	self.searchBar = nil;
 	self.segmentedControl = nil;
@@ -205,10 +212,11 @@
 	_liveSearchDelay = 0.5;
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyNone;
+    _snapPolicy = CKObjectTableViewControllerSnapPolicyNone;
 }
 
 - (void)dealloc {
-	//[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[_indexPathToReachAfterRotation release];
 	_indexPathToReachAfterRotation = nil;
 	[editButton release];
@@ -484,6 +492,8 @@
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
+    
+    [self tableViewFrameChanged:nil];
 }
 
 - (void)reload{
@@ -679,6 +689,16 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
+        if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+            CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+            CGFloat offset = r.origin.y + (r.size.height / 2.0);
+            offset -= self.tableView.contentInset.top;
+            [self.tableView selectRowAtIndexPath:indexPath
+                                        animated:NO
+                                  scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView setContentOffset:CGPointMake(0,offset) animated:YES];
+        }
+        self.selectedIndexPath = indexPath;
 		return indexPath;
 	}
 	return nil;
@@ -927,6 +947,65 @@
     }
 }
 
+- (NSIndexPath*)snapIndexPath{
+    CGFloat offset = self.tableView.contentOffset.y;
+    offset += self.tableView.bounds.size.height / 2.0;
+    
+    for(NSIndexPath* indexPath in self.visibleIndexPaths){
+        UIView* v = [self viewAtIndexPath:indexPath];
+        CGRect rect = v.frame;
+        if(rect.origin.y <= offset && rect.origin.y + rect.size.height >= offset){
+            return indexPath;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)executeSnapPolicy{
+    switch(_snapPolicy){
+        case CKObjectTableViewControllerSnapPolicyNone:{
+            break;
+        }
+        case CKObjectTableViewControllerSnapPolicyCenter:{
+            NSIndexPath* indexPath = [self snapIndexPath];
+            if(indexPath != nil){
+                NSIndexPath * indexPath2 = [self tableView:self.tableView willSelectRowAtIndexPath:indexPath];
+                if(indexPath2){
+                    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath2];
+                }
+            }
+            break;
+        }
+    }
+}
+
+- (void)tableViewFrameChanged:(id)value{
+    switch(_snapPolicy){
+        case CKObjectTableViewControllerSnapPolicyNone:{
+            break;
+        }
+        case CKObjectTableViewControllerSnapPolicyCenter:{
+            //FIXME : we do not take self.tableViewInsets in account here
+            self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0,0);
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+            
+            if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
+                && self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+                CGRect r = [self.tableView rectForRowAtIndexPath:self.selectedIndexPath];
+                CGFloat offset = r.origin.y + (r.size.height / 2.0);
+                offset -= self.tableView.contentInset.top;
+                [self.tableView selectRowAtIndexPath:self.selectedIndexPath
+                                            animated:NO
+                                      scrollPosition:UITableViewScrollPositionNone];
+                [self.tableView setContentOffset:CGPointMake(0,offset) animated:YES];
+            }
+            
+            break;
+        }
+    }
+}
+
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
 	[self fetchMoreData];
@@ -948,13 +1027,16 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	if (decelerate || scrollView.decelerating)
 		return;
+    
 	[self updateViewsVisibility:YES];
+    [self executeSnapPolicy];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
 	[self fetchMoreData];
+    [self executeSnapPolicy];
 }
 
 #pragma mark CKItemViewContainerController Implementation

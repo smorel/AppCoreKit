@@ -25,6 +25,10 @@ typedef enum CKObjectTableViewControllerScrollingPolicy{
     CKObjectTableViewControllerScrollingPolicyResignResponder
 }CKObjectTableViewControllerScrollingPolicy;
 
+typedef enum CKObjectTableViewControllerSnapPolicy{
+    CKObjectTableViewControllerSnapPolicyNone,
+    CKObjectTableViewControllerSnapPolicyCenter
+}CKObjectTableViewControllerSnapPolicy;
 
 typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
 
@@ -95,6 +99,8 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
  Specify the behavior that will get triggered when scrolling.
  */
 @property (nonatomic, assign) CKObjectTableViewControllerScrollingPolicy scrollingPolicy;
+
+@property (nonatomic, assign) CKObjectTableViewControllerSnapPolicy snapPolicy;
 
 ///-----------------------------------
 /// @name Layout

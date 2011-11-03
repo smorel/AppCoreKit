@@ -12,19 +12,19 @@
 
 @implementation CKFormCellDescriptor (CKMenus)
 
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title action:(void(^)())action{
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title action:(void(^)(CKTableViewCellController* controller))action{
     return [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:nil image:nil action:action];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle action:(void(^)())action{
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle action:(void(^)(CKTableViewCellController* controller))action{
     return [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subTitle image:nil action:action];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title image:(UIImage*)image action:(void(^)())action{
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title image:(UIImage*)image action:(void(^)(CKTableViewCellController* controller))action{
     return [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:nil image:image action:action];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)())action{
++ (CKFormCellDescriptor*)cellDescriptorWithTitle:(NSString*)title subtitle:(NSString*)subTitle image:(UIImage*)image action:(void(^)(CKTableViewCellController* controller))action{
     id value = nil;
     if(title != nil){
         value = title;
@@ -52,12 +52,13 @@
         controller.tableViewCell.detailTextLabel.text = subTitle;
         controller.tableViewCell.imageView.image = image;
         controller.tableViewCell.accessoryType = ((action != nil) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone);
+        controller.tableViewCell.selectionStyle = ((action != nil) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone);
         return (id)nil;
     }];
     [descriptor setFlags:((action != nil) ? CKItemViewFlagSelectable : CKItemViewFlagNone)];
     if(action != nil){
         [descriptor setSelectionBlock:^id(id value) {
-            action();
+            action((CKTableViewCellController*)value);
             return (id)nil;
         }];
     }

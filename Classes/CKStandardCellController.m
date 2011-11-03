@@ -14,7 +14,6 @@
 
 @interface CKStandardCellController ()
 
-@property (nonatomic, retain) NSString *imageURL;
 @property (nonatomic, retain) UIImage *fetchedImage;
 @property (nonatomic, retain) CKWebRequest *request;
 
