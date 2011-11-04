@@ -177,6 +177,7 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 - (void)didSearch:(NSString*)text;
 
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
+- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 @end
 

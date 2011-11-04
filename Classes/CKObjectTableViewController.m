@@ -695,6 +695,21 @@
 	return nil;
 }
 
+
+- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+        CGFloat offset = r.origin.y + (r.size.height / 2.0);
+        offset -= self.tableView.contentInset.top;
+        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
+    }
+    else{
+        [self.tableView scrollToRowAtIndexPath:indexPath 
+                              atScrollPosition:UITableViewScrollPositionMiddle 
+                                      animated:YES];
+    }
+}
+
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
     if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
         CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
@@ -708,7 +723,7 @@
     else{
         [self.tableView selectRowAtIndexPath:indexPath
                                     animated:NO
-                              scrollPosition:UITableViewScrollPositionMiddle];
+                              scrollPosition:UITableViewScrollPositionNone];
     }
     self.selectedIndexPath = indexPath;
 }
