@@ -241,7 +241,7 @@ NSString* CKObjectViewControllerFactoryItemLayout = @"CKObjectViewControllerFact
                 UIView* accessoryView = staticCellController.tableViewCell.accessoryView;
                 CGFloat accessorySize = accessoryView ? accessoryView.frame.size.width : 0;
                 if(staticCellController.tableViewCell.accessoryType != UITableViewCellAccessoryNone){
-                    accessorySize = 22;
+                    accessorySize = 20;
                 }
                 CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[params parentController]] - accessorySize;
                 staticCellController.tableViewCell.frame = CGRectMake(0,0,tableWidth-accessorySize,staticCellController.tableViewCell.frame.size.height);

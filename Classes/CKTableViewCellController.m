@@ -49,9 +49,17 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
     if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
 		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
+    
+    [CATransaction commit];
 }
 
 - (void)setDisclosureIndicatorImage:(UIImage*)img{
@@ -380,9 +388,11 @@
     }
     else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
         cell.textLabel.numberOfLines = 0;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.detailTextLabel.numberOfLines = 0;
         cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     }
 }
 
@@ -469,8 +479,14 @@
        || staticController.cellStyle == CKTableViewCellStylePropertyGrid
        || staticController.cellStyle == CKTableViewCellStyleSubtitle2){
         CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-        CGFloat bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-               
+        
+        CGFloat bottomDetails = 0;
+        if(staticController.tableViewCell.detailTextLabel.text != nil &&
+           [staticController.tableViewCell.detailTextLabel.text isKindOfClass:[NSString class]] &&
+           [staticController.tableViewCell.detailTextLabel.text length] > 0){
+            bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
+        }
+        
         CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
         return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
     }
@@ -589,16 +605,9 @@
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
-    
     if(_layoutCallback){
         [_layoutCallback execute:self];
     }
-    
-    [CATransaction commit];
 }
 
 - (void)scrollToRow{
@@ -837,22 +846,21 @@
 
 
 - (CGRect)subtitleDetailFrameForCell:(UITableViewCell*)cell{
+    CGRect textFrame = [self subtitleTextFrameForCell:cell];
+    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
+    CGFloat width = cell.contentView.width - x - 10;
+    
     if(cell.detailTextLabel.text == nil || 
        [cell.detailTextLabel.text isKindOfClass:[NSNull class]] ||
        [cell.detailTextLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
+        return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,0);
     }
-    
-    CGRect textFrame = [self subtitleTextFrameForCell:cell];
-    
-    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
-    CGFloat width = cell.contentView.width - x - 10;
     
     CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                    constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
                                        lineBreakMode:cell.detailTextLabel.lineBreakMode];
     
-    return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, size.width, size.height);
+    return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, width/*size.width*/, size.height);
 }
 
 - (id)performStandardLayout:(CKTableViewCellController *)controller{
@@ -884,8 +892,8 @@
 		}
 	}
     else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		if(cell.textLabel != nil){
 			CGRect textFrame = [self subtitleTextFrameForCell:cell];
 			cell.textLabel.frame = textFrame;
