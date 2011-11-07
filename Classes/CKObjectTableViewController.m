@@ -1234,7 +1234,9 @@
             if([subview respondsToSelector:@selector(text)]){
                 title = [subview performSelector:@selector(text)];
             }
-            [self.delegate performSelector:@selector(tableView:willDisplayHeaderView:withTitle:) withObjects:[NSArray arrayWithObjects:self,subview,title,nil]];
+            
+            id theDelegate = self.delegate;
+            [theDelegate performSelector:@selector(tableView:willDisplayHeaderView:withTitle:) withObjects:[NSArray arrayWithObjects:self,subview,title,nil]];
         }
     }
 }
