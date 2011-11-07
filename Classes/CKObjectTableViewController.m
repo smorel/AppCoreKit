@@ -20,6 +20,7 @@
 #import "CKUIView+Style.h"
 #import "CKUIViewController+Style.h"
 #import "CKLocalization.h"
+#import "CKNSObject+Invocation.h"
 
 //
 
@@ -847,6 +848,16 @@
 }
 
 
+#pragma mark UITableView (CKHeaderViewManagement)
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
+    if([title isKindOfClass:[NSString class]] && [title length] > 0){
+        NSMutableDictionary* style = [self controllerStyle];
+        [headerView applyStyle:style propertyName:@"sectionHeaderView"];
+    }
+}
+
+
 #pragma mark Keyboard Notifications
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
     if (_resizeOnKeyboardNotification == YES){
@@ -1203,6 +1214,28 @@
 - (void)setEditable:(BOOL)editable{
     if(_editableType == CKObjectTableViewControllerEditableTypeNone){
         _editableType = CKObjectTableViewControllerEditableTypeLeft;
+    }
+}
+
+@end
+
+
+
+@interface UITableView (CKHeaderViewManagement)
+@end
+
+@implementation UITableView (CKHeaderViewManagement)
+
+- (void)didAddSubview:(UIView *)subview{
+    [super didAddSubview:subview];
+    if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]){
+        if(self.delegate && [self.delegate respondsToSelector:@selector(tableView:willDisplayHeaderView:withTitle:)]){
+            NSString* title = nil;
+            if([subview respondsToSelector:@selector(text)]){
+                title = [subview performSelector:@selector(text)];
+            }
+            [self.delegate performSelector:@selector(tableView:willDisplayHeaderView:withTitle:) withObjects:[NSArray arrayWithObjects:self,subview,title,nil]];
+        }
     }
 }
 
