@@ -16,6 +16,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
 #import "CKVersion.h"
+#import "CKStyle+Parsing.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -363,6 +364,11 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     self.styleHasBeenApplied = NO;
     
+    //As this value needs to be set before viewWillAppear we force to set it here
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
+    if([controllerStyle containsObjectForKey:@"contentSizeForViewInPopover"]){
+        self.contentSizeForViewInPopover = [controllerStyle cgSizeForKey:@"contentSizeForViewInPopover"];
+    }
 }
 
 -(void) viewDidUnload{
