@@ -15,21 +15,25 @@
 NSString *CKStyleDefaultBackgroundImage = @"defaultBackgroundImage";
 NSString *CKStyleDefaultImage = @"defaultImage";
 NSString *CKStyleDefaultTextColor = @"defaultTextColor";
+NSString *CKStyleDefaultShadowColor = @"defaultShadowColor";
 NSString *CKStyleDefaultTitle = @"defaultTitle";
 
 NSString *CKStyleHighlightedBackgroundImage = @"highlightedBackgroundImage";
 NSString *CKStyleHighlightedImage = @"highlightedImage";
 NSString *CKStyleHighlightedTextColor = @"highlightedTextColor";
+NSString *CKStyleHighlightedShadowColor = @"highlightedShadowColor";
 NSString *CKStyleHighlightedTitle = @"highlightedTitle";
 
 NSString *CKStyleDisabledBackgroundImage = @"disabledBackgroundImage";
 NSString *CKStyleDisabledImage = @"disabledImage";
 NSString *CKStyleDisabledTextColor = @"disabledTextColor";
+NSString *CKStyleDisabledShadowColor = @"disabledShadowColor";
 NSString *CKStyleDisabledTitle = @"disabledTitle";
 
 NSString *CKStyleSelectedBackgroundImage = @"selectedBackgroundImage";
 NSString *CKStyleSelectedImage = @"selectedImage";
 NSString *CKStyleSelectedTextColor = @"selectedTextColor";
+NSString *CKStyleSelectedShadowColor = @"selectedShadowColor";
 NSString *CKStyleSelectedTitle = @"selectedTitle";
 
 @implementation NSMutableDictionary (CKUIButtonStyle)
@@ -50,6 +54,10 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 	return [self stringForKey:CKStyleDefaultTitle];
 }
 
+- (UIColor *)defaultShadowColor {
+	return [self colorForKey:CKStyleDefaultShadowColor];
+}
+
 - (UIImage*)highlightedBackgroundImage {
 	return [self imageForKey:CKStyleHighlightedBackgroundImage];
 }
@@ -64,6 +72,10 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 
 - (NSString *)highlightedTitle {
 	return [self stringForKey:CKStyleHighlightedTitle];
+}
+
+- (UIColor *)highlightedShadowColor {
+	return [self colorForKey:CKStyleHighlightedShadowColor];
 }
 
 - (UIImage*)disabledBackgroundImage {
@@ -82,6 +94,10 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 	return [self stringForKey:CKStyleDisabledTitle];
 }
 
+- (UIColor *)disabledShadowColor {
+	return [self colorForKey:CKStyleDisabledShadowColor];
+}
+
 - (UIImage*)selectedBackgroundImage {
 	return [self imageForKey:CKStyleSelectedBackgroundImage];
 }
@@ -96,6 +112,10 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 
 - (NSString *)selectedTitle {
 	return [self stringForKey:CKStyleSelectedTitle];
+}
+
+- (UIColor *)selectedShadowColor {
+	return [self colorForKey:CKStyleSelectedShadowColor];
 }
 
 @end
@@ -127,6 +147,9 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
             if ([myButtonStyle containsObjectForKey:CKStyleDefaultTitle]) {
                 [button setTitle:[myButtonStyle defaultTitle] forState:UIControlStateNormal];
             }
+            if ([myButtonStyle containsObjectForKey:CKStyleDefaultShadowColor]) {
+                [button setTitleShadowColor:[myButtonStyle defaultShadowColor] forState:UIControlStateNormal];
+            }
             
             //highlighted state
 			if ([myButtonStyle containsObjectForKey:CKStyleHighlightedBackgroundImage]) {
@@ -140,6 +163,9 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
             }
             if ([myButtonStyle containsObjectForKey:CKStyleHighlightedTitle]) {
                 [button setTitle:[myButtonStyle highlightedTitle] forState:UIControlStateHighlighted];
+            }
+            if ([myButtonStyle containsObjectForKey:CKStyleHighlightedShadowColor]) {
+                [button setTitleShadowColor:[myButtonStyle highlightedShadowColor] forState:UIControlStateHighlighted];
             }
             
             //disabled state
@@ -155,8 +181,11 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
             if ([myButtonStyle containsObjectForKey:CKStyleDisabledTitle]) {
                 [button setTitle:[myButtonStyle disabledTitle] forState:UIControlStateDisabled];
             }
+            if ([myButtonStyle containsObjectForKey:CKStyleDisabledShadowColor]) {
+                [button setTitleShadowColor:[myButtonStyle disabledShadowColor] forState:UIControlStateDisabled];
+            }
             
-            //disabled state
+            //selected state
 			if ([myButtonStyle containsObjectForKey:CKStyleSelectedBackgroundImage]) {
                 [button setBackgroundImage:[myButtonStyle selectedBackgroundImage] forState:UIControlStateSelected];
             }
@@ -168,6 +197,9 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
             }
             if ([myButtonStyle containsObjectForKey:CKStyleSelectedTitle]) {
                 [button setTitle:[myButtonStyle selectedTitle] forState:UIControlStateSelected];
+            }
+            if ([myButtonStyle containsObjectForKey:CKStyleSelectedShadowColor]) {
+                [button setTitleShadowColor:[myButtonStyle selectedShadowColor] forState:UIControlStateSelected];
             }
             
             //Font
