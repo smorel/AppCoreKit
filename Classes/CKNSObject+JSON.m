@@ -43,7 +43,7 @@
 		return [(NSNumber *)self stringValue];
 	}
 	
-	return [NSNull null];
+	return @"null";
 }
 
 + (id)objectFromJSONData:(NSData *)data {
