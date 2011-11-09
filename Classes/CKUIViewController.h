@@ -23,31 +23,92 @@ typedef enum CKInterfaceOrientation{
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
 }CKInterfaceOrientation;
 
-/** TODO
+/** 
+ CKUIViewController is the base class providing helpers to build a view controller and manage customization with stylesheet.
+ It also provides convenient blocks to define a view controller inline instead of subclassing it.
+ You can define some elements for navigation like left/right bar buttons and the supported interface orientations without having to subclass it.
  */
 @interface CKUIViewController : UIViewController {
 	NSString* _name;
 }
 
+///-----------------------------------
+/// @name Identification
+///-----------------------------------
+/** 
+ Setting a name is almost only used for stylesheets.
+ You can then target this view controller easily for customization using "CKUIViewController[name=YourControllerName] : { ... }".
+ */
 @property (nonatomic,retain) NSString* name;
 
+///-----------------------------------
+/// @name View Controller Definition
+///-----------------------------------
+/** 
+ This block is called at the begining of viewWillAppear
+ Use this block to setup bindings between your document data and the views.
+ */
 @property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewWillAppearBlock;
+
+/** 
+ This block is called at the end of viewWillAppear when styles have been applied.
+ Use this block if some of your code is dependent of data set by style.
+ For exemple, if you need to layout some views and you defined size or frames for some elements in the stylesheets.
+ */
+@property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewWillAppearEndBlock;
+
+/** 
+ This block is called at the begining of viewDidAppear
+ */
 @property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewDidAppearBlock;
+
+/** 
+ This block is called at the end of viewWillDisappear
+ */
 @property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewWillDisappearBlock;
+
+/** 
+ This block is called at the end of viewDidDisappear
+ */
 @property (nonatomic,copy) CKUIViewControllerAnimatedBlock viewDidDisappearBlock;
+
+/** 
+ This block is called at the end of viewDidLoad.
+ Use this block to setup your view by adding subviews.
+ */
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidLoadBlock;
+
+/** 
+ This block is called at the end of viewWillDisappear
+ */
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
+
+///-----------------------------------
+/// @name Interface Orientation
+///-----------------------------------
+
+/** 
+ This property will define the interface orientations supported by this view controller.
+ */
 @property (nonatomic,assign) CKInterfaceOrientation supportedInterfaceOrientations;
 
+///-----------------------------------
+/// @name Inline Debugger
+///-----------------------------------
+
+/** 
+ This is an access to the inline debugger for this view controller.
+ */
 @property(nonatomic,retain,readonly)CKInlineDebuggerController* inlineDebuggerController;
 
 ///-----------------------------------
-/// @name Navigation Buttons
+/// @name Navigation
 ///-----------------------------------
 /** 
  Specify the bar button item that should be displayed at the right of the navigation bar.
  */
 @property (nonatomic, retain) UIBarButtonItem *rightButton;
+
 /** 
  Specify the bar button item that should be displayed at the left of the navigation bar.
  */
@@ -57,6 +118,10 @@ typedef enum CKInterfaceOrientation{
  Returns whether the view is currently displayed on screen or not
  */
 @property (nonatomic, assign,readonly)  BOOL viewIsOnScreen;
+
+///-----------------------------------
+/// @name Private
+///-----------------------------------
 
 /** 
  This method is called upon initialization. Subclasses can override this method.

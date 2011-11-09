@@ -36,6 +36,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 @synthesize name = _name;
 @synthesize viewWillAppearBlock = _viewWillAppearBlock;
+@synthesize viewWillAppearEndBlock = _viewWillAppearEndBlock;
 @synthesize viewDidAppearBlock = _viewDidAppearBlock;
 @synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
 @synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
@@ -94,6 +95,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     
 	[_name release];
     [_viewWillAppearBlock release];
+    [_viewWillAppearEndBlock release];
     [_viewDidAppearBlock release];
     [_viewWillDisappearBlock release];
     [_viewDidDisappearBlock release];
@@ -292,6 +294,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [NSObject endBindingsContext];
     
     [super viewWillAppear:animated];
+    
+    if(_viewWillAppearEndBlock){
+        _viewWillAppearEndBlock(self,animated);
+    }
     
     [self.inlineDebuggerController start];
 	_viewIsOnScreen = YES;
