@@ -1232,6 +1232,10 @@
 
 @implementation UITableView (CKHeaderViewManagement)
 
+/* IOS 4.3 and before : 
+      When the views are added for section footer, they have no subviews (UITableHeaderFooterViewLabel)
+      Applying style in this delegate will then not apply anything on the label ...
+ */
 - (void)didAddSubview:(UIView *)subview{
     [super didAddSubview:subview];
     if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]){

@@ -7,7 +7,7 @@
 //
 
 #import "CKPopoverController.h"
-
+#import "CKNSObject+Bindings.h"
 
 @implementation CKPopoverController
 @synthesize autoDismissOnInterfaceOrientation;
@@ -53,6 +53,7 @@
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [self clearBindingsContext];
     [super dealloc];
 }
 

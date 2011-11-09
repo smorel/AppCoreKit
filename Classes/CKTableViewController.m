@@ -139,7 +139,7 @@
     
     if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;
-        NSLog(@"tableView reloadData <%@>",self);
+        //NSLog(@"tableView reloadData <%@>",self);
         [self.tableView reloadData];
     }
     
