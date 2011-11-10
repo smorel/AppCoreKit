@@ -199,10 +199,34 @@ void introspectTextInputsProperties(){
 	return YES;
 }
 
++ (BOOL)isKindOf:(Class)type parentClassName:(NSString*)parentClassName{
+    if(parentClassName){
+		if([NSObject isExactKindOf:type parentClassName:parentClassName])
+			return YES;
+		Class p = class_getSuperclass(type);
+		if(p)
+			return [NSObject isKindOf:p parentClassName:parentClassName];
+		return NO;
+	}
+	return YES;
+}
+
 + (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
 	if(parentType){
 		const char* t1 = class_getName(type);
 		const char* t2 = class_getName(parentType);
+		if(strcmp(t1,t2) == 0)
+			return YES;
+		return NO;
+	}
+	return YES;
+}
+
+
++ (BOOL)isExactKindOf:(Class)type parentClassName:(NSString*)parentClassName{
+    if(parentClassName){
+		const char* t1 = class_getName(type);
+		const char* t2 = [parentClassName UTF8String];
 		if(strcmp(t1,t2) == 0)
 			return YES;
 		return NO;

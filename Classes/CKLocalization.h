@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CKLocalizationManager.h"
 
 
 extern NSMutableArray* CKLocalizationStringTableNames;
@@ -19,4 +20,4 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
 
 /** TODO
  */
-#define _(key) CKGetLocalizedString([NSBundle mainBundle], key, key)
+#define _(key) [[[CKLocalizedString alloc]initWithLocalizedKey:key]autorelease]

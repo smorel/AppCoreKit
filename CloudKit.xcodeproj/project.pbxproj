@@ -79,6 +79,10 @@
 		7536F9ED13CE0BE900720C17 /* CKWebViewControllerGoForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */; };
 		7539FF92142CE94700688E2D /* CKNSError+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7539FF90142CE94700688E2D /* CKNSError+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7539FF93142CE94700688E2D /* CKNSError+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7539FF91142CE94700688E2D /* CKNSError+Additions.m */; };
+		755CEE19146C8C2E0052B1FF /* CKLocalizationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */; };
+		755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 755CEE1D146C8C7E0052B1FF /* CKLocalizedString.m */; };
 		7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1D13B8ED3600268D13 /* CKAddressBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC6B13B8ED3600268D13 /* CKAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB1E13B8ED3600268D13 /* CKAddressBook.m */; };
 		7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB1F13B8ED3600268D13 /* CKAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -597,6 +601,10 @@
 		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
+		755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizationManager.h; path = Classes/CKLocalizationManager.h; sourceTree = "<group>"; };
+		755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalizationManager.m; path = Classes/CKLocalizationManager.m; sourceTree = "<group>"; };
+		755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizedString.h; path = Classes/CKLocalizedString.h; sourceTree = "<group>"; };
+		755CEE1D146C8C7E0052B1FF /* CKLocalizedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalizedString.m; path = Classes/CKLocalizedString.m; sourceTree = "<group>"; };
 		7560DB1D13B8ED3600268D13 /* CKAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAddressBook.h; path = Classes/CKAddressBook.h; sourceTree = "<group>"; };
 		7560DB1E13B8ED3600268D13 /* CKAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAddressBook.m; path = Classes/CKAddressBook.m; sourceTree = "<group>"; };
 		7560DB1F13B8ED3600268D13 /* CKAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAlertView.h; path = Classes/CKAlertView.h; sourceTree = "<group>"; };
@@ -1548,6 +1556,10 @@
 				7560DB7E13B8ED3600268D13 /* CKLayout.m */,
 				7560DB7F13B8ED3600268D13 /* CKLocalization.h */,
 				7560DB8013B8ED3600268D13 /* CKLocalization.m */,
+				755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */,
+				755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */,
+				755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */,
+				755CEE1D146C8C7E0052B1FF /* CKLocalizedString.m */,
 				7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */,
 				7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */,
 				7560DBA313B8ED3600268D13 /* CKNSArrayAdditions.h */,
@@ -2296,6 +2308,8 @@
 				75AD5DA4144C73290008F53A /* CKItemViewContainerController+InlineDebugger.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
 				7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */,
+				755CEE19146C8C2E0052B1FF /* CKLocalizationManager.h in Headers */,
+				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2644,6 +2658,8 @@
 				75AD5DA1144C72960008F53A /* CKUIViewController+InlineDebugger.m in Sources */,
 				75AD5DA5144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m in Sources */,
 				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
+				755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */,
+				755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

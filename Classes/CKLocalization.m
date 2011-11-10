@@ -6,7 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import <CKLocalization.h>
+#import "CKLocalization.h"
 
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
