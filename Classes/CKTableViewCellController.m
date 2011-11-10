@@ -708,8 +708,9 @@
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
     CGRect textFrame = [self value3TextFrameForCell:cell];
     
-    CGFloat realWidth = cell.contentView.frame.size.width;
-	CGFloat width = realWidth - (textFrame.origin.x + textFrame.size.width + self.componentsSpace) - self.contentInsets.right;
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+    CGFloat realWidth = rowWidth;
+    CGFloat width = realWidth * self.componentsRatio;
     
     CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
                                          constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 

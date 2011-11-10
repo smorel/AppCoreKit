@@ -76,9 +76,12 @@
             BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
             CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : self.contentInsets.top;
             
-            CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldWidth = realWidth - (realWidth * self.componentsRatio + self.componentsSpace) - self.contentInsets.right;
-            CGFloat textFieldX = realWidth - self.contentInsets.right - textFieldWidth;
+            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+            CGFloat realWidth = rowWidth;
+            CGFloat width = realWidth * self.componentsRatio;
+            
+            CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
+            CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
             if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
                 textFieldWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
                 textFieldX = self.contentInsets.left;

@@ -77,7 +77,16 @@
     
     UITableViewCell* cell = controller.tableViewCell;
     if(controller.cellStyle == CKTableViewCellStyleValue3){
-        controller.textView.frame = [controller value3DetailFrameForCell:cell];
+        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+        CGFloat realWidth = rowWidth;
+        CGFloat width = realWidth * self.componentsRatio;
+        
+        CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
+        CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
+        
+        CGFloat textFieldY = self.contentInsets.top;
+        CGFloat textFieldHeight = cell.contentView.height - (self.contentInsets.top + self.contentInsets.bottom);
+        controller.textView.frame = CGRectMake(textFieldX,textFieldY,textFieldWidth,textFieldHeight);
     }
     else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -102,7 +111,7 @@
         }
     }
     else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGRect textViewFrame = CGRectMake(cell.imageView.x + 10,cell.textLabel.y + cell.textLabel.height,cell.contentView.width - (cell.imageView.x + 10) - 10,controller.textView.frame.size.height);
+        CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,cell.textLabel.x),MAX(self.contentInsets.top,cell.textLabel.y + cell.textLabel.height + 10),cell.contentView.width - (cell.imageView.x + 10) - 10,controller.textView.frame.size.height);
         controller.textView.frame = textViewFrame;
     }
 

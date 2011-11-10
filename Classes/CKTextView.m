@@ -86,7 +86,7 @@
     NSString* str = ([self.text length] <= 0 ) ? @"a" : self.text;
     CGSize size = [str sizeWithFont:self.font 
                   constrainedToSize:CGSizeMake( width  , CGFLOAT_MAX)];
-    CGFloat newheight = size.height + insets.top + insets.bottom + topMargin;
+    CGFloat newheight = size.height + insets.top + insets.bottom + topMargin + 5;
     newFrame.size.height = MIN(self.maxStretchableHeight, newheight);
     
     return newFrame;
