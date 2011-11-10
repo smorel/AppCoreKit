@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 
 
+extern NSMutableArray* CKLocalizationStringTableNames;
+
 /** TODO
  */
 NSString *CKLocalizationCurrentLocalization(void);
-NSString* CKLocalizedString(NSString* key,NSString* value);
+NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
 
 
 /** TODO
  */
-#define _(key) CKLocalizedString(key,key)
+#define _(key) CKGetLocalizedString([NSBundle mainBundle], key, key)

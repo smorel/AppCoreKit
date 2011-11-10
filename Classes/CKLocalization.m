@@ -6,20 +6,20 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <CKLocalization.h>
 
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
 	return [l18n objectAtIndex:0];
 }
 
-static NSMutableArray* CKLocalizationStringTableNames = nil;
+NSMutableArray* CKLocalizationStringTableNames = nil;
 
-NSString* CKLocalizedString(NSString* key,NSString* value){
+NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
     //Find all localization tables
     if(CKLocalizationStringTableNames == nil){
         NSMutableArray* files = [[NSMutableArray alloc]init];
-        NSArray* stringsURLs = [[NSBundle mainBundle]URLsForResourcesWithExtension:@"strings" subdirectory:nil localization:CKLocalizationCurrentLocalization()];
+        NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
         for(NSURL* stringsURL in stringsURLs){
             NSString* fileName = [[stringsURL absoluteString]lastPathComponent];
             NSRange range = [fileName rangeOfString:@"."];
@@ -36,9 +36,10 @@ NSString* CKLocalizedString(NSString* key,NSString* value){
     }
     
     for(NSString* tableName in CKLocalizationStringTableNames){
-        NSString* result =  [[NSBundle mainBundle] localizedStringForKey:key value:value table:tableName];
+        NSString* result =  [bundle localizedStringForKey:key value:value table:tableName];
         if(![result isEqualToString:key])
             return result;
     }
     return value;
 }
+
