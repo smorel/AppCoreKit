@@ -129,6 +129,7 @@
 }
 
 - (void)viewDidUnload {
+    [super viewDidUnload];
 	self.tableView = nil;
 	self.tableViewContainer = nil;
 }

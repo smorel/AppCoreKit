@@ -339,6 +339,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    CKUIViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
+    self.viewWillAppearEndBlock = nil;
+    
+    
 	[self.objectController lock];
 	[self updateParams];
     
@@ -495,6 +499,11 @@
 	}
     
     [self tableViewFrameChanged:nil];
+    
+    if(oldViewWillAppearEndBlock){
+        oldViewWillAppearEndBlock(self,animated);
+        self.viewWillAppearEndBlock = oldViewWillAppearEndBlock;
+    }
 }
 
 - (void)reload{
