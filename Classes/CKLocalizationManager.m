@@ -107,15 +107,18 @@ static CKLocalizationManager *sharedInstance = nil;
 
 
 - (void)refreshView:(UIView*)view{
+    [view setNeedsDisplay];
+    [view setNeedsLayout];
+    for(UIView* v in [view subviews]){
+        [self refreshView:v];
+    }
+    
     if([view isKindOfClass:[UITableView class]]){
         UITableView* table = (UITableView*)view;
+        NSIndexPath* indexPath = [table indexPathForSelectedRow];
         [table reloadData];
-    }
-    else{
-        [view setNeedsDisplay];
-        [view setNeedsLayout];
-        for(UIView* v in [view subviews]){
-            [self refreshView:v];
+        if(indexPath){
+            [table selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
     }
 }
