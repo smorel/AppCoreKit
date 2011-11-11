@@ -128,6 +128,10 @@ static CKLocalizationManager *sharedInstance = nil;
     controller.title = controller.title;
     [self refreshViewController:[controller modalViewController]];
     
+    if([[controller view]superview] == nil){
+        [self refreshView:[controller view]];
+    }
+    
     if([NSObject isKindOf:[controller class] parentClassName:@"CKContainerViewController"]
        || [NSObject isKindOf:[controller class] parentClassName:@"CKSplitViewController"]){
         NSArray* controllers = [controller performSelector:@selector(viewControllers)];
