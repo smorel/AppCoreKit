@@ -128,6 +128,9 @@
     if(self.detailedTextColor){
         cell.detailTextLabel.textColor = self.detailedTextColor;
     }
+    if (self.selectable == NO) {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
     
     cell.textLabel.numberOfLines = self.multilineText ? 0 : 1;
     cell.detailTextLabel.numberOfLines = self.multilineDetailText ? 0 : 1;
