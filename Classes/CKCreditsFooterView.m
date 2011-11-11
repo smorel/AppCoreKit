@@ -84,11 +84,24 @@
 		self.versionLabel = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
 		_versionLabel.backgroundColor = [UIColor clearColor];
 		_versionLabel.textAlignment = UITextAlignmentCenter;
-		_versionLabel.shadowOffset = CGSizeMake(0, 1);
 		_versionLabel.font = [UIFont systemFontOfSize:14];
 		_versionLabel.text = appVersion;
 		_versionLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		[_versionLabel sizeToFit];
+        
+        switch (style) {
+            case CKCreditsViewStyleDark:
+                _versionLabel.textColor = [UIColor colorWithRGBValue:0xa4a4a4];
+                _versionLabel.shadowOffset = CGSizeMake(0, 1);
+                _versionLabel.shadowColor = [UIColor colorWithRGBValue:0x000000];
+                break;
+                
+            case CKCreditsViewStyleLight:
+                _versionLabel.textColor = [UIColor colorWithRGBValue:0x4c566c];
+                _versionLabel.shadowOffset = CGSizeMake(0, 1);
+                _versionLabel.shadowColor = [UIColor colorWithRGBValue:0xffffff];
+                break;
+        }
 		
 		UIView *plateContainerView = [[[UIView alloc] initWithFrame:self.plateView.frame] autorelease];
 		[plateContainerView addSubview:self.plateView];
