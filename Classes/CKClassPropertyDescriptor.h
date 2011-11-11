@@ -102,10 +102,10 @@ typedef enum{
 }
 
 + (CKClassPropertyDescriptorManager*)defaultManager;
-- (NSArray*)allPropertiesForClass:(Class)class;
-- (NSArray*)allViewsPropertyForClass:(Class)class;
-- (NSArray*)allPropertieNamesForClass:(Class)class;
-- (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)class;
+- (NSArray*)allPropertiesForClass:(Class)type;
+- (NSArray*)allViewsPropertyForClass:(Class)type;
+- (NSArray*)allPropertieNamesForClass:(Class)type;
+- (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)type;
 /*
 - (NSArray*)allPropertiesForStruct:(NSString*)name;
 - (NSArray*)allPropertieNamesForStruct:(NSString*)name;

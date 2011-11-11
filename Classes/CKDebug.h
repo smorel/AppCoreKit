@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-NSString* cleanString(NSString* str);
+extern NSString* cleanString(NSString* str);
 
 #ifdef DEBUG
   /** TODO
