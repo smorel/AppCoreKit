@@ -1001,6 +1001,9 @@
     CGFloat offset = self.tableView.contentOffset.y;
     offset += self.tableView.bounds.size.height / 2.0;
     
+    if(offset < 0){ offset = 0; }
+    if(offset > self.tableView.contentSize.height){ offset = self.tableView.contentSize.height; }
+    
     for(NSIndexPath* indexPath in self.visibleIndexPaths){
         UIView* v = [self viewAtIndexPath:indexPath];
         CGRect rect = v.frame;
