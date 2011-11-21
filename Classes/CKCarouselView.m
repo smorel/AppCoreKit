@@ -206,10 +206,27 @@ double round(double x)
 	if(self.delegate && [self.delegate respondsToSelector:@selector(carouselView:viewForHeaderInSection:)]){
 		self.visibleHeaderView = [self.delegate carouselView:self viewForHeaderInSection:0];
 	}
+    
+    for(UIView* view in [_visibleViewsForIndexPaths allValues]){
+		if(view != nil){
+			[view removeFromSuperview];
+			[self enqueueReusableView:view];
+		}
+	}
+    [_visibleViewsForIndexPaths removeAllObjects];
+
 	
 	self.numberOfPages = count;
 	self.currentPage = self.currentPage;
+    
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
 	[self updateViewsAnimated:YES];
+    
+    [CATransaction commit];
 }
 
 - (void)enqueueReusableView:(UIView*)view{
