@@ -75,11 +75,17 @@
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return nil;
+    }
 	return [item controllerForObject:object atIndexPath:indexPath];
 }
 
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params{
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return CKItemViewFlagNone;
+    }
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
 	return [item flagsForObject:object atIndexPath:indexPath withParams:params];
@@ -87,6 +93,9 @@
 
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath  params:(NSMutableDictionary*)params{
 	CKObjectViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return CGSizeMake(0,0);
+    }
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
 	return [item sizeForObject:object atIndexPath:indexPath withParams:params];

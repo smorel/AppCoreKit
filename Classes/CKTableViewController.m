@@ -226,12 +226,13 @@
     /* Using indexPathForRowAtPoint because indexPathForCell sometimes deletes UITableViewCell and is catched by weaks refs.
      it could happend while iterating on the weakRefs array and then crash !
      calling indexPathForRowAtPoint has the exact same behaviour but do not kill any cells !
+     //NSIndexPath* indexPath =  [self.tableView indexPathForCell:(UITableViewCell*)view];
      */
+    
     NSArray* indexPaths = [self.tableView indexPathsForRowsInRect:view.frame];
-    NSIndexPath* indexPath = [indexPaths objectAtIndex:0];
-
-	//NSIndexPath* indexPath =  [self.tableView indexPathForCell:(UITableViewCell*)view];
-    return indexPath;
+    if([indexPaths count] <= 0)
+        return nil;
+    return [indexPaths objectAtIndex:0];
 }
 
 /* implemented in parent controller now.
