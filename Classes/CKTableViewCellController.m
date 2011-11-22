@@ -733,11 +733,24 @@
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
+    //Detail Check
+    CGSize detailsize = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
+    BOOL detailOn1Line = (detailsize.height == cell.detailTextLabel.font.lineHeight);
+    
+    
+    
     CGFloat maxWidth = realWidth - width - self.componentsSpace;
     
     CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
                                    constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
                                        lineBreakMode:cell.textLabel.lineBreakMode];
+    BOOL textOn1Line = (size.height == cell.textLabel.font.lineHeight);
+    
+    if(detailOn1Line && textOn1Line){
+        size.height = MAX(cell.textLabel.font.lineHeight,cell.detailTextLabel.font.lineHeight);
+    }
     
     BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
     CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;

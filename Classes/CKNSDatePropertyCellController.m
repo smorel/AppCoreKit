@@ -469,4 +469,10 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     }
 }
 
+
+- (id)performStandardLayout:(CKNSDatePropertyCellController*)controller{
+	[super performStandardLayout:controller];
+    return (id)nil;
+}
+
 @end

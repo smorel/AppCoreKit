@@ -210,6 +210,12 @@
             CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
             CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight));
+            
+            //align textLabel on y
+            CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
+            CGFloat txtLabelHeight = cell.textLabel.height;
+            CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
+            cell.textLabel.y = txtLabelY;
 		}
         else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;

@@ -87,6 +87,12 @@
                 textFieldX = self.contentInsets.left;
             }
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
+            
+            //align textLabel on y
+            CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
+            CGFloat txtLabelHeight = cell.textLabel.height;
+            CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
+            cell.textLabel.y = txtLabelY;
         }
         else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
