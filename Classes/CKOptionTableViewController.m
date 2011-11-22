@@ -124,7 +124,6 @@
 
 - (id)createCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-    standardController.componentsRatio = 1;
     standardController.cellStyle = self.optionCellStyle;
     return nil;
 }
@@ -140,6 +139,8 @@
 
 - (id)setupCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
+    standardController.componentsRatio = 0.95;
+    
 	NSNumber* index = [NSNumber numberWithInt:standardController.indexPath.row];
 	if([self.selectedIndexes containsObject:index]){
 		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;

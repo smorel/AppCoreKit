@@ -239,6 +239,11 @@
         id value = [self.values objectAtIndex:index];
         [self setValueInObjectProperty:value];
 	}
+    
+    //Notify parent controller that this row height could have vhanged
+    CKTableViewController* parentTableViewController = [self parentTableViewController];
+    [parentTableViewController onBeginUpdates];
+    [parentTableViewController onEndUpdates];
 	
 	if(!self.multiSelectionEnabled){
 		[self.parentController.navigationController popViewControllerAnimated:YES];

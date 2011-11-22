@@ -170,7 +170,11 @@
 	}
 	
 	if(self.tableViewCell){
+        CKTableViewController* tableViewController = [self parentTableViewController];
 		self.tableViewCell.detailTextLabel.text = [self labelForValue:self.value];
+        
+        [tableViewController onBeginUpdates];
+        [tableViewController onEndUpdates];
 	}
 	
 	if(!self.multiSelectionEnabled){
