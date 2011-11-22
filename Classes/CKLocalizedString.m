@@ -10,9 +10,16 @@
 #import "CKLocalizationManager.h"
 #import "CKNSObject+Bindings.h"
 
+@interface CKLocalizedString()
+@property(nonatomic,retain)NSString* currentLanguage;
+@property(nonatomic,retain)NSString* currentValue;
+@end
+
 @implementation CKLocalizedString
 @synthesize key = _key;
 @synthesize localizedStrings = _localizedStrings;
+@synthesize currentLanguage = _currentLanguage;
+@synthesize currentValue = _currentValue;
 
 - (id)initWithLocalizedKey:(NSString*)theKey{
     self = [super init];
@@ -27,11 +34,14 @@
 }
 
 - (void)dealloc{
-    [self clearBindingsContext];
     [_key release];
     _key = nil;
     [_localizedStrings release];
     _localizedStrings = nil;
+    [_currentValue release];
+    _currentValue = nil;
+    [_currentLanguage release];
+    _currentLanguage = nil;
     [super dealloc];
 }
 
@@ -51,14 +61,19 @@
 }
 
 - (NSString*)localizedString{
-    if(_localizedStrings){
-        NSString* currentLanguage = [[CKLocalizationManager sharedManager]language];
-        return [_localizedStrings objectForKey:currentLanguage];
+    NSString* lng = [[CKLocalizationManager sharedManager]language];
+    
+    if(![_currentLanguage isEqualToString:lng]){
+        if(_localizedStrings){
+            self.currentValue = [_localizedStrings objectForKey:lng];
+        }
+        else if(_key){
+            self.currentValue = [[CKLocalizationManager sharedManager]localizedStringForKey:self.key value:self.key]; 
+        }
+        self.currentLanguage = lng;
     }
-    else if(_key){
-        return [[CKLocalizationManager sharedManager]localizedStringForKey:self.key value:self.key]; 
-    }
-    return nil;
+    
+    return _currentValue;
 }
 
 - (NSString*)description{
