@@ -52,8 +52,14 @@
 - (void)dealloc {
 	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
-	self.tableView = nil;
-	self.tableViewContainer = nil;
+    if(_tableView){
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [_tableView release];
+        _tableView = nil;
+    }
+	[_tableViewContainer release];
+    _tableViewContainer = nil;
 	[super dealloc];
 }
 
@@ -129,8 +135,12 @@
 }
 
 - (void)viewDidUnload {
-	[_tableView release];
-    _tableView = nil;
+    if(_tableView){
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [_tableView release];
+        _tableView = nil;
+    }
 	[_tableViewContainer release];
     _tableViewContainer = nil;
     

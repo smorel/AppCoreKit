@@ -117,7 +117,7 @@ static CKLocalizationManager *sharedInstance = nil;
     for(UIView* v in [view subviews]){
         [self refreshView:v];
     }
-    
+    /*
     if([view isKindOfClass:[UITableView class]]){
         UITableView* table = (UITableView*)view;
         NSIndexPath* indexPath = [table indexPathForSelectedRow];
@@ -126,6 +126,7 @@ static CKLocalizationManager *sharedInstance = nil;
             [table selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
     }
+     */
 }
 
 - (void)refreshViewController:(UIViewController*)controller{
@@ -134,6 +135,9 @@ static CKLocalizationManager *sharedInstance = nil;
     }
     
     controller.title = controller.title;
+    if([controller respondsToSelector:@selector(reload)]){
+        [controller performSelector:@selector(reload)];
+    }
     [self refreshViewController:[controller modalViewController]];
     
     if([[controller view]superview] == nil){
