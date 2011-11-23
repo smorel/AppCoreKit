@@ -866,7 +866,7 @@
 
 - (void)reload{
 	self.reloading = YES;
-	if(self.viewIsOnScreen){
+	if(self.state & CKUIViewControllerStateDidAppear){
 		for(CKFormSectionBase* section in _sections){
 			[section start];
 			
@@ -883,7 +883,7 @@
 	self.reloading = NO;
 	[super reload];
 	
-	if(self.viewIsOnScreen){
+	if(self.state & CKUIViewControllerStateDidAppear){
 		for(CKFormSectionBase* section in _sections){
 			[section updateStyleForNonNewVisibleCells];
 		}
@@ -925,10 +925,7 @@
     NSMutableIndexSet* indexSet = nil;
     for(CKFormSectionBase* section in sections){
         section.parentController = self;
-        
-        /*if(self.viewIsOnScreen)*/{
-            [section start];
-        }
+        [section start];
         if(!section.hidden){
             if(indexSet == nil){
                 indexSet = [NSMutableIndexSet indexSet];
@@ -943,9 +940,16 @@
     }
     
     if(indexSet && self.viewIsOnScreen){
-        [self.tableView beginUpdates];
-        [self.tableView insertSections:indexSet withRowAnimation:self.rowInsertAnimation];
-        [self.tableView endUpdates];
+        if((self.state & CKUIViewControllerStateDidAppear)){
+                //[self.tableView beginUpdates];
+            UITableViewRowAnimation anim = self.rowInsertAnimation ;
+            [self.tableView insertSections:indexSet withRowAnimation:anim];
+                //[self.tableView endUpdates];
+        }
+        else{
+            //Calls super explicitely here as we do not want initializations done in form.
+            [super reload];
+        }
     }
     else if(indexSet && !self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
@@ -962,7 +966,7 @@
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
     
-    if(/*self.viewIsOnScreen && */section.hidden == NO){
+    if(section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -974,7 +978,7 @@
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
     
-    if(/*self.viewIsOnScreen && */section.hidden == NO){
+    if(section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -986,7 +990,7 @@
     NSInteger visibleIndex = section.sectionVisibleIndex;
     [_sections removeObjectAtIndex:index];
     
-    if(/*self.viewIsOnScreen && */section.hidden == NO && visibleIndex >= 0){
+    if(section.hidden == NO && visibleIndex >= 0){
         [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
     }
     
@@ -1002,7 +1006,7 @@
 		[collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 	}
     
-    if(/*self.viewIsOnScreen && */section.hidden == NO){
+    if(section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     
@@ -1103,7 +1107,7 @@
 		}
 	}
     
-    if(/*self.viewIsOnScreen && */section.hidden == NO){
+    if(section.hidden == NO){
         [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
     }
     

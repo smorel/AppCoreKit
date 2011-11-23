@@ -705,7 +705,7 @@
     }
     //NSLog(@"onInsertObjects <%@>",self);
 	
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -728,7 +728,7 @@
     }
     //NSLog(@"onRemoveObjects <%@>",self);
 	
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
+	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -758,7 +758,7 @@
 		return;
     }
     //NSLog(@"onInsertSectionAtIndex <%@>",self);
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
@@ -772,7 +772,7 @@
 		return;
     }
     //NSLog(@"onRemoveSectionAtIndex <%@>",self);
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
