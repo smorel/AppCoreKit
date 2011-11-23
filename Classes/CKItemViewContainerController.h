@@ -76,13 +76,13 @@
 @property (nonatomic, retain) NSMutableDictionary* params;
 
 //init
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory;
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib;
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib;
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory;
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory  nibName:(NSString*)nib;
 
 //setup
-- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
+- (void)setupWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;
 
 //update
 - (void)updateVisibleViewsIndexPath;
@@ -102,7 +102,7 @@
 - (NSArray*)objectsForSection:(NSInteger)section;
 - (NSInteger)indexOfObject:(id)object inSection:(NSInteger)section;
 
-//hierarchy management
+//content management
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section;
 
@@ -151,4 +151,17 @@
 @optional
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectAccessoryViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+@end
+
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@interface CKItemViewContainerController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib DEPRECATED_ATTRIBUTE;
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory DEPRECATED_ATTRIBUTE;
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib DEPRECATED_ATTRIBUTE;
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
 @end

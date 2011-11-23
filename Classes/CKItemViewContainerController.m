@@ -56,33 +56,30 @@
 	return self;
 }
 
-- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	return [self initWithObjectController:controller factory:factory];
 }
 
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib{
-	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
+    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	return [self initWithObjectController:controller factory:factory nibName:nib];
+}
+
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory{
+    return [self initWithObjectController:controller factory:factory nibName:nil];
+}
+
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
+    [self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
 	self.controllerFactory = factory;
-	return self;	
-}
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
-	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[self initWithCollection:collection mappings:mappings withNibName:nil];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory{
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
-	return self;
+- (void)setupWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+	self.controllerFactory = factory;
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 - (void)dealloc {
@@ -646,6 +643,43 @@
 		return documentController.collection.feedSource;
 	}
 	return nil;
+}
+
+@end
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation CKItemViewContainerController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib{
+	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
+	self.objectController = controller;
+	self.controllerFactory = factory;
+	return self;	
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
+	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
+	return self;
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	[self initWithCollection:collection mappings:mappings withNibName:nil];
+	return self;
+}
+
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory{
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
+	return self;
+}
+
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 @end
