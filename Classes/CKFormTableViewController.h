@@ -131,12 +131,17 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
  */
 @interface CKFormCellDescriptor : CKItemViewControllerFactoryItem{
 	id _value;
+    CKItemViewController* viewController;
 }
 
 @property (nonatomic,retain) id value;
+@property (nonatomic,retain) id viewController;
 
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass;
+- (id)initWithItemViewController:(CKItemViewController*)controller;
+
 + (CKFormCellDescriptor*)cellDescriptorWithValue:(id)value controllerClass:(Class)controllerClass;
++ (CKFormCellDescriptor*)cellDescriptorWithItemViewController:(CKItemViewController*)controller;
 
 @end
 

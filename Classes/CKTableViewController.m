@@ -177,6 +177,7 @@
 }
 
 - (void)reload {
+    [super reload];
 	[self.tableView reloadData];
 	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
 		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];

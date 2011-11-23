@@ -376,7 +376,7 @@ double round(double x)
 		if(indexPath && [visiblesIndexPaths containsObject:indexPath] == NO){
 			if([self isVisibleAtIndexPath:indexPath]){
 				if([_visibleViewsForIndexPaths objectForKey:indexPath] == nil){
-					[indexPathToAdd addObject:indexPath];
+					[indexPathToAdd insertObject:indexPath atIndex:0];
 				}
 				[visiblesIndexPaths addObject:indexPath];
 			}

@@ -60,6 +60,7 @@
 	NSMutableDictionary* _viewsToIndexPath;
 	NSMutableDictionary* _indexPathToViews;
 	NSMutableArray* _weakViews;
+    NSMutableArray* _sectionsToControllers; //containing NSMutableArray of CKItemViewController
 	
 	NSMutableDictionary* _params;
 	
@@ -134,6 +135,8 @@
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void)onInsertSectionAtIndex:(NSInteger)index;
 - (void)onRemoveSectionAtIndex:(NSInteger)index;
+
+- (void)reload;
 
 //Helpers
 - (CKFeedSource*)collectionDataSource;
