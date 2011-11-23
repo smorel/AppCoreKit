@@ -221,9 +221,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	CLLocationCoordinate2D topLeft, bottomRight;
 	topLeft.latitude = topLeft.longitude = bottomRight.latitude = bottomRight.longitude = 0;
 	for (NSObject<MKAnnotation> *annotation in theAnnotations) {
-        if(![[[annotation class]description]isEqualToString:@"RFDDeal"]){
-            int i =3;
-        }
 		if (annotation.coordinate.latitude < topLeft.latitude || topLeft.latitude == 0) topLeft.latitude = annotation.coordinate.latitude;
 		if (annotation.coordinate.longitude < topLeft.longitude || topLeft.longitude == 0) topLeft.longitude = annotation.coordinate.longitude;
 		if (annotation.coordinate.latitude > bottomRight.latitude || bottomRight.latitude == 0) bottomRight.latitude = annotation.coordinate.latitude;

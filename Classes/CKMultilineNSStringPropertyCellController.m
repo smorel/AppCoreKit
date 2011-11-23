@@ -128,13 +128,8 @@
     if([property isReadOnly] || staticController.readOnly){
         return [CKTableViewCellController viewSizeForObject:object withParams:params];
     }
-    else{
-        //NSString* text = staticController.tableViewCell.textLabel.text;
-        NSString* detail = [property value];
-        
-        //CGRect newFrame = [staticController.textView frameForText:detail];      
-		CGFloat bottomTextView = staticController.textView.frame.origin.y + staticController.textView.frame.size.height;     
-		//CGFloat bottomTextView = staticController.textView.frame.origin.y +  staticController.textView.frame.size.height;
+    else{    
+		CGFloat bottomTextView = staticController.textView.frame.origin.y + staticController.textView.frame.size.height;
 		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
 		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
 		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
