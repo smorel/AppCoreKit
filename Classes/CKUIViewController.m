@@ -27,9 +27,10 @@ typedef enum CKDebugCheckState{
 static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
 
 @interface CKUIViewController()
-@property(nonatomic,retain)NSString* navigationItemsBindingContext;
-@property(nonatomic,retain,readwrite)CKInlineDebuggerController* inlineDebuggerController;
-@property(nonatomic,assign)BOOL styleHasBeenApplied;
+@property(nonatomic,retain) NSString* navigationItemsBindingContext;
+@property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
+@property(nonatomic,assign) BOOL styleHasBeenApplied;
+@property (nonatomic, assign, readwrite) CKUIViewControllerState state;
 @end
 
 @implementation CKUIViewController
@@ -48,7 +49,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize supportedInterfaceOrientations;
 @synthesize inlineDebuggerController = _inlineDebuggerController;
 @synthesize styleHasBeenApplied;
-@synthesize viewIsOnScreen = _viewIsOnScreen;
+@synthesize state;
+@synthesize viewIsOnScreen;
 
 - (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
     metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
@@ -57,12 +59,23 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
                                                CKInterfaceOrientationAll);
 }
 
+- (void)stateMetaData:(CKObjectPropertyMetaData*)metaData{
+    metaData.enumDescriptor = CKEnumDefinition(@"CKUIViewControllerState", 
+                                               CKUIViewControllerStateNone,
+                                               CKUIViewControllerStateWillAppear,
+                                               CKUIViewControllerStateDidAppear,
+                                               CKUIViewControllerStateWillDisappear,
+                                               CKUIViewControllerStateDidDisappear,
+                                               CKUIViewControllerStateDidUnload,
+                                               CKUIViewControllerStateDidLoad);
+}
+
 - (void)postInit {	
-	_viewIsOnScreen = NO;
     self.styleHasBeenApplied = NO;
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
+    self.state = CKUIViewControllerStateNone;
 }
 
 - (id)init {
@@ -72,6 +85,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     return self;
 }
+
 
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
@@ -113,6 +127,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	[super dealloc];
 }
 
+#pragma mark - Style Management
 
 - (void)applyStyleForLeftBarButtonItem{
     if(self.navigationItem.leftBarButtonItem){
@@ -260,8 +275,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [CATransaction commit];
 }
 
+#pragma mark - View lifecycle
+
 - (void)viewWillAppear:(BOOL)animated{
-    //NSLog(@"viewWillAppear <%@>",self);
+    self.state = CKUIViewControllerStateWillAppear;
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -300,50 +317,18 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     
     [self.inlineDebuggerController start];
-	_viewIsOnScreen = YES;
-}
-
-- (void)setLeftButton:(UIBarButtonItem *)theleftButton{
-    [_leftButton release];
-    _leftButton = [theleftButton retain];
-    if(self.viewIsOnScreen){
-        [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
-        [self applyStyleForLeftBarButtonItem];
-        
-        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
-        if([CKOSVersion() floatValue]< 4.2){
-            self.navigationItem.leftBarButtonItem = nil;
-            [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
-        }
-    }
-}
-
-- (void)setRightButton:(UIBarButtonItem *)theRightButton{
-    [_rightButton release];
-    _rightButton = [theRightButton retain];
-    if(self.viewIsOnScreen){
-        [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
-        [self applyStyleForRightBarButtonItem];
-        
-        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
-        if([CKOSVersion() floatValue]< 4.2){
-            self.navigationItem.rightBarButtonItem = nil;
-            [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
-        }
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    //NSLog(@"viewWillDisappear <%@>",self);
+    self.state = CKUIViewControllerStateWillDisappear;
     [super viewWillDisappear:animated];
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
     }
-	_viewIsOnScreen = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    //NSLog(@"viewDidAppear <%@>",self);
+    self.state = CKUIViewControllerStateDidAppear;
     [super viewDidAppear:animated];
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
@@ -351,7 +336,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-    //NSLog(@"viewDidDisappear <%@>",self);
+    self.state = CKUIViewControllerStateDidDisappear;
     [super viewDidDisappear:animated];
     if(_viewDidDisappearBlock){
         _viewDidDisappearBlock(self,animated);
@@ -360,10 +345,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self.inlineDebuggerController stop];
 }
 
-#pragma mark - View lifecycle
-
 -(void) viewDidLoad{
-    //NSLog(@"viewDidLoad <%@>",self);
+    self.state = CKUIViewControllerStateDidLoad;
 	[super viewDidLoad];
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
@@ -378,7 +361,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 -(void) viewDidUnload{
-    //NSLog(@"viewDidUnload <%@>",self);
+    self.state = CKUIViewControllerStateDidUnload;
 	[super viewDidUnload];
     if(_viewDidUnloadBlock){
         _viewDidUnloadBlock(self);
@@ -394,6 +377,43 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         return YES;
     return NO;
 }
+
+- (BOOL)viewIsOnScreen{
+    return (self.state & CKUIViewControllerStateWillAppear) || (self.state & CKUIViewControllerStateDidAppear);
+}
+
+#pragma mark - Buttons Management
+
+- (void)setLeftButton:(UIBarButtonItem *)theleftButton{
+    [_leftButton release];
+    _leftButton = [theleftButton retain];
+    if(self.viewIsOnScreen){
+        [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
+        [self applyStyleForLeftBarButtonItem];
+        
+            //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            self.navigationItem.leftBarButtonItem = nil;
+            [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
+        }
+    }
+}
+
+- (void)setRightButton:(UIBarButtonItem *)theRightButton{
+    [_rightButton release];
+    _rightButton = [theRightButton retain];
+    if(self.viewIsOnScreen){
+        [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
+        [self applyStyleForRightBarButtonItem];
+        
+            //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            self.navigationItem.rightBarButtonItem = nil;
+            [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
+        }
+    }
+}
+
 
 #ifdef DEBUG
 - (void)CheckForBlockCopy{
@@ -427,3 +447,4 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 
 @end
+

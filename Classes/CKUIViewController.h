@@ -23,6 +23,16 @@ typedef enum CKInterfaceOrientation{
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
 }CKInterfaceOrientation;
 
+typedef enum CKUIViewControllerState{
+    CKUIViewControllerStateNone           = 1 << 0,
+    CKUIViewControllerStateWillAppear     = 1 << 1,
+    CKUIViewControllerStateDidAppear      = 1 << 2,
+    CKUIViewControllerStateWillDisappear  = 1 << 3,
+    CKUIViewControllerStateDidDisappear   = 1 << 4,
+    CKUIViewControllerStateDidUnload      = 1 << 5,
+    CKUIViewControllerStateDidLoad        = 1 << 6
+}CKUIViewControllerState;
+
 /** 
  CKUIViewController is the base class providing helpers to build a view controller and manage customization with stylesheet.
  It also provides convenient blocks to define a view controller inline instead of subclassing it.
@@ -114,6 +124,15 @@ typedef enum CKInterfaceOrientation{
  */
 @property (nonatomic, retain) UIBarButtonItem *leftButton;
 
+
+///-----------------------------------
+/// @name State
+///-----------------------------------
+/** 
+ Specify the bar button item that should be displayed at the left of the navigation bar.
+ */
+@property (nonatomic, assign, readonly) CKUIViewControllerState state;
+
 /** 
  Returns whether the view is currently displayed on screen or not
  */
@@ -134,3 +153,5 @@ typedef enum CKInterfaceOrientation{
 - (void)applyStyleForNavigation;
 
 @end
+
+
