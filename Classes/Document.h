@@ -17,4 +17,4 @@
 #import "CKUserDefaults.h"
 #import "CKObjectController.h"
 #import "CKDocumentController.h"
-#import "CKObjectViewControllerFactory.h"
+#import "CKItemViewControllerFactory.h"

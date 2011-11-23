@@ -10,7 +10,7 @@
 #import "CKItemViewContainerController.h"
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h"
+#import "CKItemViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
 

@@ -10,13 +10,12 @@
 #import "CKUIViewController.h"
 
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h"
+#import "CKItemViewControllerFactory.h"
 #import "CKDocumentCollection.h"
 #import "CKItemViewController.h"
 
 //not needed in this implementation but very often used when inheriting ...
 #import "CKNSDictionary+TableViewAttributes.h"
-#import "CKObjectViewControllerFactory.h"
 #import "CKDocumentController.h"
 
 /* This controller implements the logic to deals with objects via objectcontroller and controllerfactory.
@@ -54,7 +53,7 @@
  */
 @interface CKItemViewContainerController : CKUIViewController<CKObjectControllerDelegate> {
 	id _objectController;
-	CKObjectViewControllerFactory* _controllerFactory;
+	CKItemViewControllerFactory* _controllerFactory;
 	
 	//Internal view/controller management
 	NSMutableDictionary* _viewsToControllers;
@@ -69,7 +68,7 @@
 }
 
 @property (nonatomic, retain) id objectController;
-@property (nonatomic, retain) CKObjectViewControllerFactory* controllerFactory;
+@property (nonatomic, retain) CKItemViewControllerFactory* controllerFactory;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 
@@ -78,9 +77,9 @@
 
 //init
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory;
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory;
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib;
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib;
 
 //setup
 - (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings;

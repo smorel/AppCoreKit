@@ -57,11 +57,11 @@
 }
 
 - (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
     self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib{
 	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
 	self.controllerFactory = factory;
@@ -70,7 +70,7 @@
 
 - (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
 	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
 }
@@ -80,7 +80,7 @@
 	return self;
 }
 
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory{
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
 	return self;
 }
@@ -403,7 +403,7 @@
             [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
         }
 		
-		CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
+		CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 		if(factoryItem != nil && factoryItem.controllerClass){
 			NSString* identifier = [CKItemViewController identifierForItem:factoryItem object:object indexPath:indexPath  parentController:self];
 			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];

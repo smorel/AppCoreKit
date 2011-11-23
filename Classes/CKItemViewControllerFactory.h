@@ -1,5 +1,5 @@
 //
-//  CKObjectViewControllerFactoryItem.h
+//  CKItemViewControllerFactory.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-18.
@@ -11,12 +11,16 @@
 #import "CKItemViewController.h"
 
 
+/********************************* CKItemViewControllerFactoryItem *********************************
+ */
+
 /** TODO
  */
-@interface CKObjectViewControllerFactoryItem : NSObject{
+@interface CKItemViewControllerFactoryItem : NSObject{
 	Class _controllerClass;
 	NSMutableDictionary* _params;
 }
+
 @property(nonatomic,assign)Class controllerClass;
 @property(nonatomic,retain,readonly)NSMutableDictionary* params;
 
@@ -67,12 +71,12 @@
 @end
 
 
-//revoir cette interface et comment elle est utilisee ds les objectTableViewController et Carousel pour qu'ils utilisent directement des CKObjectViewControllerFactoryItem
-
+/********************************* CKItemViewControllerFactory *********************************
+ */
 
 /** TODO
  */
-@interface CKObjectViewControllerFactory : NSObject {
+@interface CKItemViewControllerFactory : NSObject {
 	NSMutableArray* _mappings;
 	id _objectController;
 }
@@ -80,31 +84,32 @@
 @property (nonatomic, retain, readonly) NSMutableArray* mappings;
 @property (nonatomic, assign, readonly) id objectController;
 
-//construction helpers
-+ (CKObjectViewControllerFactory*)factoryWithMappings:(NSArray*)mappings;
-+ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type;
+//construction
++ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings;   //should be deprecated
++ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type;  //should be deprecated
 
-//Parent controller API
-- (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+//API
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
-
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
 
-//helpers to create CKObjectViewControllerFactoryItem in self
-
-
-/** TODO
+/********************************* DEPRECATED *********************************
  */
-@interface NSMutableArray (CKObjectViewControllerFactory)
 
-//low level API
-- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params;
 
-//Higher level API
-- (CKObjectViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass;
+//DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER
+@interface CKObjectViewControllerFactoryItem : CKItemViewControllerFactoryItem
+@end
 
+//DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER
+@interface CKObjectViewControllerFactory : CKItemViewControllerFactory
+@end
+
+@interface NSMutableArray (CKObjectViewControllerFactory_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+- (CKItemViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params DEPRECATED_ATTRIBUTE;
+- (CKItemViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass DEPRECATED_ATTRIBUTE;
 @end

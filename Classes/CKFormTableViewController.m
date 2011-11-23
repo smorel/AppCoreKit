@@ -8,7 +8,7 @@
 
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h"
+#import "CKItemViewControllerFactory.h"
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
@@ -128,13 +128,13 @@
 @end
 
 
-@interface CKFormObjectControllerFactory : CKObjectViewControllerFactory{
+@interface CKFormObjectControllerFactory : CKItemViewControllerFactory{
 }
 @end
 
 @implementation CKFormObjectControllerFactory
 
-- (CKObjectViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
 	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController visibleSectionAtIndex:indexPath.section];
@@ -176,7 +176,7 @@
 	return nil;
 }
 
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 	return nil;
 }
@@ -394,10 +394,10 @@
     return nil;
 }
 
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
     if([_cellDescriptors count] > index){
         CKFormCellDescriptor* cellDescriptor = [_cellDescriptors objectAtIndex:index];
-        return (CKObjectViewControllerFactoryItem*)cellDescriptor;
+        return (CKItemViewControllerFactoryItem*)cellDescriptor;
     }
     return nil;
 }
@@ -424,7 +424,7 @@
 
 @interface CKFormDocumentCollectionSection()
 @property (nonatomic,retain) CKDocumentCollectionController* objectController;
-@property (nonatomic,retain) CKObjectViewControllerFactory* controllerFactory;
+@property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;
 @property (nonatomic,retain) NSMutableArray* changeSet;
 
 @property (nonatomic,retain,readwrite) NSMutableArray* headerCellDescriptors;
@@ -443,7 +443,7 @@
 	[super init];
 	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
 	
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
@@ -551,7 +551,7 @@
 	}
 }
 
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
     if(index < 0)
         return nil;
     

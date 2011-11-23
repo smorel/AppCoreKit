@@ -115,7 +115,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
 	NSMutableArray* mappings = [NSMutableArray array];
-	CKObjectViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
+	CKItemViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
 	[classCellDescriptor setCreateBlock:^(id object){
 		//for stylesheet identification
 		CKTableViewCellController* controller = (CKTableViewCellController*)object;
@@ -129,7 +129,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	}];
 	[classCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
-	CKObjectViewControllerFactoryItem* objectCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSObject class]];
+	CKItemViewControllerFactoryItem* objectCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSObject class]];
 	[objectCellDescriptor setCreateBlock:^(id object){
 		//for stylesheet identification
 		CKTableViewCellController* controller = (CKTableViewCellController*)object;
@@ -149,7 +149,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	}];
 	[objectCellDescriptor setFlags:CKItemViewFlagSelectable];
 	
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
 	
 	[self didSearch:CKClassExplorerFilter];
 }
@@ -178,7 +178,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
 	NSMutableArray* mappings = [NSMutableArray array];
-	CKObjectViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
+	CKItemViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
 	[classCellDescriptor setCreateBlock:^(id object){
 		//for stylesheet identification
 		CKTableViewCellController* controller = (CKTableViewCellController*)object;
@@ -191,7 +191,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 		return (id)nil;
 	}];
 	[classCellDescriptor setFlags:CKItemViewFlagSelectable];
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
 	
 	[self didSearch:CKClassExplorerFilter];
 }

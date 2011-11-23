@@ -51,7 +51,7 @@
 - (void)lock;
 - (void)unlock;
 
-- (CKObjectViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
+- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
 
 @end
 
@@ -97,7 +97,7 @@
  */
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
 	CKDocumentCollectionController* _objectController;
-	CKObjectViewControllerFactory* _controllerFactory;
+	CKItemViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
 	NSMutableArray* _footerCellDescriptors;
@@ -129,7 +129,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 
 /** TODO
  */
-@interface CKFormCellDescriptor : CKObjectViewControllerFactoryItem{
+@interface CKFormCellDescriptor : CKItemViewControllerFactoryItem{
 	id _value;
 }
 
