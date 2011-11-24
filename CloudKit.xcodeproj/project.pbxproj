@@ -38,8 +38,8 @@
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
 		75043E651404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75043E631404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75043E661404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75043E641404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m */; };
-		7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */; };
-		7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */; };
+		7506E40013B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */; };
+		7506E40113B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */; };
 		750A157613FD50E7008BC41F /* CKBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 750A157513FD50E6008BC41F /* CKBinding.m */; };
 		750A157813FD50FB008BC41F /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 750A157713FD50FA008BC41F /* CKBinding.h */; };
 		751F1EE113D0C3990041900C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EDF13D0C3990041900C /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -558,8 +558,8 @@
 		75043E631404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSMutableDictionary+CKObjectPropertyMetaData.h"; path = "Classes/CKNSMutableDictionary+CKObjectPropertyMetaData.h"; sourceTree = "<group>"; };
 		75043E641404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSMutableDictionary+CKObjectPropertyMetaData.m"; path = "Classes/CKNSMutableDictionary+CKObjectPropertyMetaData.m"; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+StyleManager.h"; path = "Classes/CKItemViewController+StyleManager.h"; sourceTree = "<group>"; };
-		7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+StyleManager.m"; path = "Classes/CKItemViewController+StyleManager.m"; sourceTree = "<group>"; };
+		7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+DynamicLayout.h"; path = "Classes/CKItemViewController+DynamicLayout.h"; sourceTree = "<group>"; };
+		7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+DynamicLayout.m"; path = "Classes/CKItemViewController+DynamicLayout.m"; sourceTree = "<group>"; };
 		750A157513FD50E6008BC41F /* CKBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBinding.m; path = Classes/CKBinding.m; sourceTree = "<group>"; };
 		750A157713FD50FA008BC41F /* CKBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBinding.h; path = Classes/CKBinding.h; sourceTree = "<group>"; };
 		751F1EDF13D0C3990041900C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = Vendor/JSONKit/JSONKit.h; sourceTree = "<group>"; };
@@ -1166,8 +1166,6 @@
 				7560DC4913B8ED3600268D13 /* CKUIView+Style.m */,
 				7560DC4C13B8ED3600268D13 /* CKUIViewController+Style.h */,
 				7560DC4D13B8ED3600268D13 /* CKUIViewController+Style.m */,
-				7506E3FE13B8FE3600EE1471 /* CKItemViewController+StyleManager.h */,
-				7506E3FF13B8FE3600EE1471 /* CKItemViewController+StyleManager.m */,
 				753178121417E4E4009310A8 /* CKNavigationBar+Style.h */,
 				753178131417E4E4009310A8 /* CKNavigationBar+Style.m */,
 				753178171417E4F9009310A8 /* CKUIToolbar+Style.h */,
@@ -1416,6 +1414,8 @@
 				7560DB7A13B8ED3600268D13 /* CKItemViewController.m */,
 				7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */,
 				7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */,
+				7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */,
+				7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2247,7 +2247,7 @@
 				7560DE3D13B8EFDC00268D13 /* ASIInputStream.h in Headers */,
 				7560DE3F13B8EFDC00268D13 /* ASINetworkQueue.h in Headers */,
 				7560DE4113B8EFDC00268D13 /* ASIProgressDelegate.h in Headers */,
-				7506E40013B8FE3600EE1471 /* CKItemViewController+StyleManager.h in Headers */,
+				7506E40013B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h in Headers */,
 				75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */,
 				4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */,
 				751F1EE113D0C3990041900C /* JSONKit.h in Headers */,
@@ -2608,7 +2608,7 @@
 				7560DE3A13B8EFDC00268D13 /* ASIHTTPRequest.m in Sources */,
 				7560DE3E13B8EFDC00268D13 /* ASIInputStream.m in Sources */,
 				7560DE4013B8EFDC00268D13 /* ASINetworkQueue.m in Sources */,
-				7506E40113B8FE3600EE1471 /* CKItemViewController+StyleManager.m in Sources */,
+				7506E40113B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m in Sources */,
 				75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */,
 				4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */,
 				4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */,

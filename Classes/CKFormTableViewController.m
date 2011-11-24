@@ -22,6 +22,13 @@
 @end
 
 
+@interface CKItemViewControllerFactory ()
+@property (nonatomic, assign) id objectController;
+@end
+
+
+//CKFormObjectController
+
 @interface CKFormObjectController : NSObject<CKObjectController>{
 	id _delegate;
 	CKFormTableViewController* _parentController;
@@ -132,6 +139,7 @@
 
 @end
 
+//CKFormObjectControllerFactory
 
 @interface CKFormObjectControllerFactory : CKItemViewControllerFactory{
 }
@@ -148,6 +156,7 @@
 
 @end
 
+//CKFormSectionBase
 
 @interface CKFormSectionBase()
 @property (nonatomic,readwrite) BOOL hidden;
@@ -258,6 +267,7 @@
 
 @end
 
+//CKFormSection
 
 @implementation CKFormSection
 @synthesize cellDescriptors = _cellDescriptors;
@@ -431,6 +441,8 @@
 }
 
 @end
+
+//CKFormDocumentCollectionSection
 
 @interface CKFormDocumentCollectionSection()
 @property (nonatomic,retain) CKDocumentCollectionController* objectController;
@@ -793,6 +805,7 @@
 
 @end
 
+//CKFormCellDescriptor
 
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
@@ -841,6 +854,8 @@
 
 @end
 
+
+//CKFormTableViewController
 
 @interface CKFormTableViewController()
 @property (nonatomic,retain, readwrite) NSMutableArray* sections;

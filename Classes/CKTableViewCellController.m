@@ -14,7 +14,6 @@
 
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
-#import "CKItemViewController+StyleManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Style.h"
 #import "CKLocalization.h"
@@ -302,13 +301,14 @@
 }
 
 - (NSString *)identifier {
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
     if(_createCallback){
         [_createCallback execute:self];
         if([controllerStyle containsObjectForKey:CKStyleCellType]){
             self.cellStyle = [controllerStyle cellStyle];
         }
     }
+    
 	NSString* groupedTableModifier = @"";
 	UIView* parentView = [self parentControllerView];
 	if([parentView isKindOfClass:[UITableView class]]){

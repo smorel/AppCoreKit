@@ -13,7 +13,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKVersion.h"
 #import "CKDocumentController.h"
-#import "CKItemViewController+StyleManager.h"
 #import "CKNSObject+bindings.h"
 #include "CKSheetController.h"
 #import "CKStyleManager.h"

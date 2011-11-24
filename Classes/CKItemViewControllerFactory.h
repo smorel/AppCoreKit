@@ -18,15 +18,9 @@
  */
 @interface CKItemViewControllerFactoryItem : NSObject{
 	Class _controllerClass;
-	NSMutableDictionary* _params;
 }
 
 @property(nonatomic,assign)Class controllerClass;
-@property(nonatomic,retain,readonly)NSMutableDictionary* params;
-
-- (BOOL)matchWithObject:(id)object;
-- (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
-- (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 
 - (CKCallback*)createCallback;
 - (CKCallback*)initCallback;
@@ -66,7 +60,12 @@
 - (void)setFilterPredicate:(NSPredicate*)predicate;
 - (void)setSize:(CGSize)size;
 
+
+//Private API For CKItemViewControllerFactory
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (BOOL)matchWithObject:(id)object;
+- (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
+- (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params;
 
 @end
 
@@ -77,18 +76,11 @@
 /** TODO
  */
 @interface CKItemViewControllerFactory : NSObject {
-	NSMutableArray* _mappings;
-	id _objectController;
 }
 
-@property (nonatomic, retain, readonly) NSMutableArray* mappings;
-@property (nonatomic, assign, readonly) id objectController;
+//TODO : Public API to setup items.
 
-//construction
-+ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings;   //should be deprecated
-+ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type;  //should be deprecated
-
-//API
+//Private API For CKItemViewContainerController
 - (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
@@ -107,6 +99,12 @@
 
 //DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER
 @interface CKObjectViewControllerFactory : CKItemViewControllerFactory
+@end
+
+@interface CKItemViewControllerFactory(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+//construction
++ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings;
++ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type;
 @end
 
 @interface NSMutableArray (CKObjectViewControllerFactory_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)

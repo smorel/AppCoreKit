@@ -9,7 +9,6 @@
 #import "CKItemViewContainerController.h"
 
 #import "CKWeakRef.h"
-#import "CKItemViewController+StyleManager.h"
 #import "CKFormTableViewController.h"
 
 //CKItemViewContainerController
