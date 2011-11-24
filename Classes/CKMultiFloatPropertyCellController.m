@@ -14,28 +14,18 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKNSValueTransformer+Additions.h"
 
-
+#define BASE_TAG 8723
 
 @implementation CKMultiFloatPropertyCellController
 @synthesize multiFloatValue = _multiFloatValue;
-@synthesize textFields = _textFields;
-@synthesize labels = _labels;
-@synthesize namelabels = _namelabels;
 
 -(void)dealloc{
 	[_multiFloatValue release];
-	[_textFields release];
-	[_labels release];
-	[_namelabels release];
 	[super dealloc];
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	[super initTableViewCell:cell];
-	
-	self.textFields = [NSMutableDictionary dictionary];
-	self.labels = [NSMutableDictionary dictionary];
-	self.namelabels = [NSMutableDictionary dictionary];
 	
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	int i =0;
@@ -45,7 +35,7 @@
 		
 		UITextField *txtField = [[[UITextField alloc] initWithFrame:textFieldFrame] autorelease];
         txtField.autoresizingMask = UIViewAutoresizingNone;
-		txtField.tag = 50000;
+		txtField.tag = BASE_TAG + (i*3) + 0;
 		txtField.borderStyle = UITextBorderStyleNone;
 		txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 		txtField.clearButtonMode = UITextFieldViewModeAlways;
@@ -56,47 +46,46 @@
 		txtField.autoresizingMask = UIViewAutoresizingNone;
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",property];
 		txtField.placeholder = _(placeholerText);
-		[_textFields setObject:txtField forKey:property];
+		[cell.contentView addSubview:txtField];
 		
 		UILabel* namelabel = [[[UILabel alloc]initWithFrame:labelFrame]autorelease];
         namelabel.autoresizingMask = UIViewAutoresizingNone;
+        namelabel.tag = BASE_TAG + (i*3) + 1;
 		namelabel.text = property;
 		namelabel.textAlignment = UITextAlignmentRight;
 		namelabel.backgroundColor = [UIColor clearColor];
 		namelabel.font = [UIFont boldSystemFontOfSize:17];
 		[cell.contentView addSubview:namelabel];
-		[_namelabels setObject:namelabel forKey:property];
 		
 		
 		UILabel* label = [[[UILabel alloc]initWithFrame:textFieldFrame]autorelease];
         label.autoresizingMask = UIViewAutoresizingNone;
 		label.backgroundColor = [UIColor clearColor];
-		txtField.autoresizingMask = UIViewAutoresizingNone;
-		[_labels setObject:label forKey:property];
+        label.tag = BASE_TAG + (i*3) + 2;
+		[cell.contentView addSubview:label];
 		++i;
 	}
-	
-	//introspect self.multiFloatValue and create widgets
-	//bindEachWidgets to update the properties respectivelly and call [self valueChanged];
 }
 
 - (void)layoutCell:(UITableViewCell *)cell{
 	int i =0 ;
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
 	for(NSString* property in properties){
+		UITextField *txtField = (UITextField*)[cell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
+		UILabel *namelabel = (UILabel*)[cell.contentView viewWithTag:BASE_TAG + (i*3) + 1];
+		UILabel *label = (UILabel*)[cell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
+        
         CGFloat width = cell.contentView.frame.size.width;
         CGFloat detailX = width / 2.0;
         CGFloat detailWidth = width - detailX - 10;
-		UILabel *label = [_labels objectForKey:property];
         
-		UITextField *txtField = [_textFields objectForKey:property];
         txtField.autoresizingMask = UIViewAutoresizingNone;
+        label.autoresizingMask = UIViewAutoresizingNone;
         
 		CGRect frame = CGRectMake(detailX,44 + i * 44,detailWidth,44);
 		label.frame = frame;
 		txtField.frame = frame;
 		
-		UILabel *namelabel = [_namelabels objectForKey:property];
         namelabel.autoresizingMask = UIViewAutoresizingNone;
 		CGRect nameFrame = CGRectMake(10,frame.origin.y - 1,detailX - 20,44);
 		namelabel.frame = nameFrame;
@@ -109,11 +98,13 @@
 
 - (void)textFieldChanged:(id)value{
 	NSArray* properties = [self.multiFloatValue allPropertyNames];
+	int i =0 ;
 	for(NSString* property in properties){
-		UITextField *txtField = [_textFields objectForKey:property];
+		UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
 		CGFloat f = [txtField.text floatValue];
 		[self.multiFloatValue setValue:[NSNumber numberWithFloat:f] forKeyPath:property];
 		[self valueChanged];
+		++i;
 	}
 }
 
@@ -126,18 +117,22 @@
 	if([property isReadOnly] || self.readOnly){
 		[self beginBindingsContextByRemovingPreviousBindings];
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        int i =0 ;
 		for(NSString* property in properties){
-			UILabel *label = [_labels objectForKey:property];
+            UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
 			[self.multiFloatValue bind:property toObject:label withKeyPath:@"text"];
+            ++i;
 		}
 		[self endBindingsContext];
 	}
 	else{
 		[self beginBindingsContextByRemovingPreviousBindings];
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        int i =0 ;
 		for(NSString* property in properties){
-			UITextField *txtField = [_textFields objectForKey:property];
+            UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
 			[self.multiFloatValue bind:property toObject:txtField withKeyPath:@"text"];
+            ++i;
 		}
 		[self endBindingsContext];
 	}	
@@ -147,27 +142,27 @@
 	[self unbind];
 	[super setupCell:cell];
 	
-	NSArray* properties = [self.multiFloatValue allPropertyNames];
-	for(NSString* property in properties){
-		UILabel *label = [_labels objectForKey:property];
-		[label removeFromSuperview];
-		UITextField *txtField = [_textFields objectForKey:property];
-		[txtField removeFromSuperview];
-	}
-	
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
 	if([property isReadOnly] || self.readOnly){
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        int i =0 ;
 		for(NSString* property in properties){
-			UILabel *label = [_labels objectForKey:property];
-			[self.tableViewCell.contentView addSubview:label];
+            UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
+            label.hidden = NO;
+            UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
+            txtField.hidden = YES;
+            ++i;
 		}
 	}
 	else{
 		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        int i =0 ;
 		for(NSString* property in properties){
-			UITextField *txtField = [_textFields objectForKey:property];
-			[self.tableViewCell.contentView addSubview:txtField];
+            UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
+            label.hidden = YES;
+            UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
+            txtField.hidden = NO;
+            ++i;
 		}
 	}	
 	

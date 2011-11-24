@@ -18,6 +18,11 @@
 
 
 @interface CKNibCellController()
+
+@property (nonatomic,assign,readwrite) CKNibCellControllerMode currentMode;
+@property (nonatomic,retain,readwrite) UIView* portraitView;
+@property (nonatomic,retain,readwrite) UIView* landscapeView;
+
 @end
 
 @implementation CKNibCellController

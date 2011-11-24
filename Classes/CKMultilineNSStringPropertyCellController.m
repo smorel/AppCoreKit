@@ -17,6 +17,8 @@
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
+#define TEXTVIEW_TAG 50000
+
 @interface CKMultilineNSStringPropertyCellController()
 @property(nonatomic,retain,readwrite)CKTextView* textView;
 @end
@@ -44,13 +46,16 @@
         self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
     }
 	_textView.backgroundColor = [UIColor clearColor];
-    _textView.tag = 50000;
+    _textView.tag = TEXTVIEW_TAG;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
     _textView.scrollEnabled = NO;
     _textView.placeholderOffset = CGPointMake(10,8);
     
     _textView.font = cell.detailTextLabel.font;
     _textView.placeholderLabel.font =  _textView.font;
+    
+    _textView.hidden = YES;//will get displayed in setup depending on the model
+    [cell.contentView addSubview:_textView];
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -148,6 +153,8 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
     
+    self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
+    
     CKObjectProperty* property = (CKObjectProperty*)self.value;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
@@ -157,6 +164,7 @@
     if([property isReadOnly] || self.readOnly){
         self.fixedSize = YES;
         [self.textView removeFromSuperview];
+        _textView.hidden = YES;
         
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[property.object bind:property.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
@@ -183,7 +191,7 @@
         }];
         [self endBindingsContext];
         
-        [cell.contentView addSubview:self.textView];
+        _textView.hidden = NO;
     }
 }
 
@@ -199,7 +207,7 @@
 	[self scrollToRow];
     
 	[self didBecomeFirstResponder];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 
@@ -210,7 +218,7 @@
         [textView resignFirstResponder];
      }*/
     _textView.frameChangeDelegate = nil;
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     return YES;
 }
 
@@ -245,7 +253,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-    [self scrollToRowAfterDelay:0.3];
+    [self scrollToRowAfterDelay:0];
 }
 
 

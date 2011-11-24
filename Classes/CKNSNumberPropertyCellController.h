@@ -17,7 +17,7 @@
 	UISwitch* _toggleSwitch;
 }
 
-@property (nonatomic,retain) UITextField* textField;
-@property (nonatomic,retain) UISwitch* toggleSwitch;
+@property (nonatomic,retain,readonly) UITextField* textField;
+@property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
 
 @end

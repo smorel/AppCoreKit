@@ -33,6 +33,13 @@
 
 @end
 
+/** TODO
+ */
+@interface CKUIEdgeInsetsPropertyCellController: CKMultiFloatPropertyCellController {
+}
+
+@end
+
 
 /** TODO
  */

@@ -19,6 +19,14 @@
 
 #import "CKStyleManager.h"
 
+#define ACTIVITY_INDICATOR_TAG 98634
+#define LABEL_TAG 938459837
+
+@interface CKDocumentCollectionViewCellController()
+@property (nonatomic,retain,readwrite) UILabel* label;
+@property (nonatomic,retain,readwrite) UIActivityIndicatorView* activityIndicator;
+@end
+
 @implementation CKDocumentCollectionViewCellController
 @synthesize label = _label;
 @synthesize activityIndicator = _activityIndicator;
@@ -40,6 +48,7 @@
 	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
 	_activityIndicator.center = cell.center;
 	_activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    _activityIndicator.tag = ACTIVITY_INDICATOR_TAG;
 	_activityIndicator.hidden = YES;
 	
 	[view addSubview:_activityIndicator];
@@ -47,6 +56,7 @@
 	self.label = [[[UILabel alloc] initWithFrame:CGRectInset(view.bounds,10,0)] autorelease];
 	_label.textAlignment = UITextAlignmentCenter;
 	_label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _label.tag = LABEL_TAG;
 	[view addSubview:_label];
 	
 	[cell.contentView addSubview:view];
@@ -111,6 +121,10 @@
 }
 
 - (void)setupCell:(UITableViewCell *)cell{
+    //In case of reuse
+    self.label = (UILabel*)[cell.contentView viewWithTag:LABEL_TAG];
+    self.activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ACTIVITY_INDICATOR_TAG];
+    
 	[super setupCell:cell];
 	
 	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;

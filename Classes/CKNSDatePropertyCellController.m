@@ -431,11 +431,10 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
-    
+    [self scrollToRowAfterDelay:0];
 }
 
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
-    [self scrollToRowAfterDelay:0.3];
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{

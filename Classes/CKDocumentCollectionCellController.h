@@ -33,7 +33,7 @@
 	UIActivityIndicatorView* _activityIndicator;
 }
 
-@property (nonatomic,retain) UILabel* label;
-@property (nonatomic,retain) UIActivityIndicatorView* activityIndicator;
+@property (nonatomic,retain,readonly) UILabel* label;
+@property (nonatomic,retain,readonly) UIActivityIndicatorView* activityIndicator;
 
 @end

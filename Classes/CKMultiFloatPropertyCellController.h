@@ -20,9 +20,6 @@
 }
 
 @property(nonatomic,retain)id multiFloatValue;
-@property(nonatomic,retain)NSMutableDictionary* textFields;
-@property(nonatomic,retain)NSMutableDictionary* labels;
-@property(nonatomic,retain)NSMutableDictionary* namelabels;
 
 //private
 -(void)valueChanged;

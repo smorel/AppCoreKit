@@ -35,11 +35,11 @@ typedef enum{
 
 @property (nonatomic,retain) NSString* portraitNibName;
 @property (nonatomic,retain) NSString* landscapeNibName;
-@property (nonatomic,assign) CKNibCellControllerMode currentMode;
 @property (nonatomic,assign) BOOL autoresizeViewsOnInsertion;
 
-@property (nonatomic,retain) UIView* portraitView;
-@property (nonatomic,retain) UIView* landscapeView;
+@property (nonatomic,assign,readonly) CKNibCellControllerMode currentMode;
+@property (nonatomic,retain,readonly) UIView* portraitView;
+@property (nonatomic,retain,readonly) UIView* landscapeView;
 
 //PRIVATE
 - (void)customizePortraitView:(UIView*)view;
