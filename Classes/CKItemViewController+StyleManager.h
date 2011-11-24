@@ -11,11 +11,9 @@
 #import "CKItemViewControllerFactory.h"
 
 
-/** TODO
+/** TODO : This is used only in CKItemViewControllerFactory to create static view controllers to compute sizes dynamically.
  */
 @interface CKItemViewController (CKStyleManager)
-+ (NSString*)identifierForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
-+ (NSMutableDictionary*)styleForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 + (CKItemViewController*)controllerForClass:(Class)theClass object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 + (CKItemViewController*)controllerForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController;
 @end

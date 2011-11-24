@@ -23,19 +23,6 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	[CKTableViewCellControllerInstances removeAllObjects];
 }
 
-
-+ (NSString*)identifierForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKItemViewController* controller = [CKItemViewController controllerForItem:item object:object indexPath:indexPath parentController:parentController];
-	return [controller identifier];
-}
-
-
-+ (NSMutableDictionary*)styleForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-	CKItemViewController* controller = [CKItemViewController controllerForItem:item object:object indexPath:indexPath parentController:parentController];
-	return [controller controllerStyle];
-}
-
-
 + (CKItemViewController*)controllerForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
     CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
 	CKCallback* callback = [item createCallback];

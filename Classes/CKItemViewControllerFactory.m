@@ -235,9 +235,6 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
     if(controllerStyle){
         [params setObject:controllerStyle forKey:CKTableViewAttributeStaticControllerStyle];
     }
-    [staticController setParentController:[params parentController]];
-    [staticController setIndexPath:indexPath];
-    [staticController setValue:object];
     if(staticController.view != nil){
         [staticController initView:staticController.view];
         [staticController setupView:staticController.view];	
@@ -294,7 +291,12 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 
 - (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKItemViewController styleForItem:self object:object indexPath:indexPath parentController:[params parentController]];
+    NSAssert([[params parentController] isKindOfClass:[CKItemViewContainerController class]],@"Incompatible parent controller");
+    
+    CKItemViewContainerController* containerController = (CKItemViewContainerController*)[params parentController];
+    CKItemViewController* itemController = [containerController controllerAtIndexPath:indexPath];
+    
+	NSMutableDictionary* controllerStyle = [itemController controllerStyle];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellFlags]){
 			return [controllerStyle cellFlags];
@@ -333,7 +335,12 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 
 - (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath withParams:(NSMutableDictionary*)params{
 	//Style size first
-	NSMutableDictionary* controllerStyle = [CKItemViewController styleForItem:self object:object indexPath:indexPath parentController:[params parentController]];
+    NSAssert([[params parentController] isKindOfClass:[CKItemViewContainerController class]],@"Incompatible parent controller");
+    
+    CKItemViewContainerController* containerController = (CKItemViewContainerController*)[params parentController];
+    CKItemViewController* itemController = [containerController controllerAtIndexPath:indexPath];
+    
+	NSMutableDictionary* controllerStyle = [itemController controllerStyle];
 	if([controllerStyle isEmpty] == NO){
 		if([controllerStyle containsObjectForKey:CKStyleCellSize]){
 			return [controllerStyle cellSize];

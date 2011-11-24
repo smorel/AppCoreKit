@@ -244,14 +244,21 @@
             NSIndexPath* indexPath = [self indexPathForView:view];
             if(indexPath){
                 NSValue* weakViewValue = [NSValue valueWithNonretainedObject:view];
-                //CKItemViewController* controller = [self.viewsToControllers objectForKey:weakViewValue];
-                
-                //[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
                 [self.viewsToIndexPath setObject:indexPath forKey:weakViewValue];
                 [self.indexPathToViews setObject:weakViewValue forKey:indexPath];
             }
         }
     }
+    
+    for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
+        NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
+        for(int row =0;row<[controllers count];++row){
+            CKItemViewController* controller = [controllers objectAtIndex:row];
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            [controller setIndexPath:indexPath];
+        }
+    }
+
 }
 
 - (void)updateViewsVisibility:(BOOL)visible{
@@ -459,14 +466,14 @@
 		
 		CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
 		if(factoryItem != nil){
-			NSString* identifier = [CKItemViewController identifierForItem:factoryItem object:object indexPath:indexPath  parentController:self];
+			CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+			NSString* identifier = [controller identifier];
 			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
             
             if(!_sectionsToControllers){
                 self.sectionsToControllers = [NSMutableArray array];
             }
             
-			CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 			if(view == nil){
 				[controller performSelector:@selector(setParentController:) withObject:self];
 
@@ -499,7 +506,6 @@
 			NSAssert(view != nil,@"The view has not been created");
 			
 			[controller setParentController:self];
-			[controller setIndexPath:indexPath];
 			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
@@ -603,14 +609,13 @@
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
+	[self updateVisibleViewsIndexPath];
 	[self onEndUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
 	NSTimeInterval delay = 0.4;
 	[self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:delay];
-	
-	[self updateVisibleViewsIndexPath];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -643,7 +648,6 @@
     }
     
 	[self onInsertObjects:objects atIndexPaths:indexPaths];
-    [self updateVisibleViewsIndexPath];
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -671,7 +675,6 @@
     }
     
 	[self onRemoveObjects:objects atIndexPaths:indexPaths];
-    [self updateVisibleViewsIndexPath];
 }
 
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{

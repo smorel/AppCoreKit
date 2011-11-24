@@ -16,6 +16,7 @@
 @interface CKItemViewController()
 @property (nonatomic, retain) CKWeakRef *viewRef;
 @property (nonatomic, retain) CKWeakRef *weakParentController;
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
 @end
 
 
@@ -141,13 +142,6 @@
 	if(_accessorySelectionCallback != nil){
 		[_accessorySelectionCallback execute:self];
 	}
-}
-
-- (void)setIndexPath:(NSIndexPath *)indexPath {
-	// This method is hidden from the public interface and is called by the parent controller
-	// when adding the CKTableViewCellController.	
-	[_indexPath release];
-	_indexPath = [indexPath retain];
 }
 
 - (NSString *)identifier {

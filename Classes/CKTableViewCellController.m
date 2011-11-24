@@ -23,6 +23,10 @@
 
 //#import <objc/runtime.h>
 
+@interface CKItemViewController()
+@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@end
+
 @implementation CKUITableViewCell
 @synthesize delegate;
 @synthesize delegateRef = _delegateRef;
@@ -263,7 +267,7 @@
 		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
-	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
+	else if([self.parentController isKindOfClass:[CKManagedTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
 		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
 	}
@@ -613,6 +617,7 @@
 - (void)scrollToRow{
     NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
     CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+    NSLog(@"Scroll To Row : %@ withData: %@",self.indexPath,self.value);
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
                                          atScrollPosition:UITableViewScrollPositionNone 
                                                  animated:YES];
@@ -620,6 +625,10 @@
 
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay{
     [self performSelector:@selector(scrollToRow) withObject:nil afterDelay:delay];
+}
+
+- (void)setIndexPath:(NSIndexPath*)indexPath{
+    [super setIndexPath:indexPath];
 }
 
 @end

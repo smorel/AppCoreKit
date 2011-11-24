@@ -300,7 +300,7 @@
 	}
 	
 	[self updateNumberOfPages];
-	[self updateVisibleViewsIndexPath];
+	//[self updateVisibleViewsIndexPath];
 	
 	[self.objectController unlock];
 	
@@ -504,7 +504,7 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self updateVisibleViewsIndexPath];
+    //[self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
         [self selectRowAtIndexPath:indexPath animated:YES];
 		return indexPath;
@@ -661,16 +661,6 @@
 			}
 		}
 	}	
-}
-
-- (void)onReload{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-	
-	[self.tableView reloadData];
-    //NSLog(@"onReload <%@>",self);
 }
 
 - (void)onBeginUpdates{

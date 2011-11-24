@@ -186,12 +186,21 @@
 }
 
 - (void)reload {
-    [super reload];
-	[self.tableView reloadData];
+    [super reload];//onReload gets called by super class
 	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
 		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
 }
+
+- (void)onReload{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+	
+	[self.tableView reloadData];
+}
+
 
 #pragma mark Setters
 
