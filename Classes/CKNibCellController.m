@@ -79,11 +79,11 @@
 	[super setupCell:cell];
 	switch(self.currentMode){
 		case CKNibCellControllerModePortrait:{
-			[self bindValueInPortraitView:cell.contentView];
+			[self bindValueInPortraitView:self.portraitView];
 			break;
 		}
 		case CKNibCellControllerModeLandscape:{
-			[self bindValueInLandscapeView:cell.contentView];
+			[self bindValueInLandscapeView:self.landscapeView];
 			break;
 		}
 	}
@@ -103,34 +103,48 @@
 		UIInterfaceOrientation interfaceOrientation = [params interfaceOrientation];
 		if(UIInterfaceOrientationIsPortrait( interfaceOrientation )){
 			if(_landscapeView){
-				[_landscapeView removeFromSuperview];
+                UIView* toRemove = [cell.contentView viewWithTag:345678];
+				[toRemove removeFromSuperview];
+                
 				if(_autoresizeViewsOnInsertion){
 					_portraitView.frame = cell.contentView.bounds;
 				}
+                _portraitView.tag = 345678;
 				[cell.contentView addSubview:_portraitView];
 				newMode = CKNibCellControllerModePortrait;
 			}
 			else{
-				[_portraitView removeFromSuperview];
+                UIView* toRemove = [cell.contentView viewWithTag:345678];
+				[toRemove removeFromSuperview];
+                
 				if(_autoresizeViewsOnInsertion){
 					_landscapeView.frame = cell.contentView.bounds;
 				}
+                _landscapeView.tag = 345678;
 				[cell.contentView addSubview:_landscapeView];
 				newMode = CKNibCellControllerModeLandscape;
 			}
 		}
 	}
-	else if(_portraitView && [_portraitView superview] != cell.contentView){
+	else if(_portraitView){
+        UIView* toRemove = [cell.contentView viewWithTag:345678];
+        [toRemove removeFromSuperview];
+        
 		if(_autoresizeViewsOnInsertion){
 			_portraitView.frame = cell.contentView.bounds;
 		}
+        _portraitView.tag = 345678;
 		[cell.contentView addSubview:_portraitView];
 		newMode = CKNibCellControllerModePortrait;
 	}
-	else if(_landscapeView && [_landscapeView superview] != cell.contentView){
+	else if(_landscapeView){
+        UIView* toRemove = [cell.contentView viewWithTag:345678];
+        [toRemove removeFromSuperview];
+        
 		if(_autoresizeViewsOnInsertion){
 			_landscapeView.frame = cell.contentView.bounds;
 		}
+        _landscapeView.tag = 345678;
 		[cell.contentView addSubview:_landscapeView];
 		newMode = CKNibCellControllerModeLandscape;
 	}
