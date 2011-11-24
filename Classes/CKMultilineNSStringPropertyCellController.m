@@ -42,9 +42,7 @@
 	cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textView == nil){
-        self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
-    }
+    self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	_textView.backgroundColor = [UIColor clearColor];
     _textView.tag = TEXTVIEW_TAG;
 	_textView.maxStretchableHeight = CGFLOAT_MAX;
@@ -163,7 +161,6 @@
     
     if([property isReadOnly] || self.readOnly){
         self.fixedSize = YES;
-        [self.textView removeFromSuperview];
         _textView.hidden = YES;
         
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];

@@ -63,10 +63,8 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textField == nil){
-        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-        self.textField = txtField;
-    }
+    UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    self.textField = txtField;
     
 	_textField.tag = 50000;
 	_textField.borderStyle = UITextBorderStyleNone;
@@ -98,19 +96,18 @@
         _textField.autoresizingMask = UIViewAutoresizingNone;
     }
     
-	if(_toggleSwitch == nil){
-        UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-        self.toggleSwitch = theSwitch;
-        
-        _toggleSwitch.hidden = YES; //will get displayed in setup depending on the model
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
-           ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
-            [cell.contentView addSubview:self.toggleSwitch];
-        }
-        else{
-            cell.accessoryView = self.toggleSwitch;
-        }
+    UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+    self.toggleSwitch = theSwitch;
+    
+    _toggleSwitch.hidden = YES; //will get displayed in setup depending on the model
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
+       ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+        [cell.contentView addSubview:self.toggleSwitch];
     }
+    else{
+        cell.accessoryView = self.toggleSwitch;
+    }
+
     _toggleSwitch.tag = SwitchTag;
 }
 

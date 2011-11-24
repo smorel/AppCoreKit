@@ -37,10 +37,9 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textField == nil){
-        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-        self.textField = txtField;
-    }
+    UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    self.textField = txtField;
+    
 	_textField.tag = TEXTFIELD_TAG;
 	_textField.borderStyle = UITextBorderStyleNone;
 	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -48,7 +47,7 @@
 	_textField.textAlignment = UITextAlignmentLeft;
 	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     
-    _textField.hidden = YES; //will get displayed in setup depending on the model
+    //_textField.hidden = YES; //will get displayed in setup depending on the model
     [cell.contentView addSubview:_textField];
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
@@ -147,7 +146,7 @@
 	cell.detailTextLabel.text = nil;
 	
 	if([model isReadOnly] || self.readOnly){
-        self.textField.hidden = YES;
+        //self.textField.hidden = YES;
         
         self.fixedSize = YES;
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -156,25 +155,31 @@
         _textField.delegate = nil;
 	}
 	else{
-        if(self.cellStyle == CKTableViewCellStylePropertyGrid
-           && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            self.fixedSize = YES;
+        if(_textField){
+            if(self.cellStyle == CKTableViewCellStylePropertyGrid
+               && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+                self.fixedSize = YES;
+            }
+            else{
+                self.fixedSize = NO;
+            }
+            [NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+            [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+            [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
+                                                             withBlock:^(NSNotification *notification) {
+                                                                 [self textFieldChanged:self.textField.text];
+                                                             }];
+            [NSObject endBindingsContext];
+            
+            NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+            self.textField.placeholder = _(placeholerText);
+            //self.textField.hidden = NO;
+            _textField.delegate = self;
         }
         else{
-            self.fixedSize = NO;
+            //WEIRD !!!!!!!!!!
+            int i =3;
         }
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-		[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-        [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
-                                                         withBlock:^(NSNotification *notification) {
-                                                             [self textFieldChanged:self.textField.text];
-                                                              }];
-		[NSObject endBindingsContext];
-		
-		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-		self.textField.placeholder = _(placeholerText);
-        self.textField.hidden = NO;
-        _textField.delegate = self;
 	}
 }
 
@@ -256,7 +261,7 @@
 }
 
 + (UIView*)responderInView:(UIView*)view{
-	UITextField *textField = (UITextField*)[view viewWithTag:50000];
+	UITextField *textField = (UITextField*)[view viewWithTag:TEXTFIELD_TAG];
 	return textField;
 }
 

@@ -520,6 +520,9 @@
 			}
 			return view;
 		}
+        else{
+            NSAssert(NO,@"WTF");
+        }
 	}
 	
 	return nil;
