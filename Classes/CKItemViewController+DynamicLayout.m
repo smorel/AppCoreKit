@@ -15,7 +15,7 @@
 #import "CKObjectTableViewController.h"
 
 @interface CKItemViewController()
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
 @end
 
@@ -46,8 +46,8 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	
 	controller.name = nil;
 	[controller setParentController:parentController];
-	[controller setIndexPath:indexPath];
 	[controller setValue:object];	
+	[controller setIndexPath:indexPath];
     
 	return controller;
 }

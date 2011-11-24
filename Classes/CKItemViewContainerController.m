@@ -14,7 +14,7 @@
 //CKItemViewContainerController
 
 @interface CKItemViewController()
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
 @end
 

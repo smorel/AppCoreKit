@@ -16,7 +16,7 @@
 @interface CKItemViewController()
 @property (nonatomic, retain) CKWeakRef *viewRef;
 @property (nonatomic, retain) CKWeakRef *weakParentController;
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
 
 
@@ -162,6 +162,12 @@
 	if(_resignFirstResponderCallback != nil){
 		[_resignFirstResponderCallback execute:self];
 	}
+}
+
+
+- (void)setIndexPath:(NSIndexPath*)theindexPath{
+    [_indexPath release];
+    _indexPath = [[NSIndexPath indexPathForRow:[theindexPath row] inSection:[theindexPath section]]retain];
 }
 
 @end

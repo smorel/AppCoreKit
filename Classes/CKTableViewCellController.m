@@ -23,7 +23,7 @@
 //#import <objc/runtime.h>
 
 @interface CKItemViewController()
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
 
 @implementation CKUITableViewCell
@@ -625,10 +625,6 @@
 
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay{
     [self performSelector:@selector(scrollToRow) withObject:nil afterDelay:delay];
-}
-
-- (void)setIndexPath:(NSIndexPath*)indexPath{
-    [super setIndexPath:indexPath];
 }
 
 @end

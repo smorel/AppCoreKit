@@ -18,7 +18,7 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 
 @interface CKItemViewController()
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
 @end
 
@@ -280,8 +280,8 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
 	controller.layoutCallback = [self layoutCallback];
 	
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	[controller setValue:object];
+	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	
 	id createObject = [_params objectForKey:CKItemViewControllerFactoryItemCreate];
 	if(createObject != nil && [createObject isKindOfClass:[CKCallback class]]){

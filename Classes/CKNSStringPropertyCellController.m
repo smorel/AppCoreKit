@@ -134,7 +134,6 @@
 	[self clearBindingsContext];
     
     self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
-	_textField.delegate = self;
 	
 	CKObjectProperty* model = self.value;
 	
@@ -154,6 +153,7 @@
 		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];
+        _textField.delegate = nil;
 	}
 	else{
         if(self.cellStyle == CKTableViewCellStylePropertyGrid
@@ -174,6 +174,7 @@
 		NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		self.textField.placeholder = _(placeholerText);
         self.textField.hidden = NO;
+        _textField.delegate = self;
 	}
 }
 

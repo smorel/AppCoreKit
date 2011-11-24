@@ -43,7 +43,6 @@
 - (void)setResignFirstResponderBlock:(CKCallbackBlock)block;
 - (void)setLayoutBlock:(CKCallbackBlock)block;
 
-
 - (void)setCreateTarget:(id)target action:(SEL)action;
 - (void)setInitTarget:(id)target action:(SEL)action;
 - (void)setSetupTarget:(id)target action:(SEL)action;
@@ -59,7 +58,6 @@
 - (void)setFlags:(CKItemViewFlags)flags;
 - (void)setFilterPredicate:(NSPredicate*)predicate;
 - (void)setSize:(CGSize)size;
-
 
 //Private API For CKItemViewControllerFactory
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
@@ -103,8 +101,8 @@
 
 @interface CKItemViewControllerFactory(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
 //construction
-+ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings;
-+ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type;
++ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
++ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type DEPRECATED_ATTRIBUTE;
 @end
 
 @interface NSMutableArray (CKObjectViewControllerFactory_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
