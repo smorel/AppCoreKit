@@ -128,6 +128,7 @@
             
             CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
             CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
+            [controller performSelector:@selector(setParentController:) withObject:self];
             
             [controllers insertObject:controller atIndex:[indexPath row]];
         }
@@ -296,6 +297,7 @@
         return nil;
     
     CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
+    [controller performSelector:@selector(setParentController:) withObject:self];
     
     NSMutableArray* controllers = nil;
     if([indexPath section] < [self.sectionsToControllers count]){
@@ -475,8 +477,6 @@
             }
             
 			if(view == nil){
-				[controller performSelector:@selector(setParentController:) withObject:self];
-
 				view = [controller loadView];
 				view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 				
@@ -505,7 +505,6 @@
 			
 			NSAssert(view != nil,@"The view has not been created");
 			
-			[controller setParentController:self];
 			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
@@ -636,6 +635,7 @@
         NSIndexPath* object = [objects objectAtIndex:i];
         CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
         CKItemViewController* controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
+        [controller performSelector:@selector(setParentController:) withObject:self];
         
         NSMutableArray* controllers = nil;
         if([indexPath section] < [_sectionsToControllers count]){
