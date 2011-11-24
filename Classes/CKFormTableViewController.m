@@ -343,11 +343,13 @@
 	}
 	[_cellDescriptors insertObject:cellDescriptor atIndex:index];
     
-    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    if([self.parentController viewIsOnScreen]){
+        [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+        NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
+        [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
+        [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    }
     
 	return cellDescriptor;
 }
@@ -358,11 +360,13 @@
 	}
 	[_cellDescriptors addObject:cellDescriptor];
     
-    [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellDescriptors count] -1 inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    if([self.parentController viewIsOnScreen]){
+        [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+        NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellDescriptors count] -1 inSection:self.sectionVisibleIndex];
+        [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellDescriptor.value,theIndexPath,nil]];
+        [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    }
     
 	return cellDescriptor;
 }
@@ -371,13 +375,14 @@
     CKFormCellDescriptor* descriptor = [_cellDescriptors objectAtIndex:index];
     
 	[_cellDescriptors removeObjectAtIndex:index];
-	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
     
-    NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
-	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.parentController.objectController,descriptor.value,theIndexPath,nil]];
-    
-	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    if([self.parentController viewIsOnScreen]){
+        [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
+        NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
+        [self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,descriptor.value,theIndexPath,nil]];
+        [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
+    }
 }
 
 - (void)removeCellDescriptor:(CKFormCellDescriptor *)descriptor{
@@ -977,7 +982,6 @@
     
     if(indexSet && self.viewIsOnScreen){
         if((self.state & CKUIViewControllerStateDidAppear)){
-                //[self.tableView beginUpdates];
             UITableViewRowAnimation anim = self.rowInsertAnimation;
             
             NSInteger currentIndex = [indexSet firstIndex];
@@ -986,8 +990,9 @@
                 currentIndex = [indexSet indexGreaterThanIndex: currentIndex];
             }
             
+            [self.tableView beginUpdates];
             [self.tableView insertSections:indexSet withRowAnimation:anim];
-                //[self.tableView endUpdates];
+            [self.tableView endUpdates];
         }
         else{
             //Calls super explicitely here as we do not want initializations done in form.
