@@ -613,29 +613,6 @@
 	[self updateVisibleViewsIndexPath];
 }
 
-/*
-- (void)incrementIndexPathFrom:(NSIndexPath*)indexPath{
-    id view = [_indexPathToViews objectForKey:indexPath];
-    if(view){
-        NSInteger section = indexPath.section;
-        NSInteger row = indexPath.row;
-        NSInteger count = [self numberOfObjectsForSection:section];
-        for(int i = count - 1;i >= row ; --i){
-            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
-            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:i+1 inSection:section];
-            id v = [_indexPathToViews objectForKey:indexPath];
-            if(v){
-                [_indexPathToViews setObject:v forKey:newIndexPath];
-                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,v,newIndexPath);
-                [_viewsToIndexPath setObject:newIndexPath forKey:v];
-                [_indexPathToViews removeObjectForKey:indexPath];
-                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,indexPath);
-            }
-        }
-    }
-}
- */
-
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	[self objectController:controller insertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
