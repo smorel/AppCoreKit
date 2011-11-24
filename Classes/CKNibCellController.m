@@ -11,6 +11,11 @@
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKUIView+Positioning.h"
+
+#define PORTRAIT_VIEW_TAG 657896
+#define LANDSCAPE_VIEW_TAG 982396235
+
 
 @interface CKNibCellController()
 @end
@@ -61,22 +66,100 @@
 	return [[self class] description];
 }
 
+
+- (CKNibCellControllerMode)setupCell:(UITableViewCell*)cell usingInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation{
+	CKNibCellControllerMode newMode = self.currentMode;
+	if(_landscapeView && _portraitView){
+        if(UIInterfaceOrientationIsPortrait( interfaceOrientation )){
+			if(_landscapeView){
+                [_landscapeView removeFromSuperview];
+				if(_autoresizeViewsOnInsertion){
+					_portraitView.frame = cell.contentView.bounds;
+				}
+				[cell.contentView addSubview:_portraitView];
+				newMode = CKNibCellControllerModePortrait;
+			}
+			else{
+                [_portraitView removeFromSuperview];
+				if(_autoresizeViewsOnInsertion){
+					_landscapeView.frame = cell.contentView.bounds;
+				}
+				[cell.contentView addSubview:_landscapeView];
+				newMode = CKNibCellControllerModeLandscape;
+			}
+		}
+	}
+	else if(_portraitView){
+        [_landscapeView removeFromSuperview];
+		if(_autoresizeViewsOnInsertion){
+			_portraitView.frame = cell.contentView.bounds;
+		}
+		[cell.contentView addSubview:_portraitView];
+		newMode = CKNibCellControllerModePortrait;
+	}
+	else if(_landscapeView){
+        [_portraitView removeFromSuperview];
+		if(_autoresizeViewsOnInsertion){
+			_landscapeView.frame = cell.contentView.bounds;
+		}
+		[cell.contentView addSubview:_landscapeView];
+		newMode = CKNibCellControllerModeLandscape;
+	}
+    return newMode;
+}
+
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	cell.clipsToBounds = YES;
 	
 	if(_portraitNibName != nil){
-		self.portraitView = [[[NSBundle mainBundle] loadNibNamed:_portraitNibName owner:nil options:nil] objectAtIndex:0];
+		UIView* view = [[[NSBundle mainBundle] loadNibNamed:_portraitNibName owner:nil options:nil] objectAtIndex:0];
+        cell.height = view.height;
+        cell.width = view.width;
+        
+        self.portraitView = [[[UIView alloc]initWithFrame:cell.contentView.bounds]autorelease];
+        self.portraitView.backgroundColor = [UIColor clearColor];
+        self.portraitView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.portraitView.tag = PORTRAIT_VIEW_TAG;
+        
+        [self.portraitView addSubview:view];
+        
 		[self customizePortraitView:_portraitView];
 	}
 	
 	if(_landscapeNibName != nil){
-		self.landscapeView = [[[NSBundle mainBundle] loadNibNamed:_landscapeNibName owner:nil options:nil] objectAtIndex:0];
-		[self customizeLandscapeView:_portraitView];
+		UIView* view =[[[NSBundle mainBundle] loadNibNamed:_landscapeNibName owner:nil options:nil] objectAtIndex:0];
+        cell.height = view.height;
+        cell.width = view.width;
+        
+        self.landscapeView = [[[UIView alloc]initWithFrame:cell.contentView.bounds]autorelease];
+        self.landscapeView.backgroundColor = [UIColor clearColor];
+        self.landscapeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.landscapeView.tag = LANDSCAPE_VIEW_TAG;
+        
+        [self.landscapeView addSubview:view];
+
+		[self customizeLandscapeView:_landscapeView];
 	}	
+    
+    [self setupCell:cell usingInterfaceOrientation:[self.parentController interfaceOrientation]];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
+    //Init state from potentially reused cell
+    UIView* view = [cell.contentView viewWithTag:PORTRAIT_VIEW_TAG];
+    if(view){
+        self.currentMode = CKNibCellControllerModePortrait;
+        self.portraitView = view;
+    }else{
+        UIView* view = [cell.contentView viewWithTag:LANDSCAPE_VIEW_TAG];
+        if(view){
+            self.currentMode = CKNibCellControllerModeLandscape;
+            self.landscapeView = view;
+        }
+    }
+    
 	[super setupCell:cell];
+
 	switch(self.currentMode){
 		case CKNibCellControllerModePortrait:{
 			[self bindValueInPortraitView:self.portraitView];
@@ -91,64 +174,15 @@
 
 - (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
 	[super rotateCell:cell withParams:params animated:animated];
-	
-	CKNibCellControllerMode newMode = self.currentMode;
-	if(_landscapeView && _portraitView){
-		if(animated){
-			CATransition *animation = [CATransition animation];
-			animation.duration = [params animationDuration];	
-			[cell.contentView.layer addAnimation:animation forKey:nil];
-		}
-		
-		UIInterfaceOrientation interfaceOrientation = [params interfaceOrientation];
-		if(UIInterfaceOrientationIsPortrait( interfaceOrientation )){
-			if(_landscapeView){
-                UIView* toRemove = [cell.contentView viewWithTag:345678];
-				[toRemove removeFromSuperview];
-                
-				if(_autoresizeViewsOnInsertion){
-					_portraitView.frame = cell.contentView.bounds;
-				}
-                _portraitView.tag = 345678;
-				[cell.contentView addSubview:_portraitView];
-				newMode = CKNibCellControllerModePortrait;
-			}
-			else{
-                UIView* toRemove = [cell.contentView viewWithTag:345678];
-				[toRemove removeFromSuperview];
-                
-				if(_autoresizeViewsOnInsertion){
-					_landscapeView.frame = cell.contentView.bounds;
-				}
-                _landscapeView.tag = 345678;
-				[cell.contentView addSubview:_landscapeView];
-				newMode = CKNibCellControllerModeLandscape;
-			}
-		}
-	}
-	else if(_portraitView){
-        UIView* toRemove = [cell.contentView viewWithTag:345678];
-        [toRemove removeFromSuperview];
-        
-		if(_autoresizeViewsOnInsertion){
-			_portraitView.frame = cell.contentView.bounds;
-		}
-        _portraitView.tag = 345678;
-		[cell.contentView addSubview:_portraitView];
-		newMode = CKNibCellControllerModePortrait;
-	}
-	else if(_landscapeView){
-        UIView* toRemove = [cell.contentView viewWithTag:345678];
-        [toRemove removeFromSuperview];
-        
-		if(_autoresizeViewsOnInsertion){
-			_landscapeView.frame = cell.contentView.bounds;
-		}
-        _landscapeView.tag = 345678;
-		[cell.contentView addSubview:_landscapeView];
-		newMode = CKNibCellControllerModeLandscape;
-	}
-	
+    if(animated){
+        CATransition *animation = [CATransition animation];
+        animation.duration = [params animationDuration];	
+        [cell.contentView.layer addAnimation:animation forKey:nil];
+    }
+    
+    UIInterfaceOrientation interfaceOrientation = [params interfaceOrientation];
+    CKNibCellControllerMode newMode = [self setupCell:cell usingInterfaceOrientation:interfaceOrientation];
+    
 	if(newMode != self.currentMode){
 		self.currentMode = newMode;
 		[self setupView:self.tableViewCell];
