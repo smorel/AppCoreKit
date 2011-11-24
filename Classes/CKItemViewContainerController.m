@@ -259,12 +259,14 @@
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		if(visible){
-			[controller viewDidAppear:controller.view];
-		}
-		else{
-			[controller viewDidDisappear];
-		}
+        if([controller view]){
+            if(visible){
+                [controller viewDidAppear:controller.view];
+            }
+            else{
+                [controller viewDidDisappear];
+            }
+        }
 	}
 }
 

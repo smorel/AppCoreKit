@@ -16,6 +16,11 @@
 
 #import "CKDebug.h"
 
+//private implementation
+@interface CKItemViewContainerController ()
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+@end
+
 
 @interface CKFormObjectController : NSObject<CKObjectController>{
 	id _delegate;
@@ -203,7 +208,7 @@
 	for(NSInteger i = 0; i < count; ++i){
 		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionVisibleIndex];
 		CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-		if(controller){
+		if(controller && [controller view]){
 			[controller applyStyle];
 		}
 	}
@@ -973,7 +978,14 @@
     if(indexSet && self.viewIsOnScreen){
         if((self.state & CKUIViewControllerStateDidAppear)){
                 //[self.tableView beginUpdates];
-            UITableViewRowAnimation anim = self.rowInsertAnimation ;
+            UITableViewRowAnimation anim = self.rowInsertAnimation;
+            
+            NSInteger currentIndex = [indexSet firstIndex];
+            while (currentIndex != NSNotFound) {
+                [self.sectionsToControllers insertObject:[NSMutableArray array] atIndex:currentIndex];
+                currentIndex = [indexSet indexGreaterThanIndex: currentIndex];
+            }
+            
             [self.tableView insertSections:indexSet withRowAnimation:anim];
                 //[self.tableView endUpdates];
         }
