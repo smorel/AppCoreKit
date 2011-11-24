@@ -1097,26 +1097,58 @@
 - (void)setSections:(NSArray*)sections hidden:(BOOL)hidden{
     [self objectControllerDidBeginUpdating:self.objectController];
     if(hidden){
+        NSMutableDictionary* sectionsByIndex = [NSMutableDictionary dictionary];
         for(CKFormSectionBase* section in sections){
             if(hidden && section.hidden == NO){
                 NSInteger index = section.sectionVisibleIndex;
-                [self objectController:self.objectController removeSectionAtIndex:index];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:index]];
             }
         }
+        
+        //Sort by bigest number
+        NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            if([obj1 intValue] > [obj2 intValue]){
+                return NSOrderedAscending;
+            }
+            else if([obj1 intValue] ==  [obj2 intValue]){
+                return NSOrderedSame;
+            }
+            return NSOrderedDescending;
+        }];
+        
+        for(NSNumber* indexNb in sortedIndexes)
+        {
+            NSInteger index = [indexNb intValue];
+            [self objectController:self.objectController removeSectionAtIndex:index];
+        }
+        
         for(CKFormSectionBase* section in sections){
             section.hidden = YES;
         }
     }
-    else{
-        NSMutableArray* toInsert = [NSMutableArray array];
+    else{ 
+        NSMutableDictionary* sectionsByIndex = [NSMutableDictionary dictionary];
         for(CKFormSectionBase* section in sections){
             if(!hidden && section.hidden == YES){
                 section.hidden = NO;
-                [toInsert addObject:section];
+                [sectionsByIndex setObject:section forKey:[NSNumber numberWithInt:section.sectionVisibleIndex]];
             }
         }
-        for(CKFormSectionBase* section in toInsert){
-            NSInteger index = section.sectionVisibleIndex;
+        
+        //Sort by smallest number
+        NSArray* sortedIndexes = [[sectionsByIndex allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            if([obj1 intValue] < [obj2 intValue]){
+                return NSOrderedAscending;
+            }
+            else if([obj1 intValue] ==  [obj2 intValue]){
+                return NSOrderedSame;
+            }
+            return NSOrderedDescending;
+        }];
+
+        
+        for(NSNumber* indexNb in sortedIndexes){
+            NSInteger index = [indexNb intValue];
             [self objectController:self.objectController insertSectionAtIndex:index];
         }
     }

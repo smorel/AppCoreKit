@@ -114,19 +114,21 @@
     NSInteger sectionCount = [self numberOfSections];
     for(NSInteger section=0;section<sectionCount;++section){
         NSInteger rowCount = [self numberOfObjectsForSection:section];
+        
+        NSMutableArray* controllers = nil;
+        if(section < [self.sectionsToControllers count]){
+            controllers = [self.sectionsToControllers objectAtIndex:section];
+        }else{
+            controllers = [NSMutableArray array];
+            [self.sectionsToControllers insertObject:controllers atIndex:section];
+        }
+        
         for(int row =0;row<rowCount;++row){
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
             CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
             
-            NSMutableArray* controllers = nil;
-            if([indexPath section] < [self.sectionsToControllers count]){
-                controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
-            }else{
-                controllers = [NSMutableArray array];
-                [self.sectionsToControllers insertObject:controllers atIndex:[indexPath section]];
-            }
             [controllers insertObject:controller atIndex:[indexPath row]];
         }
     }
