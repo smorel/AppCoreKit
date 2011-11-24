@@ -55,5 +55,6 @@ extern NSString* CKCascadingTreeIPhone;
 
 - (BOOL)isEmpty;
 - (BOOL)containsObjectForKey:(NSString*)key;
+- (NSString*)path;
 
 @end
