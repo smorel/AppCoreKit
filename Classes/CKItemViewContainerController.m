@@ -283,6 +283,9 @@
     }
     
     CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
+    if(!factoryItem)
+        return nil;
+    
     CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
     
     NSMutableArray* controllers = nil;
