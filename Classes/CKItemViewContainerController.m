@@ -458,7 +458,7 @@
         }
 		
 		CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-		if(factoryItem != nil && factoryItem.controllerClass){
+		if(factoryItem != nil){
 			NSString* identifier = [CKItemViewController identifierForItem:factoryItem object:object indexPath:indexPath  parentController:self];
 			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
             
@@ -480,27 +480,17 @@
 				[_weakViews addObject:viewRef];
 			}
 			else{
+                //Reset state
+                CKItemViewController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
+                if(previousController && [previousController view] == view){
+                    [previousController setView:nil];
+                }
+                
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
                 if(previousPath){
                     [_indexPathToViews removeObjectForKey:previousPath];
                     [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
-                    //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
                 }
-				
-				//Reuse controller
-				/*
-                 NSAssert(_viewsToControllers != nil,@"Should have been created");
-				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-				
-				controller.createCallback = [factoryItem createCallback];
-				controller.initCallback = [factoryItem initCallback];
-				controller.setupCallback = [factoryItem setupCallback];
-				controller.selectionCallback = [factoryItem selectionCallback];
-				controller.accessorySelectionCallback = [factoryItem accessorySelectionCallback];
-				controller.becomeFirstResponderCallback = [factoryItem becomeFirstResponderCallback];
-				controller.resignFirstResponderCallback = [factoryItem resignFirstResponderCallback];
-				controller.layoutCallback = [factoryItem layoutCallback];
-                 */
 			}
             
             if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
