@@ -152,12 +152,12 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if([self isViewLoaded] && ([self.view superview] != nil) && [controller respondsToSelector:@selector(setDelegate:)]){
+	if(([self state] & CKUIViewControllerStateDidAppear) && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
-		[self reload];
-		for(int i =0; i< [self numberOfSections];++i){
-			[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
-		}
+        [self reload];
+        for(int i =0; i< [self numberOfSections];++i){
+            [self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+        }
 	}
 }
 
