@@ -176,10 +176,6 @@
             //self.textField.hidden = NO;
             _textField.delegate = self;
         }
-        else{
-            //WEIRD !!!!!!!!!!
-            int i =3;
-        }
 	}
 }
 

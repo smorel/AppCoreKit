@@ -66,6 +66,10 @@ double round(double x)
 @property (nonatomic,assign,readwrite) CGFloat internalContentOffset;
 @property (nonatomic, assign) id delegate;
 
+@property (nonatomic,assign,readwrite) NSInteger numberOfPages;
+@property (nonatomic,assign,readwrite) NSInteger currentPage;
+@property (nonatomic,assign,readwrite) NSInteger currentSection;
+
 - (void)enqueueReusableView:(UIView*)view;
 - (void)updateVisibleIndexPaths:(NSMutableArray*)visiblesIndexPaths indexPathToAdd:(NSMutableArray*)indexPathToAdd indexPathToRemove:(NSMutableArray*)indexPathToRemove;
 - (void)layoutSubView:(UIView*)view atIndexPath:(NSIndexPath*)indexPath;
