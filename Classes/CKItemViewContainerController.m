@@ -262,16 +262,21 @@
 }
 
 - (void)updateViewsVisibility:(BOOL)visible{
-	//FIXME : a verifier .... ptet utiliser tous les controllers de _viewsToControllers
+    //We do not use controllerAtIndexPath here as we do not want to create any controllers in this method ...
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-        if([controller view]){
-            if(visible){
-                [controller viewDidAppear:controller.view];
-            }
-            else{
-                [controller viewDidDisappear];
+        if([indexPath section] < [self.sectionsToControllers count]){
+            NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+            if([indexPath row] < [controllers count]){
+                CKItemViewController* controller = [controllers objectAtIndex:[indexPath row]];
+                if([controller view]){
+                    if(visible){
+                        [controller viewDidAppear:controller.view];
+                    }
+                    else{
+                        [controller viewDidDisappear];
+                    }
+                }
             }
         }
 	}
@@ -606,6 +611,7 @@
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[self onBeginUpdates];
 }
 
