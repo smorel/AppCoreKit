@@ -17,123 +17,62 @@
 #import "CKItemViewController+DynamicLayout.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 
+//Private interface
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
 @end
 
+@interface CKItemViewControllerFactoryItem() 
+@property(nonatomic,retain)NSMutableDictionary* params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@end
 
 /********************************* CKItemViewControllerFactory *********************************
  */
 
 @interface CKItemViewControllerFactory ()
-@property (nonatomic, retain) NSMutableArray* mappings;
+@property (nonatomic, retain) NSMutableArray* items;
 @property (nonatomic, assign) id objectController;
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
 @end
 
 
 @implementation CKItemViewControllerFactory
-@synthesize mappings = _mappings;
+@synthesize items = _items;
 @synthesize objectController = _objectController;
 
 - (void)dealloc{
-	[_mappings release];
-	_mappings = nil;
+	[_items release];
+	_items = nil;
 	_objectController = nil;
 	[super dealloc];
 }
 
-- (void)setMappings:(id)theMappings{
+- (id)init{
+    self = [super init];
+    self.items = [NSMutableArray array];
+    return self;
+}
+
+- (void)setItems:(id)theItems{
 	NSMutableArray* res = [NSMutableArray array];
 	[res mapControllerClass:[CKDocumentCollectionViewCellController class] withObjectClass:[CKDocumentCollection class]];
-	[res addObjectsFromArray:theMappings];
+	[res addObjectsFromArray:theItems];
 	
-	[_mappings release];
-	_mappings = [res retain];
+	[_items release];
+	_items = [res retain];
 }
 
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
-	id object = [_objectController objectAtIndexPath:indexPath];
-	for(CKItemViewControllerFactoryItem* item in _mappings){
-		if([item matchWithObject:object]){
-			return item;
-		}
-	}
-	NSAssert(NO,@"controller factory could not find matching item for object '%@'",object);
-	return nil;
-}
-
-
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
-    if(!item){
-        return nil;
-    }
-	return [item controllerForObject:object atIndexPath:indexPath];
-}
-
-- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params{
-	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
-    if(!item){
-        return CKItemViewFlagNone;
-    }
-	id object = [_objectController objectAtIndexPath:indexPath];
-	[params setObject:object forKey:CKTableViewAttributeObject];
-	return [item flagsForObject:object atIndexPath:indexPath withParams:params];
-}
-
-- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath  params:(NSMutableDictionary*)params{
-	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
-    if(!item){
-        return CGSizeMake(0,0);
-    }
-	id object = [_objectController objectAtIndexPath:indexPath];
-	[params setObject:object forKey:CKTableViewAttributeObject];
-	return [item sizeForObject:object atIndexPath:indexPath withParams:params];
-}
-
-@end
-
-/********************************* CKItemViewControllerFactoryItem *********************************
- */
-
-NSString* CKItemViewControllerFactoryItemCreate               = @"CKItemViewControllerFactoryItemCreate";
-NSString* CKItemViewControllerFactoryItemInit                 = @"CKItemViewControllerFactoryItemInit";
-NSString* CKItemViewControllerFactoryItemSetup                = @"CKItemViewControllerFactoryItemSetup";
-NSString* CKItemViewControllerFactoryItemSelection            = @"CKItemViewControllerFactoryItemSelection";
-NSString* CKItemViewControllerFactoryItemAccessorySelection   = @"CKItemViewControllerFactoryItemAccessorySelection";
-NSString* CKItemViewControllerFactoryItemFlags                = @"CKItemViewControllerFactoryItemFlags";
-NSString* CKItemViewControllerFactoryItemFilter               = @"CKItemViewControllerFactoryItemFilter";
-NSString* CKItemViewControllerFactoryItemSize                 = @"CKItemViewControllerFactoryItemSize";
-NSString* CKItemViewControllerFactoryItemBecomeFirstResponder = @"CKItemViewControllerFactoryItemBecomeFirstResponder";
-NSString* CKItemViewControllerFactoryItemResignFirstResponder = @"CKItemViewControllerFactoryItemResignFirstResponder";
-NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewControllerFactoryItemLayout";
-
-@interface CKItemViewControllerFactoryItem() 
-@property(nonatomic,retain)NSMutableDictionary* params;
-@end
-
-@implementation CKItemViewControllerFactoryItem
-@synthesize controllerClass = _controllerClass;
-@synthesize params = _params;
-
-- (id)init{
-	[super init];
-	self.params = [NSMutableDictionary dictionary];
-	return self;
-}
-
-- (void)dealloc{
-	[_params release];
-	_params = nil;
-	_controllerClass = nil;
-	[super dealloc];
-}
-
-- (BOOL)matchWithObject:(id)object{
-	id filter = [_params objectForKey:CKItemViewControllerFactoryItemFilter];
+- (BOOL)doesItem:(CKItemViewControllerFactoryItem*)item matchWithObject:(id)object{
+    id filter = [item.params objectForKey:CKItemViewControllerFactoryItemFilter];
 	if(filter != nil){
-		id filter = [_params objectForKey:CKItemViewControllerFactoryItemFilter];
+		id filter = [item.params objectForKey:CKItemViewControllerFactoryItemFilter];
 		if([filter isKindOfClass:[CKCallback class]]){
 			CKCallback* callback = (CKCallback*)filter;
 			id returnValue = [callback execute:object];
@@ -149,40 +88,35 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	return NO;
 }
 
-- (CKCallback*)createCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemCreate];
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
+	id object = [_objectController objectAtIndexPath:indexPath];
+	for(CKItemViewControllerFactoryItem* item in _items){
+		if([self doesItem:item matchWithObject:object]){
+			return item;
+		}
+	}
+	return nil;
 }
 
-- (CKCallback*)initCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemInit];
+
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return nil;
+    }
+	
+    return [item controllerForObject:object atIndexPath:indexPath];
 }
 
-- (CKCallback*)setupCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemSetup];
-}
-
-- (CKCallback*)selectionCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemSelection];
-}
-
-- (CKCallback*)accessorySelectionCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemAccessorySelection];
-}
-
-- (CKCallback*)becomeFirstResponderCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemBecomeFirstResponder];
-}
-
-- (CKCallback*)resignFirstResponderCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemResignFirstResponder];
-}
-
-- (CKCallback*)layoutCallback{
-	return [_params objectForKey:CKItemViewControllerFactoryItemLayout];
-}
-
-- (CKItemViewFlags)flagsForObject:(id)object atIndexPath:(NSIndexPath*)indexPath  withParams:(NSMutableDictionary*)params{
-	//Style size first
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params{
+	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return CKItemViewFlagNone;
+    }
+    
+	id object = [_objectController objectAtIndexPath:indexPath];
+	[params setObject:object forKey:CKTableViewAttributeObject];
+    
     NSAssert([[params parentController] isKindOfClass:[CKItemViewContainerController class]],@"Incompatible parent controller");
     
     CKItemViewContainerController* containerController = (CKItemViewContainerController*)[params parentController];
@@ -195,12 +129,12 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 		}
 	}
     
-	id flagsObject = [_params objectForKey:CKItemViewControllerFactoryItemFlags];
+	id flagsObject = [item.params objectForKey:CKItemViewControllerFactoryItemFlags];
 	if(flagsObject != nil){
 		if([flagsObject isKindOfClass:[CKCallback class]]){
 			CKCallback* flagsCallBack = (CKCallback*)flagsObject;
 			if(flagsCallBack != nil){
-                [CKItemViewController setupStaticControllerForItem:self inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
+                [CKItemViewController setupStaticControllerForItem:item inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
 				NSNumber* number = [flagsCallBack execute:params];
 				CKItemViewFlags flags = (CKItemViewFlags)[number intValue];
 				return flags;
@@ -212,21 +146,26 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 			return flags;
 		}
 		else{
-			NSAssert(NO,@"invalid type for controller mappings for key '%@' controllerClass '%@'",CKItemViewControllerFactoryItemFlags,self.controllerClass);
+			NSAssert(NO,@"invalid type for controller mappings for key '%@' controllerClass '%@'",CKItemViewControllerFactoryItemFlags,item.controllerClass);
 		}
 	}
 	else{
-        [CKItemViewController setupStaticControllerForItem:self inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
-		Class theClass = self.controllerClass;
+        [CKItemViewController setupStaticControllerForItem:item inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:NO];
+		Class theClass = item.controllerClass;
         CKItemViewFlags flags = [theClass flagsForObject:object withParams:params];
         return flags;
 	}
 	return CKItemViewFlagNone;
 }
 
-
-- (CGSize)sizeForObject:(id)object atIndexPath:(NSIndexPath*)indexPath withParams:(NSMutableDictionary*)params{
-	//Style size first
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath  params:(NSMutableDictionary*)params{
+	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+    if(!item){
+        return CGSizeMake(0,0);
+    }
+	id object = [_objectController objectAtIndexPath:indexPath];
+	[params setObject:object forKey:CKTableViewAttributeObject];
+    
     NSAssert([[params parentController] isKindOfClass:[CKItemViewContainerController class]],@"Incompatible parent controller");
     
     CKItemViewContainerController* containerController = (CKItemViewContainerController*)[params parentController];
@@ -239,12 +178,12 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 		}
 	}
     
-	id sizeObject = [_params objectForKey:CKItemViewControllerFactoryItemSize];
+	id sizeObject = [item.params objectForKey:CKItemViewControllerFactoryItemSize];
 	if(sizeObject != nil){
 		if([sizeObject isKindOfClass:[CKCallback class]]){
 			CKCallback* sizeCallBack = (CKCallback*)sizeObject;
 			if(sizeCallBack != nil){
-                [CKItemViewController setupStaticControllerForItem:self inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:YES];
+                [CKItemViewController setupStaticControllerForItem:item inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath forSize:YES];
 				NSValue* value = [sizeCallBack execute:params];
 				CGSize size = [value CGSizeValue];
 				return size;
@@ -256,12 +195,12 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 			return size;
 		}
 		else{
-			NSAssert(NO,@"invalid type for controller mappings for key '%@' controllerClass '%@'",CKItemViewControllerFactoryItemFlags,self.controllerClass);
+			NSAssert(NO,@"invalid type for controller mappings for key '%@' controllerClass '%@'",CKItemViewControllerFactoryItemFlags,item.controllerClass);
 		}
 	}
 	else{
-        [CKItemViewController setupStaticControllerForItem:self inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath  forSize:YES];
-		Class theClass = self.controllerClass;
+        [CKItemViewController setupStaticControllerForItem:item inParams:params withStyle:controllerStyle withObject:object withIndexPath:indexPath  forSize:YES];
+		Class theClass = item.controllerClass;
         NSValue* v = (NSValue*) [theClass performSelector:@selector(viewSizeForObject:withParams:) withObject:object withObject:params];
         CGSize size = [v CGSizeValue];
         return size;
@@ -269,131 +208,43 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	return CGSizeMake(100,44);
 }
 
-- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewController* controller = [[[self.controllerClass alloc]init]autorelease];
-    controller.createCallback = [self createCallback];
-	controller.initCallback = [self initCallback];
-	controller.setupCallback = [self setupCallback];
-	controller.selectionCallback = [self selectionCallback];
-	controller.accessorySelectionCallback = [self accessorySelectionCallback];
-	controller.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
-	controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
-	controller.layoutCallback = [self layoutCallback];
-	
-	[controller setValue:object];
-	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-	
-	id createObject = [_params objectForKey:CKItemViewControllerFactoryItemCreate];
-	if(createObject != nil && [createObject isKindOfClass:[CKCallback class]]){
-		CKCallback* createCallBack = (CKCallback*)createObject;
-		[createCallBack execute:controller];
-	}
-	
-	return controller;
+- (CKItemViewControllerFactoryItem*)addItem:(CKItemViewControllerFactoryItem*)item{
+    [self.items addObject:item];
+	return item;
 }
 
-- (void)setCreateBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemCreate];
+- (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type withControllerOfClass:(Class)controllerClass{
+    return [self addItemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject isKindOfClass:type];
+    }] withControllerOfClass:controllerClass];
 }
 
-- (void)setInitBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemInit];
+- (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerOfClass:(Class)controllerClass{
+    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
+	item.controllerClass = controllerClass;
+	item.params = [NSMutableDictionary dictionaryWithObject:predicate 
+                                                     forKey:CKItemViewControllerFactoryItemFilter];
+	[self.items addObject:item];
+	return item;
 }
 
-- (void)setSetupBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemSetup];
+- (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
+    return [self addItemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject isKindOfClass:type];
+    }] withControllerCreationBlock:block];
 }
 
-- (void)setSelectionBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemSelection];
-}
 
-- (void)setAccessorySelectionBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemAccessorySelection];
-}
-
-- (void)setFlagsBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemFlags];
-}
-
-- (void)setFilterBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemFilter];
-}
-
-- (void)setSizeBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemSize];
-}
-
-- (void)setBecomeFirstResponderBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemBecomeFirstResponder];
-}
-
-- (void)setResignFirstResponderBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemResignFirstResponder];
-}
-
-- (void)setLayoutBlock:(CKCallbackBlock)block{
-	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemLayout];
-}
-
-- (void)setCreateTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemCreate];
-}
-
-- (void)setInitTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemInit];
-}
-
-- (void)setSetupTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemSetup];
-}
-
-- (void)setSelectionTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemSelection];
-}
-
-- (void)setAccessorySelectionTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemAccessorySelection];
-}
-
-- (void)setFlagsTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemFlags];
-}
-
-- (void)setFilterTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemFilter];
-}
-
-- (void)setSizeTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemSize];
-}
-
-- (void)setBecomeFirstResponderTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemBecomeFirstResponder];
-}
-
-- (void)setResignFirstResponderTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemResignFirstResponder];
-}
-
-- (void)setLayoutTarget:(id)target action:(SEL)action{
-	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemLayout];
-}
-
-- (void)setFlags:(CKItemViewFlags)flags{
-	[self.params setObject:[NSNumber numberWithInt:flags] forKey:CKItemViewControllerFactoryItemFlags];
-}
-
-- (void)setFilterPredicate:(NSPredicate*)predicate{
-	[self.params setObject:predicate forKey:CKItemViewControllerFactoryItemFilter];
-}
-
-- (void)setSize:(CGSize)size{
-	[self.params setObject:[NSValue valueWithCGSize:size] forKey:CKItemViewControllerFactoryItemSize];
+- (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
+    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
+	item.controllerCreateBlock = block;
+	item.params = [NSMutableDictionary dictionaryWithObject:predicate 
+                                                     forKey:CKItemViewControllerFactoryItemFilter];
+	[self.items addObject:item];
+	return item;
 }
 
 @end
-
 
 
 
@@ -401,9 +252,6 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
  */
 
 @implementation CKObjectViewControllerFactory
-@end
-
-@implementation CKObjectViewControllerFactoryItem
 @end
 
 @implementation NSMutableArray (CKObjectViewControllerFactory_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
@@ -435,7 +283,7 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 
 + (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type{
 	CKItemViewControllerFactory* factory = (CKItemViewControllerFactory*)[[[type alloc]init]autorelease];
-	factory.mappings = [NSMutableArray arrayWithArray:mappings];
+	factory.items = [NSMutableArray arrayWithArray:mappings];
 	return factory;
 }
 

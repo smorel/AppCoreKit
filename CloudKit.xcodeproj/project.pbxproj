@@ -530,6 +530,8 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
+		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96382651148009EF00A9C98B /* CKItemViewControllerFactoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1056,6 +1058,8 @@
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyMetaData.h; path = Classes/CKObjectPropertyMetaData.h; sourceTree = "<group>"; };
 		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
+		9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactoryItem.h; path = Classes/CKItemViewControllerFactoryItem.h; sourceTree = "<group>"; };
+		9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItemViewControllerFactoryItem.m; path = Classes/CKItemViewControllerFactoryItem.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1397,6 +1401,8 @@
 				7560DB7813B8ED3600268D13 /* CKItemViewContainerController.m */,
 				7560DB7913B8ED3600268D13 /* CKItemViewController.h */,
 				7560DB7A13B8ED3600268D13 /* CKItemViewController.m */,
+				9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */,
+				9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */,
 				7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */,
 				7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */,
 				7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */,
@@ -2318,6 +2324,7 @@
 				7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */,
 				755CEE19146C8C2E0052B1FF /* CKLocalizationManager.h in Headers */,
 				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
+				96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2668,6 +2675,7 @@
 				757D06E5144DAD9A00A83128 /* CKInlineDebuggerController.m in Sources */,
 				755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */,
 				755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */,
+				96382651148009EF00A9C98B /* CKItemViewControllerFactoryItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

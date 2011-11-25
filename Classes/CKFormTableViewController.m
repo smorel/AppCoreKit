@@ -16,16 +16,27 @@
 
 #import "CKDebug.h"
 
-//private implementation
+//private interfaces
 @interface CKItemViewContainerController ()
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 @end
 
+@interface CKItemViewControllerFactoryItem() 
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@end
 
 @interface CKItemViewControllerFactory ()
 @property (nonatomic, assign) id objectController;
 @end
 
+@interface CKItemViewControllerFactory ()
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+@end
 
 //CKFormObjectController
 

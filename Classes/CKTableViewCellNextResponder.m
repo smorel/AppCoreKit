@@ -11,6 +11,18 @@
 #import "CKNSObject+Invocation.h"
 #import "CKPropertyGridCellController.h"
 
+//private interfaces
+
+@interface CKItemViewControllerFactory ()
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+@end
+
+//CKTableViewCellNextResponder
 
 @implementation CKTableViewCellNextResponder
 

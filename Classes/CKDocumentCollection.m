@@ -54,6 +54,10 @@
 	return self;
 }
 
+- (void)setDelegate:(id)thedelegate{
+    _delegate = thedelegate;
+}
+
 - (void)feedSourceMetaData:(CKObjectPropertyMetaData*)metaData{
 	metaData.serializable = NO;
 }

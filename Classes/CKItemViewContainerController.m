@@ -11,7 +11,7 @@
 #import "CKWeakRef.h"
 #import "CKFormTableViewController.h"
 
-//CKItemViewContainerController
+//private interfaces
 
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
@@ -25,6 +25,15 @@
 @property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
 @property (nonatomic, retain) NSMutableArray* weakViews;
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@end
+
+@interface CKItemViewControllerFactory ()
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
@@ -125,8 +134,7 @@
         for(int row =0;row<rowCount;++row){
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
-            CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-            CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
+            CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
             [controller performSelector:@selector(setParentController:) withObject:self];
             
             [controllers insertObject:controller atIndex:[indexPath row]];
@@ -296,11 +304,10 @@
         }
     }
     
-    CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-    if(!factoryItem)
+    CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
+    if(!controller)
         return nil;
     
-    CKItemViewController* controller = [factoryItem controllerForObject:[self objectAtIndexPath:indexPath] atIndexPath:indexPath];
     [controller performSelector:@selector(setParentController:) withObject:self];
     
     NSMutableArray* controllers = nil;
@@ -641,8 +648,8 @@
     for(NSInteger i = 0; i<[indexPaths count];++i){
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
         NSIndexPath* object = [objects objectAtIndex:i];
-        CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-        CKItemViewController* controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
+        CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+        NSAssert(controller,@"Should not be nil");
         [controller performSelector:@selector(setParentController:) withObject:self];
         
         NSMutableArray* controllers = nil;
@@ -677,8 +684,8 @@
     for(NSNumber* section in [indexsToRemove allKeys]){
         NSIndexSet* indexes = [indexsToRemove objectForKey:section];
         if([section intValue] < [_sectionsToControllers count]){
-            NSMutableArray* controller = [_sectionsToControllers objectAtIndex:[section intValue]];
-            [controller removeObjectsAtIndexes:indexes];
+            NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[section intValue]];
+            [controllers removeObjectsAtIndexes:indexes];
         }
     }
     
