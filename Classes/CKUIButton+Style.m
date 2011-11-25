@@ -133,7 +133,7 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UIButton* button = (UIButton *)view;
 		NSMutableDictionary* myButtonStyle = style;
-		if(myButtonStyle){
+		if(myButtonStyle && ![myButtonStyle isEmpty]){
             //default state
 			if ([myButtonStyle containsObjectForKey:CKStyleDefaultBackgroundImage]) {
                 [button setBackgroundImage:[myButtonStyle defaultBackgroundImage] forState:UIControlStateNormal];
