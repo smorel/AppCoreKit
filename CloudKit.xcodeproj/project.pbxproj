@@ -291,8 +291,6 @@
 		7560DD3A13B8ED3600268D13 /* CKPageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBED13B8ED3600268D13 /* CKPageScrollView.m */; };
 		7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBEE13B8ED3600268D13 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBEF13B8ED3600268D13 /* CKPickerView.m */; };
-		7560DD3D13B8ED3600268D13 /* CKPropertyGridEditorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD3E13B8ED3600268D13 /* CKPropertyGridEditorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */; };
 		7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */; };
 		7560DD4513B8ED3600268D13 /* CKSlideshowViewControllerDep.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -532,6 +530,14 @@
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
 		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96382651148009EF00A9C98B /* CKItemViewControllerFactoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */; };
+		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
+		963826581484012B00A9C98B /* CKFormSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826561484012A00A9C98B /* CKFormSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		963826591484012B00A9C98B /* CKFormSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826571484012B00A9C98B /* CKFormSection.m */; };
+		9638265C1484013B00A9C98B /* CKFormDocumentCollectionSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265A1484013A00A9C98B /* CKFormDocumentCollectionSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9638265D1484013B00A9C98B /* CKFormDocumentCollectionSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */; };
+		963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265E1484015300A9C98B /* CKFormCellDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265F1484015300A9C98B /* CKFormCellDescriptor.m */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -815,8 +821,6 @@
 		7560DBED13B8ED3600268D13 /* CKPageScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPageScrollView.m; path = Classes/CKPageScrollView.m; sourceTree = "<group>"; };
 		7560DBEE13B8ED3600268D13 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = Classes/CKPickerView.h; sourceTree = "<group>"; };
 		7560DBEF13B8ED3600268D13 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = Classes/CKPickerView.m; sourceTree = "<group>"; };
-		7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyGridEditorController.h; path = Classes/CKPropertyGridEditorController.h; sourceTree = "<group>"; };
-		7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyGridEditorController.m; path = Classes/CKPropertyGridEditorController.m; sourceTree = "<group>"; };
 		7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewController.h; path = Classes/CKSlideshowViewController.h; sourceTree = "<group>"; };
 		7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewController.m; path = Classes/CKSlideshowViewController.m; sourceTree = "<group>"; };
 		7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewControllerDep.h; path = Classes/CKSlideshowViewControllerDep.h; sourceTree = "<group>"; };
@@ -1060,6 +1064,14 @@
 		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
 		9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactoryItem.h; path = Classes/CKItemViewControllerFactoryItem.h; sourceTree = "<group>"; };
 		9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItemViewControllerFactoryItem.m; path = Classes/CKItemViewControllerFactoryItem.m; sourceTree = "<group>"; };
+		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; };
+		963826531484011700A9C98B /* CKFormSectionBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSectionBase.m; path = Classes/CKFormSectionBase.m; sourceTree = "<group>"; };
+		963826561484012A00A9C98B /* CKFormSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSection.h; path = Classes/CKFormSection.h; sourceTree = "<group>"; };
+		963826571484012B00A9C98B /* CKFormSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSection.m; path = Classes/CKFormSection.m; sourceTree = "<group>"; };
+		9638265A1484013A00A9C98B /* CKFormDocumentCollectionSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormDocumentCollectionSection.h; path = Classes/CKFormDocumentCollectionSection.h; sourceTree = "<group>"; };
+		9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormDocumentCollectionSection.m; path = Classes/CKFormDocumentCollectionSection.m; sourceTree = "<group>"; };
+		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; };
+		9638265F1484015300A9C98B /* CKFormCellDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormCellDescriptor.m; path = Classes/CKFormCellDescriptor.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1895,14 +1907,17 @@
 		7577DFE813E2EE4E0065E098 /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				7560DBF013B8ED3600268D13 /* CKPropertyGridEditorController.h */,
-				7560DBF113B8ED3600268D13 /* CKPropertyGridEditorController.m */,
+				963826621484017B00A9C98B /* Additions */,
 				7560DB6013B8ED3600268D13 /* CKFormTableViewController.h */,
 				7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */,
-				7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */,
-				7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */,
-				75F295DC13EB0088009CCC70 /* CKFormTableViewController+Menus.h */,
-				75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */,
+				963826521484011700A9C98B /* CKFormSectionBase.h */,
+				963826531484011700A9C98B /* CKFormSectionBase.m */,
+				963826561484012A00A9C98B /* CKFormSection.h */,
+				963826571484012B00A9C98B /* CKFormSection.m */,
+				9638265A1484013A00A9C98B /* CKFormDocumentCollectionSection.h */,
+				9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */,
+				9638265E1484015300A9C98B /* CKFormCellDescriptor.h */,
+				9638265F1484015300A9C98B /* CKFormCellDescriptor.m */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -2074,6 +2089,17 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		963826621484017B00A9C98B /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				7577DFE413E2EE470065E098 /* CKFormTableViewController+PropertyGrid.h */,
+				7577DFE513E2EE470065E098 /* CKFormTableViewController+PropertyGrid.m */,
+				75F295DC13EB0088009CCC70 /* CKFormTableViewController+Menus.h */,
+				75F295DD13EB0088009CCC70 /* CKFormTableViewController+Menus.m */,
+			);
+			name = Additions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2187,7 +2213,6 @@
 				7560DD3713B8ED3600268D13 /* CKOverlayView+Factory.h in Headers */,
 				7560DD3913B8ED3600268D13 /* CKPageScrollView.h in Headers */,
 				7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */,
-				7560DD3D13B8ED3600268D13 /* CKPropertyGridEditorController.h in Headers */,
 				7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */,
 				7560DD4513B8ED3600268D13 /* CKSlideshowViewControllerDep.h in Headers */,
 				7560DD4713B8ED3600268D13 /* CKSlotView.h in Headers */,
@@ -2325,6 +2350,10 @@
 				755CEE19146C8C2E0052B1FF /* CKLocalizationManager.h in Headers */,
 				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
 				96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */,
+				963826541484011700A9C98B /* CKFormSectionBase.h in Headers */,
+				963826581484012B00A9C98B /* CKFormSection.h in Headers */,
+				9638265C1484013B00A9C98B /* CKFormDocumentCollectionSection.h in Headers */,
+				963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2554,7 +2583,6 @@
 				7560DD3813B8ED3600268D13 /* CKOverlayView+Factory.m in Sources */,
 				7560DD3A13B8ED3600268D13 /* CKPageScrollView.m in Sources */,
 				7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */,
-				7560DD3E13B8ED3600268D13 /* CKPropertyGridEditorController.m in Sources */,
 				7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */,
 				7560DD4613B8ED3600268D13 /* CKSlideshowViewControllerDep.m in Sources */,
 				7560DD4813B8ED3600268D13 /* CKSlotView.m in Sources */,
@@ -2676,6 +2704,10 @@
 				755CEE1A146C8C2E0052B1FF /* CKLocalizationManager.m in Sources */,
 				755CEE1F146C8C7E0052B1FF /* CKLocalizedString.m in Sources */,
 				96382651148009EF00A9C98B /* CKItemViewControllerFactoryItem.m in Sources */,
+				963826551484011700A9C98B /* CKFormSectionBase.m in Sources */,
+				963826591484012B00A9C98B /* CKFormSection.m in Sources */,
+				9638265D1484013B00A9C98B /* CKFormDocumentCollectionSection.m in Sources */,
+				963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

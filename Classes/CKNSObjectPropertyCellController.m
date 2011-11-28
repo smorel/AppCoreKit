@@ -8,8 +8,6 @@
 
 #import "CKNSObjectPropertyCellController.h"
 
-#import "CKPropertyGridEditorController.h"
-
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"
 #import "CKNSObject+Bindings.h"
