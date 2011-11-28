@@ -201,6 +201,14 @@
 	[self.tableView reloadData];
 }
 
+- (void)setObjectController:(id)controller{
+    [super setObjectController:controller];
+    
+    //This force a reload for the next viewWillAppear call.
+    if(![self viewIsOnScreen]){
+        self.tableViewHasBeenReloaded = NO;
+    }
+}
 
 #pragma mark Setters
 
