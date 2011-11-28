@@ -60,6 +60,10 @@
     return self;
 }
 
++ (CKItemViewControllerFactory*)factory{
+    return [[[CKItemViewControllerFactory alloc]init]autorelease];
+}
+
 - (void)setItems:(id)theItems{
 	NSMutableArray* res = [NSMutableArray array];
 	[res mapControllerClass:[CKDocumentCollectionViewCellController class] withObjectClass:[CKDocumentCollection class]];

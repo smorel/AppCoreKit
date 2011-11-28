@@ -20,6 +20,8 @@
 @interface CKItemViewControllerFactory : NSObject {
 }
 
++ (CKItemViewControllerFactory*)factory;
+
 - (CKItemViewControllerFactoryItem*)addItem:(CKItemViewControllerFactoryItem*)item;
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type 

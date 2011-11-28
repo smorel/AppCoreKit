@@ -32,25 +32,8 @@
 @property (nonatomic,retain) UIView* headerView;
 @property (nonatomic,retain) NSString* footerTitle;
 @property (nonatomic,retain) UIView* footerView;
-@property (nonatomic,assign) CKFormTableViewController* parentController;
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
 @property (nonatomic,readonly) BOOL hidden;
-
-- (NSInteger)numberOfObjects;
-- (id)objectAtIndex:(NSInteger)index;
-- (void)removeObjectAtIndex:(NSInteger)index;
-- (void)fetchRange:(NSRange)range;
-
-- (void)updateStyleForNonNewVisibleCells;
-- (void)updateStyleForExistingCells;
-
-- (void)start;
-- (void)stop;
-
-- (void)lock;
-- (void)unlock;
-
-- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
 
 @end

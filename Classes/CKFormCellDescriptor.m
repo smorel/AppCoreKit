@@ -18,13 +18,13 @@
 
 @implementation CKFormCellDescriptor
 @synthesize value = _value;
-@synthesize viewController = _viewController;
+@synthesize cellController = _cellController;
 
 - (void)dealloc{
     [_value release];
     _value = nil;
-    [_viewController release];
-    _viewController = nil;
+    [_cellController release];
+    _cellController = nil;
     [super dealloc];
 }
 
@@ -35,10 +35,10 @@
 	return self;
 }
 
-- (id)initWithItemViewController:(CKItemViewController*)controller{
+- (id)initWithCellController:(CKTableViewCellController*)controller{
     [super init];
 	self.value = [controller value];
-	self.viewController = controller;
+	self.cellController = controller;
 	return self;
 }
 
@@ -46,19 +46,19 @@
 	return [[[CKFormCellDescriptor alloc]initWithValue:value controllerClass:controllerClass]autorelease];
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorWithItemViewController:(CKItemViewController*)controller{
-	return [[[CKFormCellDescriptor alloc]initWithItemViewController:controller]autorelease];
++ (CKFormCellDescriptor*)cellDescriptorWithCellController:(CKTableViewCellController*)controller{
+	return [[[CKFormCellDescriptor alloc]initWithCellController:controller]autorelease];
 }
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-    if(_viewController){
-        [_viewController performSelector:@selector(setValue:) withObject:object];
-        [_viewController performSelector:@selector(setIndexPath:) withObject:indexPath];
+    if(_cellController){
+        [_cellController performSelector:@selector(setValue:) withObject:object];
+        [_cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
     }
     else{
-        self.viewController = [super controllerForObject:object atIndexPath:indexPath];
+        self.cellController = [super controllerForObject:object atIndexPath:indexPath];
     }
-    return _viewController;
+    return _cellController;
 }
 
 @end

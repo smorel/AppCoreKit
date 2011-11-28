@@ -8,6 +8,9 @@
 
 #import "CKFormDocumentCollectionSection.h"
 #import "CKFormTableViewController.h"
+#import "CKFormDocumentCollectionSection_private.h"
+#import "CKFormTableViewController_private.h"
+#import "CKFormSectionBase_private.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
 #import "CKNSObject+Invocation.h"
@@ -18,9 +21,6 @@
 #import "CKDebug.h"
 
 //Private interfaces
-@interface CKFormSectionBase()
-@property (nonatomic,readwrite) BOOL hidden;
-@end
 
 @interface CKItemViewControllerFactory ()
 
@@ -34,15 +34,6 @@
 
 //CKFormDocumentCollectionSection
 
-@interface CKFormDocumentCollectionSection()
-@property (nonatomic,retain) CKDocumentCollectionController* objectController;
-@property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;
-@property (nonatomic,retain) NSMutableArray* changeSet;
-
-@property (nonatomic,retain,readwrite) NSMutableArray* headerCellDescriptors;
-@property (nonatomic,retain,readwrite) NSMutableArray* footerCellDescriptors;
-@end
-
 @implementation CKFormDocumentCollectionSection
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
@@ -50,26 +41,8 @@
 @synthesize footerCellDescriptors = _footerCellDescriptors;
 @synthesize changeSet = _changeSet;
 
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[super init];
-	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
-	
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(_parentController.autoHideSections && (collection.count <= 0)) {
-		self.hidden = YES;
-	}
-	
-	sectionUpdate = NO;
-	
-	self.headerCellDescriptors = [NSMutableArray array];
-	self.footerCellDescriptors = [NSMutableArray array];
-	
-	return self;
+- (void)dealloc{
+    [super dealloc];
 }
 
 - (void)start{
@@ -90,29 +63,6 @@
 
 - (void)unlock{
 	[_objectController unlock];
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.headerTitle = title;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings displayFeedSourceCell:displayFeedSourceCell];
-	section.headerTitle = title;
-	return section;
 }
 
 - (NSInteger)numberOfObjects{
@@ -389,8 +339,136 @@
 	}
 }
 
-- (void)dealloc{
-    [super dealloc];
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+    [super init];
+	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
+	self.controllerFactory = factory;
+    
+	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
+		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
+	}
+	
+	if(_parentController.autoHideSections && (collection.count <= 0)) {
+		self.hidden = YES;
+	}
+	
+	sectionUpdate = NO;
+	
+	self.headerCellDescriptors = [NSMutableArray array];
+	self.footerCellDescriptors = [NSMutableArray array];
+	
+	return self;
+
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
+	section.headerTitle = title;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
+	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory displayFeedSourceCell:displayFeedSourceCell];
+	section.headerTitle = title;
+	return section;
+}
+
+
+- (CKFormCellDescriptor*)addFooterCellController:(CKTableViewCellController*)controller{
+    return [self addFooterCellDescriptor:[CKFormCellDescriptor cellDescriptorWithCellController:controller]];
+}
+
+- (void)removeFooterCellController:(CKTableViewCellController*)controller{
+    [self removeFooterCellDescriptor:[self footerCellDescriptorForCellController:controller]];
+}
+
+- (CKFormCellDescriptor*)addHeaderCellController:(CKTableViewCellController*)controller{
+    return [self addHeaderCellDescriptor:[CKFormCellDescriptor cellDescriptorWithCellController:controller]];
+}
+
+- (void)removeHeaderCellController:(CKTableViewCellController*)controller{
+    [self removeHeaderCellDescriptor:[self headerCellDescriptorForCellController:controller]];
+}
+
+- (CKFormCellDescriptor*)headerCellDescriptorForCellController:(CKTableViewCellController*)controller{
+    for(CKFormCellDescriptor* descriptor in self.headerCellDescriptors){
+        if(descriptor.cellController == controller){
+            return descriptor;
+        }
+    }
+    return nil;
+}
+
+- (CKFormCellDescriptor*)footerCellDescriptorForCellController:(CKTableViewCellController*)controller{
+    for(CKFormCellDescriptor* descriptor in self.footerCellDescriptors){
+        if(descriptor.cellController == controller){
+            return descriptor;
+        }
+    }
+    return nil;
+}
+
+@end
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation CKFormDocumentCollectionSection(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	[super init];
+	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
+	
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
+		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
+	}
+	
+	if(_parentController.autoHideSections && (collection.count <= 0)) {
+		self.hidden = YES;
+	}
+	
+	sectionUpdate = NO;
+	
+	self.headerCellDescriptors = [NSMutableArray array];
+	self.footerCellDescriptors = [NSMutableArray array];
+	
+	return self;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	section.headerTitle = title;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
+	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
+	return section;
+}
+
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings displayFeedSourceCell:displayFeedSourceCell];
+	section.headerTitle = title;
+	return section;
 }
 
 @end

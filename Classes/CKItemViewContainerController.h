@@ -78,9 +78,10 @@
 
 //init
 - (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib;
 - (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory;
+
 - (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory  nibName:(NSString*)nib;
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib;
 
 //setup
 - (void)setupWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;

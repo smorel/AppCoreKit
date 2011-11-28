@@ -20,7 +20,6 @@
     BOOL _validationEnabled;
 }
 @property (nonatomic,retain, readonly) NSMutableArray* sections;
-@property (nonatomic,readonly) BOOL reloading;
 @property (nonatomic,assign) BOOL autoHideSections;
 @property (nonatomic,assign) BOOL autoHideSectionHeaders;
 @property (nonatomic,assign) BOOL validationEnabled;
@@ -45,14 +44,12 @@
 - (NSArray*)addSections:(NSArray *)sections;
 - (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
-/* FIXME : do a InsertSections atIndexes to batch the animations and depreciate the following methods
- */
 - (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index;
 - (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index;
 
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index;
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
 
 
 ///-----------------------------------
@@ -68,6 +65,10 @@
 
 @end
 
+
+/********************************* DEPRECATED *********************************
+ */
+
 @interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors DEPRECATED_ATTRIBUTE;
 - (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle DEPRECATED_ATTRIBUTE;
@@ -76,7 +77,10 @@
 @end
 
 
-//Adds extensions here to avoid importing to much files in client projects
+@interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index DEPRECATED_ATTRIBUTE;
+@end
 
+//Adds extensions here to avoid importing to much files in client projects
 #import "CKFormTableViewController+PropertyGrid.h"
 #import "CKFormTableViewController+Menus.h"

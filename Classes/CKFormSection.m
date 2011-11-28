@@ -7,6 +7,7 @@
 //
 
 #import "CKFormSection.h"
+#import "CKFormSectionBase_private.h"
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
@@ -17,7 +18,11 @@
 
 #import "CKDebug.h"
 
-    //CKFormSection
+//CKFormSection
+
+@interface CKFormSection()
+@property (nonatomic,retain) NSArray* cellDescriptors;
+@end
 
 @implementation CKFormSection
 @synthesize cellDescriptors = _cellDescriptors;
@@ -149,6 +154,83 @@
     NSInteger index = [_cellDescriptors indexOfObjectIdenticalTo:descriptor];
     NSAssert(index != NSNotFound,@"cannot find %@",descriptor);
     [self removeCellDescriptorAtIndex:index];
+}
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title{
+    self = [self initWithCellControllers:cellcontrollers];
+    self.headerTitle = title;
+    return self;
+}
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view{
+    self = [self initWithCellControllers:cellcontrollers];
+    self.headerView = view;
+    return self;
+}
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title{
+    self = [self initWithCellControllers:cellcontrollers];
+    self.footerTitle = title;
+    return self;
+}
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view{
+    self = [self initWithCellControllers:cellcontrollers];
+    self.footerView = view;
+    return self;
+}
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers{
+    NSMutableArray* cellDescriptors = [NSMutableArray array];
+    for(CKTableViewCellController* controller in cellcontrollers){
+        [cellDescriptors addObject:[CKFormCellDescriptor cellDescriptorWithCellController:controller]];
+    }
+    return [self initWithCellControllers:cellDescriptors];
+}
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers{
+	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers headerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers headerView:view]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title{
+	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers footerTitle:title]autorelease];
+}
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view{
+	return [[[CKFormSection alloc]initWithCellControllers:cellcontrollers footerView:view]autorelease];
+}
+
+- (CKFormCellDescriptor*)insertCellController:(CKTableViewCellController *)controller atIndex:(NSUInteger)index{
+    return [self insertCellDescriptor:[CKFormCellDescriptor cellDescriptorWithCellController:controller] atIndex:index];
+}
+
+- (CKFormCellDescriptor*)addCellController:(CKTableViewCellController *)controller{
+    return [self addCellDescriptor:[CKFormCellDescriptor cellDescriptorWithCellController:controller]];
+}
+
+- (void)removeCellController:(CKTableViewCellController *)controller{
+    [self removeCellDescriptor:[self cellDescriptorForCellController:controller]];
+}
+
+- (void)removeCellControllerAtIndex:(NSUInteger)index{
+    [self removeCellDescriptorAtIndex:index];
+}
+
+- (CKFormCellDescriptor*)cellDescriptorForCellController:(CKTableViewCellController*)controller{
+    for(CKFormCellDescriptor* descriptor in self.cellDescriptors){
+        if(descriptor.cellController == controller){
+            return descriptor;
+        }
+    }
+    return nil;
 }
 
 - (NSInteger)numberOfObjects{

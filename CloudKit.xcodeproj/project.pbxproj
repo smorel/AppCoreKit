@@ -538,6 +538,9 @@
 		9638265D1484013B00A9C98B /* CKFormDocumentCollectionSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */; };
 		963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265E1484015300A9C98B /* CKFormCellDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265F1484015300A9C98B /* CKFormCellDescriptor.m */; };
+		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
+		96A642851484125600C06A85 /* CKFormDocumentCollectionSection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */; };
+		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1072,6 +1075,9 @@
 		9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormDocumentCollectionSection.m; path = Classes/CKFormDocumentCollectionSection.m; sourceTree = "<group>"; };
 		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; };
 		9638265F1484015300A9C98B /* CKFormCellDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormCellDescriptor.m; path = Classes/CKFormCellDescriptor.m; sourceTree = "<group>"; };
+		96382665148406ED00A9C98B /* CKFormSectionBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase_private.h; path = Classes/CKFormSectionBase_private.h; sourceTree = "<group>"; };
+		96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormDocumentCollectionSection_private.h; path = Classes/CKFormDocumentCollectionSection_private.h; sourceTree = "<group>"; };
+		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1909,12 +1915,15 @@
 			children = (
 				963826621484017B00A9C98B /* Additions */,
 				7560DB6013B8ED3600268D13 /* CKFormTableViewController.h */,
+				96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */,
 				7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */,
 				963826521484011700A9C98B /* CKFormSectionBase.h */,
+				96382665148406ED00A9C98B /* CKFormSectionBase_private.h */,
 				963826531484011700A9C98B /* CKFormSectionBase.m */,
 				963826561484012A00A9C98B /* CKFormSection.h */,
 				963826571484012B00A9C98B /* CKFormSection.m */,
 				9638265A1484013A00A9C98B /* CKFormDocumentCollectionSection.h */,
+				96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */,
 				9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */,
 				9638265E1484015300A9C98B /* CKFormCellDescriptor.h */,
 				9638265F1484015300A9C98B /* CKFormCellDescriptor.m */,
@@ -2354,6 +2363,9 @@
 				963826581484012B00A9C98B /* CKFormSection.h in Headers */,
 				9638265C1484013B00A9C98B /* CKFormDocumentCollectionSection.h in Headers */,
 				963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */,
+				96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */,
+				96A642851484125600C06A85 /* CKFormDocumentCollectionSection_private.h in Headers */,
+				96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

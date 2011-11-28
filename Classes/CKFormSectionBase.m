@@ -7,6 +7,7 @@
 //
 
 #import "CKFormSectionBase.h"
+#import "CKFormSectionBase_private.h"
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
@@ -18,10 +19,6 @@
 #import "CKDebug.h"
 
 //CKFormSectionBase
-
-@interface CKFormSectionBase()
-@property (nonatomic,readwrite) BOOL hidden;
-@end
 
 @implementation CKFormSectionBase
 @synthesize headerTitle = _headerTitle;

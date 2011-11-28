@@ -18,7 +18,7 @@
 	NSMutableArray* _cellDescriptors;
 }
 
-@property (nonatomic,retain) NSArray* cellDescriptors;
+//Cell Descriptors API
 
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
@@ -26,11 +26,6 @@
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors footerView:(UIView*)view;
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors;
 
-+ (CKFormSection*)section;
-+ (CKFormSection*)sectionWithHeaderTitle:(NSString*)title;
-+ (CKFormSection*)sectionWithHeaderView:(UIView*)view;
-+ (CKFormSection*)sectionWithFooterTitle:(NSString*)title;
-+ (CKFormSection*)sectionWithFooterView:(UIView*)view;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
 + (CKFormSection*)sectionWithCellDescriptors:(NSArray*)cellDescriptors headerView:(UIView*)view;
@@ -41,5 +36,35 @@
 - (CKFormCellDescriptor*)addCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
 - (void)removeCellDescriptor:(CKFormCellDescriptor *)cellDescriptor;
 - (void)removeCellDescriptorAtIndex:(NSUInteger)index;
+
+//cell controllers API
+
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
+- (id)initWithCellControllers:(NSArray*)cellcontrollers;
+
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers;
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
+
+- (CKFormCellDescriptor*)insertCellController:(CKTableViewCellController *)controller atIndex:(NSUInteger)index;
+- (CKFormCellDescriptor*)addCellController:(CKTableViewCellController *)controller;
+- (void)removeCellController:(CKTableViewCellController *)controller;
+- (void)removeCellControllerAtIndex:(NSUInteger)index;
+
+- (CKFormCellDescriptor*)cellDescriptorForCellController:(CKTableViewCellController*)controller;
+
+//Base API
+
++ (CKFormSection*)section;
++ (CKFormSection*)sectionWithHeaderTitle:(NSString*)title;
++ (CKFormSection*)sectionWithHeaderView:(UIView*)view;
++ (CKFormSection*)sectionWithFooterTitle:(NSString*)title;
++ (CKFormSection*)sectionWithFooterView:(UIView*)view;
+
 
 @end

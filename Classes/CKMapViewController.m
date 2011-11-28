@@ -148,7 +148,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self updateParams];
 	[self updateVisibleViewsRotation];
 		
-	[self reloadData:NO];
+	[self reloadData];
 	
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
@@ -463,12 +463,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (BOOL)reloadData{
-	return [self reloadData:YES];
-}
-
-- (BOOL)reloadData:(BOOL)animated{
     [super reload];
-	return YES;
+    return YES;
 }
 
 - (void)onPropertyChanged:(NSNotification*)notification{

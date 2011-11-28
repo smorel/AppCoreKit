@@ -72,6 +72,5 @@ typedef enum CKMapViewControllerZoomStrategy{
 - (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapViewControllerZoomStrategy)strategy animated:(BOOL)animated;
 
 - (BOOL)reloadData;
-- (BOOL)reloadData:(BOOL)animated;
 
 @end
