@@ -17,8 +17,9 @@
 #import "CKDebug.h"
 
 //private interfaces
-@interface CKItemViewContainerController ()
-@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@interface CKItemViewContainerController(CKItemViewControllerManagement)
+- (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
 
 @interface CKItemViewControllerFactoryItem() 
@@ -1012,7 +1013,7 @@
             
             NSInteger currentIndex = [indexSet firstIndex];
             while (currentIndex != NSNotFound) {
-                [self.sectionsToControllers insertObject:[NSMutableArray array] atIndex:currentIndex];
+                [self insertItemViewControllersSectionAtIndex:currentIndex];
                 currentIndex = [indexSet indexGreaterThanIndex: currentIndex];
             }
             
