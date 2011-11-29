@@ -129,9 +129,12 @@
 }
 
 - (void)viewDidUnload {
+	[_tableView release];
+    _tableView = nil;
+	[_tableViewContainer release];
+    _tableViewContainer = nil;
+    
     [super viewDidUnload];
-	self.tableView = nil;
-	self.tableViewContainer = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

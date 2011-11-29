@@ -194,9 +194,19 @@
 
 - (void)viewDidUnload{
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
+
+    [_weakViews removeAllObjects];
+    [_viewsToControllers removeAllObjects];
+    [_viewsToIndexPath removeAllObjects];
+    [_indexPathToViews removeAllObjects];
+    
+    [_searchBar release];
+    _searchBar = nil;
+    
+    [_segmentedControl release];
+    _segmentedControl = nil;
+    
     [super viewDidUnload];
-	self.searchBar = nil;
-	self.segmentedControl = nil;
 }
 
 - (void)postInit{
