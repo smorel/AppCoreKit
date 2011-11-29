@@ -146,7 +146,7 @@
             _toggleSwitch.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
                 _textField.hidden = YES;
@@ -161,7 +161,7 @@
                 }
                 _textField.hidden = NO;
 				
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 				
@@ -177,7 +177,7 @@
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
                 _toggleSwitch.hidden = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 			}
@@ -185,7 +185,7 @@
                 self.fixedSize = YES;
                 _toggleSwitch.hidden = NO;
 				
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				BOOL bo = [[model value]boolValue];
 				[self.toggleSwitch setOn:bo animated:NO];
 				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
@@ -292,9 +292,9 @@
   
     [self scrollToRow];
     
-	[self beginBindingsContextByRemovingPreviousBindings];
+	[self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[textField bindEvent:UIControlEventEditingChanged target:self action:@selector(textFieldChanged:)];
-	[self endBindingsContext];
+	[self.tableViewCell endBindingsContext];
 	
 	[self didBecomeFirstResponder];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -305,7 +305,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
 	CKObjectProperty* model = self.value;
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self.tableViewCell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
 	[NSObject endBindingsContext];
 }

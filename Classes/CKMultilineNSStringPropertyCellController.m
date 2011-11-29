@@ -163,7 +163,7 @@
         self.fixedSize = YES;
         _textView.hidden = YES;
         
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[property.object bind:property.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];
 	}
@@ -176,7 +176,7 @@
         [_textView setText:[property value] animated:NO];
         _textView.delegate = self;
         
-        [self beginBindingsContextByRemovingPreviousBindings];
+        [cell beginBindingsContextByRemovingPreviousBindings];
         [property.object bind:property.keyPath withBlock:^(id value) {
             if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
                 _textView.frameChangeDelegate = self;
@@ -186,7 +186,7 @@
                 _textView.frameChangeDelegate = nil;
             }
         }];
-        [self endBindingsContext];
+        [cell endBindingsContext];
         
         _textView.hidden = NO;
     }

@@ -34,6 +34,8 @@
 @synthesize checkMarkImage = _checkMarkImage;
 
 - (void)dealloc{
+    [self clearBindingsContext];
+    
     [_disclosureIndicatorImage release];
     [_disclosureButton release];
     [_delegateRef release];

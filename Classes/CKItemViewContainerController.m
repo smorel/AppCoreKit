@@ -408,6 +408,7 @@
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
+        NSAssert(object,@"toto");
         
         UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
         if(previousView){

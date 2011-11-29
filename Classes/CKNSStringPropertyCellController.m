@@ -149,7 +149,7 @@
         //self.textField.hidden = YES;
         
         self.fixedSize = YES;
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 		[NSObject endBindingsContext];
         _textField.delegate = nil;
@@ -163,7 +163,7 @@
             else{
                 self.fixedSize = NO;
             }
-            [NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+            [NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
             [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
             [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
                                                              withBlock:^(NSNotification *notification) {
