@@ -106,15 +106,12 @@
 - (void)show {
 	[self setupAlertView];
 	[self.alertView show];
+	[self retain];
 }
 
 #pragma mark - UIAlertView delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-}
-
-- (void)willPresentAlertView:(UIAlertView *)alertView {
-	[self retain];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
