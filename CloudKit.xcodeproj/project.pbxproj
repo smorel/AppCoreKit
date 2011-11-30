@@ -1679,7 +1679,7 @@
 		7528070913D4B35F0010A300 /* CellControllers */ = {
 			isa = PBXGroup;
 			children = (
-				75F2960213F04424009CCC70 /* Form */,
+				75F2960213F04424009CCC70 /* CellControllers for CKObjectProperty Value */,
 				7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */,
 				7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */,
 				7560DB5213B8ED3600268D13 /* CKDocumentCollectionCellController.h */,
@@ -2047,10 +2047,11 @@
 			name = Additions;
 			sourceTree = "<group>";
 		};
-		75F2960213F04424009CCC70 /* Form */ = {
+		75F2960213F04424009CCC70 /* CellControllers for CKObjectProperty Value */ = {
 			isa = PBXGroup;
 			children = (
-				75F2960F13F1805F009CCC70 /* incomplete */,
+				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
+				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
 				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
 				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
@@ -2061,15 +2062,6 @@
 				75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */,
 				758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */,
 				758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */,
-				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
-				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
-			);
-			name = Form;
-			sourceTree = "<group>";
-		};
-		75F2960F13F1805F009CCC70 /* incomplete */ = {
-			isa = PBXGroup;
-			children = (
 				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
 				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
 				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
@@ -2081,7 +2073,7 @@
 				7560DC2E13B8ED3600268D13 /* CKUIImagePropertyCellController.h */,
 				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
 			);
-			name = incomplete;
+			name = "CellControllers for CKObjectProperty Value";
 			sourceTree = "<group>";
 		};
 		9638264D147FE53F00A9C98B /* Controllers */ = {
