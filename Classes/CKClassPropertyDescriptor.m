@@ -44,7 +44,8 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(UIEdgeInsets)];
 		results.size = sizeof(UIEdgeInsets);
 	}
-	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
+	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]
+            || [attributes hasPrefix:@"T{?=dd}"]){//We assume unknown type here is a CLLocationCoordinate2D ...
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);
 		results.className = @"CLLocationCoordinate2D";
@@ -157,7 +158,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
 	
 	self.isReadOnly = NO;
-	if([subStrings count] > 2){
+	if([subStrings count] >= 2){
 		for(int i = 1; i < [subStrings count] - 1; ++i){
 			NSString* assignementAttribute = [subStrings objectAtIndex:i];
 			if([assignementAttribute isEqual:@"&"]){
