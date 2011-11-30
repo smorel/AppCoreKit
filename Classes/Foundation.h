@@ -23,3 +23,4 @@
 #import "CKObjectProperty.h"
 #import "CKObjectPropertyMetaData.h"
 #import "CKNSObject+Introspection.h"
+#import "CKRuntime.h"
