@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 #import "CKLocalization.h"
 
-#import "CKModelObject+CKStore.h"
+#import "CKObject+CKStore.h"
 
 #define AUTO_LOCALIZATION 0
 
@@ -403,14 +403,14 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		
         
-		if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
+		if([NSObject isKindOf:typeToCreate parentType:[CKObject class]]){
 			id uniqueId = [source valueForKeyPath:@"uniqueId"];
 			if([uniqueId isKindOfClass:[NSString class]]){
-				target = [CKModelObject objectWithUniqueId:uniqueId];
+				target = [CKObject objectWithUniqueId:uniqueId];
 			}
 			if(target == nil){
 				target = [[[typeToCreate alloc]init]autorelease];
-				[CKModelObject registerObject:target withUniqueId:uniqueId];
+				[CKObject registerObject:target withUniqueId:uniqueId];
 			}
 		}
 		else{
@@ -464,8 +464,8 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 + (void)transform:(NSDictionary*)source toObject:(id)target{
-	if([target isKindOfClass:[CKModelObject class]]){
-		CKModelObject* model = (CKModelObject*)target;
+	if([target isKindOfClass:[CKObject class]]){
+		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:YES]];//PRIVATE SELECTOR
 	}
 	NSArray* descriptors = [target allPropertyDescriptors];
@@ -477,8 +477,8 @@ NSString* CKSerializerIDTag = @"@id";
 			[property autorelease];
 		}
 	}
-	if([target isKindOfClass:[CKModelObject class]]){
-		CKModelObject* model = (CKModelObject*)target;
+	if([target isKindOfClass:[CKObject class]]){
+		CKObject* model = (CKObject*)target;
 		[model performSelector:@selector(setLoading:) withObject:[NSNumber numberWithBool:NO]];//PRIVATE SELECTOR
 	}
 }

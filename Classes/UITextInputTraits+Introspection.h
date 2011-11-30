@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <objc/runtime.h>
 
 extern NSMutableSet *textInputTraitsProperties;
 void introspectTraitsProperties();

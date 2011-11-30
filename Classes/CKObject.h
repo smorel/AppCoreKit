@@ -1,5 +1,5 @@
 //
-//  CKModelObject.h
+//  CKObject.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-02-15.
@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <objc/runtime.h>
+#import "CKClassPropertyDescriptor.h"
 #import "CKObjectPropertyMetaData.h"
-
-
+#import "CKNSObject+Introspection.h"
 
 /** TODO
  */
@@ -21,66 +20,48 @@
 @end
 
 
-
-typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
-
-
 /** TODO
  */
-@interface CKModelObject : NSObject<NSCoding,NSCopying,CKMigrating> {
+@interface CKObject : NSObject<NSCoding,NSCopying,CKMigrating> {
 	BOOL _saving;
 	BOOL _loading;
 }
 
 //This property is automatically set when serializing an object in core data
 @property (nonatomic,copy) NSString* uniqueId;
+@property (nonatomic,copy) NSString* objectName;
 
 //This property will get used to order items from core data
-@property (nonatomic,copy) NSString* modelName;
 @property (nonatomic,readonly) BOOL isSaving;
 @property (nonatomic,readonly) BOOL isLoading;
 
-+ (id)model;
++ (id)object;
 
 //private
 - (void)postInit;
 
-/*
-- (NSString*)deepDescription;
-*/
-
 @end
-
 
 
 /** TODO
  */
-@interface NSObject (CKModelObject)
+@interface NSObject (CKObject)
 
 - (void)copy : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
-
 @end
 
 
-
-/** TODO
+/********************************* DEPRECATED *********************************
  */
-@interface CKObjectValidationResults : NSObject{
-}
-@property(nonatomic,copy)NSString* modifiedKeyPath;
-@property(nonatomic,retain)NSMutableArray* invalidProperties;
-- (BOOL)isValid;
 
+
+//DEPRECATED_IN_CLOUDKIT_1_7_15_AND_LATER
+@interface CKModelObject : CKObject
+@property (nonatomic,assign,readwrite) NSString* modelName DEPRECATED_ATTRIBUTE;
++ (id)model DEPRECATED_ATTRIBUTE;
 @end
 
-/** TODO
- */
-@interface NSObject (CKValidation)
 
-- (CKObjectValidationResults*)validate;
-- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock;
-
-@end
-
+#import "CKObject+Validation.h"

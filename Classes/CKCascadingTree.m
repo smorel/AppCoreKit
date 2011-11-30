@@ -12,6 +12,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
 
 //CKCascadingTreeItemFormat
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import "CKObjectTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKObjectController.h"
@@ -18,7 +18,7 @@
 
 /** TODO
  */
-@interface CKFormSectionBase : CKModelObject
+@interface CKFormSectionBase : CKObject
 {
 	NSString* _headerTitle;
 	UIView* _headerView;

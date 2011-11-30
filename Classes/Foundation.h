@@ -8,6 +8,7 @@
 
 
 #import "CKDebug.h"
+#import "CKObject.h"
 #import "CKWeakRef.h"
 #import "CKBundle.h"
 #import "CKCache.h"

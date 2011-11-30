@@ -12,7 +12,7 @@
 #import "CKDebug.h"
 #include <execinfo.h>
 #import "CKNSObject+Bindings.h"
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
 #import "CKVersion.h"
@@ -125,6 +125,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_inlineDebuggerController = nil;
     
 	[super dealloc];
+}
+
++ (id)controller{
+	return [[[[self class]alloc]init]autorelease];
 }
 
 #pragma mark - Style Management

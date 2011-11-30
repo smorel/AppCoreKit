@@ -9,7 +9,7 @@
 #import "UITextView+Introspection.h"
 #import "UITextInputTraits+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKModelObject.h"
+#import "CKObject.h"
 
 @implementation UITextView (CKIntrospectionAdditions)
 

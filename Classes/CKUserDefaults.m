@@ -7,6 +7,7 @@
 //
 
 #import "CKUserDefaults.h"
+#import "CKNSObject+Introspection.h"
 
 @interface CKUserDefaults()
 - (void)initFromPlist;

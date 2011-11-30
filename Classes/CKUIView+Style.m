@@ -16,6 +16,7 @@
 
 #import "CKTextView.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
 
 
 //NSMutableSet* reserverKeyWords = nil;

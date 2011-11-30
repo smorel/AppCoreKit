@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKItemViewController.h"
 #import "CKManagedTableViewController.h"
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"

@@ -6,13 +6,13 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKModelObject.h"
+#import "CKObject.h"
 
 
 /** 
  A CKUserDefaults contains properties that will get synched automatically with the [NSUserDefaults standardUserDefaults] system provided by Apple.
  This allow to easily specify typed properties with default values in a plist named YourClassUserDefaults.plist or in the postInit selector.
- It also provides all the helpers from CKModelObject : auto init, auto dealloc, copy, serialization and more ...
+ It also provides all the helpers from CKObject : auto init, auto dealloc, copy, serialization and more ...
  
  CKUserDefaults objects are sharedInstance for an easy access. It will get initialized the first time you access the shared instance of your specific class.
         
@@ -39,9 +39,9 @@
            
  If we do not find some of those keys at init, the default values could be specified either in your postInit selector or in a plist named MyUserDefaults.plist located in the mainBundle.
  
- @see CKModelObject
+ @see CKObject
  */
-@interface CKUserDefaults : CKModelObject {
+@interface CKUserDefaults : CKObject {
 }
 
 ///-----------------------------------

@@ -19,4 +19,4 @@
 
 #import "CKStoreExplorer.h"
 
-#import "CKModelObject+CKStore.h"
+#import "CKObject+CKStore.h"

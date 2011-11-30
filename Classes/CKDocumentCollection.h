@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import "CKFeedSource.h"
 #import "CKDocumentStorage.h"
 
@@ -18,7 +18,7 @@ typedef void(^CKDocumentCollectionFetchBlock)(NSRange range);
 
 /** TODO : Implements fast enumeration protocol
  */
-@interface CKDocumentCollection : CKModelObject<CKFeedSourceDelegate> {
+@interface CKDocumentCollection : CKObject<CKFeedSourceDelegate> {
 	CKFeedSource* _feedSource;
 	id _storage;//<CKDocumentStorage>
 	BOOL _autosave;

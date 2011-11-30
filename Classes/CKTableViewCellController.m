@@ -10,6 +10,7 @@
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
+#import "CKObjectPropertyMetaData.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"

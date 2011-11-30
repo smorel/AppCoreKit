@@ -43,6 +43,14 @@ typedef enum CKUIViewControllerState{
 }
 
 ///-----------------------------------
+/// @name Constructor
+///-----------------------------------
+/** 
+ This returns an autorelease view controller of the calling class.
+ */
++ (id)controller;
+
+///-----------------------------------
 /// @name Identification
 ///-----------------------------------
 /** 

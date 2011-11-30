@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKModelObject.h"
+#import "CKObject.h"
 
 @class CKStoreRequest;
 @class CKItem;
 
-extern NSMutableDictionary* CKModelObjectManager;
+extern NSMutableDictionary* CKObjectManager;
 
 
 /** TODO
  */
-@interface CKModelObject (CKStoreAddition)
+@interface CKObject (CKStoreAddition)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain;
 
@@ -25,16 +25,16 @@ extern NSMutableDictionary* CKModelObjectManager;
 - (CKItem*)saveToDomainNamed:(NSString*)domain recursive:(BOOL)recursive;
 
 - (void)deleteFromDomainNamed:(NSString*)domain;
-+ (CKItem *)createItemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain;
++ (CKItem *)createItemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain;
 
-+ (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain;
-+ (CKItem*)itemWithObject:(CKModelObject*)object inDomainNamed:(NSString*)domain createIfNotFound:(BOOL)createIfNotFound;
++ (CKItem*)itemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain;
++ (CKItem*)itemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain createIfNotFound:(BOOL)createIfNotFound;
 + (CKItem*)itemWithUniqueId:(NSString*) uniqueId inDomainNamed:(NSString*)domain;
 
 + (NSArray*)itemsWithClass:(Class)type withPropertiesAndValues:(NSDictionary*)attributes inDomainNamed:(NSString*)domain;
 
-+ (CKModelObject*)objectWithUniqueId:(NSString*)uniqueId;
-+ (CKModelObject*)loadObjectWithUniqueId:(NSString*)uniqueId;
-+ (void)registerObject:(CKModelObject*) object withUniqueId:(NSString*)uniqueId;
++ (CKObject*)objectWithUniqueId:(NSString*)uniqueId;
++ (CKObject*)loadObjectWithUniqueId:(NSString*)uniqueId;
++ (void)registerObject:(CKObject*) object withUniqueId:(NSString*)uniqueId;
 
 @end
