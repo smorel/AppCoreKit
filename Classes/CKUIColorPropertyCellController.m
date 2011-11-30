@@ -60,6 +60,9 @@
 		colorWrapper.b = components[2];
 		colorWrapper.a = CGColorGetAlpha(color.CGColor);
 	}
+    
+    UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
+    colorView.backgroundColor = color;
 	
 	[super setupCell:cell];
 }
