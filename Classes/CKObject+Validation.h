@@ -15,6 +15,7 @@
 }
 @property(nonatomic,copy)NSString* modifiedKeyPath;
 @property(nonatomic,retain)NSMutableArray* invalidProperties;
+
 - (BOOL)isValid;
 
 @end

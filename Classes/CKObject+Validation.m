@@ -13,8 +13,14 @@
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 
-@implementation NSObject (CKValidation)
+/* TODO : see how we could integrate our validation predicates from metaData in the KVO validation methods.
+        by swizzling for example ...
+ 
+ - (BOOL)validateValue:(id *)ioValue forKey:(NSString *)key error:(NSError **)outError;
+ - (BOOL)validateValue:(id *)ioValue forKeyPath:(NSString *)inKeyPath error:(NSError **)outError;
+ */
 
+@implementation NSObject (CKValidation)
 
 - (CKObjectValidationResults*)validate{
     CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
