@@ -10,14 +10,12 @@
 
 @interface CKDocument()
 @property (nonatomic,retain) NSMutableDictionary* objects;
-//@property (nonatomic,retain) NSMutableDictionary* retainCounts;
 @end
 
 @implementation CKDocument
 @synthesize objects = _objects;
-//@synthesize retainCounts = _retainCounts;
 
-
+//FIXME : this allow just one class of CKDocument as sharedInstance instead of 1 per class ... Implements CKSingleton.
 + (id)sharedDocument{
 	static id CKDocumentSharedInstance = nil;
 	if (CKDocumentSharedInstance == nil) {
@@ -34,13 +32,11 @@
 - (id)init{
 	[super init];
 	self.objects = [NSMutableDictionary dictionary];
-//	self.retainCounts = [NSMutableDictionary dictionary];
 	return self;
 }
 
 - (void)dealloc{
 	[_objects release];
-//	[_retainCounts release];
 	[super dealloc];
 }
 

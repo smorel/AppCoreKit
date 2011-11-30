@@ -97,23 +97,14 @@ typedef enum{
 	NSMutableDictionary* propertiesByClassNameByName;
 	NSMutableDictionary* _viewPropertiesByClassName;
 	NSMutableDictionary* _propertyNamesByClassName;
-	
-	//faire la gestion des descripteurs de struct
 }
 
 + (CKClassPropertyDescriptorManager*)defaultManager;
+
 - (NSArray*)allPropertiesForClass:(Class)type;
 - (NSArray*)allViewsPropertyForClass:(Class)type;
 - (NSArray*)allPropertieNamesForClass:(Class)type;
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)type;
-/*
-- (NSArray*)allPropertiesForStruct:(NSString*)name;
-- (NSArray*)allPropertieNamesForStruct:(NSString*)name;
-- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname;
-- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name;
-*/
-/*@property (nonatomic, retain, readonly) NSDictionary *propertiesByClassName;
-@property (nonatomic, retain, readonly) NSDictionary *propertyNamesByClassName;
-*/
+
 @end
 

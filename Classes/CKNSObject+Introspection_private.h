@@ -17,10 +17,6 @@
 + (SEL)typeCheckSelectorForProperty : (NSString*)propertyName;
 + (SEL)setSelectorForProperty : (NSString*)propertyName;
 + (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName;
-+ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName;
-+ (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName;
-+ (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName;
-+ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName;
 
 + (SEL)insertSelectorForProperty : (NSString*)propertyName;
 + (SEL)removeSelectorForProperty : (NSString*)propertyName;

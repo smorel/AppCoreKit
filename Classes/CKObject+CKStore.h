@@ -15,7 +15,7 @@
 extern NSMutableDictionary* CKObjectManager;
 
 
-/** TODO
+/** TODO : clean this API to make public only the strict necessary methods for less confusion
  */
 @interface CKObject (CKStoreAddition)
 

@@ -1266,8 +1266,6 @@
 			isa = PBXGroup;
 			children = (
 				7506E3F813B8FD1300EE1471 /* Additions */,
-				7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */,
-				7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */,
 				7560DBDC13B8ED3600268D13 /* CKObjectProperty.h */,
 				7560DBDD13B8ED3600268D13 /* CKObjectProperty.m */,
 				75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */,
@@ -1279,6 +1277,8 @@
 				7560DBC113B8ED3600268D13 /* CKNSObject+Introspection.h */,
 				7560DBC213B8ED3600268D13 /* CKNSObject+Introspection.m */,
 				96CADE341486B6F6008A23E4 /* CKNSObject+Introspection_private.h */,
+				7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */,
+				7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */,
 			);
 			name = Introspection;
 			sourceTree = "<group>";

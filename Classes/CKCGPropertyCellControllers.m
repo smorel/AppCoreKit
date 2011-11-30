@@ -8,6 +8,7 @@
 
 #import "CKCGPropertyCellControllers.h"
 #import "CKObjectProperty.h"
+#import <CoreLocation/CoreLocation.h>
 
 //CGSIZE
 

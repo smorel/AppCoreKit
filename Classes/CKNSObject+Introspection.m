@@ -320,27 +320,6 @@ void introspectTextInputsProperties(){
 	return NSSelectorFromString(selectorName);
 }
 
-+ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionWithFilter:",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionForNewlyCreated",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionAtLocation:radius",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-
 + (SEL)insertSelectorForProperty : (NSString*)propertyName{
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"insert" suffix:@"Objects:atIndexes:"];
 	return NSSelectorFromString(selectorName);
