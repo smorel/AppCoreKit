@@ -208,11 +208,12 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
-	CLLocationCoordinate2D* coord = (CLLocationCoordinate2D*)[[p value]objCType];
-	
+	CLLocationCoordinate2D coord;
+    [[p value]getValue:&coord];
+    
 	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
-	coordWrapper.latitude = coord->latitude;
-	coordWrapper.longitude = coord->longitude;
+    coordWrapper.latitude = coord.latitude;
+    coordWrapper.longitude = coord.longitude;
 	
 	[super setupCell:cell];
 }
