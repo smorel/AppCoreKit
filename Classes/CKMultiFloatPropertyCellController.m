@@ -39,7 +39,6 @@
 		txtField.borderStyle = UITextBorderStyleNone;
 		txtField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 		txtField.clearButtonMode = UITextFieldViewModeAlways;
-		txtField.delegate = self;
 		txtField.keyboardType = UIKeyboardTypeDecimalPad;
 		txtField.textAlignment = UITextAlignmentLeft;
 		txtField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -151,6 +150,7 @@
             label.hidden = NO;
             UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
             txtField.hidden = YES;
+            txtField.delegate = nil;
             ++i;
 		}
 	}
@@ -162,6 +162,7 @@
             label.hidden = YES;
             UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
             txtField.hidden = NO;
+            txtField.delegate = self;
             ++i;
 		}
 	}	
@@ -202,12 +203,12 @@
 	[self endBindingsContext];
 	
 	[self didBecomeFirstResponder];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 	[self didResignFirstResponder];
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[self rebind];
 }
 
@@ -232,9 +233,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-	[[self parentTableView] scrollToRowAtIndexPath:self.indexPath 
-								  atScrollPosition:UITableViewScrollPositionNone 
-										  animated:YES];
+    [self scrollToRowAfterDelay:0];
 }
 
 @end
