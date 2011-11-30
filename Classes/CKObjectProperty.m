@@ -12,6 +12,7 @@
 #import "CKNSObject+Introspection.h"
 #import "CKWeakRef.h"
 #import "CKDebug.h"
+#import "CKNSObject+Introspection_private.h"
 
 @interface CKObjectProperty()
 @property (nonatomic,retain) CKWeakRef* subObject;

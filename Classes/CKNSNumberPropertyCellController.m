@@ -20,7 +20,7 @@
 
 @interface CKNSNumberPropertyCellController()
 @property (nonatomic,retain,readwrite) UITextField* textField;
-@property (nonatomic,retain,readwrite) UITextField* toggleSwitch;
+@property (nonatomic,retain,readwrite) UISwitch* toggleSwitch;
 @end
 
 @implementation CKNSNumberPropertyCellController

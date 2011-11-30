@@ -8,6 +8,7 @@
 
 #import "CKClassPropertyDescriptor.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSObject+Introspection_private.h"
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
 

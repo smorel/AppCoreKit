@@ -15,6 +15,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKObjectPropertyMetaData.h"
+#import "CKNSObject+Introspection_private.h"
 
 //nothing
 
