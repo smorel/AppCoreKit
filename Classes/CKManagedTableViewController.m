@@ -13,6 +13,10 @@
 
 #pragma mark CKManagedTableSection
 
+@interface CKItemViewContainerController ()
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@end
+
 @implementation CKTableSection
 
 @synthesize cellControllers = _cellControllers;
@@ -317,6 +321,12 @@
 	if (theCell == nil) {
 		theCell = (UITableViewCell*)[controller loadView];
 	}
+    else{
+        CKTableViewCellController* previousController = (CKTableViewCellController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:theCell]];
+        if(previousController && [previousController view] == theCell){
+            [previousController setView:nil];
+        }
+    }
     
     //Sets the delegate of the cell for layout callbacks
     if([theCell isKindOfClass:[CKUITableViewCell class]]){
@@ -331,6 +341,12 @@
 	if (_orientation == CKManagedTableViewOrientationLandscape) {
 		rotatedView.transform = CGAffineTransformMakeRotation(M_PI/2);
 	}
+    
+    
+    if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
+    [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:theCell]];
+    
+    [controller setView:theCell];
 
 	[controller setupView:theCell];	
 	return theCell;

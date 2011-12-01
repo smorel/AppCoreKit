@@ -269,10 +269,10 @@
 		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
-	else if([self.parentController isKindOfClass:[CKManagedTableViewController class]]){
+	/*else if([self.parentController isKindOfClass:[CKManagedTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
 		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
-	}
+	}*/
 	return nil;
 }
 
