@@ -317,6 +317,12 @@
 	if (theCell == nil) {
 		theCell = (UITableViewCell*)[controller loadView];
 	}
+    
+    //Sets the delegate of the cell for layout callbacks
+    if([theCell isKindOfClass:[CKUITableViewCell class]]){
+        CKUITableViewCell* ckCell = (CKUITableViewCell*)theCell;
+        ckCell.delegateRef.object = controller;
+    }
 	
 	//TODO
 	//We have to see how to resize the tableView to fit correctly in the right side ...

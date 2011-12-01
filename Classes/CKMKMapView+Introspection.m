@@ -8,7 +8,7 @@
 
 #import "CKMKMapView+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import <MapKit/MKTypes.h>
 
 

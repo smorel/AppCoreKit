@@ -16,6 +16,7 @@
 
 #import "CKTextView.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
 
 
 //NSMutableSet* reserverKeyWords = nil;
@@ -369,21 +370,7 @@ static char NSObjectAppliedStyleObjectKey;
 
 - (NSString*)appliedStylePath{
     NSMutableDictionary* style = [self appliedStyle];
-    
-    NSMutableString* stylePath = [NSMutableString string];
-    NSMutableDictionary* currentDico = style;
-    while(currentDico){
-        NSMutableDictionary* node = [currentDico objectForKey:CKCascadingTreeNode];
-        if(node){
-            NSString* nodeName = [node objectForKey:@"name"];
-            if([stylePath length] > 0){
-                nodeName = [NSString stringWithFormat:@"%@/",nodeName];
-            }
-            [stylePath insertString:nodeName atIndex:0];
-        }
-        currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
-    }
-    return stylePath;
+    return [style path];
 }
 
 - (NSString*)appliedStyleDescription{

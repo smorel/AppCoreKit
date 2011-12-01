@@ -10,7 +10,6 @@
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKDocumentController.h"
-#import "CKItemViewController+StyleManager.h"
 
 
 @interface UIViewWithIdentifier : UIView{
@@ -72,16 +71,6 @@
 	//DEBUG :
 	self.carouselView.clipsToBounds = YES;
 	self.carouselView.spacing = 20;
-	
-	//FIXME : the bindings here make the application crash. By commenting it we are not sure all the params are updated correctly ... (TO CHECK)
-	/*
-	[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[self.carouselView bind:@"frame" target:self action:@selector(updateParams)];
-	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
-	[self.carouselView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
-	[self bind:@"orientation" target:self action:@selector(updateParams)];
-	[NSObject endBindingsContext];	
-	 */
 }
 
 - (void)updateParams{
@@ -91,11 +80,12 @@
 	
 	[self.params setObject:[NSValue valueWithCGSize:self.carouselView.bounds.size] forKey:CKTableViewAttributeBounds];
 	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
 	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED
 	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
+    
+	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED FOR CAROUSEL
+	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED FOR CAROUSEL
+	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED FOR CAROUSEL
 }
 
 - (void)scrollToPage:(id)page{
@@ -132,10 +122,15 @@
 	
 	[self updateVisibleViewsRotation];
 	
-	[self.carouselView reloadData];
+	[self reload];
+    
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
@@ -215,7 +210,6 @@
 }
 
 - (void)onBeginUpdates{
-	//To implement in inherited class
 }
 
 - (void)onEndUpdates{
@@ -223,11 +217,11 @@
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//To implement in inherited class
+    //implement animations
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	//To implement in inherited class
+    //implement animations
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{

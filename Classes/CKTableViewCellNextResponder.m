@@ -11,6 +11,18 @@
 #import "CKNSObject+Invocation.h"
 #import "CKPropertyGridCellController.h"
 
+//private interfaces
+
+@interface CKItemViewControllerFactory ()
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+@end
+
+//CKTableViewCellNextResponder
 
 @implementation CKTableViewCellNextResponder
 
@@ -18,7 +30,7 @@
     //get the value at indexpath and the controller type and call + (BOOL)hasAccessoryResponderWithValue:(id)object
     if([controller.parentController isKindOfClass:[CKObjectTableViewController class]]){
         CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.parentController;
-        CKObjectViewControllerFactoryItem* factoryItem = [tableViewController.controllerFactory factoryItemAtIndexPath:indexPath];
+        CKItemViewControllerFactoryItem* factoryItem = [tableViewController.controllerFactory factoryItemAtIndexPath:indexPath];
         if([factoryItem.controllerClass respondsToSelector:@selector(hasAccessoryResponderWithValue:)]){
             id object = [tableViewController.objectController objectAtIndexPath:indexPath];
             CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];

@@ -8,6 +8,7 @@
 
 #import "CKClassPropertyDescriptor.h"
 #import "CKNSObject+Introspection.h"
+#import "CKNSObject+Introspection_private.h"
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
 
@@ -44,7 +45,8 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 		results.encoding = [NSString stringWithUTF8String:@encode(UIEdgeInsets)];
 		results.size = sizeof(UIEdgeInsets);
 	}
-	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]){
+	else if([attributes hasPrefix:@"T{?=\"latitude\"d\"longitude\"d}"]
+            || [attributes hasPrefix:@"T{?=dd}"]){//We assume unknown type here is a CLLocationCoordinate2D ...
 		results.encoding = [NSString stringWithUTF8String:@encode(CLLocationCoordinate2D)];
 		results.size = sizeof(CLLocationCoordinate2D);
 		results.className = @"CLLocationCoordinate2D";
@@ -77,41 +79,6 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
     results.pointer = YES;
 	return results;
 }
-
-/*
- NSRange rangeForClassName = [attributes rangeOfString:@"="];
- self.className = [attributes substringWithRange:NSMakeRange(2,rangeForClassName.location - 2)];
- NSRange rangeForEnd = [attributes rangeOfString:@"}"];
- NSString* attributesEncoding = [attributes substringWithRange:NSMakeRange(rangeForClassName.location + 2,rangeForEnd.location - (rangeForClassName.location + 2) )];
- NSArray* encodingComponents = [attributesEncoding componentsSeparatedByString:@"\""];
- 
- NSInteger size = 0;
- NSMutableString* theencoding = [NSMutableString stringWithFormat:@"{%@=",self.className];
- for(int i= 1; i < [encodingComponents count]; i += 2){
- NSString* e = [encodingComponents objectAtIndex:i];
- [theencoding appendString:e];
- if([e isEqual:@"@"]){size += sizeof(NSObject*);}
- else if([e isEqual:@"c"]){size += sizeof(char);}
- else if([e isEqual:@"i"]){size += sizeof(NSInteger);}
- else if([e isEqual:@"s"]){size += sizeof(short);}
- else if([e isEqual:@"l"]){size += sizeof(long);}
- else if([e isEqual:@"q"]){size += sizeof(long long);}
- else if([e isEqual:@"C"]){size += sizeof(unsigned char);}
- else if([e isEqual:@"I"]){size += sizeof(NSUInteger);}
- else if([e isEqual:@"S"]){size += sizeof(unsigned short);}
- else if([e isEqual:@"L"]){size += sizeof(unsigned long);}
- else if([e isEqual:@"Q"]){size += sizeof(unsigned long long);}
- else if([e isEqual:@"f"]){size += sizeof(CGFloat);}
- else if([e isEqual:@"d"]){size += sizeof(double);}
- else if([e isEqual:@"B"]){size += sizeof(BOOL);}
- else if([e isEqual:@"v"]){size += sizeof(void*);}
- else if([e isEqual:@"*"]){size += sizeof(char*);}
- else if([e isEqual:@"#"]){size += sizeof(Class);}
- else if([e isEqual:@":"]){size += sizeof(SEL);}
- else if([e hasPrefix:@"{"]){NSAssert(NO,@"not supported");}
- }
- [theencoding appendString:@"}"];
- */
 
 
 @implementation CKClassPropertyDescriptor
@@ -157,7 +124,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	NSArray * subStrings = [attributes componentsSeparatedByString:@","];
 	
 	self.isReadOnly = NO;
-	if([subStrings count] > 2){
+	if([subStrings count] >= 2){
 		for(int i = 1; i < [subStrings count] - 1; ++i){
 			NSString* assignementAttribute = [subStrings objectAtIndex:i];
 			if([assignementAttribute isEqual:@"&"]){
@@ -463,36 +430,6 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
     }
     return [propertiesByName objectForKey:name];
 }
-
-/*
-- (NSArray*)allPropertiesForStruct:(NSString*)name{
-	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:name];
-	return allProperties;
-}
-
-- (NSArray*)allPropertieNamesForStruct:(NSString*)name{
-	NSMutableArray* allPropertyNames = [_propertyNamesByClassName objectForKey:name];
-	return allPropertyNames;
-}
-
-- (CKClassPropertyDescriptor*)property:(NSString*)name forStruct:(NSString*)structname{
-	NSArray* properties = [self allPropertiesForStruct:structname];
-	//TODO : Optimize this by getting a dictionary of properties instead of an array !
-	for(CKClassPropertyDescriptor* p in properties){
-		if([p.name isEqual:name])
-			return p;
-	}
-	return nil;
-}
-
-- (void)registerPropertyDescriptors:(NSArray*)propertyDescriptors forStructName:(NSString*)name{
-	[_propertiesByClassName setObject:propertyDescriptors forKey:name];
-	NSMutableArray* allPropertyNames = [NSMutableArray array];
-	for(CKClassPropertyDescriptor* p in propertyDescriptors){
-		[allPropertyNames addObject:p.name];
-	}
-	[_propertyNamesByClassName setObject:allPropertyNames forKey:name];
-}*/
 
 @end
 

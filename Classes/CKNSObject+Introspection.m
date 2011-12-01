@@ -7,6 +7,7 @@
 //
 
 #import "CKNSObject+Introspection.h"
+#import "CKNSObject+Introspection_private.h"
 #import <objc/runtime.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>
@@ -14,6 +15,27 @@
 
 #include <execinfo.h>
 #import "CKUIView+Introspection.h"
+
+/*
+ The property is read-only (readonly).
+ C
+ The property is a copy of the value last assigned (copy).
+ &
+ The property is a reference to the value last assigned (retain).
+ N
+ The property is non-atomic (nonatomic).
+ G<name>
+ The property defines a custom getter selector name. The name follows the G (for example, GcustomGetter,).
+ S<name>
+ The property defines a custom setter selector name. The name follows the S (for example, ScustomSetter:,).
+ D
+ The property is dynamic (@dynamic).
+ W
+ The property is a weak reference (__weak).
+ P
+ The property is eligible for garbage collection.
+ */
+
 
 static NSString* getPropertyType(objc_property_t property) {
 	if(property){
@@ -52,30 +74,12 @@ void introspectTextInputsProperties(){
 	}
 }
 
-@interface NSObject ()
-- (void)filterProperties:(NSMutableArray*)results 
-					explored:(NSMutableSet*)explored 
-					instance:(id)instance 
-					expandWith:(CKObjectPredicate)expandWith 
-					insertWith:(CKObjectPredicate)insertWith;
-
-- (void) filterObjects : (NSMutableArray*)results 
-				    explored:(NSMutableSet*)explored 
-					instance:(id)instance 
-				    expandWith:(CKObjectPredicate)expandWith 
-				    insertWith:(CKObjectPredicate)insertWith 
-				    addInstance:(BOOL)addInstance;
-
-+ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
-@end
-
 
 @implementation NSObject (CKNSObjectIntrospection)
 
-+(CKClassPropertyDescriptor*)propertyForDescriptor:(objc_property_t)descriptor{
++ (CKClassPropertyDescriptor*)propertyForDescriptor:(objc_property_t)descriptor{
 	const char *propName = property_getName(descriptor);
 	if(propName) {
-		//const char *propType = getPropertyType(property);
 		const char *attributes = property_getAttributes(descriptor);
 		
 		NSString *propType = getPropertyType(descriptor);
@@ -99,8 +103,7 @@ void introspectTextInputsProperties(){
 	return nil;
 }
 
-+(CKClassPropertyDescriptor*) propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath{
-	//NSLog(@"finding property:'%@' in '%@'",keyPath,object);
++ (CKClassPropertyDescriptor*)propertyDescriptorForObject:(id)object keyPath:(NSString*)keyPath{
 	id subObject = object;
 	
 	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
@@ -109,7 +112,7 @@ void introspectTextInputsProperties(){
         if(!class_getProperty([subObject class],[path UTF8String])){
             return nil;
         }
-		//NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
+            //NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
 		subObject = [subObject valueForKey:path];
 	}
 	if(subObject == nil){
@@ -119,12 +122,12 @@ void introspectTextInputsProperties(){
 	return [self propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
 }
 
-+(CKClassPropertyDescriptor*) propertyDescriptor:(Class)c forKey:(NSString*)name{
-	return [[CKClassPropertyDescriptorManager defaultManager]property:name forClass:[c class]];
+
++ (CKClassPropertyDescriptor*)propertyDescriptorForClass:(Class)c key:(NSString*)key{
+	return [[CKClassPropertyDescriptorManager defaultManager]property:key forClass:c];
 }
 
-
-- (CKClassPropertyDescriptor*) propertyDescriptorForKeyPath:(NSString*)keyPath{
+- (CKClassPropertyDescriptor*)propertyDescriptorForKeyPath:(NSString*)keyPath{
 	return [NSObject propertyDescriptor:[self class] forKeyPath:keyPath];
 }
 
@@ -145,29 +148,12 @@ void introspectTextInputsProperties(){
         }
     }
     free(ps);	
-	
-	/*
-	 Ivar * ivs = class_copyIvarList(c, &outCount);
-	 for(i = 0; i < outCount; i++){
-	 Ivar v = ivs[i];
-	 int i =3;
-	 }
-	 free(ivs);	
-	 */
-	
+    
 	Class f = class_getSuperclass(c);
 	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
 		[self _introspection:f array:array];
 	}
 	
-}
-
-- (void)introspection:(Class)c array:(NSMutableArray*)array{
-	[self _introspection:c array:array];
-	if([c respondsToSelector:@selector(additionalClassPropertyDescriptors)]){
-		NSArray* additionalProperties = [c performSelector:@selector(additionalClassPropertyDescriptors)];
-		[array addObjectsFromArray:additionalProperties];
-	}
 }
 
 - (NSArray*)allViewsPropertyDescriptors{
@@ -182,12 +168,11 @@ void introspectTextInputsProperties(){
 	return [[CKClassPropertyDescriptorManager defaultManager]allPropertieNamesForClass:[self class]];
 }
 
-
 - (NSString*)className{
-	return NSStringFromClass([self class]);//[NSString stringWithUTF8String:class_getName([self class])];
+	return NSStringFromClass([self class]);
 }
 
-+ (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
++ (BOOL)isClass:(Class)type kindOfClass:(Class)parentType{
 	if(parentType){
 		if([NSObject isExactKindOf:type parentType:parentType])
 			return YES;
@@ -199,7 +184,7 @@ void introspectTextInputsProperties(){
 	return YES;
 }
 
-+ (BOOL)isKindOf:(Class)type parentClassName:(NSString*)parentClassName{
++ (BOOL)isClass:(Class)type kindOfClassNamed:(NSString*)parentClassName{
     if(parentClassName){
 		if([NSObject isExactKindOf:type parentClassName:parentClassName])
 			return YES;
@@ -211,7 +196,7 @@ void introspectTextInputsProperties(){
 	return YES;
 }
 
-+ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
++ (BOOL)isClass:(Class)type exactKindOfClass:(Class)parentType{
 	if(parentType){
 		const char* t1 = class_getName(type);
 		const char* t2 = class_getName(parentType);
@@ -223,7 +208,7 @@ void introspectTextInputsProperties(){
 }
 
 
-+ (BOOL)isExactKindOf:(Class)type parentClassName:(NSString*)parentClassName{
++ (BOOL)isClass:(Class)type exactKindOfClassNamed:(NSString*)parentClassName{
     if(parentClassName){
 		const char* t1 = class_getName(type);
 		const char* t2 = [parentClassName UTF8String];
@@ -233,151 +218,6 @@ void introspectTextInputsProperties(){
 	}
 	return YES;
 }
-
-- (void)filterProperties:(NSMutableArray*)results 
-					explored:(NSMutableSet*)explored 
-					instance:(id)instance 
-					expandWith:(CKObjectPredicate)expandWith 
-					insertWith:(CKObjectPredicate)insertWith 
-{
-	if(instance && [instance conformsToProtocol:@protocol(NSObject)]){
-		NSArray* properties = [instance allPropertyDescriptors];
-		for(CKClassPropertyDescriptor* property in properties){
-			if(property && property.propertyType == CKClassPropertyDescriptorTypeObject){
-				id instanceProperty = [instance valueForKey:property.name];
-				if(instanceProperty){
-					[self filterObjects:results explored:explored instance:instanceProperty expandWith:expandWith insertWith:insertWith addInstance:YES];
-				}
-			}
-		}
-	}
-		
-}
-
-- (void) filterObjects : (NSMutableArray*)results 
-					 explored:(NSMutableSet*)explored 
-					 instance:(id)instance 
-				     expandWith:(CKObjectPredicate)expandWith 
-				     insertWith:(CKObjectPredicate)insertWith 
-				     addInstance:(BOOL)addInstance
-{
-	if(instance && ![explored containsObject:instance]){//avoid recursions
-		[explored addObject:instance];
-		if(addInstance && insertWith(instance)){
-			[results addObject:instance];
-		}
-		
-		if(expandWith(instance)){
-			//Handle collections
-			if([instance conformsToProtocol:@protocol(NSFastEnumeration)]){
-				for(id subInstance in instance){
-					[self filterObjects:results explored:explored instance:subInstance expandWith:expandWith insertWith:insertWith addInstance:YES];
-				}
-			}
-			else{
-				//And properties
-				[self filterProperties:results explored:explored instance:instance expandWith:expandWith insertWith:insertWith];
-			}
-		}
-	}
-}
-
-- (NSMutableArray*)subObjects :(CKObjectPredicate)expandWith insertWith:(CKObjectPredicate)insertWith includeSelf:(BOOL)includeSelf{
-	NSMutableSet* objectsExplored = [NSMutableSet set];
-	NSMutableArray* results = [NSMutableArray array];
-	[self filterObjects:results explored:objectsExplored instance:self expandWith:expandWith insertWith:insertWith addInstance:includeSelf];
-	return results;
-}
-
-- (int)memorySizeIncludingSubObjects : (BOOL)includeSubObjects{
-	NSMutableArray* objects = [self subObjects:^(id object){return [object isKindOfClass:[NSObject class]];} 
-									insertWith:^(id object){return [object isKindOfClass:[NSObject class]];} 
-								    includeSelf:YES];
-	int total = 0;
-	for(NSObject* obj in objects){
-		total += malloc_size(obj);
-	}
-	return total;
-}
-
-+ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
-	NSString* firstChar = [input substringWithRange: NSMakeRange (0, 1)];
-	NSString* rest = [input substringWithRange: NSMakeRange (1, [input length] - 1)];
-	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
-}
-
-+ (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix{
-	NSAssert(prefix && (prefix.length > 0), @"prefix should not be empty.");
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:property prefix:prefix suffix:suffix];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix{
-	NSString* selectorName = [NSString stringWithFormat:@"%@%@",property,suffix];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)insertorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:forKey:"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"is" suffix:@"CompatibleWith:"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)setSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"set" suffix:@":"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyeditorCollectionSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionWithFilter:",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyeditorCollectionForNewlyCreatedSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionForNewlyCreated",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyeditorCollectionForGeolocalizationSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@EditorCollectionAtLocation:radius",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)propertyTableViewCellControllerClassSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@TableViewCellControllerClass",propertyName];
-	return NSSelectorFromString(selectorName);
-}
-
-
-+ (SEL)insertSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"insert" suffix:@"Objects:atIndexes:"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)removeSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"remove" suffix:@"ObjectsAtIndexes:"];
-	return NSSelectorFromString(selectorName);
-}
-
-+ (SEL)removeAllSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"removeAll" suffix:@"Objects"];
-	return NSSelectorFromString(selectorName);
-}
-
 
 + (NSArray*)allClasses{
     return [NSObject allClassesKindOfClass:nil];
@@ -422,6 +262,110 @@ void introspectTextInputsProperties(){
     return nil;
 }
 
+
+
+@end
+
+
+
+@implementation NSObject (CKNSObjectIntrospection_private)
+
+- (void)introspection:(Class)c array:(NSMutableArray*)array{
+	[self _introspection:c array:array];
+	if([c respondsToSelector:@selector(additionalClassPropertyDescriptors)]){
+		NSArray* additionalProperties = [c performSelector:@selector(additionalClassPropertyDescriptors)];
+		[array addObjectsFromArray:additionalProperties];
+	}
+}
+
++ (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix{
+	NSString* firstChar = [input substringWithRange: NSMakeRange (0, 1)];
+	NSString* rest = [input substringWithRange: NSMakeRange (1, [input length] - 1)];
+	return [NSString stringWithFormat:@"%@%@%@%@",prefix,[firstChar uppercaseString],rest,suffix];
+}
+
++ (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix{
+	NSAssert(prefix && (prefix.length > 0), @"prefix should not be empty.");
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:property prefix:prefix suffix:suffix];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix{
+	NSString* selectorName = [NSString stringWithFormat:@"%@%@",property,suffix];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)insertorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)keyValueInsertorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"add" suffix:@"Object:forKey:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)typeCheckSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"is" suffix:@"CompatibleWith:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)setSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"set" suffix:@":"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)insertSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"insert" suffix:@"Objects:atIndexes:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)removeSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"remove" suffix:@"ObjectsAtIndexes:"];
+	return NSSelectorFromString(selectorName);
+}
+
++ (SEL)removeAllSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"removeAll" suffix:@"Objects"];
+	return NSSelectorFromString(selectorName);
+}
+
+@end
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation NSObject (CKNSObjectIntrospection_DEPRECATED_IN_CLOUDKIT_1_7_15_AND_LATER)
+
++ (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
+	return [self isClass:type kindOfClass:parentType];
+}
+
++ (BOOL)isKindOf:(Class)type parentClassName:(NSString*)parentClassName{
+	return [self isClass:type kindOfClassNamed:parentClassName];
+}
+
++ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
+	return [self isClass:type exactKindOfClass:parentType];
+}
+
++ (BOOL)isExactKindOf:(Class)type parentClassName:(NSString*)parentClassName{
+	return [self isClass:type exactKindOfClassNamed:parentClassName];
+}
+
++ (CKClassPropertyDescriptor*)propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath{
+	return [[self class]propertyDescriptorForObject:object keyPath:keyPath];
+}
+
+
++ (CKClassPropertyDescriptor*)propertyDescriptor:(Class)c forKey:(NSString*)name{
+	return [[self class]propertyDescriptorForClass:c key:name];
+}
 
 
 @end

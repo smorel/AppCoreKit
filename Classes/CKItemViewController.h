@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
@@ -52,7 +52,7 @@ typedef NSUInteger CKItemViewFlags;
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) id value;
-@property (nonatomic, retain, readonly) NSIndexPath *indexPath;
+@property (nonatomic, copy, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) UIViewController* parentController;
 @property (nonatomic, assign) UIView *view;
 @property (nonatomic, retain) id target;

@@ -9,27 +9,6 @@
 #import "CKFormTableViewController.h"
 #import "CKObjectProperty.h"
 
-/* You should use the CKFormSection constructors and addSections on formController ...
- */
-@interface CKFormTableViewController(CKPropertyGrid)
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
-
-@end
-
-
 @interface CKFormCellDescriptor(CKPropertyGrid)
 
 + (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath;
@@ -54,5 +33,27 @@
 + (CKFormSection*)sectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly;
 + (CKFormSection*)sectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly;
 + (CKFormSection*)sectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly;
+
+@end
+
+
+
+/********************************* DEPRECATED *********************************
+ */
+@interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_1_7_11_AND_LATER)
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden DEPRECATED_ATTRIBUTE;
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly DEPRECATED_ATTRIBUTE;
 
 @end

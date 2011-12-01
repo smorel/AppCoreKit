@@ -52,8 +52,14 @@
 - (void)dealloc {
 	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
-	self.tableView = nil;
-	self.tableViewContainer = nil;
+    if(_tableView){
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [_tableView release];
+        _tableView = nil;
+    }
+	[_tableViewContainer release];
+    _tableViewContainer = nil;
 	[super dealloc];
 }
 
@@ -129,8 +135,12 @@
 }
 
 - (void)viewDidUnload {
-	[_tableView release];
-    _tableView = nil;
+    if(_tableView){
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [_tableView release];
+        _tableView = nil;
+    }
 	[_tableViewContainer release];
     _tableViewContainer = nil;
     
@@ -143,8 +153,7 @@
     
     if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;
-        //NSLog(@"tableView reloadData <%@>",self);
-        [self.tableView reloadData];
+        [self reload];
     }
     
 	if (self.stickySelection == NO){
@@ -177,10 +186,28 @@
 }
 
 - (void)reload {
-	[self.tableView reloadData];
+    [super reload];//onReload gets called by super class
 	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
 		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
+}
+
+- (void)onReload{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+	
+	[self.tableView reloadData];
+}
+
+- (void)setObjectController:(id)controller{
+    [super setObjectController:controller];
+    
+    //This force a reload for the next viewWillAppear call.
+    if(![self viewIsOnScreen]){
+        self.tableViewHasBeenReloaded = NO;
+    }
 }
 
 #pragma mark Setters

@@ -14,15 +14,11 @@
  */
 @interface CKDocument : NSObject {
 	NSMutableDictionary* _objects;
-//	NSMutableDictionary* _retainCounts;
 }
 
 + (id)sharedDocument;
 
 - (void)clear;
-
-//- (void)retainObjectsForKey:(NSString*)key;
-//- (void)releaseObjectsForKey:(NSString*)key;
 
 - (CKDocumentCollection*)collectionForKey:(NSString*)key;
 - (void)removeCollectionForKey:(NSString*)key;

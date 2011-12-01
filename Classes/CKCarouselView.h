@@ -17,19 +17,6 @@
 - (NSInteger)numberOfSectionsInCarouselView:(CKCarouselView*)carouselView;
 - (NSInteger)carouselView:(CKCarouselView*)carouselView numberOfRowsInSection:(NSInteger)section;
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath;
-
-/*Configuring a Table View
-– sectionIndexTitlesForTableView:
-– tableView:sectionForSectionIndexTitle:atIndex:
-– tableView:titleForHeaderInSection:
-– tableView:titleForFooterInSection:
-Inserting or Deleting Table Rows
-– tableView:commitEditingStyle:forRowAtIndexPath:
-– tableView:canEditRowAtIndexPath:
-Reordering Table Rows
-– tableView:canMoveRowAtIndexPath:
-– tableView:moveRowAtIndexPath:toIndexPath:
- */
 @end
 
 
@@ -41,33 +28,6 @@ Reordering Table Rows
 - (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath;
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath;
 - (void) carouselViewDidScroll:(CKCarouselView*)carouselView;
-
-/*Configuring Rows for the Table View
-– tableView:heightForRowAtIndexPath:
-– tableView:indentationLevelForRowAtIndexPath:
-– tableView:willDisplayCell:forRowAtIndexPath:
-Managing Accessory Views
-– tableView:accessoryButtonTappedForRowWithIndexPath:
-– tableView:accessoryTypeForRowWithIndexPath: Deprecated in iOS 3.0
-Managing Selections
-– tableView:willSelectRowAtIndexPath:
-– tableView:didSelectRowAtIndexPath:
-– tableView:willDeselectRowAtIndexPath:
-– tableView:didDeselectRowAtIndexPath:
-Modifying the Header and Footer of Sections
-– tableView:viewForHeaderInSection:
-– tableView:viewForFooterInSection:
-– tableView:heightForHeaderInSection:
-– tableView:heightForFooterInSection:
-Editing Table Rows
-– tableView:willBeginEditingRowAtIndexPath:
-– tableView:didEndEditingRowAtIndexPath:
-– tableView:editingStyleForRowAtIndexPath:
-– tableView:titleForDeleteConfirmationButtonForRowAtIndexPath:
-– tableView:shouldIndentWhileEditingRowAtIndexPath:
-Reordering Table Rows
-– tableView:targetIndexPathForMoveFromRowAtIndexPath:toProposedIndexPath:
-*/
 @end
 
 
@@ -102,14 +62,14 @@ typedef enum{
 	CGFloat _contentOffsetWhenStartPanning;
 }
 
-@property (nonatomic,assign) NSInteger numberOfPages;
-@property (nonatomic,assign) NSInteger currentPage;
-@property (nonatomic,assign) NSInteger currentSection;
+@property (nonatomic,assign,readonly) NSInteger numberOfPages;
+@property (nonatomic,assign,readonly) NSInteger currentPage;
+@property (nonatomic,assign,readonly) NSInteger currentSection;
+@property (nonatomic,assign,readonly) CGFloat internalContentOffset;
+
 @property (nonatomic,assign) CGFloat spacing;
 @property (nonatomic,assign) IBOutlet id dataSource;
-//@property (nonatomic,assign) IBOutlet id delegate;
 @property (nonatomic,assign) CKCarouselViewDisplayType displayType;
-@property (nonatomic,assign,readonly) CGFloat internalContentOffset;
 
 - (void)reloadData;
 - (UIView*)dequeueReusableViewWithIdentifier:(id)identifier;

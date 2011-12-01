@@ -13,7 +13,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKVersion.h"
 #import "CKDocumentController.h"
-#import "CKItemViewController+StyleManager.h"
 #import "CKNSObject+bindings.h"
 #include "CKSheetController.h"
 #import "CKStyleManager.h"
@@ -22,7 +21,8 @@
 #import "CKLocalization.h"
 #import "CKNSObject+Invocation.h"
 
-//
+/********************************* CKObjectTableViewController  *********************************
+ */
 
 @interface CKObjectTableViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
@@ -38,9 +38,11 @@
 - (void)adjustTableView;
 - (void)tableViewFrameChanged:(id)value;
 
+- (void)createsAndDisplayEditableButtonsWithType:(CKObjectTableViewControllerEditableType)type animated:(BOOL)animated;
+
 @end
 
-//
+
 
 @implementation CKObjectTableViewController
 @synthesize currentPage = _currentPage;
@@ -68,146 +70,7 @@
 @dynamic selectedIndexPath;
 @dynamic tableViewHasBeenReloaded;
 
-- (void)didSearch:(NSString*)text{
-	//if we want to implement it in subclass ..
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[self.searchBar resignFirstResponder];
-	
-	if ([searchBar.text isEqualToString:@""] == NO){
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-			[_delegate objectTableViewController:self didSearch:searchBar.text];
-		}
-        if(_searchBlock){
-            _searchBlock(searchBar.text);
-        }
-		[self didSearch:searchBar.text];
-	}
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	if ([searchBar.text isEqualToString:@""] == YES){
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-			[_delegate objectTableViewController:self didSearch:@""];
-		}
-        
-        if(_searchBlock){
-            _searchBlock(searchBar.text);
-        }
-		[self didSearch:searchBar.text];
-	}
-}
-
-- (void)delayedSearchWithText:(NSString*)str{
-	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-		[_delegate objectTableViewController:self didSearch:str];
-	}
-    
-    if(_searchBlock){
-        _searchBlock(str);
-    }
-	[self didSearch:str];
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	if(_liveSearchDelay > 0){
-		[self performSelector:@selector(delayedSearchWithText:) withObject:searchBar.text afterDelay:_liveSearchDelay];
-	}
-}
-
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
-	NSInteger index = selectedScope;
-	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
-	id value = [_searchScopeDefinition objectForKey:key];
-	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
-	CKCallback* callback = (CKCallback*)value;
-	[callback execute:self];	
-}
-
-- (void)printDebug:(NSString*)txt{
-	/*NSLog(@"%@",txt);
-	NSLog(@"view frame=%f,%f,%f,%f",self.view.frame.origin.x,self.view.frame.origin.y,self.view.frame.size.width,self.view.frame.size.height);
-	NSLog(@"tableView frame=%f,%f,%f,%f",self.tableView.frame.origin.x,self.tableView.frame.origin.y,self.tableView.frame.size.width,self.tableView.frame.size.height);
-	NSLog(@"tableView contentOffset=%f,%f",self.tableView.contentOffset.x,self.tableView.contentOffset.y);
-	NSLog(@"tableView contentSize=%f,%f",self.tableView.contentSize.width,self.tableView.contentSize.height);
-	NSLog(@"interfaceOrientation=%@",UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"Portrait" : @"Landscape");
-	
-	for(NSValue* cellValue in [_cellsToControllers allKeys]){
-		UITableViewCell* cell = [cellValue nonretainedObjectValue];
-		NSLog(@"cell frame=%f,%f,%f,%f",cell.frame.origin.x,cell.frame.origin.y,cell.frame.size.width,cell.frame.size.height);
-	}*/
-}
-
-- (void)loadView{
-	[super loadView];
-	
-	//FIXME : the bindings here make the application crash. By commenting it we are not sure all the params are updated correctly ... (TO CHECK)
-	
-	/*[NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[self.tableView bind:@"frame" target:self action:@selector(updateParams)];
-	[self bind:@"interfaceOrientation" target:self action:@selector(updateParams)];
-	[self.tableView bind:@"pagingEnabled" target:self action:@selector(updateParams)];
-	[self bind:@"orientation" target:self action:@selector(updateParams)];
-	[NSObject endBindingsContext];*/
-}
-
-- (void)viewDidLoad{
-    /*
-    _storedTableDelegate = self.tableView.delegate;
-    self.tableView.delegate = nil;
-    _storedTableDataSource = self.tableView.dataSource;
-    self.tableView.dataSource = nil;
-     */
-    
-    [super viewDidLoad];
-    
-    /*
-    //in case it changed in viewDidLoad
-    if(self.tableView.delegate)
-        _storedTableDelegate = self.tableView.delegate;
-    if(self.tableView.dataSource)
-        _storedTableDataSource = self.tableView.dataSource;
-     
-    
-    //ensure they are setup :
-    if(_storedTableDelegate == nil)
-        _storedTableDelegate = self;
-    if(_storedTableDataSource == nil)
-        _storedTableDataSource = self;
-     */
-    
-    if(self.tableView.delegate == nil){
-        self.tableView.delegate = self;
-    }
-    if(self.tableView.dataSource == nil){
-        self.tableView.dataSource = self;
-    }
-    
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[self.tableViewContainer bind:@"frame" target:self action:@selector(tableViewFrameChanged:)];
-	[NSObject endBindingsContext];
-}
-
-- (void)viewDidUnload{
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
-
-    [_weakViews removeAllObjects];
-    [_viewsToControllers removeAllObjects];
-    [_viewsToIndexPath removeAllObjects];
-    [_indexPathToViews removeAllObjects];
-    
-    [_searchBar release];
-    _searchBar = nil;
-    
-    [_segmentedControl release];
-    _segmentedControl = nil;
-    
-    [super viewDidUnload];
-}
+#pragma mark Initialization
 
 - (void)postInit{
 	[super postInit];
@@ -248,105 +111,41 @@
     [super dealloc];
 }
 
-- (void)setObjectController:(id)controller{
-	[super setObjectController:controller];
-	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
-		[_objectController setDisplayFeedSourceCell:YES];
-	}
-}
 
-- (void)updateParams{
-	if(self.params == nil){
-		self.params = [NSMutableDictionary dictionary];
-	}
-	
-	[self.params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
-	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSNumber numberWithBool:self.editableType != CKObjectTableViewControllerEditableTypeNone] forKey:CKTableViewAttributeEditable];
-	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
-}
+#pragma mark UIViewController Implementation
 
-- (void)segmentedControlChange:(id)sender{
-	NSInteger index = _segmentedControl.selectedSegmentIndex;
-	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
-	id value = [_searchScopeDefinition objectForKey:key];
-	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
-	CKCallback* callback = (CKCallback*)value;
-	[callback execute:self];
-}
-
-- (void)createsAndDisplayEditableButtonsWithType:(CKObjectTableViewControllerEditableType)type animated:(BOOL)animated{
-    switch(type){
-        case CKObjectTableViewControllerEditableTypeLeft:{
-            self.leftButton = self.navigationItem.leftBarButtonItem;
-            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeRight:{
-            self.rightButton = self.navigationItem.rightBarButtonItem;
-            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeNone:break;
-	}
-}
-
-- (void)setEditableType:(CKObjectTableViewControllerEditableType)theEditableType{
-    if(theEditableType != _editableType && self.viewIsOnScreen){
-        switch(_editableType){
-            case CKObjectTableViewControllerEditableTypeLeft:{
-                if(self.leftButton){
-                    [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
-                }
-                else{
-                    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-                }
-                break;
-            }
-            case CKObjectTableViewControllerEditableTypeRight:{
-                if(self.rightButton){
-                    [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
-                }
-                else{
-                    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-                }
-                break;
-            }
-            case CKObjectTableViewControllerEditableTypeNone:break;
-        }
-        
-        if(theEditableType != CKObjectTableViewControllerEditableTypeNone){
-            [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
-        }
-        else if(theEditableType == CKObjectTableViewControllerEditableTypeNone){
-            if([self isEditing]){
-                [self setEditing:NO animated:YES];
-            }
-        }
+- (void)viewDidLoad{
+    [super viewDidLoad];
+      
+    if(self.tableView.delegate == nil){
+        self.tableView.delegate = self;
     }
-    _editableType = theEditableType;
+    if(self.tableView.dataSource == nil){
+        self.tableView.dataSource = self;
+    }
+    
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[self.tableViewContainer bind:@"frame" target:self action:@selector(tableViewFrameChanged:)];
+	[NSObject endBindingsContext];
 }
 
-- (IBAction)edit:(id)sender{
-    switch(_editableType){
-        case CKObjectTableViewControllerEditableTypeLeft:{
-            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
-            [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeRight:{
-            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
-            [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
-            break;
-        }
-        case CKObjectTableViewControllerEditableTypeNone:break;
-	}
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+- (void)viewDidUnload{
+	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
+
+    [_weakViews removeAllObjects];
+    [_viewsToControllers removeAllObjects];
+    [_viewsToIndexPath removeAllObjects];
+    [_indexPathToViews removeAllObjects];
+    
+    [_searchBar release];
+    _searchBar = nil;
+    
+    [_segmentedControl release];
+    _segmentedControl = nil;
+
+    [super viewDidUnload];
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     CKUIViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
@@ -500,7 +299,7 @@
 	}
 	
 	[self updateNumberOfPages];
-	[self updateVisibleViewsIndexPath];
+	//[self updateVisibleViewsIndexPath];
 	
 	[self.objectController unlock];
 	
@@ -514,14 +313,6 @@
         oldViewWillAppearEndBlock(self,animated);
         self.viewWillAppearEndBlock = oldViewWillAppearEndBlock;
     }
-}
-
-- (void)reload{
-    NSLog(@"reload <%@>",self);
-	if(self.viewIsOnScreen){
-		[super reload];
-		[self fetchMoreData];
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -567,6 +358,14 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillHideNotification object:nil];
+}
+
+
+- (void)reload{
+	if(self.viewIsOnScreen){
+		[super reload];
+		[self fetchMoreData];
+	}
 }
 
 #pragma mark Orientation Management
@@ -655,6 +454,7 @@
 }
 
 #pragma mark UITableView DataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return self.tableViewHasBeenReloaded ? [self numberOfSections] : 0;
 }
@@ -689,10 +489,6 @@
 	return (height < 0) ? 0 : ((height == 0) ? self.tableView.rowHeight : height);
 }
 
-- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
-	return [self.tableView dequeueReusableCellWithIdentifier:identifier];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIView* view = [self createViewAtIndexPath:indexPath];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
@@ -707,45 +503,12 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self updateVisibleViewsIndexPath];
+    //[self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
         [self selectRowAtIndexPath:indexPath animated:YES];
 		return indexPath;
 	}
 	return nil;
-}
-
-
-- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
-    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
-        CGFloat offset = r.origin.y + (r.size.height / 2.0);
-        offset -= self.tableView.contentInset.top;
-        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
-    }
-    else{
-        [self.tableView scrollToRowAtIndexPath:indexPath 
-                              atScrollPosition:UITableViewScrollPositionMiddle 
-                                      animated:YES];
-    }
-}
-
-- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
-    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
-        CGFloat offset = r.origin.y + (r.size.height / 2.0);
-        offset -= self.tableView.contentInset.top;
-        [self.tableView selectRowAtIndexPath:indexPath
-                                    animated:NO
-                              scrollPosition:UITableViewScrollPositionNone];
-        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
-    }
-    else{
-        [self.tableView selectRowAtIndexPath:indexPath
-                                    animated:NO
-                              scrollPosition:UITableViewScrollPositionNone];
-    }
-    self.selectedIndexPath = indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -796,7 +559,7 @@
 }
 
 
-#pragma mark UITableView Protocol for Sections
+#pragma mark UITableView Delegate
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
@@ -883,7 +646,302 @@
     }
 }
 
+#pragma mark CKItemViewContainerController Implementation
+
+- (void)updateVisibleViewsRotation{
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+			[controller rotateView:controller.view withParams:self.params animated:YES];
+			
+			if ([CKOSVersion() floatValue] < 3.2) {
+				[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
+			}
+		}
+	}	
+}
+
+- (void)onBeginUpdates{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+	
+	[self.tableView beginUpdates];
+    //NSLog(@"onBeginUpdates <%@>",self);
+}
+
+- (void)onEndUpdates{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+	
+    //NSLog(@"onEndUpdates <%@>",self);
+	[self.tableView endUpdates];
+	
+	//bad solution because the contentsize is updated at the end of insert animation ....
+	//could be better if we could observe or be notified that the contentSize has changed.
+	NSTimeInterval delay = 0.4;
+	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
+}
+
+- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+    //NSLog(@"onInsertObjects <%@>",self);
+	
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath){
+		int count = 0;
+		for(NSIndexPath* indexPath in indexPaths){
+			if(indexPath.section == self.selectedIndexPath.section){
+				if(indexPath.row <= self.selectedIndexPath.row){
+					count++;
+				}
+			}
+		}
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row + count inSection:self.selectedIndexPath.section];
+	}
+}
+
+- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+    //NSLog(@"onRemoveObjects <%@>",self);
+	
+	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath){
+		int count = 0;
+		for(NSIndexPath* indexPath in indexPaths){
+			if([indexPath isEqual:self.selectedIndexPath]){
+				self.selectedIndexPath = nil;
+				break;
+			}
+			
+			if(indexPath.section == self.selectedIndexPath.section){
+				if(indexPath.row <= self.selectedIndexPath.row){
+					count++;
+				}
+			}
+		}
+		
+		if(self.selectedIndexPath){
+			self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row - count inSection:self.selectedIndexPath.section];
+		}
+	}
+}
+
+- (void)onInsertSectionAtIndex:(NSInteger)index{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+    //NSLog(@"onInsertSectionAtIndex <%@>",self);
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section + 1];
+	}
+}
+
+- (void)onRemoveSectionAtIndex:(NSInteger)index{
+	if(!self.viewIsOnScreen){
+        self.tableViewHasBeenReloaded = NO;
+		return;
+    }
+    //NSLog(@"onRemoveSectionAtIndex <%@>",self);
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+	
+	//UPDATE STICKY SELECTION INDEX PATH
+	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
+		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section - 1];
+	}
+}
+
+- (void)setObjectController:(id)controller{
+	[super setObjectController:controller];
+	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
+		[_objectController setDisplayFeedSourceCell:YES];
+	}
+}
+
+- (void)updateParams{
+	if(self.params == nil){
+		self.params = [NSMutableDictionary dictionary];
+	}
+	
+	[self.params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
+	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
+	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
+	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
+	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
+	[self.params setObject:[NSNumber numberWithBool:self.editableType != CKObjectTableViewControllerEditableTypeNone] forKey:CKTableViewAttributeEditable];
+	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
+}
+
+- (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
+	return [self.tableView dequeueReusableCellWithIdentifier:identifier];
+}
+
+#pragma mark SearchBar Management
+
+- (void)didSearch:(NSString*)text{
+        //if we want to implement it in subclass ..
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self.searchBar resignFirstResponder];
+	
+	if ([searchBar.text isEqualToString:@""] == NO){
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[_delegate objectTableViewController:self didSearch:searchBar.text];
+		}
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
+		[self didSearch:searchBar.text];
+	}
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	if ([searchBar.text isEqualToString:@""] == YES){
+		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[_delegate objectTableViewController:self didSearch:@""];
+		}
+        
+        if(_searchBlock){
+            _searchBlock(searchBar.text);
+        }
+		[self didSearch:searchBar.text];
+	}
+}
+
+- (void)delayedSearchWithText:(NSString*)str{
+	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+		[_delegate objectTableViewController:self didSearch:str];
+	}
+    
+    if(_searchBlock){
+        _searchBlock(str);
+    }
+	[self didSearch:str];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	if(_liveSearchDelay > 0){
+		[self performSelector:@selector(delayedSearchWithText:) withObject:searchBar.text afterDelay:_liveSearchDelay];
+	}
+}
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope{
+	NSInteger index = selectedScope;
+	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
+	id value = [_searchScopeDefinition objectForKey:key];
+	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+	CKCallback* callback = (CKCallback*)value;
+	[callback execute:self];	
+}
+
+- (void)segmentedControlChange:(id)sender{
+	NSInteger index = _segmentedControl.selectedSegmentIndex;
+	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
+	id value = [_searchScopeDefinition objectForKey:key];
+	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+	CKCallback* callback = (CKCallback*)value;
+	[callback execute:self];
+}
+
+
+
+#pragma mark Edit Button Management
+
+- (void)createsAndDisplayEditableButtonsWithType:(CKObjectTableViewControllerEditableType)type animated:(BOOL)animated{
+    switch(type){
+        case CKObjectTableViewControllerEditableTypeLeft:{
+            self.leftButton = self.navigationItem.leftBarButtonItem;
+            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeRight:{
+            self.rightButton = self.navigationItem.rightBarButtonItem;
+            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeNone:break;
+	}
+}
+
+- (void)setEditableType:(CKObjectTableViewControllerEditableType)theEditableType{
+    if(theEditableType != _editableType && self.viewIsOnScreen){
+        switch(_editableType){
+            case CKObjectTableViewControllerEditableTypeLeft:{
+                if(self.leftButton){
+                    [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
+                }
+                else{
+                    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+                }
+                break;
+            }
+            case CKObjectTableViewControllerEditableTypeRight:{
+                if(self.rightButton){
+                    [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
+                }
+                else{
+                    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+                }
+                break;
+            }
+            case CKObjectTableViewControllerEditableTypeNone:break;
+        }
+        
+        if(theEditableType != CKObjectTableViewControllerEditableTypeNone){
+            [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
+        }
+        else if(theEditableType == CKObjectTableViewControllerEditableTypeNone){
+            if([self isEditing]){
+                [self setEditing:NO animated:YES];
+            }
+        }
+    }
+    _editableType = theEditableType;
+}
+
+- (IBAction)edit:(id)sender{
+    switch(_editableType){
+        case CKObjectTableViewControllerEditableTypeLeft:{
+            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeRight:{
+            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            break;
+        }
+        case CKObjectTableViewControllerEditableTypeNone:break;
+	}
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+
 #pragma mark Keyboard Notifications
+
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
     if (_resizeOnKeyboardNotification == YES){
         CGRect keyboardFrame = [[self.tableViewContainer window] convertRect:endFrame toView:self.tableViewContainer];
@@ -955,21 +1013,21 @@
     }
 }
 
-#pragma mark Paging 
+#pragma mark Paging And Snapping
 
 - (void)setCurrentPage:(int)page{
 	_currentPage = page;
-	//NSLog(@"currentPage = %d",_currentPage);
-	//TODO : scroll to the right controller ???
+        //NSLog(@"currentPage = %d",_currentPage);
+        //TODO : scroll to the right controller ???
 }
 
 - (void)setNumberOfPages:(int)pages{
 	_numberOfPages = pages;
-	//NSLog(@"number of pages = %d",_numberOfPages);
-	//TODO : scroll to the right controller ???
+        //NSLog(@"number of pages = %d",_numberOfPages);
+        //TODO : scroll to the right controller ???
 }
 
-//Scroll callbacks : update self.currentPage
+    //Scroll callbacks : update self.currentPage
 - (void)updateCurrentPage{
 	CGFloat scrollPosition = self.tableView.contentOffset.y;
 	CGFloat height = self.tableView.bounds.size.height;
@@ -1049,7 +1107,7 @@
             break;
         }
         case CKObjectTableViewControllerSnapPolicyCenter:{
-            //FIXME : we do not take self.tableViewInsets in account here
+                //FIXME : we do not take self.tableViewInsets in account here
             self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0,0);
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
@@ -1096,158 +1154,43 @@
     [self executeSnapPolicy];
 }
 
-#pragma mark CKItemViewContainerController Implementation
-
-- (void)updateVisibleViewsRotation{
-	NSArray *visibleIndexPaths = [self visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:controller.view withParams:self.params animated:YES];
-			
-			if ([CKOSVersion() floatValue] < 3.2) {
-				[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
-			}
-		}
-	}	
-}
-
-- (void)onReload{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
+- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+        CGFloat offset = r.origin.y + (r.size.height / 2.0);
+        offset -= self.tableView.contentInset.top;
+        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
     }
-	
-	[self.tableView reloadData];
-    //NSLog(@"onReload <%@>",self);
+    else{
+        [self.tableView scrollToRowAtIndexPath:indexPath 
+                              atScrollPosition:UITableViewScrollPositionMiddle 
+                                      animated:YES];
+    }
 }
 
-- (void)onBeginUpdates{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
+- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
+    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+        CGFloat offset = r.origin.y + (r.size.height / 2.0);
+        offset -= self.tableView.contentInset.top;
+        [self.tableView selectRowAtIndexPath:indexPath
+                                    animated:NO
+                              scrollPosition:UITableViewScrollPositionNone];
+        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
     }
-	
-	[self.tableView beginUpdates];
-    //NSLog(@"onBeginUpdates <%@>",self);
+    else{
+        [self.tableView selectRowAtIndexPath:indexPath
+                                    animated:NO
+                              scrollPosition:UITableViewScrollPositionNone];
+    }
+    self.selectedIndexPath = indexPath;
 }
 
-- (void)onEndUpdates{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-	
-    //NSLog(@"onEndUpdates <%@>",self);
-	[self.tableView endUpdates];
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
-}
-
-- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-    //NSLog(@"onInsertObjects <%@>",self);
-	
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:_rowInsertAnimation];
-	
-	//UPDATE STICKY SELECTION INDEX PATH
-	if(self.selectedIndexPath){
-		int count = 0;
-		for(NSIndexPath* indexPath in indexPaths){
-			if(indexPath.section == self.selectedIndexPath.section){
-				if(indexPath.row <= self.selectedIndexPath.row){
-					count++;
-				}
-			}
-		}
-		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row + count inSection:self.selectedIndexPath.section];
-	}
-}
-
-- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-    //NSLog(@"onRemoveObjects <%@>",self);
-	
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:_rowRemoveAnimation];
-	
-	//UPDATE STICKY SELECTION INDEX PATH
-	if(self.selectedIndexPath){
-		int count = 0;
-		for(NSIndexPath* indexPath in indexPaths){
-			if([indexPath isEqual:self.selectedIndexPath]){
-				self.selectedIndexPath = nil;
-				break;
-			}
-			
-			if(indexPath.section == self.selectedIndexPath.section){
-				if(indexPath.row <= self.selectedIndexPath.row){
-					count++;
-				}
-			}
-		}
-		
-		if(self.selectedIndexPath){
-			self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row - count inSection:self.selectedIndexPath.section];
-		}
-	}
-}
-
-- (void)onInsertSectionAtIndex:(NSInteger)index{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-    //NSLog(@"onInsertSectionAtIndex <%@>",self);
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowInsertAnimation];
-	
-	//UPDATE STICKY SELECTION INDEX PATH
-	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
-		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section + 1];
-	}
-}
-
-- (void)onRemoveSectionAtIndex:(NSInteger)index{
-	if(!self.viewIsOnScreen){
-        self.tableViewHasBeenReloaded = NO;
-		return;
-    }
-    //NSLog(@"onRemoveSectionAtIndex <%@>",self);
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:_rowRemoveAnimation];
-	
-	//UPDATE STICKY SELECTION INDEX PATH
-	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
-		self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndexPath.row inSection:self.selectedIndexPath.section - 1];
-	}
-}
 
 @end
 
-
-@implementation CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-@dynamic editable;
-
-- (BOOL)editable{
-    return _editableType != CKObjectTableViewControllerEditableTypeNone;
-}
-
-- (void)setEditable:(BOOL)editable{
-    if(_editableType == CKObjectTableViewControllerEditableTypeNone){
-        _editableType = CKObjectTableViewControllerEditableTypeLeft;
-    }
-}
-
-@end
-
-
+/********************************* Header Management  *********************************
+ */
 
 @interface UITableView (CKHeaderViewManagement)
 @end
@@ -1255,8 +1198,8 @@
 @implementation UITableView (CKHeaderViewManagement)
 
 /* IOS 4.3 and before : 
-      When the views are added for section footer, they have no subviews (UITableHeaderFooterViewLabel)
-      Applying style in this delegate will then not apply anything on the label ...
+ When the views are added for section footer, they have no subviews (UITableHeaderFooterViewLabel)
+ Applying style in this delegate will then not apply anything on the label ...
  */
 - (void)didAddSubview:(UIView *)subview{
     [super didAddSubview:subview];
@@ -1282,3 +1225,25 @@
 }
 
 @end
+
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+@dynamic editable;
+
+- (BOOL)editable{
+    return _editableType != CKObjectTableViewControllerEditableTypeNone;
+}
+
+- (void)setEditable:(BOOL)editable{
+    if(_editableType == CKObjectTableViewControllerEditableTypeNone){
+        _editableType = CKObjectTableViewControllerEditableTypeLeft;
+    }
+}
+
+@end
+
+

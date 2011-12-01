@@ -1,12 +1,12 @@
 //
-//  CKModelObject.m
+//  CKObject.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-02-15.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKModelObject.h"
+#import "CKObject.h"
 #import <objc/runtime.h>
 #import "CKNSObject+Invocation.h"
 #import "CKLocalization.h"
@@ -15,20 +15,23 @@
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKObjectPropertyMetaData.h"
+#import "CKNSObject+Introspection_private.h"
+#import <objc/runtime.h>
+#import "CKObjectPropertyMetaData.h"
 
 //nothing
 
-static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKey";
+static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKey";
 
-@interface CKModelObject()
+@interface CKObject()
 - (void)initializeProperties;
 - (void)uninitializeProperties;
 - (void)initializeKVO;
 - (void)uninitializeKVO;
 @end
 
-@implementation CKModelObject
-@synthesize uniqueId,modelName;
+@implementation CKObject
+@synthesize uniqueId,objectName;
 
 
 - (void)uniqueIdMetaData:(CKObjectPropertyMetaData*)metaData{
@@ -60,13 +63,13 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	_loading = YES;
 	[uniqueId release];
 	uniqueId = [uid copy];
-	if(self.modelName == nil){
-		self.modelName = uid;
+	if(self.objectName == nil){
+		self.objectName = uid;
 	}
 	_loading = NO;
 }
 
-+ (id)model{
++ (id)object{
 	return [[[[self class]alloc]init]autorelease];
 }
 
@@ -164,58 +167,6 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	[super dealloc];
 }
 
-/*
-+ (void)printArray:(NSArray*)array inString:(NSMutableString*)str{
-}
-
-- (NSString*)deepDescription:(NSMutableDictionary*)stack{
-    NSString* d = [stack objectForKey:self];
-    if(d){
-        return d;
-    }
-    
-    
-    NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
-    [stack setObject:desc forKey:self];
-	NSArray* allProperties = [self allPropertyDescriptors];
-	for(CKClassPropertyDescriptor* property in allProperties){
-		if(property.isReadOnly == NO){
-			id object = [self valueForKey:property.name];
-            NSString* propertyString = nil;
-            if([object isKindOfClass:[CKModelObject class]]){
-                propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object printDebug:stack]];
-            }
-            else if([object isKindOfClass:[NSArray class]]){
-                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
-                [CKModelObject printArray:object inString:descArray];
-                [desc appendString:descArray];
-            }
-            else if([object isKindOfClass:[CKDocumentCollection class]]){
-                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
-                [CKModelObject printArray:[object allObjects] inString:descArray];
-                [desc appendString:descArray];
-            }
-            else if([object isKindOfClass:[NSSet class]]){
-                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
-                [CKModelObject printArray:[object allObjects] inString:descArray];
-                [desc appendString:descArray];
-            }
-            else if([object isKindOfClass:[NSDictionary class]]){
-                NSMutableString* descArray = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[object className],object];
-                [CKModelObject printArray:[object allObjects] inString:descArray];
-                [desc appendString:descArray];
-            }
-            else{
-                propertyString = [NSString stringWithFormat:@"%@ = %@\n",property.name,[object description]];
-            }
-			[desc appendString:propertyString];
-		}
-	}
-	[desc appendString:@"}"];
-    
-	return desc;
-}*/
-
 - (NSString*)description{
 	NSMutableString* desc = [NSMutableString stringWithFormat:@"%@ : <%p> {\n",[self className],self];
 	NSArray* allProperties = [self allPropertyDescriptors];
@@ -223,7 +174,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 		if(property.isReadOnly == NO){
 			id object = [self valueForKey:property.name];
             NSString* propertyString = nil;
-            if([object isKindOfClass:[CKModelObject class]]){
+            if([object isKindOfClass:[CKObject class]]){
                 propertyString = [NSMutableString stringWithFormat:@"%@ : {%@ : <%p>}\n",property.name,[object className],object];
             }
             else{
@@ -238,20 +189,20 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	CKModelObject* copied = [[[self class] alloc] init];
+	CKObject* copied = [[[self class] alloc] init];
 	[copied copy:self];
 	return copied;
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
-	NSAssert([aDecoder allowsKeyedCoding],@"CKModelObject does not support sequential archiving.");
+	NSAssert([aDecoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
     if (self = [super init]) {
 		[self initializeProperties];
 		[self initializeKVO];
 		[self postInit];
 		
 		//FUCK names est mal serialize !!!!!!!!!
-		NSArray* names = [aDecoder decodeObjectForKey:CKModelObjectAllPropertyNamesKey];
+		NSArray* names = [aDecoder decodeObjectForKey:CKObjectAllPropertyNamesKey];
 		NSMutableArray* allPropertiesInDecoder = [NSMutableArray arrayWithArray:names];
 		
 		NSArray* allProperties = [self allPropertyDescriptors];
@@ -298,7 +249,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
-	NSAssert([aCoder allowsKeyedCoding],@"CKModelObject does not support sequential archiving.");
+	NSAssert([aCoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
 	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
@@ -313,14 +264,8 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 			}
 		}
 	}
-	[aCoder encodeObject:names forKey:CKModelObjectAllPropertyNamesKey];
+	[aCoder encodeObject:names forKey:CKObjectAllPropertyNamesKey];
 }
-
-/*
-- (BOOL) isEqual:(id)other {
-	return self == other;
-}
-*/
 
 - (NSUInteger)hash {
 	NSMutableArray* allValues = [NSMutableArray array];
@@ -412,7 +357,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 @end
 
-@implementation NSObject (CKModelObject)
+@implementation NSObject (CKObject)
 
 - (void)copy : (id)other{
 	NSArray* allProperties = [other allPropertyDescriptors ];
@@ -507,66 +452,19 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 @end
 
 
-@implementation NSObject (CKValidation)
+@implementation CKModelObject
+@synthesize modelName;
 
-
-- (CKObjectValidationResults*)validate{
-    CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
-	NSArray* allProperties = [self allPropertyDescriptors];
-    for(CKClassPropertyDescriptor* property in allProperties){
-       // if(property.isReadOnly == NO){
-            CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-            if(metaData.validationPredicate){
-                id object = [self valueForKey:property.name];
-                if(![metaData.validationPredicate evaluateWithObject:object]){
-                    [results.invalidProperties addObject:property.name];
-                }
-            }
-        //}
-    }
-	return results;
+- (NSString*)modelName{
+    return [self objectName];
 }
 
-- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock{
-    //Register on property edition to send validation status when editing properties
-    [[NSNotificationCenter defaultCenter]bindNotificationName:CKEditionPropertyChangedNotification withBlock:^(NSNotification *notification) {
-        CKObjectProperty* property = [notification objectProperty];
-        if(property.object == self){
-            CKObjectValidationResults* validationResults = [self validate];
-            validationResults.modifiedKeyPath = property.keyPath;
-            if(validationBlock){
-                validationBlock(validationResults);
-            }
-        }
-    }];
-    
-    //Sends validation status synchronously
-    CKObjectValidationResults* validationResults = [self validate];
-    if(validationBlock){
-        validationBlock(validationResults);
-    }
+- (void)setModelName:(NSString *)name{
+    [self setObjectName:name];
 }
 
-@end
-
-
-@implementation CKObjectValidationResults
-@synthesize modifiedKeyPath,invalidProperties;
-
-- (id)init{
-    self = [super init];
-    self.invalidProperties = [NSMutableArray array];
-    return self;
-}
-
-- (void)dealloc{
-    self.modifiedKeyPath = nil;
-    self.invalidProperties = nil;
-    [super dealloc];
-}
-
-- (BOOL)isValid{
-    return [self.invalidProperties count] == 0;
++ (id)model{
+    return [[self class]object];
 }
 
 @end

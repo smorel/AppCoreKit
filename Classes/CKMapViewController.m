@@ -16,7 +16,6 @@
 #import "CKTableViewCellController.h"
 #import "CKDocumentController.h"
 #import "CKDocumentArray.h"
-#import "CKItemViewController+StyleManager.h"
 
 #import "CKNSNotificationCenter+Edition.h"
 
@@ -149,7 +148,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self updateParams];
 	[self updateVisibleViewsRotation];
 		
-	[self reloadData:NO];
+	[self reloadData];
 	
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
@@ -221,9 +220,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	CLLocationCoordinate2D topLeft, bottomRight;
 	topLeft.latitude = topLeft.longitude = bottomRight.latitude = bottomRight.longitude = 0;
 	for (NSObject<MKAnnotation> *annotation in theAnnotations) {
-        if(![[[annotation class]description]isEqualToString:@"RFDDeal"]){
-            int i =3;
-        }
 		if (annotation.coordinate.latitude < topLeft.latitude || topLeft.latitude == 0) topLeft.latitude = annotation.coordinate.latitude;
 		if (annotation.coordinate.longitude < topLeft.longitude || topLeft.longitude == 0) topLeft.longitude = annotation.coordinate.longitude;
 		if (annotation.coordinate.latitude > bottomRight.latitude || bottomRight.latitude == 0) bottomRight.latitude = annotation.coordinate.latitude;
@@ -415,7 +411,24 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark CKObjectControllerDelegate
 
 - (void)onReload{
-	[self reloadData];
+	CKFeedSource* source = [self collectionDataSource];
+	if ((source != nil) && source.isFetching) {
+            //return NO;
+	}
+    
+    while([self.mapView.annotations count] > 0){
+        id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
+        [self.mapView removeAnnotation:annotation];
+    }
+    
+    if(self.mapView.userLocation && [self.mapView.annotations indexOfObjectIdenticalTo:self.mapView.userLocation] == NSNotFound){
+        [self.mapView addAnnotation:self.mapView.userLocation];
+    }
+    
+	NSArray* objects = [self objectsForSection:0];
+	[self addAnnotations:objects];
+    
+	[self zoom:YES];
 }
 
 - (void)onBeginUpdates{
@@ -450,35 +463,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (BOOL)reloadData{
-	return [self reloadData:YES];
-}
-
-- (BOOL)reloadData:(BOOL)animated{
-	CKFeedSource* source = [self collectionDataSource];
-	if ((source != nil) && source.isFetching) {
-		//return NO;
-	}
-    
-    while([self.mapView.annotations count] > 0){
-        id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
-        [self.mapView removeAnnotation:annotation];
-    }
-    
-    if(self.mapView.userLocation && [self.mapView.annotations indexOfObjectIdenticalTo:self.mapView.userLocation] == NSNotFound){
-        [self.mapView addAnnotation:self.mapView.userLocation];
-    }
-    
-	NSArray* objects = [self objectsForSection:0];
-	[self addAnnotations:objects];
-
-	[self zoom:YES];
-	 // Set the zoom for 1 entry
-	 /*if (self.annotations.count == 1) {
-	 NSObject<MKAnnotation> *annotation = [self.annotations lastObject];
-	 [self zoomToCenterCoordinate:annotation.coordinate animated:NO];
-	 }*/
-	return YES;
-
+    [super reload];
+    return YES;
 }
 
 - (void)onPropertyChanged:(NSNotification*)notification{

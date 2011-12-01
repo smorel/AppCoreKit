@@ -18,6 +18,11 @@
 #define SwitchTag 2
 #define LabelTag 3
 
+@interface CKNSNumberPropertyCellController()
+@property (nonatomic,retain,readwrite) UITextField* textField;
+@property (nonatomic,retain,readwrite) UISwitch* toggleSwitch;
+@end
+
 @implementation CKNSNumberPropertyCellController
 @synthesize textField = _textField;
 @synthesize toggleSwitch = _toggleSwitch;
@@ -58,18 +63,18 @@
 	[super initTableViewCell:cell];
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    if(_textField == nil){
-        UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
-        self.textField = txtField;
-    }
+    UITextField *txtField = [[[UITextField alloc] initWithFrame:cell.contentView.bounds] autorelease];
+    self.textField = txtField;
     
 	_textField.tag = 50000;
 	_textField.borderStyle = UITextBorderStyleNone;
 	_textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-	_textField.delegate = self;
 	_textField.keyboardType = UIKeyboardTypeDecimalPad;
 	_textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    _textField.hidden = YES; //will get displayed in setup depending on the model
+    [cell.contentView addSubview:_textField];
     
     if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -91,29 +96,33 @@
         _textField.autoresizingMask = UIViewAutoresizingNone;
     }
     
-	if(_toggleSwitch == nil){
-        UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-        self.toggleSwitch = theSwitch;
+    UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+    self.toggleSwitch = theSwitch;
+    
+    _toggleSwitch.hidden = YES; //will get displayed in setup depending on the model
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
+       ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+        [cell.contentView addSubview:self.toggleSwitch];
     }
+    else{
+        cell.accessoryView = self.toggleSwitch;
+    }
+
     _toggleSwitch.tag = SwitchTag;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	[self clearBindingsContext];
+    
+    //In Case view is reused
+    self.textField = (UITextField*)[cell.contentView viewWithTag:50000];
+	_textField.delegate = self;
+    self.toggleSwitch = (UISwitch*)[cell viewWithTag:SwitchTag];
 	
 	CKObjectProperty* model = self.value;
 	
 	//reset the view
-	cell.accessoryView = nil;
-	UITextField *textField = (UITextField*)[cell.contentView viewWithTag:50000];
-	if(textField){
-		[textField removeFromSuperview];
-	}
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
-	if(s){
-		[s removeFromSuperview];
-	}
 	cell.detailTextLabel.text = nil;
 	
 	//build and setup the view
@@ -134,11 +143,13 @@
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
+            _toggleSwitch.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
+                _textField.hidden = YES;
 			}
 			else{
 				if(self.cellStyle == CKTableViewCellStylePropertyGrid
@@ -148,9 +159,9 @@
                 else{
                     self.fixedSize = NO;
                 }
-				[cell.contentView addSubview:self.textField];
+                _textField.hidden = NO;
 				
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 				
@@ -162,23 +173,19 @@
 		}
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
+            _textField.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                _toggleSwitch.hidden = YES;
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 			}
 			else{
                 self.fixedSize = YES;
-                if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
-                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
-					[cell.contentView addSubview:self.toggleSwitch];
-				}
-				else{
-					cell.accessoryView = self.toggleSwitch;
-				}
+                _toggleSwitch.hidden = NO;
 				
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				BOOL bo = [[model value]boolValue];
 				[self.toggleSwitch setOn:bo animated:NO];
 				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
@@ -285,20 +292,20 @@
   
     [self scrollToRow];
     
-	[self beginBindingsContextByRemovingPreviousBindings];
+	[self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[textField bindEvent:UIControlEventEditingChanged target:self action:@selector(textFieldChanged:)];
-	[self endBindingsContext];
+	[self.tableViewCell endBindingsContext];
 	
 	[self didBecomeFirstResponder];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 	[self didResignFirstResponder];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
 	CKObjectProperty* model = self.value;
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self.tableViewCell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
 	[NSObject endBindingsContext];
 }
@@ -345,7 +352,7 @@
 #pragma mark Keyboard
 
 - (void)keyboardDidShow:(NSNotification *)notification {
-    [self scrollToRowAfterDelay:0.3];
+    [self scrollToRowAfterDelay:0];
 }
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{

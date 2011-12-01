@@ -11,22 +11,22 @@
 #import "CKClassPropertyDescriptor.h"
 #import "CKObjectPropertyMetaData.h"
 
-//FIXME : try to remove this dependencies by making a CKObjectProperty+CKDocument extension
-#import <MapKit/MapKit.h>
-#import "CKDocumentCollection.h"
-
-/** TODO
+/** CKObjectProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access metaData and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
  */
 @interface CKObjectProperty : NSObject<NSCopying> {
 }
+
 @property (nonatomic,retain,readonly) id object;
 @property (nonatomic,retain,readonly) id keyPath;
+
 @property (nonatomic,assign) id value;
 @property (nonatomic,readonly) NSString* name;
 @property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
 
 + (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
 + (CKObjectProperty*)propertyWithObject:(id)object;
++ (CKObjectProperty*)propertyWithDictionary:(id)dictionary key:(id)key;
+
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;
 - (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key;
@@ -34,21 +34,14 @@
 - (CKObjectPropertyMetaData*)metaData;
 - (id)value;
 - (void)setValue:(id)value;
-- (id)convertToClass:(Class)type;
 - (Class)type;
 
 - (BOOL)isReadOnly;
 
+//For properties pointing on NSArray value
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
 - (void)removeAllObjects;
 - (NSInteger)count;
-
-//FIXME : for property grids. think to a good way to setup configuration for properties in generic controllers (see metaData)
-//Here we should not have dependencies other than Foundation !
-- (CKDocumentCollection*)editorCollectionWithFilter:(NSString*)filter;
-- (CKDocumentCollection*)editorCollectionForNewlyCreated;
-- (CKDocumentCollection*)editorCollectionAtLocation:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius;
-- (Class)tableViewCellControllerType DEPRECATED_ATTRIBUTE;
 
 @end

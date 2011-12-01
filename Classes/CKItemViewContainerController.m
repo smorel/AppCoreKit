@@ -9,13 +9,12 @@
 #import "CKItemViewContainerController.h"
 
 #import "CKWeakRef.h"
-#import "CKItemViewController+StyleManager.h"
 #import "CKFormTableViewController.h"
 
-//CKItemViewContainerController
+//private interfaces
 
 @interface CKItemViewController()
-@property (nonatomic, retain, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
 @end
 
@@ -25,7 +24,29 @@
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
 @property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
 @property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 
+@end
+
+@interface CKItemViewControllerFactory ()
+
+- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
+@end
+
+
+@interface CKItemViewContainerController(CKItemViewControllerManagement)
+- (void) createsItemViewControllers;
+- (void) insertItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+- (void) removeItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
+- (void) updateItemViewControllersVisibleViewsIndexPath;
+- (void) updateItemViewControllersVisibility:(BOOL)visible;
+- (CKItemViewController*) itemViewControllerAtIndexPath:(NSIndexPath*)indexPath;
+- (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
+- (void) removeItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
 
 //CKItemViewContainerController
@@ -41,6 +62,7 @@
 @synthesize params = _params;
 @synthesize delegate = _delegate;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
+@synthesize sectionsToControllers = _sectionsToControllers;
 
 
 #pragma mark Initialization
@@ -56,33 +78,30 @@
 	return self;
 }
 
-- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	self.controllerFactory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	return [self initWithObjectController:controller factory:factory];
 }
 
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory  withNibName:(NSString*)nib{
-	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
+- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
+    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	return [self initWithObjectController:controller factory:factory nibName:nib];
+}
+
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory{
+    return [self initWithObjectController:controller factory:factory nibName:nil];
+}
+
+- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
+    [self initWithNibName:nib bundle:[NSBundle mainBundle]];
 	self.objectController = controller;
 	self.controllerFactory = factory;
-	return self;	
-}
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
-	CKObjectViewControllerFactory* factory = [CKObjectViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[self initWithCollection:collection mappings:mappings withNibName:nil];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKObjectViewControllerFactory*)factory{
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
-	return self;
+- (void)setupWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+	self.controllerFactory = factory;
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 - (void)dealloc {
@@ -100,11 +119,19 @@
 	_indexPathToViews = nil;
 	[_weakViews release];
 	_weakViews = nil;
+    [_sectionsToControllers release];
+    _sectionsToControllers = nil;
 	
 	[super dealloc];
 }
 
 #pragma mark ObjectController/ FactoryController initialization
+
+
+- (void)reload{
+    [self createsItemViewControllers];
+    [self onReload];
+}
 
 - (void)setObjectController:(id)controller{
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
@@ -122,12 +149,12 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if([self isViewLoaded] && ([self.view superview] != nil) && [controller respondsToSelector:@selector(setDelegate:)]){
+	if(([self state] & CKUIViewControllerStateDidAppear) && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
-		[self onReload];
-		for(int i =0; i< [self numberOfSections];++i){
-			[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
-		}
+        [self reload];
+        for(int i =0; i< [self numberOfSections];++i){
+            [self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+        }
 	}
 }
 
@@ -214,38 +241,23 @@
             NSIndexPath* indexPath = [self indexPathForView:view];
             if(indexPath){
                 NSValue* weakViewValue = [NSValue valueWithNonretainedObject:view];
-                CKItemViewController* controller = [self.viewsToControllers objectForKey:weakViewValue];
-                
-                [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
                 [self.viewsToIndexPath setObject:indexPath forKey:weakViewValue];
                 [self.indexPathToViews setObject:weakViewValue forKey:indexPath];
             }
         }
     }
+    
+    [self updateItemViewControllersVisibleViewsIndexPath];
 }
 
 - (void)updateViewsVisibility:(BOOL)visible{
-	//FIXME : a verifier .... ptet utiliser tous les controllers de _viewsToControllers
-	NSArray *visibleIndexPaths = [self visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		if(visible){
-			[controller viewDidAppear:controller.view];
-		}
-		else{
-			[controller viewDidDisappear];
-		}
-	}
+    [self updateItemViewControllersVisibility:visible];
 }
 
 #pragma mark IndexPath/View/Controller management
 
 - (CKItemViewController*)controllerAtIndexPath:(NSIndexPath *)indexPath{
-	UIView* view = [self viewAtIndexPath:indexPath];
-	if(view){
-		return (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-	}
-	return nil;
+    return [self itemViewControllerAtIndexPath:indexPath];
 }
 
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{
@@ -396,6 +408,7 @@
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
 		id object = [_objectController objectAtIndexPath:indexPath];
+        NSAssert(object,@"toto");
         
         UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
         if(previousView){
@@ -403,53 +416,45 @@
             [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
         }
 		
-		CKObjectViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-		if(factoryItem != nil && factoryItem.controllerClass){
-			NSString* identifier = [CKItemViewController identifierForItem:factoryItem object:object indexPath:indexPath  parentController:self];
+		CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
+		if(factoryItem != nil){
+			CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+			NSString* identifier = [controller identifier];
 			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
-			CKItemViewController* controller = nil;
+            
+            if(!_sectionsToControllers){
+                self.sectionsToControllers = [NSMutableArray array];
+            }
+            
 			if(view == nil){
-				controller = [factoryItem controllerForObject:object atIndexPath:indexPath];
-				[controller performSelector:@selector(setParentController:) withObject:self];
-				
 				view = [controller loadView];
 				view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 				
 				//Register cell to controller
-				if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
 				if(_weakViews == nil){ self.weakViews = [NSMutableArray array]; }
 				
 				CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
 				[_weakViews addObject:viewRef];
-                
-                [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
 			}
 			else{
+                //Reset state
+                CKItemViewController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
+                if(previousController && [previousController view] == view){
+                    [previousController setView:nil];
+                }
+                
 				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
                 if(previousPath){
                     [_indexPathToViews removeObjectForKey:previousPath];
                     [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
-                    //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,previousPath);
                 }
-				
-				//Reuse controller
-				NSAssert(_viewsToControllers != nil,@"Should have been created");
-				controller = (CKItemViewController*)[_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-				
-				controller.createCallback = [factoryItem createCallback];
-				controller.initCallback = [factoryItem initCallback];
-				controller.setupCallback = [factoryItem setupCallback];
-				controller.selectionCallback = [factoryItem selectionCallback];
-				controller.accessorySelectionCallback = [factoryItem accessorySelectionCallback];
-				controller.becomeFirstResponderCallback = [factoryItem becomeFirstResponderCallback];
-				controller.resignFirstResponderCallback = [factoryItem resignFirstResponderCallback];
-				controller.layoutCallback = [factoryItem layoutCallback];
 			}
+            
+            if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
+            [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
 			
 			NSAssert(view != nil,@"The view has not been created");
 			
-			[controller setParentController:self];
-			[controller setIndexPath:indexPath];
 			[controller setView:view];
 			
 			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
@@ -466,6 +471,9 @@
 			}
 			return view;
 		}
+        else{
+            NSAssert(NO,@"WTF");
+        }
 	}
 	
 	return nil;
@@ -540,7 +548,7 @@
 #pragma mark CKObjectControllerDelegate
 
 - (void)objectControllerReloadData:(id)controller{
-	[self onReload];
+	[self reload];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
@@ -549,66 +557,45 @@
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[self onBeginUpdates];
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
+	[self updateVisibleViewsIndexPath];
 	[self onEndUpdates];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
 	NSTimeInterval delay = 0.4;
 	[self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:delay];
-	
-	[self updateVisibleViewsIndexPath];
-}
-
-- (void)incrementIndexPathFrom:(NSIndexPath*)indexPath{
-    id view = [_indexPathToViews objectForKey:indexPath];
-    if(view){
-        NSInteger section = indexPath.section;
-        NSInteger row = indexPath.row;
-        NSInteger count = [self numberOfObjectsForSection:section];
-        for(int i = count - 1;i >= row ; --i){
-            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
-            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:i+1 inSection:section];
-            id v = [_indexPathToViews objectForKey:indexPath];
-            if(v){
-                [_indexPathToViews setObject:v forKey:newIndexPath];
-                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,v,newIndexPath);
-                [_viewsToIndexPath setObject:newIndexPath forKey:v];
-                [_indexPathToViews removeObjectForKey:indexPath];
-                //NSLog(@"incrementIndexPathFrom -- controller <%p> _indexPathToViews removes view : <%p> at indexPath : %@",self,view,indexPath);
-            }
-        }
-    }
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-    [self incrementIndexPathFrom:indexPath];
-	[self onInsertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
+	[self objectController:controller insertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self onRemoveObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
+	[self objectController:controller removeObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-    for(NSIndexPath* indexPath in indexPaths){
-        [self incrementIndexPathFrom:indexPath];
-    }
+    [self insertItemViewControllersForObjects:objects atIndexPaths:indexPaths]; 
 	[self onInsertObjects:objects atIndexPaths:indexPaths];
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    [self removeItemViewControllersForObjects:objects atIndexPaths:indexPaths];    
 	[self onRemoveObjects:objects atIndexPaths:indexPaths];
 }
 
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{
+    [self insertItemViewControllersSectionAtIndex:index];   
 	[self onInsertSectionAtIndex:index];
 }
 
 - (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{
+    [self removeItemViewControllersSectionAtIndex:index];   
 	[self onRemoveSectionAtIndex:index];
 }
 
@@ -646,6 +633,215 @@
 		return documentController.collection.feedSource;
 	}
 	return nil;
+}
+
+@end
+
+
+//CKItemViewContainerController(CKItemViewControllerManagement)
+
+
+/* All the methods manipulating itemViewControllers are grouped in this extension.
+ This allow us to change the strategy by modifying the following methods.
+ Yet, the itemViewControllers are all created when reloading the controller or inserting rows.
+ They will get created on demand after inserting section ...
+ 
+ It could be improved to create them on-demand by inserting NSNull objects in creates and insert methods, 
+ and creating the controller only in itemViewControllerAtIndexPath method.
+ */
+@implementation CKItemViewContainerController(CKItemViewControllerManagement)
+
+- (CKItemViewController*)itemViewControllerAtIndexPath:(NSIndexPath*)indexPath{
+    if(_sectionsToControllers == nil){
+        self.sectionsToControllers = [NSMutableArray array];
+    }
+    
+    if([indexPath section] < [self.sectionsToControllers count]){
+        NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+        if([indexPath row] < [controllers count]){
+            CKItemViewController* controller = [controllers objectAtIndex:[indexPath row]];
+            return controller;
+        }
+    }
+    
+    CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
+    if(!controller)
+        return nil;
+    
+    [controller performSelector:@selector(setParentController:) withObject:self];
+    
+    NSMutableArray* controllers = nil;
+    if([indexPath section] < [self.sectionsToControllers count]){
+        controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+    }else{
+        controllers = [NSMutableArray array];
+        [self.sectionsToControllers insertObject:controllers atIndex:[indexPath section]];
+    }
+    [controllers insertObject:controller atIndex:[indexPath row]];
+    
+	return controller;
+}
+
+- (void) createsItemViewControllers{
+    self.sectionsToControllers = [NSMutableArray array];
+    
+    //creates all viewControllers
+    NSInteger sectionCount = [self numberOfSections];
+    for(NSInteger section=0;section<sectionCount;++section){
+        NSInteger rowCount = [self numberOfObjectsForSection:section];
+        
+        NSMutableArray* controllers = nil;
+        if(section < [self.sectionsToControllers count]){
+            controllers = [self.sectionsToControllers objectAtIndex:section];
+        }else{
+            controllers = [NSMutableArray array];
+            [self.sectionsToControllers insertObject:controllers atIndex:section];
+        }
+        
+        for(int row =0;row<rowCount;++row){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            
+            CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
+            [controller performSelector:@selector(setParentController:) withObject:self];
+            
+            [controllers insertObject:controller atIndex:[indexPath row]];
+        }
+    }
+}
+ 
+- (void) insertItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{ 
+    if(!_sectionsToControllers){
+        self.sectionsToControllers = [NSMutableArray array];
+    }
+    
+    for(NSInteger i = 0; i<[indexPaths count];++i){
+        NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
+        NSIndexPath* object = [objects objectAtIndex:i];
+        CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+        [controller performSelector:@selector(setParentController:) withObject:self];
+        
+        NSMutableArray* controllers = nil;
+        if([indexPath section] < [_sectionsToControllers count]){
+            controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
+        }else{
+            controllers = [NSMutableArray array];
+            [_sectionsToControllers insertObject:controllers atIndex:[indexPath section]];
+        }
+        [controllers insertObject:controller atIndex:[indexPath row]];
+    }
+}
+
+- (void) removeItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{ 
+    if(!_sectionsToControllers){
+        return;
+    }
+    
+    NSMutableDictionary* indexsToRemove = [NSMutableDictionary dictionary];
+    for(NSInteger i = 0; i<[indexPaths count];++i){
+        NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
+        NSMutableIndexSet* indexSet = [indexsToRemove objectForKey:[NSNumber numberWithInt:[indexPath section]]];
+        if(!indexSet){
+            indexSet = [NSMutableIndexSet indexSet];
+            [indexsToRemove setObject:indexSet forKey:[NSNumber numberWithInt:[indexPath section]]];
+        }
+        
+        NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+        if([indexPath row] < [controllers count]){
+            [indexSet addIndex:[indexPath row]];
+        }
+    }
+    
+    for(NSNumber* section in [indexsToRemove allKeys]){
+        NSIndexSet* indexes = [indexsToRemove objectForKey:section];
+        if([section intValue] < [_sectionsToControllers count]){
+            NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[section intValue]];
+            [controllers removeObjectsAtIndexes:indexes];
+        }
+    }
+}
+
+- (void) insertItemViewControllersSectionAtIndex:(NSInteger)index{
+    if(!_sectionsToControllers){
+        self.sectionsToControllers = [NSMutableArray array];
+    }
+    [self.sectionsToControllers insertObject:[NSMutableArray array] atIndex:index];
+}
+
+- (void) removeItemViewControllersSectionAtIndex:(NSInteger)index{
+    if(!_sectionsToControllers){
+        return;
+    }
+    
+    [self.sectionsToControllers removeObjectAtIndex:index];
+}
+
+- (void) updateItemViewControllersVisibleViewsIndexPath{
+    for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
+        NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
+        for(int row =0;row<[controllers count];++row){
+            CKItemViewController* controller = [controllers objectAtIndex:row];
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            [controller setIndexPath:indexPath];
+        }
+    }
+}
+
+- (void) updateItemViewControllersVisibility:(BOOL)visible{
+    //We do not use controllerAtIndexPath here as we do not want to create any controllers in this method ...
+	NSArray *visibleIndexPaths = [self visibleIndexPaths];
+	for (NSIndexPath *indexPath in visibleIndexPaths) {
+        if([indexPath section] < [self.sectionsToControllers count]){
+            NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+            if([indexPath row] < [controllers count]){
+                CKItemViewController* controller = [controllers objectAtIndex:[indexPath row]];
+                if([controller view]){
+                    if(visible){
+                        [controller viewDidAppear:controller.view];
+                    }
+                    else{
+                        [controller viewDidDisappear];
+                    }
+                }
+            }
+        }
+	}
+}
+
+@end
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation CKItemViewContainerController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
+
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib{
+	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
+	self.objectController = controller;
+	self.controllerFactory = factory;
+	return self;	
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
+	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
+	return self;
+}
+
+- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	[self initWithCollection:collection mappings:mappings withNibName:nil];
+	return self;
+}
+
+- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory{
+	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
+	return self;
+}
+
+- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 @end

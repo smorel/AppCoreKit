@@ -12,6 +12,7 @@
 #import "CKObjectProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
 
 //CKCascadingTreeItemFormat
 
@@ -689,6 +690,23 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 - (BOOL)containsObjectForKey:(NSString*)key{
     id object = [self objectForKey:key];
 	return (object != nil);
+}
+
+- (NSString*)path{
+    NSMutableString* fullPath = [NSMutableString string];
+    NSMutableDictionary* currentDico = self;
+    while(currentDico){
+        NSMutableDictionary* node = [currentDico objectForKey:CKCascadingTreeNode];
+        if(node){
+            NSString* nodeName = [node objectForKey:@"name"];
+            if([fullPath length] > 0){
+                nodeName = [NSString stringWithFormat:@"%@/",nodeName];
+            }
+            [fullPath insertString:nodeName atIndex:0];
+        }
+        currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+    }
+    return fullPath;
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "CKCGPropertyCellControllers.h"
 #import "CKObjectProperty.h"
+#import <CoreLocation/CoreLocation.h>
 
 //CGSIZE
 
@@ -139,6 +140,53 @@
 
 @end
 
+//UIEdgeInsets
+
+@interface UIEdgeInsetsWrapper : NSObject{}
+@property(nonatomic,assign)CGFloat top;
+@property(nonatomic,assign)CGFloat left;
+@property(nonatomic,assign)CGFloat bottom;
+@property(nonatomic,assign)CGFloat right;
+@end
+@implementation UIEdgeInsetsWrapper
+@synthesize top,left;
+@synthesize bottom,right;
+@end
+
+@implementation CKUIEdgeInsetsPropertyCellController
+
+- (id)init{
+	[super init];
+	self.multiFloatValue = [[[UIEdgeInsetsWrapper alloc]init]autorelease];
+	return self;
+}
+
+- (void)setupCell:(UITableViewCell *)cell {
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	
+	UIEdgeInsets insets = [[p value]UIEdgeInsetsValue];
+	
+	UIEdgeInsetsWrapper* insetsWrapper = (UIEdgeInsetsWrapper*)self.multiFloatValue;
+	insetsWrapper.top = insets.top;
+	insetsWrapper.left = insets.left;
+	insetsWrapper.bottom = insets.bottom;
+	insetsWrapper.right = insets.right;
+	
+	[super setupCell:cell];
+}
+
+- (void)valueChanged{
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	UIEdgeInsetsWrapper* insetsWrapper = (UIEdgeInsetsWrapper*)self.multiFloatValue;
+	[p setValue:[NSValue valueWithUIEdgeInsets:UIEdgeInsetsMake([insetsWrapper top],[insetsWrapper left],[insetsWrapper bottom],[insetsWrapper right])]];
+}
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
+}
+
+@end
+
 
 //CGPOINT
 
@@ -161,11 +209,12 @@
 - (void)setupCell:(UITableViewCell *)cell {
 	CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
-	CLLocationCoordinate2D* coord = (CLLocationCoordinate2D*)[[p value]objCType];
-	
+	CLLocationCoordinate2D coord;
+    [[p value]getValue:&coord];
+    
 	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
-	coordWrapper.latitude = coord->latitude;
-	coordWrapper.longitude = coord->longitude;
+    coordWrapper.latitude = coord.latitude;
+    coordWrapper.longitude = coord.longitude;
 	
 	[super setupCell:cell];
 }

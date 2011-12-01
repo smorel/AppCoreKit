@@ -299,7 +299,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         cell.detailTextLabel.text = _(placeholderText);
     }
     
-    [self beginBindingsContextByRemovingPreviousBindings];
+    [cell beginBindingsContextByRemovingPreviousBindings];
     [model.object bind:model.keyPath withBlock:^(id value){
         NSDate* date = [model value];
         if(date){
@@ -309,7 +309,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             cell.detailTextLabel.text = _(placeholderText);
         }
     }];
-    [self endBindingsContext];
+    [cell endBindingsContext];
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
@@ -431,11 +431,10 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController{
-    
+    [self scrollToRowAfterDelay:0];
 }
 
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController{
-    [self scrollToRowAfterDelay:0.3];
 }
 
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController{

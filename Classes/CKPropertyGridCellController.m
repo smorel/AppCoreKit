@@ -133,7 +133,7 @@
             CALayer* layer = [self.tableViewCell layer];
             NSArray* anims = [layer animationKeys];
             hasAnimation = ([anims count] > 0);
-            if(!hasAnimation && [form viewIsOnScreen]){
+            if(!hasAnimation && ([form state] & CKUIViewControllerStateDidAppear)){
                 [[self parentTableView]beginUpdates];
             }
         }
@@ -144,7 +144,7 @@
         
         if(!_fixedSize){
             //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
-            if(!hasAnimation && [form viewIsOnScreen]){
+            if(!hasAnimation && ([form state] & CKUIViewControllerStateDidAppear)){
                 [[self parentTableView]endUpdates];
             }
         }

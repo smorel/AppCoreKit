@@ -25,13 +25,15 @@
 }
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, assign) BOOL animateFirstInsertion;
-@property (nonatomic, assign) BOOL displayFeedSourceCell;
-@property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
 @property (nonatomic, retain) CKDocumentCollection* collection;
 
 - (id)initWithCollection:(CKDocumentCollection*)collection;
 + (CKDocumentCollectionController*) controllerWithCollection:(CKDocumentCollection*)collection;
+
+//FIXME : review those names ...
+@property (nonatomic, assign) BOOL animateFirstInsertion;
+@property (nonatomic, assign) BOOL displayFeedSourceCell;
+@property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
 
 @end
 

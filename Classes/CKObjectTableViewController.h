@@ -76,9 +76,6 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
 ///-----------------------------------
 /// @name Current State
 ///-----------------------------------
-
-@property(nonatomic,copy)CKObjectTableViewControllerSearchBlock searchBlock;
-
 /** 
  Returns the current page computed using tableView height or width depending on the orientation
  */
@@ -99,8 +96,18 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
  Specify the behavior that will get triggered when scrolling.
  */
 @property (nonatomic, assign) CKObjectTableViewControllerScrollingPolicy scrollingPolicy;
-
+/** 
+ Specify the snap behavior when scrolling or selecting/scrolling to rows.
+ */
 @property (nonatomic, assign) CKObjectTableViewControllerSnapPolicy snapPolicy;
+
+- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Selection
+///-----------------------------------
+
+- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 ///-----------------------------------
 /// @name Layout
@@ -138,6 +145,9 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 */
 @property (nonatomic, assign) CKObjectTableViewControllerEditableType editableType;
 
+@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
+
 ///-----------------------------------
 /// @name Search
 ///-----------------------------------
@@ -165,26 +175,20 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
  Returns the displayed segemnted control if the searchScopeDefinition is defined.
  */
 @property (nonatomic, retain, readonly) UISegmentedControl* segmentedControl;
+/** 
+ This block will get called each time a the user enters text in the search bar or change the search scope.
+ */
+@property(nonatomic,copy)CKObjectTableViewControllerSearchBlock searchBlock;
 
-
-///-----------------------------------
-/// @name Editing Customization
-///-----------------------------------
-@property (nonatomic, retain) UIBarButtonItem *editButton;
-@property (nonatomic, retain) UIBarButtonItem *doneButton;
 
 //private
 - (void)didSearch:(NSString*)text;
 
-- (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
-- (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
-
 @end
 
-@interface CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-@property (nonatomic) BOOL editable DEPRECATED_ATTRIBUTE;
-@end
 
+/********************************* CKObjectTableViewControllerDelegate *********************************
+ */
 
 /** TODO
  */
@@ -193,4 +197,12 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectAccessoryViewRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 - (void)objectTableViewController:(CKObjectTableViewController*)controller didSearch:(NSString*)filter;
+@end
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@interface CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+@property (nonatomic) BOOL editable DEPRECATED_ATTRIBUTE;
 @end

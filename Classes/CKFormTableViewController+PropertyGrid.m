@@ -25,15 +25,15 @@
 
 #import "CKNSObject+Introspection.h"
 #import "CKNSNotificationCenter+Edition.h"
+#import "CKFormSectionBase_private.h"
 
 
-@interface CKFormSection(CKPropertyGridPrivate)
+@interface CKFormCellDescriptor(CKPropertyGridPrivate)
 + (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter;
 + (void)setup:(NSArray*)properties inSection:(CKFormSection*)section readOnly:(BOOL)readOnly;
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly;
 @end
 
-@implementation CKFormSection(CKPropertyGridPrivate)
+@implementation CKFormCellDescriptor(CKPropertyGridPrivate)
 
 + (NSArray*)propertyNamesForObject:(id)object withFilter:(NSString*)filter{
 	NSString* lowerCaseFilter = [filter lowercaseString];
@@ -78,6 +78,35 @@
         }
     }
     return theProperties;
+}
+
+
+
++ (void)setup:(NSArray*)properties inSection:(CKFormSection*)section readOnly:(BOOL)readOnly{
+    for(CKObjectProperty* property in properties){
+        CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithProperty:property readOnly:readOnly];
+        if(descriptor){
+            [section addCellDescriptor:descriptor];
+        }
+    }
+}
+
+@end
+
+//CKFormCellDescriptor(CKPropertyGrid)
+
+@implementation CKFormCellDescriptor(CKPropertyGrid)
+
++ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath]];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:property readOnly:NO];
+}
+
++ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly{
+    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath] readOnly:readOnly];
 }
 
 
@@ -192,98 +221,9 @@
     return cellDescriptor;
 }
 
-+ (void)setup:(NSArray*)properties inSection:(CKFormSection*)section readOnly:(BOOL)readOnly{
-    for(CKObjectProperty* property in properties){
-        CKFormCellDescriptor* descriptor = [CKFormSection cellDescriptorWithProperty:property readOnly:readOnly];
-        if(descriptor){
-            [section addCellDescriptor:descriptor];
-        }
-    }
-}
-
 @end
 
-@interface CKFormSectionBase ()
-@property (nonatomic,readwrite) BOOL hidden;
-@end
-
-@implementation CKFormTableViewController(CKPropertyGrid)
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title{
-    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:NO];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden{
-    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:hidden];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title{
-    return [self addSectionWithObject:object propertyFilter:filter headerTitle:title hidden:NO];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden{
-    return [self addSectionWithObject:object properties:[CKFormSection propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title{
-    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:NO];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden{
-    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:hidden readOnly:NO];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
-    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:NO readOnly:readOnly];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
-    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:hidden readOnly:readOnly];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
-    return [self addSectionWithObject:object propertyFilter:filter headerTitle:title hidden:NO readOnly:readOnly];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
-    return [self addSectionWithObject:object properties:[CKFormSection propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden readOnly:readOnly];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
-    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:NO readOnly:readOnly];
-}
-
-- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
-    CKFormSection* section = [CKFormSection sectionWithObject:object properties:properties headerTitle:title hidden:hidden readOnly:readOnly];
-    [self addSection:section];
-    
-    return section;
-}
-
-@end
-
-
-@implementation CKFormCellDescriptor(CKPropertyGrid)
-
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath{
-    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath]];
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property{
-    return [CKFormCellDescriptor cellDescriptorWithProperty:property readOnly:NO];
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly{
-    return [CKFormCellDescriptor cellDescriptorWithProperty:[CKObjectProperty propertyWithObject:object keyPath:keyPath] readOnly:readOnly];
-}
-
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly{
-    CKFormCellDescriptor* descriptor = [CKFormSection cellDescriptorWithProperty:property readOnly:readOnly];
-    return descriptor;
-}
-
-@end
-
+//CKFormSection(CKPropertyGrid)
 
 @implementation CKFormSection(CKPropertyGrid)
 
@@ -300,7 +240,7 @@
 }
 
 + (CKFormSection*)sectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden{
-    return [CKFormSection sectionWithObject:object properties:[self propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
+    return [CKFormSection sectionWithObject:object properties:[CKFormCellDescriptor propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
 }
 
 + (CKFormSection*)sectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title{
@@ -324,7 +264,7 @@
 }
 
 + (CKFormSection*)sectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
-    return [CKFormSection sectionWithObject:object properties:[self propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden readOnly:readOnly];
+    return [CKFormSection sectionWithObject:object properties:[CKFormCellDescriptor propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden readOnly:readOnly];
 }
 
 + (CKFormSection*)sectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
@@ -352,13 +292,72 @@
         [theProperties addObject:property];
     }
     
-    //TODO footerName
     CKFormSection* section = (title != nil && [title length] > 0) ? [CKFormSection sectionWithHeaderTitle:_(title)] : [CKFormSection section];
     section.hidden = hidden;
-    [CKFormSection setup:theProperties inSection:section readOnly:readOnly];
+    [CKFormCellDescriptor setup:theProperties inSection:section readOnly:readOnly];
     
     return section;
 }
 
 @end
+
+
+/********************************* DEPRECATED *********************************
+ */
+
+@implementation CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_1_7_11_AND_LATER)
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:NO];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:hidden];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title{
+    return [self addSectionWithObject:object propertyFilter:filter headerTitle:title hidden:NO];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden{
+    return [self addSectionWithObject:object properties:[CKFormCellDescriptor propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title{
+    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:NO];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden{
+    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:hidden readOnly:NO];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:nil headerTitle:title hidden:hidden readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object propertyFilter:filter headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object propertyFilter:(NSString*)filter headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object properties:[CKFormCellDescriptor propertyNamesForObject:object withFilter:filter] headerTitle:title hidden:hidden readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title readOnly:(BOOL)readOnly{
+    return [self addSectionWithObject:object properties:properties headerTitle:title hidden:NO readOnly:readOnly];
+}
+
+- (CKFormSectionBase*)addSectionWithObject:(id)object properties:(NSArray*)properties headerTitle:(NSString*)title hidden:(BOOL)hidden readOnly:(BOOL)readOnly{
+    CKFormSection* section = [CKFormSection sectionWithObject:object properties:properties headerTitle:title hidden:hidden readOnly:readOnly];
+    [self addSection:section];
+    
+    return section;
+}
+
+@end
+
 

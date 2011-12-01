@@ -148,10 +148,12 @@
     __block CKFormTableViewController* bController = debugger;
     debugger.searchBlock = ^(NSString* filter){
         NSInteger index = [bController indexOfSection:objectSection];
-        [bController removeSectionAtIndex:index];
-        
-        CKFormSection* newObjectSection = [CKFormSection sectionWithObject:object propertyFilter:filter headerTitle:[[object class]description]];
-        [bController insertSection:newObjectSection atIndex:index];
+        if(index != NSNotFound){
+            [bController removeSectionAtIndex:index];
+            
+            CKFormSection* newObjectSection = [CKFormSection sectionWithObject:object propertyFilter:filter headerTitle:[[object class]description]];
+            [bController insertSection:newObjectSection atIndex:index];
+        }
     };
         
     return debugger;

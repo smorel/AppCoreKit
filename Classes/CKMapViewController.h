@@ -11,7 +11,7 @@
 #import <MapKit/MapKit.h>
 #import "CKItemViewContainerController.h"
 #import "CKObjectController.h"
-#import "CKObjectViewControllerFactory.h"
+#import "CKItemViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKDocumentCollection.h"
 
@@ -72,6 +72,5 @@ typedef enum CKMapViewControllerZoomStrategy{
 - (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapViewControllerZoomStrategy)strategy animated:(BOOL)animated;
 
 - (BOOL)reloadData;
-- (BOOL)reloadData:(BOOL)animated;
 
 @end

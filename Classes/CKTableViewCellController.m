@@ -10,11 +10,11 @@
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
+#import "CKObjectPropertyMetaData.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
 #import "CKNSObject+Bindings.h"
-#import "CKItemViewController+StyleManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Style.h"
 #import "CKLocalization.h"
@@ -22,6 +22,10 @@
 #import "CKUIView+Positioning.h"
 
 //#import <objc/runtime.h>
+
+@interface CKItemViewController()
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
+@end
 
 @implementation CKUITableViewCell
 @synthesize delegate;
@@ -31,6 +35,8 @@
 @synthesize checkMarkImage = _checkMarkImage;
 
 - (void)dealloc{
+    [self clearBindingsContext];
+    
     [_disclosureIndicatorImage release];
     [_disclosureButton release];
     [_delegateRef release];
@@ -263,7 +269,7 @@
 		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
-	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
+	else if([self.parentController isKindOfClass:[CKManagedTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
 		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
 	}
@@ -298,13 +304,14 @@
 }
 
 - (NSString *)identifier {
-	NSMutableDictionary* controllerStyle = [self controllerStyle];
+    NSMutableDictionary* controllerStyle = [self controllerStyle];
     if(_createCallback){
         [_createCallback execute:self];
         if([controllerStyle containsObjectForKey:CKStyleCellType]){
             self.cellStyle = [controllerStyle cellStyle];
         }
     }
+    
 	NSString* groupedTableModifier = @"";
 	UIView* parentView = [self parentControllerView];
 	if([parentView isKindOfClass:[UITableView class]]){

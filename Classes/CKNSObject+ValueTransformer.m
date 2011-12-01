@@ -8,7 +8,7 @@
 
 #import "CKNSObject+ValueTransformer.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKModelObject+CKStore.h"
+#import "CKObject+CKStore.h"
 
 //Implemented in CKNSValueTransformer+Additions.m
 @interface NSObject (CKValueTransformerSelectors)
@@ -51,14 +51,14 @@
 	}
 	
 	id returnObject = nil;
-	if([NSObject isKindOf:typeToCreate parentType:[CKModelObject class]]){
+	if([NSObject isKindOf:typeToCreate parentType:[CKObject class]]){
 		id uniqueId = [dictionary valueForKeyPath:@"uniqueId"];
 		if([uniqueId isKindOfClass:[NSString class]]){
-			returnObject = [CKModelObject objectWithUniqueId:uniqueId];
+			returnObject = [CKObject objectWithUniqueId:uniqueId];
 		}
 		if(returnObject == nil){
 			returnObject = [[[typeToCreate alloc]init]autorelease];
-			[CKModelObject registerObject:returnObject withUniqueId:uniqueId];
+			[CKObject registerObject:returnObject withUniqueId:uniqueId];
 		}
 	}
 	else{

@@ -8,6 +8,7 @@
 
 
 #import "CKDebug.h"
+#import "CKObject.h"
 #import "CKWeakRef.h"
 #import "CKBundle.h"
 #import "CKCache.h"
@@ -23,3 +24,4 @@
 #import "CKObjectProperty.h"
 #import "CKObjectPropertyMetaData.h"
 #import "CKNSObject+Introspection.h"
+#import "CKRuntime.h"
