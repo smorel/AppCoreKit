@@ -9,6 +9,7 @@
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKUIKeyboardInformation.h"
+#import "CKNSObject+Bindings.h"
 
 #pragma mark CKManagedTableSection
 
@@ -62,6 +63,7 @@
 @interface CKManagedTableViewController ()
 @property (nonatomic, retain, readwrite) NSMutableArray *sections;
 @property (nonatomic, retain) NSMutableDictionary *pValuesForKeys;
+@property (nonatomic, retain) NSString *bindingContextForTableView;
 - (void)notifiesCellControllersForVisibleRows;
 @end
 
@@ -74,17 +76,24 @@
 @synthesize pValuesForKeys = _valuesForKeys;
 @synthesize orientation = _orientation;
 @synthesize resizeOnKeyboardNotification = _resizeOnKeyboardNotification;
+@synthesize bindingContextForTableView = _bindingContextForTableView;
 
 - (void)postInit {
 	[super postInit];
 	self.style = UITableViewStyleGrouped;
 	_orientation = CKManagedTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
+    self.bindingContextForTableView = [NSString stringWithFormat:@"ManagedTable_table_<%p>",self];
 }
 
 //
 
 - (void)dealloc {
+    if(_bindingContextForTableView){
+        [NSObject removeAllBindingsForContext:_bindingContextForTableView];
+        [_bindingContextForTableView release];
+        _bindingContextForTableView = nil;
+    }
 	[self clear];
 	[super dealloc];
 }
@@ -108,6 +117,10 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[self setup];
+    
+    [NSObject beginBindingsContext:_bindingContextForTableView policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [self.tableView bind:@"hidden" target:self action:@selector(tableViewVisibilityChanged:)];
+    [NSObject endBindingsContext];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -116,9 +129,17 @@
 }
 
 - (void)viewDidUnload {
+    [NSObject removeAllBindingsForContext:_bindingContextForTableView];
+    
 	[super viewDidUnload];
 	// FIXME: Controllers should not be deallocated when the view is unloaded
 	[self clear];
+}
+
+- (void)tableViewVisibilityChanged:(NSNumber*)hidden{
+    if(![hidden boolValue]){
+        [self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:0.4];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -418,11 +439,12 @@
 	// the cells; maybe it's because it "loads" the cell, or maybe there is a bug in the framework.
 	// The documentation doesn't say anything about this.	
 	
+    
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-        CKItemViewController* controller = [self cellControllerForIndexPath:indexPath];
-        if(controller.view){
-            [controller viewDidAppear:controller.view];
+        CKTableViewCellController* controller = (CKTableViewCellController*)[self cellControllerForIndexPath:indexPath];
+        if(controller.tableViewCell){
+            [controller viewDidAppear:controller.tableViewCell];
         }
 	}
 }

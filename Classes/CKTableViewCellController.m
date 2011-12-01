@@ -291,7 +291,7 @@
 		toUseCellStyle = CKTableViewCellStyleSubtitle;
     }
 	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
-	self.view = cell;
+	//self.view = cell;
     cell.accessoryType = self.accessoryType;
 	
 	return cell;
