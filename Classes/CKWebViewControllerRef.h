@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "CKUIViewController.h"
 
 /** TODO
  */
@@ -21,7 +21,7 @@ typedef enum {
 
 /** TODO
  */
-@interface CKWebViewControllerRef : UIViewController <UIWebViewDelegate> {
+@interface CKWebViewControllerRef : CKUIViewController <UIWebViewDelegate> {
 	UIWebView *_webView;
 	NSURL *_homeURL;
 	
