@@ -10,6 +10,8 @@
 #import "CKTableViewCellController.h"
 #import "CKUIKeyboardInformation.h"
 #import "CKNSObject+Bindings.h"
+#import "CKStyleManager.h"
+#import "CKUIViewController+Style.h"
 
 #pragma mark CKManagedTableSection
 
@@ -571,6 +573,22 @@
 	} else {
 		self.tableView.transform = CGAffineTransformIdentity;
 	}
+}
+
+#pragma mark UITableView (CKHeaderViewManagement)
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
+    if([title isKindOfClass:[NSString class]] && [title length] > 0){
+        NSMutableDictionary* style = [self controllerStyle];
+        [headerView applyStyle:style propertyName:@"sectionHeaderView"];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView*)headerView withTitle:(NSString*)title{
+    if([title isKindOfClass:[NSString class]] && [title length] > 0){
+        NSMutableDictionary* style = [self controllerStyle];
+        [headerView applyStyle:style propertyName:@"sectionFooterView"];
+    }
 }
 
 
