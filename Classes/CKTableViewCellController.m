@@ -521,6 +521,8 @@
      forKey: kCATransactionDisableActions];
     
 	UITableViewCell* cell = [self loadCell];
+    self.view = cell;
+    
 	[self initView:cell];
 	[self layoutCell:cell];
 	[self applyStyle];

@@ -67,7 +67,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
-	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor];
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor multiSelectionEnabled:NO];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;
 }

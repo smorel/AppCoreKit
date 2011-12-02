@@ -43,19 +43,27 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
 @implementation NSValueTransformer (CKNativeTypes)
 
 
-+ (NSInteger)parseString:(NSString*)str toEnum:(CKEnumDescriptor*)descriptor{
-	NSInteger integer = 0;
-	NSArray* components = [str componentsSeparatedByString:@"|"];
-	for(NSString* c in components){
-		NSInteger ci = [[descriptor.valuesAndLabels objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
-		integer |= ci;
-	}
-	return integer;
++ (NSInteger)parseString:(NSString*)str toEnum:(CKEnumDescriptor*)descriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled{
+    if(multiSelectionEnabled){
+        NSInteger integer = 0;
+        NSArray* components = [str componentsSeparatedByString:@"|"];
+        for(NSString* c in components){
+            NSInteger ci = [[descriptor.valuesAndLabels objectForKey:[c stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]intValue];
+            integer |= ci;
+        }
+        return integer;
+    }
+    
+    NSNumber* ci = [descriptor.valuesAndLabels objectForKey:[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+    if(ci){
+        return [ci intValue];
+    }
+    return 0;
 }
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition{
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
 	if([object isKindOfClass:[NSString class]]){
-		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition];
+		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition multiSelectionEnabled:multiSelectionEnabled];
 		return result;
 	}
 	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
@@ -63,18 +71,28 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
 }
 
 
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition{
-	NSMutableString* str = [NSMutableString string];
-	for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
-		NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
-		if(value & ci){
-			if([str length] > 0){
-				[str appendString:@" | "];
-			}
-			[str appendString:e];
-		}
-	}
-	return str;
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
+	if(multiSelectionEnabled){
+        NSMutableString* str = [NSMutableString string];
+        for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
+            NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
+            if(value & ci){
+                if([str length] > 0){
+                    [str appendString:@" | "];
+                }
+                [str appendString:e];
+            }
+        }
+        return str;
+    }
+    
+    for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
+        NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];
+        if(ci == value){
+            return e;
+        }
+    }
+    return @"";
 }
 
 

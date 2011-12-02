@@ -461,6 +461,7 @@ static char NSObjectAppliedStyleObjectKey;
             }
         }
         
+        
 		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
 			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){

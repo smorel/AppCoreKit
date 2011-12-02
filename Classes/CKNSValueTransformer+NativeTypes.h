@@ -25,8 +25,8 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...);
 
 @interface NSValueTransformer (CKNativeTypes)
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition;
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition;
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled;
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled;
 
 + (char)convertCharFromObject:(id)object;
 + (NSInteger)convertIntegerFromObject:(id)object;

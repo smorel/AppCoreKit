@@ -58,7 +58,7 @@ NSString* CKSerializerIDTag = @"@id";
 			CKObjectPropertyMetaData* metaData = [property metaData];
 			NSInteger i = 0;
 			if(metaData.enumDescriptor != nil){
-				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:metaData.enumDescriptor];
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:metaData.enumDescriptor multiSelectionEnabled:metaData.multiselectionEnabled];
 			}
 			else{
 				i = [NSValueTransformer convertIntegerFromObject:object];
@@ -442,7 +442,7 @@ NSString* CKSerializerIDTag = @"@id";
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
 				if(metaData.enumDescriptor != nil){
-					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:metaData.enumDescriptor];
+					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:metaData.enumDescriptor multiSelectionEnabled:metaData.multiselectionEnabled];
 				}
 				break;
 			}
