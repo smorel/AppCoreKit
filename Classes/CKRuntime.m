@@ -54,6 +54,7 @@ id __runtime_setValue(id self, SEL _cmd,...){
         }
     }
     
+    
     NSMutableDictionary* runtimeProperties =  objc_getAssociatedObject(self, &NSObjectRuntimePropertiesObjectKey);
     if(!runtimeProperties){
         runtimeProperties = [NSMutableDictionary dictionary];
@@ -63,6 +64,8 @@ id __runtime_setValue(id self, SEL _cmd,...){
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
+    [self willChangeValueForKey:propertyName];
+     
     if(!value){
         [runtimeProperties removeObjectForKey:propertyName];
     }
@@ -83,6 +86,9 @@ id __runtime_setValue(id self, SEL _cmd,...){
             }
         }
     }
+    
+    [self didChangeValueForKey:propertyName];
+    
     return nil;
 }
 
