@@ -41,7 +41,7 @@
 		7506E40013B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */; };
 		750A157613FD50E7008BC41F /* CKBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 750A157513FD50E6008BC41F /* CKBinding.m */; };
-		750A157813FD50FB008BC41F /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 750A157713FD50FA008BC41F /* CKBinding.h */; };
+		750A157813FD50FB008BC41F /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 750A157713FD50FA008BC41F /* CKBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EE113D0C3990041900C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EDF13D0C3990041900C /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EE213D0C3990041900C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EE013D0C3990041900C /* JSONKit.m */; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
