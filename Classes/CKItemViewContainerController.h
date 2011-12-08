@@ -73,6 +73,8 @@
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 
+@property (nonatomic, assign, readonly) BOOL rotating;
+
 //private property
 @property (nonatomic, retain) NSMutableDictionary* params;
 

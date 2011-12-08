@@ -26,6 +26,9 @@
 @property (nonatomic, retain) NSMutableArray* weakViews;
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 
+@property (nonatomic, assign) BOOL rotating;
+@property (nonatomic, assign) BOOL invalidateParams;
+
 @end
 
 @interface CKItemViewControllerFactory ()
@@ -63,12 +66,16 @@
 @synthesize delegate = _delegate;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize sectionsToControllers = _sectionsToControllers;
+@synthesize rotating = _rotating;
+@synthesize invalidateParams = _invalidateParams;
 
 
 #pragma mark Initialization
 - (void)postInit {
 	[super postInit];
 	_numberOfObjectsToprefetch = 10;
+    _rotating = NO;
+    _invalidateParams = NO;
 }
 
 - (id)init {
@@ -201,6 +208,8 @@
 #pragma mark Interface Orientation Management
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    self.rotating = YES;
+    self.invalidateParams = YES;
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
@@ -216,6 +225,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	[self updateViewsVisibility:YES];
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    self.rotating = NO;
 }
 
 
@@ -295,8 +305,9 @@
 }
 
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath{
-    if(self.params == nil){
+    if(self.params == nil || _invalidateParams == YES){
         [self updateParams];
+        self.invalidateParams = NO;
     }
 	return [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];
 }

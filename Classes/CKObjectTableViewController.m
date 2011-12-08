@@ -449,6 +449,12 @@
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    if(_indexPathToReachAfterRotation){
+        BOOL pagingEnable = self.tableView.pagingEnabled;
+        self.tableView.pagingEnabled = NO;
+        [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+        self.tableView.pagingEnabled = pagingEnable;
+    }
 	self.indexPathToReachAfterRotation = nil;
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
