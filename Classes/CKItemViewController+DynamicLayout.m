@@ -109,6 +109,8 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
     staticController.accessorySelectionCallback = [item accessorySelectionCallback];
     staticController.becomeFirstResponderCallback = [item becomeFirstResponderCallback];
     staticController.resignFirstResponderCallback = [item resignFirstResponderCallback];
+    staticController.viewDidAppearCallback = [item viewDidAppearCallback];
+    staticController.viewDidDisappearCallback = [item viewDidDisappearCallback];
     staticController.layoutCallback = [item layoutCallback];
     [params setObject:staticController forKey:CKTableViewAttributeStaticController];
     if(controllerStyle){

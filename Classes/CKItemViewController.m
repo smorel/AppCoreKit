@@ -40,6 +40,8 @@
 @synthesize layoutCallback = _layoutCallback;
 @synthesize viewRef = _viewRef;
 @synthesize weakParentController = _weakParentController;
+@synthesize viewDidAppearCallback = _viewDidAppearCallback;
+@synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
 
 - (void)dealloc {
 	[self clearBindingsContext];
@@ -59,6 +61,8 @@
 	[_layoutCallback release];
 	[_viewRef release];
 	[_weakParentController release];
+	[_viewDidAppearCallback release];
+	[_viewDidDisappearCallback release];
 	
 	_target = nil;
 	_action = nil;
@@ -117,9 +121,15 @@
 }
 
 - (void)viewDidAppear:(UIView *)view{
+    if(_viewDidAppearCallback){
+        [_viewDidAppearCallback execute:self];
+    }
 }
 
 - (void)viewDidDisappear{
+    if(_viewDidDisappearCallback){
+        [_viewDidDisappearCallback execute:self];
+    }
 }
 
 - (NSIndexPath *)willSelect{

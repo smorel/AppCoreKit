@@ -483,6 +483,10 @@
 	[self notifiesCellControllersForVisibleRows];
 }
 
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
+	[self notifiesCellControllersForVisibleRows];
+}
+
 // Section Management
 
 - (void)addSection:(CKTableSection *)section {

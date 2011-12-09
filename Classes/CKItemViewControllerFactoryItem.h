@@ -44,6 +44,8 @@ typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSI
 - (CKCallback*)accessorySelectionCallback;
 - (CKCallback*)becomeFirstResponderCallback;
 - (CKCallback*)resignFirstResponderCallback;
+- (CKCallback*)viewDidAppearCallback;
+- (CKCallback*)viewDidDisappearCallback;
 - (CKCallback*)layoutCallback;
 
 - (void)setCreateBlock:(CKCallbackBlock)block;
@@ -55,6 +57,9 @@ typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSI
 - (void)setFilterBlock:(CKCallbackBlock)block;
 - (void)setSizeBlock:(CKCallbackBlock)block;
 - (void)setBecomeFirstResponderBlock:(CKCallbackBlock)block;
+- (void)setResignFirstResponderBlock:(CKCallbackBlock)block;
+- (void)setViewDidAppearBlock:(CKCallbackBlock)block;
+- (void)setViewDidDisappearBlock:(CKCallbackBlock)block;
 - (void)setResignFirstResponderBlock:(CKCallbackBlock)block;
 - (void)setLayoutBlock:(CKCallbackBlock)block;
 
@@ -68,6 +73,8 @@ typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSI
 - (void)setSizeTarget:(id)target action:(SEL)action;
 - (void)setBecomeFirstResponderTarget:(id)target action:(SEL)action;
 - (void)setResignFirstResponderTarget:(id)target action:(SEL)action;
+- (void)setViewDidAppearTarget:(id)target action:(SEL)action;
+- (void)setViewDidDisappearTarget:(id)target action:(SEL)action;
 - (void)setLayoutTarget:(id)target action:(SEL)action;
 
 - (void)setFlags:(CKItemViewFlags)flags;

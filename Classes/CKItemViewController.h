@@ -66,6 +66,8 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, retain) CKCallback* accessorySelectionCallback;
 @property (nonatomic, retain) CKCallback* becomeFirstResponderCallback;
 @property (nonatomic, retain) CKCallback* resignFirstResponderCallback;
+@property (nonatomic, retain) CKCallback* viewDidAppearCallback;
+@property (nonatomic, retain) CKCallback* viewDidDisappearCallback;
 
 //Used on CKTableViewCellControllers only yet
 @property (nonatomic, retain) CKCallback* layoutCallback;

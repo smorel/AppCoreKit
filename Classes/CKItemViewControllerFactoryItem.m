@@ -22,6 +22,8 @@ NSString* CKItemViewControllerFactoryItemFilter               = @"CKItemViewCont
 NSString* CKItemViewControllerFactoryItemSize                 = @"CKItemViewControllerFactoryItemSize";
 NSString* CKItemViewControllerFactoryItemBecomeFirstResponder = @"CKItemViewControllerFactoryItemBecomeFirstResponder";
 NSString* CKItemViewControllerFactoryItemResignFirstResponder = @"CKItemViewControllerFactoryItemResignFirstResponder";
+NSString* CKItemViewControllerFactoryViewDidAppear            = @"CKItemViewControllerFactoryViewDidAppear";
+NSString* CKItemViewControllerFactoryViewDidDisappear         = @"CKItemViewControllerFactoryViewDidDisappear";
 NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewControllerFactoryItemLayout";
 
 /********************************* CKItemViewControllerFactoryItem *********************************
@@ -76,6 +78,14 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	return [_params objectForKey:CKItemViewControllerFactoryItemResignFirstResponder];
 }
 
+- (CKCallback*)viewDidAppearCallback{
+	return [_params objectForKey:CKItemViewControllerFactoryViewDidAppear];
+}
+
+- (CKCallback*)viewDidDisappearCallback{
+	return [_params objectForKey:CKItemViewControllerFactoryViewDidDisappear];
+}
+
 - (CKCallback*)layoutCallback{
 	return [_params objectForKey:CKItemViewControllerFactoryItemLayout];
 }
@@ -120,6 +130,14 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemResignFirstResponder];
 }
 
+- (void)setViewDidAppearBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryViewDidAppear];
+}
+
+- (void)setViewDidDisappearBlock:(CKCallbackBlock)block{
+	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryViewDidDisappear];
+}
+
 - (void)setLayoutBlock:(CKCallbackBlock)block{
 	[self.params setObject:[CKCallback callbackWithBlock:block] forKey:CKItemViewControllerFactoryItemLayout];
 }
@@ -162,6 +180,14 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 
 - (void)setResignFirstResponderTarget:(id)target action:(SEL)action{
 	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryItemResignFirstResponder];
+}
+
+- (void)setViewDidAppearTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryViewDidAppear];
+}
+
+- (void)setViewDidDisappearTarget:(id)target action:(SEL)action{
+	[self.params setObject:[CKCallback callbackWithTarget:target action:action] forKey:CKItemViewControllerFactoryViewDidDisappear];
 }
 
 - (void)setLayoutTarget:(id)target action:(SEL)action{
@@ -211,8 +237,14 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
     if([self becomeFirstResponderCallback]){
         controller.becomeFirstResponderCallback = [self becomeFirstResponderCallback];
     }
-    if([self resignFirstResponderCallback]){
-        controller.resignFirstResponderCallback = [self resignFirstResponderCallback];
+    if([self accessorySelectionCallback]){
+        controller.accessorySelectionCallback = [self accessorySelectionCallback];
+    }
+    if([self viewDidAppearCallback]){
+        controller.viewDidAppearCallback = [self viewDidAppearCallback];
+    }
+    if([self viewDidDisappearCallback]){
+        controller.viewDidDisappearCallback = [self viewDidDisappearCallback];
     }
     if([self layoutCallback]){
         controller.layoutCallback = [self layoutCallback];

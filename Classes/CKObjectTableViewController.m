@@ -1129,6 +1129,7 @@
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
+	[self updateViewsVisibility:YES];
 	[self fetchMoreData];
 }
 
