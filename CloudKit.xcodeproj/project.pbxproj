@@ -543,6 +543,8 @@
 		969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */; };
 		969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */; };
 		969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */; };
+		969FA54614967E1E0095C61E /* UIView+CKStyleForSubViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA54414967E1D0095C61E /* UIView+CKStyleForSubViews.h */; };
+		969FA54714967E1E0095C61E /* UIView+CKStyleForSubViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA54514967E1D0095C61E /* UIView+CKStyleForSubViews.m */; };
 		96A642851484125600C06A85 /* CKFormDocumentCollectionSection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */; };
 		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
 		96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE301486B229008A23E4 /* CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1089,6 +1091,8 @@
 		969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+CKHighlight.m"; path = "Classes/CKUILabel+CKHighlight.m"; sourceTree = "<group>"; };
 		969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableViewCell+CKHighlight.h"; path = "Classes/CKUITableViewCell+CKHighlight.h"; sourceTree = "<group>"; };
 		969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITableViewCell+CKHighlight.m"; path = "Classes/CKUITableViewCell+CKHighlight.m"; sourceTree = "<group>"; };
+		969FA54414967E1D0095C61E /* UIView+CKStyleForSubViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKStyleForSubViews.h"; path = "Classes/UIView+CKStyleForSubViews.h"; sourceTree = "<group>"; };
+		969FA54514967E1D0095C61E /* UIView+CKStyleForSubViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKStyleForSubViews.m"; path = "Classes/UIView+CKStyleForSubViews.m"; sourceTree = "<group>"; };
 		96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormDocumentCollectionSection_private.h; path = Classes/CKFormDocumentCollectionSection_private.h; sourceTree = "<group>"; };
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
@@ -1432,6 +1436,8 @@
 				7560DC4313B8ED3600268D13 /* CKUIView+Factory.m */,
 				7560DC4613B8ED3600268D13 /* CKUIView+Layout.h */,
 				7560DC4713B8ED3600268D13 /* CKUIView+Layout.m */,
+				969FA54414967E1D0095C61E /* UIView+CKStyleForSubViews.h */,
+				969FA54514967E1D0095C61E /* UIView+CKStyleForSubViews.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2390,6 +2396,7 @@
 				96CADE381486BDFF008A23E4 /* CKObject+Validation.h in Headers */,
 				969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */,
 				969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */,
+				969FA54614967E1E0095C61E /* UIView+CKStyleForSubViews.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2748,6 +2755,7 @@
 				96CADE391486BDFF008A23E4 /* CKObject+Validation.m in Sources */,
 				969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */,
 				969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */,
+				969FA54714967E1E0095C61E /* UIView+CKStyleForSubViews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

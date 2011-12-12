@@ -436,12 +436,18 @@ static char NSObjectAppliedStyleObjectKey;
 - (void)applySubViewsStyle:(NSMutableDictionary*)style appliedStack:(NSMutableSet*)appliedStack delegate:(id)delegate{
 	if(style == nil)
 		return;
-    
-    [self setAppliedStyle:style];
 	
 	//iterate on view properties to apply style using property names
 	NSArray* properties = [self allViewsPropertyDescriptors];
 	for(CKClassPropertyDescriptor* descriptor in properties){
+        
+        //Handle special cases where styles should not be applyed !
+        if([[[self class]description]isEqualToString:@"UITableHeaderFooterView"] &&
+           [NSObject isClass:descriptor.type kindOfClass:[UITableView class]]){
+            continue;
+        }
+        
+        
 		UIView* view = nil;
         if([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
             //We are supposed to get a nil view here ! but UIKit creates a view when getting selectedBackgroundView wich have not the right class if called here.
@@ -493,6 +499,7 @@ static char NSObjectAppliedStyleObjectKey;
 		}
 	}
 	
+    [self setAppliedStyle:style];
 	
 	//if([appliedStack containsObject:self] == NO){
 		[[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
