@@ -1,4 +1,4 @@
-//
+ //
 //  CKRuntime.m
 //  CloudKit
 //
@@ -45,7 +45,7 @@ id __runtime_setValue(id self, SEL _cmd,...){
     CKClassPropertyDescriptor* descriptor = [self propertyDescriptorForKeyPath:propertyName];
     if(!descriptor){
         //Compute the property name with non capitalized string
-        NSString* propertyName = [NSString stringWithFormat:@"%@%@",[[selectorName substringWithRange:NSMakeRange(3, 1)]lowercaseString], 
+        propertyName = [NSString stringWithFormat:@"%@%@",[[selectorName substringWithRange:NSMakeRange(3, 1)]lowercaseString], 
                                   [selectorName substringWithRange:NSMakeRange(4, [selectorName length] - 1 - 4)]];
         descriptor = [self propertyDescriptorForKeyPath:propertyName];
         if(!descriptor){
@@ -218,4 +218,16 @@ BOOL CKClassAddStructProperty(Class c,NSString* propertyName, const char* encodi
     }
     
     return NO;
+}
+
+void CKSwizzleSelector(Class c,SEL selector, SEL newSelector){
+	Method origMethod = class_getInstanceMethod(c, selector);
+    Method newMethod = class_getInstanceMethod(c, newSelector);
+	
+    if (class_addMethod(c, selector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+        class_replaceMethod(c, newSelector, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+    }
+    else {
+        method_exchangeImplementations(origMethod, newMethod);
+    }
 }

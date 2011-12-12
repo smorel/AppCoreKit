@@ -539,6 +539,10 @@
 		963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265E1484015300A9C98B /* CKFormCellDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265F1484015300A9C98B /* CKFormCellDescriptor.m */; };
 		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
+		969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */; };
+		969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */; };
+		969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */; };
+		969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */; };
 		96A642851484125600C06A85 /* CKFormDocumentCollectionSection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */; };
 		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
 		96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE301486B229008A23E4 /* CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1081,6 +1085,10 @@
 		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; };
 		9638265F1484015300A9C98B /* CKFormCellDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormCellDescriptor.m; path = Classes/CKFormCellDescriptor.m; sourceTree = "<group>"; };
 		96382665148406ED00A9C98B /* CKFormSectionBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase_private.h; path = Classes/CKFormSectionBase_private.h; sourceTree = "<group>"; };
+		969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+CKHighlight.h"; path = "Classes/CKUILabel+CKHighlight.h"; sourceTree = "<group>"; };
+		969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+CKHighlight.m"; path = "Classes/CKUILabel+CKHighlight.m"; sourceTree = "<group>"; };
+		969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableViewCell+CKHighlight.h"; path = "Classes/CKUITableViewCell+CKHighlight.h"; sourceTree = "<group>"; };
+		969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITableViewCell+CKHighlight.m"; path = "Classes/CKUITableViewCell+CKHighlight.m"; sourceTree = "<group>"; };
 		96A642841484125600C06A85 /* CKFormDocumentCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormDocumentCollectionSection_private.h; path = Classes/CKFormDocumentCollectionSection_private.h; sourceTree = "<group>"; };
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
@@ -1383,6 +1391,10 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */,
+				969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */,
+				969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */,
+				969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */,
 				7566AF8A14476A5C00748BB1 /* CKUIView+Positioning.h */,
 				7566AF8C14476A6800748BB1 /* CKUIView+Positioning.m */,
 				4F4F052D13C5F5410009DE31 /* CKActionSheet.h */,
@@ -2376,6 +2388,8 @@
 				96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */,
 				96CADE351486B6F6008A23E4 /* CKNSObject+Introspection_private.h in Headers */,
 				96CADE381486BDFF008A23E4 /* CKObject+Validation.h in Headers */,
+				969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */,
+				969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2732,6 +2746,8 @@
 				963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */,
 				96CADE331486B22A008A23E4 /* CKRuntime.m in Sources */,
 				96CADE391486BDFF008A23E4 /* CKObject+Validation.m in Sources */,
+				969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */,
+				969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
