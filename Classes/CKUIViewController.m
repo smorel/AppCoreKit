@@ -48,6 +48,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
 @synthesize supportedInterfaceOrientations;
 @synthesize inlineDebuggerController = _inlineDebuggerController;
+@synthesize deallocBlock = _deallocBlock;
 @synthesize styleHasBeenApplied;
 @synthesize state;
 @synthesize viewIsOnScreen;
@@ -104,6 +105,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)dealloc{
+    if(_deallocBlock){
+        _deallocBlock(self);
+    }
+    
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [self clearBindingsContext];
     
@@ -123,6 +128,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_navigationItemsBindingContext = nil;
 	[_inlineDebuggerController release];
 	_inlineDebuggerController = nil;
+    [_deallocBlock release];
+    _deallocBlock = nil;
     
 	[super dealloc];
 }

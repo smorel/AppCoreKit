@@ -10,6 +10,7 @@
 #import "CKUIView+Style.h"
 #import "CKCascadingTree.h"
 #import "CKLocalization.h"
+#import "CKObjectPropertyArrayCollection.h"
 
 @implementation NSObject (CKInlineDebugger)
 
@@ -128,20 +129,45 @@
     return nil;
 }
 
++ (CKItemViewControllerFactoryItem*)factoryItemForClass{
+    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
+    item.controllerClass = [CKTableViewCellController class];
+    [item setFilterBlock:^id(id value) {
+        return [NSNumber numberWithBool:YES]; //everything ! 
+    }];
+    [item setSetupBlock:^id(id value) {
+        CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        controller.tableViewCell.textLabel.text = [controller.value description];
+        return (id)nil;
+    }];
+    return item;
+}
+
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
     CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
     debugger.name = @"CKInlineDebugger";
     debugger.searchEnabled = YES;
+    
+    CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    [factory addItem:[NSObject factoryItemForClass]];
+    
+    NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
+    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKObjectPropertyArrayCollection collectionWithArrayProperty:[CKObjectProperty propertyWithObject:inheritingClasses]] 
+                                                                                                               factory:factory 
+                                                                                                           headerTitle:@"Super Classes"];
+    
+    
     
     CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:[[object class]description]];
     
     if([object appliedStyle]){
         CKFormSection* styleSection = [CKFormSection sectionWithCellDescriptors:
                                        [NSArray arrayWithObject:[[object class]cellDescriptorForStylesheetInObject:object]] headerTitle:@"AppliedStyle"];
-        [debugger addSections:[NSArray arrayWithObjects:styleSection,objectSection,nil]];
+        [debugger addSections:[NSArray arrayWithObjects:inheritingClassesSection,styleSection,objectSection,nil]];
     }
     else{
-        [debugger addSections:[NSArray arrayWithObjects:objectSection,nil]];
+        [debugger addSections:[NSArray arrayWithObjects:inheritingClassesSection,objectSection,nil]];
     }
     
     //Setup filter callback
@@ -154,6 +180,10 @@
             CKFormSection* newObjectSection = [CKFormSection sectionWithObject:object propertyFilter:filter headerTitle:[[object class]description]];
             [bController insertSection:newObjectSection atIndex:index];
         }
+    };
+    
+    debugger.deallocBlock = ^(CKUIViewController* controller){
+        [inheritingClasses release];
     };
         
     return debugger;

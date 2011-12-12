@@ -172,6 +172,16 @@ void introspectTextInputsProperties(){
 	return NSStringFromClass([self class]);
 }
 
++ (NSArray*)superClassesForClass:(Class)c{
+    NSMutableArray* classes = [NSMutableArray array]; 
+    Class p = class_getSuperclass(c);
+    while(p){
+        [classes addObject:(id)p];
+        p = class_getSuperclass(p);
+    }
+    return classes;
+}
+
 + (BOOL)isClass:(Class)type kindOfClass:(Class)parentType{
 	if(parentType){
 		if([NSObject isExactKindOf:type parentType:parentType])

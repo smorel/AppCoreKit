@@ -27,6 +27,8 @@
 - (NSArray*)allPropertyDescriptors;
 - (NSArray*)allPropertyNames;
 
++ (NSArray*)superClassesForClass:(Class)c;
+
 + (CKClassPropertyDescriptor*) propertyDescriptorForClass:(Class)c key:(NSString*)key;
 + (CKClassPropertyDescriptor*) propertyDescriptorForObject:(id)object keyPath:(NSString*)keyPath;
 

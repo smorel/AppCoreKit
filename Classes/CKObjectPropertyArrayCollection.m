@@ -20,7 +20,7 @@
 - (id)initWithArrayProperty:(CKObjectProperty*)theProperty{
 	[super init];
 	CKClassPropertyDescriptor* desc = [theProperty descriptor];
-	NSAssert([NSObject isKindOf:desc.type parentType:[NSArray class]],@"invalid property");
+	NSAssert([NSObject isKindOf:desc.type parentType:[NSArray class]] || [[theProperty value]isKindOfClass:[NSArray class]],@"invalid property");
 	self.property = theProperty;
 	return self;
 }

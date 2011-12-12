@@ -101,6 +101,11 @@ typedef enum CKUIViewControllerState{
  */
 @property (nonatomic,copy) CKUIViewControllerBlock viewDidUnloadBlock;
 
+/** 
+ This block is called when the controller is deallocated
+ */
+@property (nonatomic,copy) CKUIViewControllerBlock deallocBlock;
+
 ///-----------------------------------
 /// @name Interface Orientation
 ///-----------------------------------
