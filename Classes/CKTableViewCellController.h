@@ -25,6 +25,8 @@
 @property(nonatomic,retain) CKWeakRef* delegateRef;
 @property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
 @property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIImage* highlightedDisclosureIndicatorImage;//can be customized via stylesheets
+@property(nonatomic,retain) UIImage* highlightedCheckMarkImage;//can be customized via stylesheets
 @property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;

@@ -23,6 +23,9 @@
 
 //#import <objc/runtime.h>
 
+#define DisclosureImageViewTag  8888991
+#define CheckmarkImageViewTag   8888992
+
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
@@ -33,12 +36,16 @@
 @synthesize disclosureIndicatorImage = _disclosureIndicatorImage;
 @synthesize disclosureButton = _disclosureButton;
 @synthesize checkMarkImage = _checkMarkImage;
+@synthesize highlightedDisclosureIndicatorImage = _highlightedDisclosureIndicatorImage;
+@synthesize highlightedCheckMarkImage = _highlightedCheckMarkImage;
 
 - (void)dealloc{
     [self clearBindingsContext];
     
     [_disclosureIndicatorImage release];
     [_disclosureButton release];
+    [_highlightedDisclosureIndicatorImage release];
+    [_highlightedCheckMarkImage release];
     [_delegateRef release];
     [super dealloc];
 }
@@ -73,7 +80,18 @@
     _disclosureIndicatorImage = [img retain];
     if(self.accessoryType == UITableViewCellAccessoryDisclosureIndicator){
         UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+        view.highlightedImage = _highlightedDisclosureIndicatorImage;
+        view.tag = DisclosureImageViewTag;
         self.accessoryView = view;
+    }
+}
+
+- (void)setHighlightedDisclosureIndicatorImage:(UIImage*)image{
+    [_highlightedDisclosureIndicatorImage release];
+    _highlightedDisclosureIndicatorImage = [image retain];
+    if([self.accessoryView tag] == DisclosureImageViewTag){
+        UIImageView* view = (UIImageView*)self.accessoryView;
+        view.highlightedImage = _highlightedDisclosureIndicatorImage;
     }
 }
 
@@ -82,7 +100,18 @@
     _checkMarkImage = [img retain];
     if(self.accessoryType == UITableViewCellAccessoryCheckmark){
         UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+        view.highlightedImage = _highlightedCheckMarkImage;
+        view.tag = CheckmarkImageViewTag;
         self.accessoryView = view;
+    }
+}
+
+- (void)setHighlightedCheckMarkImage:(UIImage*)image{
+    [_highlightedCheckMarkImage release];
+    _highlightedCheckMarkImage = [image retain];
+    if([self.accessoryView tag] == CheckmarkImageViewTag){
+        UIImageView* view = (UIImageView*)self.accessoryView;
+        view.highlightedImage = _highlightedCheckMarkImage;
     }
 }
 
@@ -108,6 +137,8 @@
         case UITableViewCellAccessoryDisclosureIndicator:{
             if(_disclosureIndicatorImage){
                 UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+                view.highlightedImage = _highlightedDisclosureIndicatorImage;
+                view.tag = DisclosureImageViewTag;
                 self.accessoryView = view;
             }
             break;
@@ -120,6 +151,8 @@
         case UITableViewCellAccessoryCheckmark:{
             if(_checkMarkImage){
                 UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+                view.highlightedImage = _highlightedCheckMarkImage;
+                view.tag = CheckmarkImageViewTag;
                 self.accessoryView = view;
             }
             break;
