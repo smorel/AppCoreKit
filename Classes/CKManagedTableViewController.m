@@ -124,6 +124,9 @@
 	[super viewDidLoad];
 	[self setup];
     
+    if(self.tableView.hidden == NO){
+        [self performSelector:@selector(notifiesCellControllersForVisibleRows) withObject:nil afterDelay:0.4];
+    }
     [NSObject beginBindingsContext:_bindingContextForTableView policy:CKBindingsContextPolicyRemovePreviousBindings];
     [self.tableView bind:@"hidden" target:self action:@selector(tableViewVisibilityChanged:)];
     [NSObject endBindingsContext];

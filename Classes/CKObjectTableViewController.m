@@ -32,6 +32,7 @@
 @property (nonatomic, retain, readwrite) UISearchBar* searchBar;
 @property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
+@property (nonatomic, retain) NSString *bindingContextForTableView;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -64,6 +65,7 @@
 @synthesize editableType = _editableType;
 @synthesize searchBlock = _searchBlock;
 @synthesize snapPolicy = _snapPolicy;
+@synthesize bindingContextForTableView = _bindingContextForTableView;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -87,10 +89,15 @@
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyNone;
     _snapPolicy = CKObjectTableViewControllerSnapPolicyNone;
+    
+    self.bindingContextForTableView = [NSString stringWithFormat:@"TableVisibility_<%p>",self];
 }
 
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
+	[NSObject removeAllBindingsForContext:_bindingContextForTableView];
+	[_bindingContextForTableView release];
+	_bindingContextForTableView = nil;
 	[_indexPathToReachAfterRotation release];
 	_indexPathToReachAfterRotation = nil;
 	[editButton release];
@@ -309,9 +316,22 @@
     
     [self tableViewFrameChanged:nil];
     
+    if(self.tableView.hidden == NO){
+        [self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:0.4];
+    }
+    [NSObject beginBindingsContext:_bindingContextForTableView policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [self.tableView bind:@"hidden" target:self action:@selector(tableViewVisibilityChanged:)];
+    [NSObject endBindingsContext];
+
     if(oldViewWillAppearEndBlock){
         oldViewWillAppearEndBlock(self,animated);
         self.viewWillAppearEndBlock = oldViewWillAppearEndBlock;
+    }
+}
+
+- (void)tableViewVisibilityChanged:(NSNumber*)hidden{
+    if(![hidden boolValue]){
+        [self performSelector:@selector(updateViewsVisibility:) withObject:[NSNumber numberWithBool:YES] afterDelay:0.4];
     }
 }
 
