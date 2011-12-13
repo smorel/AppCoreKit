@@ -90,8 +90,13 @@
 	mapView.userInteractionEnabled = NO;
 	
 	[cell.contentView addSubview:mapView];
-	
-	MKCoordinateSpan span;
+}
+
+- (void)setupCell:(UITableViewCell *)cell {
+	MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
+	mapView.delegate = self;
+    
+    MKCoordinateSpan span;
 	span.latitudeDelta = 0.0005;
 	span.longitudeDelta = 0.0005;
 	
@@ -110,11 +115,6 @@
 	region.center = centerCoordinate;
 	region.span = span;
 	[mapView setRegion:region animated:NO];
-}
-
-- (void)setupCell:(UITableViewCell *)cell {
-	MKMapView *mapView = (MKMapView *)[cell.contentView viewWithTag:1000];
-	mapView.delegate = self;
 }
 
 #pragma mark MKMapViewDelegate Protocol
