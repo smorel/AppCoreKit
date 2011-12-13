@@ -85,26 +85,19 @@
 
 -(void)layoutSubviews{
 	[super layoutSubviews];
-	
-	if ([self.views count] == 0) {
-		[self reloadData];
-	}
 
-	if (_needsLayout) {
-		int index = 0;
-		for (int row=0 ; row<_rows ; row++) {
-			for (int column=0 ; column<_columns ; ++column, ++index) {
-				NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
-				UIView *view = (index < [self.views count]) ? [self.views objectAtIndex:index] : nil;
-				if (view && [view isKindOfClass:[UIView class]]) {
-					CGPoint position = [self pointForIndexPath:indexPath];
-					view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
-					view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
-				}
-			}
-		}
-		_needsLayout = NO;
-	}
+    int index = 0;
+    for (int row=0 ; row<_rows ; row++) {
+        for (int column=0 ; column<_columns ; ++column, ++index) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row column:column];
+            UIView *view = (index < [self.views count]) ? [self.views objectAtIndex:index] : nil;
+            if (view && [view isKindOfClass:[UIView class]]) {
+                CGPoint position = [self pointForIndexPath:indexPath];
+                view.frame = CGRectIntegral(CGRectMake(position.x, position.y, self.columnWidth, self.rowHeight));
+                view.autoresizingMask = UIViewAutoresizingFlexibleWidth |  UIViewAutoresizingFlexibleHeight;
+            }
+        }
+    }
 }
 
 // 
@@ -151,6 +144,7 @@
 			[(UIView *)view removeFromSuperview];
 		}
 	}
+    
 	self.views = [NSMutableArray array];
 }
 
@@ -178,13 +172,13 @@
 	}
 	NSAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
 	[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:index];
-		
-	_needsLayout = YES;
+
 	[self setNeedsLayout];
 }
 
 - (void)reloadData {
 	[self clear];
+
 	_rows = [self.dataSource numberOfRowsForGridView:self];
 	_columns = [self.dataSource numberOfColumnsForGridView:self];
 
