@@ -295,40 +295,46 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	return descriptor;
 }
 
-+ (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
+
++ (CKClassPropertyDescriptor*) classDescriptorForNativePropertyNamed:(NSString*)name nativeType:(CKClassPropertyDescriptorType)type readOnly:(BOOL)readOnly{
 	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
 	descriptor.name = name;
-	descriptor.encoding = @"c";
-	descriptor.typeSize = sizeof(char);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeChar;
+    switch(type){
+        case CKClassPropertyDescriptorTypeChar:              { descriptor.encoding =  @"c"; descriptor.typeSize = sizeof(char);break; }
+        case CKClassPropertyDescriptorTypeInt:               { descriptor.encoding =  @"i"; descriptor.typeSize = sizeof(int);break; }
+        case CKClassPropertyDescriptorTypeShort:             { descriptor.encoding =  @"s"; descriptor.typeSize = sizeof(short);break; }
+        case CKClassPropertyDescriptorTypeLong:              { descriptor.encoding =  @"l"; descriptor.typeSize = sizeof(long);break; }
+        case CKClassPropertyDescriptorTypeLongLong:          { descriptor.encoding =  @"q"; descriptor.typeSize = sizeof(long long);break; }
+        case CKClassPropertyDescriptorTypeUnsignedChar:      { descriptor.encoding =  @"C"; descriptor.typeSize = sizeof(unsigned char);break; }
+        case CKClassPropertyDescriptorTypeUnsignedInt:       { descriptor.encoding =  @"I"; descriptor.typeSize = sizeof(unsigned int);break; }
+        case CKClassPropertyDescriptorTypeUnsignedShort:     { descriptor.encoding =  @"S"; descriptor.typeSize = sizeof(unsigned short);break; }
+        case CKClassPropertyDescriptorTypeUnsignedLong:      { descriptor.encoding =  @"L"; descriptor.typeSize = sizeof(unsigned long);break; }
+        case CKClassPropertyDescriptorTypeUnsignedLongLong:  { descriptor.encoding =  @"Q"; descriptor.typeSize = sizeof(unsigned long long);break; }
+        case CKClassPropertyDescriptorTypeFloat:             { descriptor.encoding =  @"f"; descriptor.typeSize = sizeof(float);break; }
+        case CKClassPropertyDescriptorTypeDouble:            { descriptor.encoding =  @"d"; descriptor.typeSize = sizeof(double);break; }
+        case CKClassPropertyDescriptorTypeCppBool:           { descriptor.encoding =  @"B"; descriptor.typeSize = sizeof(bool);break; }
+        case CKClassPropertyDescriptorTypeVoid:              { descriptor.encoding =  @"v"; descriptor.typeSize = sizeof(void);break; }
+        case CKClassPropertyDescriptorTypeCharString:        { descriptor.encoding =  @"*"; descriptor.typeSize = sizeof(char*);break; }
+        case CKClassPropertyDescriptorTypeClass:             { descriptor.encoding =  @"#"; descriptor.typeSize = sizeof(Class);break; }
+        case CKClassPropertyDescriptorTypeSelector:          { descriptor.encoding =  @":"; descriptor.typeSize = sizeof(SEL);break; }
+    }
+    descriptor.propertyType = type;
 	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
 	descriptor.isReadOnly = readOnly;
 	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;	
+    return descriptor;
+}
+
++ (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeChar readOnly:readOnly];
 }
 
 + (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
-	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-	descriptor.name = name;
-	descriptor.encoding = @"f";
-	descriptor.typeSize = sizeof(float);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeFloat;
-	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
-	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;	
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeFloat readOnly:readOnly];
 }
 
 + (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
-	CKClassPropertyDescriptor* descriptor = [[[CKClassPropertyDescriptor alloc]init]autorelease];
-	descriptor.name = name;
-	descriptor.encoding = @"i";
-	descriptor.typeSize = sizeof(NSInteger);
-	descriptor.propertyType = CKClassPropertyDescriptorTypeInt;
-	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
-	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
-	return descriptor;
+    return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeInt readOnly:readOnly];
 }
 
 @end
@@ -397,6 +403,24 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 	}
 	
 	return allProperties;
+}
+
+- (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c{
+	NSString* className = [NSString stringWithUTF8String:class_getName(c)];
+    NSAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
+    NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+    [allProperties addObject:descriptor];
+    
+    NSMutableArray* allPropertiesNames = [_propertyNamesByClassName objectForKey:className];
+    [allPropertiesNames addObject:descriptor.name];
+    
+    if([NSObject isClass:descriptor.type kindOfClass:[UIView class]]){
+        NSMutableArray* allViewsProperties = [_viewPropertiesByClassName objectForKey:className];
+        [allViewsProperties addObject:descriptor];
+    }
+    
+    NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+    [propertiesByName setObject:descriptor forKey:descriptor.name];
 }
 
 

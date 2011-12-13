@@ -84,6 +84,7 @@ typedef enum{
 + (CKClassPropertyDescriptor*) boolDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
 + (CKClassPropertyDescriptor*) floatDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
 + (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly;
++ (CKClassPropertyDescriptor*) classDescriptorForNativePropertyNamed:(NSString*)name nativeType:(CKClassPropertyDescriptorType)type readOnly:(BOOL)readOnly;
 
 -(NSString*)getTypeDescriptor;
 
@@ -105,6 +106,7 @@ typedef enum{
 - (NSArray*)allViewsPropertyForClass:(Class)type;
 - (NSArray*)allPropertieNamesForClass:(Class)type;
 - (CKClassPropertyDescriptor*)property:(NSString*)name forClass:(Class)type;
+- (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c;
 
 @end
 

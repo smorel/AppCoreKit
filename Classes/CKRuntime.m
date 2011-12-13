@@ -9,6 +9,7 @@
 #import "CKRuntime.h"
 #import "CKNSObject+Introspection.h"
 #import <objc/runtime.h>
+#import "CKVersion.h"
 
 static char NSObjectRuntimePropertiesObjectKey;
 
@@ -93,15 +94,9 @@ id __runtime_setValue(id self, SEL _cmd,...){
 }
 
 BOOL __class_addPropertyWithAttributes(Class c,NSString* propertyName,const objc_property_attribute_t *attributes, unsigned int attributeCount){
-    //Adds property
-    BOOL bo = class_addProperty(c, [propertyName UTF8String], attributes, attributeCount);
-    if(!bo)
-        return NO;
-    
     //Adds Property getter
-    bo = class_addMethod(c, sel_registerName([propertyName UTF8String]), &__runtime_getValue, "@@:");
-    if(!bo)
-        return NO;
+    BOOL bo = class_addMethod(c, sel_registerName([propertyName UTF8String]), &__runtime_getValue, "@@:");
+    //ASSERT
     
     //Adds Property setter
     NSString *setterName = [propertyName copy];
@@ -109,26 +104,33 @@ BOOL __class_addPropertyWithAttributes(Class c,NSString* propertyName,const objc
     first = [first uppercaseString];
     setterName = [NSString stringWithFormat:@"set%@%@:", first, [setterName substringFromIndex:1]];
     bo = class_addMethod(c, sel_registerName([setterName UTF8String]), &__runtime_setValue, "v@:@");
-    if(!bo){
-        return NO;
+    //ASSERT
+    
+    //Adds property
+    if([CKOSVersion() floatValue] > 4.2){
+        //Adds a property in the runtime sens
+        BOOL bo = class_addProperty(c, [propertyName UTF8String], attributes, attributeCount);
+        if(bo)
+            return YES;
     }
     
-    return YES;
+    return NO;
 }
 
 BOOL CKClassAddProperty(Class c,NSString* propertyName, Class propertyClass, CKClassPropertyDescriptorAssignementType assignment, BOOL nonatomic){
     NSString* typeStr = [NSString stringWithFormat:@"@\"%@\"",[propertyClass description]];
     objc_property_attribute_t type = { "T", [typeStr UTF8String] };
     
+    BOOL result = NO;
     if(assignment == CKClassPropertyDescriptorAssignementTypeAssign){
         if(nonatomic){
             objc_property_attribute_t atomic = { "N", ""};
             objc_property_attribute_t attrs[] = { type,atomic };
-            return __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
+            result =  __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
         }
         else{
             objc_property_attribute_t attrs[] = { type };
-            return __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
+            result =  __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
         }
     }
     else{
@@ -152,14 +154,23 @@ BOOL CKClassAddProperty(Class c,NSString* propertyName, Class propertyClass, CKC
         if(nonatomic){
             objc_property_attribute_t atomic = { "N", ""};
             objc_property_attribute_t attrs[] = { type, ownership,atomic };
-            return __class_addPropertyWithAttributes(c,propertyName,attrs, 3);
+            result = __class_addPropertyWithAttributes(c,propertyName,attrs, 3);
         }
         else{
             objc_property_attribute_t attrs[] = { type, ownership };
-            return __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
+            result = __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
         }
     }
-    return NO;
+    
+    if(!result){
+        //As the method class_addProperty didnt exists before ios 4.3, adds the property for our introspection system to have a class property descriptor for it !
+        [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c]; //Creates properties ...
+        CKClassPropertyDescriptor* descriptor = [CKClassPropertyDescriptor classDescriptorForPropertyNamed:propertyName withClass:propertyClass assignment:assignment readOnly:NO];;
+        [[CKClassPropertyDescriptorManager defaultManager]addPropertyDescriptor:descriptor forClass:c];
+        return YES;
+    }
+    
+    return result;
 }
 
 
@@ -190,31 +201,50 @@ BOOL CKClassAddNativeProperty(Class c,NSString* propertyName, CKClassPropertyDes
     }
     type.name = "T";
     
+    
+    BOOL result = NO;
     if(nonatomic){
         objc_property_attribute_t atomic = { "N", ""};
         objc_property_attribute_t attrs[] = { type,atomic };
-        return __class_addPropertyWithAttributes(c,propertyName,attrs,2);
+        result = __class_addPropertyWithAttributes(c,propertyName,attrs,2);
     }
     else{
         objc_property_attribute_t attrs[] = { type };
-        return __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
+        result = __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
+    }
+    
+    if(!result){
+        //As the method class_addProperty didnt exists before ios 4.3, adds the property for our introspection system to have a class property descriptor for it !
+        [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c]; //Creates properties ...
+        CKClassPropertyDescriptor* descriptor = [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:propertyName nativeType:nativeType readOnly:NO];
+        [[CKClassPropertyDescriptorManager defaultManager]addPropertyDescriptor:descriptor forClass:c];
+        return YES;
     }
     
     return NO;
 }
 
 
-BOOL CKClassAddStructProperty(Class c,NSString* propertyName, const char* encoding, BOOL nonatomic){
+BOOL CKClassAddStructProperty(Class c,NSString* propertyName, NSString* structName,const char* encoding, NSInteger size, BOOL nonatomic){
     objc_property_attribute_t type = { "T", encoding };
     
+    BOOL result = NO;
     if(nonatomic){
         objc_property_attribute_t atomic = { "N", ""};
         objc_property_attribute_t attrs[] = { type,atomic };
-        return __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
+        result = __class_addPropertyWithAttributes(c,propertyName,attrs, 2);
     }
     else{
         objc_property_attribute_t attrs[] = { type };
-        return __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
+        result = __class_addPropertyWithAttributes(c,propertyName,attrs, 1);
+    }
+    
+    if(!result){
+        //As the method class_addProperty didnt exists before ios 4.3, adds the property for our introspection system to have a class property descriptor for it !
+        [[CKClassPropertyDescriptorManager defaultManager]allPropertiesForClass:c]; //Creates properties ...
+        CKClassPropertyDescriptor* descriptor = [CKClassPropertyDescriptor structDescriptorForPropertyNamed:propertyName structName:structName structEncoding:[NSString stringWithUTF8String:encoding] structSize:size readOnly:NO];
+        [[CKClassPropertyDescriptorManager defaultManager]addPropertyDescriptor:descriptor forClass:c];
+        return YES;
     }
     
     return NO;
