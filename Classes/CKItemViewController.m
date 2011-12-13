@@ -17,6 +17,7 @@
 @property (nonatomic, retain) CKWeakRef *viewRef;
 @property (nonatomic, retain) CKWeakRef *weakParentController;
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, retain) CKWeakRef *targetRef;
 @end
 
 
@@ -42,6 +43,7 @@
 @synthesize weakParentController = _weakParentController;
 @synthesize viewDidAppearCallback = _viewDidAppearCallback;
 @synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
+@synthesize targetRef = _targetRef;
 
 - (void)dealloc {
 	[self clearBindingsContext];
@@ -63,8 +65,8 @@
 	[_weakParentController release];
 	[_viewDidAppearCallback release];
 	[_viewDidDisappearCallback release];
+	[_targetRef release];
 	
-	_target = nil;
 	_action = nil;
 	_accessoryAction = nil;
 	_parentController = nil;
@@ -136,9 +138,22 @@
 	return self.indexPath;
 }
 
+- (void)setTarget:(id)target{
+    if(!_targetRef){
+        self.targetRef = [CKWeakRef weakRefWithObject:target];
+    }
+    else{
+        _targetRef.object = target;
+    }
+}
+
+- (id)target{
+    return [_targetRef object];
+}
+
 - (void)didSelect{
-	if (_target && [_target respondsToSelector:_action]) {
-		[_target performSelector:_action withObject:self];
+	if ([_targetRef object] && [[_targetRef object] respondsToSelector:_action]) {
+		[[_targetRef object] performSelector:_action withObject:self];
 	}
 	if(_selectionCallback != nil){
 		[_selectionCallback execute:self];
@@ -146,8 +161,8 @@
 }
 
 - (void)didSelectAccessoryView{
-	if (_target && [_target respondsToSelector:_accessoryAction]) {
-		[_target performSelector:_accessoryAction withObject:self];
+	if ([_targetRef object] && [[_targetRef object] respondsToSelector:_accessoryAction]) {
+		[[_targetRef object] performSelector:_accessoryAction withObject:self];
 	}
 	if(_accessorySelectionCallback != nil){
 		[_accessorySelectionCallback execute:self];

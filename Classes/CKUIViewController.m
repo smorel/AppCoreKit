@@ -75,8 +75,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     self.styleHasBeenApplied = NO;
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
-    self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
-    self.state = CKUIViewControllerStateNone;
 }
 
 - (id)init {
@@ -369,6 +367,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if([controllerStyle containsObjectForKey:@"contentSizeForViewInPopover"]){
         self.contentSizeForViewInPopover = [controllerStyle cgSizeForKey:@"contentSizeForViewInPopover"];
     }
+    
+    self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
 }
 
 -(void) viewDidUnload{
@@ -377,6 +377,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(_viewDidUnloadBlock){
         _viewDidUnloadBlock(self);
     }
+    
+    [_inlineDebuggerController release];
+    _inlineDebuggerController = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
