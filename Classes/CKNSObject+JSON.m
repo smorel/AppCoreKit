@@ -13,7 +13,7 @@
 
 - (id)JSONRepresentation {
 	if ([self isKindOfClass:[NSString class]]) {
-		return [NSString stringWithFormat:@"\"%@\"", self];
+		return [NSString stringWithFormat:@"\"%@\"", [(NSString*)self stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"]];
 	}
 	
 	if ([self isKindOfClass:[NSArray class]]) {
