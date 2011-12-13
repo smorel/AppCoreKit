@@ -407,6 +407,7 @@ static char NSObjectAppliedStyleObjectKey;
             if(descriptor){
                 BOOL isUIView = (descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == YES);
                 if(!isUIView){
+                    //FIXME : We could propbably optimize here by not creating the CKObjectProperty as it registers weakrefs and other stuff ...
                     [style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
                 }
                 else if(isUIView){
