@@ -31,6 +31,7 @@
 }
 
 + (void)load{
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     BOOL result = CKClassAddProperty([UILabel class],@"highlightedShadowColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
     NSAssert(result, @"Unable to add highlightedShadowColor property");
     
@@ -38,6 +39,7 @@
     NSAssert(result, @"Unable to add highlightedShadowColor property");
     
     CKSwizzleSelector([UILabel class],@selector(setHighlighted:),@selector(ckSetHighlighted:));
+    [pool release];
 }
 
 @end

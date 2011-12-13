@@ -47,9 +47,11 @@
 }
 
 + (void)load{
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     if([CKOSVersion() floatValue] >= 5.0){
         CKSwizzleSelector([UITableViewCell class],@selector(setHighlighted:animated:),@selector(ckSetHighlighted:animated:));
     }
+    [pool release];
 }
 
 @end
