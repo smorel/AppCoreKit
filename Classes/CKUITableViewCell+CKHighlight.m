@@ -9,10 +9,16 @@
 #import "CKUITableViewCell+CKHighlight.h"
 #import "CKRuntime.h"
 #import "CKVersion.h"
+#import <MapKit/MapKit.h>
 
 @implementation UITableViewCell (CKHighlight)
 
 + (void)setView:(UIView*)view highlighted:(BOOL)highlighted animated:(BOOL)animated{
+    //FIXME : find a better way to manage exceptions for this behavior
+    if([view isKindOfClass:[UITableView class]] || [view isKindOfClass:[MKMapView class]]){
+        return;
+    }
+    
     if([view respondsToSelector:@selector(setHighlighted:animated:)]){
         NSMethodSignature *signature = [view methodSignatureForSelector:@selector(setHighlighted:animated:)];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
@@ -41,8 +47,10 @@
 
 - (void)ckSetHighlighted:(BOOL)highlighted animated:(BOOL)animated{
     [self ckSetHighlighted:highlighted animated:animated];
-    for(UIView* subView in self.subviews){
-        [UITableViewCell setView:subView highlighted:highlighted animated:animated];
+    if(self.selectionStyle != UITableViewCellSelectionStyleNone){
+        for(UIView* subView in self.subviews){
+            [UITableViewCell setView:subView highlighted:highlighted animated:animated];
+        }
     }
 }
 
