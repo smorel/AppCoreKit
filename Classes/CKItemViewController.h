@@ -46,8 +46,9 @@ typedef NSUInteger CKItemViewFlags;
 	CKCallback* _resignFirstResponderCallback;
 	CKCallback* _layoutCallback;
 	
-	CKWeakRef* _viewRef;//TODO mettre en weakref ...
+	CKWeakRef* _viewRef;
 	CKWeakRef* _weakParentController;
+	CKWeakRef* _targetRef;
 }
 
 @property (nonatomic, retain) NSString *name;
@@ -55,7 +56,8 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, retain, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) UIViewController* parentController;
 @property (nonatomic, assign) UIView *view;
-@property (nonatomic, retain) id target;
+
+@property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, assign) SEL accessoryAction;
 
