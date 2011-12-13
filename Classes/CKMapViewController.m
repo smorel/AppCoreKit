@@ -257,6 +257,14 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 
+- (void)animatedZoomToRegionEnclosingAnnotations:(NSArray *)annotations {
+    [self zoomToRegionEnclosingAnnotations:annotations animated:YES];
+}
+
+- (void)notAnimatedZoomToRegionEnclosingAnnotations:(NSArray *)annotations {
+    [self zoomToRegionEnclosingAnnotations:annotations animated:NO];
+}
+
 
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated{
 	self.nearestAnnotation = nil;
@@ -278,7 +286,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		if(self.annotationToSelect != nil){
 			[theAnnotations addObject:self.annotationToSelect];
 		}
-		[self zoomToRegionEnclosingAnnotations:theAnnotations animated:animated];
+		
+        if(animated)
+            [self performSelector:@selector(animatedZoomToRegionEnclosingAnnotations:) withObject:theAnnotations afterDelay:0.0];
+        else
+            [self performSelector:@selector(notAnimatedZoomToRegionEnclosingAnnotations:) withObject:theAnnotations afterDelay:0.0];
 	}
 	else{
 		MKCoordinateRegion region;
@@ -371,10 +383,14 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	return (MKAnnotationView*)view;
 }
 
+- (void)selectLastAnnotation {
+    [self.mapView selectAnnotation:[self.annotations lastObject] animated:YES];
+}
+
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
 	// If displaying only one entry, select it
 	if (self.annotations && self.annotations.count == 1) {
-		[self.mapView selectAnnotation:[self.annotations lastObject] animated:YES];
+		[self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
 	}	
 }
 
