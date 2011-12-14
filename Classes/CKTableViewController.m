@@ -50,6 +50,11 @@
 }
 
 - (void)dealloc {
+    if(_tableView){
+        _tableView.delegate = nil;
+        _tableView.dataSource = nil;
+    }
+    
 	self.selectedIndexPath = nil;
 	self.backgroundView = nil;
 	self.tableView = nil;
@@ -129,6 +134,10 @@
 }
 
 - (void)viewDidUnload {
+    if(_tableView){
+        _tableView.delegate = nil;
+        _tableView.dataSource = nil;
+    }
 	[_tableView release];
     _tableView = nil;
 	[_tableViewContainer release];
