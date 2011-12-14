@@ -17,6 +17,13 @@
 static NSMutableArray* CKBindingsContextStack = nil;
 static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 
+typedef enum CKDebugCheckState{
+    CKDebugCheckState_none,
+    CKDebugCheckState_NO,
+    CKDebugCheckState_YES
+}CKDebugCheckState;
+
+static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugCheckState_none;
 
 @implementation NSObject (CKBindings)
 
@@ -97,7 +104,17 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 }
 
 + (void)validateCurrentBindingsContext{
-    //TODO : adds a flag in plist that allow to assert if the currentcontext == CKBindingsNoContext
+#ifdef DEBUG
+    if(CKDebugAssertForBindingsOutOfContextState == CKDebugCheckState_none){
+        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugAssertForBindingsOutOfContext"]boolValue];
+        CKDebugAssertForBindingsOutOfContextState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
+    }
+    
+    if(CKDebugAssertForBindingsOutOfContextState != CKDebugCheckState_YES)
+        return;
+    
+    NSAssert([NSObject currentBindingContext] != CKBindingsNoContext,@"You're creating a binding without having opened a context !");
+#endif
 }
 
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath2{
