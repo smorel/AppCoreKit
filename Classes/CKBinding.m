@@ -11,6 +11,7 @@
 
 @implementation CKBinding
 @synthesize context = _context;
+@synthesize contextOptions = _contextOptions;
 
 - (void)bind{
     NSAssert(NO,@"Should be implemented in inherited class");
@@ -21,7 +22,8 @@
 }
 
 - (void)reset{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    _context = nil;
+    _contextOptions = 0;
 }
 
 

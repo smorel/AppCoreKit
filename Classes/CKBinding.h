@@ -9,14 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "CKNSObject+Bindings.h"
 
 /** TODO
  */
 @interface CKBinding : NSObject{
     id _context;
+    CKBindingsContextOptions _contextOptions;
 }
 
 @property(nonatomic,assign) id context;
+@property(nonatomic,assign) CKBindingsContextOptions contextOptions;
 
 - (void)bind;
 - (void)unbind;

@@ -47,6 +47,7 @@
 }
 
 - (void)reset{
+    [super reset];
 	self.instance1Ref.object = nil;
 	self.keyPath1 = nil;
 	self.instance2Ref.object = nil;
@@ -104,6 +105,10 @@
 	}
 }
 
+- (void)executeWithValue:(id)value{
+	[NSValueTransformer transform:value inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2] ];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change
@@ -113,7 +118,13 @@
 	if ([newValue isKindOfClass:[NSNull class]]) {
 		newValue = nil;
 	}
-	[NSValueTransformer transform:newValue inProperty:[CKObjectProperty propertyWithObject:instance2Ref.object keyPath:keyPath2] ];
+    
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(executeWithValue:) withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(executeWithValue:) onThread:[NSThread currentThread] withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 @end

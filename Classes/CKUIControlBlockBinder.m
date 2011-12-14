@@ -50,6 +50,7 @@
 }
 
 - (void)reset{
+    [super reset];
 	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 	self.block = nil;
 	self.controlRef.object = nil;
@@ -77,8 +78,7 @@
     self.controlRef.object = control;
 }
 
-//Update data in model
--(void)controlChange{
+- (void)execute{
 	if(block){
 		block();
 	}
@@ -86,8 +86,18 @@
 		[targetRef.object performSelector:self.selector];
 	}
 	else{
-		NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
+		//NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
 	}
+}
+
+//Update data in model
+-(void)controlChange{
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(execute) withObject:nil waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(execute) onThread:[NSThread currentThread] withObject:nil waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 #pragma mark Public API

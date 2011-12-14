@@ -48,6 +48,7 @@
 }
 
 - (void)reset{
+    [super reset];
 	self.instanceRef.object = nil;
 	self.notificationName = nil;
 	self.block = nil;
@@ -75,7 +76,8 @@
 	self.instanceRef.object = instance;
 }
 
-- (void)onNotification:(NSNotification*)notification{
+
+- (void)executeWithNotification:(NSNotification*)notification{
 	if(block){
 		block(notification);
 	}
@@ -83,8 +85,17 @@
 		[targetRef.object performSelector:self.selector withObject:notification];
 	}
 	else{
-		NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
+		//NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
 	}
+}
+
+- (void)onNotification:(NSNotification*)notification{
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(executeWithNotification:) withObject:notification waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(executeWithNotification:) onThread:[NSThread currentThread] withObject:notification waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 - (void) bind{
