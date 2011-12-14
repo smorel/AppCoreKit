@@ -46,6 +46,7 @@
 }
 
 - (void)reset{
+    [super reset];
 	self.instanceRef.object = nil;
 	self.keyPath = nil;
 	self.block = nil;
@@ -77,22 +78,31 @@
 	return [super retain];
 }
 
+- (void)executeWithValue:(id)value{
+    if(block){
+		block(value);
+	}
+	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
+		[targetRef.object performSelector:self.selector withObject:value];
+	}
+	else{
+		//NSAssert(NO,@"CKDataBlockBinder no action plugged");
+	}
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context
 {
 	id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-	if(block){
-		block(newValue);
-	}
-	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
-		[targetRef.object performSelector:self.selector withObject:newValue];
-	}
-	else{
-		NSAssert(NO,@"CKDataBlockBinder no action plugged");
-	}
-	
+    
+    if(self.contextOptions & CKBindingsContextPerformOnMainThread){
+        [self performSelectorOnMainThread:@selector(executeWithValue:) withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
+    else {
+        [self performSelector:@selector(executeWithValue:) onThread:[NSThread currentThread] withObject:newValue waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
+    }
 }
 
 

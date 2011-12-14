@@ -12,11 +12,16 @@
 
 /** TODO
  */
-typedef enum {
+typedef enum CKBindingsContextPolicy{
 	CKBindingsContextPolicyAdd,
 	CKBindingsContextPolicyRemovePreviousBindings
 } CKBindingsContextPolicy;
 
+typedef enum CKBindingsContextOptions{
+	CKBindingsContextPerformOnMainThread           = 1 << 0,
+	CKBindingsContextPerformOnCurrentThread        = 1 << 2,
+    CKBindingsContextWaitUntilDone                 = 1 << 4
+} CKBindingsContextOptions;
 
 
 /** TODO
@@ -25,10 +30,16 @@ typedef enum {
 
 + (NSString *)allBindingsDescription;
 
++ (void)validateCurrentBindingsContext;
+
 // Binding Context Management
 
 + (void)beginBindingsContext:(id)context;
 + (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy;
+
++ (void)beginBindingsContext:(id)context options:(CKBindingsContextOptions)options;
++ (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy options:(CKBindingsContextOptions)options;
+
 + (void)endBindingsContext;
 + (void)removeAllBindingsForContext:(id)context;
 
@@ -38,6 +49,9 @@ typedef enum {
 
 - (void)beginBindingsContextByKeepingPreviousBindings;
 - (void)beginBindingsContextByRemovingPreviousBindings;
+- (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options;
+- (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options;
+
 - (void)endBindingsContext;
 - (void)clearBindingsContext;
 
