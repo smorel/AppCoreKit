@@ -11,7 +11,7 @@
 #import "CKTableViewController.h"
 
 @class CKTableViewCellController;
-
+@class CKManagedTableViewController;
 
 /** TODO
  */
@@ -23,6 +23,8 @@
 	UIView *_footerView;
 	BOOL _canMoveRowsOut;
 	BOOL _canMoveRowsIn;
+	BOOL _collapsed;
+	CKManagedTableViewController* _parentController;
 }
 
 @property (nonatomic, retain, readonly) NSArray *cellControllers;
@@ -32,10 +34,15 @@
 @property (nonatomic, retain, readwrite) UIView *footerView;
 @property (nonatomic, assign) BOOL canMoveRowsOut;
 @property (nonatomic, assign) BOOL canMoveRowsIn;
+@property (nonatomic, assign, readonly) BOOL collapsed;
+@property (nonatomic, assign, readonly) CKManagedTableViewController* parentController;
 
 - (id)initWithCellControllers:(NSArray *)cellControllers;
+- (id)initWithCellControllers:(NSArray *)cellControllers collapsed:(BOOL)collapsed;
 - (void)insertCellController:(CKTableViewCellController *)cellController atIndex:(NSUInteger)index;
 - (void)removeCellControllerAtIndex:(NSUInteger)index;
+
+- (void)setCollapsed:(BOOL)collapsed withRowAnimation:(UITableViewRowAnimation)animation;
 
 @end
 
@@ -78,6 +85,7 @@ typedef enum {
 - (void)insertCellController:(CKTableViewCellController*)cellController atIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
 - (void)removeCellControllerAtIndex:(NSUInteger)index inSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
 - (CKTableSection*)sectionAtIndex:(NSUInteger)index;
+- (NSInteger)indexOfSection:(CKTableSection*)section;
 
 @end
 

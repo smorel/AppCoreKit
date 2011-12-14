@@ -19,6 +19,12 @@
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @end
 
+
+@interface CKTableSection ()
+@property (nonatomic, assign, readwrite) CKManagedTableViewController* parentController;
+@property (nonatomic, assign, readwrite) BOOL collapsed;
+@end
+
 @implementation CKTableSection
 
 @synthesize cellControllers = _cellControllers;
@@ -28,20 +34,50 @@
 @synthesize footerView = _footerView;
 @synthesize canMoveRowsOut = _canMoveRowsOut;
 @synthesize canMoveRowsIn = _canMoveRowsIn;
+@synthesize collapsed = _collapsed;
+@synthesize parentController = _parentController;
 
 - (id)init {
 	if (self = [super init]) {
 		_cellControllers = [[NSMutableArray array] retain];
 		_canMoveRowsIn = YES;
 		_canMoveRowsOut = YES;
+        _collapsed = NO;
 		
 	}
 	return self;
 }
 
+- (void)setCollapsed:(BOOL)bo withRowAnimation:(UITableViewRowAnimation)animation{
+    if(_collapsed != bo){
+        self.collapsed = bo;
+        if(_parentController.state == CKUIViewControllerStateDidAppear){
+            NSInteger section = [_parentController indexOfSection:self];
+            NSMutableArray* indexPaths = [NSMutableArray array];
+            for(int i =0;i<[self.cellControllers count];++i){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+                [indexPaths addObject:indexPath];
+            }
+            if(_collapsed){
+                [_parentController.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+            }
+            else{
+                [_parentController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+            }
+        }
+    }
+}
+
 - (id)initWithCellControllers:(NSArray *)theCellControllers {
 	[self init];
 	[_cellControllers addObjectsFromArray:theCellControllers];
+	return self;
+}
+
+- (id)initWithCellControllers:(NSArray *)theCellControllers collapsed:(BOOL)bo{
+    [self init];
+	[_cellControllers addObjectsFromArray:theCellControllers];
+    _collapsed = bo;
 	return self;
 }
 
@@ -54,6 +90,7 @@
 }
 
 - (void)dealloc {
+    [self clearBindingsContext];
 	[_cellControllers release];
 	self.headerTitle = nil;
 	self.footerTitle = nil;
@@ -290,8 +327,9 @@
 	return [self.sections count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [[[self.sections objectAtIndex:section] cellControllers] count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)index {
+    CKTableSection* section = [self.sections objectAtIndex:index];
+	return section.collapsed ? 0 : [[section cellControllers] count];
 }
 
 - (NSMutableDictionary*)params{
@@ -494,6 +532,7 @@
 
 - (void)addSection:(CKTableSection *)section {
 	// Add *self* as a weak reference for all cell controllers
+    section.parentController = self;
 	[section.cellControllers makeObjectsPerformSelector:@selector(setParentController:) withObject:self];
 	[self.sections addObject:section];
 
@@ -598,5 +637,8 @@
     }
 }
 
+- (NSInteger)indexOfSection:(CKTableSection*)section{
+    return [_sections indexOfObjectIdenticalTo:section];
+}
 
 @end
