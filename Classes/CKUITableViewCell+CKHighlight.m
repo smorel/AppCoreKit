@@ -13,35 +13,19 @@
 
 @implementation UITableViewCell (CKHighlight)
 
-+ (void)setView:(UIView*)view highlighted:(BOOL)highlighted animated:(BOOL)animated{
++ (void)setView:(UIView*)theView highlighted:(BOOL)highlighted animated:(BOOL)animated{
     //FIXME : find a better way to manage exceptions for this behavior
-    if([view isKindOfClass:[UITableView class]] || [view isKindOfClass:[MKMapView class]]){
-        return;
+    BOOL isTable = [theView isKindOfClass:[UITableView class]];
+    BOOL isMap = [theView isKindOfClass:[MKMapView class]];
+    BOOL isButton = [theView isKindOfClass:[UIButton class]];
+    if( !(isTable || isMap || isButton) ){
+        for(UIView* subView in theView.subviews){
+            [UITableViewCell setView:subView highlighted:highlighted animated:animated];
+        }
     }
-    
-    if([view respondsToSelector:@selector(setHighlighted:animated:)]){
-        NSMethodSignature *signature = [view methodSignatureForSelector:@selector(setHighlighted:animated:)];
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        [invocation setSelector:@selector(setHighlighted:animated:)];
-        [invocation setTarget:view];
-        [invocation setArgument:&highlighted
-                        atIndex:2];
-        [invocation setArgument:&animated
-                        atIndex:2];
-        [invocation invoke];
-    }
-    else  if([view respondsToSelector:@selector(setHighlighted:)]){
-        NSMethodSignature *signature = [view  methodSignatureForSelector:@selector(setHighlighted:)];
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        [invocation setSelector:@selector(setHighlighted:)];
-        [invocation setTarget:view];
-        [invocation setArgument:&highlighted
-                        atIndex:2];
-        [invocation invoke];
-    }
-    
-    for(UIView* subView in view.subviews){
-        [UITableViewCell setView:subView highlighted:highlighted animated:animated];
+    else if( isButton ){
+        UIButton* bu = (UIButton*)theView;
+        [bu setHighlighted:NO];
     }
 }
 
@@ -56,9 +40,9 @@
 
 + (void)load{
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    if([CKOSVersion() floatValue] >= 5.0){
+    //if([CKOSVersion() floatValue] >= 5.0){
         CKSwizzleSelector([UITableViewCell class],@selector(setHighlighted:animated:),@selector(ckSetHighlighted:animated:));
-    }
+    //}
     [pool release];
 }
 
