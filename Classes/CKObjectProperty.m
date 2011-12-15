@@ -157,7 +157,7 @@
 		[self.subObject.object setValue:value forKey:self.subKeyPath];
 	}
 	else if(self.subKeyPath == nil){
-		[self.subObject.object copy:value];
+		[self.subObject.object copyPropertiesFromObject:value];
 	}
 }
 
