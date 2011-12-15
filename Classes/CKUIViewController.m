@@ -138,14 +138,35 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 #pragma mark - Style Management
 
+
+- (void)observerNavigationChanges:(BOOL)bo{
+    if(bo){
+        [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
+        [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
+        [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
+        [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
+        [NSObject endBindingsContext];
+    }
+    else{
+        [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    }
+}
+
 - (void)applyStyleForLeftBarButtonItem{
+    [self observerNavigationChanges:NO];
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
-        [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = nil;
+        [item applyStyle:barItemStyle];
+        self.navigationItem.leftBarButtonItem = item;
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
@@ -154,16 +175,23 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
             [self.navigationItem setLeftBarButtonItem:bu animated:YES];
         }
     }
+    [self observerNavigationChanges:YES];
 }
 
 - (void)applyStyleForRightBarButtonItem{
+    [self observerNavigationChanges:NO];
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
-        [self.navigationItem.rightBarButtonItem applyStyle:barItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
+        [item applyStyle:barItemStyle];
+        self.navigationItem.rightBarButtonItem = item;
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
@@ -172,16 +200,24 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
             [self.navigationItem setRightBarButtonItem:bu animated:YES];
         }
     }
+    [self observerNavigationChanges:YES];
 }
 
 - (void)applyStyleForBackBarButtonItem{
+    [self observerNavigationChanges:NO];
+    
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
-        [self.navigationItem.backBarButtonItem applyStyle:barItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.backBarButtonItem;
+        self.navigationItem.backBarButtonItem = nil;
+        [item applyStyle:barItemStyle];
+        self.navigationItem.backBarButtonItem = item;
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
@@ -192,16 +228,26 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
             }
         }
     }
+    
+    [self observerNavigationChanges:YES];
 }
 
 - (void)applyStyleForTitleView{
+    [self observerNavigationChanges:NO];
+    
     if(self.navigationItem.titleView){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
         NSMutableDictionary* navBarStyle = [navControllerStyle styleForObject:self.navigationController  propertyName:@"navigationBar"];
         
-        [self.navigationItem.titleView applyStyle:navBarStyle propertyName:@"titleView"];
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIView* view = self.navigationItem.titleView;
+        self.navigationItem.titleView = nil;
+        [view applyStyle:navBarStyle propertyName:@"titleView"];
+        self.navigationItem.titleView = view;
     }
+    
+    [self observerNavigationChanges:YES];
 }
 
 - (void)leftItemChanged:(UIBarButtonItem*)item{
@@ -230,6 +276,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForNavigation{
+    [self observerNavigationChanges:NO];
+    
     //disable animations in case frames are set in stylesheets and currently in animation...
     [CATransaction begin];
     [CATransaction 
@@ -254,19 +302,35 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(self.navigationItem.leftBarButtonItem 
        && self.navigationItem.leftBarButtonItem != self.navigationItem.backBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.leftBarButtonItem propertyName:@"leftBarButtonItem"];
-        [self.navigationItem.leftBarButtonItem applyStyle:barItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = nil;
+        [item applyStyle:barItemStyle];
+        self.navigationItem.leftBarButtonItem = item;
     }
     
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
-        [self.navigationItem.backBarButtonItem applyStyle:backBarItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.backBarButtonItem;
+        self.navigationItem.backBarButtonItem = nil;
+        [item applyStyle:backBarItemStyle];
+        self.navigationItem.backBarButtonItem = item;
     }
     else if(!self.navigationItem.leftBarButtonItem && [self.navigationController.viewControllers lastObject] == topStackController){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         if(backBarItemStyle && ![backBarItemStyle isEmpty] && [self.navigationController.viewControllers count] > 1){
             UIViewController* previousController = [self.navigationController.viewControllers objectAtIndex:[self.navigationController.viewControllers count] - 2];
             self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:previousController.title style:UIBarButtonItemStyleBordered target:self action:@selector(popViewController)]autorelease];
-            [self.navigationItem.backBarButtonItem applyStyle:backBarItemStyle];
+            
+            //This weird steps are needed to avoid super views layout to be called when setting the styles !
+            UIBarButtonItem* item = self.navigationItem.backBarButtonItem;
+            self.navigationItem.backBarButtonItem = nil;
+            self.navigationItem.leftBarButtonItem = nil;
+            [item applyStyle:backBarItemStyle];
+            self.navigationItem.backBarButtonItem = item;
 
             self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
         }
@@ -274,14 +338,26 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* barItemStyle = [navBarStyle styleForObject:self.navigationItem.rightBarButtonItem propertyName:@"rightBarButtonItem"];
-        [self.navigationItem.rightBarButtonItem applyStyle:barItemStyle];
+        
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIBarButtonItem* item = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = nil;
+        [item applyStyle:barItemStyle];
+        self.navigationItem.rightBarButtonItem = item;
     }
     
     if(self.navigationItem.titleView){
-        [self.navigationItem.titleView applyStyle:navBarStyle propertyName:@"titleView"];
+        //This weird steps are needed to avoid super views layout to be called when setting the styles !
+        UIView* view = self.navigationItem.titleView;
+        self.navigationItem.titleView = nil;
+        [view applyStyle:navBarStyle propertyName:@"titleView"];
+        self.navigationItem.titleView = view;
     }
     
     [CATransaction commit];
+    
+    
+    [self observerNavigationChanges:YES];
 }
 
 #pragma mark - View lifecycle
@@ -312,12 +388,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 		[self.navigationItem setRightBarButtonItem:right animated:animated];
     }
     
-    [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
-    [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
-    [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
-    [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
-    [NSObject endBindingsContext];
+    [self observerNavigationChanges:YES];
     
     [super viewWillAppear:animated];
     
