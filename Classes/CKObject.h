@@ -47,7 +47,7 @@
  */
 @interface NSObject (CKObject)
 
-- (void)copy : (id)other;
+- (void)copyPropertiesFormObject : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
 @end
