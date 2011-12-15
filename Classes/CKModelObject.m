@@ -239,7 +239,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 - (id) copyWithZone:(NSZone *)zone {
 	CKModelObject* copied = [[[self class] alloc] init];
-	[copied copy:self];
+    [copied copyPropertiesFromObject:self];
 	return copied;
 }
 
@@ -416,7 +416,7 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 
 @implementation NSObject (CKModelObject)
 
-- (void)copyPropertiesFormObject : (id)other{
+- (void)copyPropertiesFromObject : (id)other{
 	NSArray* allProperties = [other allPropertyDescriptors ];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
