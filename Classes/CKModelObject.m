@@ -410,11 +410,13 @@ static NSString* CKModelObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNa
 	}
 }
 
+
+
 @end
 
 @implementation NSObject (CKModelObject)
 
-- (void)copy : (id)other{
+- (void)copyPropertiesFormObject : (id)other{
 	NSArray* allProperties = [other allPropertyDescriptors ];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){

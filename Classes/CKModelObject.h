@@ -57,7 +57,7 @@ typedef void(^CKModelObjectBlock)(CKClassPropertyDescriptor*,id);
  */
 @interface NSObject (CKModelObject)
 
-- (void)copy : (id)other;
+- (void)copyPropertiesFormObject : (id)other;
 - (BOOL)isEqualToObject:(id)other;
 
 
