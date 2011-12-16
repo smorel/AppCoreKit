@@ -143,8 +143,9 @@
 		case CKClassPropertyDescriptorTypeUnsignedLongLong:
 		case CKClassPropertyDescriptorTypeFloat:
 		case CKClassPropertyDescriptorTypeDouble:{
-			cell.accessoryType = UITableViewCellAccessoryNone;
             cell.accessoryView = nil;
+			cell.accessoryType = UITableViewCellAccessoryNone;
+            
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -175,33 +176,33 @@
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
             //Creates the switch
-             UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-             self.toggleSwitch = theSwitch;
-             
-             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
-             ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
-                 [cell.contentView addSubview:self.toggleSwitch];
-             }
-             else{
-                 cell.accessoryView = self.toggleSwitch;
-             }
-             _toggleSwitch.tag = SwitchTag;
-
-            
             _textField.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryNone;
                 self.fixedSize = YES;
-                cell.accessoryView.hidden = YES;
-                cell.accessoryView.userInteractionEnabled = NO;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
-				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+                cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+				[model.object bind:model.keyPath withBlock:^(id value) {
+                    cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+                }];
 				[NSObject endBindingsContext];
 			}
 			else{
+                UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+                self.toggleSwitch = theSwitch;
+                
+                if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
+                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+                    [cell.contentView addSubview:self.toggleSwitch];
+                }
+                else{
+                    cell.accessoryView = self.toggleSwitch;
+                }
+                _toggleSwitch.tag = SwitchTag;
+
+                
                 self.fixedSize = YES;
-                cell.accessoryView.hidden = NO;
-                cell.accessoryView.userInteractionEnabled = YES;
-				
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				BOOL bo = [[model value]boolValue];
 				[self.toggleSwitch setOn:bo animated:NO];
@@ -230,16 +231,22 @@
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            CGFloat realWidth = cell.contentView.frame.size.width;
-            CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
-            CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
-			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight + 10));
             
-            //align textLabel on y
-            CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
-            CGFloat txtLabelHeight = cell.textLabel.height;
-            CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
-            cell.textLabel.y = txtLabelY;
+            CKObjectProperty* model = self.value;
+			if([model isReadOnly] || self.readOnly){
+            }
+            else{
+                CGFloat realWidth = cell.contentView.frame.size.width;
+                CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
+                CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
+                textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight + 10));
+                
+                //align textLabel on y
+                CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
+                CGFloat txtLabelHeight = cell.textLabel.height;
+                CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
+                cell.textLabel.y = txtLabelY;
+            }
 		}
         else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -284,7 +291,11 @@
     CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
     CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
     CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
-    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomSwitch,MAX(bottomTextLabel,bottomDetailTextLabel))) + staticController.contentInsets.bottom;
+    
+    CKObjectProperty* model = staticController.value;
+    BOOL readonly = ([model isReadOnly] || staticController.readOnly);
+    
+    CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
     return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
 }
 

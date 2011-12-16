@@ -840,18 +840,13 @@
             CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
             CGFloat width = cell.contentView.frame.size.width - self.contentInsets.right - x;
             if(width > 0 ){
-                if(cell.detailTextLabel.text != nil && 
-                   [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-                   [cell.detailTextLabel.text length] > 0 &&
-                   cell.detailTextLabel.numberOfLines != 1){
-                    /*CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];*/
-                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-                }
-                else{
-                    return CGRectMake(x,self.contentInsets.top, width, MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-                }
+                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
+                                                     constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
+                                                         lineBreakMode:cell.detailTextLabel.lineBreakMode];
+                
+                CGFloat y = MAX(textFrame.origin.y + (textFrame.size.height / 2.0) - (size.height / 2),self.contentInsets.top);
+                
+                return CGRectMake(x,y, width, size.height);
             }
             else{
                 return CGRectMake(0,0,0,0);
@@ -942,6 +937,8 @@
 		}
 	}
     else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
 		if(cell.detailTextLabel != nil){
 			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
 		}
