@@ -38,17 +38,6 @@
             },
             "detailTextLabel" : {
                 "@inherits" : [ "$CKInlineDebugger_subtitleLabel" ]
-            },
-            "imageView" : {
-                "layer" : {
-                    "shadowColor" : "blackColor",
-                    "shadowOpacity" : "0.6",
-                    "shadowOffset" : "0 2",
-                    "shadowRadius" : "2",
-                    "cornerRadius" : "3",
-                    "borderWidth" : "0.5",
-                    "borderColor" : "0.7 0.7 0.7 1"
-                }
             }
         }
     },

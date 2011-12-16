@@ -15,6 +15,7 @@
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
 #import "CKCascadingTree.h"
+#import "CKUIColor+ValueTransformer.h"
 
 @implementation UIView (CKInlineDebugger)
 
@@ -105,7 +106,14 @@
         controller.indentationLevel = indent;
         
         controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
-        controller.tableViewCell.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        
+        controller.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
+        controller.tableViewCell.imageView.layer.shadowOpacity = 0.6;
+        controller.tableViewCell.imageView.layer.shadowOffset = CGSizeMake(0,2);
+        controller.tableViewCell.imageView.layer.shadowRadius = 2;
+        controller.tableViewCell.imageView.layer.cornerRadius = 3;
+        controller.tableViewCell.imageView.layer.borderWidth = 0.5;
+        controller.tableViewCell.imageView.layer.borderColor = [[UIColor convertFromNSString:@"0.7 0.7 0.7 1"]CGColor];
         
         controller.tableViewCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
                 
