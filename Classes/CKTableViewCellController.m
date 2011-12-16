@@ -235,6 +235,8 @@
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 @synthesize contentInsets = _contentInsets;
 
+@synthesize indentationLevel = _indentationLevel;
+
 - (id)init {
 	self = [super init];
 	if (self != nil) {
@@ -255,6 +257,7 @@
         self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         
         self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
+        _indentationLevel = 0;
 	}
 	return self;
 }

@@ -523,6 +523,11 @@
 	return (UITableViewCell*)view;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CKTableViewCellController* controller = [self controllerAtIndexPath:indexPath];
+    return controller.indentationLevel;
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
 	[self rotateSubViewsForCell:cell];
 	[self updateNumberOfPages];

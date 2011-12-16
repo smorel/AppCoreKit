@@ -17,13 +17,30 @@ NSString* cleanString(NSString* str){
 
 @implementation UIView (CKDebug)
 
-- (void)printViewHierarchyWithIndentString:(NSString *)indentString {
++ (void)appendViewHierarchyForView:(UIView*)view indentString:(NSString *)indentString inString:(NSMutableString*)str{
 	if (indentString == nil) indentString = @"";
-	NSString *viewDescription = NSStringFromClass([self class]);
-	printf("%s+- %s (tag:%d)\n", [indentString UTF8String], [viewDescription UTF8String], self.tag);
+	NSString *viewDescription = NSStringFromClass([view class]);
+    
+    if(view.backgroundColor){
+        NSString* systemColor = [view valueForKey:@"backgroundColorSystemColorName"];
+        if(!systemColor){
+            const CGFloat *comps = CGColorGetComponents([view.backgroundColor CGColor]);
+            const CGFloat alpha = CGColorGetAlpha([view.backgroundColor CGColor]);
+            [str appendFormat:@"%@+- %@(tag:%d,bck:%g %g %g %g)\n",  
+                indentString, viewDescription, view.tag, comps[0],comps[1],comps[2],alpha];
+        }
+        else{
+            [str appendFormat:@"%@+- %@(tag:%d,bck:%@)\n",  
+                indentString, viewDescription, view.tag, systemColor];
+        }
+    }
+    else{
+        [str appendFormat:@"%@+- %@(tag:%d)\n",  
+                indentString, viewDescription, view.tag];
+    }
 
-	if (self.subviews) {
-		NSArray *siblings = self.superview.subviews;
+	if (view.subviews) {
+		NSArray *siblings = view.superview.subviews;
 		if (([siblings count] > 1) && ([siblings indexOfObject:self] < ([siblings count] - 1))) {
 			indentString = [indentString stringByAppendingString:@"| "];
 		}
@@ -32,13 +49,19 @@ NSString* cleanString(NSString* str){
 		}
 	}
 
-	for (UIView *subview in self.subviews) {
-		[subview printViewHierarchyWithIndentString:indentString];
+	for (UIView *subview in view.subviews) {
+		[UIView appendViewHierarchyForView:subview indentString:indentString inString:str];
 	}
 }
 
 - (void)printViewHierarchy {
-	[self printViewHierarchyWithIndentString:nil];
+    printf("%s",[[self viewHierarchy]UTF8String]);
+}
+
+- (NSString*)viewHierarchy{
+    NSMutableString* str = [NSMutableString string];
+    [UIView appendViewHierarchyForView:self indentString:nil inString:str];
+    return str;
 }
 
 @end

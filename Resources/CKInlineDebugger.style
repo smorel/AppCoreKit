@@ -18,5 +18,14 @@
             "UINavigationController" : {
             }
         }
+    },
+    
+    "CKUIViewController[name=CKInlineDebuggerForSubViews]"  : {
+        "@inherits" : [ "CKUIViewController[name=CKInlineDebugger]" ],
+        
+        "CKTableViewCellController" : {
+            "cellType" : "CKTableViewCellStyleSubtitle"
+        }
     }
+    
 }

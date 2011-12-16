@@ -89,6 +89,7 @@ typedef enum CKTableViewCellStyle {
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
 @property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, retain) NSString* key;
+@property (nonatomic,assign) NSInteger indentationLevel;
 
 //for propertygrid and value3 only ...
 @property (nonatomic, assign) CGFloat componentsRatio;

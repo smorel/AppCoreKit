@@ -25,6 +25,7 @@ extern NSString* cleanString(NSString* str);
 @interface UIView (CKDebug)
 
 - (void)printViewHierarchy;
+- (NSString*)viewHierarchy;
 
 @end
 
