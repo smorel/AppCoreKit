@@ -93,7 +93,7 @@
     
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid){
-        _textField.autoresizingMask = UIViewAutoresizingNone;
+        _textField.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     }
     
     UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
@@ -143,7 +143,8 @@
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
 
-            _toggleSwitch.hidden = YES;
+            cell.accessoryView.hidden = YES;
+            cell.accessoryView.userInteractionEnabled = NO;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -176,14 +177,16 @@
             _textField.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
-                _toggleSwitch.hidden = YES;
+                cell.accessoryView.hidden = YES;
+                cell.accessoryView.userInteractionEnabled = NO;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
 				[NSObject endBindingsContext];
 			}
 			else{
                 self.fixedSize = YES;
-                _toggleSwitch.hidden = NO;
+                cell.accessoryView.hidden = NO;
+                cell.accessoryView.userInteractionEnabled = YES;
 				
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
 				BOOL bo = [[model value]boolValue];
@@ -213,10 +216,10 @@
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            CGFloat realWidth = cell.contentView.frame.size.width;
+            CGFloat realWidth = cell.contentView.frame.size.width + cell.accessoryView.width;
             CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
             CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
-			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight));
+			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight + 10));
             
             //align textLabel on y
             CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
