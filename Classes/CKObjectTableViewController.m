@@ -847,7 +847,7 @@
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	/*[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	if ([searchBar.text isEqualToString:@""] == YES){
 		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
 			[_delegate objectTableViewController:self didSearch:@""];
@@ -857,7 +857,7 @@
             _searchBlock(searchBar.text);
         }
 		[self didSearch:searchBar.text];
-	}
+	}*/
 }
 
 - (void)delayedSearchWithText:(NSString*)str{

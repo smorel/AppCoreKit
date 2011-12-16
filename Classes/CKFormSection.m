@@ -27,6 +27,10 @@
 @implementation CKFormSection
 @synthesize cellDescriptors = _cellDescriptors;
 
+- (NSInteger)count{
+    return [_cellDescriptors count];
+}
+
 - (id)initWithCellDescriptors:(NSArray*)theCellDescriptors headerTitle:(NSString*)title{
 	[super init];
 	self.headerTitle = title;

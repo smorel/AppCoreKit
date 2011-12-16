@@ -96,6 +96,7 @@
         _textField.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     }
     
+    /*
     UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
     self.toggleSwitch = theSwitch;
     
@@ -109,6 +110,7 @@
     }
 
     _toggleSwitch.tag = SwitchTag;
+    */
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -118,7 +120,7 @@
     //In Case view is reused
     self.textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	_textField.delegate = self;
-    self.toggleSwitch = (UISwitch*)[cell viewWithTag:SwitchTag];
+    //self.toggleSwitch = (UISwitch*)[cell viewWithTag:SwitchTag];
 	
 	CKObjectProperty* model = self.value;
 	
@@ -142,9 +144,7 @@
 		case CKClassPropertyDescriptorTypeFloat:
 		case CKClassPropertyDescriptorTypeDouble:{
 			cell.accessoryType = UITableViewCellAccessoryNone;
-
-            cell.accessoryView.hidden = YES;
-            cell.accessoryView.userInteractionEnabled = NO;
+            cell.accessoryView = nil;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
 				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -174,6 +174,20 @@
 		}
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:{
+            //Creates the switch
+             UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+             self.toggleSwitch = theSwitch;
+             
+             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
+             ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+                 [cell.contentView addSubview:self.toggleSwitch];
+             }
+             else{
+                 cell.accessoryView = self.toggleSwitch;
+             }
+             _toggleSwitch.tag = SwitchTag;
+
+            
             _textField.hidden = YES;
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
@@ -216,7 +230,7 @@
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
-            CGFloat realWidth = cell.contentView.frame.size.width + cell.accessoryView.width;
+            CGFloat realWidth = cell.contentView.frame.size.width;
             CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
             CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
 			textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight + 10));

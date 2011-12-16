@@ -12,6 +12,8 @@
 #import "CKLocalization.h"
 #import "CKObjectPropertyArrayCollection.h"
 
+#import "CKNSObject+Invocation.h"
+
 @implementation NSObject (CKInlineDebugger)
 
 + (CKFormSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{
@@ -27,6 +29,7 @@
 + (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
     if([stylesheet isEmpty]){
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
+        debugger.title = @"Applied Style";
         debugger.name = @"CKInlineDebugger";
         debugger.viewDidLoadBlock = ^(CKUIViewController* controller){
             UILabel* label = [[[UILabel alloc]initWithFrame:CGRectInset(controller.view.bounds,10,10)]autorelease];
@@ -87,6 +90,7 @@
         
         
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
+        debugger.title = @"Applied Style";
         debugger.name = @"CKInlineDebugger";
         
         NSMutableArray* sections = [NSMutableArray array];
@@ -114,8 +118,13 @@
 + (CKFormCellDescriptor*)cellDescriptorForStylesheetInObject:(id)object{
     NSMutableDictionary* styleSheet = [object appliedStyle];
     if(styleSheet){
-        NSString* title = [object appliedStylePath];
+        NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
         CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^(CKTableViewCellController* controller){
+        }];
+        [controllerCell setCreateBlock:^id(id value) {
+            CKTableViewCellController* controller = (CKTableViewCellController*)value;
+            controller.name = @"StyleSheetCell";
+            return (id)nil;
         }];
         [controllerCell setSelectionBlock:^id(id value) {
             CKTableViewCellController* controller = (CKTableViewCellController*)value;
@@ -163,8 +172,8 @@
     
     if([object appliedStyle]){
         CKFormSection* styleSection = [CKFormSection sectionWithCellDescriptors:
-                                       [NSArray arrayWithObject:[[object class]cellDescriptorForStylesheetInObject:object]] headerTitle:@"AppliedStyle"];
-        [debugger addSections:[NSArray arrayWithObjects:inheritingClassesSection,styleSection,objectSection,nil]];
+                                       [NSArray arrayWithObject:[[object class]cellDescriptorForStylesheetInObject:object]] headerTitle:@"StyleSheet"];
+        [debugger addSections:[NSArray arrayWithObjects:styleSection,inheritingClassesSection,objectSection,nil]];
     }
     else{
         [debugger addSections:[NSArray arrayWithObjects:inheritingClassesSection,objectSection,nil]];
@@ -172,17 +181,30 @@
     
     //Setup filter callback
     __block CKFormTableViewController* bController = debugger;
+    __block CKFormSection* propertiesSection = [objectSection retain];
     debugger.searchBlock = ^(NSString* filter){
-        NSInteger index = [bController indexOfSection:objectSection];
+        NSInteger index = [bController indexOfSection:propertiesSection];
         if(index != NSNotFound){
             [bController removeSectionAtIndex:index];
             
             CKFormSection* newObjectSection = [CKFormSection sectionWithObject:object propertyFilter:filter headerTitle:[[object class]description]];
             [bController insertSection:newObjectSection atIndex:index];
+            
+            if([filter length] > 0 && [newObjectSection count] > 0){
+                [bController.view endEditing:YES];
+                
+                [bController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index] 
+                                      atScrollPosition:UITableViewScrollPositionTop
+                                              animated:YES];
+            }
+            
+            [propertiesSection release];
+            propertiesSection = [newObjectSection retain];
         }
     };
     
     debugger.deallocBlock = ^(CKUIViewController* controller){
+        [propertiesSection release];
         [inheritingClasses release];
     };
         

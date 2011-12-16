@@ -18,6 +18,8 @@
 	NSMutableArray* _cellDescriptors;
 }
 
+- (NSInteger)count;
+
 //Cell Descriptors API
 
 - (id)initWithCellDescriptors:(NSArray*)cellDescriptors headerTitle:(NSString*)title;
