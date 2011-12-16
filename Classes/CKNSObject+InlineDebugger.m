@@ -26,7 +26,7 @@
 
 + (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
     if([stylesheet isEmpty]){
-        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
         debugger.name = @"CKInlineDebugger";
         debugger.viewDidLoadBlock = ^(CKUIViewController* controller){
             UILabel* label = [[[UILabel alloc]initWithFrame:CGRectInset(controller.view.bounds,10,10)]autorelease];
@@ -86,7 +86,7 @@
         }
         
         
-        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
         debugger.name = @"CKInlineDebugger";
         
         NSMutableArray* sections = [NSMutableArray array];
@@ -145,7 +145,7 @@
 }
 
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
-    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init]autorelease];
+    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
     debugger.name = @"CKInlineDebugger";
     debugger.searchEnabled = YES;
     

@@ -14,6 +14,7 @@
 #import "CKUIImage+Transformations.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
+#import "CKCascadingTree.h"
 
 @implementation UIView (CKInlineDebugger)
 
@@ -23,39 +24,9 @@
     if(image){
         return image;
     }
-    
-    UIView* v = [[[[view class]alloc]initWithFrame:view.bounds]autorelease];
-    NSArray* allPropertyDescriptors = [v allPropertyDescriptors];
-    for(CKClassPropertyDescriptor* descriptor in allPropertyDescriptors){
-        NSString* propertyName = descriptor.name;
-        if(!descriptor.isReadOnly){
-            if(![propertyName isEqualToString:@"subviews"]
-               && ![propertyName hasPrefix:@"_"]
-               && ![propertyName isEqualToString:@"inputView"]
-               && ![propertyName isEqualToString:@"inputAccessoryView"]
-               && ![propertyName isEqualToString:@"undoManager"]
-               && ![propertyName isEqualToString:@"superview"]
-               && ![propertyName isEqualToString:@"window"]
-               && ![propertyName isEqualToString:@"gestureRecognizers"]
-               && ![propertyName isEqualToString:@"layer"]){
-                [v setValue:[view valueForKey:propertyName] forKey:propertyName];
-            }
-        }
-    }
-    
-    NSMutableDictionary* style = [view appliedStyle];
-    if(style){
-        [v applyStyle:style];
-    }
-    
-    //In case subviews are generated in the alloc init, we remove them here
-    for(UIView* subView in v.subviews){
-        [subView removeFromSuperview];
-    }
-    
-    UIGraphicsBeginImageContext(v.bounds.size);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [v.layer renderInContext:ctx];
+
+    UIGraphicsBeginImageContext(view.bounds.size);
+    [view drawRect:view.bounds];
     image  = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -97,10 +68,31 @@
         UIView* subView = (UIView*)controller.value;
         
         NSString *title = NSStringFromClass([subView class]);
-        NSString* subTitle = [NSString stringWithFormat:@"(tag:%d)",  subView.tag];
+        
+        NSString* propertyName = nil;
+        NSArray* allPropertyDescriptors = [[subView superview] allPropertyDescriptors];
+        for(CKClassPropertyDescriptor* descriptor in allPropertyDescriptors){
+            NSString* p = descriptor.name;
+            id obj = [[subView superview] valueForKey:p];
+            if(obj == subView){
+                propertyName = p;
+                break;
+            }
+        }
+        
+        NSMutableString* subTitle = [NSMutableString string];
+        if(propertyName){
+            [subTitle appendString:propertyName];
+        }
+        if(subView.tag != 0){
+            [subTitle appendFormat:@"(tag:%d)",subView.tag];
+        }
+        if([subView appliedStyle] == nil || [[subView appliedStyle]isEmpty]){
+            [subTitle appendFormat:@"%@(No Stylesheet)",([subTitle length] > 0) ? @"," : @""];
+        }
         
         controller.tableViewCell.textLabel.text = title;
-        controller.tableViewCell.detailTextLabel.text = subTitle;
+        controller.tableViewCell.detailTextLabel.text = [subTitle length] > 0 ? subTitle : nil;
         
         NSInteger indent = 0;
         
@@ -113,6 +105,7 @@
         controller.indentationLevel = indent;
         
         controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
+        controller.tableViewCell.backgroundColor = [UIColor groupTableViewBackgroundColor];
         
         controller.tableViewCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
                 
@@ -126,11 +119,10 @@
         slideshow.viewDidLoadBlock = ^(CKUIViewController* controller){
             UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
             imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            imageView.contentMode = UIViewContentModeScaleAspectFit;
-            imageView.backgroundColor = [UIColor groupTableViewBackgroundColor];
             imageView.image = [UIView createsImageForView:subView];
-            
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
             [controller.view addSubview:imageView];
+            controller.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
         };
         [cellcontroller.parentController.navigationController pushViewController:slideshow animated:YES];
         return (id)nil;
@@ -155,7 +147,7 @@
 }
 
 + (CKFormTableViewController*)inlineDebuggerForSubViewsOfView:(UIView*)view{
-    CKFormTableViewController* debugger = [CKFormTableViewController controller];
+    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
     debugger.name = @"CKInlineDebuggerForSubViews";
     
     CKDocumentArrayCollection* collection = [CKDocumentArrayCollection object];

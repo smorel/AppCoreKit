@@ -224,7 +224,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 
 - (void)presentInlineDebuggerForDocumentsfromParentController:(UIViewController*)controller{
-    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]init] autorelease];
+    CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain] autorelease];
     debugger.name = @"CKInlineDebugger";
     
     __block CKFormTableViewController* bDebugger = debugger;
