@@ -524,7 +524,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CKTableViewCellController* controller = [self controllerAtIndexPath:indexPath];
+    CKTableViewCellController* controller = (CKTableViewCellController*) [self controllerAtIndexPath:indexPath];
     return controller.indentationLevel;
 }
 
