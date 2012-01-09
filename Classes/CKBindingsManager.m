@@ -8,11 +8,13 @@
 
 #import "CKBindingsManager.h"
 #import "CKBinding.h"
+#import "CKWeakRef.h"
 #import <objc/runtime.h>
 
 @interface CKBindingsManager ()
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
+@property (nonatomic, retain) NSMutableDictionary *contextsWeakRefs;
 @property (nonatomic, retain) NSMutableSet *contexts;
 @end
 
@@ -21,11 +23,13 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 @synthesize bindingsForContext = _bindingsForContext;
 @synthesize bindingsPoolForClass = _bindingsPoolForClass;
 @synthesize contexts = _contexts;
+@synthesize contextsWeakRefs = _contextsWeakRefs;
 
 - (id)init{
 	[super init];
 	self.bindingsForContext = [NSMutableDictionary dictionary];
 	self.bindingsPoolForClass = [NSMutableDictionary dictionary];
+	self.contextsWeakRefs = [NSMutableDictionary dictionary];
 	self.contexts = [NSMutableSet set];
 	return self;
 }
@@ -33,6 +37,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)dealloc{
 	[_bindingsForContext release];
 	[_bindingsPoolForClass release];
+	[_contextsWeakRefs release];
 	[_contexts release];
 	[super dealloc];
 }
@@ -69,6 +74,14 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 
 - (void)bind:(CKBinding*)binding withContext:(id)context{
     [binding bind];
+    
+    CKWeakRef* ref = [_contextsWeakRefs objectForKey:[NSValue valueWithNonretainedObject:context]];
+    if(!ref){
+        ref= [CKWeakRef weakRefWithObject:context block:^(id object) {
+            [self unbindAllBindingsWithContext:object];
+        }];
+        [_contextsWeakRefs setObject:ref forKey:context];
+    }
 	
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
@@ -103,6 +116,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     binding.context = nil;
 	
 	if([bindings count] <= 0){
+        [_contextsWeakRefs removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
 		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
 	}	
@@ -141,6 +155,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[queuedBindings addObject:binding];
 	}
 	
+    [_contextsWeakRefs removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
 	[_bindingsForContext removeObjectForKey:context];
 	[_contexts removeObject:context];
 }
