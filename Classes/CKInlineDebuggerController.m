@@ -327,6 +327,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             if(_debuggingHighlightView == nil){
                 self.debuggingHighlightView = [[[UIView alloc]initWithFrame:view.bounds]autorelease];
                 _debuggingHighlightView.backgroundColor = [UIColor redColor];
+                _debuggingHighlightView.tag = CKInlineDebuggerControllerHighlightViewTag;
                 _debuggingHighlightView.alpha = 0.4;
                 _debuggingHighlightView.layer.borderWidth = 3;
                 _debuggingHighlightView.layer.borderColor = [[UIColor redColor]CGColor];
@@ -349,6 +350,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                         UIView* subViewHighlight = [[[UIView alloc]initWithFrame:v.bounds]autorelease];
                         subViewHighlight.backgroundColor = [UIColor clearColor];
                         subViewHighlight.layer.borderWidth = 2;
+                        subViewHighlight.tag = CKInlineDebuggerControllerHighlightViewTag;
                         subViewHighlight.layer.borderColor = [[UIColor colorWithRed:((float)rand()/(float)RAND_MAX) 
                                                                              green:((float)rand()/(float)RAND_MAX) 
                                                                               blue:((float)rand()/(float)RAND_MAX)  
@@ -365,6 +367,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             
             if(_highlightLabel == nil){
                 self.highlightLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)]autorelease];
+                _highlightLabel.tag = CKInlineDebuggerControllerHighlightViewTag;
                 _highlightLabel.layer.cornerRadius = 10;
                 _highlightLabel.backgroundColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.6];
                 _highlightLabel.textColor = [UIColor whiteColor];

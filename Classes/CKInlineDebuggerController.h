@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#define CKInlineDebuggerControllerHighlightViewTag   -5647839
+
 typedef enum CKInlineDebuggerControllerState{
     CKInlineDebuggerControllerStatePending,
     CKInlineDebuggerControllerStateDebugging

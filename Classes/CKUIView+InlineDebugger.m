@@ -147,6 +147,9 @@
 }
 
 + (void)addView:(UIView*)view toCollection:(CKDocumentCollection*)collection{
+    if(view.tag == CKInlineDebuggerControllerHighlightViewTag)
+        return;
+    
     [collection addObject:view];
     
     for(UIView* subView in view.subviews){

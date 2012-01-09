@@ -297,7 +297,7 @@
     
     CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
     return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-}
+} 
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
 	return CKItemViewFlagNone;
