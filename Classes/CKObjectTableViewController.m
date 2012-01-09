@@ -134,6 +134,8 @@
     [NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
 	[self.tableViewContainer bind:@"frame" target:self action:@selector(tableViewFrameChanged:)];
 	[NSObject endBindingsContext];
+    
+    [self adjustTableView];
 }
 
 - (void)viewDidUnload{
@@ -411,19 +413,25 @@
 }
 
 - (void)adjustView{
+    if(self.tableViewContainer == nil)
+        return;
+    
 	if(_orientation == CKTableViewOrientationLandscape) {
-		CGRect frame = self.view.frame;
-		self.view.transform = CGAffineTransformMakeRotation(-M_PI/2);
-		self.view.frame = frame;
+		CGRect frame = self.tableViewContainer.frame;
+		self.tableViewContainer.transform = CGAffineTransformMakeRotation(-M_PI/2);
+		self.tableViewContainer.frame = frame;
 	}
 }
 
 - (void)adjustTableView{
+    if(self.tableViewContainer == nil)
+        return;
+    
 	[self adjustView];
 	
 	if(_orientation == CKTableViewOrientationLandscape) {
-		self.tableView.autoresizingMask = UIViewAutoresizingNone;
-		self.tableView.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height);
+		self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		self.tableView.frame = CGRectMake(0,0,self.tableViewContainer.bounds.size.width,self.tableViewContainer.bounds.size.height);
 	}
 	
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
