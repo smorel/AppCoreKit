@@ -192,8 +192,7 @@
                 UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
                 self.toggleSwitch = theSwitch;
                 
-                if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
-                   ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+                if(self.cellStyle == CKTableViewCellStyleValue3){
                     [cell.contentView addSubview:self.toggleSwitch];
                 }
                 else{
@@ -207,7 +206,7 @@
 				BOOL bo = [[model value]boolValue];
 				[self.toggleSwitch setOn:bo animated:NO];
 				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
-				[self.toggleSwitch bindEvent:UIControlEventTouchUpInside target:self action:@selector(onswitch)];
+				[self.toggleSwitch bindEvent:UIControlEventValueChanged target:self action:@selector(onswitch)];
 				[NSObject endBindingsContext];
 			}
 			break;
@@ -283,6 +282,9 @@
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
     CKNSNumberPropertyCellController* staticController = (CKNSNumberPropertyCellController*)[params staticController];
+    if(!staticController){
+         return [NSValue valueWithCGSize:CGSizeMake(100,44)];
+    }
     
 	UISwitch* s = (UISwitch*)[staticController.tableViewCell viewWithTag:SwitchTag];
 	UITextField *textField = (UITextField*)[staticController.tableViewCell viewWithTag:50000];
