@@ -64,13 +64,13 @@
     NSString* lng = [[CKLocalizationManager sharedManager]language];
     
     if(![_currentLanguage isEqualToString:lng]){
+        self.currentLanguage = lng;
         if(_localizedStrings){
             self.currentValue = [_localizedStrings objectForKey:lng];
         }
         else if(_key){
             self.currentValue = [[CKLocalizationManager sharedManager]localizedStringForKey:self.key value:self.key]; 
         }
-        self.currentLanguage = lng;
     }
     
     return _currentValue;
