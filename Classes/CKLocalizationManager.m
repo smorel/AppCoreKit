@@ -111,54 +111,49 @@ static CKLocalizationManager *sharedInstance = nil;
 }
 
 
-- (void)refreshView:(UIView*)view{
+- (void)refreshView:(UIView*)view viewStack:(NSMutableSet*)viewStack{
+    if(view == nil || [viewStack containsObject:view])
+        return;
+    
+    [viewStack addObject:view];
     [view setNeedsDisplay];
     [view setNeedsLayout];
     for(UIView* v in [view subviews]){
-        [self refreshView:v];
+        [self refreshView:v viewStack:viewStack];
     }
-    /*
-    if([view isKindOfClass:[UITableView class]]){
-        UITableView* table = (UITableView*)view;
-        NSIndexPath* indexPath = [table indexPathForSelectedRow];
-        [table reloadData];
-        if(indexPath){
-            [table selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-        }
-    }
-     */
 }
 
-- (void)refreshViewController:(UIViewController*)controller{
-    if(!controller){
+- (void)refreshViewController:(UIViewController*)controller controllerStack:(NSMutableSet*)controllerStack viewStack:(NSMutableSet*)viewStack{
+    if(controller == nil || [controllerStack containsObject:controller])
         return;
-    }
+    
+    [controllerStack addObject:controller];
     
     controller.title = controller.title;
     if([controller respondsToSelector:@selector(reload)]){
         [controller performSelector:@selector(reload)];
     }
-    [self refreshViewController:[controller modalViewController]];
+    [self refreshViewController:[controller modalViewController] controllerStack:controllerStack viewStack:viewStack];
     
-    if([[controller view]superview] == nil){
-        [self refreshView:[controller view]];
-    }
+    [self refreshView:[controller view] viewStack:viewStack];
     
     if([NSObject isKindOf:[controller class] parentClassName:@"CKContainerViewController"]
        || [NSObject isKindOf:[controller class] parentClassName:@"CKSplitViewController"]){
         NSArray* controllers = [controller performSelector:@selector(viewControllers)];
         for(UIViewController* c in controllers){
-            [self refreshViewController:c];
+            [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
         }
     }
 }
 
 - (void)refreshUI{
+    NSMutableSet* controllerStack = [NSMutableSet set];
+    NSMutableSet* viewStack = [NSMutableSet set];
     NSArray* windows = [[UIApplication sharedApplication]windows];
     for(UIWindow* window in windows){
         UIViewController* c = [window rootViewController];
-        [self refreshViewController:c];
-        [self refreshView:window];
+        [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
+        [self refreshView:window viewStack:viewStack];
     }
 }
 
