@@ -8,9 +8,13 @@
 
 #import "CKBinding.h"
 
+@interface CKBinding ()
+@property(nonatomic,retain)  CKWeakRef* contextRef;
+@end
 
 @implementation CKBinding
-@synthesize context = _context;
+@synthesize contextRef = _contextRef;
+@synthesize context;
 @synthesize contextOptions = _contextOptions;
 
 - (void)bind{
@@ -22,9 +26,20 @@
 }
 
 - (void)reset{
-    _context = nil;
+    [_contextRef release];
+    _contextRef = nil;
     _contextOptions = 0;
 }
 
+- (id)context{
+    return [_contextRef object];
+}
+
+- (void)setContext:(id)thecontext{
+    __block CKBinding* bself = self;
+    self.contextRef = [CKWeakRef weakRefWithObject:thecontext block:^(CKWeakRef *weakRef) {
+        [bself unbind];
+    }];
+}
 
 @end

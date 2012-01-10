@@ -75,12 +75,22 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)bind:(CKBinding*)binding withContext:(id)context{
     [binding bind];
     
-    CKWeakRef* ref = [_contextsWeakRefs objectForKey:[NSValue valueWithNonretainedObject:context]];
+    //We watch the context deallocation to removes the associated bindings in case it has not been done manually
+    CKWeakRef* ref = [_contextsWeakRefs objectForKey:context];
     if(!ref){
-        ref= [CKWeakRef weakRefWithObject:context block:^(id object) {
-            [self unbindAllBindingsWithContext:object];
-        }];
-        [_contextsWeakRefs setObject:ref forKey:context];
+        id contextToWatch = context;
+        if([context isKindOfClass:[NSValue class]]){
+            NSValue* contextValue = (NSValue*)context;
+            contextToWatch = [contextValue nonretainedObjectValue];
+        }
+        
+        if(contextToWatch){
+            __block id bcontext = context;
+            ref= [CKWeakRef weakRefWithObject:contextToWatch block:^(CKWeakRef* weakRef) {
+                [self unbindAllBindingsWithContext:bcontext];
+            }];
+            [_contextsWeakRefs setObject:ref forKey:context];
+        }
     }
 	
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
@@ -116,7 +126,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     binding.context = nil;
 	
 	if([bindings count] <= 0){
-        [_contextsWeakRefs removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
+        [_contextsWeakRefs removeObjectForKey:context];
 		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
 	}	
@@ -155,7 +165,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[queuedBindings addObject:binding];
 	}
 	
-    [_contextsWeakRefs removeObjectForKey:[NSValue valueWithNonretainedObject:context]];
+    [_contextsWeakRefs removeObjectForKey:context];
 	[_bindingsForContext removeObjectForKey:context];
 	[_contexts removeObject:context];
 }

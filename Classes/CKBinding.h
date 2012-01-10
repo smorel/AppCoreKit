@@ -10,16 +10,17 @@
 #import <UIKit/UIKit.h>
 
 #import "CKNSObject+Bindings.h"
+#import "CKWeakRef.h"
 
 /** TODO
  */
 @interface CKBinding : NSObject{
-    id _context;
+    CKWeakRef* _contextRef;
     CKBindingsContextOptions _contextOptions;
 }
 
 @property(nonatomic,assign) id context;
-@property(nonatomic,assign) CKBindingsContextOptions contextOptions;
+@property(nonatomic,assign)   CKBindingsContextOptions contextOptions;
 
 - (void)bind;
 - (void)unbind;
