@@ -32,7 +32,6 @@
 @synthesize activityIndicator = _activityIndicator;
 
 - (void)dealloc{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_label release];
 	[_activityIndicator release];
 	[super dealloc];
@@ -136,13 +135,13 @@
 	
 	//TODO REGISTER ON NOTIF TO KNOW IF THE COLLECTION IS UPDATED !!!
 	
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+	[cell beginBindingsContextByRemovingPreviousBindings];
 	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
 	[source bind:@"hasMore" target:self action:@selector(internalUpdate:)];
 	[source bind:@"currentIndex" target:self action:@selector(internalUpdate:)];
 	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectAddedNotification target:self action:@selector(internalUpdateWithNotification:)];
 	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectRemovedNotification target:self action:@selector(internalUpdateWithNotification:)];
-	[NSObject endBindingsContext];
+	[cell endBindingsContext];
 }
 
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{

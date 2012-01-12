@@ -29,15 +29,15 @@
 	if(self = [super init]){
 		self.view = theView;
 		_size = self.view.bounds.size;
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self]];
+        [self beginBindingsContextByRemovingPreviousBindings];
 		[theView bind:@"frame" target:self action:@selector(frameChanged:)];
-		[NSObject endBindingsContext];
+		[self endBindingsContext];
 	}
 	return self;
 }
 
 - (void)dealloc{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
+    [self clearBindingsContext];
 	[super dealloc];
 }
 

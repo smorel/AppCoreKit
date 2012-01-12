@@ -163,6 +163,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
     
     
     [staticController clearBindingsContext];
+    [staticController.view clearBindingsContext];
     /*if([staticController respondsToSelector:@selector(cacheLayoutBindingContextId)]){
      [NSObject removeAllBindingsForContext:[staticController cacheLayoutBindingContextId]];
      }*/

@@ -103,12 +103,12 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    [self clearBindingsContext];
+    
     if(_deallocBlock){
         _deallocBlock(self);
     }
-    
-    [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
-    [self clearBindingsContext];
     
 	[_name release];
     [_viewWillAppearBlock release];

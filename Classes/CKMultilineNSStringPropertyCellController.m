@@ -163,9 +163,9 @@
         self.fixedSize = YES;
         _textView.hidden = YES;
         
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [cell beginBindingsContextByRemovingPreviousBindings];
 		[property.object bind:property.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-		[NSObject endBindingsContext];
+		[cell endBindingsContext];
 	}
 	else{
         self.fixedSize = NO;

@@ -27,7 +27,6 @@
 @synthesize textField = _textField;
 
 -(void)dealloc{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_textField release];
 	[super dealloc];
 }
@@ -149,9 +148,9 @@
         //self.textField.hidden = YES;
         
         self.fixedSize = YES;
-		[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [cell beginBindingsContextByRemovingPreviousBindings];
 		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-		[NSObject endBindingsContext];
+		[cell endBindingsContext];
         _textField.delegate = nil;
 	}
 	else{
@@ -163,13 +162,13 @@
             else{
                 self.fixedSize = NO;
             }
-            [NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+            [cell beginBindingsContextByRemovingPreviousBindings];
             [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
             [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
                                                              withBlock:^(NSNotification *notification) {
                                                                  [self textFieldChanged:self.textField.text];
                                                              }];
-            [NSObject endBindingsContext];
+            [cell endBindingsContext];
             
             NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
             self.textField.placeholder = _(placeholerText);

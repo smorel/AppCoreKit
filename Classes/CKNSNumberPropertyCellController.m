@@ -28,7 +28,6 @@
 @synthesize toggleSwitch = _toggleSwitch;
 
 -(void)dealloc{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
 	[_textField release];
 	[_toggleSwitch release];
 	[super dealloc];
@@ -148,9 +147,9 @@
             
 			if([model isReadOnly] || self.readOnly){
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                [cell beginBindingsContextByRemovingPreviousBindings];
 				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-				[NSObject endBindingsContext];
+				[cell endBindingsContext];
                 _textField.hidden = YES;
 			}
 			else{
@@ -163,9 +162,9 @@
                 }
                 _textField.hidden = NO;
 				
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                [cell beginBindingsContextByRemovingPreviousBindings];
 				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-				[NSObject endBindingsContext];
+				[cell endBindingsContext];
 				
 				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 				self.textField.placeholder = _(placeholerText);
@@ -181,12 +180,12 @@
                 cell.accessoryView = nil;
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                [cell beginBindingsContextByRemovingPreviousBindings];
                 cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
 				[model.object bind:model.keyPath withBlock:^(id value) {
                     cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
                 }];
-				[NSObject endBindingsContext];
+				[cell endBindingsContext];
 			}
 			else{
                 UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
@@ -202,12 +201,12 @@
 
                 
                 self.fixedSize = YES;
-				[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:cell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+                [cell beginBindingsContextByRemovingPreviousBindings];
 				BOOL bo = [[model value]boolValue];
 				[self.toggleSwitch setOn:bo animated:NO];
 				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
 				[self.toggleSwitch bindEvent:UIControlEventValueChanged target:self action:@selector(onswitch)];
-				[NSObject endBindingsContext];
+				[cell endBindingsContext];
 			}
 			break;
 		}
@@ -335,9 +334,9 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
 	CKObjectProperty* model = self.value;
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self.tableViewCell] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-	[NSObject endBindingsContext];
+	[self.tableViewCell endBindingsContext];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
