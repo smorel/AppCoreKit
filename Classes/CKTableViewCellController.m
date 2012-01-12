@@ -43,10 +43,15 @@
     [self clearBindingsContext];
     
     [_disclosureIndicatorImage release];
+    _disclosureIndicatorImage = nil;
     [_disclosureButton release];
+    _disclosureButton = nil;
     [_highlightedDisclosureIndicatorImage release];
+    _highlightedDisclosureIndicatorImage = nil;
     [_highlightedCheckMarkImage release];
+    _highlightedCheckMarkImage = nil;
     [_delegateRef release];
+    _delegateRef = nil;
     [super dealloc];
 }
 
