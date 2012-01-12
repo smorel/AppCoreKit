@@ -17,7 +17,7 @@
         }];
  
  */
-@interface CKWeakRef : NSObject {
+@interface CKWeakRef : NSObject <NSCopying> {
 	id _object;
 	CKCallback* _callback;
 }

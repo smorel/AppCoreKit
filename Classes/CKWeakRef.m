@@ -210,8 +210,32 @@ static BOOL swizzlingDone = NO;
 + (CKWeakRef*)weakRefWithObject:(id)object block:(void (^)(CKWeakRef* weakRef))block{
 	return [[[CKWeakRef alloc]initWithObject:object block:block]autorelease];
 }
+
 + (CKWeakRef*)weakRefWithObject:(id)object target:(id)target action:(SEL)action{
 	return [[[CKWeakRef alloc]initWithObject:object target:target action:action]autorelease];
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    return [[CKWeakRef alloc]initWithObject:self.object callback:self.callback];
+}
+
+//CHECK IF CORRECT ????
+- (NSUInteger)hash {
+	return [self.object hash] + [self.callback hash];
+}
+
+- (BOOL)isEqual:(id)object{
+    if(![object isKindOfClass:[CKWeakRef class]])
+        return NO;
+    
+    CKWeakRef* other = (CKWeakRef*)object;
+    
+    BOOL bo = (other.object == self.object) && (other.callback == self.callback);
+    return bo;
+}
+
+- (NSString*)description{
+    return [NSString stringWithFormat:@"%@<%p> : { object : %@<%p> }",[self class],self,[self.object class],self.object];
 }
 
 @end
