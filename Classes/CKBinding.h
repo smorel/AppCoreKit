@@ -15,11 +15,10 @@
 /** TODO
  */
 @interface CKBinding : NSObject{
-    CKWeakRef* _contextRef;
     CKBindingsContextOptions _contextOptions;
 }
 
-@property(nonatomic,assign) id context;
+@property(nonatomic,assign)   id context;
 @property(nonatomic,assign)   CKBindingsContextOptions contextOptions;
 
 - (void)bind;

@@ -13,6 +13,11 @@
 #import "CKNotificationBlockBinder.h"
 #import "CKDataBlockBinder.h"
 
+@interface CKBindingsManager ()
+@property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
+@property (nonatomic, retain) NSDictionary *bindingsForContext;
+@property (nonatomic, retain) NSMutableSet *contexts;
+@end
 
 static NSMutableArray* CKBindingsContextStack = nil;
 static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
@@ -26,6 +31,8 @@ typedef enum CKDebugCheckState{
 static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugCheckState_none;
 
 @implementation NSObject (CKBindings)
+
+//Class method for bindings management
 
 + (id)currentBindingContext{
 	if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
@@ -58,22 +65,6 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	[NSObject beginBindingsContext:context policy:CKBindingsContextPolicyAdd options:options];
 }
 
-- (void)beginBindingsContextByKeepingPreviousBindings{
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyAdd];
-}
-
-- (void)beginBindingsContextByRemovingPreviousBindings{
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-}
-
-- (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options{
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyAdd options:options];
-}
-
-- (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options{
-	[NSObject beginBindingsContext:[NSValue valueWithNonretainedObject:self] policy:CKBindingsContextPolicyRemovePreviousBindings options:options];
-}
-
 + (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy options:(CKBindingsContextOptions)options{
     if(CKBindingsContextStack == nil){
 		CKBindingsContextStack = [[NSMutableArray alloc]init];
@@ -95,14 +86,6 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	[[CKBindingsManager defaultManager]unbindAllBindingsWithContext:context];
 }
 
-- (void)endBindingsContext{
-	[NSObject endBindingsContext];
-}
-
-- (void)clearBindingsContext{
-	[NSObject removeAllBindingsForContext:[NSValue valueWithNonretainedObject:self]];
-}
-
 + (void)validateCurrentBindingsContext{
 #ifdef DEBUG
     if(CKDebugAssertForBindingsOutOfContextState == CKDebugCheckState_none){
@@ -116,6 +99,63 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
     NSAssert([NSObject currentBindingContext] != CKBindingsNoContext,@"You're creating a binding without having opened a context !");
 #endif
 }
+
+//Instance method for bindings management
+
+- (CKWeakRef*)weakRefBindingsContext{
+    for(id context in [[CKBindingsManager defaultManager]contexts]){
+        if([context isKindOfClass:[CKWeakRef class]]){
+            CKWeakRef* contextWeakRef = (CKWeakRef*)context;
+            if(contextWeakRef.object == self){
+                return contextWeakRef;
+            }
+        }
+    }
+    return nil;
+}
+
+- (void)beginBindingsContextUsingPolicy:(CKBindingsContextPolicy)policy options:(CKBindingsContextOptions)options{
+    CKWeakRef* weakRef = [self weakRefBindingsContext];
+    if(weakRef == nil){
+        weakRef = [CKWeakRef weakRefWithObject:self block:^(CKWeakRef* ref){
+            NSMutableSet* bindings = [[[CKBindingsManager defaultManager]bindingsForContext] objectForKey:ref];
+            if(!bindings){
+                return;
+            }
+            
+            NSLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
+            [NSObject removeAllBindingsForContext:ref];
+        }];
+    }
+	[NSObject beginBindingsContext:weakRef policy:policy options:options];
+}
+
+- (void)beginBindingsContextByKeepingPreviousBindings{
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyAdd options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+}
+
+- (void)beginBindingsContextByRemovingPreviousBindings{
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyRemovePreviousBindings options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+}
+
+- (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options{
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyAdd options:options];
+}
+
+- (void)beginBindingsContextByRemovingPreviousBindingsWithOptions:(CKBindingsContextOptions)options{
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyRemovePreviousBindings options:options];
+}
+
+- (void)endBindingsContext{
+	[NSObject endBindingsContext];
+}
+
+- (void)clearBindingsContext{
+	[NSObject removeAllBindingsForContext:[self weakRefBindingsContext]];
+}
+
+
+//NSObject Bindings
 
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath2{
     [NSObject validateCurrentBindingsContext];

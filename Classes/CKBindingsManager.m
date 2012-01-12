@@ -14,7 +14,6 @@
 @interface CKBindingsManager ()
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
-@property (nonatomic, retain) NSMutableDictionary *contextsWeakRefs;
 @property (nonatomic, retain) NSMutableSet *contexts;
 @end
 
@@ -23,13 +22,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 @synthesize bindingsForContext = _bindingsForContext;
 @synthesize bindingsPoolForClass = _bindingsPoolForClass;
 @synthesize contexts = _contexts;
-@synthesize contextsWeakRefs = _contextsWeakRefs;
 
 - (id)init{
 	[super init];
 	self.bindingsForContext = [NSMutableDictionary dictionary];
 	self.bindingsPoolForClass = [NSMutableDictionary dictionary];
-	self.contextsWeakRefs = [NSMutableDictionary dictionary];
 	self.contexts = [NSMutableSet set];
 	return self;
 }
@@ -37,7 +34,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)dealloc{
 	[_bindingsForContext release];
 	[_bindingsPoolForClass release];
-	[_contextsWeakRefs release];
 	[_contexts release];
 	[super dealloc];
 }
@@ -75,29 +71,18 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)bind:(CKBinding*)binding withContext:(id)context{
     [binding bind];
     
-    //We watch the context deallocation to removes the associated bindings in case it has not been done manually
-    CKWeakRef* ref = [_contextsWeakRefs objectForKey:context];
-    if(!ref){
-        id contextToWatch = context;
-        if([context isKindOfClass:[NSValue class]]){
-            NSValue* contextValue = (NSValue*)context;
-            contextToWatch = [contextValue nonretainedObjectValue];
-        }
-        
-        if(contextToWatch){
-            __block id bcontext = context;
-            ref= [CKWeakRef weakRefWithObject:contextToWatch block:^(CKWeakRef* weakRef) {
-                [self unbindAllBindingsWithContext:bcontext];
-            }];
-            [_contextsWeakRefs setObject:ref forKey:context];
-        }
-    }
-	
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
+        if([_bindingsForContext count] != [_contexts count]){
+            int i =3;
+        }
 		[_contexts addObject:context];
 		bindings = [NSMutableSet setWithCapacity:500];
 		[_bindingsForContext setObject:bindings forKey:context];
+        
+        if([_bindingsForContext count] != [_contexts count]){
+            int i =3;
+        }
 	}
 	[bindings addObject:binding];
     binding.context = context;
@@ -126,9 +111,15 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     binding.context = nil;
 	
 	if([bindings count] <= 0){
-        [_contextsWeakRefs removeObjectForKey:context];
+        if([_bindingsForContext count] != [_contexts count]){
+            int i =3;
+        }
 		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
+        
+        if([_bindingsForContext count] != [_contexts count]){
+            int i =3;
+        }
 	}	
 	[bindings removeObject:binding];
 }
@@ -140,6 +131,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 }
 
 - (void)unbindAllBindingsWithContext:(id)context{
+    if([context isKindOfClass:[CKWeakRef class]]){
+        int i =3;
+    }
+    
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		return;
@@ -165,9 +160,16 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[queuedBindings addObject:binding];
 	}
 	
-    [_contextsWeakRefs removeObjectForKey:context];
+    
+    if([_bindingsForContext count] != [_contexts count]){
+        int i =3;
+    }
 	[_bindingsForContext removeObjectForKey:context];
 	[_contexts removeObject:context];
+    
+    if([_bindingsForContext count] != [_contexts count]){
+        int i =3;
+    }
 }
 
 @end
