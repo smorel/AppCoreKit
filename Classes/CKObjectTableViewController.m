@@ -1152,7 +1152,7 @@
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
                 && self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-                [self selectRowAtIndexPath:self.selectedIndexPath animated:YES];
+                [self selectRowAtIndexPath:self.selectedIndexPath animated:(self.state == CKUIViewControllerStateDidAppear) ? YES : NO];
             }
             
             break;
