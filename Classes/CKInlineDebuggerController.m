@@ -109,10 +109,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     for(UIGestureRecognizer* gesture in self.customGestures){
         [self.viewController.view removeGestureRecognizer:gesture];
     }
-    for(UIView* v in [self.viewController.view subviews]){
-        v.userInteractionEnabled = YES;
-    }
-    
+
     if(self.state == CKInlineDebuggerControllerStateDebugging){
         self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
         self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
@@ -461,9 +458,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         for(UIGestureRecognizer* gesture in self.customGestures){
             [self.viewController.view removeGestureRecognizer:gesture];
         }
-        for(UIView* v in [self.viewController.view subviews]){
-            v.userInteractionEnabled = YES;
-        }
+
         [self highlightView:nil];
         self.viewController.navigationItem.rightBarButtonItem = self.oldRightButtonItem;
         self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
@@ -485,9 +480,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         [self.viewController.view addGestureRecognizer:longGesture];
         [self.customGestures addObject:longGesture];
         
-        for(UIView* v in [self.viewController.view subviews]){
-            v.userInteractionEnabled = NO;
-        }
         [self highlightView:touchedView ? touchedView : self.viewController.view];
     }
 }
