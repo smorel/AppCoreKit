@@ -114,7 +114,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	[self clearBindingsContext];
+	[cell clearBindingsContext];
     
     //In Case view is reused
     self.textField = (UITextField*)[cell.contentView viewWithTag:50000];

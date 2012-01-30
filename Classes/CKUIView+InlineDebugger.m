@@ -20,38 +20,38 @@
 @implementation UIView (CKInlineDebugger)
 
 + (UIImage*)createsImageForView:(UIView*)view{
-    NSString* key = [NSString stringWithFormat:@"image<%p>",view];
-    UIImage* image = [[CKCache sharedCache] imageForKey:key];
-    if(image){
-        return image;
-    }
+    //NSString* key = [NSString stringWithFormat:@"image<%p>",view];
+    UIImage* image = nil;//[[CKCache sharedCache] imageForKey:key];
+    //if(image){
+    //    return image;
+    //}
 
     UIGraphicsBeginImageContext(view.bounds.size);
     [view drawRect:view.bounds];
     image  = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    if(image){
-        [[CKCache sharedCache] setImage:image  forKey:key];
-    }
+    //if(image){
+    //    [[CKCache sharedCache] setImage:image  forKey:key];
+    //}
     
     return image;
 }
 
 + (UIImage*)createsThumbnailForView:(UIView*)view{
-    NSString* key = [NSString stringWithFormat:@"thumbnail<%p>",view];
-    UIImage* thumbnail = [[CKCache sharedCache] imageForKey:key];
-    if(thumbnail){
-        return thumbnail;
-    }
+    //NSString* key = [NSString stringWithFormat:@"thumbnail<%p>",view];
+    UIImage* thumbnail = nil;//[[CKCache sharedCache] imageForKey:key];
+    //if(thumbnail){
+    //    return thumbnail;
+    //}
     
     UIImage* image = [UIView createsImageForView:view];
     if(image){
         thumbnail = [image imageThatFits:CGSizeMake(40,40) crop:NO];
         
-        if(thumbnail){
-            [[CKCache sharedCache] setImage:thumbnail  forKey:key];
-        }
+        //if(thumbnail){
+        //    [[CKCache sharedCache] setImage:thumbnail  forKey:key];
+        //}
     }
 
     return thumbnail;

@@ -7,6 +7,8 @@
 //
 
 #import "CKWeakRef.h"
+#import "CKNSObject+Bindings.h"
+#import "CKNSObject+Invocation.h"
 #import <objc/runtime.h>
 
 static char NSObjectWeakRefObjectKey;
@@ -219,7 +221,6 @@ static BOOL swizzlingDone = NO;
     return [[CKWeakRef alloc]initWithObject:self.object callback:self.callback];
 }
 
-//CHECK IF CORRECT ????
 - (NSUInteger)hash {
 	return [self.object hash] + [self.callback hash];
 }

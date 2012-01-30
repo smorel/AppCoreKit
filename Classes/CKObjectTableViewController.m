@@ -94,7 +94,6 @@
 }
 
 - (void)dealloc {
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
 	[NSObject removeAllBindingsForContext:_bindingContextForTableView];
 	[_bindingContextForTableView release];
 	_bindingContextForTableView = nil;
@@ -131,16 +130,10 @@
         self.tableView.dataSource = self;
     }
     
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"%p_params",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
-	[self.tableViewContainer bind:@"frame" target:self action:@selector(tableViewFrameChanged:)];
-	[NSObject endBindingsContext];
-    
     [self adjustTableView];
 }
 
 - (void)viewDidUnload{
-	[NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"%p_params",self]];
-
     [_weakViews removeAllObjects];
     [_viewsToControllers removeAllObjects];
     [_viewsToIndexPath removeAllObjects];
@@ -323,6 +316,7 @@
     }
     [NSObject beginBindingsContext:_bindingContextForTableView policy:CKBindingsContextPolicyRemovePreviousBindings];
     [self.tableView bind:@"hidden" target:self action:@selector(tableViewVisibilityChanged:)];
+	[self.tableViewContainer bind:@"bounds" target:self action:@selector(tableViewFrameChanged:)];
     [NSObject endBindingsContext];
 
     if(oldViewWillAppearEndBlock){
@@ -380,6 +374,8 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetWillHideNotification object:nil];
+    
+	[NSObject removeAllBindingsForContext:_bindingContextForTableView];
 }
 
 

@@ -16,12 +16,10 @@ typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 /** TODO
  */
 @interface CKNotificationBlockBinder : CKBinding {
-	CKWeakRef* instanceRef;
 	NSString* notificationName;
 	
 	//We can use block or target/selector
 	CKNotificationExecutionBlock block;
-	CKWeakRef* targetRef;
 	SEL selector;
 	
 	BOOL binded;
@@ -30,9 +28,8 @@ typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 @property (nonatomic, retain) NSString* notificationName;
 @property (nonatomic, copy)   CKNotificationExecutionBlock block;
 @property (nonatomic, assign) SEL selector;
+@property (nonatomic, assign) id instance;
+@property (nonatomic, assign) id target;
 
-
-- (void)setTarget:(id)instance;
-- (void)setInstance:(id)instance;
 
 @end

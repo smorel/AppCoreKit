@@ -150,6 +150,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
+    [cell clearBindingsContext];
     
     self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
     

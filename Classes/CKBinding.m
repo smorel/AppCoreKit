@@ -8,6 +8,7 @@
 
 #import "CKBinding.h"
 #import "CKBindingsManager.h"
+#import "CKWeakRef.h"
 
 
 @implementation CKBinding
@@ -21,6 +22,7 @@
 - (void)unbind{
     NSAssert(NO,@"Should be implemented in inherited class");
 }
+
 
 - (void)reset{
     _context = nil;

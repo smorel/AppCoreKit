@@ -11,79 +11,97 @@
 #import "CKBindingsManager.h"
 
 @interface CKDataBlockBinder ()
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @property (nonatomic, retain) CKWeakRef* instanceRef;
 @property (nonatomic, retain) CKWeakRef* targetRef;
+#endif
 - (void)unbindInstance:(id)instance;
 @end
 
 @implementation CKDataBlockBinder
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 @synthesize instanceRef;
+@synthesize targetRef;
+#endif
 @synthesize keyPath;
 @synthesize block;
-@synthesize targetRef;
 @synthesize selector;
+@synthesize target;
+@synthesize instance;
 
 - (id)init{
 	[super init];
 	binded = NO;
+#ifdef ENABLE_WEAK_REF_PROTECTION
     self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
     self.instanceRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
+#endif
 	return self;
 }
 
 - (void) dealloc{
 	[self unbind];
 	[self reset];
+#ifdef ENABLE_WEAK_REF_PROTECTION
     self.instanceRef = nil;
     self.targetRef = nil;
+#endif
 	[super dealloc];
 }
 
 - (NSString*)description{
-	return [NSString stringWithFormat:@"<CKDataBlockBinder : %p>{\ninstanceRef = %@\nkeyPath = %@}",
-			self,instanceRef ? instanceRef.object : @"(null)",keyPath];
+	return [NSString stringWithFormat:@"<CKDataBlockBinder : %p>{\ninstance = %@\nkeyPath = %@}",
+			self,instance ? instance : @"(null)",keyPath];
 }
 
 - (void)reset{
     [super reset];
-	self.instanceRef.object = nil;
+    
+	self.instance = nil;
+	self.target = nil;
 	self.keyPath = nil;
 	self.block = nil;
-	self.targetRef.object = nil;
 	self.selector = nil;
 }
 
+#ifdef ENABLE_WEAK_REF_PROTECTION
 - (id)releaseTarget:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:self.instance];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setTarget:(id)instance{
-    self.targetRef.object = instance;
+- (void)setTarget:(id)theTarget{
+    self.targetRef.object = theTarget;
+}
+
+- (id)target{
+    return self.targetRef.object;
 }
 
 - (id)releaseInstance:(CKWeakRef*)weakRef{
-	[self unbindInstance:weakRef.object];
-	[[CKBindingsManager defaultManager]unregister:self];
+    [self unbindInstance:weakRef.object];
+    [[CKBindingsManager defaultManager]unregister:self];
 	return nil;
 }
 
-- (void)setInstance:(id)instance{
-    self.instanceRef.object = instance;
+- (void)setInstance:(id)theinstance{
+    self.instanceRef.object = theinstance;
 }
 
-- (id)retain{
-	return [super retain];
+- (id)instance{
+    return  self.instanceRef.object;
 }
+
+#endif
 
 - (void)executeWithValue:(id)value{
     if(block){
 		block(value);
 	}
-	else if(targetRef.object && [targetRef.object respondsToSelector:self.selector]){
-		[targetRef.object performSelector:self.selector withObject:value];
+	else if(self.target && [self.target respondsToSelector:self.selector]){
+		[self.target performSelector:self.selector withObject:value];
 	}
 	else{
 		//NSAssert(NO,@"CKDataBlockBinder no action plugged");
@@ -108,9 +126,9 @@
 
 - (void) bind{
 	[self unbind];
-	if(instanceRef.object){
-		[instanceRef.object addObserver:self
-				   forKeyPath:keyPath
+	if(self.instance){
+		[self.instance addObserver:self
+				   forKeyPath:self.keyPath
 					  options:(NSKeyValueObservingOptionNew)
 					  context:nil];
 		binded = YES;
@@ -118,13 +136,13 @@
 }
 
 -(void)unbind{
-	[self unbindInstance:instanceRef.object];
+	[self unbindInstance:self.instance];
 }
 
-- (void)unbindInstance:(id)instance{
+- (void)unbindInstance:(id)theinstance{
 	if(binded){
-		[instance removeObserver:self
-								forKeyPath:keyPath];
+		[theinstance removeObserver:self
+								forKeyPath:self.keyPath];
 		binded = NO;
 	}
 }

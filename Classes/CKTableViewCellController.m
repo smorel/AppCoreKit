@@ -598,11 +598,11 @@
      forKey: kCATransactionDisableActions];
     
     
-	[self beginBindingsContextByRemovingPreviousBindings];
+	[view beginBindingsContextByRemovingPreviousBindings];
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self setupCell:(UITableViewCell*)view];
 	[super setupView:view];
-	[self endBindingsContext];
+	[view endBindingsContext];
     
     UITableViewCell* cell = (UITableViewCell*)view;
     

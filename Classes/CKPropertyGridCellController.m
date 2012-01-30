@@ -105,7 +105,7 @@
             [self setInvalidButtonVisible:!validity];
         }];
     }
-    [self endBindingsContext];
+    [NSObject endBindingsContext];
     
     BOOL validity = [self isValidValue:[[self objectProperty] value]];
     [self setInvalidButtonVisible:!validity];

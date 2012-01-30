@@ -129,7 +129,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	[self clearBindingsContext];
+	[cell clearBindingsContext];
     
     self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
 	

@@ -12,6 +12,8 @@
 #import "CKNSObject+Bindings.h"
 #import "CKWeakRef.h"
 
+#define ENABLE_WEAK_REF_PROTECTION
+
 /** TODO
  */
 @interface CKBinding : NSObject{

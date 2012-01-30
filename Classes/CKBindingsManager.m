@@ -61,7 +61,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	if([bindings count] > 0){
 		id binding = [[bindings lastObject]retain];
 		[bindings removeLastObject];
-        [binding reset];
 		return binding;
 	}
 	
@@ -73,16 +72,9 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
-        if([_bindingsForContext count] != [_contexts count]){
-            int i =3;
-        }
 		[_contexts addObject:context];
 		bindings = [NSMutableSet setWithCapacity:500];
 		[_bindingsForContext setObject:bindings forKey:context];
-        
-        if([_bindingsForContext count] != [_contexts count]){
-            int i =3;
-        }
 	}
 	[bindings addObject:binding];
     binding.context = context;
@@ -107,36 +99,27 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		queuedBindings = [NSMutableArray array];
 		[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 	}
+    
 	[queuedBindings addObject:binding];
-    binding.context = nil;
+    [bindings removeObject:binding];
+    [binding reset];
 	
-	if([bindings count] <= 0){
-        if([_bindingsForContext count] != [_contexts count]){
-            int i =3;
-        }
+    //Here we get the bindings again as [binding reset] could clear blocks retaining objects that could clear the same context ...
+	bindings = [_bindingsForContext objectForKey:context];
+	if(bindings && [bindings count] <= 0){
 		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
-        
-        if([_bindingsForContext count] != [_contexts count]){
-            int i =3;
-        }
 	}	
-	[bindings removeObject:binding];
 }
 
 - (void)unbind:(CKBinding*)binding{
     [binding unbind];
-	[binding reset];
 	[self unregister:binding];
 }
 
 - (void)unbindAllBindingsWithContext:(id)context{
-    if([context isKindOfClass:[CKWeakRef class]]){
-        int i =3;
-    }
-    
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
-	if(!bindings){
+	if(!bindings || [bindings count] <= 0){
 		return;
 	}
 	
@@ -149,7 +132,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     
     for(CKBinding* binding in bindings){
         [binding unbind];
-        [binding reset];
 		
 		NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
 		NSMutableArray* queuedBindings = [_bindingsPoolForClass valueForKey:className];
@@ -158,18 +140,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 			[_bindingsPoolForClass setValue:queuedBindings forKey:className];
 		}
 		[queuedBindings addObject:binding];
+        [binding reset];
 	}
-	
     
-    if([_bindingsForContext count] != [_contexts count]){
-        int i =3;
-    }
 	[_bindingsForContext removeObjectForKey:context];
 	[_contexts removeObject:context];
-    
-    if([_bindingsForContext count] != [_contexts count]){
-        int i =3;
-    }
 }
 
 @end
