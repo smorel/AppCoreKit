@@ -113,7 +113,8 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		newItems = _transformBlock(value);
 	}
 	else{
-		NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+        newItems = value;
+		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	if (newItems) {	

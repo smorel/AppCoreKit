@@ -36,7 +36,6 @@
 - (id)initWithFeedSource:(CKFeedSource*)source{
 	[super init];
 	self.feedSource = source;
-	source.delegate = self;
 	self.autosave = NO;
 	return self;
 }
@@ -52,6 +51,16 @@
 	self.storage = storage;
 	self.autosave = NO;
 	return self;
+}
+
+- (void)setFeedSource:(CKFeedSource *)thefeedSource{
+    if(_feedSource){
+        _feedSource.delegate = nil;
+        [_feedSource release];
+    }
+    
+    _feedSource = [thefeedSource retain];
+	_feedSource.delegate = self;
 }
 
 - (void)setDelegate:(id)thedelegate{
