@@ -15,6 +15,7 @@
 #import "JSONKit.h"
 #import <objc/runtime.h>
 #import "CKNSError+Additions.h"
+#import "CKNSObject+Invocation.h"
 
 NSString * const CKMappingErrorDomain = @"CKMappingErrorDomain";
 
@@ -31,6 +32,7 @@ NSString* CKMappingOptionalKey = @"@optional";
 NSString* CKMappingDefaultValueKey = @"@defaultValue";
 NSString* CKMappingTransformSelectorKey = @"@transformSelector";
 NSString* CKMappingTransformSelectorClassKey = @"@transformClass";
+NSString* CKMappingTransformUserDataKey = @"@transformUserData";
 NSString* CKMappingTransformCallbackKey = @"@transformCallback";
 
 //list managememt
@@ -182,6 +184,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
 - (CKCallback*)transformCallback:(NSMutableDictionary*)dico{
     return [dico objectForKey:CKMappingTransformCallbackKey];
+}
+
+- (id)transformUserData:(NSMutableDictionary*)dico{
+    return [dico objectForKey:CKMappingTransformUserDataKey];
 }
 
 - (BOOL)isSelf:(NSString*)s{
@@ -358,6 +364,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             SEL transformSelector = [self transformSelector:options];
             CKCallback* callback = [self transformCallback:options];
             if(callback){
+                id transformUserData = [self transformUserData:options];
+                if(transformUserData){
+                    int i =3; //Not supported in this case
+                }
                 id transformedValue = [callback execute:value];
                 if(!transformedValue){
                     if([self isRequired:options]){
@@ -374,8 +384,31 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 }
             }
             else if(transformSelector){
+                id transformUserData = [self transformUserData:options];
                 Class transformSelectorClass = [self transformClass:options defaultClass:targetType];
-                id transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value withObject:(id)error];
+                id transformedValue = nil;
+                if(transformUserData){
+                    NSMethodSignature *signature = [transformSelectorClass methodSignatureForSelector:transformSelector];
+                    
+                    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                    [invocation setSelector:transformSelector];
+                    [invocation setTarget:transformSelectorClass];
+                    [invocation setArgument:&value
+                                    atIndex:2];
+                    [invocation setArgument:&transformUserData
+                                    atIndex:3];
+                    [invocation setArgument:&error
+                                    atIndex:4];
+                    [invocation invoke];
+                    
+                    void* returnValue = nil;
+                    [invocation getReturnValue:&returnValue];
+                    transformedValue = (id)returnValue;
+                }
+                else{
+                    transformedValue = [transformSelectorClass performSelector:transformSelector withObject:value withObject:(id)error];
+                }
+                
                 if(!transformedValue){
                     if([self isRequired:options]){
                         NSString* details = [NSString stringWithFormat:@"Transform problem for requiered value with keyPath : '%@' in source value : %@",otherKeyPath,other];
