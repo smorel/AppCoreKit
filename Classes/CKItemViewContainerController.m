@@ -779,7 +779,7 @@
 }
 
 - (void) removeItemViewControllersSectionAtIndex:(NSInteger)index{
-    if(!_sectionsToControllers){
+    if(!_sectionsToControllers || index < 0 || index >= [_sectionsToControllers count]){
         return;
     }
     

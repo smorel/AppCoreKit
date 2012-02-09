@@ -354,13 +354,15 @@
 - (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index{
     CKFormSectionBase* section = (CKFormSectionBase*)[_sections objectAtIndex:index];
     NSInteger visibleIndex = section.sectionVisibleIndex;
+    
+    [section retain];
     [_sections removeObjectAtIndex:index];
     
     if(section.hidden == NO && visibleIndex >= 0){
         [self objectController:self.objectController removeSectionAtIndex:visibleIndex];
     }
     
-	return section;
+	return [section autorelease];
 }
 
 - (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
