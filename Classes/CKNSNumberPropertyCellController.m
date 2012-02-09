@@ -216,7 +216,9 @@
 - (id)performStandardLayout:(CKNSNumberPropertyCellController*)controller{
     UITableViewCell* cell = controller.tableViewCell;
     
-	UISwitch* s = [controller.toggleSwitch superview] ? controller.toggleSwitch : nil;
+	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
+	UITextField *textField = (UITextField*)[cell viewWithTag:50000];
+    
     CGFloat savedComponentRatio = self.componentsRatio;
     if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -225,7 +227,6 @@
     
 	[super performStandardLayout:controller];
     
-	UITextField *textField = [controller.textField superview] ? controller.textField : nil;
 	if(textField){
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
@@ -256,7 +257,7 @@
         }
 	}
     
-	if(s){
+	if(s && cell.accessoryView != s){
 		if(controller.cellStyle == CKTableViewCellStyleValue3){
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
