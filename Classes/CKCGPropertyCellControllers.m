@@ -28,15 +28,13 @@
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	CGSize size = [[p value]CGSizeValue];
 	
 	CGSizeWrapper* sizeWrapper = (CGSizeWrapper*)self.multiFloatValue;
 	sizeWrapper.width = size.width;
 	sizeWrapper.height = size.height;
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{
@@ -69,16 +67,14 @@
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CGPoint point = [[p value]CGPointValue];
 	
 	CGPointWrapper* pointWrapper = (CGPointWrapper*)self.multiFloatValue;
 	pointWrapper.x = point.x;
 	pointWrapper.y = point.y;
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{
@@ -114,8 +110,8 @@
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CGRect rect = [[p value]CGRectValue];
 	
@@ -124,8 +120,6 @@
 	rectWrapper.y = rect.origin.y;
 	rectWrapper.width = rect.size.width;
 	rectWrapper.height = rect.size.height;
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{
@@ -161,8 +155,8 @@
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	UIEdgeInsets insets = [[p value]UIEdgeInsetsValue];
 	
@@ -171,8 +165,7 @@
 	insetsWrapper.left = insets.left;
 	insetsWrapper.bottom = insets.bottom;
 	insetsWrapper.right = insets.right;
-	
-	[super setupCell:cell];
+
 }
 
 - (void)valueChanged{
@@ -206,8 +199,8 @@
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CLLocationCoordinate2D coord;
     [[p value]getValue:&coord];
@@ -215,8 +208,6 @@
 	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
     coordWrapper.latitude = coord.latitude;
     coordWrapper.longitude = coord.longitude;
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{
@@ -325,21 +316,19 @@ CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
 	return self;
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CGAffineTransform transform;
     [[p value]getValue:&transform];
     
 	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
-
+    
     wrapper.x = CGAffineTransformGetTranslateX(transform);
     wrapper.y = CGAffineTransformGetTranslateY(transform);
     wrapper.angle =  CGAffineTransformGetRotation(transform) * 180 / M_PI;
     wrapper.scaleX = CGAffineTransformGetScaleX(transform);
     wrapper.scaleY = CGAffineTransformGetScaleY(transform);
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{

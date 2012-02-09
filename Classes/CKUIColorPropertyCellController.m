@@ -46,14 +46,14 @@
     [cell.contentView addSubview:colorView];
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+- (void)propertyChanged{
+    CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	UIColor* color = [p value];
 	
 	if(color){
 		const CGFloat* components = CGColorGetComponents(color.CGColor);
-	
+        
 		CGUIColorWrapper* colorWrapper = (CGUIColorWrapper*)self.multiFloatValue;
 		colorWrapper.r = components[0];
 		colorWrapper.g = components[1];
@@ -63,8 +63,6 @@
     
     UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
     colorView.backgroundColor = color;
-	
-	[super setupCell:cell];
 }
 
 - (void)valueChanged{

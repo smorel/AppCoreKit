@@ -22,7 +22,8 @@
 @property(nonatomic,retain)id multiFloatValue;
 
 //private
--(void)valueChanged;
+- (void)valueChanged;
+- (void)propertyChanged;
 - (void)rebind;
 
 @end

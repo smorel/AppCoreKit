@@ -111,10 +111,15 @@
 	[self clearBindingsContext];
 }
 
+- (void)propertyChanged{
+    //Implement in subClass : set wrapper value;
+}
+
 - (void)rebind{
+    [self beginBindingsContextByRemovingPreviousBindings];
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
+    [property.object bind:property.keyPath target:self action:@selector(propertyChanged)];
 	if([property isReadOnly] || self.readOnly){
-		[self beginBindingsContextByRemovingPreviousBindings];
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
@@ -122,10 +127,8 @@
 			[self.multiFloatValue bind:property toObject:label withKeyPath:@"text"];
             ++i;
 		}
-		[self endBindingsContext];
 	}
 	else{
-		[self beginBindingsContextByRemovingPreviousBindings];
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
@@ -133,13 +136,14 @@
 			[self.multiFloatValue bind:property toObject:txtField withKeyPath:@"text"];
             ++i;
 		}
-		[self endBindingsContext];
 	}	
+    [self endBindingsContext];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[self unbind];
 	[super setupCell:cell];
+    [self propertyChanged];
 	
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
 	if([property isReadOnly] || self.readOnly){
