@@ -300,8 +300,8 @@ CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
         CGFloat scaleX = CGAffineTransformGetScaleX0(transform);
         CGFloat scaleY = CGAffineTransformGetScaleY0(transform) * flip;
         
-        return atan2(CGAffineTransformGetShearY(transform)/scaleY - CGAffineTransformGetShearX(transform)/scaleX,
-                    CGAffineTransformGetScaleY(transform)/scaleY + CGAffineTransformGetScaleX(transform)/scaleX);
+        return atan2((CGAffineTransformGetShearY(transform)/scaleY) - (CGAffineTransformGetShearX(transform)/scaleX),
+                    (CGAffineTransformGetScaleY(transform)/scaleY) + (CGAffineTransformGetScaleX(transform)/scaleX));
     }
     return 0;
 }
@@ -335,7 +335,7 @@ CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
 
     wrapper.x = CGAffineTransformGetTranslateX(transform);
     wrapper.y = CGAffineTransformGetTranslateY(transform);
-    wrapper.angle = CGAffineTransformGetRotation(transform);
+    wrapper.angle =  CGAffineTransformGetRotation(transform) * 180 / M_PI;
     wrapper.scaleX = CGAffineTransformGetScaleX(transform);
     wrapper.scaleY = CGAffineTransformGetScaleY(transform);
 	
@@ -347,9 +347,9 @@ CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
 	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
 	
 	CGAffineTransform transform = CGAffineTransformIdentity;
-    CGAffineTransformScale(transform, wrapper.scaleX,wrapper.scaleY);
-    CGAffineTransformRotate(transform, wrapper.angle);
-    CGAffineTransformTranslate(transform, wrapper.x, wrapper.y);
+    transform = CGAffineTransformScale(transform, wrapper.scaleX,wrapper.scaleY);
+    transform = CGAffineTransformRotate(transform, wrapper.angle * M_PI / 180.0 );
+    transform = CGAffineTransformTranslate(transform, wrapper.x, wrapper.y);
 	[p setValue:[NSValue value:&transform withObjCType:@encode(CGAffineTransform)]];
 }
 
