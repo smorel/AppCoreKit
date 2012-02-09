@@ -27,7 +27,7 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	[super initTableViewCell:cell];
 	
-	NSArray* properties = [self.multiFloatValue allPropertyNames];
+	NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
 	int i =0;
 	for(NSString* property in properties){
 		CGRect labelFrame = CGRectMake(10,44 + (i * 44) - 2,90,44);
@@ -68,7 +68,7 @@
 
 - (void)layoutCell:(UITableViewCell *)cell{
 	int i =0 ;
-	NSArray* properties = [self.multiFloatValue allPropertyNames];
+	NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
 	for(NSString* property in properties){
 		UITextField *txtField = (UITextField*)[cell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
 		UILabel *namelabel = (UILabel*)[cell.contentView viewWithTag:BASE_TAG + (i*3) + 1];
@@ -96,7 +96,7 @@
 }
 
 - (void)textFieldChanged:(id)value{
-	NSArray* properties = [self.multiFloatValue allPropertyNames];
+	NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
 	int i =0 ;
 	for(NSString* property in properties){
 		UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
@@ -115,7 +115,7 @@
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
 	if([property isReadOnly] || self.readOnly){
 		[self beginBindingsContextByRemovingPreviousBindings];
-		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
             UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
@@ -126,7 +126,7 @@
 	}
 	else{
 		[self beginBindingsContextByRemovingPreviousBindings];
-		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
             UITextField *txtField = (UITextField*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 0];
@@ -143,7 +143,7 @@
 	
 	CKObjectProperty* property = (CKObjectProperty*)self.value;
 	if([property isReadOnly] || self.readOnly){
-		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
             UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];
@@ -155,7 +155,7 @@
 		}
 	}
 	else{
-		NSArray* properties = [self.multiFloatValue allPropertyNames];
+        NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;
 		for(NSString* property in properties){
             UILabel *label = (UILabel*)[self.tableViewCell.contentView viewWithTag:BASE_TAG + (i*3) + 2];

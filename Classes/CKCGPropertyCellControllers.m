@@ -237,19 +237,124 @@
 
 
 
-/*
+//CGAffineTransform
 
-//SEE LATER
+#define _sign(value) (value >=0 ) ? 1 : -1
+
+CGFloat a, b, c, d;
+CGFloat tx, ty;
+
+CGFloat CGAffineTransformGetScaleX(CGAffineTransform transform) {
+    return transform.a;
+}
+
+CGFloat CGAffineTransformGetScaleY(CGAffineTransform transform) {
+    return transform.d;
+}
+
+CGFloat CGAffineTransformGetShearX(CGAffineTransform transform) {
+    return transform.b;
+}
+
+CGFloat CGAffineTransformGetShearY(CGAffineTransform transform) {
+    return transform.c;
+}
+
+CGFloat CGAffineTransformGetTranslateX(CGAffineTransform transform) {
+    return transform.tx;
+}
+
+CGFloat CGAffineTransformGetTranslateY(CGAffineTransform transform) {
+    return transform.ty;
+}
+
+CGFloat CGAffineTransformGetFlip(CGAffineTransform transform) {
+    CGFloat scaleX = _sign(CGAffineTransformGetScaleX(transform));
+    CGFloat scaleY = _sign(CGAffineTransformGetScaleY(transform));
+    CGFloat shearX = _sign(CGAffineTransformGetShearX(transform));
+    CGFloat shearY = _sign(CGAffineTransformGetShearY(transform));
+    if (scaleX ==  scaleY && shearX == -shearY) return +1;
+    if (scaleX == -scaleY && shearX ==  shearY) return -1;
+    return 0;
+}
+
+CGFloat CGAffineTransformGetScaleX0(CGAffineTransform transform) {
+    CGFloat scale = CGAffineTransformGetScaleX(transform);
+    CGFloat shear = CGAffineTransformGetShearX(transform);
+    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
+    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
+    return hypotf(scale, shear);
+}
+
+CGFloat CGAffineTransformGetScaleY0(CGAffineTransform transform) {
+    CGFloat scale = CGAffineTransformGetScaleY(transform);
+    CGFloat shear = CGAffineTransformGetShearY(transform);
+    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
+    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
+    return hypotf(scale, shear);
+}
+
+CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
+    CGFloat flip = CGAffineTransformGetFlip(transform);
+    if (flip != 0) {
+        CGFloat scaleX = CGAffineTransformGetScaleX0(transform);
+        CGFloat scaleY = CGAffineTransformGetScaleY0(transform) * flip;
+        
+        return atan2(CGAffineTransformGetShearY(transform)/scaleY - CGAffineTransformGetShearX(transform)/scaleX,
+                    CGAffineTransformGetScaleY(transform)/scaleY + CGAffineTransformGetScaleX(transform)/scaleX);
+    }
+    return 0;
+}
+
+@interface CKCGAffineTransformWrapper : NSObject{}
+@property(nonatomic,assign)CGFloat x;
+@property(nonatomic,assign)CGFloat y;
+@property(nonatomic,assign)CGFloat angle;
+@property(nonatomic,assign)CGFloat scaleX;
+@property(nonatomic,assign)CGFloat scaleY;
+@end
+@implementation CKCGAffineTransformWrapper
+@synthesize x,y,angle,scaleX,scaleY;
+@end
+
 @implementation CKCGAffineTransformPropertyCellController
 
 - (id)init{
 	[super init];
+	self.multiFloatValue = [[[CKCGAffineTransformWrapper alloc]init]autorelease];
 	return self;
 }
 
+- (void)setupCell:(UITableViewCell *)cell {
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	
+	CGAffineTransform transform;
+    [[p value]getValue:&transform];
+    
+	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
+
+    wrapper.x = CGAffineTransformGetTranslateX(transform);
+    wrapper.y = CGAffineTransformGetTranslateY(transform);
+    wrapper.angle = CGAffineTransformGetRotation(transform);
+    wrapper.scaleX = CGAffineTransformGetScaleX(transform);
+    wrapper.scaleY = CGAffineTransformGetScaleY(transform);
+	
+	[super setupCell:cell];
+}
+
 - (void)valueChanged{
-	//todo
+	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
+	
+	CGAffineTransform transform = CGAffineTransformIdentity;
+    CGAffineTransformScale(transform, wrapper.scaleX,wrapper.scaleY);
+    CGAffineTransformRotate(transform, wrapper.angle);
+    CGAffineTransformTranslate(transform, wrapper.x, wrapper.y);
+	[p setValue:[NSValue value:&transform withObjCType:@encode(CGAffineTransform)]];
+}
+
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 5 * 44)];
 }
 
 @end
-*/

@@ -49,9 +49,8 @@
 @end
 
 
-/*
+
 @interface CKCGAffineTransformPropertyCellController: CKMultiFloatPropertyCellController {
 }
 
 @end
-*/
