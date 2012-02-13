@@ -145,7 +145,7 @@
 	cell.detailTextLabel.text = nil;
 	
 	if([model isReadOnly] || self.readOnly){
-        //self.textField.hidden = YES;
+        self.textField.hidden = YES;
         
         self.fixedSize = YES;
         [cell beginBindingsContextByRemovingPreviousBindings];
@@ -172,8 +172,10 @@
             
             NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
             self.textField.placeholder = _(placeholerText);
-            //self.textField.hidden = NO;
+            self.textField.hidden = NO;
             _textField.delegate = self;
+            
+            cell.detailTextLabel.text = nil;
         }
 	}
 }
