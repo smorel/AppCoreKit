@@ -25,7 +25,7 @@ typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);
 }
 
 @property (nonatomic,retain) id value;
-@property (nonatomic,retain) id cellController;
+@property (nonatomic,retain) CKTableViewCellController* cellController;
 
 - (id)initWithValue:(id)value controllerClass:(Class)controllerClass;
 - (id)initWithCellController:(CKTableViewCellController*)controller;

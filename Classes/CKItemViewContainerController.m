@@ -474,8 +474,12 @@
 			[_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
             //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
 
-			[controller setValue:object];
-			[controller setupView:view];	
+            
+            [controller performSelector:@selector(setParentController:) withObject:self];
+			//[controller setValue:object];
+			NSAssert([controller value],@"FUCK !");//this should have been set at controller's creation time
+            
+            [controller setupView:view];	
 			
 			if(controller){
 				[controller rotateView:view withParams:self.params animated:NO];

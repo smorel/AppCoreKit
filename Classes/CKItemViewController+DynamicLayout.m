@@ -14,6 +14,10 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
 
+@interface CKItemViewControllerFactoryItem() 
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@end
+
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign, readwrite) UIViewController* parentController;
@@ -54,12 +58,20 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 
 
 + (CKItemViewController*)controllerForItem:(CKItemViewControllerFactoryItem*)item object:(id)object indexPath:(NSIndexPath*)indexPath parentController:(id)parentController{
-    CKItemViewController* controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
-	CKCallback* callback = [item createCallback];
-    controller.createCallback = callback;
-	if(callback){
-		[callback execute:controller];
-	}
+    CKItemViewController* controller = nil;
+    if(item.controllerCreateBlock){
+        controller = [item controllerForObject:object atIndexPath:indexPath];
+    }
+    else{
+        controller = [CKItemViewController controllerForClass:item.controllerClass object:object indexPath:indexPath parentController:parentController];
+        CKCallback* callback = [item createCallback];
+        controller.createCallback = callback;
+    }
+       
+    if(controller.createCallback){
+        [controller.createCallback execute:controller];
+    }
+    
     if(controller.view == nil){
         controller.view = [controller loadView];
             //As controller.view is a weak ref and this view will not get retained by the table, we keep a reference on it as a retain.

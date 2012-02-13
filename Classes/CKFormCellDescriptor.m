@@ -52,11 +52,16 @@
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
     if(_cellController){
-        [_cellController performSelector:@selector(setValue:) withObject:object];
+        if(_cellController.value == nil){
+            [_cellController performSelector:@selector(setValue:) withObject:object];
+        }
         [_cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
     }
     else{
         self.cellController = [super controllerForObject:object atIndexPath:indexPath];
+        self.value = self.cellController.value;
+        self.controllerClass = [_cellController class];
+        [_cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
     }
     return _cellController;
 }

@@ -211,6 +211,7 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
     CKItemViewController* controller = nil;
     if(_controllerCreateBlock){
         controller = _controllerCreateBlock(object,indexPath);
+        self.controllerClass = [controller class];
     }
     else if(self.controllerClass){
         controller = [[[self.controllerClass alloc]init]autorelease];
@@ -250,7 +251,9 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
         controller.layoutCallback = [self layoutCallback];
     }
 	
-	[controller setValue:object];
+    if(controller.value == nil){
+        [controller setValue:object];
+    }
 	[controller performSelector:@selector(setIndexPath:) withObject:indexPath];
 	
 	if(controller.createCallback){
