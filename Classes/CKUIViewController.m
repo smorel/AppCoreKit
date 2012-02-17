@@ -140,7 +140,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 
 - (void)observerNavigationChanges:(BOOL)bo{
-    if(bo){
+    /*if(bo){
         [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
         [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
@@ -151,6 +151,20 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     else{
         [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     }
+    
+    UIViewController* container = self;
+    if([container respondsToSelector:@selector(containerViewController)]){
+        container = [container performSelector:@selector(containerViewController)];
+    }
+    
+    while(container){
+        if([container isKindOfClass:[CKUIViewController class]]){
+            [(CKUIViewController*)container observerNavigationChanges:bo];
+        }
+        if([container respondsToSelector:@selector(containerViewController)]){
+            container = [container performSelector:@selector(containerViewController)];
+        }
+    }*/
 }
 
 - (void)applyStyleForLeftBarButtonItem{
@@ -189,6 +203,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
         UIBarButtonItem* item = self.navigationItem.rightBarButtonItem;
+        
         self.navigationItem.rightBarButtonItem = nil;
         [item applyStyle:barItemStyle];
         self.navigationItem.rightBarButtonItem = item;
@@ -205,7 +220,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForBackBarButtonItem{
     [self observerNavigationChanges:NO];
-    
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -234,7 +248,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)applyStyleForTitleView{
     [self observerNavigationChanges:NO];
-    
     if(self.navigationItem.titleView){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
@@ -331,7 +344,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
             self.navigationItem.leftBarButtonItem = nil;
             [item applyStyle:backBarItemStyle];
             self.navigationItem.backBarButtonItem = item;
-
+            
             self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
         }
     }
