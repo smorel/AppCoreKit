@@ -93,3 +93,19 @@ CGAffineTransform CGAffineTransformInterpolate(CGAffineTransform t1,CGAffineTran
     
     return CGAffineTransformConcat(CGAffineTransformConcat(scale, rotate),translate);
 }
+
+
+@interface CGAffineTransformTestLinkage : NSObject
+@end
+
+@implementation CGAffineTransformTestLinkage
+
+- (id)init{
+    self = [super init];
+    CGAffineTransform t = CGAffineTransformIdentity;
+    CGAffineTransform t2 = CGAffineTransformIdentity;
+    CGAffineTransform t3 = CGAffineTransformInterpolate(t,t2,0.1);
+    return self;
+}
+
+@end
