@@ -528,8 +528,6 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
-		962D8CC914EEA8A800BAB94E /* CKCGAffineTransform+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 962D8CC714EEA8A800BAB94E /* CKCGAffineTransform+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		962D8CCA14EEA8A800BAB94E /* CKCGAffineTransform+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 962D8CC814EEA8A800BAB94E /* CKCGAffineTransform+Additions.m */; };
 		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96382651148009EF00A9C98B /* CKItemViewControllerFactoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1078,8 +1076,6 @@
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyMetaData.h; path = Classes/CKObjectPropertyMetaData.h; sourceTree = "<group>"; };
 		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
-		962D8CC714EEA8A800BAB94E /* CKCGAffineTransform+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKCGAffineTransform+Additions.h"; path = "Classes/CKCGAffineTransform+Additions.h"; sourceTree = "<group>"; };
-		962D8CC814EEA8A800BAB94E /* CKCGAffineTransform+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKCGAffineTransform+Additions.m"; path = "Classes/CKCGAffineTransform+Additions.m"; sourceTree = "<group>"; };
 		9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactoryItem.h; path = Classes/CKItemViewControllerFactoryItem.h; sourceTree = "<group>"; };
 		9638264F148009EF00A9C98B /* CKItemViewControllerFactoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKItemViewControllerFactoryItem.m; path = Classes/CKItemViewControllerFactoryItem.m; sourceTree = "<group>"; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; };
@@ -1662,8 +1658,6 @@
 				75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */,
 				7539FF90142CE94700688E2D /* CKNSError+Additions.h */,
 				7539FF91142CE94700688E2D /* CKNSError+Additions.m */,
-				962D8CC714EEA8A800BAB94E /* CKCGAffineTransform+Additions.h */,
-				962D8CC814EEA8A800BAB94E /* CKCGAffineTransform+Additions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -2403,7 +2397,6 @@
 				969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */,
 				969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */,
 				969FA54614967E1E0095C61E /* UIView+CKStyleForSubViews.h in Headers */,
-				962D8CC914EEA8A800BAB94E /* CKCGAffineTransform+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2763,7 +2756,6 @@
 				969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */,
 				969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */,
 				969FA54714967E1E0095C61E /* UIView+CKStyleForSubViews.m in Sources */,
-				962D8CCA14EEA8A800BAB94E /* CKCGAffineTransform+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKMultiFloatPropertyCellController.h"
+#import "CKCoreGraphicsAdditions.h"
 
 
 /** TODO

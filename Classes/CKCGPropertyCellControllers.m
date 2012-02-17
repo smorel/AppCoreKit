@@ -9,7 +9,6 @@
 #import "CKCGPropertyCellControllers.h"
 #import "CKObjectProperty.h"
 #import <CoreLocation/CoreLocation.h>
-#import "CKCGAffineTransform+Additions.h"
 
 //CGSIZE
 
@@ -263,11 +262,11 @@
         
         CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
         
-        wrapper.x = CGAffineTransformGetTranslateX(transform);
-        wrapper.y = CGAffineTransformGetTranslateY(transform);
-        wrapper.angle =  CGAffineTransformGetRotation(transform) * 180 / M_PI;
-        wrapper.scaleX = CGAffineTransformGetScaleX(transform);
-        wrapper.scaleY = CGAffineTransformGetScaleY(transform);
+        wrapper.x = CKCGAffineTransformGetTranslateX(transform);
+        wrapper.y = CKCGAffineTransformGetTranslateY(transform);
+        wrapper.angle =  CKCGAffineTransformGetRotation(transform) * 180 / M_PI;
+        wrapper.scaleX = CKCGAffineTransformGetScaleX(transform);
+        wrapper.scaleY = CKCGAffineTransformGetScaleY(transform);
     }
 }
 
