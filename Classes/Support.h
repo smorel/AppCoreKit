@@ -46,4 +46,3 @@
 #import "CKNSPredicate+Additions.h"
 
 #import "CKNSError+Additions.h"
-#import "CKCGAffineTransform+Additions.h"
