@@ -9,6 +9,7 @@
 #import "CKCGPropertyCellControllers.h"
 #import "CKObjectProperty.h"
 #import <CoreLocation/CoreLocation.h>
+#import "CKCGAffineTransform+Additions.h"
 
 //CGSIZE
 
@@ -203,7 +204,10 @@
     CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CLLocationCoordinate2D coord;
-    [[p value]getValue:&coord];
+    NSValue* value = [p value];
+    if(value){
+        [[p value]getValue:&coord];
+    }
     
 	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
     coordWrapper.latitude = coord.latitude;
@@ -230,73 +234,6 @@
 
 //CGAffineTransform
 
-#define _sign(value) (value >=0 ) ? 1 : -1
-
-CGFloat a, b, c, d;
-CGFloat tx, ty;
-
-CGFloat CGAffineTransformGetScaleX(CGAffineTransform transform) {
-    return transform.a;
-}
-
-CGFloat CGAffineTransformGetScaleY(CGAffineTransform transform) {
-    return transform.d;
-}
-
-CGFloat CGAffineTransformGetShearX(CGAffineTransform transform) {
-    return transform.b;
-}
-
-CGFloat CGAffineTransformGetShearY(CGAffineTransform transform) {
-    return transform.c;
-}
-
-CGFloat CGAffineTransformGetTranslateX(CGAffineTransform transform) {
-    return transform.tx;
-}
-
-CGFloat CGAffineTransformGetTranslateY(CGAffineTransform transform) {
-    return transform.ty;
-}
-
-CGFloat CGAffineTransformGetFlip(CGAffineTransform transform) {
-    CGFloat scaleX = _sign(CGAffineTransformGetScaleX(transform));
-    CGFloat scaleY = _sign(CGAffineTransformGetScaleY(transform));
-    CGFloat shearX = _sign(CGAffineTransformGetShearX(transform));
-    CGFloat shearY = _sign(CGAffineTransformGetShearY(transform));
-    if (scaleX ==  scaleY && shearX == -shearY) return +1;
-    if (scaleX == -scaleY && shearX ==  shearY) return -1;
-    return 0;
-}
-
-CGFloat CGAffineTransformGetScaleX0(CGAffineTransform transform) {
-    CGFloat scale = CGAffineTransformGetScaleX(transform);
-    CGFloat shear = CGAffineTransformGetShearX(transform);
-    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
-    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
-    return hypotf(scale, shear);
-}
-
-CGFloat CGAffineTransformGetScaleY0(CGAffineTransform transform) {
-    CGFloat scale = CGAffineTransformGetScaleY(transform);
-    CGFloat shear = CGAffineTransformGetShearY(transform);
-    if (shear == 0) return fabs(scale);  // Optimization for a very common case.
-    if (scale == 0) return fabs(shear);  // Not as common as above, but still common enough.
-    return hypotf(scale, shear);
-}
-
-CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
-    CGFloat flip = CGAffineTransformGetFlip(transform);
-    if (flip != 0) {
-        CGFloat scaleX = CGAffineTransformGetScaleX0(transform);
-        CGFloat scaleY = CGAffineTransformGetScaleY0(transform) * flip;
-        
-        return atan2((CGAffineTransformGetShearY(transform)/scaleY) - (CGAffineTransformGetShearX(transform)/scaleX),
-                    (CGAffineTransformGetScaleY(transform)/scaleY) + (CGAffineTransformGetScaleX(transform)/scaleX));
-    }
-    return 0;
-}
-
 @interface CKCGAffineTransformWrapper : NSObject{}
 @property(nonatomic,assign)CGFloat x;
 @property(nonatomic,assign)CGFloat y;
@@ -320,15 +257,18 @@ CGFloat CGAffineTransformGetRotation(CGAffineTransform transform) {
     CKObjectProperty* p = (CKObjectProperty*)self.value;
 	
 	CGAffineTransform transform;
-    [[p value]getValue:&transform];
-    
-	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
-    
-    wrapper.x = CGAffineTransformGetTranslateX(transform);
-    wrapper.y = CGAffineTransformGetTranslateY(transform);
-    wrapper.angle =  CGAffineTransformGetRotation(transform) * 180 / M_PI;
-    wrapper.scaleX = CGAffineTransformGetScaleX(transform);
-    wrapper.scaleY = CGAffineTransformGetScaleY(transform);
+    id value = [p value];
+    if([value isKindOfClass:[NSValue class]]){
+        [value getValue:&transform];
+        
+        CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
+        
+        wrapper.x = CGAffineTransformGetTranslateX(transform);
+        wrapper.y = CGAffineTransformGetTranslateY(transform);
+        wrapper.angle =  CGAffineTransformGetRotation(transform) * 180 / M_PI;
+        wrapper.scaleX = CGAffineTransformGetScaleX(transform);
+        wrapper.scaleY = CGAffineTransformGetScaleY(transform);
+    }
 }
 
 - (void)valueChanged{
