@@ -16,10 +16,15 @@
 #import "CKUIView+Style.h"
 #import "CKCascadingTree.h"
 #import "CKUIColor+ValueTransformer.h"
+#import "CKNSObject+Bindings.h"
 
 @implementation UIView (CKInlineDebugger)
 
 + (UIImage*)createsImageForView:(UIView*)view{
+    if(view.layer.contents){
+        return [UIImage imageWithCGImage:(CGImageRef)view.layer.contents];
+    }
+    
     //NSString* key = [NSString stringWithFormat:@"image<%p>",view];
     UIImage* image = nil;//[[CKCache sharedCache] imageForKey:key];
     //if(image){
@@ -57,6 +62,30 @@
     return thumbnail;
 }
 
++ (NSString*)titleForView:(UIView*)view{
+    NSString *title = NSStringFromClass([view class]);
+    CKObjectProperty* nameProperty = [CKObjectProperty propertyWithObject:view keyPath:@"name"];
+    NSString *name = ([nameProperty descriptor] && [NSObject isClass:[[nameProperty descriptor]type] kindOfClass:[NSString class]] )? [nameProperty value] : nil;
+    if([name length] <= 0){
+        name = nil;
+    }
+    return name ? [NSString stringWithFormat:@"%@ - %@",title,name] : title;
+}
+
++ (NSString*)subTitleForView:(UIView*)view{
+    NSMutableString* subTitle = [NSMutableString string];
+    if(view.hidden){
+        [subTitle appendFormat:@"(hidden)"];
+    }
+    if(view.tag != 0){
+        [subTitle appendFormat:@"%@(tag:%d)",([subTitle length] > 0) ? @"," : @"",view.tag];
+    }
+    if([view appliedStyle] == nil || [[view appliedStyle]isEmpty]){
+        [subTitle appendFormat:@"%@(No Stylesheet)",([subTitle length] > 0) ? @"," : @""];
+    }
+    return subTitle;
+}
+
 + (CKItemViewControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
     CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
     item.controllerClass = [CKTableViewCellController class];
@@ -67,33 +96,31 @@
     [item setSetupBlock:^id(id value) {
         CKTableViewCellController* controller = (CKTableViewCellController*)value;
         UIView* subView = (UIView*)controller.value;
+                
+        controller.tableViewCell.textLabel.text = [UIView titleForView:subView];
+        controller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:subView];
+        controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
         
-        NSString *title = NSStringFromClass([subView class]);
         
-        NSString* propertyName = nil;
-        NSArray* allPropertyDescriptors = [[subView superview] allPropertyDescriptors];
-        for(CKClassPropertyDescriptor* descriptor in allPropertyDescriptors){
-            NSString* p = descriptor.name;
-            id obj = [[subView superview] valueForKey:p];
-            if(obj == subView){
-                propertyName = p;
-                break;
-            }
+        __block CKTableViewCellController* bcontroller = controller;
+        __block UIView* bsubView = subView;
+        [controller.tableViewCell beginBindingsContextByRemovingPreviousBindings];
+        CKObjectProperty* nameProperty = [CKObjectProperty propertyWithObject:view keyPath:@"name"];
+        if([nameProperty descriptor]){
+            [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
+                bcontroller.tableViewCell.textLabel.text = [UIView titleForView:bsubView];
+            }];
+            [subView bind:@"hidden" withBlock:^(id value) {
+                bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
+            }];
+            [subView bind:@"tag" withBlock:^(id value) {
+                bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
+            }];
+            [subView.layer bind:@"contents" withBlock:^(id value) {
+                bcontroller.tableViewCell.imageView.image = [UIView createsThumbnailForView:bsubView];
+            }];
         }
-        
-        NSMutableString* subTitle = [NSMutableString string];
-        if(propertyName){
-            [subTitle appendString:propertyName];
-        }
-        if(subView.tag != 0){
-            [subTitle appendFormat:@"(tag:%d)",subView.tag];
-        }
-        if([subView appliedStyle] == nil || [[subView appliedStyle]isEmpty]){
-            [subTitle appendFormat:@"%@(No Stylesheet)",([subTitle length] > 0) ? @"," : @""];
-        }
-        
-        controller.tableViewCell.textLabel.text = title;
-        controller.tableViewCell.detailTextLabel.text = [subTitle length] > 0 ? subTitle : nil;
+        [controller.tableViewCell endBindingsContext];
         
         NSInteger indent = 0;
         
@@ -105,7 +132,6 @@
         
         controller.indentationLevel = indent;
         
-        controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
         
         controller.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
         controller.tableViewCell.imageView.layer.shadowOpacity = 0.6;
