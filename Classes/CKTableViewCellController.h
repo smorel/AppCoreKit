@@ -173,6 +173,8 @@ typedef enum CKTableViewCellStyle {
 
 @interface CKTableViewCellController (CKDynamic)
 
++ (CKTableViewCellController*)cellController;
+
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 - (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 

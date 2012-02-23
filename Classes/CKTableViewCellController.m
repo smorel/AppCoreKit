@@ -972,6 +972,10 @@
 
 @implementation CKTableViewCellController (CKDynamic)
 
++ (CKTableViewCellController*)cellController{
+    return [[[[self class]alloc]init]autorelease];
+}
+
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
     if(block){
         self.initCallback = [CKCallback callbackWithBlock:^id(id value) {
