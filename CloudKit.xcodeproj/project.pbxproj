@@ -552,6 +552,8 @@
 		96CADE351486B6F6008A23E4 /* CKNSObject+Introspection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE341486B6F6008A23E4 /* CKNSObject+Introspection_private.h */; };
 		96CADE381486BDFF008A23E4 /* CKObject+Validation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE361486BDFC008A23E4 /* CKObject+Validation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CADE391486BDFF008A23E4 /* CKObject+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CADE371486BDFD008A23E4 /* CKObject+Validation.m */; };
+		96DAFCF414F8161600D71FEB /* CKDocumentFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKDocumentFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96DAFCF514F8161600D71FEB /* CKDocumentFilteredCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DAFCF314F8161600D71FEB /* CKDocumentFilteredCollection.m */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1100,6 +1102,8 @@
 		96CADE341486B6F6008A23E4 /* CKNSObject+Introspection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+Introspection_private.h"; path = "Classes/CKNSObject+Introspection_private.h"; sourceTree = "<group>"; };
 		96CADE361486BDFC008A23E4 /* CKObject+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKObject+Validation.h"; path = "Classes/CKObject+Validation.h"; sourceTree = "<group>"; };
 		96CADE371486BDFD008A23E4 /* CKObject+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKObject+Validation.m"; path = "Classes/CKObject+Validation.m"; sourceTree = "<group>"; };
+		96DAFCF214F8161600D71FEB /* CKDocumentFilteredCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocumentFilteredCollection.h; path = Classes/CKDocumentFilteredCollection.h; sourceTree = "<group>"; };
+		96DAFCF314F8161600D71FEB /* CKDocumentFilteredCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocumentFilteredCollection.m; path = Classes/CKDocumentFilteredCollection.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1249,6 +1253,8 @@
 				7560DB5113B8ED3600268D13 /* CKDocumentCollection.m */,
 				7560DBDE13B8ED3600268D13 /* CKObjectPropertyArrayCollection.h */,
 				7560DBDF13B8ED3600268D13 /* CKObjectPropertyArrayCollection.m */,
+				96DAFCF214F8161600D71FEB /* CKDocumentFilteredCollection.h */,
+				96DAFCF314F8161600D71FEB /* CKDocumentFilteredCollection.m */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -2397,6 +2403,7 @@
 				969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */,
 				969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */,
 				969FA54614967E1E0095C61E /* UIView+CKStyleForSubViews.h in Headers */,
+				96DAFCF414F8161600D71FEB /* CKDocumentFilteredCollection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2756,6 +2763,7 @@
 				969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */,
 				969FA54214966CD90095C61E /* CKUITableViewCell+CKHighlight.m in Sources */,
 				969FA54714967E1E0095C61E /* UIView+CKStyleForSubViews.m in Sources */,
+				96DAFCF514F8161600D71FEB /* CKDocumentFilteredCollection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

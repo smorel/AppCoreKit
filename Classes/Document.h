@@ -11,6 +11,7 @@
 #import "CKDocumentStorage.h"
 #import "CKDocumentFileStorage.h"
 #import "CKDocumentCollection.h"
+#import "CKDocumentFilteredCollection.h"
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKDocumentArray.h"
 #import "CKUserDefaults.h"
