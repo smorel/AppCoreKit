@@ -38,6 +38,9 @@
 
 - (void)updateFilteredArray{
     NSArray* filteredObjects = [[self.collection allObjects]filteredArrayUsingPredicate:self.predicate];
+    if([filteredObjects isEqualToArray:[self allObjects]])
+        return;
+    
     [super removeAllObjects];
     [super insertObjects:filteredObjects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [filteredObjects count])]];
 }
@@ -59,6 +62,8 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
+    
+    //THIS COULD BE OPTIMIZED !!!!
     [self updateFilteredArray];
 }
 
