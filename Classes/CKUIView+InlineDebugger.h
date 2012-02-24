@@ -12,5 +12,6 @@
 @interface UIView (CKInlineDebugger)
 
 + (CKFormTableViewController*)inlineDebuggerForSubViewsOfView:(UIView*)view;
++ (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end
