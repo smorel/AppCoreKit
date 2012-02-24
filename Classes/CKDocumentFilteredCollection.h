@@ -6,8 +6,7 @@
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <CloudKit/CloudKit.h>
-
+#import "CKDocumentArray.h"
 
 @interface CKDocumentFilteredCollection : CKDocumentArrayCollection
 @property(nonatomic,retain)CKDocumentCollection* collection;
