@@ -233,12 +233,16 @@
 }
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
-    [self.items addObject:[CKItemViewControllerFactoryItem itemForObjectOfClass:type withControllerCreationBlock:block]];
+    CKItemViewControllerFactoryItem* item = [CKItemViewControllerFactoryItem itemForObjectOfClass:type withControllerCreationBlock:block];
+    [self.items addObject:item];
+    return item;
 }
 
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
-    [self.items addObject:[CKItemViewControllerFactoryItem itemForObjectWithPredicate:predicate withControllerCreationBlock:block]];
+    CKItemViewControllerFactoryItem* item = [CKItemViewControllerFactoryItem itemForObjectWithPredicate:predicate withControllerCreationBlock:block];
+    [self.items addObject:item];
+    return item;
 }
 
 @end
