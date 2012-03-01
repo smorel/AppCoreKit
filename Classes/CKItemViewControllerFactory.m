@@ -233,19 +233,12 @@
 }
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
-    return [self addItemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return [evaluatedObject isKindOfClass:type];
-    }] withControllerCreationBlock:block];
+    [self.items addObject:[CKItemViewControllerFactoryItem itemForObjectOfClass:type withControllerCreationBlock:block]];
 }
 
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
-    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
-	item.controllerCreateBlock = block;
-	item.params = [NSMutableDictionary dictionaryWithObject:predicate 
-                                                     forKey:CKItemViewControllerFactoryItemFilter];
-	[self.items addObject:item];
-	return item;
+    [self.items addObject:[CKItemViewControllerFactoryItem itemForObjectWithPredicate:predicate withControllerCreationBlock:block]];
 }
 
 @end

@@ -81,6 +81,9 @@ typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSI
 - (void)setFilterPredicate:(NSPredicate*)predicate;
 - (void)setSize:(CGSize)size;
 
++ (CKItemViewControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
++ (CKItemViewControllerFactoryItem*)itemForObjectOfClass:(Class)type withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
+
 @end
 
 /********************************* DEPRECATED *********************************

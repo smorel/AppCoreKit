@@ -263,6 +263,20 @@ NSString* CKItemViewControllerFactoryItemLayout               = @"CKItemViewCont
 	return controller;
 }
 
++ (CKItemViewControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
+    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
+	item.controllerCreateBlock = block;
+	item.params = [NSMutableDictionary dictionaryWithObject:predicate 
+                                                     forKey:CKItemViewControllerFactoryItemFilter];
+	return item;
+}
+
++ (CKItemViewControllerFactoryItem*)itemForObjectOfClass:(Class)type withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
+    return [CKItemViewControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject isKindOfClass:type];
+    }] withControllerCreationBlock:block];
+}
+
 @end
 
 
