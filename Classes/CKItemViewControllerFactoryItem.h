@@ -2,7 +2,7 @@
 //  CKItemViewControllerFactoryItem.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 11-11-25.
+//  Created by Sebastien Morel on 11-11-25.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 

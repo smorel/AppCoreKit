@@ -1,7 +1,7 @@
 //
 //  Debug.h
 //
-//  Created by Martin Dufort on 04/08/09.
+//  Created by Sebastien Morel on 04/08/09.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
