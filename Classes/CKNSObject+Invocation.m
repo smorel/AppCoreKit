@@ -7,6 +7,52 @@
 //
 
 #import "CKNSObject+Invocation.h"
+#import "CKWeakRef.h"
+
+typedef void(^CKInvokationBlock)();
+
+@interface CKInvokationObject : NSObject
+@property(nonatomic,copy)CKInvokationBlock block;
+@property(nonatomic,retain)CKWeakRef* objectRef;
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay;
+@end
+
+@implementation CKInvokationObject
+@synthesize block = _block;
+@synthesize objectRef = _objectRef;
+
+- (void)dealloc{
+    [_block release];
+    [_objectRef release];
+    [super dealloc];
+}
+
+- (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay{
+    self = [super init];
+    self.block = theblock;
+    
+    __block CKInvokationObject* bself = self;
+    self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:bself selector:@selector(execute) object:nil];
+        [bself autorelease];
+    }];
+    
+    [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
+    [self retain];
+    return self;
+}
+
+- (void)execute{
+    if(_block){
+        _block();
+    }
+    [self autorelease];
+}
+
+@end
+
+
+
 
 @implementation NSObject (CKNSObjectInvocation)
 
@@ -68,5 +114,10 @@
 	}
     return nil;
 }
+
+- (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay{
+    [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay]autorelease];
+}
+
 
 @end
