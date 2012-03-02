@@ -366,8 +366,10 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             if(callback){
                 id transformUserData = [self transformUserData:options];
                 if(transformUserData){
-                    int i =3; //Not supported in this case
+                    NSString* details = [NSString stringWithFormat:@"Transform selectors are not supported for value with keyPath : '%@' in source value : %@",otherKeyPath,other];
+                    *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeTransformNotSupported,details);
                 }
+                
                 id transformedValue = [callback execute:value];
                 if(!transformedValue){
                     if([self isRequired:options]){

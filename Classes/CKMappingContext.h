@@ -19,6 +19,7 @@ extern NSString* const CKMappingErrorCodeKey;
 #define CKMappingErrorCodeInvalidObjectClass    2
 #define CKMappingErrorCodeMissingRequieredValue 3
 #define CKMappingErrorCodeInvalidProperty       4
+#define CKMappingErrorCodeTransformNotSupported 5
 
 
 /** TODO

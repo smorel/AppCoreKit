@@ -138,7 +138,7 @@ void introspectTextInputsProperties(){
     objc_property_t *ps = class_copyPropertyList(c, &outCount);
     for(i = 0; i < outCount; i++) {
         objc_property_t property = ps[i];
-        const char *propName = property_getName(property);
+        //const char *propName = property_getName(property);
         if([textInputsProperties containsObject:[NSString stringWithUTF8String:property_getName(property)]]){
             //CKDebugLog(@"INTROSPECTION : Skipping property %ls on class %@ because it is an unsupported protocol UITextInput yet",propName,c);
         }
