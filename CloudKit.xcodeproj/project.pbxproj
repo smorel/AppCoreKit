@@ -528,7 +528,6 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
-		960A2D32150572D100D30AB4 /* index.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 960A2D31150572D100D30AB4 /* index.markdown */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2510,7 +2509,6 @@
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
-				960A2D32150572D100D30AB4 /* index.markdown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
