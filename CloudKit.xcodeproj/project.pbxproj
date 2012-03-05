@@ -528,6 +528,7 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
+		960A2D32150572D100D30AB4 /* index.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 960A2D31150572D100D30AB4 /* index.markdown */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1080,6 +1081,7 @@
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyMetaData.h; path = Classes/CKObjectPropertyMetaData.h; sourceTree = "<group>"; };
 		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
+		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
 		9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactoryItem.h; path = Classes/CKItemViewControllerFactoryItem.h; sourceTree = "<group>"; };
@@ -1785,6 +1787,7 @@
 				7506E41413B902ED00EE1471 /* Resources */,
 				7560DDB813B8EDB700268D13 /* Vendor */,
 				7550153713B8EA08002DAE8B /* CloudKit */,
+				960A2D30150572C000D30AB4 /* Documentation */,
 				7550153213B8EA08002DAE8B /* Frameworks */,
 				7550153113B8EA08002DAE8B /* Products */,
 			);
@@ -2110,6 +2113,14 @@
 				7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */,
 			);
 			name = "CellControllers for CKObjectProperty Value";
+			sourceTree = "<group>";
+		};
+		960A2D30150572C000D30AB4 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				960A2D31150572D100D30AB4 /* index.markdown */,
+			);
+			name = Documentation;
 			sourceTree = "<group>";
 		};
 		9638264D147FE53F00A9C98B /* Controllers */ = {
@@ -2499,6 +2510,7 @@
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
+				960A2D32150572D100D30AB4 /* index.markdown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2529,7 +2541,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "UFW_TARGET=${PROJECT}\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_IPHONE_DIR}/Documentation/output\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}\" --warn-undocumented-object --exit-threshold 2 \"${SRCROOT}/Classes\"\n\ncp -R -L \"${UFW_IPHONE_DIR}/Documentation/output/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
+			shellScript = "UFW_TARGET=${PROJECT}\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --include \"${SRCROOT}/Documentation/\" --index-desc \"${SRCROOT}/Documentation/index.markdown\" --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_IPHONE_DIR}/Documentation/output\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}-dev\" --warn-undocumented-object --exit-threshold 2 \"${TARGET_BUILD_DIR}/${UFW_TARGET}.framework/Headers\"\n\ncp -R -L \"${UFW_IPHONE_DIR}/Documentation/output/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
