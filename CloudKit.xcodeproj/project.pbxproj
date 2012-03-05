@@ -14,6 +14,7 @@
 				7561645413BA527A00330BF0 /* ShellScript */,
 			);
 			dependencies = (
+				960A2D34150575A100D30AB4 /* PBXTargetDependency */,
 			);
 			name = "CloudKit Documentation";
 			productName = Universal_Framework;
@@ -560,6 +561,16 @@
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		960A2D33150575A100D30AB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7550152613B8EA08002DAE8B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7550152F13B8EA08002DAE8B;
+			remoteInfo = CloudKit;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4F4A912013F03D7B0093293F /* wc-appsignature-dark-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-back.png"; sourceTree = "<group>"; };
@@ -2786,6 +2797,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		960A2D34150575A100D30AB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7550152F13B8EA08002DAE8B /* CloudKit */;
+			targetProxy = 960A2D33150575A100D30AB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F4A913113F040CE0093293F /* wc-appsignature-type-dark-craftedby.png */ = {
