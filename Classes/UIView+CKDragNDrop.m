@@ -19,9 +19,15 @@ static char UIViewDraggableKey;
 static char UIViewDraggingOffsetKey;
 static char UIViewDraggingBeginPointKey;
 static char UIViewDraggingKey;
+static char UIViewIndexInParentBeforeDraggingKey;
 
 static BOOL UIViewSwizzlingDone = NO;
 static BOOL UIControlSwizzlingDone = NO;
+
+
+@interface UIView (CKDragNDrop_Private)
+@property(nonatomic,assign)NSInteger indexInParentBeforeDragging;
+@end
 
 @implementation UIView (CKDragNDrop)
 @dynamic dragTargetActions;
@@ -226,6 +232,21 @@ static BOOL UIControlSwizzlingDone = NO;
     return [self hitTest:windowPoint inWindow:touch.window];
 }
 
+- (void)startDragging{
+    NSInteger index = [[[self superview]subviews]indexOfObjectIdenticalTo:self];
+    self.indexInParentBeforeDragging = index;
+    
+    [[self superview]bringSubviewToFront:self];
+    
+    self.dragging = YES;
+}
+
+- (void)endDragging{
+    [[self superview]insertSubview:self atIndex:self.indexInParentBeforeDragging];
+    self.indexInParentBeforeDragging = NSNotFound;
+    self.dragging = NO;
+}
+
 - (void)handle_dnd_view_touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     if(self.draggable){
         UITouch* touch = [touches anyObject];
@@ -235,7 +256,7 @@ static BOOL UIControlSwizzlingDone = NO;
         [self setDraggingBeginPoint:p];
         
         [self sendActionsForDragEvents:CKDragEventBegin hitStack:[self hitStackWithTouches:touches event:event]];
-        self.dragging = YES;
+        [self startDragging];
     }
 }
 
@@ -278,7 +299,7 @@ static BOOL UIControlSwizzlingDone = NO;
         self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-draggingOffset.x, -draggingOffset.y));
         [CATransaction commit];
         
-        self.dragging = NO;
+        [self endDragging];
     }
 }
 
@@ -296,7 +317,7 @@ static BOOL UIControlSwizzlingDone = NO;
         self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-draggingOffset.x, -draggingOffset.y));
         [CATransaction commit];
         
-        self.dragging = NO;
+        [self endDragging];
     }
 }
 
@@ -315,6 +336,28 @@ static BOOL UIControlSwizzlingDone = NO;
 
 - (void)dnd_view_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     [self handle_dnd_view_touchesCancelled:touches withEvent:event];
+}
+
+@end
+
+@implementation UIView (CKDragNDrop_Private)
+@dynamic indexInParentBeforeDragging;
+
+- (void)setIndexInParentBeforeDragging:(NSInteger)index{
+    [self willChangeValueForKey:@"indexInParentBeforeDragging"];
+    [UIView executeSwizzling];
+    objc_setAssociatedObject(self, 
+                             &UIViewIndexInParentBeforeDraggingKey,
+                             [NSNumber numberWithInt:index],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"indexInParentBeforeDragging"];
+}
+
+- (NSInteger)indexInParentBeforeDragging{
+    NSNumber* number = objc_getAssociatedObject(self, &UIViewIndexInParentBeforeDraggingKey);
+    if(!number)
+        return NO;
+    return [number intValue];
 }
 
 @end

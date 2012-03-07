@@ -186,4 +186,6 @@ typedef enum CKTableViewCellStyle {
 - (void)setViewDidAppearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 - (void)setViewDidDisappearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 
+- (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
+
 @end

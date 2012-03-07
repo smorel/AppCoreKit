@@ -1060,5 +1060,15 @@
     }
 }
 
+- (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
+    if(block){
+        self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKTableViewCellController* controller = (CKTableViewCellController*)value;
+            UITableViewCell* cell = controller.tableViewCell;
+            block(controller,cell);
+            return (id)nil;
+        }];
+    }
+}
 
 @end
