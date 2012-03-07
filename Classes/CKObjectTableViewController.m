@@ -33,6 +33,7 @@
 @property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, retain) NSString *bindingContextForTableView;
+@property (nonatomic, assign, readwrite) BOOL editing;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -66,6 +67,7 @@
 @synthesize searchBlock = _searchBlock;
 @synthesize snapPolicy = _snapPolicy;
 @synthesize bindingContextForTableView = _bindingContextForTableView;
+@synthesize editing = _editing;
 
 @synthesize editButton;
 @synthesize doneButton;
@@ -89,6 +91,7 @@
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyNone;
     _snapPolicy = CKObjectTableViewControllerSnapPolicyNone;
+    _editing = NO;
     
     self.bindingContextForTableView = [NSString stringWithFormat:@"TableVisibility_<%p>",self];
 }
@@ -961,15 +964,18 @@
         case CKObjectTableViewControllerEditableTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
             [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            self.editing = (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES;
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
             [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
             [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
+            self.editing = (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES;
             break;
         }
         case CKObjectTableViewControllerEditableTypeNone:break;
 	}
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }

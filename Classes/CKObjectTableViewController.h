@@ -145,6 +145,14 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 */
 @property (nonatomic, assign) CKObjectTableViewControllerEditableType editableType;
 
+
+/** 
+ A Boolean value idicating wether the table view is currently in the editing mode.
+ 
+ This value is set when hitting the editButton and doneButton managed by the editableType property. This flag will not get set if you explicitely call setEditing:animated: on the tableView.
+ */
+@property (nonatomic, assign, readonly) BOOL editing;
+
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
