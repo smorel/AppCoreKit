@@ -204,9 +204,9 @@ static BOOL UIControlSwizzlingDone = NO;
     if([view pointInside:point withEvent:nil]){
         [stack insertObject:view atIndex:0];
     }
-    else if(view.clipsToBounds){
+    /*else if(view.clipsToBounds){
         forgetSubViews = YES;
-    }
+    }*/
     
     if(!forgetSubViews){
         for(UIView* v in view.subviews){
@@ -287,17 +287,15 @@ static BOOL UIControlSwizzlingDone = NO;
 
 - (void)handle_dnd_view_touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     if(self.draggable){
-        [self sendActionsForDragEvents:CKDragEventDrop hitStack:[self hitStackWithTouches:touches event:event]];
-        
-        CGPoint draggingOffset = [self draggingOffset];
-        
-        [self setDraggingOffset:CGPointMake(0, 0)];
         
         [CATransaction begin];
         [CATransaction setDisableActions: YES];
         
-        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-draggingOffset.x, -draggingOffset.y));
+        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-self.draggingOffset.x, -self.draggingOffset.y));
         [CATransaction commit];
+        
+        [self sendActionsForDragEvents:CKDragEventDrop hitStack:[self hitStackWithTouches:touches event:event]];
+        [self setDraggingOffset:CGPointMake(0, 0)];
         
         [self endDragging];
     }
@@ -305,17 +303,15 @@ static BOOL UIControlSwizzlingDone = NO;
 
 - (void)handle_dnd_view_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     if(self.draggable){
-        [self sendActionsForDragEvents:CKDragEventCancelled hitStack:[self hitStackWithTouches:touches event:event]];
-        
-        CGPoint draggingOffset = [self draggingOffset];
-        
-        [self setDraggingOffset:CGPointMake(0, 0)];
-        
         [CATransaction begin];
         [CATransaction setDisableActions: YES];
         
-        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-draggingOffset.x, -draggingOffset.y));
+        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-self.draggingOffset.x, -self.draggingOffset.y));
         [CATransaction commit];
+        
+        
+        [self sendActionsForDragEvents:CKDragEventCancelled hitStack:[self hitStackWithTouches:touches event:event]];
+        [self setDraggingOffset:CGPointMake(0, 0)];
         
         [self endDragging];
     }
