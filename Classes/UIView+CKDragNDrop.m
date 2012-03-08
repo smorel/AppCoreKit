@@ -15,7 +15,7 @@
 #import <objc/runtime.h>
 
 static char UIViewDragTargetActionsKey;
-static char UIViewDraggableKey;
+static char UIViewDragTypeKey;
 static char UIViewDraggingOffsetKey;
 static char UIViewDraggingBeginPointKey;
 static char UIViewDraggingKey;
@@ -31,7 +31,7 @@ static BOOL UIControlSwizzlingDone = NO;
 
 @implementation UIView (CKDragNDrop)
 @dynamic dragTargetActions;
-@dynamic draggable;
+@dynamic dragType;
 @dynamic dragging;
 @dynamic draggingOffset;
 
@@ -45,6 +45,13 @@ static BOOL UIControlSwizzlingDone = NO;
     }
 }
 
+- (void)dragTypeMetaData:(CKObjectPropertyMetaData*)metaData{
+    metaData.enumDescriptor = CKEnumDefinition(@"CKDragType", 
+                                               CKDragTypeNone,
+                                               CKDragTypeMove,
+                                               CKDragTypeGhost);
+}
+
 - (void)setDragTargetActions:(NSMutableDictionary*)dragTargetActions{
     objc_setAssociatedObject(self, 
                              &UIViewDragTargetActionsKey,
@@ -56,21 +63,21 @@ static BOOL UIControlSwizzlingDone = NO;
     return objc_getAssociatedObject(self, &UIViewDragTargetActionsKey);
 }
 
-- (void)setDraggable:(BOOL)draggable{
-    [self willChangeValueForKey:@"draggable"];
+- (void)setDragType:(CKDragType)dragType{
+    [self willChangeValueForKey:@"dragType"];
     [UIView executeSwizzling];
     objc_setAssociatedObject(self, 
-                             &UIViewDraggableKey,
-                             [NSNumber numberWithBool:draggable],
+                             &UIViewDragTypeKey,
+                             [NSNumber numberWithInt:dragType],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self didChangeValueForKey:@"draggable"];
+    [self didChangeValueForKey:@"dragType"];
 }
 
-- (BOOL)draggable{
-    NSNumber* number = objc_getAssociatedObject(self, &UIViewDraggableKey);
+- (CKDragType)dragType{
+    NSNumber* number = objc_getAssociatedObject(self, &UIViewDragTypeKey);
     if(!number)
         return NO;
-    return [number boolValue];
+    return (CKDragType)[number intValue];
 }
 
 - (void)setDragging:(BOOL)dragging{
@@ -177,7 +184,7 @@ static BOOL UIControlSwizzlingDone = NO;
     [self removeTarget:target action:action forDragEventsInArray:events];
 }
 
-- (void)sendActionsForDragEvents:(CKDragEvents)dragEvents hitStack:(NSArray*)hitStack{
+- (void)sendActionsForDragEvents:(CKDragEvents)dragEvents touch:(UITouch*)touch{
     NSArray* events = [self dragEventsArrayFromControlEvents:dragEvents];
     for(NSNumber* event in events){
         NSMutableArray* array = [self.dragTargetActions objectForKey:event];
@@ -185,7 +192,7 @@ static BOOL UIControlSwizzlingDone = NO;
             id target = [dico objectForKey:@"target"];
             SEL action = (SEL)[[dico objectForKey:@"action"]pointerValue];
             if([target respondsToSelector:action]){
-                [target performSelector:action withObjects:[NSArray arrayWithObjects:self,hitStack,event,nil]]; 
+                [target performSelector:action withObjects:[NSArray arrayWithObjects:self,touch,event,nil]]; 
             }
         }
     }
@@ -224,8 +231,7 @@ static BOOL UIControlSwizzlingDone = NO;
     return ar;
 }
 
-- (NSArray*)hitStackWithTouches:(NSSet *)touches event:event{
-    UITouch* touch = [touches anyObject];
+- (NSArray*)hitStackUnderTouch:(UITouch *)touch{
     CGPoint p = [touch locationInView:self];
     CGPoint windowPoint = [self convertPoint:p toView:touch.window];
     
@@ -248,20 +254,20 @@ static BOOL UIControlSwizzlingDone = NO;
 }
 
 - (void)handle_dnd_view_touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    if(self.draggable){
+    if(self.dragType != CKDragTypeNone){
         UITouch* touch = [touches anyObject];
         CGPoint p = [touch locationInView:self];
         
         p = [self convertPoint:p toView:[self superview]];
         [self setDraggingBeginPoint:p];
         
-        [self sendActionsForDragEvents:CKDragEventBegin hitStack:[self hitStackWithTouches:touches event:event]];
+        [self sendActionsForDragEvents:CKDragEventBegin touch:touch];
         [self startDragging];
     }
 }
 
 - (void)handle_dnd_view_touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    if(self.draggable){
+    if(self.dragType != CKDragTypeNone){
         UITouch* touch = [touches anyObject];
         CGPoint p = [touch locationInView:self];
         p = [self convertPoint:p toView:[self superview]];
@@ -281,20 +287,19 @@ static BOOL UIControlSwizzlingDone = NO;
         
         [CATransaction commit];
                
-        [self sendActionsForDragEvents:CKDragEventDragging hitStack:[self hitStackWithTouches:touches event:event]];
+        [self sendActionsForDragEvents:CKDragEventDragging touch:touch];
     }
 }
 
 - (void)handle_dnd_view_touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    if(self.draggable){
-        
+     if(self.dragType != CKDragTypeNone){
         [CATransaction begin];
         [CATransaction setDisableActions: YES];
         
         self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-self.draggingOffset.x, -self.draggingOffset.y));
         [CATransaction commit];
         
-        [self sendActionsForDragEvents:CKDragEventDrop hitStack:[self hitStackWithTouches:touches event:event]];
+        [self sendActionsForDragEvents:CKDragEventDrop touch:[touches anyObject]];
         [self setDraggingOffset:CGPointMake(0, 0)];
         
         [self endDragging];
@@ -302,7 +307,7 @@ static BOOL UIControlSwizzlingDone = NO;
 }
 
 - (void)handle_dnd_view_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    if(self.draggable){
+     if(self.dragType != CKDragTypeNone){
         [CATransaction begin];
         [CATransaction setDisableActions: YES];
         
@@ -310,7 +315,7 @@ static BOOL UIControlSwizzlingDone = NO;
         [CATransaction commit];
         
         
-        [self sendActionsForDragEvents:CKDragEventCancelled hitStack:[self hitStackWithTouches:touches event:event]];
+        [self sendActionsForDragEvents:CKDragEventCancelled touch:[touches anyObject]];
         [self setDraggingOffset:CGPointMake(0, 0)];
         
         [self endDragging];
@@ -374,9 +379,9 @@ static BOOL UIControlSwizzlingDone = NO;
     }
 }
 
-- (void)setDraggable:(BOOL)draggable{
+- (void)setDragType:(CKDragType)dragType{
     [UIControl executeSwizzling];
-    [super setDraggable:draggable];
+    [super setDragType:dragType];
 }
 
 - (void)addTarget:(id)target action:(SEL)action forDragEvents:(CKDragEvents)dragEvents{
@@ -409,7 +414,7 @@ static BOOL UIControlSwizzlingDone = NO;
 
 //BINDING
 
-typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEvents event);
+typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents event);
 
 /** TODO
  */
@@ -495,13 +500,13 @@ typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEv
     self.viewRef.object = view;
 }
 
--(void)executeDragEventForObject:(UIView*)view hitStack:(NSArray*)hitStack dragEvent:(NSNumber*)event{
+-(void)executeDragEventForObject:(UIView*)view touch:(UITouch*)touch dragEvent:(NSNumber*)event{
     if(self.block){
-		self.block(view,hitStack,[event intValue]);
+		self.block(view,touch,[event intValue]);
 	}
 	else if(self.targetRef.object && [self.targetRef.object respondsToSelector:self.selector]){
         [self.targetRef.object performSelector:self.selector
-                  withObjects:[NSArray arrayWithObjects:view,hitStack,event,nil]];
+                  withObjects:[NSArray arrayWithObjects:view,touch,event,nil]];
 	}
 	else{
 		//NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
@@ -518,15 +523,15 @@ typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEv
     }
 }
 
--(void)dragEventForObject:(UIView*)view hitStack:(NSArray*)hitStack dragEvent:(NSNumber*)eventNumber{
+-(void)dragEventForObject:(UIView*)view touch:(UITouch*)touch dragEvent:(NSNumber*)eventNumber{
     if(self.contextOptions & CKBindingsContextPerformOnMainThread){
-        [self  performSelectorOnMainThread:@selector(executeDragEventForObject:hitStack:dragEvent:) 
-                                withObject:view withObject:hitStack withObject:eventNumber
+        [self  performSelectorOnMainThread:@selector(executeDragEventForObject:touch:dragEvent:) 
+                                withObject:view withObject:touch withObject:eventNumber
                              waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
     }
     else {
-        [self performSelector:@selector(executeDragEventForObject:hitStack:dragEvent:) onThread:[NSThread currentThread] 
-                  withObjects:[NSArray arrayWithObjects:view,hitStack,eventNumber,nil] 
+        [self performSelector:@selector(executeDragEventForObject:touch:dragEvent:) onThread:[NSThread currentThread] 
+                  withObjects:[NSArray arrayWithObjects:view,touch,eventNumber,nil] 
                 waitUntilDone:(self.contextOptions & CKBindingsContextWaitUntilDone)];
     }
 }
@@ -536,7 +541,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEv
 	[self unbind];
     
 	if(self.viewRef.object){
-        [(UIView*)self.viewRef.object addTarget:self action:@selector(dragEventForObject:hitStack:dragEvent:) forDragEvents:self.dragEvents];
+        [(UIView*)self.viewRef.object addTarget:self action:@selector(dragEventForObject:touch:dragEvent:) forDragEvents:self.dragEvents];
 	}
 	binded = YES;
 }
@@ -548,7 +553,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEv
 - (void)unbindInstance:(id)instance{
 	if(binded){
 		if(instance){
-            [(UIView*)instance removeTarget:self action:@selector(dragEventForObject:hitStack:dragEvent:) forDragEvents:self.dragEvents];
+            [(UIView*)instance removeTarget:self action:@selector(dragEventForObject:touch:dragEvent:) forDragEvents:self.dragEvents];
 		}
 		binded = NO;
 	}
@@ -566,7 +571,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, NSArray* hitTestViews, CKDragEv
 
 @implementation UIView (CKDragNDropBindings)
 
-- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, NSArray* hitStackObjects, CKDragEvents event))block{
+- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, UITouch* touch, CKDragEvents event))block{
     [NSObject validateCurrentBindingsContext];
     
 	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[UIViewDragDropBlockBinder class]];

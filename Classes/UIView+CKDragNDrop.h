@@ -20,22 +20,30 @@ typedef enum CKDragEvents{
     CKDragEventAll = CKDragEventBegin | CKDragEventDrop | CKDragEventCancelled | CKDragEventDragging
 }CKDragEvents;
 
+typedef enum CKDragType{
+    CKDragTypeNone,
+    CKDragTypeMove,
+    CKDragTypeGhost
+}CKDragType;
+
 @interface UIView (CKDragNDrop)
 @property(nonatomic,retain)NSMutableDictionary* dragTargetActions;
-@property(nonatomic,assign)BOOL draggable;
+@property(nonatomic,assign)CKDragType dragType;
 @property(nonatomic,assign,readonly)BOOL dragging;
 @property(nonatomic,assign,readonly)CGPoint draggingOffset;
 
 - (void)addTarget:(id)target action:(SEL)action forDragEvents:(CKDragEvents)dragEvents;
 - (void)removeTarget:(id)target action:(SEL)action forDragEvents:(CKDragEvents)dragEvents;
-- (void)sendActionsForDragEvents:(CKDragEvents)dragEvents hitStack:(NSArray*)hitStack;
+- (void)sendActionsForDragEvents:(CKDragEvents)dragEvents touch:(UITouch*)touch;
+
+- (NSArray*)hitStackUnderTouch:(UITouch *)touch;
 
 @end
 
 
 @interface UIView (CKDragNDropBindings)
 
-- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, NSArray* hitTestViews, CKDragEvents event))block;
+- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, UITouch* touch, CKDragEvents event))block;
 - (void)bindDragEvent:(CKDragEvents)dragEvents target:(id)target action:(SEL)selector;
 
 @end
