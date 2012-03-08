@@ -571,7 +571,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 
 @implementation UIView (CKDragNDropBindings)
 
-- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, UITouch* touch, CKDragEvents event))block{
+- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* view, UITouch* touch, CKDragEvents event))block{
     [NSObject validateCurrentBindingsContext];
     
 	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[UIViewDragDropBlockBinder class]];

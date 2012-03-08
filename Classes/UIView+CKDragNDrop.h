@@ -43,7 +43,7 @@ typedef enum CKDragType{
 
 @interface UIView (CKDragNDropBindings)
 
-- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* object, UITouch* touch, CKDragEvents event))block;
+- (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* view, UITouch* touch, CKDragEvents event))block;
 - (void)bindDragEvent:(CKDragEvents)dragEvents target:(id)target action:(SEL)selector;
 
 @end
