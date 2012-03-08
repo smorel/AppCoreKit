@@ -97,6 +97,15 @@ static BOOL UIControlSwizzlingDone = NO;
     return [number boolValue];
 }
 
+- (void)updateTransform{
+    [CATransaction begin];
+    [CATransaction setDisableActions: YES];
+    
+    self.transform = CGAffineTransformMakeTranslation(self.draggingOffset.x, self.draggingOffset.x);
+    
+    [CATransaction commit];
+}
+
 - (void)setDraggingOffset:(CGPoint)draggingOffset{
     [self willChangeValueForKey:@"draggingOffset"];
     [UIView executeSwizzling];
@@ -104,6 +113,7 @@ static BOOL UIControlSwizzlingDone = NO;
                              &UIViewDraggingOffsetKey,
                              [NSValue valueWithCGPoint:draggingOffset],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self updateTransform];
     [self didChangeValueForKey:@"draggingOffset"];
 }
 
@@ -273,32 +283,16 @@ static BOOL UIControlSwizzlingDone = NO;
         p = [self convertPoint:p toView:[self superview]];
         
         CGPoint begin = [self draggingBeginPoint];
-        CGPoint oldDraggingOffset = [self draggingOffset];
         
         CGPoint newDraggingOffset = CGPointMake((p.x - begin.x), (p.y - begin.y));
-        
         [self setDraggingOffset:newDraggingOffset];
         
-        
-        [CATransaction begin];
-        [CATransaction setDisableActions: YES];
-        
-        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation((newDraggingOffset.x - oldDraggingOffset.x), (newDraggingOffset.y - oldDraggingOffset.y)));
-        
-        [CATransaction commit];
-               
         [self sendActionsForDragEvents:CKDragEventDragging touch:touch];
     }
 }
 
 - (void)handle_dnd_view_touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
      if(self.dragType != CKDragTypeNone){
-        [CATransaction begin];
-        [CATransaction setDisableActions: YES];
-        
-        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-self.draggingOffset.x, -self.draggingOffset.y));
-        [CATransaction commit];
-        
         [self sendActionsForDragEvents:CKDragEventDrop touch:[touches anyObject]];
         [self setDraggingOffset:CGPointMake(0, 0)];
         
@@ -308,13 +302,6 @@ static BOOL UIControlSwizzlingDone = NO;
 
 - (void)handle_dnd_view_touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
      if(self.dragType != CKDragTypeNone){
-        [CATransaction begin];
-        [CATransaction setDisableActions: YES];
-        
-        self.transform = CGAffineTransformConcat(self.transform,CGAffineTransformMakeTranslation(-self.draggingOffset.x, -self.draggingOffset.y));
-        [CATransaction commit];
-        
-        
         [self sendActionsForDragEvents:CKDragEventCancelled touch:[touches anyObject]];
         [self setDraggingOffset:CGPointMake(0, 0)];
         

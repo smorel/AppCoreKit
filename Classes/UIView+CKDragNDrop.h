@@ -38,6 +38,10 @@ typedef enum CKDragType{
 
 - (NSArray*)hitStackUnderTouch:(UITouch *)touch;
 
+//Private interface : This method will get called each time the draggingOffset is getting changed.
+//By default, this sets the view's transform to an affine transform with draggingOffset as translation.
+- (void)updateTransform;
+
 @end
 
 
