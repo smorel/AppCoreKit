@@ -27,10 +27,12 @@
 @synthesize footerView = _footerView;
 @synthesize parentController = _parentController;
 @synthesize hidden = _hidden;
+@synthesize collapsed =_collapsed;
 
 - (id)init{
 	[super init];
 	_hidden = NO;
+    _collapsed = NO;
 	return self;
 }
 
@@ -121,6 +123,26 @@
     }
     
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)setCollapsed:(BOOL)bo withRowAnimation:(UITableViewRowAnimation)animation{
+    if(_collapsed != bo){
+        self.collapsed = bo;
+        if(_parentController.state == CKUIViewControllerStateDidAppear){
+            NSInteger section = [_parentController indexOfSection:self];
+            NSMutableArray* indexPaths = [NSMutableArray array];
+            for(int i =0;i<[self numberOfObjects];++i){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+                [indexPaths addObject:indexPath];
+            }
+            if(_collapsed){
+                [_parentController.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+            }
+            else{
+                [_parentController.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+            }
+        }
+    }
 }
 
 @end

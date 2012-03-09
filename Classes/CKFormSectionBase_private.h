@@ -8,10 +8,9 @@
 
 @interface CKFormSectionBase()
 @property (nonatomic,readwrite) BOOL hidden;
-@property (nonatomic,assign) CKFormTableViewController* parentController;
+@property (nonatomic,readwrite) BOOL collapsed;
+@property (nonatomic,assign,readwrite) CKFormTableViewController* parentController;
 
-- (NSInteger)numberOfObjects;
-- (id)objectAtIndex:(NSInteger)index;
 - (void)removeObjectAtIndex:(NSInteger)index;
 - (void)fetchRange:(NSRange)range;
 

@@ -62,7 +62,7 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	NSInteger count = [formSection numberOfObjects];
+	NSInteger count = formSection.collapsed ? 0 : [formSection numberOfObjects];
 	return count;
 }
 

@@ -219,7 +219,7 @@
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate || self.hidden){
+	if(sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
 	
@@ -231,7 +231,7 @@
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	if(sectionUpdate || self.hidden){
+	if(sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
 	
@@ -243,7 +243,7 @@
 
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate || self.hidden){
+	if(sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
 	int headerCount = [_headerCellDescriptors count];
@@ -260,7 +260,7 @@
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(sectionUpdate || self.hidden){
+	if(sectionUpdate || self.hidden || self.collapsed){
 		return;
 	}
 	int headerCount = [_headerCellDescriptors count];
@@ -286,7 +286,7 @@
 	
 	[self.footerCellDescriptors addObject:descriptor];
 	
-	if(![_parentController reloading]){
+	if(![_parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController insertObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -301,7 +301,7 @@
 	
 	[self.headerCellDescriptors addObject:descriptor];
 	
-	if(![_parentController reloading]){
+	if(![_parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController insertObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -319,7 +319,7 @@
 	
 	[self.footerCellDescriptors removeObjectAtIndex:footerIndex];
 	
-	if(![_parentController reloading]){
+	if(![_parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -332,7 +332,7 @@
 	
 	[self.headerCellDescriptors removeObjectAtIndex:headerIndex];
 	
-	if(![_parentController reloading]){
+	if(![_parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];

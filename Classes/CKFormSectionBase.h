@@ -35,5 +35,12 @@
 @property (nonatomic,readonly) NSInteger sectionIndex;
 @property (nonatomic,readonly) NSInteger sectionVisibleIndex;
 @property (nonatomic,readonly) BOOL hidden;
+@property (nonatomic, assign, readonly) BOOL collapsed;
+@property (nonatomic,assign,readonly) CKFormTableViewController* parentController;
+
+- (void)setCollapsed:(BOOL)collapsed withRowAnimation:(UITableViewRowAnimation)animation;
+
+- (NSInteger)numberOfObjects;
+- (id)objectAtIndex:(NSInteger)index;
 
 @end
