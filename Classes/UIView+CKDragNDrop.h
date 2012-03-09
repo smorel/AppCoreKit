@@ -27,8 +27,8 @@ typedef enum CKDragType{
 }CKDragType;
 
 @interface UIView (CKDragNDrop)
-@property(nonatomic,retain)NSMutableDictionary* dragTargetActions;
 @property(nonatomic,assign)CKDragType dragType;
+@property(nonatomic,retain,readonly)NSMutableDictionary* dragTargetActions;
 @property(nonatomic,assign,readonly)BOOL dragging;
 @property(nonatomic,assign,readonly)CGPoint draggingOffset;
 
