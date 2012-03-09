@@ -1204,35 +1204,39 @@
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
-    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
-        CGFloat offset = r.origin.y + (r.size.height / 2.0);
-        offset -= self.tableView.contentInset.top;
-        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
-    }
-    else{
-        [self.tableView scrollToRowAtIndexPath:indexPath 
-                              atScrollPosition:UITableViewScrollPositionMiddle 
-                                      animated:YES];
+    if([self isValidIndexPath:indexPath]){
+        if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+            CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+            CGFloat offset = r.origin.y + (r.size.height / 2.0);
+            offset -= self.tableView.contentInset.top;
+            [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
+        }
+        else{
+            [self.tableView scrollToRowAtIndexPath:indexPath 
+                                  atScrollPosition:UITableViewScrollPositionMiddle 
+                                          animated:YES];
+        }
     }
 }
 
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
-    if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
-        CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
-        CGFloat offset = r.origin.y + (r.size.height / 2.0);
-        offset -= self.tableView.contentInset.top;
-        [self.tableView selectRowAtIndexPath:indexPath
-                                    animated:NO
-                              scrollPosition:UITableViewScrollPositionNone];
-        [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
+    if([self isValidIndexPath:indexPath]){
+        if(self.snapPolicy == CKObjectTableViewControllerSnapPolicyCenter){
+            CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
+            CGFloat offset = r.origin.y + (r.size.height / 2.0);
+            offset -= self.tableView.contentInset.top;
+            [self.tableView selectRowAtIndexPath:indexPath
+                                        animated:NO
+                                  scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView setContentOffset:CGPointMake(0,offset) animated:animated];
+        }
+        else{
+            [self.tableView selectRowAtIndexPath:indexPath
+                                        animated:NO
+                                  scrollPosition:UITableViewScrollPositionNone];
+        }
+        self.selectedIndexPath = indexPath;
     }
-    else{
-        [self.tableView selectRowAtIndexPath:indexPath
-                                    animated:NO
-                              scrollPosition:UITableViewScrollPositionNone];
-    }
-    self.selectedIndexPath = indexPath;
 }
 
 
