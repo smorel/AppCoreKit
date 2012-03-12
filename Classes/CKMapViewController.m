@@ -68,6 +68,21 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
+    
+    if(!self.controllerFactory){
+        CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+            CKMapAnnotationController* controller = [[[CKMapAnnotationController alloc]init]autorelease];
+            [controller setSetupCallback:[CKCallback callbackWithBlock:^id(id value) {
+                CKMapAnnotationController* controller = (CKMapAnnotationController*)value;
+                MKAnnotationView* annotationView = (MKAnnotationView*)controller.view;
+                annotationView.annotation = [controller value];
+                return (id)nil;
+            }]];
+            return controller;
+        }];
+        self.controllerFactory = factory;
+    }
 }
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
