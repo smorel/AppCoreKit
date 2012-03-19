@@ -30,7 +30,6 @@ typedef enum CKBindingsContextOptions{
 
 + (NSString *)allBindingsDescription;
 
-+ (void)validateCurrentBindingsContext;
 
 // Binding Context Management
 
@@ -54,6 +53,11 @@ typedef enum CKBindingsContextOptions{
 
 - (void)endBindingsContext;
 - (void)clearBindingsContext;
+
+
++ (void)validateCurrentBindingsContext;
++ (CKBindingsContextOptions)currentBindingContextOptions;
++ (id)currentBindingContext;
 
 @end
 

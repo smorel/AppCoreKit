@@ -82,3 +82,4 @@
 #import "CKUIView+InlineDebugger.h"
 
 #import "UIView+CKDragNDrop.h"
+#import "UIBarButtonItem+CKBinding.h"
