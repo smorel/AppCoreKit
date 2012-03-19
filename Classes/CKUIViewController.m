@@ -544,5 +544,18 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 #endif
 
 
+
+- (void)setEditing:(BOOL)editing{
+    [self willChangeValueForKey:@"editing"];
+    [super setEditing:editing];
+    [self didChangeValueForKey:@"editing"];
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+    [self willChangeValueForKey:@"editing"];
+    [super setEditing:editing animated:animated];
+    [self didChangeValueForKey:@"editing"];
+}
+
 @end
 
