@@ -14,6 +14,9 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
 
+#import "CKFormCellDescriptor.h"
+
+
 @interface CKItemViewControllerFactoryItem() 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
@@ -86,6 +89,14 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
                                            withObject:(id)object 
                                         withIndexPath:(NSIndexPath*)indexPath  
                                               forSize:(BOOL)forSize{
+    if([item isKindOfClass:[CKFormCellDescriptor class]]){
+        CKFormCellDescriptor* cellDescriptor = (CKFormCellDescriptor*)item;
+        if(cellDescriptor.cellController){
+            return cellDescriptor.cellController;
+        }
+    }
+    
+    
     CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForItem:item
                                                                                                      object:object 
                                                                                                   indexPath:indexPath 

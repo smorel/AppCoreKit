@@ -38,6 +38,9 @@
 - (id)initWithCellController:(CKTableViewCellController*)controller{
     [super init];
 	self.value = [controller value];
+    
+    NSAssert(self.value != nil,@"The cellController MUST have a value here");
+    
 	self.cellController = controller;
 	return self;
 }

@@ -189,7 +189,7 @@
     for(CKTableViewCellController* controller in cellcontrollers){
         [cellDescriptors addObject:[CKFormCellDescriptor cellDescriptorWithCellController:controller]];
     }
-    return [self initWithCellControllers:cellDescriptors];
+    return [self initWithCellDescriptors:cellDescriptors];
 }
 
 + (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers{
