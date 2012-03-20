@@ -959,12 +959,12 @@
 - (IBAction)edit:(id)sender{
     switch(_editableType){
         case CKObjectTableViewControllerEditableTypeLeft:{
-            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
         case CKObjectTableViewControllerEditableTypeRight:{
-            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:YES];
+            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
