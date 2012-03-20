@@ -22,6 +22,8 @@ typedef void(^CKInvokationBlock)();
 @synthesize objectRef = _objectRef;
 
 - (void)dealloc{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
     [_block release];
     [_objectRef release];
     [super dealloc];
@@ -33,7 +35,7 @@ typedef void(^CKInvokationBlock)();
     
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:bself selector:@selector(execute) object:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [bself autorelease];
     }];
     
