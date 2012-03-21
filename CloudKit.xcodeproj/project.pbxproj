@@ -2557,7 +2557,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "UFW_TARGET=${PROJECT}\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --include \"${SRCROOT}/Documentation/\" --index-desc \"${SRCROOT}/Documentation/index.markdown\" --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_IPHONE_DIR}/Documentation/output\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}-dev\" --warn-undocumented-object --exit-threshold 2 \"${TARGET_BUILD_DIR}/${UFW_TARGET}.framework/Headers\"\n\n#cp -R -L \"${UFW_IPHONE_DIR}/Documentation/output/com.wherecloud.${UFW_TARGET}.docset\" \"${DEVELOPER_DIR}/Documentation/DocSets\"\n";
+			shellScript = "UFW_TARGET=${PROJECT}\nUFW_IPHONE_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos\"\n\n# Generates Documentation\nappledoc --create-docset --install-docset --include \"${SRCROOT}/Documentation/\" --index-desc \"${SRCROOT}/Documentation/index.markdown\" --output \"${UFW_IPHONE_DIR}/Documentation/output\" --docset-install-path \"${UFW_IPHONE_DIR}/Documentation/output\" --project-name \"${UFW_TARGET}\" --project-company \"Wherecloud\" --company-id \"com.wherecloud\" --project-version \"${FRAMEWORK_VERSION}-dev\" --warn-undocumented-object --exit-threshold 2 \"${TARGET_BUILD_DIR}/${UFW_TARGET}.framework/Headers\"\n\ncp -R -L \"${UFW_IPHONE_DIR}/Documentation/output/com.wherecloud.${UFW_TARGET}.docset\" \"${USER_LIBRARY_DIR}/Developer/Shared/Documentation/DocSets\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
