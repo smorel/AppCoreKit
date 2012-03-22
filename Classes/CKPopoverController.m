@@ -11,6 +11,7 @@
 
 @implementation CKPopoverController
 @synthesize autoDismissOnInterfaceOrientation;
+@synthesize didDismissPopoverBlock = _didDismissPopoverBlock;
 
 - (void)postInit{
     self.autoDismissOnInterfaceOrientation = YES;
@@ -54,6 +55,7 @@
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [self clearBindingsContext];
+    [_didDismissPopoverBlock release];
     [super dealloc];
 }
 
@@ -74,6 +76,9 @@
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
+    if(_didDismissPopoverBlock){
+        _didDismissPopoverBlock(self);
+    }
     [self autorelease];
 }
 
