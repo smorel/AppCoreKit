@@ -35,7 +35,7 @@ typedef void(^CKInvokationBlock)();
     
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [NSObject cancelPreviousPerformRequestsWithTarget:bself];
         [bself autorelease];
     }];
     
