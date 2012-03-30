@@ -1,5 +1,5 @@
 //
-//  UIBarButtonItem+CKBinding.h
+//  CKUIBarButtonItem+Additions.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 12-03-15.
@@ -11,8 +11,9 @@
 
 typedef void(^UIBarButtonItemExecutionBlock)();
 
-@interface UIBarButtonItem (CKBinding)
+@interface UIBarButtonItem (CKAdditions)
 @property(nonatomic,copy) UIBarButtonItemExecutionBlock block;
+@property(nonatomic,retain) id userData;
 
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())block;
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style block:(void(^)())block;

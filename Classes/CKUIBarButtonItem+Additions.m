@@ -1,12 +1,12 @@
 //
-//  UIBarButtonItem+CKBinding.m
+//  CKUIBarButtonItem+Additions.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 12-03-15.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "UIBarButtonItem+CKBinding.h"
+#import "CKUIBarButtonItem+Additions.h"
 #import <objc/runtime.h>
 #import "CKBinding.h"
 #import "CKBindingsManager.h"
@@ -134,10 +134,23 @@
 
 
 
+static char UIBarButtonItemUserDataKey;
 static char UIBarButtonItemExecutionBlockKey;
 
-@implementation UIBarButtonItem (CKBinding)
+@implementation UIBarButtonItem (CKAdditions)
 @dynamic block;
+@dynamic userData;
+
+- (void)setUserData:(id)userData{
+    objc_setAssociatedObject(self, 
+                             &UIBarButtonItemUserDataKey,
+                             userData,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (id)userData{
+    return objc_getAssociatedObject(self, &UIBarButtonItemUserDataKey);
+}
 
 - (void)setBlock:(UIBarButtonItemExecutionBlock)block{
     objc_setAssociatedObject(self, 
