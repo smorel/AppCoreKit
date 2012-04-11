@@ -91,7 +91,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
                                               forSize:(BOOL)forSize{
     if([item isKindOfClass:[CKFormCellDescriptor class]]){
         CKFormCellDescriptor* cellDescriptor = (CKFormCellDescriptor*)item;
-        if(cellDescriptor.cellController){
+        if(cellDescriptor.cellController && cellDescriptor.cellController.tableViewCell){
             return cellDescriptor.cellController;
         }
     }
