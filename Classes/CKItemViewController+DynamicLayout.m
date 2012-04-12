@@ -92,6 +92,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
     if([item isKindOfClass:[CKFormCellDescriptor class]]){
         CKFormCellDescriptor* cellDescriptor = (CKFormCellDescriptor*)item;
         if(cellDescriptor.cellController && cellDescriptor.cellController.tableViewCell){
+            [params setObject:cellDescriptor.cellController forKey:CKTableViewAttributeStaticController];
             return cellDescriptor.cellController;
         }
     }

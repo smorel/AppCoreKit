@@ -169,6 +169,7 @@
     }
 	id object = [_objectController objectAtIndexPath:indexPath];
 	[params setObject:object forKey:CKTableViewAttributeObject];
+    [params removeObjectForKey:CKTableViewAttributeStaticController];
     
     NSAssert([[params parentController] isKindOfClass:[CKItemViewContainerController class]],@"Incompatible parent controller");
     
