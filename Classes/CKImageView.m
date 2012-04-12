@@ -314,8 +314,8 @@
 	}
 }
 
-- (void)spinnerStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKImageViewSpinnerStyle", 
+- (void)spinnerStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKImageViewSpinnerStyle", 
                                                CKImageViewSpinnerStyleWhiteLarge,
                                                CKImageViewSpinnerStyleWhite,
                                                CKImageViewSpinnerStyleGray,

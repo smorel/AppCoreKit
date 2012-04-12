@@ -162,9 +162,9 @@
 }
 
 
-- (CKObjectPropertyMetaData*)metaData{
+- (CKPropertyExtendedAttributes*)extendedAttributes{
 	if(self.descriptor != nil){
-		return [CKObjectPropertyMetaData propertyMetaDataForObject:self.subObject.object property:self.descriptor];
+		return [self.descriptor extendedAttributesForInstance:self.subObject.object];
 	}
 	return nil;
 }

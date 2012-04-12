@@ -10,7 +10,7 @@
 #import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
@@ -278,8 +278,8 @@
 	[super dealloc];
 }
 
-- (void)cellStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
+- (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
                                                CKTableViewCellStyleDefault,
                                                UITableViewCellStyleDefault,
                                                CKTableViewCellStyleValue1,

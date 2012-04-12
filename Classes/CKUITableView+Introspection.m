@@ -13,15 +13,15 @@
 
 @implementation UITableView (CKIntrospectionAdditions)
 
-- (void)separatorStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewCellSeparatorStyle",
+- (void)separatorStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellSeparatorStyle",
                                                UITableViewCellSeparatorStyleNone,
 											   UITableViewCellSeparatorStyleSingleLine,
 											   UITableViewCellSeparatorStyleSingleLineEtched);
 }
 
-- (void)styleMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITableViewStyle",
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewStyle",
                                                UITableViewStylePlain,
 											   UITableViewStyleGrouped);
 }

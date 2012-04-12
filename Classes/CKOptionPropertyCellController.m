@@ -50,10 +50,10 @@
 
 - (void)setupLabelsAndValues{
     CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     NSDictionary* valuesAndLabels = nil;
-    if(metaData.valuesAndLabels) valuesAndLabels = metaData.valuesAndLabels;
-    else if(metaData.enumDescriptor) valuesAndLabels = metaData.enumDescriptor.valuesAndLabels;
+    if(attributes.valuesAndLabels) valuesAndLabels = attributes.valuesAndLabels;
+    else if(attributes.enumDescriptor) valuesAndLabels = attributes.enumDescriptor.valuesAndLabels;
 
     NSAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
     NSArray* orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
@@ -74,8 +74,8 @@
 
 - (BOOL)multiSelectionEnabled{
     CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
-    return metaData.multiselectionEnabled;
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    return attributes.multiselectionEnabled;
 }
 
 - (NSString *)labelForValue:(NSInteger)intValue {

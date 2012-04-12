@@ -53,15 +53,15 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize state;
 @synthesize viewIsOnScreen;
 
-- (void)supportedInterfaceOrientationsMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
+- (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
                                                CKInterfaceOrientationPortrait,
                                                CKInterfaceOrientationLandscape,
                                                CKInterfaceOrientationAll);
 }
 
-- (void)stateMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKUIViewControllerState", 
+- (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKUIViewControllerState", 
                                                CKUIViewControllerStateNone,
                                                CKUIViewControllerStateWillAppear,
                                                CKUIViewControllerStateDidAppear,

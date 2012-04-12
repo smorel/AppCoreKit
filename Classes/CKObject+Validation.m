@@ -9,11 +9,11 @@
 #import "CKObject+Validation.h"
 #import "CKNSObject+Introspection.h"
 #import "CKNSObject+Introspection_private.h"
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 
-/* TODO : see how we could integrate our validation predicates from metaData in the KVO validation methods.
+/* TODO : see how we could integrate our validation predicates from attributes in the KVO validation methods.
         by swizzling for example ...
  
  - (BOOL)validateValue:(id *)ioValue forKey:(NSString *)key error:(NSError **)outError;
@@ -27,10 +27,10 @@
 	NSArray* allProperties = [self allPropertyDescriptors];
     for(CKClassPropertyDescriptor* property in allProperties){
             // if(property.isReadOnly == NO){
-        CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:self property:property];
-        if(metaData.validationPredicate){
+        CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:self];
+        if(attributes.validationPredicate){
             id object = [self valueForKey:property.name];
-            if(![metaData.validationPredicate evaluateWithObject:object]){
+            if(![attributes.validationPredicate evaluateWithObject:object]){
                 [results.invalidProperties addObject:property.name];
             }
         }

@@ -90,7 +90,7 @@ void introspectTextInputsProperties(){
 		objectProperty.type = returnType;
 		objectProperty.className = [NSString stringWithUTF8String:class_getName(returnType)];
 		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
-		objectProperty.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:objectProperty.name];
+		objectProperty.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:objectProperty.name];
 		
 		if([NSObject isKindOf:returnType parentType:[NSArray class]]){
 			objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
@@ -325,8 +325,8 @@ void introspectTextInputsProperties(){
 	return NSSelectorFromString(selectorName);
 }
 
-+ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName{
-	NSString* selectorName = [NSString stringWithFormat:@"%@MetaData:",propertyName];
++ (SEL)propertyExtendedAttributesSelectorForProperty : (NSString*)propertyName{
+	NSString* selectorName = [NSString stringWithFormat:@"%@ExtendedAttributes:",propertyName];
 	return NSSelectorFromString(selectorName);
 }
 

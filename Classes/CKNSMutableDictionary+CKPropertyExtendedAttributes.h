@@ -1,5 +1,5 @@
 //
-//  CKNSMutableDictionary+CKObjectPropertyMetaData.h
+//  CKNSMutableDictionary+CKPropertyExtendedAttributes.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-08-23.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSMutableDictionary (CKObjectPropertyMetaData)
+@interface NSMutableDictionary (CKPropertyExtendedAttributes)
 
 //NSNumber
 - (void)setMinimumValue:(NSNumber*)value;

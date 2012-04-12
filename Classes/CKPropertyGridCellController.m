@@ -113,9 +113,9 @@
 
 - (BOOL)isValidValue:(id)value{
     CKObjectProperty* property = [self objectProperty];
-    CKObjectPropertyMetaData* metaData = [property metaData];
-    if(metaData.validationPredicate){
-        return [metaData.validationPredicate evaluateWithObject:value];
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    if(attributes.validationPredicate){
+        return [attributes.validationPredicate evaluateWithObject:value];
     }
     return YES;
 }

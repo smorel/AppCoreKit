@@ -70,8 +70,8 @@
                 useProperty = (range.location != NSNotFound);
             }
             if(useProperty){
-                CKObjectPropertyMetaData* metaData = [CKObjectPropertyMetaData propertyMetaDataForObject:object property:descriptor];
-                if(metaData.editable){
+                CKPropertyExtendedAttributes* attributes = [descriptor extendedAttributesForInstance:object];
+                if(attributes.editable){
                     [theProperties insertObject:descriptor.name atIndex:0];
                 }
             }
@@ -113,14 +113,14 @@
 + (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKObjectProperty*)property readOnly:(BOOL)readOnly{
     CKFormCellDescriptor* cellDescriptor = nil;
     
-    CKObjectPropertyMetaData* metaData = [property metaData];
-    if(metaData.editable == YES){
-        if(metaData.propertyCellControllerClass != nil){
-            NSAssert([NSObject isKindOf:metaData.propertyCellControllerClass parentType:[CKTableViewCellController class]],@"invalid propertyCellControllerClass defined for property : %@",property);
-            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:metaData.propertyCellControllerClass];
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    if(attributes.editable == YES){
+        if(attributes.tableViewCellControllerClass != nil){
+            NSAssert([NSObject isKindOf:attributes.tableViewCellControllerClass parentType:[CKTableViewCellController class]],@"invalid tableViewCellControllerClass defined for property : %@",property);
+            cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:attributes.tableViewCellControllerClass];
         }
-        else if(metaData.valuesAndLabels != nil
-                || metaData.enumDescriptor != nil ){
+        else if(attributes.valuesAndLabels != nil
+                || attributes.enumDescriptor != nil ){
             cellDescriptor = [CKFormCellDescriptor cellDescriptorWithValue:property controllerClass:[CKOptionPropertyCellController class]];
         }
         else{

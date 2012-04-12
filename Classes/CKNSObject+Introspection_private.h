@@ -16,7 +16,7 @@
 + (SEL)keyValueInsertorForProperty : (NSString*)propertyName;
 + (SEL)typeCheckSelectorForProperty : (NSString*)propertyName;
 + (SEL)setSelectorForProperty : (NSString*)propertyName;
-+ (SEL)propertyMetaDataSelectorForProperty : (NSString*)propertyName;
++ (SEL)propertyExtendedAttributesSelectorForProperty : (NSString*)propertyName;
 
 + (SEL)insertSelectorForProperty : (NSString*)propertyName;
 + (SEL)removeSelectorForProperty : (NSString*)propertyName;

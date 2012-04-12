@@ -12,8 +12,8 @@
 
 @implementation UIToolbar (CKIntrospectionAdditions)
 
-- (void)barStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"UIBarStyle", 
+- (void)barStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIBarStyle", 
                                                UIBarStyleDefault,
                                                UIBarStyleBlack,
                                                UIBarStyleBlackOpaque,

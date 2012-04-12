@@ -231,9 +231,9 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    CKObjectPropertyMetaData* metaData = [[self objectProperty]metaData];
-    NSInteger min = [metaData.options minimumLength];
-    NSInteger max = [metaData.options maximumLength];
+    CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
+    NSInteger min = [attributes.options minimumLength];
+    NSInteger max = [attributes.options maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;

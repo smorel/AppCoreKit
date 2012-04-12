@@ -14,8 +14,8 @@
 
 @implementation MKMapView (CKIntrospectionAdditions)
 
-- (void)annotationsMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.contentProtocol = @protocol(MKAnnotation);
+- (void)annotationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.contentProtocol = @protocol(MKAnnotation);
 }
 
 //informal protocol for CKObjectProperty arrays insert/remove
@@ -37,8 +37,8 @@
 	[self removeAnnotations:self.annotations];
 }
 
-- (void)mapTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"MKMapType",
+- (void)mapTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"MKMapType",
                                                    MKMapTypeStandard,
                                                    MKMapTypeSatellite,
                                                    MKMapTypeHybrid);

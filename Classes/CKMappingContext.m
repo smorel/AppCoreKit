@@ -269,14 +269,14 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
             NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
             
-            CKObjectPropertyMetaData* metaData = [property metaData];
-            Class contentType = [self objectClass:subObjectDefinition defaultClass:[metaData contentType]];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+            Class contentType = [self objectClass:subObjectDefinition defaultClass:[attributes contentType]];
            
             id subObjectMappings = [self mappingsDefinition:subObjectDefinition];
             if(!subObjectMappings && contentType != nil){
                 subObjectMappings = [options dictionaryForClass:contentType];
             }
-            else if((contentType == nil || contentType == [metaData contentType]) && subObjectMappings){
+            else if((contentType == nil || contentType == [attributes contentType]) && subObjectMappings){
                 NSString* className = [subObjectMappings objectForKey:CKMappingClassKey];
                 if(className){
                     contentType = NSClassFromString(className);
@@ -285,7 +285,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             
             if(contentType == nil){
                 NSString* details = [NSString stringWithFormat:@"Could not find any valid class to create an object in property : %@",property];
-                NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property metaData",CKMappingClassKey];
+                NSString* details2 = [NSString stringWithFormat:@"The class could be defined in JSON object definition using '%@' or in property attributes",CKMappingClassKey];
                 *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidObjectClass,[NSString stringWithFormat:@"%@\n%@",details,details2]);
                 return;
             }
@@ -305,7 +305,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 			else{
 				id propertyCollection = [property value];
 				if(!propertyCollection){
-					NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its metaData as creatable or set the property in the postInit method of its object.",property];
+					NSString* details = [NSString stringWithFormat:@"The property %@ is a nil collection and must be instanciated. \nYou should set its attributes as creatable or set the property in the postInit method of its object.",property];
                     *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidProperty,details);
 					return;
 				}

@@ -45,8 +45,8 @@ static BOOL UIControlSwizzlingDone = NO;
     }
 }
 
-- (void)dragTypeMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKDragType", 
+- (void)dragTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKDragType", 
                                                CKDragTypeNone,
                                                CKDragTypeMove,
                                                CKDragTypeGhost);

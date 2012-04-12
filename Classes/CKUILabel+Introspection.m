@@ -12,15 +12,15 @@
 
 @implementation UILabel (CKIntrospectionAdditions)
 
-- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+- (void)textAlignmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
                                                UITextAlignmentLeft,
 											   UITextAlignmentCenter,
 											   UITextAlignmentRight);
 }
 
-- (void)lineBreakModeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UILineBreakMode",
+- (void)lineBreakModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UILineBreakMode",
                                                UILineBreakModeWordWrap,
 											   UILineBreakModeCharacterWrap,
 											   UILineBreakModeClip,
@@ -29,8 +29,8 @@
 											   UILineBreakModeMiddleTruncation);
 }
 
-- (void)baselineAdjustmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIBaselineAdjustment",
+- (void)baselineAdjustmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UIBaselineAdjustment",
                                                UIBaselineAdjustmentAlignBaselines,
 											   UIBaselineAdjustmentAlignCenters,
 											   UIBaselineAdjustmentNone);

@@ -49,7 +49,7 @@
                 [results addObject:result];
             }
             else{
-                NSAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the metaData",content);
+                NSAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the attributes",content);
             }
         }
         else{

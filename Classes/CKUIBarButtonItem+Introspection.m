@@ -12,8 +12,8 @@
 
 @implementation UIBarButtonItem (CKIntrospectionAdditions)
 
-- (void)styleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"UIBarButtonItemStyle", 
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIBarButtonItemStyle", 
                                                UIBarButtonItemStylePlain,
                                                UIBarButtonItemStyleBordered,
                                                UIBarButtonItemStyleDone);

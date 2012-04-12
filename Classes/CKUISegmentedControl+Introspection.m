@@ -12,8 +12,8 @@
 
 @implementation UISegmentedControl (CKIntrospection)
 
-- (void)segmentedControlStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"UISegmentedControlStyle", 
+- (void)segmentedControlStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UISegmentedControlStyle", 
                                                UISegmentedControlStylePlain,
                                                UISegmentedControlStyleBordered,
                                                UISegmentedControlStyleBar,

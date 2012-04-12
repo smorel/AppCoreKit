@@ -48,7 +48,7 @@
 /// @name Validating Value for Object Property
 ///-----------------------------------
 /** 
- This method will use the predicate defined in the object property metaData to validate the value that is edited by the user.
+ This method will use the predicate defined in the object property attributes to validate the value that is edited by the user.
  @param id value : the value that should be validated
  @return A boolean indicating if the value is valid.
  */

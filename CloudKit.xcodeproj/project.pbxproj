@@ -37,8 +37,8 @@
 		4F4F052F13C5F5410009DE31 /* CKActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4F052D13C5F5410009DE31 /* CKActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F4F053013C5F5410009DE31 /* CKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F052E13C5F5410009DE31 /* CKActionSheet.m */; };
 		4F689A6513CF2A4E000CE416 /* CKDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F689A6413CF2A4E000CE416 /* CKDebug.m */; };
-		75043E651404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75043E631404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75043E661404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75043E641404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m */; };
+		75043E651404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75043E631404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75043E661404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75043E641404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.m */; };
 		7506E40013B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */; };
 		7506E40113B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */; };
 		750A157613FD50E7008BC41F /* CKBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 750A157513FD50E6008BC41F /* CKBinding.m */; };
@@ -527,8 +527,8 @@
 		75F2961313F196F9009CCC70 /* CKNSPredicate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */; };
 		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
-		75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */; };
+		75FB52B413F5E2C90053BD4A /* CKPropertyExtendedAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		96382650148009EF00A9C98B /* CKItemViewControllerFactoryItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638264E148009EE00A9C98B /* CKItemViewControllerFactoryItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -594,8 +594,8 @@
 		4F4F052D13C5F5410009DE31 /* CKActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKActionSheet.h; path = Classes/CKActionSheet.h; sourceTree = "<group>"; };
 		4F4F052E13C5F5410009DE31 /* CKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKActionSheet.m; path = Classes/CKActionSheet.m; sourceTree = "<group>"; };
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
-		75043E631404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSMutableDictionary+CKObjectPropertyMetaData.h"; path = "Classes/CKNSMutableDictionary+CKObjectPropertyMetaData.h"; sourceTree = "<group>"; };
-		75043E641404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSMutableDictionary+CKObjectPropertyMetaData.m"; path = "Classes/CKNSMutableDictionary+CKObjectPropertyMetaData.m"; sourceTree = "<group>"; };
+		75043E631404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSMutableDictionary+CKPropertyExtendedAttributes.h"; path = "Classes/CKNSMutableDictionary+CKPropertyExtendedAttributes.h"; sourceTree = "<group>"; };
+		75043E641404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSMutableDictionary+CKPropertyExtendedAttributes.m"; path = "Classes/CKNSMutableDictionary+CKPropertyExtendedAttributes.m"; sourceTree = "<group>"; };
 		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7506E3FE13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewController+DynamicLayout.h"; path = "Classes/CKItemViewController+DynamicLayout.h"; sourceTree = "<group>"; };
 		7506E3FF13B8FE3600EE1471 /* CKItemViewController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewController+DynamicLayout.m"; path = "Classes/CKItemViewController+DynamicLayout.m"; sourceTree = "<group>"; };
@@ -614,7 +614,7 @@
 		753178171417E4F9009310A8 /* CKUIToolbar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIToolbar+Style.h"; sourceTree = "<group>"; };
 		753178181417E4F9009310A8 /* CKUIToolbar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIToolbar+Style.m"; sourceTree = "<group>"; };
 		7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+Introspection.h"; path = "Classes/CKUILabel+Introspection.h"; sourceTree = "<group>"; };
-		7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+Introspection.m"; path = "Classes/CKUILabel+Introspection.m"; sourceTree = "<group>"; };
+		7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKUILabel+Introspection.m"; path = "Classes/CKUILabel+Introspection.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUINavigationBar+Introspection.h"; path = "Classes/CKUINavigationBar+Introspection.h"; sourceTree = "<group>"; };
 		753178201417E61D009310A8 /* CKUINavigationBar+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUINavigationBar+Introspection.m"; path = "Classes/CKUINavigationBar+Introspection.m"; sourceTree = "<group>"; };
 		753178231417E64B009310A8 /* CKUIToolbar+introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIToolbar+introspection.h"; path = "Classes/CKUIToolbar+introspection.h"; sourceTree = "<group>"; };
@@ -911,7 +911,7 @@
 		7560DC3813B8ED3600268D13 /* CKUITableView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableView+Introspection.h"; path = "Classes/CKUITableView+Introspection.h"; sourceTree = "<group>"; };
 		7560DC3913B8ED3600268D13 /* CKUITableView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITableView+Introspection.m"; path = "Classes/CKUITableView+Introspection.m"; sourceTree = "<group>"; };
 		7560DC3A13B8ED3600268D13 /* CKUITableViewCell+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableViewCell+Introspection.h"; path = "Classes/CKUITableViewCell+Introspection.h"; sourceTree = "<group>"; };
-		7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITableViewCell+Introspection.m"; path = "Classes/CKUITableViewCell+Introspection.m"; sourceTree = "<group>"; };
+		7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKUITableViewCell+Introspection.m"; path = "Classes/CKUITableViewCell+Introspection.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITextField+Introspection.h"; path = "Classes/CKUITextField+Introspection.h"; sourceTree = "<group>"; };
 		7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITextField+Introspection.m"; path = "Classes/CKUITextField+Introspection.m"; sourceTree = "<group>"; };
 		7560DC4013B8ED3600268D13 /* CKUIToolbarAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUIToolbarAdditions.h; path = Classes/CKUIToolbarAdditions.h; sourceTree = "<group>"; };
@@ -981,7 +981,7 @@
 		7560DE2313B8EFDC00268D13 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIAuthenticationDialog.m; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIAuthenticationDialog.m"; sourceTree = "<group>"; };
 		7560DE2413B8EFDC00268D13 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASICacheDelegate.h; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASICacheDelegate.h"; sourceTree = "<group>"; };
 		7560DE2513B8EFDC00268D13 /* ASIDownloadCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIDownloadCache.h; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIDownloadCache.h"; sourceTree = "<group>"; };
-		7560DE2613B8EFDC00268D13 /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIDownloadCache.m; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIDownloadCache.m"; sourceTree = "<group>"; };
+		7560DE2613B8EFDC00268D13 /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ASIDownloadCache.m; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIDownloadCache.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DE2713B8EFDC00268D13 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIFormDataRequest.h; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIFormDataRequest.h"; sourceTree = "<group>"; };
 		7560DE2813B8EFDC00268D13 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIFormDataRequest.m; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIFormDataRequest.m"; sourceTree = "<group>"; };
 		7560DE2913B8EFDC00268D13 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequest.h; path = "Vendor/ASIHTTPRequest-1.7-57-g56139bc/Classes/ASIHTTPRequest.h"; sourceTree = "<group>"; };
@@ -1091,8 +1091,8 @@
 		75F2961113F196F9009CCC70 /* CKNSPredicate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSPredicate+Additions.m"; path = "Classes/CKNSPredicate+Additions.m"; sourceTree = "<group>"; };
 		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
-		75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectPropertyMetaData.h; path = Classes/CKObjectPropertyMetaData.h; sourceTree = "<group>"; };
-		75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectPropertyMetaData.m; path = Classes/CKObjectPropertyMetaData.m; sourceTree = "<group>"; };
+		75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKPropertyExtendedAttributes.h; path = Classes/CKPropertyExtendedAttributes.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyExtendedAttributes.m; path = Classes/CKPropertyExtendedAttributes.m; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
@@ -1306,10 +1306,10 @@
 				7506E3F813B8FD1300EE1471 /* Additions */,
 				7560DBDC13B8ED3600268D13 /* CKObjectProperty.h */,
 				7560DBDD13B8ED3600268D13 /* CKObjectProperty.m */,
-				75FB52B213F5E2C70053BD4A /* CKObjectPropertyMetaData.h */,
-				75FB52B313F5E2C80053BD4A /* CKObjectPropertyMetaData.m */,
-				75043E631404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h */,
-				75043E641404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m */,
+				75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */,
+				75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */,
+				75043E631404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.h */,
+				75043E641404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.m */,
 				96CADE301486B229008A23E4 /* CKRuntime.h */,
 				96CADE311486B229008A23E4 /* CKRuntime.m */,
 				7560DBC113B8ED3600268D13 /* CKNSObject+Introspection.h */,
@@ -2385,7 +2385,7 @@
 				75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */,
 				75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */,
 				75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */,
-				75FB52B413F5E2C90053BD4A /* CKObjectPropertyMetaData.h in Headers */,
+				75FB52B413F5E2C90053BD4A /* CKPropertyExtendedAttributes.h in Headers */,
 				758E5C5D13F9652200A07F49 /* CKOptionPropertyCellController.h in Headers */,
 				758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */,
 				750A157813FD50FB008BC41F /* CKBinding.h in Headers */,
@@ -2399,7 +2399,7 @@
 				75C6DF6613FEE8B100E4AE4F /* Data.h in Headers */,
 				75C6DF6813FEE96C00E4AE4F /* Network.h in Headers */,
 				75C6DF6A13FEE9D200E4AE4F /* Support.h in Headers */,
-				75043E651404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.h in Headers */,
+				75043E651404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.h in Headers */,
 				753178141417E4E4009310A8 /* CKNavigationBar+Style.h in Headers */,
 				753178191417E4F9009310A8 /* CKUIToolbar+Style.h in Headers */,
 				7531781D1417E5A1009310A8 /* CKUILabel+Introspection.h in Headers */,
@@ -2762,11 +2762,11 @@
 				75CC172213F4705A00835FE3 /* CKNSObject+ValueTransformer.m in Sources */,
 				75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */,
 				75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */,
-				75FB52B513F5E2C90053BD4A /* CKObjectPropertyMetaData.m in Sources */,
+				75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.m in Sources */,
 				758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */,
 				758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */,
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
-				75043E661404327500C7685D /* CKNSMutableDictionary+CKObjectPropertyMetaData.m in Sources */,
+				75043E661404327500C7685D /* CKNSMutableDictionary+CKPropertyExtendedAttributes.m in Sources */,
 				753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */,
 				7531781A1417E4F9009310A8 /* CKUIToolbar+Style.m in Sources */,
 				7531781E1417E5A1009310A8 /* CKUILabel+Introspection.m in Sources */,

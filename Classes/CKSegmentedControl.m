@@ -52,8 +52,8 @@ typedef void(^CKSegmentedControlButtonBlock)();
     [super dealloc];
 }
 
-- (void)positionMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKSegmentedControlButtonPosition", 
+- (void)positionExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKSegmentedControlButtonPosition", 
                                                CKSegmentedControlButtonPositionFirst,
                                                CKSegmentedControlButtonPositionMiddle,
                                                CKSegmentedControlButtonPositionLast,

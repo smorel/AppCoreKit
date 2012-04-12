@@ -25,8 +25,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 @synthesize datePickerMode = _datePickerMode;
 
 
-- (void)datePickerModeMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
+- (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
                                                CKDatePickerModeTime,
                                                UIDatePickerModeTime,   
                                                CKDatePickerModeDate,
@@ -242,8 +242,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 @synthesize enableAccessoryView = _enableAccessoryView;
 @synthesize datePickerMode = _datePickerMode;
 
-- (void)datePickerModeMetaData:(CKObjectPropertyMetaData*)metaData{
-    metaData.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
+- (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKDatePickerMode", 
                                                CKDatePickerModeTime,
                                                UIDatePickerModeTime,   
                                                CKDatePickerModeDate,

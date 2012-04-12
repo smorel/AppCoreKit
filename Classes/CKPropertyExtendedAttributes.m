@@ -1,16 +1,16 @@
 //
-//  CKObjectPropertyMetaData.m
+//  CKPropertyExtendedAttributes.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-08-12.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 
-static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
+static CKPropertyExtendedAttributes* CKPropertyExtendedAttributesSingleton = nil;
 
-@implementation CKObjectPropertyMetaData
+@implementation CKPropertyExtendedAttributes
 @synthesize comparable;
 @synthesize serializable;
 @synthesize creatable;
@@ -24,7 +24,7 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 @synthesize dateFormat;
 @synthesize valuesAndLabels;
 @synthesize contentProtocol;
-@synthesize propertyCellControllerClass;
+@synthesize tableViewCellControllerClass;
 @synthesize validationPredicate;
 @synthesize options;
 
@@ -56,28 +56,24 @@ static CKObjectPropertyMetaData* CKObjectPropertyMetaDataSingleton = nil;
 	self.contentType = nil;
 	self.contentProtocol = nil;
 	self.dateFormat = nil;
-	self.propertyCellControllerClass = nil;
+	self.tableViewCellControllerClass = nil;
 	self.validationPredicate = nil;
 	self.multiselectionEnabled = NO;
 	[self.options removeAllObjects];
 }
 
-+ (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property{
-	if(CKObjectPropertyMetaDataSingleton == nil){
-		CKObjectPropertyMetaDataSingleton = [[CKObjectPropertyMetaData alloc]init];
++ (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property{
+	if(CKPropertyExtendedAttributesSingleton == nil){
+		CKPropertyExtendedAttributesSingleton = [[CKPropertyExtendedAttributes alloc]init];
 	}
-	[CKObjectPropertyMetaDataSingleton reset];
+	[CKPropertyExtendedAttributesSingleton reset];
 	
-	SEL metaDataSelector = property.metaDataSelector;
-	if([object respondsToSelector:metaDataSelector]){
-		[object performSelector:metaDataSelector withObject:CKObjectPropertyMetaDataSingleton];
+	SEL extendedAttributesSelector = property.extendedAttributesSelector;
+	if([object respondsToSelector:extendedAttributesSelector]){
+		[object performSelector:extendedAttributesSelector withObject:CKPropertyExtendedAttributesSingleton];
 	}
 	
-	return CKObjectPropertyMetaDataSingleton;
+	return CKPropertyExtendedAttributesSingleton;
 }
 
-@end
-
-
-@implementation CKModelObjectPropertyMetaData
 @end

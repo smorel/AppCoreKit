@@ -7,6 +7,7 @@
 //
 
 #import "CKClassPropertyDescriptor.h"
+#import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+Introspection.h"
 #import "CKNSObject+Introspection_private.h"
 #import <objc/runtime.h>
@@ -91,7 +92,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 @synthesize className;
 @synthesize encoding;
 @synthesize typeSize;
-@synthesize metaDataSelector;
+@synthesize extendedAttributesSelector;
 @synthesize insertSelector;
 @synthesize removeSelector;
 @synthesize removeAllSelector;
@@ -272,7 +273,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	descriptor.assignementType = assignment;
 	descriptor.type = c;
 	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
 	if([NSObject isKindOf:c parentType:[NSArray class]]){
 		descriptor.insertSelector = [NSObject insertSelectorForProperty:name];
 		descriptor.removeSelector = [NSObject removeSelectorForProperty:name];
@@ -291,7 +292,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
 	descriptor.type = nil;
 	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
 	return descriptor;
 }
 
@@ -321,7 +322,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
     descriptor.propertyType = type;
 	descriptor.assignementType = CKClassPropertyDescriptorAssignementTypeAssign;
 	descriptor.isReadOnly = readOnly;
-	descriptor.metaDataSelector = [NSObject propertyMetaDataSelectorForProperty:name];
+	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
     return descriptor;
 }
 
@@ -335,6 +336,11 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 
 + (CKClassPropertyDescriptor*) intDescriptorForPropertyNamed:(NSString*)name readOnly:(BOOL)readOnly{
     return [CKClassPropertyDescriptor classDescriptorForNativePropertyNamed:name nativeType:CKClassPropertyDescriptorTypeInt readOnly:readOnly];
+}
+
+
+- (CKPropertyExtendedAttributes*)extendedAttributesForInstance:(id)instance{
+    return [CKPropertyExtendedAttributes extendedAttributesForObject:instance property:self];
 }
 
 @end

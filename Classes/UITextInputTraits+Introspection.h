@@ -14,23 +14,23 @@ extern NSMutableSet *textInputTraitsProperties;
 void introspectTraitsProperties();
 
 #define UITEXTINPUTTRAITS_IMPLEMENTATION \
-- (void)autocapitalizationTypeMetaData:(CKObjectPropertyMetaData*)metaData{\
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAutocapitalizationType",\
+- (void)autocapitalizationTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{\
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAutocapitalizationType",\
                                                UITextAutocapitalizationTypeNone,\
                                                UITextAutocapitalizationTypeWords,\
                                                UITextAutocapitalizationTypeSentences,\
                                                UITextAutocapitalizationTypeAllCharacters);\
 }\
 \
-- (void)autocorrectionTypeMetaData:(CKObjectPropertyMetaData*)metaData{\
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAutocorrectionType",\
+- (void)autocorrectionTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{\
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAutocorrectionType",\
                                                UITextAutocorrectionTypeDefault,\
                                                UITextAutocorrectionTypeNo,\
                                                UITextAutocorrectionTypeYes);\
 }\
 \
-- (void)keyboardTypeMetaData:(CKObjectPropertyMetaData*)metaData{\
-	metaData.enumDescriptor = CKEnumDefinition(@"UIKeyboardType",\
+- (void)keyboardTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{\
+	attributes.enumDescriptor = CKEnumDefinition(@"UIKeyboardType",\
                                                UIKeyboardTypeDefault,\
                                                UIKeyboardTypeASCIICapable,\
                                                UIKeyboardTypeNumbersAndPunctuation,\
@@ -43,14 +43,14 @@ void introspectTraitsProperties();
                                                UIKeyboardTypeAlphabet);\
 }\
 \
-- (void)keyboardAppearanceMetaData:(CKObjectPropertyMetaData*)metaData{\
-	metaData.enumDescriptor = CKEnumDefinition(@"UIKeyboardAppearance",\
+- (void)keyboardAppearanceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{\
+	attributes.enumDescriptor = CKEnumDefinition(@"UIKeyboardAppearance",\
                                                UIKeyboardAppearanceDefault,\
                                                UIKeyboardAppearanceAlert  );\
 }\
 \
-- (void)returnKeyTypeMetaData:(CKObjectPropertyMetaData*)metaData{\
-	metaData.enumDescriptor = CKEnumDefinition(@"UIReturnKeyType",\
+- (void)returnKeyTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{\
+	attributes.enumDescriptor = CKEnumDefinition(@"UIReturnKeyType",\
                                                UIReturnKeyDefault,\
                                                UIReturnKeyGo,\
                                                UIReturnKeyGoogle,\

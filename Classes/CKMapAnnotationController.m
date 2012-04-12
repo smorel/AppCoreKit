@@ -20,8 +20,8 @@
 	return self;
 }
 
-- (void)styleMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"CKMapAnnotationStyle",
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"CKMapAnnotationStyle",
                                                CKMapAnnotationCustom,
 											   CKMapAnnotationPin);
 }

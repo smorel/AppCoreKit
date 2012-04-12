@@ -145,9 +145,9 @@
 		CKObjectProperty* property = (CKObjectProperty*)self.value;
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		
-		CKObjectPropertyMetaData* metaData = [property metaData];
-		contentType = [metaData contentType];
-		contentProtocol = [metaData contentProtocol];
+		CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+		contentType = [attributes contentType];
+		contentProtocol = [attributes contentProtocol];
 		
 		//Wrap the array in a virtual collection
 		if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){

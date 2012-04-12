@@ -8,7 +8,7 @@
 
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Invocation.h"
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 
 
 @implementation CKDocumentCollection
@@ -67,18 +67,18 @@
     _delegate = thedelegate;
 }
 
-- (void)feedSourceMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.serializable = NO;
+- (void)feedSourceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.serializable = NO;
 }
 
-- (void)storageMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.serializable = NO;
+- (void)storageExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.serializable = NO;
 }
 
-- (void)delegateMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.serializable = NO;
-	metaData.comparable = NO;
-	metaData.hashable = NO;
+- (void)delegateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.serializable = NO;
+	attributes.comparable = NO;
+	attributes.hashable = NO;
 }
 
 - (NSArray*)allObjects{

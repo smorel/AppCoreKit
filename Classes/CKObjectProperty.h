@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CKNSObject+Introspection.h"
 #import "CKClassPropertyDescriptor.h"
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 
-/** CKObjectProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access metaData and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
+/** CKObjectProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access attributes and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
  */
 @interface CKObjectProperty : NSObject<NSCopying> {
 }
@@ -31,7 +31,7 @@
 - (id)initWithObject:(id)object;
 - (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key;
 
-- (CKObjectPropertyMetaData*)metaData;
+- (CKPropertyExtendedAttributes*)extendedAttributes;
 - (id)value;
 - (void)setValue:(id)value;
 - (Class)type;

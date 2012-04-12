@@ -13,7 +13,7 @@
 
 @implementation NSDate (CKValueTransformer)
 
-+ (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format{//special case to handle with metaData
++ (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format{//special case to handle with attributes
 	return [NSDate dateFromString:str withDateFormat:format];
 }
 

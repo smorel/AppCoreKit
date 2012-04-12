@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKClassPropertyDescriptor.h"
-#import "CKObjectPropertyMetaData.h"
+#import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+Introspection.h"
 
 /** TODO

@@ -14,15 +14,15 @@
 @implementation UITextField (CKIntrospectionAdditions)
 
 
-- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+- (void)textAlignmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
                                                UITextAlignmentLeft,
 											   UITextAlignmentCenter,
 											   UITextAlignmentRight);
 }
 
-- (void)borderStyleMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextBorderStyle",
+- (void)borderStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextBorderStyle",
                                                UITextBorderStyleNone,
                                                UITextBorderStyleLine,
                                                UITextBorderStyleBezel,
@@ -30,8 +30,8 @@
                                                );
 }
 
-- (void)clearButtonModeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+- (void)clearButtonModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
                                                UITextFieldViewModeNever,
                                                UITextFieldViewModeWhileEditing,
                                                UITextFieldViewModeUnlessEditing,
@@ -39,8 +39,8 @@
                                                );
 }
 
-- (void)leftViewModeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+- (void)leftViewModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
                                                UITextFieldViewModeNever,
                                                UITextFieldViewModeWhileEditing,
                                                UITextFieldViewModeUnlessEditing,
@@ -48,8 +48,8 @@
                                                );
 }
 
-- (void)rightViewModeMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
+- (void)rightViewModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextFieldViewMode",
                                                UITextFieldViewModeNever,
                                                UITextFieldViewModeWhileEditing,
                                                UITextFieldViewModeUnlessEditing,

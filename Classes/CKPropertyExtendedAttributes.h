@@ -1,5 +1,5 @@
 //
-//  CKObjectPropertyMetaData.h
+//  CKPropertyExtendedAttributes.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-08-12.
@@ -10,17 +10,17 @@
 
 #import "CKNSValueTransformer+NativeTypes.h"//for CKEnumDescriptor
 #import "CKNSObject+Introspection.h"
-#import "CKNSMutableDictionary+CKObjectPropertyMetaData.h"
+#import "CKNSMutableDictionary+CKPropertyExtendedAttributes.h"
 
-/** Meta data is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
+/** Extended Attributes is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
  
- by defining a selector - (void) yourPropertyNameMetaData:(CKObjectPropertyMetaData*)metaData in your classes, you will be able to customize how yourProperty will react in all the cases described previously.
+ by defining a selector - (void) yourPropertyExtendedAttributes:(CKPropertyExtendedAttributes*)attributes in your classes, you will be able to customize how yourProperty will react in all the cases described previously.
  
  Concerning the property grid representation, there several ways to customize the representation of your property : enumDescriptor, valuesAndLabels,propertyCellControllerClass or nothing.
  
  propertyCellControllerClass will get used as the top priority. after, we'll use enumDescriptor or valuesAndLabels that should be used independently depending whether your represent an enum property or something else. and finally, property grids will automatically choose a controller class depending on the property type automatically.
  */
-@interface CKObjectPropertyMetaData : NSObject{
+@interface CKPropertyExtendedAttributes : NSObject{
 	BOOL comparable;
 	BOOL serializable;
 	BOOL copiable;
@@ -39,7 +39,7 @@
     //PropertyGrid Representation
 	BOOL editable;
 	NSDictionary* valuesAndLabels;
-    Class propertyCellControllerClass;
+    Class tableViewCellControllerClass;
     
     NSMutableDictionary* options;
 }
@@ -81,7 +81,7 @@
  Specify wich table view cell controller class should be instanciated to represent the property in a property grid.
  This cell controller should accept CKObjectProperty as value.
  */
-@property (nonatomic, assign) Class propertyCellControllerClass;
+@property (nonatomic, assign) Class tableViewCellControllerClass;
 
 /** 
  Specify options that could be used by various behaviours in app or in the cloudkit.
@@ -89,13 +89,8 @@
 @property (nonatomic, retain) NSMutableDictionary* options;
 
 - (void)reset;
-+ (CKObjectPropertyMetaData*)propertyMetaDataForObject:(id)object property:(CKClassPropertyDescriptor*)property;
+
++ (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end
 
-/** 
- DEPRECATED_IN_CLOUDKIT_1.7
- @see CKObjectPropertyMetaData
- */
-@interface CKModelObjectPropertyMetaData : CKObjectPropertyMetaData{}
-@end

@@ -15,15 +15,15 @@
 
 UITEXTINPUTTRAITS_IMPLEMENTATION;
 
-- (void)textAlignmentMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
+- (void)textAlignmentExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITextAlignment",
                                                UITextAlignmentLeft,
 											   UITextAlignmentCenter,
 											   UITextAlignmentRight);
 }
 
-- (void)dataDetectorTypesMetaData:(CKObjectPropertyMetaData*)metaData{
-	metaData.enumDescriptor = CKEnumDefinition(@"UIDataDetectorTypes",
+- (void)dataDetectorTypesExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UIDataDetectorTypes",
                                                UIDataDetectorTypePhoneNumber,
                                                UIDataDetectorTypeLink,
                                                UIDataDetectorTypeAddress,
