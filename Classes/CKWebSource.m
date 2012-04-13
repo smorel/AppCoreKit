@@ -14,7 +14,7 @@
 NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
 @interface CKWebSource ()
-@property (nonatomic, retain) CKWebRequest2 *request;
+@property (nonatomic, retain) CKWebRequest *request;
 @property (nonatomic, assign) BOOL hasMore;
 @property (nonatomic, assign) BOOL isFetching;
 @property (nonatomic, assign) NSUInteger currentIndex;

@@ -1,6 +1,5 @@
 //
 //  CKNSObject+Invocation.m
-//  CKWebRequest2
 //
 //  Created by Fred Brunel on 11-01-06.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.

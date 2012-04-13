@@ -7,24 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKWebRequest2.h"
+#import "CKWebRequest.h"
 #import "CKFeedSource.h"
 
 extern NSString* const CKWebSourceErrorNotification;
 
 @class CKWebSource;
 
-typedef CKWebRequest2 *(^CKWebSourceRequestBlock)(NSRange range);
+typedef CKWebRequest *(^CKWebSourceRequestBlock)(NSRange range);
 typedef id (^CKWebSourceTransformBlock)(id value);
 typedef void (^CKWebSourceFailureBlock)(NSError *error);
 typedef void (^CKWebSourceSuccessBlock)();
-typedef void (^CKWebSourceStartBlock)(CKWebRequest2* request);
+typedef void (^CKWebSourceStartBlock)(CKWebRequest* request);
 
 
 /** TODO
  */
 @interface CKWebSource : CKFeedSource <CKWebRequestDelegate> {
-	CKWebRequest2 *_request;
+	CKWebRequest *_request;
 	NSUInteger _requestedBatchSize;
 	CKWebSourceRequestBlock _requestBlock;
 	CKWebSourceTransformBlock _transformBlock;
@@ -52,7 +52,7 @@ typedef void (^CKWebSourceStartBlock)(CKWebRequest2* request);
 @protocol CKWebSourceDelegate
 
 @required
-- (CKWebRequest2*)webSource:(CKWebSource*)webSource requestForRange:(NSRange)range;
+- (CKWebRequest*)webSource:(CKWebSource*)webSource requestForRange:(NSRange)range;
 - (id)webSource:(CKWebSource*)webSource transform:(id)value;
 - (id)webSourceDidSuccess:(CKWebSource*)webSource;
 

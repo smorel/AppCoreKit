@@ -9,9 +9,7 @@
 #import "CKMultipartEncoder.h"
 #import "CKMultipartParser.h"
 #import "CKWebRequest.h"
-#import "CKWebRequest2.h"
 #import "CKWebService.h"
-#import "CKWebService2.h"
 #import "CKWebSource.h"
 
 #import "CKBonjourResolver.h"

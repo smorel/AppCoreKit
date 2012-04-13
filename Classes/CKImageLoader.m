@@ -16,7 +16,7 @@
 NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 @interface CKImageLoader ()
-@property (nonatomic, retain) CKWebRequest2 *request;
+@property (nonatomic, retain) CKWebRequest *request;
 @end
 
 //
@@ -44,7 +44,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 #pragma mark Caching
 
 + (UIImage *)imageForURL:(NSURL*)URL {
-	NSCachedURLResponse *cachedResponse = [CKWebRequest2 cachedResponseForURL:URL];
+	NSCachedURLResponse *cachedResponse = [CKWebRequest cachedResponseForURL:URL];
 	if (cachedResponse) {
 		return [UIImage imageWithData:cachedResponse.data];
 	}
@@ -79,7 +79,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 			}
 		}
 		else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
-			self.request = [CKWebRequest2 requestWithURL:self.imageURL];
+			self.request = [CKWebRequest requestWithURL:self.imageURL];
 			self.request.delegate = self;
 			[self.request startAsynchronous];
 		}

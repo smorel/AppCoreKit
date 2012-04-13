@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "CKWebRequest2.h"
+#import "CKWebRequest.h"
 
 /** TODO
  */
@@ -19,7 +19,7 @@ extern NSString * const CKImageLoaderErrorDomain;
  */
 @interface CKImageLoader : NSObject <CKWebRequestDelegate> {
 	id _delegate;
-	CKWebRequest2 *_request;
+	CKWebRequest *_request;
 	NSURL *_imageURL;
 }
 

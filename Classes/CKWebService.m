@@ -2,12 +2,12 @@
 //  CKWebService.m
 //  CloudKit
 //
-//  Created by Fred Brunel on 09-11-10.
+//  Created by Fred Brunel on 09-05-11.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKWebService.h"
-#import "ASIHTTPRequest.h"
+
 #import "Reachability.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
@@ -19,8 +19,6 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 @interface CKWebService ()
 
 @property (nonatomic, retain, readwrite) Reachability *reachability;
-@property (nonatomic, retain, readwrite) NSString *username;
-@property (nonatomic, retain, readwrite) NSString *password;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultParams;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultHeaders;
 
@@ -36,10 +34,30 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 @synthesize baseURL = _baseURL;
 @synthesize defaultParams = _defaultParams;
 @synthesize defaultHeaders = _defaultHeaders;
-@synthesize username = _username;
-@synthesize password = _password;
 
+static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 #pragma mark Initialization
+
++ (id)sharedWebService {
+	static id CKWebServiceSharedInstances = nil;
+    
+    id sharedService = nil;
+	if (CKWebServiceSharedInstances == nil) {
+        CKWebServiceSharedInstances = [[NSMutableDictionary alloc]init];
+	}
+    sharedService = [CKWebServiceSharedInstances objectForKey:[[self class]description]];
+    if(sharedService == nil){
+        sharedService = [[[[self class] alloc] init]autorelease];
+        [CKWebServiceSharedInstances setObject:sharedService forKey:[[self class]description]];    
+    }
+	return sharedService;
+}
+
++ (void)setSharedWebService:(id)sharedWebService {
+    [CKWebServiceSharedInstances setObject:sharedWebService forKey:[[self class]description]];    
+}
+
+//
 
 - (id)init {
 	if (self = [super init]) {
@@ -57,16 +75,7 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 	self.baseURL = nil;
 	self.defaultParams = nil;
 	self.defaultHeaders = nil;
-	self.username = nil;
-	self.password = nil;
 	[super dealloc];
-}
-
-#pragma mark Properties
-
-- (void)setDefaultBasicAuthWithUsername:(NSString *)username password:(NSString *)password {
-	self.username = username;
-	self.password = password;
 }
 
 #pragma mark Create Requests
@@ -77,21 +86,17 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 	if ([self checkReachabilityWithAlert:YES withUserObject:request] == NO) 
 		return request;
 	
-	// TODO: put the request in a different queue than the shared queue (default)	
-	// ASIHTTPRequest *httpRequest = [request performSelector:@selector(connect)];
-	// [httpRequest start];
-	[request start];
+	[request startAsynchronous];
 	return request;
 }
 
 #pragma mark Request Facade
 
 - (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params {
-	// TODO: We should check the validity of the URL somewhere, maybe in CKWebRequest
 	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingString:path] : path;
 	
 	NSDictionary *theParams = nil;
-	if (self.defaultParams) {
+	if (self.defaultParams && [self.defaultParams count] > 0) {
 		NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.defaultParams];
 		[dic addEntriesFromDictionary:params];
 		theParams = dic;
@@ -100,8 +105,6 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 	}
 	
 	CKWebRequest *request = [CKWebRequest requestWithURLString:theURL params:theParams];
-	[request setBasicAuthWithUsername:self.username password:self.password];
-	
 	return request;
 }
 

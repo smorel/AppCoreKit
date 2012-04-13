@@ -366,14 +366,10 @@
 		7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5513B8ED3600268D13 /* CKVersion.m */; };
 		7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5A13B8ED3600268D13 /* CKWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5B13B8ED3600268D13 /* CKWeakRef.m */; };
-		7560DDA913B8ED3600268D13 /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5C13B8ED3600268D13 /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDAA13B8ED3600268D13 /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5D13B8ED3600268D13 /* CKWebRequest.m */; };
-		7560DDAB13B8ED3600268D13 /* CKWebRequest2.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5E13B8ED3600268D13 /* CKWebRequest2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDAC13B8ED3600268D13 /* CKWebRequest2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5F13B8ED3600268D13 /* CKWebRequest2.m */; };
-		7560DDAD13B8ED3600268D13 /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6013B8ED3600268D13 /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDAE13B8ED3600268D13 /* CKWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6113B8ED3600268D13 /* CKWebService.m */; };
-		7560DDAF13B8ED3600268D13 /* CKWebService2.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6213B8ED3600268D13 /* CKWebService2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDB013B8ED3600268D13 /* CKWebService2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6313B8ED3600268D13 /* CKWebService2.m */; };
+		7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5E13B8ED3600268D13 /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5F13B8ED3600268D13 /* CKWebRequest.m */; };
+		7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6213B8ED3600268D13 /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6313B8ED3600268D13 /* CKWebService.m */; };
 		7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6413B8ED3600268D13 /* CKWebSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDB213B8ED3600268D13 /* CKWebSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6513B8ED3600268D13 /* CKWebSource.m */; };
 		7560DDB313B8ED3600268D13 /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6613B8ED3600268D13 /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -919,14 +915,10 @@
 		7560DC5513B8ED3600268D13 /* CKVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKVersion.m; path = Classes/CKVersion.m; sourceTree = "<group>"; };
 		7560DC5A13B8ED3600268D13 /* CKWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWeakRef.h; path = Classes/CKWeakRef.h; sourceTree = "<group>"; };
 		7560DC5B13B8ED3600268D13 /* CKWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWeakRef.m; path = Classes/CKWeakRef.m; sourceTree = "<group>"; };
-		7560DC5C13B8ED3600268D13 /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
-		7560DC5D13B8ED3600268D13 /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
-		7560DC5E13B8ED3600268D13 /* CKWebRequest2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest2.h; path = Classes/CKWebRequest2.h; sourceTree = "<group>"; };
-		7560DC5F13B8ED3600268D13 /* CKWebRequest2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest2.m; path = Classes/CKWebRequest2.m; sourceTree = "<group>"; };
-		7560DC6013B8ED3600268D13 /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
-		7560DC6113B8ED3600268D13 /* CKWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebService.m; path = Classes/CKWebService.m; sourceTree = "<group>"; };
-		7560DC6213B8ED3600268D13 /* CKWebService2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService2.h; path = Classes/CKWebService2.h; sourceTree = "<group>"; };
-		7560DC6313B8ED3600268D13 /* CKWebService2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebService2.m; path = Classes/CKWebService2.m; sourceTree = "<group>"; };
+		7560DC5E13B8ED3600268D13 /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
+		7560DC5F13B8ED3600268D13 /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
+		7560DC6213B8ED3600268D13 /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
+		7560DC6313B8ED3600268D13 /* CKWebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebService.m; path = Classes/CKWebService.m; sourceTree = "<group>"; };
 		7560DC6413B8ED3600268D13 /* CKWebSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebSource.h; path = Classes/CKWebSource.h; sourceTree = "<group>"; };
 		7560DC6513B8ED3600268D13 /* CKWebSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebSource.m; path = Classes/CKWebSource.m; sourceTree = "<group>"; };
 		7560DC6613B8ED3600268D13 /* CKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewController.h; path = Classes/CKWebViewController.h; sourceTree = "<group>"; };
@@ -1559,14 +1551,10 @@
 				7560DB9A13B8ED3600268D13 /* CKMultipartEncoder.m */,
 				7560DB9B13B8ED3600268D13 /* CKMultipartParser.h */,
 				7560DB9C13B8ED3600268D13 /* CKMultipartParser.m */,
-				7560DC5C13B8ED3600268D13 /* CKWebRequest.h */,
-				7560DC5D13B8ED3600268D13 /* CKWebRequest.m */,
-				7560DC5E13B8ED3600268D13 /* CKWebRequest2.h */,
-				7560DC5F13B8ED3600268D13 /* CKWebRequest2.m */,
-				7560DC6013B8ED3600268D13 /* CKWebService.h */,
-				7560DC6113B8ED3600268D13 /* CKWebService.m */,
-				7560DC6213B8ED3600268D13 /* CKWebService2.h */,
-				7560DC6313B8ED3600268D13 /* CKWebService2.m */,
+				7560DC5E13B8ED3600268D13 /* CKWebRequest.h */,
+				7560DC5F13B8ED3600268D13 /* CKWebRequest.m */,
+				7560DC6213B8ED3600268D13 /* CKWebService.h */,
+				7560DC6313B8ED3600268D13 /* CKWebService.m */,
 				7560DC6413B8ED3600268D13 /* CKWebSource.h */,
 				7560DC6513B8ED3600268D13 /* CKWebSource.m */,
 				7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */,
@@ -2302,10 +2290,8 @@
 				7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */,
 				7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */,
 				7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */,
-				7560DDA913B8ED3600268D13 /* CKWebRequest.h in Headers */,
-				7560DDAB13B8ED3600268D13 /* CKWebRequest2.h in Headers */,
-				7560DDAD13B8ED3600268D13 /* CKWebService.h in Headers */,
-				7560DDAF13B8ED3600268D13 /* CKWebService2.h in Headers */,
+				7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */,
+				7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */,
 				7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */,
 				7560DDB313B8ED3600268D13 /* CKWebViewController.h in Headers */,
 				7560DDB513B8ED3600268D13 /* CKWebViewControllerRef.h in Headers */,
@@ -2680,10 +2666,8 @@
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
 				7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */,
-				7560DDAA13B8ED3600268D13 /* CKWebRequest.m in Sources */,
-				7560DDAC13B8ED3600268D13 /* CKWebRequest2.m in Sources */,
-				7560DDAE13B8ED3600268D13 /* CKWebService.m in Sources */,
-				7560DDB013B8ED3600268D13 /* CKWebService2.m in Sources */,
+				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,
+				7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */,
 				7560DDB213B8ED3600268D13 /* CKWebSource.m in Sources */,
 				7560DDB413B8ED3600268D13 /* CKWebViewController.m in Sources */,
 				7560DDB613B8ED3600268D13 /* CKWebViewControllerRef.m in Sources */,
