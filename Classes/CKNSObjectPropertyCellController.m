@@ -58,20 +58,20 @@
 	UITableViewCell* cell = self.tableViewCell;
 	
 	NSString* title = [[self.value class]description];
-	if([self.value isKindOfClass:[CKObjectProperty class]]){
-		CKObjectProperty* property = (CKObjectProperty*)self.value;
+	if([self.value isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)self.value;
 		title = [property name];
 	}
 	else{
 		CKClassPropertyDescriptor* nameDescriptor = [self.value propertyDescriptorForKeyPath:@"modelName"];
-		if(nameDescriptor != nil && [NSObject isKindOf:nameDescriptor.type parentType:[NSString class]]){
+		if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
 			title = [self.value valueForKeyPath:@"modelName"];
 		}
 	}
 	
 	id value = self.value;
-	if([self.value isKindOfClass:[CKObjectProperty class]]){
-		CKObjectProperty* property = (CKObjectProperty*)self.value;
+	if([self.value isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)self.value;
 		value = [property value];
 	}
 	
@@ -87,8 +87,8 @@
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		
-		/*if([self.value isKindOfClass:[CKObjectProperty class]]){
-			CKObjectProperty* property = (CKObjectProperty*)self.value;
+		/*if([self.value isKindOfClass:[CKProperty class]]){
+			CKProperty* property = (CKProperty*)self.value;
 			CKClassPropertyDescriptor* descriptor = [property descriptor];
 			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
 			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
@@ -102,8 +102,8 @@
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		/*if([self.value isKindOfClass:[CKObjectProperty class]]){
-			CKObjectProperty* property = (CKObjectProperty*)self.value;
+		/*if([self.value isKindOfClass:[CKProperty class]]){
+			CKProperty* property = (CKProperty*)self.value;
 			CKClassPropertyDescriptor* descriptor = [property descriptor];
 			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
 			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
@@ -122,8 +122,8 @@
 	[super setupCell:cell];
 	[self setup];
 	
-	if([self.value isKindOfClass:[CKObjectProperty class]]){
-		CKObjectProperty* property = (CKObjectProperty*)self.value;
+	if([self.value isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)self.value;
 		id value = [property value];
 		if(![value isKindOfClass:[CKDocumentCollection class]]
            && ![property.object isKindOfClass:[NSDictionary class]]){
@@ -141,8 +141,8 @@
 	
 	Class contentType = nil;
 	Protocol* contentProtocol = nil;
-	if([self.value isKindOfClass:[CKObjectProperty class]]){
-		CKObjectProperty* property = (CKObjectProperty*)self.value;
+	if([self.value isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)self.value;
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		
 		CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
@@ -150,7 +150,7 @@
 		contentProtocol = [attributes contentProtocol];
 		
 		//Wrap the array in a virtual collection
-		if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+		if([NSObject isClass:descriptor.type kindOfClass:[NSArray class]]){
 			thevalue = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
 		}		
 		else{
@@ -160,8 +160,8 @@
 	
 	if([thevalue isKindOfClass:[CKDocumentCollection class]]){
 		NSMutableArray* mappings = [NSMutableArray array]; 
-        //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKObjectProperty :
-        //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKObjectProperty
+        //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKProperty :
+        //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKProperty
 		[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
 		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
 		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
@@ -208,7 +208,7 @@
 - (void)deleteObject:(id)sender{
 	CKUIButtonWithInfo* button = (CKUIButtonWithInfo*)sender;
 	
-	CKObjectProperty* property = [ button.userInfo objectForKey:@"property"];
+	CKProperty* property = [ button.userInfo objectForKey:@"property"];
 	[property setValue:nil];
 }
 
@@ -220,7 +220,7 @@
 	if([object isKindOfClass:[NSString class]]){
 		NSString* className = (NSString*)object;
 		Class type = NSClassFromString(className);
-		if([NSObject isKindOf:type parentType:[UIView class]]){
+		if([NSObject isClass:type kindOfClass:[UIView class]]){
 			instance = [[[type alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
 		}
 		else{
@@ -231,8 +231,8 @@
 		instance = object;
 	}
 	
-	CKObjectProperty* property = [classExplorer.userInfo objectForKey:@"property"];
-	if([NSObject isKindOf:property.descriptor.type parentType:[CKDocumentCollection class]]){
+	CKProperty* property = [classExplorer.userInfo objectForKey:@"property"];
+	if([NSObject isClass:property.descriptor.type kindOfClass:[CKDocumentCollection class]]){
 		CKDocumentCollection* collection = (CKDocumentCollection*)[property value];
 		[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
 	}
@@ -245,7 +245,7 @@
 	//push the new object
 	NSString* title = [[instance class]description];
 	CKClassPropertyDescriptor* nameDescriptor = [instance propertyDescriptorForKeyPath:@"modelName"];
-	if(nameDescriptor != nil && [NSObject isKindOf:nameDescriptor.type parentType:[NSString class]]){
+	if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
 		title = [instance valueForKeyPath:@"modelName"];
 	}
 	
@@ -264,8 +264,8 @@
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
 	id value = object;
-	if([object isKindOfClass:[CKObjectProperty class]]){
-		CKObjectProperty* property = (CKObjectProperty*)object;
+	if([object isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)object;
 		value = [property value];
 	}
 	
@@ -273,7 +273,7 @@
 		return CKItemViewFlagNone;
 	}
 	
-	if([object isKindOfClass:[CKObjectProperty class]]){
+	if([object isKindOfClass:[CKProperty class]]){
 		return CKItemViewFlagSelectable;
 	}
 	

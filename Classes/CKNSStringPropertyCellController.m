@@ -8,7 +8,7 @@
 
 
 #import "CKNSStringPropertyCellController.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
@@ -133,7 +133,7 @@
     
     self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
 	
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.value;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
@@ -229,8 +229,8 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
-    NSInteger min = [attributes.options minimumLength];
-    NSInteger max = [attributes.options maximumLength];
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;
@@ -253,7 +253,7 @@
 
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKObjectProperty* model = object;// || self.readonly
+	CKProperty* model = object;// || self.readonly
 	return ![model isReadOnly];
 }
 

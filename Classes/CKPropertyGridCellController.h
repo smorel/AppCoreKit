@@ -7,10 +7,11 @@
 //
 
 #import "CKTableViewCellController.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 /** 
- CKPropertyGridCellController is a base class for cell controllers working with a CKObjectProperty value.
+ CKPropertyGridCellController is a base class for cell controllers working with a CKProperty value.
  This provides the base value for the mecanisms that should be implemented in subclasses like readonly, or value validation.
  */
 @interface CKPropertyGridCellController : CKTableViewCellController {
@@ -39,10 +40,10 @@
 /// @name Accessing Object Property
 ///-----------------------------------
 /** 
- This method checks if the controller's value is a CKObjectProperty and will assert if not valid.
+ This method checks if the controller's value is a CKProperty and will assert if not valid.
  @return the object property.
  */
-- (CKObjectProperty*)objectProperty;
+- (CKProperty*)objectProperty;
 
 ///-----------------------------------
 /// @name Validating Value for Object Property

@@ -9,7 +9,7 @@
 #import "CKNSValueTransformer+NativeTypes.h"
 #import "CKNSValueTransformer+Additions.h"
 
-CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) {
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* strValues, ...) {
 	NSArray* components = [strValues componentsSeparatedByString:@","];
 	
 	va_list ArgumentList;
@@ -28,11 +28,12 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
     CKEnumDescriptor* descriptor = [[[CKEnumDescriptor alloc]init]autorelease];
     descriptor.name = name;
     descriptor.valuesAndLabels = valuesAndLabels;
+    descriptor.isBitMask = bitMask;
 	return descriptor;
 }
 
 @implementation CKEnumDescriptor
-@synthesize name,valuesAndLabels;
+@synthesize name,valuesAndLabels,isBitMask;
 -(void)dealloc{
     self.name = nil;
     self.valuesAndLabels = nil;
@@ -43,8 +44,8 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
 @implementation NSValueTransformer (CKNativeTypes)
 
 
-+ (NSInteger)parseString:(NSString*)str toEnum:(CKEnumDescriptor*)descriptor multiSelectionEnabled:(BOOL)multiSelectionEnabled{
-    if(multiSelectionEnabled){
++ (NSInteger)parseString:(NSString*)str toEnum:(CKEnumDescriptor*)descriptor bitMask:(BOOL)bitMask{
+    if(bitMask){
         NSInteger integer = 0;
         NSArray* components = [str componentsSeparatedByString:@"|"];
         for(NSString* c in components){
@@ -61,9 +62,9 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
     return 0;
 }
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition bitMask:(BOOL)bitMask{
 	if([object isKindOfClass:[NSString class]]){
-		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition multiSelectionEnabled:multiSelectionEnabled];
+		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition bitMask:bitMask];
 		return result;
 	}
 	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
@@ -71,8 +72,8 @@ CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...) 
 }
 
 
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled{
-	if(multiSelectionEnabled){
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition bitMask:(BOOL)bitMask{
+	if(bitMask){
         NSMutableString* str = [NSMutableString string];
         for(NSString* e in [enumDefinition.valuesAndLabels allKeys]){
             NSInteger ci = [[enumDefinition.valuesAndLabels objectForKey:e]intValue];

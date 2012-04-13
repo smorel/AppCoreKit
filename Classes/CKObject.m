@@ -15,7 +15,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKNSObject+Introspection_private.h"
+#import "CKNSObject+CKRuntime_private.h"
 #import <objc/runtime.h>
 
 //nothing
@@ -99,8 +99,8 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 				[self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
 //				CKDebugLog(@"register <%p> of type <%@> as observer on <%p,%@>",self,[self class],self,property.name);
 			}
-			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
-					|| [NSObject isKindOf:property.type parentType:[NSSet class]]){
+			else if([NSObject isClass:property.type kindOfClass:[NSArray class]] 
+					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]){
 				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
 				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
 				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
@@ -139,8 +139,8 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 				[self removeObserver:self forKeyPath:property.name];
 			}
 			
-			else if([NSObject isKindOf:property.type parentType:[NSArray class]] 
-					|| [NSObject isKindOf:property.type parentType:[NSSet class]]){
+			else if([NSObject isClass:property.type kindOfClass:[NSArray class]] 
+					|| [NSObject isClass:property.type kindOfClass:[NSSet class]]){
 				SEL addsSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsAdded:atIndexes:"];
 				SEL removeSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsRemoved:atIndexes:"];
 				SEL replaceSelector =  [NSObject selectorForProperty:property.name suffix:@"ObjectsReplaced:byObjects:atIndexes:"];
@@ -210,7 +210,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 			if(attributes.serializable == YES){
 				if([aDecoder containsValueForKey:property.name]){
 					id objectFromDecoder = [aDecoder decodeObjectForKey:property.name];
-					if([NSObject isKindOf:[objectFromDecoder class] parentType:property.type]){
+					if([NSObject isClass:[objectFromDecoder class] kindOfClass:property.type]){
 						[self setValue:objectFromDecoder forKey:property.name];
 					}
 					else if(objectFromDecoder){

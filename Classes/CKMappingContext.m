@@ -8,8 +8,8 @@
 
 #import "CKMappingContext.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKNSObject+Introspection.h"
-#import "CKObjectProperty.h"
+#import "CKNSObject+CKRuntime.h"
+#import "CKProperty.h"
 #import "CKDocumentCollection.h"
 #import "CKCallback.h"
 #import "JSONKit.h"
@@ -244,7 +244,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
     }
 
     //Source value validation
-    CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
+    CKProperty* property = [CKProperty propertyWithObject:self keyPath:keyPath];//THIS WORKS NOT FOR DICTIONARIES AS TARGET ...
     CKClassPropertyDescriptor* descriptor = [property descriptor];
 	if(keyPath && !descriptor){
 		NSString* details = [NSString stringWithFormat:@"Trying to access to a property that doesn't exist : %@",property];
@@ -266,7 +266,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         Class targetType = [property type];
         
         //property is a collection
-        if([NSObject isKindOf:targetType parentType:[NSArray class]] || [NSObject isKindOf:targetType parentType:[CKDocumentCollection class]]){
+        if([NSObject isClass:targetType kindOfClass:[NSArray class]] || [NSObject isClass:targetType kindOfClass:[CKDocumentCollection class]]){
             NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
             
             CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
@@ -290,7 +290,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
                 return;
             }
 			
-			if([NSObject isKindOf:targetType parentType:[NSArray class]]){
+			if([NSObject isClass:targetType kindOfClass:[NSArray class]]){
 				id propertyArray = [property value];
 				if(!propertyArray){
 					[property setValue:[NSMutableArray array]];

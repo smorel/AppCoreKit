@@ -8,6 +8,7 @@
 
 #import "CKUIViewController+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
 @implementation UIViewController (CKIntrospectionAdditions)

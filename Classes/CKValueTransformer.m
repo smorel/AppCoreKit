@@ -7,7 +7,7 @@
 //
 
 #import "CKValueTransformer.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKNSValueTransformer+Additions.h"
 
 @implementation CKValueTransformer

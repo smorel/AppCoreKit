@@ -11,6 +11,7 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
 #import "CKPropertyExtendedAttributes.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"

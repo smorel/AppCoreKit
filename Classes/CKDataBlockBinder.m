@@ -7,7 +7,7 @@
 //
 
 #import "CKDataBlockBinder.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKBindingsManager.h"
 
 @interface CKDataBlockBinder ()

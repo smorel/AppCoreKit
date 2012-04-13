@@ -8,19 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "CKDocumentCollection.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 
 
 /** TODO
  */
 @interface CKObjectPropertyArrayCollection : CKDocumentCollection {
-	CKObjectProperty* _property;
+	CKProperty* _property;
 }
 
-@property (nonatomic,retain) CKObjectProperty* property;
+@property (nonatomic,retain) CKProperty* property;
 
-+ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKObjectProperty*)property;
++ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKProperty*)property;
 
-- (id)initWithArrayProperty:(CKObjectProperty*)property;
+- (id)initWithArrayProperty:(CKProperty*)property;
 
 @end

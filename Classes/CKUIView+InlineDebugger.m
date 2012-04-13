@@ -64,7 +64,7 @@
 
 + (NSString*)titleForView:(UIView*)view{
     NSString *title = NSStringFromClass([view class]);
-    CKObjectProperty* nameProperty = [CKObjectProperty propertyWithObject:view keyPath:@"name"];
+    CKProperty* nameProperty = [CKProperty propertyWithObject:view keyPath:@"name"];
     NSString *name = ([nameProperty descriptor] && [NSObject isClass:[[nameProperty descriptor]type] kindOfClass:[NSString class]] )? [nameProperty value] : nil;
     if([name length] <= 0){
         name = nil;
@@ -105,7 +105,7 @@
         __block CKTableViewCellController* bcontroller = controller;
         __block UIView* bsubView = subView;
         [controller.tableViewCell beginBindingsContextByRemovingPreviousBindings];
-        CKObjectProperty* nameProperty = [CKObjectProperty propertyWithObject:view keyPath:@"name"];
+        CKProperty* nameProperty = [CKProperty propertyWithObject:view keyPath:@"name"];
         if([nameProperty descriptor]){
             [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
                 bcontroller.tableViewCell.textLabel.text = [UIView titleForView:bsubView];

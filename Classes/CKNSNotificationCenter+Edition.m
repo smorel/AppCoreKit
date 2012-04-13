@@ -24,7 +24,7 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 
 @implementation NSNotificationCenter (CKEdition)
 
-- (void)notifyPropertyChange:(CKObjectProperty*)property{
+- (void)notifyPropertyChange:(CKProperty*)property{
 	NSMutableDictionary* infos = [NSMutableDictionary dictionary];
 	[infos setObject:property forKey:CKEditionObjectPropertyKey];
 	[self postNotificationName:CKEditionPropertyChangedNotification object:property.object userInfo:infos];
@@ -59,8 +59,8 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 
 @implementation NSNotification (CKEdition)
 
-- (CKObjectProperty*)objectProperty{
-	return (CKObjectProperty*)[[self userInfo] objectForKey:CKEditionObjectPropertyKey];
+- (CKProperty*)objectProperty{
+	return (CKProperty*)[[self userInfo] objectForKey:CKEditionObjectPropertyKey];
 }
 
 - (NSArray*)objects{

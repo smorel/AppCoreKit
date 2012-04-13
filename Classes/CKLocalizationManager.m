@@ -9,7 +9,7 @@
 #import "CKLocalizationManager.h"
 #import "CKLocalization.h"
 #import <UIKit/UIKit.h>
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKDebug.h"
 
 @interface CKLocalizationManager()
@@ -137,8 +137,8 @@ static CKLocalizationManager *sharedInstance = nil;
     
     [self refreshView:[controller view] viewStack:viewStack];
     
-    if([NSObject isKindOf:[controller class] parentClassName:@"CKContainerViewController"]
-       || [NSObject isKindOf:[controller class] parentClassName:@"CKSplitViewController"]){
+    if([NSObject isClass:[controller class] kindOfClassNamed:@"CKContainerViewController"]
+       || [NSObject isClass:[controller class] kindOfClassNamed:@"CKSplitViewController"]){
         NSArray* controllers = [controller performSelector:@selector(viewControllers)];
         for(UIViewController* c in controllers){
             [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];

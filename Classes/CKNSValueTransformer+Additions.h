@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKDocumentArray.h"
 
 #import "CKUIColor+ValueTransformer.h"
@@ -26,9 +26,9 @@
  */
 @interface NSValueTransformer (CKAddition)
 
-+ (id)transform:(id)object inProperty:(CKObjectProperty*)property;
++ (id)transform:(id)object inProperty:(CKProperty*)property;
 + (id)transform:(id)source toClass:(Class)type;
-+ (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type;
++ (id)transformProperty:(CKProperty*)property toClass:(Class)type;
 + (void)transform:(NSDictionary*)source toObject:(id)target;
 
 @end

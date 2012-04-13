@@ -9,6 +9,7 @@
 #import "CKDocumentCollection.h"
 #import "CKNSObject+Invocation.h"
 #import "CKPropertyExtendedAttributes.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
 @implementation CKDocumentCollection

@@ -8,7 +8,7 @@
 
 #import "CKUIColorPropertyCellController.h"
 #import "CKUIColorAdditions.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -34,7 +34,7 @@
 - (void)initTableViewCell:(UITableViewCell *)cell {
     [super initTableViewCell:cell];
     
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	UIColor* color = [p value];
     
     UIView* colorView = [[[UIView alloc]initWithFrame:CGRectMake(10,80,80,80)]autorelease];
@@ -47,7 +47,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	UIColor* color = [p value];
 	
@@ -66,7 +66,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CGUIColorWrapper* colorWrapper = (CGUIColorWrapper*)self.multiFloatValue;
 	
 	UIColor* color = [UIColor colorWithRed:colorWrapper.r

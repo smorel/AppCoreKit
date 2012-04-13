@@ -7,8 +7,8 @@
 //
 
 #import "CKObject+Validation.h"
-#import "CKNSObject+Introspection.h"
-#import "CKNSObject+Introspection_private.h"
+#import "CKNSObject+CKRuntime.h"
+#import "CKNSObject+CKRuntime_private.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
@@ -42,7 +42,7 @@
 - (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock{
         //Register on property edition to send validation status when editing properties
     [[NSNotificationCenter defaultCenter]bindNotificationName:CKEditionPropertyChangedNotification withBlock:^(NSNotification *notification) {
-        CKObjectProperty* property = [notification objectProperty];
+        CKProperty* property = [notification objectProperty];
         if(property.object == self){
             CKObjectValidationResults* validationResults = [self validate];
             validationResults.modifiedKeyPath = property.keyPath;

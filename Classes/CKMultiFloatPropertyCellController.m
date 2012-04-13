@@ -7,7 +7,7 @@
 //
 
 #import "CKMultiFloatPropertyCellController.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
@@ -117,7 +117,7 @@
 
 - (void)rebind{
     [self beginBindingsContextByRemovingPreviousBindings];
-	CKObjectProperty* property = (CKObjectProperty*)self.value;
+	CKProperty* property = (CKProperty*)self.value;
     [property.object bind:property.keyPath target:self action:@selector(propertyChanged)];
 	if([property isReadOnly] || self.readOnly){
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
@@ -145,7 +145,7 @@
 	[super setupCell:cell];
     [self propertyChanged];
 	
-	CKObjectProperty* property = (CKObjectProperty*)self.value;
+	CKProperty* property = (CKProperty*)self.value;
 	if([property isReadOnly] || self.readOnly){
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;

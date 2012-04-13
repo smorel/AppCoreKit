@@ -19,7 +19,7 @@
 + (CKFormSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{
     NSMutableArray* cells = [NSMutableArray array];
     for(id key in keys){
-        CKObjectProperty* property = [[[CKObjectProperty alloc]initWithDictionary:dico key:key]autorelease];
+        CKProperty* property = [[[CKProperty alloc]initWithDictionary:dico key:key]autorelease];
         CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithProperty:property];
         [cells addObject:cell];
     }
@@ -162,7 +162,7 @@
     [factory addItem:[NSObject factoryItemForClass]];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
-    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKObjectPropertyArrayCollection collectionWithArrayProperty:[CKObjectProperty propertyWithObject:inheritingClasses]] 
+    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKObjectPropertyArrayCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
                                                                                                                factory:factory 
                                                                                                            headerTitle:@"Super Classes"];
     

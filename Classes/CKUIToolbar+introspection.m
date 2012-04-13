@@ -8,6 +8,7 @@
 
 #import "CKUIToolbar+introspection.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
 @implementation UIToolbar (CKIntrospectionAdditions)

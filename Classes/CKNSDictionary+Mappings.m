@@ -13,7 +13,7 @@
 #import <objc/runtime.h>
 #import "CKNSDate+Conversions.h"
 #import "CKDocumentCollection.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKNSValueTransformer+Additions.h"
 
 
@@ -205,8 +205,8 @@ typedef enum{
 			else{
 				id target = [self valueForKeyPath:key];
 				CKClassPropertyDescriptor* descriptor = [self propertyDescriptorForKeyPath:key];
-				if([NSObject isKindOf:descriptor.type parentType:[CKDocumentCollection class]]
-				   ||[NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+				if([NSObject isClass:descriptor.type kindOfClass:[CKDocumentCollection class]]
+				   ||[NSObject isClass:descriptor.type kindOfClass:[NSArray class]]){
 					NSAssert([sourceObject isKindOfClass:[NSArray class]],@"trying to map a non array object as array");
 					NSMutableArray *items = [NSMutableArray array];
 					for (NSDictionary *d in sourceObject) {
@@ -220,12 +220,12 @@ typedef enum{
 						[collection addObjectsFromArray:items];
 					}
 					else {
-						if([NSObject isKindOf:descriptor.type parentType:[NSArray class]]){
+						if([NSObject isClass:descriptor.type kindOfClass:[NSArray class]]){
 							[self setValue:items forKeyPath:key];
 						}
 					}
 				}
-				else if([NSObject isKindOf:descriptor.type parentType:[NSObject class]]){
+				else if([NSObject isClass:descriptor.type kindOfClass:[NSObject class]]){
 					id object = [[[mappingObject.objectClass alloc] initWithDictionary:sourceObject withMappings:mappingObject.mappings error:error] autorelease];
 					[self setValue:object forKeyPath:key];
 				}

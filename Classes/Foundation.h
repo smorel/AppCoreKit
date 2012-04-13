@@ -19,9 +19,9 @@
 #import "CKCallback.h"
 #import "CKCascadingTree.h"
 
-//Introspection
-#import "CKClassPropertyDescriptor.h"
-#import "CKPropertyExtendedAttributes.h"
-#import "CKObjectProperty.h"
-#import "CKNSObject+Introspection.h"
+//Runtime
 #import "CKRuntime.h"
+#import "CKNSObject+CKRuntime.h"
+#import "CKClassPropertyDescriptor.h"
+#import "CKProperty.h"
+#import "CKPropertyExtendedAttributes.h"

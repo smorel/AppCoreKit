@@ -7,7 +7,7 @@
 //
 
 #import "CKRuntime.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import <objc/runtime.h>
 #import "CKVersion.h"
 

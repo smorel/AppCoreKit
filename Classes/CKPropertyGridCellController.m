@@ -65,14 +65,14 @@
     [super dealloc];
 }
 
-- (CKObjectProperty*)objectProperty{
-    NSAssert(self.value == nil || [self.value isKindOfClass:[CKObjectProperty class]],@"Invalid value type");
-    return (CKObjectProperty*)self.value;
+- (CKProperty*)objectProperty{
+    NSAssert(self.value == nil || [self.value isKindOfClass:[CKProperty class]],@"Invalid value type");
+    return (CKProperty*)self.value;
 }
 
 - (void)setValue:(id)value{
     if(![self.value isEqual:value]){
-        NSAssert(value == nil || [value isKindOfClass:[CKObjectProperty class]],@"Invalid value type");
+        NSAssert(value == nil || [value isKindOfClass:[CKProperty class]],@"Invalid value type");
         [super setValue:value];
     }
 }
@@ -97,9 +97,9 @@
         }];
     }
     
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     Class propertyType = [property type];
-    if(propertyType != nil && [NSObject isKindOf:propertyType parentType:[CKDocumentCollection class]]){
+    if(propertyType != nil && [NSObject isClass:propertyType kindOfClass:[CKDocumentCollection class]]){
         [property.object bind:[NSString stringWithFormat:@"%@.count",property.keyPath] withBlock:^(id value) {
             BOOL validity = [self isValidValue:[[self objectProperty] value]];
             [self setInvalidButtonVisible:!validity];
@@ -112,7 +112,7 @@
 }
 
 - (BOOL)isValidValue:(id)value{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     if(attributes.validationPredicate){
         return [attributes.validationPredicate evaluateWithObject:value];
@@ -150,7 +150,7 @@
         }
     }
     
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     [property setValue:value];
     [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
 }
@@ -231,7 +231,7 @@
 }
 
 - (void)validationInfos:(id)sender{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     NSString* titleId = [NSString stringWithFormat:@"%@_Validation_Title",descriptor.name];
     NSString* messageId = [NSString stringWithFormat:@"%@_Validation_Message",descriptor.name];
@@ -302,7 +302,7 @@
                                                                   action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
         [buttons addObject:button];
         
-        CKObjectProperty* model = self.value;
+        CKProperty* model = self.value;
         CKClassPropertyDescriptor* descriptor = [model descriptor];
         NSString* str = [NSString stringWithFormat:@"%@_NavigationBar",descriptor.name];
         NSString* title = _(str);

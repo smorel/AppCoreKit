@@ -7,7 +7,7 @@
 //
 
 #import "CKNSNumberPropertyCellController.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
@@ -39,7 +39,7 @@
 }
 
 - (void)onvalue{
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.value;
 	BOOL bo = [[model value] boolValue];
 	
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
@@ -47,7 +47,7 @@
 }
 
 - (void)textFieldChanged:(id)thevalue{
-    CKObjectProperty* property = (CKObjectProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.value;
 	NSNumber* number = (NSNumber*)[property value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
 	if(newNumber == nil){
@@ -121,7 +121,7 @@
 	_textField.delegate = self;
     //self.toggleSwitch = (UISwitch*)[cell viewWithTag:SwitchTag];
 	
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.value;
 	
 	//reset the view
 	cell.detailTextLabel.text = nil;
@@ -231,7 +231,7 @@
 		if(controller.cellStyle == CKTableViewCellStyleValue3
            || controller.cellStyle == CKTableViewCellStylePropertyGrid){
             
-            CKObjectProperty* model = self.value;
+            CKProperty* model = self.value;
 			if([model isReadOnly] || self.readOnly){
             }
             else{
@@ -294,7 +294,7 @@
     CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
     CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
     
-    CKObjectProperty* model = staticController.value;
+    CKProperty* model = staticController.value;
     BOOL readonly = ([model isReadOnly] || staticController.readOnly);
     
     CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
@@ -334,7 +334,7 @@
 	[self didResignFirstResponder];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.value;
     [self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
 	[self.tableViewCell endBindingsContext];
@@ -353,8 +353,8 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
-    NSInteger min = [attributes.options minimumLength];
-    NSInteger max = [attributes.options maximumLength];
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;
@@ -386,7 +386,7 @@
 }
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKObjectProperty* model = object;
+	CKProperty* model = object;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	switch(descriptor.propertyType){

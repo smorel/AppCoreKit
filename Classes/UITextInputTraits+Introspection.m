@@ -8,6 +8,7 @@
 
 #import "UITextInputTraits+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 NSMutableSet *textInputTraitsProperties = nil;
 

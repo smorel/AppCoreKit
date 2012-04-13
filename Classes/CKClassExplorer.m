@@ -104,7 +104,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 		for(int i = 0;i<numClasses; ++i){
 			Class c = classes[i];
 			NSString* className = NSStringFromClass(c);
-			if([NSObject isKindOf:c parentType:type]
+			if([NSObject isClass:c kindOfClass:type]
 			   && ![className hasPrefix:@"_"]){
 				[ar addObject:className];
 			}
@@ -139,7 +139,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[objectCellDescriptor setSetupBlock:^(id object){
 		CKTableViewCellController* controller = (CKTableViewCellController*)object;
 		CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
-		if(nameDescriptor != nil && [NSObject isKindOf:nameDescriptor.type parentType:[NSString class]]){
+		if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
 			controller.tableViewCell.textLabel.text = [controller.value valueForKeyPath:@"modelName"];
 		}
 		else{

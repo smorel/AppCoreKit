@@ -10,6 +10,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKObject.h"
 #import "UITextInputTraits+Introspection.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 @implementation UITextField (CKIntrospectionAdditions)
 

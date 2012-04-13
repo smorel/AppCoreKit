@@ -7,7 +7,7 @@
 //
 
 #import "CKNSDatePropertyCellController.h"
-#include "CKObjectProperty.h"
+#include "CKProperty.h"
 #include "CKLocalization.h"
 #include "CKNSObject+Bindings.h"
 #include "CKNSValueTransformer+Additions.h"
@@ -38,7 +38,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                                                CKDatePickerModeCreditCardExpirationDate);
 }
 
-- (id)initWithProperty:(CKObjectProperty*)theproperty mode:(CKDatePickerMode)mode{
+- (id)initWithProperty:(CKProperty*)theproperty mode:(CKDatePickerMode)mode{
     self = [super init];
     _property = [theproperty retain];
     self.datePickerMode = mode;
@@ -204,7 +204,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     _pickerView = nil;
 }
 
-- (void)setProperty:(CKObjectProperty *)property{
+- (void)setProperty:(CKProperty *)property{
     [_property release];
     _property = [property retain];
     NSDate* date = [_property value];
@@ -277,7 +277,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
 	
-	CKObjectProperty* model = self.value;
+	CKProperty* model = self.value;
     if([model isReadOnly] || self.readOnly){
         self.fixedSize = YES;
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -314,7 +314,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
     CKNSDatePropertyCellController* staticController = (CKNSDatePropertyCellController*)[params staticController];
-	CKObjectProperty* model = object;
+	CKProperty* model = object;
     if([model isReadOnly] || staticController.readOnly){
         return CKItemViewFlagNone;
     }
@@ -328,7 +328,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 + (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKObjectProperty* model = object;// || self.readonly
+	CKProperty* model = object;// || self.readonly
 	return ![model isReadOnly];
 }
 
@@ -337,7 +337,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)becomeFirstResponder{
-    CKObjectProperty* model = self.value;
+    CKProperty* model = self.value;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	
 	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name];

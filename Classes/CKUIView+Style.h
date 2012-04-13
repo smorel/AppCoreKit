@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKGradientView.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 
 
 /* TODO :

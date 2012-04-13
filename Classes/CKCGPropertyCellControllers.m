@@ -7,7 +7,7 @@
 //
 
 #import "CKCGPropertyCellControllers.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import <CoreLocation/CoreLocation.h>
 
 //CGSIZE
@@ -29,7 +29,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	CGSize size = [[p value]CGSizeValue];
 	
 	CGSizeWrapper* sizeWrapper = (CGSizeWrapper*)self.multiFloatValue;
@@ -38,7 +38,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CGSizeWrapper* sizeWrapper = (CGSizeWrapper*)self.multiFloatValue;
 	[p setValue:[NSValue valueWithCGSize:CGSizeMake(MAX(1,[sizeWrapper width]),MAX(1,[sizeWrapper height]))]];
 }
@@ -68,7 +68,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	CGPoint point = [[p value]CGPointValue];
 	
@@ -78,7 +78,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CGPointWrapper* pointWrapper = (CGPointWrapper*)self.multiFloatValue;
 	[p setValue:[NSValue valueWithCGPoint:CGPointMake(MAX(1,[pointWrapper x]),MAX(1,[pointWrapper y]))]];
 }
@@ -111,7 +111,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	CGRect rect = [[p value]CGRectValue];
 	
@@ -123,7 +123,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CGRectWrapper* rectWrapper = (CGRectWrapper*)self.multiFloatValue;
 	[p setValue:[NSValue valueWithCGRect:CGRectMake([rectWrapper x],[rectWrapper y],MAX(1,[rectWrapper width]),MAX(1,[rectWrapper height]))]];
 }
@@ -156,7 +156,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	UIEdgeInsets insets = [[p value]UIEdgeInsetsValue];
 	
@@ -169,7 +169,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	UIEdgeInsetsWrapper* insetsWrapper = (UIEdgeInsetsWrapper*)self.multiFloatValue;
 	[p setValue:[NSValue valueWithUIEdgeInsets:UIEdgeInsetsMake([insetsWrapper top],[insetsWrapper left],[insetsWrapper bottom],[insetsWrapper right])]];
 }
@@ -200,7 +200,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	CLLocationCoordinate2D coord;
     NSValue* value = [p value];
@@ -214,7 +214,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
 	
 	CLLocationCoordinate2D coord;
@@ -253,7 +253,7 @@
 }
 
 - (void)propertyChanged{
-    CKObjectProperty* p = (CKObjectProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.value;
 	
 	CGAffineTransform transform;
     id value = [p value];
@@ -271,7 +271,7 @@
 }
 
 - (void)valueChanged{
-	CKObjectProperty* p = (CKObjectProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.value;
 	CKCGAffineTransformWrapper* wrapper = (CKCGAffineTransformWrapper*)self.multiFloatValue;
 	
 	CGAffineTransform transform = CGAffineTransformIdentity;

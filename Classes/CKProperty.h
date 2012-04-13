@@ -1,5 +1,5 @@
 //
-//  CKObjectKeyValue.h
+//  CKProperty.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-01.
@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKPropertyExtendedAttributes.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
-/** CKObjectProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access attributes and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
+/** CKProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access attributes and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
  */
-@interface CKObjectProperty : NSObject<NSCopying> {
+@interface CKProperty : NSObject<NSCopying> {
 }
 
 @property (nonatomic,retain,readonly) id object;
@@ -23,9 +24,9 @@
 @property (nonatomic,readonly) NSString* name;
 @property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
 
-+ (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
-+ (CKObjectProperty*)propertyWithObject:(id)object;
-+ (CKObjectProperty*)propertyWithDictionary:(id)dictionary key:(id)key;
++ (CKProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
++ (CKProperty*)propertyWithObject:(id)object;
++ (CKProperty*)propertyWithDictionary:(id)dictionary key:(id)key;
 
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
 - (id)initWithObject:(id)object;

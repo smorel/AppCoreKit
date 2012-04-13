@@ -19,7 +19,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell{
     [super setupCell:cell];
-    CKObjectProperty* property = self.value;
+    CKProperty* property = self.value;
     UIImage* image = [property value];
     cell.imageView.image = image;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

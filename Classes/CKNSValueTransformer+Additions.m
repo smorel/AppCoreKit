@@ -34,7 +34,7 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 @interface NSValueTransformer()
-+ (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property;
++ (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property;
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector;
 + (NSDictionary*)converterWithIdentifier:(NSString*)identifier;
 + (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)class;
@@ -44,7 +44,7 @@ NSString* CKSerializerIDTag = @"@id";
 //utiliser des selector au lieu des valueTransformers
 @implementation NSValueTransformer (CKAddition)
 
-+ (id)transform:(id)object inProperty:(CKObjectProperty*)property{
++ (id)transform:(id)object inProperty:(CKProperty*)property{
 	CKClassPropertyDescriptor* descriptor = [property descriptor];
 	
 	switch(descriptor.propertyType){
@@ -58,7 +58,7 @@ NSString* CKSerializerIDTag = @"@id";
 			CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 			NSInteger i = 0;
 			if(attributes.enumDescriptor != nil){
-				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor multiSelectionEnabled:attributes.multiselectionEnabled];
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 			}
 			else{
 				i = [NSValueTransformer convertIntegerFromObject:object];
@@ -266,7 +266,7 @@ NSString* CKSerializerIDTag = @"@id";
 	return converterIdentifier;
 }
 
-+ (id)transform:(id)source toClass:(Class)type inProperty:(CKObjectProperty*)property{
++ (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property{
 	if(source == nil){
 		if(property != nil){
 			[property setValue:nil];
@@ -305,7 +305,7 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	//special case for date
-	if(attributes.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
+	if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
 	   && [source isKindOfClass:[NSString class]]){
 		id result = [NSDate convertFromNSString:source withFormat:attributes.dateFormat];
 		if(property != nil){
@@ -313,7 +313,7 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		return source;
 	}
-	else if(attributes.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+	else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSString class]]
 			&& [source isKindOfClass:[NSDate class]]){
 		id result = [NSDate convertToNSString:source withFormat:attributes.dateFormat];
 		if(property != nil){
@@ -403,7 +403,7 @@ NSString* CKSerializerIDTag = @"@id";
 		}
 		
         
-		if([NSObject isKindOf:typeToCreate parentType:[CKObject class]]){
+		if([NSObject isClass:typeToCreate kindOfClass:[CKObject class]]){
 			id uniqueId = [source valueForKeyPath:@"uniqueId"];
 			if([uniqueId isKindOfClass:[NSString class]]){
 				target = [CKObject objectWithUniqueId:uniqueId];
@@ -434,27 +434,27 @@ NSString* CKSerializerIDTag = @"@id";
 }
 
 
-+ (id)transformProperty:(CKObjectProperty*)property toClass:(Class)type{
++ (id)transformProperty:(CKProperty*)property toClass:(Class)type{
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-	if([NSObject isKindOf:type parentType:[NSString class]]
+	if([NSObject isClass:type kindOfClass:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
 				if(attributes.enumDescriptor != nil){
-					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:attributes.enumDescriptor multiSelectionEnabled:attributes.multiselectionEnabled];
+					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 				}
 				break;
 			}
 		}
 	}
 	//special case for date ...
-    else if(attributes.dateFormat != nil && [NSObject isKindOf:type parentType:[NSDate class]]
+    else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
 	   && [property.value isKindOfClass:[NSString class]]){
 		id result = [NSDate convertFromNSString:property.value withFormat:attributes.dateFormat];
 		return result;
 	}
-	else if(attributes.dateFormat != nil && [NSObject isKindOf:type parentType:[NSString class]]
+	else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSString class]]
 			&& [property.value isKindOfClass:[NSDate class]]){
 		id result = [NSDate convertToNSString:property.value withFormat:attributes.dateFormat];
 		return result;
@@ -472,7 +472,7 @@ NSString* CKSerializerIDTag = @"@id";
 	for(CKClassPropertyDescriptor* descriptor in descriptors){
 		id object = [source objectForKey:descriptor.name];
 		if(object != nil){
-			CKObjectProperty* property = [[CKObjectProperty alloc]initWithObject:target keyPath:descriptor.name];
+			CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name];
 			[NSValueTransformer transform:object inProperty:property];
 			[property autorelease];
 		}

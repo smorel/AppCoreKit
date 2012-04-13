@@ -9,7 +9,7 @@
 #import "CKDataBinder.h"
 #import "CKValueTransformer.h"
 #import "CKBindingsManager.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKNSValueTransformer+Additions.h"
 
 
@@ -104,13 +104,13 @@
 -(void)bind{
 	[self unbind];
 	
-	CKClassPropertyDescriptor* property = [NSObject propertyDescriptor:self.instance2 forKeyPath:self.keyPath2];
+	CKClassPropertyDescriptor* property = [NSObject propertyDescriptorForObject:self.instance2 keyPath:self.keyPath2];
 	if(property == nil){
 		return;
 	}
 	
 	[NSValueTransformer transform:[self.instance1 valueForKeyPath:self.keyPath1]
-							   inProperty:[CKObjectProperty propertyWithObject:self.instance2 keyPath:self.keyPath2]];
+							   inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2]];
 	
 	[self.instance1 addObserver:self
 				forKeyPath:self.keyPath1
@@ -131,7 +131,7 @@
 }
 
 - (void)executeWithValue:(id)value{
-	[NSValueTransformer transform:value inProperty:[CKObjectProperty propertyWithObject:self.instance2 keyPath:self.keyPath2] ];
+	[NSValueTransformer transform:value inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2] ];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

@@ -1,13 +1,13 @@
 //
-//  ObjectIntrospection.m
+//  CKNSObject+CKRuntime.m
 //  CloudKitApp
 //
 //  Created by Sebastien Morel on 11-01-18.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKNSObject+Introspection.h"
-#import "CKNSObject+Introspection_private.h"
+#import "CKNSObject+CKRuntime.h"
+#import "CKNSObject+CKRuntime_private.h"
 #import <objc/runtime.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>
@@ -75,7 +75,7 @@ void introspectTextInputsProperties(){
 }
 
 
-@implementation NSObject (CKNSObjectIntrospection)
+@implementation NSObject (CKRuntime)
 
 + (CKClassPropertyDescriptor*)propertyForDescriptor:(objc_property_t)descriptor{
 	const char *propName = property_getName(descriptor);
@@ -92,7 +92,7 @@ void introspectTextInputsProperties(){
 		objectProperty.attributes = [NSString stringWithUTF8String:attributes];
 		objectProperty.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:objectProperty.name];
 		
-		if([NSObject isKindOf:returnType parentType:[NSArray class]]){
+		if([NSObject isClass:returnType kindOfClass:[NSArray class]]){
 			objectProperty.insertSelector = [NSObject insertSelectorForProperty:objectProperty.name];
 			objectProperty.removeSelector = [NSObject removeSelectorForProperty:objectProperty.name];
 			objectProperty.removeAllSelector = [NSObject removeAllSelectorForProperty:objectProperty.name];
@@ -119,7 +119,7 @@ void introspectTextInputsProperties(){
 		CKDebugLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
 		return nil;
 	}
-	return [self propertyDescriptor:[subObject class] forKey:[ar objectAtIndex:[ar count] -1 ]];
+	return [self propertyDescriptorForClass:[subObject class] key:[ar objectAtIndex:[ar count] -1 ]];
 }
 
 
@@ -128,7 +128,7 @@ void introspectTextInputsProperties(){
 }
 
 - (CKClassPropertyDescriptor*)propertyDescriptorForKeyPath:(NSString*)keyPath{
-	return [NSObject propertyDescriptor:[self class] forKeyPath:keyPath];
+	return [NSObject propertyDescriptorForObject:self keyPath:keyPath];
 }
 
 - (void)_introspection:(Class)c array:(NSMutableArray*)array{
@@ -150,7 +150,7 @@ void introspectTextInputsProperties(){
     free(ps);	
     
 	Class f = class_getSuperclass(c);
-	if(f && ![NSObject isExactKindOf:f parentType:[NSObject class]]){
+	if(f && ![NSObject isClass:f exactKindOfClass:[NSObject class]]){
 		[self _introspection:f array:array];
 	}
 	
@@ -184,11 +184,11 @@ void introspectTextInputsProperties(){
 
 + (BOOL)isClass:(Class)type kindOfClass:(Class)parentType{
 	if(parentType){
-		if([NSObject isExactKindOf:type parentType:parentType])
+		if([NSObject isClass:type exactKindOfClass:parentType])
 			return YES;
 		Class p = class_getSuperclass(type);
 		if(p)
-			return [NSObject isKindOf:p parentType:parentType];
+			return [NSObject isClass:p exactKindOfClass:parentType];
 		return NO;
 	}
 	return YES;
@@ -196,11 +196,11 @@ void introspectTextInputsProperties(){
 
 + (BOOL)isClass:(Class)type kindOfClassNamed:(NSString*)parentClassName{
     if(parentClassName){
-		if([NSObject isExactKindOf:type parentClassName:parentClassName])
+		if([NSObject isClass:type exactKindOfClassNamed:parentClassName])
 			return YES;
 		Class p = class_getSuperclass(type);
 		if(p)
-			return [NSObject isKindOf:p parentClassName:parentClassName];
+			return [NSObject isClass:p kindOfClassNamed:parentClassName];
 		return NO;
 	}
 	return YES;
@@ -254,7 +254,7 @@ void introspectTextInputsProperties(){
             }
             else{
                 if(filter){
-                    if([NSObject isKindOf:theClass parentType:filter]){
+                    if([NSObject isClass:theClass kindOfClass:filter]){
                         [ret addObject:(id)theClass];
                     }
                 }
@@ -278,7 +278,7 @@ void introspectTextInputsProperties(){
 
 
 
-@implementation NSObject (CKNSObjectIntrospection_private)
+@implementation NSObject (CKRuntime_private)
 
 - (void)introspection:(Class)c array:(NSMutableArray*)array{
 	[self _introspection:c array:array];
@@ -344,38 +344,5 @@ void introspectTextInputsProperties(){
 	NSString* selectorName = [self concatenateAndUpperCaseFirstChar:propertyName prefix:@"removeAll" suffix:@"Objects"];
 	return NSSelectorFromString(selectorName);
 }
-
-@end
-
-/********************************* DEPRECATED *********************************
- */
-
-@implementation NSObject (CKNSObjectIntrospection_DEPRECATED_IN_CLOUDKIT_1_7_15_AND_LATER)
-
-+ (BOOL)isKindOf:(Class)type parentType:(Class)parentType{
-	return [self isClass:type kindOfClass:parentType];
-}
-
-+ (BOOL)isKindOf:(Class)type parentClassName:(NSString*)parentClassName{
-	return [self isClass:type kindOfClassNamed:parentClassName];
-}
-
-+ (BOOL)isExactKindOf:(Class)type parentType:(Class)parentType{
-	return [self isClass:type exactKindOfClass:parentType];
-}
-
-+ (BOOL)isExactKindOf:(Class)type parentClassName:(NSString*)parentClassName{
-	return [self isClass:type exactKindOfClassNamed:parentClassName];
-}
-
-+ (CKClassPropertyDescriptor*)propertyDescriptor:(id)object forKeyPath:(NSString*)keyPath{
-	return [[self class]propertyDescriptorForObject:object keyPath:keyPath];
-}
-
-
-+ (CKClassPropertyDescriptor*)propertyDescriptor:(Class)c forKey:(NSString*)name{
-	return [[self class]propertyDescriptorForClass:c key:name];
-}
-
 
 @end

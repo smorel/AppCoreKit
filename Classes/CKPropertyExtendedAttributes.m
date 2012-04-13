@@ -11,55 +11,21 @@
 static CKPropertyExtendedAttributes* CKPropertyExtendedAttributesSingleton = nil;
 
 @implementation CKPropertyExtendedAttributes
-@synthesize comparable;
-@synthesize serializable;
-@synthesize creatable;
-@synthesize hashable;
-@synthesize copiable;
-@synthesize deepCopy;
-@synthesize editable;
-@synthesize multiselectionEnabled;
-@synthesize enumDescriptor;
-@synthesize contentType;
-@synthesize dateFormat;
-@synthesize valuesAndLabels;
-@synthesize contentProtocol;
-@synthesize tableViewCellControllerClass;
-@synthesize validationPredicate;
-@synthesize options;
+@synthesize attributes;
 
 - (id)init{
     self = [super init];
-    self.options = [NSMutableDictionary dictionary];
+    self.attributes = [NSMutableDictionary dictionary];
     return self;
 }
 
 - (void)dealloc{
-	self.dateFormat = nil;
-	self.validationPredicate = nil;
-	self.enumDescriptor = nil;
-	self.valuesAndLabels = nil;
-	self.options = nil;
+	self.attributes = nil;
 	[super dealloc];
 }
 
 - (void)reset{
-	self.comparable = YES;
-	self.serializable = YES;
-	self.creatable = NO;
-	self.hashable = YES;
-	self.copiable = YES;
-	self.deepCopy = NO;
-	self.editable = YES;
-	self.enumDescriptor = nil;
-	self.valuesAndLabels = nil;
-	self.contentType = nil;
-	self.contentProtocol = nil;
-	self.dateFormat = nil;
-	self.tableViewCellControllerClass = nil;
-	self.validationPredicate = nil;
-	self.multiselectionEnabled = NO;
-	[self.options removeAllObjects];
+	[self.attributes removeAllObjects];
 }
 
 + (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property{

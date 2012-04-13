@@ -67,7 +67,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	if([object isKindOfClass:[NSNumber class]]){
 		return [object intValue];
 	}
-	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor multiSelectionEnabled:NO];
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:NO];
 	[self setObject:[NSNumber numberWithInt:result] forKey:key];
 	return result;
 }
@@ -129,7 +129,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
     return CKStyleResourceTypeSet;
 }
 
-- (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property{
+- (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property{
 	id object = [self objectForKey:key];
 	id transformedValue = [NSValueTransformer transform:object inProperty:property];
     if(object == transformedValue){

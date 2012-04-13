@@ -9,6 +9,7 @@
 #import "CKUITableViewCell+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKObject.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
 @implementation UITableViewCell (CKIntrospectionAdditions)

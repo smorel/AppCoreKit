@@ -9,6 +9,8 @@
 #import "CKMKMapView+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKObject.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
+
 #import <MapKit/MKTypes.h>
 
 
@@ -18,20 +20,20 @@
 	attributes.contentProtocol = @protocol(MKAnnotation);
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)insertAnnotationsObjects:(NSArray *)annotations atIndexes:(NSIndexSet*)indexes{
 	[self addAnnotations:annotations];
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)removeAnnotationsObjectsAtIndexes:(NSIndexSet*)indexes{
 	NSArray* annotations = [self.subviews objectsAtIndexes:indexes];
 	[self removeAnnotations:annotations];
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)removeAllAnnotationsObjects{
 	[self removeAnnotations:self.annotations];

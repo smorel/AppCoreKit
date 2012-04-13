@@ -51,7 +51,7 @@
 	}
 	
 	id returnObject = nil;
-	if([NSObject isKindOf:typeToCreate parentType:[CKObject class]]){
+	if([NSObject isClass:typeToCreate kindOfClass:[CKObject class]]){
 		id uniqueId = [dictionary valueForKeyPath:@"uniqueId"];
 		if([uniqueId isKindOfClass:[NSString class]]){
 			returnObject = [CKObject objectWithUniqueId:uniqueId];

@@ -7,9 +7,8 @@
 //
 
 #import "CKUIView+Introspection.h"
-
-
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 @implementation UIView (CKIntrospectionAdditions)
 
@@ -17,7 +16,7 @@
 	attributes.contentType = [UIView class];
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)insertSubviewsObjects:(NSArray *)views atIndexes:(NSIndexSet*)indexes{
 	
@@ -31,7 +30,7 @@
 	}
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)removeSubviewsObjectsAtIndexes:(NSIndexSet*)indexes{
 	NSArray* views = [self.subviews objectsAtIndexes:indexes];
@@ -40,7 +39,7 @@
 	}
 }
 
-//informal protocol for CKObjectProperty arrays insert/remove
+//informal protocol for CKProperty arrays insert/remove
 //will get call when acting in property grids or table views ...
 - (void)removeAllSubviewsObjects{
 	NSArray* views = [NSArray arrayWithArray:self.subviews];
@@ -50,32 +49,31 @@
 }
 
 - (void)autoresizingMaskExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-	attributes.enumDescriptor = CKEnumDefinition(@"UIViewAutoresizing",
-                                                   UIViewAutoresizingNone,
-											   UIViewAutoresizingFlexibleLeftMargin,
-											   UIViewAutoresizingFlexibleWidth,
-											   UIViewAutoresizingFlexibleRightMargin,
-											   UIViewAutoresizingFlexibleTopMargin,
-											   UIViewAutoresizingFlexibleHeight,
-											   UIViewAutoresizingFlexibleBottomMargin);
-    attributes.multiselectionEnabled = YES;
+	attributes.enumDescriptor = CKBitMaskDefinition(@"UIViewAutoresizing",
+                                                    UIViewAutoresizingNone,
+                                                    UIViewAutoresizingFlexibleLeftMargin,
+                                                    UIViewAutoresizingFlexibleWidth,
+                                                    UIViewAutoresizingFlexibleRightMargin,
+                                                    UIViewAutoresizingFlexibleTopMargin,
+                                                    UIViewAutoresizingFlexibleHeight,
+                                                    UIViewAutoresizingFlexibleBottomMargin);
 }
 
 - (void)contentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 	attributes.enumDescriptor = CKEnumDefinition(@"UIViewContentMode",
-                                                   UIViewContentModeScaleToFill,
-											   UIViewContentModeScaleAspectFit,
-											   UIViewContentModeScaleAspectFill,
-											   UIViewContentModeRedraw,
-											   UIViewContentModeCenter,
-											   UIViewContentModeTop,
-											   UIViewContentModeBottom,
-											   UIViewContentModeLeft,
-											   UIViewContentModeRight,
-											   UIViewContentModeTopLeft,
-											   UIViewContentModeTopRight,
-											   UIViewContentModeBottomLeft,
-											   UIViewContentModeBottomRight);
+                                                 UIViewContentModeScaleToFill,
+                                                 UIViewContentModeScaleAspectFit,
+                                                 UIViewContentModeScaleAspectFill,
+                                                 UIViewContentModeRedraw,
+                                                 UIViewContentModeCenter,
+                                                 UIViewContentModeTop,
+                                                 UIViewContentModeBottom,
+                                                 UIViewContentModeLeft,
+                                                 UIViewContentModeRight,
+                                                 UIViewContentModeTopLeft,
+                                                 UIViewContentModeTopRight,
+                                                 UIViewContentModeBottomLeft,
+                                                 UIViewContentModeBottomRight);
 }
 
 + (NSArray*)additionalClassPropertyDescriptors{

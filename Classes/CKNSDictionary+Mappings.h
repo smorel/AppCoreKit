@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 
 typedef id(^CKCustomMappingBlock)(id sourceObject, NSError** error);
 typedef void(^CKMappingBlock)(id sourceObject,id object,NSString* destination,NSError** error);

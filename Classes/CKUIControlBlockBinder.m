@@ -7,7 +7,7 @@
 //
 
 #import "CKUIControlBlockBinder.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKImageView.h"
 #import "CKBindingsManager.h"
 

@@ -405,10 +405,10 @@ static char NSObjectAppliedStyleObjectKey;
 		if([reserverKeyWords containsObject:key] == NO){
 			CKClassPropertyDescriptor* descriptor = [object propertyDescriptorForKeyPath:key];
             if(descriptor){
-                BOOL isUIView = (descriptor != nil && [NSObject isKindOf:descriptor.type parentType:[UIView class]] == YES);
+                BOOL isUIView = (descriptor != nil && [NSObject isClass:descriptor.type kindOfClass:[UIView class]] == YES);
                 if(!isUIView){
-                    //FIXME : We could propbably optimize here by not creating the CKObjectProperty as it registers weakrefs and other stuff ...
-                    [style setObjectForKey:key inProperty:[CKObjectProperty propertyWithObject:object keyPath:key]];
+                    //FIXME : We could propbably optimize here by not creating the CKProperty as it registers weakrefs and other stuff ...
+                    [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
                 }
                 else if(isUIView){
                     if([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
@@ -420,7 +420,7 @@ static char NSObjectAppliedStyleObjectKey;
                             id subViewStyle = [style objectForKey:key];
                             NSString* className = [subViewStyle objectForKey:@"@class"];
                             Class theClass = NSClassFromString(className);
-                            if(theClass && [NSObject isKindOf:theClass parentType:[UIView class]] == YES){
+                            if(theClass && [NSObject isClass:theClass kindOfClass:[UIView class]] == YES){
                                 UIView* createdView = [[[theClass alloc]initWithFrame:CGRectMake(0,0,100,100)]autorelease];
                                 [[createdView class] applyStyle:subViewStyle toView:createdView appliedStack:appliedStack delegate:delegate];
                                 [object setValue:createdView forKeyPath:key];

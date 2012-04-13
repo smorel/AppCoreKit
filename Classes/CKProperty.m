@@ -1,20 +1,20 @@
 //
-//  CKObjectKeyValue.m
+//  CKProperty.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-01.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDocumentCollection.h"
-#import "CKNSObject+Introspection.h"
+#import "CKNSObject+CKRuntime.h"
 #import "CKWeakRef.h"
 #import "CKDebug.h"
-#import "CKNSObject+Introspection_private.h"
+#import "CKNSObject+CKRuntime_private.h"
 
-@interface CKObjectProperty()
+@interface CKProperty()
 @property (nonatomic,retain) CKWeakRef* subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
 @property (nonatomic,retain) CKWeakRef* objectRef;
@@ -23,7 +23,7 @@
 - (void)postInit;
 @end
 
-@implementation CKObjectProperty
+@implementation CKProperty
 @synthesize object,keyPath;
 @synthesize subObject,subKeyPath;
 @synthesize descriptor;
@@ -38,18 +38,18 @@
 	[super dealloc];
 }
 
-+ (CKObjectProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath{
-	CKObjectProperty* p = [[[CKObjectProperty alloc]initWithObject:object keyPath:keyPath]autorelease];
++ (CKProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath{
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object keyPath:keyPath]autorelease];
 	return p;
 }
 
-+ (CKObjectProperty*)propertyWithObject:(id)object{
-	CKObjectProperty* p = [[[CKObjectProperty alloc]initWithObject:object]autorelease];
++ (CKProperty*)propertyWithObject:(id)object{
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object]autorelease];
 	return p;
 }
 
-+ (CKObjectProperty*)propertyWithDictionary:(id)dictionary key:(id)key{
-	CKObjectProperty* p = [[[CKObjectProperty alloc]initWithDictionary:dictionary key:key]autorelease];
++ (CKProperty*)propertyWithDictionary:(id)dictionary key:(id)key{
+	CKProperty* p = [[[CKProperty alloc]initWithDictionary:dictionary key:key]autorelease];
 	return p;
 }
 
@@ -115,7 +115,7 @@
         
         self.subObject = [CKWeakRef weakRefWithObject:target target:self action:@selector(releaseSubObject:)];
         if(self.subObject.object && self.subKeyPath){
-            self.descriptor = [NSObject propertyDescriptor:[self.subObject.object class] forKey:self.subKeyPath];
+            self.descriptor = [NSObject propertyDescriptorForClass:[self.subObject.object class] key:self.subKeyPath];
         }
         else{
             self.descriptor = nil;
@@ -186,13 +186,13 @@
 
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
 	Class selfClass = [self type];
-    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
         [[self value]insertObjects:objects atIndexes:indexes];
         return;
     }
-	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
+	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
-    if([NSObject isKindOf:selfClass parentType:[NSArray class]]){
+    if([NSObject isClass:selfClass kindOfClass:[NSArray class]]){
         if(self.descriptor && self.descriptor.insertSelector && [self.object respondsToSelector:self.descriptor.insertSelector]){
             [self.object willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:self.keyPath];
             [self.object performSelector:self.descriptor.insertSelector withObject:objects withObject:indexes];
@@ -213,11 +213,11 @@
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes{
 	Class selfClass = [self type];
-    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
 		[[self value]removeObjectsAtIndexes:indexes];
         return;
     }
-	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
+	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
 	if(self.descriptor && self.descriptor.removeSelector && [self.object respondsToSelector:self.descriptor.removeSelector]){
 		[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
@@ -238,11 +238,11 @@
 
 - (void)removeAllObjects{
 	Class selfClass = [self type];
-    if([NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
         [[self value]removeAllObjects];
         return;
     }
-	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]],@"invalid property type");
+	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
 	    
@@ -265,13 +265,13 @@
 
 - (NSInteger)count{
 	Class selfClass = [self type];
-	NSAssert([NSObject isKindOf:selfClass parentType:[NSArray class]]
-             ||[NSObject isKindOf:selfClass parentType:[CKDocumentCollection class]],@"invalid property type");
+	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]]
+             ||[NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]],@"invalid property type");
     return [[self value]count];
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-    return [[CKObjectProperty alloc]initWithObject:self.object keyPath:self.keyPath];
+    return [[CKProperty alloc]initWithObject:self.object keyPath:self.keyPath];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "CKUINavigationBar+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 @implementation UINavigationBar (CKIntrospectionAdditions)
 

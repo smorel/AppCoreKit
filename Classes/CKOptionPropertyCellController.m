@@ -49,7 +49,7 @@
 }
 
 - (void)setupLabelsAndValues{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
     NSDictionary* valuesAndLabels = nil;
     if(attributes.valuesAndLabels) valuesAndLabels = attributes.valuesAndLabels;
@@ -73,16 +73,16 @@
 }
 
 - (BOOL)multiSelectionEnabled{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    return attributes.multiselectionEnabled;
+    return (attributes.enumDescriptor && attributes.enumDescriptor.isBitMask);
 }
 
 - (NSString *)labelForValue:(NSInteger)intValue {
 	if (intValue < 0
 		|| intValue == NSNotFound) {
 		
-		CKObjectProperty* property = [self objectProperty];
+		CKProperty* property = [self objectProperty];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		NSString* str = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
 		return _(str);
@@ -125,7 +125,7 @@
 }
 
 - (NSInteger)currentValue{
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     if(self.multiSelectionEnabled){
         return [[property value]intValue];
     }
@@ -152,7 +152,7 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     
     cell.textLabel.text = _(property.name);
 	cell.detailTextLabel.text = [self labelForValue:[self currentValue]];
@@ -194,7 +194,7 @@
 }
 
 - (void)didSelect {
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
 	
 	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",property.name];
 	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);
@@ -249,7 +249,7 @@
 		[self.parentController.navigationController popViewControllerAnimated:YES];
 	}
     
-    CKObjectProperty* property = [self objectProperty];
+    CKProperty* property = [self objectProperty];
     [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
         self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];

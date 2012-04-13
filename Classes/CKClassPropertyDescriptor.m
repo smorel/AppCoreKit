@@ -8,8 +8,8 @@
 
 #import "CKClassPropertyDescriptor.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKNSObject+Introspection.h"
-#import "CKNSObject+Introspection_private.h"
+#import "CKNSObject+CKRuntime.h"
+#import "CKNSObject+CKRuntime_private.h"
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
 
@@ -274,7 +274,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 	descriptor.type = c;
 	descriptor.isReadOnly = readOnly;
 	descriptor.extendedAttributesSelector = [NSObject propertyExtendedAttributesSelectorForProperty:name];
-	if([NSObject isKindOf:c parentType:[NSArray class]]){
+	if([NSObject isClass:c kindOfClass:[NSArray class]]){
 		descriptor.insertSelector = [NSObject insertSelectorForProperty:name];
 		descriptor.removeSelector = [NSObject removeSelectorForProperty:name];
 		descriptor.removeAllSelector = [NSObject removeAllSelectorForProperty:name];
@@ -398,7 +398,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
 		for(CKClassPropertyDescriptor* property in allProperties){
 			[allPropertyNames addObject:property.name];
-			if([NSObject isKindOf:property.type parentType:[UIView class]]){
+			if([NSObject isClass:property.type kindOfClass:[UIView class]]){
 				[allViewPropertyDescriptors addObject:property];
 			}
             [propertiesByName setObject:property forKey:property.name];

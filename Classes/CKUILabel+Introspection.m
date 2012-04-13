@@ -8,6 +8,7 @@
 
 #import "CKUILabel+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
 @implementation UILabel (CKIntrospectionAdditions)

@@ -13,14 +13,14 @@
 @implementation CKObjectPropertyArrayCollection
 @synthesize property = _property;
 
-+ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKObjectProperty*)property{
++ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKProperty*)property{
 	return [[[CKObjectPropertyArrayCollection alloc]initWithArrayProperty:property]autorelease];
 }
 
-- (id)initWithArrayProperty:(CKObjectProperty*)theProperty{
+- (id)initWithArrayProperty:(CKProperty*)theProperty{
 	[super init];
 	CKClassPropertyDescriptor* desc = [theProperty descriptor];
-	NSAssert([NSObject isKindOf:desc.type parentType:[NSArray class]] || [[theProperty value]isKindOfClass:[NSArray class]],@"invalid property");
+	NSAssert([NSObject isClass:desc.type kindOfClass:[NSArray class]] || [[theProperty value]isKindOfClass:[NSArray class]],@"invalid property");
 	self.property = theProperty;
 	return self;
 }

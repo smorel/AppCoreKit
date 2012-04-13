@@ -9,7 +9,7 @@
 #import "CKCascadingTree.h"
 #import "JSONKit.h"
 
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
@@ -147,7 +147,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		CKObjectProperty* property = [CKObjectProperty propertyWithObject:object keyPath:subPropertyName];
+		CKProperty* property = [CKProperty propertyWithObject:object keyPath:subPropertyName];
         if([property descriptor]){
             id value = [property value];
             NSString* valueString = value ? [NSValueTransformer transformProperty:property toClass:[NSString class]] : @"null";

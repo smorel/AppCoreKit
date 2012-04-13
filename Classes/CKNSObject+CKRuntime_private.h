@@ -1,5 +1,5 @@
 //
-//  CKNSObject+Introspection_private.h
+//  CKNSObject+CKRuntime_private.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-11-30.
@@ -7,9 +7,10 @@
 //
 
 
-@interface NSObject (CKNSObjectIntrospection_private)
+@interface NSObject (CKRuntime_private)
 
 + (NSString*)concatenateAndUpperCaseFirstChar:(NSString*)input prefix:(NSString*)prefix suffix:(NSString*)suffix;
+
 + (SEL)selectorForProperty:(NSString*)property prefix:(NSString*)prefix suffix:(NSString*)suffix;
 + (SEL)selectorForProperty:(NSString*)property suffix:(NSString*)suffix;
 + (SEL)insertorForProperty : (NSString*)propertyName;

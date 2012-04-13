@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 
 @interface CKEnumDescriptor : NSObject{}
+@property(nonatomic,assign)BOOL isBitMask;
 @property(nonatomic,retain)NSString* name;
 @property(nonatomic,retain)NSDictionary* valuesAndLabels;
 @end
@@ -17,16 +18,17 @@
 
 /** TODO
  */
-CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,NSString* strValues, ...);
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
 
 /** TODO
  */
-#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKBitMaskDefinition(name,...) CKEnumDefinitionFunc(name,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
 
 @interface NSValueTransformer (CKNativeTypes)
 
-+ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled;
-+ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition multiSelectionEnabled:(BOOL)multiSelectionEnabled;
++ (NSInteger)convertEnumFromObject:(id)object withEnumDescriptor:(CKEnumDescriptor*)enumDefinition bitMask:(BOOL)bitMask;
++ (NSString*)convertEnumToString:(NSInteger)value withEnumDescriptor:(CKEnumDescriptor*)enumDefinition bitMask:(BOOL)bitMask;
 
 + (char)convertCharFromObject:(id)object;
 + (NSInteger)convertIntegerFromObject:(id)object;

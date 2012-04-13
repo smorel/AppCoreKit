@@ -10,6 +10,7 @@
 #import "CKNSObject+Invocation.h"
 #import "CKRuntime.h"
 #import "CKObject.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>

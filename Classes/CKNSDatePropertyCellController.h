@@ -19,20 +19,20 @@ typedef enum CKDatePickerMode{
 } CKDatePickerMode;
 
 @interface CKNSDateViewController : CKUIViewController<UIPickerViewDataSource,UIPickerViewDelegate>{
-    CKObjectProperty* _property;
+    CKProperty* _property;
     UIDatePicker* _datePicker;
     UIPickerView* _pickerView;
     CKDatePickerMode _datePickerMode;
     id _delegate;
 }
 
-@property(nonatomic,assign)CKObjectProperty* property;
+@property(nonatomic,assign)CKProperty* property;
 @property(nonatomic,retain)UIDatePicker* datePicker;
 @property(nonatomic,retain)UIPickerView* pickerView;//if mode == CKDatePickerModeCreditCardExpirationDate
 @property(nonatomic,assign)id delegate;
 @property(nonatomic,assign)CKDatePickerMode datePickerMode;
 
-- (id)initWithProperty:(CKObjectProperty*)property mode:(CKDatePickerMode)mode;
+- (id)initWithProperty:(CKProperty*)property mode:(CKDatePickerMode)mode;
 
 @end
 

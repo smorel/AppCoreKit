@@ -7,7 +7,7 @@
 //
 
 #import "CKMultilineNSStringPropertyCellController.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellNextResponder.h"
@@ -125,7 +125,7 @@
     UIViewController* controller = [params parentController];
     NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
     
-    CKObjectProperty* property = (CKObjectProperty*)object;
+    CKProperty* property = (CKProperty*)object;
     
     CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
     if([property isReadOnly] || staticController.readOnly){
@@ -154,7 +154,7 @@
     
     self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
     
-    CKObjectProperty* property = (CKObjectProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.value;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
         cell.textLabel.text = _(descriptor.name);
@@ -232,8 +232,8 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
-    NSInteger min = [attributes.options minimumLength];
-    NSInteger max = [attributes.options maximumLength];
+    NSInteger min = [attributes minimumLength];
+    NSInteger max = [attributes maximumLength];
 	if (range.length>0) {
         if(min >= 0 && range.location < min){
             return NO;

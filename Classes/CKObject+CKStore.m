@@ -15,7 +15,7 @@
 #import "CKDomain.h"
 #import "CKDebug.h"
 #import "CKObject.h"
-#import "CKObjectProperty.h"
+#import "CKProperty.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSStringAdditions.h"
 #import "CKWeakRef.h"
@@ -194,7 +194,7 @@ NSMutableDictionary* CKObjectManager = nil;
 	
 	NSArray* allProperties = [self allPropertyNames];
 	for(NSString* propertyName in allProperties){
-		CKObjectProperty* property = [CKObjectProperty propertyWithObject:self keyPath:propertyName];
+		CKProperty* property = [CKProperty propertyWithObject:self keyPath:propertyName];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 		if( (attributes  && attributes.serializable == NO) || descriptor.isReadOnly == YES){}

@@ -24,6 +24,6 @@
 - (NSString*) stringForKey:(NSString*)key;
 - (NSInteger) integerForKey:(NSString*)key;
 
-- (id)setObjectForKey:(NSString*)key inProperty:(CKObjectProperty*)property;
+- (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property;
 
 @end
