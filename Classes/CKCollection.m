@@ -1,18 +1,18 @@
 //
-//  CKDocumentCollection.m
+//  CKCollection.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-18.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKNSObject+Invocation.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 
-@implementation CKDocumentCollection
+@implementation CKCollection
 @synthesize feedSource = _feedSource;
 @synthesize delegate = _delegate;
 @synthesize count = _count;

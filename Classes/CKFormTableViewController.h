@@ -49,7 +49,7 @@
 
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
 
 
 ///-----------------------------------
@@ -65,21 +65,6 @@
 
 @end
 
-
-/********************************* DEPRECATED *********************************
- */
-
-@interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors DEPRECATED_ATTRIBUTE;
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle DEPRECATED_ATTRIBUTE;
-- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section DEPRECATED_ATTRIBUTE;
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
-@end
-
-
-@interface CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index DEPRECATED_ATTRIBUTE;
-@end
 
 //Adds extensions here to avoid importing to much files in client projects
 #import "CKFormTableViewController+PropertyGrid.h"

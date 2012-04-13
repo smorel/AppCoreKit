@@ -25,11 +25,11 @@
 }
 
 
-+ (CKDocumentFilteredCollection*)filteredCollectionWithCollection:(CKDocumentCollection*)collection usingPredicate:(NSPredicate*)predicate{
++ (CKDocumentFilteredCollection*)filteredCollectionWithCollection:(CKCollection*)collection usingPredicate:(NSPredicate*)predicate{
     return [[[CKDocumentFilteredCollection alloc]initWithCollection:collection usingPredicate:predicate]autorelease];
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)theCollection  usingPredicate:(NSPredicate*)thepredicate{
+- (id)initWithCollection:(CKCollection*)theCollection  usingPredicate:(NSPredicate*)thepredicate{
     self = [super init];
     self.predicate = thepredicate;
     self.collection = theCollection;
@@ -45,7 +45,7 @@
     [super insertObjects:filteredObjects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [filteredObjects count])]];
 }
 
-- (void)setCollection:(CKDocumentCollection *)theCollection{
+- (void)setCollection:(CKCollection *)theCollection{
     if(_collection){
         [_collection removeObserver:self];
     }

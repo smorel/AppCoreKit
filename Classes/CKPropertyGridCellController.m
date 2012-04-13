@@ -99,7 +99,7 @@
     
     CKProperty* property = [self objectProperty];
     Class propertyType = [property type];
-    if(propertyType != nil && [NSObject isClass:propertyType kindOfClass:[CKDocumentCollection class]]){
+    if(propertyType != nil && [NSObject isClass:propertyType kindOfClass:[CKCollection class]]){
         [property.object bind:[NSString stringWithFormat:@"%@.count",property.keyPath] withBlock:^(id value) {
             BOOL validity = [self isValidValue:[[self objectProperty] value]];
             [self setInvalidButtonVisible:!validity];

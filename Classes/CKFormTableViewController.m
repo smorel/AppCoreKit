@@ -365,7 +365,7 @@
 	return [section autorelease];
 }
 
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
+- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
 	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory];
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
@@ -490,64 +490,6 @@
         }
     }
     [self objectControllerDidEndUpdating:self.objectController];
-}
-
-@end
-
-/********************************* DEPRECATED *********************************
- */
-
-@implementation CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-
-- (CKFormSectionBase*)addSection:(CKFormSectionBase *)section{
-	section.parentController = self;
-	[_sections addObject:section];
-	if(section.hidden == YES){
-		if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-			CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
-			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
-		}
-	}
-    
-    if(section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
-    }
-    
-	return section;
-}
-
-
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors{
-	return [self addSectionWithCellDescriptors:cellDescriptors headerTitle:@""];
-}
-
-- (CKFormSection *)addSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle{
-	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle atIndex:[_sections count]];
-}
-
-- (CKFormDocumentCollectionSection *)addSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	return [self insertSectionWithCollection:collection mappings:mappings atIndex:[_sections count]];
-}
-
-@end
-
-
-@implementation CKFormTableViewController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings  atIndex:(NSInteger)index{
-    CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings];
-	section.parentController = self;
-	[_sections insertObject:section atIndex:index];
-	
-	if(section.hidden == YES){
-		[collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
-	}
-    
-    if(section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
-    }
-    
-	return section;
 }
 
 @end

@@ -339,9 +339,9 @@
 	}
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
     [super init];
-	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
+	self.objectController = [CKCollectionController controllerWithCollection:collection];
 	self.controllerFactory = factory;
     
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
@@ -361,25 +361,25 @@
 
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 	return section;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title{
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 	section.headerTitle = title;
 	return section;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory displayFeedSourceCell:(BOOL)displayFeedSourceCell{
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
 	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
-	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
+	section.objectController.appendCollectionCellControllerAsFooterCell = appendCollectionCellControllerAsFooterCell;
 	return section;
 }
 
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory displayFeedSourceCell:displayFeedSourceCell];
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
+	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory appendCollectionCellControllerAsFooterCell:appendCollectionCellControllerAsFooterCell];
 	section.headerTitle = title;
 	return section;
 }
@@ -417,58 +417,6 @@
         }
     }
     return nil;
-}
-
-@end
-
-
-/********************************* DEPRECATED *********************************
- */
-
-@implementation CKFormDocumentCollectionSection(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	[super init];
-	self.objectController = [CKDocumentCollectionController controllerWithCollection:collection];
-	
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(_parentController.autoHideSections && (collection.count <= 0)) {
-		self.hidden = YES;
-	}
-	
-	sectionUpdate = NO;
-	
-	self.headerCellDescriptors = [NSMutableArray array];
-	self.footerCellDescriptors = [NSMutableArray array];
-	
-	return self;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.headerTitle = title;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [[[CKFormDocumentCollectionSection alloc]initWithCollection:collection mappings:mappings]autorelease];
-	section.objectController.displayFeedSourceCell = displayFeedSourceCell;
-	return section;
-}
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection mappings:mappings displayFeedSourceCell:displayFeedSourceCell];
-	section.headerTitle = title;
-	return section;
 }
 
 @end

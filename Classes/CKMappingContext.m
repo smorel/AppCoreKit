@@ -10,7 +10,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObject+CKRuntime.h"
 #import "CKProperty.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKCallback.h"
 #import "JSONKit.h"
 #import <objc/runtime.h>
@@ -266,7 +266,7 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
         Class targetType = [property type];
         
         //property is a collection
-        if([NSObject isClass:targetType kindOfClass:[NSArray class]] || [NSObject isClass:targetType kindOfClass:[CKDocumentCollection class]]){
+        if([NSObject isClass:targetType kindOfClass:[NSArray class]] || [NSObject isClass:targetType kindOfClass:[CKCollection class]]){
             NSMutableDictionary* subObjectDefinition = [self objectDefinition:options];
             
             CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
@@ -319,8 +319,8 @@ NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
             if([value isKindOfClass:[NSArray class]]){
                 ar = value;
             }
-            else if([value isKindOfClass:[CKDocumentCollection class]]){
-                CKDocumentCollection* collection = (CKDocumentCollection*)value;
+            else if([value isKindOfClass:[CKCollection class]]){
+                CKCollection* collection = (CKCollection*)value;
                 ar = [collection allObjects];
             }
             
@@ -616,8 +616,8 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 }
 
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error{
-    if(![value isKindOfClass:[NSArray class]] && ![value isKindOfClass:[CKDocumentCollection class]]){
-        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSArray or a CKDocumentCollection");
+    if(![value isKindOfClass:[NSArray class]] && ![value isKindOfClass:[CKCollection class]]){
+        *error = aggregateError(*error,CKMappingErrorDomain,CKMappingErrorCodeInvalidSourceData,@"'value' must be a NSArray or a CKCollection");
         return nil;
     }
     return [NSObject objectFromValue:value withMappings:[self arrayDefinitionWithMappings:[self dictionary] objectClass:type] reversed:reversed error:error];

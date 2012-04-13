@@ -9,7 +9,7 @@
 #import "CKObjectCarouselViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
-#import "CKDocumentController.h"
+#import "CKCollectionController.h"
 
 
 @interface UIViewWithIdentifier : UIView{

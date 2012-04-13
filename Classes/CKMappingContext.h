@@ -42,7 +42,7 @@ extern NSString* const CKMappingErrorCodeKey;
 /// @name Applying Mapping from value
 ///-----------------------------------
 
-//value should be a collection (NSArray, CKDocumentCollection)
+//value should be a collection (NSArray, CKCollection)
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type error:(NSError**)error;
 - (NSArray*)objectsFromValue:(id)value ofClass:(Class)type reversed:(BOOL)reversed error:(NSError**)error;
 - (id)objectFromValue:(id)value ofClass:(Class)type error:(NSError**)error;

@@ -15,7 +15,7 @@
 /** TODO
  */
 @interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
-	CKDocumentCollectionController* _objectController;
+	CKCollectionController* _objectController;
 	CKItemViewControllerFactory* _controllerFactory;
 	
 	NSMutableArray* _headerCellDescriptors;
@@ -27,14 +27,14 @@
 
 @property (nonatomic,retain,readonly) NSMutableArray* headerCellDescriptors;
 @property (nonatomic,retain,readonly) NSMutableArray* footerCellDescriptors;
-@property (nonatomic,retain,readonly) CKDocumentCollectionController* objectController;
+@property (nonatomic,retain,readonly) CKCollectionController* objectController;
 
 //Initialization and constructors
-- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory displayFeedSourceCell:(BOOL)displayFeedSourceCell;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell;
+- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
++ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
 
 //Cell Descriptor API
 - (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
@@ -50,19 +50,5 @@
 
 - (CKFormCellDescriptor*)headerCellDescriptorForCellController:(CKTableViewCellController*)controller;
 - (CKFormCellDescriptor*)footerCellDescriptorForCellController:(CKTableViewCellController*)controller;
-
-@end
-
-/********************************* DEPRECATED *********************************
- */
-
-@interface CKFormDocumentCollectionSection(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title DEPRECATED_ATTRIBUTE;
-
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings displayFeedSourceCell:(BOOL)displayFeedSourceCell DEPRECATED_ATTRIBUTE;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings headerTitle:(NSString*)title displayFeedSourceCell:(BOOL)displayFeedSourceCell DEPRECATED_ATTRIBUTE;
 
 @end

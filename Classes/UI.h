@@ -29,7 +29,7 @@
 #import "CKFormTableViewController+PropertyGrid.h"
 #import "CKFormTableViewController+Menus.h"
 
-#import "CKDocumentCollectionCellController.h"
+#import "CKCollectionCellController.h"
 #import "CKImageButtonCellController.h"
 #import "CKMoviePlayerCellController.h"
 #import "CKNibCellController.h"

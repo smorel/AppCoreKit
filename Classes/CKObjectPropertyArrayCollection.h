@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKProperty.h"
 
 
 /** TODO
  */
-@interface CKObjectPropertyArrayCollection : CKDocumentCollection {
+@interface CKObjectPropertyArrayCollection : CKCollection {
 	CKProperty* _property;
 }
 

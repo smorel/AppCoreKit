@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKProperty.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 
 /** TODO
  */
@@ -31,9 +31,9 @@ extern NSString* CKEditionObjectReplacedNotification;
  */
 @interface NSNotificationCenter (CKEdition)
 - (void)notifyPropertyChange:(CKProperty*)property;
-- (void)notifyObjectsAdded:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKDocumentCollection*)collection;
-- (void)notifyObjectsRemoved:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKDocumentCollection*)collection;
-- (void)notifyObjectReplaced:(id)object byObject:(id)other atIndex:(NSInteger)index inCollection:(CKDocumentCollection*)collection;
+- (void)notifyObjectsAdded:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKCollection*)collection;
+- (void)notifyObjectsRemoved:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKCollection*)collection;
+- (void)notifyObjectReplaced:(id)object byObject:(id)other atIndex:(NSInteger)index inCollection:(CKCollection*)collection;
 @end
 
 
@@ -42,7 +42,7 @@ extern NSString* CKEditionObjectReplacedNotification;
 @interface NSNotification (CKEdition)
 - (CKProperty*)objectProperty;
 - (NSArray*)objects;
-- (CKDocumentCollection*)documentCollection;
+- (CKCollection*)documentCollection;
 - (NSIndexSet*)indexes;
 - (NSInteger)index;
 - (id)replacedObject;

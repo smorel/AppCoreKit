@@ -172,7 +172,7 @@
     return item;
 }
 
-+ (void)addView:(UIView*)view toCollection:(CKDocumentCollection*)collection{
++ (void)addView:(UIView*)view toCollection:(CKCollection*)collection{
     if(view.tag == CKInlineDebuggerControllerHighlightViewTag)
         return;
     

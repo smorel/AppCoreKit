@@ -119,7 +119,8 @@
 		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
 		[cells addObject:descriptor];
 	}
-	[self addSectionWithCellDescriptors:cells];
+    CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cells];
+	[self addSections:[NSArray arrayWithObject:section]];
 }
 
 - (id)createCell:(id)controller{

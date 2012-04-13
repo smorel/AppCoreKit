@@ -85,13 +85,13 @@
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
-    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+    CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 	return [self initWithObjectController:controller factory:factory];
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
-    CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
+    CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 	return [self initWithObjectController:controller factory:factory nibName:nib];
 }
 
@@ -106,9 +106,9 @@
 	return self;
 }
 
-- (void)setupWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
 	self.controllerFactory = factory;
-    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+    self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 - (void)dealloc {
@@ -349,11 +349,11 @@
 }
 
 - (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-    BOOL feedSourceCellEnabled = NO;
-    if([_objectController respondsToSelector:@selector(displayFeedSourceCell)]){
-        feedSourceCellEnabled = [_objectController displayFeedSourceCell];
+    BOOL appendCollectionCellControllerAsFooterCell = NO;
+    if([_objectController respondsToSelector:@selector(appendCollectionCellControllerAsFooterCell)]){
+        appendCollectionCellControllerAsFooterCell = [_objectController appendCollectionCellControllerAsFooterCell];
     }
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (feedSourceCellEnabled ? 1 : 0);
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (appendCollectionCellControllerAsFooterCell ? 1 : 0);
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
@@ -643,8 +643,8 @@
 }
 
 - (CKFeedSource*)collectionDataSource{
-	if([self.objectController isKindOfClass:[CKDocumentCollectionController class]]){
-		CKDocumentCollectionController* documentController = (CKDocumentCollectionController*)self.objectController;
+	if([self.objectController isKindOfClass:[CKCollectionController class]]){
+		CKCollectionController* documentController = (CKCollectionController*)self.objectController;
 		return documentController.collection.feedSource;
 	}
 	return nil;
@@ -837,14 +837,14 @@
 	return self;	
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
+	CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
 	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
 	return self;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings{
 	[self initWithCollection:collection mappings:mappings withNibName:nil];
 	return self;
 }
@@ -854,9 +854,9 @@
 	return self;
 }
 
-- (void)setupWithCollection:(CKDocumentCollection*)collection mappings:(NSArray*)mappings{
+- (void)setupWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings{
 	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-    self.objectController = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
+    self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 @end

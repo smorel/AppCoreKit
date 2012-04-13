@@ -12,7 +12,7 @@
 #import "CKUIKeyboardInformation.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKVersion.h"
-#import "CKDocumentController.h"
+#import "CKCollectionController.h"
 #import "CKNSObject+bindings.h"
 #include "CKSheetController.h"
 #import "CKStyleManager.h"
@@ -806,8 +806,8 @@
 
 - (void)setObjectController:(id)controller{
 	[super setObjectController:controller];
-	if(_objectController != nil && [_objectController respondsToSelector:@selector(setDisplayFeedSourceCell:)]){
-		[_objectController setDisplayFeedSourceCell:YES];
+	if(_objectController != nil && [_objectController respondsToSelector:@selector(setAppendCollectionCellControllerAsFooterCell:)]){
+		[_objectController setAppendCollectionCellControllerAsFooterCell:YES];
 	}
 }
 

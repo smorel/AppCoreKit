@@ -8,7 +8,7 @@
 
 #import "CKProperty.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKNSObject+CKRuntime.h"
 #import "CKWeakRef.h"
 #import "CKDebug.h"
@@ -186,7 +186,7 @@
 
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes{
 	Class selfClass = [self type];
-    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
         [[self value]insertObjects:objects atIndexes:indexes];
         return;
     }
@@ -213,7 +213,7 @@
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes{
 	Class selfClass = [self type];
-    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
 		[[self value]removeObjectsAtIndexes:indexes];
         return;
     }
@@ -238,7 +238,7 @@
 
 - (void)removeAllObjects{
 	Class selfClass = [self type];
-    if([NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]]){
+    if([NSObject isClass:selfClass kindOfClass:[CKCollection class]]){
         [[self value]removeAllObjects];
         return;
     }
@@ -266,7 +266,7 @@
 - (NSInteger)count{
 	Class selfClass = [self type];
 	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]]
-             ||[NSObject isClass:selfClass kindOfClass:[CKDocumentCollection class]],@"invalid property type");
+             ||[NSObject isClass:selfClass kindOfClass:[CKCollection class]],@"invalid property type");
     return [[self value]count];
 }
 

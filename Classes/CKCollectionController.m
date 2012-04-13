@@ -1,23 +1,23 @@
 //
-//  CKFeedController.m
+//  CKCollectionController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-16.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentController.h"
+#import "CKCollectionController.h"
 #import "CKDocument.h"
 #import <UIKit/UITableView.h>
 #import "CKNSObject+Invocation.h"
 #import "CKVersion.h"
 
-@implementation CKDocumentCollectionController
+@implementation CKCollectionController
 @synthesize collection = _collection;
 @synthesize delegate = _delegate;
-@synthesize displayFeedSourceCell;
+@synthesize appendCollectionCellControllerAsFooterCell;
 @synthesize numberOfFeedObjectsLimit;
-@synthesize animateFirstInsertion;
+@synthesize animateInsertionsOnReload;
 
 - (void)dealloc{
 	if(_collection){
@@ -34,12 +34,12 @@
 	[super dealloc];
 }
 
-+ (CKDocumentCollectionController*) controllerWithCollection:(CKDocumentCollection*)collection{
-	CKDocumentCollectionController* controller = [[[CKDocumentCollectionController alloc]initWithCollection:collection]autorelease];
++ (CKCollectionController*) controllerWithCollection:(CKCollection*)collection{
+	CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 	return controller;
 }
 
-- (id)initWithCollection:(CKDocumentCollection*)theCollection{
+- (id)initWithCollection:(CKCollection*)theCollection{
 	[super init];
 
 	self.numberOfFeedObjectsLimit = 0;
@@ -50,8 +50,8 @@
 	}
 	observing = NO;
 	
-	displayFeedSourceCell = NO;
-	animateFirstInsertion = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
+	appendCollectionCellControllerAsFooterCell = NO;
+	animateInsertionsOnReload = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
 	locked = NO;
 	changedWhileLocked = NO;
 	
@@ -109,7 +109,7 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
-	if(displayFeedSourceCell && _collection.feedSource){
+	if(appendCollectionCellControllerAsFooterCell && _collection.feedSource){
 		return count + 1;
 	}
 	else {
@@ -128,7 +128,7 @@
 		NSInteger index = indexPath.row;
 		return [_collection objectAtIndex:index];
 	}
-	else if(displayFeedSourceCell && _collection.feedSource){
+	else if(appendCollectionCellControllerAsFooterCell && _collection.feedSource){
 		return _collection;
 	}
 
@@ -184,7 +184,7 @@
 	
 	NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
 	
-	if(!animateFirstInsertion && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
+	if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
 		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
 			[_delegate objectControllerReloadData:self];
 			return;
@@ -279,7 +279,4 @@
     return nil;
 }
 
-@end
-
-@implementation CKDocumentController
 @end

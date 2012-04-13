@@ -1,5 +1,5 @@
 //
-//  CKDocumentCollectionViewCellController.h
+//  CKCollectionCellController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-23.
@@ -11,7 +11,7 @@
 
 //SEB TODO adds accessors in dictionary helper with special keys
 /*
-@interface CKDocumentCollectionCellControllerStyle : CKTableViewCellControllerStyle{
+@interface CKCollectionCellControllerStyle : CKTableViewCellControllerStyle{
 }
 
 @property (nonatomic, copy) NSString* noItemsMessage;
@@ -20,7 +20,7 @@
 @property (nonatomic, retain) UIColor* textColor;
 @property (nonatomic, assign) UIActivityIndicatorViewStyle indicatorStyle;
 
-+ (CKDocumentCollectionCellControllerStyle*)defaultStyle;
++ (CKCollectionCellControllerStyle*)defaultStyle;
 
 @end
 */
@@ -28,7 +28,7 @@
 
 /** TODO
  */
-@interface CKDocumentCollectionViewCellController : CKTableViewCellController {
+@interface CKCollectionCellController : CKTableViewCellController {
 	UILabel* _label;
 	UIActivityIndicatorView* _activityIndicator;
 }

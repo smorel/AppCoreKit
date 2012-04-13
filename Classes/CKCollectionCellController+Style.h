@@ -1,5 +1,5 @@
 //
-//  CKDocumentCollectionViewCellController+Style.h
+//  CKCollectionCellController+Style.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-27.
@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKDocumentCollectionCellController.h"
+#import "CKCollectionCellController.h"
 
 
 /** TODO
@@ -29,7 +29,7 @@ extern NSString* CKStyleIndicatorStyle;
 
 /** TODO
  */
-@interface NSMutableDictionary (CKDocumentCollectionViewCellControllerStyle)
+@interface NSMutableDictionary (CKCollectionCellControllerStyle)
 
 - (NSString*)noItemsMessage;
 - (NSString*)oneItemMessage;

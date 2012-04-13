@@ -30,7 +30,7 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 	[self postNotificationName:CKEditionPropertyChangedNotification object:property.object userInfo:infos];
 }
 
-- (void)notifyObjectsAdded:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKDocumentCollection*)collection{
+- (void)notifyObjectsAdded:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKCollection*)collection{
 	NSMutableDictionary* infos = [NSMutableDictionary dictionary];
 	[infos setObject:objects forKey:CKEditionObjectsKey];
 	[infos setObject:collection forKey:CKEditionCollectionKey];
@@ -38,7 +38,7 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 	[self postNotificationName:CKEditionObjectAddedNotification object:collection userInfo:infos];
 }
 
-- (void)notifyObjectsRemoved:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKDocumentCollection*)collection{
+- (void)notifyObjectsRemoved:(NSArray*)objects atIndexes:(NSIndexSet *)indexes inCollection:(CKCollection*)collection{
 	NSMutableDictionary* infos = [NSMutableDictionary dictionary];
 	[infos setObject:objects forKey:CKEditionObjectsKey];
 	[infos setObject:collection forKey:CKEditionCollectionKey];
@@ -46,7 +46,7 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 	[self postNotificationName:CKEditionObjectRemovedNotification object:collection userInfo:infos];
 }
 
-- (void)notifyObjectReplaced:(id)object byObject:(id)other atIndex:(NSInteger)index inCollection:(CKDocumentCollection*)collection{
+- (void)notifyObjectReplaced:(id)object byObject:(id)other atIndex:(NSInteger)index inCollection:(CKCollection*)collection{
 	NSMutableDictionary* infos = [NSMutableDictionary dictionary];
 	[infos setObject:object forKey:CKEditionReplacedObjectKey];
 	[infos setObject:other forKey:CKEditionReplacementObjectKey];
@@ -67,8 +67,8 @@ NSString* CKEditionReplacementObjectKey = @"CKEditionReplacementObjectKey";
 	return (NSArray*)[[self userInfo] objectForKey:CKEditionObjectsKey];
 }
 
-- (CKDocumentCollection*)documentCollection{
-	return (CKDocumentCollection*)[[self userInfo] objectForKey:CKEditionCollectionKey];
+- (CKCollection*)documentCollection{
+	return (CKCollection*)[[self userInfo] objectForKey:CKEditionCollectionKey];
 }
 
 - (NSIndexSet*)indexes{

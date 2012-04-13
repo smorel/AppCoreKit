@@ -8,11 +8,11 @@
 
 #import "CKDocument.h"
 #import "CKFeedSource.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKDocumentFilteredCollection.h"
 #import "CKObjectPropertyArrayCollection.h"
 #import "CKDocumentArray.h"
 #import "CKUserDefaults.h"
 #import "CKObjectController.h"
-#import "CKDocumentController.h"
+#import "CKCollectionController.h"
 #import "CKItemViewControllerFactory.h"

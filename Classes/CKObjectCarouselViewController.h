@@ -12,7 +12,7 @@
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
 #import "CKNSDictionary+TableViewAttributes.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 
 
 /** TODO

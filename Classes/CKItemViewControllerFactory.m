@@ -8,8 +8,8 @@
 
 #import "CKItemViewControllerFactory.h"
 #import "CKObjectController.h"
-#import "CKDocumentCollectionCellController.h"
-#import "CKDocumentCollection.h"
+#import "CKCollectionCellController.h"
+#import "CKCollection.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
@@ -66,7 +66,7 @@
 
 - (void)setItems:(id)theItems{
 	NSMutableArray* res = [NSMutableArray array];
-	[res mapControllerClass:[CKDocumentCollectionViewCellController class] withObjectClass:[CKDocumentCollection class]];
+	[res mapControllerClass:[CKCollectionCellController class] withObjectClass:[CKCollection class]];
 	[res addObjectsFromArray:theItems];
 	
 	[_items release];

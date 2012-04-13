@@ -75,7 +75,7 @@
 		value = [property value];
 	}
 	
-	if([value isKindOfClass:[CKDocumentCollection class]]
+	if([value isKindOfClass:[CKCollection class]]
 	   || [value isKindOfClass:[NSArray class]]){
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -125,7 +125,7 @@
 	if([self.value isKindOfClass:[CKProperty class]]){
 		CKProperty* property = (CKProperty*)self.value;
 		id value = [property value];
-		if(![value isKindOfClass:[CKDocumentCollection class]]
+		if(![value isKindOfClass:[CKCollection class]]
            && ![property.object isKindOfClass:[NSDictionary class]]){
 			[self beginBindingsContextByRemovingPreviousBindings];
 			[property.object bind:property.keyPath withBlock:^(id value){
@@ -158,7 +158,7 @@
 		}
 	}
 	
-	if([thevalue isKindOfClass:[CKDocumentCollection class]]){
+	if([thevalue isKindOfClass:[CKCollection class]]){
 		NSMutableArray* mappings = [NSMutableArray array]; 
         //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKProperty :
         //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKProperty
@@ -232,8 +232,8 @@
 	}
 	
 	CKProperty* property = [classExplorer.userInfo objectForKey:@"property"];
-	if([NSObject isClass:property.descriptor.type kindOfClass:[CKDocumentCollection class]]){
-		CKDocumentCollection* collection = (CKDocumentCollection*)[property value];
+	if([NSObject isClass:property.descriptor.type kindOfClass:[CKCollection class]]){
+		CKCollection* collection = (CKCollection*)[property value];
 		[collection addObjectsFromArray:[NSArray arrayWithObject:instance]];
 	}
 	else{

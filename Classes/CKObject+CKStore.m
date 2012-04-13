@@ -200,7 +200,7 @@ NSMutableDictionary* CKObjectManager = nil;
 		if( (attributes  && attributes.serializable == NO) || descriptor.isReadOnly == YES){}
 		else{
 			id propertyValue = [property value];
-			if([propertyValue isKindOfClass:[CKDocumentCollection class]]
+			if([propertyValue isKindOfClass:[CKCollection class]]
 			   || [propertyValue isKindOfClass:[NSArray class]]
 			   || [propertyValue isKindOfClass:[NSSet class]]){
 				NSArray* allObjects = propertyValue;

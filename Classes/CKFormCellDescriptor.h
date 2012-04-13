@@ -11,7 +11,7 @@
 #import "CKObjectTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKObjectController.h"
-#import "CKDocumentController.h"
+#import "CKCollectionController.h"
 
 
 typedef void(^CKFormCellInitializeBlock)(CKTableViewCellController* controller);

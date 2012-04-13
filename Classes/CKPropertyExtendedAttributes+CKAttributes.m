@@ -69,7 +69,7 @@
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKObject_creatable"];
     if(value) return [value boolValue];
     
-    //TODO : Return YES if CKDocumentCollection !
+    //TODO : Return YES if CKCollection !
     return NO;
 }
 

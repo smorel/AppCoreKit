@@ -7,7 +7,7 @@
 //
 
 @interface CKFormDocumentCollectionSection()
-@property (nonatomic,retain) CKDocumentCollectionController* objectController;
+@property (nonatomic,retain) CKCollectionController* objectController;
 @property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;
 @property (nonatomic,retain) NSMutableArray* changeSet;
 

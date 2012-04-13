@@ -1,19 +1,19 @@
 //
-//  CKDocumentCollectionViewCellController.m
+//  CKCollectionCellController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-23.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentCollectionCellController.h"
+#import "CKCollectionCellController.h"
 #import "CKFeedSource.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectCarouselViewController.h"
-#import "CKDocumentCollection.h"
-#import "CKDocumentCollectionViewCellController+Style.h"
+#import "CKCollection.h"
+#import "CKCollectionCellController+Style.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellController+Style.h"
 
@@ -22,12 +22,12 @@
 #define ACTIVITY_INDICATOR_TAG 98634
 #define LABEL_TAG 938459837
 
-@interface CKDocumentCollectionViewCellController()
+@interface CKCollectionCellController()
 @property (nonatomic,retain,readwrite) UILabel* label;
 @property (nonatomic,retain,readwrite) UIActivityIndicatorView* activityIndicator;
 @end
 
-@implementation CKDocumentCollectionViewCellController
+@implementation CKCollectionCellController
 @synthesize label = _label;
 @synthesize activityIndicator = _activityIndicator;
 
@@ -76,7 +76,7 @@
 	if(view == nil)
 		return;
 	
-	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
+	CKCollection* collection = (CKCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
 	_activityIndicator.hidden = [self forceHidden] || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
@@ -126,7 +126,7 @@
     
 	[super setupCell:cell];
 	
-	CKDocumentCollection* collection = (CKDocumentCollection*)self.value;
+	CKCollection* collection = (CKCollection*)self.value;
 	CKFeedSource* source = collection.feedSource;
 	
 	[self update:cell.contentView];

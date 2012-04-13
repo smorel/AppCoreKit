@@ -11,7 +11,7 @@
 #import "CKNSObject+Invocation.h"
 #import "CKLocalization.h"
 #import "CKDebug.h"
-#import "CKDocumentCollection.h"
+#import "CKCollection.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKPropertyExtendedAttributes.h"
@@ -368,8 +368,8 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 			if(attributes.copiable){
 				id value = [other valueForKey:property.name];
 				if(attributes.deepCopy){
-                    if([value isKindOfClass:[CKDocumentCollection class]]){
-                        CKDocumentCollection* collection = value;
+                    if([value isKindOfClass:[CKCollection class]]){
+                        CKCollection* collection = value;
                         if(property.assignementType == CKClassPropertyDescriptorAssignementTypeCopy){
                             value = [[property.type alloc]init];
                             [value setFeedSource:collection.feedSource];
