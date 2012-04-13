@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKProperty.h"
-#import "CKDocumentArray.h"
+#import "CKArrayCollection.h"
 
 #import "CKUIColor+ValueTransformer.h"
 #import "CKUIImage+ValueTransformer.h"

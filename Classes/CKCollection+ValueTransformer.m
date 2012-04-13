@@ -11,7 +11,7 @@
 #import "CKNSValueTransformer+Additions.h"
 
 
-@implementation CKCollection (CKDocumentArray_ValueTransformer)
+@implementation CKCollection (CKValueTransformer)
 
 + (CKCollection*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className{
 	NSArray* results = [NSArray convertFromNSArray:array withContentClassName:className];

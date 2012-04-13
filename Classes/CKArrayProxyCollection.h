@@ -1,5 +1,5 @@
 //
-//  CKObjectPropertyArrayCollection.h
+//  CKArrayProxyCollection.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-06-09.
@@ -13,13 +13,13 @@
 
 /** TODO
  */
-@interface CKObjectPropertyArrayCollection : CKCollection {
+@interface CKArrayProxyCollection : CKCollection {
 	CKProperty* _property;
 }
 
 @property (nonatomic,retain) CKProperty* property;
 
-+ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKProperty*)property;
++ (CKArrayProxyCollection*)collectionWithArrayProperty:(CKProperty*)property;
 
 - (id)initWithArrayProperty:(CKProperty*)property;
 

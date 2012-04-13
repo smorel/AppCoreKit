@@ -7,7 +7,7 @@
 //
 
 #import "CKUIView+InlineDebugger.h"
-#import "CKDocumentArray.h"
+#import "CKArrayCollection.h"
 #import "CKDebug.h"
 #import "CKCache.h"
 #import <QuartzCore/QuartzCore.h>
@@ -187,7 +187,7 @@
     CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
     debugger.name = @"CKInlineDebuggerForSubViews";
     
-    CKDocumentArrayCollection* collection = [CKDocumentArrayCollection object];
+    CKArrayCollection* collection = [CKArrayCollection object];
     [UIView addView:view toCollection:collection];
     
     CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];

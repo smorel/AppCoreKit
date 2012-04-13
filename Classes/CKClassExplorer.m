@@ -22,7 +22,7 @@ NSString* CKClassExplorerAdditionalFilter = @"ck";
 CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 
 @interface CKClassExplorer()
-@property(nonatomic,retain)CKDocumentArray* classesCollection;
+@property(nonatomic,retain)CKArrayCollection* classesCollection;
 @property(nonatomic,retain)NSString* className;
 - (void)createClassesCollectionWithBaseClass:(Class)type;
 - (void)createClassesCollectionWithProtocol:(Protocol*)protocol;
@@ -90,7 +90,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 }
 
 - (void)createClassesCollectionWithBaseClass:(Class)type{
-	self.classesCollection = [[[CKDocumentArray alloc]init]autorelease];
+	self.classesCollection = [[[CKArrayCollection alloc]init]autorelease];
 	
 	self.className = [type description];
 	
@@ -155,7 +155,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 }
 
 - (void)createClassesCollectionWithProtocol:(Protocol*)protocol{
-	self.classesCollection = [[[CKDocumentArray alloc]init]autorelease];
+	self.classesCollection = [[[CKArrayCollection alloc]init]autorelease];
 	
 	NSMutableArray* ar = [NSMutableArray array];
 	Class * classes = NULL;
@@ -218,7 +218,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[CKClassExplorerFilter release];
 	CKClassExplorerFilter = theFilter;
 	
-	CKDocumentArray* collection = _classesCollection;
+	CKArrayCollection* collection = _classesCollection;
 	if(CKClassExplorerCurrentType == CKClassExplorerTypeClasses){
 		if((text != nil && [text length] > 0)
 		   ||(CKClassExplorerAdditionalFilter != nil && [CKClassExplorerAdditionalFilter length] > 0 )){
@@ -237,7 +237,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 				}
 				return found;
 			}]];
-			collection = [[[CKDocumentArray alloc]init]autorelease];
+			collection = [[[CKArrayCollection alloc]init]autorelease];
 			[collection addObjectsFromArray:filteredObjects];
 		}
 	}
@@ -256,7 +256,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 			source.transformBlock = ^(id value){
 				return (id) [NSArray objectArrayFromDictionaryArray:value];
 			};		
-			collection = [[[CKDocumentArray alloc]initWithFeedSource:source]autorelease];
+			collection = [[[CKArrayCollection alloc]initWithFeedSource:source]autorelease];
 		}
 	}
 	self.objectController = [CKCollectionController controllerWithCollection:collection];

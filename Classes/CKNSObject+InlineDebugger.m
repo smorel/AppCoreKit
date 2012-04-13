@@ -10,7 +10,7 @@
 #import "CKUIView+Style.h"
 #import "CKCascadingTree.h"
 #import "CKLocalization.h"
-#import "CKObjectPropertyArrayCollection.h"
+#import "CKArrayProxyCollection.h"
 
 #import "CKNSObject+Invocation.h"
 
@@ -162,7 +162,7 @@
     [factory addItem:[NSObject factoryItemForClass]];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
-    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKObjectPropertyArrayCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
+    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
                                                                                                                factory:factory 
                                                                                                            headerTitle:@"Super Classes"];
     

@@ -1,14 +1,14 @@
 //
-//  CKDocumentFilteredCollection.m
-//  YellowPages
+//  CKFilteredCollection.m
+//  CloudKit
 //
 //  Created by Sebastien Morel on 11-12-08.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentFilteredCollection.h"
+#import "CKFilteredCollection.h"
 
-@implementation CKDocumentFilteredCollection
+@implementation CKFilteredCollection
 @synthesize collection = _collection;
 @synthesize predicate = _predicate;
 
@@ -25,8 +25,8 @@
 }
 
 
-+ (CKDocumentFilteredCollection*)filteredCollectionWithCollection:(CKCollection*)collection usingPredicate:(NSPredicate*)predicate{
-    return [[[CKDocumentFilteredCollection alloc]initWithCollection:collection usingPredicate:predicate]autorelease];
++ (CKFilteredCollection*)filteredCollectionWithCollection:(CKCollection*)collection usingPredicate:(NSPredicate*)predicate{
+    return [[[CKFilteredCollection alloc]initWithCollection:collection usingPredicate:predicate]autorelease];
 }
 
 - (id)initWithCollection:(CKCollection*)theCollection  usingPredicate:(NSPredicate*)thepredicate{

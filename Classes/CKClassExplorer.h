@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 #import "CKObjectTableViewController.h"
-#import "CKDocumentArray.h"
+#import "CKArrayCollection.h"
 #import "CKCallback.h"
 
 
@@ -24,7 +24,7 @@ typedef enum CKClassExplorerType{
 /** TODO
  */
 @interface CKClassExplorer : CKObjectTableViewController {
-	CKDocumentArray* _classesCollection;
+	CKArrayCollection* _classesCollection;
 	id _userInfo;
 	NSString* _className;
 }

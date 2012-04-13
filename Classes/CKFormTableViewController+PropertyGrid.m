@@ -14,7 +14,7 @@
 #import "CKNSStringPropertyCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKOptionCellController.h"
-#import "CKObjectPropertyArrayCollection.h"
+#import "CKArrayProxyCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
 #import "CKUIColorPropertyCellController.h"

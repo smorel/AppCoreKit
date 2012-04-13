@@ -1,20 +1,20 @@
 //
-//  CKObjectPropertyArrayCollection.m
+//  CKArrayProxyCollection.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-06-09.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKObjectPropertyArrayCollection.h"
+#import "CKArrayProxyCollection.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKDebug.h"
 
-@implementation CKObjectPropertyArrayCollection
+@implementation CKArrayProxyCollection
 @synthesize property = _property;
 
-+ (CKObjectPropertyArrayCollection*)collectionWithArrayProperty:(CKProperty*)property{
-	return [[[CKObjectPropertyArrayCollection alloc]initWithArrayProperty:property]autorelease];
++ (CKArrayProxyCollection*)collectionWithArrayProperty:(CKProperty*)property{
+	return [[[CKArrayProxyCollection alloc]initWithArrayProperty:property]autorelease];
 }
 
 - (id)initWithArrayProperty:(CKProperty*)theProperty{

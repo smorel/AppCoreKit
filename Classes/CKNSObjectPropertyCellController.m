@@ -13,7 +13,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKOptionCellController.h"
-#import "CKObjectPropertyArrayCollection.h"
+#import "CKArrayProxyCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
 #import "CKNSObject+InlineDebugger.h"
@@ -151,7 +151,7 @@
 		
 		//Wrap the array in a virtual collection
 		if([NSObject isClass:descriptor.type kindOfClass:[NSArray class]]){
-			thevalue = [CKObjectPropertyArrayCollection collectionWithArrayProperty:property];
+			thevalue = [CKArrayProxyCollection collectionWithArrayProperty:property];
 		}		
 		else{
 			thevalue = [property value];

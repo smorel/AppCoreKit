@@ -15,7 +15,7 @@
 
 #import "CKTableViewCellController.h"
 #import "CKCollectionController.h"
-#import "CKDocumentArray.h"
+#import "CKArrayCollection.h"
 
 #import "CKNSNotificationCenter+Edition.h"
 
@@ -88,7 +88,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate {
 	self = [super init];
     if (self) {
-		CKDocumentArray* collection = [[CKDocumentArray alloc]init];
+		CKArrayCollection* collection = [[CKArrayCollection alloc]init];
 		[collection addObjectsFromArray:annotations];
 		
 		self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
@@ -185,7 +185,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		documentController = (CKCollectionController*)self.objectController;
 	}
 	else{
-		CKDocumentArray* collection = [[[CKDocumentArray alloc]init]autorelease];
+		CKArrayCollection* collection = [[[CKArrayCollection alloc]init]autorelease];
 		self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 		if([self isViewLoaded] && [self.view superview] != nil){
 			if([self.objectController respondsToSelector:@selector(setDelegate:)]){

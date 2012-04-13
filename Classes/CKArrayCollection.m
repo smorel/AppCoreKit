@@ -1,19 +1,19 @@
 //
-//  CKDocumentArray.m
+//  CKArrayCollection.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-18.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKDocumentArray.h"
+#import "CKArrayCollection.h"
 #import "CKNSNotificationCenter+Edition.h"
 
-@interface CKDocumentArrayCollection()
+@interface CKArrayCollection()
 @property (nonatomic,copy) NSMutableArray* collectionObjects;
 @end
 
-@implementation CKDocumentArrayCollection
+@implementation CKArrayCollection
 @synthesize collectionObjects = _collectionObjects;
 
 - (void)postInit{
@@ -34,7 +34,7 @@
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-    CKDocumentArrayCollection* collection = [super copyWithZone:zone];
+    CKArrayCollection* collection = [super copyWithZone:zone];
     collection.property = [CKProperty propertyWithObject:collection keyPath:@"collectionObjects"];
     return collection;
 }
@@ -47,7 +47,4 @@
     [self.collectionObjects removeObjectsAtIndexes:indexes];
 }
 
-@end
-
-@implementation CKDocumentArray
 @end
