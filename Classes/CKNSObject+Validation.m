@@ -1,12 +1,12 @@
 //
-//  CKObject+Validation.m
+//  CKNSObject+Validation.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-11-30.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKObject+Validation.h"
+#import "CKNSObject+Validation.h"
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSObject+CKRuntime_private.h"
 #import "CKPropertyExtendedAttributes.h"

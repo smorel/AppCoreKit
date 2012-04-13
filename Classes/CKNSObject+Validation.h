@@ -1,5 +1,5 @@
 //
-//  CKObject+Validation.h
+//  CKNSObject+Validation.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-11-30.

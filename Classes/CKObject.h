@@ -64,4 +64,4 @@
 @end
 
 
-#import "CKObject+Validation.h"
+#import "CKNSObject+Validation.h"
