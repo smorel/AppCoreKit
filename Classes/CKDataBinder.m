@@ -7,7 +7,6 @@
 //
 
 #import "CKDataBinder.h"
-#import "CKValueTransformer.h"
 #import "CKBindingsManager.h"
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSValueTransformer+Additions.h"

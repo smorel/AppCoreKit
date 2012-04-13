@@ -1,13 +1,15 @@
 //
-//  CKDocument.m
+//  CKObject+CKSingleton.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 12-04-13.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKDocument.h"
+#import "CKObject.h"
 
-@implementation CKDocument
+@interface CKObject (CKSingleton)
+
++ (id)sharedInstance;
 
 @end

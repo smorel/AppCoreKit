@@ -44,14 +44,4 @@
 @interface CKUserDefaults : CKObject {
 }
 
-///-----------------------------------
-/// @name Getting the Shared Instanceß
-///-----------------------------------
-
-/** 
- Returns the shared defaults object.
- @return The shared defaults object.
- */
-+ (id)sharedInstance;
-
 @end

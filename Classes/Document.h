@@ -8,8 +8,6 @@
 
 #import "CKDocument.h"
 #import "CKFeedSource.h"
-#import "CKDocumentStorage.h"
-#import "CKDocumentFileStorage.h"
 #import "CKDocumentCollection.h"
 #import "CKDocumentFilteredCollection.h"
 #import "CKObjectPropertyArrayCollection.h"

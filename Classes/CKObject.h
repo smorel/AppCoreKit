@@ -65,3 +65,4 @@
 
 
 #import "CKNSObject+Validation.h"
+#import "CKObject+CKSingleton.h"

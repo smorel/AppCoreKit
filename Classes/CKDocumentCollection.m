@@ -14,8 +14,6 @@
 
 @implementation CKDocumentCollection
 @synthesize feedSource = _feedSource;
-@synthesize storage = _storage;
-@synthesize autosave = _autosave;
 @synthesize delegate = _delegate;
 @synthesize count = _count;
 
@@ -28,7 +26,6 @@
 
 - (id)init{
 	[super init];
-	self.autosave = NO;
 	self.count = 0;
 	return self;
 }
@@ -37,20 +34,6 @@
 - (id)initWithFeedSource:(CKFeedSource*)source{
 	[super init];
 	self.feedSource = source;
-	self.autosave = NO;
-	return self;
-}
-
-- (id)initWithFeedSource:(CKFeedSource*)source withStorage:(id)theStorage{
-	[self initWithFeedSource:source];
-	self.storage = theStorage;
-	return self;
-}
-
-- (id)initWithStorage:(id)storage{
-	[super init];
-	self.storage = storage;
-	self.autosave = NO;
 	return self;
 }
 
@@ -69,10 +52,6 @@
 }
 
 - (void)feedSourceExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-	attributes.serializable = NO;
-}
-
-- (void)storageExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 	attributes.serializable = NO;
 }
 
@@ -171,38 +150,6 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:fetchDidFailWithError:)]) {
 		[_delegate documentCollection:self fetchDidFailWithError:error];
 	}
-}
-
-- (BOOL)load{
-	if(_storage == nil)
-		return NO;
-	
-	if( [_storage load:self] ){
-		if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidLoad:)]){
-			[_delegate documentCollectionDidLoad:self];
-		}
-		return YES;
-	}
-	if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidFailLoading:)]){
-		[_delegate documentCollectionDidFailLoading:self];
-	}
-	return NO;
-}
-
-- (BOOL)save{
-	if(_storage == nil)
-		return NO;
-	
-	if( [_storage save:self] ){
-		if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidSave:)]){
-			[_delegate documentCollectionDidSave:self];
-		}
-		return YES;
-	}
-	if(_delegate && [_delegate respondsToSelector:@selector(documentCollectionDidFailSaving:)]){
-		[_delegate documentCollectionDidFailSaving:self];
-	}
-	return NO;
 }
 
 /*

@@ -249,7 +249,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
     NSArray* documentClasses = [NSObject allClassesKindOfClass:[CKDocument class]];
     NSMutableSet* documentInstances = [NSMutableSet set];
     for(Class c in documentClasses){
-        [documentInstances addObject:[c sharedDocument]];
+        [documentInstances addObject:[c sharedInstance]];
     }
     
     NSMutableArray* documentCells = [NSMutableArray array];

@@ -16,21 +16,6 @@
 
 @implementation CKUserDefaults
 
-static NSMutableDictionary* CKUserDefaultsSharedInstances = nil;
-
-+ (id)sharedInstance{
-    id sharedUserDefaults = nil;
-	if (CKUserDefaultsSharedInstances == nil) {
-        CKUserDefaultsSharedInstances = [[NSMutableDictionary alloc]init];
-	}
-    sharedUserDefaults = [CKUserDefaultsSharedInstances objectForKey:[[self class]description]];
-    if(sharedUserDefaults == nil){
-        sharedUserDefaults = [[[[self class] alloc] init]autorelease];
-        [CKUserDefaultsSharedInstances setObject:sharedUserDefaults forKey:[[self class]description]];    
-    }
-	return sharedUserDefaults;
-}
-
 - (void)observeAllProperties{
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){

@@ -15,7 +15,6 @@
 
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKValueTransformer.h"
 #import "CKCallback.h"
 #import "CKCascadingTree.h"
 

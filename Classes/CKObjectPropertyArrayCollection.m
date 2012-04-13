@@ -46,9 +46,6 @@
 	self.count = [[_property value] count];
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
-	if(self.autosave){
-		[self save];
-	}
 	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
@@ -67,9 +64,6 @@
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
 	
-	if(self.autosave){
-		[self save];
-	}	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
@@ -89,9 +83,6 @@
 	
 	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
-	if(self.autosave){
-		[self save];
-	}
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
