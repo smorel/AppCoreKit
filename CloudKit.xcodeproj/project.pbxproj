@@ -1275,9 +1275,12 @@
 			isa = PBXGroup;
 			children = (
 				75C6DF6313FECA9F00E4AE4F /* UI.h */,
-				7506E40513B8FF7A00EE1471 /* ItemContainers */,
 				7506E40413B8FF6700EE1471 /* Views */,
 				9638264D147FE53F00A9C98B /* Controllers */,
+				7506E40513B8FF7A00EE1471 /* ItemContainers */,
+				7506E3FD13B8FDD300EE1471 /* Carousel */,
+				7506E40213B8FE6100EE1471 /* Tables */,
+				7506E40613B8FFB400EE1471 /* Map */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1358,9 +1361,6 @@
 		7506E40513B8FF7A00EE1471 /* ItemContainers */ = {
 			isa = PBXGroup;
 			children = (
-				7506E3FD13B8FDD300EE1471 /* Carousel */,
-				7506E40213B8FE6100EE1471 /* Tables */,
-				7506E40613B8FFB400EE1471 /* Map */,
 				7560DB7713B8ED3600268D13 /* CKItemViewContainerController.h */,
 				7560DB7813B8ED3600268D13 /* CKItemViewContainerController.m */,
 				7560DB7913B8ED3600268D13 /* CKItemViewController.h */,
