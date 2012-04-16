@@ -9,7 +9,7 @@
 #import "CKFormTableViewController.h"
 #import "CKFormTableViewController_private.h"
 #import "CKFormSectionBase_private.h"
-#import "CKFormDocumentCollectionSection_private.h"
+#import "CKFormBindedCollectionSection_private.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
 #import "CKNSObject+Invocation.h"
@@ -204,7 +204,7 @@
 	self.reloading = YES;
 	for(CKFormSectionBase* section in _sections){
 		[section start];
-		if(self.autoHideSections && [section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+		if(self.autoHideSections && [section isKindOfClass:[CKFormBindedCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
         if(self.viewIsOnScreen){
@@ -229,10 +229,10 @@
 		for(CKFormSectionBase* section in _sections){
 			[section start];
 			
-			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
+			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
 				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
-					CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
+					CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
 					[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 				}
 			}
@@ -263,8 +263,8 @@
 	for(CKFormSectionBase* section in theSections){
 		section.parentController = self;
 		if(section.hidden == YES){
-			if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-				CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
+			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+				CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
 				[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 			}
 		}
@@ -292,8 +292,8 @@
             NSInteger index = section.sectionVisibleIndex;
             [indexSet addIndex:index];
         }
-        if([section isKindOfClass:[CKFormDocumentCollectionSection class]]){
-			CKFormDocumentCollectionSection* collecSection = (CKFormDocumentCollectionSection*)section;
+        if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+			CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
 			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
 		}
     }
@@ -365,8 +365,8 @@
 	return [section autorelease];
 }
 
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
-	CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory];
+- (CKFormBindedCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
+	CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];
 	section.parentController = self;
 	[_sections insertObject:section atIndex:index];
 	

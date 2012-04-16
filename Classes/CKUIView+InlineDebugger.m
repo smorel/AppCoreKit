@@ -185,7 +185,7 @@
     CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
     [factory addItem:[UIView factoryItemForSubViewInView:view]];
     
-    CKFormDocumentCollectionSection* section = [CKFormDocumentCollectionSection sectionWithCollection:collection factory:factory];
+    CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];
     [debugger addSections:[NSArray arrayWithObject:section]];
     return debugger;
 }

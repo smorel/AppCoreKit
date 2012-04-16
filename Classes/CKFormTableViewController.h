@@ -8,7 +8,7 @@
 
 #import "CKFormSectionBase.h"
 #import "CKFormSection.h"
-#import "CKFormDocumentCollectionSection.h"
+#import "CKFormBindedCollectionSection.h"
 
 /** TODO
  */
@@ -49,7 +49,7 @@
 
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
 - (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
-- (CKFormDocumentCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
+- (CKFormBindedCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
 
 
 ///-----------------------------------

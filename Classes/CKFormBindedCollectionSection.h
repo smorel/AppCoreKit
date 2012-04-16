@@ -1,5 +1,5 @@
 //
-//  CKFormDocumentCollectionSection.h
+//  CKFormBindedCollectionSection.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-11-28.
@@ -14,7 +14,7 @@
 
 /** TODO
  */
-@interface CKFormDocumentCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
+@interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
 	CKCollectionController* _objectController;
 	CKItemViewControllerFactory* _controllerFactory;
 	
@@ -31,10 +31,10 @@
 
 //Initialization and constructors
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
-+ (CKFormDocumentCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
 
 //Cell Descriptor API
 - (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;

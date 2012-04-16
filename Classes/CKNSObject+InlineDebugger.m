@@ -150,7 +150,7 @@
     [factory addItem:[NSObject factoryItemForClass]];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
-    CKFormDocumentCollectionSection* inheritingClassesSection = [CKFormDocumentCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
+    CKFormBindedCollectionSection* inheritingClassesSection = [CKFormBindedCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
                                                                                                                factory:factory 
                                                                                                            headerTitle:@"Super Classes"];
     
