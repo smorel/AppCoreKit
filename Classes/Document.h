@@ -6,6 +6,8 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import "CKObject.h"
+#import "CKObject+CKSingleton.h"
 #import "CKDocument.h"
 #import "CKFeedSource.h"
 #import "CKCollection.h"

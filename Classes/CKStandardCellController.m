@@ -128,7 +128,7 @@
     if(self.detailedTextColor){
         cell.detailTextLabel.textColor = self.detailedTextColor;
     }
-    if (self.selectable == NO) {
+    if (!(self.flags & CKItemViewFlagSelectable)) {
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     

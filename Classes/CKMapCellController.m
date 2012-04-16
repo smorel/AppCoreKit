@@ -46,15 +46,10 @@
 @synthesize annotationImageOffset = _annotationImageOffset;
 
 - (void)postInit {
+    [super postInit];
 	self.annotationImageOffset = CGPointMake(0, 0);
-}
-
-- (id)init {
-	self = [super init];
-	if (self) {
-		[self postInit];
-	}
-	return self;
+    self.flags = CKItemViewFlagNone;
+    self.size = CGSizeMake(100,260.0);
 }
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -137,15 +132,6 @@
 	}
 	
 	return view;
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
-}
-
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,260.0)];
 }
 
 @end

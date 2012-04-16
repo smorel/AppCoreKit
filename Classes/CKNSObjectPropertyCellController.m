@@ -159,14 +159,13 @@
 	}
 	
 	if([thevalue isKindOfClass:[CKCollection class]]){
-		NSMutableArray* mappings = [NSMutableArray array]; 
-        //TODO FIXME : here NSString & NSNumber will not be encapsulated in CKProperty :
-        //That means CKNSNumberPropertyCellController, CKNSStringPropertyCellController should be able to manage values that are not CKProperty
-		[mappings mapControllerClass:[CKNSNumberPropertyCellController class] withObjectClass:[NSNumber class]];
-		[mappings mapControllerClass:[CKNSStringPropertyCellController class] withObjectClass:[NSString class]];
-		[mappings mapControllerClass:[CKNSObjectPropertyCellController class] withObjectClass:[NSObject class]];
-		CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:thevalue mappings:mappings]autorelease];
-        controller.style = [[(CKTableViewController*)self.parentController tableView]style];
+        CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+        [factory addItemForObjectOfClass:[NSNumber class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSNumberPropertyCellController cellController];}];
+        [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSStringPropertyCellController cellController];}];
+        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSObjectPropertyCellController cellController];}];
+        
+        CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
+        controller.style = [[(CKTableViewController*)self.containerController tableView]style];
         controller.name = @"CKInlineDebugger";
 		controller.title = self.tableViewCell.textLabel.text;
 		if(contentType != nil || contentProtocol != nil){
@@ -174,12 +173,12 @@
 			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.value,@"property",[NSValue valueWithPointer:contentType],@"class",[NSValue valueWithPointer:contentProtocol],@"protocol",controller,@"controller",nil];
 			controller.rightButton = button;
 		}
-		[self.parentController.navigationController pushViewController:controller animated:YES];
+		[self.containerController.navigationController pushViewController:controller animated:YES];
 	}
 	else{
         CKFormTableViewController* debugger = [[thevalue class]inlineDebuggerForObject:thevalue];
         debugger.title = self.tableViewCell.textLabel.text;
-		[self.parentController.navigationController pushViewController:debugger animated:YES];
+		[self.containerController.navigationController pushViewController:debugger animated:YES];
 	}
 }
 
@@ -202,7 +201,7 @@
 	CKClassExplorer* controller = protocol ? [[[CKClassExplorer alloc]initWithProtocol:protocol]autorelease] : [[[CKClassExplorer alloc]initWithBaseClass:type]autorelease];
 	controller.userInfo = userInfos;
 	controller.delegate = self;
-	[self.parentController.navigationController pushViewController:controller animated:YES];
+	[self.containerController.navigationController pushViewController:controller animated:YES];
 }
 
 - (void)deleteObject:(id)sender{
@@ -258,27 +257,40 @@
 	 */
 }
 
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateCell:cell withParams:params animated:animated];
+- (void)rotateCell:(UITableViewCell*)cell  animated:(BOOL)animated{
+	[super rotateCell:cell  animated:animated];
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	id value = object;
-	if([object isKindOfClass:[CKProperty class]]){
-		CKProperty* property = (CKProperty*)object;
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
+
+- (void)updateFlags{
+    id value = self.value;
+    if([value isKindOfClass:[CKProperty class]]){
+		CKProperty* property = (CKProperty*)value;
 		value = [property value];
 	}
 	
 	if(value == nil){
-		return CKItemViewFlagNone;
+		self.flags = CKItemViewFlagNone;
+        return;
 	}
 	
-	if([object isKindOfClass:[CKProperty class]]){
-		return CKItemViewFlagSelectable;
+	if([self.value isKindOfClass:[CKProperty class]]){
+		self.flags =  CKItemViewFlagSelectable;
+        return;
 	}
 	
 	//TODO prendre en compte le readonly pour create/remove
-	return CKItemViewFlagSelectable | CKItemViewFlagRemovable;
+	self.flags = CKItemViewFlagSelectable | CKItemViewFlagRemovable;
+}
+
+- (void)setValue:(id)value{
+    [super setValue:value];
+    [self updateFlags];
 }
 
 @end

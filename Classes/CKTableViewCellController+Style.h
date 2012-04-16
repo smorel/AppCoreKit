@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
+#import "CKTableViewController.h"
 #import "CKUIViewController+Style.h"
 
 

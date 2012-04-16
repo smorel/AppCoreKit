@@ -15,7 +15,7 @@
 
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
-@property (nonatomic, assign, readwrite) UIViewController* parentController;
+@property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
 @end
 
 @interface CKItemViewContainerController ()
@@ -27,15 +27,12 @@
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 
 @property (nonatomic, assign) BOOL rotating;
-@property (nonatomic, assign) BOOL invalidateParams;
 
 @end
 
 @interface CKItemViewControllerFactory ()
 
 - (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
-- (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
-- (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
@@ -62,12 +59,10 @@
 @synthesize viewsToIndexPath = _viewsToIndexPath;
 @synthesize indexPathToViews = _indexPathToViews;
 @synthesize weakViews = _weakViews;
-@synthesize params = _params;
 @synthesize delegate = _delegate;
 @synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
 @synthesize sectionsToControllers = _sectionsToControllers;
 @synthesize rotating = _rotating;
-@synthesize invalidateParams = _invalidateParams;
 
 
 #pragma mark Initialization
@@ -75,7 +70,6 @@
 	[super postInit];
 	_numberOfObjectsToprefetch = 10;
     _rotating = NO;
-    _invalidateParams = NO;
 }
 
 - (id)init {
@@ -112,8 +106,6 @@
 }
 
 - (void)dealloc {
-	[_params release];
-	_params = nil;
 	[_objectController release];
 	_objectController = nil;
 	[_viewsToControllers release];
@@ -186,8 +178,6 @@
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
-    
-	[self updateParams];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -209,15 +199,11 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     self.rotating = YES;
-    self.invalidateParams = YES;
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
-	
-	[self updateParams];
-	[self.params setObject:[NSNumber numberWithDouble:duration] forKey:CKTableViewAttributeAnimationDuration];
 	[self updateVisibleViewsRotation];
 	[self updateViewsVisibility:YES];
 }
@@ -235,8 +221,8 @@
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:controller.view withParams:self.params animated:YES];
+		if([controller respondsToSelector:@selector(rotateView:animated:)]){
+			[controller rotateView:controller.view animated:YES];
 		}
 	}	
 }
@@ -284,10 +270,6 @@
 	return nil;
 }
 
-- (void)updateParams{
-	NSAssert(NO,@"Implement in inheriting class");
-}
-
 #pragma mark ObjectController/ControllerFactory helpers
 
 - (NSInteger)numberOfSections{
@@ -305,16 +287,13 @@
 }
 
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath{
-    if(self.params == nil || _invalidateParams == YES){
-        [self updateParams];
-        self.invalidateParams = NO;
-    }
-	return [self.controllerFactory sizeForControllerAtIndexPath:indexPath params:self.params];
+    CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+    return controller.size;
 }
 
 - (CKItemViewFlags)flagsForViewAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewFlags flags = [self.controllerFactory flagsForControllerIndexPath:indexPath params:self.params];
-	return flags;
+    CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+    return controller.flags;
 }
 
 - (void)fetchMoreData{
@@ -482,7 +461,7 @@
             [controller setupView:view];	
 			
 			if(controller){
-				[controller rotateView:view withParams:self.params animated:NO];
+				[controller rotateView:view animated:NO];
 			}
 			return view;
 		}
@@ -640,6 +619,11 @@
 
 - (void)onRemoveSectionAtIndex:(NSInteger)index{
 	//To implement in inherited class
+}
+
+- (void)onSizeChangeAtIndexPath:(NSIndexPath*)index{
+	//To implement in inherited class
+    NSAssert(NO,@"Implements this in tables by performing intelligently beginUpdate/endUpdate!");
 }
 
 - (CKFeedSource*)collectionDataSource{
@@ -820,43 +804,6 @@
             }
         }
 	}
-}
-
-@end
-
-
-/********************************* DEPRECATED *********************************
- */
-
-@implementation CKItemViewContainerController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib{
-	[self initWithNibName:nib bundle:[NSBundle mainBundle]];
-	self.objectController = controller;
-	self.controllerFactory = factory;
-	return self;	
-}
-
-- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib{
-	CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
-	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nib];
-	return self;
-}
-
-- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings{
-	[self initWithCollection:collection mappings:mappings withNibName:nil];
-	return self;
-}
-
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory{
-	[self initWithObjectController:controller withControllerFactory:factory withNibName:nil];
-	return self;
-}
-
-- (void)setupWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings{
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
-    self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 }
 
 @end

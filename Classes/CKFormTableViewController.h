@@ -67,5 +67,5 @@
 
 
 //Adds extensions here to avoid importing to much files in client projects
-#import "CKFormTableViewController+PropertyGrid.h"
-#import "CKFormTableViewController+Menus.h"
+#import "CKTableViewCellController+PropertyGrid.h"
+#import "CKTableViewCellController+Menus.h"

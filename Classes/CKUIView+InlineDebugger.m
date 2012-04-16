@@ -87,89 +87,81 @@
 }
 
 + (CKItemViewControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
-    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
-    item.controllerClass = [CKTableViewCellController class];
-    
-    [item setFilterBlock:^id(id value) {
-        return [NSNumber numberWithBool:[ value isKindOfClass:[UIView class]]];
+    return [CKItemViewControllerFactoryItem itemForObjectOfClass:[UIView class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            UIView* subView = (UIView*)controller.value;
+            
+            controller.tableViewCell.textLabel.text = [UIView titleForView:subView];
+            controller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:subView];
+            controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
+            
+            
+            __block CKTableViewCellController* bcontroller = controller;
+            __block UIView* bsubView = subView;
+            [controller.tableViewCell beginBindingsContextByRemovingPreviousBindings];
+            CKProperty* nameProperty = [CKProperty propertyWithObject:view keyPath:@"name"];
+            if([nameProperty descriptor]){
+                [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
+                    bcontroller.tableViewCell.textLabel.text = [UIView titleForView:bsubView];
+                }];
+                [subView bind:@"hidden" withBlock:^(id value) {
+                    bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
+                }];
+                [subView bind:@"tag" withBlock:^(id value) {
+                    bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
+                }];
+                [subView.layer bind:@"contents" withBlock:^(id value) {
+                    bcontroller.tableViewCell.imageView.image = [UIView createsThumbnailForView:bsubView];
+                }];
+            }
+            [controller.tableViewCell endBindingsContext];
+            
+            NSInteger indent = 0;
+            
+            UIView* v = subView;
+            while(v && v != view){
+                indent++;
+                v = [v superview];
+            }
+            
+            controller.indentationLevel = indent;
+            
+            
+            controller.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
+            controller.tableViewCell.imageView.layer.shadowOpacity = 0.6;
+            controller.tableViewCell.imageView.layer.shadowOffset = CGSizeMake(0,2);
+            controller.tableViewCell.imageView.layer.shadowRadius = 2;
+            controller.tableViewCell.imageView.layer.cornerRadius = 3;
+            controller.tableViewCell.imageView.layer.borderWidth = 0.5;
+            controller.tableViewCell.imageView.layer.borderColor = [[UIColor convertFromNSString:@"0.7 0.7 0.7 1"]CGColor];
+            
+            controller.tableViewCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        }];
+        
+        [controller setSelectionBlock:^(CKTableViewCellController *controller) {
+            UIView* subView = (UIView*)controller.value;
+            
+            CKUIViewController* slideshow = [CKUIViewController controller];
+            slideshow.viewDidLoadBlock = ^(CKUIViewController* controller){
+                UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
+                imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                imageView.image = [UIView createsImageForView:subView];
+                imageView.contentMode = UIViewContentModeScaleAspectFit;
+                [controller.view addSubview:imageView];
+                controller.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+            };
+            [controller.containerController.navigationController pushViewController:slideshow animated:YES];
+        }];
+        
+        [controller setAccessorySelectionBlock:^(CKTableViewCellController *controller) {
+            UIView* subView = (UIView*)controller.value;
+            
+            CKFormTableViewController* subViewDebugger = [[subView class]inlineDebuggerForObject:subView];
+            [controller.containerController.navigationController pushViewController:subViewDebugger animated:YES];
+        }];
+        return controller;
     }];
-    [item setSetupBlock:^id(id value) {
-        CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        UIView* subView = (UIView*)controller.value;
-                
-        controller.tableViewCell.textLabel.text = [UIView titleForView:subView];
-        controller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:subView];
-        controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
-        
-        
-        __block CKTableViewCellController* bcontroller = controller;
-        __block UIView* bsubView = subView;
-        [controller.tableViewCell beginBindingsContextByRemovingPreviousBindings];
-        CKProperty* nameProperty = [CKProperty propertyWithObject:view keyPath:@"name"];
-        if([nameProperty descriptor]){
-            [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
-                bcontroller.tableViewCell.textLabel.text = [UIView titleForView:bsubView];
-            }];
-            [subView bind:@"hidden" withBlock:^(id value) {
-                bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
-            }];
-            [subView bind:@"tag" withBlock:^(id value) {
-                bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
-            }];
-            [subView.layer bind:@"contents" withBlock:^(id value) {
-                bcontroller.tableViewCell.imageView.image = [UIView createsThumbnailForView:bsubView];
-            }];
-        }
-        [controller.tableViewCell endBindingsContext];
-        
-        NSInteger indent = 0;
-        
-        UIView* v = subView;
-        while(v && v != view){
-            indent++;
-            v = [v superview];
-        }
-        
-        controller.indentationLevel = indent;
-        
-        
-        controller.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
-        controller.tableViewCell.imageView.layer.shadowOpacity = 0.6;
-        controller.tableViewCell.imageView.layer.shadowOffset = CGSizeMake(0,2);
-        controller.tableViewCell.imageView.layer.shadowRadius = 2;
-        controller.tableViewCell.imageView.layer.cornerRadius = 3;
-        controller.tableViewCell.imageView.layer.borderWidth = 0.5;
-        controller.tableViewCell.imageView.layer.borderColor = [[UIColor convertFromNSString:@"0.7 0.7 0.7 1"]CGColor];
-        
-        controller.tableViewCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-                
-        return (id)nil;
-    }];
-    [item setSelectionBlock:^id(id value) {
-        CKTableViewCellController* cellcontroller = (CKTableViewCellController*)value;;
-        UIView* subView = (UIView*)cellcontroller.value;
-        
-        CKUIViewController* slideshow = [CKUIViewController controller];
-        slideshow.viewDidLoadBlock = ^(CKUIViewController* controller){
-            UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
-            imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            imageView.image = [UIView createsImageForView:subView];
-            imageView.contentMode = UIViewContentModeScaleAspectFit;
-            [controller.view addSubview:imageView];
-            controller.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        };
-        [cellcontroller.parentController.navigationController pushViewController:slideshow animated:YES];
-        return (id)nil;
-    }];
-    [item setAccessorySelectionBlock:^id(id value) {
-        CKTableViewCellController* cellcontroller = (CKTableViewCellController*)value;;
-        UIView* subView = (UIView*)cellcontroller.value;
-        
-        CKFormTableViewController* subViewDebugger = [[subView class]inlineDebuggerForObject:subView];
-        [cellcontroller.parentController.navigationController pushViewController:subViewDebugger animated:YES];
-        return (id)nil;
-    }];
-    return item;
 }
 
 + (void)addView:(UIView*)view toCollection:(CKCollection*)collection{
@@ -209,30 +201,19 @@
     
     if([view superview]){
         NSString* title = [NSString stringWithFormat:@"%@ <%p>",[[view superview] class],[view superview]];
-        CKFormCellDescriptor* superViewCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"Super View" subtitle:title action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* superViewCell = [CKTableViewCellController cellControllerWithTitle:@"Super View" subtitle:title action:^(CKTableViewCellController* controller){
             CKFormTableViewController* superViewForm = [[[view superview]class] inlineDebuggerForObject:[view superview]];
             superViewForm.title = title;
             [bController.navigationController pushViewController:superViewForm animated:YES];
         }];
-        [superViewSection addCellDescriptor:superViewCell];
+        [superViewSection addCellController:superViewCell];
     }
     
-    CKFormCellDescriptor* hierarchyCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"Hierarchy" action:^(CKTableViewCellController* controller){
-        /*CKUIViewController* hierarchyController = [[[CKUIViewController alloc]init]autorelease];
-        hierarchyController.name = @"CKInlineDebugger";
-        hierarchyController.viewDidLoadBlock = ^(CKUIViewController* controller){
-            UIView* view = (UIView*)object;
-            UITextView* txtView = [[[UITextView alloc]initWithFrame:controller.view.bounds]autorelease];
-            txtView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            txtView.text = [view viewHierarchy];
-            txtView.editable = NO;
-            [controller.view addSubview:txtView];
-        };*/
-        
+    CKTableViewCellController* hierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Hierarchy" action:^(CKTableViewCellController* controller){
         CKFormTableViewController* hierarchyController = [UIView inlineDebuggerForSubViewsOfView:(UIView*)object];
         [bController.navigationController pushViewController:hierarchyController animated:YES];
     }];
-    [superViewSection addCellDescriptor:hierarchyCell];
+    [superViewSection addCellController:hierarchyCell];
     
     [debugger insertSection:superViewSection atIndex:0];
     return debugger;

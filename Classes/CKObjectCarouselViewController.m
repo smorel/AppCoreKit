@@ -73,21 +73,6 @@
 	self.carouselView.spacing = 20;
 }
 
-- (void)updateParams{
-	if(self.params == nil){
-		self.params = [NSMutableDictionary dictionary];
-	}
-	
-	[self.params setObject:[NSValue valueWithCGSize:self.carouselView.bounds.size] forKey:CKTableViewAttributeBounds];
-	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
-    
-	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED FOR CAROUSEL
-	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED FOR CAROUSEL
-	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED FOR CAROUSEL
-}
-
 - (void)scrollToPage:(id)page{
 	[self.carouselView setContentOffset:_pageControl.currentPage animated:YES];
 }
@@ -118,7 +103,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	[self updateParams];
 	
 	[self updateVisibleViewsRotation];
 	

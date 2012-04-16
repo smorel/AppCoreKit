@@ -65,8 +65,8 @@
 	[super setupView:view];
 }
 
-- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateView:view withParams:params animated:animated];
+- (void)rotateView:(UIView*)view animated:(BOOL)animated{
+	[super rotateView:view  animated:animated];
 }
 
 - (void)viewDidAppear:(UIView *)view{

@@ -138,12 +138,12 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (NSMutableDictionary*)controllerStyle{
-	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.parentController  propertyName:nil];
+	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.containerController  propertyName:nil];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
     
     if([CKStyleManager logEnabled]){
         if([controllerStyle isEmpty]){
-            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.parentController,parentControllerStyle);
+            CKDebugLog(@"did not find style for item controller %@ with parent controller %@ with style %@",self,self.containerController,parentControllerStyle);
         }
         else{
             CKDebugLog(@"found style for item controller %@",self);
@@ -155,12 +155,12 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (UIView*)parentControllerView{
 	UIView* view = nil;
-	if([self.parentController isKindOfClass:[CKObjectCarouselViewController class]] == YES) 
-		view = (UIView*)((CKObjectCarouselViewController*)self.parentController).carouselView;
-	else if([self.parentController isKindOfClass:[CKTableViewController class]] == YES) 
-		view = (UIView*)((CKTableViewController*)self.parentController).tableView;
-	else if([self.parentController isKindOfClass:[CKMapViewController class]] == YES) 
-		view = (UIView*)((CKMapViewController*)self.parentController).mapView;
+	if([self.containerController isKindOfClass:[CKObjectCarouselViewController class]] == YES) 
+		view = (UIView*)((CKObjectCarouselViewController*)self.containerController).carouselView;
+	else if([self.containerController isKindOfClass:[CKTableViewController class]] == YES) 
+		view = (UIView*)((CKTableViewController*)self.containerController).tableView;
+	else if([self.containerController isKindOfClass:[CKMapViewController class]] == YES) 
+		view = (UIView*)((CKMapViewController*)self.containerController).mapView;
 	return view;
 }
 

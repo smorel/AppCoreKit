@@ -45,6 +45,11 @@
 	return self;
 }
 
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
+
 - (void)dealloc {
 	self.values = nil;
 	self.labels = nil;
@@ -128,17 +133,19 @@
     }
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    CKOptionCellController* staticController = (CKOptionCellController*)[params staticController];
-    if(staticController.readOnly){
-        return CKItemViewFlagNone;
+- (void)setReadOnly:(BOOL)bo{
+    _readOnly = bo;
+    
+    if(bo){
+        self.flags = CKItemViewFlagNone;
+        return;
     }
-    return CKItemViewFlagSelectable;
+    self.flags = CKItemViewFlagSelectable;
 }
 
 - (void)didSelectRow {
 	[super didSelectRow];
-    CKTableViewController* tableController = (CKTableViewController*)[self parentController];
+    CKTableViewController* tableController = (CKTableViewController*)[self containerController];
 	CKOptionTableViewController *optionTableController = nil;
 	if(self.multiSelectionEnabled){
 		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self.value intValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
@@ -149,7 +156,7 @@
     optionTableController.optionCellStyle = self.optionCellStyle;
 	optionTableController.title = self.text;
 	optionTableController.optionTableDelegate = self;
-	[self.parentController.navigationController pushViewController:optionTableController animated:YES];
+	[self.containerController.navigationController pushViewController:optionTableController animated:YES];
 }
 
 //
@@ -178,7 +185,7 @@
 	}
 	
 	if(!self.multiSelectionEnabled){
-		[self.parentController.navigationController popViewControllerAnimated:YES];
+		[self.containerController.navigationController popViewControllerAnimated:YES];
 	}
 }
 

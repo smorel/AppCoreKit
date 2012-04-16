@@ -114,42 +114,35 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-	NSMutableArray* mappings = [NSMutableArray array];
-	CKItemViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
-	[classCellDescriptor setCreateBlock:^(id object){
-		//for stylesheet identification
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		controller.name = @"CKClassExplorerCell";
-		return (id)nil;
-	}];
-	[classCellDescriptor setSetupBlock:^(id object){
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		controller.tableViewCell.textLabel.text = (NSString*)controller.value;
-		return (id)nil;
-	}];
-	[classCellDescriptor setFlags:CKItemViewFlagSelectable];
+    CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    
+    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        controller.name = @"CKClassExplorerCell";
+        controller.flags = CKItemViewFlagSelectable;
+        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            cell.textLabel.text = (NSString*)controller.value;
+        }];
+        return controller;
+    }];
+    
+    [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        controller.name = @"CKClassExplorerCell";
+        controller.flags = CKItemViewFlagSelectable;
+        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
+            if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
+                controller.tableViewCell.textLabel.text = [controller.value valueForKeyPath:@"modelName"];
+            }
+            else{
+                controller.tableViewCell.textLabel.text = @"Unknown";
+            }
+        }];
+        return controller;
+    }];
 	
-	CKItemViewControllerFactoryItem* objectCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSObject class]];
-	[objectCellDescriptor setCreateBlock:^(id object){
-		//for stylesheet identification
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		controller.name = @"CKClassExplorerCell";
-		return (id)nil;
-	}];
-	[objectCellDescriptor setSetupBlock:^(id object){
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
-		if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
-			controller.tableViewCell.textLabel.text = [controller.value valueForKeyPath:@"modelName"];
-		}
-		else{
-			controller.tableViewCell.textLabel.text = @"Unknown";
-		}
-		return (id)nil;
-	}];
-	[objectCellDescriptor setFlags:CKItemViewFlagSelectable];
-	
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+	self.controllerFactory = factory;
 	
 	[self didSearch:CKClassExplorerFilter];
 }
@@ -177,21 +170,19 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-	NSMutableArray* mappings = [NSMutableArray array];
-	CKItemViewControllerFactoryItem* classCellDescriptor = [mappings mapControllerClass:[CKTableViewCellController class] withObjectClass:[NSString class]];
-	[classCellDescriptor setCreateBlock:^(id object){
-		//for stylesheet identification
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		controller.name = @"CKClassExplorerCell";
-		return (id)nil;
-	}];
-	[classCellDescriptor setSetupBlock:^(id object){
-		CKTableViewCellController* controller = (CKTableViewCellController*)object;
-		controller.tableViewCell.textLabel.text = (NSString*)controller.value;
-		return (id)nil;
-	}];
-	[classCellDescriptor setFlags:CKItemViewFlagSelectable];
-	self.controllerFactory = [CKItemViewControllerFactory factoryWithMappings:mappings];
+	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    
+    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        controller.name = @"CKClassExplorerCell";
+        controller.flags = CKItemViewFlagSelectable;
+        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            cell.textLabel.text = (NSString*)controller.value;
+        }];
+        return controller;
+    }];
+    
+	self.controllerFactory = factory;
 	
 	[self didSearch:CKClassExplorerFilter];
 }

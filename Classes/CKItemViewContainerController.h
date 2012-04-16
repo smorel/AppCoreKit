@@ -13,9 +13,6 @@
 #import "CKItemViewControllerFactory.h"
 #import "CKCollection.h"
 #import "CKItemViewController.h"
-
-//not needed in this implementation but very often used when inheriting ...
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCollectionController.h"
 
 /* This controller implements the logic to deals with objects via objectcontroller and controllerfactory.
@@ -62,8 +59,6 @@
 	NSMutableArray* _weakViews;
     NSMutableArray* _sectionsToControllers; //containing NSMutableArray of CKItemViewController
 	
-	NSMutableDictionary* _params;
-	
 	id _delegate;
 	int _numberOfObjectsToprefetch;
 }
@@ -74,9 +69,6 @@
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 
 @property (nonatomic, assign, readonly) BOOL rotating;
-
-//private property
-@property (nonatomic, retain) NSMutableDictionary* params;
 
 //init
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
@@ -130,7 +122,7 @@
 - (void)didMoveViewAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 - (NSIndexPath*)targetIndexPathForMoveFromIndexPath:(NSIndexPath*)sourceIndexPath toProposedIndexPath:(NSIndexPath*)proposedDestinationIndexPath;
 
-//document update callbacks
+//Object Controller update callbacks
 - (void)onReload;
 - (void)onBeginUpdates;
 - (void)onEndUpdates;
@@ -139,13 +131,12 @@
 - (void)onInsertSectionAtIndex:(NSInteger)index;
 - (void)onRemoveSectionAtIndex:(NSInteger)index;
 
+- (void)onSizeChangeAtIndexPath:(NSIndexPath*)index;
+
 - (void)reload;
 
 //Helpers
 - (CKFeedSource*)collectionDataSource;
-
-//Private
-- (void)updateParams;
 
 @end
 
@@ -157,17 +148,4 @@
 @optional
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 - (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectAccessoryViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
-@end
-
-
-
-/********************************* DEPRECATED *********************************
- */
-
-@interface CKItemViewContainerController(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
-- (id)initWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings withNibName:(NSString*)nib DEPRECATED_ATTRIBUTE;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory DEPRECATED_ATTRIBUTE;
-- (id)initWithObjectController:(id)controller withControllerFactory:(CKItemViewControllerFactory*)factory  withNibName:(NSString*)nib DEPRECATED_ATTRIBUTE;
-- (void)setupWithCollection:(CKCollection*)collection mappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
 @end

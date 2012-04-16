@@ -31,13 +31,17 @@
 @synthesize optionsViewController = _optionsViewController;
 @synthesize internalBindingContext = _internalBindingContext;
 
-- (id)init{
-    self = [super init];
+
+
+- (void)postInit{
+    [super postInit];
+    
     self.cellStyle = CKTableViewCellStylePropertyGrid;
     self.optionCellStyle = CKTableViewCellStylePropertyGrid;
     self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
-    return self;
+    self.flags = CKItemViewFlagNone;
 }
+
 
 - (void)dealloc{
     [NSObject removeAllBindingsForContext:self.internalBindingContext];
@@ -185,12 +189,14 @@
     }
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    CKOptionPropertyCellController* staticController = (CKOptionPropertyCellController*)[params staticController];
-    if(staticController.readOnly){
-        return CKItemViewFlagNone;
+- (void)setReadOnly:(BOOL)bo{
+    [super setReadOnly:bo];
+    
+    if(bo){
+        self.flags = CKItemViewFlagNone;
+        return;
     }
-    return CKItemViewFlagSelectable;
+    self.flags = CKItemViewFlagSelectable;
 }
 
 - (void)didSelect {
@@ -202,7 +208,7 @@
 		propertyNavBarTitleLocalized = _(property.name);
 	}
     
-    CKTableViewController* tableController = (CKTableViewController*)[self parentController];
+    CKTableViewController* tableController = (CKTableViewController*)[self containerController];
 	if(self.multiSelectionEnabled){
 		self.optionsViewController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self indexesForValue:[self currentValue]] multiSelectionEnabled:YES style:[tableController style]] autorelease];
 	}
@@ -215,7 +221,7 @@
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
     
-	[self.parentController.navigationController pushViewController:self.optionsViewController animated:YES];
+	[self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
 }
 
 //
@@ -246,7 +252,7 @@
     [parentTableViewController onEndUpdates];
 	
 	if(!self.multiSelectionEnabled){
-		[self.parentController.navigationController popViewControllerAnimated:YES];
+		[self.containerController.navigationController popViewControllerAnimated:YES];
 	}
     
     CKProperty* property = [self objectProperty];

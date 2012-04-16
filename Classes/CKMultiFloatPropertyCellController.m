@@ -11,7 +11,7 @@
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKNSNotificationCenter+Edition.h"
-#import "CKTableViewCellNextResponder.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKNSValueTransformer+Additions.h"
 
 #define BASE_TAG 8723
@@ -22,6 +22,12 @@
 -(void)dealloc{
 	[_multiFloatValue release];
 	[super dealloc];
+}
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+    self.size = CGSizeMake(100,44);
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
@@ -182,16 +188,8 @@
 - (void)didSelectRow{
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44)];
-}
-
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateCell:cell withParams:params animated:animated];
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
+- (void)rotateCell:(UITableViewCell*)cell  animated:(BOOL)animated{
+	[super rotateCell:cell  animated:animated];
 }
 
 - (void)valueChanged{
@@ -217,7 +215,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
+	if([self activateNextResponder] == NO){
 		[textField resignFirstResponder];
 	}
 	return YES;

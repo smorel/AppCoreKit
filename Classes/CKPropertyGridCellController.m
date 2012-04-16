@@ -13,7 +13,7 @@
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
 #import "CKBundle.h"
-#import "CKTableViewCellNextResponder.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKSheetController.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -89,8 +89,8 @@
     [super setupCell:cell];
 
     [NSObject beginBindingsContext:_validationBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
-        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    if([[self containerController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self containerController];
         [form bind:@"validationEnabled" withBlock:^(id value) {
             BOOL validity = [self isValidValue:[[self objectProperty] value]];
             [self setInvalidButtonVisible:!validity];
@@ -123,7 +123,7 @@
 - (void)setValueInObjectProperty:(id)value{
     BOOL validity = [self isValidValue:value];
     
-    CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    CKFormTableViewController* form = (CKFormTableViewController*)[self containerController];
     BOOL visible = !validity && form.validationEnabled;
     BOOL validityStateChanged = (_validationDisplayed != visible);
     if(validityStateChanged){
@@ -177,8 +177,8 @@
     if(self.view == nil)
         return;
     
-    if([[self parentController]isKindOfClass:[CKFormTableViewController class]]){
-        CKFormTableViewController* form = (CKFormTableViewController*)[self parentController];
+    if([[self containerController]isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)[self containerController];
         visible = visible && form.validationEnabled;
         BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
                                            || [self parentTableView].style == UITableViewStylePlain );
@@ -264,15 +264,15 @@
 }
 
 - (void)previous:(id)sender{
-    [CKTableViewCellNextResponder activatePreviousResponderFromController:self];
+    [self activatePreviousResponder];
 }
 
 - (void)next:(id)sender{
-    [CKTableViewCellNextResponder activateNextResponderFromController:self];
+    [self activateNextResponder];
 }
 
 - (void)done:(id)sender{
-    [self.parentController.view endEditing:YES];
+    [self.containerController.view endEditing:YES];
     [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
 }
 
@@ -284,8 +284,8 @@
         UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
         toolbar.barStyle = UIBarStyleBlackTranslucent;
         
-        BOOL hasNextResponder = [CKTableViewCellNextResponder needsNextKeyboard:self];
-        BOOL hasPreviousResponder = [CKTableViewCellNextResponder needsPreviousKeyboard:self];
+        BOOL hasNextResponder = [self needsNextKeyboard];
+        BOOL hasPreviousResponder = [self needsPreviousKeyboard];
         NSMutableArray* buttons = [NSMutableArray array];
         {
             UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:_(@"Previous")

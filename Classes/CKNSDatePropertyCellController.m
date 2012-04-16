@@ -13,6 +13,7 @@
 #include "CKNSValueTransformer+Additions.h"
 #import "CKPopoverController.h"
 #import "CKUIView+Positioning.h"
+#import "CKTableViewCellController+Responder.h"
 
 //static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
@@ -255,11 +256,11 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                                                CKDatePickerModeCreditCardExpirationDate);
 }
 
-- (id)init{
-    self = [super init];
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
     _enableAccessoryView = NO;
     self.datePickerMode = CKDatePickerModeDate;
-    return self;
 }
 
 - (void)dealloc{
@@ -268,6 +269,25 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [_onEndEditingCallback release];
     _onEndEditingCallback = nil;
     [super dealloc];
+}
+
+- (void)updateFlags{
+    CKProperty* model = self.value;
+    if([model isReadOnly] || self.readOnly){
+        self.flags = CKItemViewFlagNone;
+        return;
+    }
+    self.flags =  CKItemViewFlagSelectable;
+}
+
+- (void)setValue:(id)value{
+    [super setValue:value];
+    [self updateFlags];
+}
+
+- (void)setReadOnly:(BOOL)readOnly{
+    [super setReadOnly:readOnly];
+    [self updateFlags];
 }
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
@@ -312,28 +332,20 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [cell endBindingsContext];
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    CKNSDatePropertyCellController* staticController = (CKNSDatePropertyCellController*)[params staticController];
-	CKProperty* model = object;
-    if([model isReadOnly] || staticController.readOnly){
-        return CKItemViewFlagNone;
-    }
-    return CKItemViewFlagSelectable;
-}
-
-
 - (void)didSelectRow{
 	[self becomeFirstResponder];
 }
 
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKProperty* model = object;// || self.readonly
-	return ![model isReadOnly];
+- (BOOL)hasResponder{
+	return ![self.objectProperty isReadOnly];
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-    return view;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return self.tableViewCell;
+    }
+    return nil;
 }
 
 - (void)becomeFirstResponder{
@@ -371,7 +383,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             [self onBeginEditingUsingViewController:dateController];
             
             sheetController.delegate = self;
-            UIView* parentView = self.parentController.view;
+            UIView* parentView = self.containerController.view;
             [sheetController showFromRect:[parentView bounds] 
                                    inView:parentView 
                                  animated:YES];
@@ -402,7 +414,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         }
     }
     else{
-        [[[self parentController]view]endEditing:YES];//Hides keyboard if needed
+        [[[self containerController]view]endEditing:YES];//Hides keyboard if needed
         
         CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
         dateController.title = propertyNavBarTitleLocalized;

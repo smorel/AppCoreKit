@@ -21,17 +21,17 @@
 - (void)setupWithDomains:(NSArray *)domains{
     self.title = @"Domains";
     
-    NSMutableArray* cellDescriptors = [NSMutableArray array];
+    NSMutableArray* cellControllers = [NSMutableArray array];
     for (NSString *domain in domains) {
         //CKStore *store = [CKStore storeWithDomainName:domain];
-        CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:domain action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:domain action:^(CKTableViewCellController* controller){
             CKStoreDomainExplorer *domainExplorer = [[CKStoreDomainExplorer alloc] initWithDomain:domain];
             [self.navigationController pushViewController:domainExplorer animated:YES];
             [domainExplorer release];
         }];
-        [cellDescriptors addObject:desc];
+        [cellControllers addObject:cellController];
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellDescriptors:cellDescriptors]]];
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
 }
 
 - (id)init{
@@ -61,18 +61,19 @@
 @implementation CKStoreDomainExplorer
 
 - (void)setupWithItems:(NSArray*)items{
-    NSMutableArray* cellDescriptors = [NSMutableArray array];
+    NSMutableArray* cellControllers = [NSMutableArray array];
     for(CKItem* item in items){
         CKAttribute* typeAttribute = [item attributeNamed:@"@class" createIfNotFound:NO];
-        CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:typeAttribute ? [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name 
-                                                                          subtitle:[NSString stringWithFormat:@"%@", item.createdAt]  
-                                                                            action:^(CKTableViewCellController* controller){
-                                                                                CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
-                                                                                [self.navigationController pushViewController:itemExplorer animated:YES];
-                                                                                }];
-        [cellDescriptors addObject:desc];
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:typeAttribute ? 
+                                                                                                       [NSString stringWithFormat:@"[%@] %@",typeAttribute.value,item.name] :item.name 
+                                                                                              subtitle:[NSString stringWithFormat:@"%@", item.createdAt]  
+                                                                                                action:^(CKTableViewCellController* controller){
+                                                                                                    CKStoreItemExplorer *itemExplorer = [[[CKStoreItemExplorer alloc] initWithItem:item]autorelease];
+                                                                                                    [self.navigationController pushViewController:itemExplorer animated:YES];
+                                                                                                }];
+        [cellControllers addObject:cellController];
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellDescriptors:cellDescriptors]]];
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
 }
 
 - (id)initWithDomain:(NSString *)domain {
@@ -101,26 +102,26 @@
     self = [super initWithStyle:UITableViewStylePlain];
 	self.title = @"Attributes";
     
-    NSMutableArray* cellDescriptors = [NSMutableArray array];
+    NSMutableArray* cellControllers = [NSMutableArray array];
     
-    CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:@"item address" subtitle:[NSString stringWithFormat:@"%p",item] action:nil];
-    [cellDescriptors addObject:desc];
+    CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:@"item address" subtitle:[NSString stringWithFormat:@"%p",item] action:nil];
+    [cellControllers addObject:cellController];
     
     for(CKAttribute* attribute in [item.attributes allObjects]){
         if(attribute.value != nil){
-            CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:attribute.name subtitle:attribute.value action:nil];
-            [cellDescriptors addObject:desc];
+            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:attribute.value action:nil];
+            [cellControllers addObject:cellController];
         }
         else{
-            CKFormCellDescriptor* desc = [CKFormCellDescriptor cellDescriptorWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
+            CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:attribute.name subtitle:[NSString stringWithFormat:@"%d",[attribute.itemReferences count]] action:^(CKTableViewCellController* controller){
                 CKStoreDomainExplorer* domainController = [[[CKStoreDomainExplorer alloc]initWithItems:[NSMutableArray arrayWithArray:attribute.items]]autorelease];
                 domainController.title = attribute.name;
                 [self.navigationController pushViewController:domainController animated:YES];
             }];
-            [cellDescriptors addObject:desc];
+            [cellControllers addObject:cellController];
         }
     }
-    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellDescriptors:cellDescriptors]]];
+    [self addSections:[NSArray arrayWithObject:[CKFormSection sectionWithCellControllers:cellControllers]]];
     
     return self;
 }

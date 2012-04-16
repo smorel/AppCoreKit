@@ -11,12 +11,6 @@
 
 @implementation CKUIImagePropertyCellController
 
-- (id)init{
-    self = [super init];
-    self.cellStyle = CKTableViewCellStyleSubtitle;
-    return self;
-}
-
 - (void)setupCell:(UITableViewCell *)cell{
     [super setupCell:cell];
     CKProperty* property = self.value;
@@ -26,8 +20,12 @@
     cell.accessoryType = UITableViewCellAccessoryNone;
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-    return CKItemViewFlagNone;
+
+- (void)postInit{
+    [super postInit];
+    
+    self.cellStyle = CKTableViewCellStyleSubtitle;
+    self.flags = CKItemViewFlagNone;
 }
 
 @end

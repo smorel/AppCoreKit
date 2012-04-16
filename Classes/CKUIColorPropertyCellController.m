@@ -24,12 +24,11 @@
 
 @implementation CKUIColorPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CGUIColorWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 4 * 44);
 }
-
 
 - (void)initTableViewCell:(UITableViewCell *)cell {
     [super initTableViewCell:cell];
@@ -77,10 +76,6 @@
     
     UIView* colorView = [self.tableViewCell.contentView viewWithTag:78];
     colorView.backgroundColor = color;
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
 }
 
 @end

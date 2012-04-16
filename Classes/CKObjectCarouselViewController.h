@@ -11,7 +11,6 @@
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCollection.h"
 
 

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "CKObject.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
@@ -26,40 +25,22 @@ enum{
 typedef NSUInteger CKItemViewFlags;
 
 
+@class CKItemViewContainerController;
+
 /** TODO
  */
-@interface CKItemViewController : NSObject {
-	NSString *_name;
-	id _value;
-	id _target;
-	SEL _action;
-	SEL _accessoryAction;
-	
-	NSIndexPath *_indexPath;
-	
-	CKCallback* _createCallback;
-	CKCallback* _initCallback;
-	CKCallback* _setupCallback;
-	CKCallback* _selectionCallback;
-	CKCallback* _accessorySelectionCallback;
-	CKCallback* _becomeFirstResponderCallback;
-	CKCallback* _resignFirstResponderCallback;
-	CKCallback* _layoutCallback;
-	
-	CKWeakRef* _viewRef;
-	CKWeakRef* _weakParentController;
-	CKWeakRef* _targetRef;
-}
+@interface CKItemViewController : NSObject
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) id value;
 @property (nonatomic, copy, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) UIViewController* parentController;
+@property (nonatomic, assign, readonly) CKItemViewContainerController* containerController;
 @property (nonatomic, assign) UIView *view;
 
-@property (nonatomic, assign) id target;
-@property (nonatomic, assign) SEL action;
-@property (nonatomic, assign) SEL accessoryAction;
+@property (nonatomic, assign) CKItemViewFlags flags;
+@property (nonatomic, assign) CGSize size;
+
+//TODO : REPLACE BY BLOCKS !
 
 @property (nonatomic, retain) CKCallback* createCallback;
 @property (nonatomic, retain) CKCallback* initCallback;
@@ -74,15 +55,15 @@ typedef NSUInteger CKItemViewFlags;
 //Used on CKTableViewCellControllers only yet
 @property (nonatomic, retain) CKCallback* layoutCallback;
 
+
+//Private for subclassing
+
 - (NSString*)identifier;
 
-- (UIView *)loadView;
 - (void)setupView:(UIView *)view;
-- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated;
+- (void)rotateView:(UIView*)view animated:(BOOL)animated;
 
 - (void)applyStyle;
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params;
 
 - (void)viewDidAppear:(UIView *)view;
 - (void)viewDidDisappear;
@@ -94,5 +75,8 @@ typedef NSUInteger CKItemViewFlags;
 - (void)initView:(UIView*)view;
 - (void)didBecomeFirstResponder;
 - (void)didResignFirstResponder;
+
+- (UIView *)loadView;
+- (void)postInit;
 
 @end

@@ -10,7 +10,7 @@
 #import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKTableViewCellNextResponder.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKObjectTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"
@@ -31,7 +31,32 @@
     _textView = nil;
 	[super dealloc];
 }
-//
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
+
+//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
+/*
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    UIViewController* controller = [params parentController];
+    NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
+    
+    CKProperty* property = (CKProperty*)object;
+    
+    CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
+    if([property isReadOnly] || staticController.readOnly){
+        return [CKTableViewCellController viewSizeForObject:object withParams:params];
+    }
+    else{    
+		CGFloat bottomTextView = staticController.textView.frame.origin.y + staticController.textView.frame.size.height;
+		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
+		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
+    }
+    return nil;
+}*/
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
     [super initTableViewCell:cell];
@@ -80,7 +105,7 @@
     
     UITableViewCell* cell = controller.tableViewCell;
     if(controller.cellStyle == CKTableViewCellStyleValue3){
-        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
         CGFloat realWidth = rowWidth;
         CGFloat width = realWidth * self.componentsRatio;
         
@@ -119,29 +144,6 @@
     }
 
     return (id)nil;
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* controller = [params parentController];
-    NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
-    
-    CKProperty* property = (CKProperty*)object;
-    
-    CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
-    if([property isReadOnly] || staticController.readOnly){
-        return [CKTableViewCellController viewSizeForObject:object withParams:params];
-    }
-    else{    
-		CGFloat bottomTextView = staticController.textView.frame.origin.y + staticController.textView.frame.size.height;
-		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
-		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-    }
-    return nil;
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
 }
  
 - (void)textViewChanged:(id)value{
@@ -254,14 +256,15 @@
     [self scrollToRowAfterDelay:0];
 }
 
-
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
+- (BOOL)hasResponder{
 	return YES;
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-	UITextView *textView = (UITextView*)[view viewWithTag:50000];
-	return textView;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return [self.tableViewCell viewWithTag:50000];
+    }
+	return nil;
 }
 
 @end

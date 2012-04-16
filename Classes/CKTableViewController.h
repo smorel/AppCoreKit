@@ -11,6 +11,11 @@
 #import <Foundation/Foundation.h>
 #import "CKItemViewContainerController.h"
 
+typedef enum {
+	CKTableViewOrientationPortrait,
+	CKTableViewOrientationLandscape
+} CKTableViewOrientation;
+
 // From UITableViewController:
 // Creates a table view with the correct dimensions and autoresizing, setting the datasource and delegate to self.
 // In -viewWillAppear:, it reloads the table's data if it's empty. Otherwise, it deselects all rows (with or without animation).

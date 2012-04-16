@@ -10,7 +10,7 @@
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
-#import "CKTableViewCellNextResponder.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKUIView+Positioning.h"
 
@@ -32,6 +32,36 @@
 	[_toggleSwitch release];
 	[super dealloc];
 }
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
+
+
+//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
+/*
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    CKNSNumberPropertyCellController* staticController = (CKNSNumberPropertyCellController*)[params staticController];
+    if(!staticController){
+        return [NSValue valueWithCGSize:CGSizeMake(100,44)];
+    }
+    
+	UISwitch* s = (UISwitch*)[staticController.tableViewCell viewWithTag:SwitchTag];
+	UITextField *textField = (UITextField*)[staticController.tableViewCell viewWithTag:50000];
+    
+    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
+    CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
+    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
+    
+    CKProperty* model = staticController.value;
+    BOOL readonly = ([model isReadOnly] || staticController.readOnly);
+    
+    CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
+    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
+} */
+
 
 - (void)onswitch{
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
@@ -280,30 +310,6 @@
     return (id)nil;
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    CKNSNumberPropertyCellController* staticController = (CKNSNumberPropertyCellController*)[params staticController];
-    if(!staticController){
-         return [NSValue valueWithCGSize:CGSizeMake(100,44)];
-    }
-    
-	UISwitch* s = (UISwitch*)[staticController.tableViewCell viewWithTag:SwitchTag];
-	UITextField *textField = (UITextField*)[staticController.tableViewCell viewWithTag:50000];
-        
-    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
-    CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
-    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
-    
-    CKProperty* model = staticController.value;
-    BOOL readonly = ([model isReadOnly] || staticController.readOnly);
-    
-    CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
-    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-} 
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
-}
 
 #pragma mark UITextField Delegate
 
@@ -313,7 +319,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.textField.inputAccessoryView = [self navigationToolbar];
-    if([CKTableViewCellNextResponder needsNextKeyboard:self] == YES){
+    if([self needsNextKeyboard] == YES){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
     else{
@@ -341,7 +347,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if([CKTableViewCellNextResponder activateNextResponderFromController:self] == NO){
+	if([self activateNextResponder] == NO){
 		[textField resignFirstResponder];
 	}
 	return YES;
@@ -385,21 +391,21 @@
     [self scrollToRowAfterDelay:0];
 }
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	CKProperty* model = object;
-	
-	CKClassPropertyDescriptor* descriptor = [model descriptor];
+- (BOOL)hasResponder{
+	CKClassPropertyDescriptor* descriptor = [self.objectProperty descriptor];
 	switch(descriptor.propertyType){
 		case CKClassPropertyDescriptorTypeChar:
 		case CKClassPropertyDescriptorTypeCppBool:
 			return NO;
 	}
-	return ![model isReadOnly];
+	return ![self.objectProperty isReadOnly];
 }
 
-+ (UIView*)responderInView:(UIView*)view{
-	UITextField *textField = (UITextField*)[view viewWithTag:50000];
-	return textField;
+- (UIView*)nextResponder:(UIView*)view{
+    if(view == nil){
+        return [view viewWithTag:50000];
+    }
+	return nil;
 }
 
 @end

@@ -107,21 +107,6 @@
 
 //
 
-- (void)setup {
-	NSMutableArray *cells = [NSMutableArray arrayWithCapacity:self.values.count];
-	for (int i=0 ; i< self.values.count ; i++) {
-		NSNumber* index = [NSNumber numberWithInt:i];
-		
-		CKFormCellDescriptor* descriptor = [CKFormCellDescriptor cellDescriptorWithValue:([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0]  controllerClass:[CKTableViewCellController class]];
-        [descriptor setCreateTarget:self action:@selector(createCell:)];
-		[descriptor setInitTarget:self action:@selector(initCell:)];
-		[descriptor setSetupTarget:self action:@selector(setupCell:)];
-		[descriptor setSelectionTarget:self action:@selector(selectCell:)];
-		[cells addObject:descriptor];
-	}
-    CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cells];
-	[self addSections:[NSArray arrayWithObject:section]];
-}
 
 - (id)createCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
@@ -190,6 +175,37 @@
 		[self.optionTableDelegate optionTableViewController:self didSelectValueAtIndex:i];
 	}
 	return nil;
+}
+
+
+- (void)setup {
+	NSMutableArray *cellControllers = [NSMutableArray arrayWithCapacity:self.values.count];
+    
+	for (int i=0 ; i< self.values.count ; i++) {
+		NSNumber* index = [NSNumber numberWithInt:i];
+		
+        __block CKOptionTableViewController* bself = self;
+        
+        CKTableViewCellController* cellController = [CKTableViewCellController cellController];
+        cellController.value = ([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0];
+        [self createCell:cellController];
+        
+        [cellController setInitBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            [bself initCell:controller];
+        }];
+        
+        [cellController setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            [bself setupCell:controller];
+        }];
+        
+        [cellController setSelectionBlock:^(CKTableViewCellController *controller) {
+            [bself selectCell:controller];
+        }];
+        
+		[cellControllers addObject:cellController];
+	}
+    CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers];
+	[self addSections:[NSArray arrayWithObject:section]];
 }
 
 - (NSInteger)selectedIndex{

@@ -7,13 +7,30 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKItemViewController.h"
-#import "CKItemViewControllerFactoryItem.h"
 
+/********************************* CKItemViewControllerFactoryItem *********************************/
 
-/********************************* CKItemViewControllerFactory *********************************
+typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSIndexPath* indexPath);
+
+/** TODO
  */
+@interface CKItemViewControllerFactoryItem : NSObject
+
+@property(nonatomic,copy)   CKItemViewControllerCreationBlock controllerCreateBlock;
+@property(nonatomic,retain) NSPredicate* predicate;
+
++ (CKItemViewControllerFactoryItem*)itemForObjectWithPredicate:(NSPredicate*)predicate 
+                                   withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
+
++ (CKItemViewControllerFactoryItem*)itemForObjectOfClass:(Class)type 
+                             withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
+
+@end
+
+
+
+/********************************* CKItemViewControllerFactory *********************************/
 
 /** TODO
  */
@@ -25,35 +42,9 @@
 - (CKItemViewControllerFactoryItem*)addItem:(CKItemViewControllerFactoryItem*)item;
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type 
-                                      withControllerOfClass:(Class)controllerClass;
-
-- (CKItemViewControllerFactoryItem*)addItemForObjectOfClass:(Class)type 
                                 withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
-
-- (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate 
-                                             withControllerOfClass:(Class)controllerClass;
 
 - (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate 
                                        withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
 
-@end
-
-
-/********************************* DEPRECATED *********************************
- */
-
-
-//DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER
-@interface CKObjectViewControllerFactory : CKItemViewControllerFactory
-@end
-
-@interface CKItemViewControllerFactory(DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-//construction
-+ (CKItemViewControllerFactory*)factoryWithMappings:(NSArray*)mappings DEPRECATED_ATTRIBUTE;
-+ (id)factoryWithMappings:(NSArray*)mappings withFactoryClass:(Class)type DEPRECATED_ATTRIBUTE;
-@end
-
-@interface NSMutableArray (CKObjectViewControllerFactory_DEPRECATED_IN_CLOUDKIT_VERSION_1_7_14_AND_LATER)
-- (CKItemViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withParams:(NSMutableDictionary*)params DEPRECATED_ATTRIBUTE;
-- (CKItemViewControllerFactoryItem*)mapControllerClass:(Class)controllerClass withObjectClass:(Class)objectClass DEPRECATED_ATTRIBUTE;
 @end

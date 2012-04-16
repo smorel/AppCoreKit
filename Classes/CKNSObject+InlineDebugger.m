@@ -17,13 +17,13 @@
 @implementation NSObject (CKInlineDebugger)
 
 + (CKFormSection*)sectionWithDictionary:(NSMutableDictionary*)dico keys:(NSArray*)keys title:(NSString*)title{
-    NSMutableArray* cells = [NSMutableArray array];
+    NSMutableArray* cellControllers = [NSMutableArray array];
     for(id key in keys){
         CKProperty* property = [[[CKProperty alloc]initWithDictionary:dico key:key]autorelease];
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithProperty:property];
-        [cells addObject:cell];
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithProperty:property];
+        [cellControllers addObject:cellController];
     }
-    return [CKFormSection sectionWithCellDescriptors:cells headerTitle:title];
+    return [CKFormSection sectionWithCellControllers:cellControllers headerTitle:title];
 }
 
 + (CKFormTableViewController*)inlineDebuggerForStylesheet:(NSMutableDictionary*)stylesheet withObject:(id)object{
@@ -115,42 +115,30 @@
     return nil;
 }
 
-+ (CKFormCellDescriptor*)cellDescriptorForStylesheetInObject:(id)object{
++ (CKTableViewCellController*)cellControllerForStylesheetInObject:(id)object{
     NSMutableDictionary* styleSheet = [object appliedStyle];
     if(styleSheet){
         NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
-        CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title action:^(CKTableViewCellController* controller){
-        }];
-        [controllerCell setCreateBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            controller.name = @"StyleSheetCell";
-            return (id)nil;
-        }];
-        [controllerCell setSelectionBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:title action:^(CKTableViewCellController* controller){
             CKFormTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object]; 
-            [controller.parentController.navigationController pushViewController:debugger animated:YES];
-            return (id)nil;
+            [controller.containerController.navigationController pushViewController:debugger animated:YES];
         }];
-        return controllerCell;
+        cellController.name = @"StyleSheetCell";
+        return cellController;
     }
     
     return nil;
 }
 
 + (CKItemViewControllerFactoryItem*)factoryItemForClass{
-    CKItemViewControllerFactoryItem* item = [[[CKItemViewControllerFactoryItem alloc]init]autorelease];
-    item.controllerClass = [CKTableViewCellController class];
-    [item setFilterBlock:^id(id value) {
-        return [NSNumber numberWithBool:YES]; //everything ! 
+    return [CKItemViewControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithValue:YES] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+            controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            controller.tableViewCell.textLabel.text = [controller.value description];
+        }];
+        return controller;
     }];
-    [item setSetupBlock:^id(id value) {
-        CKTableViewCellController* controller = (CKTableViewCellController*)value;
-        controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        controller.tableViewCell.textLabel.text = [controller.value description];
-        return (id)nil;
-    }];
-    return item;
 }
 
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
@@ -171,8 +159,8 @@
     CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:[[object class]description]];
     
     if([object appliedStyle]){
-        CKFormSection* styleSection = [CKFormSection sectionWithCellDescriptors:
-                                       [NSArray arrayWithObject:[[object class]cellDescriptorForStylesheetInObject:object]] headerTitle:@"StyleSheet"];
+        CKFormSection* styleSection = [CKFormSection sectionWithCellControllers:
+                                       [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"];
         [debugger addSections:[NSArray arrayWithObjects:styleSection,inheritingClassesSection,objectSection,nil]];
     }
     else{

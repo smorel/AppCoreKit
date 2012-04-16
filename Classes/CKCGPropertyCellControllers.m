@@ -22,10 +22,10 @@
 
 @implementation CKCGSizePropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CGSizeWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 2 * 44);
 }
 
 - (void)propertyChanged{
@@ -43,10 +43,6 @@
 	[p setValue:[NSValue valueWithCGSize:CGSizeMake(MAX(1,[sizeWrapper width]),MAX(1,[sizeWrapper height]))]];
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
-}
-
 @end
 
 //CGPOINT
@@ -61,10 +57,10 @@
 
 @implementation CKCGPointPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CGPointWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 2 * 44);
 }
 
 - (void)propertyChanged{
@@ -81,10 +77,6 @@
 	CKProperty* p = (CKProperty*)self.value;
 	CGPointWrapper* pointWrapper = (CGPointWrapper*)self.multiFloatValue;
 	[p setValue:[NSValue valueWithCGPoint:CGPointMake(MAX(1,[pointWrapper x]),MAX(1,[pointWrapper y]))]];
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
 }
 
 @end
@@ -104,10 +96,10 @@
 
 @implementation CKCGRectPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CGRectWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 4 * 44);
 }
 
 - (void)propertyChanged{
@@ -128,10 +120,6 @@
 	[p setValue:[NSValue valueWithCGRect:CGRectMake([rectWrapper x],[rectWrapper y],MAX(1,[rectWrapper width]),MAX(1,[rectWrapper height]))]];
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
-}
-
 @end
 
 //UIEdgeInsets
@@ -149,10 +137,10 @@
 
 @implementation CKUIEdgeInsetsPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[UIEdgeInsetsWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 4 * 44);
 }
 
 - (void)propertyChanged{
@@ -174,10 +162,6 @@
 	[p setValue:[NSValue valueWithUIEdgeInsets:UIEdgeInsetsMake([insetsWrapper top],[insetsWrapper left],[insetsWrapper bottom],[insetsWrapper right])]];
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 4 * 44)];
-}
-
 @end
 
 
@@ -193,10 +177,10 @@
 
 @implementation CKCLLocationCoordinate2DPropertyCellController
 
-- (id)init{
-	[super init];
+- (void)postInit{
+	[super postInit];
 	self.multiFloatValue = [[[CLLocationCoordinate2DWrapper alloc]init]autorelease];
-	return self;
+    self.size = CGSizeMake(100,44 + 2 * 44);
 }
 
 - (void)propertyChanged{
@@ -223,10 +207,6 @@
 	[p setValue:[NSValue value:&coord withObjCType:@encode(CLLocationCoordinate2D)]];
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 2 * 44)];
-}
-
 @end
 
 
@@ -245,6 +225,12 @@
 @end
 
 @implementation CKCGAffineTransformPropertyCellController
+
+- (void)postInit{
+	[super postInit];
+	self.multiFloatValue = [[[CKCGAffineTransformWrapper alloc]init]autorelease];
+    self.size = CGSizeMake(100,44 + 5 * 44);
+}
 
 - (id)init{
 	[super init];
@@ -279,10 +265,6 @@
     transform = CGAffineTransformRotate(transform, wrapper.angle * M_PI / 180.0 );
     transform = CGAffineTransformTranslate(transform, wrapper.x, wrapper.y);
 	[p setValue:[NSValue value:&transform withObjCType:@encode(CGAffineTransform)]];
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	return [NSValue valueWithCGSize:CGSizeMake(100,44 + 5 * 44)];
 }
 
 @end

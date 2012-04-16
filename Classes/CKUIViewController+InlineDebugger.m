@@ -11,7 +11,7 @@
 
 @implementation UIViewController (CKInlineDebugger)
 
-+ (CKFormCellDescriptor*)cellDescriptorForController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
++ (CKTableViewCellController*)cellControllerForViewController:(UIViewController*)c withDebugger:(UIViewController*)debugger{
     NSString* title = nil;
     NSString* subtitle = nil;
     if([c respondsToSelector:@selector(name)]){
@@ -31,21 +31,22 @@
     
     __block UIViewController* bController = c;
     __block UIViewController* bDebugger = debugger;
-    CKFormCellDescriptor* controllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
+    
+    CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
         CKFormTableViewController* controllerForm = [[bController class]inlineDebuggerForObject:bController];
         [bDebugger.navigationController pushViewController:controllerForm animated:YES];
     }];
     
-    return controllerCell;
+    return cellController;
 }
 
 - (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
     CKFormTableViewController* debugger = [[view class]inlineDebuggerForObject:view];
     
-    NSMutableArray* controllerCells = [NSMutableArray array];
+    NSMutableArray* cellControllers = [NSMutableArray array];
     UIViewController* c = self;
     while(c){
-        [controllerCells insertObject:[CKUIViewController cellDescriptorForController:c withDebugger:debugger] atIndex:0];
+        [cellControllers insertObject:[CKUIViewController cellControllerForViewController:c withDebugger:debugger] atIndex:0];
         if([c respondsToSelector:@selector(containerViewController)]){
             c = [c performSelector:@selector(containerViewController)];
         }
@@ -54,10 +55,10 @@
         }
     }
     
-    [controllerCells insertObject:[CKUIViewController cellDescriptorForController:self.navigationController withDebugger:debugger] atIndex:0];
+    [cellControllers insertObject:[CKUIViewController cellControllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
     
-    CKFormSection* controllerSection = [debugger insertSectionWithCellDescriptors:controllerCells atIndex:0];
-    controllerSection.headerTitle = @"Controllers";
+    CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers headerTitle:@"Controllers"];
+    [debugger insertSection:section atIndex:0];
     
     return debugger;
 }

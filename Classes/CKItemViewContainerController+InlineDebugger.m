@@ -39,12 +39,14 @@
 
             __block id bItemController = itemController;
             __block CKFormTableViewController* bDebugger = debugger;
-            CKFormCellDescriptor* itemControllerCell = [CKFormCellDescriptor cellDescriptorWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
+            
+            CKTableViewCellController* itemControllerCell = [CKTableViewCellController cellControllerWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
                 CKFormTableViewController* controllerForm = [[bItemController class]inlineDebuggerForObject:bItemController];
                 [bDebugger.navigationController pushViewController:controllerForm animated:YES];
             }];
             
-            [controllerSection addCellDescriptor:itemControllerCell];
+            [controllerSection addCellController:itemControllerCell];
+            
             return debugger;
         }
         v = [v superview];

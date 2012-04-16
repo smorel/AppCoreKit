@@ -7,7 +7,6 @@
 //
 
 #import "CKTableViewCellController.h"
-#import "CKManagedTableViewController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKObjectTableViewController.h"
 #import "CKPropertyExtendedAttributes.h"
@@ -243,29 +242,24 @@
 
 @synthesize indentationLevel = _indentationLevel;
 
-- (id)init {
-	self = [super init];
-	if (self != nil) {
-		self.cellStyle = CKTableViewCellStyleDefault;
-        
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            self.componentsRatio = 1.0 / 3.0;
-        }
-        else{
-            self.componentsRatio = 2.0 / 3.0;
-        }
-        
-		self.componentsSpace = 10;
-        
-        self.selectable = YES;
-        self.rowHeight = 44.0f;
-        self.editable = YES;
-        self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        
-        self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
-        _indentationLevel = 0;
-	}
-	return self;
+- (void)postInit {
+	[super postInit];
+    self.cellStyle = CKTableViewCellStyleDefault;
+    
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        self.componentsRatio = 1.0 / 3.0;
+    }
+    else{
+        self.componentsRatio = 2.0 / 3.0;
+    }
+    
+    self.componentsSpace = 10;
+    self.size = CGSizeMake(320,44);
+    self.flags = CKItemViewFlagSelectable | CKItemViewFlagEditable;
+    self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    
+    self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
+    _indentationLevel = 0;
 }
 
 - (void)dealloc {
@@ -278,6 +272,33 @@
 	
 	[super dealloc];
 }
+
+
+//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
+/*
++ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
+    UIViewController* parentController = [params parentController];
+    NSAssert([parentController isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
+    
+    CGFloat tableWidth = [params bounds].width;
+    CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
+    if(staticController.cellStyle == CKTableViewCellStyleValue3
+       || staticController.cellStyle == CKTableViewCellStylePropertyGrid
+       || staticController.cellStyle == CKTableViewCellStyleSubtitle2){
+        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+        
+        CGFloat bottomDetails = 0;
+        if(staticController.tableViewCell.detailTextLabel.text != nil &&
+           [staticController.tableViewCell.detailTextLabel.text isKindOfClass:[NSString class]] &&
+           [staticController.tableViewCell.detailTextLabel.text length] > 0){
+            bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
+        }
+        
+        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
+        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
+    }
+    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
+}*/
 
 - (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
@@ -311,10 +332,6 @@
 		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
-	/*else if([self.parentController isKindOfClass:[CKManagedTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-		return [tableViewController.tableView cellForRowAtIndexPath:self.indexPath];
-	}*/
 	return nil;
 }
 
@@ -347,8 +364,8 @@
 
 - (NSString *)identifier {
     NSMutableDictionary* controllerStyle = [self controllerStyle];
-    if(_createCallback){
-        [_createCallback execute:self];
+    if(self.createCallback){
+        [self.createCallback execute:self];
         if([controllerStyle containsObjectForKey:CKStyleCellType]){
             self.cellStyle = [controllerStyle cellStyle];
         }
@@ -359,7 +376,7 @@
 	if([parentView isKindOfClass:[UITableView class]]){
 		UITableView* tableView = (UITableView*)parentView;
 		if(tableView.style == UITableViewStyleGrouped){
-			NSInteger numberOfRows = [(CKItemViewContainerController*)self.parentController numberOfObjectsForSection:self.indexPath.section];
+			NSInteger numberOfRows = [(CKItemViewContainerController*)self.containerController numberOfObjectsForSection:self.indexPath.section];
 			if(self.indexPath.row == 0 && numberOfRows > 1){
 				groupedTableModifier = @"BeginGroup";
 			}
@@ -450,7 +467,6 @@
 }
 
 
-#pragma mark CKManagedTableViewController Protocol
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
 	return;
@@ -460,7 +476,7 @@
 	return;
 }
 
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated{
+- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated{
 }
 
 // Selection
@@ -478,19 +494,6 @@
 - (void)setNeedsSetup {
 	if (self.tableViewCell)
 		[self setupCell:self.tableViewCell];
-}
-
-//This method is used by CKTableViewCellNextResponder to setup the keyboard and the next responder
-+ (BOOL)hasAccessoryResponderWithValue:(id)object{
-	return NO;
-}
-
-+ (UIView*)responderInView:(UIView*)view{
-	return nil;
-}
-
-- (void)becomeFirstResponder{
-    
 }
 
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{
@@ -518,33 +521,9 @@
     return rowWidth;
 }
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* parentController = [params parentController];
-    NSAssert([parentController isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
-    
-    CGFloat tableWidth = [params bounds].width;
-    CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
-    if(staticController.cellStyle == CKTableViewCellStyleValue3
-       || staticController.cellStyle == CKTableViewCellStylePropertyGrid
-       || staticController.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-        
-        CGFloat bottomDetails = 0;
-        if(staticController.tableViewCell.detailTextLabel.text != nil &&
-           [staticController.tableViewCell.detailTextLabel.text isKindOfClass:[NSString class]] &&
-           [staticController.tableViewCell.detailTextLabel.text length] > 0){
-            bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-        }
-        
-        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
-        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
-    }
-    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
-}
-
 - (CKTableViewController*)parentTableViewController{
-	if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		return (CKTableViewController*)self.parentController;
+	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+		return (CKTableViewController*)self.containerController;
 	}
 	return nil;
 }
@@ -589,7 +568,7 @@
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     }
     
-    if(_layoutCallback == nil){
+    if(self.layoutCallback == nil){
         self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
     }
         
@@ -619,9 +598,9 @@
     [CATransaction commit];
 }
 
-- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
-	[super rotateView:view withParams:params animated:animated];
-	[self rotateCell:(UITableViewCell*)view withParams:params animated:animated];
+- (void)rotateView:(UIView*)view animated:(BOOL)animated{
+	[super rotateView:view animated:animated];
+	[self rotateCell:(UITableViewCell*)view animated:animated];
 }
 
 - (void)viewDidAppear:(UIView *)view{
@@ -640,8 +619,8 @@
 }
 
 - (void)didSelect{
-	if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+	if([self.containerController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
 		if (tableViewController.stickySelection == NO){
 			[tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
 		}
@@ -650,20 +629,15 @@
 	[super didSelect];
 }
 
-- (void)setLayoutCallback:(CKCallback *)thelayoutCallback{
-    [_layoutCallback release];
-    _layoutCallback = [thelayoutCallback retain];
-}
-
 - (void)layoutCell:(UITableViewCell *)cell{
-    if(_layoutCallback){
-        [_layoutCallback execute:self];
+    if(self.layoutCallback){
+        [self.layoutCallback execute:self];
     }
 }
 
 - (void)scrollToRow{
-    NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
-    CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
+    NSAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+    CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
                                          atScrollPosition:UITableViewScrollPositionNone 
                                                  animated:YES];
@@ -676,82 +650,6 @@
 @end
 
 
-
-@implementation CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
-@dynamic rowHeight;
-@dynamic movable;
-@dynamic editable;
-@dynamic removable;
-@dynamic selectable;
-@dynamic value3Ratio;
-@dynamic value3LabelsSpace;
-
-- (CGFloat)heightForRow{
-    return _rowHeight;
-}
-
-- (void)setRowHeight:(CGFloat)f{
-    _rowHeight = f;
-    if(self.parentController){
-        NSAssert([self.parentController isKindOfClass:[CKTableViewController class]],@"invalid parent controller");
-        CKTableViewController* tableViewController = (CKTableViewController*)self.parentController;
-        [[tableViewController tableView]beginUpdates];
-        [[tableViewController tableView]endUpdates];
-    }
-}
-
-- (CGFloat)value3Ratio{
-    return _componentsRatio;
-}
-
-- (void)setValue3Ratio:(CGFloat)f{
-    _componentsRatio = f;
-}
-
-- (CGFloat)value3LabelsSpace{
-    return _componentsSpace;
-}
-
-- (void)setValue3LabelsSpace:(CGFloat)f{
-    _componentsSpace = f;
-}
-
-- (BOOL)isMovable{
-    return _movable;
-}
-
-- (void)setMovable:(BOOL)bo{
-    _movable = bo;
-}
-
-- (BOOL)isEditable{
-    return _editable;
-}
-
-- (void)setEditable:(BOOL)bo{
-    _editable = bo;
-}
-
-- (BOOL)isRemovable{
-    return _movable;
-}
-
-- (void)setRemovable:(BOOL)bo{
-    _movable = bo;
-}
-
-- (BOOL)isSelectable{
-    return _selectable;
-}
-
-- (void)setSelectable:(BOOL)bo{
-    _selectable = bo;
-}
-
-@end
-
-
-
 @implementation CKTableViewCellController (CKLayout)
 
 
@@ -759,7 +657,7 @@
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
     CGRect textFrame = [self value3TextFrameForCell:cell];
     
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
@@ -780,7 +678,7 @@
         return CGRectMake(0,0,0,0);
     }
     
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
@@ -870,7 +768,7 @@
             return CGRectMake(0,0,0,0);
         }
         else{
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self parentController]];
+            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
             CGFloat realWidth = rowWidth;
             CGFloat width = realWidth * self.componentsRatio;
             

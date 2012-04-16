@@ -1,5 +1,5 @@
 //
-//  CKFormTableViewController+PropertyGrid.h
+//  CKTableViewCellController+PropertyGrid.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-07-29.
@@ -9,12 +9,12 @@
 #import "CKFormTableViewController.h"
 #import "CKProperty.h"
 
-@interface CKFormCellDescriptor(CKPropertyGrid)
+@interface CKTableViewCellController(CKPropertyGrid)
 
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath;
-+ (CKFormCellDescriptor*)cellDescriptorWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly;
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKProperty*)property;
-+ (CKFormCellDescriptor*)cellDescriptorWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly;
++ (CKTableViewCellController*)cellControllerWithObject:(id)object keyPath:(NSString*)keyPath;
++ (CKTableViewCellController*)cellControllerWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly;
++ (CKTableViewCellController*)cellControllerWithProperty:(CKProperty*)property;
++ (CKTableViewCellController*)cellControllerWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly;
 
 @end
 

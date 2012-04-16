@@ -271,4 +271,9 @@
 }
  */
 
+- (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
+    [[self tableView]beginUpdates];
+    [[self tableView]endUpdates];
+}
+
 @end

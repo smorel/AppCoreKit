@@ -109,23 +109,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     [super dealloc];
 }
 
-#pragma Params Management
-
-- (void)updateParams{
-	
-	if(self.params == nil){
-		self.params = [NSMutableDictionary dictionary];
-	}
-	
-	[self.params setObject:[NSValue valueWithCGSize:self.view.bounds.size] forKey:CKTableViewAttributeBounds];
-	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-	[self.params setObject:[NSNumber numberWithBool:YES] forKey:CKTableViewAttributePagingEnabled];//NOT SUPPORTED
-	[self.params setObject:[NSNumber numberWithInt:CKTableViewOrientationLandscape] forKey:CKTableViewAttributeOrientation];//NOT SUPPORTED
-	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSNumber numberWithBool:NO] forKey:CKTableViewAttributeEditable];//NOT SUPPORTED
-	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
-}
-
 #pragma mark View Management
 
 - (void)addAnnotations:(NSArray*)annotations{
@@ -160,7 +143,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.mapView.frame = self.view.bounds;
 	//self.mapView.showsUserLocation = YES;
 	
-	[self updateParams];
 	[self updateVisibleViewsRotation];
 		
 	[self reloadData];

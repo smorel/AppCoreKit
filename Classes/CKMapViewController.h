@@ -12,7 +12,6 @@
 #import "CKItemViewContainerController.h"
 #import "CKObjectController.h"
 #import "CKItemViewControllerFactory.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCollection.h"
 
 #import "CKMapAnnotationController.h"

@@ -10,7 +10,6 @@
 #import "CKFeedSource.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKObjectCarouselViewController.h"
 #import "CKCollection.h"
 #import "CKCollectionCellController+Style.h"
@@ -21,6 +20,10 @@
 
 #define ACTIVITY_INDICATOR_TAG 98634
 #define LABEL_TAG 938459837
+
+@interface CKItemViewController()
+- (void)setContainerController:(CKItemViewContainerController*)c;
+@end
 
 @interface CKCollectionCellController()
 @property (nonatomic,retain,readwrite) UILabel* label;
@@ -35,6 +38,20 @@
 	[_label release];
 	[_activityIndicator release];
 	[super dealloc];
+}
+
+- (void)postInit{
+    [super postInit];
+    self.flags = CKItemViewFlagNone;
+}
+
+- (void)setContainerController:(CKItemViewContainerController*)c{
+    [super setContainerController:c];
+    if(self.parentTableView.pagingEnabled){
+        self.size = CGSizeMake(-1,-1);
+        return;
+    }
+    self.size = CGSizeMake(320,44);
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
@@ -63,10 +80,10 @@
 
 //FIXME : UGLY TEMPORARY HACK
 - (BOOL)forceHidden{
-	if([self.parentController isKindOfClass:[CKObjectCarouselViewController class]])
+	if([self.containerController isKindOfClass:[CKObjectCarouselViewController class]])
 		return YES;
-	else if([self.parentController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.parentController ;
+	else if([self.containerController isKindOfClass:[CKTableViewController class]]){
+		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController ;
 		return tableViewController.tableView.pagingEnabled;
 	}
 	return NO;
@@ -142,17 +159,6 @@
 	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectAddedNotification target:self action:@selector(internalUpdateWithNotification:)];
 	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectRemovedNotification target:self action:@selector(internalUpdateWithNotification:)];
 	[cell endBindingsContext];
-}
-
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-	if([params pagingEnabled])
-		return [NSValue valueWithCGSize:CGSizeMake(-1,-1)];
-	return [NSValue valueWithCGSize:CGSizeMake(320,44)];
-}
-
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
 }
 
 @end

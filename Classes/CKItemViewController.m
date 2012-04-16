@@ -7,6 +7,7 @@
 //
 
 #import "CKItemViewController.h"
+#import "CKItemViewContainerController.h"
 #import "CKTableViewCellController+Style.h"
 
 #import "CKStyleManager.h"
@@ -26,11 +27,8 @@
 @synthesize name = _name;
 @synthesize value = _value;
 @synthesize indexPath = _indexPath;
-@synthesize parentController = _parentController;
+@synthesize containerController = _containerController;
 @synthesize view = _view;
-@synthesize target = _target;
-@synthesize action = _action;
-@synthesize accessoryAction = _accessoryAction;
 @synthesize createCallback = _createCallback;
 @synthesize initCallback = _initCallback;
 @synthesize setupCallback = _setupCallback;
@@ -45,12 +43,14 @@
 @synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
 @synthesize targetRef = _targetRef;
 
+@synthesize flags;
+@synthesize size = _size;
+
 - (void)dealloc {
 	[self clearBindingsContext];
 	
 	[_value release];
 	[_indexPath release];
-	[_target release];
 	[_name release];
 	
 	[_accessorySelectionCallback release];
@@ -67,10 +67,28 @@
 	[_viewDidDisappearCallback release];
 	[_targetRef release];
 	
-	_action = nil;
-	_accessoryAction = nil;
-	_parentController = nil;
+	_containerController = nil;
 	[super dealloc];
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (void)postInit{
+    self.flags = CKItemViewFlagAll;
+    self.size = CGSizeMake(320,44);
+}
+
+- (void)setSize:(CGSize)s{
+    _size = s;
+    if(self.containerController){
+        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
+    }
 }
 
 - (void)setView:(UIView *)view{
@@ -81,12 +99,12 @@
 	return [_viewRef object];
 }
 
-- (void)setParentController:(UIViewController *)c{
+- (void)setContainerController:(CKItemViewContainerController *)c{
 	self.weakParentController = [CKWeakRef weakRefWithObject:c];
 }
 
-- (UIViewController*)parentController{
-	return (UIViewController*)[_weakParentController object];
+- (CKItemViewContainerController*)containerController{
+	return (CKItemViewContainerController*)[_weakParentController object];
 }
 
 //sequence : loadView, initView, applyStyle
@@ -114,12 +132,8 @@
 	}
 }
 
-- (void)rotateView:(UIView*)view withParams:(NSDictionary*)params animated:(BOOL)animated{
+- (void)rotateView:(UIView*)view animated:(BOOL)animated{
 	//To implement in subclass
-}
-
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagAll;
 }
 
 - (void)viewDidAppear:(UIView *)view{
@@ -152,18 +166,12 @@
 }
 
 - (void)didSelect{
-	if ([_targetRef object] && [[_targetRef object] respondsToSelector:_action]) {
-		[[_targetRef object] performSelector:_action withObject:self];
-	}
 	if(_selectionCallback != nil){
 		[_selectionCallback execute:self];
 	}
 }
 
 - (void)didSelectAccessoryView{
-	if ([_targetRef object] && [[_targetRef object] respondsToSelector:_accessoryAction]) {
-		[[_targetRef object] performSelector:_accessoryAction withObject:self];
-	}
 	if(_accessorySelectionCallback != nil){
 		[_accessorySelectionCallback execute:self];
 	}

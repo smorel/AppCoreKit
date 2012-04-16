@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "CKItemViewController.h"
-#import "CKManagedTableViewController.h"
+#import "CKTableViewController.h"
 #import "CKObject.h"
-#import "CKNSDictionary+TableViewAttributes.h"
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
 @class CKObjectTableViewController;
-
+@class CKTableViewCellController;
+@class CKTableViewController;
 
 /** TODO
  */
@@ -58,7 +58,6 @@ typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleValue2 = UITableViewCellStyleValue2,		
     CKTableViewCellStyleSubtitle = UITableViewCellStyleSubtitle,
     
-    //The following styles are not compatible with CKManagedTableViewController that do not support dynamic layout for cells.
 	CKTableViewCellStyleValue3,
 	CKTableViewCellStylePropertyGrid,
 	CKTableViewCellStyleSubtitle2
@@ -76,13 +75,6 @@ typedef enum CKTableViewCellStyle {
     UIEdgeInsets _contentInsets;
     
     NSString* _cacheLayoutBindingContextId;
-    
-    //DEPRECATED 1.5
-    CGFloat _rowHeight;
-    BOOL _movable;
-    BOOL _editable;
-    BOOL _removable;
-    BOOL _selectable;
 }
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
@@ -104,7 +96,7 @@ typedef enum CKTableViewCellStyle {
 
 - (UITableViewCell *)loadCell;
 - (void)setupCell:(UITableViewCell *)cell;
-- (void)rotateCell:(UITableViewCell*)cell withParams:(NSDictionary*)params animated:(BOOL)animated;
+- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated;
 
 - (NSIndexPath *)willSelectRow;
 - (void)didSelectRow;
@@ -120,40 +112,12 @@ typedef enum CKTableViewCellStyle {
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params;
 + (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
 
 - (void)scrollToRow;
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
 
-+ (BOOL)hasAccessoryResponderWithValue:(id)object;
-+ (UIView*)responderInView:(UIView*)view;
-- (void)becomeFirstResponder;
-
 @end
-
-@interface CKTableViewCellController (DEPRECATED_IN_CLOUDKIT_VERSION_1_5_AND_LATER)
-
-@property (nonatomic, getter = heightForRow) CGFloat rowHeight DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isMovable) BOOL movable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isEditable) BOOL editable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isRemovable) BOOL removable DEPRECATED_ATTRIBUTE;
-@property (nonatomic, getter = isSelectable) BOOL selectable DEPRECATED_ATTRIBUTE;
-
-@property (nonatomic, assign) CGFloat value3Ratio DEPRECATED_ATTRIBUTE;
-@property (nonatomic, assign) CGFloat value3LabelsSpace DEPRECATED_ATTRIBUTE;
-
-- (CGFloat)heightForRow DEPRECATED_ATTRIBUTE;
-- (BOOL)isMovable DEPRECATED_ATTRIBUTE;
-- (BOOL)isEditable DEPRECATED_ATTRIBUTE;
-- (BOOL)isRemovable DEPRECATED_ATTRIBUTE;
-- (BOOL)isSelectable DEPRECATED_ATTRIBUTE;
-
-@end
-
-
-
-
 
 
 //FIXME use layout when available !

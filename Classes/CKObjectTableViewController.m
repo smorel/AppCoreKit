@@ -155,7 +155,6 @@
     
     
 	[self.objectController lock];
-	[self updateParams];
     
     /*
     self.tableView.delegate = _storedTableDelegate;
@@ -163,7 +162,6 @@
     */
     
     [super viewWillAppear:animated];
-	[self updateParams];
 	
 	//apply width constraint
 	if(_tableMaximumWidth > 0){
@@ -688,7 +686,7 @@
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
-			[controller rotateView:controller.view withParams:self.params animated:YES];
+			[controller rotateView:controller.view animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {
 				[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
@@ -809,20 +807,6 @@
 	if(_objectController != nil && [_objectController respondsToSelector:@selector(setAppendCollectionCellControllerAsFooterCell:)]){
 		[_objectController setAppendCollectionCellControllerAsFooterCell:YES];
 	}
-}
-
-- (void)updateParams{
-	if(self.params == nil){
-		self.params = [NSMutableDictionary dictionary];
-	}
-	
-	[self.params setObject:[NSValue valueWithCGSize:self.tableView.bounds.size] forKey:CKTableViewAttributeBounds];
-	[self.params setObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:CKTableViewAttributeInterfaceOrientation];
-	[self.params setObject:[NSNumber numberWithBool:self.tableView.pagingEnabled] forKey:CKTableViewAttributePagingEnabled];
-	[self.params setObject:[NSNumber numberWithInt:self.orientation] forKey:CKTableViewAttributeOrientation];
-	[self.params setObject:[NSNumber numberWithDouble:0] forKey:CKTableViewAttributeAnimationDuration];
-	[self.params setObject:[NSNumber numberWithBool:self.editableType != CKObjectTableViewControllerEditableTypeNone] forKey:CKTableViewAttributeEditable];
-	[self.params setObject:[NSValue valueWithNonretainedObject:self] forKey:CKTableViewAttributeParentController];
 }
 
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{

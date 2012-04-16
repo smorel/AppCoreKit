@@ -233,16 +233,16 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         [userDefaultInstances addObject:[c sharedInstance]];
     }
     
-    NSMutableArray* userDefaultsCells = [NSMutableArray array];
+    NSMutableArray* userDefaultsCellControllers = [NSMutableArray array];
     for(id userDefault in userDefaultInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[userDefault  class] description] action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* cell = [CKTableViewCellController cellControllerWithTitle:[[userDefault  class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[userDefault  class] inlineDebuggerForObject:userDefault];
             udDebugger.title = [[userDefault  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
-        [userDefaultsCells addObject:cell];
+        [userDefaultsCellControllers addObject:cell];
     }
-    CKFormSection* userDefaultsSection = [CKFormSection sectionWithCellDescriptors:userDefaultsCells headerTitle:@"User Defaults"];
+    CKFormSection* userDefaultsSection = [CKFormSection sectionWithCellControllers:userDefaultsCellControllers headerTitle:@"User Defaults"];
     
     
     //Documents
@@ -252,23 +252,23 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         [documentInstances addObject:[c sharedInstance]];
     }
     
-    NSMutableArray* documentCells = [NSMutableArray array];
+    NSMutableArray* documentCellControllers = [NSMutableArray array];
     for(id document in documentInstances){
-        CKFormCellDescriptor* cell = [CKFormCellDescriptor cellDescriptorWithTitle:[[document class] description] action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* cell = [CKTableViewCellController cellControllerWithTitle:[[document class] description] action:^(CKTableViewCellController* controller){
             CKFormTableViewController* udDebugger = [[document class] inlineDebuggerForObject:document];
             udDebugger.title = [[document  class] description];
             [bDebugger.navigationController pushViewController:udDebugger animated:YES];
         }];
-        [documentCells addObject:cell];
+        [documentCellControllers addObject:cell];
     }
-    CKFormSection* documentSection = [CKFormSection sectionWithCellDescriptors:documentCells headerTitle:@"Documents"];
+    CKFormSection* documentSection = [CKFormSection sectionWithCellControllers:documentCellControllers headerTitle:@"Documents"];
     
     //Core Data
-    CKFormCellDescriptor* storeExplorerCell = [CKFormCellDescriptor cellDescriptorWithTitle:@"CKStore explorer" action:^(CKTableViewCellController* controller){
+    CKTableViewCellController* storeExplorerCell = [CKTableViewCellController cellControllerWithTitle:@"CKStore explorer" action:^(CKTableViewCellController* controller){
         CKStoreExplorer* storeExplorer = [[[CKStoreExplorer alloc]init]autorelease];
         [bDebugger.navigationController pushViewController:storeExplorer animated:YES];
     }];
-    CKFormSection* coreDataSection = [CKFormSection sectionWithCellDescriptors:[NSArray arrayWithObject:storeExplorerCell] headerTitle:@"Core Data"];
+    CKFormSection* coreDataSection = [CKFormSection sectionWithCellControllers:[NSArray arrayWithObject:storeExplorerCell] headerTitle:@"Core Data"];
     [debugger addSections:[NSArray arrayWithObjects:userDefaultsSection,documentSection,coreDataSection,nil]];
     
     //Init

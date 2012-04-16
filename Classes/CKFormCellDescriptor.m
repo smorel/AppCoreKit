@@ -31,7 +31,7 @@
 - (id)initWithValue:(id)theValue controllerClass:(Class)theControllerClass{
 	[super init];
 	self.value = theValue;
-	self.controllerClass = theControllerClass;
+	//self.controllerClass = theControllerClass;
 	return self;
 }
 
@@ -63,7 +63,7 @@
     else{
         self.cellController = [super controllerForObject:object atIndexPath:indexPath];
         self.value = self.cellController.value;
-        self.controllerClass = [_cellController class];
+        //self.controllerClass = [_cellController class];
         [_cellController performSelector:@selector(setIndexPath:) withObject:indexPath];
     }
     return _cellController;
