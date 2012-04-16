@@ -14,8 +14,8 @@
  */
 @interface CKTableViewCellController(CKResponder)
 
-- (BOOL)needsNextKeyboard;
-- (BOOL)needsPreviousKeyboard;
+- (BOOL)hasNextResponder;
+- (BOOL)hasPreviousResponder;
 
 - (BOOL)activateNextResponder;
 - (BOOL)activatePreviousResponder;

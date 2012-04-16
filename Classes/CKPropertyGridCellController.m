@@ -284,8 +284,8 @@
         UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
         toolbar.barStyle = UIBarStyleBlackTranslucent;
         
-        BOOL hasNextResponder = [self needsNextKeyboard];
-        BOOL hasPreviousResponder = [self needsPreviousKeyboard];
+        BOOL hasNextResponder = [self hasNextResponder];
+        BOOL hasPreviousResponder = [self hasPreviousResponder];
         NSMutableArray* buttons = [NSMutableArray array];
         {
             UIBarButtonItem* button = [[[UIBarButtonItem alloc]initWithTitle:_(@"Previous")

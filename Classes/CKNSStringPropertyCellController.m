@@ -203,7 +203,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.textField.inputAccessoryView = [self navigationToolbar];
 
-    if([self needsNextKeyboard]){
+    if([self hasNextResponder]){
         self.textField.returnKeyType = UIReturnKeyNext;
     }
     else{

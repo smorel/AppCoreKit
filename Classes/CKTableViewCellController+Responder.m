@@ -131,7 +131,7 @@
 }
 
 
-- (BOOL)needsNextKeyboard{
+- (BOOL)hasNextResponder{
 	NSIndexPath* nextIndexPath = [self findNextResponderWithScrollEnabled:NO];
 	if(nextIndexPath == nil)
 		return NO;
@@ -147,7 +147,7 @@
 	return YES;
 }
 
-- (BOOL)needsPreviousKeyboard{
+- (BOOL)hasPreviousResponder{
     NSIndexPath* previousIndexPath = [self findPreviousResponderWithScrollEnabled:NO];
 	if(previousIndexPath == nil)
 		return NO;
