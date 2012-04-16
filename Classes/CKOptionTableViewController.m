@@ -7,7 +7,6 @@
 //
 
 #import "CKOptionTableViewController.h"
-#import "CKStandardCellController.h"
 #import "CKLocalization.h"
 
 

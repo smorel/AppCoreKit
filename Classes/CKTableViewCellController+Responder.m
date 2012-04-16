@@ -7,7 +7,7 @@
 //
 
 #import "CKTableViewCellController+Responder.h"
-#import "CKObjectTableViewController.h"
+#import "CKBindedTableViewController.h"
 #import "CKNSObject+Invocation.h"
 
 
@@ -16,14 +16,14 @@
 @implementation CKTableViewCellController(CKResponder)
 
 + (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKItemViewContainerController*)controller{
-    if([controller isKindOfClass:[CKObjectTableViewController class]]){
-        CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller;
+    if([controller isKindOfClass:[CKBindedTableViewController class]]){
+        CKBindedTableViewController* tableViewController = (CKBindedTableViewController*)controller;
         CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
         if([cellController hasResponder] == YES)
             return YES;
     }
     else{
-        NSAssert(NO,@"CKTableViewCellNextResponder is supported only for CKObjectTableViewController yet");
+        NSAssert(NO,@"CKTableViewCellNextResponder is supported only for CKBindedTableViewController yet");
     }
     return NO;
 }
@@ -93,8 +93,8 @@
 
 
 + (void)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
-	if([controller.containerController isKindOfClass:[CKObjectTableViewController class]]){
-		CKObjectTableViewController* tableViewController = (CKObjectTableViewController*)controller.containerController;
+	if([controller.containerController isKindOfClass:[CKBindedTableViewController class]]){
+		CKBindedTableViewController* tableViewController = (CKBindedTableViewController*)controller.containerController;
 	
 		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
 		if(controllerNew != nil){

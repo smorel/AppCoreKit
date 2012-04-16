@@ -21,13 +21,15 @@
 @synthesize currentValue = _currentValue;
 @synthesize readOnly = _readOnly;
 @synthesize optionCellStyle;
+@synthesize title = _title;
 
-- (id)initWithTitle:(NSString *)title values:(NSArray *)values labels:(NSArray *)labels {
-	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+- (id)initWithTitle:(NSString *)thetitle values:(NSArray *)thevalues labels:(NSArray *)thelabels {
+	if (thelabels) NSAssert(thelabels.count == thevalues.count, @"labels.count != values.count");
 
-	self = [super initWithText:title]; 
-    self.values = values;
-    self.labels = labels;
+	self = [super init];
+    self.title = thetitle;
+    self.values = thevalues;
+    self.labels = thelabels;
     self.cellStyle = CKTableViewCellStyleValue1;
     self.optionCellStyle = CKTableViewCellStyleValue1;
 	
@@ -53,6 +55,7 @@
 - (void)dealloc {
 	self.values = nil;
 	self.labels = nil;
+    self.title = nil;
 	[_currentValue release];
     _currentValue = nil;
 	[super dealloc];
@@ -99,7 +102,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
 	[super setupCell:cell];
-	cell.textLabel.text = self.text;
+	cell.textLabel.text = self.title;
 	cell.detailTextLabel.text = [self labelForValue:self.value];
     
     if(self.readOnly){
@@ -154,7 +157,7 @@
 		optionTableController = [[[CKOptionTableViewController alloc] initWithValues:self.values labels:self.labels selected:[self.value intValue] style:[tableController style]] autorelease];
 	}
     optionTableController.optionCellStyle = self.optionCellStyle;
-	optionTableController.title = self.text;
+	optionTableController.title = self.title;
 	optionTableController.optionTableDelegate = self;
 	[self.containerController.navigationController pushViewController:optionTableController animated:YES];
 }

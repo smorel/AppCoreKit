@@ -11,7 +11,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
-#import "CKObjectTableViewController.h"
+#import "CKBindedTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"
 
@@ -41,7 +41,7 @@
 /*
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
     UIViewController* controller = [params parentController];
-    NSAssert([controller isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
+    NSAssert([controller isKindOfClass:[CKBindedTableViewController class]],@"invalid parent controller");
     
     CKProperty* property = (CKProperty*)object;
     
@@ -105,7 +105,7 @@
     
     UITableViewCell* cell = controller.tableViewCell;
     if(controller.cellStyle == CKTableViewCellStyleValue3){
-        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
+        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
         CGFloat realWidth = rowWidth;
         CGFloat width = realWidth * self.componentsRatio;
         

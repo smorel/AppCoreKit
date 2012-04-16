@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKStandardCellController.h"
+#import "CKTableViewCellController.h"
 
 //SEB TODO adds accessors in dictionary helper with special keys
 /*

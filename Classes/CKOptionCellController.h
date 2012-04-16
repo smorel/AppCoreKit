@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKStandardCellController.h"
+#import "CKTableViewCellController.h"
 #import "CKOptionTableViewController.h"
 
 
 /** TODO
  */
-@interface CKOptionCellController : CKStandardCellController <CKOptionTableViewControllerDelegate> {
+@interface CKOptionCellController : CKTableViewCellController <CKOptionTableViewControllerDelegate> {
 	NSArray *_values;
 	NSArray *_labels;
 	BOOL _multiSelectionEnabled;
@@ -22,6 +22,7 @@
 
 @property (nonatomic, retain) NSArray *values;
 @property (nonatomic, retain) NSArray *labels;
+@property (nonatomic, retain) NSString *title;
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
 @property (nonatomic, retain, readonly) id currentValue;
 @property (nonatomic,assign) BOOL readOnly;

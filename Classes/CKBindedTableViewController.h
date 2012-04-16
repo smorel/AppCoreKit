@@ -1,5 +1,5 @@
 //
-//  CKObjectTableViewController.h
+//  CKBindedTableViewController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-16.
@@ -14,27 +14,27 @@
 //FIXME :
    //on rotation, resizer la search bar si besoin !
 
-typedef enum CKObjectTableViewControllerEditableType{
-    CKObjectTableViewControllerEditableTypeNone,
-    CKObjectTableViewControllerEditableTypeLeft,
-    CKObjectTableViewControllerEditableTypeRight
-}CKObjectTableViewControllerEditableType;
+typedef enum CKBindedTableViewControllerEditableType{
+    CKBindedTableViewControllerEditableTypeNone,
+    CKBindedTableViewControllerEditableTypeLeft,
+    CKBindedTableViewControllerEditableTypeRight
+}CKBindedTableViewControllerEditableType;
 
-typedef enum CKObjectTableViewControllerScrollingPolicy{
-    CKObjectTableViewControllerScrollingPolicyNone,
-    CKObjectTableViewControllerScrollingPolicyResignResponder
-}CKObjectTableViewControllerScrollingPolicy;
+typedef enum CKBindedTableViewControllerScrollingPolicy{
+    CKBindedTableViewControllerScrollingPolicyNone,
+    CKBindedTableViewControllerScrollingPolicyResignResponder
+}CKBindedTableViewControllerScrollingPolicy;
 
-typedef enum CKObjectTableViewControllerSnapPolicy{
-    CKObjectTableViewControllerSnapPolicyNone,
-    CKObjectTableViewControllerSnapPolicyCenter
-}CKObjectTableViewControllerSnapPolicy;
+typedef enum CKBindedTableViewControllerSnapPolicy{
+    CKBindedTableViewControllerSnapPolicyNone,
+    CKBindedTableViewControllerSnapPolicyCenter
+}CKBindedTableViewControllerSnapPolicy;
 
-typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
+typedef void(^CKBindedTableViewControllerSearchBlock)(NSString* filter);
 
 /** TODO
  */
-@interface CKObjectTableViewController : CKTableViewController<UISearchBarDelegate> {
+@interface CKBindedTableViewController : CKTableViewController<UISearchBarDelegate> {
 	CKTableViewOrientation _orientation;
 	BOOL _resizeOnKeyboardNotification;
 	
@@ -42,9 +42,9 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
 	int _numberOfPages;
 	
 	BOOL _scrolling;
-    CKObjectTableViewControllerScrollingPolicy _scrollingPolicy;
+    CKBindedTableViewControllerScrollingPolicy _scrollingPolicy;
     
-    CKObjectTableViewControllerEditableType _editableType;
+    CKBindedTableViewControllerEditableType _editableType;
     
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -95,11 +95,11 @@ typedef void(^CKObjectTableViewControllerSearchBlock)(NSString* filter);
 /** 
  Specify the behavior that will get triggered when scrolling.
  */
-@property (nonatomic, assign) CKObjectTableViewControllerScrollingPolicy scrollingPolicy;
+@property (nonatomic, assign) CKBindedTableViewControllerScrollingPolicy scrollingPolicy;
 /** 
  Specify the snap behavior when scrolling or selecting/scrolling to rows.
  */
-@property (nonatomic, assign) CKObjectTableViewControllerSnapPolicy snapPolicy;
+@property (nonatomic, assign) CKBindedTableViewControllerSnapPolicy snapPolicy;
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
@@ -143,7 +143,7 @@ Specify the animations that should be launch on row and sections insertion
 /** 
 Specify if the table is editable. If yes, an edit/done button is automatically added to the left/right of the navigation bar.
 */
-@property (nonatomic, assign) CKObjectTableViewControllerEditableType editableType;
+@property (nonatomic, assign) CKBindedTableViewControllerEditableType editableType;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
@@ -152,7 +152,7 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 /// @name Search
 ///-----------------------------------
 /** 
- Specify if search is enabled. It will add a search bar at the top of the view and call objectTableViewController:(CKObjectTableViewController*)controller didSearch:(NSString*)filter on the delegate and didSearch:(NSString*)text; on itself for inherited view controllers.
+ Specify if search is enabled. It will add a search bar at the top of the view and call objectTableViewController:(CKBindedTableViewController*)controller didSearch:(NSString*)filter on the delegate and didSearch:(NSString*)text; on itself for inherited view controllers.
  */
 @property (nonatomic, assign) BOOL searchEnabled;
 /** 
@@ -178,7 +178,7 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 /** 
  This block will get called each time a the user enters text in the search bar or change the search scope.
  */
-@property(nonatomic,copy)CKObjectTableViewControllerSearchBlock searchBlock;
+@property(nonatomic,copy)CKBindedTableViewControllerSearchBlock searchBlock;
 
 
 //private
@@ -187,22 +187,22 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 @end
 
 
-/********************************* CKObjectTableViewControllerDelegate *********************************
+/********************************* CKBindedTableViewControllerDelegate *********************************
  */
 
 /** TODO
  */
-@protocol CKObjectTableViewControllerDelegate
+@protocol CKBindedTableViewControllerDelegate
 @optional
-- (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
-- (void)objectTableViewController:(CKObjectTableViewController*)controller didSelectAccessoryViewRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
-- (void)objectTableViewController:(CKObjectTableViewController*)controller didSearch:(NSString*)filter;
+- (void)objectTableViewController:(CKBindedTableViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)objectTableViewController:(CKBindedTableViewController*)controller didSelectAccessoryViewRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)objectTableViewController:(CKBindedTableViewController*)controller didSearch:(NSString*)filter;
 @end
 
 
 /********************************* DEPRECATED *********************************
  */
 
-@interface CKObjectTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
+@interface CKBindedTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
 @property (nonatomic) BOOL editable DEPRECATED_ATTRIBUTE;
 @end

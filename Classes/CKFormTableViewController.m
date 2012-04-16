@@ -183,7 +183,7 @@
 	_autoHideSectionHeaders = NO;
     _validationEnabled = NO;
     self.style = UITableViewStyleGrouped;
-    _scrollingPolicy = CKObjectTableViewControllerScrollingPolicyResignResponder;
+    _scrollingPolicy = CKBindedTableViewControllerScrollingPolicyResignResponder;
 }
 
 - (void)setValidationEnabled:(BOOL)validationEnabled{

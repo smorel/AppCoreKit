@@ -164,7 +164,7 @@
         [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSStringPropertyCellController cellController];}];
         [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSObjectPropertyCellController cellController];}];
         
-        CKObjectTableViewController* controller = [[[CKObjectTableViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
+        CKBindedTableViewController* controller = [[[CKBindedTableViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
         controller.style = [[(CKTableViewController*)self.containerController tableView]style];
         controller.name = @"CKInlineDebugger";
 		controller.title = self.tableViewCell.textLabel.text;

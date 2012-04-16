@@ -256,8 +256,8 @@
 		7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDD13B8ED3600268D13 /* CKProperty.m */; };
 		7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBDE13B8ED3600268D13 /* CKArrayProxyCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDF13B8ED3600268D13 /* CKArrayProxyCollection.m */; };
-		7560DD2D13B8ED3600268D13 /* CKObjectTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE013B8ED3600268D13 /* CKObjectTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD2E13B8ED3600268D13 /* CKObjectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE113B8ED3600268D13 /* CKObjectTableViewController.m */; };
+		7560DD2D13B8ED3600268D13 /* CKBindedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */; };
 		7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */; };
 		7560DD3113B8ED3600268D13 /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE413B8ED3600268D13 /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -623,7 +623,7 @@
 		7560DB3313B8ED3600268D13 /* CKCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCarouselView.m; path = Classes/CKCarouselView.m; sourceTree = "<group>"; };
 		7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCGPropertyCellControllers.h; path = Classes/CKCGPropertyCellControllers.h; sourceTree = "<group>"; };
 		7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCGPropertyCellControllers.m; path = Classes/CKCGPropertyCellControllers.m; sourceTree = "<group>"; };
-		7560DB3613B8ED3600268D13 /* CKClassExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKClassExplorer.h; path = Classes/CKClassExplorer.h; sourceTree = "<group>"; };
+		7560DB3613B8ED3600268D13 /* CKClassExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKClassExplorer.h; path = Classes/CKClassExplorer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DB3713B8ED3600268D13 /* CKClassExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKClassExplorer.m; path = Classes/CKClassExplorer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKClassPropertyDescriptor.h; path = Classes/CKClassPropertyDescriptor.h; sourceTree = "<group>"; };
 		7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKClassPropertyDescriptor.m; path = Classes/CKClassPropertyDescriptor.m; sourceTree = "<group>"; };
@@ -765,7 +765,7 @@
 		7560DBD313B8ED3600268D13 /* CKNSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSStringAdditions.h; path = Classes/CKNSStringAdditions.h; sourceTree = "<group>"; };
 		7560DBD413B8ED3600268D13 /* CKNSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSStringAdditions.m; path = Classes/CKNSStringAdditions.m; sourceTree = "<group>"; };
 		7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSStringPropertyCellController.h; path = Classes/CKNSStringPropertyCellController.h; sourceTree = "<group>"; };
-		7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSStringPropertyCellController.m; path = Classes/CKNSStringPropertyCellController.m; sourceTree = "<group>"; };
+		7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKNSStringPropertyCellController.m; path = Classes/CKNSStringPropertyCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "CKNSValueTransformer+Additions.h"; path = "Classes/CKNSValueTransformer+Additions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSValueTransformer+Additions.m"; path = "Classes/CKNSValueTransformer+Additions.m"; sourceTree = "<group>"; };
 		7560DBD913B8ED3600268D13 /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKObjectCarouselViewController.h; path = Classes/CKObjectCarouselViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -775,8 +775,8 @@
 		7560DBDD13B8ED3600268D13 /* CKProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKProperty.m; path = Classes/CKProperty.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBDE13B8ED3600268D13 /* CKArrayProxyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKArrayProxyCollection.h; path = Classes/CKArrayProxyCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DBDF13B8ED3600268D13 /* CKArrayProxyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKArrayProxyCollection.m; path = Classes/CKArrayProxyCollection.m; sourceTree = "<group>"; };
-		7560DBE013B8ED3600268D13 /* CKObjectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectTableViewController.h; path = Classes/CKObjectTableViewController.h; sourceTree = "<group>"; };
-		7560DBE113B8ED3600268D13 /* CKObjectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectTableViewController.m; path = Classes/CKObjectTableViewController.m; sourceTree = "<group>"; };
+		7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedTableViewController.h; path = Classes/CKBindedTableViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedTableViewController.m; path = Classes/CKBindedTableViewController.m; sourceTree = "<group>"; };
 		7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactory.h; path = Classes/CKItemViewControllerFactory.h; sourceTree = "<group>"; };
 		7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKItemViewControllerFactory.m; path = Classes/CKItemViewControllerFactory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBE413B8ED3600268D13 /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionCellController.h; path = Classes/CKOptionCellController.h; sourceTree = "<group>"; };
@@ -962,7 +962,7 @@
 		75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKItemViewContainerController+InlineDebugger.h"; path = "Classes/CKItemViewContainerController+InlineDebugger.h"; sourceTree = "<group>"; };
 		75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKItemViewContainerController+InlineDebugger.m"; path = "Classes/CKItemViewContainerController+InlineDebugger.m"; sourceTree = "<group>"; };
 		75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultilineNSStringPropertyCellController.h; path = Classes/CKMultilineNSStringPropertyCellController.h; sourceTree = "<group>"; };
-		75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultilineNSStringPropertyCellController.m; path = Classes/CKMultilineNSStringPropertyCellController.m; sourceTree = "<group>"; };
+		75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKMultilineNSStringPropertyCellController.m; path = Classes/CKMultilineNSStringPropertyCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C6DF5713FEC5BC00E4AE4F /* Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Foundation.h; path = Classes/Foundation.h; sourceTree = "<group>"; };
@@ -1012,13 +1012,13 @@
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
-		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; };
+		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		963826531484011700A9C98B /* CKFormSectionBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSectionBase.m; path = Classes/CKFormSectionBase.m; sourceTree = "<group>"; };
 		963826561484012A00A9C98B /* CKFormSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSection.h; path = Classes/CKFormSection.h; sourceTree = "<group>"; };
 		963826571484012B00A9C98B /* CKFormSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSection.m; path = Classes/CKFormSection.m; sourceTree = "<group>"; };
 		9638265A1484013A00A9C98B /* CKFormDocumentCollectionSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormDocumentCollectionSection.h; path = Classes/CKFormDocumentCollectionSection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9638265B1484013B00A9C98B /* CKFormDocumentCollectionSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFormDocumentCollectionSection.m; path = Classes/CKFormDocumentCollectionSection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; };
+		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9638265F1484015300A9C98B /* CKFormCellDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormCellDescriptor.m; path = Classes/CKFormCellDescriptor.m; sourceTree = "<group>"; };
 		96382665148406ED00A9C98B /* CKFormSectionBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase_private.h; path = Classes/CKFormSectionBase_private.h; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* CKObject+CKSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKSingleton.h"; path = "Classes/CKObject+CKSingleton.h"; sourceTree = "<group>"; };
@@ -1309,8 +1309,8 @@
 				7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */,
 				7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */,
 				7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */,
-				7560DBE013B8ED3600268D13 /* CKObjectTableViewController.h */,
-				7560DBE113B8ED3600268D13 /* CKObjectTableViewController.m */,
+				7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */,
+				7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */,
 			);
 			name = Tables;
 			sourceTree = "<group>";
@@ -2138,7 +2138,7 @@
 				7560DD2813B8ED3600268D13 /* CKObjectController.h in Headers */,
 				7560DD2913B8ED3600268D13 /* CKProperty.h in Headers */,
 				7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */,
-				7560DD2D13B8ED3600268D13 /* CKObjectTableViewController.h in Headers */,
+				7560DD2D13B8ED3600268D13 /* CKBindedTableViewController.h in Headers */,
 				7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */,
 				7560DD3113B8ED3600268D13 /* CKOptionCellController.h in Headers */,
 				7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */,
@@ -2499,7 +2499,7 @@
 				7560DD2713B8ED3600268D13 /* CKObjectCarouselViewController.m in Sources */,
 				7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */,
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
-				7560DD2E13B8ED3600268D13 /* CKObjectTableViewController.m in Sources */,
+				7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */,
 				7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */,
 				7560DD3213B8ED3600268D13 /* CKOptionCellController.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,

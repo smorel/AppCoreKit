@@ -12,7 +12,7 @@
 
 /** TODO
  */
-@interface CKFormTableViewController : CKObjectTableViewController {
+@interface CKFormTableViewController : CKBindedTableViewController {
 	NSMutableArray* _sections;
 	BOOL _autoHideSections;
 	BOOL _autoHideSectionHeaders;

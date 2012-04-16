@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKObject.h"
-#import "CKObjectTableViewController.h"
+#import "CKBindedTableViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKObjectController.h"
 #import "CKCollectionController.h"

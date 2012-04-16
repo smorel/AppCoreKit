@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKCollectionCellController.h"
+#import "CKTableViewCellController.h"
 
 
 /** TODO

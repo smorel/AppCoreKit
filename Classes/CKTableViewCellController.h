@@ -13,7 +13,7 @@
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
-@class CKObjectTableViewController;
+@class CKBindedTableViewController;
 @class CKTableViewCellController;
 @class CKTableViewController;
 
@@ -112,7 +112,7 @@ typedef enum CKTableViewCellStyle {
 - (CKTableViewController*)parentTableViewController;
 - (UITableView*)parentTableView;
 
-+ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller;
++ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
 
 - (void)scrollToRow;
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;

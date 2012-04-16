@@ -20,7 +20,7 @@
 #import "CKTableViewCellNextResponder.h"
 #import "CKTableViewCellController.h"
 #import "CKTableViewController.h"
-#import "CKObjectTableViewController.h"
+#import "CKBindedTableViewController.h"
 #import "CKOptionTableViewController.h"
 #import "CKClassExplorer.h"
 #import "CKFormTableViewController.h"

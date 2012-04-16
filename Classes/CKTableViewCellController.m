@@ -8,7 +8,7 @@
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
-#import "CKObjectTableViewController.h"
+#import "CKBindedTableViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import <objc/runtime.h>
@@ -278,7 +278,7 @@
 /*
 + (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
     UIViewController* parentController = [params parentController];
-    NSAssert([parentController isKindOfClass:[CKObjectTableViewController class]],@"invalid parent controller");
+    NSAssert([parentController isKindOfClass:[CKBindedTableViewController class]],@"invalid parent controller");
     
     CGFloat tableWidth = [params bounds].width;
     CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
@@ -496,7 +496,7 @@
 		[self setupCell:self.tableViewCell];
 }
 
-+ (CGFloat)contentViewWidthInParentController:(CKObjectTableViewController*)controller{
++ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller{
     CGFloat rowWidth = 0;
     UIView* tableViewContainer = [controller tableViewContainer];
     UITableView* tableView = [controller tableView];
@@ -657,7 +657,7 @@
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
     CGRect textFrame = [self value3TextFrameForCell:cell];
     
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
@@ -678,7 +678,7 @@
         return CGRectMake(0,0,0,0);
     }
     
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
+    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
@@ -768,7 +768,7 @@
             return CGRectMake(0,0,0,0);
         }
         else{
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKObjectTableViewController*)[self containerController]];
+            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
             CGFloat realWidth = rowWidth;
             CGFloat width = realWidth * self.componentsRatio;
             
