@@ -11,6 +11,6 @@
 @property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;
 @property (nonatomic,retain) NSMutableArray* changeSet;
 
-@property (nonatomic,retain,readwrite) NSMutableArray* headerCellDescriptors;
-@property (nonatomic,retain,readwrite) NSMutableArray* footerCellDescriptors;
+@property (nonatomic,retain,readwrite) NSMutableArray* headerCellControllers;
+@property (nonatomic,retain,readwrite) NSMutableArray* footerCellControllers;
 @end

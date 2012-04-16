@@ -7,48 +7,31 @@
 //
 
 #import "CKFormSectionBase.h"
-#import "CKFormCellDescriptor.h"
-
-@class CKFormCellDescriptor;
-
+#import "CKTableViewCellController.h"
 
 /** TODO
  */
 @interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
-	CKCollectionController* _objectController;
-	CKItemViewControllerFactory* _controllerFactory;
-	
-	NSMutableArray* _headerCellDescriptors;
-	NSMutableArray* _footerCellDescriptors;
-	NSMutableArray* _changeSet;
-	
-	BOOL sectionUpdate;
+	BOOL _sectionUpdate;
 }
 
-@property (nonatomic,retain,readonly) NSMutableArray* headerCellDescriptors;
-@property (nonatomic,retain,readonly) NSMutableArray* footerCellDescriptors;
+@property (nonatomic,retain,readonly) NSMutableArray* headerCellControllers;
+@property (nonatomic,retain,readonly) NSMutableArray* footerCellControllers;
 @property (nonatomic,retain,readonly) CKCollectionController* objectController;
 
 //Initialization and constructors
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
+
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title;
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
 
-//Cell Descriptor API
-- (CKFormCellDescriptor*)addFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
-- (void)removeFooterCellDescriptor:(CKFormCellDescriptor*)descriptor;
-- (CKFormCellDescriptor*)addHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor;
-- (void)removeHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor;
-
 //Cell Controller API
-- (CKFormCellDescriptor*)addFooterCellController:(CKTableViewCellController*)controller;
+- (void)addFooterCellController:(CKTableViewCellController*)controller;
 - (void)removeFooterCellController:(CKTableViewCellController*)controller;
-- (CKFormCellDescriptor*)addHeaderCellController:(CKTableViewCellController*)controller;
-- (void)removeHeaderCellController:(CKTableViewCellController*)controller;
 
-- (CKFormCellDescriptor*)headerCellDescriptorForCellController:(CKTableViewCellController*)controller;
-- (CKFormCellDescriptor*)footerCellDescriptorForCellController:(CKTableViewCellController*)controller;
+- (void)addHeaderCellController:(CKTableViewCellController*)controller;
+- (void)removeHeaderCellController:(CKTableViewCellController*)controller;
 
 @end

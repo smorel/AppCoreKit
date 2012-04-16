@@ -73,7 +73,7 @@
 }
 
 - (id)init {
-	self = [super initWithNibName:nil bundle:nil];
+	self = [super init];
 	if (self) {
 	}
 	return self;
@@ -84,21 +84,13 @@
 	return [self initWithObjectController:controller factory:factory];
 }
 
-- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
-    CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
-	return [self initWithObjectController:controller factory:factory nibName:nib];
-}
-
 - (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory{
-    return [self initWithObjectController:controller factory:factory nibName:nil];
-}
-
-- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory nibName:(NSString*)nib{
-    [self initWithNibName:nib bundle:[NSBundle mainBundle]];
+    self = [self init];
 	self.objectController = controller;
 	self.controllerFactory = factory;
 	return self;
 }
+
 
 - (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
 	self.controllerFactory = factory;
@@ -406,69 +398,66 @@
             [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
         }
 		
-		CKItemViewControllerFactoryItem* factoryItem = [_controllerFactory factoryItemAtIndexPath:indexPath];
-		if(factoryItem != nil){
-			CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-			NSString* identifier = [controller identifier];
-			UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
+        CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+        NSString* identifier = [controller identifier];
+        UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
+        
+        if(!_sectionsToControllers){
+            self.sectionsToControllers = [NSMutableArray array];
+        }
+        
+        if(view == nil){
+            view = [controller loadView];
+            view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
             
-            if(!_sectionsToControllers){
-                self.sectionsToControllers = [NSMutableArray array];
+            //Register cell to controller
+            if(_weakViews == nil){ self.weakViews = [NSMutableArray array]; }
+            
+            CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
+            [_weakViews addObject:viewRef];
+        }
+        else{
+            //Reset state
+            CKItemViewController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
+            if(previousController && [previousController view] == view){
+                [previousController setView:nil];
             }
             
-			if(view == nil){
-				view = [controller loadView];
-				view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-				
-				//Register cell to controller
-				if(_weakViews == nil){ self.weakViews = [NSMutableArray array]; }
-				
-				CKWeakRef* viewRef = [CKWeakRef weakRefWithObject:view target:self action:@selector(releaseView:)];
-				[_weakViews addObject:viewRef];
-			}
-			else{
-                //Reset state
-                CKItemViewController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
-                if(previousController && [previousController view] == view){
-                    [previousController setView:nil];
-                }
-                
-				NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
-                if(previousPath){
-                    [_indexPathToViews removeObjectForKey:previousPath];
-                    [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
-                }
-			}
-            
-            if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
-            [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
-			
-			NSAssert(view != nil,@"The view has not been created");
-			
-			[controller setView:view];
-			
-			if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
-			[_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
-			if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
-			[_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
-            //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
-
-            
-            [controller performSelector:@selector(setParentController:) withObject:self];
-			//[controller setValue:object];
-			NSAssert([controller value],@"FUCK !");//this should have been set at controller's creation time
-            
-            [controller setupView:view];	
-			
-			if(controller){
-				[controller rotateView:view animated:NO];
-			}
-			return view;
-		}
-        else{
-            NSAssert(NO,@"WTF");
+            NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:[NSValue valueWithNonretainedObject:view]];
+            if(previousPath){
+                [_indexPathToViews removeObjectForKey:previousPath];
+                [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:view]];
+            }
         }
-	}
+        
+        if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
+        [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
+        
+        NSAssert(view != nil,@"The view has not been created");
+        
+        [controller setView:view];
+        
+        if(_viewsToIndexPath == nil){ self.viewsToIndexPath = [NSMutableDictionary dictionary]; }
+        [_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
+        if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
+        [_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
+        //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
+        
+        
+        [controller performSelector:@selector(setParentController:) withObject:self];
+        //[controller setValue:object];
+        NSAssert([controller value],@"FUCK !");//this should have been set at controller's creation time
+        
+        [controller setupView:view];	
+        
+        if(controller){
+            [controller rotateView:view animated:NO];
+        }
+        return view;
+    }
+    else{
+        NSAssert(NO,@"WTF");
+    }
 	
 	return nil;
 }

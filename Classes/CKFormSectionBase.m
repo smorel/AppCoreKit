@@ -50,7 +50,13 @@
 	return nil;
 }
 
+
 - (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+    NSAssert(FALSE,@"Should not be called !");
+    return nil;
+}
+
+- (id)controllerForObject:(id)object atIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 	return nil;
 }

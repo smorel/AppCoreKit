@@ -29,7 +29,6 @@
 ///-----------------------------------
 
 - (id)initWithSections:(NSArray*)sections;
-- (id)initWithSections:(NSArray*)sections withNibName:(NSString*)nibName;
 
 ///-----------------------------------
 /// @name Clearing CKFormTableViewController
@@ -42,15 +41,10 @@
 ///-----------------------------------
 
 - (NSArray*)addSections:(NSArray *)sections;
-- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
-
 - (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index;
 - (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index;
 
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index;
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index;
-- (CKFormBindedCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory  atIndex:(NSInteger)index;
-
+- (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
 ///-----------------------------------
 /// @name Accessing the sections

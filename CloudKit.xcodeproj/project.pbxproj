@@ -494,8 +494,6 @@
 		963826591484012B00A9C98B /* CKFormSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826571484012B00A9C98B /* CKFormSection.m */; };
 		9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9638265D1484013B00A9C98B /* CKFormBindedCollectionSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */; };
-		963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265E1484015300A9C98B /* CKFormCellDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265F1484015300A9C98B /* CKFormCellDescriptor.m */; };
 		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
 		967C51811538BD4E00B3F785 /* CKObject+CKSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* CKObject+CKSingleton.h */; };
 		967C51821538BD4E00B3F785 /* CKObject+CKSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* CKObject+CKSingleton.m */; };
@@ -1018,8 +1016,6 @@
 		963826571484012B00A9C98B /* CKFormSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormSection.m; path = Classes/CKFormSection.m; sourceTree = "<group>"; };
 		9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormBindedCollectionSection.h; path = Classes/CKFormBindedCollectionSection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFormBindedCollectionSection.m; path = Classes/CKFormBindedCollectionSection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		9638265E1484015300A9C98B /* CKFormCellDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormCellDescriptor.h; path = Classes/CKFormCellDescriptor.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		9638265F1484015300A9C98B /* CKFormCellDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFormCellDescriptor.m; path = Classes/CKFormCellDescriptor.m; sourceTree = "<group>"; };
 		96382665148406ED00A9C98B /* CKFormSectionBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase_private.h; path = Classes/CKFormSectionBase_private.h; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* CKObject+CKSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKSingleton.h"; path = "Classes/CKObject+CKSingleton.h"; sourceTree = "<group>"; };
 		967C51801538BD4E00B3F785 /* CKObject+CKSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKObject+CKSingleton.m"; path = "Classes/CKObject+CKSingleton.m"; sourceTree = "<group>"; };
@@ -1856,8 +1852,6 @@
 				9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */,
 				96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */,
 				9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */,
-				9638265E1484015300A9C98B /* CKFormCellDescriptor.h */,
-				9638265F1484015300A9C98B /* CKFormCellDescriptor.m */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -2272,7 +2266,6 @@
 				963826541484011700A9C98B /* CKFormSectionBase.h in Headers */,
 				963826581484012B00A9C98B /* CKFormSection.h in Headers */,
 				9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */,
-				963826601484015400A9C98B /* CKFormCellDescriptor.h in Headers */,
 				96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */,
 				96A642851484125600C06A85 /* CKFormBindedCollectionSection_private.h in Headers */,
 				96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */,
@@ -2618,7 +2611,6 @@
 				963826551484011700A9C98B /* CKFormSectionBase.m in Sources */,
 				963826591484012B00A9C98B /* CKFormSection.m in Sources */,
 				9638265D1484013B00A9C98B /* CKFormBindedCollectionSection.m in Sources */,
-				963826611484015400A9C98B /* CKFormCellDescriptor.m in Sources */,
 				96CADE331486B22A008A23E4 /* CKRuntime.m in Sources */,
 				96CADE391486BDFF008A23E4 /* CKNSObject+Validation.m in Sources */,
 				969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */,

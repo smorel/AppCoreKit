@@ -23,6 +23,6 @@
 - (void)lock;
 - (void)unlock;
 
-- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index;
+- (id)controllerForObject:(id)object atIndex:(NSInteger)index;
 
 @end

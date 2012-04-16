@@ -154,11 +154,11 @@
 
 @implementation CKFormObjectControllerFactory
 
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
-	CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    CKFormObjectController* formObjectController = (CKFormObjectController*)self.objectController;
 	CKFormTableViewController* formController = (CKFormTableViewController*)formObjectController.parentController;
 	CKFormSectionBase* formSection = (CKFormSectionBase*)[formController visibleSectionAtIndex:indexPath.section];
-	return [formSection factoryItemForIndex:indexPath.row];
+	return [formSection controllerForObject:object atIndex:indexPath.row];
 }
 
 @end
@@ -257,8 +257,8 @@
 }
 
 
-- (id)initWithSections:(NSArray*)theSections withNibName:(NSString*)nibName{
-	[super initWithNibName:nibName bundle:[NSBundle mainBundle]];
+- (id)initWithSections:(NSArray*)theSections{
+	self = [super init];
 	self.sections = [NSMutableArray arrayWithArray:theSections];
 	for(CKFormSectionBase* section in theSections){
 		section.parentController = self;
@@ -271,12 +271,6 @@
 	}
 	return self;
 }
-
-- (id)initWithSections:(NSArray*)theSections{
-	[self initWithSections:theSections withNibName:nil];
-	return self;
-}
-
 
 - (NSArray*)addSections:(NSArray *)sections{
 	[_sections addObjectsFromArray:sections];
@@ -323,22 +317,6 @@
     
     return sections;
 }
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors atIndex:(NSInteger)index{
-	return [self insertSectionWithCellDescriptors:cellDescriptors headerTitle:@"" atIndex:index];
-}
-
-- (CKFormSection *)insertSectionWithCellDescriptors:(NSArray *)cellDescriptors headerTitle:(NSString *)headerTitle  atIndex:(NSInteger)index{
-	CKFormSection* section = [CKFormSection sectionWithCellDescriptors:cellDescriptors headerTitle:headerTitle];
-	section.parentController = self;
-	[_sections insertObject:section atIndex:index];
-    
-    if(section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
-    }
-    
-	return section;
-}
-
 
 - (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index{
 	section.parentController = self;
@@ -363,23 +341,6 @@
     }
     
 	return [section autorelease];
-}
-
-- (CKFormBindedCollectionSection *)insertSectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory atIndex:(NSInteger)index{
-	CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];
-	section.parentController = self;
-	[_sections insertObject:section atIndex:index];
-	
-	if(section.hidden == YES){
-		[collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
-	}
-    
-    if(section.hidden == NO){
-        [self objectController:self.objectController insertSectionAtIndex:section.sectionVisibleIndex];
-    }
-    
-	return section;
-	
 }
 
 - (CKFormSectionBase*)sectionAtIndex:(NSUInteger)index{
