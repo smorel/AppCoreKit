@@ -88,7 +88,7 @@
 	_liveSearchDelay = 0.5;
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKBindedTableViewControllerScrollingPolicyNone;
-    _snapPolicy = CKBindedTableViewControllerSnapPolicyNone;
+    _snapPolicy = CKBindedTableViewControllerSnappingPolicyNone;
     
     self.bindingContextForTableView = [NSString stringWithFormat:@"TableVisibility_<%p>",self];
 }
@@ -1105,10 +1105,10 @@
 
 - (void)executeSnapPolicy{
     switch(_snapPolicy){
-        case CKBindedTableViewControllerSnapPolicyNone:{
+        case CKBindedTableViewControllerSnappingPolicyNone:{
             break;
         }
-        case CKBindedTableViewControllerSnapPolicyCenter:{
+        case CKBindedTableViewControllerSnappingPolicyCenter:{
             NSIndexPath* indexPath = [self snapIndexPath];
             if(indexPath != nil){
                 NSIndexPath * indexPath2 = [self tableView:self.tableView willSelectRowAtIndexPath:indexPath];
@@ -1123,16 +1123,16 @@
 
 - (void)tableViewFrameChanged:(id)value{
     switch(_snapPolicy){
-        case CKBindedTableViewControllerSnapPolicyNone:{
+        case CKBindedTableViewControllerSnappingPolicyNone:{
             break;
         }
-        case CKBindedTableViewControllerSnapPolicyCenter:{
+        case CKBindedTableViewControllerSnappingPolicyCenter:{
                 //FIXME : we do not take self.tableViewInsets in account here
             self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0,0);
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
-                && self.snapPolicy == CKBindedTableViewControllerSnapPolicyCenter){
+                && self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
                 [self selectRowAtIndexPath:self.selectedIndexPath animated:(self.state == CKUIViewControllerStateDidAppear) ? YES : NO];
             }
             
@@ -1177,7 +1177,7 @@
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
     if([self isValidIndexPath:indexPath]){
-        if(self.snapPolicy == CKBindedTableViewControllerSnapPolicyCenter){
+        if(self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
             CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
             CGFloat offset = r.origin.y + (r.size.height / 2.0);
             offset -= self.tableView.contentInset.top;
@@ -1193,7 +1193,7 @@
 
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
     if([self isValidIndexPath:indexPath]){
-        if(self.snapPolicy == CKBindedTableViewControllerSnapPolicyCenter){
+        if(self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
             CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
             CGFloat offset = r.origin.y + (r.size.height / 2.0);
             offset -= self.tableView.contentInset.top;
@@ -1250,25 +1250,3 @@
 }
 
 @end
-
-
-
-/********************************* DEPRECATED *********************************
- */
-
-@implementation CKBindedTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-@dynamic editable;
-
-- (BOOL)editable{
-    return _editableType != CKBindedTableViewControllerEditableTypeNone;
-}
-
-- (void)setEditable:(BOOL)editable{
-    if(_editableType == CKBindedTableViewControllerEditableTypeNone){
-        _editableType = CKBindedTableViewControllerEditableTypeLeft;
-    }
-}
-
-@end
-
-

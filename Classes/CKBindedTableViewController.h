@@ -25,10 +25,10 @@ typedef enum CKBindedTableViewControllerScrollingPolicy{
     CKBindedTableViewControllerScrollingPolicyResignResponder
 }CKBindedTableViewControllerScrollingPolicy;
 
-typedef enum CKBindedTableViewControllerSnapPolicy{
-    CKBindedTableViewControllerSnapPolicyNone,
-    CKBindedTableViewControllerSnapPolicyCenter
-}CKBindedTableViewControllerSnapPolicy;
+typedef enum CKBindedTableViewControllerSnappingPolicy{
+    CKBindedTableViewControllerSnappingPolicyNone,
+    CKBindedTableViewControllerSnappingPolicyCenter
+}CKBindedTableViewControllerSnappingPolicy;
 
 typedef void(^CKBindedTableViewControllerSearchBlock)(NSString* filter);
 
@@ -99,7 +99,7 @@ typedef void(^CKBindedTableViewControllerSearchBlock)(NSString* filter);
 /** 
  Specify the snap behavior when scrolling or selecting/scrolling to rows.
  */
-@property (nonatomic, assign) CKBindedTableViewControllerSnapPolicy snapPolicy;
+@property (nonatomic, assign) CKBindedTableViewControllerSnappingPolicy snapPolicy;
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
@@ -199,10 +199,3 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 - (void)objectTableViewController:(CKBindedTableViewController*)controller didSearch:(NSString*)filter;
 @end
 
-
-/********************************* DEPRECATED *********************************
- */
-
-@interface CKBindedTableViewController (DEPRECATED_IN_CLOUDKIT_VERSION_1_7_AND_LATER)
-@property (nonatomic) BOOL editable DEPRECATED_ATTRIBUTE;
-@end
