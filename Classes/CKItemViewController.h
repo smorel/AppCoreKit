@@ -32,9 +32,10 @@ typedef NSUInteger CKItemViewFlags;
 @interface CKItemViewController : NSObject
 
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) id value;
 @property (nonatomic, copy, readonly) NSIndexPath *indexPath;
 @property (nonatomic, assign, readonly) CKItemViewContainerController* containerController;
+
+@property (nonatomic, retain) id value;
 @property (nonatomic, assign) UIView *view;
 
 @property (nonatomic, assign) CKItemViewFlags flags;
