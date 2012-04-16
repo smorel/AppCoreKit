@@ -121,18 +121,3 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 }
 
 @end
-
-#pragma mark Deprecated
-
-@implementation CKImageLoader (Deprecated)
-
-@dynamic imageSize;
-@dynamic aspectFill;
-
-+ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size {
-	NSAssert(NO, @"DEPRECATED: Use CKThumbnailImageTransformer instead.");
-	// TODO: Get image from a CKImageTransformer
-	return nil;
-}
-
-@end

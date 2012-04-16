@@ -21,7 +21,4 @@ typedef enum {
 
 + (id)creditsViewWithStyle:(CKCreditsViewStyle)style;
 
-- (id)initWithTitle:(NSString *)title DEPRECATED_ATTRIBUTE;
-+ (id)creditsViewWithTitle:(NSString *)title DEPRECATED_ATTRIBUTE;
-
 @end

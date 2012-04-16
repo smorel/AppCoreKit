@@ -58,7 +58,6 @@
 @interface CKItem (CKItemRepresentations)
 
 - (NSDictionary *)propertyListRepresentation;
-- (NSDictionary *)attributesDictionary DEPRECATED_ATTRIBUTE;
 - (NSDictionary *)attributesIndexedByName;
 
 @end

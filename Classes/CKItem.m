@@ -29,10 +29,6 @@
 	return [[[CKAttributesDictionary alloc] initWithItem:self] autorelease];
 }
 
-- (NSDictionary *)attributesDictionary {
-	return [self propertyListRepresentation];
-}
-
 - (NSDictionary *)attributesIndexedByName{
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	for(CKAttribute* att in self.attributes){

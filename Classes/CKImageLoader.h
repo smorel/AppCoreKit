@@ -38,19 +38,6 @@ extern NSString * const CKImageLoaderErrorDomain;
 
 /** TODO
  */
-@interface CKImageLoader (Deprecated)
-
-@property (nonatomic, assign) CGSize imageSize DEPRECATED_ATTRIBUTE; 
-@property (nonatomic, assign) BOOL aspectFill DEPRECATED_ATTRIBUTE; 
-
-+ (UIImage *)imageForURL:(NSURL *)url withSize:(CGSize)size DEPRECATED_ATTRIBUTE;
-
-@end
-
-//
-
-/** TODO
- */
 @protocol CKImageLoaderDelegate
 
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached;

@@ -52,17 +52,5 @@
 
 @end
 
-
-/********************************* DEPRECATED *********************************
- */
-
-
-//DEPRECATED_IN_CLOUDKIT_1_7_15_AND_LATER
-@interface CKModelObject : CKObject
-@property (nonatomic,assign,readwrite) NSString* modelName DEPRECATED_ATTRIBUTE;
-+ (id)model DEPRECATED_ATTRIBUTE;
-@end
-
-
 #import "CKNSObject+Validation.h"
 #import "CKObject+CKSingleton.h"

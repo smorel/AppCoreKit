@@ -188,7 +188,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	CKModelObject* copied = [[[self class] alloc] init];
+	CKObject* copied = [[[self class] alloc] init];
     [copied copyPropertiesFromObject:self];
 	return copied;
 }
@@ -448,24 +448,6 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 		return result;
 	}
 	return NO;
-}
-
-@end
-
-
-@implementation CKModelObject
-@synthesize modelName;
-
-- (NSString*)modelName{
-    return [self objectName];
-}
-
-- (void)setModelName:(NSString *)name{
-    [self setObjectName:name];
-}
-
-+ (id)model{
-    return [[self class]object];
 }
 
 @end
