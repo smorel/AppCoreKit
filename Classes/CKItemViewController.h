@@ -31,17 +31,30 @@ typedef NSUInteger CKItemViewFlags;
  */
 @interface CKItemViewController : NSObject
 
+
+///-----------------------------------
+/// @name Identifying the Controller at runtime
+///-----------------------------------
+
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, copy, readonly) NSIndexPath *indexPath;
-@property (nonatomic, assign, readonly) CKItemViewContainerController* containerController;
 
+- (NSString*)identifier;
+
+///-----------------------------------
+/// @name Managing Content
+///-----------------------------------
+
+@property (nonatomic, assign, readonly) CKItemViewContainerController* containerController;
 @property (nonatomic, retain) id value;
 @property (nonatomic, assign) UIView *view;
 
+///-----------------------------------
+/// @name Customizing the Controller Interactions And Visual Appearance
+///-----------------------------------
+
 @property (nonatomic, assign) CKItemViewFlags flags;
 @property (nonatomic, assign) CGSize size;
-
-//TODO : REPLACE BY BLOCKS !
 
 @property (nonatomic, retain) CKCallback* createCallback;
 @property (nonatomic, retain) CKCallback* initCallback;
@@ -52,32 +65,39 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, retain) CKCallback* resignFirstResponderCallback;
 @property (nonatomic, retain) CKCallback* viewDidAppearCallback;
 @property (nonatomic, retain) CKCallback* viewDidDisappearCallback;
-
-//Used on CKTableViewCellControllers only yet
 @property (nonatomic, retain) CKCallback* layoutCallback;
 
 
-//Private for subclassing
-
-- (NSString*)identifier;
-
-- (void)setupView:(UIView *)view;
-- (void)rotateView:(UIView*)view animated:(BOOL)animated;
-
-- (void)applyStyle;
+///-----------------------------------
+/// @name Responding to ContainerController Events
+///-----------------------------------
 
 - (void)viewDidAppear:(UIView *)view;
 - (void)viewDidDisappear;
+
+- (UIView *)loadView;
+- (void)initView:(UIView*)view;
+- (void)setupView:(UIView *)view;
+- (void)rotateView:(UIView*)view animated:(BOOL)animated;
 
 - (NSIndexPath *)willSelect;
 - (void)didSelect;
 - (void)didSelectAccessoryView;
 
-- (void)initView:(UIView*)view;
 - (void)didBecomeFirstResponder;
 - (void)didResignFirstResponder;
 
-- (UIView *)loadView;
+
+///-----------------------------------
+/// @name Managing Stylesheets
+///-----------------------------------
+
+- (void)applyStyle;
+
+///-----------------------------------
+/// @name Initializing a Controller
+///-----------------------------------
+
 - (void)postInit;
 
 @end

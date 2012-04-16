@@ -19,6 +19,10 @@
 
 #define TEXTFIELD_TAG 50000
 
+@interface CKTableViewCellController()
++ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
+@end
+
 @interface CKNSStringPropertyCellController()
 @property (nonatomic,retain,readwrite) UITextField* textField;
 @end
@@ -90,13 +94,13 @@
     }
 }
 
-- (id)performStandardLayout:(CKNSStringPropertyCellController*)controller{
-	[super performStandardLayout:controller];
-    UITableViewCell* cell = controller.tableViewCell;
-	UITextField *textField = controller.textField;
+- (void)performLayout{
+	[super performLayout];
+    UITableViewCell* cell = self.tableViewCell;
+	UITextField *textField = self.textField;
 	if(textField){
-        if(controller.cellStyle == CKTableViewCellStyleValue3
-           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
+        if(self.cellStyle == CKTableViewCellStyleValue3
+           || self.cellStyle == CKTableViewCellStylePropertyGrid){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
             
             BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
@@ -120,7 +124,7 @@
             CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
             cell.textLabel.y = txtLabelY;
         }
-        else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
+        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
             CGFloat x = cell.textLabel.x;
             CGRect textFrame = cell.textLabel.frame;
@@ -129,7 +133,6 @@
 			textField.frame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,(textField.font.lineHeight + 10)));
         }
     }
-    return (id)nil;
 }
 
 - (void)textFieldChanged:(id)value{

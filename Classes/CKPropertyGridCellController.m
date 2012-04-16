@@ -245,20 +245,19 @@
     }
 }
 
-- (id)performStandardLayout:(CKPropertyGridCellController*)controller{
-    [super performStandardLayout:controller];
-    [self performValidationLayout:controller];
-    return (id)nil;
+- (void)performLayout{
+    [super performLayout];
+    [self performValidationLayout];
 }
 
-- (void)performValidationLayout:(CKPropertyGridCellController*)controller{
-    if(controller.validationButton != nil
-       || controller.validationImageView != nil){
+- (void)performValidationLayout{
+    if(self.validationButton != nil
+       || self.validationImageView != nil){
         BOOL shouldReplaceAccessoryView = (   [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone
                                            || [self parentTableView].style == UITableViewStylePlain );
         if(!shouldReplaceAccessoryView){
-            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)controller.validationButton : (UIView*)controller.validationImageView;
-            newAccessoryView.frame = [controller rectForValidationButtonWithCell:controller.tableViewCell];
+            UIView* newAccessoryView = CLICKABLE_VALIDATION_INFO ? (UIView*)self.validationButton : (UIView*)self.validationImageView;
+            newAccessoryView.frame = [self rectForValidationButtonWithCell:self.tableViewCell];
         }
     }
 }

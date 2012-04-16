@@ -19,6 +19,10 @@
 
 #define TEXTVIEW_TAG 50000
 
+@interface CKTableViewCellController()
++ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
+@end
+
 @interface CKMultilineNSStringPropertyCellController()
 @property(nonatomic,retain,readwrite)CKTextView* textView;
 @end
@@ -100,11 +104,11 @@
     }
 }
 
-- (id)performStandardLayout:(CKMultilineNSStringPropertyCellController*)controller{
-    [super performStandardLayout:controller];
+- (void)performLayout{
+    [super performLayout];
     
-    UITableViewCell* cell = controller.tableViewCell;
-    if(controller.cellStyle == CKTableViewCellStyleValue3){
+    UITableViewCell* cell = self.tableViewCell;
+    if(self.cellStyle == CKTableViewCellStyleValue3){
         CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
         CGFloat realWidth = rowWidth;
         CGFloat width = realWidth * self.componentsRatio;
@@ -114,36 +118,34 @@
         
         CGFloat textFieldY = self.contentInsets.top;
         CGFloat textFieldHeight = cell.contentView.height - (self.contentInsets.top + self.contentInsets.bottom);
-        controller.textView.frame = CGRectMake(textFieldX,textFieldY,textFieldWidth,textFieldHeight);
+        self.textView.frame = CGRectMake(textFieldX,textFieldY,textFieldWidth,textFieldHeight);
     }
-    else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
+    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
         if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             if(cell.textLabel.text == nil || 
                [cell.textLabel.text isKindOfClass:[NSNull class]] ||
                [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
-                controller.textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
+                self.textView.frame = textViewFrame;
             }
             else{
                 //sets the textLabel on one full line and the textView beside
                 CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
                 cell.textLabel.frame = textFrame;
                 
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,controller.textView.frame.size.height);
-                controller.textView.frame = textViewFrame;
+                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
+                self.textView.frame = textViewFrame;
             }
         }
         else{
-            CGRect f = [controller propertyGridDetailFrameForCell:cell];
-            controller.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,controller.textView.frame.size.height);
+            CGRect f = [self propertyGridDetailFrameForCell:cell];
+            self.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,self.textView.frame.size.height);
         }
     }
-    else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,cell.textLabel.x),MAX(self.contentInsets.top,cell.textLabel.y + cell.textLabel.height + 10),cell.contentView.width - (cell.imageView.x + 10) - 10,controller.textView.frame.size.height);
-        controller.textView.frame = textViewFrame;
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,cell.textLabel.x),MAX(self.contentInsets.top,cell.textLabel.y + cell.textLabel.height + 10),cell.contentView.width - (cell.imageView.x + 10) - 10,self.textView.frame.size.height);
+        self.textView.frame = textViewFrame;
     }
-
-    return (id)nil;
 }
  
 - (void)textViewChanged:(id)value{

@@ -21,13 +21,26 @@
  */
 @interface CKUITableViewCell : UITableViewCell
 
+///-----------------------------------
+/// @name Managing CellController Connection
+///-----------------------------------
+
 @property(nonatomic,readonly) CKTableViewCellController* delegate;
-@property(nonatomic,retain) CKWeakRef* delegateRef;
-@property(nonatomic,retain) UIImage* disclosureIndicatorImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIImage* checkMarkImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIImage* highlightedDisclosureIndicatorImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIImage* highlightedCheckMarkImage;//can be customized via stylesheets
-@property(nonatomic,retain) UIButton* disclosureButton;//can be customized via stylesheets
+
+///-----------------------------------
+/// @name Customizing the View Visual Appearance
+///-----------------------------------
+
+@property(nonatomic,retain) UIImage*   disclosureIndicatorImage;
+@property(nonatomic,retain) UIImage*   checkMarkImage;
+@property(nonatomic,retain) UIImage*   highlightedDisclosureIndicatorImage;
+@property(nonatomic,retain) UIImage*   highlightedCheckMarkImage;
+@property(nonatomic,retain) UIButton*  disclosureButton;
+
+
+///-----------------------------------
+/// @name Initializing a CKUITableViewCell instance
+///-----------------------------------
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)delegate;
 
@@ -65,54 +78,28 @@ typedef enum CKTableViewCellStyle {
 
 /** TODO
  */
-@interface CKTableViewCellController : CKItemViewController {
-	UITableViewCellAccessoryType _accessoryType;
-	CKTableViewCellStyle _cellStyle;
-	
-	NSString* _key;
-	CGFloat _componentsRatio;
-	CGFloat _componentsSpace;
-    UIEdgeInsets _contentInsets;
-    
-    NSString* _cacheLayoutBindingContextId;
-}
+@interface CKTableViewCellController : CKItemViewController
 
-@property (nonatomic, readonly) UITableViewCell *tableViewCell;
++ (CKTableViewCellController*)cellController;
+
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
-@property (assign, readwrite) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, retain) NSString* key;
 @property (nonatomic,assign) NSInteger indentationLevel;
 
-//for propertygrid and value3 only ...
-@property (nonatomic, assign) CGFloat componentsRatio;
-@property (nonatomic, assign) CGFloat componentsSpace;
-@property (nonatomic, assign) UIEdgeInsets contentInsets;
 
+@property (nonatomic, readonly) UITableViewCell *tableViewCell;
+- (CKTableViewController*)parentTableViewController;
+- (UITableView*)parentTableView;
 
-- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
+- (void)initTableViewCell:(UITableViewCell*)cell;
+- (void)setupCell:(UITableViewCell *)cell;
+- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated;
+- (void)layoutCell:(UITableViewCell*)cell;
 
 - (void)cellDidAppear:(UITableViewCell *)cell;
 - (void)cellDidDisappear;
 
-- (UITableViewCell *)loadCell;
-- (void)setupCell:(UITableViewCell *)cell;
-- (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated;
-
 - (NSIndexPath *)willSelectRow;
 - (void)didSelectRow;
-
-// Calls -setupCell with the cell associated with this controller.
-// Does not call -setupCell if the cell is not visible.
-- (void)setNeedsSetup;
-
-//private
-- (void)initTableViewCell:(UITableViewCell*)cell;
-- (void)layoutCell:(UITableViewCell*)cell;
-
-- (CKTableViewController*)parentTableViewController;
-- (UITableView*)parentTableView;
-
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
 
 - (void)scrollToRow;
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
@@ -121,10 +108,13 @@ typedef enum CKTableViewCellStyle {
 
 
 //FIXME use layout when available !
-
 @interface CKTableViewCellController (CKLayout)
 
-- (id)performStandardLayout:(CKTableViewCellController *)controller;
+@property (nonatomic, assign) CGFloat componentsRatio;
+@property (nonatomic, assign) CGFloat componentsSpace;
+@property (nonatomic, assign) UIEdgeInsets contentInsets;
+
+- (void)performLayout;
 
 - (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
@@ -135,9 +125,7 @@ typedef enum CKTableViewCellStyle {
 @end
 
 
-@interface CKTableViewCellController (CKDynamic)
-
-+ (CKTableViewCellController*)cellController;
+@interface CKTableViewCellController (CKInlineDefinition)
 
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 - (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;

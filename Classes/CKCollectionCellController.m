@@ -132,10 +132,6 @@
 	}
 }
 
-- (UITableViewCell*)loadCell{
-	return [super loadCell];
-}
-
 - (void)setupCell:(UITableViewCell *)cell{
     //In case of reuse
     self.label = (UILabel*)[cell.contentView viewWithTag:LABEL_TAG];

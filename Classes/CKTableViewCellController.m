@@ -30,6 +30,11 @@
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
 
+
+@interface CKUITableViewCell()
+@property(nonatomic,retain) CKWeakRef* delegateRef;
+@end
+
 @implementation CKUITableViewCell
 @synthesize delegate;
 @synthesize delegateRef = _delegateRef;
@@ -228,13 +233,18 @@
 @interface CKTableViewCellController ()
 
 @property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
+
+@property (nonatomic, assign) CGFloat componentsRatio;
+@property (nonatomic, assign) CGFloat componentsSpace;
+@property (nonatomic, assign) UIEdgeInsets contentInsets;
+
+- (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
+- (UITableViewCell *)loadCell;
+
 @end
 
 @implementation CKTableViewCellController
-
-@synthesize accessoryType = _accessoryType;
 @synthesize cellStyle = _cellStyle;
-@synthesize key = _key;
 @synthesize componentsRatio = _componentsRatio;
 @synthesize componentsSpace = _componentsSpace;
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
@@ -265,14 +275,16 @@
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
 	[self clearBindingsContext];
-	[_key release];
-	_key = nil;
     [_cacheLayoutBindingContextId release];
 	_cacheLayoutBindingContextId = nil;
 	
 	[super dealloc];
 }
 
+
++ (CKTableViewCellController*)cellController{
+    return [[[[self class]alloc]init]autorelease];
+}
 
 //HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
 /*
@@ -356,8 +368,6 @@
 		toUseCellStyle = CKTableViewCellStyleSubtitle;
     }
 	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
-	//self.view = cell;
-    cell.accessoryType = self.accessoryType;
 	
 	return cell;
 }
@@ -491,36 +501,6 @@
 
 // Update
 
-- (void)setNeedsSetup {
-	if (self.tableViewCell)
-		[self setupCell:self.tableViewCell];
-}
-
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller{
-    CGFloat rowWidth = 0;
-    UIView* tableViewContainer = [controller tableViewContainer];
-    UITableView* tableView = [controller tableView];
-    if(tableView.style == UITableViewStylePlain){
-        rowWidth = tableViewContainer.frame.size.width;
-    }
-    else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        rowWidth = tableViewContainer.frame.size.width - 18;
-    }
-    else{
-        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
-        CGFloat offset = -1;
-        if(tableViewWidth > 716)offset = 90;
-        else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 624) offset = 76;
-        else if(tableViewWidth > 545) offset = 74 - (((NSInteger)(624 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 400) offset = 62;
-        else offset = 20;
-        
-        rowWidth = tableViewWidth - offset;
-    }
-    return rowWidth;
-}
-
 - (CKTableViewController*)parentTableViewController{
 	if([self.containerController isKindOfClass:[CKTableViewController class]]){
 		return (CKTableViewController*)self.containerController;
@@ -569,7 +549,11 @@
     }
     
     if(self.layoutCallback == nil){
-        self.layoutCallback = [CKCallback callbackWithTarget:self action:@selector(performStandardLayout:)];
+        __block CKTableViewCellController* bself = self;
+        self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
+            [bself performLayout];
+            return (id)nil;
+        }];
     }
         
     [CATransaction begin];
@@ -651,7 +635,32 @@
 
 
 @implementation CKTableViewCellController (CKLayout)
+@dynamic componentsRatio, componentsSpace, contentInsets;
 
++ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller{
+    CGFloat rowWidth = 0;
+    UIView* tableViewContainer = [controller tableViewContainer];
+    UITableView* tableView = [controller tableView];
+    if(tableView.style == UITableViewStylePlain){
+        rowWidth = tableViewContainer.frame.size.width;
+    }
+    else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        rowWidth = tableViewContainer.frame.size.width - 18;
+    }
+    else{
+        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
+        CGFloat offset = -1;
+        if(tableViewWidth > 716)offset = 90;
+        else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
+        else if(tableViewWidth > 624) offset = 76;
+        else if(tableViewWidth > 545) offset = 74 - (((NSInteger)(624 - tableViewWidth) / 13) * 2);
+        else if(tableViewWidth > 400) offset = 62;
+        else offset = 20;
+        
+        rowWidth = tableViewWidth - offset;
+    }
+    return rowWidth;
+}
 
 //Value3 layout 
 - (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
@@ -821,8 +830,8 @@
     return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, width/*size.width*/, size.height);
 }
 
-- (id)performStandardLayout:(CKTableViewCellController *)controller{
-    UITableViewCell* cell = controller.tableViewCell;
+- (void)performLayout{
+    UITableViewCell* cell = self.tableViewCell;
     //You can overload this method if you need to update cell layout when cell is resizing.
 	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
 	if(self.cellStyle == CKTableViewCellStyleValue3){
@@ -862,18 +871,13 @@
 			cell.detailTextLabel.frame = [self subtitleDetailFrameForCell:cell];
 		}
 	}
-    return (id)nil;
 }
 
 @end
 
 
 
-@implementation CKTableViewCellController (CKDynamic)
-
-+ (CKTableViewCellController*)cellController{
-    return [[[[self class]alloc]init]autorelease];
-}
+@implementation CKTableViewCellController (CKInlineDefinition)
 
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
     if(block){

@@ -243,23 +243,23 @@
 	}	
 }
 
-- (id)performStandardLayout:(CKNSNumberPropertyCellController*)controller{
-    UITableViewCell* cell = controller.tableViewCell;
+- (void)performLayout{
+    UITableViewCell* cell = self.tableViewCell;
     
 	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
 	UITextField *textField = (UITextField*)[cell viewWithTag:50000];
     
     CGFloat savedComponentRatio = self.componentsRatio;
-    if(s && controller.cellStyle == CKTableViewCellStylePropertyGrid
+    if(s && self.cellStyle == CKTableViewCellStylePropertyGrid
        && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        controller.componentsRatio = 0.3;
+        self.componentsRatio = 0.3;
     }
     
-	[super performStandardLayout:controller];
+    [super performLayout];
     
 	if(textField){
-		if(controller.cellStyle == CKTableViewCellStyleValue3
-           || controller.cellStyle == CKTableViewCellStylePropertyGrid){
+		if(self.cellStyle == CKTableViewCellStyleValue3
+           || self.cellStyle == CKTableViewCellStylePropertyGrid){
             
             CKProperty* model = self.value;
 			if([model isReadOnly] || self.readOnly){
@@ -277,7 +277,7 @@
                 cell.textLabel.y = txtLabelY;
             }
 		}
-        else if(controller.cellStyle == CKTableViewCellStyleSubtitle2){
+        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
             textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
             CGFloat x = cell.textLabel.x;
             CGRect textFrame = cell.textLabel.frame;
@@ -288,26 +288,25 @@
 	}
     
 	if(s && cell.accessoryView != s){
-		if(controller.cellStyle == CKTableViewCellStyleValue3){
+		if(self.cellStyle == CKTableViewCellStyleValue3){
             CGRect switchFrame = [self value3DetailFrameForCell:cell];
 			CGFloat height = cell.bounds.size.height;
 			CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
 			s.frame = CGRectIntegral(rectForSwitch);
 		}
-        else if(controller.cellStyle == CKTableViewCellStylePropertyGrid){
-			CGFloat height = MAX(44,controller.tableViewCell.textLabel.frame.size.height);
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+			CGFloat height = MAX(44,self.tableViewCell.textLabel.frame.size.height);
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
                 //align right
-                CGRect rectForSwitch = CGRectMake(controller.tableViewCell.textLabel.frame.origin.x + controller.tableViewCell.textLabel.frame.size.width + 10,
+                CGRect rectForSwitch = CGRectMake(self.tableViewCell.textLabel.frame.origin.x + self.tableViewCell.textLabel.frame.size.width + 10,
                                                   (height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
                 s.frame = CGRectIntegral(rectForSwitch);
             }
             //For iphone its an accessory view
 		}
         
-        controller.componentsRatio = savedComponentRatio;
+        self.componentsRatio = savedComponentRatio;
 	}
-    return (id)nil;
 }
 
 
