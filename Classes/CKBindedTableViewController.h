@@ -14,11 +14,11 @@
 //FIXME :
    //on rotation, resizer la search bar si besoin !
 
-typedef enum CKBindedTableViewControllerEditableType{
-    CKBindedTableViewControllerEditableTypeNone,
-    CKBindedTableViewControllerEditableTypeLeft,
-    CKBindedTableViewControllerEditableTypeRight
-}CKBindedTableViewControllerEditableType;
+typedef enum CKBindedTableViewControllerEditingType{
+    CKBindedTableViewControllerEditingTypeNone,
+    CKBindedTableViewControllerEditingTypeLeft,
+    CKBindedTableViewControllerEditingTypeRight
+}CKBindedTableViewControllerEditingType;
 
 typedef enum CKBindedTableViewControllerScrollingPolicy{
     CKBindedTableViewControllerScrollingPolicyNone,
@@ -44,7 +44,7 @@ typedef void(^CKBindedTableViewControllerSearchBlock)(NSString* filter);
 	BOOL _scrolling;
     CKBindedTableViewControllerScrollingPolicy _scrollingPolicy;
     
-    CKBindedTableViewControllerEditableType _editableType;
+    CKBindedTableViewControllerEditingType _editableType;
     
 	UITableViewRowAnimation _rowInsertAnimation;
 	UITableViewRowAnimation _rowRemoveAnimation;
@@ -143,7 +143,7 @@ Specify the animations that should be launch on row and sections insertion
 /** 
 Specify if the table is editable. If yes, an edit/done button is automatically added to the left/right of the navigation bar.
 */
-@property (nonatomic, assign) CKBindedTableViewControllerEditableType editableType;
+@property (nonatomic, assign) CKBindedTableViewControllerEditingType editableType;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;

@@ -39,7 +39,7 @@
 - (void)adjustTableView;
 - (void)tableViewFrameChanged:(id)value;
 
-- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditableType)type animated:(BOOL)animated;
+- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditingType)type animated:(BOOL)animated;
 
 @end
 
@@ -83,7 +83,7 @@
 	_currentPage = 0;
 	_numberOfPages = 0;
 	_scrolling = NO;
-	_editableType = CKBindedTableViewControllerEditableTypeNone;
+	_editableType = CKBindedTableViewControllerEditingTypeNone;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_tableMaximumWidth = 0;
@@ -568,7 +568,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.editableType == CKBindedTableViewControllerEditableTypeNone
+    if(self.editableType == CKBindedTableViewControllerEditingTypeNone
        || self.editing == NO)
         return NO;
     
@@ -576,7 +576,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.editableType == CKBindedTableViewControllerEditableTypeNone
+    if(self.editableType == CKBindedTableViewControllerEditingTypeNone
        || self.editing == NO)
         return NO;
     
@@ -888,26 +888,26 @@
 
 #pragma mark Edit Button Management
 
-- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditableType)type animated:(BOOL)animated{
+- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditingType)type animated:(BOOL)animated{
     switch(type){
-        case CKBindedTableViewControllerEditableTypeLeft:{
+        case CKBindedTableViewControllerEditingTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
-        case CKBindedTableViewControllerEditableTypeRight:{
+        case CKBindedTableViewControllerEditingTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
-        case CKBindedTableViewControllerEditableTypeNone:break;
+        case CKBindedTableViewControllerEditingTypeNone:break;
 	}
 }
 
-- (void)setEditableType:(CKBindedTableViewControllerEditableType)theEditableType{
+- (void)setEditableType:(CKBindedTableViewControllerEditingType)theEditableType{
     if(theEditableType != _editableType && self.viewIsOnScreen){
         switch(_editableType){
-            case CKBindedTableViewControllerEditableTypeLeft:{
+            case CKBindedTableViewControllerEditingTypeLeft:{
                 if(self.leftButton){
                     [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
                 }
@@ -916,7 +916,7 @@
                 }
                 break;
             }
-            case CKBindedTableViewControllerEditableTypeRight:{
+            case CKBindedTableViewControllerEditingTypeRight:{
                 if(self.rightButton){
                     [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
                 }
@@ -925,13 +925,13 @@
                 }
                 break;
             }
-            case CKBindedTableViewControllerEditableTypeNone:break;
+            case CKBindedTableViewControllerEditingTypeNone:break;
         }
         
-        if(theEditableType != CKBindedTableViewControllerEditableTypeNone){
+        if(theEditableType != CKBindedTableViewControllerEditingTypeNone){
             [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
         }
-        else if(theEditableType == CKBindedTableViewControllerEditableTypeNone){
+        else if(theEditableType == CKBindedTableViewControllerEditingTypeNone){
             if([self isEditing]){
                 [self setEditing:NO animated:YES];
             }
@@ -942,17 +942,17 @@
 
 - (IBAction)edit:(id)sender{
     switch(_editableType){
-        case CKBindedTableViewControllerEditableTypeLeft:{
+        case CKBindedTableViewControllerEditingTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
-        case CKBindedTableViewControllerEditableTypeRight:{
+        case CKBindedTableViewControllerEditingTypeRight:{
             [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
-        case CKBindedTableViewControllerEditableTypeNone:break;
+        case CKBindedTableViewControllerEditingTypeNone:break;
 	}
     
     [self.tableView beginUpdates];
