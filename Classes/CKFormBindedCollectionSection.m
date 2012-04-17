@@ -312,6 +312,7 @@
 	int count = [_objectController numberOfObjectsForSection:0];
 	int index = headerCount + count + footerIndex;
 	
+    [cellController retain];
 	[self.footerCellControllers removeObjectAtIndex:footerIndex];
 	
 	if(![_parentController reloading] && !self.collapsed){
@@ -319,12 +320,14 @@
 		[self objectController:self.objectController removeObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
 	}
+    [cellController autorelease];
 }
 
 - (void)removeHeaderCellController:(CKTableViewCellController*)cellController{
     NSInteger headerIndex = [_headerCellControllers indexOfObjectIdenticalTo:cellController];
 	int index = headerIndex;
 	
+    [cellController retain];
 	[self.headerCellControllers removeObjectAtIndex:headerIndex];
 	
 	if(![_parentController reloading] && !self.collapsed){
@@ -332,6 +335,7 @@
 		[self objectController:self.objectController removeObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
 	}
+    [cellController autorelease];
 }
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
