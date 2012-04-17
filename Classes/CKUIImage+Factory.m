@@ -7,7 +7,6 @@
 //
 
 #import "CKUIImage+Factory.h"
-#import "CKCompatibility.h"
 
 
 CGFloat randomPictureAngle(int offset, int max) {
@@ -44,7 +43,7 @@ CGAffineTransform rotationTransform(CGSize size, CGFloat degrees) {
 
 	// Set the shadow
 	UIColor *shadowColor = [UIColor colorWithWhite:0 alpha:0.6];
-	CGContextSetShadowWithColor(context, CKShadowSizeMake(0, 1), 4.0, shadowColor.CGColor);
+	CGContextSetShadowWithColor(context, CGSizeMake(0, 1), 4.0, shadowColor.CGColor);
 	CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
 	
 	CGRect imageRect = UIEdgeInsetsInsetRect(stackRect, insets);

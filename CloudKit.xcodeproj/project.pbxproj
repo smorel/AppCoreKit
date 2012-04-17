@@ -110,8 +110,6 @@
 		7560DC8613B8ED3600268D13 /* CKClassPropertyDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */; };
 		7560DC8713B8ED3600268D13 /* CKCLLocationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3A13B8ED3600268D13 /* CKCLLocationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC8813B8ED3600268D13 /* CKCLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB3B13B8ED3600268D13 /* CKCLLocationAdditions.m */; };
-		7560DC8913B8ED3600268D13 /* CKCompatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3C13B8ED3600268D13 /* CKCompatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC8A13B8ED3600268D13 /* CKCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB3D13B8ED3600268D13 /* CKCompatibility.m */; };
 		7560DC8B13B8ED3600268D13 /* CKConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3E13B8ED3600268D13 /* CKConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC8C13B8ED3600268D13 /* CKCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3F13B8ED3600268D13 /* CKCoreDataManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */; };
@@ -619,8 +617,6 @@
 		7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKClassPropertyDescriptor.m; path = Classes/CKClassPropertyDescriptor.m; sourceTree = "<group>"; };
 		7560DB3A13B8ED3600268D13 /* CKCLLocationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCLLocationAdditions.h; path = Classes/CKCLLocationAdditions.h; sourceTree = "<group>"; };
 		7560DB3B13B8ED3600268D13 /* CKCLLocationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCLLocationAdditions.m; path = Classes/CKCLLocationAdditions.m; sourceTree = "<group>"; };
-		7560DB3C13B8ED3600268D13 /* CKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCompatibility.h; path = Classes/CKCompatibility.h; sourceTree = "<group>"; };
-		7560DB3D13B8ED3600268D13 /* CKCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCompatibility.m; path = Classes/CKCompatibility.m; sourceTree = "<group>"; };
 		7560DB3E13B8ED3600268D13 /* CKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKConstants.h; path = Classes/CKConstants.h; sourceTree = "<group>"; };
 		7560DB3F13B8ED3600268D13 /* CKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCoreDataManager.h; path = Classes/CKCoreDataManager.h; sourceTree = "<group>"; };
 		7560DB4013B8ED3600268D13 /* CKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCoreDataManager.m; path = Classes/CKCoreDataManager.m; sourceTree = "<group>"; };
@@ -1468,8 +1464,6 @@
 				75C6DF6913FEE9D200E4AE4F /* Support.h */,
 				7506E40913B9005700EE1471 /* AddressBook */,
 				7506E40713B8FFFE00EE1471 /* Location */,
-				7560DB3C13B8ED3600268D13 /* CKCompatibility.h */,
-				7560DB3D13B8ED3600268D13 /* CKCompatibility.m */,
 				7560DB3E13B8ED3600268D13 /* CKConstants.h */,
 				7560DB4113B8ED3600268D13 /* CKCoreGraphicsAdditions.h */,
 				7560DB4213B8ED3600268D13 /* CKCoreGraphicsAdditions.m */,
@@ -2033,7 +2027,6 @@
 				7560DC8313B8ED3600268D13 /* CKClassExplorer.h in Headers */,
 				7560DC8513B8ED3600268D13 /* CKClassPropertyDescriptor.h in Headers */,
 				7560DC8713B8ED3600268D13 /* CKCLLocationAdditions.h in Headers */,
-				7560DC8913B8ED3600268D13 /* CKCompatibility.h in Headers */,
 				7560DC8B13B8ED3600268D13 /* CKConstants.h in Headers */,
 				7560DC8C13B8ED3600268D13 /* CKCoreDataManager.h in Headers */,
 				7560DC8E13B8ED3600268D13 /* CKCoreGraphicsAdditions.h in Headers */,
@@ -2393,7 +2386,6 @@
 				7560DC8413B8ED3600268D13 /* CKClassExplorer.m in Sources */,
 				7560DC8613B8ED3600268D13 /* CKClassPropertyDescriptor.m in Sources */,
 				7560DC8813B8ED3600268D13 /* CKCLLocationAdditions.m in Sources */,
-				7560DC8A13B8ED3600268D13 /* CKCompatibility.m in Sources */,
 				7560DC8D13B8ED3600268D13 /* CKCoreDataManager.m in Sources */,
 				7560DC8F13B8ED3600268D13 /* CKCoreGraphicsAdditions.m in Sources */,
 				7560DC9113B8ED3600268D13 /* CKCreditsFooterView.m in Sources */,

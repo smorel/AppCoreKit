@@ -9,7 +9,6 @@
 #import "CKAddressBook.h"
 #import "CKCLLocationAdditions.h"
 #import "CKLocationManager.h"
-#import "CKCompatibility.h"
 #import "CKConstants.h"
 #import "CKCoreGraphicsAdditions.h"
 #import "CKImageLoader.h"
