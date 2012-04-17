@@ -7,6 +7,7 @@
 //
 
 #import "CKMultilineNSStringPropertyCellController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
@@ -61,6 +62,14 @@
     }
     return nil;
 }*/
+
+- (UIFont*)textViewFont{
+    return [self fontForViewWithKeyPath:@"textView"];
+}
+
+- (CGSize)computeSize{
+    NSAssert(NO,@"Do Implement this method");
+}
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
     [super initTableViewCell:cell];

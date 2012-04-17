@@ -272,6 +272,13 @@
  */
 
 - (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
+    NSAssert(NO,@"");
+    /* here we have to be VERY intelligent as several rows can change their size in the "same scope" wich is not really accessible
+     
+     we should invalidate this if we already are in a beginUpdates scope
+     we should delay the endUpdate to handle all the onSizeChangeAtIndexPath from several controllers
+     if we are in viewWillAppear, we should not call this !
+     */
     [[self tableView]beginUpdates];
     [[self tableView]endUpdates];
 }

@@ -8,6 +8,9 @@
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
+
+#import "CKUILabel+Style.h"
 #import "CKBindedTableViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
@@ -20,6 +23,8 @@
 #import "CKLocalization.h"
 
 #import "CKUIView+Positioning.h"
+#import "CKProperty.h"
+#import "CKNSObject+CKSingleton.h"
 
 //#import <objc/runtime.h>
 
@@ -32,7 +37,9 @@
 
 
 @interface CKUITableViewCell()
-@property(nonatomic,retain) CKWeakRef* delegateRef;
+@property (nonatomic,retain) CKWeakRef* delegateRef;
+@property (nonatomic,assign,readwrite) CKTableViewCellController* delegate;
+@property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
 @end
 
 @implementation CKUITableViewCell
@@ -43,10 +50,23 @@
 @synthesize checkMarkImage = _checkMarkImage;
 @synthesize highlightedDisclosureIndicatorImage = _highlightedDisclosureIndicatorImage;
 @synthesize highlightedCheckMarkImage = _highlightedCheckMarkImage;
+@synthesize syncControllerViewBindingContextId = _syncControllerViewBindingContextId;
+
+//OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
++ (id)sharedInstance{
+    static CKUITableViewCell* sharedCKUITableViewCell = nil;
+    if(!sharedCKUITableViewCell){
+        sharedCKUITableViewCell = [[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
+    }
+    return sharedCKUITableViewCell;
+}
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:_syncControllerViewBindingContextId];
     [self clearBindingsContext];
     
+    [_syncControllerViewBindingContextId release];
+    _syncControllerViewBindingContextId = nil;
     [_disclosureIndicatorImage release];
     _disclosureIndicatorImage = nil;
     [_disclosureButton release];
@@ -62,12 +82,29 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-	self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
+	self.delegate = thedelegate;
+    self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
 	return self;
 }
 
 - (id)delegate{
     return self.delegateRef.object;
+}
+
+- (void)setDelegate:(CKTableViewCellController *)thedelegate{
+	self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
+
+    //Keeps controller in sync for size updates if user sets or bind data directly to the cell !
+    [NSObject beginBindingsContext:_syncControllerViewBindingContextId options:CKBindingsContextPolicyRemovePreviousBindings];
+    [self bind:@"indentationLevel"  toObject:thedelegate withKeyPath:@"indentationLevel"];
+    [self.textLabel bind:@"text"  toObject:thedelegate withKeyPath:@"text"];
+    [self.detailTextLabel bind:@"text"  toObject:thedelegate withKeyPath:@"detailText"];
+    [self.imageView bind:@"image"  toObject:thedelegate withKeyPath:@"image"];
+    [self bind:@"accessoryView"  toObject:thedelegate withKeyPath:@"accessoryView"];
+    [self bind:@"accessoryType"  toObject:thedelegate withKeyPath:@"accessoryType"];
+    [self bind:@"editingAccessoryView"  toObject:thedelegate withKeyPath:@"editingAccessoryView"];
+    [self bind:@"editingAccessoryType"  toObject:thedelegate withKeyPath:@"editingAccessoryType"];
+    [NSObject endBindingsContext];	
 }
 
 - (void)layoutSubviews{
@@ -249,8 +286,15 @@
 @synthesize componentsSpace = _componentsSpace;
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 @synthesize contentInsets = _contentInsets;
-
 @synthesize indentationLevel = _indentationLevel;
+@synthesize text = _text;
+@synthesize detailText = _detailText;
+@synthesize image = _image;
+@synthesize accessoryType = _accessoryType;
+@synthesize accessoryView = _accessoryView;
+@synthesize editingAccessoryType = _editingAccessoryType;
+@synthesize editingAccessoryView = _editingAccessoryView;
+@synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
 
 - (void)postInit {
 	[super postInit];
@@ -270,47 +314,53 @@
     
     self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
     _indentationLevel = 0;
+    _sizeHasBeenQueriedByTableView = NO;
 }
 
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
+    
 	[self clearBindingsContext];
     [_cacheLayoutBindingContextId release];
 	_cacheLayoutBindingContextId = nil;
+    
+    [_text release];
+	_text = nil;
+    [_detailText release];
+	_detailText = nil;
+    [_image release];
+	_image = nil;
+    [_accessoryView release];
+	_accessoryView = nil;
+    [_editingAccessoryView release];
+	_editingAccessoryView = nil;
 	
 	[super dealloc];
 }
 
+- (void)setCellStyle:(CKTableViewCellStyle)cellStyle{
+    _cellStyle = cellStyle;
+    [self invalidateSize];//as stylesheet selection could be dependent
+}
+
+- (void)setIndexPath:(NSIndexPath *)indexPath{
+    [super setIndexPath:indexPath];
+    [self invalidateSize];//as stylesheet selection could be dependent
+}
+
+- (void)setName:(NSString *)name{
+    [super setName:name];
+    [self invalidateSize];//as stylesheet selection could be dependent
+}
+
+- (void)setValue:(id)value{
+    [super setValue:value];
+    [self invalidateSize];
+}
 
 + (CKTableViewCellController*)cellController{
     return [[[[self class]alloc]init]autorelease];
 }
-
-//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
-/*
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* parentController = [params parentController];
-    NSAssert([parentController isKindOfClass:[CKBindedTableViewController class]],@"invalid parent controller");
-    
-    CGFloat tableWidth = [params bounds].width;
-    CKTableViewCellController* staticController = (CKTableViewCellController*)[params staticController];
-    if(staticController.cellStyle == CKTableViewCellStyleValue3
-       || staticController.cellStyle == CKTableViewCellStylePropertyGrid
-       || staticController.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-        
-        CGFloat bottomDetails = 0;
-        if(staticController.tableViewCell.detailTextLabel.text != nil &&
-           [staticController.tableViewCell.detailTextLabel.text isKindOfClass:[NSString class]] &&
-           [staticController.tableViewCell.detailTextLabel.text length] > 0){
-            bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
-        }
-        
-        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
-        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
-    }
-    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
-}*/
 
 - (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
@@ -335,7 +385,7 @@
 	[super setView:view];
 	if([view isKindOfClass:[CKUITableViewCell class]]){
 		CKUITableViewCell* customCell = (CKUITableViewCell*)view;
-		customCell.delegateRef.object = self;
+		customCell.delegate = self;
 	}
 }
 
@@ -541,6 +591,96 @@
 	[super initView:view];
 }
 
+- (void)setText:(NSString *)text{
+    if(_text == text)
+        return;
+    
+    [_text release];
+    _text = [text retain];
+    if(self.tableViewCell){
+        self.tableViewCell.textLabel.text = text;
+    }
+    [self invalidateSize];
+}
+
+- (void)setDetailText:(NSString *)detailText{
+    if(_detailText == detailText)
+        return;
+    
+    [_detailText release];
+    _detailText = [detailText retain];
+    if(self.tableViewCell){
+        self.tableViewCell.detailTextLabel.text = detailText;
+    }
+    [self invalidateSize];
+}
+
+- (void)setImage:(UIImage *)image{
+    if(_image == image)
+        return;
+    
+    [_image release];
+    _image = [image retain];
+    if(self.tableViewCell){
+        self.tableViewCell.imageView.image = image;
+    }
+    [self invalidateSize];
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType{
+    if(_accessoryType == accessoryType)
+        return;
+    
+    _accessoryType = accessoryType;
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryType = accessoryType;
+    }
+    if(![self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setAccessoryView:(UIView *)accessoryView{
+    if(_accessoryView == accessoryView)
+        return;
+    
+    [_accessoryView release];
+    _accessoryView = [accessoryView retain];
+    if(self.tableViewCell){
+        self.tableViewCell.accessoryView = accessoryView;
+    }
+    if(![self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setEditingAccessoryType:(UITableViewCellAccessoryType)editingAccessoryType{
+    if(_editingAccessoryType == editingAccessoryType)
+        return;
+    
+    _editingAccessoryType = editingAccessoryType;
+    if(self.tableViewCell){
+        self.tableViewCell.editingAccessoryType = editingAccessoryType;
+    }
+    if([self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
+- (void)setEditingAccessoryView:(UIView *)editingAccessoryView{
+    if(_editingAccessoryView == editingAccessoryView)
+        return;
+    
+    [_editingAccessoryView release];
+    _editingAccessoryView = [editingAccessoryView retain];
+    if(self.tableViewCell){
+        self.tableViewCell.editingAccessoryView = editingAccessoryView;
+    }
+    if([self.tableViewCell isEditing]){
+        [self invalidateSize];
+    }
+}
+
 - (void)setupView:(UIView *)view{
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
@@ -561,15 +701,29 @@
      setValue: [NSNumber numberWithBool: YES]
      forKey: kCATransactionDisableActions];
     
+    //Setup the tableViewCell using internal values.
+    //Those values can then be overloaded by setup block
+	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+    
+    UITableViewCell* cell = (UITableViewCell*)view;
+    cell.indentationLevel = self.indentationLevel;
+    if(self.text)cell.textLabel.text = self.text;
+    if(self.detailText)cell.detailTextLabel.text = self.detailText;
+    if(self.image)cell.imageView.image = self.image;
+    if(self.accessoryView)cell.accessoryView = self.accessoryView;
+    else cell.accessoryType = self.accessoryType;
+    if(self.editingAccessoryView)cell.editingAccessoryView = self.editingAccessoryView;
+    else cell.editingAccessoryType = self.editingAccessoryType;
     
 	[view beginBindingsContextByRemovingPreviousBindings];
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
-	[self setupCell:(UITableViewCell*)view];
+	[self setupCell:cell];
 	[super setupView:view];
 	[view endBindingsContext];
     
-    UITableViewCell* cell = (UITableViewCell*)view;
     
+    //TODO : Check if necessary as setting values on controller or cell will invalidate the size
+    //and as a side effect tell the table to refresh the view with this new size !
+    /*
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
@@ -578,6 +732,7 @@
         [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
         [NSObject endBindingsContext];	
     }
+     */
     
     [CATransaction commit];
 }
@@ -629,349 +784,6 @@
 
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay{
     [self performSelector:@selector(scrollToRow) withObject:nil afterDelay:delay];
-}
-
-@end
-
-
-@implementation CKTableViewCellController (CKLayout)
-@dynamic componentsRatio, componentsSpace, contentInsets;
-
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller{
-    CGFloat rowWidth = 0;
-    UIView* tableViewContainer = [controller tableViewContainer];
-    UITableView* tableView = [controller tableView];
-    if(tableView.style == UITableViewStylePlain){
-        rowWidth = tableViewContainer.frame.size.width;
-    }
-    else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        rowWidth = tableViewContainer.frame.size.width - 18;
-    }
-    else{
-        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
-        CGFloat offset = -1;
-        if(tableViewWidth > 716)offset = 90;
-        else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 624) offset = 76;
-        else if(tableViewWidth > 545) offset = 74 - (((NSInteger)(624 - tableViewWidth) / 13) * 2);
-        else if(tableViewWidth > 400) offset = 62;
-        else offset = 20;
-        
-        rowWidth = tableViewWidth - offset;
-    }
-    return rowWidth;
-}
-
-//Value3 layout 
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self value3TextFrameForCell:cell];
-    
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
-    CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
-    
-    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
-	
-    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
-                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
-}
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
-    
-    CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
-    CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
-    
-    //Detail Check
-    CGSize detailsize = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                         constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                             lineBreakMode:cell.detailTextLabel.lineBreakMode];
-    BOOL detailOn1Line = (detailsize.height == cell.detailTextLabel.font.lineHeight);
-    
-    
-    
-    CGFloat maxWidth = realWidth - width - self.componentsSpace;
-    
-    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                   constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.textLabel.lineBreakMode];
-    BOOL textOn1Line = (size.height == cell.textLabel.font.lineHeight);
-    
-    if(detailOn1Line && textOn1Line){
-        size.height = MAX(cell.textLabel.font.lineHeight,cell.detailTextLabel.font.lineHeight);
-    }
-    
-    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-    if(cell.textLabel.textAlignment == UITextAlignmentRight){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
-    else if(cell.textLabel.textAlignment == UITextAlignmentLeft){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
-    
-    //else Center
-    return CGRectIntegral(CGRectMake(self.contentInsets.left + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-}
-
-//PropertyGrid layout
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell{
-    //TODO : factoriser un peu mieux ce code la ....
-    CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            if(cell.detailTextLabel.text != nil && 
-               [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-               [cell.detailTextLabel.text length] > 0 &&
-               cell.detailTextLabel.numberOfLines != 1){
-                
-                CGFloat realWidth = cell.contentView.frame.size.width;
-                CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
-                
-                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                     constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                                         lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), size.height);
-            }
-            else{
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
-            }
-        }
-        else{
-            //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-            CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.frame.size.width - self.contentInsets.right - x;
-            if(width > 0 ){
-                CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                                     constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                                         lineBreakMode:cell.detailTextLabel.lineBreakMode];
-                
-                CGFloat y = MAX(textFrame.origin.y + (textFrame.size.height / 2.0) - (size.height / 2),self.contentInsets.top);
-                
-                return CGRectMake(x,y, width, size.height);
-            }
-            else{
-                return CGRectMake(0,0,0,0);
-            }
-        }
-    }
-    return [self value3DetailFrameForCell:cell];
-}
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell{
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            return CGRectMake(0,0,0,0);
-        }
-        else{
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
-            CGFloat realWidth = rowWidth;
-            CGFloat width = realWidth * self.componentsRatio;
-            
-            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
-            CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                           constrainedToSize:CGSizeMake( maxWidth , CGFLOAT_MAX) 
-                                               lineBreakMode:cell.textLabel.lineBreakMode];
-            // NSLog(@"propertyGridTextFrameForCell for cell at index: %@",self.indexPath);
-            //NSLog(@"cell width : %f",realWidth);
-            //NSLog(@"textLabel size %f %f",size.width,size.height);
-            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
-        }
-    }
-    return [self value3TextFrameForCell:cell];
-}
-
-- (CGRect)subtitleTextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
-    
-    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
-    CGFloat width = cell.contentView.width - x - 10;
-    
-    CGSize size = [cell.textLabel.text  sizeWithFont:cell.textLabel.font 
-                                   constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.textLabel.lineBreakMode];
-    
-    return CGRectMake(x,11, size.width, size.height);
-}
-
-
-- (CGRect)subtitleDetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self subtitleTextFrameForCell:cell];
-    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
-    CGFloat width = cell.contentView.width - x - 10;
-    
-    if(cell.detailTextLabel.text == nil || 
-       [cell.detailTextLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.detailTextLabel.text length] <= 0){
-        return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,0);
-    }
-    
-    CGSize size = [cell.detailTextLabel.text  sizeWithFont:cell.detailTextLabel.font 
-                                   constrainedToSize:CGSizeMake( width , CGFLOAT_MAX) 
-                                       lineBreakMode:cell.detailTextLabel.lineBreakMode];
-    
-    return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, width/*size.width*/, size.height);
-}
-
-- (void)performLayout{
-    UITableViewCell* cell = self.tableViewCell;
-    //You can overload this method if you need to update cell layout when cell is resizing.
-	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
-	if(self.cellStyle == CKTableViewCellStyleValue3){
-        
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        }
-        
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self value3TextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self subtitleTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self subtitleDetailFrameForCell:cell];
-		}
-	}
-}
-
-@end
-
-
-
-@implementation CKTableViewCellController (CKInlineDefinition)
-
-- (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
-    if(block){
-        self.initCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            UITableViewCell* cell = controller.tableViewCell;
-            block(controller,cell);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
-    if(block){
-        self.setupCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            UITableViewCell* cell = controller.tableViewCell;
-            block(controller,cell);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setSelectionBlock:(void(^)(CKTableViewCellController* controller))block{
-    if(block){
-        self.selectionCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            block(controller);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setAccessorySelectionBlock:(void(^)(CKTableViewCellController* controller))block{
-    if(block){
-        self.accessorySelectionCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            block(controller);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setBecomeFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block{
-    if(block){
-        self.becomeFirstResponderCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            block(controller);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setResignFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block{
-    if(block){
-        self.resignFirstResponderCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            block(controller);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setViewDidAppearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
-    if(block){
-        self.viewDidAppearCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            UITableViewCell* cell = controller.tableViewCell;
-            block(controller,cell);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setViewDidDisappearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
-    if(block){
-        self.viewDidDisappearCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            UITableViewCell* cell = controller.tableViewCell;
-            block(controller,cell);
-            return (id)nil;
-        }];
-    }
-}
-
-- (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
-    if(block){
-        self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
-            CKTableViewCellController* controller = (CKTableViewCellController*)value;
-            UITableViewCell* cell = controller.tableViewCell;
-            block(controller,cell);
-            return (id)nil;
-        }];
-    }
 }
 
 @end

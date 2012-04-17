@@ -7,6 +7,7 @@
 //
 
 #import "CKNSObject+InlineDebugger.h"
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKUIView+Style.h"
 #import "CKCascadingTree.h"
 #import "CKLocalization.h"

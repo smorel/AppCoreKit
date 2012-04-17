@@ -7,6 +7,7 @@
 //
 
 #import "CKTableViewCellController+Menus.h"
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKTableViewCellController.h"
 
 

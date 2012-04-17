@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKObject.h"
+#import <Foundation/Foundation.h>
 
-@interface CKObject (CKSingleton)
+@interface NSObject (CKSingleton)
 
 + (id)sharedInstance;
 

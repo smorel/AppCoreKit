@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import "CKStoreDataSource.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
 
 NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 {

@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKObject+CKSingleton.h"
+#import "CKNSObject+CKSingleton.h"
 
 static NSMutableDictionary* CKObjectSingletons = nil;
 
-@implementation CKObject (CKSingleton)
+@implementation NSObject (CKSingleton)
 
 + (id)sharedInstance{
     if(!CKObjectSingletons){

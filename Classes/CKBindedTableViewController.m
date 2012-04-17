@@ -492,7 +492,15 @@
 	return self.tableViewHasBeenReloaded ? [self numberOfObjectsForSection:section] : 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {	CGFloat height = 0;
+- (CGSize)sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
+    CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
+    controller.sizeHasBeenQueriedByTableView = YES;
+    [controller invalidateSize];
+    return controller.size;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {	
+    CGFloat height = 0;
 	CGSize thesize = [self sizeForViewAtIndexPath:indexPath];
 	height = (_orientation == CKTableViewOrientationLandscape) ? thesize.width : thesize.height;
 	

@@ -8,6 +8,7 @@
 
 
 #import "CKNSStringPropertyCellController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
@@ -55,6 +56,14 @@
     CGFloat maxHeight = MAX(bottomTextField,MAX(bottomTextLabel,bottomDetailTextLabel)) + staticController.contentInsets.bottom;
     return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
 }*/
+
+- (UIFont*)textViewFont{
+    return [self fontForViewWithKeyPath:@"textField"];
+}
+
+- (CGSize)computeSize{
+    NSAssert(NO,@"Do Implement this method");
+}
 
 //pas utiliser load cell mais initCell pour application des styles ...
 - (void)initTableViewCell:(UITableViewCell*)cell{

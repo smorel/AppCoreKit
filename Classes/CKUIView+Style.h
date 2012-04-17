@@ -10,14 +10,6 @@
 #import "CKGradientView.h"
 #import "CKNSObject+CKRuntime.h"
 
-
-/* TODO :
-     utiliser l'introspection pour pouvoir setter n'importe quelle property via les styles avec les types supportes par le style serializer
-     le style serializer aura surement besoin d'un enum manager pour le parsing car c les types qui n'ont rien pour etre introspectes (= int)
-     faudra enregistrer les enums qu'on veut pouvoir utiliser avec l'introspection en utilisant le helper CKEnumDefinition
- */
-
-
 /** TODO
  */
 typedef enum{

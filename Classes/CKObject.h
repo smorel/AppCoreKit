@@ -53,4 +53,4 @@
 @end
 
 #import "CKNSObject+Validation.h"
-#import "CKObject+CKSingleton.h"
+#import "CKNSObject+CKSingleton.h"

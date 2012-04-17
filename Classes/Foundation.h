@@ -11,6 +11,8 @@
 #import "CKWeakRef.h"
 #import "CKBundle.h"
 #import "CKCache.h"
+#import "CKNSObject+CKSingleton.h"
+#import "CKNSObject+Validation.h"
 
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKNSValueTransformer+Additions.h"

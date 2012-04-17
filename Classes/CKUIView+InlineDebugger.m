@@ -7,6 +7,7 @@
 //
 
 #import "CKUIView+InlineDebugger.h"
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKArrayCollection.h"
 #import "CKDebug.h"
 #import "CKCache.h"

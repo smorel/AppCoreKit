@@ -18,6 +18,8 @@
 #import "CKBindedCarouselViewController.h"
 
 #import "CKTableViewCellController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableViewController.h"
 #import "CKBindedTableViewController.h"

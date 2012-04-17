@@ -85,10 +85,14 @@
 }
 
 - (void)setSize:(CGSize)s{
+    if(CGSizeEqualToSize(_size, s))
+        return;
+    [self willChangeValueForKey:@"size"];
     _size = s;
     if(self.containerController){
         [self.containerController onSizeChangeAtIndexPath:self.indexPath];
     }
+    [self didChangeValueForKey:@"size"];
 }
 
 - (void)setView:(UIView *)view{

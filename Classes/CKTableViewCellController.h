@@ -13,6 +13,8 @@
 #import "CKCallback.h"
 #import "CKWeakRef.h"
 
+/********************************************** CKUITableViewCell *************************************/
+
 @class CKBindedTableViewController;
 @class CKTableViewCellController;
 @class CKTableViewController;
@@ -48,7 +50,7 @@
 
 
 
-
+/********************************************** CKTableViewCellController *************************************/
 
 /** TODO
  */
@@ -74,7 +76,8 @@ typedef enum CKTableViewCellStyle {
 	CKTableViewCellStyleValue3,
 	CKTableViewCellStylePropertyGrid,
 	CKTableViewCellStyleSubtitle2
-} CKTableViewCellStyle;             
+} CKTableViewCellStyle;           
+
 
 /** TODO
  */
@@ -83,8 +86,15 @@ typedef enum CKTableViewCellStyle {
 + (CKTableViewCellController*)cellController;
 
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
-@property (nonatomic,assign) NSInteger indentationLevel;
+@property (nonatomic, assign) NSInteger indentationLevel;
 
+@property (nonatomic, retain) NSString* text;
+@property (nonatomic, retain) NSString* detailText;
+@property (nonatomic, retain) UIImage*  image;
+@property (nonatomic) UITableViewCellAccessoryType   accessoryType;
+@property (nonatomic,retain) UIView                 *accessoryView;
+@property (nonatomic) UITableViewCellAccessoryType   editingAccessoryType;
+@property (nonatomic,retain) UIView                 *editingAccessoryView;
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
 - (CKTableViewController*)parentTableViewController;
@@ -104,40 +114,12 @@ typedef enum CKTableViewCellStyle {
 - (void)scrollToRow;
 - (void)scrollToRowAfterDelay:(NSTimeInterval)delay;
 
-@end
-
-
-//FIXME use layout when available !
-@interface CKTableViewCellController (CKLayout)
-
-@property (nonatomic, assign) CGFloat componentsRatio;
-@property (nonatomic, assign) CGFloat componentsSpace;
-@property (nonatomic, assign) UIEdgeInsets contentInsets;
-
-- (void)performLayout;
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell;
-
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell;
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell;
+//PRIVATE
+@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
 
 @end
 
 
-@interface CKTableViewCellController (CKInlineDefinition)
-
-- (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
-- (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
-
-- (void)setSelectionBlock:(void(^)(CKTableViewCellController* controller))block;
-- (void)setAccessorySelectionBlock:(void(^)(CKTableViewCellController* controller))block;
-- (void)setBecomeFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block;
-- (void)setResignFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block;
-
-- (void)setViewDidAppearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
-- (void)setViewDidDisappearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
-
-- (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
-
-@end
+#import "CKTableViewCellController+CKBlockBasedInterface.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+Responder.h"

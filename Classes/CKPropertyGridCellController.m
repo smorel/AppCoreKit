@@ -7,6 +7,7 @@
 //
 
 #import "CKPropertyGridCellController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
@@ -77,13 +78,20 @@
     }
 }
 
+- (void)setReadOnly:(BOOL)readOnly{
+    _readOnly = readOnly;
+    if(self.tableViewCell){
+        [self setupCell:self.tableViewCell];
+    }
+    [self invalidateSize];
+}
+
 - (void)initTableViewCell:(UITableViewCell*)cell{
 	[super initTableViewCell:cell];
     if(self.readOnly){
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 }
-
 
 - (void)setupCell:(UITableViewCell*)cell{
     [super setupCell:cell];

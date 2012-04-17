@@ -7,6 +7,7 @@
 //
 
 #import "CKNSNumberPropertyCellController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
@@ -62,6 +63,13 @@
     return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
 } */
 
+- (UIFont*)textViewFont{
+    return [self fontForViewWithKeyPath:@"textField"];
+}
+
+- (CGSize)computeSize{
+    NSAssert(NO,@"Do Implement this method");
+}
 
 - (void)onswitch{
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
