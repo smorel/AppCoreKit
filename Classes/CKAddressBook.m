@@ -8,7 +8,7 @@
 #import "CKAddressBook.h"
 #import <AddressBook/AddressBook.h>
 
-#import "CKNSArrayAdditions.h"
+#import "CKNSArray+Additions.h"
 
 @implementation CKAddressBookPerson
 

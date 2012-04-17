@@ -6,7 +6,7 @@
 //
 
 #import "CKNSDate+Calculations.h"
-#import "CKNSDateAdditions.h"
+#import "CKNSDate+Conversions.h"
 
 @implementation NSDate (NSDateCalculationsAdditions)
 

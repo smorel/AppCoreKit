@@ -15,7 +15,7 @@
 #import "CKBindedMapViewController.h"
 
 #import "CKGradientView.h"
-#import "CKNSArrayAdditions.h"
+#import "CKNSArray+Additions.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
 

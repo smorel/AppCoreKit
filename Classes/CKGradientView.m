@@ -10,7 +10,7 @@
 #import "CKUIColorAdditions.h"
 #import "CKUIImage+Transformations.h"
 #import "CKNSObject+Bindings.h"
-#import "CKNSArrayAdditions.h"
+#import "CKNSArray+Additions.h"
 
 #import <QuartzCore/QuartzCore.h>
 

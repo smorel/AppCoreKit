@@ -189,8 +189,8 @@
 		7560DCEB13B8ED3600268D13 /* CKNetworkActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */; };
 		7560DCEE13B8ED3600268D13 /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA113B8ED3600268D13 /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCEF13B8ED3600268D13 /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA213B8ED3600268D13 /* CKNotificationBlockBinder.m */; };
-		7560DCF013B8ED3600268D13 /* CKNSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA313B8ED3600268D13 /* CKNSArrayAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCF113B8ED3600268D13 /* CKNSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA413B8ED3600268D13 /* CKNSArrayAdditions.m */; };
+		7560DCF013B8ED3600268D13 /* CKNSArray+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA313B8ED3600268D13 /* CKNSArray+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCF113B8ED3600268D13 /* CKNSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA413B8ED3600268D13 /* CKNSArray+Additions.m */; };
 		7560DCF213B8ED3600268D13 /* CKNSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA513B8ED3600268D13 /* CKNSData+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCF313B8ED3600268D13 /* CKNSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA613B8ED3600268D13 /* CKNSData+Base64.m */; };
 		7560DCF413B8ED3600268D13 /* CKNSData+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA713B8ED3600268D13 /* CKNSData+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -199,12 +199,10 @@
 		7560DCF713B8ED3600268D13 /* CKNSData+Matching.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBAA13B8ED3600268D13 /* CKNSData+Matching.m */; };
 		7560DCF813B8ED3600268D13 /* CKNSData+SHA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBAB13B8ED3600268D13 /* CKNSData+SHA1.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCF913B8ED3600268D13 /* CKNSData+SHA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBAC13B8ED3600268D13 /* CKNSData+SHA1.m */; };
-		7560DCFA13B8ED3600268D13 /* CKNSDataAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBAD13B8ED3600268D13 /* CKNSDataAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCFB13B8ED3600268D13 /* CKNSDate+Calculations.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBAE13B8ED3600268D13 /* CKNSDate+Calculations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCFC13B8ED3600268D13 /* CKNSDate+Calculations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBAF13B8ED3600268D13 /* CKNSDate+Calculations.m */; };
 		7560DCFD13B8ED3600268D13 /* CKNSDate+Conversions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBB013B8ED3600268D13 /* CKNSDate+Conversions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCFE13B8ED3600268D13 /* CKNSDate+Conversions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBB113B8ED3600268D13 /* CKNSDate+Conversions.m */; };
-		7560DCFF13B8ED3600268D13 /* CKNSDateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBB213B8ED3600268D13 /* CKNSDateAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0013B8ED3600268D13 /* CKNSDatePropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0113B8ED3600268D13 /* CKNSDatePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */; };
 		7560DD0613B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBB913B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -692,8 +690,8 @@
 		7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNetworkActivityManager.m; path = Classes/CKNetworkActivityManager.m; sourceTree = "<group>"; };
 		7560DBA113B8ED3600268D13 /* CKNotificationBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNotificationBlockBinder.h; path = Classes/CKNotificationBlockBinder.h; sourceTree = "<group>"; };
 		7560DBA213B8ED3600268D13 /* CKNotificationBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNotificationBlockBinder.m; path = Classes/CKNotificationBlockBinder.m; sourceTree = "<group>"; };
-		7560DBA313B8ED3600268D13 /* CKNSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSArrayAdditions.h; path = Classes/CKNSArrayAdditions.h; sourceTree = "<group>"; };
-		7560DBA413B8ED3600268D13 /* CKNSArrayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSArrayAdditions.m; path = Classes/CKNSArrayAdditions.m; sourceTree = "<group>"; };
+		7560DBA313B8ED3600268D13 /* CKNSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSArray+Additions.h"; path = "Classes/CKNSArray+Additions.h"; sourceTree = "<group>"; };
+		7560DBA413B8ED3600268D13 /* CKNSArray+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSArray+Additions.m"; path = "Classes/CKNSArray+Additions.m"; sourceTree = "<group>"; };
 		7560DBA513B8ED3600268D13 /* CKNSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSData+Base64.h"; path = "Classes/CKNSData+Base64.h"; sourceTree = "<group>"; };
 		7560DBA613B8ED3600268D13 /* CKNSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSData+Base64.m"; path = "Classes/CKNSData+Base64.m"; sourceTree = "<group>"; };
 		7560DBA713B8ED3600268D13 /* CKNSData+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSData+Compression.h"; path = "Classes/CKNSData+Compression.h"; sourceTree = "<group>"; };
@@ -702,12 +700,10 @@
 		7560DBAA13B8ED3600268D13 /* CKNSData+Matching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSData+Matching.m"; path = "Classes/CKNSData+Matching.m"; sourceTree = "<group>"; };
 		7560DBAB13B8ED3600268D13 /* CKNSData+SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSData+SHA1.h"; path = "Classes/CKNSData+SHA1.h"; sourceTree = "<group>"; };
 		7560DBAC13B8ED3600268D13 /* CKNSData+SHA1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSData+SHA1.m"; path = "Classes/CKNSData+SHA1.m"; sourceTree = "<group>"; };
-		7560DBAD13B8ED3600268D13 /* CKNSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDataAdditions.h; path = Classes/CKNSDataAdditions.h; sourceTree = "<group>"; };
 		7560DBAE13B8ED3600268D13 /* CKNSDate+Calculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDate+Calculations.h"; path = "Classes/CKNSDate+Calculations.h"; sourceTree = "<group>"; };
 		7560DBAF13B8ED3600268D13 /* CKNSDate+Calculations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDate+Calculations.m"; path = "Classes/CKNSDate+Calculations.m"; sourceTree = "<group>"; };
 		7560DBB013B8ED3600268D13 /* CKNSDate+Conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSDate+Conversions.h"; path = "Classes/CKNSDate+Conversions.h"; sourceTree = "<group>"; };
 		7560DBB113B8ED3600268D13 /* CKNSDate+Conversions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSDate+Conversions.m"; path = "Classes/CKNSDate+Conversions.m"; sourceTree = "<group>"; };
-		7560DBB213B8ED3600268D13 /* CKNSDateAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDateAdditions.h; path = Classes/CKNSDateAdditions.h; sourceTree = "<group>"; };
 		7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSDatePropertyCellController.h; path = Classes/CKNSDatePropertyCellController.h; sourceTree = "<group>"; };
 		7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSDatePropertyCellController.m; path = Classes/CKNSDatePropertyCellController.m; sourceTree = "<group>"; };
 		7560DBB913B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
@@ -1465,8 +1461,8 @@
 				7560DB7E13B8ED3600268D13 /* CKLayout.m */,
 				7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */,
 				7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */,
-				7560DBA313B8ED3600268D13 /* CKNSArrayAdditions.h */,
-				7560DBA413B8ED3600268D13 /* CKNSArrayAdditions.m */,
+				7560DBA313B8ED3600268D13 /* CKNSArray+Additions.h */,
+				7560DBA413B8ED3600268D13 /* CKNSArray+Additions.m */,
 				7560DBA513B8ED3600268D13 /* CKNSData+Base64.h */,
 				7560DBA613B8ED3600268D13 /* CKNSData+Base64.m */,
 				7560DBA713B8ED3600268D13 /* CKNSData+Compression.h */,
@@ -1475,12 +1471,10 @@
 				7560DBAA13B8ED3600268D13 /* CKNSData+Matching.m */,
 				7560DBAB13B8ED3600268D13 /* CKNSData+SHA1.h */,
 				7560DBAC13B8ED3600268D13 /* CKNSData+SHA1.m */,
-				7560DBAD13B8ED3600268D13 /* CKNSDataAdditions.h */,
 				7560DBAE13B8ED3600268D13 /* CKNSDate+Calculations.h */,
 				7560DBAF13B8ED3600268D13 /* CKNSDate+Calculations.m */,
 				7560DBB013B8ED3600268D13 /* CKNSDate+Conversions.h */,
 				7560DBB113B8ED3600268D13 /* CKNSDate+Conversions.m */,
-				7560DBB213B8ED3600268D13 /* CKNSDateAdditions.h */,
 				7560DBC313B8ED3600268D13 /* CKNSObject+Invocation.h */,
 				7560DBC413B8ED3600268D13 /* CKNSObject+Invocation.m */,
 				7560DBC513B8ED3600268D13 /* CKNSObject+JSON.h */,
@@ -2063,15 +2057,13 @@
 				7560DCE813B8ED3600268D13 /* CKMultipartParser.h in Headers */,
 				7560DCEA13B8ED3600268D13 /* CKNetworkActivityManager.h in Headers */,
 				7560DCEE13B8ED3600268D13 /* CKNotificationBlockBinder.h in Headers */,
-				7560DCF013B8ED3600268D13 /* CKNSArrayAdditions.h in Headers */,
+				7560DCF013B8ED3600268D13 /* CKNSArray+Additions.h in Headers */,
 				7560DCF213B8ED3600268D13 /* CKNSData+Base64.h in Headers */,
 				7560DCF413B8ED3600268D13 /* CKNSData+Compression.h in Headers */,
 				7560DCF613B8ED3600268D13 /* CKNSData+Matching.h in Headers */,
 				7560DCF813B8ED3600268D13 /* CKNSData+SHA1.h in Headers */,
-				7560DCFA13B8ED3600268D13 /* CKNSDataAdditions.h in Headers */,
 				7560DCFB13B8ED3600268D13 /* CKNSDate+Calculations.h in Headers */,
 				7560DCFD13B8ED3600268D13 /* CKNSDate+Conversions.h in Headers */,
-				7560DCFF13B8ED3600268D13 /* CKNSDateAdditions.h in Headers */,
 				7560DD0013B8ED3600268D13 /* CKNSDatePropertyCellController.h in Headers */,
 				7560DD0613B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h in Headers */,
 				7560DD0813B8ED3600268D13 /* CKNSNotificationCenter+Edition.h in Headers */,
@@ -2419,7 +2411,7 @@
 				7560DCE913B8ED3600268D13 /* CKMultipartParser.m in Sources */,
 				7560DCEB13B8ED3600268D13 /* CKNetworkActivityManager.m in Sources */,
 				7560DCEF13B8ED3600268D13 /* CKNotificationBlockBinder.m in Sources */,
-				7560DCF113B8ED3600268D13 /* CKNSArrayAdditions.m in Sources */,
+				7560DCF113B8ED3600268D13 /* CKNSArray+Additions.m in Sources */,
 				7560DCF313B8ED3600268D13 /* CKNSData+Base64.m in Sources */,
 				7560DCF513B8ED3600268D13 /* CKNSData+Compression.m in Sources */,
 				7560DCF713B8ED3600268D13 /* CKNSData+Matching.m in Sources */,

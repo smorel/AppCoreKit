@@ -16,7 +16,7 @@
 #import "CKLocalization.h"
 #import "CKMapAnnotationController.h"
 #import "CKNetworkActivityManager.h"
-#import "CKNSArrayAdditions.h"
+#import "CKNSArray+Additions.h"
 #import "CKNSData+Base64.h"
 #import "CKNSData+Compression.h"
 #import "CKNSData+Matching.h"

@@ -7,7 +7,8 @@
 //
 
 #import "CKBindedTableViewController.h"
-#import "CKNSDateAdditions.h"
+#import "CKNSDate+Conversions.h"
+#import "CKNSDate+Calculations.h"
 #import <objc/runtime.h>
 #import "CKUIKeyboardInformation.h"
 #import <QuartzCore/QuartzCore.h>

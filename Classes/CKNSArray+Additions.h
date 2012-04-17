@@ -1,5 +1,5 @@
 //
-//  CKNSArrayAdditions.h
+//  CKNSArray+Additions.h
 //
 //  Created by Fred Brunel on 05/08/09.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.

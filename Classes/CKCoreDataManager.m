@@ -8,7 +8,8 @@
 #import <UIKit/UIKit.h>
 
 #import "CKCoreDataManager.h"
-#import "CKNSDateAdditions.h"
+#import "CKNSDate+Conversions.h"
+#import "CKNSDate+Calculations.h"
 #import "CKNSStringAdditions.h"
 #import "CKDebug.h"
 

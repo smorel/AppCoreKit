@@ -1,11 +1,11 @@
 //
-//  CKNSArrayAdditions.m
+//  CKNSArray+Additions.m
 //
 //  Created by Fred Brunel on 05/08/09.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKNSArrayAdditions.h"
+#import "CKNSArray+Additions.h"
 
 @implementation NSArray (CKNSArrayAdditions)
 
