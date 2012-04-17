@@ -13,7 +13,6 @@
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"
 #import "CKNSObject+Bindings.h"
-#import "CKOptionCellController.h"
 #import "CKArrayProxyCollection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"

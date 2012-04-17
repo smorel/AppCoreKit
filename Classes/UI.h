@@ -17,8 +17,8 @@
 #import "CKCarouselView.h"
 #import "CKBindedCarouselViewController.h"
 
-#import "CKTableViewCellNextResponder.h"
 #import "CKTableViewCellController.h"
+#import "CKTableViewCellController+Responder.h"
 #import "CKTableViewController.h"
 #import "CKBindedTableViewController.h"
 #import "CKOptionTableViewController.h"
@@ -28,8 +28,6 @@
 #import "CKTableViewCellController+Menus.h"
 
 #import "CKCollectionCellController.h"
-#import "CKMoviePlayerCellController.h"
-#import "CKOptionCellController.h"
 
 #import "CKPropertyGridCellController.h"
 #import "CKNSDatePropertyCellController.h"
@@ -43,7 +41,6 @@
 #import "CKUIColorPropertyCellController.h"
 #import "CKUIImagePropertyCellController.h"
 
-#import "CKMapCellController.h"
 #import "CKBindedMapViewController.h"
 
 #import "CKActionSheet.h"

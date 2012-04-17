@@ -177,8 +177,6 @@
 		7560DCD113B8ED3600268D13 /* CKLocationManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8413B8ED3600268D13 /* CKLocationManager2.m */; };
 		7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */; };
-		7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8913B8ED3600268D13 /* CKMapCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8A13B8ED3600268D13 /* CKMapCellController.m */; };
 		7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCDB13B8ED3600268D13 /* CKBindedMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKBindedMapViewController.m */; };
 		7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -187,8 +185,6 @@
 		7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9213B8ED3600268D13 /* CKObject.m */; };
 		7560DCE013B8ED3600268D13 /* CKObject+CKStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9313B8ED3600268D13 /* CKObject+CKStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCE113B8ED3600268D13 /* CKObject+CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9413B8ED3600268D13 /* CKObject+CKStore.m */; };
-		7560DCE213B8ED3600268D13 /* CKMoviePlayerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9513B8ED3600268D13 /* CKMoviePlayerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCE313B8ED3600268D13 /* CKMoviePlayerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9613B8ED3600268D13 /* CKMoviePlayerCellController.m */; };
 		7560DCE413B8ED3600268D13 /* CKMultiFloatPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCE513B8ED3600268D13 /* CKMultiFloatPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */; };
 		7560DCE613B8ED3600268D13 /* CKMultipartEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9913B8ED3600268D13 /* CKMultipartEncoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -260,8 +256,6 @@
 		7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */; };
 		7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */; };
-		7560DD3113B8ED3600268D13 /* CKOptionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE413B8ED3600268D13 /* CKOptionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD3213B8ED3600268D13 /* CKOptionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE513B8ED3600268D13 /* CKOptionCellController.m */; };
 		7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */; };
 		7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBEE13B8ED3600268D13 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -694,8 +688,6 @@
 		7560DB8413B8ED3600268D13 /* CKLocationManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager2.m; path = Classes/CKLocationManager2.m; sourceTree = "<group>"; };
 		7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapAnnotationController.h; path = Classes/CKMapAnnotationController.h; sourceTree = "<group>"; };
 		7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapAnnotationController.m; path = Classes/CKMapAnnotationController.m; sourceTree = "<group>"; };
-		7560DB8913B8ED3600268D13 /* CKMapCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapCellController.h; path = Classes/CKMapCellController.h; sourceTree = "<group>"; };
-		7560DB8A13B8ED3600268D13 /* CKMapCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapCellController.m; path = Classes/CKMapCellController.m; sourceTree = "<group>"; };
 		7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedMapViewController.h; path = Classes/CKBindedMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DB8E13B8ED3600268D13 /* CKBindedMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKBindedMapViewController.m; path = Classes/CKBindedMapViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMKMapView+Introspection.h"; path = "Classes/CKMKMapView+Introspection.h"; sourceTree = "<group>"; };
@@ -704,8 +696,6 @@
 		7560DB9213B8ED3600268D13 /* CKObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKObject.m; path = Classes/CKObject.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB9313B8ED3600268D13 /* CKObject+CKStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore.h"; path = "Classes/CKObject+CKStore.h"; sourceTree = "<group>"; };
 		7560DB9413B8ED3600268D13 /* CKObject+CKStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKObject+CKStore.m"; path = "Classes/CKObject+CKStore.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7560DB9513B8ED3600268D13 /* CKMoviePlayerCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMoviePlayerCellController.h; path = Classes/CKMoviePlayerCellController.h; sourceTree = "<group>"; };
-		7560DB9613B8ED3600268D13 /* CKMoviePlayerCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMoviePlayerCellController.m; path = Classes/CKMoviePlayerCellController.m; sourceTree = "<group>"; };
 		7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultiFloatPropertyCellController.h; path = Classes/CKMultiFloatPropertyCellController.h; sourceTree = "<group>"; };
 		7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMultiFloatPropertyCellController.m; path = Classes/CKMultiFloatPropertyCellController.m; sourceTree = "<group>"; };
 		7560DB9913B8ED3600268D13 /* CKMultipartEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMultipartEncoder.h; path = Classes/CKMultipartEncoder.h; sourceTree = "<group>"; };
@@ -777,8 +767,6 @@
 		7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedTableViewController.m; path = Classes/CKBindedTableViewController.m; sourceTree = "<group>"; };
 		7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactory.h; path = Classes/CKItemViewControllerFactory.h; sourceTree = "<group>"; };
 		7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKItemViewControllerFactory.m; path = Classes/CKItemViewControllerFactory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7560DBE413B8ED3600268D13 /* CKOptionCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionCellController.h; path = Classes/CKOptionCellController.h; sourceTree = "<group>"; };
-		7560DBE513B8ED3600268D13 /* CKOptionCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKOptionCellController.m; path = Classes/CKOptionCellController.m; sourceTree = "<group>"; };
 		7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionTableViewController.h; path = Classes/CKOptionTableViewController.h; sourceTree = "<group>"; };
 		7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKOptionTableViewController.m; path = Classes/CKOptionTableViewController.m; sourceTree = "<group>"; };
 		7560DBEE13B8ED3600268D13 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = Classes/CKPickerView.h; sourceTree = "<group>"; };
@@ -1304,10 +1292,6 @@
 				7528070913D4B35F0010A300 /* CellControllers */,
 				7560DC1613B8ED3600268D13 /* CKTableViewController.h */,
 				7560DC1713B8ED3600268D13 /* CKTableViewController.m */,
-				7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */,
-				7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */,
-				7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */,
-				7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */,
 				7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */,
 				7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */,
 			);
@@ -1608,18 +1592,16 @@
 		7528070913D4B35F0010A300 /* CellControllers */ = {
 			isa = PBXGroup;
 			children = (
+				7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */,
+				7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */,
+				7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */,
+				7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */,
 				963826621484017B00A9C98B /* Additions */,
 				75F2960213F04424009CCC70 /* CKProperty Cell Controllers */,
 				7560DB5213B8ED3600268D13 /* CKCollectionCellController.h */,
 				7560DB5313B8ED3600268D13 /* CKCollectionCellController.m */,
-				7560DB9513B8ED3600268D13 /* CKMoviePlayerCellController.h */,
-				7560DB9613B8ED3600268D13 /* CKMoviePlayerCellController.m */,
-				7560DBE413B8ED3600268D13 /* CKOptionCellController.h */,
-				7560DBE513B8ED3600268D13 /* CKOptionCellController.m */,
 				7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */,
 				7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */,
-				7560DB8913B8ED3600268D13 /* CKMapCellController.h */,
-				7560DB8A13B8ED3600268D13 /* CKMapCellController.m */,
 			);
 			name = CellControllers;
 			sourceTree = "<group>";
@@ -2091,12 +2073,10 @@
 				7560DCCE13B8ED3600268D13 /* CKLocationManager.h in Headers */,
 				7560DCD013B8ED3600268D13 /* CKLocationManager2.h in Headers */,
 				7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */,
-				7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */,
 				7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */,
 				7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */,
 				7560DCE013B8ED3600268D13 /* CKObject+CKStore.h in Headers */,
-				7560DCE213B8ED3600268D13 /* CKMoviePlayerCellController.h in Headers */,
 				7560DCE413B8ED3600268D13 /* CKMultiFloatPropertyCellController.h in Headers */,
 				7560DCE613B8ED3600268D13 /* CKMultipartEncoder.h in Headers */,
 				7560DCE813B8ED3600268D13 /* CKMultipartParser.h in Headers */,
@@ -2134,7 +2114,6 @@
 				7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */,
 				7560DD2D13B8ED3600268D13 /* CKBindedTableViewController.h in Headers */,
 				7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */,
-				7560DD3113B8ED3600268D13 /* CKOptionCellController.h in Headers */,
 				7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */,
 				7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */,
 				7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */,
@@ -2454,12 +2433,10 @@
 				7560DCCF13B8ED3600268D13 /* CKLocationManager.m in Sources */,
 				7560DCD113B8ED3600268D13 /* CKLocationManager2.m in Sources */,
 				7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */,
-				7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */,
 				7560DCDB13B8ED3600268D13 /* CKBindedMapViewController.m in Sources */,
 				7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */,
 				7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */,
 				7560DCE113B8ED3600268D13 /* CKObject+CKStore.m in Sources */,
-				7560DCE313B8ED3600268D13 /* CKMoviePlayerCellController.m in Sources */,
 				7560DCE513B8ED3600268D13 /* CKMultiFloatPropertyCellController.m in Sources */,
 				7560DCE713B8ED3600268D13 /* CKMultipartEncoder.m in Sources */,
 				7560DCE913B8ED3600268D13 /* CKMultipartParser.m in Sources */,
@@ -2494,7 +2471,6 @@
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
 				7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */,
 				7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */,
-				7560DD3213B8ED3600268D13 /* CKOptionCellController.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,
 				7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */,
 				7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */,
