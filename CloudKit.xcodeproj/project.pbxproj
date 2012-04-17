@@ -223,8 +223,8 @@
 		7560DD1513B8ED3600268D13 /* CKNSObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBC813B8ED3600268D13 /* CKNSObject+Notifications.m */; };
 		7560DD1613B8ED3600268D13 /* CKNSObjectPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD1713B8ED3600268D13 /* CKNSObjectPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */; };
-		7560DD1813B8ED3600268D13 /* CKNSSetAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBCB13B8ED3600268D13 /* CKNSSetAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD1913B8ED3600268D13 /* CKNSSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBCC13B8ED3600268D13 /* CKNSSetAdditions.m */; };
+		7560DD1813B8ED3600268D13 /* CKNSSet+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBCB13B8ED3600268D13 /* CKNSSet+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD1913B8ED3600268D13 /* CKNSSet+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBCC13B8ED3600268D13 /* CKNSSet+Additions.m */; };
 		7560DD1A13B8ED3600268D13 /* CKNSString+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBCD13B8ED3600268D13 /* CKNSString+Parsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD1B13B8ED3600268D13 /* CKNSString+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBCE13B8ED3600268D13 /* CKNSString+Parsing.m */; };
 		7560DD1C13B8ED3600268D13 /* CKNSString+URIQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBCF13B8ED3600268D13 /* CKNSString+URIQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -724,8 +724,8 @@
 		7560DBC813B8ED3600268D13 /* CKNSObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+Notifications.m"; path = "Classes/CKNSObject+Notifications.m"; sourceTree = "<group>"; };
 		7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSObjectPropertyCellController.h; path = Classes/CKNSObjectPropertyCellController.h; sourceTree = "<group>"; };
 		7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKNSObjectPropertyCellController.m; path = Classes/CKNSObjectPropertyCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7560DBCB13B8ED3600268D13 /* CKNSSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSSetAdditions.h; path = Classes/CKNSSetAdditions.h; sourceTree = "<group>"; };
-		7560DBCC13B8ED3600268D13 /* CKNSSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSSetAdditions.m; path = Classes/CKNSSetAdditions.m; sourceTree = "<group>"; };
+		7560DBCB13B8ED3600268D13 /* CKNSSet+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSSet+Additions.h"; path = "Classes/CKNSSet+Additions.h"; sourceTree = "<group>"; };
+		7560DBCC13B8ED3600268D13 /* CKNSSet+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSSet+Additions.m"; path = "Classes/CKNSSet+Additions.m"; sourceTree = "<group>"; };
 		7560DBCD13B8ED3600268D13 /* CKNSString+Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSString+Parsing.h"; path = "Classes/CKNSString+Parsing.h"; sourceTree = "<group>"; };
 		7560DBCE13B8ED3600268D13 /* CKNSString+Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSString+Parsing.m"; path = "Classes/CKNSString+Parsing.m"; sourceTree = "<group>"; };
 		7560DBCF13B8ED3600268D13 /* CKNSString+URIQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSString+URIQuery.h"; path = "Classes/CKNSString+URIQuery.h"; sourceTree = "<group>"; };
@@ -1481,8 +1481,8 @@
 				7560DBC613B8ED3600268D13 /* CKNSObject+JSON.m */,
 				7560DBC713B8ED3600268D13 /* CKNSObject+Notifications.h */,
 				7560DBC813B8ED3600268D13 /* CKNSObject+Notifications.m */,
-				7560DBCB13B8ED3600268D13 /* CKNSSetAdditions.h */,
-				7560DBCC13B8ED3600268D13 /* CKNSSetAdditions.m */,
+				7560DBCB13B8ED3600268D13 /* CKNSSet+Additions.h */,
+				7560DBCC13B8ED3600268D13 /* CKNSSet+Additions.m */,
 				7560DBCD13B8ED3600268D13 /* CKNSString+Parsing.h */,
 				7560DBCE13B8ED3600268D13 /* CKNSString+Parsing.m */,
 				7560DBCF13B8ED3600268D13 /* CKNSString+URIQuery.h */,
@@ -2074,7 +2074,7 @@
 				7560DD1213B8ED3600268D13 /* CKNSObject+JSON.h in Headers */,
 				7560DD1413B8ED3600268D13 /* CKNSObject+Notifications.h in Headers */,
 				7560DD1613B8ED3600268D13 /* CKNSObjectPropertyCellController.h in Headers */,
-				7560DD1813B8ED3600268D13 /* CKNSSetAdditions.h in Headers */,
+				7560DD1813B8ED3600268D13 /* CKNSSet+Additions.h in Headers */,
 				7560DD1A13B8ED3600268D13 /* CKNSString+Parsing.h in Headers */,
 				7560DD1C13B8ED3600268D13 /* CKNSString+URIQuery.h in Headers */,
 				7560DD1E13B8ED3600268D13 /* CKNSString+Validations.h in Headers */,
@@ -2428,7 +2428,7 @@
 				7560DD1313B8ED3600268D13 /* CKNSObject+JSON.m in Sources */,
 				7560DD1513B8ED3600268D13 /* CKNSObject+Notifications.m in Sources */,
 				7560DD1713B8ED3600268D13 /* CKNSObjectPropertyCellController.m in Sources */,
-				7560DD1913B8ED3600268D13 /* CKNSSetAdditions.m in Sources */,
+				7560DD1913B8ED3600268D13 /* CKNSSet+Additions.m in Sources */,
 				7560DD1B13B8ED3600268D13 /* CKNSString+Parsing.m in Sources */,
 				7560DD1D13B8ED3600268D13 /* CKNSString+URIQuery.m in Sources */,
 				7560DD1F13B8ED3600268D13 /* CKNSString+Validations.m in Sources */,

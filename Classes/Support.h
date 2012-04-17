@@ -26,7 +26,7 @@
 #import "CKNSObject+Invocation.h"
 #import "CKNSObject+JSON.h"
 #import "CKNSObject+Notifications.h"
-#import "CKNSSetAdditions.h"
+#import "CKNSSet+Additions.h"
 #import "CKNSString+Parsing.h"
 #import "CKNSString+URIQuery.h"
 #import "CKNSString+Validations.h"

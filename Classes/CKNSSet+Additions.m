@@ -5,7 +5,7 @@
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKNSSetAdditions.h"
+#import "CKNSSet+Additions.h"
 
 @implementation NSSet (CKNSSetAdditions)
 
