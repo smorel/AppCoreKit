@@ -1,12 +1,12 @@
 //
-//  CKCoreGraphicsAdditions.m
+//  CKCoreGraphics+Additions.m
 //  CloudKit
 //
 //  Created by Olivier Collet on 11-01-20.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKCoreGraphicsAdditions.h"
+#import "CKCoreGraphics+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 
 

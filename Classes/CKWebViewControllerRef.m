@@ -7,10 +7,8 @@
 //
 
 #import "CKWebViewControllerRef.h"
-#import "CKUINavigationControllerAdditions.h"
-#import "CKConstants.h"
+#import "CKUIViewAutoresizing+Additions.h"
 #import "CKBundle.h"
-#import "CKUIToolbarAdditions.h"
 
 @interface CKWebViewControllerRef ()
 
@@ -22,8 +20,6 @@
 @property (nonatomic, readwrite, retain) UIBarButtonItem *refreshButtonItem;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *actionButtonItem;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *spinnerItem;
-
-@property (nonatomic, readwrite, retain) NSDictionary *navigationControllerStyles;
 
 @end
 
@@ -46,7 +42,6 @@
 @synthesize actionButtonItem = _actionButtonItem;
 @synthesize spinnerItem = _spinnerItem;
 
-@synthesize navigationControllerStyles = _navigationControllerStyles;
 @synthesize showDocumentTitle = _showDocumentTitle;
 @synthesize activityIndicatorViewStyle = _activityIndicatorViewStyle;
 
@@ -66,7 +61,6 @@
 	self.refreshButtonItem = nil;
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
-	self.navigationControllerStyles = nil;
     [super dealloc];
 }
 
@@ -75,7 +69,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-	self.view.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+	self.view.autoresizingMask = UIViewAutoresizingFlexibleAll;
 
 	// Set up the WebView
 	
@@ -127,8 +121,6 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	// Save the NavigationController styles
-	self.navigationControllerStyles = [self.navigationController getStyles];
 
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	[self.navigationController setToolbarHidden:NO animated:animated];
@@ -140,9 +132,6 @@
 	
 	if (self.webView.loading) [self.webView stopLoading];
 	self.webView.delegate = nil;
-
-	// Restore the NavigationController styles
-	[self.navigationController setStyles:self.navigationControllerStyles animated:animated];
 }
 
 - (void)viewDidUnload {
@@ -227,9 +216,22 @@
 
 #pragma mark WebView Delegate
 
+- (void)replaceItemWithTag:(NSInteger)tag withItem:(UIBarButtonItem *)item inToolbar:(UIToolbar*)toolbar{
+	NSInteger i = 0;
+	for (UIBarButtonItem *button in toolbar.items) {
+		if (button.tag == tag) {
+			NSMutableArray *theItems = [NSMutableArray arrayWithArray:toolbar.items];
+			[theItems replaceObjectAtIndex:i withObject:item];
+			toolbar.items = theItems;
+			break;
+		}
+		i++;
+	}
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-	[self.navigationController.toolbar replaceItemWithTag:CKWebViewControllerButtonItemRefresh withItem:self.spinnerItem];
+	[self replaceItemWithTag:CKWebViewControllerButtonItemRefresh withItem:self.spinnerItem inToolbar:self.navigationController.toolbar];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
@@ -239,8 +241,8 @@
 	if (self.showDocumentTitle) {
 		self.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 	}
-
-	[self.navigationController.toolbar replaceItemWithTag:CKWebViewControllerButtonItemRefresh withItem:self.refreshButtonItem];	
+    
+	[self replaceItemWithTag:CKWebViewControllerButtonItemRefresh withItem:self.refreshButtonItem inToolbar:self.navigationController.toolbar];
 	
 	self.backButtonItem.enabled = self.webView.canGoBack;
 	self.forwardButtonItem.enabled = self.webView.canGoForward;	

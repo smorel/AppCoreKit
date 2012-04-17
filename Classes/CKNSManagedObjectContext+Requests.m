@@ -6,7 +6,7 @@
 //
 
 #import "CKNSManagedObjectContext+Requests.h"
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 #import "CKDebug.h"
 
 //

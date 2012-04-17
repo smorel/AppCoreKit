@@ -1,12 +1,12 @@
 //
-//  CKUIColorAdditions.m
+//  CKUIColor+Additions.m
 //  CloudKit
 //
 //  Created by Fred Brunel on 10-02-12.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 
 @implementation UIColor (CKUIColorAdditions)
 

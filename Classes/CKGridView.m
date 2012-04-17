@@ -7,9 +7,9 @@
 //
 
 #import "CKGridView.h"
-#import "CKCoreGraphicsAdditions.h"
+#import "CKCoreGraphics+Additions.h"
 #import "CKVersion.h"
-#import "CKConstants.h"
+#import "CKUIViewAutoresizing+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define DEFAULT_DRAGGEDVIEW_SCALE 2

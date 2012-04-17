@@ -1,5 +1,5 @@
 //
-//  CKCoreGraphicsAdditions.h
+//  CKCoreGraphics+Additions.h
 //  CloudKit
 //
 //  Created by Olivier Collet on 11-01-20.

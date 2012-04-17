@@ -14,7 +14,7 @@
 #import "CKItem.h"
 #import "CKAttribute.h"
 
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 
 static CKCoreDataManager* CKStoreCoreDataManager = nil;
 static NSMutableDictionary* CKStoreCache = nil;

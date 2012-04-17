@@ -17,7 +17,7 @@
 #import "CKObject.h"
 #import "CKProperty.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 #import "CKWeakRef.h"
 
 NSMutableDictionary* CKObjectManager = nil;

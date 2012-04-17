@@ -40,8 +40,6 @@ typedef enum {
 	
 	NSMutableArray *_toolbarButtonsLoading;
 	NSMutableArray *_toolbarButtonsStatic;
-
-	NSDictionary *_navigationControllerStyles;
 	
 	NSString *_onLoadScript;
 	

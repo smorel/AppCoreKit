@@ -7,7 +7,7 @@
 //
 
 #import "CKCreditsFooterView.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 #import "CKBundle.h"
 #import "CKLocalization.h"
 

@@ -7,8 +7,7 @@
 //
 
 #import "CKWebViewController.h"
-#import "CKUINavigationControllerAdditions.h"
-#import "CKConstants.h"
+#import "CKUIViewAutoresizing+Additions.h"
 #import "CKBundle.h"
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
@@ -131,7 +130,6 @@
 	[super viewWillAppear:animated];
 
 	// Save the NavigationController styles
-	_navigationControllerStyles = [[self.navigationController getStyles] retain];
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	
 	// Hide the toolbar from the webView
@@ -162,9 +160,6 @@
 	if (_webView.loading) [_webView stopLoading];
 	_webView.delegate = nil;
 
-	// Restore the NavigationController styles
-	[self.navigationController setStyles:_navigationControllerStyles animated:animated];
-
 	[super viewWillDisappear:animated];
 }
 
@@ -189,7 +184,6 @@
 	[_forwardButton release];
 	[_toolbarButtonsStatic release];
 	[_toolbarButtonsLoading release];
-	[_navigationControllerStyles release];
 	[_onLoadScript release];
 	[_webViewToolbar release];
     [super dealloc];

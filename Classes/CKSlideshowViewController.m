@@ -7,9 +7,8 @@
 //
 
 #import "CKSlideshowViewController.h"
-#import "CKUINavigationControllerAdditions.h"
 #import "CKLocalization.h"
-#import "CKConstants.h"
+#import "CKUIViewAutoresizing+Additions.h"
 #import "CKBundle.h"
 
 #define DELAY_CONTROLS_DISAPPEAR 5
@@ -20,7 +19,6 @@
 @property (nonatomic, retain) CKImageView *leftImageView;
 @property (nonatomic, retain) CKImageView *rightImageView;
 @property (nonatomic, retain) CKImageView *currentImageView;
-@property (nonatomic, retain) NSDictionary *styles;
 @end
 
 @interface CKSlideshowViewController ()
@@ -41,7 +39,6 @@
 @synthesize imageContainerView = _imageContainerView;
 @synthesize shouldHideControls, useModalStyle;
 @synthesize leftImageView, rightImageView, currentImageView;
-@synthesize styles = _styles;
 
 - (id)initWithImagePaths:(NSArray *)paths startAtIndex:(NSUInteger)index {
 	if (self = [super init]) {
@@ -62,7 +59,6 @@
 	[leftImageView release];
 	[currentImageView release];
 	[rightImageView release];
-	[_styles release];
 	[_imageContainerView release];
 	[super dealloc];
 }
@@ -80,7 +76,7 @@
 	if (self.imageContainerView == nil) {
 		self.imageContainerView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 		self.imageContainerView.backgroundColor = [UIColor blackColor];
-		self.imageContainerView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+		self.imageContainerView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 		[self.view addSubview:self.imageContainerView];
 	}
 }
@@ -101,7 +97,6 @@
 	// Set the view style
 	
 	if (useModalStyle == NO) {
-		self.styles = [self.navigationController getStyles];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
 	}
 		
@@ -178,10 +173,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	if (useModalStyle == NO) {
-		[self.navigationController setStyles:self.styles animated:YES];
-	}
-		
 	[super viewWillDisappear:animated];
 }
 
@@ -257,7 +248,7 @@
 	imageView.opaque = YES;
 	imageView.userInteractionEnabled = NO;
 	imageView.backgroundColor = [UIColor blackColor];
-	imageView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+	imageView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	imageView.clipsToBounds = YES;	
 	

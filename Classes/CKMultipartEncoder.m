@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKMultipartEncoder.h"
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 
 @implementation CKMultipartEncoder
 

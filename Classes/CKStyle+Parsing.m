@@ -7,7 +7,7 @@
 //
 
 #import "CKStyle+Parsing.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 #import "CKLocalization.h"
 
 //TODO : HERE store the converted data in the key to convert only once !

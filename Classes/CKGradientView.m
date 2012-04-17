@@ -7,7 +7,7 @@
 //
 
 #import "CKGradientView.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 #import "CKUIImage+Transformations.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSArray+Additions.h"

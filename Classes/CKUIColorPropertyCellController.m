@@ -7,7 +7,7 @@
 //
 
 #import "CKUIColorPropertyCellController.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 #import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>

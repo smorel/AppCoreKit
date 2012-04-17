@@ -32,7 +32,6 @@ typedef enum {
 	UIBarButtonItem *_spinnerItem;
 	
 	UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-	NSDictionary *_navigationControllerStyles;
 	BOOL _showDocumentTitle;
 }
 

@@ -9,8 +9,8 @@
 #import "CKBindedMapViewController.h"
 
 #import "CKLocalization.h"
-#import "CKConstants.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIViewAutoresizing+Additions.h"
+#import "CKUIColor+Additions.h"
 #import "CKDebug.h"
 
 #import "CKTableViewCellController.h"
@@ -122,7 +122,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	
 	if (self.mapView == nil) {
 		self.mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
-		self.mapView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+		self.mapView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 		[self.view addSubview:self.mapView];		
 	}
 

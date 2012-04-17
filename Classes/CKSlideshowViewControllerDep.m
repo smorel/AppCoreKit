@@ -8,7 +8,7 @@
 
 #import "CKSlideshowViewControllerDep.h"
 #import "CKLocalization.h"
-#import "CKConstants.h"
+#import "CKUIViewAutoresizing+Additions.h"
 #import "ASIHTTPRequest.h"
 #import "CKBundle.h"
 
@@ -326,7 +326,7 @@
 	imageView.userInteractionEnabled = NO;
 	imageView.backgroundColor = [UIColor blackColor];
 	imageView.contentMode = self.contentMode;
-	imageView.autoresizingMask = CKUIViewAutoresizingFlexibleAll;
+	imageView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 	imageView.clipsToBounds = YES;
 	
 	// Image already in the cache

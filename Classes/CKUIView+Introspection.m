@@ -9,6 +9,7 @@
 #import "CKUIView+Introspection.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKUIViewAutoresizing+Additions.h"
 
 @implementation UIView (CKIntrospectionAdditions)
 
@@ -56,7 +57,12 @@
                                                     UIViewAutoresizingFlexibleRightMargin,
                                                     UIViewAutoresizingFlexibleTopMargin,
                                                     UIViewAutoresizingFlexibleHeight,
-                                                    UIViewAutoresizingFlexibleBottomMargin);
+                                                    UIViewAutoresizingFlexibleBottomMargin,
+                                                    UIViewAutoresizingFlexibleAll,
+                                                    UIViewAutoresizingFlexibleSize,
+                                                    UIViewAutoresizingFlexibleAllMargins,
+                                                    UIViewAutoresizingFlexibleHorizontalMargins,
+                                                    UIViewAutoresizingFlexibleVerticalMargins);
 }
 
 - (void)contentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{

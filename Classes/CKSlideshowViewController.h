@@ -30,7 +30,6 @@
 	UIBarButtonItem *nextButton;
 	BOOL useModalStyle;
 	BOOL canHideControls;
-	NSDictionary *_styles;
 }
 
 @property (nonatomic, assign) id delegate;

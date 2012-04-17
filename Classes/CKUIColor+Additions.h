@@ -1,5 +1,5 @@
 //
-//  CKUIColorAdditions.h
+//  CKUIColor+Additions.h
 //  CloudKit
 //
 //  Created by Fred Brunel on 10-02-12.

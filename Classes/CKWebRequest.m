@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CKWebRequest.h"
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 #import "CKNSString+URIQuery.h"
 #import "CKNSObject+Invocation.h"
 #import "CKNSObject+JSON.h"

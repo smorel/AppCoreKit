@@ -8,7 +8,7 @@
 
 #import "CKUIColor+ValueTransformer.h"
 #import "CKNSValueTransformer+Additions.h"
-#import "CKUIColorAdditions.h"
+#import "CKUIColor+Additions.h"
 
 
 @implementation UIColor (CKUIColor_ValueTransformer)

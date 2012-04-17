@@ -10,7 +10,7 @@
 #import "CKCoreDataManager.h"
 #import "CKNSDate+Conversions.h"
 #import "CKNSDate+Calculations.h"
-#import "CKNSStringAdditions.h"
+#import "CKNSString+Additions.h"
 #import "CKDebug.h"
 
 // Private Interface
