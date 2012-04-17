@@ -317,6 +317,7 @@
 	int count = [_objectController numberOfObjectsForSection:0];
 	int index = headerCount + count + footerIndex;
 	
+    [descriptor retain];
 	[self.footerCellDescriptors removeObjectAtIndex:footerIndex];
 	
 	if(![_parentController reloading] && !self.collapsed){
@@ -324,12 +325,14 @@
 		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
 	}
+    [descriptor autorelease];
 }
 
 - (void)removeHeaderCellDescriptor:(CKFormCellDescriptor*)descriptor{
     NSInteger headerIndex = [_headerCellDescriptors indexOfObjectIdenticalTo:descriptor];
 	int index = headerIndex;
 	
+    [descriptor retain];
 	[self.headerCellDescriptors removeObjectAtIndex:headerIndex];
 	
 	if(![_parentController reloading] && !self.collapsed){
@@ -337,6 +340,7 @@
 		[self objectController:self.objectController removeObject:descriptor.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
 	}
+    [descriptor autorelease];
 }
 
 - (id)initWithCollection:(CKDocumentCollection*)collection factory:(CKItemViewControllerFactory*)factory{

@@ -42,6 +42,7 @@
     NSAssert(self.value != nil,@"The cellController MUST have a value here");
     
 	self.cellController = controller;
+    self.controllerClass = [controller class];
 	return self;
 }
 
