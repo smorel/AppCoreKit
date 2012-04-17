@@ -10,7 +10,7 @@
 #import "CKFeedSource.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
-#import "CKObjectCarouselViewController.h"
+#import "CKBindedCarouselViewController.h"
 #import "CKCollection.h"
 #import "CKCollectionCellController+Style.h"
 #import "CKNSNotificationCenter+Edition.h"
@@ -80,7 +80,7 @@
 
 //FIXME : UGLY TEMPORARY HACK
 - (BOOL)forceHidden{
-	if([self.containerController isKindOfClass:[CKObjectCarouselViewController class]])
+	if([self.containerController isKindOfClass:[CKBindedCarouselViewController class]])
 		return YES;
 	else if([self.containerController isKindOfClass:[CKTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController ;

@@ -10,9 +10,9 @@
 #import "CKStyleManager.h"
 
 //HACK : here to know the context of the parent controller ...
-#import "CKObjectCarouselViewController.h"
+#import "CKBindedCarouselViewController.h"
 #import "CKTableViewController.h"
-#import "CKMapViewController.h"
+#import "CKBindedMapViewController.h"
 
 #import "CKGradientView.h"
 #import "CKNSArrayAdditions.h"
@@ -155,12 +155,12 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (UIView*)parentControllerView{
 	UIView* view = nil;
-	if([self.containerController isKindOfClass:[CKObjectCarouselViewController class]] == YES) 
-		view = (UIView*)((CKObjectCarouselViewController*)self.containerController).carouselView;
+	if([self.containerController isKindOfClass:[CKBindedCarouselViewController class]] == YES) 
+		view = (UIView*)((CKBindedCarouselViewController*)self.containerController).carouselView;
 	else if([self.containerController isKindOfClass:[CKTableViewController class]] == YES) 
 		view = (UIView*)((CKTableViewController*)self.containerController).tableView;
-	else if([self.containerController isKindOfClass:[CKMapViewController class]] == YES) 
-		view = (UIView*)((CKMapViewController*)self.containerController).mapView;
+	else if([self.containerController isKindOfClass:[CKBindedMapViewController class]] == YES) 
+		view = (UIView*)((CKBindedMapViewController*)self.containerController).mapView;
 	return view;
 }
 

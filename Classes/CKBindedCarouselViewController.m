@@ -1,12 +1,12 @@
 //
-//  CKObjectCarouselViewController.m
+//  CKBindedCarouselViewController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-07.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKObjectCarouselViewController.h"
+#import "CKBindedCarouselViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKCollectionController.h"
@@ -24,11 +24,11 @@
 @end
 
 
-@interface CKObjectCarouselViewController ()
+@interface CKBindedCarouselViewController ()
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @end
 
-@implementation CKObjectCarouselViewController
+@implementation CKBindedCarouselViewController
 @synthesize carouselView = _carouselView;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
@@ -213,7 +213,7 @@
 	[self.carouselView setContentOffset:offset animated:animated];
 }
 
-#pragma mark CKObjectCarouselViewController
+#pragma mark CKBindedCarouselViewController
 
 /*
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{

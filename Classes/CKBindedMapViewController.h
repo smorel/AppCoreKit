@@ -1,5 +1,5 @@
 //
-//  CKMapViewController.h
+//  CKBindedMapViewController.h
 //  CloudKit
 //
 //  Created by Olivier Collet on 10-08-20.
@@ -22,19 +22,19 @@
 
 /** TODO
  */
-typedef enum CKMapViewControllerZoomStrategy{
-	CKMapViewControllerZoomStrategyEnclosing,
-	CKMapViewControllerZoomStrategySmart
-}CKMapViewControllerZoomStrategy;
+typedef enum CKBindedMapViewControllerZoomStrategy{
+	CKBindedMapViewControllerZoomStrategyEnclosing,
+	CKBindedMapViewControllerZoomStrategySmart
+}CKBindedMapViewControllerZoomStrategy;
 
 
 /** TODO
  */
-@interface CKMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
+@interface CKBindedMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
 	CLLocationCoordinate2D _centerCoordinate;
 	MKMapView *_mapView;
 	
-	CKMapViewControllerZoomStrategy _zoomStrategy;
+	CKBindedMapViewControllerZoomStrategy _zoomStrategy;
     BOOL _includeUserLocationWhenZooming;
 	CGFloat _smartZoomDefaultRadius;
 	NSInteger _smartZoomMinimumNumberOfAnnotations;
@@ -47,7 +47,7 @@ typedef enum CKMapViewControllerZoomStrategy{
 @property (nonatomic, assign, readwrite) NSArray *annotations;
 @property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
 
-@property (nonatomic, assign) CKMapViewControllerZoomStrategy zoomStrategy;
+@property (nonatomic, assign) CKBindedMapViewControllerZoomStrategy zoomStrategy;
 @property (nonatomic, assign) CGFloat smartZoomDefaultRadius;
 @property (nonatomic, assign) NSInteger smartZoomMinimumNumberOfAnnotations;
 @property (nonatomic, assign) BOOL includeUserLocationWhenZooming;
@@ -68,7 +68,7 @@ typedef enum CKMapViewControllerZoomStrategy{
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated;
-- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapViewControllerZoomStrategy)strategy animated:(BOOL)animated;
+- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKBindedMapViewControllerZoomStrategy)strategy animated:(BOOL)animated;
 
 - (BOOL)reloadData;
 

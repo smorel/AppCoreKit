@@ -179,8 +179,8 @@
 		7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */; };
 		7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8913B8ED3600268D13 /* CKMapCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8A13B8ED3600268D13 /* CKMapCellController.m */; };
-		7560DCDA13B8ED3600268D13 /* CKMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCDB13B8ED3600268D13 /* CKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapViewController.m */; };
+		7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCDB13B8ED3600268D13 /* CKBindedMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKBindedMapViewController.m */; };
 		7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9013B8ED3600268D13 /* CKMKMapView+Introspection.m */; };
 		7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9113B8ED3600268D13 /* CKObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -249,8 +249,8 @@
 		7560DD2313B8ED3600268D13 /* CKNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */; };
 		7560DD2413B8ED3600268D13 /* CKNSValueTransformer+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */; };
-		7560DD2613B8ED3600268D13 /* CKObjectCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD913B8ED3600268D13 /* CKObjectCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD2713B8ED3600268D13 /* CKObjectCarouselViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDA13B8ED3600268D13 /* CKObjectCarouselViewController.m */; };
+		7560DD2613B8ED3600268D13 /* CKBindedCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD913B8ED3600268D13 /* CKBindedCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD2713B8ED3600268D13 /* CKBindedCarouselViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDA13B8ED3600268D13 /* CKBindedCarouselViewController.m */; };
 		7560DD2813B8ED3600268D13 /* CKObjectController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBDB13B8ED3600268D13 /* CKObjectController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2913B8ED3600268D13 /* CKProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBDC13B8ED3600268D13 /* CKProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDD13B8ED3600268D13 /* CKProperty.m */; };
@@ -696,8 +696,8 @@
 		7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapAnnotationController.m; path = Classes/CKMapAnnotationController.m; sourceTree = "<group>"; };
 		7560DB8913B8ED3600268D13 /* CKMapCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapCellController.h; path = Classes/CKMapCellController.h; sourceTree = "<group>"; };
 		7560DB8A13B8ED3600268D13 /* CKMapCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapCellController.m; path = Classes/CKMapCellController.m; sourceTree = "<group>"; };
-		7560DB8D13B8ED3600268D13 /* CKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKMapViewController.h; path = Classes/CKMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DB8E13B8ED3600268D13 /* CKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKMapViewController.m; path = Classes/CKMapViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedMapViewController.h; path = Classes/CKBindedMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DB8E13B8ED3600268D13 /* CKBindedMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKBindedMapViewController.m; path = Classes/CKBindedMapViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMKMapView+Introspection.h"; path = "Classes/CKMKMapView+Introspection.h"; sourceTree = "<group>"; };
 		7560DB9013B8ED3600268D13 /* CKMKMapView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMKMapView+Introspection.m"; path = "Classes/CKMKMapView+Introspection.m"; sourceTree = "<group>"; };
 		7560DB9113B8ED3600268D13 /* CKObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObject.h; path = Classes/CKObject.h; sourceTree = "<group>"; };
@@ -766,8 +766,8 @@
 		7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKNSStringPropertyCellController.m; path = Classes/CKNSStringPropertyCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "CKNSValueTransformer+Additions.h"; path = "Classes/CKNSValueTransformer+Additions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSValueTransformer+Additions.m"; path = "Classes/CKNSValueTransformer+Additions.m"; sourceTree = "<group>"; };
-		7560DBD913B8ED3600268D13 /* CKObjectCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKObjectCarouselViewController.h; path = Classes/CKObjectCarouselViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DBDA13B8ED3600268D13 /* CKObjectCarouselViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectCarouselViewController.m; path = Classes/CKObjectCarouselViewController.m; sourceTree = "<group>"; };
+		7560DBD913B8ED3600268D13 /* CKBindedCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedCarouselViewController.h; path = Classes/CKBindedCarouselViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DBDA13B8ED3600268D13 /* CKBindedCarouselViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedCarouselViewController.m; path = Classes/CKBindedCarouselViewController.m; sourceTree = "<group>"; };
 		7560DBDB13B8ED3600268D13 /* CKObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectController.h; path = Classes/CKObjectController.h; sourceTree = "<group>"; };
 		7560DBDC13B8ED3600268D13 /* CKProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKProperty.h; path = Classes/CKProperty.h; sourceTree = "<group>"; };
 		7560DBDD13B8ED3600268D13 /* CKProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKProperty.m; path = Classes/CKProperty.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1290,8 +1290,8 @@
 			children = (
 				7560DB3213B8ED3600268D13 /* CKCarouselView.h */,
 				7560DB3313B8ED3600268D13 /* CKCarouselView.m */,
-				7560DBD913B8ED3600268D13 /* CKObjectCarouselViewController.h */,
-				7560DBDA13B8ED3600268D13 /* CKObjectCarouselViewController.m */,
+				7560DBD913B8ED3600268D13 /* CKBindedCarouselViewController.h */,
+				7560DBDA13B8ED3600268D13 /* CKBindedCarouselViewController.m */,
 			);
 			name = Carousel;
 			sourceTree = "<group>";
@@ -1376,8 +1376,8 @@
 			children = (
 				7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */,
 				7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */,
-				7560DB8D13B8ED3600268D13 /* CKMapViewController.h */,
-				7560DB8E13B8ED3600268D13 /* CKMapViewController.m */,
+				7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */,
+				7560DB8E13B8ED3600268D13 /* CKBindedMapViewController.m */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -2092,7 +2092,7 @@
 				7560DCD013B8ED3600268D13 /* CKLocationManager2.h in Headers */,
 				7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */,
 				7560DCD613B8ED3600268D13 /* CKMapCellController.h in Headers */,
-				7560DCDA13B8ED3600268D13 /* CKMapViewController.h in Headers */,
+				7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */,
 				7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */,
 				7560DCE013B8ED3600268D13 /* CKObject+CKStore.h in Headers */,
@@ -2128,7 +2128,7 @@
 				7560DD2013B8ED3600268D13 /* CKNSStringAdditions.h in Headers */,
 				7560DD2213B8ED3600268D13 /* CKNSStringPropertyCellController.h in Headers */,
 				7560DD2413B8ED3600268D13 /* CKNSValueTransformer+Additions.h in Headers */,
-				7560DD2613B8ED3600268D13 /* CKObjectCarouselViewController.h in Headers */,
+				7560DD2613B8ED3600268D13 /* CKBindedCarouselViewController.h in Headers */,
 				7560DD2813B8ED3600268D13 /* CKObjectController.h in Headers */,
 				7560DD2913B8ED3600268D13 /* CKProperty.h in Headers */,
 				7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */,
@@ -2455,7 +2455,7 @@
 				7560DCD113B8ED3600268D13 /* CKLocationManager2.m in Sources */,
 				7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */,
 				7560DCD713B8ED3600268D13 /* CKMapCellController.m in Sources */,
-				7560DCDB13B8ED3600268D13 /* CKMapViewController.m in Sources */,
+				7560DCDB13B8ED3600268D13 /* CKBindedMapViewController.m in Sources */,
 				7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */,
 				7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */,
 				7560DCE113B8ED3600268D13 /* CKObject+CKStore.m in Sources */,
@@ -2489,7 +2489,7 @@
 				7560DD2113B8ED3600268D13 /* CKNSStringAdditions.m in Sources */,
 				7560DD2313B8ED3600268D13 /* CKNSStringPropertyCellController.m in Sources */,
 				7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.m in Sources */,
-				7560DD2713B8ED3600268D13 /* CKObjectCarouselViewController.m in Sources */,
+				7560DD2713B8ED3600268D13 /* CKBindedCarouselViewController.m in Sources */,
 				7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */,
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
 				7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */,

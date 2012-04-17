@@ -1,5 +1,5 @@
 //
-//  CKObjectCarouselViewController.h
+//  CKBindedCarouselViewController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-07.
@@ -16,7 +16,7 @@
 
 /** TODO
  */
-@interface CKObjectCarouselViewController : CKItemViewContainerController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
+@interface CKBindedCarouselViewController : CKItemViewContainerController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
 	CKCarouselView* _carouselView;
 	
 	NSMutableDictionary* _headerViewsForSections;

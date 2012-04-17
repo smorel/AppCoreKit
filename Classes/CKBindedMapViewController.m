@@ -1,12 +1,12 @@
 //
-//  CKMapViewController.m
+//  CKBindedMapViewController.m
 //  CloudKit
 //
 //  Created by Olivier Collet on 10-08-20.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKMapViewController.h"
+#import "CKBindedMapViewController.h"
 
 #import "CKLocalization.h"
 #import "CKConstants.h"
@@ -41,14 +41,14 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 
 //
-@interface CKMapViewController()
+@interface CKBindedMapViewController()
 - (void)onPropertyChanged:(NSNotification*)notification;
 - (void)zoom:(BOOL)animated;
 @property (nonatomic, retain) id nearestAnnotation;
 @end
 
 
-@implementation CKMapViewController
+@implementation CKBindedMapViewController
 
 @synthesize centerCoordinate = _centerCoordinate;
 @synthesize mapView = _mapView;
@@ -64,7 +64,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 	
-	_zoomStrategy = CKMapViewControllerZoomStrategyEnclosing;
+	_zoomStrategy = CKBindedMapViewControllerZoomStrategyEnclosing;
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
@@ -298,7 +298,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 
-- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapViewControllerZoomStrategy)strategy animated:(BOOL)animated{
+- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKBindedMapViewControllerZoomStrategy)strategy animated:(BOOL)animated{
     NSMutableArray* theAnnotations = [NSMutableArray arrayWithArray:annotations];
     if(!self.includeUserLocationWhenZooming && self.mapView.userLocation){
         NSInteger index = [theAnnotations indexOfObjectIdenticalTo:self.mapView.userLocation];
@@ -309,11 +309,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
     
 	switch(strategy){
-		case CKMapViewControllerZoomStrategySmart:{
+		case CKBindedMapViewControllerZoomStrategySmart:{
 			[self smartZoomWithAnnotations:theAnnotations animated:animated];
 			break;
 		}
-		case CKMapViewControllerZoomStrategyEnclosing:{
+		case CKBindedMapViewControllerZoomStrategyEnclosing:{
 			[self zoomToRegionEnclosingAnnotations:theAnnotations animated:animated];
 			break;
 		}

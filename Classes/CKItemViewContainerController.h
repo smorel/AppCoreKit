@@ -24,7 +24,7 @@
  
    By this way we centralize all the document/viewcontroller logic taht is redondant in this class
  
-   For some specific implementations see : CKBindedTableViewController, CKObjectCarouselViewController and CKMapViewController
+   For some specific implementations see : CKBindedTableViewController, CKBindedCarouselViewController and CKBindedMapViewController
  
  
   *  derivating this controller means

@@ -15,7 +15,7 @@
 #import "CKItemViewContainerController.h"
 
 #import "CKCarouselView.h"
-#import "CKObjectCarouselViewController.h"
+#import "CKBindedCarouselViewController.h"
 
 #import "CKTableViewCellNextResponder.h"
 #import "CKTableViewCellController.h"
@@ -44,7 +44,7 @@
 #import "CKUIImagePropertyCellController.h"
 
 #import "CKMapCellController.h"
-#import "CKMapViewController.h"
+#import "CKBindedMapViewController.h"
 
 #import "CKActionSheet.h"
 #import "CKAlertView.h"
