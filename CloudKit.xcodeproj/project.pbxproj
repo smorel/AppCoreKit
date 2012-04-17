@@ -171,10 +171,8 @@
 		7560DCCB13B8ED3600268D13 /* CKLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7E13B8ED3600268D13 /* CKLayout.m */; };
 		7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7F13B8ED3600268D13 /* CKLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCCD13B8ED3600268D13 /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8013B8ED3600268D13 /* CKLocalization.m */; };
-		7560DCCE13B8ED3600268D13 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8113B8ED3600268D13 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCCF13B8ED3600268D13 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8213B8ED3600268D13 /* CKLocationManager.m */; };
-		7560DCD013B8ED3600268D13 /* CKLocationManager2.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8313B8ED3600268D13 /* CKLocationManager2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCD113B8ED3600268D13 /* CKLocationManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8413B8ED3600268D13 /* CKLocationManager2.m */; };
+		7560DCD013B8ED3600268D13 /* CKLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8313B8ED3600268D13 /* CKLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCD113B8ED3600268D13 /* CKLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8413B8ED3600268D13 /* CKLocationManager.m */; };
 		7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */; };
 		7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -682,10 +680,8 @@
 		7560DB7E13B8ED3600268D13 /* CKLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLayout.m; path = Classes/CKLayout.m; sourceTree = "<group>"; };
 		7560DB7F13B8ED3600268D13 /* CKLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalization.h; path = Classes/CKLocalization.h; sourceTree = "<group>"; };
 		7560DB8013B8ED3600268D13 /* CKLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalization.m; path = Classes/CKLocalization.m; sourceTree = "<group>"; };
-		7560DB8113B8ED3600268D13 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager.h; path = Classes/CKLocationManager.h; sourceTree = "<group>"; };
-		7560DB8213B8ED3600268D13 /* CKLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager.m; path = Classes/CKLocationManager.m; sourceTree = "<group>"; };
-		7560DB8313B8ED3600268D13 /* CKLocationManager2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager2.h; path = Classes/CKLocationManager2.h; sourceTree = "<group>"; };
-		7560DB8413B8ED3600268D13 /* CKLocationManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager2.m; path = Classes/CKLocationManager2.m; sourceTree = "<group>"; };
+		7560DB8313B8ED3600268D13 /* CKLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocationManager.h; path = Classes/CKLocationManager.h; sourceTree = "<group>"; };
+		7560DB8413B8ED3600268D13 /* CKLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocationManager.m; path = Classes/CKLocationManager.m; sourceTree = "<group>"; };
 		7560DB8713B8ED3600268D13 /* CKMapAnnotationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMapAnnotationController.h; path = Classes/CKMapAnnotationController.h; sourceTree = "<group>"; };
 		7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKMapAnnotationController.m; path = Classes/CKMapAnnotationController.m; sourceTree = "<group>"; };
 		7560DB8D13B8ED3600268D13 /* CKBindedMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedMapViewController.h; path = Classes/CKBindedMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1371,10 +1367,8 @@
 			children = (
 				7560DB3A13B8ED3600268D13 /* CKCLLocationAdditions.h */,
 				7560DB3B13B8ED3600268D13 /* CKCLLocationAdditions.m */,
-				7560DB8113B8ED3600268D13 /* CKLocationManager.h */,
-				7560DB8213B8ED3600268D13 /* CKLocationManager.m */,
-				7560DB8313B8ED3600268D13 /* CKLocationManager2.h */,
-				7560DB8413B8ED3600268D13 /* CKLocationManager2.m */,
+				7560DB8313B8ED3600268D13 /* CKLocationManager.h */,
+				7560DB8413B8ED3600268D13 /* CKLocationManager.m */,
 			);
 			name = Location;
 			sourceTree = "<group>";
@@ -2070,8 +2064,7 @@
 				7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */,
 				7560DCCA13B8ED3600268D13 /* CKLayout.h in Headers */,
 				7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */,
-				7560DCCE13B8ED3600268D13 /* CKLocationManager.h in Headers */,
-				7560DCD013B8ED3600268D13 /* CKLocationManager2.h in Headers */,
+				7560DCD013B8ED3600268D13 /* CKLocationManager.h in Headers */,
 				7560DCD413B8ED3600268D13 /* CKMapAnnotationController.h in Headers */,
 				7560DCDA13B8ED3600268D13 /* CKBindedMapViewController.h in Headers */,
 				7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */,
@@ -2430,8 +2423,7 @@
 				7560DCC913B8ED3600268D13 /* CKKeypadView.m in Sources */,
 				7560DCCB13B8ED3600268D13 /* CKLayout.m in Sources */,
 				7560DCCD13B8ED3600268D13 /* CKLocalization.m in Sources */,
-				7560DCCF13B8ED3600268D13 /* CKLocationManager.m in Sources */,
-				7560DCD113B8ED3600268D13 /* CKLocationManager2.m in Sources */,
+				7560DCD113B8ED3600268D13 /* CKLocationManager.m in Sources */,
 				7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */,
 				7560DCDB13B8ED3600268D13 /* CKBindedMapViewController.m in Sources */,
 				7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */,
