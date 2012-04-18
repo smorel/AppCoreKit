@@ -95,6 +95,7 @@ typedef enum CKTableViewCellStyle {
 @property (nonatomic,retain) UIView                 *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType   editingAccessoryType;
 @property (nonatomic,retain) UIView                 *editingAccessoryView;
+@property (nonatomic) UITableViewCellSelectionStyle  selectionStyle;
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
 - (CKTableViewController*)parentTableViewController;

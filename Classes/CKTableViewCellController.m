@@ -104,6 +104,7 @@
     [self bind:@"accessoryType"  toObject:thedelegate withKeyPath:@"accessoryType"];
     [self bind:@"editingAccessoryView"  toObject:thedelegate withKeyPath:@"editingAccessoryView"];
     [self bind:@"editingAccessoryType"  toObject:thedelegate withKeyPath:@"editingAccessoryType"];
+    [self bind:@"selectionStyle"  toObject:thedelegate withKeyPath:@"selectionStyle"];
     [NSObject endBindingsContext];	
 }
 
@@ -295,6 +296,7 @@
 @synthesize editingAccessoryType = _editingAccessoryType;
 @synthesize editingAccessoryView = _editingAccessoryView;
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
+@synthesize selectionStyle = _selectionStyle;
 
 - (void)postInit {
 	[super postInit];
@@ -681,6 +683,23 @@
     }
 }
 
+- (void)setSelectionStyle:(UITableViewCellSelectionStyle)selectionStyle{
+    if(_selectionStyle == selectionStyle)
+        return;
+    
+    _selectionStyle = selectionStyle;
+    if(self.tableViewCell){
+        self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? selectionStyle : UITableViewCellSelectionStyleNone;
+    }
+}
+
+- (void)setFlags:(CKItemViewFlags)flags{
+    [super setFlags:flags];
+    if(self.tableViewCell && ! (flags & CKItemViewFlagSelectable)){
+        self.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+}
+
 - (void)setupView:(UIView *)view{
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
@@ -707,6 +726,7 @@
     
     UITableViewCell* cell = (UITableViewCell*)view;
     cell.indentationLevel = self.indentationLevel;
+    cell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
     if(self.text)cell.textLabel.text = self.text;
     if(self.detailText)cell.detailTextLabel.text = self.detailText;
     if(self.image)cell.imageView.image = self.image;

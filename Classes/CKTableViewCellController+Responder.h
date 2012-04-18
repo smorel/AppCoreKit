@@ -20,7 +20,7 @@
 - (BOOL)activateNextResponder;
 - (BOOL)activatePreviousResponder;
 
-//Responder Protocol for CKTableViewCellController
+//Responder Protocol to implements in CKTableViewCellController
 - (BOOL)hasResponder;
 - (void)becomeFirstResponder;
 - (UIView*)nextResponder:(UIView*)view;
