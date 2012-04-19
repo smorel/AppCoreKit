@@ -21,6 +21,7 @@
 #import "CKCGPropertyCellControllers.h"
 #import "CKUIImagePropertyCellController.h"
 #import "CKOptionPropertyCellController.h"
+#import "CKMultilineNSStringPropertyCellController.h"
 
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSNotificationCenter+Edition.h"
@@ -66,7 +67,11 @@
                 Class propertyType = value ? [value class] : (descriptor ? descriptor.type : nil);
                 
                 if([NSObject isClass:propertyType kindOfClass:[NSString class]]){
-                    cellController = [CKNSStringPropertyCellController cellController];
+                    if(attributes.multiLineEnabled){
+                        cellController = [CKMultilineNSStringPropertyCellController cellController];
+                    }else{
+                        cellController = [CKNSStringPropertyCellController cellController];
+                    }
                 }
                 else if([NSObject isClass:propertyType kindOfClass:[NSNumber class]]){
                     cellController = [CKNSNumberPropertyCellController cellController];

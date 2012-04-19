@@ -124,3 +124,5 @@ typedef enum CKTableViewCellStyle {
 #import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKTableViewCellController+Responder.h"
+#import "CKTableViewCellController+PropertyGrid.h"
+#import "CKTableViewCellController+Menus.h"

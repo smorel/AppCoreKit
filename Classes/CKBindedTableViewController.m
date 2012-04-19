@@ -495,7 +495,10 @@
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath*)indexPath{
     CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
     controller.sizeHasBeenQueriedByTableView = YES;
-    [controller invalidateSize];
+    if(controller.invalidatedSize){
+        CGSize size = [controller computeSize];
+        [controller setSize:size notifyingContainerForUpdate:NO];
+    }
     return controller.size;
 }
 
@@ -691,10 +694,11 @@
 #pragma mark CKItemViewContainerController Implementation
 
 - (void)updateVisibleViewsRotation{
+    //Rotate views for visible controllers.
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
 		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
-		if([controller respondsToSelector:@selector(rotateView:withParams:animated:)]){
+		if([controller respondsToSelector:@selector(rotateView:animated:)]){
 			[controller rotateView:controller.view animated:YES];
 			
 			if ([CKOSVersion() floatValue] < 3.2) {

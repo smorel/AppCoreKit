@@ -53,3 +53,10 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
 @property (nonatomic, assign) NSInteger maximumLength;
 
 @end
+
+
+@interface CKPropertyExtendedAttributes (CKMultilineNSStringPropertyCellController)
+
+@property (nonatomic, assign) BOOL multiLineEnabled;
+
+@end

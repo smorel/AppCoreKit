@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL insetsApplied;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
+@property (nonatomic, assign) BOOL isUpdatingSizes;
 @end
 
 
@@ -31,6 +32,7 @@
 @synthesize tableViewInsets = _tableViewInsets;
 @synthesize insetsApplied;
 @synthesize tableViewHasBeenReloaded;
+@synthesize isUpdatingSizes;
 
 - (void)postInit {
 	[super postInit];
@@ -38,6 +40,7 @@
     self.insetsApplied = NO;
 	self.style = UITableViewStylePlain;
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
+    self.isUpdatingSizes = NO;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -271,16 +274,33 @@
 }
  */
 
-- (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    NSAssert(NO,@"");
-    /* here we have to be VERY intelligent as several rows can change their size in the "same scope" wich is not really accessible
-     
-     we should invalidate this if we already are in a beginUpdates scope
-     we should delay the endUpdate to handle all the onSizeChangeAtIndexPath from several controllers
-     if we are in viewWillAppear, we should not call this !
-     */
-    [[self tableView]beginUpdates];
+
+
+/* here we have to be VERY intelligent as several rows can change their size in the "same scope" wich is not really accessible
+ 
+ we should invalidate this if we already are in a beginUpdates scope
+ we should delay the endUpdate to handle all the onSizeChangeAtIndexPath from several controllers
+ if we are in viewWillAppear, we should not call this !
+ */
+
+
+- (void)onSizeChangeEnd{
     [[self tableView]endUpdates];
+    self.isUpdatingSizes = NO;
+}
+
+- (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
+    if(self.state != CKUIViewControllerStateDidAppear){
+        return; //yet but probably needs something else ...
+    }
+    
+    if(!self.isUpdatingSizes){
+        [[self tableView]beginUpdates];
+    }
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
+    [self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
+    self.isUpdatingSizes = YES;
 }
 
 @end

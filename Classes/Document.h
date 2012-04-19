@@ -7,7 +7,7 @@
 //
 
 #import "CKObject.h"
-#import "CKObject+CKSingleton.h"
+#import "CKNSObject+CKSingleton.h"
 #import "CKDocument.h"
 #import "CKFeedSource.h"
 #import "CKCollection.h"

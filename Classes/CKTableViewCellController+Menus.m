@@ -43,15 +43,12 @@
     CKTableViewCellController* cellController = [CKTableViewCellController cellController];
     cellController.value = value;
     cellController.cellStyle = ((subTitle != nil) ? CKTableViewCellStyleSubtitle : CKTableViewCellStyleDefault);
-    cellController.name = [NSString stringWithFormat:@"cellDescriptorWithTitle<%d>",cellController.cellStyle];
     cellController.flags = ((action != nil) ? CKItemViewFlagSelectable : CKItemViewFlagNone);
     cellController.text = title;
     cellController.detailText = subTitle;
     cellController.image = image;
-    
     cellController.accessoryType = ((action != nil) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone);
     cellController.selectionStyle = ((action != nil) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone);
-
     if(action != nil){
         [cellController setSelectionBlock:^(CKTableViewCellController *controller) {
             action(controller);

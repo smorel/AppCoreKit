@@ -7,7 +7,8 @@
 //
 
 #import "CKFormSectionBase.h"
-#import "CKTableViewCellController.h"
+
+@class CKTableViewCellController;
 
 /** TODO
  */

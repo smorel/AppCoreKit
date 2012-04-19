@@ -8,7 +8,6 @@
 
 
 #import "CKNSStringPropertyCellController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
@@ -21,7 +20,7 @@
 #define TEXTFIELD_TAG 50000
 
 @interface CKTableViewCellController()
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
+- (CGFloat)computeContentViewSize;
 @end
 
 @interface CKNSStringPropertyCellController()
@@ -40,29 +39,6 @@
 - (void)postInit{
     [super postInit];
     self.flags = CKItemViewFlagNone;
-}
-
-
-//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
-/*
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    CKNSStringPropertyCellController* staticController = (CKNSStringPropertyCellController*)[params staticController];
-    
-	UITextField *textField = staticController.textField;
-    
-    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
-    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
-    CGFloat maxHeight = MAX(bottomTextField,MAX(bottomTextLabel,bottomDetailTextLabel)) + staticController.contentInsets.bottom;
-    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-}*/
-
-- (UIFont*)textViewFont{
-    return [self fontForViewWithKeyPath:@"textField"];
-}
-
-- (CGSize)computeSize{
-    NSAssert(NO,@"Do Implement this method");
 }
 
 //pas utiliser load cell mais initCell pour application des styles ...
@@ -100,47 +76,6 @@
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         _textField.autoresizingMask = UIViewAutoresizingNone;
-    }
-}
-
-- (void)performLayout{
-	[super performLayout];
-    UITableViewCell* cell = self.tableViewCell;
-	UITextField *textField = self.textField;
-	if(textField){
-        if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid){
-            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            
-            BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-            CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - ((textField.font.lineHeight + 10) / 2.0)) : self.contentInsets.top;
-            
-            CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
-            CGFloat realWidth = rowWidth;
-            CGFloat width = realWidth * self.componentsRatio;
-            
-            CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
-            CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
-            if(![cell.textLabel.text isKindOfClass:[NSString class]] || [cell.textLabel.text length] <= 0){
-                textFieldWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
-                textFieldX = self.contentInsets.left;
-            }
-			textField.frame = CGRectIntegral(CGRectMake(textFieldX,y,textFieldWidth,(textField.font.lineHeight + 10)));
-            
-            //align textLabel on y
-            CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
-            CGFloat txtLabelHeight = cell.textLabel.height;
-            CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
-            cell.textLabel.y = txtLabelY;
-        }
-        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-            CGFloat x = cell.textLabel.x;
-            CGRect textFrame = cell.textLabel.frame;
-            CGFloat width = cell.contentView.width - x - 10;
-            
-			textField.frame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,(textField.font.lineHeight + 10)));
-        }
     }
 }
 
@@ -281,4 +216,3 @@
 }
 
 @end
-

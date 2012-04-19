@@ -191,6 +191,18 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     self.rotating = YES;
+    
+    if([self isKindOfClass:[CKTableViewController class]]){
+        //Invalidate all controller's size !
+        for(int i =0; i< [self numberOfSections];++i){
+            for(int j=0;j<[self numberOfObjectsForSection:i];++j){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
+                controller.invalidatedSize = YES;
+            }
+        }
+    }
+    
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
@@ -389,8 +401,8 @@
 
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		id object = [_objectController objectAtIndexPath:indexPath];
-        NSAssert(object,@"toto");
+		//id object = [_objectController objectAtIndexPath:indexPath];
+        //NSAssert(object,@"toto");
         
         UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
         if(previousView){
@@ -443,10 +455,8 @@
         [_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
         //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
         
-        
-        [controller performSelector:@selector(setParentController:) withObject:self];
-        //[controller setValue:object];
-        NSAssert([controller value],@"FUCK !");//this should have been set at controller's creation time
+        [controller performSelector:@selector(setContainerController:) withObject:self];
+        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
         [controller setupView:view];	
         
@@ -652,11 +662,14 @@
         }
     }
     
-    CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
+    id object = [self objectAtIndexPath:indexPath];
+    CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
     if(!controller)
         return nil;
     
-    [controller performSelector:@selector(setParentController:) withObject:self];
+    [controller performSelector:@selector(setContainerController:) withObject:self];
+    [controller performSelector:@selector(setValue:) withObject:object];
+    [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
     
     NSMutableArray* controllers = nil;
     if([indexPath section] < [self.sectionsToControllers count]){
@@ -689,8 +702,11 @@
         for(int row =0;row<rowCount;++row){
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
-            CKItemViewController* controller = [_controllerFactory controllerForObject:[self objectAtIndexPath:indexPath]  atIndexPath:indexPath];
-            [controller performSelector:@selector(setParentController:) withObject:self];
+            id object = [self objectAtIndexPath:indexPath];
+            CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+            [controller performSelector:@selector(setContainerController:) withObject:self];
+            [controller performSelector:@selector(setValue:) withObject:object];
+            [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
             
             [controllers insertObject:controller atIndex:[indexPath row]];
         }
@@ -706,7 +722,9 @@
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
         NSIndexPath* object = [objects objectAtIndex:i];
         CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
-        [controller performSelector:@selector(setParentController:) withObject:self];
+        [controller performSelector:@selector(setContainerController:) withObject:self];
+        [controller performSelector:@selector(setValue:) withObject:object];
+        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
         NSMutableArray* controllers = nil;
         if([indexPath section] < [_sectionsToControllers count]){

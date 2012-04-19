@@ -26,16 +26,23 @@
 #import "CKUIView+Positioning.h"
 #import "CKProperty.h"
 #import "CKNSObject+CKSingleton.h"
+#import "CKStyle+Parsing.h"
+
+
+NSString* CKDynamicLayoutTextAlignment = @"CKDynamicLayoutTextAlignment";
+NSString* CKDynamicLayoutFont          = @"CKDynamicLayoutFont";
+NSString* CKDynamicLayoutNumberOfLines = @"CKDynamicLayoutNumberOfLines";
+NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @implementation CKTableViewCellController (CKDynamicLayout)
 
-@dynamic componentsRatio, componentsSpace, contentInsets;
+@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize;
 
 
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller{
+- (CGFloat)computeTableViewCellViewSize{
     CGFloat rowWidth = 0;
-    UIView* tableViewContainer = [controller tableViewContainer];
-    UITableView* tableView = [controller tableView];
+    UIView* tableViewContainer = [(CKTableViewController*)self.containerController tableViewContainer];
+    UITableView* tableView = [(CKTableViewController*)self.containerController tableView];
     if(tableView.style == UITableViewStylePlain){
         rowWidth = tableViewContainer.frame.size.width;
     }
@@ -57,107 +64,161 @@
     return rowWidth;
 }
 
-- (CGSize)sizeForTextLabelConstraintToWidth:(CGFloat)width{
-    if(!self.text){
+- (CGFloat)computeContentViewSize{
+    //TODO : This should  taking care of editing status and accessory view ...
+    return [self computeTableViewCellViewSize];
+}
+
+
+- (CGFloat)tableViewCellWidth{
+    return [self computeTableViewCellViewSize];
+}
+
+- (CGFloat)contentViewWidth{
+    return [self computeContentViewSize];
+}
+
+- (CGSize)sizeForText:(NSString*)text withStyle:(NSDictionary*)style constraintToWidth:(CGFloat)width{
+    if(!text || [text isKindOfClass:[NSNull class]]|| [text length] <= 0){
         return CGSizeMake(0,0);
     }
     
-    CGSize size = [self.text  sizeWithFont:[self textLabelFont]
-                               constrainedToSize:CGSizeMake( width , CGFLOAT_MAX)];
+    UIFont* font = [style objectForKey:CKDynamicLayoutFont];
+    
+    NSInteger numberOfLines = [[style objectForKey:CKDynamicLayoutNumberOfLines]intValue];
+    CGFloat maxHeight = (numberOfLines <= 0) ? CGFLOAT_MAX : numberOfLines * font.lineHeight;
+    
+    CGSize size = [text  sizeWithFont: font
+                    constrainedToSize:CGSizeMake( width , maxHeight) 
+                        lineBreakMode:[[style objectForKey:CKDynamicLayoutLineBreakMode]intValue]];
     return size;
 }
 
-- (CGSize)sizeForDetailTextLabelConstraintToWidth:(CGFloat)width{
-    if(!self.detailText){
-        return CGSizeMake(0,0);
-    }
-    
-    CGSize size = [self.detailText  sizeWithFont:[self detailTextLabelFont]
-                               constrainedToSize:CGSizeMake( width , CGFLOAT_MAX)];
-    return size;
-}
+//CKTableViewCellStyleValue3
 
-//Value3 layout 
-- (CGRect)value3DetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self value3TextFrameForCell:cell];
+- (CGRect)value3TextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+           Take care of image
+    */
     
-    CGFloat rowWidth = [self contentViewWidth];
-    CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
+    UIFont* detailTextFont = [detailTextStyle objectForKey:CKDynamicLayoutFont];
+    UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
+    UITextAlignment textAlignment = [[textStyle objectForKey:CKDynamicLayoutTextAlignment]intValue];
     
-    CGSize size = [self sizeForDetailTextLabelConstraintToWidth:width];
-	
-    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.detailTextLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
-                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(cell.detailTextLabel.font.lineHeight,size.height))));
-}
-
-- (CGRect)value3TextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
-    
-    CGFloat rowWidth = [self contentViewWidth];
+    CGFloat rowWidth = [self tableViewCellWidth];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
     //Detail Check
-    CGSize detailsize = [self sizeForDetailTextLabelConstraintToWidth:width];
-    BOOL detailOn1Line = (detailsize.height == cell.detailTextLabel.font.lineHeight);
+    CGSize detailsize = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
+    BOOL detailOn1Line = (detailsize.height == detailTextFont.lineHeight);
     
     CGFloat maxWidth = realWidth - width - self.componentsSpace;
     
-    CGSize size = [self sizeForTextLabelConstraintToWidth:maxWidth];
-    BOOL textOn1Line = (size.height == cell.textLabel.font.lineHeight);
+    CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
+    BOOL textOn1Line = (size.height == textFont.lineHeight);
     
     if(detailOn1Line && textOn1Line){
-        size.height = MAX(cell.textLabel.font.lineHeight,cell.detailTextLabel.font.lineHeight);
+        size.height = MAX(textFont.lineHeight,detailTextFont.lineHeight);
     }
+    
+    CGFloat totalHeight = size.height + self.contentInsets.top + self.contentInsets.bottom;
     
     BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((cell.contentView.frame.size.height / 2.0) - (MAX(cell.textLabel.font.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
-    if(cell.textLabel.textAlignment == UITextAlignmentRight){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left + maxWidth - size.width,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
-    else if(cell.textLabel.textAlignment == UITextAlignmentLeft){
-        return CGRectIntegral(CGRectMake(self.contentInsets.left,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
-    }
+    CGFloat y = isIphone ? ((totalHeight / 2.0) - (MAX(textFont.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
     
+    if(textAlignment == UITextAlignmentRight){
+        return CGRectIntegral(CGRectMake(self.contentInsets.left + maxWidth - size.width,y,size.width,MAX(textFont.lineHeight,size.height)));
+    }
+    else if(textAlignment == UITextAlignmentLeft){
+        return CGRectIntegral(CGRectMake(self.contentInsets.left,y,size.width,MAX(textFont.lineHeight,size.height)));
+    }
     //else Center
-    return CGRectIntegral(CGRectMake(self.contentInsets.left + (maxWidth - size.width) / 2.0,y,size.width,MAX(cell.textLabel.font.lineHeight,size.height)));
+    return CGRectIntegral(CGRectMake(self.contentInsets.left + (maxWidth - size.width) / 2.0,y,size.width,MAX(textFont.lineHeight,size.height)));
 }
 
-//PropertyGrid layout
-- (CGRect)propertyGridDetailFrameForCell:(UITableViewCell*)cell{
-    //TODO : factoriser un peu mieux ce code la ....
-    CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+- (CGRect)value3DetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+    Take care of image
+    */
+    
+    UIFont* detailTextFont = [detailTextStyle objectForKey:CKDynamicLayoutFont];
+    
+    CGRect textFrame = [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
+    
+    CGFloat rowWidth = [self tableViewCellWidth];
+    CGFloat realWidth = rowWidth;
+    CGFloat width = realWidth * self.componentsRatio - self.contentInsets.right - self.componentsSpace;
+    
+    CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
+    
+    CGFloat maxHeight = MAX(textFrame.origin.y + textFrame.size.height,size.height + self.contentInsets.top + self.contentInsets.bottom);
+	
+    BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+    CGFloat y = isIphone ? ((maxHeight / 2.0) - (MAX(detailTextFont.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
+    
+	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
+                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(detailTextFont.lineHeight,size.height))));
+}
+
+//CKTableViewCellStylePropertyGrid
+
+- (CGRect)propertyGridTextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+    Take care of image
+    */
+    
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            if(cell.detailTextLabel.text != nil && 
-               [cell.detailTextLabel.text isKindOfClass:[NSNull class]] == NO &&
-               [cell.detailTextLabel.text length] > 0 &&
-               cell.detailTextLabel.numberOfLines != 1){
-                
-                CGFloat realWidth = cell.contentView.frame.size.width;
+        if(text == nil || 
+           [text isKindOfClass:[NSNull class]] ||
+           [text length] <= 0){
+            return CGRectMake(0,0,0,0);
+        }
+        else{
+            CGFloat rowWidth = [self contentViewWidth];
+            CGFloat realWidth = rowWidth;
+            CGFloat width = realWidth * self.componentsRatio;
+            
+            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
+            CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
+            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
+        }
+    }
+    return [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
+}
+
+- (CGRect)propertyGridDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+    Take care of image
+    */
+    
+    CGFloat realWidth = [self contentViewWidth];
+    
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(text == nil || [text isKindOfClass:[NSNull class]] ||[text length] <= 0){
+            NSInteger detailNumberOfLines = [[detailTextStyle objectForKey:CKDynamicLayoutNumberOfLines]intValue];
+            if(detailText != nil && [detailText isKindOfClass:[NSNull class]] == NO && [detailText length] > 0 && detailNumberOfLines != 1){
                 CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
-                CGSize size = [self sizeForDetailTextLabelConstraintToWidth:maxWidth];
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), size.height);
+                CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:maxWidth];
+                return CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), size.height);
             }
             else{
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, cell.contentView.frame.size.width - (self.contentInsets.left + self.contentInsets.right), MAX(cell.textLabel.font.lineHeight,textFrame.size.height));
+                CGRect textFrame = [self propertyGridTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
+                
+                UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
+                return CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), MAX(textFont.lineHeight,textFrame.size.height));
             }
         }
         else{
-            //CGRect textFrame = [self propertyGridTextFrameForCell:cell];
+            CGRect textFrame = [self propertyGridTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
             CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
-            CGFloat width = cell.contentView.frame.size.width - self.contentInsets.right - x;
+            CGFloat width = realWidth - self.contentInsets.right - x;
             if(width > 0 ){
-                CGSize size = [self sizeForDetailTextLabelConstraintToWidth:width];
+                CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
                 CGFloat y = MAX(textFrame.origin.y + (textFrame.size.height / 2.0) - (size.height / 2),self.contentInsets.top);
                 
                 return CGRectMake(x,y, width, size.height);
@@ -167,127 +228,132 @@
             }
         }
     }
-    return [self value3DetailFrameForCell:cell];
+    return [self value3DetailFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
 }
 
-- (CGRect)propertyGridTextFrameForCell:(UITableViewCell*)cell{
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            return CGRectMake(0,0,0,0);
-        }
-        else{
-            CGFloat rowWidth = [self contentViewWidth];
-            CGFloat realWidth = rowWidth;
-            CGFloat width = realWidth * self.componentsRatio;
-            
-            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
-            CGSize size = [self sizeForTextLabelConstraintToWidth:maxWidth];
-            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
-        }
-    }
-    return [self value3TextFrameForCell:cell];
-}
+//CKTableViewCellStyleSubtitle2
 
-- (CGRect)subtitleTextFrameForCell:(UITableViewCell*)cell{
-    if(cell.textLabel.text == nil || 
-       [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.textLabel.text length] <= 0){
-        return CGRectMake(0,0,0,0);
-    }
+- (CGRect)subtitleTextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+    Take care of image
+    */
+
+    CGFloat x = self.contentInsets.left + image.size.width;
+    CGFloat width = [self contentViewWidth] - x - 10;
     
-    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
-    CGFloat width = cell.contentView.width - x - 10;
-    
-    CGSize size = [self sizeForTextLabelConstraintToWidth:width];
-    return CGRectMake(x,11, size.width, size.height);
+    CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
+    return CGRectMake(x,self.contentInsets.top, width, size.height);
 }
 
 
-- (CGRect)subtitleDetailFrameForCell:(UITableViewCell*)cell{
-    CGRect textFrame = [self subtitleTextFrameForCell:cell];
-    CGFloat x = cell.imageView.x + cell.imageView.width + 10;
-    CGFloat width = cell.contentView.width - x - 10;
+- (CGRect)subtitleDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    /*
+    TODO : Take care of indentation level !
+    Take care of image
+    */
     
-    if(cell.detailTextLabel.text == nil || 
-       [cell.detailTextLabel.text isKindOfClass:[NSNull class]] ||
-       [cell.detailTextLabel.text length] <= 0){
-        return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,0);
+    CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
+    
+    CGFloat x = self.contentInsets.left + image.size.width;
+    CGFloat width = [self contentViewWidth] - x - 10;
+    
+    if(text == nil || [text isKindOfClass:[NSNull class]] || [text length] <= 0){
+        return CGRectMake(x,textFrame.origin.y + textFrame.size.height + self.componentsSpace,width,0);
     }
     
-    CGSize size = [self sizeForDetailTextLabelConstraintToWidth:width];
-    return CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, width/*size.width*/, size.height);
+    CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
+    CGRect detailFrame = CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10, width/*size.width*/, size.height);
+    NSLog(@"INDEXPATH : %@ CONTENTWIDTH : %f TEXTFRAME : %@ DETAILFRAME : %@",[self indexPath],[self contentViewWidth],NSStringFromCGRect(textFrame),NSStringFromCGRect(detailFrame));
+    
+    return detailFrame;
 }
 
-- (void)performLayout{
-    UITableViewCell* cell = self.tableViewCell;
-    //You can overload this method if you need to update cell layout when cell is resizing.
-	//for example you need to resize an accessory view that is not automatically resized as resizingmask are not applied on it.
-	if(self.cellStyle == CKTableViewCellStyleValue3){
-        
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-            cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        }
-        
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self value3DetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self value3TextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self propertyGridDetailFrameForCell:cell];
-		}
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self propertyGridTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-	}
-    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
-        cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
-		if(cell.textLabel != nil){
-			CGRect textFrame = [self subtitleTextFrameForCell:cell];
-			cell.textLabel.frame = textFrame;
-		}
-		if(cell.detailTextLabel != nil){
-			cell.detailTextLabel.frame = [self subtitleDetailFrameForCell:cell];
-		}
-	}
-}
-
-- (UIFont*)fontForViewWithKeyPath:(NSString*)keyPath{
+- (NSDictionary*)styleForViewWithKeyPath:(NSString*)keyPath defaultStyle:(NSDictionary*)defaultStyle{
+    if(!defaultStyle){
+        NSMutableDictionary * def = [NSMutableDictionary dictionary];
+        [def setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        [def setObject:[UIFont systemFontOfSize:[UIFont systemFontSize]] forKey:CKDynamicLayoutFont];
+        [def setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+        [def setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+        defaultStyle = def;
+    }
+    
+    NSMutableDictionary* style = [NSMutableDictionary dictionaryWithDictionary:defaultStyle];
+    
+    //QUERY THE EXISTING VIEW
     id object = [self valueForKeyPath:keyPath];
     if(object){
+        //font
         if([object respondsToSelector:@selector(font)]){
-            return [object performSelector:@selector(font)];
+            UIFont* font = [object performSelector:@selector(font)];
+            [style setObject:font forKey:CKDynamicLayoutFont];
         }
-        return nil;
+        
+        //textAlignment
+        if([object respondsToSelector:@selector(textAlignment)]){
+            NSMethodSignature *signature = [object methodSignatureForSelector:@selector(textAlignment)];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            [invocation setSelector:@selector(textAlignment)];
+            [invocation setTarget:object];
+            [invocation invoke];
+            
+            UITextAlignment textAlignment = UITextAlignmentLeft;
+            [invocation getReturnValue:&textAlignment];
+            
+            [style setObject:[NSNumber numberWithInt:textAlignment] forKey:CKDynamicLayoutTextAlignment];
+        }
+        
+        //lineBreakMode
+        if([object respondsToSelector:@selector(lineBreakMode)]){
+            NSMethodSignature *signature = [object methodSignatureForSelector:@selector(lineBreakMode)];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            [invocation setSelector:@selector(lineBreakMode)];
+            [invocation setTarget:object];
+            [invocation invoke];
+            
+            UILineBreakMode lineBreakMode = UILineBreakModeWordWrap;
+            [invocation getReturnValue:&lineBreakMode];
+            
+            [style setObject:[NSNumber numberWithInt:lineBreakMode] forKey:CKDynamicLayoutLineBreakMode];
+        }
+        
+        //numberOfLines
+        if([object respondsToSelector:@selector(numberOfLines)]){
+            NSMethodSignature *signature = [object methodSignatureForSelector:@selector(numberOfLines)];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            [invocation setSelector:@selector(numberOfLines)];
+            [invocation setTarget:object];
+            [invocation invoke];
+            
+            NSInteger numberOfLines = 0;
+            [invocation getReturnValue:&numberOfLines];
+            
+            [style setObject:[NSNumber numberWithInt:numberOfLines] forKey:CKDynamicLayoutNumberOfLines];
+        }
+        
+        return style;
     }
     
-    id currentObject = self;
+    //QUERY STYLESHEETS
+    
     NSMutableDictionary* currentStyle = [self controllerStyle];
-    
-    NSArray* components = [keyPath componentsSeparatedByString:@"."];
-    for(NSString* component in components){
-        CKProperty* property = [CKProperty propertyWithObject:currentObject keyPath:component];
-        currentObject = [property value];
-        if(!currentObject){
-            currentObject = [[property class]sharedInstance];
+    if(![currentStyle isEmpty]){
+        id currentObject = self;
+        
+        NSArray* components = [keyPath componentsSeparatedByString:@"."];
+        for(NSString* component in components){
+            CKProperty* property = [CKProperty propertyWithObject:currentObject keyPath:component];
+            currentObject = [property value];
+            if(!currentObject){
+                currentObject = [[property class]sharedInstance];
+            }
+            currentStyle = [currentStyle styleForObject:currentObject propertyName:property.name];
         }
-        currentStyle = [currentStyle styleForObject:currentObject propertyName:property.name];
-    }
-    
-    if([currentObject respondsToSelector:@selector(font)]){
-        UIFont* font = [currentObject performSelector:@selector(font)];
+        
         if(currentStyle){
+            //font
+            UIFont* font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
             NSString* fontName = font.fontName;
             if([currentStyle containsObjectForKey:CKStyleFontName])
                 fontName= [currentStyle fontName];
@@ -295,63 +361,206 @@
             if([currentStyle containsObjectForKey:CKStyleFontSize])
                 fontSize= [currentStyle fontSize];
             font = [UIFont fontWithName:fontName size:fontSize];
+            [style setObject:font forKey:CKDynamicLayoutFont];
+            
+            //textAlignment
+            if([currentStyle containsObjectForKey:@"textAlignment"]){
+                NSInteger value = [currentStyle enumValueForKey:@"textAlignment" withEnumDescriptor:CKEnumDefinition(@"UITextAlignment",
+                                                                                                                     UITextAlignmentLeft,
+                                                                                                                     UITextAlignmentCenter,
+                                                                                                                     UITextAlignmentRight)];
+                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutTextAlignment];
+            }
+            
+            //numberOfLines
+            if([currentStyle containsObjectForKey:@"numberOfLines"]){
+                NSInteger value = [currentStyle integerForKey:@"numberOfLines"];
+                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutNumberOfLines];
+            }
+            
+            //lineBreakMode
+            if([currentStyle containsObjectForKey:@"lineBreakMode"]){
+                NSInteger value = [currentStyle enumValueForKey:@"lineBreakMode" withEnumDescriptor:CKEnumDefinition(@"UILineBreakMode",
+                                                                                                                     UILineBreakModeWordWrap,            
+                                                                                                                     UILineBreakModeCharacterWrap,           
+                                                                                                                     UILineBreakModeClip,                    
+                                                                                                                     UILineBreakModeHeadTruncation,          
+                                                                                                                     UILineBreakModeTailTruncation,
+                                                                                                                     UILineBreakModeMiddleTruncation)];
+                [style setObject:[NSNumber numberWithInt:value] forKey:CKDynamicLayoutLineBreakMode];
+            }
         }
-        return font;
     }
     
-    return nil;
+    return style;
 }
 
-- (UIFont*)textLabelFont{
-    return [self fontForViewWithKeyPath:@"tableViewCell.textLabel"];
+- (NSDictionary*)textStyle{
+     //INIT DEAFAULT VALUES
+    if(!self.text) return nil;
+    
+    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
+    [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+    [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3){
+        [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
+    }
+    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        }
+        else{
+            [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
+        }
+    }
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+    }
+    
+    return [self styleForViewWithKeyPath:@"tableViewCell.textLabel" defaultStyle:defaultStyle];
 }
 
-- (UIFont*)detailTextLabelFont{
-    return [self fontForViewWithKeyPath:@"tableViewCell.detailTextLabel"];
-}
-
-- (CGFloat)contentViewWidth{
-    return [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)self.containerController];
+- (NSDictionary*)detailTextStyle{
+    if(!self.detailText) return nil;
+    
+    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
+    [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+    [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3){
+        [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+    }
+    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
+        }
+        else{
+            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        }
+    }
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        [defaultStyle setObject:[UIFont systemFontOfSize:14] forKey:CKDynamicLayoutFont];
+        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+    }
+    
+    return [self styleForViewWithKeyPath:@"tableViewCell.detailTextLabel" defaultStyle:defaultStyle];
 }
 
 - (void)invalidateSize{
-    //When tableView will wuery for the first time the size, it will set sizeHasBeenQueriedByTableView to YES and call invalidateSize for a first computation
-    //after what, each time invalidateSize is called, the size will get recomputed.
-    if(!self.sizeHasBeenQueriedByTableView)
-        return;
-    
-    self.size = [self computeSize];
+	if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+        
+        //When tableView will wuery for the first time the size, it will set sizeHasBeenQueriedByTableView to YES and call invalidateSize for a first computation
+        //after what, each time invalidateSize is called, the size will get recomputed.
+        if(!self.sizeHasBeenQueriedByTableView)
+            return;
+        
+        self.invalidatedSize = YES;
+        [super invalidateSize];
+    }
 }
 
 - (CGSize)computeSize{
-    /*
-     @property (nonatomic, assign) NSInteger indentationLevel;
-     @property (nonatomic, retain) NSString* text;
-     @property (nonatomic, retain) NSString* detailedText;
-     @property (nonatomic, retain) UIImage*  image;
-     @property (nonatomic) UITableViewCellAccessoryType   accessoryType;
-     @property (nonatomic,retain) UIView                 *accessoryView;
-     @property (nonatomic) UITableViewCellAccessoryType   editingAccessoryType;
-     @property (nonatomic,retain) UIView                 *editingAccessoryView;
-     */
-    /*
     if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGFloat bottomText = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
+        /*
+        TODO : Take care of indentation level !
+        Take care of image
+         */
         
-        CGFloat bottomDetails = 0;
-        if(staticController.tableViewCell.detailTextLabel.text != nil &&
-           [staticController.tableViewCell.detailTextLabel.text isKindOfClass:[NSString class]] &&
-           [staticController.tableViewCell.detailTextLabel.text length] > 0){
-            bottomDetails = staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height;
+        NSDictionary* textStyle = [self textStyle];
+        NSDictionary* detailStyle = [self detailTextStyle];
+        
+        CGFloat height = 0;
+        if(self.cellStyle == CKTableViewCellStyleValue3){
+            CGRect detailTextFrame = [self value3DetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            CGRect textFrame = [self value3TextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
         }
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+            CGRect detailTextFrame = [self propertyGridDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            CGRect textFrame = [self propertyGridTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
+        }
+        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+            NSLog(@"computeSize");
+            CGRect detailTextFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
+            NSLog(@"computedHeight : %f",height);
+        }    
         
-        CGFloat maxHeight = MAX(44, MAX(bottomText,bottomDetails) + staticController.contentInsets.bottom);
-        return [NSValue valueWithCGSize:CGSizeMake(tableWidth,maxHeight)];
+        return CGSizeMake(320,height);
     }
-    return [NSValue valueWithCGSize:CGSizeMake(tableWidth,44)];
-    NSAssert(NO,@"Do Implement this method");*/
+    
+    self.invalidatedSize = NO;
+    return self.size;
+}
+
+
+- (void)performLayout{
+    if(self.cellStyle == CKTableViewCellStyleValue3
+       || self.cellStyle == CKTableViewCellStylePropertyGrid
+       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+        UITableViewCell* cell = self.tableViewCell;
+        
+        NSDictionary* textStyle = [self textStyle];
+        NSDictionary* detailStyle = [self detailTextStyle];
+        
+        /*
+         TODO : Take care of indentation level !
+         Take care of image
+         */
+        
+        
+        if(self.cellStyle == CKTableViewCellStyleValue3){
+            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+                cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+                cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+            }
+            
+            if(cell.detailTextLabel != nil){
+                cell.detailTextLabel.frame = [self value3DetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            }
+            if(cell.textLabel != nil){
+                CGRect textFrame = [self value3TextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+                cell.textLabel.frame = textFrame;
+            }
+        }
+        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+            cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+            if(cell.detailTextLabel != nil){
+                cell.detailTextLabel.frame = [self propertyGridDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            }
+            if(cell.textLabel != nil){
+                CGRect textFrame = [self propertyGridTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+                cell.textLabel.frame = textFrame;
+            }
+        }
+        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+            NSLog(@"performLayout");
+            cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
+            cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+            if(cell.textLabel != nil){
+                CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+                cell.textLabel.frame = textFrame;
+            }
+            if(cell.detailTextLabel != nil){
+                cell.detailTextLabel.frame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            }
+        }
+    }
 }
 
 @end

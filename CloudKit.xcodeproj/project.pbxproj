@@ -475,15 +475,15 @@
 		9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9638265D1484013B00A9C98B /* CKFormBindedCollectionSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */; };
 		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
-		964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */; };
+		964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2081153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */; };
-		964C2084153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */; };
+		964C2084153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2085153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C2083153DD92E00398E0F /* CKTableViewCellController+CKBlockBasedInterface.m */; };
-		964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */; };
+		964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */; };
-		967C51811538BD4E00B3F785 /* CKNSObject+CKSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* CKNSObject+CKSingleton.h */; };
+		967C51811538BD4E00B3F785 /* CKNSObject+CKSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* CKNSObject+CKSingleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51821538BD4E00B3F785 /* CKNSObject+CKSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */; };
-		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; };
+		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51861538BE8200B3F785 /* CKDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51841538BE8200B3F785 /* CKDocument.m */; };
 		969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */; };
 		969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */; };
@@ -502,6 +502,17 @@
 		96D4B83615125FD200B517A5 /* CKUIBarButtonItem+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* CKUIBarButtonItem+Additions.m */; };
 		96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */; };
+		96E4D3EE15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */; };
+		96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */; };
+		96E4D3F315406F5500CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */; };
+		96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */; };
+		96E4D3F715406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */; };
+		96E4D3F815406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */; };
+		96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */; };
+		96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */; };
+		96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */; };
+		96E4D4671540918800CCF421 /* UnitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D40215407D8600CCF421 /* UnitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1010,6 +1021,17 @@
 		96D4B83415125FD200B517A5 /* CKUIBarButtonItem+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIBarButtonItem+Additions.m"; path = "Classes/CKUIBarButtonItem+Additions.m"; sourceTree = "<group>"; };
 		96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFilteredCollection.h; path = Classes/CKFilteredCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFilteredCollection.m; path = Classes/CKFilteredCollection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMultilineNSStringPropertyCellController+CKDynamicLayout.h"; path = "Classes/CKMultilineNSStringPropertyCellController+CKDynamicLayout.h"; sourceTree = "<group>"; };
+		96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMultilineNSStringPropertyCellController+CKDynamicLayout.m"; path = "Classes/CKMultilineNSStringPropertyCellController+CKDynamicLayout.m"; sourceTree = "<group>"; };
+		96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSStringPropertyCellController+CKDynamicLayout.h"; path = "Classes/CKNSStringPropertyCellController+CKDynamicLayout.h"; sourceTree = "<group>"; };
+		96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSStringPropertyCellController+CKDynamicLayout.m"; path = "Classes/CKNSStringPropertyCellController+CKDynamicLayout.m"; sourceTree = "<group>"; };
+		96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKPropertyGridCellController+CKDynamicLayout.h"; path = "Classes/CKPropertyGridCellController+CKDynamicLayout.h"; sourceTree = "<group>"; };
+		96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKPropertyGridCellController+CKDynamicLayout.m"; path = "Classes/CKPropertyGridCellController+CKDynamicLayout.m"; sourceTree = "<group>"; };
+		96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSNumberPropertyCellController+CKDynamicLayout.h"; path = "Classes/CKNSNumberPropertyCellController+CKDynamicLayout.h"; sourceTree = "<group>"; };
+		96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSNumberPropertyCellController+CKDynamicLayout.m"; path = "Classes/CKNSNumberPropertyCellController+CKDynamicLayout.m"; sourceTree = "<group>"; };
+		96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUnitTest_TableViewCellController_DynamicLayout.h; path = Classes/CKUnitTest_TableViewCellController_DynamicLayout.h; sourceTree = "<group>"; };
+		96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKUnitTest_TableViewCellController_DynamicLayout.m; path = Classes/CKUnitTest_TableViewCellController_DynamicLayout.m; sourceTree = "<group>"; };
+		96E4D40215407D8600CCF421 /* UnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests.h; path = Classes/UnitTests.h; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1566,10 +1588,7 @@
 				7577DFE513E2EE470065E098 /* CKTableViewCellController+PropertyGrid.m */,
 				75F295DC13EB0088009CCC70 /* CKTableViewCellController+Menus.h */,
 				75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */,
-				7560DB5213B8ED3600268D13 /* CKCollectionCellController.h */,
-				7560DB5313B8ED3600268D13 /* CKCollectionCellController.m */,
-				7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */,
-				7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */,
+				964DAF7F153F2E970024C08F /* CKCollection CellControllers */,
 				75F2960213F04424009CCC70 /* CKProperty CellControllers */,
 			);
 			name = CellControllers;
@@ -1687,6 +1706,7 @@
 				7506E40D13B9014100EE1471 /* Network */,
 				964C207D153DB66A00398E0F /* Localization */,
 				7506E40F13B9022700EE1471 /* Support */,
+				96E4D3FD15407D2700CCF421 /* UnitTests */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1862,19 +1882,10 @@
 		75AD5D8A144C687E0008F53A /* Inline Debugger */ = {
 			isa = PBXGroup;
 			children = (
-				7560DB3613B8ED3600268D13 /* CKClassExplorer.h */,
-				7560DB3713B8ED3600268D13 /* CKClassExplorer.m */,
 				7580AFEF144F59C2004DCF7A /* CKInlineDebugger.style */,
 				757D06E2144DAD9A00A83128 /* CKInlineDebuggerController.h */,
 				757D06E3144DAD9A00A83128 /* CKInlineDebuggerController.m */,
-				75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */,
-				75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */,
-				75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */,
-				75AD5D9B144C71740008F53A /* CKUIView+InlineDebugger.m */,
-				75AD5D9E144C72950008F53A /* CKUIViewController+InlineDebugger.h */,
-				75AD5D9F144C72960008F53A /* CKUIViewController+InlineDebugger.m */,
-				75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */,
-				75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */,
+				964DAF80153F2FB10024C08F /* Additions */,
 			);
 			name = "Inline Debugger";
 			sourceTree = "<group>";
@@ -1915,20 +1926,32 @@
 			children = (
 				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
 				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
+				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */,
+				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */,
 				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
 				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
 				7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */,
+				96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */,
+				96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */,
 				7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */,
 				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
+				96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */,
+				96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */,
 				75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */,
 				75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */,
+				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
+				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */,
 				758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */,
 				758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */,
+				7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */,
+				7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */,
 				7560DB9713B8ED3600268D13 /* CKMultiFloatPropertyCellController.h */,
 				7560DB9813B8ED3600268D13 /* CKMultiFloatPropertyCellController.m */,
 				7560DBC913B8ED3600268D13 /* CKNSObjectPropertyCellController.h */,
 				7560DBCA13B8ED3600268D13 /* CKNSObjectPropertyCellController.m */,
+				7560DB3613B8ED3600268D13 /* CKClassExplorer.h */,
+				7560DB3713B8ED3600268D13 /* CKClassExplorer.m */,
 				7560DB3413B8ED3600268D13 /* CKCGPropertyCellControllers.h */,
 				7560DB3513B8ED3600268D13 /* CKCGPropertyCellControllers.m */,
 				7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */,
@@ -1983,6 +2006,30 @@
 			name = Localization;
 			sourceTree = "<group>";
 		};
+		964DAF7F153F2E970024C08F /* CKCollection CellControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB5213B8ED3600268D13 /* CKCollectionCellController.h */,
+				7560DB5313B8ED3600268D13 /* CKCollectionCellController.m */,
+			);
+			name = "CKCollection CellControllers";
+			sourceTree = "<group>";
+		};
+		964DAF80153F2FB10024C08F /* Additions */ = {
+			isa = PBXGroup;
+			children = (
+				75AD5D8C144C68BA0008F53A /* CKNSObject+InlineDebugger.h */,
+				75AD5D8D144C68BA0008F53A /* CKNSObject+InlineDebugger.m */,
+				75AD5D9A144C71740008F53A /* CKUIView+InlineDebugger.h */,
+				75AD5D9B144C71740008F53A /* CKUIView+InlineDebugger.m */,
+				75AD5D9E144C72950008F53A /* CKUIViewController+InlineDebugger.h */,
+				75AD5D9F144C72960008F53A /* CKUIViewController+InlineDebugger.m */,
+				75AD5DA2144C73280008F53A /* CKItemViewContainerController+InlineDebugger.h */,
+				75AD5DA3144C73290008F53A /* CKItemViewContainerController+InlineDebugger.m */,
+			);
+			name = Additions;
+			sourceTree = "<group>";
+		};
 		966B00C51538884200360C0F /* NSObject Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -1992,6 +2039,16 @@
 				96CADE371486BDFD008A23E4 /* CKNSObject+Validation.m */,
 			);
 			name = "NSObject Extension";
+			sourceTree = "<group>";
+		};
+		96E4D3FD15407D2700CCF421 /* UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				96E4D40215407D8600CCF421 /* UnitTests.h */,
+				96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */,
+				96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */,
+			);
+			name = UnitTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2230,6 +2287,12 @@
 				964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */,
 				964C2084153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.h in Headers */,
 				964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */,
+				96E4D3EE15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h in Headers */,
+				96E4D3F315406F5500CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h in Headers */,
+				96E4D3F715406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h in Headers */,
+				96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h in Headers */,
+				96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */,
+				96E4D4671540918800CCF421 /* UnitTests.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2565,6 +2628,11 @@
 				964C2081153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.m in Sources */,
 				964C2085153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.m in Sources */,
 				964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */,
+				96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m in Sources */,
+				96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m in Sources */,
+				96E4D3F815406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m in Sources */,
+				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m in Sources */,
+				96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

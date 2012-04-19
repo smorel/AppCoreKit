@@ -20,4 +20,7 @@
 @property (nonatomic,retain,readonly) UITextField* textField;
 @property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
 
+- (BOOL)isBOOL;
+- (BOOL)isNumber;
+
 @end

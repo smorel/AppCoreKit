@@ -15,6 +15,7 @@
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKTableViewCellController.h"
 
 #import "CKDebug.h"
 

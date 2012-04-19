@@ -99,5 +99,7 @@ typedef NSUInteger CKItemViewFlags;
 ///-----------------------------------
 
 - (void)postInit;
+- (void)invalidateSize;
+- (void)setSize:(CGSize)size notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate;
 
 @end

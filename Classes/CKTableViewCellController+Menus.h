@@ -6,8 +6,7 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKFormTableViewController.h"
-
+#import "CKTableViewCellController.h"
 
 @interface CKTableViewCellController(CKMenus)
 

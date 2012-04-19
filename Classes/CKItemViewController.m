@@ -85,14 +85,26 @@
 }
 
 - (void)setSize:(CGSize)s{
+    [self setSize:s notifyingContainerForUpdate:YES];
+}
+
+- (void)setSize:(CGSize)s notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate{
     if(CGSizeEqualToSize(_size, s))
         return;
     [self willChangeValueForKey:@"size"];
     _size = s;
-    if(self.containerController){
+    //this will tell the controller it needs to update without computing a new size.
+    if(notifyingContainerForUpdate && self.containerController){
         [self.containerController onSizeChangeAtIndexPath:self.indexPath];
     }
     [self didChangeValueForKey:@"size"];
+}
+
+//this will tell the controller it needs to update by computing a new size.
+- (void)invalidateSize{
+    if(self.containerController){
+        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
+    }
 }
 
 - (void)setView:(UIView *)view{

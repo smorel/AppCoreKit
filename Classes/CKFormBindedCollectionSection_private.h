@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#import "CKFormBindedCollectionSection.h"
+
 @interface CKFormBindedCollectionSection()
 @property (nonatomic,retain) CKCollectionController* objectController;
 @property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;

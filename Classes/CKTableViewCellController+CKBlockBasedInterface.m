@@ -2,7 +2,7 @@
 //  CKTableViewCellController+CKBlockBasedInterface.m
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-04-17.
+//  Created by Sebastien Morel on 12-04-17.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

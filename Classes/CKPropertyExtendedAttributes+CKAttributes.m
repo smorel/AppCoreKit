@@ -201,3 +201,19 @@
 }
 
 @end
+
+
+@implementation CKPropertyExtendedAttributes (CKMultilineNSStringPropertyCellController)
+@dynamic multiLineEnabled;
+
+- (void)setMultiLineEnabled:(BOOL)multiLineEnabled{
+    [self.attributes setObject:[NSNumber numberWithBool:multiLineEnabled] forKey:@"CKPropertyExtendedAttributes_CKMultilineNSStringPropertyCellController_multiLineEnabled"];
+}
+
+- (BOOL)multiLineEnabled{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKMultilineNSStringPropertyCellController_multiLineEnabled"];
+    if(value) return [value boolValue];
+    return NO;
+}
+
+@end

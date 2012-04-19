@@ -7,7 +7,6 @@
 //
 
 #import "CKMultilineNSStringPropertyCellController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
@@ -21,7 +20,7 @@
 #define TEXTVIEW_TAG 50000
 
 @interface CKTableViewCellController()
-+ (CGFloat)contentViewWidthInParentController:(CKBindedTableViewController*)controller;
+- (CGFloat)computeContentViewSize;
 @end
 
 @interface CKMultilineNSStringPropertyCellController()
@@ -40,35 +39,6 @@
 - (void)postInit{
     [super postInit];
     self.flags = CKItemViewFlagNone;
-}
-
-//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
-/*
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    UIViewController* controller = [params parentController];
-    NSAssert([controller isKindOfClass:[CKBindedTableViewController class]],@"invalid parent controller");
-    
-    CKProperty* property = (CKProperty*)object;
-    
-    CKMultilineNSStringPropertyCellController* staticController = (CKMultilineNSStringPropertyCellController*)[params staticController];
-    if([property isReadOnly] || staticController.readOnly){
-        return [CKTableViewCellController viewSizeForObject:object withParams:params];
-    }
-    else{    
-		CGFloat bottomTextView = staticController.textView.frame.origin.y + staticController.textView.frame.size.height;
-		CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-		CGFloat maxHeight = MAX(bottomTextView,bottomTextLabel) + 10;
-		return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-    }
-    return nil;
-}*/
-
-- (UIFont*)textViewFont{
-    return [self fontForViewWithKeyPath:@"textView"];
-}
-
-- (CGSize)computeSize{
-    NSAssert(NO,@"Do Implement this method");
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
@@ -113,50 +83,6 @@
     }
 }
 
-- (void)performLayout{
-    [super performLayout];
-    
-    UITableViewCell* cell = self.tableViewCell;
-    if(self.cellStyle == CKTableViewCellStyleValue3){
-        CGFloat rowWidth = [CKTableViewCellController contentViewWidthInParentController:(CKBindedTableViewController*)[self containerController]];
-        CGFloat realWidth = rowWidth;
-        CGFloat width = realWidth * self.componentsRatio;
-        
-        CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
-        CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
-        
-        CGFloat textFieldY = self.contentInsets.top;
-        CGFloat textFieldHeight = cell.contentView.height - (self.contentInsets.top + self.contentInsets.bottom);
-        self.textView.frame = CGRectMake(textFieldX,textFieldY,textFieldWidth,textFieldHeight);
-    }
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-            if(cell.textLabel.text == nil || 
-               [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-               [cell.textLabel.text length] <= 0){
-                CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
-                self.textView.frame = textViewFrame;
-            }
-            else{
-                //sets the textLabel on one full line and the textView beside
-                CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
-                cell.textLabel.frame = textFrame;
-                
-                CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
-                self.textView.frame = textViewFrame;
-            }
-        }
-        else{
-            CGRect f = [self propertyGridDetailFrameForCell:cell];
-            self.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,self.textView.frame.size.height);
-        }
-    }
-    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,cell.textLabel.x),MAX(self.contentInsets.top,cell.textLabel.y + cell.textLabel.height + 10),cell.contentView.width - (cell.imageView.x + 10) - 10,self.textView.frame.size.height);
-        self.textView.frame = textViewFrame;
-    }
-}
- 
 - (void)textViewChanged:(id)value{
     [self setValueInObjectProperty:value];
 }

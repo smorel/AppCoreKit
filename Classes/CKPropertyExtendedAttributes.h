@@ -31,3 +31,5 @@
 
 @end
 
+
+#import "CKPropertyExtendedAttributes+CKAttributes.h"

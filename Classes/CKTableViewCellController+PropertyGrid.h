@@ -6,7 +6,7 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKFormTableViewController.h"
+#import "CKTableViewCellController.h"
 #import "CKProperty.h"
 
 @interface CKTableViewCellController(CKPropertyGrid)

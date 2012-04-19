@@ -363,15 +363,16 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             }
             
             if(_highlightLabel == nil){
-                self.highlightLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 20)]autorelease];
+                self.highlightLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 10, 40)]autorelease];
                 _highlightLabel.tag = CKInlineDebuggerControllerHighlightViewTag;
                 _highlightLabel.layer.cornerRadius = 10;
                 _highlightLabel.backgroundColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.6];
                 _highlightLabel.textColor = [UIColor whiteColor];
                 _highlightLabel.textAlignment = UITextAlignmentCenter;
+                _highlightLabel.numberOfLines = 2;
             }
             
-            _highlightLabel.text = [[view class]description];
+            _highlightLabel.text = [NSString stringWithFormat:@"%@\n%@",[[view class]description],NSStringFromCGRect([view frame])];
             [_highlightLabel sizeToFit];
             
             _highlightLabel.width += 20;

@@ -82,8 +82,8 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-	self.delegate = thedelegate;
     self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
+	self.delegate = thedelegate;
 	return self;
 }
 
@@ -95,7 +95,7 @@
 	self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
 
     //Keeps controller in sync for size updates if user sets or bind data directly to the cell !
-    [NSObject beginBindingsContext:_syncControllerViewBindingContextId options:CKBindingsContextPolicyRemovePreviousBindings];
+    /*[NSObject beginBindingsContext:_syncControllerViewBindingContextId options:CKBindingsContextPolicyRemovePreviousBindings];
     [self bind:@"indentationLevel"  toObject:thedelegate withKeyPath:@"indentationLevel"];
     [self.textLabel bind:@"text"  toObject:thedelegate withKeyPath:@"text"];
     [self.detailTextLabel bind:@"text"  toObject:thedelegate withKeyPath:@"detailText"];
@@ -105,7 +105,7 @@
     [self bind:@"editingAccessoryView"  toObject:thedelegate withKeyPath:@"editingAccessoryView"];
     [self bind:@"editingAccessoryType"  toObject:thedelegate withKeyPath:@"editingAccessoryType"];
     [self bind:@"selectionStyle"  toObject:thedelegate withKeyPath:@"selectionStyle"];
-    [NSObject endBindingsContext];	
+    [NSObject endBindingsContext];	*/
 }
 
 - (void)layoutSubviews{
@@ -276,6 +276,8 @@
 @property (nonatomic, assign) CGFloat componentsSpace;
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
 
+@property (nonatomic, assign) BOOL invalidatedSize;
+
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 - (UITableViewCell *)loadCell;
 
@@ -295,8 +297,11 @@
 @synthesize accessoryView = _accessoryView;
 @synthesize editingAccessoryType = _editingAccessoryType;
 @synthesize editingAccessoryView = _editingAccessoryView;
-@synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
 @synthesize selectionStyle = _selectionStyle;
+@synthesize invalidatedSize = _invalidatedSize;
+
+//used in cell size invalidation process
+@synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
 
 - (void)postInit {
 	[super postInit];
@@ -312,10 +317,15 @@
     self.componentsSpace = 10;
     self.size = CGSizeMake(320,44);
     self.flags = CKItemViewFlagSelectable | CKItemViewFlagEditable;
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    self.editingAccessoryType = UITableViewCellAccessoryNone;
     self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     
     self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
     _indentationLevel = 0;
+    
+    _invalidatedSize = YES;
     _sizeHasBeenQueriedByTableView = NO;
 }
 
@@ -341,23 +351,31 @@
 }
 
 - (void)setCellStyle:(CKTableViewCellStyle)cellStyle{
-    _cellStyle = cellStyle;
-    [self invalidateSize];//as stylesheet selection could be dependent
+    if(cellStyle != _cellStyle){
+        _cellStyle = cellStyle;
+        [self invalidateSize];//as stylesheet selection could be dependent
+    }
 }
 
 - (void)setIndexPath:(NSIndexPath *)indexPath{
-    [super setIndexPath:indexPath];
-    [self invalidateSize];//as stylesheet selection could be dependent
+    if([self.indexPath isEqual:indexPath] == NO){
+        [super setIndexPath:indexPath];
+        [self invalidateSize];//as stylesheet selection could be dependent
+    }
 }
 
 - (void)setName:(NSString *)name{
-    [super setName:name];
-    [self invalidateSize];//as stylesheet selection could be dependent
+    if([self.name isEqual:name] == NO){
+        [super setName:name];
+        [self invalidateSize];//as stylesheet selection could be dependent
+    }
 }
 
 - (void)setValue:(id)value{
-    [super setValue:value];
-    [self invalidateSize];
+    if([self.value isEqual:value] == NO){
+        [super setValue:value];
+        [self invalidateSize];
+    }
 }
 
 + (CKTableViewCellController*)cellController{
@@ -701,11 +719,11 @@
 }
 
 - (void)setupView:(UIView *)view{
-    if(self.cellStyle == CKTableViewCellStyleValue3
+    /*if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
-    }
+    }*/
     
     if(self.layoutCallback == nil){
         __block CKTableViewCellController* bself = self;
@@ -758,6 +776,7 @@
 }
 
 - (void)rotateView:(UIView*)view animated:(BOOL)animated{
+    self.invalidatedSize = YES;
 	[super rotateView:view animated:animated];
 	[self rotateCell:(UITableViewCell*)view animated:animated];
 }

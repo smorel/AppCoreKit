@@ -10,6 +10,8 @@
 #import "CKProperty.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 
+#define CLICKABLE_VALIDATION_INFO 0
+
 /** 
  CKPropertyGridCellController is a base class for cell controllers working with a CKProperty value.
  This provides the base value for the mecanisms that should be implemented in subclasses like readonly, or value validation.
@@ -64,7 +66,6 @@
 
 //Private
 - (void)setInvalidButtonVisible:(BOOL)visible;
-- (void)performValidationLayout;
 
 - (UIToolbar*)navigationToolbar;
 

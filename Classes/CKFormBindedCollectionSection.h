@@ -7,7 +7,11 @@
 //
 
 #import "CKFormSectionBase.h"
-#import "CKTableViewCellController.h"
+#import "CKCollection.h"
+#import "CKItemViewControllerFactory.h"
+#import "CKCollectionController.h"
+
+@class CKTableViewCellController;
 
 /** TODO
  */

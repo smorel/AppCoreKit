@@ -6,6 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
+#import "CKBindedTableViewController.h"
 #import "CKFormSectionBase.h"
 #import "CKFormSection.h"
 #import "CKFormBindedCollectionSection.h"
@@ -58,8 +59,3 @@
 - (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
 
 @end
-
-
-//Adds extensions here to avoid importing to much files in client projects
-#import "CKTableViewCellController+PropertyGrid.h"
-#import "CKTableViewCellController+Menus.h"

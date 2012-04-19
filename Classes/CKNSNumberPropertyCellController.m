@@ -7,17 +7,12 @@
 //
 
 #import "CKNSNumberPropertyCellController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKUIView+Positioning.h"
-
-#define TextEditTag 1
-#define SwitchTag 2
-#define LabelTag 3
 
 @interface CKNSNumberPropertyCellController()
 @property (nonatomic,retain,readwrite) UITextField* textField;
@@ -39,40 +34,8 @@
     self.flags = CKItemViewFlagNone;
 }
 
-
-//HERE SIZE DEPENDS ON VALUE &&& STYLESHEET !
-/*
-+ (NSValue*)viewSizeForObject:(id)object withParams:(NSDictionary*)params{
-    CKNSNumberPropertyCellController* staticController = (CKNSNumberPropertyCellController*)[params staticController];
-    if(!staticController){
-        return [NSValue valueWithCGSize:CGSizeMake(100,44)];
-    }
-    
-	UISwitch* s = (UISwitch*)[staticController.tableViewCell viewWithTag:SwitchTag];
-	UITextField *textField = (UITextField*)[staticController.tableViewCell viewWithTag:50000];
-    
-    CGFloat bottomTextField = textField ? (textField.frame.origin.y + textField.frame.size.height) : 0;
-    CGFloat bottomSwitch = s ? (s.frame.origin.y + s.frame.size.height) : 0;
-    CGFloat bottomTextLabel = staticController.tableViewCell.textLabel.frame.origin.y + staticController.tableViewCell.textLabel.frame.size.height;
-    CGFloat bottomDetailTextLabel = [staticController.tableViewCell.detailTextLabel text] ? (staticController.tableViewCell.detailTextLabel.frame.origin.y + staticController.tableViewCell.detailTextLabel.frame.size.height) : 0;
-    
-    CKProperty* model = staticController.value;
-    BOOL readonly = ([model isReadOnly] || staticController.readOnly);
-    
-    CGFloat maxHeight = MAX((readonly ? 0 : bottomTextField),MAX((readonly ? 0 : bottomSwitch),MAX(bottomTextLabel,(readonly ? bottomDetailTextLabel : 0)))) + staticController.contentInsets.bottom;
-    return [NSValue valueWithCGSize:CGSizeMake(100,maxHeight)];
-} */
-
-- (UIFont*)textViewFont{
-    return [self fontForViewWithKeyPath:@"textField"];
-}
-
-- (CGSize)computeSize{
-    NSAssert(NO,@"Do Implement this method");
-}
-
 - (void)onswitch{
-	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
+	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:500002];
     [self setValueInObjectProperty:[NSNumber numberWithBool:s.on]];
 }
 
@@ -80,7 +43,7 @@
 	CKProperty* model = self.value;
 	BOOL bo = [[model value] boolValue];
 	
-	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:SwitchTag];
+	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:500002];
 	[s setOn:bo animated:YES];
 }
 
@@ -146,8 +109,39 @@
         cell.accessoryView = self.toggleSwitch;
     }
 
-    _toggleSwitch.tag = SwitchTag;
+    _toggleSwitch.tag = 500002;
     */
+}
+
+
+- (BOOL)isNumber{
+	CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    switch(descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeInt:
+		case CKClassPropertyDescriptorTypeShort:
+		case CKClassPropertyDescriptorTypeLong:
+		case CKClassPropertyDescriptorTypeLongLong:
+		case CKClassPropertyDescriptorTypeUnsignedChar:
+		case CKClassPropertyDescriptorTypeUnsignedInt:
+		case CKClassPropertyDescriptorTypeUnsignedShort:
+		case CKClassPropertyDescriptorTypeUnsignedLong:
+		case CKClassPropertyDescriptorTypeUnsignedLongLong:
+		case CKClassPropertyDescriptorTypeFloat:
+		case CKClassPropertyDescriptorTypeDouble:
+            return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isBOOL{
+    
+    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    switch(descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeChar:
+		case CKClassPropertyDescriptorTypeCppBool:
+            return YES;
+    }
+    return NO;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -157,7 +151,7 @@
     //In Case view is reused
     self.textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	_textField.delegate = self;
-    //self.toggleSwitch = (UISwitch*)[cell viewWithTag:SwitchTag];
+    //self.toggleSwitch = (UISwitch*)[cell viewWithTag:500002];
 	
 	CKProperty* model = self.value;
 	
@@ -168,155 +162,72 @@
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	cell.textLabel.text = _(descriptor.name);
 	
-	switch(descriptor.propertyType){
-		case CKClassPropertyDescriptorTypeInt:
-		case CKClassPropertyDescriptorTypeShort:
-		case CKClassPropertyDescriptorTypeLong:
-		case CKClassPropertyDescriptorTypeLongLong:
-		case CKClassPropertyDescriptorTypeUnsignedChar:
-		case CKClassPropertyDescriptorTypeUnsignedInt:
-		case CKClassPropertyDescriptorTypeUnsignedShort:
-		case CKClassPropertyDescriptorTypeUnsignedLong:
-		case CKClassPropertyDescriptorTypeUnsignedLongLong:
-		case CKClassPropertyDescriptorTypeFloat:
-		case CKClassPropertyDescriptorTypeDouble:{
-            cell.accessoryView = nil;
-			cell.accessoryType = UITableViewCellAccessoryNone;
-            
-			if([model isReadOnly] || self.readOnly){
-                self.fixedSize = YES;
-                [cell beginBindingsContextByRemovingPreviousBindings];
-				[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
-				[cell endBindingsContext];
-                _textField.hidden = YES;
-			}
-			else{
-				if(self.cellStyle == CKTableViewCellStylePropertyGrid
-                   && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-                        self.fixedSize = YES;
-                }
-                else{
-                    self.fixedSize = NO;
-                }
-                _textField.hidden = NO;
-				
-                [cell beginBindingsContextByRemovingPreviousBindings];
-				[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
-				[cell endBindingsContext];
-				
-				NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
-				self.textField.placeholder = _(placeholerText);
-			}
-	
-			break;
-		}
-		case CKClassPropertyDescriptorTypeChar:
-		case CKClassPropertyDescriptorTypeCppBool:{
-            //Creates the switch
+	if([self isNumber]){
+        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        
+        if([model isReadOnly] || self.readOnly){
+            self.fixedSize = YES;
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            [model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+            [cell endBindingsContext];
             _textField.hidden = YES;
-			if([model isReadOnly] || self.readOnly){
-                cell.accessoryView = nil;
-                cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        else{
+            if(self.cellStyle == CKTableViewCellStylePropertyGrid
+               && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
                 self.fixedSize = YES;
-                [cell beginBindingsContextByRemovingPreviousBindings];
-                cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
-				[model.object bind:model.keyPath withBlock:^(id value) {
-                    cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
-                }];
-				[cell endBindingsContext];
-			}
-			else{
-                UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
-                self.toggleSwitch = theSwitch;
-                
-                if(self.cellStyle == CKTableViewCellStyleValue3){
-                    [cell.contentView addSubview:self.toggleSwitch];
-                }
-                else{
-                    cell.accessoryView = self.toggleSwitch;
-                }
-                _toggleSwitch.tag = SwitchTag;
-
-                
-                self.fixedSize = YES;
-                [cell beginBindingsContextByRemovingPreviousBindings];
-				BOOL bo = [[model value]boolValue];
-				[self.toggleSwitch setOn:bo animated:NO];
-				[model.object bind:model.keyPath target:self action:@selector(onvalue)];
-				[self.toggleSwitch bindEvent:UIControlEventValueChanged target:self action:@selector(onswitch)];
-				[cell endBindingsContext];
-			}
-			break;
-		}
-	}	
-}
-
-- (void)performLayout{
-    UITableViewCell* cell = self.tableViewCell;
-    
-	UISwitch* s = (UISwitch*)[cell viewWithTag:SwitchTag];
-	UITextField *textField = (UITextField*)[cell viewWithTag:50000];
-    
-    CGFloat savedComponentRatio = self.componentsRatio;
-    if(s && self.cellStyle == CKTableViewCellStylePropertyGrid
-       && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        self.componentsRatio = 0.3;
-    }
-    
-    [super performLayout];
-    
-	if(textField){
-		if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid){
-            
-            CKProperty* model = self.value;
-			if([model isReadOnly] || self.readOnly){
             }
             else{
-                CGFloat realWidth = cell.contentView.frame.size.width;
-                CGFloat textFieldX = (cell.textLabel.frame.origin.x + cell.textLabel.frame.size.width) + self.componentsSpace;
-                CGFloat textFieldWidth = realWidth - self.contentInsets.right - textFieldX;
-                textField.frame = CGRectIntegral(CGRectMake(textFieldX,self.contentInsets.top,textFieldWidth,textField.font.lineHeight + 10));
-                
-                //align textLabel on y
-                CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
-                CGFloat txtLabelHeight = cell.textLabel.height;
-                CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
-                cell.textLabel.y = txtLabelY;
+                self.fixedSize = NO;
             }
-		}
-        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-            textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-            CGFloat x = cell.textLabel.x;
-            CGRect textFrame = cell.textLabel.frame;
-            CGFloat width = cell.contentView.width - x - 10;
+            _textField.hidden = NO;
             
-			textField.frame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + 10,width,(textField.font.lineHeight + 10)));
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+            [cell endBindingsContext];
+            
+            NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
+            self.textField.placeholder = _(placeholerText);
         }
 	}
-    
-	if(s && cell.accessoryView != s){
-		if(self.cellStyle == CKTableViewCellStyleValue3){
-            CGRect switchFrame = [self value3DetailFrameForCell:cell];
-			CGFloat height = cell.bounds.size.height;
-			CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
-			s.frame = CGRectIntegral(rectForSwitch);
-		}
-        else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-			CGFloat height = MAX(44,self.tableViewCell.textLabel.frame.size.height);
-            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-                //align right
-                CGRect rectForSwitch = CGRectMake(self.tableViewCell.textLabel.frame.origin.x + self.tableViewCell.textLabel.frame.size.width + 10,
-                                                  (height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
-                s.frame = CGRectIntegral(rectForSwitch);
+    else if([self isBOOL]){
+        //Creates the switch
+        _textField.hidden = YES;
+        if([model isReadOnly] || self.readOnly){
+            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            self.fixedSize = YES;
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+            [model.object bind:model.keyPath withBlock:^(id value) {
+                cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+            }];
+            [cell endBindingsContext];
+        }
+        else{
+            UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+            self.toggleSwitch = theSwitch;
+            
+            if(self.cellStyle == CKTableViewCellStyleValue3){
+                [cell.contentView addSubview:self.toggleSwitch];
             }
-            //For iphone its an accessory view
-		}
-        
-        self.componentsRatio = savedComponentRatio;
-	}
+            else{
+                cell.accessoryView = self.toggleSwitch;
+            }
+            _toggleSwitch.tag = 500002;
+            
+            
+            self.fixedSize = YES;
+            [cell beginBindingsContextByRemovingPreviousBindings];
+            BOOL bo = [[model value]boolValue];
+            [self.toggleSwitch setOn:bo animated:NO];
+            [model.object bind:model.keyPath target:self action:@selector(onvalue)];
+            [self.toggleSwitch bindEvent:UIControlEventValueChanged target:self action:@selector(onswitch)];
+            [cell endBindingsContext];
+        }
+    }
 }
-
 
 #pragma mark UITextField Delegate
 
