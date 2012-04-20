@@ -22,6 +22,11 @@
 #import "CKLocalization.h"
 #import "CKNSObject+Invocation.h"
 
+@interface CKTableViewController ()
+@property (nonatomic, assign) BOOL isUpdatingSizes;
+@end
+
+
 /********************************* CKBindedTableViewController  *********************************
  */
 
@@ -261,8 +266,10 @@
 	[self createsAndDisplayEditableButtonsWithType:_editableType animated:animated];
 	
 	if ([CKOSVersion() floatValue] < 3.2) {
-		[self.tableView beginUpdates];
-		[self.tableView endUpdates];
+        if(!self.isUpdatingSizes){
+            [self.tableView beginUpdates];
+            [self.tableView endUpdates];
+        }
 	}
 	
 	[self updateVisibleViewsRotation];
@@ -715,7 +722,9 @@
 		return;
     }
 	
-	[self.tableView beginUpdates];
+    if(!self.isUpdatingSizes){
+        [self.tableView beginUpdates];
+    }
     //NSLog(@"onBeginUpdates <%@>",self);
 }
 
@@ -726,7 +735,9 @@
     }
 	
     //NSLog(@"onEndUpdates <%@>",self);
-	[self.tableView endUpdates];
+    if(!self.isUpdatingSizes){
+        [self.tableView endUpdates];
+    }
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.
@@ -969,8 +980,10 @@
         case CKBindedTableViewControllerEditingTypeNone:break;
 	}
     
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+    if(!self.isUpdatingSizes){
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
 }
 
 

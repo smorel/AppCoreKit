@@ -12,15 +12,15 @@
 #import "CKNSObject+CKSingleton.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
-@property (nonatomic,retain) NSString* multiline;
-/*@property (nonatomic,retain) NSString* string;
-@property (nonatomic,assign) NSInteger integer;
+//@property (nonatomic,retain) NSString* multiline;
+@property (nonatomic,retain) NSString* string;
+/*@property (nonatomic,assign) NSInteger integer;
 @property (nonatomic,assign) CGFloat cgfloat;
 @property (nonatomic,assign) BOOL boolean;*/
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
-@synthesize /*string,integer,cgfloat,boolean,*/multiline;
+@synthesize string/*,integer,cgfloat,boolean,multiline*/;
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
@@ -102,6 +102,8 @@
                     CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
                     
                     controller.cellStyle = readOnlyController.cellStyle = style;
+                    controller.componentsRatio = 0.5;
+                    readOnlyController.componentsRatio = 0.5;
                     
                     [section addCellController:controller];
                     [section addCellController:readOnlyController];

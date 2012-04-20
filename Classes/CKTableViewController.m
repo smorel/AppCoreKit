@@ -294,6 +294,9 @@
         return; //yet but probably needs something else ...
     }
     
+    //TODO : CHECK IF TABLE VIEW IS ALREADY IN A BEGINUPDATES STATE BY SWIZZLING METHOD
+    //IMPLEMENTS PROTECTION BY INCREMENTING/DECREMENTING A COUNT !
+    
     if(!self.isUpdatingSizes){
         [[self tableView]beginUpdates];
     }

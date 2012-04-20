@@ -41,7 +41,7 @@
 
 - (CGRect)subtitleTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle  image:(UIImage*)image{
     CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:textViewText detailTextStyle:textViewStyle image:image];
-    CGFloat width = [self contentViewWidth] - (image.size.width + self.contentInsets.left) - self.componentsSpace;
+    CGFloat width = [self contentViewWidth] - (image.size.width + self.componentsSpace + self.contentInsets.left + self.contentInsets.right);
     
     CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:width];
     textViewTextSize.height += 2 * TEXTVIEWINSETS;
@@ -156,7 +156,8 @@
             
             NSString* text = nil;
             CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+               || self.cellStyle == CKTableViewCellStyleValue3){
                 text = _(descriptor.name);
             }
             

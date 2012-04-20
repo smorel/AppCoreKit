@@ -2039,12 +2039,12 @@
 				964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */,
 				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */,
 				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */,
+				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
+				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */,
 				96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */,
 				96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */,
 				96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */,
 				96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */,
-				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
-				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */,
 			);
 			name = "Dynamic Layouts";
 			sourceTree = "<group>";
