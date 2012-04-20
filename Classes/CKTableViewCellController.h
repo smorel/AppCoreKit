@@ -117,6 +117,7 @@ typedef enum CKTableViewCellStyle {
 
 //PRIVATE
 @property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
+- (void)onValueChanged;
 
 @end
 

@@ -142,18 +142,17 @@
 
 //
 
-- (void)setupCell:(UITableViewCell *)cell {
-	[super setupCell:cell];
-    
+
+- (void)onValueChanged{
     [self setupLabelsAndValues];
     
     if(self.readOnly){
         self.fixedSize = YES;
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
         self.fixedSize = NO;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     CKProperty* property = [self objectProperty];
@@ -163,7 +162,7 @@
     if(self.detailText == nil){
         self.detailText = @" ";
     }
-
+    
     __block CKOptionPropertyCellController* bself = self;
     [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
@@ -171,6 +170,7 @@
     }];
     [NSObject endBindingsContext];
 }
+
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];

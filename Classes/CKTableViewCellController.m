@@ -357,6 +357,18 @@
     }
 }
 
+- (CKTableViewCellStyle)cellStyle{
+    if(!self.tableViewCell){
+        NSMutableDictionary* style = [self controllerStyle];
+        if(![style isEmpty]){
+            if([style containsObjectForKey:CKStyleCellType]){
+                return [style cellStyle];
+            }
+        }
+    }
+    return _cellStyle;
+}
+
 - (void)setIndexPath:(NSIndexPath *)indexPath{
     if([self.indexPath isEqual:indexPath] == NO){
         [super setIndexPath:indexPath];
@@ -374,8 +386,13 @@
 - (void)setValue:(id)value{
     if([self.value isEqual:value] == NO){
         [super setValue:value];
+        [self onValueChanged];
         [self invalidateSize];
     }
+}
+
+- (void)onValueChanged{
+    
 }
 
 + (CKTableViewCellController*)cellController{

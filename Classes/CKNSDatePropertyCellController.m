@@ -294,10 +294,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [super initTableViewCell:cell];
 }
 
-- (void)setupCell:(UITableViewCell *)cell {
-	[super setupCell:cell];
-	
-	CKProperty* model = self.value;
+- (void)onValueChanged{
+    CKProperty* model = self.value;
     if([model isReadOnly] || self.readOnly){
         self.fixedSize = YES;
         self.accessoryType = UITableViewCellAccessoryNone;
@@ -320,7 +318,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     }
     
     __block CKTableViewCellController* bself = self;
-    [cell beginBindingsContextByRemovingPreviousBindings];
+    [self beginBindingsContextByRemovingPreviousBindings];
     [model.object bind:model.keyPath withBlock:^(id value){
         NSDate* date = [model value];
         if(date){
@@ -330,7 +328,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             bself.detailText  = _(placeholderText);
         }
     }];
-    [cell endBindingsContext];
+    [self endBindingsContext];
 }
 
 - (void)didSelectRow{

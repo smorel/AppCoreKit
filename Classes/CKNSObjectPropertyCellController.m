@@ -53,8 +53,9 @@
 	[super initTableViewCell:cell];
 }
 
-- (void)setup{
-	NSString* title = [[self.value class]description];
+
+- (void)onValueChanged{
+    NSString* title = [[self.value class]description];
 	if([self.value isKindOfClass:[CKProperty class]]){
 		CKProperty* property = (CKProperty*)self.value;
 		title = [property name];
@@ -85,48 +86,44 @@
 		self.selectionStyle = UITableViewCellSelectionStyleNone;
 		
 		/*if([self.value isKindOfClass:[CKProperty class]]){
-			CKProperty* property = (CKProperty*)self.value;
-			CKClassPropertyDescriptor* descriptor = [property descriptor];
-			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
-			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
-			[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-			[button setTitle:@"Create" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(createObject:) forControlEvents:UIControlEventTouchUpInside];
-			self.tableViewCell.accessoryView = button;
-		}*/
+         CKProperty* property = (CKProperty*)self.value;
+         CKClassPropertyDescriptor* descriptor = [property descriptor];
+         CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
+         button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
+         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+         [button setTitle:@"Create" forState:UIControlStateNormal];
+         [button addTarget:self action:@selector(createObject:) forControlEvents:UIControlEventTouchUpInside];
+         self.tableViewCell.accessoryView = button;
+         }*/
 	}
 	else{
 		self.detailText = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		/*if([self.value isKindOfClass:[CKProperty class]]){
-			CKProperty* property = (CKProperty*)self.value;
-			CKClassPropertyDescriptor* descriptor = [property descriptor];
-			CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
-			button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
-			[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-			[button setTitle:@"Delete" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(deleteObject:) forControlEvents:UIControlEventTouchUpInside];
-			self.tableViewCell.accessoryView = button;
-		}*/
+         CKProperty* property = (CKProperty*)self.value;
+         CKClassPropertyDescriptor* descriptor = [property descriptor];
+         CKUIButtonWithInfo* button = [[[CKUIButtonWithInfo alloc]initWithFrame:CGRectMake(0,0,100,40)]autorelease];
+         button.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithPointer:descriptor.type],@"class",property,@"property",nil];
+         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+         [button setTitle:@"Delete" forState:UIControlStateNormal];
+         [button addTarget:self action:@selector(deleteObject:) forControlEvents:UIControlEventTouchUpInside];
+         self.tableViewCell.accessoryView = button;
+         }*/
 	}
 	
 	self.text = title;
-}
-
-- (void)setupCell:(UITableViewCell *)cell {
-	[self clearBindingsContext];
-	[super setupCell:cell];
-	[self setup];
-	
-	if([self.value isKindOfClass:[CKProperty class]]){
+    
+    if([self.value isKindOfClass:[CKProperty class]]){
 		CKProperty* property = (CKProperty*)self.value;
 		id value = [property value];
 		if(![value isKindOfClass:[CKCollection class]]
            && ![property.object isKindOfClass:[NSDictionary class]]){
+            
+            __block CKNSObjectPropertyCellController* bself = self;
 			[self beginBindingsContextByRemovingPreviousBindings];
 			[property.object bind:property.keyPath withBlock:^(id value){
-				[self setup];
+				[bself onValueChanged];
 			}];
 			[self endBindingsContext];
 		}
@@ -262,6 +259,7 @@
 - (void)postInit{
     [super postInit];
     self.flags = CKItemViewFlagNone;
+    self.cellStyle = CKTableViewCellStyleSubtitle2;
 }
 
 - (void)updateFlags{

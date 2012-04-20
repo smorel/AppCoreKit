@@ -134,10 +134,8 @@
 + (CKItemViewControllerFactoryItem*)factoryItemForClass{
     return [CKItemViewControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithValue:YES] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
-        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            controller.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            controller.tableViewCell.textLabel.text = [controller.value description];
-        }];
+        controller.selectionStyle = UITableViewCellSelectionStyleNone;
+        controller.text = [object description];
         return controller;
     }];
 }

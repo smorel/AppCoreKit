@@ -109,51 +109,6 @@
 //
 
 
-- (id)createCell:(id)controller{
-	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-    standardController.cellStyle = self.optionCellStyle;
-    return nil;
-}
-
-- (id)initCell:(id)controller{
-	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-    if(standardController.cellStyle == CKTableViewCellStyleValue3
-       || standardController.cellStyle == CKTableViewCellStylePropertyGrid){
-        standardController.tableViewCell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-	}
-	return nil;
-}
-
-- (id)setupCell:(id)controller{
-	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
-    standardController.componentsRatio = 0.95;
-    
-	NSNumber* index = [NSNumber numberWithInt:standardController.indexPath.row];
-	if([self.selectedIndexes containsObject:index]){
-		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-	}
-	else{
-		standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
-	}
-    
-    NSString* text = @"UNKNOWN";
-    NSUInteger rowIndex = standardController.indexPath.row;
-    if(_labels){
-        if(rowIndex < [_labels count]){
-            text = [_labels objectAtIndex:rowIndex];
-        }
-    }
-    else{
-        if(rowIndex < [_values count]){
-            text = [_values objectAtIndex:rowIndex];
-        }
-    }
-    standardController.tableViewCell.textLabel.text = @"";
-	standardController.tableViewCell.detailTextLabel.text = _(text);
-	return nil;
-}
-
-
 - (id)selectCell:(id)controller{
 	CKTableViewCellController* standardController = (CKTableViewCellController*)controller;
 	int i = standardController.indexPath.row;
@@ -189,16 +144,39 @@
         
         CKTableViewCellController* cellController = [CKTableViewCellController cellController];
         cellController.value = ([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0];
-        [self createCell:cellController];
+        cellController.cellStyle = self.optionCellStyle;
         
-        [cellController setInitBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            [bself initCell:controller];
-        }];
+        /*
+        if(cellController.cellStyle == CKTableViewCellStyleValue3
+           || cellController.cellStyle == CKTableViewCellStylePropertyGrid){
+            cellController.textAlignment = UITextAlignmentLeft;
+        }
+         */
         
-        [cellController setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            [bself setupCell:controller];
-        }];
+        cellController.componentsRatio = 0.95;
         
+        if([self.selectedIndexes containsObject:index]){
+            cellController.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else{
+            cellController.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        NSString* text = @"UNKNOWN";
+        NSUInteger rowIndex = i;
+        if(_labels){
+            if(rowIndex < [_labels count]){
+                text = [_labels objectAtIndex:rowIndex];
+            }
+        }
+        else{
+            if(rowIndex < [_values count]){
+                text = [_values objectAtIndex:rowIndex];
+            }
+        }
+        cellController.text = @"";
+        cellController.detailText = _(text);
+
         [cellController setSelectionBlock:^(CKTableViewCellController *controller) {
             [bself selectCell:controller];
         }];

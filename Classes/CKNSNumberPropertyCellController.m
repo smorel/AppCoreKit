@@ -151,21 +151,21 @@
     //In Case view is reused
     self.textField = (UITextField*)[cell.contentView viewWithTag:50000];
 	_textField.delegate = self;
-    //self.toggleSwitch = (UISwitch*)[cell viewWithTag:500002];
+    
+    
+    UISwitch* theSwitch = (UISwitch*)[cell viewWithTag:500002];
+    self.accessoryView = nil;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    [theSwitch removeFromSuperview];
+	
 	
 	CKProperty* model = self.value;
-	
-	//reset the view
-	self.text = nil;
 	
 	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	self.text = _(descriptor.name);
-	
+    
 	if([self isNumber]){
-        self.accessoryView = nil;
-        self.accessoryType = UITableViewCellAccessoryNone;
-        
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
             [cell beginBindingsContextByRemovingPreviousBindings];
@@ -195,8 +195,6 @@
         //Creates the switch
         _textField.hidden = YES;
         if([model isReadOnly] || self.readOnly){
-            self.accessoryView = nil;
-            self.accessoryType = UITableViewCellAccessoryNone;
             self.fixedSize = YES;
             
             __block CKTableViewCellController* bself = self;
@@ -208,14 +206,12 @@
             [cell endBindingsContext];
         }
         else{
-            
-            UISwitch* theSwitch = (UISwitch*)[cell viewWithTag:500002];
             if(!theSwitch){
                 theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+                theSwitch.tag = 500002;
             }
             
             self.toggleSwitch = theSwitch;
-            _toggleSwitch.tag = 500002;
             
             if(self.cellStyle == CKTableViewCellStyleValue3){
                 [cell.contentView addSubview:self.toggleSwitch];

@@ -96,6 +96,8 @@
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
        || self.cellStyle != CKTableViewCellStylePropertyGrid){
         self.text = _(descriptor.name);
+    }else{
+        self.text = nil;
     }
 	
 	self.detailText = nil;

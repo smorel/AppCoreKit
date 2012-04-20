@@ -12,19 +12,26 @@
 #import "CKNSObject+CKSingleton.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
-@property (nonatomic,retain) NSString* multiline;
-@property (nonatomic,retain) NSString* string;
-@property (nonatomic,assign) NSInteger integer;
-@property (nonatomic,assign) CGFloat cgfloat;
-@property (nonatomic,assign) BOOL boolean;
+//@property (nonatomic,retain) NSString* multiline;
+//@property (nonatomic,retain) NSString* string;
+//@property (nonatomic,assign) NSInteger integer;
+//@property (nonatomic,assign) CGFloat cgfloat;
+//@property (nonatomic,assign) BOOL boolean;
+@property (nonatomic,retain) CKObject* object;
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
-@synthesize multiline;
-@synthesize string;
-@synthesize integer;
-@synthesize cgfloat;
-@synthesize boolean;
+//@synthesize multiline;
+//@synthesize string;
+//@synthesize integer;
+//@synthesize cgfloat;
+//@synthesize boolean;
+@synthesize object;
+
+- (void)postInit{
+    [super postInit];
+    self.object = [CKObject object];
+}
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
@@ -32,6 +39,7 @@
 
 @end
 
+/*
 //THIS SHOULD BE REMOVED WHEN NSSTRING CELL WORKS
 @interface CKObject(CKUnitTest)
 @end
@@ -43,7 +51,7 @@
 }
 
 @end
-
+*/
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout
 
@@ -95,12 +103,13 @@
     for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
         CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
         
+        for(int i =0;i<10;++i){
         for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
             CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
             //DEBUG 1 by 1
             if(style == CKTableViewCellStyleSubtitle2
-               || style == CKTableViewCellStyleValue3
-               || style == CKTableViewCellStylePropertyGrid
+                ||style == CKTableViewCellStyleValue3
+               //|| style == CKTableViewCellStylePropertyGrid
                ){
                 CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
                 if(controller){//as some properties can be not editable.
@@ -111,9 +120,10 @@
                     readOnlyController.componentsRatio = 0.5;
                     
                     [section addCellController:controller];
-                    //[section addCellController:readOnlyController];
+                    [section addCellController:readOnlyController];
                 }
             }
+        }
         }
     }
     

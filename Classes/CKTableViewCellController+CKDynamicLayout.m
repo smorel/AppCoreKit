@@ -345,7 +345,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             CKProperty* property = [CKProperty propertyWithObject:currentObject keyPath:component];
             currentObject = [property value];
             if(!currentObject){
-                currentObject = [[property class]sharedInstance];
+                currentObject = [[property type]sharedInstance];
             }
             currentStyle = [currentStyle styleForObject:currentObject propertyName:property.name];
         }

@@ -90,45 +90,42 @@
 + (CKItemViewControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
     return [CKItemViewControllerFactoryItem itemForObjectOfClass:[UIView class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
+        
+        controller.text = [UIView titleForView:object];
+        controller.detailText = [UIView subTitleForView:object];
+        controller.image = [UIView createsThumbnailForView:object];
+        
+        __block CKTableViewCellController* bcontroller = controller;
+        __block UIView* bsubView = object;
+        [controller beginBindingsContextByRemovingPreviousBindings];
+        CKProperty* nameProperty = [CKProperty propertyWithObject:object keyPath:@"name"];
+        if([nameProperty descriptor]){
+            [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
+                bcontroller.text = [UIView titleForView:bsubView];
+            }];
+            [bsubView bind:@"hidden" withBlock:^(id value) {
+                bcontroller.detailText = [UIView subTitleForView:bsubView];
+            }];
+            [bsubView bind:@"tag" withBlock:^(id value) {
+                bcontroller.detailText = [UIView subTitleForView:bsubView];
+            }];
+            [bsubView.layer bind:@"contents" withBlock:^(id value) {
+                bcontroller.image = [UIView createsThumbnailForView:bsubView];
+            }];
+        }
+        [controller.tableViewCell endBindingsContext];
+        
+        NSInteger indent = 0;
+        
+        UIView* v = object;
+        while(v && v != view){
+            indent++;
+            v = [v superview];
+        }
+        
+        controller.indentationLevel = indent;
+        
         [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            UIView* subView = (UIView*)controller.value;
-            
-            controller.tableViewCell.textLabel.text = [UIView titleForView:subView];
-            controller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:subView];
-            controller.tableViewCell.imageView.image = [UIView createsThumbnailForView:subView];
-            
-            
-            __block CKTableViewCellController* bcontroller = controller;
-            __block UIView* bsubView = subView;
-            [controller.tableViewCell beginBindingsContextByRemovingPreviousBindings];
-            CKProperty* nameProperty = [CKProperty propertyWithObject:view keyPath:@"name"];
-            if([nameProperty descriptor]){
-                [nameProperty.object bind:nameProperty.keyPath withBlock:^(id value) {
-                    bcontroller.tableViewCell.textLabel.text = [UIView titleForView:bsubView];
-                }];
-                [subView bind:@"hidden" withBlock:^(id value) {
-                    bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
-                }];
-                [subView bind:@"tag" withBlock:^(id value) {
-                    bcontroller.tableViewCell.detailTextLabel.text = [UIView subTitleForView:bsubView];
-                }];
-                [subView.layer bind:@"contents" withBlock:^(id value) {
-                    bcontroller.tableViewCell.imageView.image = [UIView createsThumbnailForView:bsubView];
-                }];
-            }
-            [controller.tableViewCell endBindingsContext];
-            
-            NSInteger indent = 0;
-            
-            UIView* v = subView;
-            while(v && v != view){
-                indent++;
-                v = [v superview];
-            }
-            
-            controller.indentationLevel = indent;
-            
-            
             controller.tableViewCell.imageView.layer.shadowColor = [[UIColor blackColor]CGColor];
             controller.tableViewCell.imageView.layer.shadowOpacity = 0.6;
             controller.tableViewCell.imageView.layer.shadowOffset = CGSizeMake(0,2);

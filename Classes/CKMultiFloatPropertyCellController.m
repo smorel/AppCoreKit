@@ -238,4 +238,9 @@
     [self scrollToRowAfterDelay:0];
 }
 
+- (CGSize)computeSize{
+    self.invalidatedSize = NO;
+    return self.size;
+}
+
 @end

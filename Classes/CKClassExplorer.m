@@ -121,9 +121,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;
-        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            cell.textLabel.text = (NSString*)controller.value;
-        }];
+        controller.text = object;
         return controller;
     }];
     
@@ -131,15 +129,14 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;
-        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
-            if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
-                controller.tableViewCell.textLabel.text = [controller.value valueForKeyPath:@"modelName"];
-            }
-            else{
-                controller.tableViewCell.textLabel.text = @"Unknown";
-            }
-        }];
+        CKClassPropertyDescriptor* nameDescriptor = [controller.value propertyDescriptorForKeyPath:@"modelName"];
+        if(nameDescriptor != nil && [NSObject isClass:nameDescriptor.type kindOfClass:[NSString class]]){
+            controller.text = [controller.value valueForKeyPath:@"modelName"];
+        }
+        else{
+            controller.text = @"Unknown";
+        }
+        
         return controller;
     }];
 	
@@ -177,9 +174,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;
-        [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-            cell.textLabel.text = (NSString*)controller.value;
-        }];
+        controller.text = object;
         return controller;
     }];
     
