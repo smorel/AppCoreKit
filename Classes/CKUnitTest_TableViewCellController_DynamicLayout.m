@@ -12,19 +12,19 @@
 #import "CKNSObject+CKSingleton.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
-//@property (nonatomic,retain) NSString* multiline;
-//@property (nonatomic,retain) NSString* string;
+@property (nonatomic,retain) NSString* multiline;
+@property (nonatomic,retain) NSString* string;
 @property (nonatomic,assign) NSInteger integer;
 @property (nonatomic,assign) CGFloat cgfloat;
-//@property (nonatomic,assign) BOOL boolean;
+@property (nonatomic,assign) BOOL boolean;
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
-//@synthesize multiline;
-//@synthesize string;
+@synthesize multiline;
+@synthesize string;
 @synthesize integer;
 @synthesize cgfloat;
-//@synthesize boolean;
+@synthesize boolean;
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
@@ -100,7 +100,8 @@
             //DEBUG 1 by 1
             if(style == CKTableViewCellStyleSubtitle2
                || style == CKTableViewCellStyleValue3
-               || style == CKTableViewCellStylePropertyGrid){
+               || style == CKTableViewCellStylePropertyGrid
+               ){
                 CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
                 if(controller){//as some properties can be not editable.
                     CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
@@ -110,7 +111,7 @@
                     readOnlyController.componentsRatio = 0.5;
                     
                     [section addCellController:controller];
-                    [section addCellController:readOnlyController];
+                    //[section addCellController:readOnlyController];
                 }
             }
         }

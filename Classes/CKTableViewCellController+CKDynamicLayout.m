@@ -469,7 +469,9 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         return;
     
     [super setSize:s notifyingContainerForUpdate:notifyingContainerForUpdate];
-    [self performLayout];
+    if(self.tableViewCell){
+        [self performLayout];
+    }
 }
 
 - (CGSize)computeSize{

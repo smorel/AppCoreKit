@@ -208,17 +208,22 @@
             [cell endBindingsContext];
         }
         else{
-            UISwitch *theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+            
+            UISwitch* theSwitch = (UISwitch*)[cell viewWithTag:500002];
+            if(!theSwitch){
+                theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
+            }
+            
             self.toggleSwitch = theSwitch;
+            _toggleSwitch.tag = 500002;
             
             if(self.cellStyle == CKTableViewCellStyleValue3){
                 [cell.contentView addSubview:self.toggleSwitch];
+                [self performLayout];
             }
             else{
                 self.accessoryView = self.toggleSwitch;
             }
-            _toggleSwitch.tag = 500002;
-            
             
             self.fixedSize = YES;
             [cell beginBindingsContextByRemovingPreviousBindings];
@@ -227,6 +232,7 @@
             [model.object bind:model.keyPath target:self action:@selector(onvalue)];
             [self.toggleSwitch bindEvent:UIControlEventValueChanged target:self action:@selector(onswitch)];
             [cell endBindingsContext];
+            
         }
     }
 }

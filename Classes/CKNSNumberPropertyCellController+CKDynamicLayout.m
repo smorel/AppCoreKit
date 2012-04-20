@@ -16,16 +16,22 @@
 #import "CKUIView+Positioning.h"
 
 #define TEXTFIELDINSETS 8
+#define SWITCHHEIGHT 27
+#define SWITCHWIDTH 77
 
 @implementation CKNSNumberPropertyCellController(CKDynamicLayout)
 
 - (CGRect)value3SwitchFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
-    NSAssert(NO,@"NOT IMPLEMENTED!");
-    /*CGRect switchFrame = [self value3DetailFrameForCell:cell];
-    CGFloat height = cell.bounds.size.height;
-    CGRect rectForSwitch = CGRectMake(switchFrame.origin.x,(height/ 2.0) - (s.frame.size.height / 2.0),s.frame.size.width,s.frame.size.height);
-    s.frame = CGRectIntegral(rectForSwitch);
-     */
+    CGFloat rowWidth = [self contentViewWidth];
+    CGFloat realWidth = rowWidth;
+    CGFloat width = realWidth * self.componentsRatio;
+    
+    CGFloat switchWidth = width - (self.contentInsets.right + self.componentsSpace);
+    CGFloat switchX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - switchWidth);
+    
+    CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
+    
+    return CGRectMake(switchX,MAX(22,(textFrame.origin.y + textFrame.size.height)/2) - (SWITCHHEIGHT / 2),SWITCHWIDTH,SWITCHHEIGHT);
 }
 
 - (CGRect)value3TextFieldFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textFieldText:(NSString*)textFieldText textFieldStyle:(NSDictionary*)textFieldStyle image:(UIImage*)image{
@@ -82,14 +88,14 @@
         text = _(descriptor.name);
     }
     
+    BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     NSString* textFieldText = [self isNumber] ? 
                          [NSValueTransformer transform:[[self objectProperty]value] toClass:[NSString class]] 
-                       : ([[[self objectProperty] value]boolValue] ? @"YES" : @"NO");
+                       : (readonly  ? ([[[self objectProperty] value]boolValue] ? @"YES" : @"NO") : nil);
     
     CGSize size = [self computeSizeUsingText:text detailText:textFieldText image:self.image];
     self.invalidatedSize = NO;
     
-    BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
         if(self.cellStyle == CKTableViewCellStyleValue3
            || self.cellStyle == CKTableViewCellStylePropertyGrid
@@ -139,7 +145,7 @@
                 text = _(descriptor.name);
             }
             
-            if(textField){
+            if(textField && !s){
                 NSDictionary* textFieldStyle = [self textFieldStyle];
                 NSString* textFieldText = [NSValueTransformer transform:[[self objectProperty]value] toClass:[NSString class]];
                 
