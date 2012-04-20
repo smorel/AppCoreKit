@@ -54,8 +54,6 @@
 }
 
 - (void)setup{
-	UITableViewCell* cell = self.tableViewCell;
-	
 	NSString* title = [[self.value class]description];
 	if([self.value isKindOfClass:[CKProperty class]]){
 		CKProperty* property = (CKProperty*)self.value;

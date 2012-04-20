@@ -13,14 +13,18 @@
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
 //@property (nonatomic,retain) NSString* multiline;
-@property (nonatomic,retain) NSString* string;
-/*@property (nonatomic,assign) NSInteger integer;
+//@property (nonatomic,retain) NSString* string;
+@property (nonatomic,assign) NSInteger integer;
 @property (nonatomic,assign) CGFloat cgfloat;
-@property (nonatomic,assign) BOOL boolean;*/
+//@property (nonatomic,assign) BOOL boolean;
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
-@synthesize string/*,integer,cgfloat,boolean,multiline*/;
+//@synthesize multiline;
+//@synthesize string;
+@synthesize integer;
+@synthesize cgfloat;
+//@synthesize boolean;
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
