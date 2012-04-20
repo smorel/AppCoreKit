@@ -95,17 +95,17 @@
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
        || self.cellStyle != CKTableViewCellStylePropertyGrid){
-        cell.textLabel.text = _(descriptor.name);
+        self.text = _(descriptor.name);
     }
 	
-	cell.detailTextLabel.text = nil;
+	self.detailText = nil;
 	
 	if([model isReadOnly] || self.readOnly){
         self.textField.hidden = YES;
         
         self.fixedSize = YES;
         [cell beginBindingsContextByRemovingPreviousBindings];
-		[model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+		[model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
 		[cell endBindingsContext];
         _textField.delegate = nil;
 	}
@@ -131,7 +131,7 @@
             self.textField.hidden = NO;
             _textField.delegate = self;
             
-            cell.detailTextLabel.text = nil;
+            self.detailText = nil;
         }
 	}
 }

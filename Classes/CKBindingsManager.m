@@ -85,6 +85,8 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	id context = binding.context;
     if(context == nil)
         return;
+    
+    [context retain];
 	
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
@@ -110,6 +112,8 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsForContext removeObjectForKey:context];
 		[_contexts removeObject:context];
 	}	
+    
+    [context autorelease];
 }
 
 - (void)unbind:(CKBinding*)binding{

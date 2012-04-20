@@ -111,6 +111,12 @@
             [self setInvalidButtonVisible:!validity];
         }];
     }
+    
+    __block CKTableViewCellController* bSelf = self;
+    [property.object bind:property.keyPath withBlock:^(id value) {
+        [bSelf invalidateSize];
+    }];
+    
     [NSObject endBindingsContext];
     
     BOOL validity = [self isValidValue:[[self objectProperty] value]];

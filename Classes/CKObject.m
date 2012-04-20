@@ -32,7 +32,6 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 @implementation CKObject
 @synthesize uniqueId,objectName;
 
-
 - (void)uniqueIdExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 	attributes.editable = NO;
 }

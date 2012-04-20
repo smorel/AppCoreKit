@@ -156,20 +156,20 @@
 	CKProperty* model = self.value;
 	
 	//reset the view
-	cell.detailTextLabel.text = nil;
+	self.text = nil;
 	
 	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
-	cell.textLabel.text = _(descriptor.name);
+	self.text = _(descriptor.name);
 	
 	if([self isNumber]){
-        cell.accessoryView = nil;
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryView = nil;
+        self.accessoryType = UITableViewCellAccessoryNone;
         
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
             [cell beginBindingsContextByRemovingPreviousBindings];
-            [model.object bind:model.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+            [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
             [cell endBindingsContext];
             _textField.hidden = YES;
         }
@@ -195,13 +195,15 @@
         //Creates the switch
         _textField.hidden = YES;
         if([model isReadOnly] || self.readOnly){
-            cell.accessoryView = nil;
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            self.accessoryView = nil;
+            self.accessoryType = UITableViewCellAccessoryNone;
             self.fixedSize = YES;
+            
+            __block CKTableViewCellController* bself = self;
             [cell beginBindingsContextByRemovingPreviousBindings];
-            cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+            self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
             [model.object bind:model.keyPath withBlock:^(id value) {
-                cell.detailTextLabel.text = [[model value]boolValue] ? @"YES" : @"NO";
+                bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
             }];
             [cell endBindingsContext];
         }
@@ -213,7 +215,7 @@
                 [cell.contentView addSubview:self.toggleSwitch];
             }
             else{
-                cell.accessoryView = self.toggleSwitch;
+                self.accessoryView = self.toggleSwitch;
             }
             _toggleSwitch.tag = 500002;
             

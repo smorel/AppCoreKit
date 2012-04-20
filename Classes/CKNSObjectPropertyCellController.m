@@ -76,15 +76,15 @@
 	
 	if([value isKindOfClass:[CKCollection class]]
 	   || [value isKindOfClass:[NSArray class]]){
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[value count]];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-		cell.accessoryView = nil;
+		self.detailText = [NSString stringWithFormat:@"%d",[value count]];
+		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		self.selectionStyle = UITableViewCellSelectionStyleBlue;
+		self.accessoryView = nil;
 	}
 	else if(value == nil){
-		cell.detailTextLabel.text = @"nil";
-		cell.accessoryType = UITableViewCellAccessoryNone;
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		self.detailText = @"nil";
+		self.accessoryType = UITableViewCellAccessoryNone;
+		self.selectionStyle = UITableViewCellSelectionStyleNone;
 		
 		/*if([self.value isKindOfClass:[CKProperty class]]){
 			CKProperty* property = (CKProperty*)self.value;
@@ -98,9 +98,9 @@
 		}*/
 	}
 	else{
-		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+		self.detailText = [NSString stringWithFormat:@"%@ <%p>",[value class],value];
+		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		self.selectionStyle = UITableViewCellSelectionStyleBlue;
 		/*if([self.value isKindOfClass:[CKProperty class]]){
 			CKProperty* property = (CKProperty*)self.value;
 			CKClassPropertyDescriptor* descriptor = [property descriptor];
@@ -113,7 +113,7 @@
 		}*/
 	}
 	
-	cell.textLabel.text = title;
+	self.text = title;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

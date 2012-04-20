@@ -12,21 +12,34 @@
 #import "CKNSObject+CKSingleton.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
-@property (nonatomic,retain) NSString* string;
 @property (nonatomic,retain) NSString* multiline;
+/*@property (nonatomic,retain) NSString* string;
 @property (nonatomic,assign) NSInteger integer;
 @property (nonatomic,assign) CGFloat cgfloat;
-@property (nonatomic,assign) BOOL boolean;
+@property (nonatomic,assign) BOOL boolean;*/
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
-@synthesize string,integer,cgfloat,boolean,multiline;
+@synthesize /*string,integer,cgfloat,boolean,*/multiline;
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
 }
 
 @end
+
+//THIS SHOULD BE REMOVED WHEN NSSTRING CELL WORKS
+@interface CKObject(CKUnitTest)
+@end
+
+@implementation CKObject(CKUnitTest)
+
+- (void)objectNameExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.editable = NO;
+}
+
+@end
+
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout
 
@@ -36,14 +49,12 @@
     return [[cellStyleProperty extendedAttributes]enumDescriptor];
 }
 
-+ (CKUIViewController*)viewController{
++ (CKUIViewController*)viewControllerToTestBasicCellControllers{
     CKFormTableViewController* form = [CKFormTableViewController controller];
     
     CKFormSection* section = [CKFormSection section];
-    
     CKEnumDescriptor* cellStylesEnumDescriptor = [CKUnitTest_TableViewCellController_DynamicLayout cellStylesEnumDescriptor];
-    
-    for(int i =1; i <= 5; ++i){
+    for(int i =0; i <= 5; ++i){
         for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
             CKTableViewCellController* cellController = [CKTableViewCellController cellController];
             cellController.text = cellStyleName;
@@ -57,39 +68,49 @@
             CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
             cellController.cellStyle = style;
             cellController.componentsRatio = 0.5;
+            cellController.componentsSpace = 30;
+            cellController.contentInsets = UIEdgeInsetsMake(5, 5, 40, 30);
             
             [section addCellController:cellController];
         }
     }
+    [form addSections:[NSArray arrayWithObject:section]];
+
+    return form;
+}
+
+
++ (CKUIViewController*)viewControllerToTestPropertyCellControllers{
+    CKFormTableViewController* form = [CKFormTableViewController controller];
     
-    /*CKUnitTest_TableViewCellController_DynamicLayout_Object *object = [CKUnitTest_TableViewCellController_DynamicLayout_Object object];
+    CKFormSection* section = [CKFormSection section];
+    
+    CKEnumDescriptor* cellStylesEnumDescriptor = [CKUnitTest_TableViewCellController_DynamicLayout cellStylesEnumDescriptor];
+
+    CKUnitTest_TableViewCellController_DynamicLayout_Object *object = [[CKUnitTest_TableViewCellController_DynamicLayout_Object object]retain];//if not it will get killed !
     for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
         CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
         
-        for(NSNumber* cellStyleNumber in cellStyles){
-            
-            CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
-            if(controller){//as some properties can be not editable.
-                CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
-                
-                CKTableViewCellStyle style = [cellStyleNumber intValue];
-                controller.cellStyle = readOnlyController.cellStyle = style;
-                
-                [section addCellController:controller];
-                [section addCellController:readOnlyController];
+        for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
+            CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
+            //DEBUG 1 by 1
+            if(style == CKTableViewCellStyleSubtitle2
+               || style == CKTableViewCellStyleValue3
+               || style == CKTableViewCellStylePropertyGrid){
+                CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
+                if(controller){//as some properties can be not editable.
+                    CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
+                    
+                    controller.cellStyle = readOnlyController.cellStyle = style;
+                    
+                    [section addCellController:controller];
+                    [section addCellController:readOnlyController];
+                }
             }
         }
-    }*/
+    }
     
     [form addSections:[NSArray arrayWithObject:section]];
-    
-    form.viewDidAppearBlock = ^(CKUIViewController* controller, BOOL animated){
-        
-    };
-    
-    form.viewWillDisappearBlock = ^(CKUIViewController* controller, BOOL animated){
-        
-    };
     
     return form;
 }

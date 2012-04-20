@@ -11,6 +11,7 @@
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout : NSObject
 
-+ (CKUIViewController*)viewController;
++ (CKUIViewController*)viewControllerToTestBasicCellControllers;
++ (CKUIViewController*)viewControllerToTestPropertyCellControllers;
 
 @end

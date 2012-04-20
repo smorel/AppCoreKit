@@ -158,15 +158,16 @@
     
     CKProperty* property = [self objectProperty];
     
-    cell.textLabel.text = _(property.name);
-	cell.detailTextLabel.text = [self labelForValue:[self currentValue]];
-    if(cell.detailTextLabel.text == nil){
-        cell.detailTextLabel.text = @" ";
+    self.text = _(property.name);
+	self.detailText = [self labelForValue:[self currentValue]];
+    if(self.detailText == nil){
+        self.detailText = @" ";
     }
 
+    __block CKOptionPropertyCellController* bself = self;
     [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
+        bself.detailText = [bself labelForValue:[bself currentValue]];
     }];
     [NSObject endBindingsContext];
 }
@@ -255,10 +256,11 @@
 		[self.containerController.navigationController popViewControllerAnimated:YES];
 	}
     
+    __block CKOptionPropertyCellController* bself = self;
     CKProperty* property = [self objectProperty];
     [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
     [property.object bind:property.keyPath withBlock:^(id value){
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:[self currentValue]];
+        bself.detailText = [bself labelForValue:[bself currentValue]];
     }];
     [NSObject endBindingsContext];
 }

@@ -17,61 +17,98 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"
 
+#define TEXTVIEWINSETS 8
+
 @implementation CKMultilineNSStringPropertyCellController(CKDynamicLayout)
 
 - (CGRect)value3TextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle image:(UIImage*)image{
-    NSAssert(NO,@"NOT IMPLEMENTED!");
-    /*UITableViewCell* cell = self.tableViewCell;
-    if(self.cellStyle == CKTableViewCellStyleValue3){
-        CGFloat rowWidth = [self computeContentViewSize];
-        CGFloat realWidth = rowWidth;
-        CGFloat width = realWidth * self.componentsRatio;
-        
-        CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
-        CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
-        
-        CGFloat textFieldY = self.contentInsets.top;
-        CGFloat textFieldHeight = cell.contentView.height - (self.contentInsets.top + self.contentInsets.bottom);
-        self.textView.frame = CGRectMake(textFieldX,textFieldY,textFieldWidth,textFieldHeight);
-    }*/
-}
-
-- (CGRect)propertyGridTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle image:(UIImage*)image{
-    NSAssert(NO,@"NOT IMPLEMENTED!");
-    /*if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(cell.textLabel.text == nil || 
-           [cell.textLabel.text isKindOfClass:[NSNull class]] ||
-           [cell.textLabel.text length] <= 0){
-            CGRect textViewFrame = CGRectMake(3,0,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
-            self.textView.frame = textViewFrame;
-        }
-        else{
-            //sets the textLabel on one full line and the textView beside
-            CGRect textFrame = CGRectMake(10,0,cell.contentView.bounds.size.width - 20,28);
-            cell.textLabel.frame = textFrame;
-            
-            CGRect textViewFrame = CGRectMake(3,30,cell.contentView.bounds.size.width - 6,self.textView.frame.size.height);
-            self.textView.frame = textViewFrame;
-        }
-    }
-    else{
-        CGRect f = [self propertyGridDetailFrameForCell:cell];
-        self.textView.frame = CGRectMake(f.origin.x - 8,f.origin.y - 8 ,f.size.width + 8,self.textView.frame.size.height);
-    }*/
+    
+    CGFloat rowWidth = [self contentViewWidth];
+    CGFloat realWidth = rowWidth;
+    CGFloat width = realWidth * self.componentsRatio;
+    
+    CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
+    CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
+    
+    CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:textFieldWidth];
+    
+    UIFont* textViewFont = [textViewStyle objectForKey:CKDynamicLayoutFont];
+    textViewTextSize.height += 2 * TEXTVIEWINSETS;
+    
+    CGFloat textFieldY = self.contentInsets.top - TEXTVIEWINSETS;
+    return CGRectMake(textFieldX,textFieldY,textFieldWidth,MAX(textViewTextSize.height,textViewFont.lineHeight + 2 * TEXTVIEWINSETS));
 }
 
 - (CGRect)subtitleTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle  image:(UIImage*)image{
-    NSAssert(NO,@"NOT IMPLEMENTED!");
-    /*CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,cell.textLabel.x),MAX(self.contentInsets.top,cell.textLabel.y + cell.textLabel.height + 10),cell.contentView.width - (cell.imageView.x + 10) - 10,self.textView.frame.size.height);
-    self.textView.frame = textViewFrame;*/
+    CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:textViewText detailTextStyle:textViewStyle image:image];
+    CGFloat width = [self contentViewWidth] - (image.size.width + self.contentInsets.left) - self.componentsSpace;
+    
+    CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:width];
+    textViewTextSize.height += 2 * TEXTVIEWINSETS;
+    
+    UIFont* font = [textViewStyle objectForKey:CKDynamicLayoutFont];
+    
+    CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,textFrame.origin.x),
+                                      MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.componentsSpace) : 0),
+                                      width,
+                                      MAX(textViewTextSize.height,font.lineHeight));
+    return textViewFrame;
 }
 
+- (CGRect)propertyGridTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle image:(UIImage*)image{
+    
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(text == nil || [text isKindOfClass:[NSNull class]] || [text length] <= 0){
+            CGFloat rowWidth = [self contentViewWidth];
+            CGFloat width = rowWidth - (self.contentInsets.left + self.contentInsets.right);
+            
+            CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:width];
+            textViewTextSize.height += 2 * TEXTVIEWINSETS;
+            
+            return CGRectMake(self.contentInsets.left - TEXTVIEWINSETS, self.contentInsets.top, rowWidth - self.contentInsets.right,textViewTextSize.height);
+        }
+    }
+    
+    return [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];
+}
+
+
 - (NSDictionary*)textViewStyle{
-    return [self styleForViewWithKeyPath:@"textView" defaultStyle:nil];
+    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
+    [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+    [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+    
+    //TODO : Verify lineBreakMode for textView !
+    [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+    
+    if(self.cellStyle == CKTableViewCellStyleValue3){
+        [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+    }
+    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        }
+        else{
+            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        }
+    }
+    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        [defaultStyle setObject:[UIFont systemFontOfSize:14] forKey:CKDynamicLayoutFont];
+    }
+    
+    return [self styleForViewWithKeyPath:@"textView" defaultStyle:defaultStyle];
 }
 
 - (CGSize)computeSize{
-    CGSize size = [super size];
+    NSString* text = nil;
+    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+       || self.cellStyle == CKTableViewCellStyleValue3){
+        text = _(descriptor.name);
+    }
+    
+    CGSize size = [self computeSizeUsingText:text detailText:[[self objectProperty]value] image:self.image];
+    self.invalidatedSize = NO;
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
@@ -82,13 +119,8 @@
             NSDictionary* textViewStyle = [self textViewStyle];
             NSDictionary* textStyle = [self detailTextStyle];
             
-            NSString* text = nil;
-            CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-            if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-                text = _(descriptor.name);
-            }
-            
-            NSString* textViewText = [[self objectProperty]value];
+            NSString* textViewText = [NSString stringWithFormat:@"%@a",[[self objectProperty]value]]; 
+            //we append 'a' here to manage extra return spaces in text not taken in account when computing text size.
             
             CGFloat height = 0;
             if(self.cellStyle == CKTableViewCellStyleValue3){
@@ -101,7 +133,7 @@
             }
             else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
                 CGRect frame = [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
-                height = MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom);
+                height = frame.origin.y + frame.size.height + self.contentInsets.bottom;
             }    
             
             return CGSizeMake(320,height);
@@ -128,7 +160,8 @@
                 text = _(descriptor.name);
             }
             
-            NSString* textViewText = [[self objectProperty]value];
+            NSString* textViewText = [NSString stringWithFormat:@"%@a",[[self objectProperty]value]]; 
+            //we append 'a' here to manage extra return spaces in text not taken in account when computing text size.
             
             UITableViewCell* cell = self.tableViewCell;
             CKTextView* textView = (CKTextView*)[cell viewWithTag:50000];

@@ -96,6 +96,7 @@
 
 - (void)dealloc {
 	[NSObject removeAllBindingsForContext:_bindingContextForTableView];
+    
 	[_bindingContextForTableView release];
 	_bindingContextForTableView = nil;
 	[_indexPathToReachAfterRotation release];

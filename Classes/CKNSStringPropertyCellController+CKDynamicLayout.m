@@ -52,7 +52,7 @@
 }
 
 - (CGSize)computeSize{
-    CGSize size = [super size];
+    CGSize size = [super computeSize];
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){

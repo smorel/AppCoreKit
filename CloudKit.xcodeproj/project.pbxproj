@@ -1580,8 +1580,6 @@
 				7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */,
 				964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */,
 				964C2083153DD92E00398E0F /* CKTableViewCellController+CKBlockBasedInterface.m */,
-				964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */,
-				964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */,
 				7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */,
 				7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */,
 				7577DFE413E2EE470065E098 /* CKTableViewCellController+PropertyGrid.h */,
@@ -1590,6 +1588,7 @@
 				75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */,
 				964DAF7F153F2E970024C08F /* CKCollection CellControllers */,
 				75F2960213F04424009CCC70 /* CKProperty CellControllers */,
+				96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */,
 			);
 			name = CellControllers;
 			sourceTree = "<group>";
@@ -1926,22 +1925,14 @@
 			children = (
 				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
 				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
-				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */,
-				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */,
 				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
 				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
 				7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */,
-				96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */,
-				96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */,
 				7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */,
 				7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */,
-				96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */,
-				96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */,
 				75B03FC113E9A89F00830B62 /* CKMultilineNSStringPropertyCellController.h */,
 				75B03FC213E9A8A000830B62 /* CKMultilineNSStringPropertyCellController.m */,
-				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
-				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */,
 				758E5C5B13F9652200A07F49 /* CKOptionPropertyCellController.h */,
 				758E5C5C13F9652200A07F49 /* CKOptionPropertyCellController.m */,
 				7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */,
@@ -2039,6 +2030,23 @@
 				96CADE371486BDFD008A23E4 /* CKNSObject+Validation.m */,
 			);
 			name = "NSObject Extension";
+			sourceTree = "<group>";
+		};
+		96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */,
+				964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */,
+				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */,
+				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */,
+				96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h */,
+				96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */,
+				96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */,
+				96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */,
+				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
+				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.m */,
+			);
+			name = "Dynamic Layouts";
 			sourceTree = "<group>";
 		};
 		96E4D3FD15407D2700CCF421 /* UnitTests */ = {

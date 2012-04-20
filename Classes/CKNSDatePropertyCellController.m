@@ -300,33 +300,34 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 	CKProperty* model = self.value;
     if([model isReadOnly] || self.readOnly){
         self.fixedSize = YES;
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryType = UITableViewCellAccessoryNone;
     }
     else{
         self.fixedSize = NO;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
-	cell.textLabel.text = _(descriptor.name);
+	self.text = _(descriptor.name);
     
     NSString* placeholderText = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
     NSDate* date = [model value];
     if(date){
-        cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+        self.detailText = [NSValueTransformer transformProperty:model toClass:[NSString class]];
     }
     else{
-        cell.detailTextLabel.text = _(placeholderText);
+        self.detailText  = _(placeholderText);
     }
     
+    __block CKTableViewCellController* bself = self;
     [cell beginBindingsContextByRemovingPreviousBindings];
     [model.object bind:model.keyPath withBlock:^(id value){
         NSDate* date = [model value];
         if(date){
-            cell.detailTextLabel.text = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+            bself.detailText  = [NSValueTransformer transformProperty:model toClass:[NSString class]];
         }
         else{
-            cell.detailTextLabel.text = _(placeholderText);
+            bself.detailText  = _(placeholderText);
         }
     }];
     [cell endBindingsContext];

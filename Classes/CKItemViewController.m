@@ -91,6 +91,7 @@
 - (void)setSize:(CGSize)s notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate{
     if(CGSizeEqualToSize(_size, s))
         return;
+    
     [self willChangeValueForKey:@"size"];
     _size = s;
     //this will tell the controller it needs to update without computing a new size.

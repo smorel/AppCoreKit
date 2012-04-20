@@ -95,8 +95,9 @@
     
     CKProperty* property = (CKProperty*)self.value;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-        cell.textLabel.text = _(descriptor.name);
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+       || self.cellStyle == CKTableViewCellStyleValue3){
+        self.text = _(descriptor.name);
     }
     
     if([property isReadOnly] || self.readOnly){
@@ -104,7 +105,7 @@
         _textView.hidden = YES;
         
         [cell beginBindingsContextByRemovingPreviousBindings];
-		[property.object bind:property.keyPath toObject:cell.detailTextLabel withKeyPath:@"text"];
+		[property.object bind:property.keyPath toObject:self withKeyPath:@"detailText"];
 		[cell endBindingsContext];
 	}
 	else{
@@ -165,8 +166,8 @@
 
 
 -(void)textViewFrameChanged:(CGRect)frame{
-    [[self parentTableView]beginUpdates];
-    [[self parentTableView]endUpdates];
+    //[[self parentTableView]beginUpdates];
+    //[[self parentTableView]endUpdates];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
