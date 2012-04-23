@@ -13,7 +13,6 @@
 #import "CKCoreGraphics+Additions.h"
 #import "CKImageLoader.h"
 #import "CKLayout.h"
-#import "CKLocalization.h"
 #import "CKMapAnnotationController.h"
 #import "CKNetworkActivityManager.h"
 #import "CKNSArray+Additions.h"

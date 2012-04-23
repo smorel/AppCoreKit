@@ -25,3 +25,7 @@
 #import "CKClassPropertyDescriptor.h"
 #import "CKProperty.h"
 #import "CKPropertyExtendedAttributes.h"
+
+#import "CKLocalization.h"
+
+#import "Document.h"

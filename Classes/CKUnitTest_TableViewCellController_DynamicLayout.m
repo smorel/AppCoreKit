@@ -41,20 +41,6 @@
 
 @end
 
-
-//THIS SHOULD BE REMOVED WHEN NSSTRING CELL WORKS
-@interface CKObject(CKUnitTest)
-@end
-
-@implementation CKObject(CKUnitTest)
-
-- (void)objectNameExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-	attributes.editable = NO;
-}
-
-@end
-
-
 @implementation CKUnitTest_TableViewCellController_DynamicLayout
 
 + (CKEnumDescriptor*)cellStylesEnumDescriptor{
@@ -114,8 +100,7 @@
                 CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
                 
                 controller.cellStyle = readOnlyController.cellStyle = style;
-                controller.componentsRatio = 0.5;
-                readOnlyController.componentsRatio = 0.5;
+                controller.componentsRatio = readOnlyController.componentsRatio = 0.5;
                 
                 [section addCellController:controller];
                 [section addCellController:readOnlyController];

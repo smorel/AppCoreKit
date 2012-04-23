@@ -12,12 +12,11 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "Foundation.h"
-#import "Document.h"
 #import "Bindings.h"
 #import "Mappings.h"
 #import "Styles.h"
 #import "UI.h"
-#import "Data.h"
+#import "CoreData.h"
 #import "Network.h"
 #import "Support.h"
 #import "UnitTests.h"
