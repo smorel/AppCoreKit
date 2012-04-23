@@ -95,6 +95,8 @@
                 CGRect frame = [self subtitleTextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
                 return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }
+        }else{
+            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
     return size;
@@ -141,6 +143,8 @@
                     textField.frame = [self subtitleTextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
                 }
             }
+        }else{
+            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
 }

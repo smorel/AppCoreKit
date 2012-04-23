@@ -76,11 +76,7 @@
         }
     }  
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid
-       || self.cellStyle == CKTableViewCellStyleSubtitle2){
-        _textView.autoresizingMask = UIViewAutoresizingNone;
-    }
+    _textView.autoresizingMask = UIViewAutoresizingNone;
 }
 
 - (void)textViewChanged:(id)value{

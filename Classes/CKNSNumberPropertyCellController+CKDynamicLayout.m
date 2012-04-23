@@ -121,6 +121,8 @@
             }else if([self isBOOL] && self.cellStyle == CKTableViewCellStyleValue3){
                 CGRect frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:nil detailTextStyle:nil image:self.image];
                 return CGSizeMake(320,MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom));
+            }else{
+                NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
             }
         }
     }
@@ -169,6 +171,8 @@
             }else if(s && self.cellStyle == CKTableViewCellStyleValue3){
                 s.frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:nil detailTextStyle:nil image:self.image];
             }
+        }else{
+            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
         }
     }
 }

@@ -137,6 +137,8 @@
             }    
             
             return CGSizeMake(320,height);
+        }else{
+            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
     return size;
@@ -176,6 +178,8 @@
             else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
                 textView.frame = [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
             }
+        }else{
+            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
 }
