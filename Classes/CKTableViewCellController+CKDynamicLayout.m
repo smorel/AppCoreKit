@@ -62,7 +62,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         rowWidth = tableViewWidth - offset;
     }
     
-    return rowWidth - [self accessoryWidth];
+    return rowWidth;
 }
 
 - (CGFloat)accessoryWidth{
@@ -80,7 +80,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 - (CGFloat)computeContentViewSize{
     //TODO : This should  taking care of editing status and accessory view ...
-    return [self computeTableViewCellViewSize];
+    return [self computeTableViewCellViewSize] - [self accessoryWidth];
 }
 
 

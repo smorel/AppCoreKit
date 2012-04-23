@@ -158,12 +158,12 @@
                 if(self.cellStyle == CKTableViewCellStyleValue3
                    || self.cellStyle == CKTableViewCellStylePropertyGrid){
                     textField.frame = [self value3TextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
-                
+                /*
                     //align textLabel on y
                     CGFloat txtFieldCenter = textField.y + (textField.height / 2.0);
                     CGFloat txtLabelHeight = cell.textLabel.height;
                     CGFloat txtLabelY = txtFieldCenter - (txtLabelHeight / 2.0);
-                    cell.textLabel.y = txtLabelY;
+                    cell.textLabel.y = txtLabelY;*/
                 }else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
                     textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
                     textField.frame = [self subtitleTextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
