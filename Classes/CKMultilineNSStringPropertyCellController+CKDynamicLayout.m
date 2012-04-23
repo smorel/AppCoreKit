@@ -25,18 +25,18 @@
     
     CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
+    CGFloat width = (text == nil) ? realWidth : (realWidth * self.componentsRatio);
     
-    CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
+    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.componentsSpace));
     CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
     
     CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:textFieldWidth];
     
-    UIFont* textViewFont = [textViewStyle objectForKey:CKDynamicLayoutFont];
+    UIFont* font = [textViewStyle objectForKey:CKDynamicLayoutFont];
     textViewTextSize.height += 2 * TEXTVIEWINSETS;
     
     CGFloat textFieldY = self.contentInsets.top - TEXTVIEWINSETS;
-    return CGRectMake(textFieldX,textFieldY,textFieldWidth,MAX(textViewTextSize.height,textViewFont.lineHeight + 2 * TEXTVIEWINSETS));
+    return CGRectMake(textFieldX - TEXTVIEWINSETS,textFieldY,textFieldWidth + 2*TEXTVIEWINSETS,MAX(textViewTextSize.height,font.lineHeight + 2 * TEXTVIEWINSETS));
 }
 
 - (CGRect)subtitleTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle  image:(UIImage*)image{
@@ -48,9 +48,9 @@
     
     UIFont* font = [textViewStyle objectForKey:CKDynamicLayoutFont];
     
-    CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,textFrame.origin.x),
+    CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,textFrame.origin.x) - TEXTVIEWINSETS,
                                       MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.componentsSpace) : 0),
-                                      width,
+                                      width + 2 * TEXTVIEWINSETS,
                                       MAX(textViewTextSize.height,font.lineHeight));
     return textViewFrame;
 }
@@ -58,15 +58,7 @@
 - (CGRect)propertyGridTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle image:(UIImage*)image{
     
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        if(text == nil || [text isKindOfClass:[NSNull class]] || [text length] <= 0){
-            CGFloat rowWidth = [self contentViewWidth];
-            CGFloat width = rowWidth - (self.contentInsets.left + self.contentInsets.right);
-            
-            CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:width];
-            textViewTextSize.height += 2 * TEXTVIEWINSETS;
-            
-            return CGRectMake(self.contentInsets.left - TEXTVIEWINSETS, self.contentInsets.top, rowWidth - self.contentInsets.right,textViewTextSize.height);
-        }
+        return [self value3TextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];
     }
     
     return [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];

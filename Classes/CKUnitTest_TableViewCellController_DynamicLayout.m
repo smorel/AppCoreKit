@@ -89,21 +89,43 @@
     CKEnumDescriptor* cellStylesEnumDescriptor = [CKUnitTest_TableViewCellController_DynamicLayout cellStylesEnumDescriptor];
 
     CKUnitTest_TableViewCellController_DynamicLayout_Object *object = [[CKUnitTest_TableViewCellController_DynamicLayout_Object object]retain];//if not it will get killed !
-    for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
-        CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
-        
-        for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
-            CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
-        
-            CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
-            if(controller){//as some properties can be not editable.
-                CKTableViewCellController* readOnlyController = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
+    
+    //Editable cells
+    for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
+        CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
+        if(style == CKTableViewCellStyleValue3
+           || style == CKTableViewCellStylePropertyGrid
+           || style == CKTableViewCellStyleSubtitle2){
+            
+            for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
+                CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
                 
-                controller.cellStyle = readOnlyController.cellStyle = style;
-                controller.componentsRatio = readOnlyController.componentsRatio = 0.5;
+                CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
+                if(controller){//as some properties can be not editable.
+                    controller.cellStyle = style;
+                    controller.componentsRatio = 0.5;
+                    [section addCellController:controller];
+                }
+            }
+        }
+    }
+    
+    //Readonly cellds
+    for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
+        CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
+        if(style == CKTableViewCellStyleValue3
+           || style == CKTableViewCellStylePropertyGrid
+           || style == CKTableViewCellStyleSubtitle2){
+            
+            for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
+                CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
                 
-                [section addCellController:controller];
-                [section addCellController:readOnlyController];
+                CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property readOnly:YES];
+                if(controller){//as some properties can be not editable.
+                    controller.cellStyle = style;
+                    controller.componentsRatio = 0.5;
+                    [section addCellController:controller];
+                }
             }
         }
     }

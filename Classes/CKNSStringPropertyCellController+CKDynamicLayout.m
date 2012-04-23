@@ -25,9 +25,9 @@
 - (CGRect)value3TextFieldFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textFieldText:(NSString*)textFieldText textFieldStyle:(NSDictionary*)textFieldStyle image:(UIImage*)image{
     CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
-    CGFloat width = realWidth * self.componentsRatio;
+    CGFloat width = (text == nil) ? realWidth : (realWidth * self.componentsRatio);
     
-    CGFloat textFieldWidth = width - (self.contentInsets.right + self.componentsSpace);
+    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.componentsSpace));
     CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
     
     CGSize textViewTextSize = [self sizeForText:textFieldText withStyle:textFieldStyle constraintToWidth:textFieldWidth];
