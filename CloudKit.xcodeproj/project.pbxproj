@@ -470,6 +470,14 @@
 		9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8CE1545C56200F07C5A /* CKObjectGraph.m */; };
 		9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */; };
+		9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */; };
+		9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8E01545CAFF00F07C5A /* CKContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */; };
+		9600B8E11545CAFF00F07C5A /* CKSplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */; };
+		9600B8E31545CAFF00F07C5A /* CKTabViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -992,6 +1000,14 @@
 		9600B8CE1545C56200F07C5A /* CKObjectGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectGraph.m; path = Classes/CKObjectGraph.m; sourceTree = "<group>"; };
 		9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideShowViewController.h; path = Classes/CKSlideShowViewController.h; sourceTree = "<group>"; };
 		9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideShowViewController.m; path = Classes/CKSlideShowViewController.m; sourceTree = "<group>"; };
+		9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBreadCrumbViewController.h; path = Classes/CKBreadCrumbViewController.h; sourceTree = "<group>"; };
+		9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBreadCrumbViewController.m; path = Classes/CKBreadCrumbViewController.m; sourceTree = "<group>"; };
+		9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKContainerViewController.h; path = Classes/CKContainerViewController.h; sourceTree = "<group>"; };
+		9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKContainerViewController.m; path = Classes/CKContainerViewController.m; sourceTree = "<group>"; };
+		9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSplitViewController.h; path = Classes/CKSplitViewController.h; sourceTree = "<group>"; };
+		9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSplitViewController.m; path = Classes/CKSplitViewController.m; sourceTree = "<group>"; };
+		9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTabViewController.h; path = Classes/CKTabViewController.h; sourceTree = "<group>"; };
+		9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTabViewController.m; path = Classes/CKTabViewController.m; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
@@ -1985,6 +2001,21 @@
 			name = ObjectGraph;
 			sourceTree = "<group>";
 		};
+		9600B8E51545CB3100F07C5A /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */,
+				9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */,
+				9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */,
+				9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */,
+				9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */,
+				9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */,
+				9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */,
+				9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */,
+			);
+			name = Containers;
+			sourceTree = "<group>";
+		};
 		960A2D30150572C000D30AB4 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1996,6 +2027,7 @@
 		9638264D147FE53F00A9C98B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9600B8E51545CB3100F07C5A /* Containers */,
 				7560DC4A13B8ED3600268D13 /* CKUIViewController.h */,
 				7560DC4B13B8ED3600268D13 /* CKUIViewController.m */,
 				757578F913E71C000082C247 /* CKSheetController.h */,
@@ -2331,6 +2363,10 @@
 				9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */,
 				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
 				9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */,
+				9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */,
+				9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */,
+				9600B8E11545CAFF00F07C5A /* CKSplitViewController.h in Headers */,
+				9600B8E31545CAFF00F07C5A /* CKTabViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2673,6 +2709,10 @@
 				9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */,
 				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
 				9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */,
+				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,
+				9600B8E01545CAFF00F07C5A /* CKContainerViewController.m in Sources */,
+				9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */,
+				9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

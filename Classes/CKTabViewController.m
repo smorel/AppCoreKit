@@ -1,0 +1,442 @@
+//
+//  CKTabViewController.m
+//  CloudKit
+//
+//  Created by Sebastien Morel on 11-08-18.
+//  Copyright 2011 WhereCloud Inc. All rights reserved.
+//
+
+#import "CKTabViewController.h"
+#import "CKUIViewController+Style.h"
+#import "CKStyleManager.h"
+#import <QuartzCore/QuartzCore.h>
+#import "CKRuntime.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKNSObject+Bindings.h"
+#import <objc/runtime.h>
+
+
+@interface CKContainerViewController ()
+@property (nonatomic, readwrite) NSUInteger selectedIndex;
+@end
+
+
+#define kCKTabViewDefaultHeight 49
+
+@implementation CKTabView
+
+@synthesize delegate = _delegate;
+@synthesize items = _items;
+@synthesize selectedIndex = _selectedIndex;
+@synthesize style;
+@synthesize itemsSpace;
+@synthesize selectedTabIndicatorView = _selectedTabIndicatorView;
+@synthesize contentInsets;
+
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTabViewStyle", 
+                                               CKTabViewStyleFill,
+                                               CKTabViewStyleCenter);
+}
+
+- (void)postInit {
+	self.backgroundColor = [UIColor blackColor];
+    self.style = CKTabViewStyleFill;
+    self.itemsSpace = 0;
+    self.contentInsets = UIEdgeInsetsZero;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+	frame.size.height = kCKTabViewDefaultHeight;	// Forces the height to the same as a UITabBar
+    self = [super initWithFrame:frame];
+    if (self) {
+		[self postInit];
+    }
+    return self;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.frame = CGRectMake(0, 0, 320, kCKTabViewDefaultHeight);	// Defaults to the same as a UITabBar
+		[self postInit];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [_selectedTabIndicatorView release];
+    [_items release]; _items = nil;
+    [super dealloc];
+}
+
+#pragma mark - Layout
+
+- (void)setSelectedTabIndicatorView:(UIView *)theselectedTabIndicatorView{
+    [_selectedTabIndicatorView removeFromSuperview];
+    [_selectedTabIndicatorView release];
+    _selectedTabIndicatorView = [theselectedTabIndicatorView retain];
+    [self addSubview:_selectedTabIndicatorView];
+    [self setNeedsLayout];
+}
+
+- (void)layoutSubviews {
+	[super layoutSubviews];
+    
+    CGFloat viewWidth = self.bounds.size.width - (contentInsets.left + contentInsets.right);
+    CGFloat viewHeight = self.bounds.size.height - (contentInsets.top + contentInsets.bottom);
+    
+    switch(self.style){
+        case CKTabViewStyleFill:{
+            CGFloat width = (viewWidth - (([_items count] - 1) * self.itemsSpace)) / [_items count];
+            CGFloat x = contentInsets.left;
+            for (CKTabViewItem *item in _items) {
+                item.frame = CGRectMake(x, contentInsets.top, width, viewHeight);
+                x += width + self.itemsSpace;
+            }
+            break;
+        }
+        case CKTabViewStyleCenter:{
+            CGFloat totalWidth = 0;
+            for (CKTabViewItem *item in _items) {
+                totalWidth += item.frame.size.width;
+            }
+            totalWidth += ([_items count] - 1) * self.itemsSpace;
+            
+            CGFloat x = contentInsets.left + (viewWidth / 2.0) - (totalWidth / 2.0);
+            for (CKTabViewItem *item in _items) {
+                [item sizeToFit];
+                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
+                x += item.frame.size.width + self.itemsSpace;
+            }
+            
+            break;
+        }
+        case CKTabViewStyleAlignLeft:{
+            CGFloat x = contentInsets.left;
+            for (CKTabViewItem *item in _items) {
+                [item sizeToFit];
+                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
+                x += item.frame.size.width + self.itemsSpace;
+            }
+            
+            break;
+        }
+        case CKTabViewStyleAlignRight:{
+            CGFloat x = contentInsets.left + viewWidth;
+            for (CKTabViewItem *item in _items) {
+                [item sizeToFit];
+                x -= item.frame.size.width;
+                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
+                x -= self.itemsSpace;
+            }
+            
+            break;
+        }
+    }
+    
+    if(_selectedTabIndicatorView && (_selectedIndex < [_items count])){
+        CGSize size = _selectedTabIndicatorView.frame.size;
+        
+        CKTabViewItem* selectedItem = [_items objectAtIndex:_selectedIndex];
+        CGFloat itemCenter = selectedItem.frame.origin.x + selectedItem.frame.size.width / 2.0;
+        
+        _selectedTabIndicatorView.frame = CGRectMake(itemCenter - size.width / 2.0,0,size.width,size.height);
+    }
+}
+
+#pragma mark - Item Management
+
+// Add the items
+
+- (void)setItems:(NSArray *)items {
+    
+	// Remove the previous items
+	for (CKTabViewItem *item in _items) {
+        [item removeTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		[item removeFromSuperview];
+	}
+	[_items release];
+    
+	// Add the new items
+	_items = [items copy];
+	int index = 0;
+	for (CKTabViewItem *item in _items) {
+		NSAssert([item isKindOfClass:[CKTabViewItem class]], @"Items must be of class CKTabViewItem.");
+        [item addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:item];
+		[(CKTabViewItem *)item setSelected:(index++ == _selectedIndex)];
+	}
+    
+    [self layoutSubviews];
+}
+
+// Handle item selection
+
+- (void)buttonClicked:(id)sender {
+	UIView *item = (UIView*)sender;
+	if ([item isKindOfClass:[CKTabViewItem class]] == NO) {
+		return;
+	}
+    
+	NSUInteger index = [_items indexOfObject:item];
+	if (index < [_items count]) {
+		CKTabViewItem *currentSelectedItem = [_items objectAtIndex:_selectedIndex];
+		[currentSelectedItem setSelected:NO];
+		[(CKTabViewItem *)item setSelected:YES];
+        
+		if ([self.delegate respondsToSelector:@selector(tabView:didSelectItemAtIndex:)]) {
+			[self.delegate tabView:self didSelectItemAtIndex:index];
+		}
+		_selectedIndex = index;
+	}
+    [self setNeedsLayout];
+}
+
+- (void)setSelectedIndex:(NSUInteger)index{
+    if(_selectedIndex != index){
+        CKTabViewItem *currentSelectedItem = [_items objectAtIndex:_selectedIndex];
+		[currentSelectedItem setSelected:NO];
+        CKTabViewItem *newSelectedItem = [_items objectAtIndex:index];
+		[newSelectedItem setSelected:YES];
+        _selectedIndex = index;
+    }
+}
+
+@end
+
+//CKTabViewItem
+
+
+@implementation CKTabViewItem
+
++ (void)load{
+    CKSwizzleSelector([UIViewController class],@selector(dealloc), @selector(CKTabViewItem_UIViewController_dealloc));
+}
+
+- (void)dealloc{
+    [self clearBindingsContext];
+    [super dealloc];
+}
+
+@end
+
+//CKTabViewController
+
+@interface CKTabViewController ()
+
+@property (nonatomic, retain) UIView *containerView;
+@property (nonatomic, retain, readwrite) CKTabView *tabBar;
+
+- (void)updateTabBarItems;
+
+@end
+
+//
+
+@implementation CKTabViewController
+
+@synthesize tabBar = _tabBar;
+@synthesize style = _style;
+@synthesize willSelectViewControllerBlock = _willSelectViewControllerBlock;
+@synthesize didSelectViewControllerBlock = _didSelectViewControllerBlock;
+@dynamic containerView;
+
+- (void)postInit{
+    [super postInit];
+    self.style = CKTabViewControllerStyleBottom;
+}
+
+- (void)dealloc {
+    [_tabBar release]; 
+    _tabBar = nil;
+    [_willSelectViewControllerBlock release]; 
+    _willSelectViewControllerBlock = nil;
+    [_didSelectViewControllerBlock release]; 
+    _didSelectViewControllerBlock = nil;
+    [super dealloc];
+}
+
+- (void)loadView {
+	[super loadView];
+
+    if(!_tabBar){
+        self.tabBar = [[[CKTabView alloc] initWithFrame:CGRectMake(0,self.view.bounds.size.height - kCKTabViewDefaultHeight,self.view.bounds.size.width,kCKTabViewDefaultHeight)]autorelease];
+        self.tabBar.delegate = self;
+        self.tabBar.clipsToBounds = YES;
+        [self.view addSubview:self.tabBar];
+    }
+    
+    [self setStyle:self.style];//Apply layout ...
+    
+	[self updateTabBarItems];
+}
+
+- (void)setStyle:(CKTabViewControllerStyle)theStyle{
+    _style = theStyle;
+    switch(theStyle){
+        case CKTabViewControllerStyleBottom:{
+            if(_tabBar){
+                CGRect frame = CGRectMake(0,self.view.bounds.size.height - _tabBar.frame.size.height,
+                                          self.view.bounds.size.width,_tabBar.frame.size.height);
+                _tabBar.frame = frame;
+                _tabBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+            }
+            if(self.containerView){
+                CGRect frame = CGRectMake(0,0,self.view.bounds.size.width,
+                                          self.view.bounds.size.height - _tabBar.frame.size.height);
+                self.containerView.frame = frame;
+                self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            }
+            break;
+        }
+        case CKTabViewControllerStyleTop:{
+            if(_tabBar){
+                CGRect frame = CGRectMake(0,0,self.view.bounds.size.width,_tabBar.frame.size.height);
+                _tabBar.frame = frame;
+                _tabBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+            }
+            
+            if(self.containerView){
+                CGRect frame = CGRectMake(0,_tabBar.frame.size.height,
+                                          self.view.bounds.size.width,
+                                          self.view.bounds.size.height - _tabBar.frame.size.height);
+                self.containerView.frame = frame;
+                self.containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            }
+
+            break;
+        }
+    }
+}
+
+- (void)viewDidUnload{
+    [super viewDidUnload];
+	self.tabBar = nil;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    //disable animations 
+    [CATransaction begin];
+    [CATransaction 
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
+    [self setStyle:self.style];//Apply layout ...
+    
+	[super viewWillAppear:animated];
+    
+    NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+	NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+    for(CKTabViewItem* item in self.tabBar.items){
+        NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+        [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
+        [item sizeToFit];
+    }
+    
+    [CATransaction commit];
+}
+
+- (void)setViewControllers:(NSArray *)viewControllers {
+	[super setViewControllers:viewControllers];
+	[self updateTabBarItems];
+}
+
+- (void)updateTabBarItems {
+	if (self.viewControllers) {
+		NSMutableArray *items = [NSMutableArray arrayWithCapacity:[self.viewControllers count]];
+        
+        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
+        NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
+        
+		for (UIViewController *vc in self.viewControllers) {
+            CKTabViewItem* item = vc.tabViewItem;
+            if(self.viewIsOnScreen){
+                NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
+                [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
+                [item sizeToFit];
+            }
+
+			[items addObject:item];
+		}
+		[self.tabBar setItems:items];
+	}
+}
+
+#pragma mark - CKTabViewDelegate
+
+- (void)tabView:(CKTabView *)tabView didSelectItemAtIndex:(NSUInteger)index {
+    if(_willSelectViewControllerBlock){
+        _willSelectViewControllerBlock(self,index);
+    }
+	[self showViewControllerAtIndex:index withTransition:CKTransitionNone];
+    if(_didSelectViewControllerBlock){
+        _didSelectViewControllerBlock(self,index);
+    }
+}
+
+
+- (void)showViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
+    [super showViewControllerAtIndex:index withTransition:transition];
+    if(_tabBar){
+        _tabBar.selectedIndex = self.selectedIndex;
+    }
+}
+
+
+-(void)setSelectedIndex:(NSUInteger)selectedIndex{
+    [super setSelectedIndex:selectedIndex];
+    [[self tabBar]setSelectedIndex:selectedIndex];
+}
+
+@end
+
+
+#pragma mark - UIViewController Additions
+
+@implementation UIViewController (CKTabViewItem)
+
+static char CKUIViewControllerTabViewItemKey;
+
+- (void)CKTabViewItem_UIViewController_dealloc{
+    [[self tabViewItem]clearBindingsContext];
+    [self CKTabViewItem_UIViewController_dealloc];
+}
+
+- (void)setTabViewItem:(CKTabViewItem *)tabViewItem {
+    objc_setAssociatedObject(self, 
+                             &CKUIViewControllerTabViewItemKey,
+                             tabViewItem,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CKTabViewItem *)tabViewItem {
+    id item = objc_getAssociatedObject(self, &CKUIViewControllerTabViewItemKey);
+	if (item) return item;
+	
+	CKTabViewItem *newItem = [[[CKTabViewItem alloc] initWithFrame:CGRectZero] autorelease];
+    newItem.contentEdgeInsets = UIEdgeInsetsMake(3, 10, 3, 10);
+	newItem.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+	[newItem setTitle:self.title forState:UIControlStateNormal];
+	[newItem setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+	[newItem setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+    [newItem sizeToFit];
+    newItem.bounds = CGRectMake(0, 0, newItem.bounds.size.width + (self.title ? 10 : 0), newItem.bounds.size.height + (self.title ? 10 : 0) );
+	[self setTabViewItem:newItem];
+    
+    __block CKTabViewItem* bItem = newItem;
+    __block UIViewController* bController = self;
+    [newItem beginBindingsContextByRemovingPreviousBindings];
+    [self bind:@"title" withBlock:^(id value) {
+        [bItem setTitle:bController.title forState:UIControlStateNormal];
+        [bItem sizeToFit];
+    }];
+    [newItem endBindingsContext];
+    
+	return newItem;
+}
+
+@end
