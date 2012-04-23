@@ -410,6 +410,7 @@
         }
 		
         CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+        
         NSString* identifier = [controller identifier];
         UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
         

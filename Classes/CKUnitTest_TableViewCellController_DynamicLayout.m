@@ -83,6 +83,7 @@
 
 + (CKUIViewController*)viewControllerToTestPropertyCellControllers{
     CKFormTableViewController* form = [CKFormTableViewController controller];
+    form.editableType = CKBindedTableViewControllerEditingTypeRight;
     
     CKFormSection* section = [CKFormSection section];
     
@@ -104,6 +105,7 @@
                 if(controller){//as some properties can be not editable.
                     controller.cellStyle = style;
                     controller.componentsRatio = 0.5;
+                    controller.flags = CKItemViewFlagRemovable;
                     [section addCellController:controller];
                 }
             }

@@ -29,6 +29,8 @@
 
 @property(nonatomic,readonly) CKTableViewCellController* delegate;
 
+@property(nonatomic, assign) UITableViewCellStateMask editingMask;
+
 ///-----------------------------------
 /// @name Customizing the View Visual Appearance
 ///-----------------------------------

@@ -78,9 +78,19 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     return 0;
 }
 
+- (CGFloat)editingWidth{
+    if(self.flags & CKItemViewFlagRemovable && [self.containerController isEditing]){
+        if(self.tableViewCell && ((CKUITableViewCell*)self.tableViewCell).editingMask == 3){
+            return 32 + 75;
+        }
+        return 32;
+    }
+    return 0;
+}
+
 - (CGFloat)computeContentViewSize{
     //TODO : This should  taking care of editing status and accessory view ...
-    return [self computeTableViewCellViewSize] - [self accessoryWidth];
+    return [self computeTableViewCellViewSize] - [self accessoryWidth] - [self editingWidth];
 }
 
 
@@ -120,7 +130,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
     UITextAlignment textAlignment = [[textStyle objectForKey:CKDynamicLayoutTextAlignment]intValue];
     
-    CGFloat rowWidth = [self tableViewCellWidth];
+    CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
     CGFloat width = realWidth * self.componentsRatio;
     
@@ -163,7 +173,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     CGRect textFrame = [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
     
-    CGFloat rowWidth = [self tableViewCellWidth];
+    CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
     CGFloat width = (realWidth * self.componentsRatio) - (self.contentInsets.right + self.componentsSpace);
     

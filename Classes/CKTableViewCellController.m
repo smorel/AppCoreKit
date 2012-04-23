@@ -51,6 +51,7 @@
 @synthesize highlightedDisclosureIndicatorImage = _highlightedDisclosureIndicatorImage;
 @synthesize highlightedCheckMarkImage = _highlightedCheckMarkImage;
 @synthesize syncControllerViewBindingContextId = _syncControllerViewBindingContextId;
+@synthesize editingMask = _editingMask;
 
 //OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
 + (id)sharedInstance{
@@ -84,6 +85,7 @@
 	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
     self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
 	self.delegate = thedelegate;
+    self.editingMask = UITableViewCellStateDefaultMask;
 	return self;
 }
 
@@ -210,11 +212,23 @@
     [super setAccessoryType:theAccessoryType];
 }
 
-/* Tests for customizing Delete button and editing control
+- (void)setEditingMask:(UITableViewCellStateMask)editingMask{
+    if(_editingMask != editingMask){
+        UITableViewCellStateMask oldMask = _editingMask;
+        _editingMask = editingMask;
+        
+        if(editingMask == 3 || oldMask == 3){
+            //that means delete button shows/hides
+            [self.delegate invalidateSize];
+        }
+    }
+}
+
 - (void)willTransitionToState:(UITableViewCellStateMask)state{
     [super willTransitionToState:state];
+    self.editingMask = state;
     
-    NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
+    /*NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
     NSMutableDictionary* myStyle = [controllerStyle styleForObject:self propertyName:@"tableViewCell"];
     
     switch(state){
@@ -262,9 +276,8 @@
             }
             break;
         }
-    }
+    }*/
 }
- */
 
 @end
 

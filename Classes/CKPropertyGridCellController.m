@@ -139,27 +139,8 @@
     BOOL visible = !validity && form.validationEnabled;
     BOOL validityStateChanged = (_validationDisplayed != visible);
     if(validityStateChanged){
-        //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
-        BOOL hasAnimation = NO;
-        if(!_fixedSize){
-            CALayer* layer = [self.tableViewCell layer];
-            NSArray* anims = [layer animationKeys];
-            hasAnimation = ([anims count] > 0);
-            if(!hasAnimation && ([form state] & CKUIViewControllerStateDidAppear)){
-                [[self parentTableView]beginUpdates];
-            }
-        }
-        
         [self setInvalidButtonVisible:!validity];
         [self layoutCell:self.tableViewCell];
-        
-        
-        if(!_fixedSize){
-            //appeller seulement quand changement d'etat de validation ET parentForm validationEnabled
-            if(!hasAnimation && ([form state] & CKUIViewControllerStateDidAppear)){
-                [[self parentTableView]endUpdates];
-            }
-        }
     }
     
     CKProperty* property = [self objectProperty];

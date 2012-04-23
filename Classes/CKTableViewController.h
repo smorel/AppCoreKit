@@ -11,6 +11,9 @@
 #import <Foundation/Foundation.h>
 #import "CKItemViewContainerController.h"
 
+@interface CKTableView : UITableView
+@end
+
 typedef enum {
 	CKTableViewOrientationPortrait,
 	CKTableViewOrientationLandscape
@@ -28,14 +31,14 @@ typedef enum {
 @interface CKTableViewController : CKItemViewContainerController <UITableViewDataSource, UITableViewDelegate> {
 	UIView *_backgroundView;
 	UIView *_tableViewContainer;
-	UITableView *_tableView;
+	CKTableView *_tableView;
 	UITableViewStyle _style;
 	BOOL _stickySelection;
 	NSIndexPath *_selectedIndexPath;
     UIEdgeInsets _tableViewInsets;
 }
 
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
+@property (nonatomic, retain) IBOutlet CKTableView *tableView;
 @property (nonatomic, retain) IBOutlet UIView *tableViewContainer;
 @property (nonatomic, assign) UITableViewStyle style;
 @property (nonatomic, retain) UIView *backgroundView;

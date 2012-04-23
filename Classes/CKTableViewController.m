@@ -11,13 +11,69 @@
 #import "CKTableViewController.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
+
+@interface CKTableView()
+@property (nonatomic,assign) NSInteger numberOfUpdates;
+@end
+
+
+@implementation CKTableView
+@synthesize numberOfUpdates;
+
+- (void)postInit{
+    self.numberOfUpdates = 0;
+}
+
+- (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
+    self = [super initWithFrame:frame style:style];
+    [self postInit];
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    [self postInit];
+    return self; 
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    [self postInit];
+    return self;
+}
+
+- (id)init{
+    self = [super init];
+    [self postInit];
+    return self;
+}
+
+- (void)beginUpdates{
+    if(self.numberOfUpdates == 0){
+       // NSLog(@"beginUpdates");
+        [super beginUpdates];
+    }
+    self.numberOfUpdates++;
+}
+
+- (void)endUpdates{
+    self.numberOfUpdates--;
+    if(self.numberOfUpdates == 0){
+       // NSLog(@"endUpdates");
+        [super endUpdates];
+    }
+}
+
+@end
 
 
 @interface CKTableViewController ()
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, assign) BOOL insetsApplied;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
-@property (nonatomic, assign) BOOL isUpdatingSizes;
+@property (nonatomic, assign) BOOL sizeIsAlreadyInvalidated;
+@property (nonatomic, assign) BOOL lockSizeChange;
 @end
 
 
@@ -32,7 +88,8 @@
 @synthesize tableViewInsets = _tableViewInsets;
 @synthesize insetsApplied;
 @synthesize tableViewHasBeenReloaded;
-@synthesize isUpdatingSizes;
+@synthesize sizeIsAlreadyInvalidated;
+@synthesize lockSizeChange;
 
 - (void)postInit {
 	[super postInit];
@@ -40,7 +97,8 @@
     self.insetsApplied = NO;
 	self.style = UITableViewStylePlain;
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
-    self.isUpdatingSizes = NO;
+    self.sizeIsAlreadyInvalidated = NO;
+    self.lockSizeChange = NO;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -94,14 +152,14 @@
     
 	if (self.view == nil) {
 		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
-		UIView *theView = [[[UITableView alloc] initWithFrame:theViewFrame] autorelease];
+		UIView *theView = [[[CKTableView alloc] initWithFrame:theViewFrame] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		self.view = theView;
 	}
 	//self.view.clipsToBounds = YES;
 	
-	if ([self.view isKindOfClass:[UITableView class]] == NO && self.tableViewContainer == nil) {
-        UITableView* theTableView = (UITableView*)self.view;
+	if ([self.view isKindOfClass:[CKTableView class]] == NO && self.tableViewContainer == nil) {
+        CKTableView* theTableView = (CKTableView*)self.view;
         CGRect theViewFrame = self.view.bounds;
 		UIView *theView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -116,12 +174,12 @@
 	}
     
 	if (self.tableView == nil) {
-		if ([self.view isKindOfClass:[UITableView class]]) {
+		if ([self.view isKindOfClass:[CKTableView class]]) {
 			// TODO: Assert - Should not be allowed
-			self.tableView = (UITableView *)self.view;
+			self.tableView = (CKTableView *)self.view;
 		} else {
 			CGRect theViewFrame = self.view.bounds;
-			UITableView *theTableView = [[[UITableView alloc] initWithFrame:theViewFrame style:self.style] autorelease];
+			CKTableView *theTableView = [[[CKTableView alloc] initWithFrame:theViewFrame style:self.style] autorelease];
 			theTableView.delegate = self;
 			theTableView.dataSource = self;
 			theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -216,8 +274,20 @@
 #pragma mark Setters
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    //Invalidate all controller's size !
+    for(int i =0; i< [self numberOfSections];++i){
+        for(int j=0;j<[self numberOfObjectsForSection:i];++j){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:j inSection:i];
+            CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
+            controller.invalidatedSize = YES;
+        }
+    }
+    
 	[super setEditing:editing animated:animated];
 	[self.tableView setEditing:editing animated:animated];
+    
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)setBackgroundView:(UIView *)backgroundView {
@@ -285,25 +355,31 @@
 
 
 - (void)onSizeChangeEnd{
-    [[self tableView]endUpdates];
-    self.isUpdatingSizes = NO;
+    if(self.sizeIsAlreadyInvalidated){
+        [[self tableView]endUpdates];
+    }
+    self.sizeIsAlreadyInvalidated = NO;
 }
 
 - (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    if(self.state != CKUIViewControllerStateWillAppear){
-        return; //yet but probably needs something else ...
+    if(self.state == CKUIViewControllerStateWillAppear || self.lockSizeChange){
+        return;
     }
     
-    //TODO : CHECK IF TABLE VIEW IS ALREADY IN A BEGINUPDATES STATE BY SWIZZLING METHOD
-    //IMPLEMENTS PROTECTION BY INCREMENTING/DECREMENTING A COUNT !
-    
-    if(!self.isUpdatingSizes){
+    if(self.sizeIsAlreadyInvalidated == NO){
         [[self tableView]beginUpdates];
     }
+    self.sizeIsAlreadyInvalidated = YES;
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
     [self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
-    self.isUpdatingSizes = YES;
+}
+
+- (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
+    self.lockSizeChange = YES;
+    UIView* view = [super createViewAtIndexPath:indexPath];
+    self.lockSizeChange = NO;
+    return view;
 }
 
 @end
