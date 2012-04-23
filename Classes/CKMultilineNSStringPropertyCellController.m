@@ -44,11 +44,11 @@
 - (void)initTableViewCell:(UITableViewCell*)cell{
     [super initTableViewCell:cell];
     
-	cell.accessoryView = nil;
-	cell.accessoryType = UITableViewCellAccessoryNone;
+	self.accessoryView = nil;
+	self.accessoryType = UITableViewCellAccessoryNone;
 	cell.clipsToBounds = NO;
 	cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
     self.textView = [[[CKTextView alloc] initWithFrame:cell.contentView.bounds] autorelease];
 	_textView.backgroundColor = [UIColor clearColor];

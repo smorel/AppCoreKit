@@ -401,8 +401,7 @@
 
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		//id object = [_objectController objectAtIndexPath:indexPath];
-        //NSAssert(object,@"toto");
+		id object = [_objectController objectAtIndexPath:indexPath];
         
         UIView* previousView = [[_indexPathToViews objectForKey:indexPath]nonretainedObjectValue];
         if(previousView){
@@ -417,6 +416,10 @@
         if(!_sectionsToControllers){
             self.sectionsToControllers = [NSMutableArray array];
         }
+        
+        [controller setValue:object];
+        [controller performSelector:@selector(setContainerController:) withObject:self];
+        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
         if(view == nil){
             view = [controller loadView];
@@ -453,10 +456,6 @@
         [_viewsToIndexPath setObject:indexPath forKey:[NSValue valueWithNonretainedObject:view]];
         if(_indexPathToViews == nil){self.indexPathToViews = [NSMutableDictionary dictionary]; }
         [_indexPathToViews setObject:[NSValue valueWithNonretainedObject:view] forKey:indexPath];
-        //NSLog(@"createViewAtIndexPath -- controller <%p> _indexPathToViews set view : <%p> at indexPath : %@",self,view,indexPath);
-        
-        [controller performSelector:@selector(setContainerController:) withObject:self];
-        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
         [controller setupView:view];	
         

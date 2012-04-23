@@ -290,7 +290,7 @@
 }
 
 - (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    if(self.state != CKUIViewControllerStateDidAppear){
+    if(self.state != CKUIViewControllerStateWillAppear){
         return; //yet but probably needs something else ...
     }
     

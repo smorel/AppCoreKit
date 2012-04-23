@@ -15,22 +15,24 @@
 //@property (nonatomic,retain) NSString* multiline;
 //@property (nonatomic,retain) NSString* string;
 //@property (nonatomic,assign) NSInteger integer;
-//@property (nonatomic,assign) CGFloat cgfloat;
-//@property (nonatomic,assign) BOOL boolean;
-@property (nonatomic,retain) CKObject* object;
+//@property (nonatomic,assign) CGFloat cgfloatwiwjehriwuheriuweir;
+@property (nonatomic,assign) BOOL booleanwerkhwvebqrrkbqkjwerbkjqwjbkerj;
+@property (nonatomic,assign) BOOL bo;
+//@property (nonatomic,retain) CKObject* object;
 @end
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout_Object
 //@synthesize multiline;
 //@synthesize string;
 //@synthesize integer;
-//@synthesize cgfloat;
-//@synthesize boolean;
-@synthesize object;
+//@synthesize cgfloatwiwjehriwuheriuweir;
+@synthesize booleanwerkhwvebqrrkbqkjwerbkjqwjbkerj;
+@synthesize bo;
+//@synthesize object;
 
 - (void)postInit{
     [super postInit];
-    self.object = [CKObject object];
+    //self.object = [CKObject object];
 }
 
 - (void)multilineExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -39,7 +41,7 @@
 
 @end
 
-/*
+
 //THIS SHOULD BE REMOVED WHEN NSSTRING CELL WORKS
 @interface CKObject(CKUnitTest)
 @end
@@ -51,7 +53,7 @@
 }
 
 @end
-*/
+
 
 @implementation CKUnitTest_TableViewCellController_DynamicLayout
 
@@ -82,6 +84,7 @@
             cellController.componentsRatio = 0.5;
             cellController.componentsSpace = 30;
             cellController.contentInsets = UIEdgeInsetsMake(5, 5, 40, 30);
+            cellController.accessoryType = UITableViewCellAccessoryCheckmark;
             
             [section addCellController:cellController];
         }
@@ -103,13 +106,13 @@
     for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
         CKProperty* property = [CKProperty propertyWithObject:object keyPath:descriptor.name];
         
-        for(int i =0;i<10;++i){
+        //for(int i =0;i<10;++i){
         for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
             CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
             //DEBUG 1 by 1
-            if(style == CKTableViewCellStyleSubtitle2
-                ||style == CKTableViewCellStyleValue3
-               //|| style == CKTableViewCellStylePropertyGrid
+            if(//style == CKTableViewCellStyleSubtitle2
+               // || style == CKTableViewCellStyleValue3
+                style == CKTableViewCellStylePropertyGrid
                ){
                 CKTableViewCellController* controller = [CKTableViewCellController cellControllerWithProperty:property];
                 if(controller){//as some properties can be not editable.
@@ -120,11 +123,11 @@
                     readOnlyController.componentsRatio = 0.5;
                     
                     [section addCellController:controller];
-                    [section addCellController:readOnlyController];
+                    //[section addCellController:readOnlyController];
                 }
             }
         }
-        }
+        //}
     }
     
     [form addSections:[NSArray arrayWithObject:section]];

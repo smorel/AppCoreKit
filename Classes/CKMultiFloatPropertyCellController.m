@@ -179,10 +179,10 @@
 	
 	[self rebind];
 	
-	cell.textLabel.text = [property name];
+	self.text = [property name];
 	
-	cell.accessoryType = UITableViewCellAccessoryNone;
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	self.accessoryType = UITableViewCellAccessoryNone;
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)didSelectRow{

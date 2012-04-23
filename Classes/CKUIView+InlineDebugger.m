@@ -94,6 +94,7 @@
         controller.text = [UIView titleForView:object];
         controller.detailText = [UIView subTitleForView:object];
         controller.image = [UIView createsThumbnailForView:object];
+        controller.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         
         __block CKTableViewCellController* bcontroller = controller;
         __block UIView* bsubView = object;
@@ -133,8 +134,6 @@
             controller.tableViewCell.imageView.layer.cornerRadius = 3;
             controller.tableViewCell.imageView.layer.borderWidth = 0.5;
             controller.tableViewCell.imageView.layer.borderColor = [[UIColor convertFromNSString:@"0.7 0.7 0.7 1"]CGColor];
-            
-            controller.tableViewCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         }];
         
         [controller setSelectionBlock:^(CKTableViewCellController *controller) {

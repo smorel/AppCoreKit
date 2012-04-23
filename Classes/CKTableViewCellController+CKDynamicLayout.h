@@ -47,5 +47,6 @@ extern NSString* CKDynamicLayoutLineBreakMode;
 
 - (CGFloat)tableViewCellWidth;
 - (CGFloat)contentViewWidth;
+- (CGFloat)accessoryWidth;
 
 @end

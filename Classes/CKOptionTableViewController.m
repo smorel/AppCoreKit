@@ -115,12 +115,12 @@
 	if(self.multiSelectionEnabled){
 		if([standardController.value intValue] == 1){
 			standardController.value = [NSNumber numberWithInt:0];
-			standardController.tableViewCell.accessoryType = UITableViewCellAccessoryNone;
+			standardController.accessoryType = UITableViewCellAccessoryNone;
 			[self.selectedIndexes removeObject:[NSNumber numberWithInt:i]];
 		}
 		else{
 			standardController.value = [NSNumber numberWithInt:1];
-			standardController.tableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+			standardController.accessoryType = UITableViewCellAccessoryCheckmark;
 			[self.selectedIndexes addObject:[NSNumber numberWithInt:i]];
 		}
 	}
@@ -153,7 +153,7 @@
         }
          */
         
-        cellController.componentsRatio = 0.95;
+        cellController.componentsRatio = 0;
         
         if([self.selectedIndexes containsObject:index]){
             cellController.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -174,8 +174,8 @@
                 text = [_values objectAtIndex:rowIndex];
             }
         }
-        cellController.text = @"";
-        cellController.detailText = _(text);
+        
+        cellController.text = _(text);
 
         [cellController setSelectionBlock:^(CKTableViewCellController *controller) {
             [bself selectCell:controller];

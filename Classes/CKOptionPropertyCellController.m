@@ -237,20 +237,15 @@
 			v |= [[self.values objectAtIndex:[index intValue]]intValue];
 		}
         
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:v];
+        self.detailText = [self labelForValue:v];
         [self setValueInObjectProperty:[NSNumber numberWithInt:v]];
     }
 	else{
         NSInteger index = tableViewController.selectedIndex;
-        self.tableViewCell.detailTextLabel.text = [self labelForValue:index];
+        self.detailText = [self labelForValue:index];
         id value = [self.values objectAtIndex:index];
         [self setValueInObjectProperty:value];
 	}
-    
-    //Notify parent controller that this row height could have vhanged
-    CKTableViewController* parentTableViewController = [self parentTableViewController];
-    [parentTableViewController onBeginUpdates];
-    [parentTableViewController onEndUpdates];
 	
 	if(!self.multiSelectionEnabled){
 		[self.containerController.navigationController popViewControllerAnimated:YES];

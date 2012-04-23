@@ -358,12 +358,10 @@
 }
 
 - (CKTableViewCellStyle)cellStyle{
-    if(!self.tableViewCell){
-        NSMutableDictionary* style = [self controllerStyle];
-        if(![style isEmpty]){
-            if([style containsObjectForKey:CKStyleCellType]){
-                return [style cellStyle];
-            }
+    NSMutableDictionary* style = [self controllerStyle];
+    if(![style isEmpty]){
+        if([style containsObjectForKey:CKStyleCellType]){
+            return [style cellStyle];
         }
     }
     return _cellStyle;
@@ -762,13 +760,13 @@
     UITableViewCell* cell = (UITableViewCell*)view;
     cell.indentationLevel = self.indentationLevel;
     cell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
-    if(self.text)cell.textLabel.text = self.text;
-    if(self.detailText)cell.detailTextLabel.text = self.detailText;
-    if(self.image)cell.imageView.image = self.image;
-    if(self.accessoryView)cell.accessoryView = self.accessoryView;
-    else cell.accessoryType = self.accessoryType;
-    if(self.editingAccessoryView)cell.editingAccessoryView = self.editingAccessoryView;
-    else cell.editingAccessoryType = self.editingAccessoryType;
+    cell.textLabel.text = self.text;
+    cell.detailTextLabel.text = self.detailText;
+    cell.imageView.image = self.image;
+    cell.accessoryView = self.accessoryView;
+    if(!self.accessoryView) cell.accessoryType = self.accessoryType;
+    cell.editingAccessoryView = self.editingAccessoryView;
+    if(!self.editingAccessoryView) cell.editingAccessoryType = self.editingAccessoryType;
     
 	[view beginBindingsContextByRemovingPreviousBindings];
 	[self setupCell:cell];

@@ -61,7 +61,21 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         
         rowWidth = tableViewWidth - offset;
     }
-    return rowWidth;
+    
+    return rowWidth - [self accessoryWidth];
+}
+
+- (CGFloat)accessoryWidth{
+    if(self.accessoryView){
+        return self.accessoryView.width;
+    }
+    else if(self.accessoryType == UITableViewCellAccessoryDisclosureIndicator
+            || self.accessoryType == UITableViewCellAccessoryCheckmark){
+        return 30;
+    }else if(self.accessoryType == UITableViewCellAccessoryDetailDisclosureButton){
+        return 43;
+    }
+    return 0;
 }
 
 - (CGFloat)computeContentViewSize{
@@ -145,6 +159,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     */
     
     UIFont* detailTextFont = [detailTextStyle objectForKey:CKDynamicLayoutFont];
+    UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
     
     CGRect textFrame = [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
     
@@ -154,13 +169,20 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
     
-    CGFloat maxHeight = MAX(textFrame.origin.y + textFrame.size.height,size.height + self.contentInsets.top + self.contentInsets.bottom);
 	
     BOOL isIphone = ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
-    CGFloat y = isIphone ? ((maxHeight / 2.0) - (MAX(detailTextFont.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
+    //here we want to center detail text to first line text on iphone.
+    CGFloat y = self.contentInsets.top;
+    if(isIphone && textFrame.size.height > 0){
+        CGFloat offset = (textFont.lineHeight - detailTextFont.lineHeight) / 2;
+        y += offset;
+    }
+    
+   // CGFloat maxHeight = MAX(textFrame.origin.y + textFrame.size.height,size.height + self.contentInsets.top) + self.contentInsets.bottom;
+   // CGFloat y = isIphone ? ((maxHeight / 2.0) - (MAX(detailTextFont.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
     
 	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
-                                     MIN(size.width,width) , MAX(textFrame.size.height,MAX(detailTextFont.lineHeight,size.height))));
+                                     MIN(size.width,width) , size.height));
 }
 
 //CKTableViewCellStylePropertyGrid
@@ -180,9 +202,9 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         else{
             CGFloat rowWidth = [self contentViewWidth];
             CGFloat realWidth = rowWidth;
-            CGFloat width = realWidth * self.componentsRatio;
+            CGFloat width = (detailText == nil) ? 0 : realWidth * self.componentsRatio;
             
-            CGFloat maxWidth = realWidth - width - self.contentInsets.left - self.componentsSpace;
+            CGFloat maxWidth = realWidth - width - self.contentInsets.left - ((detailText == nil) ? self.contentInsets.right : self.componentsSpace);
             CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
             return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
         }
@@ -461,6 +483,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         
         self.invalidatedSize = YES;
         [super invalidateSize];
+        [self performLayout];
     }
 }
 

@@ -15,9 +15,10 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKUIView+Positioning.h"
 
+
 #define TEXTFIELDINSETS 8
 #define SWITCHHEIGHT 27
-#define SWITCHWIDTH 77
+#define SWITCHWIDTH 79
 
 @implementation CKNSNumberPropertyCellController(CKDynamicLayout)
 
@@ -29,9 +30,7 @@
     CGFloat switchWidth = width - (self.contentInsets.right + self.componentsSpace);
     CGFloat switchX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - switchWidth);
     
-    CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
-    
-    return CGRectMake(switchX,MAX(22,(textFrame.origin.y + textFrame.size.height)/2) - (SWITCHHEIGHT / 2),SWITCHWIDTH,SWITCHHEIGHT);
+    return CGRectMake(switchX,self.contentInsets.top,SWITCHWIDTH,SWITCHHEIGHT);
 }
 
 - (CGRect)value3TextFieldFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textFieldText:(NSString*)textFieldText textFieldStyle:(NSDictionary*)textFieldStyle image:(UIImage*)image{
@@ -80,13 +79,19 @@
     return [super componentsRatio];
 }
 
-- (CGSize)computeSize{
-    NSString* text = nil;
-    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle != CKTableViewCellStylePropertyGrid){
-        text = _(descriptor.name);
+- (CGFloat)accessoryWidth{
+    BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
+    if(!readonly){
+        if([self isBOOL] && self.cellStyle != CKTableViewCellStyleValue3){
+            return SWITCHWIDTH + (2 * 8);
+        }
     }
+    return [super accessoryWidth];
+}
+
+- (CGSize)computeSize{
+    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    NSString* text = _(descriptor.name);
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     NSString* textFieldText = [self isNumber] ? 
@@ -114,8 +119,7 @@
                     return CGSizeMake(320,MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom));
                 }
             }else if([self isBOOL] && self.cellStyle == CKTableViewCellStyleValue3){
-                NSDictionary* detailTextStyle = [self detailTextStyle];
-                CGRect frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:textFieldText detailTextStyle:detailTextStyle image:self.image];
+                CGRect frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:nil detailTextStyle:nil image:self.image];
                 return CGSizeMake(320,MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom));
             }
         }
@@ -163,10 +167,7 @@
                     textField.frame = [self subtitleTextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
                 }
             }else if(s && self.cellStyle == CKTableViewCellStyleValue3){
-                NSDictionary* detailTextStyle = [self detailTextStyle];
-                NSString* detailText = [[[self objectProperty] value]boolValue] ? @"YES" : @"NO";
-                
-                s.frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:self.image];
+                s.frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:nil detailTextStyle:nil image:self.image];
             }
         }
     }
