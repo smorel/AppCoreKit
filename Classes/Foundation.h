@@ -26,6 +26,10 @@
 #import "CKProperty.h"
 #import "CKPropertyExtendedAttributes.h"
 
+#import "CKSuffixTree.h"
+#import "CKSuffixTree+Generator.h"
+#import "CKObjectGraph.h"
+
 #import "CKLocalization.h"
 
 #import "Document.h"

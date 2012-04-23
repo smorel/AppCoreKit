@@ -466,6 +466,12 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKPropertyExtendedAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */; };
+		9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BD1545C41400F07C5A /* CKSuffixTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */; };
+		9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */; };
+		9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8CD1545C56200F07C5A /* CKObjectGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8CE1545C56200F07C5A /* CKObjectGraph.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -984,6 +990,12 @@
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKPropertyExtendedAttributes.h; path = Classes/CKPropertyExtendedAttributes.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyExtendedAttributes.m; path = Classes/CKPropertyExtendedAttributes.m; sourceTree = "<group>"; };
+		9600B8BD1545C41400F07C5A /* CKSuffixTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSuffixTree.h; path = Classes/CKSuffixTree.h; sourceTree = "<group>"; };
+		9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKSuffixTree.mm; path = Classes/CKSuffixTree.mm; sourceTree = "<group>"; };
+		9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKSuffixTree+Generator.h"; path = "Classes/CKSuffixTree+Generator.h"; sourceTree = "<group>"; };
+		9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKSuffixTree+Generator.mm"; path = "Classes/CKSuffixTree+Generator.mm"; sourceTree = "<group>"; };
+		9600B8CD1545C56200F07C5A /* CKObjectGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectGraph.h; path = Classes/CKObjectGraph.h; sourceTree = "<group>"; };
+		9600B8CE1545C56200F07C5A /* CKObjectGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectGraph.m; path = Classes/CKObjectGraph.m; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
@@ -1090,7 +1102,9 @@
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
 				7506E3F013B8FABB00EE1471 /* Edition */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
-				75A405EC13D8B66E00D932B0 /* CascadingTrees */,
+				75A405EC13D8B66E00D932B0 /* CascadingTree */,
+				9600B8BC1545C40200F07C5A /* SuffixTree */,
+				9600B8CC1545C55200F07C5A /* ObjectGraph */,
 				7506E3F313B8FBB100EE1471 /* Document */,
 				964C207D153DB66A00398E0F /* Localization */,
 			);
@@ -1859,13 +1873,13 @@
 			name = UIKit;
 			sourceTree = "<group>";
 		};
-		75A405EC13D8B66E00D932B0 /* CascadingTrees */ = {
+		75A405EC13D8B66E00D932B0 /* CascadingTree */ = {
 			isa = PBXGroup;
 			children = (
 				75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */,
 				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
 			);
-			name = CascadingTrees;
+			name = CascadingTree;
 			sourceTree = "<group>";
 		};
 		75AD5D8A144C687E0008F53A /* Inline Debugger */ = {
@@ -1953,6 +1967,26 @@
 				7506E3FA13B8FD7A00EE1471 /* Private */,
 			);
 			name = "To-One Bindings";
+			sourceTree = "<group>";
+		};
+		9600B8BC1545C40200F07C5A /* SuffixTree */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8BD1545C41400F07C5A /* CKSuffixTree.h */,
+				9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */,
+				9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */,
+				9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */,
+			);
+			name = SuffixTree;
+			sourceTree = "<group>";
+		};
+		9600B8CC1545C55200F07C5A /* ObjectGraph */ = {
+			isa = PBXGroup;
+			children = (
+				9600B8CD1545C56200F07C5A /* CKObjectGraph.h */,
+				9600B8CE1545C56200F07C5A /* CKObjectGraph.m */,
+			);
+			name = ObjectGraph;
 			sourceTree = "<group>";
 		};
 		960A2D30150572C000D30AB4 /* Documentation */ = {
@@ -2301,6 +2335,9 @@
 				96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.h in Headers */,
 				96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */,
 				96E4D4671540918800CCF421 /* UnitTests.h in Headers */,
+				9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */,
+				9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */,
+				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2641,6 +2678,9 @@
 				96E4D3F815406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m in Sources */,
 				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m in Sources */,
 				96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */,
+				9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */,
+				9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */,
+				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
