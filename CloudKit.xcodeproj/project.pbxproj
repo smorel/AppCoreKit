@@ -478,6 +478,8 @@
 		9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */; };
 		9600B8E31545CAFF00F07C5A /* CKTabViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */; };
+		9600B8E81545CD1F00F07C5A /* CKSegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1008,6 +1010,8 @@
 		9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSplitViewController.m; path = Classes/CKSplitViewController.m; sourceTree = "<group>"; };
 		9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTabViewController.h; path = Classes/CKTabViewController.h; sourceTree = "<group>"; };
 		9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTabViewController.m; path = Classes/CKTabViewController.m; sourceTree = "<group>"; };
+		9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSegmentedViewController.h; path = Classes/CKSegmentedViewController.h; sourceTree = "<group>"; };
+		9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSegmentedViewController.m; path = Classes/CKSegmentedViewController.m; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
@@ -2012,6 +2016,8 @@
 				9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */,
 				9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */,
 				9600B8DC1545CAFF00F07C5A /* CKTabViewController.m */,
+				9600B8E61545CD1D00F07C5A /* CKSegmentedViewController.h */,
+				9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */,
 			);
 			name = Containers;
 			sourceTree = "<group>";
@@ -2367,6 +2373,7 @@
 				9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */,
 				9600B8E11545CAFF00F07C5A /* CKSplitViewController.h in Headers */,
 				9600B8E31545CAFF00F07C5A /* CKTabViewController.h in Headers */,
+				9600B8E81545CD1F00F07C5A /* CKSegmentedViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2713,6 +2720,7 @@
 				9600B8E01545CAFF00F07C5A /* CKContainerViewController.m in Sources */,
 				9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */,
 				9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */,
+				9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

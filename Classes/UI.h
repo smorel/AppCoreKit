@@ -75,3 +75,4 @@
 #import "CKBreadCrumbViewController.h"
 #import "CKSplitViewController.h"
 #import "CKTabViewController.h"
+#import "CKSegmentedViewController.h"
