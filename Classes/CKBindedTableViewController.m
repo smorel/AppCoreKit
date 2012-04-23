@@ -504,7 +504,12 @@
     CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
     controller.sizeHasBeenQueriedByTableView = YES;
     if(controller.invalidatedSize){
-        CGSize size = [controller computeSize];
+        CGSize size;
+        if(controller.sizeBlock){
+            size = controller.sizeBlock(controller);
+        }else{
+            [controller computeSize];
+        }
         [controller setSize:size notifyingContainerForUpdate:NO];
     }
     return controller.size;

@@ -299,6 +299,7 @@
 @synthesize editingAccessoryView = _editingAccessoryView;
 @synthesize selectionStyle = _selectionStyle;
 @synthesize invalidatedSize = _invalidatedSize;
+@synthesize sizeBlock = _sizeBlock;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -346,7 +347,9 @@
 	_accessoryView = nil;
     [_editingAccessoryView release];
 	_editingAccessoryView = nil;
-	
+	[_sizeBlock release];
+    _sizeBlock = nil;
+    
 	[super dealloc];
 }
 

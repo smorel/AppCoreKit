@@ -252,10 +252,6 @@
 		7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */; };
 		7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBEE13B8ED3600268D13 /* CKPickerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBEF13B8ED3600268D13 /* CKPickerView.m */; };
-		7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */; };
-		7560DD4513B8ED3600268D13 /* CKSlideshowViewControllerDep.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD4613B8ED3600268D13 /* CKSlideshowViewControllerDep.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBF913B8ED3600268D13 /* CKSlideshowViewControllerDep.m */; };
 		7560DD4B13B8ED3600268D13 /* CKStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBFE13B8ED3600268D13 /* CKStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBFF13B8ED3600268D13 /* CKStore.m */; };
 		7560DD4D13B8ED3600268D13 /* CKStoreDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0013B8ED3600268D13 /* CKStoreDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -472,6 +468,8 @@
 		9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */; };
 		9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8CD1545C56200F07C5A /* CKObjectGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8CE1545C56200F07C5A /* CKObjectGraph.m */; };
+		9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -772,10 +770,6 @@
 		7560DBE713B8ED3600268D13 /* CKOptionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKOptionTableViewController.m; path = Classes/CKOptionTableViewController.m; sourceTree = "<group>"; };
 		7560DBEE13B8ED3600268D13 /* CKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPickerView.h; path = Classes/CKPickerView.h; sourceTree = "<group>"; };
 		7560DBEF13B8ED3600268D13 /* CKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPickerView.m; path = Classes/CKPickerView.m; sourceTree = "<group>"; };
-		7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewController.h; path = Classes/CKSlideshowViewController.h; sourceTree = "<group>"; };
-		7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewController.m; path = Classes/CKSlideshowViewController.m; sourceTree = "<group>"; };
-		7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideshowViewControllerDep.h; path = Classes/CKSlideshowViewControllerDep.h; sourceTree = "<group>"; };
-		7560DBF913B8ED3600268D13 /* CKSlideshowViewControllerDep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideshowViewControllerDep.m; path = Classes/CKSlideshowViewControllerDep.m; sourceTree = "<group>"; };
 		7560DBFE13B8ED3600268D13 /* CKStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStore.h; path = Classes/CKStore.h; sourceTree = "<group>"; };
 		7560DBFF13B8ED3600268D13 /* CKStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKStore.m; path = Classes/CKStore.m; sourceTree = "<group>"; };
 		7560DC0013B8ED3600268D13 /* CKStoreDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKStoreDataSource.h; path = Classes/CKStoreDataSource.h; sourceTree = "<group>"; };
@@ -996,6 +990,8 @@
 		9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKSuffixTree+Generator.mm"; path = "Classes/CKSuffixTree+Generator.mm"; sourceTree = "<group>"; };
 		9600B8CD1545C56200F07C5A /* CKObjectGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectGraph.h; path = Classes/CKObjectGraph.h; sourceTree = "<group>"; };
 		9600B8CE1545C56200F07C5A /* CKObjectGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectGraph.m; path = Classes/CKObjectGraph.m; sourceTree = "<group>"; };
+		9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSlideShowViewController.h; path = Classes/CKSlideShowViewController.h; sourceTree = "<group>"; };
+		9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSlideShowViewController.m; path = Classes/CKSlideShowViewController.m; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
@@ -2006,14 +2002,12 @@
 				757578FA13E71C000082C247 /* CKSheetController.m */,
 				75CC16BF13F32B4500835FE3 /* CKPopoverController.h */,
 				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
-				7560DBF613B8ED3600268D13 /* CKSlideshowViewController.h */,
-				7560DBF713B8ED3600268D13 /* CKSlideshowViewController.m */,
-				7560DBF813B8ED3600268D13 /* CKSlideshowViewControllerDep.h */,
-				7560DBF913B8ED3600268D13 /* CKSlideshowViewControllerDep.m */,
 				7560DC6613B8ED3600268D13 /* CKWebViewController.h */,
 				7560DC6713B8ED3600268D13 /* CKWebViewController.m */,
 				7560DC6813B8ED3600268D13 /* CKWebViewControllerRef.h */,
 				7560DC6913B8ED3600268D13 /* CKWebViewControllerRef.m */,
+				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
+				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2186,8 +2180,6 @@
 				7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */,
 				7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */,
 				7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */,
-				7560DD4313B8ED3600268D13 /* CKSlideshowViewController.h in Headers */,
-				7560DD4513B8ED3600268D13 /* CKSlideshowViewControllerDep.h in Headers */,
 				7560DD4B13B8ED3600268D13 /* CKStore.h in Headers */,
 				7560DD4D13B8ED3600268D13 /* CKStoreDataSource.h in Headers */,
 				7560DD5113B8ED3600268D13 /* CKStoreExplorer.h in Headers */,
@@ -2338,6 +2330,7 @@
 				9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */,
 				9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */,
 				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
+				9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2549,8 +2542,6 @@
 				7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,
 				7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */,
-				7560DD4413B8ED3600268D13 /* CKSlideshowViewController.m in Sources */,
-				7560DD4613B8ED3600268D13 /* CKSlideshowViewControllerDep.m in Sources */,
 				7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */,
 				7560DD4E13B8ED3600268D13 /* CKStoreDataSource.m in Sources */,
 				7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */,
@@ -2681,6 +2672,7 @@
 				9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */,
 				9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */,
 				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
+				9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

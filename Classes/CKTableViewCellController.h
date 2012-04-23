@@ -79,6 +79,8 @@ typedef enum CKTableViewCellStyle {
 } CKTableViewCellStyle;           
 
 
+typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* controller);
+
 /** TODO
  */
 @interface CKTableViewCellController : CKItemViewController
@@ -96,6 +98,8 @@ typedef enum CKTableViewCellStyle {
 @property (nonatomic) UITableViewCellAccessoryType   editingAccessoryType;
 @property (nonatomic,retain) UIView                 *editingAccessoryView;
 @property (nonatomic) UITableViewCellSelectionStyle  selectionStyle;
+
+@property (nonatomic,copy) CKTableViewCellControllerSizeBlock sizeBlock;
 
 @property (nonatomic, readonly) UITableViewCell *tableViewCell;
 - (CKTableViewController*)parentTableViewController;

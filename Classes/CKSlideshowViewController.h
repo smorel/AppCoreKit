@@ -1,61 +1,52 @@
 //
-//  CKSlideshowViewController.h
+//  CKSlideShowViewController.h
 //  CloudKit
 //
-//  Created by Olivier Collet on 09-12-01.
-//  Copyright 2009 WhereCloud Inc. All rights reserved.
+//  Created by Sebastien Morel on 11-12-08.
+//  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+/* StyleSheet example for CKSlideshowController2 :
 
-#import "CKImageView.h"
-#import "CKUIViewController.h"
-
-
-/** TODO
- */
-@interface CKSlideshowViewController : CKUIViewController {
-	id _delegate;
-	NSArray *imagesPaths; // Contains the paths to the images
-	IBOutlet UIView *_imageContainerView;
-	CKImageView *leftImageView;
-	CKImageView *currentImageView;
-	CKImageView *rightImageView;	
-	NSUInteger _currentImageIndex;
-	BOOL swiping;
-	BOOL animating;
-	CGFloat swipeStartX;
-	UIBarButtonItem *previousButton;
-	UIBarButtonItem *nextButton;
-	BOOL useModalStyle;
-	BOOL canHideControls;
+"CKSlideShowViewController" : {
+    "UINavigationController" : {
+        "navigationBar" : {
+            "backgroundImage" : "CRAP", //this force to have no background image if 1 has been previously set on the navigation bar
+            "barStyle" : "UIBarStyleBlackTranslucent",
+            "backBarButtonItem" : {
+                "@inherits" : [ "UIBarButtonItem" ],
+                "defaultBackgroundImage" : ["button_header_left","15 0"],
+                "highlightedBackgroundImage" : ["button_header_left-highlight","15 0"],
+                "fontName" : "Helvetica-Bold",
+                "fontSize" : "13",
+                "defaultTextColor" : "whiteColor",
+                "height" : "30",
+                "contentEdgeInsets" : "-2 17 0 10"
+            }
+        },
+        
+        "UIToolbar" : {
+            "backgroundImage" : "CRAP", //this force to have no background image if 1 has been previously set on the toolbar
+            "barStyle" : "UIBarStyleBlackTranslucent"
+        }
+    },
+    "UITableView" : {
+        "backgroundColor" : "blackColor",
+        "separatorStyle" : "UITableViewCellSeparatorStyleNone"
+    }
 }
+*/
 
-@property (nonatomic, assign) id delegate;
+#import "CKBindedTableViewController.h"
+
+@interface CKSlideShowViewController : CKBindedTableViewController
 @property (nonatomic, assign) BOOL shouldHideControls;
-@property (nonatomic, assign) BOOL useModalStyle;
-@property (nonatomic, readonly) NSUInteger currentImageIndex;
 
-- (id)initWithImagePaths:(NSArray *)paths startAtIndex:(NSUInteger)index;
-- (id)initWithImagePaths:(NSArray *)paths;
-- (void)showControls;
-- (void)hideControls;
+- (id)initWithCollection:(CKCollection *)collection;
+- (id)initWithCollection:(CKCollection *)collection factory:(CKItemViewControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
+- (id)initWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex;
 
-@end
-
-//
-
-/** TODO
- */
-@protocol CKSlideshowViewControllerDelegate
-
-- (NSUInteger)numberOfImagesInSlideshowView:(CKSlideshowViewController *)slideshowController;
-- (NSURL *)slideshowViewController:(CKSlideshowViewController *)slideshowController URLForImageAtIndex:(NSUInteger)index;
-
-@optional
-- (void)slideshowViewController:(CKSlideshowViewController *)slideshowController imageDidAppearAtIndex:(NSUInteger)index;
+- (id)initWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex;
+- (id)initWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex;
 
 @end
-
-//
