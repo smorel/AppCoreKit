@@ -56,7 +56,7 @@
         else{
             CKClassPropertyDescriptor* descriptor = [property descriptor];
             if(descriptor == nil || descriptor.propertyType == CKClassPropertyDescriptorTypeObject){
-                id value = [property value];
+                /*id value = [property value];
                 if(descriptor == nil && [value isKindOfClass:[NSValue class]]){
                     id nonRetainedValue = [value nonretainedObjectValue];
                     if(nonRetainedValue){
@@ -65,6 +65,17 @@
                 }
                 
                 Class propertyType = value ? [value class] : (descriptor ? descriptor.type : nil);
+                 */
+                
+                Class propertyType = descriptor ? descriptor.type : nil;
+                id value = [property value];
+                if(descriptor == nil && [value isKindOfClass:[NSValue class]]){
+                    id nonRetainedValue = [value nonretainedObjectValue];
+                    if(nonRetainedValue){
+                        value = nonRetainedValue;
+                    }
+                    propertyType = [value class];
+                }
                 
                 if([NSObject isClass:propertyType kindOfClass:[NSString class]]){
                     if(attributes.multiLineEnabled){
