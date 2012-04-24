@@ -188,7 +188,7 @@ void introspectTextInputsProperties(){
 			return YES;
 		Class p = class_getSuperclass(type);
 		if(p)
-			return [NSObject isClass:p exactKindOfClass:parentType];
+			return [NSObject isClass:p kindOfClass:parentType];
 		return NO;
 	}
 	return YES;
