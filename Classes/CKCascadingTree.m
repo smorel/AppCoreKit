@@ -610,7 +610,7 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 	
 	//Cascading
 	NSMutableDictionary* parentDico = [self parentDictionary];
-	if(parentDico){
+	if(parentDico && parentDico != self){
 		NSMutableDictionary* foundDico = [parentDico _dictionaryForObjectWithCascading:object propertyName:propertyName];
 		if(foundDico){
 			return foundDico;

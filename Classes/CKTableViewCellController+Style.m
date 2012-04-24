@@ -138,6 +138,10 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (NSMutableDictionary*)controllerStyle{
+    if(!self.containerController){
+        return nil;
+    }
+    
 	NSMutableDictionary* parentControllerStyle = [[CKStyleManager defaultManager] styleForObject:self.containerController  propertyName:nil];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
     
