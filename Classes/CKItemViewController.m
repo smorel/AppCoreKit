@@ -43,7 +43,7 @@
 @synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
 @synthesize targetRef = _targetRef;
 
-@synthesize flags;
+@synthesize flags = _flags;
 @synthesize size = _size;
 
 - (void)dealloc {
@@ -80,8 +80,8 @@
 }
 
 - (void)postInit{
-    self.flags = CKItemViewFlagAll;
-    self.size = CGSizeMake(320,44);
+    _flags = CKItemViewFlagAll;
+    _size = CGSizeMake(320,44);
 }
 
 - (void)setSize:(CGSize)s{

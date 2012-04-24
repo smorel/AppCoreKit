@@ -12,6 +12,8 @@
 #import "CKItemViewContainerController.h"
 
 @interface CKTableView : UITableView
+@property(nonatomic,assign) BOOL sizeChangedWhileReloading;
+@property(nonatomic,assign) BOOL isLayouting;
 @end
 
 typedef enum {

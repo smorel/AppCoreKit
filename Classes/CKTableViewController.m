@@ -12,6 +12,7 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CKTableView()
 @property (nonatomic,assign) NSInteger numberOfUpdates;
@@ -20,9 +21,13 @@
 
 @implementation CKTableView
 @synthesize numberOfUpdates;
+@synthesize sizeChangedWhileReloading;
+@synthesize isLayouting;
 
 - (void)postInit{
     self.numberOfUpdates = 0;
+    self.sizeChangedWhileReloading = NO;
+    self.isLayouting = NO;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
@@ -65,6 +70,25 @@
     }
 }
 
+- (void)layoutSubviews{
+    self.isLayouting = YES;
+    [super layoutSubviews];
+    self.isLayouting = NO;
+    
+    if(self.sizeChangedWhileReloading){
+        [CATransaction begin];
+        [CATransaction 
+         setValue: [NSNumber numberWithBool: YES]
+         forKey: kCATransactionDisableActions];
+        
+        [self beginUpdates];
+        [self endUpdates];
+        self.sizeChangedWhileReloading = NO;
+        
+        [CATransaction commit];
+    }
+}
+
 @end
 
 
@@ -74,6 +98,7 @@
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, assign) BOOL sizeIsAlreadyInvalidated;
 @property (nonatomic, assign) BOOL lockSizeChange;
+@property (nonatomic, assign) BOOL isReloading;
 @end
 
 
@@ -90,6 +115,7 @@
 @synthesize tableViewHasBeenReloaded;
 @synthesize sizeIsAlreadyInvalidated;
 @synthesize lockSizeChange;
+@synthesize isReloading;
 
 - (void)postInit {
 	[super postInit];
@@ -99,6 +125,7 @@
     self.tableViewInsets = UIEdgeInsetsMake(0,0,0,0);
     self.sizeIsAlreadyInvalidated = NO;
     self.lockSizeChange = NO;
+    self.isReloading = NO;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style { 
@@ -259,7 +286,9 @@
 		return;
     }
 	
+    self.isReloading = YES;
 	[self.tableView reloadData];
+    self.isReloading = NO;
 }
 
 - (void)setObjectController:(id)controller{
@@ -362,7 +391,8 @@
 }
 
 - (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    if(self.state == CKUIViewControllerStateWillAppear || self.lockSizeChange){
+    if(self.tableView.isLayouting || self.lockSizeChange){
+        self.tableView.sizeChangedWhileReloading = YES;
         return;
     }
     
