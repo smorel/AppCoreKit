@@ -369,7 +369,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     //QUERY STYLESHEETS
     
     NSMutableDictionary* currentStyle = [self controllerStyle];
-    if(![currentStyle isEmpty]){
+    if(currentStyle && ![currentStyle isEmpty]){
         id currentObject = self;
         
         NSArray* components = [keyPath componentsSeparatedByString:@"."];

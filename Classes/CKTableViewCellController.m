@@ -375,7 +375,7 @@
 
 - (CKTableViewCellStyle)cellStyle{
     NSMutableDictionary* style = [self controllerStyle];
-    if(![style isEmpty]){
+    if(style && ![style isEmpty]){
         if([style containsObjectForKey:CKStyleCellType]){
             return [style cellStyle];
         }
