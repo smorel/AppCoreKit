@@ -1334,7 +1334,6 @@
 				7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */,
 				7528070913D4B35F0010A300 /* CellControllers */,
 				7577DFE813E2EE4E0065E098 /* Form */,
-				75AD5D8A144C687E0008F53A /* Inline Debugger */,
 			);
 			name = Tables;
 			sourceTree = "<group>";
@@ -1737,6 +1736,7 @@
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Network */,
 				7506E40F13B9022700EE1471 /* Support */,
+				75AD5D8A144C687E0008F53A /* Inline Debugger */,
 				96E4D3FD15407D2700CCF421 /* UnitTests */,
 			);
 			name = Classes;

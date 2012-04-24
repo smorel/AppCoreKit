@@ -171,7 +171,7 @@
 	}
 	else{
         CKFormTableViewController* debugger = [[thevalue class]inlineDebuggerForObject:thevalue];
-        debugger.title = self.tableViewCell.textLabel.text;
+        debugger.title = self.tableViewCell.text;
 		[self.containerController.navigationController pushViewController:debugger animated:YES];
 	}
 }

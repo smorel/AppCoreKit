@@ -42,6 +42,7 @@
             
             CKTableViewCellController* itemControllerCell = [CKTableViewCellController cellControllerWithTitle:title subtitle:subtitle action:^(CKTableViewCellController* controller){
                 CKFormTableViewController* controllerForm = [[bItemController class]inlineDebuggerForObject:bItemController];
+                controllerForm.title = title;
                 [bDebugger.navigationController pushViewController:controllerForm animated:YES];
             }];
             

@@ -208,6 +208,7 @@
     
     CKTableViewCellController* hierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Hierarchy" action:^(CKTableViewCellController* controller){
         CKFormTableViewController* hierarchyController = [UIView inlineDebuggerForSubViewsOfView:(UIView*)object];
+        hierarchyController.title = @"Hierarchy";
         [bController.navigationController pushViewController:hierarchyController animated:YES];
     }];
     [superViewSection addCellController:hierarchyCell];

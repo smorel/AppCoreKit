@@ -704,7 +704,8 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
             }
             [fullPath insertString:nodeName atIndex:0];
         }
-        currentDico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+        NSMutableDictionary* newdico = [[currentDico objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+        currentDico = (newdico == currentDico) ? nil : newdico;
     }
     return fullPath;
 }

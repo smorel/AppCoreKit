@@ -28,6 +28,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 @interface CKUIViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
+@property(nonatomic,retain) NSString* navigationTitleBindingContext;
 @property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
 @property (nonatomic, assign, readwrite) CKUIViewControllerState state;
@@ -46,6 +47,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize rightButton = _rightButton;
 @synthesize leftButton = _leftButton;
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
+@synthesize navigationTitleBindingContext = _navigationTitleBindingContext;
 @synthesize supportedInterfaceOrientations;
 @synthesize inlineDebuggerController = _inlineDebuggerController;
 @synthesize deallocBlock = _deallocBlock;
@@ -74,6 +76,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 - (void)postInit {	
     self.styleHasBeenApplied = NO;
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
+    self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
 }
 
@@ -104,6 +107,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)dealloc{
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     [self clearBindingsContext];
     
     if(_deallocBlock){
@@ -128,6 +132,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_inlineDebuggerController = nil;
     [_deallocBlock release];
     _deallocBlock = nil;
+    [_navigationTitleBindingContext release];
+    _navigationTitleBindingContext = nil;
     
 	[super dealloc];
 }
@@ -365,6 +371,24 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         self.navigationItem.titleView = nil;
         [view applyStyle:navBarStyle propertyName:@"titleView"];
         self.navigationItem.titleView = view;
+    }else{
+        UILabel* label = [[[UILabel alloc]init]autorelease];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+        label.text = self.title;
+        
+        self.navigationItem.titleView = label;
+        [label applyStyle:navBarStyle propertyName:@"titleView"];
+        
+        [label sizeToFit];
+        
+        __block UILabel* blabel = label;
+        [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [self bind:@"title" withBlock:^(id value) {
+            blabel.text = value;
+            [blabel sizeToFit];
+        }];
+        [NSObject endBindingsContext];
     }
     
     [CATransaction commit];
