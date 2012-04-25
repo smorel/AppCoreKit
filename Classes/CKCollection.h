@@ -17,7 +17,7 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 
 /** TODO : Implements fast enumeration protocol
  */
-@interface CKCollection : CKObject<CKFeedSourceDelegate> {
+@interface CKCollection : NSObject<NSCopying,CKFeedSourceDelegate> {
 	CKFeedSource* _feedSource;
 	id _delegate;
 	NSInteger _count;
@@ -33,6 +33,8 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 @property (nonatomic,copy) CKCollectionClearBlock clearBlock;
 @property (nonatomic,copy) CKCollectionFetchBlock startFetchingBlock;
 @property (nonatomic,copy) CKCollectionBlock endFetchingBlock;
+
++ (id)object;
 
 - (id)initWithFeedSource:(CKFeedSource*)source;
 
@@ -51,6 +53,9 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 - (void)fetchRange:(NSRange)range;
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate;
+
+//private
+- (void)postInit;
 
 @end
 

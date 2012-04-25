@@ -17,29 +17,56 @@
 @synthesize delegate = _delegate;
 @synthesize count = _count;
 
-@synthesize addObjectsBlock;
-@synthesize removeObjectsBlock;
-@synthesize replaceObjectBlock;
-@synthesize clearBlock;
-@synthesize startFetchingBlock;
-@synthesize endFetchingBlock;
+@synthesize addObjectsBlock = _addObjectsBlock;
+@synthesize removeObjectsBlock = _removeObjectsBlock;
+@synthesize replaceObjectBlock = _replaceObjectBlock;
+@synthesize clearBlock = _clearBlock;
+@synthesize startFetchingBlock = _startFetchingBlock;
+@synthesize endFetchingBlock = _endFetchingBlock;
+
+- (void)postInit{
+	self.count = 0;
+}
 
 - (id)init{
 	[super init];
-	self.count = 0;
+    [self postInit];
 	return self;
 }
 
+- (void)dealloc{
+    if(_feedSource){
+        _feedSource.delegate = nil;
+        [_feedSource cancelFetch];
+    }
+    [_feedSource release];
+    _feedSource = nil;
+    [_addObjectsBlock release];
+    _addObjectsBlock = nil;
+    [_removeObjectsBlock release];
+    _removeObjectsBlock = nil;
+    [_replaceObjectBlock release];
+    _replaceObjectBlock = nil;
+    [_clearBlock release];
+    _clearBlock = nil;
+    [_startFetchingBlock release];
+    _startFetchingBlock = nil;
+    [_endFetchingBlock release];
+    _endFetchingBlock = nil;
+    [super dealloc];
+}
 
 - (id)initWithFeedSource:(CKFeedSource*)source{
 	[super init];
 	self.feedSource = source;
+    [self postInit];
 	return self;
 }
 
 - (void)setFeedSource:(CKFeedSource *)thefeedSource{
     if(_feedSource){
         _feedSource.delegate = nil;
+        [_feedSource cancelFetch];
         [_feedSource release];
     }
     
@@ -150,6 +177,17 @@
 	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:fetchDidFailWithError:)]) {
 		[_delegate documentCollection:self fetchDidFailWithError:error];
 	}
+}
+
+
++ (id)object{
+	return [[[[self class]alloc]init]autorelease];
+}
+
+- (id) copyWithZone:(NSZone *)zone{
+	id copied = [[[self class] alloc] init];
+    [copied copyPropertiesFromObject:self];
+	return copied;
 }
 
 /*
