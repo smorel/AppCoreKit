@@ -382,11 +382,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         [label sizeToFit];
         
-        __block UILabel* blabel = label;
         [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         [self bind:@"title" withBlock:^(id value) {
-            blabel.text = value;
-            [blabel sizeToFit];
+            label.text = value;
+            [label sizeToFit];
         }];
         [NSObject endBindingsContext];
     }
