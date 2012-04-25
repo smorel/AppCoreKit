@@ -22,7 +22,7 @@
         if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
             for(UIBarButtonItem* item in toolbar.items){
                 NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
-                [item applySubViewsStyle:itemStyle appliedStack:appliedStack delegate:delegate];
+                [item applyStyle:itemStyle];
             }
             return YES;
         }
@@ -34,8 +34,15 @@
                     UIImage* image = [style backgroundImage];
                     [toolbar setBackgroundImage:image forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
                 }
+                [[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
                 [appliedStack addObject:view];
-                [view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
+                
+                for(UIBarButtonItem* item in toolbar.items){
+                    NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
+                    [item applyStyle:itemStyle];
+                }
+                
+                //[view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
                 return YES;
             }
         }
