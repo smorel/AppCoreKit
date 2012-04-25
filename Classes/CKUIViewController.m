@@ -459,6 +459,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         _viewDidDisappearBlock(self,animated);
     }
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+    [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     [self.inlineDebuggerController stop];
 }
 
@@ -498,6 +499,11 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
        && (self.supportedInterfaceOrientations & CKInterfaceOrientationLandscape))
         return YES;
     return NO;
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self applyStyleForNavigation];
 }
 
 - (BOOL)viewIsOnScreen{
