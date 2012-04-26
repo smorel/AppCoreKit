@@ -79,7 +79,7 @@
 
 	// Set up the WebView
 	
-	self.webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+	self.webView = [[[UIWebView alloc] initWithFrame:self.view.bounds]autorelease];
 	self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.webView.scalesPageToFit = YES;
 	self.webView.delegate = self;

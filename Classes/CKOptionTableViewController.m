@@ -93,9 +93,9 @@
 
 
 - (void)dealloc {
-	[self.values release];
-	[self.labels release];
-	[self.selectedIndexes release];
+	[_values release];
+	[_labels release];
+	[_selectedIndexes release];
     [super dealloc];
 }
 

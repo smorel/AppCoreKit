@@ -166,12 +166,18 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 }
 
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName{
+    if([[CKStyleManager defaultManager]tree] == nil || [[[CKStyleManager defaultManager]tree]isEmpty])
+        return nil;
+    
 	NSMutableDictionary* myViewStyle = [style styleForObject:self propertyName:propertyName];
 	[[self class] applyStyle:myViewStyle toView:self appliedStack:[NSMutableSet set] delegate:nil];
     return myViewStyle;
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view propertyName:(NSString*)propertyName appliedStack:(NSMutableSet*)appliedStack{
+    if([[CKStyleManager defaultManager]tree] == nil || [[[CKStyleManager defaultManager]tree]isEmpty])
+        return NO;
+    
 	NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:propertyName];
 	return [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack  delegate:nil];
 }

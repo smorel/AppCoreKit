@@ -21,6 +21,9 @@ static NSInteger kLogEnabled = -1;
 }
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
+    if(self.tree == nil || [self.tree isEmpty])
+        return nil;
+    
 	return [self dictionaryForObject:object propertyName:propertyName];
 }
 
@@ -51,6 +54,9 @@ static NSInteger kLogEnabled = -1;
 @implementation NSMutableDictionary (CKStyleManager)
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
+    if([[CKStyleManager defaultManager]tree] == nil || [[[CKStyleManager defaultManager]tree]isEmpty])
+        return nil;
+    
     return [self dictionaryForObject:object propertyName:propertyName];
 }
 
