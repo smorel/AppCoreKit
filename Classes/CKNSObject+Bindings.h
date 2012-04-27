@@ -43,7 +43,10 @@ typedef enum CKBindingsContextOptions{
 + (void)removeAllBindingsForContext:(id)context;
 
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath;
+
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block;
+- (void)bind:(NSString *)keyPath byExecutingBlockNow:(BOOL)execute withBlock:(void (^)(id value))block;
+
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
 
 - (void)beginBindingsContextByKeepingPreviousBindings;

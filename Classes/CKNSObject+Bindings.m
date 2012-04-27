@@ -13,6 +13,10 @@
 #import "CKNotificationBlockBinder.h"
 #import "CKDataBlockBinder.h"
 
+@interface CKDataBlockBinder()
+- (void)executeWithValue:(id)value;
+@end
+
 @interface CKBindingsManager ()
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
@@ -171,6 +175,10 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block{
+    [self bind:keyPath byExecutingBlockNow:NO withBlock:block];
+}
+
+- (void)bind:(NSString *)keyPath byExecutingBlockNow:(BOOL)execute withBlock:(void (^)(id value))block{
     [NSObject validateCurrentBindingsContext];
     
 	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBlockBinder class]];
@@ -180,7 +188,12 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
+    
+    if(execute){
+        [binder executeWithValue:[self valueForKeyPath:keyPath]];
+    }
 }
+
 
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
