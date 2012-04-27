@@ -55,16 +55,31 @@
 - (void)setupLabelsAndValues{
     CKProperty* property = [self objectProperty];
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    
     NSDictionary* valuesAndLabels = nil;
     if(attributes.valuesAndLabels) valuesAndLabels = attributes.valuesAndLabels;
     else if(attributes.enumDescriptor) valuesAndLabels = attributes.enumDescriptor.valuesAndLabels;
 
     NSAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
-    NSArray* orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSString* str1 = _(obj1);
-        NSString* str2 = _(obj2);
-        return [str1 compare:str2];
-    }];
+    CKOptionPropertyCellControllerSortingBlock sortingBlock = attributes.sortingBlock;
+    NSArray* orderedLabels = nil;
+    if(sortingBlock){
+        orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSString* str1 = obj1;
+            NSString* str2 = obj2;
+            id value1 = [valuesAndLabels objectForKey:str1];
+            id value2 = [valuesAndLabels objectForKey:str2];
+            
+            return sortingBlock(value1,_(str1),value2,_(str2));
+        }];
+    }
+    else{
+        orderedLabels = [[valuesAndLabels allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSString* str1 = _(obj1);
+            NSString* str2 = _(obj2);
+            return [str1 compare:str2];
+        }];
+    }
     
     NSMutableArray* orderedValues = [NSMutableArray array];
     for(NSString* label in orderedLabels){

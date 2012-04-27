@@ -62,8 +62,11 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
 @end
 
 
+typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value1, NSString* label1,id value2, NSString* label2);
+
 @interface CKPropertyExtendedAttributes (CKOptionPropertyCellController)
 
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
+@property (nonatomic, copy) CKOptionPropertyCellControllerSortingBlock sortingBlock;
 
 @end

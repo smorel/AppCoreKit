@@ -221,6 +221,7 @@
 
 @implementation CKPropertyExtendedAttributes (CKOptionPropertyCellController)
 @dynamic multiSelectionEnabled;
+@dynamic sortingBlock;
 
 - (void)setMultiSelectionEnabled:(BOOL)multiSelectionEnabled{
     [self.attributes setObject:[NSNumber numberWithBool:multiSelectionEnabled] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
@@ -230,6 +231,14 @@
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
     if(value) return [value boolValue];
     return NO;
+}
+
+- (void)setSortingBlock:(CKOptionPropertyCellControllerSortingBlock)block{
+    [self.attributes setObject:[block copy] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_sortingBlock"];
+}
+
+- (CKOptionPropertyCellControllerSortingBlock)sortingBlock{
+    return [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_sortingBlock"];
 }
 
 @end
