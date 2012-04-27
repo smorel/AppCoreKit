@@ -270,6 +270,8 @@
 	[super viewWillDisappear:animated];
 	if (self.stickySelection == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
 	else self.selectedIndexPath = [self.tableView indexPathForSelectedRow];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
 }
 
 #pragma mark Selection
