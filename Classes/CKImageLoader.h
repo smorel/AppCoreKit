@@ -14,6 +14,10 @@
  */
 extern NSString * const CKImageLoaderErrorDomain;
 
+@class CKImageLoader;
+typedef void(^CKImageLoaderCompletionBlock)(CKImageLoader* imageLoader, UIImage* image, BOOL loadedFromCache);
+typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* error);
+
 
 /** TODO
  */
@@ -25,6 +29,8 @@ extern NSString * const CKImageLoaderErrorDomain;
 
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) NSURL *imageURL;
+@property (nonatomic, copy) CKImageLoaderCompletionBlock completionBlock;
+@property (nonatomic, copy) CKImageLoaderErrorBlock errorBlock;
 
 - (id)initWithDelegate:(id)delegate;
 - (void)loadImageWithContentOfURL:(NSURL *)url;

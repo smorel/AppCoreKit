@@ -26,6 +26,8 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 @synthesize delegate = _delegate;
 @synthesize request = _request;
 @synthesize imageURL = _imageURL;
+@synthesize completionBlock = _completionBlock;
+@synthesize errorBlock = _errorBlock;
 
 - (id)initWithDelegate:(id)delegate {
 	if (self = [super init]) {
@@ -38,6 +40,8 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 - (void)dealloc {
 	[self cancel];
 	self.imageURL = nil;
+    [_completionBlock release];
+    [_errorBlock release];
 	[super dealloc];
 }
 
@@ -59,6 +63,9 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 	
 	UIImage *image = [CKImageLoader imageForURL:url];
 	if (image) {
+        if(_completionBlock){
+            _completionBlock(self,image,YES);
+        }
 		[self.delegate imageLoader:self didLoadImage:image cached:YES];
 	} else {
 		//CHECK if url is web or disk and load from disk if needed ...
@@ -66,6 +73,9 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 			if(![[NSFileManager defaultManager] fileExistsAtPath:[self.imageURL path]] ){
 				NSDictionary *userInfo = [NSDictionary dictionaryWithObject:_(@"Could not find image file on disk") forKey:NSLocalizedDescriptionKey];
 				NSError *error = [NSError errorWithDomain:CKImageLoaderErrorDomain code:1 userInfo:userInfo];
+                if(_errorBlock){
+                    _errorBlock(self,error);
+                }
 				if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
 					[self.delegate imageLoader:self didFailWithError:error];
 				}
@@ -74,6 +84,9 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 			else{
 				image = [UIImage imageWithContentsOfFile:[self.imageURL path]];
 				if (image) {
+                    if(_completionBlock){
+                        _completionBlock(self,image,YES);
+                    }
 					[self.delegate imageLoader:self didLoadImage:image cached:YES];
 				}
 			}
@@ -98,6 +111,9 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 - (void)request:(id)request didReceiveValue:(id)value {
 	if ([value isKindOfClass:[UIImage class]]) {
+        if(_completionBlock){
+            _completionBlock(self,(UIImage*)value,YES);
+        }
 		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
 			[self.delegate imageLoader:self didLoadImage:(UIImage*)value cached:NO];
 		}
@@ -105,7 +121,12 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 		// Throws an error if the value is not an image
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:_(@"Did not receive an image") forKey:NSLocalizedDescriptionKey];
 		NSError *error = [NSError errorWithDomain:CKImageLoaderErrorDomain code:0 userInfo:userInfo];
-		[self.delegate imageLoader:self didFailWithError:error];
+        if(_errorBlock){
+            _errorBlock(self,error);
+        }
+		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
+            [self.delegate imageLoader:self didFailWithError:error];
+        }
 	}
 	
 	//Delete the request not to cancel it later
@@ -114,7 +135,12 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 }
 
 - (void)request:(id)request didFailWithError:(NSError *)error {
-	[self.delegate imageLoader:self didFailWithError:error];
+    if(_errorBlock){
+        _errorBlock(self,error);
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
+        [self.delegate imageLoader:self didFailWithError:error];
+    }
 	//Delete the request not to cancel it later
 	//self.request.delegate = nil;
 	//elf.request = nil;
