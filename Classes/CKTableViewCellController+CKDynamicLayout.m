@@ -265,17 +265,39 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 //CKTableViewCellStyleSubtitle2
 
+- (CGFloat)subtitleHeightForText:(NSString*)text textStyle:(NSDictionary*)textStyle image:(UIImage*)image{
+    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
+    CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
+    
+    CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
+    return size.height;
+}
+
 - (CGRect)subtitleTextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
     /*
     TODO : Take care of indentation level !
     Take care of image
     */
+    
+    CGFloat textHeight = [self subtitleHeightForText:text textStyle:textStyle image:image];
+    CGFloat detailTextHeight = [self subtitleHeightForText:detailText textStyle:detailTextStyle image:image];
+    
+    BOOL hasText = !(text == nil || [text isKindOfClass:[NSNull class]] || [text length] <= 0);
+    BOOL hasDetailText = !(detailText == nil || [detailText isKindOfClass:[NSNull class]] || [detailText length] <= 0);
+    
+    CGFloat textGlobalHeight = self.contentInsets.top + (hasText ? (textHeight + self.componentsSpace) : 0) + (hasDetailText ? detailTextHeight : 0) + self.contentInsets.bottom;
+    CGFloat imageGlobalHeight = image ? (image.size.height + self.contentInsets.top + self.contentInsets.bottom) : 0;
+    
+    CGFloat yOffset = 0;
+    if(imageGlobalHeight > textGlobalHeight){
+        yOffset = (imageGlobalHeight - textGlobalHeight) / 2;
+    }
 
     CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
-    return CGRectMake(x,self.contentInsets.top, width, size.height);
+    return CGRectMake(x,self.contentInsets.top + yOffset, width, size.height);
 }
 
 
