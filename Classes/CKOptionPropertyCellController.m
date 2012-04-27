@@ -79,7 +79,7 @@
 - (BOOL)multiSelectionEnabled{
     CKProperty* property = [self objectProperty];
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    return (attributes.enumDescriptor && attributes.enumDescriptor.isBitMask);
+    return (attributes.enumDescriptor && attributes.enumDescriptor.isBitMask) || attributes.multiSelectionEnabled;
 }
 
 - (NSString *)labelForValue:(NSInteger)intValue {

@@ -60,3 +60,10 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
 @property (nonatomic, assign) BOOL multiLineEnabled;
 
 @end
+
+
+@interface CKPropertyExtendedAttributes (CKOptionPropertyCellController)
+
+@property (nonatomic, assign) BOOL multiSelectionEnabled;
+
+@end

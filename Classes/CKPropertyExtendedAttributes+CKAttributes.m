@@ -217,3 +217,19 @@
 }
 
 @end
+
+
+@implementation CKPropertyExtendedAttributes (CKOptionPropertyCellController)
+@dynamic multiSelectionEnabled;
+
+- (void)setMultiSelectionEnabled:(BOOL)multiSelectionEnabled{
+    [self.attributes setObject:[NSNumber numberWithBool:multiSelectionEnabled] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
+}
+
+- (BOOL)multiSelectionEnabled{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
+    if(value) return [value boolValue];
+    return NO;
+}
+
+@end
