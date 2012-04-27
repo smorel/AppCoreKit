@@ -175,10 +175,10 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 - (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block{
-    [self bind:keyPath byExecutingBlockNow:NO withBlock:block];
+    [self bind:keyPath executeBlockImmediatly:NO withBlock:block];
 }
 
-- (void)bind:(NSString *)keyPath byExecutingBlockNow:(BOOL)execute withBlock:(void (^)(id value))block{
+- (void)bind:(NSString *)keyPath executeBlockImmediatly:(BOOL)execute withBlock:(void (^)(id value))block{
     [NSObject validateCurrentBindingsContext];
     
 	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBlockBinder class]];
