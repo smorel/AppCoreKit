@@ -20,16 +20,19 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 
 @interface CKSheetController()//PRIVATE
 @property(nonatomic,retain) UIView* sheetView;
+@property(nonatomic,assign, readwrite) BOOL visible;
 @end
 
 @implementation CKSheetController
 @synthesize delegate = _delegate;
 @synthesize contentViewController = _contentViewController;
 @synthesize sheetView = _sheetView;
+@synthesize visible;
 
 - (id)initWithContentViewController:(UIViewController *)viewController{
     self = [super init];
     self.contentViewController = viewController;
+    self.visible = NO;
     return self;
 }
 
@@ -138,6 +141,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
                                                                    CKSheetAnimationCurveUserInfoKey,
                                                                    nil]];
     }
+    
+    self.visible = YES;
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated  causedByKeyboard:(BOOL)causedByKeyboard{
@@ -226,6 +231,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
         self.sheetView = nil;
         [self autorelease];
     }    
+    
+    self.visible = NO;
 }
 
 - (void)dismissSheetAnimated:(BOOL)animated{

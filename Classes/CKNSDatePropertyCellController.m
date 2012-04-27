@@ -14,16 +14,22 @@
 #import "CKPopoverController.h"
 #import "CKUIView+Positioning.h"
 #import "CKTableViewCellController+Responder.h"
+#import "CKWeakRef.h"
 
 //static CKSheetController* CKNSDateSheetControllerSingleton = nil;
 static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
+
+@interface CKNSDateViewController()
+@property(nonatomic,retain) CKWeakRef* delegateRef;
+@end
 
 @implementation CKNSDateViewController
 @synthesize pickerView = _pickerView;
 @synthesize property = _property;
 @synthesize datePicker = _datePicker;
-@synthesize delegate = _delegate;
+@synthesize delegate;
 @synthesize datePickerMode = _datePickerMode;
+@synthesize delegateRef = _delegateRef;
 
 
 - (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -53,13 +59,13 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     [_pickerView release];
     _pickerView = nil;
     
-    if(_delegate){
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
-            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:nil];
+    if(_delegateRef){
+        if(_delegateRef.object && [_delegateRef.object respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [_delegateRef.object performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:nil];
         }
     }
     
-    _delegate = nil;
+    [_delegateRef release];
     [super dealloc];
 }
 
@@ -226,13 +232,17 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     return CGSizeMake(320,height);
 }
 
+- (id)delegate{
+    return [self.delegateRef object];
+}
+
 - (void)setDelegate:(id)thedelegate{
-    if(_delegate){
-        if(_delegate && [_delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
-            [_delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:thedelegate];
+    if(self.delegate){
+        if(self.delegate && [self.delegate respondsToSelector:@selector(dateController:delegateChanged:)]){
+            [self.delegate performSelector:@selector(dateController:delegateChanged:) withObject:self withObject:thedelegate];
         }
     }
-    _delegate = thedelegate;
+    self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
 }
 
 @end
@@ -410,6 +420,13 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             [dateController setProperty:self.value];
             
             [self scrollToRow];
+            
+            //if(!sheetController.visible){
+                UIView* parentView = self.containerController.view;
+                [sheetController showFromRect:[parentView bounds] 
+                                       inView:parentView 
+                                     animated:YES];
+            //}
         }
     }
     else{

@@ -325,7 +325,7 @@
 
 - (UIView*)nextResponder:(UIView*)view{
     if(view == nil){
-        return [view viewWithTag:50000];
+        return [self.tableViewCell viewWithTag:50000];
     }
 	return nil;
 }

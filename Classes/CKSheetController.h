@@ -28,6 +28,7 @@ extern NSString *const CKSheetKeyboardWillShowInfoKey;
 @property(nonatomic,assign) id delegate;
 @property(nonatomic,retain) UIViewController* contentViewController;
 @property(nonatomic,retain, readonly) UIView* sheetView;
+@property(nonatomic,assign, readonly) BOOL visible;
 
 - (id)initWithContentViewController:(UIViewController *)viewController;
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;

@@ -212,7 +212,7 @@
 
 - (UIView*)nextResponder:(UIView*)view{
     if(view == nil){
-        return [view viewWithTag:TEXTFIELD_TAG];
+        return [self.tableViewCell viewWithTag:TEXTFIELD_TAG];
     }
 	return nil;
 }
