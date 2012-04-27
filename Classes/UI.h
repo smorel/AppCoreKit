@@ -28,6 +28,7 @@
 #import "CKFormTableViewController.h"
 #import "CKTableViewCellController+PropertyGrid.h"
 #import "CKTableViewCellController+Menus.h"
+#import "CKViewControllerCellController.h"
 
 #import "CKCollectionCellController.h"
 

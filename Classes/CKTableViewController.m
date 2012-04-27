@@ -128,6 +128,12 @@
     self.isReloading = NO;
 }
 
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewStyle",
+                                                 UITableViewStylePlain,
+                                                 UITableViewStyleGrouped);
+}
+
 - (id)initWithStyle:(UITableViewStyle)style { 
 	self = [super init];
 	if (self) {

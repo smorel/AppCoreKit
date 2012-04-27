@@ -493,6 +493,8 @@
 		9638265C1484013B00A9C98B /* CKFormBindedCollectionSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9638265D1484013B00A9C98B /* CKFormBindedCollectionSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */; };
 		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
+		96445943154869170054F907 /* CKViewControllerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96445941154869170054F907 /* CKViewControllerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96445944154869170054F907 /* CKViewControllerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96445942154869170054F907 /* CKViewControllerCellController.m */; };
 		964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2081153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */; };
 		964C2084153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1030,6 +1032,8 @@
 		9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormBindedCollectionSection.h; path = Classes/CKFormBindedCollectionSection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFormBindedCollectionSection.m; path = Classes/CKFormBindedCollectionSection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96382665148406ED00A9C98B /* CKFormSectionBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormSectionBase_private.h; path = Classes/CKFormSectionBase_private.h; sourceTree = "<group>"; };
+		96445941154869170054F907 /* CKViewControllerCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKViewControllerCellController.h; path = Classes/CKViewControllerCellController.h; sourceTree = "<group>"; };
+		96445942154869170054F907 /* CKViewControllerCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKViewControllerCellController.m; path = Classes/CKViewControllerCellController.m; sourceTree = "<group>"; };
 		964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+CKDynamicLayout.h"; path = "Classes/CKTableViewCellController+CKDynamicLayout.h"; sourceTree = "<group>"; };
 		964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+CKDynamicLayout.m"; path = "Classes/CKTableViewCellController+CKDynamicLayout.m"; sourceTree = "<group>"; };
 		964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+CKBlockBasedInterface.h"; path = "Classes/CKTableViewCellController+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
@@ -1619,6 +1623,8 @@
 				7577DFE513E2EE470065E098 /* CKTableViewCellController+PropertyGrid.m */,
 				75F295DC13EB0088009CCC70 /* CKTableViewCellController+Menus.h */,
 				75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */,
+				96445941154869170054F907 /* CKViewControllerCellController.h */,
+				96445942154869170054F907 /* CKViewControllerCellController.m */,
 				964DAF7F153F2E970024C08F /* CKCollection CellControllers */,
 				75F2960213F04424009CCC70 /* CKProperty CellControllers */,
 				96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */,
@@ -2388,6 +2394,7 @@
 				9600B8E81545CD1F00F07C5A /* CKSegmentedViewController.h in Headers */,
 				9600B8EE1545D88F00F07C5A /* CKDownloader.h in Headers */,
 				9600B8F01545D88F00F07C5A /* CKDownloadManager.h in Headers */,
+				96445943154869170054F907 /* CKViewControllerCellController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2737,6 +2744,7 @@
 				9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */,
 				9600B8EF1545D88F00F07C5A /* CKDownloader.m in Sources */,
 				9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */,
+				96445944154869170054F907 /* CKViewControllerCellController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
