@@ -399,7 +399,7 @@
 }
 
 - (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    if(self.tableView.isLayouting || self.lockSizeChange){
+    if(self.state != CKUIViewControllerStateDidAppear || self.tableView.isLayouting || self.lockSizeChange){
         self.tableView.sizeChangedWhileReloading = YES;
         return;
     }
