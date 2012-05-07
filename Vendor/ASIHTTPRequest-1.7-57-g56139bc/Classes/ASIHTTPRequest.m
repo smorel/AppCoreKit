@@ -13,7 +13,7 @@
 #import "ASIHTTPRequest.h"
 #import <zlib.h>
 #if TARGET_OS_IPHONE
-#import "Reachability.h"
+#import <VendorsKit/VendorsKit.h>
 #import "ASIAuthenticationDialog.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #else

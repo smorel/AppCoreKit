@@ -8,7 +8,7 @@
 
 #import "CKWebService.h"
 
-#import "Reachability.h"
+#import <VendorsKit/VendorsKit.h>
 #import "CKLocalization.h"
 #import "CKAlertView.h"
 
