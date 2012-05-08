@@ -138,8 +138,8 @@
 		7560DCAC13B8ED3600268D13 /* CKFeedSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB5F13B8ED3600268D13 /* CKFeedSource.m */; };
 		7560DCAD13B8ED3600268D13 /* CKFormTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6013B8ED3600268D13 /* CKFormTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCAE13B8ED3600268D13 /* CKFormTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */; };
-		7560DCAF13B8ED3600268D13 /* CKGradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6213B8ED3600268D13 /* CKGradientView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DCB013B8ED3600268D13 /* CKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6313B8ED3600268D13 /* CKGradientView.m */; };
+		7560DCAF13B8ED3600268D13 /* CKStyleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6213B8ED3600268D13 /* CKStyleView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCB013B8ED3600268D13 /* CKStyleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6313B8ED3600268D13 /* CKStyleView.m */; };
 		7560DCB113B8ED3600268D13 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6413B8ED3600268D13 /* CKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6513B8ED3600268D13 /* CKGridView.m */; };
 		7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */; };
@@ -576,7 +576,7 @@
 		75305B7614228EC10003EBB6 /* UITextView+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Introspection.h"; path = "Classes/UITextView+Introspection.h"; sourceTree = "<group>"; };
 		75305B7714228EC10003EBB6 /* UITextView+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Introspection.m"; path = "Classes/UITextView+Introspection.m"; sourceTree = "<group>"; };
 		753178121417E4E4009310A8 /* CKNavigationBar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNavigationBar+Style.h"; path = "Classes/CKNavigationBar+Style.h"; sourceTree = "<group>"; };
-		753178131417E4E4009310A8 /* CKNavigationBar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNavigationBar+Style.m"; path = "Classes/CKNavigationBar+Style.m"; sourceTree = "<group>"; };
+		753178131417E4E4009310A8 /* CKNavigationBar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKNavigationBar+Style.m"; path = "Classes/CKNavigationBar+Style.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		753178171417E4F9009310A8 /* CKUIToolbar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIToolbar+Style.h"; sourceTree = "<group>"; };
 		753178181417E4F9009310A8 /* CKUIToolbar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIToolbar+Style.m"; sourceTree = "<group>"; };
 		7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+Introspection.h"; path = "Classes/CKUILabel+Introspection.h"; sourceTree = "<group>"; };
@@ -668,8 +668,8 @@
 		7560DB5F13B8ED3600268D13 /* CKFeedSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFeedSource.m; path = Classes/CKFeedSource.m; sourceTree = "<group>"; };
 		7560DB6013B8ED3600268D13 /* CKFormTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormTableViewController.h; path = Classes/CKFormTableViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFormTableViewController.m; path = Classes/CKFormTableViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7560DB6213B8ED3600268D13 /* CKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGradientView.h; path = Classes/CKGradientView.h; sourceTree = "<group>"; };
-		7560DB6313B8ED3600268D13 /* CKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKGradientView.m; path = Classes/CKGradientView.m; sourceTree = "<group>"; };
+		7560DB6213B8ED3600268D13 /* CKStyleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKStyleView.h; path = Classes/CKStyleView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		7560DB6313B8ED3600268D13 /* CKStyleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKStyleView.m; path = Classes/CKStyleView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DB6413B8ED3600268D13 /* CKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGridView.h; path = Classes/CKGridView.h; sourceTree = "<group>"; };
 		7560DB6513B8ED3600268D13 /* CKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKGridView.m; path = Classes/CKGridView.m; sourceTree = "<group>"; };
 		7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKGridView+NSIndexPath.m"; path = "Classes/CKGridView+NSIndexPath.m"; sourceTree = "<group>"; };
@@ -793,7 +793,7 @@
 		7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewCellController.h; path = Classes/CKTableViewCellController.h; sourceTree = "<group>"; };
 		7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKTableViewCellController.m; path = Classes/CKTableViewCellController.m; sourceTree = "<group>"; };
 		7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Style.h"; path = "Classes/CKTableViewCellController+Style.h"; sourceTree = "<group>"; };
-		7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+Style.m"; path = "Classes/CKTableViewCellController+Style.m"; sourceTree = "<group>"; };
+		7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKTableViewCellController+Style.m"; path = "Classes/CKTableViewCellController+Style.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Responder.h"; path = "Classes/CKTableViewCellController+Responder.h"; sourceTree = "<group>"; };
 		7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+Responder.m"; path = "Classes/CKTableViewCellController+Responder.m"; sourceTree = "<group>"; };
 		7560DC1613B8ED3600268D13 /* CKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewController.h; path = Classes/CKTableViewController.h; sourceTree = "<group>"; };
@@ -1156,6 +1156,7 @@
 				75C6DF6113FECA2F00E4AE4F /* Styles.h */,
 				7560DC0A13B8ED3600268D13 /* CKStyleManager.h */,
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
+				969892761559999100763F50 /* Views */,
 				7506E3F213B8FB1000EE1471 /* Additions */,
 			);
 			name = Styles;
@@ -1353,10 +1354,6 @@
 				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
 				7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */,
 				7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */,
-				75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */,
-				75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */,
-				7560DB6213B8ED3600268D13 /* CKGradientView.h */,
-				7560DB6313B8ED3600268D13 /* CKGradientView.m */,
 				7560DB6413B8ED3600268D13 /* CKGridView.h */,
 				7560DB6513B8ED3600268D13 /* CKGridView.m */,
 				7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */,
@@ -2088,6 +2085,17 @@
 			name = "Object Extension";
 			sourceTree = "<group>";
 		};
+		969892761559999100763F50 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */,
+				75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */,
+				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
+				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -2152,7 +2160,7 @@
 				7560DCA913B8ED3600268D13 /* CKDomain.h in Headers */,
 				7560DCAB13B8ED3600268D13 /* CKFeedSource.h in Headers */,
 				7560DCAD13B8ED3600268D13 /* CKFormTableViewController.h in Headers */,
-				7560DCAF13B8ED3600268D13 /* CKGradientView.h in Headers */,
+				7560DCAF13B8ED3600268D13 /* CKStyleView.h in Headers */,
 				7560DCB113B8ED3600268D13 /* CKGridView.h in Headers */,
 				7560DCB413B8ED3600268D13 /* CKHost.h in Headers */,
 				7560DCB813B8ED3600268D13 /* CKImageLoader.h in Headers */,
@@ -2520,7 +2528,7 @@
 				7560DCAA13B8ED3600268D13 /* CKDomain.m in Sources */,
 				7560DCAC13B8ED3600268D13 /* CKFeedSource.m in Sources */,
 				7560DCAE13B8ED3600268D13 /* CKFormTableViewController.m in Sources */,
-				7560DCB013B8ED3600268D13 /* CKGradientView.m in Sources */,
+				7560DCB013B8ED3600268D13 /* CKStyleView.m in Sources */,
 				7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */,
 				7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */,
 				7560DCB513B8ED3600268D13 /* CKHost.m in Sources */,

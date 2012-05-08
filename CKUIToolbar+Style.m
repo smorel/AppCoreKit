@@ -52,7 +52,7 @@
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
     if([CKOSVersion() floatValue] < 5){
-    BOOL hasBackgroundGradientView = [[self subviews]count] > 0 && [[[self subviews]objectAtIndex:0]isKindOfClass:[CKGradientView class]];
+    BOOL hasBackgroundGradientView = [[self subviews]count] > 0 && [[[self subviews]objectAtIndex:0]isKindOfClass:[CKStyleView class]];
         [super insertSubview:view atIndex:hasBackgroundGradientView ? index + 1 : index];
         return;
     }

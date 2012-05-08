@@ -28,10 +28,16 @@ NSString* CKStyleBackgroundImage = @"backgroundImage";
 NSString* CKStyleCornerStyle = @"cornerStyle";
 NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
+NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
+
+
 NSString* CKStyleBorderColor = @"borderColor";
 NSString* CKStyleBorderWidth = @"borderWidth";
 NSString* CKStyleBorderStyle = @"borderStyle";
-NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
+
+NSString* CKStyleSeparatorColor = @"separatorColor";
+NSString* CKStyleSeparatorWidth = @"separatorWidth";
+NSString* CKStyleSeparatorStyle = @"separatorStyle";
 
 
 @implementation NSMutableDictionary (CKViewStyle)
@@ -100,9 +106,27 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
 									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
-                                                                     CKViewBorderStyleDefault,
+                                                                     CKViewBorderStyleTableViewCell,
 																	 CKViewBorderStyleAll,
 																	 CKViewBorderStyleNone)];
+}
+
+- (UIColor*)separatorColor{
+	return [self colorForKey:CKStyleSeparatorColor];
+}
+
+- (CGFloat)separatorWidth{
+	return [self cgFloatForKey:CKStyleSeparatorWidth];
+}
+
+- (CKViewSeparatorStyle)separatorStyle{
+	return (CKViewSeparatorStyle)[self enumValueForKey:CKStyleSeparatorStyle 
+                                 withEnumDescriptor:CKEnumDefinition(@"CKViewSeparatorStyle",
+                                                                     CKViewSeparatorStyleTableViewCell,
+                                                                     CKViewSeparatorStyleTop,
+                                                                     CKViewSeparatorStyleBottom,
+                                                                     CKViewSeparatorStyleLeft,
+                                                                     CKViewSeparatorStyleRight)];
 }
 
 
@@ -137,13 +161,13 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 @implementation UIView (CKStyle)
 
-+ (CKGradientView*)gradientView:(UIView*)view{
-	if([view isKindOfClass:[CKGradientView class]])
-		return (CKGradientView*)view;
++ (CKStyleView*)gradientView:(UIView*)view{
+	if([view isKindOfClass:[CKStyleView class]])
+		return (CKStyleView*)view;
 	
 	for(UIView* subView in [view subviews]){
-		if([subView isKindOfClass:[CKGradientView class]])
-			return (CKGradientView*)subView;
+		if([subView isKindOfClass:[CKStyleView class]])
+			return (CKStyleView*)subView;
 	}
 	return nil;
 }
@@ -152,10 +176,13 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 	if(style == nil || [style isEmpty] == YES)
 		return NO;
 	
+    //TODO : check if colors in style are clear color ... or image is nil ...
 	if([style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
+	   || [style containsObjectForKey:CKStyleCornerSize]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
-	   || [style containsObjectForKey:CKStyleBorderColor]){
+	   || [style containsObjectForKey:CKStyleBorderColor]
+	   || ([style containsObjectForKey:CKStyleSeparatorColor] && ![view isKindOfClass:[UITableView class]])){
 		return YES;
 	}
 	return NO;
@@ -195,12 +222,13 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				BOOL opaque = YES;
 				
 				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-				CKGradientViewBorderType viewBorderType = CKGradientViewBorderTypeNone;
+				CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
+				CKStyleViewSeparatorLocation viewSeparatorType = CKStyleViewSeparatorLocationNone;
 				
 				if([UIView needSubView:myViewStyle forView:view]){
-					CKGradientView* gradientView = [UIView gradientView:view];
+					CKStyleView* gradientView = [UIView gradientView:view];
 					if(gradientView == nil){
-						gradientView = [[[CKGradientView alloc]initWithFrame:view.bounds]autorelease];
+						gradientView = [[[CKStyleView alloc]initWithFrame:view.bounds]autorelease];
 						gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 						view.backgroundColor = [UIColor clearColor];
 						[view insertSubview:gradientView atIndex:0];
@@ -213,8 +241,8 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 				
 				//backgroundView.opaque = YES;
 				
-				if([backgroundView isKindOfClass:[CKGradientView class]]){
-					CKGradientView* gradientView = (CKGradientView*)backgroundView;
+				if([backgroundView isKindOfClass:[CKStyleView class]]){
+					CKStyleView* gradientView = (CKStyleView*)backgroundView;
 					
 					//Apply Background Image
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
@@ -272,27 +300,68 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 					
 					//Apply BorderStyle
 					{
-						CKViewBorderStyle borderStyle = CKViewBorderStyleDefault;
+						CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
 						if([myViewStyle containsObjectForKey:CKStyleBorderStyle]){
 							borderStyle = [myViewStyle borderStyle];
 						}
 						
-						if(borderStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
+						if(borderStyle == CKViewBorderStyleTableViewCell && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
 							viewBorderType = [delegate view:gradientView borderStyleWithStyle:myViewStyle];
 						}
 						else{
 							switch(borderStyle){
 								case CKViewBorderStyleAll:{
-									viewBorderType = CKGradientViewBorderTypeAll;
+									viewBorderType = CKStyleViewBorderLocationAll;
 									break;
 								}
 								case CKViewBorderStyleNone:{
-									viewBorderType = CKGradientViewBorderTypeNone;
+									viewBorderType = CKStyleViewBorderLocationNone;
 									break;
 								}
 							}
 						}
-						gradientView.borderStyle = viewBorderType;
+						gradientView.borderLocation = viewBorderType;
+                        
+                        if([myViewStyle containsObjectForKey:CKStyleBorderWidth]){
+                            gradientView.borderWidth = [myViewStyle borderWidth];
+                        }
+					}
+                    
+                    //Apply SeparatorStyle
+					{
+                        //SeparatorColor
+                        UIColor* separatorColor = nil;
+                        if([myViewStyle containsObjectForKey:CKStyleSeparatorColor]){
+							separatorColor = [myViewStyle separatorColor];
+						}else if(delegate && [delegate respondsToSelector:@selector(separatorColorForView:withStyle:)]){
+                            separatorColor = [delegate separatorColorForView:gradientView withStyle:myViewStyle];
+                        }
+						gradientView.separatorColor = separatorColor;
+                        
+                        
+                        if([myViewStyle containsObjectForKey:CKStyleSeparatorWidth]){
+                            gradientView.separatorWidth = [myViewStyle separatorWidth];
+                        }else if(separatorColor){
+                            gradientView.separatorWidth = 1;
+                        }
+                        
+						CKViewSeparatorStyle separatorStyle = CKViewSeparatorStyleTableViewCell;
+						if([myViewStyle containsObjectForKey:CKStyleSeparatorStyle]){
+							separatorStyle = [myViewStyle separatorStyle];
+						}
+						
+						if(separatorStyle == CKViewSeparatorStyleTableViewCell && delegate && [delegate respondsToSelector:@selector(view:separatorStyleWithStyle:)]){
+							viewSeparatorType = [delegate view:gradientView separatorStyleWithStyle:myViewStyle];
+						}
+						else{
+							switch(separatorStyle){
+                                case CKViewSeparatorStyleTop:    viewSeparatorType = CKStyleViewSeparatorLocationTop; break;
+                                case CKViewSeparatorStyleBottom: viewSeparatorType = CKStyleViewSeparatorLocationBottom; break;
+                                case CKViewSeparatorStyleLeft:   viewSeparatorType = CKStyleViewSeparatorLocationLeft; break;
+                                case CKViewSeparatorStyleRight:  viewSeparatorType = CKStyleViewSeparatorLocationRight; break;
+							}
+						}
+						gradientView.separatorLocation = viewSeparatorType;
 					}
 					
 					if([myViewStyle containsObjectForKey:CKStyleCornerSize]){
@@ -303,9 +372,6 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 						gradientView.borderColor = [myViewStyle borderColor];
 					}	
 					
-					if([myViewStyle containsObjectForKey:CKStyleBorderWidth]){
-						gradientView.borderWidth = [myViewStyle borderWidth];
-					}
 					
 					[gradientView setNeedsDisplay];
 				}
@@ -468,6 +534,9 @@ static char NSObjectAppliedStyleObjectKey;
             }
         }
         
+        if([descriptor.name isEqualToString:@"backgroundView"] && [self isKindOfClass:[UITableViewCell class]]){
+            int i =3;
+        }
         
 		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
@@ -475,11 +544,11 @@ static char NSObjectAppliedStyleObjectKey;
 				shouldReplaceView = [delegate object:self shouldReplaceViewWithDescriptor:descriptor withStyle:myViewStyle];
 			}
 			
-			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKGradientView class]] == NO)) )
+			if(([UIView needSubView:myViewStyle forView:view] && view == nil) || (shouldReplaceView && (view == nil || [view isKindOfClass:[CKStyleView class]] == NO)) )
             {
                 UIView* referenceView = (view != nil) ? view : (([self isKindOfClass:[UIView class]] == YES) ? (UIView*)self : nil);
                 CGRect frame = (referenceView != nil) ? referenceView.bounds : CGRectMake(0,0,100,100);
-				view = [[[CKGradientView alloc]initWithFrame:frame]autorelease];
+				view = [[[CKStyleView alloc]initWithFrame:frame]autorelease];
 				view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 				[self setValue:view forKey:descriptor.name];
 			}

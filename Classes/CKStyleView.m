@@ -1,20 +1,21 @@
 //
-//  CKUIGradientView.m
-//  GroupedTableStyled
+//  CKStyleView.m
+//  CloudKit
 //
 //  Created by Olivier Collet on 11-04-07.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKGradientView.h"
+#import "CKStyleView.h"
 #import "CKUIColor+Additions.h"
 #import "CKUIImage+Transformations.h"
 #import "CKNSObject+Bindings.h"
 #import "CKNSArray+Additions.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@implementation CKGradientViewUpdater
+@implementation CKStyleViewUpdater
 @synthesize view = _view;
 
 - (void)frameChanged:(id)value{
@@ -43,22 +44,25 @@
 
 @end
 
-@interface CKGradientView () 
-@property(nonatomic,retain)CKGradientViewUpdater* updater;
+@interface CKStyleView () 
+@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
 @end
 
 
 
-@implementation CKGradientView
+@implementation CKStyleView
 
 @synthesize gradientColors = _gradientColors;
 @synthesize gradientColorLocations = _gradientColorLocations;
 @synthesize image = _image;
+@synthesize borderLocation = _borderLocation;
 @synthesize borderColor = _borderColor;
 @synthesize borderWidth = _borderWidth;
+@synthesize separatorLocation = _separatorLocation;
+@synthesize separatorColor = _separatorColor;
+@synthesize separatorWidth = _separatorWidth;
 @synthesize updater = _updater;
-@synthesize borderStyle = _borderStyle;
 @synthesize fillColor = _fillColor;
 @synthesize imageContentMode = _imageContentMode;
 @synthesize embossTopColor = _embossTopColor;
@@ -67,10 +71,35 @@
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
-	self.borderStyle = CKRoundedCornerViewTypeNone;
-	self.updater = [[[CKGradientViewUpdater alloc]initWithView:self]autorelease];
+	self.borderLocation = CKStyleViewBorderLocationNone;
+    
+	self.separatorColor = [UIColor clearColor];
+	self.separatorWidth = 1;
+	self.separatorLocation = CKStyleViewSeparatorLocationNone;
+    
+	self.updater = [[[CKStyleViewUpdater alloc]initWithView:self]autorelease];
 	self.fillColor = [UIColor clearColor];
 	self.imageContentMode = UIViewContentModeScaleToFill;
+}
+
+- (void)borderLocationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKStyleViewBorderLocation",
+                                                    CKStyleViewBorderLocationNone,
+                                                    CKStyleViewBorderLocationTop,
+                                                    CKStyleViewBorderLocationBottom,
+                                                    CKStyleViewBorderLocationRight,
+                                                    CKStyleViewBorderLocationLeft,
+                                                    CKStyleViewBorderLocationAll);
+}
+
+- (void)separatorLocationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKStyleViewSeparatorLocation",
+                                                    CKStyleViewSeparatorLocationNone,
+                                                    CKStyleViewSeparatorLocationTop,
+                                                    CKStyleViewSeparatorLocationBottom,
+                                                    CKStyleViewSeparatorLocationRight,
+                                                    CKStyleViewSeparatorLocationLeft,
+                                                    CKStyleViewSeparatorLocationAll);
 }
 
 - (id)init {
@@ -125,8 +154,9 @@
 }
 
 - (void)setBorderWidth:(CGFloat)width {
-	CGFloat scale = [[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1;
-	_borderWidth = 2 * width * scale;
+	//CGFloat scale = [[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1;
+	//_borderWidth = 2 * width * scale;
+    _borderWidth = width;
 }
 
 - (void)dealloc {
@@ -135,6 +165,7 @@
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
 	[_borderColor release]; _borderColor = nil;
+	[_separatorColor release]; _separatorColor = nil;
 	[_fillColor release]; _fillColor = nil;
 	[_embossTopColor release]; _embossTopColor = nil;
 	[_embossBottomColor release]; _embossBottomColor = nil;
@@ -158,34 +189,33 @@
 		default:
 			break;
 	}
+    
+    CGFloat offset = 0;
+    
+	if (self.borderLocation & CKStyleViewBorderLocationTop && self.borderColor && (self.borderColor != [UIColor clearColor])) {
+        offset = self.borderWidth;
+    }
+    if (self.separatorLocation & CKStyleViewSeparatorLocationTop && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
+        offset = MAX(offset,self.separatorWidth);
+    }
 	
-	CGFloat x = self.bounds.origin.x;
-	CGFloat y = self.bounds.origin.y;
-	CGFloat width = self.bounds.size.width;
-	CGFloat radius = self.roundedCornerSize;
+	CGFloat x = self.bounds.origin.x + offset-1;
+	CGFloat y = self.bounds.origin.y + offset - 1;
+	CGFloat width = self.bounds.size.width - (2 * (offset - 1));
+	CGFloat radius = self.roundedCornerSize - offset + 2;
 	
-	if (self.borderColor && (self.borderColor != [UIColor clearColor])) {
-		y += (self.borderWidth / 2);
-		x += (self.borderWidth / 2);
-		width -= (self.borderWidth / 2);
-	}
-	
-	CGPathMoveToPoint (path, nil, x, -1);
-	CGPathAddLineToPoint (path, nil, x, (roundedCorners & UIRectCornerTopLeft) ? radius : y);
+    
+    CGPoint startLinePoint = CGPointMake(x, y + ((roundedCorners & UIRectCornerTopLeft) ? radius : 0));
+    CGPoint endLinePoint = CGPointMake((roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : x + width, y);
+    
+    CGPathMoveToPoint (path, nil, startLinePoint.x,startLinePoint.y );
 	if(roundedCorners & UIRectCornerTopLeft){
-		CGPathAddArcToPoint (path, nil, x, y, radius, y, radius);
+        CGPathAddArc(path, nil,x + radius,y + radius,radius, M_PI,  3 * (M_PI / 2.0),NO);
 	}
-	CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (width - radius) : width, y);
+	CGPathAddLineToPoint (path, nil, endLinePoint.x,endLinePoint.y );
 	if(roundedCorners & UIRectCornerTopRight){
-		CGPathAddArcToPoint (path, nil, width, y, width, radius, radius);
+        CGPathAddArc(path, nil,endLinePoint.x,endLinePoint.y + radius,radius, 3 * (M_PI / 2.0), 0,NO);
 	}
-	else{
-		CGPathMoveToPoint (path, nil, width, (roundedCorners & UIRectCornerTopRight) ? radius : y);
-	}
-	CGPathAddLineToPoint (path, nil, width, -1);
-	CGPathAddLineToPoint (path, nil, x, -1);
-	
-	CGPathCloseSubpath(path);
 }
 
 - (void)generateBottomEmbossPath:(CGMutablePathRef)path {
@@ -203,40 +233,38 @@
 		default:
 			break;
 	}
+    
+    CGFloat offset = 0;
+    
+	if (self.borderLocation & CKStyleViewBorderLocationBottom && self.borderColor && (self.borderColor != [UIColor clearColor])) {
+        offset = self.borderWidth;
+    }
+    if (self.separatorLocation & CKStyleViewSeparatorLocationBottom && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
+        offset = MAX(offset,self.separatorWidth);
+    }
 	
-	CGFloat x = self.bounds.origin.x;
-	CGFloat width = self.bounds.size.width;
-	CGFloat height = self.bounds.size.height;
-	CGFloat radius = self.roundedCornerSize;
+	CGFloat x = self.bounds.origin.x + self.borderWidth - 1;
+	CGFloat y = self.bounds.size.height - (offset - 1);
+	CGFloat width = self.bounds.size.width - (2 * (self.borderWidth - 1));
+	CGFloat radius = self.roundedCornerSize - self.borderWidth + 2;
+    
+    
+    CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
+    CGPoint endLinePoint = CGPointMake((roundedCorners & UIRectCornerBottomRight) ? (x + width - radius) : x + width, y);
 	
-	if ((self.borderColor && (self.borderColor != [UIColor clearColor])) && (self.borderStyle & CKGradientViewBorderTypeBottom)) {
-		height -= (self.borderWidth / 2);
-		x += (self.borderWidth / 2);
-		width -= (self.borderWidth / 2);
-	}
-	
-	CGPathMoveToPoint(path, nil, x, self.bounds.size.height + 1);
-	CGPathAddLineToPoint(path, nil, width, self.bounds.size.height + 1);
-	CGPathAddLineToPoint (path, nil, width, (roundedCorners & UIRectCornerBottomRight) ? (height - radius) : height);
-	if(roundedCorners & UIRectCornerBottomRight){
-		CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
-	}
-	CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : x, height);
+    CGPathMoveToPoint (path, nil, startLinePoint.x,startLinePoint.y );
 	if(roundedCorners & UIRectCornerBottomLeft){
-		CGPathMoveToPoint (path, nil, radius, height);
-		CGPathAddArcToPoint (path, nil, x, height, x, height - radius, radius);
+        CGPathAddArc(path, nil,startLinePoint.x + radius,startLinePoint.y,radius, -M_PI,  M_PI / 2,YES);
 	}
-	else{
-		CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (height - radius) : height);
+	CGPathAddLineToPoint (path, nil, endLinePoint.x,endLinePoint.y );
+	if(roundedCorners & UIRectCornerBottomRight){
+        CGPathAddArc(path, nil,endLinePoint.x,endLinePoint.y - radius,radius, M_PI / 2.0, 0,YES);
 	}
-	CGPathAddLineToPoint(path, nil, x, self.bounds.size.height + 1);
-	
-	CGPathCloseSubpath(path);
 }
 
 #pragma mark - Border Path
 
-- (void)generateBorderPath:(CGMutablePathRef)path {
+- (void)generateBorderPath:(CGMutablePathRef)path withStyle:(CKStyleViewBorderLocation)borderStyle width:(CGFloat)borderWidth{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:
@@ -252,59 +280,65 @@
 			break;
 	}
 	
-	CGFloat width = self.bounds.size.width;
-	CGFloat height = self.bounds.size.height;
-	CGFloat radius = self.roundedCornerSize;
+    CGFloat x = 0 + borderWidth / 2.0;
+    CGFloat y = 0 + borderWidth / 2.0;
+	CGFloat width = self.bounds.size.width - borderWidth;
+	CGFloat height = self.bounds.size.height - borderWidth;
+    
+	CGFloat radius = self.roundedCornerSize - (borderWidth / 2.0);
 	
-	if(_borderStyle & CKGradientViewBorderTypeLeft){
+	if(borderStyle & CKStyleViewBorderLocationLeft){
 		//draw arc from bottom to left or move to bottom left
-		if((roundedCorners & UIRectCornerBottomLeft) && (_borderStyle & CKGradientViewBorderTypeBottom)){
-			CGPathMoveToPoint (path, nil, radius, height);
-			CGPathAddArcToPoint (path, nil, 0, height, 0, height - radius, radius);
+		if((roundedCorners & UIRectCornerBottomLeft) && (borderStyle & CKStyleViewBorderLocationBottom)){
+			CGPathMoveToPoint (path, nil, x + radius, y + height);
+            CGPathAddArc(path, nil,x + radius,y + height-radius,radius, M_PI / 2,  M_PI ,NO);
 		}
 		else{
-			CGPathMoveToPoint (path, nil, 0, (roundedCorners & UIRectCornerBottomLeft) ? (height - radius) : height);
+			CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (y + height - radius) : height + borderWidth);
 		}
 		
 		//draw left line
-		CGPathAddLineToPoint (path, nil, 0, (roundedCorners & UIRectCornerTopLeft) ? radius : 0);
+		CGPathAddLineToPoint (path, nil, x, (roundedCorners & UIRectCornerTopLeft) ? y + radius : 0);
 		
 		//draw arc from left to top
-		if((roundedCorners & UIRectCornerTopLeft) && (_borderStyle & CKGradientViewBorderTypeTop)){
-			CGPathAddArcToPoint (path, nil, 0, 0, radius, 0, radius);
+		if((roundedCorners & UIRectCornerTopLeft) && (borderStyle & CKStyleViewBorderLocationTop)){
+            CGPathAddArc(path, nil,x + radius,y + radius,radius, M_PI,  3 * (M_PI / 2.0),NO);
+			//CGPathAddArcToPoint (path, nil, 0, 0, radius, 0, radius);
 		}
 	}
 	
 	//draw top
-	if(_borderStyle & CKGradientViewBorderTypeTop){
-		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? radius : 0, 0);
-		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (width - radius) : width, 0);
+	if(borderStyle & CKStyleViewBorderLocationTop){
+		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? x + radius : x, y);
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : width + borderWidth, y);
 	}
 	
 	//draw right
-	if(_borderStyle & CKGradientViewBorderTypeRight){
+	if(borderStyle & CKStyleViewBorderLocationRight){
 		//draw arc from top to right or move to top right
-		if((roundedCorners & UIRectCornerTopRight) && (_borderStyle & CKGradientViewBorderTypeTop)){
-			CGPathMoveToPoint (path, nil, width - radius, 0);
-			CGPathAddArcToPoint (path, nil, width, 0, width, radius, radius);
+		if((roundedCorners & UIRectCornerTopRight) && (borderStyle & CKStyleViewBorderLocationTop)){
+			CGPathMoveToPoint (path, nil, x + width - radius, y);
+            CGPathAddArc(path, nil,x + width- radius,y + radius,radius, 3 * (M_PI / 2.0),0  ,NO);
+			//CGPathAddArcToPoint (path, nil, width, 0, width, radius, radius);
 		}
 		else{
-			CGPathMoveToPoint (path, nil, width, (roundedCorners & UIRectCornerTopRight) ? radius : 0);
+			CGPathMoveToPoint (path, nil, x + width, (roundedCorners & UIRectCornerTopRight) ? y + radius : 0);
 		}
 		
 		//draw right line
-		CGPathAddLineToPoint (path, nil, width, (roundedCorners & UIRectCornerBottomRight) ? (height - radius) : height);
+		CGPathAddLineToPoint (path, nil, x + width, (roundedCorners & UIRectCornerBottomRight) ? (y + height - radius) : height + borderWidth);
 		
 		//draw arc from right to bottom
-		if((roundedCorners & UIRectCornerBottomRight) && (_borderStyle & CKGradientViewBorderTypeBottom)){
-			CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
+		if((roundedCorners & UIRectCornerBottomRight) && (borderStyle & CKStyleViewBorderLocationBottom)){
+            CGPathAddArc(path, nil,x + width - radius,y + height - radius,radius, 0,  M_PI / 2.0,NO);
+			//CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
 		}
 	}
 	
 	//draw bottom
-	if(_borderStyle & CKGradientViewBorderTypeBottom){
-		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (width - radius) : width, height);
-		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : 0, height);
+	if(borderStyle & CKStyleViewBorderLocationBottom){
+		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (x + width - radius) : x + width, y + height);
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? x + radius : 0, y + height);
 	}
 }
 
@@ -452,6 +486,7 @@
 	
 	// Gradient
 	if(self.gradientColors){
+		CGContextSaveGState(gc);
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
 			CGContextClip(gc);
@@ -474,26 +509,25 @@
 
 		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
 		CGGradientRelease(gradient);
+		CGContextRestoreGState(gc);
 	}
 	
 	// Top Emboss
 	if (_embossTopColor && (_embossTopColor != [UIColor clearColor])) {
 		CGContextSaveGState(gc);
-		if(clippingPath != nil){
-			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
-		}
+        [[UIColor clearColor]setStroke];
+		CGContextSetLineWidth(gc, 1);
 		CGContextSetShadowWithColor(gc, CGSizeMake(0, 1), 0, _embossTopColor.CGColor);
 		CGMutablePathRef topEmbossPath = CGPathCreateMutable();
 		[self generateTopEmbossPath:topEmbossPath];
 		CGContextAddPath(gc, topEmbossPath);
-		CFRelease(topEmbossPath);
         
-        UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
+        UIColor* thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
         thecolor = [thecolor colorWithAlphaComponent:1];
-		[thecolor setFill];
+		[thecolor setStroke];
         
-		CGContextFillPath(gc);
+		CGContextStrokePath(gc);
+		CFRelease(topEmbossPath);
 		CGContextRestoreGState(gc);
 	}
 	
@@ -512,21 +546,37 @@
         
         UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors last] : self.fillColor;
         thecolor = [thecolor colorWithAlphaComponent:1];
-		[thecolor setFill];
+		[thecolor setStroke];
         
-		CGContextFillPath(gc);
+		CGContextStrokePath(gc);
+		CGContextRestoreGState(gc);
+	}
+    
+    
+    // Separator
+	if(_separatorColor!= nil && _separatorColor != [UIColor clearColor] && _separatorWidth > 0 && _separatorLocation != CKStyleViewSeparatorLocationNone){
+        CGContextSaveGState(gc);
+		[_separatorColor setStroke];
+		CGContextSetLineWidth(gc, self.separatorWidth);
+		CGMutablePathRef borderPath = CGPathCreateMutable();
+		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth];
+		CGContextAddPath(gc, borderPath);
+		CFRelease(borderPath);
+		CGContextStrokePath(gc);
 		CGContextRestoreGState(gc);
 	}
 	
 	// Border
-	if(_borderColor!= nil && _borderColor != [UIColor clearColor]){
+	if(_borderColor!= nil && _borderColor != [UIColor clearColor] && _borderWidth > 0 && _borderLocation != CKStyleViewBorderLocationNone){
+		CGContextSaveGState(gc);
 		[_borderColor setStroke];
 		CGContextSetLineWidth(gc, self.borderWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
-		[self generateBorderPath:borderPath];
+		[self generateBorderPath:borderPath withStyle:_borderLocation width:_borderWidth];
 		CGContextAddPath(gc, borderPath);
 		CFRelease(borderPath);
 		CGContextStrokePath(gc);
+		CGContextRestoreGState(gc);
 	}
 }
 

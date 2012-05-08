@@ -50,7 +50,7 @@
 #import "CKAlertView.h"
 #import "CKCreditsFooterView.h"
 #import "CKRoundedCornerView.h"
-#import "CKGradientView.h"
+#import "CKStyleView.h"
 #import "CKGridView.h"
 #import "CKImageView.h"
 #import "CKKeypadView.h"

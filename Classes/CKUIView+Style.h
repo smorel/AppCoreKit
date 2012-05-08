@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKGradientView.h"
+#import "CKStyleView.h"
 #import "CKNSObject+CKRuntime.h"
 
 /** TODO
@@ -25,10 +25,18 @@ typedef enum{
 /** TODO
  */
 typedef enum{
-	CKViewBorderStyleDefault,
+	CKViewBorderStyleTableViewCell,
 	CKViewBorderStyleAll,
 	CKViewBorderStyleNone
 }CKViewBorderStyle;
+
+typedef enum{
+	CKViewSeparatorStyleTableViewCell,
+	CKViewSeparatorStyleTop,
+	CKViewSeparatorStyleBottom,
+	CKViewSeparatorStyleLeft,
+	CKViewSeparatorStyleRight
+}CKViewSeparatorStyle;
 
 
 /** TODO
@@ -75,6 +83,18 @@ extern NSString* CKStyleBorderWidth;
  */
 extern NSString* CKStyleBorderStyle;
 
+/** TODO
+ */
+extern NSString* CKStyleSeparatorColor;
+
+/** TODO
+ */
+extern NSString* CKStyleSeparatorWidth;
+
+/** TODO
+ */
+extern NSString* CKStyleSeparatorStyle;
+
 
 /** TODO
  */
@@ -91,6 +111,9 @@ extern NSString* CKStyleBorderStyle;
 - (UIColor*)borderColor;
 - (CGFloat)borderWidth;
 - (CKViewBorderStyle)borderStyle;
+- (UIColor*)separatorColor;
+- (CGFloat)separatorWidth;
+- (CKViewSeparatorStyle)separatorStyle;
 
 @end
 
@@ -136,7 +159,9 @@ extern NSString* CKStyleBorderStyle;
 @optional
 
 - (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
-- (CKGradientViewBorderType)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style;
+- (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style;
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style;
 
 @end

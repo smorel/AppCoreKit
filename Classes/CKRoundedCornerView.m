@@ -31,7 +31,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-	
+	/*
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKRoundedCornerViewTypeTop:
@@ -48,6 +48,7 @@
 	if (self.corners != CKRoundedCornerViewTypeNone) {
 		[[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)] addClip];
 	}
+     */
 }
 
 - (void)dealloc {

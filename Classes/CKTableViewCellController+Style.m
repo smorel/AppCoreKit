@@ -14,7 +14,7 @@
 #import "CKTableViewController.h"
 #import "CKBindedMapViewController.h"
 
-#import "CKGradientView.h"
+#import "CKStyleView.h"
 #import "CKNSArray+Additions.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
@@ -91,11 +91,11 @@ NSString* CKStyleCellFlags = @"flags";
 }
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
-    CKGradientView* backgroundView = nil;
+    CKStyleView* backgroundView = nil;
     for(UIView* view in [self subviews]){
-        if([view isKindOfClass:[CKGradientView class]]
+        if([view isKindOfClass:[CKStyleView class]]
            && view != self.backgroundView){
-            backgroundView = (CKGradientView*)view;
+            backgroundView = (CKStyleView*)view;
             break;
         }
     }
@@ -204,35 +204,87 @@ NSString* CKStyleCellFlags = @"flags";
 	return roundedCornerType;
 }
 
-- (CKGradientViewBorderType)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
-	CKGradientViewBorderType borderType = CKGradientViewBorderTypeNone;
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
+	CKStyleViewBorderLocation borderType = CKStyleViewBorderLocationNone;
+    
+    CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleBorderStyle]){
+        borderStyle = [style borderStyle];
+    }
 	
-	switch([style cornerStyle]){
-		case CKViewCornerStyleDefault:{
+	switch(borderStyle){
+		case CKViewBorderStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
 				UIView* parentView = [self parentControllerView];
 				if([parentView isKindOfClass:[UITableView class]]){
 					UITableView* tableView = (UITableView*)parentView;
-					if(tableView.style == UITableViewStyleGrouped){
-						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-						if(self.indexPath.row == numberOfRows - 1){
-							borderType = CKGradientViewBorderTypeAll;
-						}
-						else {
-							borderType = CKGradientViewBorderTypeAll &~ CKGradientViewBorderTypeBottom;
-						}
-					}
-					else{
-						borderType = CKGradientViewBorderTypeBottom;
-					}
+                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                    if(numberOfRows > 1){
+                        if(self.indexPath.row == 0){
+                            return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
+                        }else if(self.indexPath.row == numberOfRows-1){
+                            return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
+                        }else{
+                            return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
+                        }
+                    }
+                    else{
+                        return CKStyleViewBorderLocationAll;
+                    }
 				}
 			}
 			break;
 		}
+        case CKViewBorderStyleAll: return CKStyleViewBorderLocationAll;
+        case CKViewBorderStyleNone: return CKStyleViewBorderLocationNone;
 	}
 	
 	return borderType;
+}
+
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{
+	CKStyleViewSeparatorLocation separatorType = CKStyleViewSeparatorLocationNone;
+    
+    CKViewSeparatorStyle separatorStyle = CKViewSeparatorStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleSeparatorStyle]){
+        separatorStyle = [style separatorStyle];
+    }
+	
+	switch(separatorStyle){
+		case CKViewSeparatorStyleTableViewCell:{
+			if(view == self.tableViewCell.backgroundView
+			   || view == self.tableViewCell.selectedBackgroundView){
+				UIView* parentView = [self parentControllerView];
+				if([parentView isKindOfClass:[UITableView class]]){
+					UITableView* tableView = (UITableView*)parentView;
+                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                    if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
+                        return CKStyleViewSeparatorLocationBottom;
+                    }
+                    else{
+                        return CKStyleViewSeparatorLocationNone;
+                    }
+				}
+			}
+			break;
+		}
+        case CKViewSeparatorStyleTop:    return CKStyleViewSeparatorLocationAll;
+        case CKViewSeparatorStyleBottom: return CKStyleViewSeparatorLocationBottom;
+        case CKViewSeparatorStyleLeft:   return CKStyleViewSeparatorLocationLeft;
+        case CKViewSeparatorStyleRight:  return CKStyleViewSeparatorLocationRight;
+	}
+	
+	return separatorType;
+}
+
+
+- (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style{
+    UIColor* separatorColor = [[self parentTableView]separatorColor];
+    if([style containsObjectForKey:CKStyleSeparatorColor]){
+        separatorColor = [style separatorColor];
+    }
+    return separatorColor;
 }
 
 - (BOOL)object:(id)object shouldReplaceViewWithDescriptor:(CKClassPropertyDescriptor*)descriptor withStyle:(NSMutableDictionary*)style{
