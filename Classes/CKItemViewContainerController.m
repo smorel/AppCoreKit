@@ -555,8 +555,8 @@
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
-	[self updateVisibleViewsIndexPath];
 	[self onEndUpdates];
+	[self updateVisibleViewsIndexPath];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
 	//could be better if we could observe or be notified that the contentSize has changed.

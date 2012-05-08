@@ -62,10 +62,6 @@
 	return nil;
 }
 
-- (void)updateStyleForNonNewVisibleCells{
-	NSAssert(NO,@"Base Implementation");
-}
-
 - (void)removeObjectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"Base Implementation");
 }
@@ -77,18 +73,6 @@
 }
 
 - (void)fetchRange:(NSRange)range{}
-
-- (void)updateStyleForExistingCells{
-        //Update style for indexpath that have not been applyed
-	NSInteger count = [self numberOfObjects];
-	for(NSInteger i = 0; i < count; ++i){
-		NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:self.sectionVisibleIndex];
-		CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-		if(controller && [controller view]){
-			[controller applyStyle];
-		}
-	}
-}
 
 - (void)start{}
 - (void)stop{}

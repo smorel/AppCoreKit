@@ -207,9 +207,6 @@
 		if(self.autoHideSections && [section isKindOfClass:[CKFormBindedCollectionSection class]]){
 			section.hidden = ([section numberOfObjects] <= 0);
 		}
-        if(self.viewIsOnScreen){
-            [section updateStyleForExistingCells];
-        }
 	 }
 	
 	[super viewWillAppear:animated];
@@ -241,12 +238,6 @@
 	
 	self.reloading = NO;
 	[super reload];
-	
-	if(self.state & CKUIViewControllerStateDidAppear){
-		for(CKFormSectionBase* section in _sections){
-			[section updateStyleForNonNewVisibleCells];
-		}
-	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

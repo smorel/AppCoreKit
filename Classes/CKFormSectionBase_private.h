@@ -14,9 +14,6 @@
 - (void)removeObjectAtIndex:(NSInteger)index;
 - (void)fetchRange:(NSRange)range;
 
-- (void)updateStyleForNonNewVisibleCells;
-- (void)updateStyleForExistingCells;
-
 - (void)start;
 - (void)stop;
 

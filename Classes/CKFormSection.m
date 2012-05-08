@@ -178,19 +178,6 @@
     return nil; 
 }
 
-- (void)updateStyleForNonNewVisibleCells{
-        //Update style for indexpath that have not been applyed
-	NSInteger sectionIndex = [self sectionVisibleIndex];
-	
-	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		if(indexPath.section == sectionIndex){
-			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-			NSAssert(controller != nil,@"invalid controller");
-			[controller applyStyle];
-		}
-	}
-}
 
 - (void)removeObjectAtIndex:(NSInteger)index{
 	NSAssert(NO,@"NOT IMPLEMENTED");

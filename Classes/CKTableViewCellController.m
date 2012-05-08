@@ -388,6 +388,9 @@
         [super setIndexPath:indexPath];
         [self invalidateSize];//as stylesheet selection could be dependent
     }
+    if([self.tableViewCell superview]){
+        [self applyStyle];
+    }
 }
 
 - (void)setName:(NSString *)name{
@@ -481,26 +484,8 @@
             self.cellStyle = [controllerStyle cellStyle];
         }
     }
-    
-	NSString* groupedTableModifier = @"";
-	UIView* parentView = [self parentControllerView];
-	if([parentView isKindOfClass:[UITableView class]]){
-		UITableView* tableView = (UITableView*)parentView;
-		if(tableView.style == UITableViewStyleGrouped){
-			NSInteger numberOfRows = [(CKItemViewContainerController*)self.containerController numberOfObjectsForSection:self.indexPath.section];
-			if(self.indexPath.row == 0 && numberOfRows > 1){
-				groupedTableModifier = @"BeginGroup";
-			}
-			else if(self.indexPath.row == 0){
-				groupedTableModifier = @"AloneInGroup";
-			}
-			else if(self.indexPath.row == numberOfRows-1){
-				groupedTableModifier = @"EndingGroup";
-			}
-		}
-	}
 	
-	return [NSString stringWithFormat:@"%@-<%p>-%@-[%@]-<%d>",[[self class] description],controllerStyle,groupedTableModifier,self.name ? self.name : @"", self.cellStyle];
+	return [NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle];
 }
 
 - (UITableViewCell *)loadCell {
@@ -627,7 +612,6 @@
     
 	[self initView:cell];
 	[self layoutCell:cell];
-	[self applyStyle];
     
     [CATransaction commit];
 	
@@ -750,6 +734,7 @@
 }
 
 - (void)setupView:(UIView *)view{
+	[self applyStyle];
     /*if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){

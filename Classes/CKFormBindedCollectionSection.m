@@ -37,7 +37,6 @@
 @synthesize controllerFactory = _controllerFactory;
 @synthesize headerCellControllers = _headerCellControllers;
 @synthesize footerCellControllers = _footerCellControllers;
-@synthesize changeSet = _changeSet;
 
 - (void)dealloc{
     [super dealloc];
@@ -158,28 +157,8 @@
 	}
 }
 
-- (void)updateStyleForNonNewVisibleCells{
-    [self.parentController updateVisibleViewsIndexPath];
-        //Update style for indexpath that have not been applyed
-	NSInteger sectionIndex = [self sectionVisibleIndex];
-	
-	NSArray *visibleIndexPaths = [self.parentController visibleIndexPaths];
-	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		if((self.changeSet == nil || [self.changeSet containsObject:indexPath] == NO)
-		   && indexPath.section == sectionIndex){
-			CKItemViewController* controller = [self.parentController controllerAtIndexPath:indexPath];
-			if(controller != nil){
-				[controller applyStyle];
-			}
-		}
-	}
-	
-	[self.changeSet removeAllObjects];	
-}
-
 - (void)objectControllerReloadData:(id)controller{
 	[self.parentController performSelector:@selector(objectControllerReloadData:) withObject:self.objectController];
-	[self updateStyleForNonNewVisibleCells];
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
@@ -201,10 +180,6 @@
 		}
 	}
 	
-	
-	if(self.changeSet == nil){
-		self.changeSet = [NSMutableArray array];
-	}
 	[self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self.objectController];
 }
 
@@ -214,7 +189,6 @@
 		return;
 	}
 	[self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self.objectController];
-	[self updateStyleForNonNewVisibleCells];
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -224,7 +198,7 @@
 	
 	int headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
-	[self.changeSet addObject:theIndexPath];
+
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
@@ -251,8 +225,6 @@
 		NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
 		NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + headerCount inSection:self.sectionVisibleIndex];
 		[newIndexPaths addObject:newIndexPath];
-		
-		[self.changeSet addObject:newIndexPath];
 	}
 	[self.parentController performSelector:@selector(objectController:insertObjects:atIndexPaths:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,objects,newIndexPaths,nil]];
