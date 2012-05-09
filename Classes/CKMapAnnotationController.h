@@ -30,3 +30,6 @@ typedef enum CKMapAnnotationStyle{
 - (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
 
 @end
+
+
+#import "CKMapAnnotationController+CKBlockBasedInterface.h"

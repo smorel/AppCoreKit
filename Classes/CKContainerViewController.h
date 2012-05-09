@@ -30,6 +30,7 @@ typedef enum CKTransitionType{
 @property (nonatomic, retain, readonly) UIView *containerView;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
+
 - (void)showViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
 
 @end

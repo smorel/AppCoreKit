@@ -209,13 +209,14 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 								   CKStyleBackgroundImage,CKStyleCornerStyle,CKStyleCornerSize,CKStyleAlpha,CKStyleBorderColor,CKStyleBorderWidth,CKStyleBorderStyle,@"@class",nil]];
 }
 
+//if appliedStack is nil, the style is not applicated hierarchically !
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack
                    delegate:(id)delegate {
 	if(view == nil)
 		return NO;
     
 	NSMutableDictionary* myViewStyle = style;
-	if([appliedStack containsObject:view] == NO){
+	if(!appliedStack || [appliedStack containsObject:view] == NO){
 		if(myViewStyle){
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
@@ -407,9 +408,11 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 			}
 		}
         
-        [appliedStack addObject:view];
-		//Root to leaf instead of leaf to root like before.
-		[view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
+        if(appliedStack != nil){
+            [appliedStack addObject:view];
+            //Root to leaf instead of leaf to root like before.
+            [view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
+        }
 		return YES;
 	}
 	return NO;

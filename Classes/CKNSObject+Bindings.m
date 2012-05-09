@@ -215,6 +215,11 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 @implementation UIControl (CKBindings)
 
 - (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block{
+    [self bindEvent:controlEvents executeBlockImmediatly:NO withBlock:block];
+}
+
+
+- (void)bindEvent:(UIControlEvents)controlEvents executeBlockImmediatly:(BOOL)execute withBlock:(void (^)())block{
     [NSObject validateCurrentBindingsContext];
     
 	CKUIControlBlockBinder* binder = (CKUIControlBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKUIControlBlockBinder class]];
@@ -224,6 +229,10 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	[binder setControl:self];
 	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
+    
+    if(execute && block){
+        block();
+    }
 }
 
 - (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector{

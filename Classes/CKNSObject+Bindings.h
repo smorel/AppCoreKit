@@ -73,6 +73,7 @@ typedef enum CKBindingsContextOptions{
 @interface UIControl (CKBindings)
 
 - (void)bindEvent:(UIControlEvents)controlEvents withBlock:(void (^)())block;
+- (void)bindEvent:(UIControlEvents)controlEvents executeBlockImmediatly:(BOOL)execute withBlock:(void (^)())block;
 - (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector;
 
 @end

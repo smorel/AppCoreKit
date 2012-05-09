@@ -16,6 +16,7 @@
 
 typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
 typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
+typedef void(^CKUIViewControllerOrientationBlock)(CKUIViewController* controller, UIInterfaceOrientation orientation);
 
 typedef enum CKInterfaceOrientation{
     CKInterfaceOrientationPortrait  = 1 << 0,
@@ -105,6 +106,11 @@ typedef enum CKUIViewControllerState{
  This block is called when the controller is deallocated
  */
 @property (nonatomic,copy) CKUIViewControllerBlock deallocBlock;
+
+/** 
+ This block is called when the controller orientation changes
+ */
+@property (nonatomic, copy) CKUIViewControllerOrientationBlock orientationChangeBlock;
 
 ///-----------------------------------
 /// @name Interface Orientation

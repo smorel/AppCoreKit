@@ -130,6 +130,9 @@ typedef void(^CKTransitionBlock)();
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
     
+    
+    [UIView setAnimationsEnabled:NO];
+    
     UIViewController *newController = self.selectedViewController;
     if(newController && [newController.view superview] != nil){
         if([CKOSVersion() floatValue] < 5){
@@ -140,6 +143,8 @@ typedef void(^CKTransitionBlock)();
     else{
         [self showViewControllerAtIndex:self.selectedIndex withTransition:CKTransitionNone];
     }
+    
+    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -209,17 +214,10 @@ typedef void(^CKTransitionBlock)();
         newController.view.frame = self.containerView.bounds;
         newController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        [CATransaction begin];
-        [CATransaction 
-         setValue: [NSNumber numberWithBool: YES]
-         forKey: kCATransactionDisableActions];
-        
         //if([CKOSVersion() floatValue] < 5){
             [oldController viewWillDisappear:YES];
             [newController viewWillAppear:YES];
         //}
-        
-        [CATransaction commit];
         
         UIView *containerView = self.containerView;
         __block UIViewController *bOldController = oldController;
@@ -268,17 +266,18 @@ typedef void(^CKTransitionBlock)();
         else{
             [bNewController retain];
             [bOldController retain];
+            
+            if(bOldController){
+                [bOldController.view removeFromSuperview];
+            }
+            if(bNewController){
+                [containerView addSubview:bNewController.view];
+            }
+                       
             [UIView transitionWithView:containerView
                               duration:0.4f 
                                options:(UIViewAnimationOptions)transition
-                            animations:^(void){
-                                if(bOldController){
-                                    [bOldController.view removeFromSuperview];
-                                }
-                                if(bNewController){
-                                    [containerView addSubview:bNewController.view];
-                                }
-                            } 
+                            animations:^(void){} 
                             completion:^(BOOL finished){
                                 if(bOldController){
                                     //if([CKOSVersion() floatValue] < 5){

@@ -70,10 +70,10 @@
         __block CKSplitView* bself = self;
         CKSplitViewConstraints* constraints = [self.delegate splitView:self constraintsForViewAtIndex:i];
         [constraints bind:@"type" withBlock:^(id value) {
-            [bself layoutSubviews];
+            [bself setNeedsLayout];
         }];
         [constraints bind:@"size" withBlock:^(id value) {
-            [bself layoutSubviews];
+            [bself setNeedsLayout];
         }];
         
         [self addSubview:view];
@@ -149,7 +149,7 @@
     }
     
     //set frames
-    
+
     i = 0;
     CGRect newFrame = CGRectMake(0,0,0,0);
     for(UIView* view in self.controllerViews){
@@ -281,10 +281,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+    [UIView setAnimationsEnabled:NO];
     
     if(!self.hasBeenReloaded){
         self.hasBeenReloaded = YES;
@@ -295,8 +292,9 @@
         [controller viewWillAppear:animated];
     }
     
-    [CATransaction commit];
     [_splitView setNeedsLayout];
+    
+    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

@@ -17,6 +17,7 @@
 #import "CKFormTableViewController.h"
 #import "CKVersion.h"
 #import "CKStyle+Parsing.h"
+#import "CKUIView+Style.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -42,6 +43,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize viewDidAppearBlock = _viewDidAppearBlock;
 @synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
 @synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
+@synthesize orientationChangeBlock = _orientationChangeBlock;
 @synthesize viewDidLoadBlock = _viewDidLoadBlock;
 @synthesize viewDidUnloadBlock = _viewDidUnloadBlock;
 @synthesize rightButton = _rightButton;
@@ -134,6 +136,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     _deallocBlock = nil;
     [_navigationTitleBindingContext release];
     _navigationTitleBindingContext = nil;
+    [_orientationChangeBlock release];
+    _orientationChangeBlock = nil;
     
 	[super dealloc];
 }
@@ -384,7 +388,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         
         [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         [self bind:@"title" withBlock:^(id value) {
-            label.text = value;
+            label.text = [value isKindOfClass:[NSString class]] ? value : nil;
             [label sizeToFit];
         }];
         [NSObject endBindingsContext];
@@ -500,8 +504,21 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     return NO;
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+}
+
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    if(_orientationChangeBlock){
+        _orientationChangeBlock(self,toInterfaceOrientation);
+    }
+    
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    NSMutableDictionary* viewStyle = [[self controllerStyle]styleForObject:self.view  propertyName:@"view"];
+    [[self.view class] applyStyle:viewStyle toView:self.view appliedStack:nil delegate:nil];//Apply only on view and not hierarchy !
+    
     [self applyStyleForNavigation];
 }
 
