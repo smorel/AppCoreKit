@@ -7,6 +7,7 @@
 //
 
 #import "CKViewControllerCellController.h"
+#import "CKUIView+Positioning.h"
 
 @implementation CKViewControllerCellController
 @synthesize viewController = _viewController;
@@ -33,6 +34,10 @@
     [super setupCell:cell];
 	UIView* controllerView = [_viewController view];
     controllerView.frame = cell.contentView.bounds;
+    controllerView.x += self.contentInsets.left;
+    controllerView.y += self.contentInsets.top;
+    controllerView.width -= self.contentInsets.left + self.contentInsets.right;
+    controllerView.height -= self.contentInsets.top + self.contentInsets.bottom;
     [cell.contentView addSubview:controllerView];
     
     [self setupViewControllerView:controllerView];
