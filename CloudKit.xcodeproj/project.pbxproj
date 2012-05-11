@@ -511,6 +511,8 @@
 		969FA54714967E1E0095C61E /* UIView+CKStyleForSubViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA54514967E1D0095C61E /* UIView+CKStyleForSubViews.m */; };
 		96A642851484125600C06A85 /* CKFormBindedCollectionSection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */; };
 		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
+		96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96C78A51155C6C9600A1120B /* CKAggregateCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C78A52155C6C9600A1120B /* CKAggregateCollection.m */; };
 		96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE301486B229008A23E4 /* CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CADE331486B22A008A23E4 /* CKRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CADE311486B229008A23E4 /* CKRuntime.m */; };
 		96CADE351486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE341486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h */; };
@@ -1048,6 +1050,8 @@
 		969FA54514967E1D0095C61E /* UIView+CKStyleForSubViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKStyleForSubViews.m"; path = "Classes/UIView+CKStyleForSubViews.m"; sourceTree = "<group>"; };
 		96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormBindedCollectionSection_private.h; path = Classes/CKFormBindedCollectionSection_private.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
+		96C78A51155C6C9600A1120B /* CKAggregateCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAggregateCollection.h; path = Classes/CKAggregateCollection.h; sourceTree = "<group>"; };
+		96C78A52155C6C9600A1120B /* CKAggregateCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAggregateCollection.m; path = Classes/CKAggregateCollection.m; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
 		96CADE311486B229008A23E4 /* CKRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRuntime.m; path = Classes/CKRuntime.m; sourceTree = "<group>"; };
 		96CADE341486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+CKRuntime_private.h"; path = "Classes/CKNSObject+CKRuntime_private.h"; sourceTree = "<group>"; };
@@ -1220,6 +1224,8 @@
 				7560DB4F13B8ED3600268D13 /* CKArrayCollection.m */,
 				96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */,
 				96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */,
+				96C78A51155C6C9600A1120B /* CKAggregateCollection.h */,
+				96C78A52155C6C9600A1120B /* CKAggregateCollection.m */,
 			);
 			name = Collection;
 			sourceTree = "<group>";
@@ -2380,6 +2386,7 @@
 				9600B8F01545D88F00F07C5A /* CKDownloadManager.h in Headers */,
 				96445943154869170054F907 /* CKViewControllerCellController.h in Headers */,
 				96243226155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h in Headers */,
+				96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2729,6 +2736,7 @@
 				9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */,
 				96445944154869170054F907 /* CKViewControllerCellController.m in Sources */,
 				96243227155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m in Sources */,
+				96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

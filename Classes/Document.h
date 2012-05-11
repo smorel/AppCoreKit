@@ -12,6 +12,7 @@
 #import "CKFeedSource.h"
 #import "CKCollection.h"
 #import "CKFilteredCollection.h"
+#import "CKAggregateCollection.h"
 #import "CKArrayCollection.h"
 #import "CKArrayProxyCollection.h"
 #import "CKUserDefaults.h"
