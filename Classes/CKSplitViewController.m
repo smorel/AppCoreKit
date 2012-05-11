@@ -252,6 +252,10 @@
             [self addChildViewController:controller];
         }
     }
+    
+    if(_splitView){
+        [_splitView reloadData];
+    }
 }
 
 - (void)loadView{
