@@ -35,6 +35,7 @@
 @property (nonatomic, retain, readwrite) UISegmentedControl* segmentedControl;
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @property (nonatomic, retain) NSString *bindingContextForTableView;
+@property (nonatomic, assign, readwrite) BOOL scrolling;
 
 - (void)updateNumberOfPages;
 - (void)adjustView;
@@ -1164,6 +1165,7 @@
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
 	[self fetchMoreData];
+    self.scrolling = NO;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -1173,10 +1175,12 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
 	[self fetchMoreData];
+    self.scrolling = NO;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self executeScrollingPolicy];
+    self.scrolling = YES;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -1192,6 +1196,7 @@
 	[self updateViewsVisibility:YES];
 	[self fetchMoreData];
     [self executeSnapPolicy];
+    self.scrolling = NO;
 }
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
