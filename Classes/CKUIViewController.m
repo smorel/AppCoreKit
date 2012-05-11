@@ -333,7 +333,11 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         self.navigationItem.leftBarButtonItem = item;
     }
     
-    if(self.navigationItem.backBarButtonItem){
+    //Back button
+    if(self.navigationItem.hidesBackButton){
+        self.navigationItem.backBarButtonItem = self.navigationItem.leftBarButtonItem = nil;
+    }
+    else if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* backBarItemStyle = [navBarStyle styleForObject:self.navigationItem.backBarButtonItem propertyName:@"backBarButtonItem"];
         
         //This weird steps are needed to avoid super views layout to be called when setting the styles !
