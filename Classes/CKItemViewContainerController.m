@@ -173,6 +173,10 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+	if([_objectController respondsToSelector:@selector(setDelegate:)]){
+		[_objectController performSelector:@selector(setDelegate:) withObject:self];
+	}
+    
     [super viewDidAppear:animated];
 	[self updateViewsVisibility:YES];
 }
