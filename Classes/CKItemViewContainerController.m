@@ -668,6 +668,7 @@
     
     id object = [self objectAtIndexPath:indexPath];
     CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+    NSAssert(controller, @"Unable to create CKItemViewController for object : %@",[object description]);
     if(!controller)
         return nil;
     

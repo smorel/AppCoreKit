@@ -377,7 +377,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)selectLastAnnotation {
-    [self.mapView selectAnnotation:[self.annotations lastObject] animated:YES];
+    if([self.annotations count] > 0){
+        [self.mapView selectAnnotation:[self.annotations lastObject] animated:YES];
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
@@ -428,6 +430,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	if ((source != nil) && source.isFetching) {
             //return NO;
 	}
+    
+    [self.mapView selectAnnotation:nil animated:YES];
+    self.annotationToSelect = nil;
     
     while([self.mapView.annotations count] > 0){
         id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
