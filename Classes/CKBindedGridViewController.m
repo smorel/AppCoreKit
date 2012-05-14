@@ -37,7 +37,7 @@
     [super setupWithCollection:gridCollection factory:factory];
 }
 
-
+/*
 - (void)setObjectController:(id)objectController{
     [super setObjectController:objectController];
     
@@ -45,6 +45,7 @@
     CKCollectionController* collectionController = (CKCollectionController*)self.objectController;
     collectionController.animateInsertionsOnReload = NO;
 }
+ */
 
 - (CKGridCollection*)gridCollection{
     NSAssert([self.objectController isKindOfClass:[CKCollectionController class]],@"Invalid ObjectController Class");

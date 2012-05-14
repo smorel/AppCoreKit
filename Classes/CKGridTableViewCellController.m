@@ -129,15 +129,16 @@
                 button.frame = view.bounds;
                 button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 button.tag = InteractionButtonTag;
-                [view addSubview:button];
+                [view insertSubview:button atIndex:0];
                 
                 [controller setView:view];
-                [controller initView:view];
                 
                 [cell.contentView addSubview:view];
                 
                 subcell = (CKUITableViewCell*) view;
             }
+            
+            subcell.contentView.userInteractionEnabled = NO;
             
             UIButton* button = (UIButton*)[subcell viewWithTag:InteractionButtonTag];
             button.backgroundColor = [UIColor clearColor];
