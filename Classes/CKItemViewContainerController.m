@@ -32,13 +32,14 @@
 
 @interface CKItemViewControllerFactory ()
 
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
 
 @interface CKItemViewContainerController(CKItemViewControllerManagement)
+- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (void) createsItemViewControllers;
 - (void) insertItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void) removeItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
@@ -80,17 +81,10 @@
 }
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
-    CKCollectionController* controller = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
-	return [self initWithObjectController:controller factory:factory];
-}
-
-- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory{
     self = [self init];
-	self.objectController = controller;
-	self.controllerFactory = factory;
+	[self setupWithCollection:collection factory:factory];
 	return self;
 }
-
 
 - (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
 	self.controllerFactory = factory;
@@ -653,6 +647,11 @@
  */
 @implementation CKItemViewContainerController(CKItemViewControllerManagement)
 
+- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+    return controller;
+}
+
 - (CKItemViewController*)itemViewControllerAtIndexPath:(NSIndexPath*)indexPath{
     if(_sectionsToControllers == nil){
         self.sectionsToControllers = [NSMutableArray array];
@@ -667,8 +666,8 @@
     }
     
     id object = [self objectAtIndexPath:indexPath];
-    CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
-    NSAssert(controller, @"Unable to create CKItemViewController for object : %@",[object description]);
+    CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
+    //NSAssert(controller, @"Unable to create CKItemViewController for object : %@",[object description]);
     if(!controller)
         return nil;
     
@@ -708,7 +707,7 @@
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             id object = [self objectAtIndexPath:indexPath];
-            CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+            CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
             [controller performSelector:@selector(setContainerController:) withObject:self];
             [controller performSelector:@selector(setValue:) withObject:object];
             [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
@@ -726,7 +725,7 @@
     for(NSInteger i = 0; i<[indexPaths count];++i){
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
         NSIndexPath* object = [objects objectAtIndex:i];
-        CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+        CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
         [controller performSelector:@selector(setContainerController:) withObject:self];
         [controller performSelector:@selector(setValue:) withObject:object];
         [controller performSelector:@selector(setIndexPath:) withObject:indexPath];

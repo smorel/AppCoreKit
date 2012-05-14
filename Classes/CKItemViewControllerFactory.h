@@ -47,4 +47,7 @@ typedef CKItemViewController*(^CKItemViewControllerCreationBlock)(id object, NSI
 - (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate 
                                        withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block;
 
+
+- (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+
 @end

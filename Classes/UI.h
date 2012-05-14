@@ -45,6 +45,9 @@
 #import "CKUIImagePropertyCellController.h"
 
 #import "CKBindedMapViewController.h"
+#import "CKBindedGridViewController.h"
+#import "CKGridTableViewCellController.h"
+#import "CKGridCollection.h"
 
 #import "CKActionSheet.h"
 #import "CKAlertView.h"

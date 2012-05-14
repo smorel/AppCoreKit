@@ -119,7 +119,7 @@
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-	id object = [[_property value] objectAtIndex:index];
+	id object = [[[_property value] objectAtIndex:index]retain];
 	[[_property value] removeObjectAtIndex:index];
 	[[_property value] insertObject:other atIndex:index];
 	self.count = [[_property value] count];	
@@ -133,6 +133,7 @@
     if(self.replaceObjectBlock){
         self.replaceObjectBlock(other,object,index); 
     }
+    [object release];
 }
 
 @end

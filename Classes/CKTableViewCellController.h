@@ -87,7 +87,7 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
  */
 @interface CKTableViewCellController : CKItemViewController
 
-+ (CKTableViewCellController*)cellController;
++ (id)cellController;
 
 @property (nonatomic, assign) CKTableViewCellStyle cellStyle;
 @property (nonatomic, assign) NSInteger indentationLevel;
