@@ -144,7 +144,6 @@
     return item;
 }
 
-
 - (CKItemViewControllerFactoryItem*)addItemForObjectWithPredicate:(NSPredicate*)predicate withControllerCreationBlock:(CKItemViewController*(^)(id object, NSIndexPath* indexPath))block{
     CKItemViewControllerFactoryItem* item = [CKItemViewControllerFactoryItem itemForObjectWithPredicate:predicate withControllerCreationBlock:block];
     [self.items addObject:item];
