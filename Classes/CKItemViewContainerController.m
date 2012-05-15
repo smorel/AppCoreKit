@@ -730,13 +730,16 @@
         [controller performSelector:@selector(setValue:) withObject:object];
         [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
-        NSMutableArray* controllers = nil;
-        if([indexPath section] < [_sectionsToControllers count]){
-            controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
-        }else{
-            controllers = [NSMutableArray array];
-            [_sectionsToControllers insertObject:controllers atIndex:[indexPath section]];
+        //If this update appears before we updated the orther sections :
+        for(int j = 0; j <= [indexPath section]; ++ j){
+            if(j >= [_sectionsToControllers count]){
+                [_sectionsToControllers insertObject:[NSMutableArray array] atIndex:j];
+            }
         }
+        
+        NSAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
+        
+        NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
         [controllers insertObject:controller atIndex:[indexPath row]];
     }
 }
