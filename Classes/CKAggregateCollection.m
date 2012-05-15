@@ -77,6 +77,14 @@
 	//TODO ! TO IMPLEMENT
 }
 
+- (BOOL)isFetching{
+    for(CKCollection* collection in _collections){
+        if([collection isFetching])
+            return YES;
+    }
+    return NO;
+}
+
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
     [self updateArray];//THIS COULD BE OPTIMIZED !!!!
 }

@@ -10,10 +10,13 @@
 
 typedef void(^CKInvokationBlock)();
 
+static NSMutableDictionary* CKInvokationRegistry = nil;
+
 @interface CKInvokationObject : NSObject
 @property(nonatomic,copy)CKInvokationBlock block;
 @property(nonatomic,retain)CKWeakRef* objectRef;
 - (id)initWithObject:(id)object block:(CKInvokationBlock)theblock delay:(NSTimeInterval)delay;
+- (void)cancel;
 @end
 
 @implementation CKInvokationObject
@@ -22,6 +25,14 @@ typedef void(^CKInvokationBlock)();
 
 - (void)dealloc{
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+    NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
+    if(ar){
+        [ar removeObject:[NSValue valueWithNonretainedObject:self]];
+        if([ar count] <= 0){
+            [CKInvokationRegistry removeObjectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
+        }
+    }
     
     [_block release];
     [_objectRef release];
@@ -32,8 +43,21 @@ typedef void(^CKInvokationBlock)();
     self = [super init];
     self.block = theblock;
     
+    if(CKInvokationRegistry == nil){
+        CKInvokationRegistry = [[NSMutableDictionary alloc]init];
+    }
+    
+    NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:object]];
+    if(!ar){
+        ar = [NSMutableArray array];
+        [CKInvokationRegistry setObject:ar forKey:[NSValue valueWithNonretainedObject:object]];
+    }
+    
+    [ar addObject:[NSValue valueWithNonretainedObject:self]];
+    
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
+        [CKInvokationRegistry removeObjectForKey:[NSValue valueWithNonretainedObject:weakRef.object]];
         [NSObject cancelPreviousPerformRequestsWithTarget:bself];
         [bself autorelease];
     }];
@@ -47,6 +71,12 @@ typedef void(^CKInvokationBlock)();
     if(_block){
         _block();
     }
+    
+    [self autorelease];
+}
+
+- (void)cancel{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self autorelease];
 }
 
@@ -120,5 +150,12 @@ typedef void(^CKInvokationBlock)();
     [[[CKInvokationObject alloc]initWithObject:self block:block delay:delay]autorelease];
 }
 
+- (void)cancelPeformBlock{
+    NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self]];
+    for(NSValue* v in ar){
+        CKInvokationObject* invokation = [v nonretainedObjectValue];
+        [invokation cancel];
+    }
+}
 
 @end

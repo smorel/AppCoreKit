@@ -155,6 +155,10 @@
 	}
 }
 
+- (BOOL)isFetching{
+    return [[self feedSource]isFetching];
+}
+
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
 	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
 	

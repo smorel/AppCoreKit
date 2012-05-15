@@ -51,6 +51,7 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 - (void)addObserver:(id)object;
 - (void)removeObserver:(id)object;
 - (void)fetchRange:(NSRange)range;
+- (BOOL)isFetching;
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate;
 

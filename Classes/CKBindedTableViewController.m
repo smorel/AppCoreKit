@@ -475,7 +475,7 @@
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-    if(_indexPathToReachAfterRotation){
+    if([self isValidIndexPath:_indexPathToReachAfterRotation]){
         BOOL pagingEnable = self.tableView.pagingEnabled;
         self.tableView.pagingEnabled = NO;
         [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionMiddle animated:NO];

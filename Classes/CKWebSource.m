@@ -117,14 +117,14 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
-	if (newItems) {	
-		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
-		[self performSelector:@selector(addItems:) withObject:newItems];
-	}
-	
 	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
 	self.isFetching = NO;
 	self.request = nil;
+    
+    if (newItems) {	
+		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
+		[self performSelector:@selector(addItems:) withObject:newItems];
+	}
 	
 	if(_webSourceDelegate && [_webSourceDelegate respondsToSelector:@selector(webSourceDidSuccess:)]){
 		[_webSourceDelegate webSourceDidSuccess:self];

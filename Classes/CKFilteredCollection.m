@@ -73,6 +73,10 @@
 	[self.collection fetchRange:range];
 }
 
+- (BOOL)isFetching{
+    return [self.collection isFetching];
+}
+
 - (NSIndexSet*)filteredIndexSet:(NSIndexSet*)indexes{
     NSMutableIndexSet* nonFilteredIndexPaths = [NSMutableIndexSet indexSet];
     
