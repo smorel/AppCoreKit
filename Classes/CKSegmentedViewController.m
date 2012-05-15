@@ -10,6 +10,7 @@
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import "CKNSObject+Bindings.h"
 #import "CKUIView+Positioning.h"
+#import "CKUIViewController+Style.h"
 
 @interface CKSegmentedViewController() 
 - (void)updateSegmentPositionUsingPosition:(CKSegmentedViewControllerPosition)position;
@@ -164,6 +165,8 @@
         [self.segmentedControl addTarget:self action:@selector(changeList:) forControlEvents:UIControlEventValueChanged];
         [self updateSegmentPositionUsingPosition:self.segmentPosition];
         self.segmentedControl.selectedSegmentIndex = 0;
+        
+        [self applyStyle];
     }
 }
 
