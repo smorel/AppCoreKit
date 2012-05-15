@@ -83,6 +83,9 @@
 }
 
 + (NSString*)convertToNSString:(id)object{
+    if(!object){
+        return @"nil";
+    }
     return [NSString stringWithFormat:@"%@ : <%p>",object,[object class]];
 }
 

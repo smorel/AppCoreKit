@@ -281,9 +281,13 @@
         [self.view addSubview:self.tabBar];
     }
     
-    [self setStyle:self.style];//Apply layout ...
-    
 	[self updateTabBarItems];
+}
+
+- (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTabViewControllerStyle",
+                                                 CKTabViewControllerStyleBottom,
+                                                 CKTabViewControllerStyleTop);
 }
 
 - (void)setStyle:(CKTabViewControllerStyle)theStyle{
@@ -336,9 +340,9 @@
      setValue: [NSNumber numberWithBool: YES]
      forKey: kCATransactionDisableActions];
     
-    [self setStyle:self.style];//Apply layout ...
-    
 	[super viewWillAppear:animated];
+    
+    [self setStyle:self.style];//Apply layout ...
     
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
 	NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
