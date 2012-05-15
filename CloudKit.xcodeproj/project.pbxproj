@@ -503,6 +503,12 @@
 		967C51821538BD4E00B3F785 /* CKNSObject+CKSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */; };
 		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51861538BE8200B3F785 /* CKDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51841538BE8200B3F785 /* CKDocument.m */; };
+		969AFE6B1561506B00CFE27A /* CKBindedGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE691561506B00CFE27A /* CKBindedGridViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		969AFE6C1561506B00CFE27A /* CKBindedGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6A1561506B00CFE27A /* CKBindedGridViewController.m */; };
+		969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		969AFE70156151D700CFE27A /* CKGridTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6E156151D700CFE27A /* CKGridTableViewCellController.m */; };
+		969AFE7315616B5C00CFE27A /* CKGridCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE7115616B5C00CFE27A /* CKGridCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		969AFE7415616B5C00CFE27A /* CKGridCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE7215616B5C00CFE27A /* CKGridCollection.m */; };
 		969FA53F14966CD90095C61E /* CKUILabel+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */; };
 		969FA54014966CD90095C61E /* CKUILabel+CKHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */; };
 		969FA54114966CD90095C61E /* CKUITableViewCell+CKHighlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */; };
@@ -1042,6 +1048,12 @@
 		967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+CKSingleton.m"; path = "Classes/CKNSObject+CKSingleton.m"; sourceTree = "<group>"; };
 		967C51831538BE8100B3F785 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocument.h; path = Classes/CKDocument.h; sourceTree = "<group>"; };
 		967C51841538BE8200B3F785 /* CKDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocument.m; path = Classes/CKDocument.m; sourceTree = "<group>"; };
+		969AFE691561506B00CFE27A /* CKBindedGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBindedGridViewController.h; path = Classes/CKBindedGridViewController.h; sourceTree = "<group>"; };
+		969AFE6A1561506B00CFE27A /* CKBindedGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedGridViewController.m; path = Classes/CKBindedGridViewController.m; sourceTree = "<group>"; };
+		969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGridTableViewCellController.h; path = Classes/CKGridTableViewCellController.h; sourceTree = "<group>"; };
+		969AFE6E156151D700CFE27A /* CKGridTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKGridTableViewCellController.m; path = Classes/CKGridTableViewCellController.m; sourceTree = "<group>"; };
+		969AFE7115616B5C00CFE27A /* CKGridCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGridCollection.h; path = CloudKit/CKGridCollection.h; sourceTree = "<group>"; };
+		969AFE7215616B5C00CFE27A /* CKGridCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKGridCollection.m; path = CloudKit/CKGridCollection.m; sourceTree = "<group>"; };
 		969FA53B14966CD90095C61E /* CKUILabel+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+CKHighlight.h"; path = "Classes/CKUILabel+CKHighlight.h"; sourceTree = "<group>"; };
 		969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+CKHighlight.m"; path = "Classes/CKUILabel+CKHighlight.m"; sourceTree = "<group>"; };
 		969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableViewCell+CKHighlight.h"; path = "Classes/CKUITableViewCell+CKHighlight.h"; sourceTree = "<group>"; };
@@ -1316,6 +1328,7 @@
 				7506E40513B8FF7A00EE1471 /* ItemContainers */,
 				7506E3FD13B8FDD300EE1471 /* Carousel */,
 				7506E40213B8FE6100EE1471 /* Tables */,
+				969AFE671561504700CFE27A /* Grid */,
 				7506E40613B8FFB400EE1471 /* Map */,
 			);
 			name = UI;
@@ -2108,6 +2121,19 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		969AFE671561504700CFE27A /* Grid */ = {
+			isa = PBXGroup;
+			children = (
+				969AFE7115616B5C00CFE27A /* CKGridCollection.h */,
+				969AFE7215616B5C00CFE27A /* CKGridCollection.m */,
+				969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */,
+				969AFE6E156151D700CFE27A /* CKGridTableViewCellController.m */,
+				969AFE691561506B00CFE27A /* CKBindedGridViewController.h */,
+				969AFE6A1561506B00CFE27A /* CKBindedGridViewController.m */,
+			);
+			name = Grid;
+			sourceTree = "<group>";
+		};
 		96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -2387,6 +2413,9 @@
 				96445943154869170054F907 /* CKViewControllerCellController.h in Headers */,
 				96243226155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h in Headers */,
 				96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */,
+				969AFE6B1561506B00CFE27A /* CKBindedGridViewController.h in Headers */,
+				969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */,
+				969AFE7315616B5C00CFE27A /* CKGridCollection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2737,6 +2766,9 @@
 				96445944154869170054F907 /* CKViewControllerCellController.m in Sources */,
 				96243227155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m in Sources */,
 				96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */,
+				969AFE6C1561506B00CFE27A /* CKBindedGridViewController.m in Sources */,
+				969AFE70156151D700CFE27A /* CKGridTableViewCellController.m in Sources */,
+				969AFE7415616B5C00CFE27A /* CKGridCollection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

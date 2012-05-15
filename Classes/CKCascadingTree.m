@@ -412,6 +412,8 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)initAfterLoading{
+    [self makeAllPlatformSpecific];
+    
     for(id key in [self allKeys]){
 		id object = [[self objectForKey:key]retain];
 		if([object isKindOfClass:[NSDictionary class]]
@@ -451,7 +453,6 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)postInitAfterLoading{
-    [self makeAllPlatformSpecific];
     //Setup parent for hierarchical searchs
     for(id key in [self allKeys]){
 		id object = [self objectForKey:key];

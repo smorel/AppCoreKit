@@ -72,7 +72,6 @@
 
 //init
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
-- (id)initWithObjectController:(id)controller factory:(CKItemViewControllerFactory*)factory;
 
 //setup
 - (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;

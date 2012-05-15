@@ -72,7 +72,7 @@
 @property (nonatomic, retain) NSMutableArray* items;
 @property (nonatomic, assign) id objectController;
 
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
@@ -80,12 +80,11 @@
 
 @implementation CKItemViewControllerFactory
 @synthesize items = _items;
-@synthesize objectController = _objectController;
+@synthesize objectController;
 
 - (void)dealloc{
 	[_items release];
 	_items = nil;
-	_objectController = nil;
 	[super dealloc];
 }
 
@@ -113,8 +112,7 @@
     return [predicate evaluateWithObject:object];
 }
 
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath{
-	id object = [_objectController objectAtIndexPath:indexPath];
+- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
 	for(CKItemViewControllerFactoryItem* item in _items){
 		if([self doesItem:item matchWithObject:object]){
 			return item;
@@ -125,7 +123,7 @@
 
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewControllerFactoryItem* item = [self factoryItemAtIndexPath:indexPath];
+	CKItemViewControllerFactoryItem* item = [self factoryItemForObject:object atIndexPath:indexPath];
     if(!item){
         return nil;
     }

@@ -412,7 +412,7 @@
     
 }
 
-+ (CKTableViewCellController*)cellController{
++ (id)cellController{
     return [[[[self class]alloc]init]autorelease];
 }
 

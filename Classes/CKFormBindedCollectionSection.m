@@ -26,7 +26,7 @@
 @interface CKItemViewControllerFactory ()
 
 @property (nonatomic, assign) id objectController;
-- (CKItemViewControllerFactoryItem*)factoryItemAtIndexPath:(NSIndexPath*)indexPath;
+- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
 
