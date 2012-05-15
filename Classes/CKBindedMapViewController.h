@@ -23,6 +23,7 @@
 /** TODO
  */
 typedef enum CKBindedMapViewControllerZoomStrategy{
+    CKBindedMapViewControllerZoomStrategyManual,
 	CKBindedMapViewControllerZoomStrategyEnclosing,
 	CKBindedMapViewControllerZoomStrategySmart
 }CKBindedMapViewControllerZoomStrategy;
