@@ -36,7 +36,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @implementation CKTableViewCellController (CKDynamicLayout)
 
-@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize;
+@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController;
 
 
 - (CGFloat)computeTableViewCellViewSize{
@@ -88,8 +88,16 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     return 0;
 }
 
+- (CGFloat)computeContentViewSizeForSubCellController{
+    return [self computeTableViewCellViewSize] - [self accessoryWidth] - [self editingWidth];
+}
+
 - (CGFloat)computeContentViewSize{
-    //TODO : This should  taking care of editing status and accessory view ...
+    if(self.parentCellController){
+        return [self.parentCellController computeContentViewSizeForSubCellController]  - [self accessoryWidth] - [self editingWidth];
+    }
+    
+    
     return [self computeTableViewCellViewSize] - [self accessoryWidth] - [self editingWidth];
 }
 
@@ -589,6 +597,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
          */
         
         
+        
         if(self.cellStyle == CKTableViewCellStyleValue3){
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
                 cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -617,12 +626,23 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
             cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
             cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
+            
+            //ADJUST FRAMES HERE DEPENDING ON CELL SIZE THAT COULD BE DIFFERENT THAN THE 'IDEAL' SIZE
+            
+            CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            CGRect detailFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            
+            CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y;
+            CGFloat yoffset = ((cell.contentView.height - textsHeight) / 2) -  textFrame.origin.y;
+            textFrame.origin.y += yoffset;
+            detailFrame.origin.y += yoffset;
+            
             if(cell.textLabel != nil){
-                CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
                 cell.textLabel.frame = textFrame;
             }
+            
             if(cell.detailTextLabel != nil){
-                cell.detailTextLabel.frame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+                cell.detailTextLabel.frame = detailFrame;
             }
         }
     }

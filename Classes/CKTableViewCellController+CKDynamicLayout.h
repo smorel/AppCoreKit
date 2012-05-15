@@ -14,6 +14,8 @@
 @property (nonatomic, assign) CGFloat componentsSpace;
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
 
+@property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
+
 extern NSString* CKDynamicLayoutTextAlignment;
 extern NSString* CKDynamicLayoutFont;
 extern NSString* CKDynamicLayoutNumberOfLines;
@@ -23,6 +25,10 @@ extern NSString* CKDynamicLayoutLineBreakMode;
 
 - (void)performLayout;
 - (CGSize)computeSize;
+
+
+- (CGFloat)computeContentViewSize;
+- (CGFloat)computeContentViewSizeForSubCellController;
 
 - (CGSize)sizeForText:(NSString*)text withStyle:(NSDictionary*)style constraintToWidth:(CGFloat)width;
 

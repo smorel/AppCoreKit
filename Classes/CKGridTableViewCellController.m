@@ -9,6 +9,7 @@
 #import "CKGridTableViewCellController.h"
 #import "CKGridView.h"
 #import "CKNSObject+Bindings.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
@@ -187,6 +188,11 @@
         
         NSIndexPath* indexPath = self.indexPath;
         CKItemViewController* controller = [_controllerFactory controllerForObject:object atIndexPath:indexPath];
+        NSAssert([controller isKindOfClass:[CKTableViewCellController class]],@"Grid only supports CKTableViewCellController");
+        
+        CKTableViewCellController* cellController = (CKTableViewCellController*)controller;
+        cellController.parentCellController = self;
+        
         [controller performSelector:@selector(setContainerController:) withObject:self.containerController];
         [controller performSelector:@selector(setValue:) withObject:object];
         [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
@@ -228,6 +234,13 @@
     for(CKItemViewController* controller in self.cellControllers){
         [controller viewDidDisappear];
     }
+}
+
+- (CGFloat)computeContentViewSizeForSubCellController{
+    CGFloat contentWidth = [self computeContentViewSize];
+    
+    CGFloat viewWidth = (contentWidth - self.contentInsets.left - self.contentInsets.right - ((_numberOfColumns - 1) * self.componentsSpace)) / (CGFloat)_numberOfColumns;
+    return viewWidth;
 }
 
 @end
