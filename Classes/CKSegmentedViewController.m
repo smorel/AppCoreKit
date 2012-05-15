@@ -101,7 +101,8 @@
     //place the segmented control
     switch(self.segmentPosition){
         case CKSegmentedViewControllerPositionTop:{
-            self.containerView.y += self.segmentedControl.height;
+            self.containerView.y = self.segmentedControl.height;
+            self.containerView.height = [self.view height] - self.segmentedControl.height;
             self.segmentedControl.y = 0;
             self.segmentedControl.x = 0;
             self.segmentedControl.width = self.view.width;
@@ -110,7 +111,7 @@
             break;
         }
         case CKSegmentedViewControllerPositionBottom:{
-            self.containerView.height -= self.segmentedControl.height;
+            self.containerView.height = [self.view height] - self.segmentedControl.height;
             self.segmentedControl.y = self.containerView.height;
             self.segmentedControl.x = 0;
             self.segmentedControl.width = self.view.width;
@@ -138,6 +139,10 @@
     if(self.state == CKUIViewControllerStateWillAppear ||
        self.state == CKUIViewControllerStateDidAppear){
         
+        if(_segmentedControl){
+            [_segmentedControl removeFromSuperview];
+        }
+        
         __block CKSegmentedViewController* bself = self;
         [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         NSMutableArray* items = [NSMutableArray array];
@@ -153,6 +158,7 @@
             ++i;
         }
         [NSObject endBindingsContext];
+
         
         self.segmentedControl = [[[CKSegmentedControl alloc]initWithItems:items]autorelease];
         [self.segmentedControl addTarget:self action:@selector(changeList:) forControlEvents:UIControlEventValueChanged];
