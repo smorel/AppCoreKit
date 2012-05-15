@@ -288,6 +288,8 @@
 @property (nonatomic, assign) CGFloat componentsRatio;
 @property (nonatomic, assign) CGFloat componentsSpace;
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
+@property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
+@property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
 
 @property (nonatomic, assign) BOOL invalidatedSize;
 
@@ -313,6 +315,8 @@
 @synthesize selectionStyle = _selectionStyle;
 @synthesize invalidatedSize = _invalidatedSize;
 @synthesize sizeBlock = _sizeBlock;
+@synthesize parentCellController = _parentCellController;
+@synthesize parentCellControllerRef = _parentCellControllerRef;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -362,8 +366,18 @@
 	_editingAccessoryView = nil;
 	[_sizeBlock release];
     _sizeBlock = nil;
+    [_parentCellControllerRef release];
+    _parentCellControllerRef = nil;
     
 	[super dealloc];
+}
+
+- (void)setParentCellController:(CKTableViewCellController *)parentCellController{
+    self.parentCellControllerRef = [CKWeakRef weakRefWithObject:parentCellController];
+}
+
+- (CKTableViewCellController*)parentCellController{
+    return [[self parentCellControllerRef]object];
 }
 
 - (void)setCellStyle:(CKTableViewCellStyle)cellStyle{
