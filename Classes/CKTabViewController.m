@@ -209,12 +209,23 @@
 @end
 
 //CKTabViewItem
-
+@interface CKTabViewItem()
+@property(nonatomic,assign,readwrite)CKTabViewItemPosition position;
+@end
 
 @implementation CKTabViewItem
+@synthesize position;
 
 + (void)load{
     CKSwizzleSelector([UIViewController class],@selector(dealloc), @selector(CKTabViewItem_UIViewController_dealloc));
+}
+
+- (void)positionExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTabViewItemPosition", 
+                                                 CKTabViewItemPositionFirst,
+                                                 CKTabViewItemPositionMiddle,
+                                                 CKTabViewItemPositionLast,
+                                                 CKTabViewItemPositionAlone);
 }
 
 - (void)dealloc{
@@ -352,8 +363,21 @@
         NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
         NSMutableDictionary* tabBarStyle = [controllerStyle styleForObject:self  propertyName:@"tabBar"];
         
+        int i =0;
 		for (UIViewController *vc in self.viewControllers) {
             CKTabViewItem* item = vc.tabViewItem;
+            
+            if([self.viewControllers count] == 1){
+                item.position = CKTabViewItemPositionAlone;
+            }
+            else if(i == 0){
+                item.position = CKTabViewItemPositionFirst;
+            }else if(i == [self.viewControllers count] - 1){
+                item.position = CKTabViewItemPositionLast;
+            }else{
+                item.position = CKTabViewItemPositionMiddle;
+            }
+            
             if(self.viewIsOnScreen){
                 NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
                 [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
@@ -361,6 +385,7 @@
             }
 
 			[items addObject:item];
+            ++i;
 		}
 		[self.tabBar setItems:items];
 	}

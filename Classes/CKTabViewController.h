@@ -31,6 +31,8 @@ typedef enum CKTabViewStyle{
 @end
 
 
+
+
 // CKTabViewDelegate
 
 @protocol CKTabViewDelegate <NSObject>
@@ -39,9 +41,18 @@ typedef enum CKTabViewStyle{
 
 @end
 
+
+typedef enum CKTabViewItemPosition{
+    CKTabViewItemPositionFirst  = 1 << 0,
+    CKTabViewItemPositionMiddle = 1 << 1,
+    CKTabViewItemPositionLast   = 1 << 2,
+    CKTabViewItemPositionAlone  = 1 << 3
+}CKTabViewItemPosition;
+
 // CKTabViewItem
 
 @interface CKTabViewItem : UIButton
+@property(nonatomic,assign,readonly)CKTabViewItemPosition position;
 @end
 
 
