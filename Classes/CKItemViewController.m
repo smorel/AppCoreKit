@@ -20,6 +20,7 @@
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, retain) CKWeakRef *targetRef;
 @property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
+@property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
 
@@ -43,6 +44,7 @@
 @synthesize viewDidAppearCallback = _viewDidAppearCallback;
 @synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
 @synthesize targetRef = _targetRef;
+@synthesize isViewAppeared = _isViewAppeared;
 
 @synthesize flags = _flags;
 @synthesize size = _size;
@@ -83,6 +85,7 @@
 - (void)postInit{
     _flags = CKItemViewFlagAll;
     _size = CGSizeMake(320,44);
+    _isViewAppeared = NO;
 }
 
 - (void)setSize:(CGSize)s{
@@ -148,6 +151,8 @@
 	if(_initCallback != nil){
 		[_initCallback execute:self];
 	}
+    
+	[self applyStyle];
 }
 
 - (void)rotateView:(UIView*)view animated:(BOOL)animated{
@@ -155,14 +160,20 @@
 }
 
 - (void)viewDidAppear:(UIView *)view{
-    if(_viewDidAppearCallback){
-        [_viewDidAppearCallback execute:self];
+    if(!self.isViewAppeared){
+        if(_viewDidAppearCallback){
+            [_viewDidAppearCallback execute:self];
+        }
+        self.isViewAppeared = YES;
     }
 }
 
 - (void)viewDidDisappear{
-    if(_viewDidDisappearCallback){
-        [_viewDidDisappearCallback execute:self];
+    if(self.isViewAppeared){
+        if(_viewDidDisappearCallback){
+            [_viewDidDisappearCallback execute:self];
+        }
+        self.isViewAppeared = YES;
     }
 }
 

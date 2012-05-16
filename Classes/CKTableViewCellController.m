@@ -8,6 +8,7 @@
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKUIView+Style.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 
 #import "CKUILabel+Style.h"
@@ -33,6 +34,7 @@
 
 @interface CKItemViewController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
 
@@ -397,20 +399,48 @@
     return _cellStyle;
 }
 
+- (void)reapplyStyleForBackgroundViews{
+    if(self.tableViewCell){
+        CKStyleView* backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
+            ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
+        CKStyleView* selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
+            ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
+        if(backgroundStyleView || selectedBackgroundStyleView){
+            
+            NSMutableDictionary* style = [self controllerStyle];
+            NSMutableDictionary* tableViewCellStyle = [style styleForObject:self.tableViewCell  propertyName:@"tableViewCell"];
+            
+            if(backgroundStyleView){
+                NSMutableDictionary* backgroundViewStyle = [tableViewCellStyle styleForObject:self.tableViewCell.backgroundView  propertyName:@"backgroundView"];
+                
+                backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:backgroundViewStyle];
+                backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:backgroundViewStyle];
+                backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:backgroundViewStyle];
+            }
+            if(selectedBackgroundStyleView){
+                NSMutableDictionary* selectedBackgroundViewStyle = [tableViewCellStyle styleForObject:self.tableViewCell.selectedBackgroundView  propertyName:@"selectedBackgroundView"];
+                
+                selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:selectedBackgroundViewStyle];
+                selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:selectedBackgroundViewStyle];
+                selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:selectedBackgroundViewStyle];
+            }
+        }
+    }
+}
+
 - (void)setIndexPath:(NSIndexPath *)indexPath{
     if([self.indexPath isEqual:indexPath] == NO){
         [super setIndexPath:indexPath];
-        [self invalidateSize];//as stylesheet selection could be dependent
     }
+
     if([self.tableViewCell superview]){
-        [self applyStyle];
+        [self reapplyStyleForBackgroundViews];
     }
 }
 
 - (void)setName:(NSString *)name{
     if([self.name isEqual:name] == NO){
         [super setName:name];
-        [self invalidateSize];//as stylesheet selection could be dependent
     }
 }
 
@@ -748,12 +778,13 @@
 }
 
 - (void)setupView:(UIView *)view{
-	[self applyStyle];
     /*if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     }*/
+    
+    [self reapplyStyleForBackgroundViews];
     
     if(self.layoutCallback == nil){
         __block CKTableViewCellController* bself = self;
@@ -813,12 +844,16 @@
 
 - (void)viewDidAppear:(UIView *)view{
 	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
-	[self cellDidAppear:(UITableViewCell*)view];
+    if(!self.isViewAppeared){
+        [self cellDidAppear:(UITableViewCell*)view];
+    }
 	[super viewDidAppear:view];
 }
 
 - (void)viewDidDisappear{
-	[self cellDidDisappear];
+    if(self.isViewAppeared){
+        [self cellDidDisappear];
+    }
 	[super viewDidDisappear];
 }
 

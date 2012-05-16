@@ -14,6 +14,10 @@
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface CKItemViewContainerController ()
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+@end
+
 @interface CKTableView()
 @property (nonatomic,assign) NSInteger numberOfUpdates;
 @end
@@ -248,6 +252,18 @@
     if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;
         [self reload];
+    }else{
+        
+        for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
+            NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
+            for(int row =0;row<[controllers count];++row){
+                CKTableViewCellController* controller = (CKTableViewCellController*)[controllers objectAtIndex:row];
+                [controller setInvalidatedSize:YES];
+            }
+        }
+        
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
     }
     
 	if (self.stickySelection == NO){
@@ -405,12 +421,13 @@
     }
     
     if(self.sizeIsAlreadyInvalidated == NO){
-        [[self tableView]beginUpdates];
+        //[[self tableView]beginUpdates];
+        [self.tableView setNeedsLayout];
     }
     self.sizeIsAlreadyInvalidated = YES;
     
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
-    [self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
+    //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
+    //[self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
 }
 
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{

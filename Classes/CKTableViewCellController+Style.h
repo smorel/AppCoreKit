@@ -44,6 +44,9 @@ extern NSString* CKStyleCellFlags;
 /** TODO
  */
 @interface CKTableViewCellController (CKStyle)
+- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style;
 @end
 
 /** TODO

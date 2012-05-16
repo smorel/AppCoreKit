@@ -8,6 +8,7 @@
 
 #import "CKGridTableViewCellController.h"
 #import "CKGridView.h"
+#import "CKStyleView.h"
 #import "CKNSObject+Bindings.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 
@@ -130,7 +131,17 @@
                 button.frame = view.bounds;
                 button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 button.tag = InteractionButtonTag;
-                [view insertSubview:button atIndex:0];
+                
+                NSInteger styleViewIndex = -1;
+                int i = 0;
+                for(UIView* v in [view subviews]){
+                    if([v isKindOfClass:[CKStyleView class]]){
+                        styleViewIndex = i;
+                        break;
+                    }
+                    ++i;
+                }
+                [view insertSubview:button atIndex:(styleViewIndex == -1) ? 0 : styleViewIndex+1];
                 
                 [controller setView:view];
                 
@@ -146,15 +157,18 @@
             if([controller flags] & CKItemViewFlagSelectable){
                 [button bindEvent:UIControlEventTouchDown | UIControlEventTouchDragInside withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
-                        [subcell setSelected:YES animated:NO];
+                        [subcell setSelected:YES animated:YES];
+                        [subcell setHighlighted:YES animated:NO];
                     }
                 }];
                 [button bindEvent:UIControlEventTouchUpInside withBlock:^{
                     [subcell setSelected:NO animated:YES];
+                    [subcell setHighlighted:YES animated:YES];
                     [controller didSelect]; 
                 }];
                 [button bindEvent:UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragOutside withBlock:^{
                     [subcell setSelected:NO animated:YES];
+                    [subcell setHighlighted:NO animated:YES];
                 }];
             }
             
