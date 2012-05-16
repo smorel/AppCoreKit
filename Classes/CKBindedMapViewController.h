@@ -28,6 +28,12 @@ typedef enum CKBindedMapViewControllerZoomStrategy{
 	CKBindedMapViewControllerZoomStrategySmart
 }CKBindedMapViewControllerZoomStrategy;
 
+
+typedef enum CKBindedMapViewControllerSelectionStrategy{
+    CKBindedMapViewControllerSelectionStrategyManual,
+    CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations
+}CKBindedMapViewControllerSelectionStrategy;
+
 @class CKBindedMapViewController;
 typedef void(^CKBindedMapViewControllerSelectionBlock)(CKBindedMapViewController* controller, CKMapAnnotationController* annotationController);
 
@@ -52,6 +58,7 @@ typedef void(^CKBindedMapViewControllerSelectionBlock)(CKBindedMapViewController
 @property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
 
 @property (nonatomic, assign) CKBindedMapViewControllerZoomStrategy zoomStrategy;
+@property (nonatomic, assign) CKBindedMapViewControllerSelectionStrategy selectionStrategy;
 @property (nonatomic, assign) CGFloat smartZoomDefaultRadius;
 @property (nonatomic, assign) NSInteger smartZoomMinimumNumberOfAnnotations;
 @property (nonatomic, assign) BOOL includeUserLocationWhenZooming;

@@ -60,6 +60,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize includeUserLocationWhenZooming = _includeUserLocationWhenZooming;
 @synthesize selectionBlock = _selectionBlock;
 @synthesize deselectionBlock = _deselectionBlock;
+@synthesize selectionStrategy = _selectionStrategy;
 
 - (void)postInit {
 	[super postInit];
@@ -67,6 +68,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 	
 	_zoomStrategy = CKBindedMapViewControllerZoomStrategyEnclosing;
+    _selectionStrategy = CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations;
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
@@ -395,9 +397,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
 	// If displaying only one entry, select it
-	if (self.annotations && self.annotations.count == 1) {
-		[self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
-	}	
+    if(_selectionStrategy == CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations){
+        if (self.annotations && self.annotations.count == 1) {
+            [self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
+        }	
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
