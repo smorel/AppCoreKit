@@ -671,18 +671,21 @@
     if(!controller)
         return nil;
     
+    //If this update appears before we updated the orther sections :
+    for(int j = 0; j <= [indexPath section]; ++ j){
+        if(j >= [_sectionsToControllers count]){
+            [_sectionsToControllers insertObject:[NSMutableArray array] atIndex:j];
+        }
+    }
+    
+    NSAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
+    
+    NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
+    [controllers insertObject:controller atIndex:[indexPath row]];
+    
     [controller performSelector:@selector(setContainerController:) withObject:self];
     [controller performSelector:@selector(setValue:) withObject:object];
     [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-    
-    NSMutableArray* controllers = nil;
-    if([indexPath section] < [self.sectionsToControllers count]){
-        controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
-    }else{
-        controllers = [NSMutableArray array];
-        [self.sectionsToControllers insertObject:controllers atIndex:[indexPath section]];
-    }
-    [controllers insertObject:controller atIndex:[indexPath row]];
     
 	return controller;
 }
@@ -695,13 +698,15 @@
     for(NSInteger section=0;section<sectionCount;++section){
         NSInteger rowCount = [self numberOfObjectsForSection:section];
         
-        NSMutableArray* controllers = nil;
-        if(section < [self.sectionsToControllers count]){
-            controllers = [self.sectionsToControllers objectAtIndex:section];
-        }else{
-            controllers = [NSMutableArray array];
-            [self.sectionsToControllers insertObject:controllers atIndex:section];
+        //If this update appears before we updated the orther sections :
+        for(int j = 0; j <= section; ++ j){
+            if(j >= [_sectionsToControllers count]){
+                [_sectionsToControllers insertObject:[NSMutableArray array] atIndex:j];
+            }
         }
+        
+        NSAssert(section < [_sectionsToControllers count],@"There is a problem");
+        NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:section];
         
         for(int row =0;row<rowCount;++row){
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
@@ -726,9 +731,6 @@
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
         NSIndexPath* object = [objects objectAtIndex:i];
         CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
-        [controller performSelector:@selector(setContainerController:) withObject:self];
-        [controller performSelector:@selector(setValue:) withObject:object];
-        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
         
         //If this update appears before we updated the orther sections :
         for(int j = 0; j <= [indexPath section]; ++ j){
@@ -741,6 +743,10 @@
         
         NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
         [controllers insertObject:controller atIndex:[indexPath row]];
+        
+        [controller performSelector:@selector(setContainerController:) withObject:self];
+        [controller performSelector:@selector(setValue:) withObject:object];
+        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
     }
 }
 
