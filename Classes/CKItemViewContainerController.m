@@ -631,6 +631,16 @@
 	return nil;
 }
 
+- (NSIndexPath*)indexPathForObject:(id)object{
+    for(int i =0; i < [self numberOfSections]; ++i){
+        NSInteger index = [self indexOfObject:object inSection:i];
+        if(index != NSNotFound){
+            return [NSIndexPath indexPathForRow:index inSection:i];
+        }
+    }
+    return nil;
+}
+
 @end
 
 

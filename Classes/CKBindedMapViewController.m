@@ -58,6 +58,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize annotationToSelect = _annotationToSelect;
 @synthesize nearestAnnotation = _nearestAnnotation;
 @synthesize includeUserLocationWhenZooming = _includeUserLocationWhenZooming;
+@synthesize selectionBlock = _selectionBlock;
+@synthesize deselectionBlock = _deselectionBlock;
 
 - (void)postInit {
 	[super postInit];
@@ -106,6 +108,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	_annotationToSelect = nil;
 	[_nearestAnnotation release];
 	_nearestAnnotation = nil;
+    [_selectionBlock release];
+    _selectionBlock = nil;
+    [_deselectionBlock release];
+    _deselectionBlock = nil;
     [super dealloc];
 }
 
@@ -399,11 +405,21 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 	 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
-	[self didSelectViewAtIndexPath:[self indexPathForView:view]];
+    NSIndexPath* indexPath = [self indexPathForView:view];
+	[self didSelectViewAtIndexPath:indexPath];
+    
+    if(self.selectionBlock){
+        CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
+        self.selectionBlock(self,controller);
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
-	//TODO
+    NSIndexPath* indexPath = [self indexPathForView:view];
+    if(self.deselectionBlock){
+        CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
+        self.deselectionBlock(self,controller);
+    }
 }
 
 /*

@@ -109,6 +109,8 @@ typedef void(^CKBindedTableViewControllerSearchBlock)(NSString* filter);
 
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
+@property (nonatomic, retain,readonly) NSIndexPath* selectedIndexPath;
+
 ///-----------------------------------
 /// @name Layout
 ///-----------------------------------
