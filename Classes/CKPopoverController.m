@@ -8,12 +8,20 @@
 
 #import "CKPopoverController.h"
 #import "CKNSObject+Bindings.h"
+#import "CKContainerViewController.h"
+#import <objc/runtime.h>
+
+
+@interface UIViewController ()
+@property(nonatomic,assign,readwrite) BOOL isInPopover;
+@end
 
 @implementation CKPopoverController
 @synthesize autoDismissOnInterfaceOrientation;
 @synthesize didDismissPopoverBlock = _didDismissPopoverBlock;
 
 - (void)postInit{
+    [self.contentViewController setIsInPopover:YES];
     self.autoDismissOnInterfaceOrientation = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
@@ -86,6 +94,29 @@
     if(autoDismissOnInterfaceOrientation){
         [self dismissPopoverAnimated:YES];
     }
+}
+
+@end
+
+static char UIViewControllerIsInPopoverKey;
+
+@implementation UIViewController (CKPopoverController)
+@dynamic isInPopover;
+
+- (void)setIsInPopover:(BOOL)isInPopover{
+    [self willChangeValueForKey:@"isInPopover"];
+    objc_setAssociatedObject(self, 
+                             &UIViewControllerIsInPopoverKey,
+                             [NSNumber numberWithBool:isInPopover],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"isInPopover"];
+}
+
+- (BOOL)isInPopover{
+    NSNumber* number = objc_getAssociatedObject(self, &UIViewControllerIsInPopoverKey);
+    if(!number)
+        return NO;
+    return [number boolValue];
 }
 
 @end
