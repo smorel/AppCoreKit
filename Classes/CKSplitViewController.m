@@ -337,6 +337,16 @@
     return [[_viewControllers objectAtIndex:index]splitViewConstraints];
 }
 
+- (NSArray*)toolbarItems{
+    NSMutableArray* items = [NSMutableArray array];
+    for(UIViewController* controller in self.viewControllers){
+        if(controller.toolbarItems){
+            [items addObjectsFromArray:controller.toolbarItems];
+        }
+    }
+    return items;
+}
+
 @end
 
 //UIViewController(CKSplitView)

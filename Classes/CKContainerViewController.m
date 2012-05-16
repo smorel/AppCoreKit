@@ -179,8 +179,8 @@ typedef void(^CKTransitionBlock)();
 - (void)setNavigationItemFromViewController:(UIViewController *)viewController {
     /*
     [self.navigationController.navigationBar pushNavigationItem:self.navigationItem animated:NO];
-    [self.navigationController setToolbarItems:self.toolbarItems animated:NO];
     */
+    
     UIViewController* container = self;
     while([container containerViewController]){
         container = [container containerViewController];
@@ -193,6 +193,7 @@ typedef void(^CKTransitionBlock)();
 	container.navigationItem.title = viewController.navigationItem.title;
 	container.navigationItem.prompt = viewController.navigationItem.prompt;
 	container.navigationItem.titleView = viewController.navigationItem.titleView;
+    container.toolbarItems = viewController.toolbarItems;
 }
 
 //
