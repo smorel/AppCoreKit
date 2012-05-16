@@ -127,8 +127,13 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	}
 
 	self.mapView.delegate = self;
-	self.mapView.centerCoordinate = self.centerCoordinate;
-	[self addAnnotations:self.annotations];
+    
+    if([self.annotations count] > 0 || (self.centerCoordinate.latitude != 0 && self.centerCoordinate.longitude != 0)){
+        self.mapView.centerCoordinate = self.centerCoordinate;
+        [self addAnnotations:self.annotations];
+    }else{
+        [self.mapView setVisibleMapRect:MKMapRectWorld];
+    }
 }
 
 - (void)viewDidUnload {
@@ -446,7 +451,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	NSArray* objects = [self objectsForSection:0];
 	[self addAnnotations:objects];
     
-	[self zoom:YES];
+    if([objects count] > 0){
+        [self zoom:YES];
+    }
 }
 
 - (void)onBeginUpdates{

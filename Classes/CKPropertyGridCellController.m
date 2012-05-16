@@ -17,6 +17,8 @@
 #import "CKTableViewCellController+Responder.h"
 #import "CKSheetController.h"
 
+#import "CKTableViewCellController+Style.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface CKPropertyGridCellController () 
@@ -240,7 +242,10 @@
     if(_navigationToolbar == nil){
         UIToolbar* toolbar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)]autorelease];
         toolbar.barStyle = UIBarStyleBlackTranslucent;
-        
+        _navigationToolbar = [toolbar retain];
+    }
+    
+    if(self.containerController.state == CKUIViewControllerStateDidAppear){
         BOOL hasNextResponder = [self hasNextResponder];
         BOOL hasPreviousResponder = [self hasPreviousResponder];
         NSMutableArray* buttons = [NSMutableArray array];
@@ -272,13 +277,12 @@
             [buttons addObject:titleItem];
         }
         
-        toolbar.items = buttons;
+        _navigationToolbar.items = buttons;
         
-        return toolbar;
-        
-        //Do not retain it as we reuse controllers : To fix when no more controller reuse.
-        //_navigationToolbar = [toolbar retain];
+        NSMutableDictionary* dico = [self controllerStyle];
+        [_navigationToolbar applyStyle:dico propertyName:@"navigationToolbar"];
     }
+
     
     return _navigationToolbar;
 }

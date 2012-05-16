@@ -379,6 +379,16 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         self.navigationItem.titleView = nil;
         [view applyStyle:navBarStyle propertyName:@"titleView"];
         self.navigationItem.titleView = view;
+        
+        if([view isKindOfClass:[UILabel class]]){
+            [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+            [self bind:@"title" withBlock:^(id value) {
+                UILabel* label = (UILabel*)view;
+                label.text = [value isKindOfClass:[NSString class]] ? value : nil;
+                [label sizeToFit];
+            }];
+            [NSObject endBindingsContext];
+        }
     }else{
         UILabel* label = [[[UILabel alloc]init]autorelease];
         label.backgroundColor = [UIColor clearColor];
