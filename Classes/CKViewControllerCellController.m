@@ -8,11 +8,19 @@
 
 #import "CKViewControllerCellController.h"
 #import "CKUIView+Positioning.h"
+#import "CKContainerViewController.h"
+
+@interface CKItemViewController()
+@property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
+@end
+
 
 @implementation CKViewControllerCellController
 @synthesize viewController = _viewController;
 
 - (void)dealloc{
+    [_viewController setContainerViewController:nil];
+    
     [_viewController release];
     _viewController = nil;
     [super dealloc];
@@ -32,6 +40,7 @@
 
 - (void)setupCell:(UITableViewCell *)cell {
     [super setupCell:cell];
+    
 	UIView* controllerView = [_viewController view];
     controllerView.frame = cell.contentView.bounds;
     controllerView.x += self.contentInsets.left;
@@ -57,6 +66,17 @@
 
 - (void)setupViewControllerView:(UIView*)view{
     
+}
+
+- (void)setViewController:(UIViewController *)theViewController{
+    [_viewController release];
+    _viewController = theViewController;
+    [_viewController setContainerViewController:self.containerController];
+}
+
+- (void)setContainerController:(CKItemViewContainerController *)containerController{
+    [super setContainerController:containerController];
+    [_viewController setContainerViewController:containerController];
 }
 
 @end

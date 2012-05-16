@@ -58,6 +58,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize annotationToSelect = _annotationToSelect;
 @synthesize nearestAnnotation = _nearestAnnotation;
 @synthesize includeUserLocationWhenZooming = _includeUserLocationWhenZooming;
+@synthesize selectionBlock = _selectionBlock;
+@synthesize deselectionBlock = _deselectionBlock;
+@synthesize selectionStrategy = _selectionStrategy;
 
 - (void)postInit {
 	[super postInit];
@@ -65,6 +68,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 	
 	_zoomStrategy = CKBindedMapViewControllerZoomStrategyEnclosing;
+    _selectionStrategy = CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations;
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
@@ -106,6 +110,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	_annotationToSelect = nil;
 	[_nearestAnnotation release];
 	_nearestAnnotation = nil;
+    [_selectionBlock release];
+    _selectionBlock = nil;
+    [_deselectionBlock release];
+    _deselectionBlock = nil;
     [super dealloc];
 }
 
@@ -389,9 +397,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
 	// If displaying only one entry, select it
-	if (self.annotations && self.annotations.count == 1) {
-		[self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
-	}	
+    if(_selectionStrategy == CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations){
+        if (self.annotations && self.annotations.count == 1) {
+            [self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
+        }	
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
@@ -399,11 +409,21 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 	 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
-	[self didSelectViewAtIndexPath:[self indexPathForView:view]];
+    NSIndexPath* indexPath = [self indexPathForView:view];
+	[self didSelectViewAtIndexPath:indexPath];
+    
+    if(self.selectionBlock){
+        CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
+        self.selectionBlock(self,controller);
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
-	//TODO
+    NSIndexPath* indexPath = [self indexPathForView:view];
+    if(self.deselectionBlock){
+        CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
+        self.deselectionBlock(self,controller);
+    }
 }
 
 /*

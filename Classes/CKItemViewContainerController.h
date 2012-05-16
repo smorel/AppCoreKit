@@ -93,6 +93,7 @@
 - (id)objectAtIndexPath:(NSIndexPath*)indexPath;
 - (NSArray*)objectsForSection:(NSInteger)section;
 - (NSInteger)indexOfObject:(id)object inSection:(NSInteger)section;
+- (NSIndexPath*)indexPathForObject:(id)object;
 
 //content management
 - (NSInteger)numberOfSections;

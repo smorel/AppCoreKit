@@ -19,6 +19,7 @@
 @property (nonatomic, retain) CKWeakRef *weakParentController;
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, retain) CKWeakRef *targetRef;
+@property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
 @end
 
 

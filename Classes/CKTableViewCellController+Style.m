@@ -280,7 +280,8 @@ NSString* CKStyleCellFlags = @"flags";
 
 
 - (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style{
-    UIColor* separatorColor = [[self parentTableView]separatorColor];
+    BOOL hasSeparator = ([[self parentTableView]separatorStyle] != UITableViewCellSeparatorStyleNone);
+    UIColor* separatorColor = hasSeparator ? [[self parentTableView]separatorColor] : [UIColor clearColor];
     if([style containsObjectForKey:CKStyleSeparatorColor]){
         separatorColor = [style separatorColor];
     }

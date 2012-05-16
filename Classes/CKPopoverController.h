@@ -32,3 +32,8 @@ typedef void(^CKPopoverControllerDismissBlock)(CKPopoverController* popover);
 - (void)postInit;
 
 @end
+
+
+@interface UIViewController (CKPopoverController)
+@property(nonatomic,assign,readonly) BOOL isInPopover;
+@end
