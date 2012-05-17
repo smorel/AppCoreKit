@@ -31,6 +31,7 @@
 
 #import "CKNSStringPropertyCellController.h"
 #import "CKNSNumberPropertyCellController.h"
+#import "CKMultilineNSStringPropertyCellController.h"
 
 NSString* CKDynamicLayoutTextAlignment = @"CKDynamicLayoutTextAlignment";
 NSString* CKDynamicLayoutFont          = @"CKDynamicLayoutFont";
@@ -638,7 +639,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
             CGRect detailFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
             
-            if(!([self isKindOfClass:[CKNSStringPropertyCellController class] ] || [self isKindOfClass:[CKNSNumberPropertyCellController class] ])){
+            if(!([self isKindOfClass:[CKNSStringPropertyCellController class] ] || [self isKindOfClass:[CKNSNumberPropertyCellController class] ] || [self isKindOfClass:[CKMultilineNSStringPropertyCellController class] ])){
                 CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y;
                 CGFloat yoffset = ((cell.contentView.height - textsHeight) / 2) -  textFrame.origin.y;
                 textFrame.origin.y += yoffset;
