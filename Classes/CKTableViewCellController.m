@@ -294,6 +294,7 @@
 @property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
 
 @property (nonatomic, assign) BOOL invalidatedSize;
+@property (nonatomic, assign) BOOL isInSetup;
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 - (UITableViewCell *)loadCell;
@@ -319,6 +320,7 @@
 @synthesize sizeBlock = _sizeBlock;
 @synthesize parentCellController = _parentCellController;
 @synthesize parentCellControllerRef = _parentCellControllerRef;
+@synthesize isInSetup = _isInSetup;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -783,6 +785,7 @@
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     }*/
+    self.isInSetup = YES;
     
     [self reapplyStyleForBackgroundViews];
     
@@ -834,6 +837,16 @@
      */
     
     [CATransaction commit];
+    
+    self.isInSetup = NO;
+    
+    CGSize size;
+    if(self.sizeBlock){
+        size = self.sizeBlock(self);
+    }else{
+        size = [self computeSize];
+    }
+    self.size = size;
 }
 
 - (void)rotateView:(UIView*)view animated:(BOOL)animated{

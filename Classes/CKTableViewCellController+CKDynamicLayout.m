@@ -36,7 +36,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @implementation CKTableViewCellController (CKDynamicLayout)
 
-@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController;
+@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController, isInSetup;
 
 
 - (CGFloat)computeTableViewCellViewSize{
@@ -512,6 +512,9 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 }
 
 - (void)invalidateSize{
+    if(self.isInSetup)
+        return;
+    
 	if(self.cellStyle == CKTableViewCellStyleValue3
        || self.cellStyle == CKTableViewCellStylePropertyGrid
        || self.cellStyle == CKTableViewCellStyleSubtitle2){

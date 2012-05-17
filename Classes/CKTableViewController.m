@@ -421,13 +421,13 @@
     }
     
     if(self.sizeIsAlreadyInvalidated == NO){
-        //[[self tableView]beginUpdates];
+        [[self tableView]beginUpdates];
         [self.tableView setNeedsLayout];
     }
     self.sizeIsAlreadyInvalidated = YES;
     
-    //[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
-    //[self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
+    [self performSelector:@selector(onSizeChangeEnd) withObject:nil afterDelay:0.1];
 }
 
 - (UIView*)createViewAtIndexPath:(NSIndexPath*)indexPath{

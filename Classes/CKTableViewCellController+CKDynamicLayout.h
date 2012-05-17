@@ -13,6 +13,7 @@
 @property (nonatomic, assign) CGFloat componentsRatio;
 @property (nonatomic, assign) CGFloat componentsSpace;
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
+@property (nonatomic, assign) BOOL isInSetup;
 
 @property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
 
