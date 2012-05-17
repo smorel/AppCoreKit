@@ -14,6 +14,10 @@
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface CKItemViewContainerController ()
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+@end
+
 @interface CKTableView()
 @property (nonatomic,assign) NSInteger numberOfUpdates;
 @end
@@ -248,6 +252,18 @@
     if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;
         [self reload];
+    }else{
+        
+        for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
+            NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
+            for(int row =0;row<[controllers count];++row){
+                CKTableViewCellController* controller = (CKTableViewCellController*)[controllers objectAtIndex:row];
+                [controller setInvalidatedSize:YES];
+            }
+        }
+        
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
     }
     
 	if (self.stickySelection == NO){
@@ -406,6 +422,7 @@
     
     if(self.sizeIsAlreadyInvalidated == NO){
         [[self tableView]beginUpdates];
+        [self.tableView setNeedsLayout];
     }
     self.sizeIsAlreadyInvalidated = YES;
     

@@ -75,9 +75,10 @@
 
 + (CKTableViewCellController*)cellControllerWithTitle:(NSString*)title subtitle:(NSString*)subTitle defaultImage:(UIImage*)image imageURL:(NSURL*)imageURL imageSize:(CGSize)imageSize action:(void(^)(CKTableViewCellController* controller))action{
     
-    UIImage* remoteImage = [CKImageLoader imageForURL:imageURL];
-    if(imageSize.width >= 0 && imageSize.height >= 0){
-        remoteImage = [remoteImage imageThatFits:imageSize crop:NO];
+    __block UIImage* croppedImage = [CKImageLoader imageForURL:imageURL];
+    if(imageSize.width >= 0 && imageSize.height >= 0
+       && !CGSizeEqualToSize(croppedImage.size, imageSize)){
+        croppedImage = [croppedImage imageThatFits:imageSize crop:NO];
     }
     
     CKTableViewCellController* cellController = [CKTableViewCellController cellController];
@@ -85,7 +86,7 @@
     cellController.flags = ((action != nil) ? CKItemViewFlagSelectable : CKItemViewFlagNone);
     cellController.text = title;
     cellController.detailText = subTitle;
-    cellController.image = remoteImage ? remoteImage : image;
+    cellController.image = croppedImage ? croppedImage : image;
     cellController.accessoryType = ((action != nil) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone);
     cellController.selectionStyle = ((action != nil) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone);
     if(action != nil){
@@ -99,24 +100,31 @@
     
     CKImageLoader* imageLoader = [[[CKImageLoader alloc]init]autorelease];
     imageLoader.completionBlock = ^(CKImageLoader* imageLoader, UIImage* image, BOOL loadedFromCache){
-        if(imageSize.width >= 0 && imageSize.height >= 0){
+        if(imageSize.width >= 0 && imageSize.height >= 0
+           && !CGSizeEqualToSize(image.size, imageSize)){
             image = [image imageThatFits:imageSize crop:NO];
         }
-        bself.image = image;
+        croppedImage = image;
+        bself.image = croppedImage;
     };
     
     [cellController setViewDidDisappearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         [imageLoader cancel];
     }];
     [cellController setViewDidAppearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-        UIImage* remoteImage = [CKImageLoader imageForURL:imageURL];
-        if(remoteImage){
-            if(imageSize.width >= 0 && imageSize.height >= 0){
-                remoteImage = [remoteImage imageThatFits:imageSize crop:NO];
+        if(!croppedImage){
+            UIImage* remoteImage = [CKImageLoader imageForURL:imageURL];
+            if(remoteImage){
+                if(imageSize.width >= 0 && imageSize.height >= 0
+                   && !CGSizeEqualToSize(remoteImage.size, imageSize)){
+                    croppedImage = [remoteImage imageThatFits:imageSize crop:NO];
+                }else{
+                    croppedImage = remoteImage;
+                }
+                controller.image = croppedImage;
+            }else{
+                [imageLoader loadImageWithContentOfURL:imageURL];
             }
-            controller.image = remoteImage;
-        }else{
-            [imageLoader loadImageWithContentOfURL:imageURL];
         }
     }];
     

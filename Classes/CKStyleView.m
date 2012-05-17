@@ -146,10 +146,10 @@
     _corners = corners;
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
     if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
-        [self setBackgroundColor:[UIColor blackColor]];
+        [super setBackgroundColor:[UIColor blackColor]];
     }
     else{
-        [self setBackgroundColor:[UIColor clearColor]];
+        [super setBackgroundColor:[UIColor clearColor]];
     }
 }
 
