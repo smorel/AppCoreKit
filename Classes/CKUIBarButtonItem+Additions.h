@@ -17,6 +17,7 @@ typedef void(^UIBarButtonItemExecutionBlock)();
 
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())block;
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style block:(void(^)())block;
+- (id)initWithTag:(NSInteger)tag style:(UIBarButtonItemStyle)style block:(void(^)())block;
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem block:(void(^)())block;
 
 - (void)bindEventWithBlock:(void(^)())block;

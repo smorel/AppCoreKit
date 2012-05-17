@@ -181,6 +181,13 @@ static char UIBarButtonItemExecutionBlockKey;
     return self;
 }
 
+- (id)initWithTag:(NSInteger)thetag style:(UIBarButtonItemStyle)style block:(void(^)())theblock{
+    self = [self initWithTitle:nil style:style target:self action:@selector(execute:)];
+    self.tag = thetag;
+    self.block = theblock;
+    return self;
+}
+
 - (void)bindEventWithBlock:(void(^)())theblock{
     [NSObject validateCurrentBindingsContext];
     
