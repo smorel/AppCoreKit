@@ -120,7 +120,7 @@
     NSMutableDictionary* styleSheet = [object appliedStyle];
     if(styleSheet){
         NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
-        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:title action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:nil subtitle:title action:^(CKTableViewCellController* controller){
             CKFormTableViewController* debugger = [[object class]inlineDebuggerForStylesheet:styleSheet withObject:object]; 
             [controller.containerController.navigationController pushViewController:debugger animated:YES];
         }];
@@ -145,25 +145,32 @@
     debugger.name = @"CKInlineDebugger";
     debugger.searchEnabled = YES;
     
+    //IDENTIFICATION SECTION
+    CKFormSection* sectionIdentification = [CKFormSection sectionWithObject:object properties:[NSArray arrayWithObjects:@"name",@"tag",nil] headerTitle:@"Identification"];
+    [sectionIdentification insertCellController:[CKTableViewCellController cellControllerWithTitle:@"class" subtitle:[[object class]description] action:nil] atIndex:0];
+    
+    //SECTION FOR STYLESHEET
+    CKFormSection* styleSection = [object appliedStyle] ? [CKFormSection sectionWithCellControllers:
+                                                           [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"] : nil;
+    
+    //SECTION FOR CLASS HIERARCHY
     CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
     [factory addItem:[NSObject factoryItemForClass]];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.
     CKFormBindedCollectionSection* inheritingClassesSection = [CKFormBindedCollectionSection sectionWithCollection:[CKArrayProxyCollection collectionWithArrayProperty:[CKProperty propertyWithObject:inheritingClasses]] 
-                                                                                                               factory:factory 
-                                                                                                           headerTitle:@"Super Classes"];
+                                                                                                           factory:factory 
+                                                                                                       headerTitle:@"Class Hierarchy"];
     
     
+    //PROPERTIES SECTION
+    CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:@"Properties"];
     
-    CKFormSection* objectSection = [CKFormSection sectionWithObject:object propertyFilter:nil headerTitle:[[object class]description]];
-    
-    if([object appliedStyle]){
-        CKFormSection* styleSection = [CKFormSection sectionWithCellControllers:
-                                       [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"];
-        [debugger addSections:[NSArray arrayWithObjects:styleSection,inheritingClassesSection,objectSection,nil]];
+    if(styleSection){
+        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,styleSection,inheritingClassesSection,objectSection,nil]];
     }
     else{
-        [debugger addSections:[NSArray arrayWithObjects:inheritingClassesSection,objectSection,nil]];
+        [debugger addSections:[NSArray arrayWithObjects:sectionIdentification,inheritingClassesSection,objectSection,nil]];
     }
     
     //Setup filter callback

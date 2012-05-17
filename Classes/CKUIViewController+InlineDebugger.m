@@ -58,8 +58,17 @@
     
     [cellControllers insertObject:[CKUIViewController cellControllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
     
-    CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers headerTitle:@"Controllers"];
-    [debugger insertSection:section atIndex:0];
+    CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers headerTitle:@"Controller Hierarchy"];
+    
+    int i =0;
+    for(CKFormSectionBase* section in debugger.sections){
+        if([section.headerTitle isEqualToString:@"Class Hierarchy"]){
+            break;
+        }
+        ++i;
+    }
+    
+    [debugger insertSection:section atIndex:i];
     
     return debugger;
 }

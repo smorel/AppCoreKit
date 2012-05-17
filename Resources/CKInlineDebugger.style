@@ -38,12 +38,24 @@
             },
             "detailTextLabel" : {
                 "@inherits" : [ "$CKInlineDebugger_subtitleLabel" ]
+            },
+            "UILabel[tag=8724],UILabel[tag=8727],UILabel[tag=8730],UILabel[tag=8733],UILabel[tag=8736],UILabel[tag=8739],UILabel[tag=8742],UILabel[tag=8745]" : {
+                "@inherits" : [ "$CKInlineDebugger_subtitleLabel" ]
+            },
+            "UISwitch" : {
+                "onTintColor" : "blackColor"
+            },
+            "textField,textView" : {
+                "@inherits" : [ "$CKInlineDebugger_titleLabel" ]
             }
         }
     },
     
     "$CKInlineDebugger_tableViewController" : {
         "supportedInterfaceOrientations" : "CKInterfaceOrientationPortrait",
+        "UISearchBar" : {
+            "tintColor" : "blackColor"
+        },
         "UITableView" : {
             "backgroundColor" : "clearColor",
             "separatorStyle" : "UITableViewCellSeparatorStyleNone"
@@ -54,15 +66,17 @@
         },
         "tableViewContainer" : {
             "backgroundColor" : "clearColor"
-        }
-    },
-
-    
-    "CKUIViewController[name=CKInlineDebugger]" : {
-        "@inherits" : [  "$CKInlineDebugger_tableViewController" ],
+        },
+        
         "UINavigationController" : {
             "navigationBar" : {
-                "tintColor" : "blackColor"
+                "tintColor" : "blackColor",
+                "backgroundImage" : "CRAP",
+                "UIBarButtonItem" : {},
+                
+                "UILabel,titleView" : {
+                    "textColor" : "whiteColor"
+                }
             }
         },
         
@@ -76,32 +90,33 @@
             "cellType" : "CKTableViewCellStylePropertyGrid"
         },
         
-        "CKOptionTableViewController, CKUIViewController[name=CKClassExplorer]" : {
-            "UINavigationController" : {
-                "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ]
-            }
-        },
-        
         "sectionHeaderView" : {
-            "backgroundGradientColors" : [ "0.94 0.94 0.94 1", "0.64 0.64 0.64 1"],
+            "backgroundGradientColors" : [ "0.64 0.64 0.64 1", "0.34 0.34 0.34 1"],
             "backgroundGradientLocations" : [ 0, 1],
             "embossTopColor" : "whiteColor",
             "embossBottomColor" : "0.7 0.7 0.7 1",
             
             "UILabel" : {
-                "textColor" : "0.3 0.3 0.3 1",
-                "fontSize" : "17",
-                "shadowColor" : "0.8 0.8 0.8 1"
+                "textColor" : "0.95 0.95 0.95 1",
+                "fontSize" : "17"
             }
         }
     },
+
     
-    "CKUIViewController[name=CKInlineDebuggerForSubViews]"  : {
-        "@inherits" : [ "CKUIViewController[name=CKInlineDebugger]" ],
-        
+    "CKFormTableViewController[name=CKInlineDebugger]" : {
+        "@inherits" : [  "$CKInlineDebugger_tableViewController" ],
+                
+        "CKTableViewController,CKOptionTableViewController,CKFormTableViewController,CKUIViewController" : {//controller pushed by a debugger take the same style.
+            "@inherits" : [  "$CKInlineDebugger_tableViewController" ]
+        }
+    },
+    
+    "CKFormTableViewController[name=CKInlineDebuggerForSubViews]"  : {
+        "@inherits" : [ "CKFormTableViewController[name=CKInlineDebugger]" ],
         "CKTableViewCellController" : {
-            "cellType" : "CKTableViewCellStyleSubtitle"
+            "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
+            "cellType" : "CKTableViewCellStyleSubtitle" //for indentation level
         }
     }
-    
 }

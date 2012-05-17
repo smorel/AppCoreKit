@@ -224,7 +224,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             
             CGFloat maxWidth = realWidth - width - self.contentInsets.left - ((detailText == nil) ? self.contentInsets.right : self.componentsSpace);
             CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
-            return CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height);
+            return CGRectIntegral(CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height));
         }
     }
     return [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
@@ -244,13 +244,13 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             if(detailText != nil && [detailText isKindOfClass:[NSNull class]] == NO && [detailText length] > 0 && detailNumberOfLines != 1){
                 CGFloat maxWidth = realWidth - (self.contentInsets.left + self.contentInsets.right);
                 CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:maxWidth];
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), size.height);
+                return CGRectIntegral(CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), size.height));
             }
             else{
                 CGRect textFrame = [self propertyGridTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
                 
                 UIFont* textFont = [textStyle objectForKey:CKDynamicLayoutFont];
-                return CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), MAX(textFont.lineHeight,textFrame.size.height));
+                return CGRectIntegral(CGRectMake(self.contentInsets.left,self.contentInsets.top, realWidth - (self.contentInsets.left + self.contentInsets.right), MAX(textFont.lineHeight,textFrame.size.height)));
             }
         }
         else{
@@ -261,7 +261,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
                 CGFloat y = MAX(textFrame.origin.y + (textFrame.size.height / 2.0) - (size.height / 2),self.contentInsets.top);
                 
-                return CGRectMake(x,y, width, size.height);
+                return CGRectIntegral(CGRectMake(x,y, width, size.height));
             }
             else{
                 return CGRectMake(0,0,0,0);
@@ -305,7 +305,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
-    return CGRectMake(x,self.contentInsets.top + yOffset, width, size.height);
+    return CGRectIntegral(CGRectMake(x,self.contentInsets.top + yOffset, width, size.height));
 }
 
 
@@ -321,11 +321,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     if(detailText == nil || [detailText isKindOfClass:[NSNull class]] || [detailText length] <= 0){
-        return CGRectMake(x,textFrame.origin.y + textFrame.size.height,width,0);
+        return CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height,width,0));
     }
     
     CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
-    CGRect detailFrame = CGRectMake(x,textFrame.origin.y + textFrame.size.height + self.componentsSpace, width/*size.width*/, size.height);
+    CGRect detailFrame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + self.componentsSpace, width/*size.width*/, size.height));
     
     return detailFrame;
 }
@@ -641,11 +641,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             detailFrame.origin.y += yoffset;
             
             if(cell.textLabel != nil){
-                cell.textLabel.frame = textFrame;
+                cell.textLabel.frame = CGRectIntegral(textFrame);
             }
             
             if(cell.detailTextLabel != nil){
-                cell.detailTextLabel.frame = detailFrame;
+                cell.detailTextLabel.frame = CGRectIntegral(detailFrame);
             }
         }
     }

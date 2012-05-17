@@ -793,7 +793,13 @@
     if(!_sectionsToControllers){
         self.sectionsToControllers = [NSMutableArray array];
     }
-    [self.sectionsToControllers insertObject:[NSMutableArray array] atIndex:index];
+    
+    //If this update appears before we updated the orther sections :
+    for(int j = 0; j <= index; ++ j){
+        if(j >= [_sectionsToControllers count]){
+            [_sectionsToControllers insertObject:[NSMutableArray array] atIndex:j];
+        }
+    }
 }
 
 - (void) removeItemViewControllersSectionAtIndex:(NSInteger)index{

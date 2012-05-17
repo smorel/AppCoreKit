@@ -194,7 +194,7 @@
     __block CKFormTableViewController* bController = debugger;
     
     CKFormSection* superViewSection = [CKFormSection section];
-    superViewSection.headerTitle = @"Views";
+    superViewSection.headerTitle = @"View Hierarchy";
     
     if([view superview]){
         NSString* title = [NSString stringWithFormat:@"%@ <%p>",[[view superview] class],[view superview]];
@@ -206,14 +206,22 @@
         [superViewSection addCellController:superViewCell];
     }
     
-    CKTableViewCellController* hierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Hierarchy" action:^(CKTableViewCellController* controller){
+    CKTableViewCellController* hierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Subviews Hierarchy" action:^(CKTableViewCellController* controller){
         CKFormTableViewController* hierarchyController = [UIView inlineDebuggerForSubViewsOfView:(UIView*)object];
         hierarchyController.title = @"Hierarchy";
         [bController.navigationController pushViewController:hierarchyController animated:YES];
     }];
     [superViewSection addCellController:hierarchyCell];
     
-    [debugger insertSection:superViewSection atIndex:0];
+    int i =0;
+    for(CKFormSectionBase* section in debugger.sections){
+        if([section.headerTitle isEqualToString:@"Class Hierarchy"]){
+            break;
+        }
+        ++i;
+    }
+    
+    [debugger insertSection:superViewSection atIndex:i];
     return debugger;
 }
 
