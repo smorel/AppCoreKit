@@ -27,6 +27,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @synthesize connection, request, response;
 @synthesize data, completionBlock;
+@synthesize delegate;
 
 - (id)init {
     if (self = [super init]) {
@@ -111,26 +112,38 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark - NSURLConnectionDataDelegate
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)aResponse {
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
     self.response = aResponse;
+    
+    if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
+        [self.delegate connection:aConnection didReceiveResponse:aResponse];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)someData {
+- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
     [self.data appendData:someData];
+    
+    if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
+        [self.delegate connection:aConnection didReceiveData:someData];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self.completionBlock(self.data, self.response, nil);
     });
+    
+    if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
+        [self.delegate connectionDidFinishLoading:aConnection];
 }
 
 #pragma mark - NSURLConnectionDelegate
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
     dispatch_async(dispatch_get_main_queue(), ^(void) {
         self.completionBlock(nil, self.response, error);
     });
+    
+    if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
+        [self.delegate connection:aConnection didFailWithError:error];
 }
 
 #pragma mark - Getters
