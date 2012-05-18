@@ -7,6 +7,7 @@
 //
 
 #import "CKSheetController.h"
+#import "CKWeakRef.h"
 
 NSString *const CKSheetResignNotification           = @"CKSheetResignNotification";
 NSString *const CKSheetWillShowNotification         = @"CKSheetWillShowNotification";
@@ -21,6 +22,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 @interface CKSheetController()//PRIVATE
 @property(nonatomic,retain) UIView* sheetView;
 @property(nonatomic,assign, readwrite) BOOL visible;
+@property(nonatomic,assign) BOOL registeredToNotifications;
+@property(nonatomic,retain) CKWeakRef* delegateRef;
 @end
 
 @implementation CKSheetController
@@ -28,6 +31,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 @synthesize contentViewController = _contentViewController;
 @synthesize sheetView = _sheetView;
 @synthesize visible;
+@synthesize registeredToNotifications = _registeredToNotifications;
+@synthesize delegateRef = _delegateRef;
 
 - (id)initWithContentViewController:(UIViewController *)viewController{
     self = [super init];
@@ -36,11 +41,33 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
     return self;
 }
 
+- (void)setDelegate:(id)delegate{
+    self.delegateRef = [CKWeakRef weakRefWithObject:delegate];
+}
+
+- (id)delegate{
+    return [self.delegateRef object];
+}
+
+- (void)dealloc{
+    if(_registeredToNotifications){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
+    }
+    
+    [_contentViewController release];
+    [_sheetView release];
+    [_delegateRef release];
+    
+    [super dealloc];
+}
+
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated{
    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldResign:) name:CKSheetResignNotification object:nil];
+    self.registeredToNotifications = YES;
     
     //this will retain the CKSheetController until it will get dismissed.
     //this avoid us to explicitelly retain it in the client code.
@@ -148,6 +175,8 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 - (void)dismissSheetAnimated:(BOOL)animated  causedByKeyboard:(BOOL)causedByKeyboard{
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:CKSheetResignNotification object:nil];
+    
+    self.registeredToNotifications = NO;
     
     UIView* contentView = self.sheetView;
     
