@@ -537,10 +537,6 @@ static char NSObjectAppliedStyleObjectKey;
             }
         }
         
-        if([descriptor.name isEqualToString:@"backgroundView"] && [self isKindOfClass:[UITableViewCell class]]){
-            int i =3;
-        }
-        
 		//if(![myViewStyle isEmpty]){
 			BOOL shouldReplaceView = NO;
 			if(delegate && [delegate respondsToSelector:@selector(object:shouldReplaceViewWithDescriptor:withStyle:)]){

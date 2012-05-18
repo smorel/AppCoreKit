@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSMutableArray *runningRequests;
 @property (nonatomic, retain) NSMutableArray *waitingRequests;
 
+- (void)requestDidFinish:(CKWebRequest*)request;
+
 @end
 
 @implementation CKWebRequestManager
