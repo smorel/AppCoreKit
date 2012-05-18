@@ -12,7 +12,7 @@ extern NSString * const CKDownloaderErrorDomain;
 
 typedef void (^CKDownloaderCompletionBlock)(void);
 
-@interface CKDownloader : NSObject <CKWebRequestDelegate> {
+@interface CKDownloader : NSObject {
 	__unsafe_unretained id _delegate;
     id _userInfo;
 	CKWebRequest *_request;

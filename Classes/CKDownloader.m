@@ -7,15 +7,15 @@
 //
 
 #import "CKDownloader.h"
+#import "CKWebRequestManager.h"
 
 //
 
-static NSOperationQueue *CKDownloaderQueue = nil;
 NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 
 //
 
-@interface CKDownloader ()
+@interface CKDownloader () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, copy) CKDownloaderCompletionBlock completionBlock;
 @property (nonatomic, retain) CKWebRequest *request;
 - (BOOL)retry;
@@ -59,28 +59,21 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
     self.URL = URL;
     self.destinationPath = destination;
 
-	self.request = [CKWebRequest requestWithURL:self.URL];
-	self.request.delegate = self;
-
 	BOOL allowOverwrite = YES;
 
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:self.destinationPath]) {
 		NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.destinationPath error:nil];
 		_byteReceived = [attributes fileSize];
 		self.progress = (float)_byteReceived / (float)_expectedLength;		
 		NSString* bytesStr = [NSString stringWithFormat:@"bytes=%qu-", _byteReceived];
-		[self.request setHeaders:[NSDictionary dictionaryWithObject:bytesStr forKey:@"Range"]];
+        [request addValue:bytesStr forHTTPHeaderField:@"Range"];
 		allowOverwrite = NO;
 	}
-	
-	[self.request setDestination:self.destinationPath allowOverwrite:allowOverwrite];
-		 
-	if (CKDownloaderQueue == nil){
-		CKDownloaderQueue = [[NSOperationQueue alloc] init];
-		[CKDownloaderQueue setMaxConcurrentOperationCount:4];
-	}
-	
-	[CKDownloaderQueue addOperation:self.request];
+    
+    self.request = [[CKWebRequest alloc] initWithURLRequest:request completion:nil];
+    self.request.delegate = self;
+    [[CKWebRequestManager sharedManager] scheduleRequest:self.request];
 } 
 
 - (void)cancel {
@@ -115,9 +108,9 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 
 #pragma mark CKWebRequestDelegate Protocol
 
-- (void)requestDidFinishLoading:(id)request{
-	self.progress = 1.0f;
-
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    self.progress = 1.0f;
+    
     if (self.completionBlock) {
         self.completionBlock();
     }    
@@ -127,9 +120,9 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 	}
 }
 
-- (void)request:(id)request didReceiveResponse:(NSURLResponse *)response {
-	NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
-
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
+    
     if ([httpResponse statusCode] >= 400) {
         _skipResponseData = YES;
         return;
@@ -148,19 +141,19 @@ NSString * const CKDownloaderErrorDomain = @"CKDownloaderErrorDomain";
 	}
 }
 
-- (void)request:(id)request didFailWithError:(NSError *)error {
-	if ([error code] == NSURLErrorTimedOut) {
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  	if ([error code] == NSURLErrorTimedOut) {
 		if ([self retry] == YES)
             return;
 	}
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(downloader:didFailWithError:)]) {
         [self.delegate downloader:self didFailWithError:error];
-    }
+    }  
 }
 
-- (void)request:(id)request didReceivePartialData:(NSData*)data progress:(NSNumber *)progress {
-	if (_skipResponseData)
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    if (_skipResponseData)
 		return;
     
 	_byteReceived += [data length];	
