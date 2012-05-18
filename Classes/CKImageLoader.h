@@ -21,7 +21,7 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
 
 /** TODO
  */
-@interface CKImageLoader : NSObject <CKWebRequestDelegate> {
+@interface CKImageLoader : NSObject {
 	id _delegate;
 	CKWebRequest *_request;
 	NSURL *_imageURL;

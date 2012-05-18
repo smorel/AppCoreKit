@@ -23,7 +23,7 @@ typedef void (^CKWebSourceStartBlock)(CKWebRequest* request);
 
 /** TODO
  */
-@interface CKWebSource : CKFeedSource <CKWebRequestDelegate> {
+@interface CKWebSource : CKFeedSource {
 	CKWebRequest *_request;
 	NSUInteger _requestedBatchSize;
 	CKWebSourceRequestBlock _requestBlock;

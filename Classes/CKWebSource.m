@@ -10,6 +10,7 @@
 #import "CKDebug.h"
 #import "CKAlertView.h"
 #import "CKLocalization.h"
+#import "CKWebRequestManager.h"
 
 NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
@@ -71,13 +72,11 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	}
 	
 	if (self.request) {
-		self.request.delegate = self;
         if(_launchRequestBlock){
             _launchRequestBlock(self.request);
         }
-        else{
-            [self.request startAsynchronous];
-        }
+        else
+            [[CKWebRequestManager sharedManager] scheduleRequest:self.request];
 		self.isFetching = YES;
 		return YES;
 	}
@@ -87,7 +86,6 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
 - (void)cancelFetch {
 	[self.request cancel];
-	self.request.delegate = nil;
 	self.request = nil;
 	[super cancelFetch];
 }
