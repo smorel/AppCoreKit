@@ -7,6 +7,7 @@
 //
 
 #import "CKWebRequestManager.h"
+#import "CKWebRequest.h"
 
 @interface CKWebRequestManager ()
 
@@ -57,6 +58,13 @@
 #pragma mark - Schedule Request
 
 - (void)scheduleRequest:(CKWebRequest *)request {
+    void (^oldCompletionBlock)(id, NSURLResponse *, NSError *) = request.completionBlock;
+    request.completionBlock = ^(id object, NSURLResponse *response, NSError *error) {
+        [self requestDidFinish:request];
+        
+        oldCompletionBlock(object, response, error);
+    };
+    
     if (self.runningRequests.count >= self.maxCurrentRequest) {
         dispatch_async(self.requestQueue, ^{
             [request start];
@@ -64,6 +72,20 @@
     }
     else 
         [self.waitingRequests addObject:request];
+}
+
+- (void)requestDidFinish:(CKWebRequest*)request {//Start a new one if some are waiting
+    [self.runningRequests removeObject:request];
+    
+    if (self.waitingRequests.count != 0) {
+        CKWebRequest *newRequest = [self.waitingRequests objectAtIndex:0];
+        [self.waitingRequests removeObjectAtIndex:0];
+        [self.runningRequests addObject:newRequest];
+        
+        dispatch_async(self.requestQueue, ^{
+            [newRequest start];
+        });
+    }
 }
 
 #pragma mark - Cancel Request

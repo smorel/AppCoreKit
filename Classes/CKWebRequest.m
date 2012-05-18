@@ -20,8 +20,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @property (nonatomic, retain) NSMutableData *data;
 
-@property (nonatomic, copy) void (^completionBlock)(id response, NSURLResponse *urlResponse, NSError *error);
-
 @end
 
 @implementation CKWebRequest

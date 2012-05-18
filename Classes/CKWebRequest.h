@@ -13,6 +13,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @interface CKWebRequest : NSObject
 
 @property (nonatomic, readonly) NSURL *URL;
+@property (nonatomic, copy) void (^completionBlock)(id response, NSURLResponse *urlResponse, NSError *error);
 
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;
 +(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request completion:(void (^)(id, NSURLResponse*, NSError*))block;
