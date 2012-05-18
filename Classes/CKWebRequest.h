@@ -15,11 +15,16 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, copy) void (^completionBlock)(id response, NSURLResponse *urlResponse, NSError *error);
 
++(NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;
++(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters completion:(void (^)(id, NSURLResponse*, NSError*))block;
 +(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request completion:(void (^)(id, NSURLResponse*, NSError*))block;
++(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters completion:(void (^)(id, NSURLResponse*, NSError*))block;
 
 - (id)initWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;
+- (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters completion:(void (^)(id, NSURLResponse*, NSError*))block;
 - (id)initWithURLRequest:(NSURLRequest*)request completion:(void (^)(id, NSURLResponse*, NSError*))block;
+- (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters completion:(void (^)(id, NSURLResponse*, NSError*))block;
 
 - (void)start; //Start on the currentRunLoop. Recommended to schedule with CKWebRequestManager
 - (void)cancel;

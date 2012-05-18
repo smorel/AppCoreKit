@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CKNSString+URIQuery.h"
 #import "CKWebRequest.h"
 #import "CKWebRequestManager.h"
 
@@ -46,9 +47,24 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return [self initWithURLRequest:aRequest completion:block];
 }
 
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[NSURLRequest alloc] initWithURL:url];
+    return [self initWithURLRequest:aRequest parameters:parameters completion:block];
+}
+
 - (id)initWithURLRequest:(NSURLRequest *)aRequest completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:nil completion:block];
+}
+
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
     if (self = [super init]) {
-        self.request = aRequest;
+        NSMutableURLRequest *mutableRequest = aRequest.mutableCopy;
+        if (parameters) {
+            NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
+            [mutableRequest setURL:newURL];
+        }
+        
+        self.request = mutableRequest;
         self.completionBlock = block;
     }
     return self;
@@ -56,13 +72,29 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark - Convinience methods
 
++ (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL {
+	NSURLRequest *request = [[NSURLRequest alloc] initWithURL:anURL];
+	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+}
+
 + (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url completion:(void (^)(id, NSURLResponse *, NSError *))block {
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     return [self scheduledRequestWithURLRequest:request completion:block];
 }
 
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters completion:block];
+}
+
 + (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request completion:(void (^)(id, NSURLResponse *, NSError *))block {
     CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return webRequest;
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters completion:block];
     [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
     return webRequest;
 }
