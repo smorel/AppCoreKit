@@ -188,7 +188,7 @@
 }
 
 - (NSInteger)selectedIndex{
-	NSAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
+	//NSAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
 	return [[self.selectedIndexes lastObject]intValue];
 }
 

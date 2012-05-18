@@ -17,7 +17,15 @@
     while(v){
         id itemController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:v]];
         if(itemController){
-            CKFormSection* controllerSection = (CKFormSection*)[debugger sectionAtIndex:0];
+            int i =0;
+            for(CKFormSectionBase* section in debugger.sections){
+                if([section.headerTitle isEqualToString:@"Controller Hierarchy"]){
+                    break;
+                }
+                ++i;
+            }
+            
+            CKFormSection* controllerSection = (CKFormSection*)[debugger sectionAtIndex:i];
             
             NSString* title = nil;
             NSString* subtitle = nil;

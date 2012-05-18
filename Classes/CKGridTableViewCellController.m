@@ -157,13 +157,13 @@
             if([controller flags] & CKItemViewFlagSelectable){
                 [button bindEvent:UIControlEventTouchDown | UIControlEventTouchDragInside withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
-                        [subcell setSelected:YES animated:YES];
+                        [subcell setSelected:YES animated:NO];
                         [subcell setHighlighted:YES animated:NO];
                     }
                 }];
                 [button bindEvent:UIControlEventTouchUpInside withBlock:^{
-                    [subcell setSelected:NO animated:YES];
-                    [subcell setHighlighted:YES animated:YES];
+                    [subcell setSelected:NO animated:NO];
+                    [subcell setHighlighted:YES animated:NO];
                     [controller didSelect]; 
                 }];
                 [button bindEvent:UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragOutside withBlock:^{

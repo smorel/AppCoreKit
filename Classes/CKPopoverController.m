@@ -16,9 +16,15 @@
 @property(nonatomic,assign,readwrite) BOOL isInPopover;
 @end
 
+
+@interface CKPopoverController ()
+@property(nonatomic,assign) UIInterfaceOrientation orientation;
+@end
+
 @implementation CKPopoverController
 @synthesize autoDismissOnInterfaceOrientation;
 @synthesize didDismissPopoverBlock = _didDismissPopoverBlock;
+@synthesize orientation = _orientation;
 
 - (void)postInit{
     [self.contentViewController setIsInPopover:YES];
@@ -71,12 +77,16 @@
     self.delegate = self;
     [self retain];
     [super presentPopoverFromRect:rect inView:view permittedArrowDirections:arrowDirections animated:animated];
+    
+    self.orientation = self.contentViewController.interfaceOrientation;
 }
 
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated{
     self.delegate = self;
     [self retain];
     [super presentPopoverFromBarButtonItem:item permittedArrowDirections:arrowDirections animated:animated];
+    
+    self.orientation = self.contentViewController.interfaceOrientation;
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController{
@@ -91,8 +101,32 @@
 }
 
 - (void)orientationChanged:(NSNotification*)notif{
-    if(autoDismissOnInterfaceOrientation){
+    BOOL shouldDismiss = NO;
+    
+    UIDeviceOrientation o = [[UIDevice currentDevice]orientation];
+    switch(self.orientation){
+        case UIInterfaceOrientationPortrait:
+        case UIInterfaceOrientationPortraitUpsideDown:{
+            if(o == UIDeviceOrientationLandscapeRight || o == UIDeviceOrientationLandscapeLeft){
+                shouldDismiss = YES;
+            }
+            break;
+        }
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:{
+            if(o == UIDeviceOrientationPortrait || o == UIDeviceOrientationPortraitUpsideDown){
+                shouldDismiss = YES;
+            }
+            break;
+        }
+    }
+    
+    if(shouldDismiss && autoDismissOnInterfaceOrientation){
         [self dismissPopoverAnimated:YES];
+        if(_didDismissPopoverBlock){
+            _didDismissPopoverBlock(self);
+        }
+        [self autorelease];
     }
 }
 
