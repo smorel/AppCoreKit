@@ -90,13 +90,17 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    self.completionBlock(self.data, self.response, nil);
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self.completionBlock(self.data, self.response, nil);
+    });
 }
 
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    self.completionBlock(nil, self.response, error);
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        self.completionBlock(nil, self.response, error);
+    });
 }
 
 #pragma mark - Getters
