@@ -686,14 +686,14 @@
 #pragma mark UITableView (CKHeaderViewManagement)
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
-    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
+    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionHeaderView"];
     }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView*)headerView withTitle:(NSString*)title{
-    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
+    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionFooterView"];
     }
