@@ -15,6 +15,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, copy) void (^completionBlock)(id response, NSURLResponse *urlResponse, NSError *error);
 @property (nonatomic, assign) id<NSURLConnectionDelegate, NSURLConnectionDataDelegate> delegate;//Forward URL connection if nessesary
+@property (nonatomic, readonly) CGFloat progress;
 
 +(NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;

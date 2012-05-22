@@ -22,13 +22,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @property (nonatomic, retain) NSMutableData *data;
 
+@property (nonatomic, assign, readwrite) CGFloat progress;
+
 @end
 
 @implementation CKWebRequest
 
 @synthesize connection, request, response;
 @synthesize data, completionBlock;
-@synthesize delegate;
+@synthesize delegate, progress;
 
 - (id)init {
     if (self = [super init]) {
@@ -110,6 +112,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
     self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
     self.data = [[[NSMutableData alloc] init] autorelease];
+    self.progress = 0.0;
     
     [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
     [self.connection start];
@@ -131,11 +134,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
     [self.data appendData:someData];
     
+    self.progress = self.data.length / self.response.expectedContentLength;
+    
     if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
         [self.delegate connection:aConnection didReceiveData:someData];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+    self.progress = 1.0;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
