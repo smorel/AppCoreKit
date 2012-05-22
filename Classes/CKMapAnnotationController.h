@@ -21,7 +21,7 @@ typedef enum CKMapAnnotationStyle{
 @class CKMapAnnotationController;
 
 @interface CKAnnotationView : MKAnnotationView
-@property(nonatomic,retain)CKUIViewController* calloutViewController;
+@property(nonatomic,retain)UIViewController* calloutViewController;
 @property(nonatomic,assign)CKMapAnnotationController* annotationController;
 
 - (MKMapView*)mapView;
