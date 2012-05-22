@@ -41,7 +41,9 @@
     if (self = [super init]) {
         dispatch_queue_t queue = dispatch_queue_create("com.cloudkit.CKWebRequestManager", DISPATCH_QUEUE_SERIAL);
         self.requestQueue = queue;
-        dispatch_sync(self.requestQueue, ^{
+        
+        dispatch_group_t group = dispatch_group_create();
+        dispatch_group_async(group, self.requestQueue, ^{
             NSPort* port = [NSPort port];
             NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];
             self.runLoop = currentRunLoop;
@@ -50,6 +52,8 @@
                 [currentRunLoop run];
             });
         });
+        
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         
         self.maxCurrentRequest = 4;
         
