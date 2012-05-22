@@ -24,6 +24,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @property (nonatomic, retain) NSFileHandle *handle;
 
 @property (nonatomic, assign, readwrite) CGFloat progress;
+@property (nonatomic, assign) NSUInteger retriesCount;
 
 @end
 
@@ -31,7 +32,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @synthesize connection, request, response;
 @synthesize data, completionBlock;
-@synthesize delegate, progress;
+@synthesize delegate, progress, retriesCount;
 
 - (id)initWithCompletion:(void (^)(id, NSURLResponse *, NSError *))block {
     if (self = [self init]) {
@@ -190,15 +191,27 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self.completionBlock(nil, self.response, error);
-    });
-    
-    if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
-        [self.delegate connection:aConnection didFailWithError:error];
+    if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            self.completionBlock(nil, self.response, error);
+        });
+        
+        if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
+            [self.delegate connection:aConnection didFailWithError:error];
+    }
 }
 
 #pragma mark - Getters
+
+- (BOOL)retry {
+    if (self.retriesCount++ == 3)
+        return NO;
+    else {
+      	[self cancel];
+        [self start];
+        return YES;  
+    }
+}
 
 - (NSURL *)URL {
     return self.request.URL;
