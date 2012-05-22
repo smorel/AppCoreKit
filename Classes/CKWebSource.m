@@ -70,6 +70,13 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	else{
 		CKDebugLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
+    
+    self.request.completionBlock = ^(id value, NSHTTPURLResponse *response, NSError *error){
+        if (error) 
+            [self didFailWithError:error];
+        else
+            [self didReceiveValue:value];
+    };
 	
 	if (self.request) {
         if(_launchRequestBlock){
@@ -95,13 +102,9 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[super reset];
 }
 
-#pragma mark CKWebRequestDelegate
+#pragma mark Callback
 
-- (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers {
-	return;
-}
-
-- (void)request:(id)request didReceiveValue:(id)value {
+- (void)didReceiveValue:(id)value {
 	
 	id newItems = nil;
 	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
@@ -132,7 +135,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	}
 }
 
-- (void)request:(id)request didFailWithError:(NSError *)error {
+- (void)didFailWithError:(NSError *)error {
 	CKDebugLog(@"%@", error);
 	self.isFetching = NO;
 	self.request = nil;
