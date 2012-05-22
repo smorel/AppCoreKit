@@ -68,9 +68,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         
         self.request = mutableRequest;
         self.completionBlock = block;
-        
-        self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self] autorelease];
-        self.data = [[[NSMutableData alloc] init] autorelease];
     }
     return self;
 }
@@ -107,7 +104,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 #pragma mark - LifeCycle
 
 - (void)start {
+    self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+    self.data = [[[NSMutableData alloc] init] autorelease];
+    
+    [self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     [self.connection start];
+    
+    CFRunLoopRun();
 }
 
 - (void)cancel {
@@ -139,6 +142,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     
     if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
         [self.delegate connectionDidFinishLoading:aConnection];
+    
+    CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
 #pragma mark - NSURLConnectionDelegate
@@ -150,6 +155,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     
     if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
         [self.delegate connection:aConnection didFailWithError:error];
+    
+    CFRunLoopStop(CFRunLoopGetCurrent()); 
 }
 
 #pragma mark - Getters
