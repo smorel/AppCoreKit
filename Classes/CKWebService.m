@@ -106,7 +106,7 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
         [request addValue:obj forHTTPHeaderField:key];
     }];
 	
-    return [[[CKWebRequest alloc] initWithURLRequest:request parameters:params completion:nil] autorelease];
+    return [[[CKWebRequest alloc] initWithURLRequest:request parameters:theParams completion:nil] autorelease];
 }
 
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
