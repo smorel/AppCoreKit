@@ -10,6 +10,7 @@
 #import "CKNSString+URIQuery.h"
 #import "CKWebRequest.h"
 #import "CKWebRequestManager.h"
+#import "CKWebDataConverter.h"
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
@@ -127,8 +128,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+    id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
+    
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self.completionBlock(self.data, self.response, nil);
+        self.completionBlock(object, self.response, nil);
     });
     
     if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
