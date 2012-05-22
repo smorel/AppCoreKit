@@ -68,6 +68,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         
         self.request = mutableRequest;
         self.completionBlock = block;
+        
+        self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self] autorelease];
+        self.data = [[[NSMutableData alloc] init] autorelease];
     }
     return self;
 }

@@ -47,7 +47,7 @@ static NSMutableDictionary *dictionnary;
 + (id)convertData:(NSData *)data fromResponse:(NSURLResponse *)response {
     NSString *MIMEType = response.MIMEType;
     
-    id (^converter)(NSData *) = nil;
+    id (^converter)(NSData *, NSURLResponse*) = nil;
     for (NSPredicate *predicate in dictionnary) {
         if ([predicate evaluateWithObject:MIMEType]) {
             converter = [dictionnary objectForKey:predicate];
@@ -56,7 +56,7 @@ static NSMutableDictionary *dictionnary;
     }
     
     if (converter)
-        return converter(data);
+        return converter(data, response);
     else
         return data;
 }

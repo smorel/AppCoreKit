@@ -67,7 +67,7 @@
         oldCompletionBlock(object, response, error);
     };
     
-    if (self.runningRequests.count >= self.maxCurrentRequest) {
+    if (self.runningRequests.count < self.maxCurrentRequest) {
         dispatch_async(self.requestQueue, ^{
             [request start];
         });
