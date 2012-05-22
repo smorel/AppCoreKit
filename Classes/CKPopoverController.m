@@ -100,6 +100,14 @@
     [self autorelease];
 }
 
+- (void)dismissPopoverAnimated:(BOOL)animated{
+    [super dismissPopoverAnimated:YES];
+    if(_didDismissPopoverBlock){
+        _didDismissPopoverBlock(self);
+    }
+    [self autorelease];
+}
+
 - (void)orientationChanged:(NSNotification*)notif{
     BOOL shouldDismiss = NO;
     
@@ -123,10 +131,6 @@
     
     if(shouldDismiss && autoDismissOnInterfaceOrientation){
         [self dismissPopoverAnimated:YES];
-        if(_didDismissPopoverBlock){
-            _didDismissPopoverBlock(self);
-        }
-        [self autorelease];
     }
 }
 

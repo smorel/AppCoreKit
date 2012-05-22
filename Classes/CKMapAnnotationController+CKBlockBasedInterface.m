@@ -19,7 +19,7 @@
             block(controller,view);
             return (id)nil;
         }];
-    }
+    }else{ self.initCallback = nil; }
 }
 
 - (void)setSetupBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
@@ -30,7 +30,7 @@
             block(controller,view);
             return (id)nil;
         }];
-    }
+    }else{ self.setupCallback = nil; }
 }
 
 - (void)setSelectionBlock:(void(^)(CKMapAnnotationController* controller))block{
@@ -40,7 +40,18 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.selectionCallback = nil; }
+}
+
+
+- (void)setDeselectionBlock:(void(^)(CKMapAnnotationController* controller))block{
+    if(block){
+        self.deselectionCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKMapAnnotationController* controller = (CKMapAnnotationController*)value;
+            block(controller);
+            return (id)nil;
+        }];
+    }else{ self.deselectionCallback = nil; }
 }
 
 - (void)setAccessorySelectionBlock:(void(^)(CKMapAnnotationController* controller))block{
@@ -50,7 +61,7 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.accessorySelectionCallback = nil; }
 }
 
 - (void)setViewDidAppearBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
@@ -61,7 +72,7 @@
             block(controller,view);
             return (id)nil;
         }];
-    }
+    }else{ self.viewDidAppearCallback = nil; }
 }
 
 - (void)setViewDidDisappearBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
@@ -72,7 +83,7 @@
             block(controller,view);
             return (id)nil;
         }];
-    }
+    }else{ self.viewDidDisappearCallback = nil; }
 }
 
 - (void)setLayoutBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
@@ -83,7 +94,7 @@
             block(controller,view);
             return (id)nil;
         }];
-    }
+    }else{ self.layoutCallback = nil; }
 }
 
 @end

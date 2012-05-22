@@ -36,6 +36,7 @@ typedef enum CKBindedMapViewControllerSelectionStrategy{
 
 @class CKBindedMapViewController;
 typedef void(^CKBindedMapViewControllerSelectionBlock)(CKBindedMapViewController* controller, CKMapAnnotationController* annotationController);
+typedef void(^CKBindedMapViewControllerScrollBlock)(CKBindedMapViewController* controller,BOOL animated);
 
 
 /** TODO
@@ -66,6 +67,7 @@ typedef void(^CKBindedMapViewControllerSelectionBlock)(CKBindedMapViewController
 
 @property (nonatomic, copy) CKBindedMapViewControllerSelectionBlock selectionBlock;
 @property (nonatomic, copy) CKBindedMapViewControllerSelectionBlock deselectionBlock;
+@property (nonatomic, copy) CKBindedMapViewControllerScrollBlock didScrollBlock;
 
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate;

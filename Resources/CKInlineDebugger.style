@@ -109,14 +109,14 @@
                 
         "CKTableViewController,CKOptionTableViewController,CKFormTableViewController,CKUIViewController" : {//controller pushed by a debugger take the same style.
             "@inherits" : [  "$CKInlineDebugger_tableViewController" ]
-        }
-    },
-    
-    "CKFormTableViewController[name=CKInlineDebuggerForSubViews]"  : {
-        "@inherits" : [ "CKFormTableViewController[name=CKInlineDebugger]" ],
-        "CKTableViewCellController" : {
-            "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
-            "cellType" : "CKTableViewCellStyleSubtitle" //for indentation level
+        },
+        
+        "CKFormTableViewController[name=CKInlineDebuggerForSubViews]"  : {
+            "@inherits" : [ "$CKInlineDebugger_tableViewController" ],
+            "CKTableViewCellController" : {
+                "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
+                "cellType" : "CKTableViewCellStyleSubtitle" //for indentation level
+            }
         }
     }
 }

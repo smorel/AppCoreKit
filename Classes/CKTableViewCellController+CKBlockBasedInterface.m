@@ -19,7 +19,7 @@
             block(controller,cell);
             return (id)nil;
         }];
-    }
+    }else{ self.initCallback = nil; }
 }
 
 - (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
@@ -30,7 +30,7 @@
             block(controller,cell);
             return (id)nil;
         }];
-    }
+    }else{ self.setupCallback = nil; }
 }
 
 - (void)setSelectionBlock:(void(^)(CKTableViewCellController* controller))block{
@@ -40,7 +40,7 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.selectionCallback = nil; }
 }
 
 - (void)setAccessorySelectionBlock:(void(^)(CKTableViewCellController* controller))block{
@@ -50,7 +50,7 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.accessorySelectionCallback = nil; }
 }
 
 - (void)setBecomeFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block{
@@ -60,7 +60,7 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.becomeFirstResponderCallback = nil; }
 }
 
 - (void)setResignFirstResponderBlock:(void(^)(CKTableViewCellController* controller))block{
@@ -70,7 +70,7 @@
             block(controller);
             return (id)nil;
         }];
-    }
+    }else{ self.resignFirstResponderCallback = nil; }
 }
 
 - (void)setViewDidAppearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
@@ -81,7 +81,7 @@
             block(controller,cell);
             return (id)nil;
         }];
-    }
+    }else{ self.viewDidAppearCallback = nil; }
 }
 
 - (void)setViewDidDisappearBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
@@ -92,7 +92,7 @@
             block(controller,cell);
             return (id)nil;
         }];
-    }
+    }else{ self.viewDidDisappearCallback = nil; }
 }
 
 - (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
@@ -103,7 +103,7 @@
             block(controller,cell);
             return (id)nil;
         }];
-    }
+    }else{ self.layoutCallback = nil; }
 }
 
 @end

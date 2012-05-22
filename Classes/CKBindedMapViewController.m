@@ -40,6 +40,58 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 
+@interface CKMapView : MKMapView
+@property(nonatomic,retain) id<MKAnnotation> annotationToSelectAfterScrolling;
+@end
+
+@implementation CKMapView
+@synthesize annotationToSelectAfterScrolling = _annotationToSelectAfterScrolling;
+
+- (void)dealloc{
+    [_annotationToSelectAfterScrolling release];
+    _annotationToSelectAfterScrolling = nil;
+    [super dealloc];
+}
+
+- (void)selectAnnotation:(id<MKAnnotation>)annotation animated:(BOOL)animated{
+    MKAnnotationView* view = [self viewForAnnotation:annotation];
+    if(self.annotationToSelectAfterScrolling == annotation){
+        BOOL hasCalloutView = NO;
+        for(UIView* v in [view subviews]){
+            if([[[v class]description] isEqualToString:@"UICalloutView"]
+               ||[[[v class]description] isEqualToString:@"CKCalloutView"]){
+                hasCalloutView = YES;
+                break;
+            }
+        }
+        //if no calloutview in view && view is selected, select nil non animated !
+        if(view.selected && !hasCalloutView){
+            [super deselectAnnotation:annotation animated:NO];
+        }
+                             
+        [super selectAnnotation:annotation animated:animated];
+        self.annotationToSelectAfterScrolling = nil;
+        return;
+    }
+    
+    BOOL delayedCallToSuper = NO;
+    if([view isKindOfClass:[CKAnnotationView class]]){
+        CKAnnotationView* customView = (CKAnnotationView*)view;
+        if(customView.calloutViewController){
+            delayedCallToSuper = YES;
+            self.annotationToSelectAfterScrolling = annotation;
+            [self setCenterCoordinate:annotation.coordinate animated:YES];
+        }
+    }
+    
+    if(!delayedCallToSuper){
+        [super selectAnnotation:annotation animated:animated];
+    }
+}
+
+@end
+
+
 //
 @interface CKBindedMapViewController()
 - (void)onPropertyChanged:(NSNotification*)notification;
@@ -61,6 +113,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize selectionBlock = _selectionBlock;
 @synthesize deselectionBlock = _deselectionBlock;
 @synthesize selectionStrategy = _selectionStrategy;
+@synthesize didScrollBlock = _didScrollBlock;
 
 - (void)postInit {
 	[super postInit];
@@ -114,6 +167,8 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     _selectionBlock = nil;
     [_deselectionBlock release];
     _deselectionBlock = nil;
+    [_didScrollBlock release];
+    _didScrollBlock = nil;
     [super dealloc];
 }
 
@@ -129,7 +184,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.view.backgroundColor = [UIColor colorWithRGBValue:0xc1bfbb];	
 	
 	if (self.mapView == nil) {
-		self.mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
+		self.mapView = [[CKMapView alloc] initWithFrame:self.view.bounds];
 		self.mapView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 		[self.view addSubview:self.mapView];		
 	}
@@ -350,12 +405,22 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark MKMapView Delegate
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    CKMapView* ckMapView = (CKMapView*)mapView;
+    if(ckMapView.annotationToSelectAfterScrolling){
+        id<MKAnnotation> annotation = ckMapView.annotationToSelectAfterScrolling;
+		[self.mapView selectAnnotation:annotation animated:YES];
+    }
+    
 	if(self.annotationToSelect != nil && [self.mapView.annotations containsObject:_annotationToSelect]){
 		[self.mapView selectAnnotation:self.annotationToSelect animated:YES];
 	}
 	else if(self.nearestAnnotation != nil){
 		[self.mapView selectAnnotation:self.nearestAnnotation animated:YES];
 	}
+    
+    if(_didScrollBlock){
+        _didScrollBlock(self,animated);
+    }
 }
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
@@ -409,6 +474,15 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 	 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+    if([view isKindOfClass:[CKAnnotationView class]]){
+        CKAnnotationView* customView = (CKAnnotationView*)view;
+        if(customView.calloutViewController){
+            CKMapView* ckMapView = (CKMapView*)mapView;
+            ckMapView.annotationToSelectAfterScrolling = customView.annotation;
+            [self.mapView setCenterCoordinate:customView.annotation.coordinate animated:YES];
+        }
+    }
+
     NSIndexPath* indexPath = [self indexPathForView:view];
 	[self didSelectViewAtIndexPath:indexPath];
     
@@ -420,6 +494,13 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
     NSIndexPath* indexPath = [self indexPathForView:view];
+	
+    CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
+	if(controller != nil){
+		[controller didDeselect];
+	}
+
+    
     if(self.deselectionBlock){
         CKMapAnnotationController* controller = (CKMapAnnotationController*)[self controllerAtIndexPath:indexPath];
         self.deselectionBlock(self,controller);
@@ -456,7 +537,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
             //return NO;
 	}
     
-    [self.mapView selectAnnotation:nil animated:YES];
+    for(id<MKAnnotation> annotation in self.mapView.selectedAnnotations){
+        [self.mapView deselectAnnotation:annotation animated:YES];
+    }
+    
     self.annotationToSelect = nil;
     
     while([self.mapView.annotations count] > 0){
@@ -489,6 +573,10 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    for(id<MKAnnotation> annotation in objects){
+        [self.mapView deselectAnnotation:annotation animated:YES];
+    }
+    
 	[self.mapView removeAnnotations:objects];
 	[self zoom:YES];
 }
