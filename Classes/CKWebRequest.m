@@ -188,6 +188,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
+        if (self.transformBlock) {
+            id transformedObject = transformBlock(object);
+            if (transformedObject)
+                object = transformedObject;
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (self.completionBlock)
                 self.completionBlock(object, self.response, nil);
