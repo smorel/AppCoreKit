@@ -47,9 +47,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return [self initWithURLRequest:aRequest completion:block];
 }
 
+- (id)initWithURL:(NSURL *)url transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[NSURLRequest alloc] initWithURL:url];
+    return [self initWithURLRequest:aRequest transform:transform completion:block];
+}
+
 - (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
     NSURLRequest *aRequest = [[NSURLRequest alloc] initWithURL:url];
     return [self initWithURLRequest:aRequest parameters:parameters completion:block];
+}
+
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[NSURLRequest alloc] initWithURL:url];
+    return [self initWithURLRequest:aRequest parameters:parameters transform:transform completion:block];
 }
 
 - (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
@@ -62,6 +72,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:parameters transform:nil completion:block];
+}
+
+- (id)initWithURLRequest:(NSURLRequest *)aRequest transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:nil transform:transform completion:block];
+}
+
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
     if (self = [super init]) {
         NSMutableURLRequest *mutableRequest = aRequest.mutableCopy;
         if (parameters) {
@@ -71,6 +89,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         
         self.request = mutableRequest;
         self.completionBlock = block;
+        self.transformBlock = transform;
         self.data = [[[NSMutableData alloc] init] autorelease];
     }
     return self;
@@ -120,8 +139,24 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return [self scheduledRequestWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
 }
 
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters transform:transform completion:block];
+}
+
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    return [self scheduledRequestWithURLRequest:request transform:transform completion:block];
+}
+
 + (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request completion:(void (^)(id, NSURLResponse *, NSError *))block {
     CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return webRequest;
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request transform:transform completion:block];
     [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
     return webRequest;
 }
@@ -134,6 +169,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 + (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
     CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return webRequest;
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters transform:transform completion:block];
     [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
     return webRequest;
 }

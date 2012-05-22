@@ -21,17 +21,25 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 +(NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;
++(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url transform:(id (^)(id value))transform completion:(void (^)(id, NSURLResponse*, NSError*))block;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
++(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
++(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
++(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 
 - (id)initWithURL:(NSURL*)url completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
+- (id)initWithURL:(NSURL*)url transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 - (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
+- (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 - (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 - (id)initWithURLRequest:(NSURLRequest*)request completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
+- (id)initWithURLRequest:(NSURLRequest*)request transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
+- (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 
 - (void)start; //Start on the currentRunLoop. Recommended to schedule with CKWebRequestManager
