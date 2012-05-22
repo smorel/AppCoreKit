@@ -81,6 +81,7 @@
     if (self.runningRequests.count < self.maxCurrentRequest) {
         NSRunLoop *loop = self.runLoop;
         [request startOnRunLoop:loop];
+        [self.runningRequests addObject:request];
     }
     else 
         [self.waitingRequests addObject:request];
