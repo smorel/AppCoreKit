@@ -35,19 +35,22 @@
 }
 
 - (void)layoutSubviews{
+    [super layoutSubviews];
     if(_calloutView){
         self.clipsToBounds = NO;
         
-        _calloutView.y = - _calloutView.height + 29;
-        _calloutView.x = self.width / 2 - _calloutView.width / 2;
-        _calloutView.autoresizingMask = UIViewAutoresizingNone;
-        _calloutView.layer.cornerRadius = 5;
-        _calloutView.clipsToBounds = YES;
         
         UIImageView* arrowTop = (UIImageView*)[[self subviews]objectAtIndex:2];
         arrowTop.hidden = YES;
         
         UIImageView* arrowBottom = (UIImageView*)[[self subviews]objectAtIndex:3];
+        
+        _calloutView.y = - _calloutView.height + self.height - [self superview].height;
+        _calloutView.x = arrowBottom.x + (arrowBottom.width / 2) - (_calloutView.width / 2);
+        _calloutView.autoresizingMask = UIViewAutoresizingNone;
+        _calloutView.layer.cornerRadius = 5;
+        _calloutView.clipsToBounds = YES;
+        
         arrowBottom.image = [arrowBottom.image stretchableImageWithLeftCapWidth:2 topCapHeight:19];
         arrowBottom.x = _calloutView.x + (_calloutView.width / 2) - 20;
         arrowBottom.y = _calloutView.y - 6;
@@ -68,8 +71,6 @@
         rightBorderView.width = leftBorderView.width;
         
         rightBorderView.height = leftBorderView.height = arrowBottom.height - 13;
-    }else{
-        [super layoutSubviews];
     }
 }
 
