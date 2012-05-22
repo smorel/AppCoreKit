@@ -18,7 +18,6 @@
 #import "CKArrayCollection.h"
 
 #import "CKNSNotificationCenter+Edition.h"
-#import <objc/Object.h>
 
 
 NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *context)
