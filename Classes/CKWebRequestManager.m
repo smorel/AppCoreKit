@@ -71,8 +71,8 @@
 #pragma mark - Schedule Request
 
 - (void)scheduleRequest:(CKWebRequest *)request {
-    void (^oldCompletionBlock)(id, NSURLResponse *, NSError *) = request.completionBlock;
-    request.completionBlock = ^(id object, NSURLResponse *response, NSError *error) {
+    void (^oldCompletionBlock)(id, NSHTTPURLResponse *, NSError *) = request.completionBlock;
+    request.completionBlock = ^(id object, NSHTTPURLResponse *response, NSError *error) {
         [self requestDidFinish:request];
         
         oldCompletionBlock(object, response, error);
