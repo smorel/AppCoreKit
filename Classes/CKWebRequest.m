@@ -154,8 +154,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark - NSURLConnectionDataDelegate
 
-- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
     self.response = aResponse;
+    
+    if ([aResponse statusCode] >= 400)
+        self.handle = nil;
     
     if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
         [self.delegate connection:aConnection didReceiveResponse:aResponse];
