@@ -22,6 +22,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @property (nonatomic, retain) NSMutableData *data;
 @property (nonatomic, retain) NSFileHandle *handle;
+@property (nonatomic, retain, readwrite) NSString *downloadPath;
 
 @property (nonatomic, assign, readwrite) CGFloat progress;
 @property (nonatomic, assign) NSUInteger retriesCount;
@@ -31,7 +32,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @implementation CKWebRequest
 
 @synthesize connection, request, response;
-@synthesize data, completionBlock, handle;
+@synthesize data, completionBlock, handle, downloadPath;
 @synthesize delegate, progress, retriesCount;
 
 - (id)initWithCompletion:(void (^)(id, NSURLResponse *, NSError *))block {
@@ -91,6 +92,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             [self.handle seekToFileOffset:existingDataLenght];
         }
         
+        self.downloadPath = path;
         self.retriesCount = 0;
     }
     return nil;
