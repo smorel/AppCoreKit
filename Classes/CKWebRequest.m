@@ -21,6 +21,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @property (nonatomic, retain) NSURLResponse *response;
 
 @property (nonatomic, retain) NSMutableData *data;
+@property (nonatomic, retain) NSFileHandle *handle;
 
 @property (nonatomic, assign, readwrite) CGFloat progress;
 
@@ -31,13 +32,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @synthesize connection, request, response;
 @synthesize data, completionBlock;
 @synthesize delegate, progress;
-
-- (id)init {
-    if (self = [super init]) {
-        self.data = [NSMutableData data];
-    }
-    return self;
-}
 
 - (id)initWithCompletion:(void (^)(id, NSURLResponse *, NSError *))block {
     if (self = [self init]) {
@@ -56,6 +50,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return [self initWithURLRequest:aRequest parameters:parameters completion:block];
 }
 
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[NSURLRequest alloc] initWithURL:url];
+    return [self initWithURLRequest:aRequest parameters:parameters downloadAtPath:path completion:block];
+}
+
 - (id)initWithURLRequest:(NSURLRequest *)aRequest completion:(void (^)(id, NSURLResponse *, NSError *))block {
     return [self initWithURLRequest:aRequest parameters:nil completion:block];
 }
@@ -70,8 +69,26 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         
         self.request = mutableRequest;
         self.completionBlock = block;
+        self.data = [[[NSMutableData alloc] init] autorelease];
     }
     return self;
+}
+
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    if (self = [self initWithURLRequest:aRequest parameters:parameters completion:block]) {
+        self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+            unsigned long long existingDataLenght = [attributes fileSize];
+            NSString* bytesStr = [NSString stringWithFormat:@"bytes=%qu-", existingDataLenght];
+            
+            NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
+            [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
+            self.request = mutableRequest;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Convinience methods
@@ -91,6 +108,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return [self scheduledRequestWithURLRequest:request parameters:parameters completion:block];
 }
 
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
+}
+
 + (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request completion:(void (^)(id, NSURLResponse *, NSError *))block {
     CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request completion:block];
     [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
@@ -103,6 +125,12 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return webRequest;
 }
 
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return webRequest;
+}
+
 #pragma mark - LifeCycle
 
 - (void)start {
@@ -111,7 +139,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
     self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
-    self.data = [[[NSMutableData alloc] init] autorelease];
     self.progress = 0.0;
     
     [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
@@ -132,9 +159,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
-    [self.data appendData:someData];
-    
-    self.progress = self.data.length / self.response.expectedContentLength;
+    if (self.handle) {
+        self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
+        [self.handle writeData:someData];
+    }
+    else {
+        self.progress = self.data.length / self.response.expectedContentLength;
+        [self.data appendData:someData];
+    }
     
     if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
         [self.delegate connection:aConnection didReceiveData:someData];
