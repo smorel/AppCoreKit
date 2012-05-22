@@ -131,8 +131,13 @@
             CKCalloutView* v = (CKCalloutView*)subview;
             
             UIView* view = [_calloutViewController view];
-            view.width = _calloutViewController.contentSizeForViewInPopover.width;
-            view.height = _calloutViewController.contentSizeForViewInPopover.height;
+            CGSize size = _calloutViewController.contentSizeForViewInPopover;
+            if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+                UINavigationController* nav = (UINavigationController*)_calloutViewController;
+                size = nav.topViewController.contentSizeForViewInPopover;
+            }
+            view.width = size.width;
+            view.height = size.height;
             
             v.calloutView = view;
             
