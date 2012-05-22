@@ -17,3 +17,5 @@
 #import "CKHost.h"
 
 #import "CKDownloadManager.h"
+#import "NSURLRequest+Upload.h"
+#import "CKWebDataConverter.h"
