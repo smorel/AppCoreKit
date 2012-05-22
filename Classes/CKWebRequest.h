@@ -20,8 +20,8 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, readonly) CGFloat progress;
 
 +(NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL;
-+(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id, NSURLResponse*, NSError*))block;
-+(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url transform:(id (^)(id value))transform completion:(void (^)(id, NSURLResponse*, NSError*))block;
++(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
++(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 +(CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;

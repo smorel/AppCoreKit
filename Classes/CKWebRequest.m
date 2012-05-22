@@ -97,8 +97,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSURLResponse *, NSError *))block {
     if (self = [self initWithURLRequest:aRequest parameters:parameters completion:block]) {
-        self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
-        
+        unsigned long long existingDataLenght = 0;
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
             NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
             unsigned long long existingDataLenght = [attributes fileSize];
@@ -107,14 +106,18 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
             [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
             self.request = mutableRequest;
-            
-            [self.handle seekToFileOffset:existingDataLenght];
         }
+        else 
+            [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+        
+        self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+        [self.handle seekToFileOffset:existingDataLenght];
         
         self.downloadPath = path;
         self.retriesCount = 0;
+        self.data = nil;
     }
-    return nil;
+    return self;
 }
 
 #pragma mark - Convinience methods
@@ -202,8 +205,11 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
     self.response = aResponse;
     
-    if ([aResponse statusCode] >= 400)
+    if ([aResponse statusCode] >= 400) {
         self.handle = nil;
+        self.data = [NSMutableData data];
+        [[NSFileManager defaultManager] removeItemAtPath:self.downloadPath error:nil];
+    }
     
     if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
         [self.delegate connection:aConnection didReceiveResponse:aResponse];

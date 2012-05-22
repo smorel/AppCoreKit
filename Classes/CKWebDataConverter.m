@@ -53,6 +53,9 @@ static NSMutableDictionary *dictionnary;
 }
 
 + (id)convertData:(NSData *)data fromResponse:(NSURLResponse *)response {
+    if (data == nil)
+        return nil;
+    
     NSString *MIMEType = response.MIMEType;
     
     id (^converter)(NSData *, NSURLResponse*) = nil;
