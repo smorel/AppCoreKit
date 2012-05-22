@@ -32,7 +32,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @implementation CKWebRequest
 
 @synthesize connection, request, response;
-@synthesize data, completionBlock, handle, downloadPath;
+@synthesize data, completionBlock, transformBlock, handle, downloadPath;
 @synthesize delegate, progress, retriesCount;
 
 - (id)initWithCompletion:(void (^)(id, NSURLResponse *, NSError *))block {
@@ -189,7 +189,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            self.completionBlock(object, self.response, nil);
+            if (self.completionBlock)
+                self.completionBlock(object, self.response, nil);
             
             if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
                 [self.delegate connectionDidFinishLoading:aConnection];
@@ -202,7 +203,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
     if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            self.completionBlock(nil, self.response, error);
+            if (self.completionBlock)
+                self.completionBlock(nil, self.response, error);
         });
         
         if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
