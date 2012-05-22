@@ -31,7 +31,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @implementation CKWebRequest
 
 @synthesize connection, request, response;
-@synthesize data, completionBlock;
+@synthesize data, completionBlock, handle;
 @synthesize delegate, progress, retriesCount;
 
 - (id)initWithCompletion:(void (^)(id, NSURLResponse *, NSError *))block {
@@ -88,6 +88,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
             self.request = mutableRequest;
         }
+        
+        self.retriesCount = 0;
     }
     return nil;
 }
