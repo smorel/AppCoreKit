@@ -189,6 +189,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
+    NSAssert(self.connection == nil, @"Connection already started");
     self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
     self.progress = 0.0;
     
@@ -272,6 +273,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         return NO;
     else {
       	[self cancel];
+        self.connection = nil;
         [self start];
         return YES;  
     }
