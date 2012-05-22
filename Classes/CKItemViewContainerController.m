@@ -576,8 +576,8 @@
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-    [self removeItemViewControllersForObjects:objects atIndexPaths:indexPaths];    
 	[self onRemoveObjects:objects atIndexPaths:indexPaths];
+    [self removeItemViewControllersForObjects:objects atIndexPaths:indexPaths];    
 }
 
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{
@@ -585,9 +585,9 @@
 	[self onInsertSectionAtIndex:index];
 }
 
-- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{
-    [self removeItemViewControllersSectionAtIndex:index];   
+- (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{  
 	[self onRemoveSectionAtIndex:index];
+    [self removeItemViewControllersSectionAtIndex:index]; 
 }
 
 - (void)onReload{

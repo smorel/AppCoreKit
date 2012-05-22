@@ -14,6 +14,7 @@
 - (void)setSetupBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block;
 
 - (void)setSelectionBlock:(void(^)(CKMapAnnotationController* controller))block;
+- (void)setDeselectionBlock:(void(^)(CKMapAnnotationController* controller))block;
 - (void)setAccessorySelectionBlock:(void(^)(CKMapAnnotationController* controller))block;
 
 - (void)setViewDidAppearBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block;
