@@ -87,6 +87,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
             [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
             self.request = mutableRequest;
+            
+            [self.handle seekToFileOffset:existingDataLenght];
         }
         
         self.retriesCount = 0;

@@ -12,30 +12,8 @@ extern NSString * const CKDownloaderErrorDomain;
 
 typedef void (^CKDownloaderCompletionBlock)(void);
 
-@interface CKDownloader : NSObject {
-	__unsafe_unretained id _delegate;
-    id _userInfo;
-	CKWebRequest *_request;
-	NSURL *_URL;
-	NSString *_destinationPath;
-	
-	unsigned long long _byteReceived;
-	unsigned long long _expectedLength;
-	
-	float _progress;
-    NSUInteger _retriesCount;
-    BOOL _skipResponseData;
-    
-    CKDownloaderCompletionBlock _completionBlock;
-}
+@interface CKDownloader : CKWebRequest
 
-@property (nonatomic, assign) id delegate;
-@property (nonatomic, retain) id userInfo;
-@property (nonatomic, retain) NSURL *URL;
-@property (nonatomic, retain) NSString *destinationPath;
-@property (nonatomic, assign) float progress;
-@property (nonatomic, readonly) NSUInteger totalBytesWritten;
-@property (nonatomic, readonly) NSUInteger totalExpectedBytes;
 
 - (id)initWithDelegate:(id)delegate;
 - (void)downloadContentOfURL:(NSURL *)URL destination:(NSString *)destination completion:(CKDownloaderCompletionBlock)completion;
