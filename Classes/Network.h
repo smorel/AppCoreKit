@@ -16,5 +16,4 @@
 #import "CKInetEndPoint.h"
 #import "CKHost.h"
 
-#import "CKDownloader.h"
 #import "CKDownloadManager.h"
