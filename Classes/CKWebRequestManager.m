@@ -12,6 +12,7 @@
 @interface CKWebRequestManager ()
 
 @property (nonatomic, assign) dispatch_queue_t requestQueue;
+@property (nonatomic, retain) NSRunLoop *runLoop;
 
 @property (nonatomic, retain) NSMutableArray *runningRequests;
 @property (nonatomic, retain) NSMutableArray *waitingRequests;
@@ -22,7 +23,7 @@
 
 @implementation CKWebRequestManager
 
-@synthesize requestQueue, maxCurrentRequest;
+@synthesize requestQueue, runLoop, maxCurrentRequest;
 @synthesize runningRequests, waitingRequests;
 
 #pragma mark - Lifecycle
@@ -40,6 +41,15 @@
     if (self = [super init]) {
         dispatch_queue_t queue = dispatch_queue_create("com.cloudkit.CKWebRequestManager", DISPATCH_QUEUE_SERIAL);
         self.requestQueue = queue;
+        dispatch_sync(self.requestQueue, ^{
+            NSPort* port = [NSPort port];
+            NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];
+            self.runLoop = currentRunLoop;
+            dispatch_async(self.requestQueue, ^{
+                [currentRunLoop addPort:port forMode:NSDefaultRunLoopMode];
+                [currentRunLoop run];
+            });
+        });
         
         self.maxCurrentRequest = 4;
         
@@ -53,6 +63,7 @@
     dispatch_release(self.requestQueue);
     self.runningRequests = nil;
     self.waitingRequests = nil;
+    self.runLoop = nil;
     
     [super dealloc];
 }
@@ -68,9 +79,8 @@
     };
     
     if (self.runningRequests.count < self.maxCurrentRequest) {
-        dispatch_async(self.requestQueue, ^{
-            [request start];
-        });
+        NSRunLoop *loop = self.runLoop;
+        [request startOnRunLoop:loop];
     }
     else 
         [self.waitingRequests addObject:request];
@@ -84,9 +94,7 @@
         [self.waitingRequests removeObjectAtIndex:0];
         [self.runningRequests addObject:newRequest];
         
-        dispatch_async(self.requestQueue, ^{
-            [newRequest start];
-        });
+        [newRequest startOnRunLoop:self.runLoop];
     }
 }
 

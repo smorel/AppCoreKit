@@ -28,6 +28,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters completion:(void (^)(id object, NSURLResponse *response, NSError *error))block;
 
 - (void)start; //Start on the currentRunLoop. Recommended to schedule with CKWebRequestManager
+- (void)startOnRunLoop:(NSRunLoop*)runLoop;
 - (void)cancel;
 
 @end
