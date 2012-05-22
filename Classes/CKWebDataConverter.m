@@ -8,7 +8,9 @@
 
 #import "CKWebDataConverter.h"
 #import <UIKit/UIKit.h>
+#import "CXMLDocument.h"
 #import <VendorsKit/VendorsKit.h>
+#import "RegexKitLite.h"
 
 @implementation CKWebDataConverter
 
@@ -38,9 +40,15 @@ static NSMutableDictionary *dictionnary;
     [self addConverter:^id(NSData *data, NSURLResponse *response) {
         return [data objectFromJSONData];
     } forMIMEPredicate:[NSPredicate predicateWithFormat:@"self = \"application/json\""]];
+    
+    [self addConverter:^id(NSData *data, NSURLResponse *response) {
+        return [[[CXMLDocument alloc] initWithData:data options:0 error:nil] autorelease];
+    } forMIMEPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject isMatchedByRegex:@"(application|text)/xml"];
+    }]];
 }
 
-+ (void)addConverter:(id (^)(NSData *, NSURLResponse *response))converter forMIMEPredicate:(NSPredicate*)predicate {
++ (void)addConverter:(id (^)(NSData * data, NSURLResponse *response))converter forMIMEPredicate:(NSPredicate*)predicate {
     [dictionnary setObject:converter forKey:predicate];
 }
 
