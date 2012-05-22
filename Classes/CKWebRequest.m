@@ -136,14 +136,16 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-    id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
-    
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        self.completionBlock(object, self.response, nil);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            self.completionBlock(object, self.response, nil);
+            
+            if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
+                [self.delegate connectionDidFinishLoading:aConnection];
+        });
     });
-    
-    if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
-        [self.delegate connectionDidFinishLoading:aConnection];
 }
 
 #pragma mark - NSURLConnectionDelegate
