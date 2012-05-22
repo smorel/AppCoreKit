@@ -55,8 +55,13 @@ static NSMutableDictionary *dictionnary;
         }
     }
     
-    if (converter)
-        return converter(data, response);
+    if (converter) {
+        id result = converter(data, response);
+        if (result)
+            return result;
+        else
+            return data;
+    }
     else
         return data;
 }
