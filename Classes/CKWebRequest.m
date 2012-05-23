@@ -210,6 +210,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
     [self.connection cancel];
+    
+    NSDictionary *cancelUserInfo = [NSDictionary dictionaryWithObject:@"Operation cancelled" forKey:@"Reason"];
+    self.completionBlock(nil, self.response, [NSError errorWithDomain:CKWebRequestHTTPErrorDomain code:10 userInfo:cancelUserInfo]);
 }
 
 #pragma mark - NSURLConnectionDataDelegate
