@@ -43,7 +43,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
             [mutableRequest setURL:newURL];
         }
-        
+                
         self.request = mutableRequest;
         [mutableRequest release];
         
@@ -106,11 +106,23 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
     NSAssert(self.connection == nil, @"Connection already started");
-    self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+    
     self.progress = 0.0;
     
-    [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
-    [self.connection start];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+        if (cachedResponse) {
+            [self connection:nil didReceiveResponse:cachedResponse.response];
+            [self connection:nil didReceiveData:cachedResponse.data];
+            [self connectionDidFinishLoading:nil];
+        }
+        else {
+            self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+            
+            [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+            [self.connection start];  
+        }
+    });
 }
 
 - (void)cancel {
@@ -169,6 +181,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
                 [self.delegate connectionDidFinishLoading:aConnection];
         });
     });
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
+    [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
+    
+     return nil;
 }
 
 #pragma mark - NSURLConnectionDelegate
