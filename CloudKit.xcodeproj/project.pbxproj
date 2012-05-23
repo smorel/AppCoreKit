@@ -524,6 +524,8 @@
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */; };
+		B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
@@ -1056,6 +1058,8 @@
 		B01481181566A8FD000C1E1C /* CKWebRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequestManager.m; path = Classes/CKWebRequestManager.m; sourceTree = "<group>"; };
 		B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+Upload.h"; path = "Classes/NSURLRequest+Upload.h"; sourceTree = "<group>"; };
 		B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLRequest+Upload.m"; path = "Classes/NSURLRequest+Upload.m"; sourceTree = "<group>"; };
+		B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKWebRequest+Initialization.h"; sourceTree = "<group>"; };
+		B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKWebRequest+Initialization.m"; sourceTree = "<group>"; };
 		B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebDataConverter.h; path = Classes/CKWebDataConverter.h; sourceTree = "<group>"; };
 		B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebDataConverter.m; path = Classes/CKWebDataConverter.m; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
@@ -1480,6 +1484,8 @@
 				7560DB9C13B8ED3600268D13 /* CKMultipartParser.m */,
 				7560DC5E13B8ED3600268D13 /* CKWebRequest.h */,
 				7560DC5F13B8ED3600268D13 /* CKWebRequest.m */,
+				B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */,
+				B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */,
 				B01481171566A8FD000C1E1C /* CKWebRequestManager.h */,
 				B01481181566A8FD000C1E1C /* CKWebRequestManager.m */,
 				B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */,
@@ -1657,7 +1663,6 @@
 			children = (
 				7560DDB713B8EDA300268D13 /* Classes */,
 				7506E41413B902ED00EE1471 /* Resources */,
-				7560DDB813B8EDB700268D13 /* Vendor */,
 				7550153713B8EA08002DAE8B /* CloudKit */,
 				960A2D30150572C000D30AB4 /* Documentation */,
 				7550153213B8EA08002DAE8B /* Frameworks */,
@@ -1676,6 +1681,7 @@
 		7550153213B8EA08002DAE8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7560DDB813B8EDB700268D13 /* Vendor */,
 				9660F471156308F700FE2081 /* VendorsKit.framework */,
 				7560DE4213B8F00F00268D13 /* MediaPlayer.framework */,
 				7560DE4313B8F00F00268D13 /* QuartzCore.framework */,
@@ -2145,6 +2151,7 @@
 				7560DC9613B8ED3600268D13 /* CKDebug.h in Headers */,
 				7560DC9713B8ED3600268D13 /* CKDictionaryFromAttributesTransformer.h in Headers */,
 				7560DC9B13B8ED3600268D13 /* CKArrayCollection.h in Headers */,
+				B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */,
 				7560DC9D13B8ED3600268D13 /* CKCollection.h in Headers */,
 				7560DC9F13B8ED3600268D13 /* CKCollectionCellController.h in Headers */,
 				7560DCA113B8ED3600268D13 /* CKCollectionCellController+Style.h in Headers */,
@@ -2709,6 +2716,7 @@
 				B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */,
 				B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */,
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
+				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
