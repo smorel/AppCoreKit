@@ -386,47 +386,51 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (NSArray*)allPropertiesForClass:(Class)class{
-	NSString* className = [NSString stringWithUTF8String:class_getName(class)];
-	NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
-	if(allProperties == nil){
-		allProperties = [NSMutableArray array];
-		[NSObject introspection:class array:allProperties];
-		[_propertiesByClassName setObject:allProperties forKey:className];
-		
-		NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
-		NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
-		NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
-		for(CKClassPropertyDescriptor* property in allProperties){
-			[allPropertyNames addObject:property.name];
-			if([NSObject isClass:property.type kindOfClass:[UIView class]]){
-				[allViewPropertyDescriptors addObject:property];
-			}
-            [propertiesByName setObject:property forKey:property.name];
-		}
-		[_propertyNamesByClassName setObject:allPropertyNames forKey:className];
-		[_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
-        [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
-	}
-	
-	return allProperties;
+    @synchronized(self){
+        NSString* className = [NSString stringWithUTF8String:class_getName(class)];
+        NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+        if(allProperties == nil){
+            allProperties = [NSMutableArray array];
+            [NSObject introspection:class array:allProperties];
+            [_propertiesByClassName setObject:allProperties forKey:className];
+            
+            NSMutableDictionary* propertiesByName = [NSMutableDictionary dictionaryWithCapacity:[allProperties count]];
+            NSMutableArray* allPropertyNames = [NSMutableArray arrayWithCapacity:[allProperties count]];
+            NSMutableArray* allViewPropertyDescriptors = [NSMutableArray arrayWithCapacity:[allProperties count]];
+            for(CKClassPropertyDescriptor* property in allProperties){
+                [allPropertyNames addObject:property.name];
+                if([NSObject isClass:property.type kindOfClass:[UIView class]]){
+                    [allViewPropertyDescriptors addObject:property];
+                }
+                [propertiesByName setObject:property forKey:property.name];
+            }
+            [_propertyNamesByClassName setObject:allPropertyNames forKey:className];
+            [_viewPropertiesByClassName setObject:allViewPropertyDescriptors forKey:className];
+            [_propertiesByClassNameByName setObject:propertiesByName forKey:className];
+        }
+        
+        return allProperties;
+    }
 }
 
 - (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c{
-	NSString* className = [NSString stringWithUTF8String:class_getName(c)];
-    NSAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
-    NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
-    [allProperties addObject:descriptor];
-    
-    NSMutableArray* allPropertiesNames = [_propertyNamesByClassName objectForKey:className];
-    [allPropertiesNames addObject:descriptor.name];
-    
-    if([NSObject isClass:descriptor.type kindOfClass:[UIView class]]){
-        NSMutableArray* allViewsProperties = [_viewPropertiesByClassName objectForKey:className];
-        [allViewsProperties addObject:descriptor];
+    @synchronized(self){
+        NSString* className = [NSString stringWithUTF8String:class_getName(c)];
+        NSAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
+        NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
+        [allProperties addObject:descriptor];
+        
+        NSMutableArray* allPropertiesNames = [_propertyNamesByClassName objectForKey:className];
+        [allPropertiesNames addObject:descriptor.name];
+        
+        if([NSObject isClass:descriptor.type kindOfClass:[UIView class]]){
+            NSMutableArray* allViewsProperties = [_viewPropertiesByClassName objectForKey:className];
+            [allViewsProperties addObject:descriptor];
+        }
+        
+        NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
+        [propertiesByName setObject:descriptor forKey:descriptor.name];
     }
-    
-    NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
-    [propertiesByName setObject:descriptor forKey:descriptor.name];
 }
 
 
