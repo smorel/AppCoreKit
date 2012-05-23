@@ -20,8 +20,6 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, retain, readonly) NSString *downloadPath;
 @property (nonatomic, readonly) CGFloat progress;
 
-+(NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL;
-
 //See CKWebRequest+Initialization.h for other init methods
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSHTTPURLResponse *response, NSError *error))block;
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters downloadAtPath:(NSString*)path completion:(void (^)(id object, NSHTTPURLResponse *response, NSError *error))block;

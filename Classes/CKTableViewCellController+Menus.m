@@ -75,7 +75,7 @@
 
 + (CKTableViewCellController*)cellControllerWithTitle:(NSString*)title subtitle:(NSString*)subTitle defaultImage:(UIImage*)image imageURL:(NSURL*)imageURL imageSize:(CGSize)imageSize action:(void(^)(CKTableViewCellController* controller))action{
     
-    __block UIImage* croppedImage = [CKImageLoader imageForURL:imageURL];
+    __block UIImage* croppedImage = nil;
     if(imageSize.width >= 0 && imageSize.height >= 0
        && !CGSizeEqualToSize(croppedImage.size, imageSize)){
         croppedImage = [croppedImage imageThatFits:imageSize crop:NO];
@@ -113,7 +113,7 @@
     }];
     [cellController setViewDidAppearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         if(!croppedImage){
-            UIImage* remoteImage = [CKImageLoader imageForURL:imageURL];
+            UIImage* remoteImage = nil;
             if(remoteImage){
                 if(imageSize.width >= 0 && imageSize.height >= 0
                    && !CGSizeEqualToSize(remoteImage.size, imageSize)){

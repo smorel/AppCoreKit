@@ -36,8 +36,6 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
 - (void)loadImageWithContentOfURL:(NSURL *)url;
 - (void)cancel;
 
-+ (UIImage *)imageForURL:(NSURL *)URL;
-
 @end
 
 //

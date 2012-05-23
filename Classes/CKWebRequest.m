@@ -93,11 +93,6 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     [super dealloc];
 }
 
-+ (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL {
-	NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:anURL] autorelease];
-	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
-}
-
 #pragma mark - LifeCycle
 
 - (void)start {
@@ -186,7 +181,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
     NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
     [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
-    
+        
      return nil;
 }
 
