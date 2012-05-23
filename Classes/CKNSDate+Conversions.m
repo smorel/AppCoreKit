@@ -13,12 +13,22 @@
 // NOTE: This method maintains a cache of NSDateFormatters
 
 + (NSDateFormatter *)formatterWithDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
-	static NSMutableDictionary *formatters = nil;
-	if (formatters == nil) { formatters = [[NSMutableDictionary dictionary] retain]; }
+    static NSMutableDictionary *formattersPerThread = nil;
+    if(!formattersPerThread){
+        formattersPerThread = [[NSMutableDictionary alloc] init];
+    }
+    
+    NSThread* currentThread = [NSThread currentThread];
+
+	NSMutableDictionary *formatters = [formattersPerThread objectForKey:[NSValue valueWithNonretainedObject:currentThread]];
+	if (formatters == nil) { 
+        formatters = [NSMutableDictionary dictionary]; 
+        [formattersPerThread setObject:formatters forKey:[NSValue valueWithNonretainedObject:currentThread]];
+    }
 	
 	NSLocale *locale = localeIdentifier 
-	? [[[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier] autorelease]
-	: [NSLocale currentLocale];
+	    ? [[[NSLocale alloc] initWithLocaleIdentifier:localeIdentifier] autorelease]
+	    : [NSLocale currentLocale];
 	
 	NSString *key = [NSString stringWithFormat:@"%@-%@", dateFormat, locale.localeIdentifier];
 	NSDateFormatter *formatter = [formatters objectForKey:key];

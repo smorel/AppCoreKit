@@ -34,7 +34,7 @@ NSString* CKSerializerIDTag = @"@id";
 @end
 
 
-@interface NSValueTransformer()
+@interface NSValueTransformer(CKAdditionPrivate)
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property;
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector;
 + (NSDictionary*)converterWithIdentifier:(NSString*)identifier;
