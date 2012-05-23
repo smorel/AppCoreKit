@@ -8,7 +8,6 @@
 
 #import "CKImageLoader.h"
 #import "CKUIImage+Transformations.h"
-#import "CKCache.h"
 #import "CKLocalization.h"
 #import "CKDebug.h"
 #import "RegexKitLite.h"

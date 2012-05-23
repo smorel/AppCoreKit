@@ -7,7 +7,6 @@
 //
 
 #import "CKImageView.h"
-#import "CKCache.h"
 #import "CKUIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKNSValueTransformer+Additions.h"

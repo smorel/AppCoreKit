@@ -94,8 +94,6 @@
 		7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */; };
 		7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2A13B8ED3600268D13 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7813B8ED3600268D13 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2B13B8ED3600268D13 /* CKBundle.m */; };
-		7560DC7913B8ED3600268D13 /* CKCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2C13B8ED3600268D13 /* CKCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC7A13B8ED3600268D13 /* CKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2D13B8ED3600268D13 /* CKCache.m */; };
 		7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2E13B8ED3600268D13 /* CKCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7C13B8ED3600268D13 /* CKCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2F13B8ED3600268D13 /* CKCallback.m */; };
 		7560DC7F13B8ED3600268D13 /* CKCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3213B8ED3600268D13 /* CKCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -623,8 +621,6 @@
 		7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBonjourResolver.m; path = Classes/CKBonjourResolver.m; sourceTree = "<group>"; };
 		7560DB2A13B8ED3600268D13 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
 		7560DB2B13B8ED3600268D13 /* CKBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBundle.m; path = Classes/CKBundle.m; sourceTree = "<group>"; };
-		7560DB2C13B8ED3600268D13 /* CKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCache.h; path = Classes/CKCache.h; sourceTree = "<group>"; };
-		7560DB2D13B8ED3600268D13 /* CKCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCache.m; path = Classes/CKCache.m; sourceTree = "<group>"; };
 		7560DB2E13B8ED3600268D13 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCallback.h; path = Classes/CKCallback.h; sourceTree = "<group>"; };
 		7560DB2F13B8ED3600268D13 /* CKCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCallback.m; path = Classes/CKCallback.m; sourceTree = "<group>"; };
 		7560DB3213B8ED3600268D13 /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCarouselView.h; path = Classes/CKCarouselView.h; sourceTree = "<group>"; };
@@ -1113,8 +1109,6 @@
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.m */,
 				7560DB2A13B8ED3600268D13 /* CKBundle.h */,
 				7560DB2B13B8ED3600268D13 /* CKBundle.m */,
-				7560DB2C13B8ED3600268D13 /* CKCache.h */,
-				7560DB2D13B8ED3600268D13 /* CKCache.m */,
 				7560DB2E13B8ED3600268D13 /* CKCallback.h */,
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
 				966B00C51538884200360C0F /* Object Extension */,
@@ -2135,7 +2129,6 @@
 				7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */,
 				7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */,
 				7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */,
-				7560DC7913B8ED3600268D13 /* CKCache.h in Headers */,
 				7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */,
 				7560DC7F13B8ED3600268D13 /* CKCarouselView.h in Headers */,
 				7560DC8113B8ED3600268D13 /* CKCGPropertyCellControllers.h in Headers */,
@@ -2502,7 +2495,6 @@
 				7560DC7413B8ED3600268D13 /* CKBindingsManager.m in Sources */,
 				7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */,
 				7560DC7813B8ED3600268D13 /* CKBundle.m in Sources */,
-				7560DC7A13B8ED3600268D13 /* CKCache.m in Sources */,
 				7560DC7C13B8ED3600268D13 /* CKCallback.m in Sources */,
 				7560DC8013B8ED3600268D13 /* CKCarouselView.m in Sources */,
 				7560DC8213B8ED3600268D13 /* CKCGPropertyCellControllers.m in Sources */,
