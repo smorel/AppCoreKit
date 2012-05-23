@@ -8,7 +8,7 @@
 
 #import "CKBindedGridViewController.h"
 #import "CKGridTableViewCellController.h"
-#import "CKGridCollection.h"
+#import "CKArrayProxyCollection.h"
 
 
 @interface CKItemViewContainerController(CKItemViewControllerManagement)
@@ -18,40 +18,90 @@
 
 @interface CKBindedTableViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
+- (void)updateGridArray;
 @end
 
-@interface CKBindedGridViewController ()
 
+@interface CKBindedGridViewController ()
+@property(nonatomic,retain) NSMutableArray* subControllers;
+@property(nonatomic,retain) NSMutableArray* objectsAsGrid;
+@property(nonatomic,retain) CKCollection* linearCollection;
+@property(nonatomic,retain) CKItemViewControllerFactory* subControllersFactory;
+@property(nonatomic,retain) CKCollectionController* linearCollectionController;
 @end
 
 @implementation CKBindedGridViewController
 @synthesize size = _size;
+@synthesize subControllers = _subControllers;
+@synthesize linearCollection = _linearCollection;
+@synthesize subControllersFactory = _subControllersFactory;
+@synthesize linearCollectionController = _linearCollectionController;
+@synthesize objectsAsGrid = _objectsAsGrid;
 
 - (void)postInit{
     [super postInit];
     _size = CGSizeMake(5,2);
 }
 
+- (void)dealloc{
+    [_subControllers release];
+    [_linearCollection release];
+    [_subControllersFactory release];
+    [_linearCollectionController release];
+    [super dealloc];
+}
+
 - (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
-    CKGridCollection* gridCollection = [[[CKGridCollection alloc]initWithCollection:collection size:_size ]autorelease];
+    [_linearCollectionController setDelegate:nil];
+    self.linearCollection = collection;
+    self.subControllersFactory = factory;
+    self.subControllers = [NSMutableArray array];
+    
+    self.linearCollectionController = [CKCollectionController controllerWithCollection:collection];
+    _linearCollectionController.delegate = self;
+    
+    //OBSERVE collection & keeps factory to create/remove controllers in _subControllers
+    self.objectsAsGrid = [NSMutableArray array];
+    [self updateGridArray];
+    CKArrayProxyCollection* gridCollection = [[[CKArrayProxyCollection alloc]initWithArrayProperty:[CKProperty propertyWithObject:self keyPath:@"objectsAsGrid"] ]autorelease];
     [super setupWithCollection:gridCollection factory:factory];
 }
 
-/*
-- (void)setObjectController:(id)objectController{
-    [super setObjectController:objectController];
+- (void)updateGridArray{
+    NSInteger height = 0;
+    switch(self.orientation){
+        case CKTableViewOrientationPortrait:{
+            height = _size.height;
+            break;
+        }
+        case CKTableViewOrientationLandscape:{
+            height = _size.width;
+            break;
+        }
+    }
     
-    NSAssert([self.objectController isKindOfClass:[CKCollectionController class]],@"Invalid ObjectController Class");
-    CKCollectionController* collectionController = (CKCollectionController*)self.objectController;
-    collectionController.animateInsertionsOnReload = NO;
-}
- */
-
-- (CKGridCollection*)gridCollection{
-    NSAssert([self.objectController isKindOfClass:[CKCollectionController class]],@"Invalid ObjectController Class");
-    CKCollectionController* collectionController = (CKCollectionController*)self.objectController;
-    NSAssert([collectionController.collection isKindOfClass:[CKGridCollection class]],@"Invalid Collection Class");
-    return (CKGridCollection*)collectionController.collection;
+    NSMutableArray* objects = [NSMutableArray array];
+    
+    int i =0;
+    NSMutableArray* currentArray = nil;
+    for(id object in [self.linearCollection allObjects]){
+        if(i == 0){
+            currentArray = [NSMutableArray array];
+            [objects addObject:currentArray];
+        }
+        
+        [currentArray addObject:object];
+        
+        ++i;
+        
+        if(i >= height){
+            i = 0;
+        }
+    }
+    
+    CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
+    [theCollection removeAllObjects];
+    [theCollection addObjectsFromArray:objects];
 }
 
 - (void)setSize:(CGSize)s{
@@ -60,16 +110,7 @@
     CGSize oldSize = _size;
     _size = s;
     
-    switch(self.orientation){
-        case CKTableViewOrientationPortrait:{
-            [[self gridCollection]setSize:_size];
-            break;
-        }
-        case CKTableViewOrientationLandscape:{
-            [[self gridCollection]setSize:CGSizeMake(_size.height,_size.width)];
-            break;
-        }
-    }
+    [self updateGridArray];
     
     for(int i = 0; i < [self numberOfObjectsForSection:0]; ++i){
         CKGridTableViewCellController* controller = (CKGridTableViewCellController*)[self controllerAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -135,6 +176,99 @@
     }
     controller.controllerFactory = _controllerFactory;
     return controller;
+}
+
+//Sub controllers management
+
+- (void)objectControllerDidBeginUpdating:(id)controller{
+    if(controller == self.linearCollectionController){
+        return;
+    }
+    [super objectControllerDidBeginUpdating:controller];
+}
+
+- (void)objectControllerDidEndUpdating:(id)controller{
+    if(controller == self.linearCollectionController){
+        return;
+    }
+    [super objectControllerDidEndUpdating:controller];
+}
+
+- (void)objectControllerReloadData:(id)controller{
+    if(controller == self.linearCollectionController){
+        NSAssert(NO,@"NOT IMPLEMENTED");
+        
+        [self updateGridArray];
+        return;
+    }
+    
+    [super objectControllerReloadData:controller];
+}
+ 
+- (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(controller == self.linearCollectionController){
+        int i =0;
+        for(id object in objects){
+            NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
+            CKItemViewController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
+            [self.subControllers insertObject:subcontroller atIndex:indexPath.row];
+            
+            [subcontroller performSelector:@selector(setContainerController:) withObject:self];
+            [subcontroller performSelector:@selector(setValue:) withObject:object];
+            [subcontroller performSelector:@selector(setIndexPath:) withObject:indexPath];
+            
+            ++i;
+        }
+        
+        [self updateGridArray];
+        return;
+    }
+    
+    [super objectController:controller insertObjects:objects atIndexPaths:indexPaths];
+}
+
+- (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(controller == self.linearCollectionController){
+        NSAssert(NO,@"NOT IMPLEMENTED");
+        
+        [self updateGridArray];
+        
+        return;
+    }
+    
+    [super objectController:controller removeObjects:objects atIndexPaths:indexPaths];
+}
+
+- (CKItemViewController*)subControllerForRow:(NSInteger)row column:(NSInteger)column{
+    NSInteger index = 0;
+    switch(self.orientation){
+        case CKTableViewOrientationLandscape:{
+            index = (self.size.width * column) + row;
+            break;
+        }
+        case CKTableViewOrientationPortrait:{
+            index = (self.size.height * column) + row;
+            break;
+        }
+    }
+    
+    return [self.subControllers objectAtIndex:index];
+}
+
+- (void)fetchObjectsInRange:(NSRange)range forSection:(NSInteger)section{
+    NSInteger height = 0;
+    switch(self.orientation){
+        case CKTableViewOrientationPortrait:{
+            height = _size.height;
+            break;
+        }
+        case CKTableViewOrientationLandscape:{
+            height = _size.width;
+            break;
+        }
+    }
+
+     [self.linearCollection fetchRange:NSMakeRange(range.location * height, range.length * height)];
 }
 
 @end

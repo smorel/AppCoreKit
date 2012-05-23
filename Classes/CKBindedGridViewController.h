@@ -10,4 +10,7 @@
 
 @interface CKBindedGridViewController : CKBindedTableViewController
 @property(nonatomic,assign) CGSize size;
+
+- (CKItemViewController*)subControllerForRow:(NSInteger)row column:(NSInteger)column;
+
 @end

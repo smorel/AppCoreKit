@@ -11,6 +11,7 @@
 #import "CKStyleView.h"
 #import "CKNSObject+Bindings.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKBindedGridViewController.h"
 
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
@@ -190,27 +191,13 @@
 - (void)updateViewControllers{
     NSMutableArray* controllers = [NSMutableArray array];
     
+    CKBindedGridViewController* parentGrid = (CKBindedGridViewController*)self.containerController;
+    
     NSArray* objects = (NSArray*)self.value;
     int i =0;
     for(id object in objects){
-        /*NSUInteger indexes[3];
-        indexes[0] = self.indexPath.row;
-        indexes[1] = self.indexPath.section;
-        indexes[2] = i;
-        
-        NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:indexes length:3];*/
-        
-        NSIndexPath* indexPath = self.indexPath;
-        CKItemViewController* controller = [_controllerFactory controllerForObject:object atIndexPath:indexPath];
-        NSAssert([controller isKindOfClass:[CKTableViewCellController class]],@"Grid only supports CKTableViewCellController");
-        
-        CKTableViewCellController* cellController = (CKTableViewCellController*)controller;
-        cellController.parentCellController = self;
-        
-        [controller performSelector:@selector(setContainerController:) withObject:self.containerController];
-        [controller performSelector:@selector(setValue:) withObject:object];
-        [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
-        
+        CKTableViewCellController* controller = (CKTableViewCellController*)[parentGrid subControllerForRow:self.indexPath.row column:i];
+        controller.parentCellController = self;
         [controllers addObject:controller];
         ++i;
     }
