@@ -42,6 +42,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return block;
 }
 
+- (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters{
+    return [self initWithURL:url parameters:parameters completion:nil];
+}
+
 - (id)initWithURL:(NSURL *)url completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
     NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
     return [self initWithURLRequest:aRequest completion:block];
@@ -128,6 +132,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 + (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL {
 	NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:anURL] autorelease];
 	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+}
+
++ (CKWebRequest*)scheduledRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters{
+    return [self scheduledRequestWithURL:url parameters:parameters completion:nil];
 }
 
 + (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
