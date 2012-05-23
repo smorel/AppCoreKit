@@ -8,7 +8,7 @@
 
 #import "CKPropertyExtendedAttributes.h"
 
-static CKPropertyExtendedAttributes* CKPropertyExtendedAttributesSingleton = nil;
+static NSMutableDictionary* CKPropertyExtendedAttributesPerThreadSingleton = nil;
 
 @implementation CKPropertyExtendedAttributes
 @synthesize attributes;
@@ -29,17 +29,26 @@ static CKPropertyExtendedAttributes* CKPropertyExtendedAttributesSingleton = nil
 }
 
 + (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property{
-	if(CKPropertyExtendedAttributesSingleton == nil){
-		CKPropertyExtendedAttributesSingleton = [[CKPropertyExtendedAttributes alloc]init];
+    NSThread* currentThread = [NSThread currentThread];
+    
+	if(CKPropertyExtendedAttributesPerThreadSingleton == nil){
+		CKPropertyExtendedAttributesPerThreadSingleton = [[NSMutableDictionary alloc]init];
 	}
-	[CKPropertyExtendedAttributesSingleton reset];
+    
+    CKPropertyExtendedAttributes* attributes = [CKPropertyExtendedAttributesPerThreadSingleton objectForKey:[NSValue valueWithNonretainedObject: currentThread]];
+    if(!attributes){
+        attributes = [[[CKPropertyExtendedAttributes alloc]init]autorelease];
+        [CKPropertyExtendedAttributesPerThreadSingleton setObject:attributes forKey:[NSValue valueWithNonretainedObject: currentThread]];
+    }
+    
+	[attributes reset];
 	
 	SEL extendedAttributesSelector = property.extendedAttributesSelector;
 	if([object respondsToSelector:extendedAttributesSelector]){
-		[object performSelector:extendedAttributesSelector withObject:CKPropertyExtendedAttributesSingleton];
+		[object performSelector:extendedAttributesSelector withObject:attributes];
 	}
 	
-	return CKPropertyExtendedAttributesSingleton;
+	return attributes;
 }
 
 @end
