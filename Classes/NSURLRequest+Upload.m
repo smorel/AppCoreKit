@@ -11,7 +11,7 @@
 @implementation NSURLRequest (Upload)
 
 + (id)requestWithURL:(NSURL *)URL toUploadData:(NSData *)data {
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:URL] autorelease];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:data];
     [request setValue:[NSString stringWithFormat:@"%d", [data length]] forHTTPHeaderField:@"Content-Length"];

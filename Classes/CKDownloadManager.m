@@ -61,7 +61,7 @@ static CKDownloadManager *CKSharedDownloadManager;
 - (id)init {
     self = [super init];
     if (self) {
-        self.downloaders = [[NSMutableDictionary alloc] init];
+        self.downloaders = [[[NSMutableDictionary alloc] init] autorelease];
     }
     return self;
 }
