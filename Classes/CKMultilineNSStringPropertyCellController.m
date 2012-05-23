@@ -63,17 +63,17 @@
     _textView.hidden = YES;//will get displayed in setup depending on the model
     [cell.contentView addSubview:_textView];
     
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             _textView.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }  
-        else{
-            _textView.textColor = [UIColor blackColor];
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+       // }  
+        //else{
+       //     _textView.textColor = [UIColor blackColor];
+       //     cell.detailTextLabel.numberOfLines = 0;
+       //     cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+       // }
     }  
     
     _textView.autoresizingMask = UIViewAutoresizingNone;
@@ -92,7 +92,7 @@
     CKProperty* property = (CKProperty*)self.value;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle == CKTableViewCellStyleValue3){
+       || self.cellStyle == CKTableViewCellStyleIPadForm){
         self.text = _(descriptor.name);
     }
     

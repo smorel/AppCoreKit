@@ -76,23 +76,23 @@
     _textField.hidden = YES; //will get displayed in setup depending on the model
     [cell.contentView addSubview:_textField];
     
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             _textField.textAlignment = UITextAlignmentRight;
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
-        }  
-        else{
-            _textField.textColor = [UIColor blackColor];
-            _textField.textAlignment = UITextAlignmentLeft;
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+        //}  
+        //else{
+        //    _textField.textColor = [UIColor blackColor];
+        //    _textField.textAlignment = UITextAlignmentLeft;
+        //    cell.detailTextLabel.numberOfLines = 0;
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //}
     }  
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid){
+    if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm){
         _textField.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     }
     
@@ -102,7 +102,7 @@
     
     _toggleSwitch.hidden = YES; //will get displayed in setup depending on the model
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ||
-       ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleValue3)){
+       ([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.cellStyle == CKTableViewCellStyleIPadForm)){
         [cell.contentView addSubview:self.toggleSwitch];
     }
     else{
@@ -174,8 +174,8 @@
             _textField.hidden = YES;
         }
         else{
-            if(self.cellStyle == CKTableViewCellStylePropertyGrid
-               && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            if(self.cellStyle == CKTableViewCellStyleIPhoneForm
+               /*&& [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone*/){
                 self.fixedSize = YES;
             }
             else{
@@ -213,7 +213,7 @@
             
             self.toggleSwitch = theSwitch;
             
-            if(self.cellStyle == CKTableViewCellStyleValue3){
+            if(self.cellStyle == CKTableViewCellStyleIPadForm){
                 [cell.contentView addSubview:self.toggleSwitch];
                 [self performLayout];
             }

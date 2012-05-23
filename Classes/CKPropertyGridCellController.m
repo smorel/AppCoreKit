@@ -43,7 +43,7 @@
 
 - (id)init{
 	[super init];
-	self.cellStyle = CKTableViewCellStylePropertyGrid;
+	self.cellStyle = CKTableViewCellStyleIPhoneForm;
     _validationDisplayed = NO;
     self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
     _fixedSize = NO;

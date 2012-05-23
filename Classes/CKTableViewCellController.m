@@ -472,8 +472,8 @@
                                                UITableViewCellStyleValue2,
                                                CKTableViewCellStyleSubtitle,
                                                UITableViewCellStyleSubtitle,
-                                               CKTableViewCellStyleValue3,
-                                               CKTableViewCellStylePropertyGrid,
+                                               CKTableViewCellStyleIPadForm,
+                                               CKTableViewCellStyleIPhoneForm,
                                                CKTableViewCellStyleSubtitle2
                                                );
 }
@@ -510,8 +510,8 @@
     //Redirect cell style to a known style for UITableViewCell initialization
     //The layoutCell method will then adapt the layout to our custom type of cell
 	CKTableViewCellStyle toUseCellStyle = thecellStyle;
-	if(toUseCellStyle == CKTableViewCellStyleValue3
-       ||toUseCellStyle == CKTableViewCellStylePropertyGrid){
+	if(toUseCellStyle == CKTableViewCellStyleIPadForm
+       ||toUseCellStyle == CKTableViewCellStyleIPhoneForm){
 		toUseCellStyle = CKTableViewCellStyleValue1;
 	}
     else if(toUseCellStyle == CKTableViewCellStyleSubtitle2){
@@ -544,8 +544,8 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid
+	if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         //Ensure detailTextLabel is created !
         if(cell.detailTextLabel == nil){
@@ -557,7 +557,7 @@
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 	
-	if(self.cellStyle == CKTableViewCellStyleValue3){
+	if(self.cellStyle == CKTableViewCellStyleIPadForm){
 		cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
@@ -571,28 +571,28 @@
         cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
 	}
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+    else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
         cell.textLabel.numberOfLines = 0;
         cell.detailTextLabel.numberOfLines = 0;
         cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
         
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.textLabel.textColor = [UIColor blackColor];
             cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
             cell.detailTextLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
             cell.textLabel.textAlignment = UITextAlignmentLeft;
-        }
-        else{
-            cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
-            cell.detailTextLabel.textColor = [UIColor blackColor];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-            cell.textLabel.textAlignment = UITextAlignmentRight;
-        }
+        //}
+        //else{
+        //    cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
+        //    cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        //    cell.detailTextLabel.textColor = [UIColor blackColor];
+        //    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //    cell.textLabel.textAlignment = UITextAlignmentRight;
+        //}
     }
     else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
         cell.textLabel.numberOfLines = 0;
@@ -780,8 +780,8 @@
 }
 
 - (void)setupView:(UIView *)view{
-    /*if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid
+    /*if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     }*/
@@ -826,8 +826,8 @@
     //TODO : Check if necessary as setting values on controller or cell will invalidate the size
     //and as a side effect tell the table to refresh the view with this new size !
     /*
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid
+    if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
         [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];

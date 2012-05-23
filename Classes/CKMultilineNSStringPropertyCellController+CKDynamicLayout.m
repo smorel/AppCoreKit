@@ -57,11 +57,11 @@
 
 - (CGRect)propertyGridTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle image:(UIImage*)image{
     
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         return [self value3TextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];
-    }
+    //}
     
-    return [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];
+    //return [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:image];
 }
 
 
@@ -73,16 +73,16 @@
     //TODO : Verify lineBreakMode for textView !
     [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
     
-    if(self.cellStyle == CKTableViewCellStyleValue3){
+    if(self.cellStyle == CKTableViewCellStyleIPadForm){
         [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
     }
-    else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        }
-        else{
-            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        }
+        //}
+        //else{
+        //    [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+        //}
     }
     else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
         [defaultStyle setObject:[UIFont systemFontOfSize:14] forKey:CKDynamicLayoutFont];
@@ -94,8 +94,8 @@
 - (CGSize)computeSize{
     NSString* text = nil;
     CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle == CKTableViewCellStyleValue3){
+    if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm){
         text = _(descriptor.name);
     }
     
@@ -104,8 +104,8 @@
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
-        if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid
+        if(self.cellStyle == CKTableViewCellStyleIPadForm
+           || self.cellStyle == CKTableViewCellStyleIPhoneForm
            || self.cellStyle == CKTableViewCellStyleSubtitle2){
             
             NSDictionary* textViewStyle = [self textViewStyle];
@@ -115,11 +115,11 @@
             //we append 'a' here to manage extra return spaces in text not taken in account when computing text size.
             
             CGFloat height = 0;
-            if(self.cellStyle == CKTableViewCellStyleValue3){
+            if(self.cellStyle == CKTableViewCellStyleIPadForm){
                 CGRect frame = [self value3TextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
                 height = MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }
-            else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+            else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
                 CGRect frame = [self propertyGridTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
                 height = MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }
@@ -130,7 +130,7 @@
             
             return CGSizeMake(320,height);
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
+            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
     return size;
@@ -141,8 +141,8 @@
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
-        if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid
+        if(self.cellStyle == CKTableViewCellStyleIPadForm
+           || self.cellStyle == CKTableViewCellStyleIPhoneForm
            || self.cellStyle == CKTableViewCellStyleSubtitle2){
             
             NSDictionary* textViewStyle = [self textViewStyle];
@@ -151,7 +151,7 @@
             NSString* text = nil;
             CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-               || self.cellStyle == CKTableViewCellStyleValue3){
+               || self.cellStyle == CKTableViewCellStyleIPadForm){
                 text = _(descriptor.name);
             }
             
@@ -161,17 +161,17 @@
             UITableViewCell* cell = self.tableViewCell;
             CKTextView* textView = (CKTextView*)[cell viewWithTag:50000];
             
-            if(self.cellStyle == CKTableViewCellStyleValue3){
+            if(self.cellStyle == CKTableViewCellStyleIPadForm){
                 textView.frame = [self value3TextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
             }
-            else if(self.cellStyle == CKTableViewCellStylePropertyGrid){
+            else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
                 textView.frame = [self propertyGridTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
             }
             else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
                 textView.frame = [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
+            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
 }

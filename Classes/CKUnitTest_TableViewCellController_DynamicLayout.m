@@ -94,8 +94,8 @@
     //Editable cells
     for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
         CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
-        if(style == CKTableViewCellStyleValue3
-           || style == CKTableViewCellStylePropertyGrid
+        if(style == CKTableViewCellStyleIPadForm
+           || style == CKTableViewCellStyleIPhoneForm
            || style == CKTableViewCellStyleSubtitle2){
             
             for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){
@@ -115,8 +115,8 @@
     //Readonly cellds
     for(NSString* cellStyleName in [[cellStylesEnumDescriptor valuesAndLabels]allKeys]){
         CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
-        if(style == CKTableViewCellStyleValue3
-           || style == CKTableViewCellStylePropertyGrid
+        if(style == CKTableViewCellStyleIPadForm
+           || style == CKTableViewCellStyleIPhoneForm
            || style == CKTableViewCellStyleSubtitle2){
             
             for(CKClassPropertyDescriptor* descriptor in [object allPropertyDescriptors]){

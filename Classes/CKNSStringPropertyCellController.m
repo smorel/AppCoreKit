@@ -59,21 +59,21 @@
     //_textField.hidden = YES; //will get displayed in setup depending on the model
     [cell.contentView addSubview:_textField];
     
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             _textField.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1];
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }  
-        else{
-            _textField.textColor = [UIColor blackColor];
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+        //}  
+        //else{
+        //    _textField.textColor = [UIColor blackColor];
+        //    cell.detailTextLabel.numberOfLines = 0;
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //}
     }  
     
-    if(self.cellStyle == CKTableViewCellStyleValue3
-       || self.cellStyle == CKTableViewCellStylePropertyGrid
+    if(self.cellStyle == CKTableViewCellStyleIPadForm
+       || self.cellStyle == CKTableViewCellStyleIPhoneForm
        || self.cellStyle == CKTableViewCellStyleSubtitle2){
         _textField.autoresizingMask = UIViewAutoresizingNone;
     }
@@ -93,8 +93,8 @@
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle != CKTableViewCellStylePropertyGrid){
+    if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
+       || self.cellStyle != CKTableViewCellStyleIPhoneForm){
         self.text = _(descriptor.name);
     }else{
         self.text = nil;
@@ -113,8 +113,8 @@
 	}
 	else{
         if(_textField){
-            if(self.cellStyle == CKTableViewCellStylePropertyGrid
-               && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            if(self.cellStyle == CKTableViewCellStyleIPhoneForm
+               /*&& [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone*/){
                 self.fixedSize = YES;
             }
             else{

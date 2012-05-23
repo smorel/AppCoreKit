@@ -37,8 +37,8 @@ NSString* CKStyleCellFlags = @"flags";
                                                                         UITableViewCellStyleValue2,
                                                                         CKTableViewCellStyleSubtitle,
                                                                         UITableViewCellStyleSubtitle,
-                                                                        CKTableViewCellStyleValue3,
-                                                                        CKTableViewCellStylePropertyGrid,
+                                                                        CKTableViewCellStyleIPadForm,
+                                                                        CKTableViewCellStyleIPhoneForm,
                                                                         CKTableViewCellStyleSubtitle2)];
 }
 

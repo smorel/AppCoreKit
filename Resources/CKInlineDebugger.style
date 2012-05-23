@@ -87,7 +87,7 @@
         
         "CKNSNumberPropertyCellController" : {
             "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
-            "cellType" : "CKTableViewCellStylePropertyGrid"
+            "cellType" : "CKTableViewCellStyleIPhoneForm"
         },
         
         "sectionHeaderView" : {

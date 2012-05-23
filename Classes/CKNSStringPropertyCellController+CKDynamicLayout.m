@@ -69,8 +69,8 @@
 - (CGSize)computeSize{
     NSString* text = nil;
     CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-       || self.cellStyle != CKTableViewCellStylePropertyGrid){
+    if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
+       || self.cellStyle != CKTableViewCellStyleIPhoneForm){
         text = _(descriptor.name);
     }
     NSString* textFieldText = [[self objectProperty]value];
@@ -80,15 +80,15 @@
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
-        if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid
+        if(self.cellStyle == CKTableViewCellStyleIPadForm
+           || self.cellStyle == CKTableViewCellStyleIPhoneForm
            || self.cellStyle == CKTableViewCellStyleSubtitle2){
             
             NSDictionary* textStyle = [self detailTextStyle];
             
             NSDictionary* textFieldStyle = [self textFieldStyle];
-            if(self.cellStyle == CKTableViewCellStyleValue3
-               || self.cellStyle == CKTableViewCellStylePropertyGrid){
+            if(self.cellStyle == CKTableViewCellStyleIPadForm
+               || self.cellStyle == CKTableViewCellStyleIPhoneForm){
                 CGRect frame = [self value3TextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
                 return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
@@ -96,7 +96,7 @@
                 return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
+            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
     return size;
@@ -107,8 +107,8 @@
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
     if(!readonly){
-        if(self.cellStyle == CKTableViewCellStyleValue3
-           || self.cellStyle == CKTableViewCellStylePropertyGrid
+        if(self.cellStyle == CKTableViewCellStyleIPadForm
+           || self.cellStyle == CKTableViewCellStyleIPhoneForm
            || self.cellStyle == CKTableViewCellStyleSubtitle2){
             
             UITableViewCell* cell = self.tableViewCell;
@@ -119,16 +119,16 @@
                 
                 NSString* text = nil;
                 CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-                if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
-                   || self.cellStyle != CKTableViewCellStylePropertyGrid){
+                if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
+                   || self.cellStyle != CKTableViewCellStyleIPhoneForm){
                     text = _(descriptor.name);
                 }
                 
                 NSDictionary* textFieldStyle = [self textFieldStyle];
                 NSString* textFieldText =[[self objectProperty]value];
                 
-                if(self.cellStyle == CKTableViewCellStyleValue3
-                   || self.cellStyle == CKTableViewCellStylePropertyGrid){
+                if(self.cellStyle == CKTableViewCellStyleIPadForm
+                   || self.cellStyle == CKTableViewCellStyleIPhoneForm){
                     textField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
                     textField.frame = [self value3TextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
                     
@@ -144,7 +144,7 @@
                 }
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleValue3, CKTableViewCellStylePropertyGrid, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
+            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
 }

@@ -147,8 +147,8 @@
         cellController.cellStyle = self.optionCellStyle;
         
         /*
-        if(cellController.cellStyle == CKTableViewCellStyleValue3
-           || cellController.cellStyle == CKTableViewCellStylePropertyGrid){
+        if(cellController.cellStyle == CKTableViewCellStyleIPadForm
+           || cellController.cellStyle == CKTableViewCellStyleIPhoneForm){
             cellController.textAlignment = UITextAlignmentLeft;
         }
          */

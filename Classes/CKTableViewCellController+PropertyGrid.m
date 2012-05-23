@@ -137,10 +137,10 @@
     
     if(cellController){
         cellController.value = property;
-        cellController.cellStyle = CKTableViewCellStylePropertyGrid;
+        cellController.cellStyle = CKTableViewCellStyleIPhoneForm;
         
         if([cellController respondsToSelector:@selector(setOptionCellStyle:)]){
-            CKTableViewCellStyle subStyle = CKTableViewCellStylePropertyGrid;
+            CKTableViewCellStyle subStyle = CKTableViewCellStyleIPhoneForm;
             
             NSMethodSignature *signature = [cellController methodSignatureForSelector:@selector(setOptionCellStyle:)];
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];

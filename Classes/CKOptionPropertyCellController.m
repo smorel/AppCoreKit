@@ -36,8 +36,8 @@
 - (void)postInit{
     [super postInit];
     
-    self.cellStyle = CKTableViewCellStylePropertyGrid;
-    self.optionCellStyle = CKTableViewCellStylePropertyGrid;
+    self.cellStyle = CKTableViewCellStyleIPhoneForm;
+    self.optionCellStyle = CKTableViewCellStyleIPhoneForm;
     self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
     self.flags = CKItemViewFlagNone;
 }
@@ -189,15 +189,15 @@
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
-    if(self.cellStyle == CKTableViewCellStylePropertyGrid){
-        if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             cell.detailTextLabel.numberOfLines = 0;
             cell.detailTextLabel.textAlignment = UITextAlignmentRight;
-        }  
-        else{
-            cell.detailTextLabel.numberOfLines = 0;
-            cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
-        }
+        //}  
+        //else{
+        //    cell.detailTextLabel.numberOfLines = 0;
+        //    cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        //}
     }  
     
     if(self.readOnly){
