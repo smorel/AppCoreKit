@@ -42,6 +42,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return block;
 }
 
+- (void)dealloc {
+    self.connection = nil;
+    self.request = nil;
+    self.response = nil;
+    self.data = nil;
+    self.handle = nil;
+    self.downloadPath = nil;
+    self.completionBlock = nil;
+    self.transformBlock = nil;
+    
+    [super dealloc];
+}
+
 - (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters{
     return [self initWithURL:url parameters:parameters completion:nil];
 }
@@ -210,6 +223,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
     [self.connection cancel];
+    
+    NSDictionary *cancelUserInfo = [NSDictionary dictionaryWithObject:@"Operation cancelled" forKey:@"Reason"];
+    self.completionBlock(nil, self.response, [NSError errorWithDomain:CKWebRequestHTTPErrorDomain code:10 userInfo:cancelUserInfo]);
 }
 
 #pragma mark - NSURLConnectionDataDelegate

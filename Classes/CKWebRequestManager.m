@@ -8,6 +8,7 @@
 
 #import "CKWebRequestManager.h"
 #import "CKWebRequest.h"
+#import "CKNetworkActivityManager.h"
 
 @interface CKWebRequestManager ()
 
@@ -54,8 +55,9 @@
         });
         
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+        dispatch_release(group);
         
-        self.maxCurrentRequest = 4;
+        self.maxCurrentRequest = 10;
         
         self.runningRequests = [NSMutableArray array];
         self.waitingRequests = [NSMutableArray array];
@@ -75,9 +77,10 @@
 #pragma mark - Schedule Request
 
 - (void)scheduleRequest:(CKWebRequest *)request {
+    __block CKWebRequest *bRequest = request;
     void (^oldCompletionBlock)(id, NSHTTPURLResponse *, NSError *) = request.completionBlock;
     request.completionBlock = ^(id object, NSHTTPURLResponse *response, NSError *error) {
-        [self requestDidFinish:request];
+        [self requestDidFinish:bRequest];
         
         oldCompletionBlock(object, response, error);
     };
@@ -86,6 +89,8 @@
         NSRunLoop *loop = self.runLoop;
         [request startOnRunLoop:loop];
         [self.runningRequests addObject:request];
+        
+        [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:request];
     }
     else 
         [self.waitingRequests addObject:request];
@@ -93,6 +98,7 @@
 
 - (void)requestDidFinish:(CKWebRequest*)request {//Start a new one if some are waiting
     [self.runningRequests removeObject:request];
+    [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:request];
     
     if (self.waitingRequests.count != 0) {
         CKWebRequest *newRequest = [self.waitingRequests objectAtIndex:0];
@@ -107,7 +113,6 @@
 
 - (void)cancelAllOperation {
     [self.runningRequests makeObjectsPerformSelector:@selector(cancel)];
-    [self.runningRequests removeAllObjects];
     [self.waitingRequests removeAllObjects];
 }
 
@@ -115,7 +120,6 @@
     [[self.runningRequests filteredArrayUsingPredicate:predicate] makeObjectsPerformSelector:@selector(cancel)];
     
     NSPredicate *notPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:predicate];
-    [self.runningRequests filterUsingPredicate:notPredicate];
     [self.waitingRequests filterUsingPredicate:notPredicate];
 }
 
