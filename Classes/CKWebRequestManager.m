@@ -55,7 +55,7 @@
         
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         
-        self.maxCurrentRequest = 4;
+        self.maxCurrentRequest = 10;
         
         self.runningRequests = [NSMutableArray array];
         self.waitingRequests = [NSMutableArray array];
