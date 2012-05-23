@@ -97,6 +97,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)onPropertyChanged:(NSNotification*)notification;
 - (void)zoom:(BOOL)animated;
 @property (nonatomic, retain) id nearestAnnotation;
+@property (nonatomic, assign) BOOL mapViewHasBeenReloaded;
 @end
 
 
@@ -114,6 +115,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @synthesize deselectionBlock = _deselectionBlock;
 @synthesize selectionStrategy = _selectionStrategy;
 @synthesize didScrollBlock = _didScrollBlock;
+@synthesize mapViewHasBeenReloaded = _mapViewHasBeenReloaded;
 
 - (void)postInit {
 	[super postInit];
@@ -125,6 +127,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
+    _mapViewHasBeenReloaded = NO;
     
     if(!self.controllerFactory){
         CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
@@ -211,9 +214,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.mapView.frame = self.view.bounds;
 	//self.mapView.showsUserLocation = YES;
 	
-	[self updateVisibleViewsRotation];
-		
-	[self reloadData];
+    [self updateVisibleViewsRotation];
+    
+    if(!self.mapViewHasBeenReloaded){
+        self.mapViewHasBeenReloaded = YES;
+        [self reloadData];
+    }
 	
 	for(int i =0; i< [self numberOfSections];++i){
 		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
@@ -532,21 +538,32 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark CKObjectControllerDelegate
 
 - (void)onReload{
+    if(!self.viewIsOnScreen){
+        self.mapViewHasBeenReloaded = NO;
+		return;
+    }
+    
 	CKFeedSource* source = [self collectionDataSource];
 	if ((source != nil) && source.isFetching) {
             //return NO;
 	}
     
-    for(id<MKAnnotation> annotation in self.mapView.selectedAnnotations){
+    NSArray* selected = self.mapView.selectedAnnotations;
+    for(id<MKAnnotation> annotation in selected){
         [self.mapView deselectAnnotation:annotation animated:YES];
     }
     
     self.annotationToSelect = nil;
     
+    NSArray* allAnnotations = self.mapView.annotations ;
+    [self.mapView  removeAnnotations:allAnnotations];
+    
+    /*
     while([self.mapView.annotations count] > 0){
         id <MKAnnotation> annotation = [self.mapView.annotations lastObject];
         [self.mapView removeAnnotation:annotation];
     }
+     */
     
     if(self.mapView.userLocation && [self.mapView.annotations indexOfObjectIdenticalTo:self.mapView.userLocation] == NSNotFound){
         [self.mapView addAnnotation:self.mapView.userLocation];
@@ -568,11 +585,21 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.viewIsOnScreen){
+        self.mapViewHasBeenReloaded = NO;
+		return;
+    }
+    
 	[self addAnnotations:objects];
 	[self zoom:YES];
 }
 
 - (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+    if(!self.viewIsOnScreen){
+        self.mapViewHasBeenReloaded = NO;
+		return;
+    }
+    
     for(id<MKAnnotation> annotation in objects){
         [self.mapView deselectAnnotation:annotation animated:YES];
     }

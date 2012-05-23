@@ -386,7 +386,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (NSArray*)allPropertiesForClass:(Class)class{
-    @synchronized(self){
+    //@synchronized(self){
         NSString* className = [NSString stringWithUTF8String:class_getName(class)];
         NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
         if(allProperties == nil){
@@ -410,11 +410,11 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
         }
         
         return allProperties;
-    }
+    //}
 }
 
 - (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c{
-    @synchronized(self){
+   // @synchronized(self){
         NSString* className = [NSString stringWithUTF8String:class_getName(c)];
         NSAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
         NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
@@ -430,7 +430,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
         
         NSMutableDictionary* propertiesByName = [_propertiesByClassNameByName objectForKey:className];
         [propertiesByName setObject:descriptor forKey:descriptor.name];
-    }
+   // }
 }
 
 

@@ -142,6 +142,12 @@ NSString* CKStyleCellFlags = @"flags";
         return nil;
     }
     
+    //CACHE THE STYLE FOR CELL CONTROLLERS AS IT IS PART OF THEIR REUSE IDENTIFIER
+    NSMutableDictionary* style = [self appliedStyle];
+    if(style){
+        return style;
+    }
+    
 	NSMutableDictionary* parentControllerStyle = [self.containerController controllerStyle];
 	NSMutableDictionary* controllerStyle = [parentControllerStyle styleForObject:self  propertyName:nil];
     
@@ -153,6 +159,8 @@ NSString* CKStyleCellFlags = @"flags";
             CKDebugLog(@"found style for item controller %@",self);
         }
     }
+    
+    [self setAppliedStyle:controllerStyle];
     
 	return controllerStyle;
 }

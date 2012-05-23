@@ -450,7 +450,10 @@
     if([self.value isEqual:value] == NO){
         [super setValue:value];
         [self onValueChanged];
-        [self invalidateSize];
+        
+        if([self.tableViewCell superview]){
+            [self invalidateSize];
+        }
     }
 }
 
