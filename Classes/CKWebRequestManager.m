@@ -55,6 +55,7 @@
         });
         
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+        dispatch_release(group);
         
         self.maxCurrentRequest = 10;
         
@@ -76,9 +77,10 @@
 #pragma mark - Schedule Request
 
 - (void)scheduleRequest:(CKWebRequest *)request {
+    __block CKWebRequest *bRequest = request;
     void (^oldCompletionBlock)(id, NSHTTPURLResponse *, NSError *) = request.completionBlock;
     request.completionBlock = ^(id object, NSHTTPURLResponse *response, NSError *error) {
-        [self requestDidFinish:request];
+        [self requestDidFinish:bRequest];
         
         oldCompletionBlock(object, response, error);
     };

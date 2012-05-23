@@ -42,6 +42,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     return block;
 }
 
+- (void)dealloc {
+    self.connection = nil;
+    self.request = nil;
+    self.response = nil;
+    self.data = nil;
+    self.handle = nil;
+    self.downloadPath = nil;
+    self.completionBlock = nil;
+    self.transformBlock = nil;
+    
+    [super dealloc];
+}
+
 - (id)initWithURL:(NSURL*)url parameters:(NSDictionary*)parameters{
     return [self initWithURL:url parameters:parameters completion:nil];
 }
