@@ -87,7 +87,7 @@ NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 	NSString* cfWay = (NSString*)[(NSString*)CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, (CFStringRef)self, CFSTR("")) autorelease] ;
 	NSString* cocoaWay = [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
 	if (![cfWay isEqualToString:cocoaWay]) {
-		NSLog(@"[%@ %s]: CF and Cocoa different for %@", [self class], _cmd, self) ;
+		NSLog(@"[%@ %@]: CF and Cocoa different for %@", [self class], NSStringFromSelector(_cmd), self) ;
 	}
 	
 	return cfWay ;

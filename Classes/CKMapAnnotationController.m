@@ -113,7 +113,6 @@
     [super setSelected:selected animated:animated];
     if(_calloutViewController){
         if(selected){
-            int i =3;
         }
         else{
             [super setSelected:selected animated:animated];

@@ -31,7 +31,7 @@ size_t computeHash(const std::string &s)
 }
 
 
-typedef struct TimeProfiler{
+struct TimeProfiler{
 	clock_t start,end;
 	std::string str;
 	TimeProfiler(const std::string& _str):str(_str){
@@ -40,14 +40,14 @@ typedef struct TimeProfiler{
 	~TimeProfiler(){
 		end = clock();
 		double time_in_seconds = (double)(end - start)/(double)CLOCKS_PER_SEC;
-		NSLog(@"%ls Duration = %g seconds",str.c_str(),time_in_seconds);
+		NSLog(@"%s Duration = %g seconds",str.c_str(),time_in_seconds);
 	}
 };
 
 using namespace __gnu_cxx;
 typedef hash_map<size_t,unsigned int> FatType;
 
-typedef struct CKSuffixTreeStreamReader{
+struct CKSuffixTreeStreamReader{
 	std::ifstream wordsFile,fatFile,indexesFile;
 	FatType fat;
 	
@@ -146,7 +146,7 @@ typedef struct CKSuffixTreeStreamReader{
        initialized with the same name. That avoid to load fat for the same files several times ...
  */
 
-typedef struct CKManagedSuffixTreeStreamReader{
+struct CKManagedSuffixTreeStreamReader{
 	CKSuffixTreeStreamReader* reader;
 	int refCount;
 	
