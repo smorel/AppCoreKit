@@ -334,6 +334,9 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    CKUIViewControllerAnimatedBlock appearEndBlock = [self.viewWillAppearEndBlock copy];
+    self.viewWillAppearEndBlock = nil;
+    
     //disable animations 
     [CATransaction begin];
     [CATransaction 
@@ -353,6 +356,11 @@
     }
     
     [CATransaction commit];
+    
+    if(appearEndBlock){
+        appearEndBlock(self,animated);
+        self.viewWillAppearEndBlock = appearEndBlock;
+    }
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers {
