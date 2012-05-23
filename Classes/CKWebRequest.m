@@ -7,515 +7,283 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CKWebRequest.h"
-#import "CKNSString+Additions.h"
 #import "CKNSString+URIQuery.h"
-#import "CKNSObject+Invocation.h"
-#import "CKNSObject+JSON.h"
-#import "CXMLDocument.h"
-#import "RegexKitLite.h"
-#import "CKDebug.h"
-#import "CKNetworkActivityManager.h"
-#import "CKNSError+Additions.h"
-
-//
-
-static NSUInteger theNumberOfRequestRunning = 0;
-static NSOperationQueue *theSharedQueue = nil;
-
-//
+#import "CKWebRequest.h"
+#import "CKWebRequestManager.h"
+#import "CKWebDataConverter.h"
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
-@interface CKWebRequest ()
-@property (nonatomic, retain) NSURLResponse *response;
-@property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, retain) NSMutableData *receivedData;
-@property (nonatomic, retain, readwrite) NSString *destinationPath;
-@property (nonatomic, assign, readwrite) BOOL allowDestinationOverwrite;
-@property (nonatomic, retain, readwrite) NSOutputStream *destinationStream;
+@interface CKWebRequest () <NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 
-- (void)markAsExecuting;
-- (void)markAsFinished;
-- (void)markAsCancelled;
+@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain) NSHTTPURLResponse *response;
+
+@property (nonatomic, retain) NSMutableData *data;
+@property (nonatomic, retain) NSFileHandle *handle;
+@property (nonatomic, retain, readwrite) NSString *downloadPath;
+
+@property (nonatomic, assign, readwrite) CGFloat progress;
+@property (nonatomic, assign) NSUInteger retriesCount;
 
 @end
 
-//
-
 @implementation CKWebRequest
 
-@synthesize URL = theURL;
-@synthesize connection = theConnection;
-@synthesize receivedData = theReceivedData;
-@synthesize response = theResponse;
-@synthesize userInfo = theUserInfo;
-@synthesize delegate = theDelegate;
-@synthesize destinationPath;
-@synthesize allowDestinationOverwrite;
-@synthesize destinationStream;
-@synthesize transformBlock = theTransformBlock;
-@synthesize successBlock = theSuccessBlock;
-@synthesize failureBlock = theFailureBlock;
-@synthesize completedBlock = theCompletedBlock;
+@synthesize connection, request, response;
+@synthesize data, completionBlock, transformBlock, handle, downloadPath;
+@synthesize delegate, progress, retriesCount;
 
-@synthesize validatesSecureCertificates;
-@synthesize credential = _credential;
-
-#pragma mark Initialization
-
-+ (NSMutableURLRequest *)defaultURLRequestForURL:(NSURL*)anURL{
-	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:anURL
-																cachePolicy:NSURLRequestUseProtocolCachePolicy
-															timeoutInterval:60.0];
-	[request addValue:[CKWebRequest defaultUserAgentString] forHTTPHeaderField:@"User-Agent"];
-	return [request autorelease];
+- (id)initWithCompletion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    if (self = [self init]) {
+        self.completionBlock = block;
+    }
+    return block;
 }
 
-+ (void)initialize {
-	if (self == [CKWebRequest class]) {
-		theSharedQueue = [[NSOperationQueue alloc] init];
-		//[theSharedQueue setName:@"CKWebRequest"]; Does not work on iOS 3.x
-		[theSharedQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
-	}
+- (id)initWithURL:(NSURL *)url completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self initWithURLRequest:aRequest completion:block];
 }
 
-- (id)initWithURL:(NSURL *)anURL {
-	if (self = [super init]) {
-		theRequest = [[CKWebRequest defaultURLRequestForURL:anURL] retain];
-	}
-	return self;
+- (id)initWithURL:(NSURL *)url transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self initWithURLRequest:aRequest transform:transform completion:block];
 }
 
-- (void)dealloc {
-	theDelegate = nil;
-	[theRequest release];
-	[theReceivedData release];
-	[theResponse release];
-	[theUserInfo release];
-	[theConnection release];
-	[theTransformBlock release];
-	[theSuccessBlock release];
-	[theFailureBlock release];
-	[theCompletedBlock release];
-	self.destinationPath = nil;
-	self.destinationStream = nil;
-    [_credential release];
-	[super dealloc];
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self initWithURLRequest:aRequest parameters:parameters completion:block];
 }
 
-+ (NSString *)defaultUserAgentString {
-	static NSString *userAgent = nil;
-	if (userAgent == nil) {
-		NSBundle *bundle = [NSBundle mainBundle];
-		UIDevice *device = [UIDevice currentDevice];
-		NSString *appName = [bundle objectForInfoDictionaryKey:@"CFBundleName"]; 
-		NSString *versionNumber = [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-		NSString *buildNumber = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
-		NSString *appVersion = [NSString stringWithFormat:@"%@-%@", versionNumber, buildNumber];
-		NSString *model = [device model];
-		NSString *systemName = [device systemName];
-		NSString *systemVersion = [device systemVersion];
-		NSString *locale = [[NSLocale currentLocale] localeIdentifier]; // FIXME: this is the current locale of the application localization, not the system.
-		userAgent = [[NSString stringWithFormat:@"%@/%@ (%@; %@; %@)", appName, appVersion, model, systemName, systemVersion, locale] retain];
-	}
-	return userAgent;
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self initWithURLRequest:aRequest parameters:parameters transform:transform completion:block];
 }
 
-
-- (void)setDestination:(NSString *)path allowOverwrite:(BOOL)allowOverwrite{
-	self.destinationPath = path;
-	self.allowDestinationOverwrite = allowOverwrite;
+- (id)initWithURL:(NSURL *)url parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *aRequest = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self initWithURLRequest:aRequest parameters:parameters downloadAtPath:path completion:block];
 }
 
-#pragma mark Public API
-
-- (NSURL *)URL {
-	return theRequest.URL;
+- (id)initWithURLRequest:(NSURLRequest *)aRequest completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:nil completion:block];
 }
 
-- (NSDictionary *)headers {
-	return [theRequest allHTTPHeaderFields];
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:parameters transform:nil completion:block];
 }
 
-- (void)setHeaders:(NSDictionary *)headers {
-	NSMutableDictionary *fields = [[[theRequest allHTTPHeaderFields] mutableCopy] autorelease];
-	[fields addEntriesFromDictionary:headers];	
-	[theRequest setAllHTTPHeaderFields:fields];
+- (id)initWithURLRequest:(NSURLRequest *)aRequest transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    return [self initWithURLRequest:aRequest parameters:nil transform:transform completion:block];
 }
 
-- (void)setMethod:(NSString *)method {
-	[theRequest setHTTPMethod:method];
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    if (self = [super init]) {
+        NSMutableURLRequest *mutableRequest = aRequest.mutableCopy;
+        if (parameters) {
+            NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
+            [mutableRequest setURL:newURL];
+        }
+        
+        self.request = mutableRequest;
+        [mutableRequest release];
+        
+        self.completionBlock = block;
+        self.transformBlock = transform;
+        self.data = [[[NSMutableData alloc] init] autorelease];
+    }
+    return self;
 }
 
-- (void)setBodyData:(NSData *)bodyData {
-	[theRequest setHTTPBody:bodyData];
-	[theRequest setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-Length"];
+- (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    if (self = [self initWithURLRequest:aRequest parameters:parameters completion:block]) {
+        unsigned long long existingDataLenght = 0;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+            unsigned long long existingDataLenght = [attributes fileSize];
+            NSString* bytesStr = [NSString stringWithFormat:@"bytes=%qu-", existingDataLenght];
+            
+            NSMutableURLRequest *mutableRequest = self.request.mutableCopy;
+            [mutableRequest addValue:bytesStr forHTTPHeaderField:@"Range"];
+            self.request = mutableRequest;
+            [mutableRequest release];
+        }
+        else 
+            [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+        
+        self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+        [self.handle seekToFileOffset:existingDataLenght];
+        
+        self.downloadPath = path;
+        self.retriesCount = 0;
+        self.data = nil;
+    }
+    return self;
 }
 
-- (void)setBodyParams:(NSDictionary *)params {
-	[self setBodyData:[[NSString stringWithQueryDictionary:params] dataUsingEncoding:NSUTF8StringEncoding]];
-	[self setMethod:@"POST"];
-	[theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-}
-
-- (void)startAsynchronous {
-	[theSharedQueue addOperation:self];
-}
-
-//
-
-+ (id)requestWithURL:(NSURL *)URL {
-	NSAssert(URL != nil && [[URL scheme] isMatchedByRegex:@"^(http|https)$"], @"CKWebRequest supports only http and https requests.");
-	return [[[[self class] alloc] initWithURL:URL] autorelease];
-}
-
-+ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params {
-	NSURL *URL = [NSURL URLWithString:(params ? [NSString stringWithFormat:@"%@?%@", URLString, [NSString stringWithQueryDictionary:params]] : URLString)];
-	if(URL != nil){
-		return [[[[self class] alloc] initWithURL:URL] autorelease];
-	}
-	return nil;
-}
-
-+ (id)requestWithURLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest *request = [[self class] requestWithURLString:URLString params:params];
-	request.delegate = delegate;
-	return request;
-}
-
-+ (id)requestWithMethod:(NSString *)method URLString:(NSString *)URLString params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest *request = [[self class] requestWithURLString:URLString params:params delegate:delegate];
-	[request setMethod:method];
-	return request;
-}
+#pragma mark - Convinience methods
 
 + (NSCachedURLResponse *)cachedResponseForURL:(NSURL *)anURL {
-	NSURLRequest *request = [CKWebRequest defaultURLRequestForURL:anURL];
+	NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:anURL] autorelease];
 	return [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
 }
 
-- (void)openFileStream{
-	if(self.allowDestinationOverwrite){
-		NSError* error;
-		[[NSFileManager defaultManager] removeItemAtPath:self.destinationPath error:&error];
-		//TODO : HANDLE ERROR
-	}
-	
-	self.destinationStream = [[[NSOutputStream alloc] initToFileAtPath:self.destinationPath append:YES] autorelease];
-	[self.destinationStream open];
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self scheduledRequestWithURLRequest:request completion:block];
 }
 
-#pragma mark NSOperation Methods
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters completion:block];
+}
+
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
+}
+
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self scheduledRequestWithURLRequest:request parameters:parameters transform:transform completion:block];
+}
+
++ (CKWebRequest *)scheduledRequestWithURL:(NSURL *)url transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:url] autorelease];
+    return [self scheduledRequestWithURLRequest:request transform:transform completion:block];
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return [webRequest autorelease];
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request transform:transform completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return [webRequest autorelease];
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return [webRequest autorelease];
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters downloadAtPath:(NSString *)path completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters downloadAtPath:path completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return [webRequest autorelease];
+}
+
++ (CKWebRequest *)scheduledRequestWithURLRequest:(NSURLRequest *)request parameters:(NSDictionary *)parameters transform:(id (^)(id))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
+    CKWebRequest *webRequest = [[CKWebRequest alloc] initWithURLRequest:request parameters:parameters transform:transform completion:block];
+    [[CKWebRequestManager sharedManager] scheduleRequest:webRequest];
+    return [webRequest autorelease];
+}
+
+#pragma mark - LifeCycle
 
 - (void)start {
-	if([self isCancelled]){
-		//NSLog(@"start but already cancelled <%p>",self);
-		[self markAsFinished];
-		return;
-	}
-	
-	if ( [self isExecuting] || [self isFinished]){
-		//NSLog(@"start aborted <%p>",self);
-		return;
-	}
-	
-	//NSLog(@"start request <%p>",self);
-	
-	self.destinationStream = nil;
-	if(self.destinationPath){
-		[self openFileStream];
-	}
-	
-	[self markAsExecuting];
+    [self startOnRunLoop:[NSRunLoop currentRunLoop]];
+}
 
-	NSMutableData *data = [[NSMutableData alloc] init];	
-	self.receivedData = data;
-	[data release];
-	
-	// NSURLConnection automatically supports the decompression of gzipped HTTP bodies.
-	// As of iOS 3.2, NSURLRequest automatically accepts a gzipped encoding when issuing requests.
-	// We force the encoding to ensure it's supported on previous iOS versions.
-	[theRequest addValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-	
-	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self startImmediately:NO];
-	self.connection = conn;
-	[conn release];
-	
-	[self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-	[self.connection start];
+- (void)startOnRunLoop:(NSRunLoop *)runLoop {
+    NSAssert(self.connection == nil, @"Connection already started");
+    self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+    self.progress = 0.0;
+    
+    [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+    [self.connection start];
 }
 
 - (void)cancel {
-	if(self.destinationStream){
-		[self.destinationStream close];
-	}
-	[theConnection cancel];
-	[self markAsCancelled];
+    [self.connection cancel];
 }
 
-#pragma mark Connection Authentication
+#pragma mark - NSURLConnectionDataDelegate
 
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return YES;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-
-    if (([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) && (validatesSecureCertificate == NO)) {
-        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-            return;
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
+    self.response = aResponse;
+    
+    if ([aResponse statusCode] >= 400) {
+        self.handle = nil;
+        self.data = [NSMutableData data];
+        [[NSFileManager defaultManager] removeItemAtPath:self.downloadPath error:nil];
     }
     
-    if ([challenge previousFailureCount] == 0) {
-        NSURLCredential *credential = _credential ? 
-          _credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
-        
-        if (credential) {
-            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-            return;
-        }
+    if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
+        [self.delegate connection:aConnection didReceiveResponse:aResponse];
+}
+
+- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
+    if (self.handle) {
+        self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
+        [self.handle writeData:someData];
     }
-        
-    [[challenge sender] cancelAuthenticationChallenge:challenge];
-}
-
-#pragma mark URL Loading
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-//	CKDebugLog(@"willCacheResponse: %@ (%d bytes)", cachedResponse, [[cachedResponse data] length]);
-	return cachedResponse;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-//	CKDebugLog(@"didReceiveResponse %@", response);
-//	NSURLCache *cache = [NSURLCache sharedURLCache];
-//	CKDebugLog(@"Cache mem %d (%d), disk %d (%d)", [cache currentMemoryUsage], [cache memoryCapacity], [cache currentDiskUsage], [cache diskCapacity]);
-	
-	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveResponse:) 
-								  withObject:self 
-								  withObject:response 
-							   waitUntilDone:NO];
-	
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    [theReceivedData setLength:0];
-	byteReceived = 0;
-	
-	self.response = response;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	//CKDebugLog(@"didReceiveData (%d bytes)", [data length]);
-	
-	long long expectedLength = [self.response expectedContentLength];
-	NSAssert(expectedLength != 0,@"Expected length for request is 0.");
-	byteReceived += [data length];
-	float progress = (float)byteReceived / (float)expectedLength;
-	
-	[theDelegate performSelectorOnMainThread:@selector(request:didReceivePartialData:progress:) 
-								  withObject:self 
-								  withObject:data 
-								  withObject:[NSNumber numberWithFloat:progress]
-							   waitUntilDone:NO];
-	
-	if(self.destinationStream && ([theResponse statusCode] == 200 || [theResponse statusCode] == 206)){
-		[self.destinationStream write:[data bytes] maxLength:[data length]];
-	}
-	else{
-		// Append the new available data
-		[theReceivedData appendData:data];
-	}
-}
-
-- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-	return;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-//	CKDebugLog(@"didFinishLoading <%@>", theRequest.URL);
-	
-	// FIXME: This perform needs to be tested before called because its the one from the framework.
-	// The other calls are implemented in CKNSObject+Invocation and test that the receiver responds to the
-	// message
-	
-	if ([theDelegate respondsToSelector:@selector(requestDidFinishLoading:)]) {
-		[theDelegate performSelectorOnMainThread:@selector(requestDidFinishLoading:) 
-									  withObject:self 
-								   waitUntilDone:NO];
-	}
-	
-	// Direct to disk
-	
-	if (self.destinationStream) {
-		[self.destinationStream close];
-		[self markAsFinished];
-		return;
-	}
-	
-	// Notifies the delegate data has been received with the HTTP headers
-	
-	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveData:withResponseHeaders:) 
-								  withObject:self 
-								  withObject:theReceivedData
-								  withObject:[theResponse allHeaderFields]
-							   waitUntilDone:NO];
-	
-	// Try to process the response according to the Content-Type (e.g., XML, JSON).
-	// FIXME: The processing should happen in a different class (a default transformer).
-	
-	id responseValue = nil;
-	NSDictionary *responseHeaders = [theResponse allHeaderFields];
-	NSError *error = nil;
-	NSString *contentType = [responseHeaders objectForKey:@"Content-Type"];
-    if(contentType == nil){
-        contentType = [theResponse MIMEType];
+    else {
+        self.progress = self.data.length / self.response.expectedContentLength;
+        [self.data appendData:someData];
     }
-    CKDebugLog(@"Recv Content-Type: %@", contentType);
-	
-	if ([contentType isMatchedByRegex:@"(application|text)/xml"]) {
-		responseValue = [[[CXMLDocument alloc] initWithData:theReceivedData options:0 error:nil] autorelease];
-	} else if ([contentType isMatchedByRegex:@"application/json"]) {
-		responseValue = [NSObject objectFromJSONData:theReceivedData error:&error];
-	} else if ([contentType isMatchedByRegex:@"image/"]) {
-		responseValue = [UIImage imageWithData:theReceivedData];
-	} else if ([contentType isMatchedByRegex:@"text/"]) {
-		// TODO: Check for the encoding
-		responseValue = [[[NSString alloc] initWithData:theReceivedData encoding:NSASCIIStringEncoding] autorelease];
-	} else {
-		responseValue = [[theReceivedData copy] autorelease];
-	}
     
-    if ([theResponse statusCode] >= 400 || error) {
-        //aggregate error !
-		NSString *stringForStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:[theResponse statusCode]];
-		/*NSError *error2 = [NSError errorWithDomain:CKWebRequestHTTPErrorDomain
-											 code:[theResponse statusCode]
-										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:stringForStatusCode, NSLocalizedDescriptionKey, nil]];*/
-        error = aggregateError(error, CKWebRequestHTTPErrorDomain, [theResponse statusCode], stringForStatusCode);
+    if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
+        [self.delegate connection:aConnection didReceiveData:someData];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+    self.progress = 1.0;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
-		[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) 
-									  withObject:self 
-									  withObject:error 
-								   waitUntilDone:NO];
-        
-        if (theFailureBlock) {
-            theFailureBlock(error);
+        if (self.transformBlock) {
+            id transformedObject = transformBlock(object);
+            if (transformedObject)
+                object = transformedObject;
         }
         
-        if(theCompletedBlock){
-            theCompletedBlock(responseValue,theResponse,error);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (self.completionBlock)
+                self.completionBlock(object, self.response, nil);
+            
+            if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
+                [self.delegate connectionDidFinishLoading:aConnection];
+        });
+    });
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
+    if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (self.completionBlock)
+                self.completionBlock(nil, self.response, error);
+        });
         
-		[self markAsFinished];
-		return;
-	}
-	
-	// Process the content wih the user specified CKWebResponseTransformer
-	
-	id value = responseValue;
-	if (theTransformBlock) {
-		value = theTransformBlock(responseValue);
-	}
-//	if (_transformer) {
-//		value = [_transformer request:self transformContent:responseValue];
-//	}
-	
-	// Notifies the delegate of the final value; finish the process.
-
-	[theDelegate performSelectorOnMainThread:@selector(request:didReceiveValue:) 
-								  withObject:self 
-								  withObject:value 
-							   waitUntilDone:NO];	
-	if (theSuccessBlock) {
-		theSuccessBlock(value);
-	}
-    
-    
-    if(theCompletedBlock){
-        theCompletedBlock(value,theResponse,error);
+        if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
+            [self.delegate connection:aConnection didFailWithError:error];
     }
-    
-	[self markAsFinished];
 }
 
+#pragma mark - Getters
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	//NSURLErrorFailingURLStringErrorKey incompatible os3
-	//CKDebugLog(@"ERR Connection failed! %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-	[theDelegate performSelectorOnMainThread:@selector(request:didFailWithError:) withObject:self withObject:error waitUntilDone:NO];
-    if (theFailureBlock) {
-		theFailureBlock(error);
-	}
-	[self markAsFinished];
+- (BOOL)retry {
+    if (self.retriesCount++ == 3)
+        return NO;
+    else {
+      	[self cancel];
+        self.connection = nil;
+        [self start];
+        return YES;  
+    }
 }
 
-#pragma mark NSOperation
-
-- (BOOL)isConcurrent {
-	return YES;
-}
-
-- (BOOL)isExecuting {
-	return executing;
-}
-
-- (BOOL)isFinished {
-	return finished;
-}
-
-- (BOOL)isCancelled {
-	return cancelled;
-}
-
-- (void)markAsExecuting {
-	if (executing) return;
-	
-	//NSLog(@"executing request <%p>",self);
-	
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = YES;
-	[self didChangeValueForKey:@"isExecuting"];
-	
-	theNumberOfRequestRunning++;
-	[[CKNetworkActivityManager defaultManager]addNetworkActivityForObject:self];
-	//[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-}
-
-- (void)markAsCancelled {
-	if(cancelled)return;
-	
-	//NSLog(@"cancelling request <%p>",self);
-	[self willChangeValueForKey:@"isCancelled"];
-	cancelled = YES;
-	[self didChangeValueForKey:@"isCancelled"];
-	
-	if(executing){
-		[self markAsFinished];
-	}
-}
-
-- (void)markAsFinished {
-	if (finished) return;
-	
-	//NSLog(@"finishing request <%p>",self);
-	[self willChangeValueForKey:@"isFinished"];
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = NO;
-    finished = YES;
-	[self didChangeValueForKey:@"isExecuting"];
-	[self didChangeValueForKey:@"isFinished"];
-	
-	theNumberOfRequestRunning--;
-	[[CKNetworkActivityManager defaultManager]removeNetworkActivityForObject:self];
-	
-	/*if (theNumberOfRequestRunning == 0) {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	}*/
-}
-
-- (NSString*)description{
-	return [NSString stringWithFormat:@"CKWebRequest <%p> Url='%@' destinationPath='%@' allowOverwrite='%@'",self,self.URL,self.destinationPath,self.allowDestinationOverwrite ? @"YES" : @"NO"];
+- (NSURL *)URL {
+    return self.request.URL;
 }
 
 @end

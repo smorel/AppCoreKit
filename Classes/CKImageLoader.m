@@ -17,6 +17,8 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 @interface CKImageLoader ()
 @property (nonatomic, retain) CKWebRequest *request;
+
+- (void)didReceiveValue:(UIImage*)image error:(NSError*)error;
 @end
 
 //
@@ -92,32 +94,36 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 			}
 		}
 		else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
-			self.request = [CKWebRequest requestWithURL:self.imageURL];
-			self.request.delegate = self;
-			[self.request startAsynchronous];
+			self.request = [CKWebRequest scheduledRequestWithURL:url completion:^(id object, NSURLResponse *response, NSError * error) {
+                [self didReceiveValue:object error:error];
+            }];
 		}
 	}
 }
 
 - (void)cancel {
-	if(self.request){
-		self.request.delegate = nil;
-		[self.request cancel];
-		self.request = nil;
-	}
+    [self.request cancel];
+    self.request = nil;
 }
 
-#pragma mark CKWebRequestDelegate Protocol
-
-- (void)request:(id)request didReceiveValue:(id)value {
-	if ([value isKindOfClass:[UIImage class]]) {
+- (void)didReceiveValue:(UIImage*)image error:(NSError*)error {
+	if ([image isKindOfClass:[UIImage class]]) {
         if(_completionBlock){
-            _completionBlock(self,(UIImage*)value,YES);
+            _completionBlock(self, image, YES);
         }
 		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
-			[self.delegate imageLoader:self didLoadImage:(UIImage*)value cached:NO];
+			[self.delegate imageLoader:self didLoadImage:image cached:NO];
 		}
-	} else{
+	} 
+    else if (error) {
+        if(_errorBlock){
+            _errorBlock(self,error);
+        }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
+            [self.delegate imageLoader:self didFailWithError:error];
+        }
+    }
+    else{
 		// Throws an error if the value is not an image
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:_(@"Did not receive an image") forKey:NSLocalizedDescriptionKey];
 		NSError *error = [NSError errorWithDomain:CKImageLoaderErrorDomain code:0 userInfo:userInfo];
@@ -127,23 +133,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
             [self.delegate imageLoader:self didFailWithError:error];
         }
-	}
-	
-	//Delete the request not to cancel it later
-	//self.request.delegate = nil;
-	//self.request = nil;
-}
-
-- (void)request:(id)request didFailWithError:(NSError *)error {
-    if(_errorBlock){
-        _errorBlock(self,error);
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didFailWithError:)]) {
-        [self.delegate imageLoader:self didFailWithError:error];
-    }
-	//Delete the request not to cancel it later
-	//self.request.delegate = nil;
-	//elf.request = nil;
+	}    
 }
 
 @end

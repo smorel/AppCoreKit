@@ -10,6 +10,7 @@
 #import "CKDebug.h"
 #import "CKAlertView.h"
 #import "CKLocalization.h"
+#import "CKWebRequestManager.h"
 
 NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
@@ -25,11 +26,8 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 
 @synthesize request = _request;
 @synthesize requestBlock = _requestBlock;
-@synthesize transformBlock = _transformBlock;
-@synthesize failureBlock = _failureBlock;
+@synthesize completionBlock = _completionBlock;
 @synthesize webSourceDelegate = _webSourceDelegate;
-@synthesize successBlock = _successBlock;
-@synthesize launchRequestBlock = _launchRequestBlock;
 @dynamic hasMore;
 @dynamic isFetching;
 @dynamic currentIndex;
@@ -44,10 +42,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 - (void)dealloc {
 	[self cancelFetch];
 	[_requestBlock release];
-	[_transformBlock release];
-	[_failureBlock release];
-	[_successBlock release];
-	[_launchRequestBlock release];
+    [_completionBlock release];
 	_webSourceDelegate = nil;
 	[super dealloc];
 }
@@ -69,25 +64,25 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	else{
 		CKDebugLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
+    
+    self.request.completionBlock = ^(id value, NSHTTPURLResponse *response, NSError *error){
+        if (error) 
+            [self didFailWithError:error];
+        else
+            [self didReceiveValue:value];
+    };
 	
 	if (self.request) {
-		self.request.delegate = self;
-        if(_launchRequestBlock){
-            _launchRequestBlock(self.request);
-        }
-        else{
-            [self.request startAsynchronous];
-        }
+        [[CKWebRequestManager sharedManager] scheduleRequest:self.request];
 		self.isFetching = YES;
 		return YES;
 	}
-
+    
 	return NO;
 }
 
 - (void)cancelFetch {
 	[self.request cancel];
-	self.request.delegate = nil;
 	self.request = nil;
 	[super cancelFetch];
 }
@@ -97,20 +92,13 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[super reset];
 }
 
-#pragma mark CKWebRequestDelegate
+#pragma mark Callback
 
-- (void)request:(id)request didReceiveData:(NSData *)data withResponseHeaders:(NSDictionary *)headers {
-	return;
-}
-
-- (void)request:(id)request didReceiveValue:(id)value {
+- (void)didReceiveValue:(id)value {
 	
 	id newItems = nil;
 	if(_webSourceDelegate && [_webSourceDelegate conformsToProtocol:@protocol(CKWebSourceDelegate)]){
 		newItems = [_webSourceDelegate webSource:self transform:value];
-	}
-	else if(_transformBlock){
-		newItems = _transformBlock(value);
 	}
 	else{
         newItems = value;
@@ -129,12 +117,12 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	if(_webSourceDelegate && [_webSourceDelegate respondsToSelector:@selector(webSourceDidSuccess:)]){
 		[_webSourceDelegate webSourceDidSuccess:self];
 	}
-	else if(_successBlock){
-		_successBlock();
+	else if(_completionBlock){
+		_completionBlock(value, nil);
 	}
 }
 
-- (void)request:(id)request didFailWithError:(NSError *)error {
+- (void)didFailWithError:(NSError *)error {
 	CKDebugLog(@"%@", error);
 	self.isFetching = NO;
 	self.request = nil;
@@ -143,8 +131,8 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	   && [_webSourceDelegate respondsToSelector:@selector(webSource:didFailWithError:)]){
 		[_webSourceDelegate webSource:self didFailWithError:error];
 	}
-	else if(_failureBlock){
-		_failureBlock(error);
+	else if(_completionBlock){
+		_completionBlock(nil, error);
 	}
 	else{
 		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
@@ -154,13 +142,13 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	
 	// TODO: Makes the alert optional and allow the request to be restarted.
 #ifdef DEBUG
-		/*CKAlertView *alertView = 
-		[[[CKAlertView alloc] initWithTitle:@"Fetching Error"
-									message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
-								   delegate:self
-						  cancelButtonTitle:_(@"Dismiss")
-						  otherButtonTitles:nil] autorelease];
-		[alertView show];*/
+    /*CKAlertView *alertView = 
+     [[[CKAlertView alloc] initWithTitle:@"Fetching Error"
+     message:[NSString stringWithFormat:@"%d %@", [error code], [error localizedDescription]]
+     delegate:self
+     cancelButtonTitle:_(@"Dismiss")
+     otherButtonTitles:nil] autorelease];
+     [alertView show];*/
 #endif
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class CKWebRequest;
 
 extern NSString *CKDownloadManagerDownloadDidFinishNotification;
 extern NSString *CKDownloadManagerDownloadDidFailNotification;
@@ -17,10 +18,10 @@ extern NSString *CKDownloadManagerDownloadDidFailNotification;
 
 + (id)sharedManager;
 
-- (CKDownloader *)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name;
-- (CKDownloader *)downloaderForName:(NSString *)name;
+- (CKWebRequest *)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name;
+- (CKWebRequest *)downloaderForName:(NSString *)name;
 - (NSURL *)fileURLForName:(NSString *)name;
-- (void)abortDownload:(CKDownloader*)downloader;
+- (void)abortDownload:(CKWebRequest*)downloader;
 
 - (NSString *)defaultDirectoryPath;
 //

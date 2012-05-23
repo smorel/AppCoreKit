@@ -15,31 +15,22 @@ extern NSString* const CKWebSourceErrorNotification;
 @class CKWebSource;
 
 typedef CKWebRequest *(^CKWebSourceRequestBlock)(NSRange range);
-typedef id (^CKWebSourceTransformBlock)(id value);
-typedef void (^CKWebSourceFailureBlock)(NSError *error);
-typedef void (^CKWebSourceSuccessBlock)();
-typedef void (^CKWebSourceStartBlock)(CKWebRequest* request);
+typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
 
 
 /** TODO
  */
-@interface CKWebSource : CKFeedSource <CKWebRequestDelegate> {
+@interface CKWebSource : CKFeedSource {
 	CKWebRequest *_request;
 	NSUInteger _requestedBatchSize;
 	CKWebSourceRequestBlock _requestBlock;
-	CKWebSourceTransformBlock _transformBlock;
-	CKWebSourceFailureBlock _failureBlock;
-	CKWebSourceSuccessBlock _successBlock;
-	CKWebSourceStartBlock _launchRequestBlock;
+    CKWebSourceCompletionBlock _completionBlock;
 	
 	id _webSourceDelegate;
 }
 
 @property (nonatomic, copy) CKWebSourceRequestBlock requestBlock;
-@property (nonatomic, copy) CKWebSourceTransformBlock transformBlock;
-@property (nonatomic, copy) CKWebSourceFailureBlock failureBlock;
-@property (nonatomic, copy) CKWebSourceSuccessBlock successBlock;
-@property (nonatomic, copy) CKWebSourceStartBlock launchRequestBlock;
+@property (nonatomic, copy) CKWebSourceCompletionBlock completionBlock;
 @property (nonatomic, assign) id webSourceDelegate;
 
 

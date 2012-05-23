@@ -16,5 +16,6 @@
 #import "CKInetEndPoint.h"
 #import "CKHost.h"
 
-#import "CKDownloader.h"
 #import "CKDownloadManager.h"
+#import "NSURLRequest+Upload.h"
+#import "CKWebDataConverter.h"

@@ -10,11 +10,10 @@
 
 #import <VendorsKit/VendorsKit.h>
 #import "CKLocalization.h"
+#import "CKWebRequestManager.h"
 #import "CKAlertView.h"
 
 static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServiceAlertTypeNetworkReachability";
-
-//
 
 @interface CKWebService ()
 
@@ -81,12 +80,10 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 #pragma mark Create Requests
 
 - (id)performRequest:(CKWebRequest *)request {
-	[request setHeaders:self.defaultHeaders];
-	
 	if ([self checkReachabilityWithAlert:YES withUserObject:request] == NO) 
 		return request;
 	
-	[request startAsynchronous];
+    [[CKWebRequestManager sharedManager] scheduleRequest:request];
 	return request;
 }
 
@@ -103,14 +100,17 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 	} else {
 		theParams = params;
 	}
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:theURL]];
+    [self.defaultHeaders enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [request addValue:obj forHTTPHeaderField:key];
+    }];
 	
-	CKWebRequest *request = [CKWebRequest requestWithURLString:theURL params:theParams];
-	return request;
+    return [[[CKWebRequest alloc] initWithURLRequest:request parameters:theParams completion:nil] autorelease];
 }
 
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
 	CKWebRequest *request = [self getRequestForPath:path params:params];
-	[request setDelegate:delegate];
 	return [self performRequest:request];
 }
 

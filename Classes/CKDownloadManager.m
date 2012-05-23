@@ -7,7 +7,7 @@
 //
 
 #import "CKDownloadManager.h"
-#import "CKDownloader.h"
+#import "CKWebRequest.h"
 
 #import <CloudKit/CKNSObject+JSON.h>
 #import <CloudKit/CKDebug.h>
@@ -18,6 +18,20 @@ NSString *CKDownloadManagerDownloadDidFinishNotification = @"CKDownloadManagerDo
 NSString *CKDownloadManagerDownloadDidFailNotification = @"CKDownloadManagerDownloadDidFailNotification";
 
 //
+
+@interface CKWebRequest (CKDownloader)
+
+@property (nonatomic, readonly) NSString *downloadName;
+
+@end
+
+@implementation CKWebRequest (CKDownloader)
+
+- (NSString *)downloadName {
+    return [[self.downloadPath stringByDeletingPathExtension] lastPathComponent];
+}
+
+@end
 
 static CKDownloadManager *CKSharedDownloadManager;
 
@@ -100,29 +114,34 @@ static CKDownloadManager *CKSharedDownloadManager;
     return nil;
 }
 
-- (CKDownloader *)downloaderForName:(NSString *)name {
+- (CKWebRequest *)downloaderForName:(NSString *)name {
     return [self.downloaders objectForKey:name];
 }
 
-- (CKDownloader*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name {
+- (CKWebRequest*)downloadContentOfURL:(NSURL *)URL fileName:(NSString *)name {
     if ([self fileURLForName:name])
         return nil;
     
     if ([self downloaderForName:name])
         return nil;
     
-    CKDownloader *downloader = [[CKDownloader alloc] initWithDelegate:self];
-    downloader.userInfo = name;
     NSString *filePath = [self filePathForName:name];
     NSString *temporaryFilePath = [self temporaryFilePathForName:name];
     NSString *metadataPath = [self metaFilePathForName:name];
-    
-    [downloader downloadContentOfURL:URL destination:temporaryFilePath completion:^{
-        NSError *error = nil;
-        [[NSFileManager defaultManager] moveItemAtPath:temporaryFilePath toPath:filePath error:&error];
-        [[NSFileManager defaultManager] removeItemAtPath:metadataPath error:&error];
+    CKWebRequest *downloader = [CKWebRequest scheduledRequestWithURL:URL parameters:nil downloadAtPath:temporaryFilePath completion:^(id object, NSURLResponse *response, NSError *error) {
+        [self downloader:[self downloaderForName:name] didReceiveResponse:(NSHTTPURLResponse*)response];
+        
+        if (!error) {
+            NSError *error = nil;
+            [[NSFileManager defaultManager] moveItemAtPath:temporaryFilePath toPath:filePath error:&error];
+            [[NSFileManager defaultManager] removeItemAtPath:metadataPath error:&error];
+            
+            [self downloaderDidFinish:[self downloaderForName:name]];
+        }
+        else 
+            [self downloader:[self downloaderForName:name] didFailWithError:error];
     }];
-    
+        
     [self.downloaders setObject:downloader forKey:name];
     
     return downloader;
@@ -145,8 +164,8 @@ static CKDownloadManager *CKSharedDownloadManager;
     }
 }
 
-- (void)abortDownload:(CKDownloader*)downloader{
-    NSString* path = [downloader.destinationPath stringByReplacingOccurrencesOfString:@".inprogress" withString:@""];
+- (void)abortDownload:(CKWebRequest*)downloader{
+    NSString* path = [downloader.downloadName stringByReplacingOccurrencesOfString:@".inprogress" withString:@""];
     
     [downloader cancel];
     NSString* inProgressPath = [NSString stringWithFormat:@"%@.inprogress",path];
@@ -167,54 +186,52 @@ static CKDownloadManager *CKSharedDownloadManager;
         NSAssert(error == nil, @"Could not delete file");
     }
     
-    [self.downloaders removeObjectForKey:downloader.userInfo];
+    [self.downloaders removeObjectForKey:downloader.downloadName];
 }
 
 #pragma CKDownloader Delegate
 
 // NCDownloader Delegate
 
-- (void)downloader:(CKDownloader *)downloader didReceiveResponse:(NSHTTPURLResponse *)response {
+- (void)downloader:(CKWebRequest *)downloader didReceiveResponse:(NSHTTPURLResponse *)response {
     CKDebugLog(@"didReceiveResponse %d <%lld bytes>", [response statusCode], [response expectedContentLength]);
     
-    if ([self metadataExistsForName:downloader.userInfo] == NO) {
+    if ([self metadataExistsForName:downloader.downloadName] == NO) {
         NSMutableDictionary *md = [NSMutableDictionary dictionary];
         [md setObject:[downloader.URL description] forKey:@"url"];
         [md setObject:[NSString stringWithFormat:@"%lld", [response expectedContentLength]] forKey:@"length"];
-        [md setObject:downloader.userInfo forKey:@"filename"];
-        [self createMetadataForName:downloader.userInfo content:md];
+        [md setObject:downloader.downloadName forKey:@"filename"];
+        [self createMetadataForName:downloader.downloadName content:md];
         return;
     }
 }
 
-- (void)downloaderDidFinish:(CKDownloader *)downloader {
-    CKDebugLog(@"downloaderDidFinish <%d bytes written; %d expected bytes>", downloader.totalBytesWritten, downloader.totalExpectedBytes);
-
+- (void)downloaderDidFinish:(CKWebRequest *)downloader {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    [userInfo setObject:downloader.userInfo forKey:@"name"];
+    [userInfo setObject:downloader.downloadName forKey:@"name"];
     [userInfo setObject:downloader.URL forKey:@"url"];
-    [userInfo setObject:[self fileURLForName:downloader.userInfo] forKey:@"file"];
+    [userInfo setObject:[self fileURLForName:downloader.downloadName] forKey:@"file"];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CKDownloadManagerDownloadDidFinishNotification 
                                                         object:self 
                                                       userInfo:userInfo];
     
-    [self.downloaders removeObjectForKey:downloader.userInfo];
+    [self.downloaders removeObjectForKey:downloader.downloadName];
 }
 
-- (void)downloader:(CKDownloader *)downloader didFailWithError:(NSError *)error {
+- (void)downloader:(CKWebRequest *)downloader didFailWithError:(NSError *)error {
     CKDebugLog(@"didFailWithError %@", error);
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:error forKey:@"error"];
-    [userInfo setObject:downloader.userInfo forKey:@"name"];
+    [userInfo setObject:downloader.downloadName forKey:@"name"];
     [userInfo setObject:downloader.URL forKey:@"url"];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CKDownloadManagerDownloadDidFailNotification 
                                                         object:self 
                                                       userInfo:userInfo];
     
-    [self.downloaders removeObjectForKey:downloader.userInfo];
+    [self.downloaders removeObjectForKey:downloader.downloadName];
 
     if ((error.code == NSURLErrorNotConnectedToInternet) || (error.code == NSURLErrorNetworkConnectionLost))
         return;
@@ -222,14 +239,10 @@ static CKDownloadManager *CKSharedDownloadManager;
     // Proceed to clean up for other errors.        
     // FIXME: should be put in a function
 
-    NSString *temporaryFilePath = [self temporaryFilePathForName:downloader.userInfo];
-    NSString *metadataPath = [self metaFilePathForName:downloader.userInfo];
+    NSString *temporaryFilePath = [self temporaryFilePathForName:downloader.downloadName];
+    NSString *metadataPath = [self metaFilePathForName:downloader.downloadName];
     [[NSFileManager defaultManager] removeItemAtPath:temporaryFilePath error:nil];
     [[NSFileManager defaultManager] removeItemAtPath:metadataPath error:nil];
-}
-
-- (void)downloader:(CKDownloader *)downloader didReceiveDataOfLength:(NSUInteger)length totalBytesWritten:(NSUInteger)totalBytesWritten totalBytesExpectedToWrite:(NSUInteger)totalBytesExpectedToWrite {
-    CKDebugLog(@"recv [%d%%] <%d bytes; %d bytes written; %d expected bytes>", (int)(downloader.progress * 100), length, totalBytesWritten, totalBytesExpectedToWrite);
 }
 
 @end
