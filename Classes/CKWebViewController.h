@@ -18,7 +18,11 @@
 @property (readonly, nonatomic) NSURL *currentURL;
 @property (nonatomic, readonly, retain) UIWebView *webView;
 @property (nonatomic, assign) id<UIWebViewDelegate> delegate; //Forward UIWebViewDelegate events
+@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
 
-- (void)loadURL:(NSURL*)URL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion;
+- (id)initWithURL:(NSURL*)URL;
+- (id)initWithURL:(NSURL*)URL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion;
+
+- (void)loadURL:(NSURL*)URL;
 
 @end

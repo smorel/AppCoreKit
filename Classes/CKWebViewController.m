@@ -17,7 +17,6 @@
 
 @property (nonatomic, retain) NSURL *URL;
 @property (nonatomic, retain) UIWebView *webView;
-@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
 
 @property (nonatomic, retain) Reachability *reachability;
 
@@ -28,22 +27,32 @@
 @synthesize URL, webView, completionBlock, reachability;
 @synthesize delegate;
 
-- (void)dealloc {
-    [super dealloc];
-    
+- (void)dealloc {    
     self.URL = nil;
     self.webView = nil;
     self.completionBlock = nil;
     self.reachability = nil;
+    
+    [super dealloc];
 }
 
 - (NSURL *)currentURL {
 	return [[NSURL URLWithString:[self.webView stringByEvaluatingJavaScriptFromString:@"window.location.href"]] standardizedURL];
 }
 
-- (void)loadURL:(NSURL *)anURL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion {
-    self.completionBlock = completion;
-    
+- (id)initWithURL:(NSURL *)anURL {
+    return [self initWithURL:anURL withCompletionBlock:nil];
+}
+
+- (id)initWithURL:(NSURL *)anURL withCompletionBlock:(void (^)(UIWebView *, NSError *))completion {
+    if (self = [super init]) {
+        self.URL = anURL;
+        self.completionBlock = completion;
+    }
+    return self;
+}
+
+- (void)loadURL:(NSURL *)anURL {
     self.URL = anURL;
     [self loadCurrentURL];
 }

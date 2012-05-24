@@ -22,6 +22,9 @@
 @property (nonatomic, readwrite, retain) UIBarButtonItem *actionButtonItem;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *spinnerItem;
 
+@property (nonatomic, assign) BOOL wasUsingToolbar;
+@property (nonatomic, assign) BOOL wasUsingNavigationbar;
+
 @end
 
 //
@@ -37,6 +40,7 @@
 @synthesize homeURL, webController;
 @synthesize backButtonItem, forwardButtonItem, refreshButtonItem, actionButtonItem, spinnerItem;
 @synthesize showDocumentTitle;
+@synthesize wasUsingToolbar, wasUsingNavigationbar;
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
@@ -79,8 +83,10 @@
 	[activityView startAnimating];
 	self.spinnerItem = [[[UIBarButtonItem alloc] initWithCustomView:activityView] autorelease];
 	self.spinnerItem.tag = CKWebViewControllerButtonItemRefresh;
-	
-	// Setup the toolbar
+    
+	[self.webController loadURL:self.homeURL];
+    
+    // Setup the toolbar
 	
 	UIBarButtonItem *fixedSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil] autorelease];
 	fixedSpace.width = 57.0f;
@@ -95,11 +101,6 @@
 	}
 	
 	[self setToolbarItems:items animated:NO];
-	
-	
-	[self.webController loadURL:self.homeURL withCompletionBlock:^(UIWebView *webView, NSError *error) {
-        
-    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -108,8 +109,12 @@
     [self.webController viewWillAppear:animated];
     self.webController.delegate = self;
     
+    self.wasUsingToolbar = !self.navigationController.toolbarHidden;
+    self.wasUsingNavigationbar = !self.navigationController.navigationBarHidden;
+    
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	[self.navigationController setToolbarHidden:NO animated:animated];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -118,6 +123,9 @@
 	
     [self.webController viewDidAppear:animated];
 	self.webController.delegate = nil;
+    
+    [self.navigationController setToolbarHidden:!self.wasUsingToolbar animated:animated];
+    [self.navigationController setNavigationBarHidden:!self.wasUsingNavigationbar animated:animated];
 }
 
 - (void)viewDidUnload {

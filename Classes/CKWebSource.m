@@ -33,12 +33,6 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @dynamic currentIndex;
 @dynamic range;
 
-- (id)init {
-	if (self = [super init]) {
-	}
-	return self;
-}
-
 - (void)dealloc {
 	[self cancelFetch];
 	[_requestBlock release];
