@@ -94,10 +94,8 @@
 		[items addObject:self.refreshButtonItem];
 	}
 	
-	// FIXME: Should be set in viewWillAppear
-	[self setToolbarItems:items animated:YES];
+	[self setToolbarItems:items animated:NO];
 	
-	//[NSArray arrayWithObjects:self.backButtonItem, fixedSpace, self.forwardButtonItem, flexiSpace, self.refreshButtonItem, nil] animated:NO];
 	
 	[self.webController loadURL:self.homeURL withCompletionBlock:^(UIWebView *webView, NSError *error) {
         
@@ -106,7 +104,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
+    
+    [self.webController viewWillAppear:animated];
     self.webController.delegate = self;
     
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
@@ -117,6 +116,7 @@
 	[super viewWillDisappear:animated];
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	
+    [self.webController viewDidAppear:animated];
 	self.webController.delegate = nil;
 }
 
