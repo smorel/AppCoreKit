@@ -62,7 +62,7 @@
 #import "CKUIView+Factory.h"
 #import "CKUIView+Layout.h"
 #import "CKWebViewController.h"
-#import "CKWebViewControllerRef.h"
+#import "CKWebBrowserViewController.h"
 
 #import "CKSegmentedControl.h"
 

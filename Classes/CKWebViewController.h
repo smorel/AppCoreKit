@@ -13,9 +13,11 @@
 
 /** TODO
  */
-@interface CKWebViewController : CKUIViewController <UIWebViewDelegate>
+@interface CKWebViewController : CKUIViewController
 
 @property (readonly, nonatomic) NSURL *currentURL;
+@property (nonatomic, readonly, retain) UIWebView *webView;
+@property (nonatomic, assign) id<UIWebViewDelegate> delegate; //Forward UIWebViewDelegate events
 
 - (void)loadURL:(NSURL*)URL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion;
 

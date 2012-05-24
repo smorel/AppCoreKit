@@ -318,8 +318,8 @@
 		7560DDB213B8ED3600268D13 /* CKWebSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6513B8ED3600268D13 /* CKWebSource.m */; };
 		7560DDB313B8ED3600268D13 /* CKWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6613B8ED3600268D13 /* CKWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDB413B8ED3600268D13 /* CKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6713B8ED3600268D13 /* CKWebViewController.m */; };
-		7560DDB513B8ED3600268D13 /* CKWebViewControllerRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6813B8ED3600268D13 /* CKWebViewControllerRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDB613B8ED3600268D13 /* CKWebViewControllerRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6913B8ED3600268D13 /* CKWebViewControllerRef.m */; };
+		7560DDB513B8ED3600268D13 /* CKWebBrowserViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6813B8ED3600268D13 /* CKWebBrowserViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DDB613B8ED3600268D13 /* CKWebBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */; };
 		7560DDC413B8EE5800268D13 /* MKNumberBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DDC213B8EE5800268D13 /* MKNumberBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDC513B8EE5800268D13 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DDC313B8EE5800268D13 /* MKNumberBadgeView.m */; };
 		7560DDD813B8EE9800268D13 /* CXMLDocument_PrivateExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DDC713B8EE9800268D13 /* CXMLDocument_PrivateExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -522,6 +522,7 @@
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */; };
+		B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6713B8ED3600268D13 /* CKWebViewController.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -845,8 +846,8 @@
 		7560DC6513B8ED3600268D13 /* CKWebSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebSource.m; path = Classes/CKWebSource.m; sourceTree = "<group>"; };
 		7560DC6613B8ED3600268D13 /* CKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewController.h; path = Classes/CKWebViewController.h; sourceTree = "<group>"; };
 		7560DC6713B8ED3600268D13 /* CKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewController.m; path = Classes/CKWebViewController.m; sourceTree = "<group>"; };
-		7560DC6813B8ED3600268D13 /* CKWebViewControllerRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebViewControllerRef.h; path = Classes/CKWebViewControllerRef.h; sourceTree = "<group>"; };
-		7560DC6913B8ED3600268D13 /* CKWebViewControllerRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebViewControllerRef.m; path = Classes/CKWebViewControllerRef.m; sourceTree = "<group>"; };
+		7560DC6813B8ED3600268D13 /* CKWebBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebBrowserViewController.h; path = Classes/CKWebBrowserViewController.h; sourceTree = "<group>"; };
+		7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebBrowserViewController.m; path = Classes/CKWebBrowserViewController.m; sourceTree = "<group>"; };
 		7560DDC213B8EE5800268D13 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKNumberBadgeView.h; path = Vendor/MKNumberBadgeView/MKNumberBadgeView.h; sourceTree = "<group>"; };
 		7560DDC313B8EE5800268D13 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKNumberBadgeView.m; path = Vendor/MKNumberBadgeView/MKNumberBadgeView.m; sourceTree = "<group>"; };
 		7560DDC713B8EE9800268D13 /* CXMLDocument_PrivateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CXMLDocument_PrivateExtensions.h; path = "Vendor/TouchXML-1.0.6/Common/Source/CXMLDocument_PrivateExtensions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2010,8 +2011,8 @@
 				75CC16C013F32B4500835FE3 /* CKPopoverController.m */,
 				7560DC6613B8ED3600268D13 /* CKWebViewController.h */,
 				7560DC6713B8ED3600268D13 /* CKWebViewController.m */,
-				7560DC6813B8ED3600268D13 /* CKWebViewControllerRef.h */,
-				7560DC6913B8ED3600268D13 /* CKWebViewControllerRef.m */,
+				7560DC6813B8ED3600268D13 /* CKWebBrowserViewController.h */,
+				7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */,
 				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
 				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
 			);
@@ -2128,6 +2129,7 @@
 				7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */,
 				7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */,
 				7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */,
+				B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */,
 				7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */,
 				7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */,
 				7560DC7F13B8ED3600268D13 /* CKCarouselView.h in Headers */,
@@ -2243,7 +2245,6 @@
 				7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */,
 				7560DDB113B8ED3600268D13 /* CKWebSource.h in Headers */,
 				7560DDB313B8ED3600268D13 /* CKWebViewController.h in Headers */,
-				7560DDB513B8ED3600268D13 /* CKWebViewControllerRef.h in Headers */,
 				7560DDC413B8EE5800268D13 /* MKNumberBadgeView.h in Headers */,
 				7560DDD813B8EE9800268D13 /* CXMLDocument_PrivateExtensions.h in Headers */,
 				7560DDDA13B8EE9800268D13 /* CXMLDocument.h in Headers */,
@@ -2274,6 +2275,7 @@
 				75CC170913F46E6C00835FE3 /* CKNSNumber+ValueTransformer.h in Headers */,
 				75CC170D13F46E8200835FE3 /* CKNSURL+ValueTransformer.h in Headers */,
 				75CC171113F46E9800835FE3 /* CKNSDate+ValueTransformer.h in Headers */,
+				7560DDB513B8ED3600268D13 /* CKWebBrowserViewController.h in Headers */,
 				75CC171513F46EAF00835FE3 /* CKNSArray+ValueTransformer.h in Headers */,
 				75CC171913F46EC800835FE3 /* CKCollection+ValueTransformer.h in Headers */,
 				75CC171D13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.h in Headers */,
@@ -2606,7 +2608,7 @@
 				7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */,
 				7560DDB213B8ED3600268D13 /* CKWebSource.m in Sources */,
 				7560DDB413B8ED3600268D13 /* CKWebViewController.m in Sources */,
-				7560DDB613B8ED3600268D13 /* CKWebViewControllerRef.m in Sources */,
+				7560DDB613B8ED3600268D13 /* CKWebBrowserViewController.m in Sources */,
 				7560DDC513B8EE5800268D13 /* MKNumberBadgeView.m in Sources */,
 				7560DDD913B8EE9800268D13 /* CXMLDocument_PrivateExtensions.m in Sources */,
 				7560DDDB13B8EE9800268D13 /* CXMLDocument.m in Sources */,

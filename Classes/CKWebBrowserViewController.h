@@ -21,24 +21,11 @@ typedef enum {
 
 /** TODO
  */
-@interface CKWebViewControllerRef : CKUIViewController <UIWebViewDelegate> {
-	UIWebView *_webView;
-	NSURL *_homeURL;
-	
-	UIBarButtonItem *_backButtonItem;
-	UIBarButtonItem *_forwardButtonItem;
-	UIBarButtonItem *_refreshButtonItem;
-	UIBarButtonItem *_actionButtonItem;
-	UIBarButtonItem *_spinnerItem;
-	
-	UIActivityIndicatorViewStyle _activityIndicatorViewStyle;
-	BOOL _showDocumentTitle;
-}
+@interface CKWebBrowserViewController : CKUIViewController
 
 @property (nonatomic, readonly, retain) NSURL *homeURL;
 @property (nonatomic, readonly, retain) NSURL *currentURL;
 @property (nonatomic, readwrite, assign) BOOL showDocumentTitle;
-@property (nonatomic, readwrite, assign) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
 
 - (id)initWithURL:(NSURL *)url;
 

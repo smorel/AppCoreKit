@@ -26,6 +26,7 @@
 @implementation CKWebViewController
 
 @synthesize URL, webView, completionBlock, reachability;
+@synthesize delegate;
 
 - (void)dealloc {
     [super dealloc];
@@ -53,6 +54,7 @@
     [super loadView];
     
     self.webView = [[[UIWebView alloc] initWithFrame:self.view.frame] autorelease];
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleSize;
     self.webView.scalesPageToFit = YES;
     self.view = self.webView;
     self.webView.delegate = self;
@@ -104,16 +106,18 @@
 #pragma mark WebView Delegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-	if ([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload) return NO;
-	return YES;
+    if ([self.delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)])
+        return [self.delegate webView:self.webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    else
+        return !([request.URL isEqual:[NSURL URLWithString:@"about:blank"]] && navigationType == UIWebViewNavigationTypeReload);
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
+    if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)])
+        [self.delegate webViewDidStartLoad:self.webView];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    self.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-	
+- (void)webViewDidFinishLoad:(UIWebView *)webView {	
 	// Change the size of the popover according to the size of the body
 	CGFloat height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
 	if (height > 0)
@@ -121,11 +125,17 @@
     
     if (self.completionBlock)
         completionBlock(self.webView, nil);
+    
+    if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)])
+        [self.delegate webViewDidFinishLoad:self.webView];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     if (self.completionBlock)
         completionBlock(self.webView, error);
+    
+    if ([self.delegate respondsToSelector:@selector(webView:didFailLoadWithError:)])
+        [self.delegate webView:self.webView didFailLoadWithError:error];
 }
 
 @end
