@@ -528,9 +528,17 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         if(!self.sizeHasBeenQueriedByTableView)
             return;
         
-        self.invalidatedSize = YES;
-        [super invalidateSize];
-        [self performLayout];
+        CGSize s;
+        if(self.sizeBlock){
+            s = self.sizeBlock(self);
+        }else{
+            s = [self computeSize];
+        }
+        
+        if(!CGSizeEqualToSize(s, self.size)){
+            self.invalidatedSize = YES;
+            [super invalidateSize];
+        }
     }
 }
 

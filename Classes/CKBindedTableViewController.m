@@ -642,7 +642,11 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-        return [_objectController headerViewForSection:section];
+        UIView* view = [_objectController headerViewForSection:section];
+        if(view){
+            [self tableView:tableView willDisplayHeaderView:view withTitle:@" CKHEADER "];
+        }
+        return view;
     }
 
 	return nil;
@@ -677,7 +681,11 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if([_objectController respondsToSelector:@selector(footerViewForSection:)]){
-        return [_objectController footerViewForSection:section];
+        UIView* view = [_objectController footerViewForSection:section];
+        if(view){
+            [self tableView:tableView willDisplayFooterView:view withTitle:@" CKFOOTER "];
+        }
+        return view;
     }
 	return nil;
 }
