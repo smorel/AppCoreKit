@@ -9,258 +9,95 @@
 #import "CKWebViewController.h"
 #import "CKUIViewAutoresizing+Additions.h"
 #import "CKBundle.h"
+#import <VendorsKit/Reachability.h>
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]
 
-@interface CKWebViewController ()
-@property (nonatomic, readwrite, retain) UIBarButtonItem *backButton;
-@property (nonatomic, readwrite, retain) UIBarButtonItem *forwardButton;
-@property (nonatomic, readwrite, retain) UIBarButtonItem *reloadButton;
-@property (nonatomic, readwrite, retain) UIActivityIndicatorView *spinner;
-@property (nonatomic, readwrite, retain) NSMutableArray *toolbarButtonsLoading;
-@property (nonatomic, readwrite, retain) NSMutableArray *toolbarButtonsStatic;
-@end
+@interface CKWebViewController () <UIWebViewDelegate>
 
-@interface CKWebViewController ()
-@property (nonatomic, retain) NSString *HTMLString;
-@property (nonatomic, retain) NSURL *baseURL;
-- (void)generateToolbar;
-- (void)updateToolbar;
+@property (nonatomic, retain) NSURL *URL;
+@property (nonatomic, retain) UIWebView *webView;
+@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
+
+@property (nonatomic, retain) Reachability *reachability;
+
 @end
 
 @implementation CKWebViewController
 
-@synthesize homeURL = _homeURL;
-@synthesize HTMLString = _HTMLString;
-@synthesize baseURL = _baseURL;
-@synthesize backButton = _backButton;
-@synthesize forwardButton = _forwardButton;
-@synthesize reloadButton = _reloadButton;
-@synthesize spinner = _spinner;
-@synthesize toolbarButtonsLoading = _toolbarButtonsLoading;
-@synthesize toolbarButtonsStatic = _toolbarButtonsStatic;
-@synthesize _showURLInTitle;
-@synthesize hidesToolbar = _hidesToolbar;
-@synthesize onLoadScript = _onLoadScript;
-@synthesize minContentSizeForViewInPopover = _minContentSizeForViewInPopover;
-@synthesize maxContentSizeForViewInPopover = _maxContentSizeForViewInPopover;
-@synthesize canBeDismissed = _canBeDismissed;
-@synthesize webViewToolbar = _webViewToolbar;
-
-- (void)setup {
-	_showURLInTitle = YES;
-	
-	// Create the toolbar buttons
-	[self setImage:[CKBundle imageForName:@"CKWebViewControllerGoBack.png"] forButton:CKWebViewButtonBack];
-	[self setImage:[CKBundle imageForName:@"CKWebViewControllerGoForward.png"] forButton:CKWebViewButtonForward];
-	self.reloadButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload)] autorelease];
-	self.spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-	
-    self.minContentSizeForViewInPopover = CGSizeMake(400, 400);
-    self.maxContentSizeForViewInPopover = CGSizeMake(400, 400);
-    
-	[self generateToolbar];	
-}
-
-- (id)initWithURL:(NSURL *)url {
-	if (self = [super init]) {
-		self.homeURL = url;
-		[self setup];
-	}
-    return self;	
-}
-
-- (void)setHomeURL:(NSURL *)theHomeURL{
-    [_homeURL release];
-    _homeURL = [theHomeURL retain];
-    if(_webView){
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
-		[_webView loadRequest:request];
-		[request release];
-    }
-}
-
-- (id)initWithHTMLString:(NSString *)string baseURL:(NSURL *)baseURL {
-	if (self = [super init]) {
-		self.HTMLString = string;
-		self.baseURL = baseURL;
-		[self setup];
-	}
-    return self;	
-}
-
-- (void)viewDidLoad {
-	[super viewDidLoad];
-    
-	// Set up the WebView
-	_webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
-	_webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_webView.scalesPageToFit = YES;
-	_webView.delegate = self;
-	[self.view addSubview:_webView];
-    
-	self.webViewToolbar = [[[UIToolbar alloc] init] autorelease];
-    self.webViewToolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-	[self.view addSubview:_webViewToolbar];
-	
-	// Load the URL
-	if (_homeURL) {
-		NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_homeURL];
-		[_webView loadRequest:request];
-		[request release];
-	}
-	
-	// Load the HTML string
-	if (self.HTMLString) {
-		[_webView loadHTMLString:self.HTMLString baseURL:self.baseURL];
-	}
-	
-	self.contentSizeForViewInPopover = self.minContentSizeForViewInPopover;
-	
-	if (_canBeDismissed) {
-		UIBarButtonItem *cancelButton = 
-		  [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
-														 target:self
-														 action:@selector(dismiss)] autorelease];
-		self.navigationItem.leftBarButtonItem = cancelButton;
-	}
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	// Save the NavigationController styles
-	[self.navigationController setNavigationBarHidden:NO animated:animated];
-	
-	// Hide the toolbar from the webView
-	[self.navigationController setToolbarHidden:YES animated:NO];
-	
-	// Setup the custom toolbar
-	self.webViewToolbar.frame = CGRectMake(0, self.view.bounds.size.height - 44, self.view.bounds.size.width, 44);
-	[self updateToolbar];
-	[self.webViewToolbar setItems:_toolbarButtonsStatic animated:animated];
-	
-	// Display the toolbar
-	self.webViewToolbar.hidden = self.hidesToolbar;
-	_webView.frame = self.hidesToolbar ? self.view.bounds : CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - 44);
-	_webView.hidden = YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
-	if (_webView.loading) [_webView stopLoading];
-	_webView.delegate = nil;
-
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidUnload {
-	[_webView release];
-	_webView = nil;
-	[_backButton release];
-	_backButton = nil;
-	[_forwardButton release];
-	_forwardButton = nil;
-	[_webViewToolbar release];
-	_webViewToolbar = nil;
-}
+@synthesize URL, webView, completionBlock, reachability;
 
 - (void)dealloc {
-	self.HTMLString = nil;
-	self.baseURL = nil;
-	self.reloadButton = nil;
-	[_webView release];
-	[_homeURL release];
-	[_backButton release];
-	[_forwardButton release];
-	[_toolbarButtonsStatic release];
-	[_toolbarButtonsLoading release];
-	[_onLoadScript release];
-	[_webViewToolbar release];
     [super dealloc];
-}
-
-- (void)setActionButtonWithStyle:(UIBarButtonSystemItem)style action:(SEL)action target:(id)target {
-	UIBarButtonItem *actionButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:style target:target action:action] autorelease];
-	[_toolbarButtonsStatic addObject:CKBarButtonItemFlexibleSpace];
-	[_toolbarButtonsStatic addObject:actionButton];
-	[_toolbarButtonsLoading addObject:CKBarButtonItemFlexibleSpace];
-	[_toolbarButtonsLoading addObject:actionButton];
+    
+    self.URL = nil;
+    self.webView = nil;
+    self.completionBlock = nil;
+    self.reachability = nil;
 }
 
 - (NSURL *)currentURL {
-	return [[NSURL URLWithString:[_webView stringByEvaluatingJavaScriptFromString:@"window.location.href"]] standardizedURL];
+	return [[NSURL URLWithString:[self.webView stringByEvaluatingJavaScriptFromString:@"window.location.href"]] standardizedURL];
 }
 
-#pragma mark -
-#pragma mark Toolbar
-
-- (void)updateToolbar {
-	_backButton.enabled = _webView.canGoBack;
-	_forwardButton.enabled = _webView.canGoForward;
-	
-	[self generateToolbar];
-	if ([_webView isLoading]) [self.webViewToolbar setItems:self.toolbarButtonsLoading animated:NO];
-	else [self.webViewToolbar setItems:self.toolbarButtonsStatic animated:NO];
+- (void)loadURL:(NSURL *)anURL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion {
+    self.completionBlock = completion;
+    
+    self.URL = anURL;
+    [self loadCurrentURL];
 }
 
-- (void)goBack {
-	[_webView goBack];
-}
-- (void)goForward {
-	[_webView goForward];
-}
-- (void)reload {
-	[_webView reload];
-}
+#pragma mark - LifeCycle
 
-#pragma mark -
-#pragma mark Toolbar Customization
-
-- (void)generateToolbar {
-	self.toolbarButtonsStatic = [NSMutableArray arrayWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, self.reloadButton, nil];
-	[self.spinner startAnimating];
-	UIBarButtonItem *loadingItem = [[[UIBarButtonItem alloc] initWithCustomView:self.spinner] autorelease];
-	self.toolbarButtonsLoading = [NSMutableArray arrayWithObjects:self.backButton, CKBarButtonItemFlexibleSpace, self.forwardButton, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, CKBarButtonItemFlexibleSpace, loadingItem, nil];
+- (void)loadView {
+    [super loadView];
+    
+    self.webView = [[[UIWebView alloc] initWithFrame:self.view.frame] autorelease];
+    self.webView.scalesPageToFit = YES;
+    self.view = self.webView;
+    self.webView.delegate = self;
 }
 
-- (void)setImage:(UIImage *)image forButton:(CKWebViewButton)button {
-	if (image == nil) return;
+- (void)viewDidLoad {
+    [super viewDidLoad];
 
-	UIButton *btn = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 22, 22)] autorelease];
-	[btn setImage:image forState:UIControlStateNormal];
-	
-	switch (button) {
-		case CKWebViewButtonBack:
-			[btn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-			self.backButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
-			break;
-		case CKWebViewButtonForward:
-			[btn addTarget:self action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
-			self.forwardButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
-			break;
-		case CKWebViewButtonReload:
-			[btn addTarget:self action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
-			self.reloadButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];
-			break;
-		default:
-			break;
-	}
-	
-	[self updateToolbar];
+    [self loadCurrentURL];
 }
 
-- (void)setSpinnerStyle:(UIActivityIndicatorViewStyle)style {
-	_spinner.activityIndicatorViewStyle = style;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.reachability startNotifer];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.reachability stopNotifer];    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (BOOL)loadCurrentURL {
+    if (self.URL && self.webView) {
+        NSURLRequest *request = [[[NSURLRequest alloc] initWithURL:self.URL] autorelease];
+        [self.webView loadRequest:request];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)reachabilityChanged:(NSNotification*)notif {
+    if (self.reachability.currentReachabilityStatus != NotReachable) {
+        [self loadCurrentURL];
+    }
+}
+
+- (Reachability *)reachability {
+    if (reachability == nil) {
+        self.reachability = [Reachability reachabilityForInternetConnection];
+    }
+    return reachability;
 }
 
 #pragma mark -
@@ -272,44 +109,23 @@
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-	[self updateToolbar];
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-		
-	[self updateToolbar];
-
-	// Update the title
-	if (_showURLInTitle) self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-	
-	// Run the optional after the view has finished loading
-	if (_onLoadScript) [_webView stringByEvaluatingJavaScriptFromString:_onLoadScript];
+    self.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 	
 	// Change the size of the popover according to the size of the body
-	CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
-	
-	if (height > 0) {
-		if (height < self.minContentSizeForViewInPopover.height) height = self.minContentSizeForViewInPopover.height;
-		if (height > self.maxContentSizeForViewInPopover.height) height = self.maxContentSizeForViewInPopover.height;
-		
+	CGFloat height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue];
+	if (height > 0)
 		self.contentSizeForViewInPopover = CGSizeMake(self.contentSizeForViewInPopover.width, height);
-	}
-		
-	_webView.hidden = NO;
+    
+    if (self.completionBlock)
+        completionBlock(self.webView, nil);
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;	
-	[self updateToolbar];
-}
-
-#pragma mark -
-#pragma mark Dismiss
-
-- (void)dismiss {
-	[self.navigationController dismissModalViewControllerAnimated:YES];
+    if (self.completionBlock)
+        completionBlock(self.webView, error);
 }
 
 @end
