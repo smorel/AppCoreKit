@@ -10,6 +10,7 @@
 #import "CKSheetController.h"
 
 #import "CKUIViewController.h"
+#import "UINavigationController+CKBlockBasedDelegate.h"
 
 #import "CKItemViewController.h"
 #import "CKItemViewContainerController.h"

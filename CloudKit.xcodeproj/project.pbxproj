@@ -527,6 +527,8 @@
 		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
+		B0EA78A6156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1059,6 +1061,8 @@
 		B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKWebRequest+Initialization.m"; sourceTree = "<group>"; };
 		B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebDataConverter.h; path = Classes/CKWebDataConverter.h; sourceTree = "<group>"; };
 		B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebDataConverter.m; path = Classes/CKWebDataConverter.m; sourceTree = "<group>"; };
+		B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+CKBlockBasedDelegate.h"; sourceTree = "<group>"; };
+		B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UINavigationController+CKBlockBasedDelegate.mm"; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1977,6 +1981,8 @@
 		9600B8E51545CB3100F07C5A /* Containers */ = {
 			isa = PBXGroup;
 			children = (
+				B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */,
+				B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */,
 				9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */,
 				9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */,
 				9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */,
@@ -2124,6 +2130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7560DC6A13B8ED3600268D13 /* CKAddressBook.h in Headers */,
+				B0EA78A6156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h in Headers */,
 				7560DC6C13B8ED3600268D13 /* CKAlertView.h in Headers */,
 				7560DC6E13B8ED3600268D13 /* CKAttribute.h in Headers */,
 				7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */,
@@ -2711,6 +2718,7 @@
 				B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */,
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
+				B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
