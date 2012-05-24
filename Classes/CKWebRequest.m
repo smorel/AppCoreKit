@@ -37,23 +37,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @synthesize connection, request, response, cancelled, operationsGroup;
 @synthesize completionBlock, transformBlock, cancelBlock;
-@synthesize data, handle, downloadPath;
+@synthesize data, handle, downloadPath, credential;
 @synthesize delegate, progress, retriesCount;
 
-- (void)dealloc {
-    self.connection = nil;
-    self.request = nil;
-    self.response = nil;
-    self.data = nil;
-    self.handle = nil;
-    self.downloadPath = nil;
-    self.completionBlock = nil;
-    self.transformBlock = nil;
-    self.cancelBlock = nil;
-    dispatch_release(self.operationsGroup);
-    
-    [super dealloc];
-}
+#pragma mark - Init/Dealloc
 
 - (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
     if (self = [super init]) {
@@ -62,7 +49,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             NSURL *newURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", aRequest.URL.absoluteString, [NSString stringWithQueryDictionary:parameters]]];
             [mutableRequest setURL:newURL];
         }
-                
+        
         self.request = mutableRequest;
         [mutableRequest release];
         
@@ -101,6 +88,21 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.operationsGroup = dispatch_group_create();
     }
     return self;
+}
+
+- (void)dealloc {
+    self.connection = nil;
+    self.request = nil;
+    self.response = nil;
+    self.data = nil;
+    self.handle = nil;
+    self.downloadPath = nil;
+    self.completionBlock = nil;
+    self.transformBlock = nil;
+    self.cancelBlock = nil;
+    dispatch_release(self.operationsGroup);
+    
+    [super dealloc];
 }
 
 #pragma mark - LifeCycle
@@ -142,6 +144,19 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 #pragma mark - NSURLConnectionDataDelegate
+
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredential *aCredential = self.credential ? self.credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+        
+        if (aCredential) {
+            [[challenge sender] useCredential:aCredential forAuthenticationChallenge:challenge];
+            return;
+        }
+    }
+    
+    [[challenge sender] cancelAuthenticationChallenge:challenge];
+}
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
     if (!self.isCancelled) {
@@ -201,8 +216,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
     NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
     [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
-        
-     return nil;
+    
+    return nil;
 }
 
 #pragma mark - NSURLConnectionDelegate

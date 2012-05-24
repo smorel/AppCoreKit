@@ -20,6 +20,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 @property (nonatomic, assign) id<NSURLConnectionDelegate, NSURLConnectionDataDelegate> delegate; //Forward URL connection delegate if nessesary
 @property (nonatomic, retain, readonly) NSString *downloadPath; //Need to be set at initialization 
 @property (nonatomic, readonly) CGFloat progress; //KVO compilent
+@property (nonatomic, retain) NSURLCredential *credential;//Overwrite default credential
 
 //See CKWebRequest+Initialization.h for other init and convinience methods
 - (id)initWithURLRequest:(NSURLRequest*)request parameters:(NSDictionary*)parameters transform:(id (^)(id value))transform completion:(void (^)(id object, NSHTTPURLResponse *response, NSError *error))block;
