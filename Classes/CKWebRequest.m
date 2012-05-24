@@ -28,13 +28,32 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 @property (nonatomic, assign, readwrite) CGFloat progress;
 @property (nonatomic, assign) NSUInteger retriesCount;
 
+@property (nonatomic, assign, getter = isCancelled) BOOL cancelled;
+@property (nonatomic, assign) dispatch_group_t operationsGroup;
+
 @end
 
 @implementation CKWebRequest
 
-@synthesize connection, request, response;
-@synthesize data, completionBlock, transformBlock, handle, downloadPath;
+@synthesize connection, request, response, cancelled, operationsGroup;
+@synthesize completionBlock, transformBlock, cancelBlock;
+@synthesize data, handle, downloadPath;
 @synthesize delegate, progress, retriesCount;
+
+- (void)dealloc {
+    self.connection = nil;
+    self.request = nil;
+    self.response = nil;
+    self.data = nil;
+    self.handle = nil;
+    self.downloadPath = nil;
+    self.completionBlock = nil;
+    self.transformBlock = nil;
+    self.cancelBlock = nil;
+    dispatch_release(self.operationsGroup);
+    
+    [super dealloc];
+}
 
 - (id)initWithURLRequest:(NSURLRequest *)aRequest parameters:(NSDictionary *)parameters transform:(id (^)(id value))transform completion:(void (^)(id, NSHTTPURLResponse *, NSError *))block {
     if (self = [super init]) {
@@ -50,6 +69,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.completionBlock = block;
         self.transformBlock = transform;
         self.data = [[[NSMutableData alloc] init] autorelease];
+        self.cancelled = NO;
+        self.operationsGroup = dispatch_group_create();
     }
     return self;
 }
@@ -76,21 +97,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.downloadPath = path;
         self.retriesCount = 0;
         self.data = nil;
+        self.cancelled = NO;
+        self.operationsGroup = dispatch_group_create();
     }
     return self;
-}
-
-- (void)dealloc {
-    self.connection = nil;
-    self.request = nil;
-    self.response = nil;
-    self.data = nil;
-    self.handle = nil;
-    self.downloadPath = nil;
-    self.completionBlock = nil;
-    self.transformBlock = nil;
-    
-    [super dealloc];
 }
 
 #pragma mark - LifeCycle
@@ -103,6 +113,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     NSAssert(self.connection == nil, @"Connection already started");
     
     self.progress = 0.0;
+    self.cancelled = NO;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
@@ -122,59 +133,68 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)cancel {
     [self.connection cancel];
+    self.cancelled = YES;
     
-    NSDictionary *cancelUserInfo = [NSDictionary dictionaryWithObject:@"Operation cancelled" forKey:@"Reason"];
-    self.completionBlock(nil, self.response, [NSError errorWithDomain:CKWebRequestHTTPErrorDomain code:10 userInfo:cancelUserInfo]);
+    dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
+    
+    if (self.cancelBlock)
+        self.cancelBlock();
 }
 
 #pragma mark - NSURLConnectionDataDelegate
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
-    self.response = aResponse;
-    
-    if ([aResponse statusCode] >= 400) {
-        self.handle = nil;
-        self.data = [NSMutableData data];
-        [[NSFileManager defaultManager] removeItemAtPath:self.downloadPath error:nil];
+    if (!self.isCancelled) {
+        self.response = aResponse;
+        
+        if ([aResponse statusCode] >= 400) {
+            self.handle = nil;
+            self.data = [NSMutableData data];
+            [[NSFileManager defaultManager] removeItemAtPath:self.downloadPath error:nil];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
+            [self.delegate connection:aConnection didReceiveResponse:aResponse];  
     }
-    
-    if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)])
-        [self.delegate connection:aConnection didReceiveResponse:aResponse];
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
-    if (self.handle) {
-        self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
-        [self.handle writeData:someData];
+    if (!self.isCancelled) {
+        if (self.handle) {
+            self.progress = self.handle.offsetInFile / self.response.expectedContentLength;
+            [self.handle writeData:someData];
+        }
+        else {
+            self.progress = self.data.length / self.response.expectedContentLength;
+            [self.data appendData:someData];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
+            [self.delegate connection:aConnection didReceiveData:someData];  
     }
-    else {
-        self.progress = self.data.length / self.response.expectedContentLength;
-        [self.data appendData:someData];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(connection:didReceiveData:)]) 
-        [self.delegate connection:aConnection didReceiveData:someData];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
     self.progress = 1.0;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        id object = [CKWebDataConverter convertData:self.data fromResponse:self.response];
+    dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
-        if (self.transformBlock) {
+        if (self.transformBlock && !self.isCancelled) {
             id transformedObject = transformBlock(object);
             if (transformedObject)
                 object = transformedObject;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if (self.completionBlock)
-                self.completionBlock(object, self.response, nil);
-            
-            if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)])
-                [self.delegate connectionDidFinishLoading:aConnection];
-        });
+        if (!self.isCancelled) {
+            dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
+                if (self.completionBlock && !self.isCancelled)
+                    self.completionBlock(object, self.response, nil);
+                
+                if ([self.delegate respondsToSelector:@selector(connectionDidFinishLoading:)] && !self.isCancelled)
+                    [self.delegate connectionDidFinishLoading:aConnection];
+            });  
+        }
     });
 }
 
@@ -189,13 +209,13 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
     if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if (self.completionBlock)
+        dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
+            if (self.completionBlock && !self.isCancelled)
                 self.completionBlock(nil, self.response, error);
+            
+            if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)] && !self.isCancelled)
+                [self.delegate connection:aConnection didFailWithError:error];
         });
-        
-        if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)])
-            [self.delegate connection:aConnection didFailWithError:error];
     }
 }
 

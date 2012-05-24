@@ -14,6 +14,7 @@ OBJC_EXPORT NSString * const CKWebRequestHTTPErrorDomain;
 
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, copy) void (^completionBlock)(id response, NSHTTPURLResponse *urlResponse, NSError *error);
+@property (nonatomic, copy) void (^cancelBlock)(void);
 @property (nonatomic, copy) id (^transformBlock)(id value); //Called to apply a possible transformation to the response before the completion block
 
 @property (nonatomic, assign) id<NSURLConnectionDelegate, NSURLConnectionDataDelegate> delegate; //Forward URL connection delegate if nessesary
