@@ -82,7 +82,16 @@
     request.completionBlock = ^(id object, NSHTTPURLResponse *response, NSError *error) {
         [self requestDidFinish:bRequest];
         
-        oldCompletionBlock(object, response, error);
+        if (oldCompletionBlock)
+            oldCompletionBlock(object, response, error);
+    };
+    
+    void (^oldCancelBlock)(void) = request.cancelBlock;
+    request.cancelBlock = ^{
+        [self requestDidFinish:bRequest];
+        
+        if (oldCancelBlock)
+            oldCancelBlock();
     };
     
     if (self.runningRequests.count < self.maxCurrentRequest) {

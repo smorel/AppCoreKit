@@ -13,7 +13,7 @@
 
 + (CKWebRequestManager*)sharedManager;
 
-@property (nonatomic, assign) NSUInteger maxCurrentRequest; //Default 4
+@property (nonatomic, assign) NSUInteger maxCurrentRequest; //Default 10
 @property (nonatomic, readonly) NSUInteger numberOfRunningRequest;
 @property (nonatomic, readonly) NSUInteger numberOfWaitingRequest;
 
