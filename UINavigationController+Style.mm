@@ -10,22 +10,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CloudKit.h"
 
-static char UINavigationControllerStyleHasBeenApplied;
 
 bool swizzle_UINavigationControllerStyle();
 
 @implementation UINavigationController (Style)
-
-- (void)UINavigationControllerStyle_setStyleHasBeenApplied:(BOOL)style{
-    objc_setAssociatedObject(self, 
-                             &UINavigationControllerStyleHasBeenApplied,
-                             [NSNumber numberWithBool:style],
-                             OBJC_ASSOCIATION_ASSIGN);
-}
-
-- (BOOL)UINavigationControllerStyle_styleHasBeenApplied{
-    return [objc_getAssociatedObject(self, &UINavigationControllerStyleHasBeenApplied) boolValue];
-}
 
 - (void)UINavigationControllerStyle_setToolbarHidden:(BOOL)hidden animated:(BOOL)animated {
     if (hidden == NO) {
@@ -49,7 +37,6 @@ bool swizzle_UINavigationControllerStyle();
 
 bool swizzle_UINavigationControllerStyle(){
     CKSwizzleSelector([UINavigationController class],@selector(setToolbarHidden:animated:),@selector(UINavigationControllerStyle_setToolbarHidden:animated:));
-    CKSwizzleSelector([UINavigationController class],@selector(wantsFullScreenLayout),@selector(UINavigationControllerStyle_wantsFullScreenLayout));
     return 1;
 }
 
