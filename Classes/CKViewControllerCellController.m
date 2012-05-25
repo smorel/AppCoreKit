@@ -12,11 +12,21 @@
 
 @interface CKItemViewController()
 @property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
+@property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
+@interface CKViewControllerCellController()
+@property(nonatomic,assign) BOOL controllerHasBeenInitialized;
+@end
 
 @implementation CKViewControllerCellController
 @synthesize viewController = _viewController;
+@synthesize controllerHasBeenInitialized = _controllerHasBeenInitialized;
+
+- (void)postInit{
+    [super postInit];
+    _controllerHasBeenInitialized = NO;
+}
 
 - (void)dealloc{
     [_viewController setContainerViewController:nil];
@@ -50,14 +60,32 @@
     [cell.contentView addSubview:controllerView];
     
     [self setupViewControllerView:controllerView];
-    [_viewController viewWillAppear:NO];
-    [_viewController viewDidAppear:NO];
+    
+    if(!self.controllerHasBeenInitialized){
+        [_viewController viewWillAppear:NO];
+        [_viewController viewDidAppear:NO];
+        self.controllerHasBeenInitialized = YES;
+    }
+}
+
+- (void)cellDidAppear:(UITableViewCell *)cell{
+    [super cellDidAppear:cell];
+    
+    if(!self.controllerHasBeenInitialized){
+        [_viewController viewWillAppear:NO];
+        [_viewController viewDidAppear:NO];
+        self.controllerHasBeenInitialized = YES;
+    }
 }
 
 - (void)cellDidDisappear{
     [super cellDidDisappear];
-    [_viewController viewWillDisappear:NO];
-    [_viewController viewDidDisappear:NO];
+    
+    if(self.controllerHasBeenInitialized){
+        [_viewController viewWillDisappear:NO];
+        [_viewController viewDidDisappear:NO];
+        self.controllerHasBeenInitialized = NO;
+    }
 }
 
 + (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{

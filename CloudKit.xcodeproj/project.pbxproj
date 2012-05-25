@@ -464,6 +464,7 @@
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		96243226155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96243224155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96243227155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96243225155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m */; };
+		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
 		963826541484011700A9C98B /* CKFormSectionBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826521484011700A9C98B /* CKFormSectionBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		963826551484011700A9C98B /* CKFormSectionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 963826531484011700A9C98B /* CKFormSectionBase.m */; };
 		963826581484012B00A9C98B /* CKFormSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 963826561484012A00A9C98B /* CKFormSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2727,6 +2728,7 @@
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */,
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
+				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

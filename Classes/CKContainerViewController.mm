@@ -87,13 +87,6 @@ typedef void(^CKTransitionBlock)();
 - (void)setViewControllers:(NSArray *)viewControllers{
     for(UIViewController* controller in _viewControllers){
         [controller setContainerViewController:nil];
-        if([CKOSVersion() floatValue] >= 5){
-            [controller removeFromParentViewController];
-        }
-        
-        if([controller isViewLoaded]){
-            [[controller view]removeFromSuperview];
-        }
     }
     
     [_viewControllers release];
@@ -102,12 +95,13 @@ typedef void(^CKTransitionBlock)();
     if ([self.viewControllers count] > 0) {
 		for (UIViewController* controller in self.viewControllers) {
 			[controller setContainerViewController:self];
-            if([CKOSVersion() floatValue] >= 5){
-                [self addChildViewController:controller];
-            }
 		}
 		_selectedIndex = 0;
 	}
+    
+    if(self.viewIsOnScreen){
+        [self showViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -300,6 +294,32 @@ typedef void(^CKTransitionBlock)();
 	_selectedIndex = index;
 }
 
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    if([CKOSVersion() floatValue] < 5){
+        [self.selectedViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    if([CKOSVersion() floatValue] < 5){
+        [self.selectedViewController  didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    }
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+    [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    
+    if([CKOSVersion() floatValue] < 5){
+        [self.selectedViewController  willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    }
+}
+ 
+
 @end
 
 #pragma mark - UIViewController Additions
@@ -325,6 +345,15 @@ static char CKUIViewControllerContainerViewControllerKey;
 
 
 - (void)setContainerViewController:(UIViewController *)viewController {
+    if(viewController == nil){
+        if([self isViewLoaded]){
+            [self viewWillDisappear:NO];
+            [[self view]removeFromSuperview];
+            [self viewDidDisappear:NO];
+        }
+    }
+    
+    
     CKWeakRef* ref = self.containerViewControllerRef;
     if(!ref){
         ref = [CKWeakRef weakRefWithObject:viewController];
@@ -336,11 +365,28 @@ static char CKUIViewControllerContainerViewControllerKey;
     else{
         ref.object = viewController;
     }
+    
+    if([CKOSVersion() floatValue] >= 5){
+        if(viewController == nil){
+            [self removeFromParentViewController];
+        }else{
+            [viewController addChildViewController:self];
+        }
+    }
 }
 
 - (UIViewController *)containerViewController {
     CKWeakRef* ref = self.containerViewControllerRef;
     return [ref object];
+}
+
+- (UIInterfaceOrientation)UIViewController_CKContainerController_interfaceOrientation{
+    if(self.containerViewController){
+        return [self.containerViewController interfaceOrientation];
+    }else if(self.navigationController){
+        return [self.navigationController interfaceOrientation];
+    }
+    return [self UIViewController_CKContainerController_interfaceOrientation];
 }
 
 @end
@@ -388,9 +434,10 @@ static char CKUIViewControllerContainerViewControllerKey;
 
 
 
-bool swizzle_UINavigationController_CKContainerViewController(){
+bool swizzle_CKContainerViewController(){
     CKSwizzleSelector([UINavigationController class],@selector(wantsFullScreenLayout),@selector(UINavigationController_CKContainerViewController_wantsFullScreenLayout));
+    CKSwizzleSelector([UIViewController class],@selector(interfaceOrientation),@selector(UIViewController_CKContainerController_interfaceOrientation));
     return 1;
 }
 
-static bool bo_swizzle_UINavigationController_CKContainerViewController = swizzle_UINavigationController_CKContainerViewController();
+static bool bo_swizzle_CKContainerViewController = swizzle_CKContainerViewController();

@@ -869,6 +869,7 @@
 - (void)viewDidDisappear{
     if(self.isViewAppeared){
         [self cellDidDisappear];
+        self.isViewAppeared = NO;
     }
 	[super viewDidDisappear];
 }

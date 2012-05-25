@@ -164,6 +164,7 @@
 	if([_objectController respondsToSelector:@selector(setDelegate:)]){
 		[_objectController performSelector:@selector(setDelegate:) withObject:self];
 	}
+	[self updateViewsVisibility:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -172,7 +173,6 @@
 	}
     
     [super viewDidAppear:animated];
-	[self updateViewsVisibility:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
