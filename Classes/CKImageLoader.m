@@ -79,6 +79,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
         //__block CKImageLoader *bSelf = self;
         self.request = [CKWebRequest scheduledRequestWithURL:url completion:^(id object, NSURLResponse *response, NSError * error) {
             [self didReceiveValue:object error:error];
+            self.request = nil;
         }];
     }
 }
