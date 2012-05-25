@@ -49,6 +49,7 @@ bool swizzle_UINavigationControllerStyle();
 
 bool swizzle_UINavigationControllerStyle(){
     CKSwizzleSelector([UINavigationController class],@selector(setToolbarHidden:animated:),@selector(UINavigationControllerStyle_setToolbarHidden:animated:));
+    CKSwizzleSelector([UINavigationController class],@selector(wantsFullScreenLayout),@selector(UINavigationControllerStyle_wantsFullScreenLayout));
     return 1;
 }
 

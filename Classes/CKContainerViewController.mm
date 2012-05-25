@@ -10,6 +10,7 @@
 #import "CKVersion.h"
 #import "CKWeakRef.h"
 #import <objc/runtime.h>
+#import "CKRuntime.h"
 
 typedef void(^CKTransitionBlock)();
 
@@ -357,3 +358,28 @@ static char CKUIViewControllerContainerViewControllerKey;
 
 @end
 
+
+
+@interface UINavigationController (CKContainerViewController)
+@end
+
+
+@implementation UINavigationController (CKContainerViewController)
+
+- (BOOL)UINavigationController_CKContainerViewController_wantsFullScreenLayout{
+    if([self containerViewController]){
+        return NO;
+    }
+    return [self UINavigationController_CKContainerViewController_wantsFullScreenLayout ];
+}
+
+@end
+
+
+
+bool swizzle_UINavigationController_CKContainerViewController(){
+    CKSwizzleSelector([UINavigationController class],@selector(wantsFullScreenLayout),@selector(UINavigationController_CKContainerViewController_wantsFullScreenLayout));
+    return 1;
+}
+
+static bool bo_swizzle_UINavigationController_CKContainerViewController = swizzle_UINavigationController_CKContainerViewController();

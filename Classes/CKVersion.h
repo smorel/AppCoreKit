@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /** TODO
  */
 NSString *CKApplicationVersion();
@@ -15,3 +19,8 @@ NSString *CKApplicationVersion();
 /** TODO
  */
 NSString *CKOSVersion();
+
+    
+#ifdef __cplusplus
+}
+#endif

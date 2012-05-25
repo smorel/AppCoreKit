@@ -451,7 +451,7 @@
 		9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */; };
 		9600B8DF1545CAFF00F07C5A /* CKContainerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9600B8E01545CAFF00F07C5A /* CKContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */; };
+		9600B8E01545CAFF00F07C5A /* CKContainerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8D81545CAFE00F07C5A /* CKContainerViewController.mm */; };
 		9600B8E11545CAFF00F07C5A /* CKSplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */; };
 		9600B8E31545CAFF00F07C5A /* CKTabViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -987,7 +987,7 @@
 		9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBreadCrumbViewController.h; path = Classes/CKBreadCrumbViewController.h; sourceTree = "<group>"; };
 		9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBreadCrumbViewController.m; path = Classes/CKBreadCrumbViewController.m; sourceTree = "<group>"; };
 		9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKContainerViewController.h; path = Classes/CKContainerViewController.h; sourceTree = "<group>"; };
-		9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKContainerViewController.m; path = Classes/CKContainerViewController.m; sourceTree = "<group>"; };
+		9600B8D81545CAFE00F07C5A /* CKContainerViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKContainerViewController.mm; path = Classes/CKContainerViewController.mm; sourceTree = "<group>"; };
 		9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSplitViewController.h; path = Classes/CKSplitViewController.h; sourceTree = "<group>"; };
 		9600B8DA1545CAFF00F07C5A /* CKSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSplitViewController.m; path = Classes/CKSplitViewController.m; sourceTree = "<group>"; };
 		9600B8DB1545CAFF00F07C5A /* CKTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTabViewController.h; path = Classes/CKTabViewController.h; sourceTree = "<group>"; };
@@ -1987,10 +1987,8 @@
 		9600B8E51545CB3100F07C5A /* Containers */ = {
 			isa = PBXGroup;
 			children = (
-				B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */,
-				B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */,
 				9600B8D71545CAFE00F07C5A /* CKContainerViewController.h */,
-				9600B8D81545CAFE00F07C5A /* CKContainerViewController.m */,
+				9600B8D81545CAFE00F07C5A /* CKContainerViewController.mm */,
 				9600B8D51545CAFE00F07C5A /* CKBreadCrumbViewController.h */,
 				9600B8D61545CAFE00F07C5A /* CKBreadCrumbViewController.m */,
 				9600B8D91545CAFE00F07C5A /* CKSplitViewController.h */,
@@ -2027,6 +2025,8 @@
 				7560DC6913B8ED3600268D13 /* CKWebBrowserViewController.m */,
 				9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */,
 				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
+				B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */,
+				B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2711,7 +2711,7 @@
 				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
 				9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */,
 				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,
-				9600B8E01545CAFF00F07C5A /* CKContainerViewController.m in Sources */,
+				9600B8E01545CAFF00F07C5A /* CKContainerViewController.mm in Sources */,
 				9600B8E21545CAFF00F07C5A /* CKSplitViewController.m in Sources */,
 				9600B8E41545CAFF00F07C5A /* CKTabViewController.m in Sources */,
 				9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */,
