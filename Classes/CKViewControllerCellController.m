@@ -70,7 +70,7 @@
 
 - (void)setViewController:(UIViewController *)theViewController{
     [_viewController release];
-    _viewController = theViewController;
+    _viewController = [theViewController retain];
     [_viewController setContainerViewController:self.containerController];
 }
 
