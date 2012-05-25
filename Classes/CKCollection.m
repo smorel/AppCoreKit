@@ -10,12 +10,18 @@
 #import "CKNSObject+Invocation.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKNSObject+Bindings.h"
 
+@interface CKCollection()
+@property (nonatomic,assign,readwrite) NSInteger count;
+@property (nonatomic,assign,readwrite) BOOL isFetching;
+@end
 
 @implementation CKCollection
 @synthesize feedSource = _feedSource;
 @synthesize delegate = _delegate;
 @synthesize count = _count;
+@synthesize isFetching = _isFetching;
 
 @synthesize addObjectsBlock = _addObjectsBlock;
 @synthesize removeObjectsBlock = _removeObjectsBlock;
@@ -25,7 +31,8 @@
 @synthesize endFetchingBlock = _endFetchingBlock;
 
 - (void)postInit{
-	self.count = 0;
+	_count = 0;
+    _isFetching = NO;
 }
 
 - (id)init{
@@ -35,6 +42,8 @@
 }
 
 - (void)dealloc{
+    [self clearBindingsContext];
+    
     if(_feedSource){
         _feedSource.delegate = nil;
         [_feedSource cancelFetch];
@@ -72,6 +81,12 @@
     
     _feedSource = [thefeedSource retain];
 	_feedSource.delegate = self;
+    
+    if(_feedSource){
+        [self beginBindingsContextByRemovingPreviousBindings];
+        [_feedSource bind:@"isFetching" toObject:self withKeyPath:@"isFetching"];
+        [self endBindingsContext];
+    }
 }
 
 - (void)setDelegate:(id)thedelegate{

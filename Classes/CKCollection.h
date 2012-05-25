@@ -25,7 +25,8 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 
 @property (nonatomic,retain) CKFeedSource* feedSource;
 @property (nonatomic,assign) id delegate;
-@property (nonatomic,assign) NSInteger count;
+@property (nonatomic,assign,readonly) NSInteger count;
+@property (nonatomic,assign,readonly) BOOL isFetching;
 
 @property (nonatomic,copy) CKCollectionBlock addObjectsBlock;
 @property (nonatomic,copy) CKCollectionBlock removeObjectsBlock;
@@ -51,7 +52,6 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 - (void)addObserver:(id)object;
 - (void)removeObserver:(id)object;
 - (void)fetchRange:(NSRange)range;
-- (BOOL)isFetching;
 
 - (NSArray*)objectsWithPredicate:(NSPredicate*)predicate;
 

@@ -10,6 +10,12 @@
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKDebug.h"
 
+
+@interface CKCollection()
+@property (nonatomic,assign,readwrite) NSInteger count;
+@property (nonatomic,assign,readwrite) BOOL isFetching;
+@end
+
 @implementation CKArrayProxyCollection
 @synthesize property = _property;
 

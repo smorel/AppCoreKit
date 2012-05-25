@@ -7,6 +7,7 @@
 //
 
 #import "CKFilteredCollection.h"
+#import "CKNSObject+Bindings.h"
 
 @implementation CKFilteredCollection
 @synthesize collection = _collection;
@@ -33,6 +34,11 @@
     self = [super init];
     self.predicate = thepredicate;
     self.collection = theCollection;
+    
+    [self beginBindingsContextByRemovingPreviousBindings];
+    [theCollection bind:@"isFetching" toObject:self withKeyPath:@"isFetching"];
+    [self endBindingsContext];
+    
     return self;
 }
 
@@ -71,10 +77,6 @@
 
 - (void)fetchRange:(NSRange)range{
 	[self.collection fetchRange:range];
-}
-
-- (BOOL)isFetching{
-    return [self.collection isFetching];
 }
 
 - (NSIndexSet*)filteredIndexSet:(NSIndexSet*)indexes{

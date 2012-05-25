@@ -7,6 +7,12 @@
 //
 
 #import "CKAggregateCollection.h"
+#import "CKNSObject+Bindings.h"
+
+@interface CKCollection()
+@property (nonatomic,assign,readwrite) NSInteger count;
+@property (nonatomic,assign,readwrite) BOOL isFetching;
+@end
 
 @implementation CKAggregateCollection
 @synthesize collections = _collections;
@@ -45,6 +51,14 @@
     [super insertObjects:array atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [array count])]];
 }
 
+- (BOOL)allCollections_isFetching{
+    for(CKCollection* collection in _collections){
+        if([collection isFetching])
+            return YES;
+    }
+    return NO;
+}
+
 - (void)setCollections:(NSArray *)theCollections{
     if(_collections){
         for(CKCollection* collection in _collections){
@@ -55,9 +69,18 @@
     [_collections release];
     _collections = [theCollections retain];
     
+    __block CKAggregateCollection* bself = self;
+    [self beginBindingsContextByRemovingPreviousBindings];
     for(CKCollection* collection in _collections){
         [collection addObserver:self];
+        [collection bind:@"isFetching" withBlock:^(id value){
+            BOOL bo = [bself allCollections_isFetching];
+            if(bo != self.isFetching){
+                self.isFetching = bo;
+            }
+        }];
     }
+    [self endBindingsContext];
     
     [self updateArray];
 }
@@ -75,14 +98,6 @@
 
 - (void)fetchRange:(NSRange)range{
 	//TODO ! TO IMPLEMENT
-}
-
-- (BOOL)isFetching{
-    for(CKCollection* collection in _collections){
-        if([collection isFetching])
-            return YES;
-    }
-    return NO;
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
