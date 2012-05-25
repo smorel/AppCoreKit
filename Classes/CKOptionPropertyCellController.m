@@ -12,6 +12,7 @@
 
 #import "CKUIViewController+Style.h"
 #import "CKStyleManager.h"
+#import "CKPopoverController.h"
 
 
 @interface CKOptionPropertyCellController ()
@@ -233,46 +234,58 @@
 	}
     self.optionsViewController.optionCellStyle = self.optionCellStyle;
 	self.optionsViewController.title = propertyNavBarTitleLocalized;
-	self.optionsViewController.optionTableDelegate = self;
     
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
     
-	[self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
-}
-
-//
-
-- (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index {
-    [NSObject removeAllBindingsForContext:self.internalBindingContext];
-    
-    if(self.multiSelectionEnabled){
-		NSArray* indexes = tableViewController.selectedIndexes;
-		NSInteger v = 0;
-		for(NSNumber* index in indexes){
-			v |= [[self.values objectAtIndex:[index intValue]]intValue];
-		}
-        
-        self.detailText = [self labelForValue:v];
-        [self setValueInObjectProperty:[NSNumber numberWithInt:v]];
+    CKPopoverController* popover = nil;
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+        popover = [[CKPopoverController alloc]initWithContentViewController:self.optionsViewController];
     }
-	else{
-        NSInteger index = tableViewController.selectedIndex;
-        self.detailText = [self labelForValue:index];
-        id value = [self.values objectAtIndex:index];
-        [self setValueInObjectProperty:value];
-	}
-	
-	if(!self.multiSelectionEnabled){
-		[self.containerController.navigationController popViewControllerAnimated:YES];
-	}
     
     __block CKOptionPropertyCellController* bself = self;
-    CKProperty* property = [self objectProperty];
-    [NSObject beginBindingsContext:self.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-    [property.object bind:property.keyPath withBlock:^(id value){
-        bself.detailText = [bself labelForValue:[bself currentValue]];
-    }];
-    [NSObject endBindingsContext];
+    self.optionsViewController.selectionBlock = ^(CKOptionTableViewController* tableViewController,NSInteger index){
+        [NSObject removeAllBindingsForContext:bself.internalBindingContext];
+        
+        if(bself.multiSelectionEnabled){
+            NSArray* indexes = tableViewController.selectedIndexes;
+            NSInteger v = 0;
+            for(NSNumber* index in indexes){
+                v |= [[bself.values objectAtIndex:[index intValue]]intValue];
+            }
+            
+            bself.detailText = [bself labelForValue:v];
+            [bself setValueInObjectProperty:[NSNumber numberWithInt:v]];
+        }
+        else{
+            NSInteger index = tableViewController.selectedIndex;
+            bself.detailText = [bself labelForValue:index];
+            id value = [bself.values objectAtIndex:index];
+            [bself setValueInObjectProperty:value];
+        }
+        
+        if(!bself.multiSelectionEnabled){
+            if(popover){
+                [popover dismissPopoverAnimated:YES];
+            }else{
+                [bself.containerController.navigationController popViewControllerAnimated:YES];
+            }
+        }
+        
+        CKProperty* property = [bself objectProperty];
+        [NSObject beginBindingsContext:bself.internalBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+        [property.object bind:property.keyPath withBlock:^(id value){
+            bself.detailText = [bself labelForValue:[bself currentValue]];
+        }];
+        [NSObject endBindingsContext];
+    };
+    
+    if(popover){
+        [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
+    else{
+        [self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
+    }
 }
+
 
 @end

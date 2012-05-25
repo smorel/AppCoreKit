@@ -21,6 +21,8 @@
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index;
 @end
 
+typedef void(^CKOptionTableViewControllerSelectionBlock)(CKOptionTableViewController* tableViewController,NSInteger index);
+
 
 /** TODO
  */
@@ -37,6 +39,7 @@
 @property (nonatomic, retain,readonly) NSMutableArray* selectedIndexes;
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
 @property (nonatomic, assign) CKTableViewCellStyle optionCellStyle;
+@property (nonatomic, copy ) CKOptionTableViewControllerSelectionBlock selectionBlock;
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index;
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled;

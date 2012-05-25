@@ -31,6 +31,7 @@
 @synthesize selectedIndexes = _selectedIndexes;
 @synthesize multiSelectionEnabled = _multiSelectionEnabled;
 @synthesize optionCellStyle;
+@synthesize selectionBlock = _selectionBlock;
 
 
 
@@ -97,6 +98,7 @@
 	[self.values release];
 	[self.labels release];
 	[self.selectedIndexes release];
+    [_selectionBlock release];
     [super dealloc];
 }
 
@@ -127,6 +129,11 @@
 	else{
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:i]];
 	}
+    
+    
+    if(_selectionBlock){
+        _selectionBlock(self,i);
+    }
 	if (self.optionTableDelegate && [self.optionTableDelegate respondsToSelector:@selector(optionTableViewController:didSelectValueAtIndex:)]){
 		[self.optionTableDelegate optionTableViewController:self didSelectValueAtIndex:i];
 	}
