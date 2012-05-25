@@ -15,7 +15,7 @@
 
 - (void)ckDidAddSubview:(UIView *)subview{
     if([subview appliedStyle] == nil && [self appliedStyle] != nil){
-        [subview applyStyle:[self appliedStyle]];
+         [subview applyStyle:[self appliedStyle]];
     }
     [self ckDidAddSubview:subview];
 }

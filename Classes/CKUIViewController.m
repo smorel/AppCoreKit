@@ -18,6 +18,7 @@
 #import "CKVersion.h"
 #import "CKStyle+Parsing.h"
 #import "CKUIView+Style.h"
+#import "CKRuntime.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -56,6 +57,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize styleHasBeenApplied;
 @synthesize state;
 @synthesize viewIsOnScreen;
+
++ (void)load {
+    
+}
 
 - (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
@@ -319,7 +324,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     
     NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self.navigationController  propertyName:@"navigationController"];
     NSMutableDictionary* navBarStyle = [self.navigationController.navigationBar applyStyle:navControllerStyle propertyName:@"navigationBar"];
-    [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
     
     UIViewController* topStackController = self;
     if(self.navigationItem.leftBarButtonItem 

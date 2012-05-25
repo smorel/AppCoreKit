@@ -529,6 +529,8 @@
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
 		B0EA78A6156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */; };
+		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
 		EDF472F11446469400DBA2B5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF472F01446469400DBA2B5 /* libz.1.dylib */; };
@@ -1063,6 +1065,8 @@
 		B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebDataConverter.m; path = Classes/CKWebDataConverter.m; sourceTree = "<group>"; };
 		B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+CKBlockBasedDelegate.h"; sourceTree = "<group>"; };
 		B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UINavigationController+CKBlockBasedDelegate.mm"; sourceTree = "<group>"; };
+		B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Style.h"; sourceTree = "<group>"; };
+		B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UINavigationController+Style.mm"; sourceTree = "<group>"; };
 		EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIViewController+Introspection.h"; path = "Classes/CKUIViewController+Introspection.h"; sourceTree = "<group>"; };
 		EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIViewController+Introspection.m"; path = "Classes/CKUIViewController+Introspection.m"; sourceTree = "<group>"; };
 		EDF472F01446469400DBA2B5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
@@ -1183,6 +1187,8 @@
 				753178181417E4F9009310A8 /* CKUIToolbar+Style.m */,
 				75956975144626960092F317 /* CKUIBarButtonItem+Style.h */,
 				759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */,
+				B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */,
+				B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -2214,6 +2220,7 @@
 				7560DD2913B8ED3600268D13 /* CKProperty.h in Headers */,
 				7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */,
 				7560DD2D13B8ED3600268D13 /* CKBindedTableViewController.h in Headers */,
+				B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */,
 				7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */,
 				7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */,
 				7560DD3B13B8ED3600268D13 /* CKPickerView.h in Headers */,
@@ -2719,6 +2726,7 @@
 				B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */,
 				B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */,
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */,
+				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
