@@ -134,13 +134,15 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)cancel {
-    [self.connection cancel];
-    self.cancelled = YES;
-    
-    dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
-    
-    if (self.cancelBlock)
-        self.cancelBlock();
+    if (!self.cancelled) {
+        [self.connection cancel];
+        self.cancelled = YES;
+        
+        dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
+        
+        if (self.cancelBlock)
+            self.cancelBlock();
+    }
 }
 
 #pragma mark - NSURLConnectionDataDelegate
@@ -225,11 +227,16 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
     if (!([error code] == NSURLErrorTimedOut && [self retry] && self.handle)) {
         dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
-            if (self.completionBlock && !self.isCancelled)
-                self.completionBlock(nil, self.response, error);
-            
-            if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)] && !self.isCancelled)
-                [self.delegate connection:aConnection didFailWithError:error];
+            if ( !self.isCancelled ) {
+                self.cancelled = YES;
+                if(self.completionBlock){
+                    self.completionBlock(nil, self.response, error);
+                }
+                
+                if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)]){
+                    [self.delegate connection:aConnection didFailWithError:error];
+                }
+            }
         });
     }
 }

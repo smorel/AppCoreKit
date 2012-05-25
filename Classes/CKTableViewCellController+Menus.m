@@ -74,8 +74,8 @@
 }
 
 + (CKTableViewCellController*)cellControllerWithTitle:(NSString*)title subtitle:(NSString*)subTitle defaultImage:(UIImage*)image imageURL:(NSURL*)imageURL imageSize:(CGSize)imageSize action:(void(^)(CKTableViewCellController* controller))action{
-    
-    __block UIImage* croppedImage = nil;
+    __block UIImage* croppedImage = image;
+    __block UIImage* remoteImage = nil;
     if(imageSize.width >= 0 && imageSize.height >= 0
        && !CGSizeEqualToSize(croppedImage.size, imageSize)){
         croppedImage = [croppedImage imageThatFits:imageSize crop:NO];
@@ -86,7 +86,7 @@
     cellController.flags = ((action != nil) ? CKItemViewFlagSelectable : CKItemViewFlagNone);
     cellController.text = title;
     cellController.detailText = subTitle;
-    cellController.image = croppedImage ? croppedImage : image;
+    cellController.image = remoteImage ? remoteImage : croppedImage;
     cellController.accessoryType = ((action != nil) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone);
     cellController.selectionStyle = ((action != nil) ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone);
     if(action != nil){
@@ -98,33 +98,26 @@
     //ImageURL Management
     __block CKTableViewCellController* bself = cellController;
     
-    CKImageLoader* imageLoader = [[[CKImageLoader alloc]init]autorelease];
-    imageLoader.completionBlock = ^(CKImageLoader* imageLoader, UIImage* image, BOOL loadedFromCache){
-        if(imageSize.width >= 0 && imageSize.height >= 0
-           && !CGSizeEqualToSize(image.size, imageSize)){
-            image = [image imageThatFits:imageSize crop:NO];
-        }
-        croppedImage = image;
-        bself.image = croppedImage;
-    };
+    CKImageLoader* imageLoader = nil;
+    if(imageURL){
+        imageLoader = [[[CKImageLoader alloc]init]autorelease];
+        imageLoader.completionBlock = ^(CKImageLoader* imageLoader, UIImage* image, BOOL loadedFromCache){
+            if(imageSize.width >= 0 && imageSize.height >= 0
+               && !CGSizeEqualToSize(image.size, imageSize)){
+                image = [image imageThatFits:imageSize crop:NO];
+            }
+            remoteImage = image;
+            bself.image = remoteImage;
+        };
+    }
     
     [cellController setViewDidDisappearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         [imageLoader cancel];
     }];
+    
     [cellController setViewDidAppearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-        if(!croppedImage){
-            UIImage* remoteImage = nil;
-            if(remoteImage){
-                if(imageSize.width >= 0 && imageSize.height >= 0
-                   && !CGSizeEqualToSize(remoteImage.size, imageSize)){
-                    croppedImage = [remoteImage imageThatFits:imageSize crop:NO];
-                }else{
-                    croppedImage = remoteImage;
-                }
-                controller.image = croppedImage;
-            }else{
-                [imageLoader loadImageWithContentOfURL:imageURL];
-            }
+        if(!remoteImage){
+            [imageLoader loadImageWithContentOfURL:imageURL];
         }
     }];
     

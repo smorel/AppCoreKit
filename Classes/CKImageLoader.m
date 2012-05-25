@@ -76,9 +76,9 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
         }
     }
     else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
-        __block CKImageLoader *bSelf = self;
+        //__block CKImageLoader *bSelf = self;
         self.request = [CKWebRequest scheduledRequestWithURL:url completion:^(id object, NSURLResponse *response, NSError * error) {
-            [bSelf didReceiveValue:object error:error];
+            [self didReceiveValue:object error:error];
         }];
     }
 }
