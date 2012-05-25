@@ -8,7 +8,12 @@
 
 #import "CKItemViewContainerController.h"
 #import "CKUIViewController+InlineDebugger.h"
+#import "CKBindedGridViewController.h"
 
 @interface CKItemViewContainerController (CKInlineDebugger)
+
+@end
+
+@interface CKBindedGridViewController (CKInlineDebugger)
 
 @end

@@ -110,9 +110,9 @@
     [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:request];
     
     if (self.waitingRequests.count != 0) {
-        CKWebRequest *newRequest = [self.waitingRequests objectAtIndex:0];
+        CKWebRequest *newRequest = [[self.waitingRequests objectAtIndex:0]retain];
         [self.waitingRequests removeObjectAtIndex:0];
-        [self.runningRequests addObject:newRequest];
+        [self.runningRequests addObject:[newRequest autorelease]];
         
         [newRequest startOnRunLoop:self.runLoop];
     }
