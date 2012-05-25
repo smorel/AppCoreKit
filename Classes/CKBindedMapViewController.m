@@ -441,6 +441,9 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		return nil;
 	
 	NSInteger index = [self indexOfObject:annotation inSection:0];
+    if(index == NSNotFound)
+        return nil;
+    
 	UIView* view = [self createViewAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
 	if(view == nil){
 		static NSString *annotationIdentifier = @"Annotation";

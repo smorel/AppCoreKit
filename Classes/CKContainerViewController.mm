@@ -11,6 +11,7 @@
 #import "CKWeakRef.h"
 #import <objc/runtime.h>
 #import "CKRuntime.h"
+#import "CKUIView+Positioning.h"
 
 typedef void(^CKTransitionBlock)();
 
@@ -367,10 +368,20 @@ static char CKUIViewControllerContainerViewControllerKey;
 @implementation UINavigationController (CKContainerViewController)
 
 - (BOOL)UINavigationController_CKContainerViewController_wantsFullScreenLayout{
-    if([self containerViewController]){
+    //FIXME :
+    //here we should return no when in container but this method is called too early by the nav controller itself ...
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
         return NO;
     }
     return [self UINavigationController_CKContainerViewController_wantsFullScreenLayout ];
+}
+
+- (void)setContainerViewController:(UIViewController *)containerViewController{
+    [super setContainerViewController:containerViewController];
+    if(containerViewController){
+        [self setWantsFullScreenLayout:NO];
+        self.navigationBar.y = 0;
+    }
 }
 
 @end
