@@ -80,6 +80,8 @@
         [self.controllerViews addObject:view];
     }
     [NSObject endBindingsContext];
+    
+    [self layoutSubviews];
 }
 
 - (void)layoutSubviews{
@@ -238,9 +240,6 @@
 - (void)setViewControllers:(NSArray *)theViewControllers{
     for(UIViewController* controller in _viewControllers){
         [controller setContainerViewController:nil];
-        if([CKOSVersion() floatValue] >= 5){
-            [controller removeFromParentViewController];
-        }
     }
     
     [_viewControllers release];
@@ -248,13 +247,23 @@
     
     for(UIViewController* controller in _viewControllers){
         [controller setContainerViewController:self];
-        if([CKOSVersion() floatValue] >= 5){
-            [self addChildViewController:controller];
-        }
     }
     
-    if(_splitView){
+    if(self.viewIsOnScreen){
+        if([CKOSVersion() floatValue] < 5){
+            for(UIViewController* controller in _viewControllers){
+                UIView* v = controller.view;//force to load view now
+                [controller viewWillAppear:NO];
+            }
+        }
+        
         [_splitView reloadData];
+        
+        if([CKOSVersion() floatValue] < 5){
+            for(UIViewController* controller in _viewControllers){
+                [controller viewDidAppear:NO];
+            }
+        }
     }
 }
 
@@ -345,6 +354,37 @@
         }
     }
     return items;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    if([CKOSVersion() floatValue] < 5){
+        for(UIViewController* controller in _viewControllers){
+            [controller willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+        }
+    }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    if([CKOSVersion() floatValue] < 5){
+        for(UIViewController* controller in _viewControllers){
+            [controller didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+        }
+    }
+}
+
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+    [super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    
+    if([CKOSVersion() floatValue] < 5){
+        for(UIViewController* controller in _viewControllers){
+            [controller  willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+        }
+    }
 }
 
 @end
