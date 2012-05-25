@@ -34,7 +34,10 @@ bool swizzle_UINavigationControllerStyle();
          setValue: [NSNumber numberWithBool: YES]
          forKey: kCATransactionDisableActions];
         
-        [self applyStyle];
+        NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
+        
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self  propertyName:@"navigationController"];
+        [self.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
                 
         [CATransaction commit];  
     }
