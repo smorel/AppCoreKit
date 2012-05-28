@@ -8,7 +8,6 @@
 
 #import "CKWebService.h"
 
-#import <VendorsKit/VendorsKit.h>
 #import "CKLocalization.h"
 #import "CKWebRequestManager.h"
 #import "CKAlertView.h"
@@ -17,11 +16,8 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 
 @interface CKWebService ()
 
-@property (nonatomic, retain, readwrite) Reachability *reachability;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultParams;
 @property (nonatomic, retain, readwrite) NSMutableDictionary *defaultHeaders;
-
-- (BOOL)checkReachabilityWithAlert:(BOOL)showAlert withUserObject:(id)object;
 
 @end
 
@@ -29,7 +25,6 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 
 @implementation CKWebService
 
-@synthesize reachability = _reachability;
 @synthesize baseURL = _baseURL;
 @synthesize defaultParams = _defaultParams;
 @synthesize defaultHeaders = _defaultHeaders;
@@ -62,15 +57,11 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 	if (self = [super init]) {
 		self.defaultParams = [NSMutableDictionary dictionary];
 		self.defaultHeaders = [NSMutableDictionary dictionary];
-		self.reachability = [Reachability reachabilityForInternetConnection];
-		[self.reachability startNotifer];
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[self.reachability stopNotifer];
-	self.reachability = nil;	
 	self.baseURL = nil;
 	self.defaultParams = nil;
 	self.defaultHeaders = nil;
@@ -80,9 +71,6 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 #pragma mark Create Requests
 
 - (id)performRequest:(CKWebRequest *)request {
-	if ([self checkReachabilityWithAlert:YES withUserObject:request] == NO) 
-		return request;
-	
     [[CKWebRequestManager sharedManager] scheduleRequest:request];
 	return request;
 }
@@ -112,25 +100,6 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 - (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
 	CKWebRequest *request = [self getRequestForPath:path params:params];
 	return [self performRequest:request];
-}
-
-#pragma mark Reachability
-
-- (BOOL)checkReachabilityWithAlert:(BOOL)showAlert withUserObject:(id)object {
-    NetworkStatus netStatus = [_reachability currentReachabilityStatus];
-    if (netStatus == NotReachable) {
-		if (showAlert) {
-			CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"No Internet Message")] autorelease];
-			[alertView addButtonWithTitle:_(@"Dismiss") action:nil];
-			[alertView addButtonWithTitle:_(@"Retry") action:^(void) {
-				CKWebRequest *request = (CKWebRequest *)(object);
-				if (request) [self performRequest:request];
-			}];
-			[alertView show];
-		}
-		return NO;
-	}
-	return YES;
 }
 
 @end
