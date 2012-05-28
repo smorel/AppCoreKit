@@ -7,7 +7,10 @@
 //
 
 #import "CKWebRequestManager.h"
+#import "CKLocalization.h"
 #import "CKWebRequest.h"
+#import "CKAlertView.h"
+#import <VendorsKit/VendorsKit.h>
 #import "CKNetworkActivityManager.h"
 
 @interface CKWebRequestManager ()
@@ -18,6 +21,9 @@
 @property (nonatomic, retain) NSMutableArray *runningRequests;
 @property (nonatomic, retain) NSMutableArray *waitingRequests;
 
+@property (nonatomic, retain) Reachability *reachability;
+@property (nonatomic, assign) BOOL handelingDisconnect;
+
 - (void)requestDidFinish:(CKWebRequest*)request;
 
 @end
@@ -26,6 +32,7 @@
 
 @synthesize requestQueue, runLoop, maxCurrentRequest;
 @synthesize runningRequests, waitingRequests;
+@synthesize disconnectBlock, reachability, handelingDisconnect;
 
 #pragma mark - Lifecycle
 
@@ -58,18 +65,44 @@
         dispatch_release(group);
         
         self.maxCurrentRequest = 10;
+        self.handelingDisconnect = NO;
         
         self.runningRequests = [NSMutableArray array];
         self.waitingRequests = [NSMutableArray array];
+        
+        __block CKWebRequestManager *bself = self;
+        self.disconnectBlock = ^{
+            [bself pauseAllOperation];
+            
+            CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"You don't seems to have Internet access right now, do you want to try again?")] autorelease];
+			[alertView addButtonWithTitle:_(@"Dismiss") action:^{
+                [bself didHandleDisconnect];
+            }];
+			[alertView addButtonWithTitle:_(@"Retry") action:^{
+                [bself didHandleDisconnect];
+                [bself retryAllOperation];
+			}];
+			[alertView show];
+        };
+        
+        self.reachability = [Reachability reachabilityForInternetConnection];
+        [self.reachability startNotifer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityDidChange) name:kReachabilityChangedNotification object:self.reachability];
     }
     return self;
 }
 
 - (void)dealloc {
+    [self.reachability stopNotifer];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self.reachability];
+    
     dispatch_release(self.requestQueue);
     self.runningRequests = nil;
     self.waitingRequests = nil;
     self.runLoop = nil;
+    self.reachability = nil;
+    self.disconnectBlock = nil;
     
     [super dealloc];
 }
@@ -103,6 +136,8 @@
     }
     else 
         [self.waitingRequests addObject:request];
+    
+    [self reachabilityDidChange];
 }
 
 - (void)requestDidFinish:(CKWebRequest*)request {//Start a new one if some are waiting
@@ -145,6 +180,7 @@
 
 - (void)retryAllOperation {
     [self.runningRequests makeObjectsPerformSelector:@selector(startOnRunLoop:) withObject:self.runLoop];
+    [self reachabilityDidChange];
 }
 
 #pragma mark - Getter
@@ -155,6 +191,20 @@
 
 - (NSUInteger)numberOfWaitingRequest {
     return self.waitingRequests.count;
+}
+
+#pragma mark - Reachability
+
+- (void)reachabilityDidChange {
+    NetworkStatus networkStatus = [self.reachability currentReachabilityStatus];
+    if (!self.handelingDisconnect && networkStatus == NotReachable && self.runningRequests.count != 0) {
+        if (self.disconnectBlock)
+            self.disconnectBlock();
+    }
+}
+
+- (void)didHandleDisconnect {
+    self.handelingDisconnect = NO;
 }
 
 @end
