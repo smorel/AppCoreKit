@@ -172,6 +172,7 @@
         __block CKWebRequest *bRequest = request;
         void (^oldCancelBlock)() = request.cancelBlock;
         request.cancelBlock = ^{
+            [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:request];
             bRequest.cancelBlock = oldCancelBlock;
         };
         [request cancel];
