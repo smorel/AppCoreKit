@@ -45,7 +45,7 @@
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
 	UIActivityIndicatorView* activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
-	activityIndicator.center = cell.center;
+	activityIndicator.center = cell.contentView.center;
 	activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     activityIndicator.tag = ACTIVITY_INDICATOR_TAG;
 	activityIndicator.hidden = YES;
@@ -70,7 +70,7 @@
 	
 	CKCollection* collection = (CKCollection*)self.value;
 	
-    UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ACTIVITY_INDICATOR_TAG];
+    UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view.contentView viewWithTag:ACTIVITY_INDICATOR_TAG];
 	activityIndicator.hidden = [self forceHidden] || !collection.isFetching || view.frame.size.width <= 0 || view.frame.size.height <= 0;
 	if(!activityIndicator.hidden){
 		[activityIndicator startAnimating];
@@ -82,27 +82,29 @@
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
     view.textLabel.textAlignment = UITextAlignmentCenter;
-	view.textLabel.text = @" ";
+    view.textLabel.backgroundColor = [UIColor clearColor];
     if(activityIndicator.hidden){
         switch([collection count]){
             case 0:{
-                view.textLabel.text = _(theStyle.noItemsMessage);
+                self.text = _(theStyle.noItemsMessage);
                 break;
             }
             case 1:{
-                view.textLabel.text = _(theStyle.oneItemMessage);
+                self.text = _(theStyle.oneItemMessage);
                 break;
             }
             default:{
-                view.textLabel.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
+                self.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
                 break;
             }
         }
+    }else{
+       self.text = @" ";
     }
 }
 
 - (void)internalUpdate:(id)value{
-	[self update:self.tableViewCell];
+	[self performSelectorOnMainThread:@selector(update:) withObject:self.tableViewCell waitUntilDone:NO];
 }
 
 - (void)setupCell:(UITableViewCell *)cell{
