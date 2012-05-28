@@ -174,7 +174,7 @@ NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationMa
 - (void)displayLocationServicesAlert {
 	UIAlertView *alertView = 
 	  [[[UIAlertView alloc] initWithTitle:_(@"No Location Services")
-								  message:_(@"No Location Services Message")
+								  message:_(@"We could not find your location")
 								 delegate:self
 						cancelButtonTitle:_(@"Dismiss")
 						otherButtonTitles:nil] autorelease];
