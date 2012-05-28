@@ -19,24 +19,33 @@ NSString* CKStyleIndicatorStyle = @"indicatorStyle";
 @implementation NSMutableDictionary (CKCollectionCellControllerStyle)
 
 - (NSString*)noItemsMessage{
-	return [self stringForKey:CKStyleNoItemsMessage];
+	NSString* str = [self stringForKey:CKStyleNoItemsMessage];
+    if(str) return str;
+    return _(@"No results");
 }
 
 - (NSString*)oneItemMessage{
-	return [self stringForKey:CKStyleOneItemMessage];
+	NSString* str = [self stringForKey:CKStyleOneItemMessage];
+    if(str) return str;
+    return _(@"1 result");
 }
 
 - (NSString*)manyItemsMessage{
-	return [self stringForKey:CKStyleManyItemsMessage];
+	NSString* str = [self stringForKey:CKStyleManyItemsMessage];
+    if(str) return str;
+    return _(@"%d results");
 }
 
 - (UIActivityIndicatorViewStyle)indicatorStyle{
-	return (UIActivityIndicatorViewStyle)[self enumValueForKey:CKStyleIndicatorStyle 
+    if([self containsObjectForKey:CKStyleIndicatorStyle]){
+        return (UIActivityIndicatorViewStyle)[self enumValueForKey:CKStyleIndicatorStyle 
 												withEnumDescriptor:CKEnumDefinition(@"UIActivityIndicatorViewStyle",
-                                                                                UIActivityIndicatorViewStyleWhiteLarge,
-																				UIActivityIndicatorViewStyleWhite,
-																				UIActivityIndicatorViewStyleGray																				
-																				)];
+                                                                                    UIActivityIndicatorViewStyleWhiteLarge,
+                                                                                    UIActivityIndicatorViewStyleWhite,
+                                                                                    UIActivityIndicatorViewStyleGray		
+                                                                                    )];
+    }
+    return UIActivityIndicatorViewStyleGray;
 }
 
 @end

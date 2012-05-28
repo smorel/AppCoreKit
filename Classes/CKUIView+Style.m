@@ -228,10 +228,14 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 				
 				if([UIView needSubView:myViewStyle forView:view]){
 					CKStyleView* gradientView = [UIView gradientView:view];
+                    [gradientView setAppliedStyle:myViewStyle];
+                    
 					if(gradientView == nil){
 						gradientView = [[[CKStyleView alloc]initWithFrame:view.bounds]autorelease];
 						gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 						view.backgroundColor = [UIColor clearColor];
+                        
+                        [gradientView setAppliedStyle:myViewStyle];
 						[view insertSubview:gradientView atIndex:0];
 					}
                     
