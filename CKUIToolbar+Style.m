@@ -37,10 +37,13 @@
                 [[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
                 [appliedStack addObject:view];
                 
+                [view setAppliedStyle:style];
+                
                 for(UIBarButtonItem* item in toolbar.items){
                     NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
                     [item applyStyle:itemStyle];
                 }
+                
                 
                 //[view applySubViewsStyle:style appliedStack:appliedStack delegate:delegate];
                 return YES;

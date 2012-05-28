@@ -65,6 +65,8 @@
     UIBarButtonItem* barButtonItem = (UIBarButtonItem*)object;
     
     if(style && [style isEmpty] == NO){
+        [barButtonItem setAppliedStyle:style];
+        
         UIButton* button = nil;
         if(barButtonItem.customView == nil || [[[barButtonItem.customView class]description]isEqualToString:@"UINavigationButton"]){
             button = [[[CKBarButtonItemButton alloc]initWithBarButtonItem:barButtonItem]autorelease];
