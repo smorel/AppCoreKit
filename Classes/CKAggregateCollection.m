@@ -53,8 +53,9 @@
 
 - (BOOL)allCollections_isFetching{
     for(CKCollection* collection in _collections){
-        if([collection isFetching])
+        if([collection isFetching]){
             return YES;
+        }
     }
     return NO;
 }
@@ -69,15 +70,16 @@
     [_collections release];
     _collections = [theCollections retain];
     
+    BOOL bo = [self allCollections_isFetching];
+    self.isFetching = bo;
+    
     __block CKAggregateCollection* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];
     for(CKCollection* collection in _collections){
         [collection addObserver:self];
         [collection bind:@"isFetching" withBlock:^(id value){
             BOOL bo = [bself allCollections_isFetching];
-            if(bo != self.isFetching){
-                self.isFetching = bo;
-            }
+            bself.isFetching = bo;
         }];
     }
     [self endBindingsContext];

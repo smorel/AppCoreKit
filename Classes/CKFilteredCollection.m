@@ -9,6 +9,10 @@
 #import "CKFilteredCollection.h"
 #import "CKNSObject+Bindings.h"
 
+@interface CKCollection()
+@property (nonatomic,assign,readwrite) BOOL isFetching;
+@end
+
 @implementation CKFilteredCollection
 @synthesize collection = _collection;
 @synthesize predicate = _predicate;
@@ -35,8 +39,15 @@
     self.predicate = thepredicate;
     self.collection = theCollection;
     
+    BOOL bo = [theCollection isFetching];
+    self.isFetching =  bo;
+    
+    __block CKFilteredCollection* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];
-    [theCollection bind:@"isFetching" toObject:self withKeyPath:@"isFetching"];
+    [theCollection bind:@"isFetching" withBlock:^(id value) {
+        BOOL bo = [value boolValue];
+        bself.isFetching =  bo;
+    }];
     [self endBindingsContext];
     
     return self;

@@ -83,8 +83,15 @@
 	_feedSource.delegate = self;
     
     if(_feedSource){
+        BOOL bo = [_feedSource isFetching];
+        self.isFetching =  bo;
+        
+        __block CKCollection* bself = self;
         [self beginBindingsContextByRemovingPreviousBindings];
-        [_feedSource bind:@"isFetching" toObject:self withKeyPath:@"isFetching"];
+        [_feedSource bind:@"isFetching" withBlock:^(id value) {
+            BOOL bo = [value boolValue];
+            bself.isFetching =  bo;
+        }];
         [self endBindingsContext];
     }
 }
@@ -168,10 +175,6 @@
             self.startFetchingBlock(range);
         }
 	}
-}
-
-- (BOOL)isFetching{
-    return [[self feedSource]isFetching];
 }
 
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
