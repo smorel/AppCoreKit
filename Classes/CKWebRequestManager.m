@@ -121,8 +121,8 @@
 #pragma mark - Cancel Request
 
 - (void)cancelAllOperation {
-    [self.runningRequests makeObjectsPerformSelector:@selector(cancel)];
     [self.waitingRequests removeAllObjects];
+    [self.runningRequests makeObjectsPerformSelector:@selector(cancel)];
 }
 
 - (void)cancelOperationsConformingToPredicate:(NSPredicate *)predicate {
@@ -130,6 +130,21 @@
     
     NSPredicate *notPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:predicate];
     [self.waitingRequests filterUsingPredicate:notPredicate];
+}
+
+- (void)pauseAllOperation {
+    for (CKWebRequest *request in self.runningRequests) {
+        __block CKWebRequest *bRequest = request;
+        void (^oldCancelBlock)() = request.cancelBlock;
+        request.cancelBlock = ^{
+            bRequest.cancelBlock = oldCancelBlock;
+        };
+        [request cancel];
+    }
+}
+
+- (void)retryAllOperation {
+    [self.runningRequests makeObjectsPerformSelector:@selector(startOnRunLoop:) withObject:self.runLoop];
 }
 
 #pragma mark - Getter

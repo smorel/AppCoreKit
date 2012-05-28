@@ -19,7 +19,9 @@
 
 - (void)scheduleRequest:(CKWebRequest*)request;
 
-- (void)cancelAllOperation;
+- (void)cancelAllOperation; //Stop and remove all operations
 - (void)cancelOperationsConformingToPredicate:(NSPredicate*)predicate;
+- (void)pauseAllOperation; //Stop operations
+- (void)retryAllOperation; //Retry stopped operations
 
 @end
