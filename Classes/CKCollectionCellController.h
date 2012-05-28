@@ -29,11 +29,6 @@
 /** TODO
  */
 @interface CKCollectionCellController : CKTableViewCellController {
-	UILabel* _label;
-	UIActivityIndicatorView* _activityIndicator;
 }
-
-@property (nonatomic,retain,readonly) UILabel* label;
-@property (nonatomic,retain,readonly) UIActivityIndicatorView* activityIndicator;
 
 @end

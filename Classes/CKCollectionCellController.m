@@ -19,26 +19,13 @@
 #import "CKStyleManager.h"
 
 #define ACTIVITY_INDICATOR_TAG 98634
-#define LABEL_TAG 938459837
 
 @interface CKItemViewController()
 - (void)setContainerController:(CKItemViewContainerController*)c;
 @end
 
-@interface CKCollectionCellController()
-@property (nonatomic,retain,readwrite) UILabel* label;
-@property (nonatomic,retain,readwrite) UIActivityIndicatorView* activityIndicator;
-@end
 
 @implementation CKCollectionCellController
-@synthesize label = _label;
-@synthesize activityIndicator = _activityIndicator;
-
-- (void)dealloc{
-	[_label release];
-	[_activityIndicator release];
-	[super dealloc];
-}
 
 - (void)postInit{
     [super postInit];
@@ -55,27 +42,15 @@
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
-	UIView* view = [[[UIView alloc] initWithFrame:cell.contentView.bounds] autorelease];
-	view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
+	UIActivityIndicatorView* activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
+	activityIndicator.center = cell.center;
+	activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    activityIndicator.tag = ACTIVITY_INDICATOR_TAG;
+	activityIndicator.hidden = YES;
 	
-	self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
-	_activityIndicator.center = cell.center;
-	_activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    _activityIndicator.tag = ACTIVITY_INDICATOR_TAG;
-	_activityIndicator.hidden = YES;
-	
-	[view addSubview:_activityIndicator];
-	
-	self.label = [[[UILabel alloc] initWithFrame:CGRectInset(view.bounds,10,0)] autorelease];
-	_label.textAlignment = UITextAlignmentCenter;
-	_label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _label.tag = LABEL_TAG;
-	[view addSubview:_label];
-	
-	[cell.contentView addSubview:view];
+	[cell.contentView addSubview:activityIndicator];
 }
 
 //FIXME : UGLY TEMPORARY HACK
@@ -89,71 +64,57 @@
 	return NO;
 }
 
-- (void)update:(UIView*)view{
+- (void)update:(UITableViewCell*)view{
 	if(view == nil)
 		return;
 	
 	CKCollection* collection = (CKCollection*)self.value;
-	CKFeedSource* source = collection.feedSource;
 	
-	_activityIndicator.hidden = [self forceHidden] || !source.isFetching || !source.hasMore || view.frame.size.width <= 0 || view.frame.size.height <= 0;
-	if(!_activityIndicator.hidden){
-		[_activityIndicator startAnimating];
+    UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view viewWithTag:ACTIVITY_INDICATOR_TAG];
+	activityIndicator.hidden = [self forceHidden] || !collection.isFetching || view.frame.size.width <= 0 || view.frame.size.height <= 0;
+	if(!activityIndicator.hidden){
+		[activityIndicator startAnimating];
 	}
 	else{
-		[_activityIndicator stopAnimating];
+		[activityIndicator stopAnimating];
 	}
 	
 	NSMutableDictionary* theStyle = [self controllerStyle];
 	
-	_label.hidden = !_activityIndicator.hidden;	
-	switch([collection count]){
-		case 0:{
-			_label.text = _(theStyle.noItemsMessage);
-			break;
-		}
-		case 1:{
-			_label.text = _(theStyle.oneItemMessage);
-			break;
-		}
-		default:{
-			_label.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
-			break;
-		}
-	}
+    view.textLabel.textAlignment = UITextAlignmentCenter;
+	view.textLabel.text = @" ";
+    if(activityIndicator.hidden){
+        switch([collection count]){
+            case 0:{
+                view.textLabel.text = _(theStyle.noItemsMessage);
+                break;
+            }
+            case 1:{
+                view.textLabel.text = _(theStyle.oneItemMessage);
+                break;
+            }
+            default:{
+                view.textLabel.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
+                break;
+            }
+        }
+    }
 }
 
 - (void)internalUpdate:(id)value{
 	[self update:self.tableViewCell];
 }
-- (void)internalUpdateWithNotification:(NSNotification*)notification{
-	if([notification documentCollection] == self.value){
-		[self update:self.tableViewCell];
-	}
-}
 
 - (void)setupCell:(UITableViewCell *)cell{
-    //In case of reuse
-    self.label = (UILabel*)[cell.contentView viewWithTag:LABEL_TAG];
-    self.activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:ACTIVITY_INDICATOR_TAG];
-    
 	[super setupCell:cell];
 	
 	CKCollection* collection = (CKCollection*)self.value;
-	CKFeedSource* source = collection.feedSource;
 	
-	[self update:cell.contentView];
-	
-	_activityIndicator.hidden = _activityIndicator.hidden || [self forceHidden];
-	
-	//TODO REGISTER ON NOTIF TO KNOW IF THE COLLECTION IS UPDATED !!!
+	[self update:cell];
 	
 	[cell beginBindingsContextByRemovingPreviousBindings];
-	[source bind:@"isFetching" target:self action:@selector(internalUpdate:)];
-	[source bind:@"hasMore" target:self action:@selector(internalUpdate:)];
-	[source bind:@"currentIndex" target:self action:@selector(internalUpdate:)];
-	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectAddedNotification target:self action:@selector(internalUpdateWithNotification:)];
-	[[NSNotificationCenter defaultCenter] bindNotificationName:CKEditionObjectRemovedNotification target:self action:@selector(internalUpdateWithNotification:)];
+	[collection bind:@"isFetching" target:self action:@selector(internalUpdate:)];
+	[collection bind:@"count" target:self action:@selector(internalUpdate:)];
 	[cell endBindingsContext];
 }
 
