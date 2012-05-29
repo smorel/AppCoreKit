@@ -10,8 +10,8 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKUIView+Style.h"
-
 #import "CKVersion.h"
+#import "CKRuntime.h"
 
 
 @implementation UIToolbar (CKStyleManager)
@@ -55,11 +55,46 @@
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index{
     if([CKOSVersion() floatValue] < 5){
-    BOOL hasBackgroundGradientView = [[self subviews]count] > 0 && [[[self subviews]objectAtIndex:0]isKindOfClass:[CKStyleView class]];
+        BOOL hasBackgroundGradientView = [[self subviews]count] > 0 && [[[self subviews]objectAtIndex:0]isKindOfClass:[CKStyleView class]];
         [super insertSubview:view atIndex:hasBackgroundGradientView ? index + 1 : index];
         return;
     }
     [super insertSubview:view atIndex:index];
 }
 
+
+- (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items{
+    [self UIToolbar_CKStyleManager_setItems:items];
+    
+    NSMutableDictionary* style = [self appliedStyle];
+    if(style){
+        for(UIBarButtonItem* item in items){
+            NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
+            [item applyStyle:itemStyle];
+        }
+    }
+}
+
+- (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items animated:(BOOL)animated{
+    [self UIToolbar_CKStyleManager_setItems:items animated:animated];
+    
+    NSMutableDictionary* style = [self appliedStyle];
+    if(style){
+        for(UIBarButtonItem* item in items){
+            NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
+            [item applyStyle:itemStyle];
+        }
+    }
+}
+
 @end
+
+
+
+bool swizzle_UIToolbar_CKStyleManager(){
+    CKSwizzleSelector([UIToolbar class],@selector(setItems:),@selector(UIToolbar_CKStyleManager_setItems:));
+    CKSwizzleSelector([UIToolbar class],@selector(setItems:animated:),@selector(UIToolbar_CKStyleManager_setItems:animated:));
+    return 1;
+}
+
+static bool bo_swizzle_UIToolbar_CKStyleManager = swizzle_UIToolbar_CKStyleManager();

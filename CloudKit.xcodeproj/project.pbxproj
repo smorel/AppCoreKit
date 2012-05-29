@@ -51,7 +51,7 @@
 		753178141417E4E4009310A8 /* CKNavigationBar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178121417E4E4009310A8 /* CKNavigationBar+Style.h */; };
 		753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178131417E4E4009310A8 /* CKNavigationBar+Style.m */; };
 		753178191417E4F9009310A8 /* CKUIToolbar+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 753178171417E4F9009310A8 /* CKUIToolbar+Style.h */; };
-		7531781A1417E4F9009310A8 /* CKUIToolbar+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 753178181417E4F9009310A8 /* CKUIToolbar+Style.m */; };
+		7531781A1417E4F9009310A8 /* CKUIToolbar+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = 753178181417E4F9009310A8 /* CKUIToolbar+Style.mm */; };
 		7531781D1417E5A1009310A8 /* CKUILabel+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */; };
 		7531781E1417E5A1009310A8 /* CKUILabel+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */; };
 		753178211417E61D009310A8 /* CKUINavigationBar+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */; };
@@ -581,7 +581,7 @@
 		753178121417E4E4009310A8 /* CKNavigationBar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNavigationBar+Style.h"; path = "Classes/CKNavigationBar+Style.h"; sourceTree = "<group>"; };
 		753178131417E4E4009310A8 /* CKNavigationBar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKNavigationBar+Style.m"; path = "Classes/CKNavigationBar+Style.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		753178171417E4F9009310A8 /* CKUIToolbar+Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKUIToolbar+Style.h"; sourceTree = "<group>"; };
-		753178181417E4F9009310A8 /* CKUIToolbar+Style.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKUIToolbar+Style.m"; sourceTree = "<group>"; };
+		753178181417E4F9009310A8 /* CKUIToolbar+Style.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "CKUIToolbar+Style.mm"; sourceTree = "<group>"; };
 		7531781B1417E5A1009310A8 /* CKUILabel+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUILabel+Introspection.h"; path = "Classes/CKUILabel+Introspection.h"; sourceTree = "<group>"; };
 		7531781C1417E5A1009310A8 /* CKUILabel+Introspection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKUILabel+Introspection.m"; path = "Classes/CKUILabel+Introspection.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7531781F1417E61D009310A8 /* CKUINavigationBar+Introspection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUINavigationBar+Introspection.h"; path = "Classes/CKUINavigationBar+Introspection.h"; sourceTree = "<group>"; };
@@ -1185,7 +1185,7 @@
 				753178121417E4E4009310A8 /* CKNavigationBar+Style.h */,
 				753178131417E4E4009310A8 /* CKNavigationBar+Style.m */,
 				753178171417E4F9009310A8 /* CKUIToolbar+Style.h */,
-				753178181417E4F9009310A8 /* CKUIToolbar+Style.m */,
+				753178181417E4F9009310A8 /* CKUIToolbar+Style.mm */,
 				75956975144626960092F317 /* CKUIBarButtonItem+Style.h */,
 				759569731446268A0092F317 /* CKUIBarButtonItem+Style.m */,
 				B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */,
@@ -2666,7 +2666,7 @@
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
 				75043E661404327500C7685D /* CKPropertyExtendedAttributes+CKAttributes.m in Sources */,
 				753178151417E4E4009310A8 /* CKNavigationBar+Style.m in Sources */,
-				7531781A1417E4F9009310A8 /* CKUIToolbar+Style.m in Sources */,
+				7531781A1417E4F9009310A8 /* CKUIToolbar+Style.mm in Sources */,
 				7531781E1417E5A1009310A8 /* CKUILabel+Introspection.m in Sources */,
 				753178221417E61D009310A8 /* CKUINavigationBar+Introspection.m in Sources */,
 				753178261417E64C009310A8 /* CKUIToolbar+introspection.m in Sources */,
