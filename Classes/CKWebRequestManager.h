@@ -17,9 +17,16 @@
 @property (nonatomic, readonly) NSUInteger numberOfRunningRequest;
 @property (nonatomic, readonly) NSUInteger numberOfWaitingRequest;
 
+@property (nonatomic, copy) void (^disconnectBlock)(void); //Called when there's no more Internet connectivity still with running request
+                                                           //By default, pause all operation and show an alert with the option to retry all requests
+                                                           //When handling of the disconnect is done, the block should call - (void)didHandleDisconnect (after an alert is dismissed for example)
+- (void)didHandleDisconnect;
+
 - (void)scheduleRequest:(CKWebRequest*)request;
 
-- (void)cancelAllOperation;
+- (void)cancelAllOperation; //Stop and remove all operations
 - (void)cancelOperationsConformingToPredicate:(NSPredicate*)predicate;
+- (void)pauseAllOperation; //Stop operations
+- (void)retryAllOperation; //Retry stopped operations
 
 @end
