@@ -561,15 +561,20 @@ static char NSObjectAppliedStyleObjectKey;
 		//}
 	}
 	
-	if([self isKindOfClass:[UIView class]] == YES){
-		UIView* selfView = (UIView*)self;
-		for(UIView* view in [selfView subviews]){
-            if(![appliedStack containsObject:view]){
-                NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
-                [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+    
+    if(![self isKindOfClass:[UITableView class]]){
+        //Style are applyed by cell controllers and header/footer view insertion for tables ...
+        
+        if([self isKindOfClass:[UIView class]] == YES){
+            UIView* selfView = (UIView*)self;
+            for(UIView* view in [selfView subviews]){
+                if(![appliedStack containsObject:view]){
+                    NSMutableDictionary* myViewStyle = [style styleForObject:view propertyName:nil];
+                    [[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
+                }
             }
-		}
-	}
+        }
+    }
 	
     [self setAppliedStyle:style];
 	
