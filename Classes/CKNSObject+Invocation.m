@@ -43,9 +43,10 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     self = [super init];
     self.block = theblock;
     
-    if(CKInvokationRegistry == nil){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         CKInvokationRegistry = [[NSMutableDictionary alloc]init];
-    }
+    });
     
     NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:object]];
     if(!ar){

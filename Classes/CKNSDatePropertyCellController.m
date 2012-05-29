@@ -397,9 +397,10 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                                    inView:parentView 
                                  animated:YES];
             
-            if(CKNSDateSheetControllersSingleton == nil){
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
                 CKNSDateSheetControllersSingleton = [[NSMutableDictionary dictionary]retain];
-            }
+            });
             [CKNSDateSheetControllersSingleton setObject:sheetController forKey:dateSheetControllerKey];
         }
         else{

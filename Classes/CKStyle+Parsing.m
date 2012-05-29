@@ -114,7 +114,8 @@ static NSSet* CKStyleResourceTypeSet = nil;
 }
 
 + (NSSet*)resourceTypes{
-    if(CKStyleResourceTypeSet == nil){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         CKStyleResourceTypeSet = [[NSSet setWithObjects:
                                    [NSValue valueWithPointer:[NSString class]],
                                    [NSValue valueWithPointer:[NSURL class]],
@@ -125,7 +126,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
                                    [NSValue valueWithPointer:[NSDate class]],
                                    [NSValue valueWithPointer:[NSIndexPath class]],
                                    nil]retain];
-    }
+    });
     return CKStyleResourceTypeSet;
 }
 

@@ -510,9 +510,10 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 @implementation CKMappingManager
 
 + (CKMappingManager*)defaultManager{
-	if(CKMappingManagerDefault == nil){
-		CKMappingManagerDefault = [[CKMappingManager alloc]init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKMappingManagerDefault = [[CKMappingManager alloc]init];
+    });
 	return CKMappingManagerDefault;
 }
 

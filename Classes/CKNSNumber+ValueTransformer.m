@@ -15,10 +15,11 @@ static NSNumberFormatter* CKValueTransformerNumberFormatter = nil;
 @implementation NSNumber (CKValueTransformer)
 
 + (NSNumber*)convertFromNSString:(NSString*)str{
-	if(CKValueTransformerNumberFormatter == nil){
-		CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKValueTransformerNumberFormatter = [[NSNumberFormatter alloc] init];
 		[CKValueTransformerNumberFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease]];
-	}
+    });
 	return [CKValueTransformerNumberFormatter numberFromString:str]; 
 }
 

@@ -48,12 +48,11 @@ static CKDownloadManager *CKSharedDownloadManager;
 @synthesize downloaders;
 
 + (id)sharedManager {
-    @synchronized(self) {
-        if (CKSharedDownloadManager == nil) {
-            CKSharedDownloadManager = [[CKDownloadManager alloc] init];
-        }
-        return CKSharedDownloadManager;
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKSharedDownloadManager = [[CKDownloadManager alloc] init];
+    });
+    return CKSharedDownloadManager;
 }
 
 //
@@ -141,7 +140,7 @@ static CKDownloadManager *CKSharedDownloadManager;
         else 
             [self downloader:[self downloaderForName:name] didFailWithError:error];
     }];
-        
+    
     [self.downloaders setObject:downloader forKey:name];
     
     return downloader;
@@ -226,19 +225,19 @@ static CKDownloadManager *CKSharedDownloadManager;
     [userInfo setObject:error forKey:@"error"];
     [userInfo setObject:downloader.downloadName forKey:@"name"];
     [userInfo setObject:downloader.URL forKey:@"url"];
-
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CKDownloadManagerDownloadDidFailNotification 
                                                         object:self 
                                                       userInfo:userInfo];
     
     [self.downloaders removeObjectForKey:downloader.downloadName];
-
+    
     if ((error.code == NSURLErrorNotConnectedToInternet) || (error.code == NSURLErrorNetworkConnectionLost))
         return;
-
+    
     // Proceed to clean up for other errors.        
     // FIXME: should be put in a function
-
+    
     NSString *temporaryFilePath = [self temporaryFilePathForName:downloader.downloadName];
     NSString *metadataPath = [self metaFilePathForName:downloader.downloadName];
     [[NSFileManager defaultManager] removeItemAtPath:temporaryFilePath error:nil];

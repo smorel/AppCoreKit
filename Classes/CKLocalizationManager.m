@@ -25,27 +25,12 @@ static CKLocalizationManager *sharedInstance = nil;
 
 + (CKLocalizationManager *)sharedManager
 {
-	@synchronized([CKLocalizationManager class])
-	{
-		if (!sharedInstance){
-			[[self alloc] init];
-		}
-		return sharedInstance;
-	}
-	return nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[CKLocalizationManager alloc] init];
+    });
+    return sharedInstance;
 }
-
-+(id)alloc
-{
-	@synchronized([CKLocalizationManager class])
-	{
-		NSAssert(sharedInstance == nil, @"Attempted to allocate a second instance of a singleton.");
-		sharedInstance = [super alloc];
-		return sharedInstance;
-	}
-	return nil;
-}
-
 
 - (id)init
 {

@@ -58,9 +58,10 @@
 //OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
 + (id)sharedInstance{
     static CKUITableViewCell* sharedCKUITableViewCell = nil;
-    if(!sharedCKUITableViewCell){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sharedCKUITableViewCell = [[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
-    }
+    });
     return sharedCKUITableViewCell;
 }
 

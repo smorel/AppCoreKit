@@ -220,9 +220,10 @@ NSString* CKSerializerIDTag = @"@id";
 
 
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector{
-	if(CKNSValueTransformerCache == nil){
-		CKNSValueTransformerCache = [[NSMutableDictionary dictionary]retain];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKNSValueTransformerCache = [[NSMutableDictionary dictionary]retain];
+    });
 	[CKNSValueTransformerCache setValue:[NSDictionary dictionaryWithObjectsAndKeys:
 										 [NSValue valueWithPointer:selectorClass],CKNSValueTransformerCacheClassTag,
 										 [NSValue valueWithPointer:selector],CKNSValueTransformerCacheSelectorTag,nil]

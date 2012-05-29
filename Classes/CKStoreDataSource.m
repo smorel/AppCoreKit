@@ -55,10 +55,11 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 //- (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedBy:(NSString*)sortedBy
 
 - (void)startAsynchronous{
-	if(theSharedStoreDataSourceQueue == nil){
-		theSharedStoreDataSourceQueue = [[NSOperationQueue alloc] init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        theSharedStoreDataSourceQueue = [[NSOperationQueue alloc] init];
 		[theSharedStoreDataSourceQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
-	}
+    });
 	[theSharedStoreDataSourceQueue addOperation:self];
 }
 

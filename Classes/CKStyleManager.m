@@ -14,9 +14,10 @@ static NSInteger kLogEnabled = -1;
 @implementation CKStyleManager
 
 + (CKStyleManager*)defaultManager{
-	if(CKStyleManagerDefault == nil){
-		CKStyleManagerDefault = [[CKStyleManager alloc]init];
-	}
+	static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKStyleManagerDefault = [[CKStyleManager alloc]init];
+    });
 	return CKStyleManagerDefault;
 }
 
