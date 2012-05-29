@@ -105,45 +105,57 @@
 }
 
 - (void)setSize:(CGSize)s{
-    NSArray* indexPaths = [self visibleIndexPaths];
-    NSInteger firstVisibleIndex = ([indexPaths count] > 0) ? [[indexPaths objectAtIndex:0]row] : 0;
-    CGSize oldSize = _size;
-    _size = s;
-    
-    [self updateGridArray];
-    
-    for(int i = 0; i < [self numberOfObjectsForSection:0]; ++i){
-        CKGridTableViewCellController* controller = (CKGridTableViewCellController*)[self controllerAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+    if(!CGSizeEqualToSize(_size, s)){
+        NSInteger firstVisibleIndex = [self.indexPathToReachAfterRotation row];
+        CGSize oldSize = _size;
+        _size = s;
+        
+        [self updateGridArray];
+        
+        for(int i = 0; i < [self numberOfObjectsForSection:0]; ++i){
+            CKGridTableViewCellController* controller = (CKGridTableViewCellController*)[self controllerAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            switch(self.orientation){
+                case CKTableViewOrientationLandscape:{
+                    controller.numberOfColumns = _size.width;
+                    break;
+                }
+                case CKTableViewOrientationPortrait:{
+                    controller.numberOfColumns = _size.height;
+                    break;
+                }
+            }
+        }
+        
+        NSInteger oldIndex = 0;
         switch(self.orientation){
             case CKTableViewOrientationLandscape:{
-                controller.numberOfColumns = _size.width;
+                oldIndex = (oldSize.width * firstVisibleIndex) + 0;
                 break;
             }
             case CKTableViewOrientationPortrait:{
-                controller.numberOfColumns = _size.height;
+                oldIndex = (oldSize.height * firstVisibleIndex) + 0;
                 break;
             }
         }
-    }
-    
-    NSInteger multiply = 0;
-    NSInteger oldmultiply = 0;
-    switch(self.orientation){
-        case CKTableViewOrientationLandscape:{
-            multiply = _size.width;
-            oldmultiply = oldSize.width;
-            break;
+        
+        
+        NSInteger newIndex = 0;
+        
+        switch(self.orientation){
+            case CKTableViewOrientationLandscape:{
+                newIndex = oldIndex /  _size.width;
+                break;
+            }
+            case CKTableViewOrientationPortrait:{
+                newIndex = oldIndex / _size.height;
+                break;
+            }
         }
-        case CKTableViewOrientationPortrait:{
-            multiply = _size.height;
-            oldmultiply = oldSize.height;
-            break;
-        }
+        
+        NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
+        self.indexPathToReachAfterRotation = newIndexPath;
+        [self scrollToRowAtIndexPath:newIndexPath animated:(self.state == CKUIViewControllerStateDidAppear)];
     }
-    
-    NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:firstVisibleIndex * oldmultiply / multiply inSection:0];
-    self.indexPathToReachAfterRotation = newIndexPath;
-    [self scrollToRowAtIndexPath:newIndexPath animated:(self.state == CKUIViewControllerStateDidAppear)];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -243,11 +255,11 @@
     NSInteger index = 0;
     switch(self.orientation){
         case CKTableViewOrientationLandscape:{
-            index = (self.size.width * column) + row;
+            index = (self.size.width * row) + column;
             break;
         }
         case CKTableViewOrientationPortrait:{
-            index = (self.size.height * column) + row;
+            index = (self.size.height * row) + column;
             break;
         }
     }

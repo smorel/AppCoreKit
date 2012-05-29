@@ -117,14 +117,14 @@
         if(i < [self.cellControllers count]){
             //HERE WE ASSUME WE ONLY HAVE 1 TYPE OF CELLS IN GRIDS AND REUSE THE EXISTING VIEWS
             NSInteger index = i;
-            CKItemViewController* controller = [self.cellControllers objectAtIndex:index];
+            CKTableViewCellController* controller = [self.cellControllers objectAtIndex:index];
             if(subcell){
-                CKItemViewController* oldController = [subcell delegate];
+                CKTableViewCellController* oldController = [subcell delegate];
                 [oldController setView:nil];
                 [controller setView:subcell];
             }else{
                 //Creates and insert cell
-                CKItemViewController* controller = [self.cellControllers objectAtIndex:index];
+                CKTableViewCellController* controller = [self.cellControllers objectAtIndex:index];
                 UIView* view = [controller loadView];
                 view.tag = viewTag;
                 
@@ -158,18 +158,16 @@
             if([controller flags] & CKItemViewFlagSelectable){
                 [button bindEvent:UIControlEventTouchDown | UIControlEventTouchDragInside withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
-                        [subcell setSelected:YES animated:NO];
-                        [subcell setHighlighted:YES animated:NO];
+                        [controller.tableViewCell setSelected:YES animated:NO];
+                        [controller.tableViewCell setHighlighted:YES animated:NO];
                     }
                 }];
                 [button bindEvent:UIControlEventTouchUpInside withBlock:^{
-                    [subcell setSelected:NO animated:NO];
-                    [subcell setHighlighted:YES animated:NO];
                     [controller didSelect]; 
                 }];
                 [button bindEvent:UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragOutside withBlock:^{
-                    [subcell setSelected:NO animated:YES];
-                    [subcell setHighlighted:NO animated:YES];
+                    [controller.tableViewCell setSelected:NO animated:YES];
+                    [controller.tableViewCell setHighlighted:NO animated:YES];
                 }];
             }
             

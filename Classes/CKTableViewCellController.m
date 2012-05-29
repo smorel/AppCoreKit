@@ -882,7 +882,12 @@
 	if([self.containerController isKindOfClass:[CKTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
 		if (tableViewController.stickySelection == NO){
-			[tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
+            if(self.parentCellController){
+                [self.tableViewCell setHighlighted:NO animated:NO];
+                [self.tableViewCell setSelected:NO animated:NO];
+            }else{
+                [tableViewController.tableView deselectRowAtIndexPath:self.indexPath animated:YES];
+            }
 		}
 	}
 	[self didSelectRow];
