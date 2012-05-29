@@ -233,8 +233,9 @@
 }
 
 - (id)init{
-	[super init];
-	self.multiFloatValue = [[[CKCGAffineTransformWrapper alloc]init]autorelease];
+	if (self =[super init]) {
+      	self.multiFloatValue = [[[CKCGAffineTransformWrapper alloc]init]autorelease];  
+    }
 	return self;
 }
 

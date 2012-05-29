@@ -79,14 +79,16 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 }
 
 - (id)initWithBaseClass:(Class)type{
-	[super init];
-	[self createClassesCollectionWithBaseClass:type];
+    if (self = [super init]) {
+        [self createClassesCollectionWithBaseClass:type];
+    }
 	return self;
 }
 
 - (id)initWithProtocol:(Protocol*)protocol{
-	[super init];
-	[self createClassesCollectionWithProtocol:protocol];
+	if (self = [super init]) {
+      [self createClassesCollectionWithProtocol:protocol];  
+    }
 	return self;
 }
 

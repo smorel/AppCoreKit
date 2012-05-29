@@ -31,9 +31,10 @@
 @synthesize collapsed =_collapsed;
 
 - (id)init{
-	[super init];
-	_hidden = NO;
-    _collapsed = NO;
+    if (self = [super init]) {
+      	_hidden = NO;
+        _collapsed = NO;
+    }
 	return self;
 }
 

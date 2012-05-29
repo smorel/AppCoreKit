@@ -32,13 +32,14 @@
 @synthesize instance;
 
 - (id)init{
-	[super init];
-	//NSLog(@"CKNotificationBlockBinder init %p",self);
-	binded = NO;
+    if (self = [super init]) {
+        //NSLog(@"CKNotificationBlockBinder init %p",self);
+        binded = NO;
 #ifdef ENABLE_WEAK_REF_PROTECTION
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.instanceRef =  [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.instanceRef =  [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
 #endif
+    }
 	return self;
 }
 

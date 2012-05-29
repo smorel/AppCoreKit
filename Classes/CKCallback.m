@@ -32,15 +32,17 @@
 }
 
 - (id)initWithTarget:(id)thetarget action:(SEL)theaction{
-	[super init];
-	self.target = thetarget;
-	self.action = theaction;
+	if (self = [super init]) {
+        self.target = thetarget;
+        self.action = theaction;
+    }
 	return self;
 }
 
 - (id)initWithBlock:(CKCallbackBlock)theblock{
-	[super init];
-	self.block = theblock;
+	if (self = [super init]) {
+        self.block = theblock;
+    }
 	return self;
 }
 

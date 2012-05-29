@@ -129,20 +129,23 @@ double round(double x)
 }
 
 - (id)init{
-	[super init];
-	[self postInit];
+	if (self = [super init]) {
+      [self postInit];
+    }
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-	[super initWithCoder:aDecoder];
-	[self postInit];
+    if (self = [super initWithCoder:aDecoder]) {
+        [self postInit];
+    }
 	return self;
 }
 
 - (id)initWithFrame:(CGRect)theFrame{
-	[super initWithFrame:theFrame];
-	[self postInit];
+    if (self = [super initWithFrame:theFrame]) {
+      [self postInit];  
+    }
 	return self;
 }
 
@@ -305,7 +308,7 @@ double round(double x)
                 
                 if(animated){
                     view.alpha = 0;
-                    [UIView beginAnimations:@"carouselAppear" context:view];
+                    [UIView beginAnimations:@"carouselAppear" context:((void *) view)];
                     view.alpha = 1;
                     [UIView commitAnimations];
                 }

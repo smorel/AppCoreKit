@@ -85,10 +85,11 @@
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
-	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
-	self.delegate = thedelegate;
-    self.editingMask = UITableViewCellStateDefaultMask;
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
+        self.delegate = thedelegate;
+        self.editingMask = UITableViewCellStateDefaultMask;
+    }
 	return self;
 }
 

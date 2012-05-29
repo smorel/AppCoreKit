@@ -441,10 +441,11 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 #pragma mark Initialization
 
 -(id)init{
-	[super init];
-	binded = NO;
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.viewRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseView:)];
+	if (self = [super init]) {
+      	binded = NO;
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.viewRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseView:)];
+    }
 	return self;
 }
 

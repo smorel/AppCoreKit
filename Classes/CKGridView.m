@@ -56,9 +56,11 @@
 
 
 - (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size{
-	[self initWithFrame:frame];
-	_rows = size.height;
-	_columns = size.width;
+	if (self = [self initWithFrame:frame]) {
+    	_rows = size.height;
+        _columns = size.width;
+    }
+    
 	return self;
 }
 

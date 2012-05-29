@@ -36,8 +36,9 @@
 }
 
 - (id)init{
-	[super init];
-    [self postInit];
+	if (self = [super init]) {
+        [self postInit];
+    }
 	return self;
 }
 
@@ -66,9 +67,10 @@
 }
 
 - (id)initWithFeedSource:(CKFeedSource*)source{
-	[super init];
-	self.feedSource = source;
-    [self postInit];
+	if (self = [super init]) {
+        self.feedSource = source;
+        [self postInit];
+    }
 	return self;
 }
 

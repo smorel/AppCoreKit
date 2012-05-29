@@ -36,8 +36,9 @@ static char NSObjectWeakRefObjectKey;
 @synthesize weakRefs = _weakRefs;
 
 - (id)init{
-	[super init];
-	self.weakRefs = [NSMutableSet set];
+	if (self = [super init]) {
+        self.weakRefs = [NSMutableSet set];
+    }
 	return self;
 }
 
@@ -145,24 +146,26 @@ static BOOL swizzlingDone = NO;
 }
 
 - (id)initWithObject:(id)theObject{
-	[[self class] executeSwizzling];
-	[super init];
-	self.object = theObject;
-	[self registerToObject:theObject];
-	return self;
+    [[self class] executeSwizzling];
+    if (self = [self init]) {
+        self.object = theObject;
+        [self registerToObject:theObject];
+    }
+    return self;
 }
 
 - (id)initWithObject:(id)theObject callback:(CKCallback*)callback{
 	[[self class] executeSwizzling];
-	[super init];
-	self.object = theObject;
-	self.callback = callback;
-	[self registerToObject:theObject];
+	if (self = [super init]) {
+        self.object = theObject;
+        self.callback = callback;
+        [self registerToObject:theObject];
+    }
 	return self;
 }
 
 - (id)initWithObject:(id)object block:(void (^)(CKWeakRef* weakRef))block{
-	[self initWithObject:object callback:[CKCallback callbackWithBlock:^(id object){
+    self = [self initWithObject:object callback:[CKCallback callbackWithBlock:^(id object){
 		block((CKWeakRef*)object);
 		return (id)nil;
 	}]];
@@ -170,7 +173,7 @@ static BOOL swizzlingDone = NO;
 }
 
 - (id)initWithObject:(id)object target:(id)target action:(SEL)action{
-	[self initWithObject:object callback:[CKCallback callbackWithTarget:target action:action]];
+	self = [self initWithObject:object callback:[CKCallback callbackWithTarget:target action:action]];
 	return self;
 }
 

@@ -157,8 +157,9 @@
 @synthesize deselectionCallback = _deselectionCallback;
 
 - (id)init{
-	[super init];
-	_style = CKMapAnnotationPin;
+	if (self = [super init]) {
+      _style = CKMapAnnotationPin;
+    }
 	return self;
 }
 

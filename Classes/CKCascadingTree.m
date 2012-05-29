@@ -105,25 +105,26 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 }
 
 - (id)initFormatWithFormat:(NSString*)theformat{
-	[super init];
-	self.properties = [NSMutableArray array];
-	
-	NSArray* splittedFormat = [[self class] parseFormat:theformat];
-	self.format = [[self class] formatFromSplittedFormat:splittedFormat];
-	
-	NSString* identifier = (NSString*)[splittedFormat objectAtIndex:0];
-	Class type = NSClassFromString(identifier);
-	if(type == nil){
-		self.propertyName = identifier;
-	}
-	else{
-		self.objectClass = type;
-	}
-	
-	for(int i=1;i<[splittedFormat count];i += 2){
-		NSString* name = [splittedFormat objectAtIndex:i];
-		[self.properties addObject:name];
-	}
+	if (self = [super init]) {
+        self.properties = [NSMutableArray array];
+        
+        NSArray* splittedFormat = [[self class] parseFormat:theformat];
+        self.format = [[self class] formatFromSplittedFormat:splittedFormat];
+        
+        NSString* identifier = (NSString*)[splittedFormat objectAtIndex:0];
+        Class type = NSClassFromString(identifier);
+        if(type == nil){
+            self.propertyName = identifier;
+        }
+        else{
+            self.objectClass = type;
+        }
+        
+        for(int i=1;i<[splittedFormat count];i += 2){
+            NSString* name = [splittedFormat objectAtIndex:i];
+            [self.properties addObject:name];
+        }
+    }
 	return self;
 }
 
@@ -733,8 +734,9 @@ NSString* CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (id)init{
-	[super init];
-	self.loadedFiles = [NSMutableSet set];
+	if (self = [super init]) {
+      self.loadedFiles = [NSMutableSet set];
+    }
 	return self;
 }
 

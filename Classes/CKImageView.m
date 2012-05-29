@@ -55,8 +55,10 @@
 }
 
 - (id)initWithCoder:(NSCoder *)decoder{
-	[super initWithCoder:decoder];
+	if (self = [super initWithCoder:decoder]) {
+  
 	[self postInit];
+    }
 	return self;
 }
 

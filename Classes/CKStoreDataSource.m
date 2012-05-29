@@ -35,12 +35,13 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 }
 
 - (id)initWithPredicateFormat:(NSString*)format arguments:(NSArray*)arguments range:(NSRange)theRange sortKeys:(NSArray*)sortKeys store:(CKStore*)theStore{
-	[super init];
-	self.store = theStore;
-	self.predicateFormat = format;
-	self.predicateArguments = arguments;
-	self.range = theRange;
-	self.sortKeys = sortKeys;
+	if (self = [super init]) {
+        self.store = theStore;
+        self.predicateFormat = format;
+        self.predicateArguments = arguments;
+        self.range = theRange;
+        self.sortKeys = sortKeys;
+    }
 	return self;
 }
 
@@ -172,8 +173,9 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 }
 
 - (id)init{
-	[super init];
-	self.executeInBackground = YES;
+	if (self = [super init]) {
+      self.executeInBackground = YES;  
+    }
 	return self;
 }
 

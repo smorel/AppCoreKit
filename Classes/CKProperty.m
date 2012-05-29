@@ -54,27 +54,30 @@
 }
 
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
-	[super init];
-    self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
-    if([thekeyPath length] > 0){
-        self.keyPath = thekeyPath;
+	if (self = [super init]) {
+        self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
+        if([thekeyPath length] > 0){
+            self.keyPath = thekeyPath;
+        }
+        [self postInit];    
     }
-    [self postInit];
-	return self;
+    return self;
 }
 
 - (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key{
-    [super init];
-    self.objectRef = [CKWeakRef weakRefWithObject:dictionary target:self action:@selector(releaseObject:)];
-    self.keyPath = key;
-    [self postInit];
+    if (self = [super init]) {
+        self.objectRef = [CKWeakRef weakRefWithObject:dictionary target:self action:@selector(releaseObject:)];
+        self.keyPath = key;
+        [self postInit];
+    }
 	return self;
 }
 
 - (id)initWithObject:(id)theobject{
-	[super init];
-    self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
-    [self postInit];
+	if (self = [super init]) {
+        self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
+        [self postInit];
+    }
 	return self;
 }
 

@@ -152,10 +152,11 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 }
 
 - (id)init{
-	[super init];
-	[self initializeProperties];
-	[self initializeKVO];
-	[self postInit];
+	if (self = [super init]) {
+      	[self initializeProperties];
+        [self initializeKVO];
+        [self postInit];
+    }
 	return self;
 }
 
