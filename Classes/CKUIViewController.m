@@ -534,8 +534,13 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
-    NSMutableDictionary* viewStyle = [[self controllerStyle]styleForObject:self.view  propertyName:@"view"];
+    NSMutableDictionary* viewStyle = [self.view appliedStyle];
     [[self.view class] applyStyle:viewStyle toView:self.view appliedStack:nil delegate:nil];//Apply only on view and not hierarchy !
+    
+    if(self.navigationController && ![self.navigationController isToolbarHidden]){
+        NSMutableDictionary* navControllerStyle = [[self controllerStyle] styleForObject:self.navigationController  propertyName:@"navigationController"];
+        [self.navigationController.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
+    }
     
     [self applyStyleForNavigation];
 }
