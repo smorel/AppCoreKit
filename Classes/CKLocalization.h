@@ -20,4 +20,8 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
 
 /** TODO
  */
+#if __has_feature(objc_arc)
+#define _(key) [[CKLocalizedString alloc]initWithLocalizedKey:key]
+#else
 #define _(key) [[[CKLocalizedString alloc]initWithLocalizedKey:key]autorelease]
+#endif
