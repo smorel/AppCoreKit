@@ -84,6 +84,7 @@
 - (void)setHeaderTitle:(NSString *)headerTitle{
     [_headerTitle release];
     _headerTitle = [headerTitle retain];
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -93,7 +94,7 @@
     
     if(_headerView){
         NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_headerView applyStyle:controllerStyle];
+        [_headerView applyStyle:controllerStyle propertyName:@"sectionHeaderView"];
     }
     
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
@@ -102,6 +103,9 @@
 - (void)setFooterTitle:(NSString *)footerTitle{
     [_footerTitle release];
     _footerTitle = [footerTitle retain];
+    
+    //Creates headerView if stylesheet available for optimizations
+    
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -110,7 +114,7 @@
     _footerView = [footerView retain];
     if(_footerView){
         NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_footerView applyStyle:controllerStyle];
+        [_footerView applyStyle:controllerStyle propertyName:@"sectionFooterView"];
     }
     
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];

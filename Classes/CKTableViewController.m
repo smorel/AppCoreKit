@@ -422,7 +422,7 @@
     
     if(self.sizeIsAlreadyInvalidated == NO){
         [[self tableView]beginUpdates];
-        [self.tableView setNeedsLayout];
+        //[self.tableView setNeedsLayout];
     }
     self.sizeIsAlreadyInvalidated = YES;
     

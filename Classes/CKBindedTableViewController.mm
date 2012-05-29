@@ -21,6 +21,7 @@
 #import "CKUIViewController+Style.h"
 #import "CKLocalization.h"
 #import "CKNSObject+Invocation.h"
+#import "CKRuntime.h"
 
 
 /********************************* CKBindedTableViewController  *********************************
@@ -694,14 +695,14 @@
 #pragma mark UITableView (CKHeaderViewManagement)
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
+    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionHeaderView"];
     }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
+    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionFooterView"];
     }
@@ -1044,7 +1045,7 @@
     _modalViewCount = 2;
     NSDictionary *info = [notification userInfo];
     CGRect keyboardEndFrame = [[info objectForKey:CKSheetFrameEndUserInfoKey] CGRectValue];
-    UIViewAnimationCurve animationCurve = [[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
+    UIViewAnimationCurve animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
     NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
     [self stretchTableDownUsingRect:keyboardEndFrame animationCurve:animationCurve duration:animationDuration];}
 
@@ -1053,7 +1054,7 @@
         _modalViewCount = 0;
     }
     NSDictionary *info = [notification userInfo];
-    UIViewAnimationCurve animationCurve = [[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
+    UIViewAnimationCurve animationCurve = (UIViewAnimationCurve)[[info objectForKey:CKSheetAnimationCurveUserInfoKey] intValue];
     NSTimeInterval animationDuration = [[info objectForKey:CKSheetAnimationDurationUserInfoKey] floatValue];
     BOOL keyboardWillShow = [[info objectForKey:CKSheetKeyboardWillShowInfoKey]boolValue];
     if(!keyboardWillShow){
@@ -1266,7 +1267,7 @@
  When the views are added for section footer, they have no subviews (UITableHeaderFooterViewLabel)
  Applying style in this delegate will then not apply anything on the label ...
  */
-- (void)didAddSubview:(UIView *)subview{
+- (void)UITableView_CKHeaderViewManagement_didAddSubview:(UIView *)subview{
     if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]){
         if(self.delegate && [self.delegate respondsToSelector:@selector(tableView:willDisplayHeaderView:withTitle:)]){
             BOOL header = [[subview valueForKey:@"sectionHeader"]boolValue];
@@ -1286,7 +1287,17 @@
             }
         }
     }
-    [super didAddSubview:subview];
+    
+    [self UITableView_CKHeaderViewManagement_didAddSubview:subview];
 }
 
 @end
+
+
+bool swizzle_UITableView_CKHeaderViewManagement(){
+    CKSwizzleSelector([UITableView class],@selector(didAddSubview:),@selector(UITableView_CKHeaderViewManagement_didAddSubview:));
+    return 1;
+}
+
+static bool bo_swizzle_UITableView_CKHeaderViewManagement = swizzle_UITableView_CKHeaderViewManagement();
+

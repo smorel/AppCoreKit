@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 extern NSString *const CKSheetResignNotification;
 extern NSString *const CKSheetWillShowNotification;
 extern NSString *const CKSheetDidShowNotification;
@@ -18,6 +23,11 @@ extern NSString *const CKSheetFrameEndUserInfoKey;
 extern NSString *const CKSheetAnimationDurationUserInfoKey;
 extern NSString *const CKSheetAnimationCurveUserInfoKey;
 extern NSString *const CKSheetKeyboardWillShowInfoKey;
+    
+    
+#ifdef __cplusplus
+}
+#endif
 
 @interface CKSheetController : NSObject{
     id _delegate;
