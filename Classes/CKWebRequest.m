@@ -119,12 +119,14 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
     });
     
-    dispatch_release(group);
-    
     self.progress = 0.0;
     self.cancelled = NO;
     
     NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+    
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    dispatch_release(group);
+    
     if (cachedResponse) {
         [self connection:nil didReceiveResponse:cachedResponse.response];
         [self connection:nil didReceiveData:cachedResponse.data];
