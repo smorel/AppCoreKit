@@ -13,7 +13,7 @@
 /** TODO
  */
 typedef enum{
-	CKViewCornerStyleDefault,//in this case, we set the corner style of the parent controller (table plain or grouped)
+	CKViewCornerStyleTableViewCell,//in this case, we set the corner style of the parent controller (table plain or grouped)
 	//in the following case, we force the corner style of the cell and bypass the parent controller style
 	CKViewCornerStyleRounded,
 	CKViewCornerStyleRoundedTop,

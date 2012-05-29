@@ -80,7 +80,7 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 - (CKViewCornerStyle)cornerStyle{
 	return (CKViewCornerStyle)[self enumValueForKey:CKStyleCornerStyle 
 									 withEnumDescriptor:CKEnumDefinition(@"CKViewCornerStyle",
-                                                                     CKViewCornerStyleDefault, 
+                                                                     CKViewCornerStyleTableViewCell, 
 																	 CKViewCornerStyleRounded,
 																	 CKViewCornerStyleRoundedTop,
 																	 CKViewCornerStyleRoundedBottom, 
@@ -276,15 +276,14 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 					
 					//Apply corners
 					{
-						CKViewCornerStyle cornerStyle = CKViewCornerStyleDefault;
-						if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
-							cornerStyle = [myViewStyle cornerStyle];
-						}
-						
-						if(cornerStyle == CKViewCornerStyleDefault && delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
+						if(delegate && [delegate respondsToSelector:@selector(view:cornerStyleWithStyle:)]){
 							roundedCornerType = [delegate view:gradientView cornerStyleWithStyle:myViewStyle];
 						}
 						else{
+                            CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
+                            if([myViewStyle containsObjectForKey:CKStyleCornerStyle]){
+                                cornerStyle = [myViewStyle cornerStyle];
+                            }
 							switch(cornerStyle){
 								case CKViewCornerStyleRounded:{
 									roundedCornerType = CKRoundedCornerViewTypeAll;

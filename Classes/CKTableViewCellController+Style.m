@@ -182,10 +182,14 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation CKTableViewCellController (CKStyle)
 
 - (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
+    CKViewCornerStyle cornerStyle = CKViewBorderStyleTableViewCell;
+    if([style containsObjectForKey:CKStyleCornerStyle]){
+        cornerStyle = [style cornerStyle];
+    }
+    
 	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
-	
-	switch([style cornerStyle]){
-		case CKViewCornerStyleDefault:{
+	switch(cornerStyle){
+		case CKViewCornerStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
 				UIView* parentView = [self parentControllerView];
@@ -207,6 +211,18 @@ NSString* CKStyleCellFlags = @"flags";
 			}
 			break;
 		}
+        case CKViewCornerStyleRounded:{
+            roundedCornerType = CKRoundedCornerViewTypeAll;
+            break;
+        }
+        case CKViewCornerStyleRoundedTop:{
+            roundedCornerType = CKRoundedCornerViewTypeTop;
+            break;
+        }
+        case CKViewCornerStyleRoundedBottom:{
+            roundedCornerType = CKRoundedCornerViewTypeBottom;
+            break;
+        }
 	}
 	
 	return roundedCornerType;
