@@ -146,10 +146,20 @@
     
     if (self.waitingRequests.count != 0) {
         CKWebRequest *newRequest = [[self.waitingRequests objectAtIndex:0]retain];
+        if(!newRequest){
+            int i =3;
+            //THIS IS WEIRD !!!!!!!!!!!!
+        }
         [self.waitingRequests removeObjectAtIndex:0];
-        [self.runningRequests addObject:[newRequest autorelease]];
-        
-        [newRequest startOnRunLoop:self.runLoop];
+        if(newRequest){
+            [self.runningRequests addObject:newRequest];
+            
+            [newRequest startOnRunLoop:self.runLoop];
+            [newRequest autorelease];
+        }else{
+            int i =3;
+            //THIS IS WEIRD !!!!!!!!!!!!
+        }
     }
 }
 
