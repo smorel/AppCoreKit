@@ -17,6 +17,7 @@
 #import "CKUserDefaults.h"
 #import "CKStyleManager.h"
 #import <objc/runtime.h>
+#import "CKNSObject+Bindings.h"
 
 
 typedef enum CKDebugCheckState{
@@ -328,6 +329,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                 _debuggingHighlightView.alpha = 0.4;
                 _debuggingHighlightView.layer.borderWidth = 3;
                 _debuggingHighlightView.layer.borderColor = [[UIColor redColor]CGColor];
+                _debuggingHighlightView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
             }
             
             self.debuggingView = view;
@@ -352,6 +354,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                                                                              green:((float)rand()/(float)RAND_MAX) 
                                                                               blue:((float)rand()/(float)RAND_MAX)  
                                                                              alpha:1]CGColor];
+                        subViewHighlight.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
                         [_supperHighlightViews addObject:subViewHighlight];
                     }
                     
@@ -372,12 +375,16 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
                 _highlightLabel.numberOfLines = 2;
             }
             
-            _highlightLabel.text = [NSString stringWithFormat:@"%@\n%@",[[view class]description],NSStringFromCGRect([view frame])];
-            [_highlightLabel sizeToFit];
-            
-            _highlightLabel.width += 20;
-            _highlightLabel.center = self.viewController.view.center;
-            _highlightLabel.y = 5;
+            [self beginBindingsContextByRemovingPreviousBindings];
+            [view bind:@"frame" executeBlockImmediatly:YES withBlock:^(id value) {
+                _highlightLabel.text = [NSString stringWithFormat:@"%@\n%@",[[view class]description],NSStringFromCGRect([view frame])];
+                [_highlightLabel sizeToFit];
+                
+                _highlightLabel.width += 20;
+                _highlightLabel.center = self.viewController.view.center;
+                _highlightLabel.y = 5;
+            }];
+            [self endBindingsContext];
             
             [self.viewController.view addSubview:_highlightLabel];
         }
