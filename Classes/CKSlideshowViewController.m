@@ -140,6 +140,8 @@
 						   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
 						   nil] 
 				 animated:YES];
+    [previousButton release];
+    [nextButton release];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
