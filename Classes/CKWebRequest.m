@@ -36,7 +36,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @implementation CKWebRequest
 
-@synthesize connection, request, response, cancelled, operationsGroup;
+@synthesize connection, request, response, cancelled, operationsGroup, startGroup;
 @synthesize completionBlock, transformBlock, cancelBlock;
 @synthesize data, handle, downloadPath, credential;
 @synthesize delegate, progress, retriesCount;
