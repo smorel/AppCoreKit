@@ -222,18 +222,7 @@
 	
 	CGFloat arcRadius = ceil((inSize.height+self.pad)/2.0);
 	
-	CGFloat badgeWidthAdjustment = inSize.width - inSize.height/2.0;
 	CGFloat badgeWidth = 2.0*arcRadius;
-	
-	if ( badgeWidthAdjustment > 0.0 )
-	{
-		badgeWidth += badgeWidthAdjustment;
-	}
-	else
-	{
-		badgeWidthAdjustment = 0;
-	}
-	
 	
 	CGMutablePathRef badgePath = CGPathCreateMutable();
 	

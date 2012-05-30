@@ -95,7 +95,7 @@ id __runtime_setValue(id self, SEL _cmd,...){
 
 BOOL __class_addPropertyWithAttributes(Class c,NSString* propertyName,const objc_property_attribute_t *attributes, unsigned int attributeCount){
     //Adds Property getter
-    BOOL bo = class_addMethod(c, sel_registerName([propertyName UTF8String]), &__runtime_getValue, "@@:");
+    class_addMethod(c, sel_registerName([propertyName UTF8String]), &__runtime_getValue, "@@:");
     //ASSERT
     
     //Adds Property setter
@@ -103,7 +103,7 @@ BOOL __class_addPropertyWithAttributes(Class c,NSString* propertyName,const objc
     NSString *first = [setterName substringToIndex:1];
     first = [first uppercaseString];
     setterName = [NSString stringWithFormat:@"set%@%@:", first, [setterName substringFromIndex:1]];
-    bo = class_addMethod(c, sel_registerName([setterName UTF8String]), &__runtime_setValue, "v@:@");
+    class_addMethod(c, sel_registerName([setterName UTF8String]), &__runtime_setValue, "v@:@");
     //ASSERT
     
     //Adds property
