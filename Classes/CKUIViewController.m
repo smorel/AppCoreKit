@@ -554,8 +554,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 - (void)setLeftButton:(UIBarButtonItem *)theleftButton{
     [_leftButton release];
     _leftButton = [theleftButton retain];
+    [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.viewIsOnScreen];
     if(self.viewIsOnScreen){
-        [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
         [self applyStyleForLeftBarButtonItem];
         
             //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
@@ -569,8 +569,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 - (void)setRightButton:(UIBarButtonItem *)theRightButton{
     [_rightButton release];
     _rightButton = [theRightButton retain];
+    
+    [self.navigationItem setRightBarButtonItem:theRightButton animated:(self.viewIsOnScreen)];
     if(self.viewIsOnScreen){
-        [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
         [self applyStyleForRightBarButtonItem];
         
             //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
