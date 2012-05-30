@@ -222,6 +222,7 @@
 @implementation CKPropertyExtendedAttributes (CKOptionPropertyCellController)
 @dynamic multiSelectionEnabled;
 @dynamic sortingBlock;
+@dynamic presentsOptionsAsPopover;
 
 - (void)setMultiSelectionEnabled:(BOOL)multiSelectionEnabled{
     [self.attributes setObject:[NSNumber numberWithBool:multiSelectionEnabled] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
@@ -229,6 +230,16 @@
 
 - (BOOL)multiSelectionEnabled{
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
+    if(value) return [value boolValue];
+    return NO;
+}
+
+- (void)setPresentsOptionsAsPopover:(BOOL)presentsOptionsAsPopover{
+    [self.attributes setObject:[NSNumber numberWithBool:presentsOptionsAsPopover] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentsOptionsAsPopover"];
+}
+
+- (BOOL)presentsOptionsAsPopover{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentsOptionsAsPopover"];
     if(value) return [value boolValue];
     return NO;
 }

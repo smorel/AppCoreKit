@@ -11,6 +11,10 @@
 #import "CKArrayProxyCollection.h"
 
 
+@interface CKTableViewController ()
+@property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
+@end
+
 @interface CKItemViewContainerController(CKItemViewControllerManagement)
 - (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
@@ -154,7 +158,13 @@
         
         NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:newIndex inSection:0];
         self.indexPathToReachAfterRotation = newIndexPath;
-        [self scrollToRowAtIndexPath:newIndexPath animated:(self.state == CKUIViewControllerStateDidAppear)];
+        
+        
+        if(self.state != CKUIViewControllerStateDidAppear){
+            self.tableViewHasBeenReloaded = NO;
+        }else{
+            [self scrollToRowAtIndexPath:newIndexPath animated:YES];
+        }
     }
 }
 

@@ -31,7 +31,7 @@
 @synthesize multiSelectionEnabled;
 @synthesize optionsViewController = _optionsViewController;
 @synthesize internalBindingContext = _internalBindingContext;
-
+@synthesize presentsOptionsAsPopover = _presentsOptionsAsPopover;
 
 
 - (void)postInit{
@@ -41,6 +41,7 @@
     self.optionCellStyle = CKTableViewCellStyleIPhoneForm;
     self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
     self.flags = CKItemViewFlagNone;
+    _presentsOptionsAsPopover = NO;
 }
 
 
@@ -238,7 +239,9 @@
     [super didSelect];//here because we could want to act on optionsViewController in selectionBlock
     
     CKPopoverController* popover = nil;
-    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+    
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    if((attributes.presentsOptionsAsPopover || self.presentsOptionsAsPopover) && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ){
         popover = [[CKPopoverController alloc]initWithContentViewController:self.optionsViewController];
     }
     
