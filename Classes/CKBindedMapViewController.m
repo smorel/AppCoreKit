@@ -152,6 +152,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		[collection addObjectsFromArray:annotations];
 		
 		self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
+        [collection release];
 		
 		_centerCoordinate = centerCoordinate;
 		[self postInit];
@@ -187,7 +188,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.view.backgroundColor = [UIColor colorWithRGBValue:0xc1bfbb];	
 	
 	if (self.mapView == nil) {
-		self.mapView = [[CKMapView alloc] initWithFrame:self.view.bounds];
+		self.mapView = [[[CKMapView alloc] initWithFrame:self.view.bounds] autorelease];
 		self.mapView.autoresizingMask = UIViewAutoresizingFlexibleAll;
 		[self.view addSubview:self.mapView];		
 	}

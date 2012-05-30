@@ -144,7 +144,7 @@
 }
 
 - (void)setCellControllerCreationBlock:(CKCellControllerCreationBlock)cellControllerCreationBlock{
-    [self.attributes setObject:[cellControllerCreationBlock copy] forKey:@"CKPropertyExtendedAttributes_CKPropertyGrid_cellControllerCreationBlock"];
+    [self.attributes setObject:[[cellControllerCreationBlock copy] autorelease] forKey:@"CKPropertyExtendedAttributes_CKPropertyGrid_cellControllerCreationBlock"];
 }
 
 - (CKCellControllerCreationBlock)cellControllerCreationBlock{
@@ -245,7 +245,7 @@
 }
 
 - (void)setSortingBlock:(CKOptionPropertyCellControllerSortingBlock)block{
-    [self.attributes setObject:[block copy] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_sortingBlock"];
+    [self.attributes setObject:[[block copy] autorelease] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_sortingBlock"];
 }
 
 - (CKOptionPropertyCellControllerSortingBlock)sortingBlock{

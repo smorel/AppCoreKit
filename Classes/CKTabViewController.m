@@ -359,7 +359,7 @@
     
     if(appearEndBlock){
         appearEndBlock(self,animated);
-        self.viewWillAppearEndBlock = appearEndBlock;
+        self.viewWillAppearEndBlock = [appearEndBlock autorelease];
     }
 }
 

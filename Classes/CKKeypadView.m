@@ -24,7 +24,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-		self.value = [[NSString alloc] init];
+		self.value = @"";
 		[self constructView];
     }
     return self;
@@ -32,7 +32,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		self.value = [[NSString alloc] init];
+		self.value = @"";
 		[self constructView];
 	}
 	return self;
@@ -102,7 +102,7 @@
 
 	switch (button.tag) {
 		case CKKeypadViewKeyBackspace:
-			if (self.value.length > 0) self.value = [[self.value substringToIndex:self.value.length-1] retain];
+			if (self.value.length > 0) self.value = [self.value substringToIndex:self.value.length-1];
 			break;
 		default:
 			if ([(NSObject *)self.delegate respondsToSelector:@selector(keypadView:shouldSelectKey:)] &&

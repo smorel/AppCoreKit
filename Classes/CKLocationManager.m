@@ -49,7 +49,7 @@ NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationMa
 - (id)init {
 	if (self = [super init]) {
 		self.delegates = [NSMutableSet set];
-		self.locationManager = [[CLLocationManager alloc] init];
+		self.locationManager = [[[CLLocationManager alloc] init] autorelease];
 		self.locationManager.delegate = self;
 		self.locationManager.headingFilter = 5.0f; // kCLHeadingFilterNone
 		self.locationManager.distanceFilter = 20.0f; // kCLDistanceFilterNone

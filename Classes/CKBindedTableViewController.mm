@@ -328,7 +328,7 @@
 
     if(oldViewWillAppearEndBlock){
         oldViewWillAppearEndBlock(self,animated);
-        self.viewWillAppearEndBlock = oldViewWillAppearEndBlock;
+        self.viewWillAppearEndBlock = [oldViewWillAppearEndBlock autorelease];
     }
 }
 

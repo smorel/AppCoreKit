@@ -57,21 +57,24 @@
 	return [UIColor colorWithGradientFromColor:fromColor toColor:toColor size:CGSizeMake(1, height)];
 }
 
-+ (UIImage *)imageWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size {	
-	CGContextRef bitmapContext = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4 * size.width, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst);
++ (UIImage *)imageWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size {
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextRef bitmapContext = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4 * size.width, colorSpace, kCGImageAlphaNoneSkipFirst);
 	
 	NSMutableArray *gradientColors = [NSMutableArray array];
 	for (UIColor *color in colors) {
 		[gradientColors addObject:(id)([color RGBColor].CGColor)];
 	}
 	
-	CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)gradientColors, locations);
+	CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, locations);
 	
 	CGContextDrawLinearGradient(bitmapContext, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, size.height), 0);
 	CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
 	UIImage *gradientImage = [UIImage imageWithCGImage:cgImage];
 	CGImageRelease(cgImage);
 	CGContextRelease(bitmapContext);
+    CGGradientRelease(gradient);
+    CGColorSpaceRelease(colorSpace);
 	
 	return gradientImage;
 }

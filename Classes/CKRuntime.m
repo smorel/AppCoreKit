@@ -99,7 +99,7 @@ BOOL __class_addPropertyWithAttributes(Class c,NSString* propertyName,const objc
     //ASSERT
     
     //Adds Property setter
-    NSString *setterName = [propertyName copy];
+    NSString *setterName = [[propertyName copy] autorelease];
     NSString *first = [setterName substringToIndex:1];
     first = [first uppercaseString];
     setterName = [NSString stringWithFormat:@"set%@%@:", first, [setterName substringFromIndex:1]];
