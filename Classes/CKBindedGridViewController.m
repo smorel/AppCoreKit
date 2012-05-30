@@ -161,11 +161,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch(self.orientation){
         case CKTableViewOrientationLandscape:{
-            return (tableView.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right)) / _size.height;
+            return floorf((tableView.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right)) / _size.height);
             break;
         }
         case CKTableViewOrientationPortrait:{
-            return (tableView.bounds.size.height - (self.tableViewInsets.top + self.tableViewInsets.bottom)) / _size.width;
+            return floorf((tableView.bounds.size.height - (self.tableViewInsets.top + self.tableViewInsets.bottom)) / _size.width);
             break;
         }
     }
