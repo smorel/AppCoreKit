@@ -18,8 +18,8 @@
 @property (nonatomic, assign) dispatch_queue_t requestQueue;
 @property (nonatomic, retain) NSRunLoop *runLoop;
 
-@property (nonatomic, retain) NSMutableArray *runningRequests;
-@property (nonatomic, retain) NSMutableArray *waitingRequests;
+@property (retain) NSMutableArray *runningRequests;
+@property (retain) NSMutableArray *waitingRequests;
 
 @property (nonatomic, retain) Reachability *reachability;
 @property (nonatomic, assign) BOOL handelingDisconnect;
@@ -134,8 +134,14 @@
         
         [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:request];
     }
-    else 
+    else {
+        NSInteger i = [self.runningRequests indexOfObjectIdenticalTo:request];
+        if(i != NSNotFound){
+            int i = 3;
+            /////WEIRD !!!!!!!!!!!
+        }
         [self.waitingRequests addObject:request];
+    }
     
     [self reachabilityDidChange];
 }
