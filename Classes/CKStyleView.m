@@ -144,7 +144,7 @@
 
 - (void)setImage:(UIImage *)anImage {
     if (anImage != _image) {
-        [anImage release];
+        [_image release];
         _image = [anImage retain];
         
         self.opaque = YES;
