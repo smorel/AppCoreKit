@@ -190,11 +190,11 @@
     NSValue* value = [p value];
     if(value){
         [[p value]getValue:&coord];
+        
+        CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
+        coordWrapper.latitude = coord.latitude;
+        coordWrapper.longitude = coord.longitude;
     }
-    
-	CLLocationCoordinate2DWrapper* coordWrapper = (CLLocationCoordinate2DWrapper*)self.multiFloatValue;
-    coordWrapper.latitude = coord.latitude;
-    coordWrapper.longitude = coord.longitude;
 }
 
 - (void)valueChanged{
