@@ -142,13 +142,6 @@
     return (self.gradientColors == nil) ? self.fillColor : [UIColor clearColor];
 }
 
-- (BOOL)isOpaque {
-    if (self.image)
-        return YES;
-    else
-        return [super isOpaque];
-}
-
 - (void)setImage:(UIImage *)anImage {
     if (anImage != _image) {
         [anImage release];
@@ -380,27 +373,19 @@
 		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
 	}
 	
-	if(self.gradientColors == nil){
-		if(self.fillColor != nil && self.image != nil){
+	if(self.gradientColors == nil && self.image == nil){
+		if(self.fillColor != nil)
 			[self.fillColor setFill];
-			if(clippingPath != nil){
-				CGContextAddPath(gc, clippingPath);
-				CGContextFillPath(gc);
-			}
-			else{
-				CGContextFillRect(gc, self.bounds);
-			}
-		}
-		else{
+		else
 			[[UIColor clearColor] setFill];
-			if(clippingPath != nil){
-				CGContextAddPath(gc, clippingPath);
-				CGContextFillPath(gc);
-			}
-			else{
-				CGContextFillRect(gc, self.bounds);
-			}
-		}
+        
+        if(clippingPath != nil){
+            CGContextAddPath(gc, clippingPath);
+            CGContextFillPath(gc);
+        }
+        else{
+            CGContextFillRect(gc, self.bounds);
+        }
 	}
 	
 	
