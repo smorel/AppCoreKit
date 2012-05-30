@@ -142,6 +142,23 @@
     return (self.gradientColors == nil) ? self.fillColor : [UIColor clearColor];
 }
 
+- (BOOL)isOpaque {
+    if (self.image)
+        return YES;
+    else
+        return [super isOpaque];
+}
+
+- (void)setImage:(UIImage *)anImage {
+    if (anImage != _image) {
+        [anImage release];
+        _image = [anImage retain];
+        
+        self.opaque = YES;
+        self.backgroundColor = [UIColor blackColor];
+    }
+}
+
 - (void)setCorners:(CKRoundedCornerViewType)corners{
     _corners = corners;
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
@@ -364,7 +381,7 @@
 	}
 	
 	if(self.gradientColors == nil){
-		if(self.fillColor != nil){
+		if(self.fillColor != nil && self.image != nil){
 			[self.fillColor setFill];
 			if(clippingPath != nil){
 				CGContextAddPath(gc, clippingPath);
