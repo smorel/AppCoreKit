@@ -194,7 +194,8 @@
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
-	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    /*[UIView setAnimationsEnabled:NO];
+    
     
     [self onBeginUpdates];
     if([self isKindOfClass:[CKTableViewController class]]){
@@ -208,6 +209,23 @@
         }
     }
     [self onEndUpdates];
+    [UIView setAnimationsEnabled:YES];*/
+    
+    if([self isKindOfClass:[CKTableViewController class]]){
+        //Invalidate all controller's size !
+        for(int i =0; i< [self numberOfSections];++i){
+            for(int j=0;j<[self numberOfObjectsForSection:i];++j){
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                CKTableViewCellController* controller = (CKTableViewCellController*)[self controllerAtIndexPath:indexPath];
+                controller.invalidatedSize = YES;
+            }
+        }
+    }
+
+    [self reload];
+    
+	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+
     
 	[self updateVisibleViewsRotation];
 	[self updateViewsVisibility:YES];

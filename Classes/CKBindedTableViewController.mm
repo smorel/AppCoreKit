@@ -1226,7 +1226,7 @@
             else{
                 [self.tableView scrollToRowAtIndexPath:indexPath 
                                       atScrollPosition:UITableViewScrollPositionMiddle 
-                                              animated:YES];
+                                              animated:animated];
             }
         }
         self.indexPathToReachAfterRotation = indexPath;
