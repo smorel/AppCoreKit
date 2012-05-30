@@ -50,8 +50,9 @@
 @synthesize parentController = _parentController;
 
 - (id)initWithParentController:(CKFormTableViewController*)controller{
-	[super init];
-	self.parentController = controller;
+	if (self = [super init]) {
+      self.parentController = controller;  
+    }
 	return self;
 }
 

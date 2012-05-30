@@ -40,20 +40,20 @@
 }
 
 - (id)initWithCollection:(CKCollection*)theCollection{
-	[super init];
-
-	self.numberOfFeedObjectsLimit = 0;
-	self.collection = theCollection;
-	
-	if(theCollection){
-		//[_document retainObjectsForKey:_key];
-	}
-	observing = NO;
-	
-	appendCollectionCellControllerAsFooterCell = NO;
-	animateInsertionsOnReload = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
-	locked = NO;
-	changedWhileLocked = NO;
+    if (self = [super init]) {
+        self.numberOfFeedObjectsLimit = 0;
+        self.collection = theCollection;
+        
+        if(theCollection){
+            //[_document retainObjectsForKey:_key];
+        }
+        observing = NO;
+        
+        appendCollectionCellControllerAsFooterCell = NO;
+        animateInsertionsOnReload = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
+        locked = NO;
+        changedWhileLocked = NO;
+    }
 	
 	return self;
 }

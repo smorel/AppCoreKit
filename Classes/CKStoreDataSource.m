@@ -35,12 +35,13 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 }
 
 - (id)initWithPredicateFormat:(NSString*)format arguments:(NSArray*)arguments range:(NSRange)theRange sortKeys:(NSArray*)sortKeys store:(CKStore*)theStore{
-	[super init];
-	self.store = theStore;
-	self.predicateFormat = format;
-	self.predicateArguments = arguments;
-	self.range = theRange;
-	self.sortKeys = sortKeys;
+	if (self = [super init]) {
+        self.store = theStore;
+        self.predicateFormat = format;
+        self.predicateArguments = arguments;
+        self.range = theRange;
+        self.sortKeys = sortKeys;
+    }
 	return self;
 }
 
@@ -55,10 +56,11 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 //- (NSArray *)fetchItemsWithFormat:(NSString *)predicateFormat arguments:(NSArray *)arguments range:(NSRange)range sortedBy:(NSString*)sortedBy
 
 - (void)startAsynchronous{
-	if(theSharedStoreDataSourceQueue == nil){
-		theSharedStoreDataSourceQueue = [[NSOperationQueue alloc] init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        theSharedStoreDataSourceQueue = [[NSOperationQueue alloc] init];
 		[theSharedStoreDataSourceQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
-	}
+    });
 	[theSharedStoreDataSourceQueue addOperation:self];
 }
 
@@ -171,8 +173,9 @@ static NSOperationQueue *theSharedStoreDataSourceQueue = nil;
 }
 
 - (id)init{
-	[super init];
-	self.executeInBackground = YES;
+	if (self = [super init]) {
+      self.executeInBackground = YES;  
+    }
 	return self;
 }
 

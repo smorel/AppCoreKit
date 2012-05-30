@@ -39,9 +39,10 @@ NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationMa
 
 + (id)sharedManager {
 	static CKLocationManager *_instance;
-	if (_instance == nil) {
-		_instance = [[CKLocationManager alloc] init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [[CKLocationManager alloc] init];
+    });
 	return _instance;
 }
 

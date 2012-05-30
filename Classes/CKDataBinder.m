@@ -34,13 +34,14 @@
 @synthesize keyPath2;
 
 - (id)init{
-	[super init];
-	binded = NO;
-    
+	if (self = [super init]) {
+        binded = NO;
+        
 #ifdef ENABLE_WEAK_REF_PROTECTION
-    self.instance1Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance1:)];
-    self.instance2Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance2:)];
+        self.instance1Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance1:)];
+        self.instance2Ref = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance2:)];
 #endif
+    }
 	return self;
 }
 
@@ -109,12 +110,12 @@
 	}
 	
 	[NSValueTransformer transform:[self.instance1 valueForKeyPath:self.keyPath1]
-							   inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2]];
+                       inProperty:[CKProperty propertyWithObject:self.instance2 keyPath:self.keyPath2]];
 	
 	[self.instance1 addObserver:self
-				forKeyPath:self.keyPath1
-				   options:(NSKeyValueObservingOptionNew)
-				   context:nil];
+                     forKeyPath:self.keyPath1
+                        options:(NSKeyValueObservingOptionNew)
+                        context:nil];
 	binded = YES;
 }
 

@@ -198,7 +198,7 @@
 	
 	int headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
-
+    
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
 							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
 }
@@ -312,25 +312,25 @@
 }
 
 - (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
-    [super init];
-	self.objectController = [CKCollectionController controllerWithCollection:collection];
-	self.controllerFactory = factory;
-    
-	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
-		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
-	}
-	
-	if(_parentController.autoHideSections && (collection.count <= 0)) {
-		self.hidden = YES;
-	}
-	
-	_sectionUpdate = NO;
-	
-	self.headerCellControllers = [NSMutableArray array];
-	self.footerCellControllers = [NSMutableArray array];
+    if (self = [super init]) {
+        self.objectController = [CKCollectionController controllerWithCollection:collection];
+        self.controllerFactory = factory;
+        
+        if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
+            [_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
+        }
+        
+        if(_parentController.autoHideSections && (collection.count <= 0)) {
+            self.hidden = YES;
+        }
+        
+        _sectionUpdate = NO;
+        
+        self.headerCellControllers = [NSMutableArray array];
+        self.footerCellControllers = [NSMutableArray array];
+    }
 	
 	return self;
-
 }
 
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{

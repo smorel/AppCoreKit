@@ -33,37 +33,42 @@
 }
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers headerTitle:(NSString*)title{
-	[super init];
-	self.headerTitle = title;
-	self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+	if (self = [super init]) {
+      	self.headerTitle = title;
+        self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    }
 	return self;
 }
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers headerView:(UIView*)view{
-	[super init];
-	self.headerView = view;
-	self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+	if (self = [super init]) {
+      	self.headerView = view;
+        self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    }
 	return self;
 }
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers{
-	[super init];
-	self.headerTitle = @"";
-	self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+	if (self = [super init]) {
+      	self.headerTitle = @"";
+        self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    }
 	return self;
 }
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers footerTitle:(NSString*)title{
-    [super init];
-	self.footerTitle = title;
-	self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    if (self = [super init]) {
+      	self.footerTitle = title;
+        self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    }
 	return self;
 }
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers footerView:(UIView*)view{
-    [super init];
-	self.footerView = view;
-	self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    if (self = [super init]) {
+        self.footerView = view;
+        self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
+    }
 	return self;
 }
 

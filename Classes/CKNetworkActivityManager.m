@@ -13,9 +13,10 @@
 
 + (CKNetworkActivityManager*)defaultManager {
 	static CKNetworkActivityManager* CKDefaultNetworkActivityManager = nil;
-	if (CKDefaultNetworkActivityManager == nil) {
-		CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc] init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKDefaultNetworkActivityManager = [[CKNetworkActivityManager alloc] init];
+    });
 	return CKDefaultNetworkActivityManager;
 }
 

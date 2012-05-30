@@ -58,9 +58,10 @@
 //OverLoads sharedInstance here as CKUITableViewCell has to be inited using a style !
 + (id)sharedInstance{
     static CKUITableViewCell* sharedCKUITableViewCell = nil;
-    if(!sharedCKUITableViewCell){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sharedCKUITableViewCell = [[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"sharedCKUITableViewCell"];
-    }
+    });
     return sharedCKUITableViewCell;
 }
 
@@ -84,10 +85,11 @@
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier delegate:(CKTableViewCellController*)thedelegate{
-	[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
-	self.delegate = thedelegate;
-    self.editingMask = UITableViewCellStateDefaultMask;
+	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.syncControllerViewBindingContextId = [NSString stringWithFormat:@"syncControllerViewBindingContextId<%p>",self];
+        self.delegate = thedelegate;
+        self.editingMask = UITableViewCellStateDefaultMask;
+    }
 	return self;
 }
 

@@ -41,11 +41,12 @@
 #pragma mark Initialization
 
 -(id)init{
-	[super init];
-	binded = NO;
+	if (self = [super init]) {
+      	binded = NO;
 #ifdef ENABLE_WEAK_REF_PROTECTION
-    self.barButtonItemRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseBarButtonItemRef:)];
+        self.barButtonItemRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseBarButtonItemRef:)];
 #endif
+    }
 	return self;
 }
 

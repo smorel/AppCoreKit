@@ -178,9 +178,10 @@ static CKSuffixTreeStreamReaderManager* CKSuffixTreeStreamReaderDefaultManager =
 @implementation CKSuffixTreeStreamReaderManager
 
 + (CKSuffixTreeStreamReaderManager*)defaultManager{
-	if(CKSuffixTreeStreamReaderDefaultManager == nil){
-		CKSuffixTreeStreamReaderDefaultManager = [[CKSuffixTreeStreamReaderManager alloc]init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKSuffixTreeStreamReaderDefaultManager = [[CKSuffixTreeStreamReaderManager alloc]init];
+    });
 	return CKSuffixTreeStreamReaderDefaultManager;
 }
 
@@ -238,11 +239,12 @@ static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
 	NSString* result = [txt stringUsingASCIIEncoding];
 	result = [result lowercaseString];
 	
-    if(CKSuffixTreeFormatingStringCharacterSet == nil){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         NSMutableCharacterSet* set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
         [set formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
         CKSuffixTreeFormatingStringCharacterSet = [set retain];
-    }
+    });
 	
 	NSArray* components = [result componentsSeparatedByCharactersInSet:[CKSuffixTreeFormatingStringCharacterSet invertedSet]];
 	result = [components componentsJoinedByString:@""];

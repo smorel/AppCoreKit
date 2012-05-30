@@ -10,7 +10,7 @@
 #import "CKOptionTableViewController.h"
 
 
-@interface CKOptionPropertyCellController : CKPropertyGridCellController  <CKOptionTableViewControllerDelegate>{
+@interface CKOptionPropertyCellController : CKPropertyGridCellController {
 }
 
 @property (nonatomic,assign) CKTableViewCellStyle optionCellStyle;

@@ -369,12 +369,13 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 }
 
 - (id)init{
-	[super init];
-	self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
-	self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
-	return self;
+    if (self = [super init]) {
+        self.propertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.propertyNamesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.viewPropertiesByClassName = [NSMutableDictionary dictionaryWithCapacity:500];
+        self.propertiesByClassNameByName = [NSMutableDictionary dictionaryWithCapacity:500];
+    }
+    return self;
 }
 
 - (void)dealloc{

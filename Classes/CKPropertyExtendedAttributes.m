@@ -31,9 +31,10 @@ static NSMutableDictionary* CKPropertyExtendedAttributesPerThreadSingleton = nil
 + (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property{
     NSThread* currentThread = [NSThread currentThread];
     
-	if(CKPropertyExtendedAttributesPerThreadSingleton == nil){
-		CKPropertyExtendedAttributesPerThreadSingleton = [[NSMutableDictionary alloc]init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKPropertyExtendedAttributesPerThreadSingleton = [[NSMutableDictionary alloc]init];
+    });
     
     CKPropertyExtendedAttributes* attributes = [CKPropertyExtendedAttributesPerThreadSingleton objectForKey:[NSValue valueWithNonretainedObject: currentThread]];
     if(!attributes){

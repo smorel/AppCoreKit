@@ -56,9 +56,11 @@
 
 
 - (id)initWithFrame:(CGRect)frame gridSize:(CGSize)size{
-	[self initWithFrame:frame];
-	_rows = size.height;
-	_columns = size.width;
+	if (self = [self initWithFrame:frame]) {
+    	_rows = size.height;
+        _columns = size.width;
+    }
+    
 	return self;
 }
 
@@ -349,7 +351,7 @@
 }
 
 - (void)swapAnimationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-	if (finished == NO) return;
+	if (finished.boolValue == NO) return;
 
 	if (self.dataSource && [(id)self.dataSource respondsToSelector:@selector(gridView:didMoveViewFromIndexPath:toIndexPath:)]) {
 		[self.dataSource gridView:self didMoveViewFromIndexPath:self.fromIndexPath toIndexPath:self.toIndexPath];

@@ -97,7 +97,7 @@ void *NewBase64Decode(
 		//
 		// Accumulate 4 valid characters (ignore everything else)
 		//
-		unsigned char accumulated[BASE64_UNIT_SIZE];
+		unsigned char accumulated[BASE64_UNIT_SIZE] = {0};
 		size_t accumulateIndex = 0;
 		while (i < length)
 		{
@@ -291,7 +291,7 @@ char *NewBase64Encode(
 //
 - (NSString *)base64EncodedString
 {
-	size_t outputLength;
+	size_t outputLength = 0;
 	char *outputBuffer =
 		NewBase64Encode([self bytes], [self length], true, &outputLength);
 	

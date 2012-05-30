@@ -31,12 +31,13 @@
 @synthesize instance;
 
 - (id)init{
-	[super init];
-	binded = NO;
+	if (self = [super init]) {
+        binded = NO;
 #ifdef ENABLE_WEAK_REF_PROTECTION
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.instanceRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.instanceRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseInstance:)];
 #endif
+    }
 	return self;
 }
 
@@ -128,9 +129,9 @@
 	[self unbind];
 	if(self.instance){
 		[self.instance addObserver:self
-				   forKeyPath:self.keyPath
-					  options:(NSKeyValueObservingOptionNew)
-					  context:nil];
+                        forKeyPath:self.keyPath
+                           options:(NSKeyValueObservingOptionNew)
+                           context:nil];
 		binded = YES;
 	}
 }
@@ -142,7 +143,7 @@
 - (void)unbindInstance:(id)theinstance{
 	if(binded){
 		[theinstance removeObserver:self
-								forKeyPath:self.keyPath];
+                         forKeyPath:self.keyPath];
 		binded = NO;
 	}
 }

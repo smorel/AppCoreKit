@@ -18,7 +18,7 @@ NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 }
 
 
-NSString* CKClassExplorerFilter = nil;
+__strong NSString* CKClassExplorerFilter = nil;
 NSString* CKClassExplorerAdditionalFilter = @"ck";
 CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 
@@ -79,14 +79,16 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 }
 
 - (id)initWithBaseClass:(Class)type{
-	[super init];
-	[self createClassesCollectionWithBaseClass:type];
+    if (self = [super init]) {
+        [self createClassesCollectionWithBaseClass:type];
+    }
 	return self;
 }
 
 - (id)initWithProtocol:(Protocol*)protocol{
-	[super init];
-	[self createClassesCollectionWithProtocol:protocol];
+	if (self = [super init]) {
+      [self createClassesCollectionWithProtocol:protocol];  
+    }
 	return self;
 }
 
@@ -96,11 +98,10 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	self.className = [type description];
 	
 	NSMutableArray* ar = [NSMutableArray array];
-	Class * classes = NULL;
 	int numClasses = objc_getClassList(NULL, 0);
 	if (numClasses > 0 )
 	{
-		classes = malloc(sizeof(Class) * numClasses);
+        Class * classes = malloc(sizeof(Class) * numClasses);
 		numClasses = objc_getClassList(classes, numClasses);
 		for(int i = 0;i<numClasses; ++i){
 			Class c = classes[i];
@@ -149,11 +150,10 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	self.classesCollection = [[[CKArrayCollection alloc]init]autorelease];
 	
 	NSMutableArray* ar = [NSMutableArray array];
-	Class * classes = NULL;
 	int numClasses = objc_getClassList(NULL, 0);
 	if (numClasses > 0 )
 	{
-		classes = malloc(sizeof(Class) * numClasses);
+		Class * classes = malloc(sizeof(Class) * numClasses);
 		numClasses = objc_getClassList(classes, numClasses);
 		for(int i = 0;i<numClasses; ++i){
 			Class c = classes[i];

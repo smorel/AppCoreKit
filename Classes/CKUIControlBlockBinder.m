@@ -34,14 +34,15 @@
 #pragma mark Initialization
 
 -(id)init{
-	[super init];
-	binded = NO;
-	self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
+    if (self = [super init]) {
+        binded = NO;
+        self.controlEvents = UIControlEventTouchUpInside;//UIControlEventValueChanged;
 #ifdef ENABLE_WEAK_REF_PROTECTION
-    self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
-    self.controlRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseControl:)];
+        self.targetRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseTarget:)];
+        self.controlRef = [CKWeakRef weakRefWithObject:nil target:self action:@selector(releaseControl:)];
 #endif
-	return self;
+    }
+    return self;
 }
 
 -(void)dealloc{

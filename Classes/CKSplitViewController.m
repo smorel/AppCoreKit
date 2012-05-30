@@ -252,7 +252,7 @@
     if(self.viewIsOnScreen){
         if([CKOSVersion() floatValue] < 5){
             for(UIViewController* controller in _viewControllers){
-                UIView* v = controller.view;//force to load view now
+                [controller view];//force to load view now
                 [controller viewWillAppear:NO];
             }
         }

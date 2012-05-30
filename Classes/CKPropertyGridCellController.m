@@ -42,12 +42,13 @@
 @synthesize navigationToolbar = _navigationToolbar;
 
 - (id)init{
-	[super init];
-	self.cellStyle = CKTableViewCellStyleIPhoneForm;
-    _validationDisplayed = NO;
-    self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
-    _fixedSize = NO;
-    self.enableNavigationToolbar = NO;
+    if (self = [super init]) {
+        self.cellStyle = CKTableViewCellStyleIPhoneForm;
+        _validationDisplayed = NO;
+        self.validationBindingContext = [NSString stringWithFormat:@"<%p>_validation",self];
+        _fixedSize = NO;
+        self.enableNavigationToolbar = NO;
+    }
 	return self;
 }
 

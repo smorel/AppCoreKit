@@ -24,10 +24,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 @synthesize contexts = _contexts;
 
 - (id)init{
-	[super init];
-	self.bindingsForContext = [NSMutableDictionary dictionary];
-	self.bindingsPoolForClass = [NSMutableDictionary dictionary];
-	self.contexts = [NSMutableSet set];
+    if (self = [super init]) {
+        self.bindingsForContext = [NSMutableDictionary dictionary];
+        self.bindingsPoolForClass = [NSMutableDictionary dictionary];
+        self.contexts = [NSMutableSet set];
+    }
 	return self;
 }
 
@@ -91,6 +92,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		//Already unbinded
+        [context autorelease];
 		return;
 	}
 	

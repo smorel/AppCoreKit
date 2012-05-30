@@ -32,13 +32,12 @@ static NSMutableDictionary* CKStoreCache = nil;
 #pragma mark Shared CKCoreDataManager
 
 + (CKCoreDataManager *)storeCoreDataManager {
-    @synchronized(self) {
-        if (CKStoreCoreDataManager == nil) {
-            NSString *path = [[NSBundle mainBundle] pathForResource:@"CloudKit" ofType:@"momd"];
-            NSURL *momURL = [NSURL fileURLWithPath:path];
-            CKStoreCoreDataManager = [[CKCoreDataManager alloc] initWithModelURL:momURL];
-        }
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"CloudKit" ofType:@"momd"];
+        NSURL *momURL = [NSURL fileURLWithPath:path];
+        CKStoreCoreDataManager = [[CKCoreDataManager alloc] initWithModelURL:momURL];
+    });
     return CKStoreCoreDataManager;
 }
 

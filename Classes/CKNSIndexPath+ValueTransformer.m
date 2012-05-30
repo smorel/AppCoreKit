@@ -21,7 +21,11 @@
 		indexes[i] = [component intValue];
 		++i;
 	}
-	return [[[NSIndexPath alloc]initWithIndexes:indexes length:[components count]]autorelease];
+	
+    NSIndexPath *indexPath = [[[NSIndexPath alloc]initWithIndexes:indexes length:[components count]]autorelease];
+    free(indexes);
+    
+    return indexPath;
 }
 
 + (NSString*)convertToNSString:(NSIndexPath*)indexPath{

@@ -126,7 +126,7 @@
 	}
 	else{
 		NSInteger index = intValue;
-        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%@", intValue];
+        NSString* str = (self.labels && index != NSNotFound) ? [self.labels objectAtIndex:index] : [NSString stringWithFormat:@"%d", intValue];
 		return _(str);
 	}
 	return nil;
