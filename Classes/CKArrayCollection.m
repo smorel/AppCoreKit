@@ -47,4 +47,11 @@
     [self.collectionObjects removeObjectsAtIndexes:indexes];
 }
 
+- (void)dealloc {
+    [_collectionObjects release];
+    self.property = nil;
+    
+    [super dealloc];
+}
+
 @end
