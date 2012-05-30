@@ -15,6 +15,7 @@
 
 @property (nonatomic,assign) CKTableViewCellStyle optionCellStyle;
 @property (nonatomic,retain,readonly) CKOptionTableViewController* optionsViewController;
+@property (nonatomic,assign) BOOL presentsOptionsAsPopover;
 
 
 

@@ -67,6 +67,7 @@ typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value
 @interface CKPropertyExtendedAttributes (CKOptionPropertyCellController)
 
 @property (nonatomic, assign) BOOL multiSelectionEnabled;
+@property (nonatomic, assign) BOOL presentsOptionsAsPopover;
 @property (nonatomic, copy) CKOptionPropertyCellControllerSortingBlock sortingBlock;
 
 @end
