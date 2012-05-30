@@ -34,7 +34,7 @@
                     UIImage* image = [style backgroundImage];
                     [toolbar setBackgroundImage:image forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
                 }
-                [[self class] applyStyleByIntrospection:style toObject:self appliedStack:appliedStack delegate:delegate];
+                [[self class] applyStyleByIntrospection:style toObject:view appliedStack:appliedStack delegate:delegate];
                 [appliedStack addObject:view];
                 
                 [view setAppliedStyle:style];
