@@ -25,7 +25,7 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
 - (void)setWillPopViewControllerBlock:(UINavigationControllerBlock)block{
     objc_setAssociatedObject(self, 
                              &UINavigationControllerWillPopViewControllerBlockBlockKey,
-                             [block copy],
+                             block,
                              OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
@@ -36,7 +36,7 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
 - (void)setWillPushViewControllerBlock:(UINavigationControllerBlock)block{
     objc_setAssociatedObject(self, 
                              &UINavigationControllerWillPushViewControllerBlockBlockKey,
-                             [block copy],
+                             block,
                              OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
@@ -47,7 +47,7 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
 - (void)setDidPopViewControllerBlock:(UINavigationControllerBlock)block{
     objc_setAssociatedObject(self, 
                              &UINavigationControllerDidPopViewControllerBlockBlockKey,
-                             [block copy],
+                             block,
                              OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
@@ -58,7 +58,7 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
 - (void)setDidPushViewControllerBlock:(UINavigationControllerBlock)block{
     objc_setAssociatedObject(self, 
                              &UINavigationControllerDidPushViewControllerBlockBlockKey,
-                             [block copy],
+                             block,
                              OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 

@@ -32,7 +32,7 @@ NSString* CKStyleFontName = @"fontName";
     [super updateReservedKeyWords:keyWords];
 	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleFontName,CKStyleFontSize,nil]];
 }
-
+    
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
 	if([UIView applyStyle:style toView:view appliedStack:appliedStack delegate:delegate]){
 		UILabel* label = (UILabel*)view;

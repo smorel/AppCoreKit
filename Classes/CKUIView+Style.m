@@ -470,7 +470,7 @@ static char NSObjectAppliedStyleObjectKey;
 	/*if(reserverKeyWords == nil){
 	}*/
 	
-    NSMutableSet* reserverKeyWords = [[NSMutableSet set]retain];
+    NSMutableSet* reserverKeyWords = [NSMutableSet set];
 	[[self class]updateReservedKeyWords:reserverKeyWords];
 	
 	for(NSString* key in [style allKeys]){
