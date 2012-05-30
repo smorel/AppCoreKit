@@ -30,6 +30,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 @property (atomic, assign, getter = isCancelled) BOOL cancelled;
 @property (nonatomic, assign) dispatch_group_t operationsGroup;
+@property (nonatomic, assign) dispatch_group_t startGroup;
 
 @end
 
@@ -100,6 +101,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     self.completionBlock = nil;
     self.transformBlock = nil;
     self.cancelBlock = nil;
+    if (self.startGroup)
+        dispatch_release(self.startGroup);
     dispatch_release(self.operationsGroup);
     
     [super dealloc];
@@ -114,41 +117,48 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
     NSAssert(self.connection == nil, @"Connection already started");
     
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    if (self.startGroup)
+        dispatch_release(self.startGroup);
+    
+    self.startGroup = dispatch_group_create();
+    dispatch_group_async(self.startGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         dispatch_group_wait(self.operationsGroup, DISPATCH_TIME_FOREVER);
-    });
-    
-    self.progress = 0.0;
-    self.cancelled = NO;
-    
-    NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
-    
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    dispatch_release(group);
-    
-    if (cachedResponse) {
-        [self connection:nil didReceiveResponse:cachedResponse.response];
-        [self connection:nil didReceiveData:cachedResponse.data];
-        [self connectionDidFinishLoading:nil];
-    }
-    else {
-        self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
         
-        [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
-        [self.connection start];  
-    }
+        self.progress = 0.0;
+        self.cancelled = NO;
+        
+        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
+        
+        if (cachedResponse) {
+            [self connection:nil didReceiveResponse:cachedResponse.response];
+            [self connection:nil didReceiveData:cachedResponse.data];
+            [self connectionDidFinishLoading:nil];
+        }
+        else {
+            self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
+            
+            [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+            [self.connection start];  
+        }
+    });
 }
 
 - (void)cancel {
-    if (!self.cancelled) {
-        [self.connection cancel];
-        self.connection = nil;
-        self.cancelled = YES;
-                
-        if (self.cancelBlock)
-            self.cancelBlock();
-    }
+    void (^doCancel)() = ^{
+        if (!self.cancelled) {
+            [self.connection cancel];
+            self.connection = nil;
+            self.cancelled = YES;
+            
+            if (self.cancelBlock)
+                self.cancelBlock();
+        }
+    };
+    
+    if (self.startGroup)
+        dispatch_group_notify(self.startGroup, dispatch_get_current_queue(), doCancel);
+    else
+        doCancel();
 }
 
 #pragma mark - NSURLConnectionDataDelegate
