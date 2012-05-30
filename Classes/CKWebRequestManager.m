@@ -134,14 +134,8 @@
         
         [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:request];
     }
-    else {
-        NSInteger i = [self.runningRequests indexOfObjectIdenticalTo:request];
-        if(i != NSNotFound){
-            int i = 3;
-            /////WEIRD !!!!!!!!!!!
-        }
+    else
         [self.waitingRequests addObject:request];
-    }
     
     [self reachabilityDidChange];
 }
@@ -152,19 +146,12 @@
     
     if (self.waitingRequests.count != 0) {
         CKWebRequest *newRequest = [[self.waitingRequests objectAtIndex:0]retain];
-        if(!newRequest){
-            int i =3;
-            //THIS IS WEIRD !!!!!!!!!!!!
-        }
         [self.waitingRequests removeObjectAtIndex:0];
         if(newRequest){
             [self.runningRequests addObject:newRequest];
             
             [newRequest startOnRunLoop:self.runLoop];
             [newRequest autorelease];
-        }else{
-            int i =3;
-            //THIS IS WEIRD !!!!!!!!!!!!
         }
     }
 }
