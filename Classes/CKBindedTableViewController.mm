@@ -298,9 +298,13 @@
 		}
 		
 		if (currentRow >= 0 && currentSection >= 0){
-			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:currentRow inSection:currentSection] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            BOOL pagingEnable = self.tableView.pagingEnabled;
+            self.tableView.pagingEnabled = NO;
+			[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:currentRow inSection:currentSection] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+            self.tableView.pagingEnabled = pagingEnable;
+            
+            self.indexPathToReachAfterRotation = [NSIndexPath indexPathForRow:currentRow inSection:currentSection];
 		}
-		self.indexPathToReachAfterRotation = nil;
 	}
 	
 	[self updateNumberOfPages];
@@ -479,7 +483,7 @@
     if([self isValidIndexPath:_indexPathToReachAfterRotation]){
         BOOL pagingEnable = self.tableView.pagingEnabled;
         self.tableView.pagingEnabled = NO;
-        [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+        [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionNone animated:NO];
         self.tableView.pagingEnabled = pagingEnable;
     }
 	self.indexPathToReachAfterRotation = nil;

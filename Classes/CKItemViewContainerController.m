@@ -190,6 +190,13 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     self.rotating = YES;
     
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
+	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
+    
+    [self onBeginUpdates];
     if([self isKindOfClass:[CKTableViewController class]]){
         //Invalidate all controller's size !
         for(int i =0; i< [self numberOfSections];++i){
@@ -200,12 +207,8 @@
             }
         }
     }
+    [self onEndUpdates];
     
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration{
-	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 	[self updateVisibleViewsRotation];
 	[self updateViewsVisibility:YES];
 }
