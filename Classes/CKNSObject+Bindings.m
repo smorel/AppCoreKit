@@ -164,7 +164,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath2{
     [NSObject validateCurrentBindingsContext];
     
-	CKDataBinder* binder = (CKDataBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBinder class]];
+	CKDataBinder* binder = (CKDataBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKDataBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setInstance1:self];
 	binder.keyPath1 = keyPath;
@@ -181,7 +181,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bind:(NSString *)keyPath executeBlockImmediatly:(BOOL)execute withBlock:(void (^)(id value))block{
     [NSObject validateCurrentBindingsContext];
     
-	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBlockBinder class]];
+	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKDataBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setInstance:self];
 	binder.keyPath = keyPath;
@@ -198,7 +198,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
     
-	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKDataBlockBinder class]];
+	CKDataBlockBinder* binder = (CKDataBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKDataBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setInstance:self];
 	binder.keyPath = keyPath;
@@ -222,7 +222,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindEvent:(UIControlEvents)controlEvents executeBlockImmediatly:(BOOL)execute withBlock:(void (^)())block{
     [NSObject validateCurrentBindingsContext];
     
-	CKUIControlBlockBinder* binder = (CKUIControlBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKUIControlBlockBinder class]];
+	CKUIControlBlockBinder* binder = (CKUIControlBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKUIControlBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	binder.controlEvents = controlEvents;
 	binder.block = block;
@@ -238,7 +238,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindEvent:(UIControlEvents)controlEvents target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
     
-	CKUIControlBlockBinder* binder = (CKUIControlBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKUIControlBlockBinder class]];
+	CKUIControlBlockBinder* binder = (CKUIControlBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKUIControlBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	binder.controlEvents = controlEvents;
 	[binder setControl:self];
@@ -257,7 +257,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindNotificationName:(NSString *)notification object:(id)notificationSender withBlock:(void (^)(NSNotification *notification))block{
     [NSObject validateCurrentBindingsContext];
     
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
+	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKNotificationBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setInstance:notificationSender];
 	binder.notificationName = notification;
@@ -269,7 +269,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindNotificationName:(NSString *)notification withBlock:(void (^)(NSNotification *notification))block{
     [NSObject validateCurrentBindingsContext];
     
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
+	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKNotificationBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	binder.notificationName = notification;
 	binder.block = block;
@@ -280,7 +280,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindNotificationName:(NSString *)notification object:(id)notificationSender target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
     
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
+	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKNotificationBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setInstance:notificationSender];
 	[binder setTarget:target];
@@ -293,7 +293,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
     
-	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKNotificationBlockBinder class]];
+	CKNotificationBlockBinder* binder = (CKNotificationBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKNotificationBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setTarget:target];
 	binder.notificationName = notification;

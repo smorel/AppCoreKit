@@ -51,7 +51,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 }
 
 //The client should release the object returned !
-- (id)dequeueReusableBindingWithClass:(Class)bindingClass{
+- (id)newDequeuedReusableBindingWithClass:(Class)bindingClass{
 	NSString* className = NSStringFromClass(bindingClass);//[NSString stringWithUTF8String:class_getName(bindingClass)];
 	NSMutableArray* bindings = [_bindingsPoolForClass valueForKey:className];
 	if(!bindings){

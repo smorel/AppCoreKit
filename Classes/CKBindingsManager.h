@@ -21,7 +21,7 @@
 
 + (CKBindingsManager*)defaultManager;
 
-- (id)dequeueReusableBindingWithClass:(Class)bindingClass;
+- (id)newDequeuedReusableBindingWithClass:(Class)bindingClass;
 - (void)bind:(CKBinding*)binding withContext:(id)context;
 - (void)unbind:(CKBinding*)binding;
 - (void)unregister:(CKBinding*)binding;

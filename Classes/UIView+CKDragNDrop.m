@@ -563,7 +563,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 - (void)bindDragEvent:(CKDragEvents)dragEvents withBlock:(void (^)(UIView* view, UITouch* touch, CKDragEvents event))block{
     [NSObject validateCurrentBindingsContext];
     
-	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[UIViewDragDropBlockBinder class]];
+	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[UIViewDragDropBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	binder.dragEvents = dragEvents;
 	binder.block = block;
@@ -575,7 +575,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
 - (void)bindDragEvent:(CKDragEvents)dragEvents target:(id)target action:(SEL)selector{
     [NSObject validateCurrentBindingsContext];
     
-	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[UIViewDragDropBlockBinder class]];
+	UIViewDragDropBlockBinder* binder = (UIViewDragDropBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[UIViewDragDropBlockBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	binder.dragEvents = dragEvents;
 	[binder setView:self];

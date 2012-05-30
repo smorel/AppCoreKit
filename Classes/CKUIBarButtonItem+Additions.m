@@ -192,7 +192,7 @@ static char UIBarButtonItemExecutionBlockKey;
 - (void)bindEventWithBlock:(void(^)())theblock{
     [NSObject validateCurrentBindingsContext];
     
-	CKUIBarButtonItemBinder* binder = (CKUIBarButtonItemBinder*)[[CKBindingsManager defaultManager]dequeueReusableBindingWithClass:[CKUIBarButtonItemBinder class]];
+	CKUIBarButtonItemBinder* binder = (CKUIBarButtonItemBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKUIBarButtonItemBinder class]];
     binder.contextOptions = [NSObject currentBindingContextOptions];
 	[binder setBarButtonItem:self];
 	binder.block = theblock;
