@@ -89,10 +89,10 @@
     switch(self.style){
         case CKTabViewStyleFill:{
             CGFloat width = (viewWidth - (([_items count] - 1) * self.itemsSpace)) / [_items count];
-            CGFloat x = contentInsets.left;
+            CGFloat x = floorf(contentInsets.left);
             for (CKTabViewItem *item in _items) {
                 item.frame = CGRectMake(x, contentInsets.top, width, viewHeight);
-                x += width + self.itemsSpace;
+                x += floorf(width + self.itemsSpace);
             }
             break;
         }
@@ -103,35 +103,35 @@
             }
             totalWidth += ([_items count] - 1) * self.itemsSpace;
             
-            CGFloat x = contentInsets.left + (viewWidth / 2.0) - (totalWidth / 2.0);
+            CGFloat x = floorf(contentInsets.left + (viewWidth / 2.0) - (totalWidth / 2.0));
             for (CKTabViewItem *item in _items) {
                 [item sizeToFit];
-                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
-                x += item.frame.size.width + self.itemsSpace;
+                x += floorf(item.frame.size.width + self.itemsSpace);
             }
             
             break;
         }
         case CKTabViewStyleAlignLeft:{
-            CGFloat x = contentInsets.left;
+            CGFloat x = floorf(contentInsets.left);
             for (CKTabViewItem *item in _items) {
                 [item sizeToFit];
-                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
-                x += item.frame.size.width + self.itemsSpace;
+                x += floorf(item.frame.size.width + self.itemsSpace);
             }
             
             break;
         }
         case CKTabViewStyleAlignRight:{
-            CGFloat x = contentInsets.left + viewWidth;
+            CGFloat x = floorf(contentInsets.left + viewWidth);
             for (CKTabViewItem *item in _items) {
                 [item sizeToFit];
-                x -= item.frame.size.width;
-                CGFloat y = contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0);
+                x -= floorf(item.frame.size.width);
+                CGFloat y = floorf(contentInsets.top + (viewHeight / 2.0) - (item.frame.size.height / 2.0));
                 item.frame = CGRectMake(x,y,item.frame.size.width,item.frame.size.height);
-                x -= self.itemsSpace;
+                x -= floorf(self.itemsSpace);
             }
             
             break;
