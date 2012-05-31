@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import <Foundation/Foundation.h>
 #import "CKFormTableViewController.h"
 
@@ -14,3 +16,5 @@
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end
+
+#endif

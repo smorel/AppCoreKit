@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import "CKUIViewController+InlineDebugger.h"
 #import "CKNSObject+InlineDebugger.h"
 
@@ -74,3 +76,5 @@
 }
 
 @end
+
+#endif

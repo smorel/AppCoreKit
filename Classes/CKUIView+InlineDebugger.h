@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import <UIKit/UIKit.h>
 #import "CKNSObject+InlineDebugger.h"
 
@@ -15,3 +17,5 @@
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end
+
+#endif

@@ -10,7 +10,7 @@
 
 @interface CKWebDataConverter : NSObject
 
-+ (void)addConverter:(id (^)(NSData *, NSURLResponse *response))converter forMIMEPredicate:(NSPredicate*)predicate;
++ (void)addConverter:(id (^)(NSData *data, NSURLResponse *response))converter forMIMEPredicate:(NSPredicate*)predicate;
 
 +(id)convertData:(NSData*)data fromResponse:(NSURLResponse*)response;
 

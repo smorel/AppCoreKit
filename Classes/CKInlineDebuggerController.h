@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -25,3 +27,5 @@ typedef enum CKInlineDebuggerControllerState{
 - (void)setActive:(BOOL)bo  withView:(UIView*)view;
 
 @end
+
+#endif

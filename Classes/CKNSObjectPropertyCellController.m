@@ -169,11 +169,13 @@
 		}
 		[self.containerController.navigationController pushViewController:controller animated:YES];
 	}
+#ifdef DEBUG
 	else{
         CKFormTableViewController* debugger = [[thevalue class]inlineDebuggerForObject:thevalue];
         debugger.title = self.tableViewCell.text;
 		[self.containerController.navigationController pushViewController:debugger animated:YES];
 	}
+#endif
 }
 
 - (void)createObject:(id)sender{
@@ -242,8 +244,10 @@
 		title = [instance valueForKeyPath:@"modelName"];
 	}
 	
+#ifdef DEBUG
     CKFormTableViewController* debugger = [[instance class]inlineDebuggerForObject:instance];
 	debugger.title = title;
+#endif
     
 	/*
 	 NSIndexPath* indexPath = [controller indexPathForObject:object];

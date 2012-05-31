@@ -31,9 +31,13 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @interface CKUIViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
-@property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
 @property (nonatomic, assign, readwrite) CKUIViewControllerState state;
+
+#ifdef DEBUG
+@property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
+#endif
+
 @end
 
 @implementation CKUIViewController
@@ -52,11 +56,14 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize navigationItemsBindingContext = _navigationItemsBindingContext;
 @synthesize navigationTitleBindingContext = _navigationTitleBindingContext;
 @synthesize supportedInterfaceOrientations;
-@synthesize inlineDebuggerController = _inlineDebuggerController;
 @synthesize deallocBlock = _deallocBlock;
 @synthesize styleHasBeenApplied;
 @synthesize state;
 @synthesize viewIsOnScreen;
+
+#ifdef DEBUG
+@synthesize inlineDebuggerController = _inlineDebuggerController;
+#endif
 
 + (void)load {
     
@@ -135,14 +142,17 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_leftButton = nil;
 	[_navigationItemsBindingContext release];
 	_navigationItemsBindingContext = nil;
-	[_inlineDebuggerController release];
-	_inlineDebuggerController = nil;
     [_deallocBlock release];
     _deallocBlock = nil;
     [_navigationTitleBindingContext release];
     _navigationTitleBindingContext = nil;
     [_orientationChangeBlock release];
     _orientationChangeBlock = nil;
+    
+#ifdef DEBUG
+    [_inlineDebuggerController release];
+	_inlineDebuggerController = nil;
+#endif
     
 	[super dealloc];
 }
@@ -454,7 +464,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         _viewWillAppearEndBlock(self,animated);
     }
     
+#ifdef DEBUG
     [self.inlineDebuggerController start];
+#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -481,7 +493,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
+    
+#ifdef DEBUG
     [self.inlineDebuggerController stop];
+#endif
 }
 
 -(void) viewDidLoad{
@@ -498,7 +513,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         self.contentSizeForViewInPopover = [controllerStyle cgSizeForKey:@"contentSizeForViewInPopover"];
     }
     
+#ifdef DEBUG
     self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
+#endif
 }
 
 -(void) viewDidUnload{
@@ -508,8 +525,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         _viewDidUnloadBlock(self);
     }
     
+#ifdef DEBUG
     [_inlineDebuggerController release];
     _inlineDebuggerController = nil;
+#endif
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

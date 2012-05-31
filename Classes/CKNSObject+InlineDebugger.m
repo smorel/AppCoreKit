@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import "CKNSObject+InlineDebugger.h"
 #import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKUIView+Style.h"
@@ -206,3 +208,5 @@
 }
 
 @end
+
+#endif

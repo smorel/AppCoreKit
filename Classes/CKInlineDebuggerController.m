@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import "CKInlineDebuggerController.h"
 #import "CKWeakRef.h"
 #import "CKUIViewController+InlineDebugger.h"
@@ -73,7 +75,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 
 - (void)start{
-#ifdef DEBUG
     if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
         BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
         CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
@@ -101,11 +102,9 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
             }
         }
     }
-#endif
 }
 
 - (void)stop{
-#ifdef DEBUG
     [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];
     for(UIGestureRecognizer* gesture in self.customGestures){
         [self.viewController.view removeGestureRecognizer:gesture];
@@ -117,7 +116,6 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         self.oldRightButtonItem = nil;
         self.oldLeftButtonItem = nil;
     }
-#endif
 }
 
 - (void)dealloc{
@@ -514,3 +512,5 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 }
 
 @end
+
+#endif

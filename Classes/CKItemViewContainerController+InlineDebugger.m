@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#ifdef DEBUG
+
 #import "CKItemViewContainerController+InlineDebugger.h"
 #import "CKGridTableViewCellController.h"
 
@@ -113,3 +115,5 @@
 }
 
 @end
+
+#endif
