@@ -115,11 +115,18 @@
         [imageLoader cancel];
     }];
     
-    [cellController setViewDidAppearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+    [cellController setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         if(!remoteImage){
             [imageLoader loadImageWithContentOfURL:imageURL];
         }
     }];
+    
+    /* We can do it when setupping now as we have multi-threaded the network.
+    [cellController setViewDidAppearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+        if(!remoteImage){
+            [imageLoader loadImageWithContentOfURL:imageURL];
+        }
+    }];*/
     
     return cellController;
 }
