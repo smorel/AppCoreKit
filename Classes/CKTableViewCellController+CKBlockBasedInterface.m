@@ -10,6 +10,15 @@
 
 @implementation CKTableViewCellController (CKBlockBasedInterface)
 
+- (void)setDeallocBlock:(void(^)(CKTableViewCellController* controller))block{
+    if(block){
+        self.deallocCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKTableViewCellController* controller = (CKTableViewCellController*)value;
+            block(controller);
+            return (id)nil;
+        }];
+    }else{ self.deallocCallback = nil; }
+}
 
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block{
     if(block){

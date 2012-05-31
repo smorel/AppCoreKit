@@ -111,6 +111,10 @@
         };
     }
     
+    [cellController setDeallocBlock:^(CKTableViewCellController *controller) {
+        [imageLoader cancel];
+    }];
+    
     [cellController setViewDidDisappearBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         [imageLoader cancel];
     }];

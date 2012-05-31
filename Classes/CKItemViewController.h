@@ -56,6 +56,7 @@ typedef NSUInteger CKItemViewFlags;
 @property (nonatomic, assign) CKItemViewFlags flags;
 @property (nonatomic, assign) CGSize size;
 
+@property (nonatomic, retain) CKCallback* deallocCallback;
 @property (nonatomic, retain) CKCallback* createCallback;
 @property (nonatomic, retain) CKCallback* initCallback;
 @property (nonatomic, retain) CKCallback* setupCallback;

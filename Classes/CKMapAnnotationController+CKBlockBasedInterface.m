@@ -10,6 +10,15 @@
 
 @implementation CKMapAnnotationController (CKBlockBasedInterface)
 
+- (void)setDeallocBlock:(void(^)(CKMapAnnotationController* controller))block{
+    if(block){
+        self.deallocCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKMapAnnotationController* controller = (CKMapAnnotationController*)value;
+            block(controller);
+            return (id)nil;
+        }];
+    }else{ self.deallocCallback = nil; }
+}
 
 - (void)setInitBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block{
     if(block){

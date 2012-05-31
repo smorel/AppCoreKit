@@ -45,11 +45,15 @@
 @synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
 @synthesize targetRef = _targetRef;
 @synthesize isViewAppeared = _isViewAppeared;
+@synthesize deallocCallback = _deallocCallback;
 
 @synthesize flags = _flags;
 @synthesize size = _size;
 
 - (void)dealloc {
+    if(_deallocCallback){
+        [_deallocCallback execute:self];
+    }
 	[self clearBindingsContext];
 	
 	[_value release];
@@ -69,6 +73,7 @@
 	[_viewDidAppearCallback release];
 	[_viewDidDisappearCallback release];
 	[_targetRef release];
+    [_deallocCallback release];
 	
 	_containerController = nil;
 	[super dealloc];

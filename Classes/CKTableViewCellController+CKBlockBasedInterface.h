@@ -10,6 +10,7 @@
 
 @interface CKTableViewCellController (CKBlockBasedInterface)
 
+- (void)setDeallocBlock:(void(^)(CKTableViewCellController* controller))block;
 - (void)setInitBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 - (void)setSetupBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 
