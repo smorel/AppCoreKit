@@ -15,6 +15,12 @@
 
 #define AUTO_LOCALIZATION 0
 
+typedef struct CKNSValueTransformerIdentifier {
+    Class fromClass;
+    Class toClass;
+    Class contentClass;
+} CKNSValueTransformerIdentifier;
+
 
 NSString* CKNSValueTransformerCacheClassTag = @"CKNSValueTransformerCacheClassTag";
 NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSelectorTag";
@@ -38,8 +44,8 @@ NSString* CKSerializerIDTag = @"@id";
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property;
 + (void)registerConverterWithIdentifier:(NSString*)identifier selectorClass:(Class)selectorClass selector:(SEL)selector;
 + (NSDictionary*)converterWithIdentifier:(NSString*)identifier;
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)class;
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)class;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content;
 @end
 
 //utiliser des selector au lieu des valueTransformers
@@ -138,7 +144,7 @@ NSString* CKSerializerIDTag = @"@id";
 			Class c =  [NSValueTransformer convertClassFromObject:object];
             [property setValue:(id)c];
 			/*[property setValue:[NSValue valueWithPointer:c]];
-			return [NSValue valueWithPointer:c];*/
+             return [NSValue valueWithPointer:c];*/
             return c;
 			break;
 		}
@@ -230,42 +236,51 @@ NSString* CKSerializerIDTag = @"@id";
 								 forKey:identifier];
 }
 
-+ (NSDictionary*)converterWithIdentifier:(NSString*)identifier{
++ (NSDictionary*)converterWithIdentifier:(id)identifier{
 	return [CKNSValueTransformerCache objectForKey:identifier];
 }
 
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target{
-	NSDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target{
+	NSMutableDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
 	if(dico != nil){
 		id value = [dico objectForKey:[target description]];
 		if([value isKindOfClass:[NSString class]])
 			return value;
 	}
 	
-	NSString* converterIdentifier = [NSString stringWithFormat:@"%@TO%@",[[source class]description],[target description]];
-	if(CKNSValueTransformerIdentifierCache == nil){
-		CKNSValueTransformerIdentifierCache = [[NSMutableDictionary dictionary]retain];
-		[CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:converterIdentifier 
-																		 forKey:[target description]]
-									  forKey:[source description]];
-	}
-	else{
-		NSMutableDictionary* dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
-		if(dico == nil){
-			[CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:converterIdentifier 
-																					   forKey:[target description]]
-													forKey:[source description]];
-		}
-		else{
-			[dico setObject:converterIdentifier forKey:[target description]];
-		}
-	}
-	return converterIdentifier;
+    CKNSValueTransformerIdentifier identifier;
+    identifier.fromClass = source;
+    identifier.toClass = target;
+    identifier.contentClass = nil;
+    
+    NSValue *identifierValue = [NSValue value:&identifier withObjCType:@encode(CKNSValueTransformerIdentifier)];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKNSValueTransformerIdentifierCache = [[NSMutableDictionary alloc] init];
+    });
+    
+    dico = [CKNSValueTransformerIdentifierCache objectForKey:[source description]];
+    if(dico == nil){
+        [CKNSValueTransformerIdentifierCache setObject:[NSMutableDictionary dictionaryWithObject:identifierValue forKey:[target description]]
+                                                forKey:[source description]];
+    }
+    else{
+        [dico setObject:identifierValue forKey:[target description]];
+    }
+    
+	return identifierValue;
 }
 
-+ (NSString*)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content{
-	NSString* converterIdentifier = [NSString stringWithFormat:@"%@_%@TO%@",[[source class]description],[content description],[target description]];
-	return converterIdentifier;
++ (id)identifierForSourceClass:(Class)source targetClass:(Class)target contentClass:(Class)content{
+	CKNSValueTransformerIdentifier identifier;
+    identifier.fromClass = source;
+    identifier.toClass = target;
+    identifier.contentClass = content;
+    
+    NSValue *identifierValue = [NSValue value:&identifier withObjCType:@encode(CKNSValueTransformerIdentifier)];
+    
+	return identifierValue;
 }
 
 + (id)transform:(id)source toClass:(Class)type inProperty:(CKProperty*)property{
@@ -280,7 +295,7 @@ NSString* CKSerializerIDTag = @"@id";
 	
 	CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 	if(attributes.contentType != nil){
-		NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:attributes.contentType];
+		id converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type contentClass:attributes.contentType];
 		NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 		
 		SEL selector = nil;
@@ -337,7 +352,7 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	
 	//Use the cached selector if exists
-	NSString* converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type];
+	id converterIdentifier = [NSValueTransformer identifierForSourceClass:[source class] targetClass:type];
 	NSDictionary* dico = [NSValueTransformer converterWithIdentifier:converterIdentifier];
 	if(dico != nil){
 		SEL selector = [[dico objectForKey:CKNSValueTransformerCacheSelectorTag]pointerValue];
@@ -452,7 +467,7 @@ NSString* CKSerializerIDTag = @"@id";
 	}
 	//special case for date ...
     else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
-	   && [property.value isKindOfClass:[NSString class]]){
+            && [property.value isKindOfClass:[NSString class]]){
 		id result = [NSDate convertFromNSString:property.value withFormat:attributes.dateFormat];
 		return result;
 	}
