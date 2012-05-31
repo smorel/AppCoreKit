@@ -27,6 +27,8 @@ extern NSString* CKDynamicLayoutLineBreakMode;
 - (void)performLayout;
 - (CGSize)computeSize;
 
++ (CGFloat)computeTableViewCellViewSizeUsingTableView:(UITableView*)tableView;
++ (CGFloat)computeTableViewCellMarginUsingTableView:(UITableView*)tableView;
 
 - (CGFloat)computeContentViewSize;
 - (CGFloat)computeContentViewSizeForSubCellController;

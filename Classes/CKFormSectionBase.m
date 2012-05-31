@@ -16,8 +16,13 @@
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKSectionViews.h"
 
 #import "CKDebug.h"
+
+@interface CKSectionHeaderView()
+@property(nonatomic,assign,readwrite) CKTableViewController* tableViewController;
+@end
 
 //CKFormSectionBase
 
@@ -82,20 +87,44 @@
 	return [_parentController indexOfVisibleSection:self];
 }
 
+- (void)setParentController:(CKFormTableViewController *)theParentController{
+    _parentController = theParentController;
+    
+    if([_headerView isKindOfClass:[CKSectionHeaderView class]]){
+        CKSectionHeaderView* v = (CKSectionHeaderView*)_headerView;
+        v.tableViewController = _parentController;
+    }
+    
+    if([_footerView isKindOfClass:[CKSectionHeaderView class]]){
+        CKSectionHeaderView* v = (CKSectionHeaderView*)_footerView;
+        v.tableViewController = _parentController;
+    }
+}
+
 - (void)setHeaderTitle:(NSString *)headerTitle{
     [_headerTitle release];
     _headerTitle = [headerTitle retain];
     
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    if(!_headerView){
+        CKSectionHeaderView* v = [[[CKSectionHeaderView alloc]init]autorelease];
+        v.text = _headerTitle;
+        [self setHeaderView:v];
+    }else{
+        if([_headerView isKindOfClass:[CKSectionHeaderView class]]){
+            CKSectionHeaderView* v = (CKSectionHeaderView*)_headerView;
+            v.text = _headerTitle;
+        }
+        [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)setHeaderView:(UIView *)headerView{
     [_headerView release];
     _headerView = [headerView retain];
     
-    if(_headerView){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_headerView applyStyle:controllerStyle propertyName:@"sectionHeaderView"];
+    if([headerView isKindOfClass:[CKSectionHeaderView class]]){
+        CKSectionHeaderView* v = (CKSectionHeaderView*)headerView;
+        v.tableViewController = _parentController;
     }
     
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
@@ -105,17 +134,26 @@
     [_footerTitle release];
     _footerTitle = [footerTitle retain];
     
-    //Creates headerView if stylesheet available for optimizations
-    
-    [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    if(!_footerView){
+        CKSectionHeaderView* v = [[[CKSectionHeaderView alloc]init]autorelease];
+        v.text = _headerTitle;
+        [self setFooterView:v];
+    }else{
+        if([_footerView isKindOfClass:[CKSectionHeaderView class]]){
+            CKSectionHeaderView* v = (CKSectionHeaderView*)_headerView;
+            v.text = _headerTitle;
+        }
+        [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)setFooterView:(UIView *)footerView{
     [_footerView release];
     _footerView = [footerView retain];
-    if(_footerView){
-        NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:_parentController propertyName:nil];
-        [_footerView applyStyle:controllerStyle propertyName:@"sectionFooterView"];
+    
+    if([footerView isKindOfClass:[CKSectionHeaderView class]]){
+        CKSectionHeaderView* v = (CKSectionHeaderView*)footerView;
+        v.tableViewController = _parentController;
     }
     
     [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];

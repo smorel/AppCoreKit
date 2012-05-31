@@ -42,19 +42,17 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController, isInSetup;
 
-
-- (CGFloat)computeTableViewCellViewSize{
++ (CGFloat)computeTableViewCellViewSizeUsingTableView:(UITableView*)tableView{
     CGFloat rowWidth = 0;
-    UIView* tableViewContainer = [(CKTableViewController*)self.containerController tableViewContainer];
-    UITableView* tableView = [(CKTableViewController*)self.containerController tableView];
+    CGFloat tableViewWidth = tableView.frame.size.width;
+    
     if(tableView.style == UITableViewStylePlain){
-        rowWidth = tableViewContainer.frame.size.width;
+        rowWidth = tableViewWidth;
     }
     else if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        rowWidth = tableViewContainer.frame.size.width - 18;
+        rowWidth = tableViewWidth - 18;
     }
     else{
-        CGFloat tableViewWidth = tableViewContainer.frame.size.width;
         CGFloat offset = -1;
         if(tableViewWidth > 716)offset = 90;
         else if(tableViewWidth > 638) offset = 88 - (((NSInteger)(716 - tableViewWidth) / 13) * 2);
@@ -67,6 +65,17 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     }
     
     return rowWidth;
+}
+
++ (CGFloat)computeTableViewCellMarginUsingTableView:(UITableView*)tableView{
+    CGFloat rowWidth = [CKTableViewCellController computeTableViewCellViewSizeUsingTableView:tableView];
+    CGFloat allMArgins = tableView.frame.size.width - rowWidth;
+    return allMArgins / 2;
+}
+
+- (CGFloat)computeTableViewCellViewSize{
+    UITableView* tableView = [(CKTableViewController*)self.containerController tableView];
+    return [CKTableViewCellController computeTableViewCellViewSizeUsingTableView:tableView];
 }
 
 - (CGFloat)accessoryWidth{

@@ -462,6 +462,8 @@
 		9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
+		962347D01577FF5B0036002C /* CKSectionViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 962347CE1577FF5B0036002C /* CKSectionViews.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		962347D11577FF5B0036002C /* CKSectionViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 962347CF1577FF5B0036002C /* CKSectionViews.m */; };
 		96243226155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96243224155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96243227155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96243225155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m */; };
 		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
@@ -1000,6 +1002,8 @@
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
+		962347CE1577FF5B0036002C /* CKSectionViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionViews.h; path = Classes/CKSectionViews.h; sourceTree = "<group>"; };
+		962347CF1577FF5B0036002C /* CKSectionViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSectionViews.m; path = Classes/CKSectionViews.m; sourceTree = "<group>"; };
 		96243224155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMapAnnotationController+CKBlockBasedInterface.h"; path = "Classes/CKMapAnnotationController+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
 		96243225155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMapAnnotationController+CKBlockBasedInterface.m"; path = "Classes/CKMapAnnotationController+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1825,6 +1829,8 @@
 				9638265A1484013A00A9C98B /* CKFormBindedCollectionSection.h */,
 				96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */,
 				9638265B1484013B00A9C98B /* CKFormBindedCollectionSection.m */,
+				962347CE1577FF5B0036002C /* CKSectionViews.h */,
+				962347CF1577FF5B0036002C /* CKSectionViews.m */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -2378,6 +2384,7 @@
 				969AFE6B1561506B00CFE27A /* CKBindedGridViewController.h in Headers */,
 				969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */,
 				B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */,
+				962347D01577FF5B0036002C /* CKSectionViews.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2729,6 +2736,7 @@
 				B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */,
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
 				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
+				962347D11577FF5B0036002C /* CKSectionViews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

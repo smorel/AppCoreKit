@@ -128,6 +128,8 @@
 
 //HACK to control how to paint using the background color !
 - (void)setBackgroundColor:(UIColor *)color{
+    //self.gradientColors = nil;
+    
 	self.fillColor = color;
     CGFloat alpha = CGColorGetAlpha([color CGColor]);
     if(self.corners == CKRoundedCornerViewTypeNone && alpha >= 1){

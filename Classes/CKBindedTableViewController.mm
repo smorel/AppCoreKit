@@ -622,6 +622,10 @@
 #pragma mark UITableView Delegate
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    UIView* view = [self tableView:self.tableView viewForHeaderInSection:section];
+	if(view){
+        return nil;
+    }
     if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
         return [_objectController headerTitleForSection:section];
     }
@@ -661,6 +665,10 @@
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    UIView* view = [self tableView:self.tableView viewForFooterInSection:section];
+	if(view){
+        return nil;
+    }
     if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
         return [_objectController footerTitleForSection:section];
     }
@@ -701,14 +709,14 @@
 #pragma mark UITableView (CKHeaderViewManagement)
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
+    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionHeaderView"];
     }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
+    if([headerView appliedStyle] == nil && [title isKindOfClass:[NSString class]] && [title length] > 0){
         NSMutableDictionary* style = [self controllerStyle];
         [headerView applyStyle:style propertyName:@"sectionFooterView"];
     }
