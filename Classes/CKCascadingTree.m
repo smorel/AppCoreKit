@@ -148,13 +148,12 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		CKProperty* property = [CKProperty propertyWithObject:object keyPath:subPropertyName];
-        if([property descriptor]){
-            id value = [property value];
-            NSString* valueString = value ? [NSValueTransformer transformProperty:property toClass:[NSString class]] : @"null";
+        @try {
+            id value = [object valueForKeyPath:subPropertyName];
+            NSString* valueString = value ? [NSValueTransformer transform:value toClass:[NSString class]] : @"null";
             [str appendFormat:@"%@%@='%@'",(i > 0) ? @";" : @"" ,subPropertyName,valueString];
             ++i;
-        }
+        } @catch (NSException *exception) {}
 	}
 	
 	if([properties count] > 0){
