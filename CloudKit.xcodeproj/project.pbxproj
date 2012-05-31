@@ -232,7 +232,7 @@
 		7560DD2213B8ED3600268D13 /* CKNSStringPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2313B8ED3600268D13 /* CKNSStringPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */; };
 		7560DD2413B8ED3600268D13 /* CKNSValueTransformer+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */; };
+		7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.mm */; };
 		7560DD2613B8ED3600268D13 /* CKBindedCarouselViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBD913B8ED3600268D13 /* CKBindedCarouselViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2713B8ED3600268D13 /* CKBindedCarouselViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDA13B8ED3600268D13 /* CKBindedCarouselViewController.m */; };
 		7560DD2813B8ED3600268D13 /* CKObjectController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBDB13B8ED3600268D13 /* CKObjectController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -765,7 +765,7 @@
 		7560DBD513B8ED3600268D13 /* CKNSStringPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSStringPropertyCellController.h; path = Classes/CKNSStringPropertyCellController.h; sourceTree = "<group>"; };
 		7560DBD613B8ED3600268D13 /* CKNSStringPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKNSStringPropertyCellController.m; path = Classes/CKNSStringPropertyCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "CKNSValueTransformer+Additions.h"; path = "Classes/CKNSValueTransformer+Additions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSValueTransformer+Additions.m"; path = "Classes/CKNSValueTransformer+Additions.m"; sourceTree = "<group>"; };
+		7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKNSValueTransformer+Additions.mm"; path = "Classes/CKNSValueTransformer+Additions.mm"; sourceTree = "<group>"; };
 		7560DBD913B8ED3600268D13 /* CKBindedCarouselViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedCarouselViewController.h; path = Classes/CKBindedCarouselViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DBDA13B8ED3600268D13 /* CKBindedCarouselViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedCarouselViewController.m; path = Classes/CKBindedCarouselViewController.m; sourceTree = "<group>"; };
 		7560DBDB13B8ED3600268D13 /* CKObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectController.h; path = Classes/CKObjectController.h; sourceTree = "<group>"; };
@@ -1139,7 +1139,7 @@
 			children = (
 				75CC16FE13F46E0800835FE3 /* Additions */,
 				7560DBD713B8ED3600268D13 /* CKNSValueTransformer+Additions.h */,
-				7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.m */,
+				7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.mm */,
 			);
 			name = Conversion;
 			sourceTree = "<group>";
@@ -2580,7 +2580,7 @@
 				7560DD1F13B8ED3600268D13 /* CKNSString+Validations.m in Sources */,
 				7560DD2113B8ED3600268D13 /* CKNSString+Additions.m in Sources */,
 				7560DD2313B8ED3600268D13 /* CKNSStringPropertyCellController.m in Sources */,
-				7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.m in Sources */,
+				7560DD2513B8ED3600268D13 /* CKNSValueTransformer+Additions.mm in Sources */,
 				7560DD2713B8ED3600268D13 /* CKBindedCarouselViewController.m in Sources */,
 				7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */,
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
