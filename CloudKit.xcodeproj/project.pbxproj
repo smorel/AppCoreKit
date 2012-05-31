@@ -439,7 +439,7 @@
 		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKPropertyExtendedAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */; };
+		75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */; };
 		9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BD1545C41400F07C5A /* CKSuffixTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */; };
 		9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -976,7 +976,7 @@
 		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKPropertyExtendedAttributes.h; path = Classes/CKPropertyExtendedAttributes.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKPropertyExtendedAttributes.m; path = Classes/CKPropertyExtendedAttributes.m; sourceTree = "<group>"; };
+		75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKPropertyExtendedAttributes.mm; path = Classes/CKPropertyExtendedAttributes.mm; sourceTree = "<group>"; };
 		9600B8BD1545C41400F07C5A /* CKSuffixTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSuffixTree.h; path = Classes/CKSuffixTree.h; sourceTree = "<group>"; };
 		9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKSuffixTree.mm; path = Classes/CKSuffixTree.mm; sourceTree = "<group>"; };
 		9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKSuffixTree+Generator.h"; path = "Classes/CKSuffixTree+Generator.h"; sourceTree = "<group>"; };
@@ -1251,7 +1251,7 @@
 				7560DBDC13B8ED3600268D13 /* CKProperty.h */,
 				7560DBDD13B8ED3600268D13 /* CKProperty.m */,
 				75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */,
-				75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.m */,
+				75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */,
 				75043E631404327500C7685D /* CKPropertyExtendedAttributes+CKAttributes.h */,
 				75043E641404327500C7685D /* CKPropertyExtendedAttributes+CKAttributes.m */,
 			);
@@ -2660,7 +2660,7 @@
 				75CC172213F4705A00835FE3 /* CKNSObject+ValueTransformer.m in Sources */,
 				75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */,
 				75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */,
-				75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.m in Sources */,
+				75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.mm in Sources */,
 				758E5C5E13F9652200A07F49 /* CKOptionPropertyCellController.m in Sources */,
 				758523EC13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.m in Sources */,
 				750A157613FD50E7008BC41F /* CKBinding.m in Sources */,
