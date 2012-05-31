@@ -39,13 +39,14 @@ NSString* CKStyleFontName = @"fontName";
 		NSMutableDictionary* myLabelStyle = style;
 		if(myLabelStyle){
 			
-			NSString* fontName = label.font.fontName;
-			if([myLabelStyle containsObjectForKey:CKStyleFontName])
-				fontName= [myLabelStyle fontName];
-			CGFloat fontSize = label.font.pointSize;
-			if([myLabelStyle containsObjectForKey:CKStyleFontSize])
-				fontSize= [myLabelStyle fontSize];
-			label.font = [UIFont fontWithName:fontName size:fontSize];
+            CGFloat styleFontSize = [myLabelStyle fontSize];
+			CGFloat fontSize = styleFontSize ? styleFontSize : label.font.pointSize;
+            
+            NSString* styleFontName = [myLabelStyle objectForKey:CKStyleFontName];
+            if (styleFontName)
+                label.font = [UIFont fontWithName:styleFontName size:fontSize];
+            else
+                label.font = [label.font fontWithSize:fontSize];
 			
 			return YES;
 		}
