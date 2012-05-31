@@ -156,7 +156,7 @@
                         atIndex:2];
         [invocation invoke];
     }
-	else if(self.subKeyPath != nil && [[self value] isEqual:value] == NO){
+	else if(self.subKeyPath != nil){
 		[self.subObject.object setValue:value forKey:self.subKeyPath];
 	}
 	else if(self.subKeyPath == nil){
