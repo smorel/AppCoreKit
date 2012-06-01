@@ -18,11 +18,14 @@ static NSMutableDictionary* CKObjectSingletons = nil;
         CKObjectSingletons = [[NSMutableDictionary alloc]init];
     });
     
-    id instance = [CKObjectSingletons objectForKey:(id)[self class]];
-    if(!instance){
-        instance = [[[self class]alloc]init];
-        [CKObjectSingletons setObject:instance forKey:(id)[self class]];
-        //[instance release];
+    id instance = nil;
+    @synchronized (self) {
+        instance = [CKObjectSingletons objectForKey:(id)[self class]];
+        if(!instance){
+            instance = [[[self class]alloc]init];
+            [CKObjectSingletons setObject:instance forKey:(id)[self class]];
+            [instance release];
+        }
     }
     
     return instance;
