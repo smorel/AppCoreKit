@@ -89,7 +89,7 @@
 		7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2313B8ED3600268D13 /* CKAttributesDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2413B8ED3600268D13 /* CKAttributesDictionary.m */; };
 		7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2613B8ED3600268D13 /* CKBindingsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC7413B8ED3600268D13 /* CKBindingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2713B8ED3600268D13 /* CKBindingsManager.m */; };
+		7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2713B8ED3600268D13 /* CKBindingsManager.mm */; };
 		7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */; };
 		7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2A13B8ED3600268D13 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -208,7 +208,7 @@
 		7560DD0A13B8ED3600268D13 /* CKNSNumberPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */; };
 		7560DD0C13B8ED3600268D13 /* CKNSObject+Bindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBBF13B8ED3600268D13 /* CKNSObject+Bindings.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD0D13B8ED3600268D13 /* CKNSObject+Bindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.m */; };
+		7560DD0D13B8ED3600268D13 /* CKNSObject+Bindings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.mm */; };
 		7560DD0E13B8ED3600268D13 /* CKNSObject+CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBC113B8ED3600268D13 /* CKNSObject+CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0F13B8ED3600268D13 /* CKNSObject+CKRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBC213B8ED3600268D13 /* CKNSObject+CKRuntime.m */; };
 		7560DD1013B8ED3600268D13 /* CKNSObject+Invocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBC313B8ED3600268D13 /* CKNSObject+Invocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -624,7 +624,7 @@
 		7560DB2313B8ED3600268D13 /* CKAttributesDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAttributesDictionary.h; path = Classes/CKAttributesDictionary.h; sourceTree = "<group>"; };
 		7560DB2413B8ED3600268D13 /* CKAttributesDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAttributesDictionary.m; path = Classes/CKAttributesDictionary.m; sourceTree = "<group>"; };
 		7560DB2613B8ED3600268D13 /* CKBindingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBindingsManager.h; path = Classes/CKBindingsManager.h; sourceTree = "<group>"; };
-		7560DB2713B8ED3600268D13 /* CKBindingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindingsManager.m; path = Classes/CKBindingsManager.m; sourceTree = "<group>"; };
+		7560DB2713B8ED3600268D13 /* CKBindingsManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKBindingsManager.mm; path = Classes/CKBindingsManager.mm; sourceTree = "<group>"; };
 		7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBonjourResolver.h; path = Classes/CKBonjourResolver.h; sourceTree = "<group>"; };
 		7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBonjourResolver.m; path = Classes/CKBonjourResolver.m; sourceTree = "<group>"; };
 		7560DB2A13B8ED3600268D13 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
@@ -743,7 +743,7 @@
 		7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSNumberPropertyCellController.h; path = Classes/CKNSNumberPropertyCellController.h; sourceTree = "<group>"; };
 		7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSNumberPropertyCellController.m; path = Classes/CKNSNumberPropertyCellController.m; sourceTree = "<group>"; };
 		7560DBBF13B8ED3600268D13 /* CKNSObject+Bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+Bindings.h"; path = "Classes/CKNSObject+Bindings.h"; sourceTree = "<group>"; };
-		7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+Bindings.m"; path = "Classes/CKNSObject+Bindings.m"; sourceTree = "<group>"; };
+		7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKNSObject+Bindings.mm"; path = "Classes/CKNSObject+Bindings.mm"; sourceTree = "<group>"; };
 		7560DBC113B8ED3600268D13 /* CKNSObject+CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+CKRuntime.h"; path = "Classes/CKNSObject+CKRuntime.h"; sourceTree = "<group>"; };
 		7560DBC213B8ED3600268D13 /* CKNSObject+CKRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+CKRuntime.m"; path = "Classes/CKNSObject+CKRuntime.m"; sourceTree = "<group>"; };
 		7560DBC313B8ED3600268D13 /* CKNSObject+Invocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+Invocation.h"; path = "Classes/CKNSObject+Invocation.h"; sourceTree = "<group>"; };
@@ -1285,7 +1285,7 @@
 			isa = PBXGroup;
 			children = (
 				7560DB2613B8ED3600268D13 /* CKBindingsManager.h */,
-				7560DB2713B8ED3600268D13 /* CKBindingsManager.m */,
+				7560DB2713B8ED3600268D13 /* CKBindingsManager.mm */,
 				7560DB4513B8ED3600268D13 /* CKDataBinder.h */,
 				7560DB4613B8ED3600268D13 /* CKDataBinder.m */,
 				7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */,
@@ -1963,7 +1963,7 @@
 			isa = PBXGroup;
 			children = (
 				7560DBBF13B8ED3600268D13 /* CKNSObject+Bindings.h */,
-				7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.m */,
+				7560DBC013B8ED3600268D13 /* CKNSObject+Bindings.mm */,
 				750A157713FD50FA008BC41F /* CKBinding.h */,
 				750A157513FD50E6008BC41F /* CKBinding.m */,
 				7506E3FA13B8FD7A00EE1471 /* Private */,
@@ -2516,7 +2516,7 @@
 				7560DC6D13B8ED3600268D13 /* CKAlertView.m in Sources */,
 				7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */,
 				7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */,
-				7560DC7413B8ED3600268D13 /* CKBindingsManager.m in Sources */,
+				7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */,
 				7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */,
 				7560DC7813B8ED3600268D13 /* CKBundle.m in Sources */,
 				7560DC7C13B8ED3600268D13 /* CKCallback.m in Sources */,
@@ -2575,7 +2575,7 @@
 				7560DD0713B8ED3600268D13 /* CKNSManagedObjectContext+Requests.m in Sources */,
 				7560DD0913B8ED3600268D13 /* CKNSNotificationCenter+Edition.m in Sources */,
 				7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */,
-				7560DD0D13B8ED3600268D13 /* CKNSObject+Bindings.m in Sources */,
+				7560DD0D13B8ED3600268D13 /* CKNSObject+Bindings.mm in Sources */,
 				7560DD0F13B8ED3600268D13 /* CKNSObject+CKRuntime.m in Sources */,
 				7560DD1113B8ED3600268D13 /* CKNSObject+Invocation.m in Sources */,
 				7560DD1313B8ED3600268D13 /* CKNSObject+JSON.m in Sources */,

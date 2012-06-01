@@ -15,8 +15,6 @@
 @interface CKBindingsManager : NSObject {
 	NSMutableDictionary* _bindingsForContext;
 	NSMutableDictionary* _bindingsPoolForClass;
-	
-	NSMutableSet* _contexts;
 }
 
 + (CKBindingsManager*)defaultManager;

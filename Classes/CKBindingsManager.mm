@@ -8,26 +8,36 @@
 
 #import "CKBindingsManager.h"
 #import "CKBinding.h"
-#import "CKWeakRef.h"
 #import <objc/runtime.h>
+#include <ext/hash_map>
 
-@interface CKBindingsManager ()
+using namespace __gnu_cxx;
+
+namespace __gnu_cxx{
+    template<> struct hash< id >
+    {
+        size_t operator()( id x ) const{
+            return (size_t)x;
+        }
+    };
+}
+
+@interface CKBindingsManager () {
+    hash_map<id, CKWeakRef*> weakRefContext;
+}
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
-@property (nonatomic, retain) NSMutableSet *contexts;
 @end
 
 static CKBindingsManager* CKBindingsDefauktManager = nil;
 @implementation CKBindingsManager
 @synthesize bindingsForContext = _bindingsForContext;
 @synthesize bindingsPoolForClass = _bindingsPoolForClass;
-@synthesize contexts = _contexts;
 
 - (id)init{
     if (self = [super init]) {
         self.bindingsForContext = [NSMutableDictionary dictionaryWithCapacity:2000];
         self.bindingsPoolForClass = [NSMutableDictionary dictionary];
-        self.contexts = [NSMutableSet setWithCapacity:2000];
     }
 	return self;
 }
@@ -35,14 +45,14 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 - (void)dealloc{
 	[_bindingsForContext release];
 	[_bindingsPoolForClass release];
-	[_contexts release];
 	[super dealloc];
 }
 
 + (CKBindingsManager*)defaultManager{
-	if(CKBindingsDefauktManager == nil){
-		CKBindingsDefauktManager = [[CKBindingsManager alloc]init];
-	}
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CKBindingsDefauktManager = [[CKBindingsManager alloc]init];
+    });
 	return CKBindingsDefauktManager;
 }
 
@@ -73,7 +83,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
-		[_contexts addObject:context];
+        if ([context isKindOfClass:[CKWeakRef class]]) {
+            weakRefContext[[context object]] = context;
+            [context retain];
+        }
 		bindings = [NSMutableSet setWithCapacity:50];
 		[_bindingsForContext setObject:bindings forKey:context];
 	}
@@ -112,7 +125,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	bindings = [_bindingsForContext objectForKey:context];
 	if(bindings && [bindings count] <= 0){
 		[_bindingsForContext removeObjectForKey:context];
-		[_contexts removeObject:context];
+        if ([context isKindOfClass:[CKWeakRef class]]) {
+            weakRefContext.erase([context object]);
+            [context release];
+        }
 	}	
     
     [context autorelease];
@@ -150,7 +166,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	}
     
 	[_bindingsForContext removeObjectForKey:context];
-	[_contexts removeObject:context];
+    if ([context isKindOfClass:[CKWeakRef class]]) {
+        weakRefContext.erase([context object]);
+        [context release];
+    }
 }
 
 @end
