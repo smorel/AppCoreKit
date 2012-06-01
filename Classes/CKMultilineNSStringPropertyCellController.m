@@ -113,14 +113,18 @@
         [_textView setText:[property value] animated:NO];
         _textView.delegate = self;
         
+        __block CKMultilineNSStringPropertyCellController* bself = self;
+        
         [cell beginBindingsContextByRemovingPreviousBindings];
-        [property.object bind:property.keyPath withBlock:^(id value) {
-            if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
-                _textView.frameChangeDelegate = self;
-                _textView.delegate = nil;
-                [_textView setText:[property value] animated:YES];
-                _textView.delegate = self;
-                _textView.frameChangeDelegate = nil;
+        [property.object bind:property.keyPath executeBlockImmediatly:YES withBlock:^(id value) {
+            if(![_textView.text isEqualToString:value]){
+                if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
+                    _textView.frameChangeDelegate = bself;
+                    _textView.delegate = nil;
+                    [_textView setText:[property value] animated:YES];
+                    _textView.delegate = bself;
+                    _textView.frameChangeDelegate = nil;
+                }
             }
         }];
         [cell endBindingsContext];

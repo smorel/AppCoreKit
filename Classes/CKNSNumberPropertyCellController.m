@@ -165,6 +165,7 @@
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	self.text = _(descriptor.name);
     
+    __block CKNSNumberPropertyCellController* bself = self;
 	if([self isNumber]){
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
@@ -184,7 +185,12 @@
             _textField.hidden = NO;
             
             [cell beginBindingsContextByRemovingPreviousBindings];
-            [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+            [model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
+                NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
+                if(![bself.textField.text isEqualToString:str]){
+                    bself.textField.text = str;
+                }
+            }];
             [cell endBindingsContext];
             
             NSString* placeholerText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];

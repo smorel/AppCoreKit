@@ -327,15 +327,19 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         self.detailText  = _(placeholderText);
     }
     
-    __block CKTableViewCellController* bself = self;
+    __block CKNSDatePropertyCellController* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];
-    [model.object bind:model.keyPath withBlock:^(id value){
+    [model.object bind:model.keyPath executeBlockImmediatly:YES withBlock:^(id value){
         NSDate* date = [model value];
+        NSString* str = nil;
         if(date){
-            bself.detailText  = [NSValueTransformer transformProperty:model toClass:[NSString class]];
+            str  = [NSValueTransformer transformProperty:model toClass:[NSString class]];
         }
         else{
-            bself.detailText  = _(placeholderText);
+            str  = _(placeholderText);
+        }
+        if(![bself.detailText isEqualToString:str]){
+            bself.detailText = str;
         }
     }];
     [self endBindingsContext];

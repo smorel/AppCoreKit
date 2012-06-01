@@ -120,8 +120,17 @@
             else{
                 self.fixedSize = NO;
             }
+            
+            __block CKNSStringPropertyCellController* bself = self;
+            
             [cell beginBindingsContextByRemovingPreviousBindings];
-            [model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+            [model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
+                NSString* str = value;
+                if(![bself.textField.text isEqualToString:str]){
+                    bself.textField.text = str;
+                }
+            }];
+
             [[NSNotificationCenter defaultCenter] bindNotificationName:UITextFieldTextDidChangeNotification object:self.textField 
                                                              withBlock:^(NSNotification *notification) {
                                                                  [self textFieldChanged:self.textField.text];
