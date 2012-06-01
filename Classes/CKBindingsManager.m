@@ -25,9 +25,9 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 
 - (id)init{
     if (self = [super init]) {
-        self.bindingsForContext = [NSMutableDictionary dictionary];
+        self.bindingsForContext = [NSMutableDictionary dictionaryWithCapacity:2000];
         self.bindingsPoolForClass = [NSMutableDictionary dictionary];
-        self.contexts = [NSMutableSet set];
+        self.contexts = [NSMutableSet setWithCapacity:2000];
     }
 	return self;
 }
@@ -74,7 +74,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
 		[_contexts addObject:context];
-		bindings = [NSMutableSet setWithCapacity:500];
+		bindings = [NSMutableSet setWithCapacity:50];
 		[_bindingsForContext setObject:bindings forKey:context];
 	}
 	[bindings addObject:binding];

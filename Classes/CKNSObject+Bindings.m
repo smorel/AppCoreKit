@@ -34,9 +34,10 @@ typedef enum CKDebugCheckState{
 
 static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugCheckState_none;
 
-@implementation NSObject (CKBindings)
 
-//Class method for bindings management
+@implementation NSObject (CKBindingContext)
+
+
 
 + (id)currentBindingContext{
 	if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
@@ -157,6 +158,10 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 - (void)clearBindingsContext{
 	[NSObject removeAllBindingsForContext:[self weakRefBindingsContext]];
 }
+
+@end
+
+@implementation NSObject (CKBindings)
 
 
 //NSObject Bindings
