@@ -622,6 +622,10 @@
 #pragma mark UITableView Delegate
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    UIView* view = [self tableView:self.tableView viewForHeaderInSection:section];
+	if(view){
+        return nil;
+    }
     if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
         return [_objectController headerTitleForSection:section];
     }
@@ -650,8 +654,9 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
         UIView* view = [_objectController headerViewForSection:section];
-        if(view){
-            [self tableView:tableView willDisplayHeaderView:view withTitle:@" CKHEADER "];
+        if(view && [view appliedStyle] == nil){
+            NSMutableDictionary* style = [self controllerStyle];
+            [view applyStyle:style propertyName:@"sectionHeaderView"];
         }
         return view;
     }
@@ -661,6 +666,10 @@
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    UIView* view = [self tableView:self.tableView viewForFooterInSection:section];
+	if(view){
+        return nil;
+    }
     if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
         return [_objectController footerTitleForSection:section];
     }
@@ -689,29 +698,13 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if([_objectController respondsToSelector:@selector(footerViewForSection:)]){
         UIView* view = [_objectController footerViewForSection:section];
-        if(view){
-            [self tableView:tableView willDisplayFooterView:view withTitle:@" CKFOOTER "];
+        if(view && [view appliedStyle] == nil){
+            NSMutableDictionary* style = [self controllerStyle];
+            [view applyStyle:style propertyName:@"sectionFooterView"];
         }
         return view;
     }
 	return nil;
-}
-
-
-#pragma mark UITableView (CKHeaderViewManagement)
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
-        NSMutableDictionary* style = [self controllerStyle];
-        [headerView applyStyle:style propertyName:@"sectionHeaderView"];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView*)headerView withTitle:(NSString*)title{
-    if(/*[headerView appliedStyle] == nil && */[title isKindOfClass:[NSString class]] && [title length] > 0){
-        NSMutableDictionary* style = [self controllerStyle];
-        [headerView applyStyle:style propertyName:@"sectionFooterView"];
-    }
 }
 
 #pragma mark CKItemViewContainerController Implementation
@@ -1260,50 +1253,3 @@
 
 
 @end
-
-/********************************* Header Management  *********************************
- */
-
-@interface UITableView (CKHeaderViewManagement)
-@end
-
-@implementation UITableView (CKHeaderViewManagement)
-
-/* IOS 4.3 and before : 
- When the views are added for section footer, they have no subviews (UITableHeaderFooterViewLabel)
- Applying style in this delegate will then not apply anything on the label ...
- */
-- (void)UITableView_CKHeaderViewManagement_didAddSubview:(UIView *)subview{
-    if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]){
-        if(self.delegate && [self.delegate respondsToSelector:@selector(tableView:willDisplayHeaderView:withTitle:)]){
-            BOOL header = [[subview valueForKey:@"sectionHeader"]boolValue];
-            NSString* title = nil;
-            if([subview respondsToSelector:@selector(text)]){
-                title = [subview performSelector:@selector(text)];
-            }
-            
-            id theDelegate = self.delegate;
-            if(header){
-                [theDelegate performSelector:@selector(tableView:willDisplayHeaderView:withTitle:) 
-                                 withObjects:[NSArray arrayWithObjects:self,subview,title,nil]];
-            }
-            else{
-                [theDelegate performSelector:@selector(tableView:willDisplayFooterView:withTitle:) 
-                                 withObjects:[NSArray arrayWithObjects:self,subview,title,nil]];
-            }
-        }
-    }
-    
-    [self UITableView_CKHeaderViewManagement_didAddSubview:subview];
-}
-
-@end
-
-
-bool swizzle_UITableView_CKHeaderViewManagement(){
-    CKSwizzleSelector([UITableView class],@selector(didAddSubview:),@selector(UITableView_CKHeaderViewManagement_didAddSubview:));
-    return 1;
-}
-
-static bool bo_swizzle_UITableView_CKHeaderViewManagement = swizzle_UITableView_CKHeaderViewManagement();
-

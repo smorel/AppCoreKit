@@ -26,12 +26,9 @@ typedef enum CKBindingsContextOptions{
 
 /** TODO
  */
-@interface NSObject (CKBindings)
+@interface NSObject(CKBindingContext)
 
 + (NSString *)allBindingsDescription;
-
-
-// Binding Context Management
 
 + (void)beginBindingsContext:(id)context;
 + (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy;
@@ -41,13 +38,6 @@ typedef enum CKBindingsContextOptions{
 
 + (void)endBindingsContext;
 + (void)removeAllBindingsForContext:(id)context;
-
-- (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath;
-
-- (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block;
-- (void)bind:(NSString *)keyPath executeBlockImmediatly:(BOOL)execute withBlock:(void (^)(id value))block;
-
-- (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
 
 - (void)beginBindingsContextByKeepingPreviousBindings;
 - (void)beginBindingsContextByRemovingPreviousBindings;
@@ -61,6 +51,21 @@ typedef enum CKBindingsContextOptions{
 + (void)validateCurrentBindingsContext;
 + (CKBindingsContextOptions)currentBindingContextOptions;
 + (id)currentBindingContext;
+
+@end
+
+
+
+/** TODO
+ */
+@interface NSObject (CKBindings)
+
+- (void)bind:(NSString *)keyPath toObject:(id)object withKeyPath:(NSString *)keyPath;
+
+- (void)bind:(NSString *)keyPath withBlock:(void (^)(id value))block;
+- (void)bind:(NSString *)keyPath executeBlockImmediatly:(BOOL)execute withBlock:(void (^)(id value))block;
+
+- (void)bind:(NSString *)keyPath target:(id)target action:(SEL)selector;
 
 @end
 

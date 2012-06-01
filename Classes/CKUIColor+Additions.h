@@ -14,6 +14,7 @@
 @interface UIColor (CKUIColorAdditions)
 
 + (UIColor *)colorWithRGBValue:(NSUInteger)value;
++ (UIColor *)colorWithIntegerRed:(NSUInteger)red green:(NSUInteger)green blue:(NSUInteger)blue alpha:(NSUInteger)alpha;
 + (UIColor *)blueTextColor;
 
 - (UIColor *)RGBColor;

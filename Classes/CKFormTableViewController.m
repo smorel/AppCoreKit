@@ -82,10 +82,6 @@
 		 return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.headerView != nil ){
-		NSMutableDictionary* controllerStyle = [self.parentController controllerStyle];
-		[formSection.headerView applyStyle:controllerStyle propertyName:@"sectionHeaderView"];
-	}
 	return formSection.headerView;
 }
 
@@ -104,10 +100,6 @@
         return nil;
 	
 	CKFormSectionBase* formSection =  (CKFormSectionBase*)[self.parentController visibleSectionAtIndex:section];
-	if( formSection.footerView != nil ){
-		NSMutableDictionary* controllerStyle = [self.parentController controllerStyle];
-		[formSection.footerView applyStyle:controllerStyle propertyName:@"sectionFooterView"];
-	}
 	return formSection.footerView;
 }
 

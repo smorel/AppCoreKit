@@ -26,6 +26,7 @@
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKFormSectionBase_private.h"
+#import "CKTableViewCellController+Menus.h"
 
 @implementation CKTableViewCellController(CKPropertyGrid)
 
@@ -95,6 +96,11 @@
                 }
                 else if([NSObject isClass:propertyType kindOfClass:[UIImage class]]){
                     cellController = [CKUIImagePropertyCellController cellController];
+                }
+                else if([NSObject isClass:propertyType kindOfClass:[UIFont class]]){
+                    UIFont* font = [property value];
+                    NSString* subtitle = font ? [NSString stringWithFormat:@"%@ [%g]",font.fontName,font.pointSize] : @"nil";
+                    cellController = [CKTableViewCellController cellControllerWithTitle:property.name subtitle:subtitle action:nil];
                 }
                 else{
                     cellController = [CKNSObjectPropertyCellController cellController];

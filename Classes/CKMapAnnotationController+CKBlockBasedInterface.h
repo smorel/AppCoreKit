@@ -10,6 +10,8 @@
 
 @interface CKMapAnnotationController (CKBlockBasedInterface)
 
+- (void)setDeallocBlock:(void(^)(CKMapAnnotationController* controller))block;
+
 - (void)setInitBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block;
 - (void)setSetupBlock:(void(^)(CKMapAnnotationController* controller, MKAnnotationView* view))block;
 

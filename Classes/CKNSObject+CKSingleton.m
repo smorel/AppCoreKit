@@ -22,7 +22,7 @@ static NSMutableDictionary* CKObjectSingletons = nil;
     if(!instance){
         instance = [[[self class]alloc]init];
         [CKObjectSingletons setObject:instance forKey:(id)[self class]];
-        [instance release];
+        //[instance release];
     }
     
     return instance;
