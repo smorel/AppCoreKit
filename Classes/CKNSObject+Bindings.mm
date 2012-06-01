@@ -12,15 +12,29 @@
 #import "CKDataBinder.h"
 #import "CKNotificationBlockBinder.h"
 #import "CKDataBlockBinder.h"
+#include <ext/hash_map>
+
+using namespace __gnu_cxx;
+
+namespace __gnu_cxx{
+    template<> struct hash< id >
+    {
+        size_t operator()( id x ) const{
+            return (size_t)x;
+        }
+    };
+}
 
 @interface CKDataBlockBinder()
 - (void)executeWithValue:(id)value;
 @end
 
-@interface CKBindingsManager ()
+@interface CKBindingsManager () {
+    @public
+    hash_map<id, CKWeakRef*> weakRefContext;
+}
 @property (nonatomic, retain) NSDictionary *bindingsPoolForClass;
 @property (nonatomic, retain) NSDictionary *bindingsForContext;
-@property (nonatomic, retain) NSMutableSet *contexts;
 @end
 
 static NSMutableArray* CKBindingsContextStack = nil;
@@ -51,7 +65,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
     if(CKBindingsContextStack && [CKBindingsContextStack count] > 0){
 		return (CKBindingsContextOptions)[[[CKBindingsContextStack lastObject]objectForKey:@"options"]intValue];
 	}
-	return CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone;
+	return (CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone);
 }
 
 + (NSString *)allBindingsDescription{
@@ -59,11 +73,11 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 + (void)beginBindingsContext:(id)context{
-	[NSObject beginBindingsContext:context policy:CKBindingsContextPolicyAdd options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+	[NSObject beginBindingsContext:context policy:CKBindingsContextPolicyAdd options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
 }
 
 + (void)beginBindingsContext:(id)context policy:(CKBindingsContextPolicy)policy{
-	[NSObject beginBindingsContext:context policy:policy options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+	[NSObject beginBindingsContext:context policy:policy options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
 }
 
 + (void)beginBindingsContext:(id)context options:(CKBindingsContextOptions)options{
@@ -108,15 +122,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 //Instance method for bindings management
 
 - (CKWeakRef*)weakRefBindingsContext{
-    for(id context in [[CKBindingsManager defaultManager]contexts]){
-        if([context isKindOfClass:[CKWeakRef class]]){
-            CKWeakRef* contextWeakRef = (CKWeakRef*)context;
-            if(contextWeakRef.object == self){
-                return contextWeakRef;
-            }
-        }
-    }
-    return nil;
+    return [CKBindingsManager defaultManager]->weakRefContext[self];
 }
 
 - (void)beginBindingsContextUsingPolicy:(CKBindingsContextPolicy)policy options:(CKBindingsContextOptions)options{
@@ -136,11 +142,11 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 - (void)beginBindingsContextByKeepingPreviousBindings{
-	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyAdd options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyAdd options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
 }
 
 - (void)beginBindingsContextByRemovingPreviousBindings{
-	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyRemovePreviousBindings options:CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone];
+	[self beginBindingsContextUsingPolicy:CKBindingsContextPolicyRemovePreviousBindings options:(CKBindingsContextOptions) (CKBindingsContextPerformOnMainThread | CKBindingsContextWaitUntilDone)];
 }
 
 - (void)beginBindingsContextByKeepingPreviousBindingsWithOptions:(CKBindingsContextOptions)options{
