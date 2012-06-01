@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 
-extern NSString* CKCascadingTreeFormats;
-extern NSString* CKCascadingTreeParent;
-extern NSString* CKCascadingTreeEmpty;
-extern NSString* CKCascadingTreeNode;
-extern NSString* CKCascadingTreeInherits;
-extern NSString* CKCascadingTreeImport;
-extern NSString* CKCascadingTreeIPad;
-extern NSString* CKCascadingTreeIPhone;
+extern NSString* const CKCascadingTreeFormats;
+extern NSString* const CKCascadingTreeParent;
+extern NSString* const CKCascadingTreeEmpty;
+extern NSString* const CKCascadingTreeNode;
+extern NSString* const CKCascadingTreeInherits;
+extern NSString* const CKCascadingTreeImport;
+extern NSString* const CKCascadingTreeIPad;
+extern NSString* const CKCascadingTreeIPhone;
 
 /** TODO
  */
