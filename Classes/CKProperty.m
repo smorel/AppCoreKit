@@ -10,14 +10,13 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKCollection.h"
 #import "CKNSObject+CKRuntime.h"
-#import "CKWeakRef.h"
 #import "CKDebug.h"
 #import "CKNSObject+CKRuntime_private.h"
 
 @interface CKProperty()
-@property (nonatomic,retain) CKWeakRef* subObject;
+@property (nonatomic,retain) id subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
-@property (nonatomic,retain) CKWeakRef* objectRef;
+@property (nonatomic,retain,readwrite) id object;
 @property (nonatomic,retain,readwrite) id keyPath;
 @property (nonatomic,retain,readwrite) CKClassPropertyDescriptor* descriptor;
 - (void)postInit;
@@ -27,10 +26,9 @@
 @synthesize object,keyPath;
 @synthesize subObject,subKeyPath;
 @synthesize descriptor;
-@synthesize objectRef;
 
 - (void)dealloc{
-    self.objectRef = nil;
+    self.object = nil;
     self.keyPath = nil;
     self.subObject = nil;
     self.subKeyPath = nil;
@@ -55,7 +53,7 @@
 
 - (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
 	if (self = [super init]) {
-        self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
+        self.object = theobject;
         if([thekeyPath length] > 0){
             self.keyPath = thekeyPath;
         }
@@ -66,7 +64,7 @@
 
 - (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key{
     if (self = [super init]) {
-        self.objectRef = [CKWeakRef weakRefWithObject:dictionary target:self action:@selector(releaseObject:)];
+        self.object = dictionary;
         self.keyPath = key;
         [self postInit];
     }
@@ -75,24 +73,10 @@
 
 - (id)initWithObject:(id)theobject{
 	if (self = [super init]) {
-        self.objectRef = [CKWeakRef weakRefWithObject:theobject target:self action:@selector(releaseObject:)];
+        self.object = theobject;
         [self postInit];
     }
 	return self;
-}
-
-- (id)releaseSubObject:(CKWeakRef*)weakRef{
-    self.subKeyPath = nil;
-    return nil;
-}
-
-- (id)releaseObject:(CKWeakRef*)weakRef{
-    self.keyPath = nil;
-    return nil;
-}
-
-- (id)object{
-    return self.objectRef.object;
 }
 
 - (void)postInit{
@@ -116,9 +100,9 @@
         }
         
         
-        self.subObject = [CKWeakRef weakRefWithObject:target target:self action:@selector(releaseSubObject:)];
-        if(self.subObject.object && self.subKeyPath){
-            self.descriptor = [NSObject propertyDescriptorForClass:[self.subObject.object class] key:self.subKeyPath];
+        self.subObject = target;
+        if(self.subObject && self.subKeyPath){
+            self.descriptor = [NSObject propertyDescriptorForClass:[self.subObject class] key:self.subKeyPath];
         }
         else{
             self.descriptor = nil;
@@ -136,7 +120,7 @@
     if([self.object isKindOfClass:[NSDictionary class]]){
         return [self.object objectForKey:self.keyPath];
     }
-	return (self.subKeyPath != nil) ? [self.subObject.object valueForKey:self.subKeyPath] : self.subObject.object;
+	return (self.subKeyPath != nil) ? [self.subObject valueForKey:self.subKeyPath] : self.subObject;
 }
 
 - (void)setValue:(id)value{
@@ -147,27 +131,27 @@
         SEL selector = [NSObject selectorForProperty:[self descriptor].name prefix:@"set" suffix:@":"];
         SEL selValue = [value pointerValue];
         
-        NSMethodSignature *signature = [self.subObject.object methodSignatureForSelector:selector];
+        NSMethodSignature *signature = [self.subObject methodSignatureForSelector:selector];
         
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
         [invocation setSelector:selector];
-        [invocation setTarget:self.subObject.object];
+        [invocation setTarget:self.subObject];
         [invocation setArgument:&selValue
                         atIndex:2];
         [invocation invoke];
     }
 	else if(self.subKeyPath != nil){
-		[self.subObject.object setValue:value forKey:self.subKeyPath];
+		[self.subObject setValue:value forKey:self.subKeyPath];
 	}
 	else if(self.subKeyPath == nil){
-		[self.subObject.object copyPropertiesFromObject:value];
+		[self.subObject copyPropertiesFromObject:value];
 	}
 }
 
 
 - (CKPropertyExtendedAttributes*)extendedAttributes{
 	if(self.descriptor != nil){
-		return [self.descriptor extendedAttributesForInstance:self.subObject.object];
+		return [self.descriptor extendedAttributesForInstance:self.subObject];
 	}
 	return nil;
 }
@@ -204,10 +188,10 @@
         else{
             id proxy= nil;
             if(self.subKeyPath != nil) {
-                proxy = [self.subObject.object mutableArrayValueForKey:self.subKeyPath];
+                proxy = [self.subObject mutableArrayValueForKey:self.subKeyPath];
             }
             else{
-                proxy = self.subObject.object;
+                proxy = self.subObject;
             }
             [proxy insertObjects:objects atIndexes:indexes];
         }
@@ -230,10 +214,10 @@
 	else{
         id proxy= nil;
         if(self.subKeyPath != nil) {
-            proxy = [self.subObject.object mutableArrayValueForKey:self.subKeyPath];
+            proxy = [self.subObject mutableArrayValueForKey:self.subKeyPath];
         }
         else{
-            proxy = self.subObject.object;
+            proxy = self.subObject;
         }
 		[proxy removeObjectsAtIndexes:indexes];
 	}
@@ -257,10 +241,10 @@
 	else{
         NSMutableArray* proxy= nil;
         if(self.subKeyPath != nil) {
-            proxy = [self.subObject.object mutableArrayValueForKey:self.subKeyPath];
+            proxy = [self.subObject mutableArrayValueForKey:self.subKeyPath];
         }
         else{
-            proxy = self.subObject.object;
+            proxy = self.subObject;
         }
 		[proxy removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [proxy count])]];
 	}
