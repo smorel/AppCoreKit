@@ -97,7 +97,8 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 + (void)endBindingsContext{
-	NSAssert(CKBindingsContextStack != nil && [CKBindingsContextStack count] > 0,@"No context opened");
+    if (!(CKBindingsContextStack != nil && [CKBindingsContextStack count] > 0))
+        [NSException raise:NSGenericException format:@"No context opened"];
 	[CKBindingsContextStack removeLastObject];
 }
 
@@ -115,7 +116,8 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
     if(CKDebugAssertForBindingsOutOfContextState != CKDebugCheckState_YES)
         return;
     
-    NSAssert([NSObject currentBindingContext] != CKBindingsNoContext,@"You're creating a binding without having opened a context !");
+    if ([NSObject currentBindingContext] == CKBindingsNoContext)
+        [NSException raise:NSGenericException format:@"You're creating a binding without having opened a context !"];
 #endif
 }
 

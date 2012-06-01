@@ -546,7 +546,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIView* view = [self createViewAtIndexPath:indexPath];
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid type for view");
+    
+    if (![view isKindOfClass:[UITableViewCell class]])
+        [NSException raise:NSGenericException format:@"invalid type for view"];
 	[self updateNumberOfPages];
 	
 	return (UITableViewCell*)view;
@@ -901,7 +903,8 @@
 	NSInteger index = selectedScope;
 	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
 	id value = [_searchScopeDefinition objectForKey:key];
-	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+    if (![value isKindOfClass:[CKCallback class]])
+        [NSException raise:NSGenericException format:@"invalid object in segmentDefinition"];
 	CKCallback* callback = (CKCallback*)value;
 	[callback execute:self];	
 }
@@ -910,7 +913,8 @@
 	NSInteger index = _segmentedControl.selectedSegmentIndex;
 	id key = [[_searchScopeDefinition allKeys]objectAtIndex:index];
 	id value = [_searchScopeDefinition objectForKey:key];
-	NSAssert([value isKindOfClass:[CKCallback class]],@"invalid object in segmentDefinition");
+    if (![value isKindOfClass:[CKCallback class]])
+        [NSException raise:NSGenericException format:@"invalid object in segmentDefinition"];
 	CKCallback* callback = (CKCallback*)value;
 	[callback execute:self];
 }
