@@ -82,3 +82,5 @@
 #import "CKSplitViewController.h"
 #import "CKTabViewController.h"
 #import "CKSegmentedViewController.h"
+
+#import "UIViewController+CKDeviceOrientation.h"

@@ -464,6 +464,8 @@
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		962347D01577FF5B0036002C /* CKSectionViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 962347CE1577FF5B0036002C /* CKSectionViews.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962347D11577FF5B0036002C /* CKSectionViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 962347CF1577FF5B0036002C /* CKSectionViews.m */; };
+		96234819157D6A770036002C /* UIViewController+CKDeviceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96234817157D6A760036002C /* UIViewController+CKDeviceOrientation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9623481A157D6A770036002C /* UIViewController+CKDeviceOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96234818157D6A760036002C /* UIViewController+CKDeviceOrientation.mm */; };
 		96243226155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96243224155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96243227155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96243225155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m */; };
 		962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7580AFCB144E314B004DCF7A /* CloudKit.xcdatamodeld */; };
@@ -1004,6 +1006,8 @@
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
 		962347CE1577FF5B0036002C /* CKSectionViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionViews.h; path = Classes/CKSectionViews.h; sourceTree = "<group>"; };
 		962347CF1577FF5B0036002C /* CKSectionViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSectionViews.m; path = Classes/CKSectionViews.m; sourceTree = "<group>"; };
+		96234817157D6A760036002C /* UIViewController+CKDeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+CKDeviceOrientation.h"; path = "Classes/UIViewController+CKDeviceOrientation.h"; sourceTree = "<group>"; };
+		96234818157D6A760036002C /* UIViewController+CKDeviceOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIViewController+CKDeviceOrientation.mm"; path = "Classes/UIViewController+CKDeviceOrientation.mm"; sourceTree = "<group>"; };
 		96243224155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMapAnnotationController+CKBlockBasedInterface.h"; path = "Classes/CKMapAnnotationController+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
 		96243225155B0689002B6CE8 /* CKMapAnnotationController+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKMapAnnotationController+CKBlockBasedInterface.m"; path = "Classes/CKMapAnnotationController+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
 		963826521484011700A9C98B /* CKFormSectionBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormSectionBase.h; path = Classes/CKFormSectionBase.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2034,6 +2038,8 @@
 				9600B8D21545C6B000F07C5A /* CKSlideShowViewController.m */,
 				B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */,
 				B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */,
+				96234817157D6A760036002C /* UIViewController+CKDeviceOrientation.h */,
+				96234818157D6A760036002C /* UIViewController+CKDeviceOrientation.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2385,6 +2391,7 @@
 				969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */,
 				B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */,
 				962347D01577FF5B0036002C /* CKSectionViews.h in Headers */,
+				96234819157D6A770036002C /* UIViewController+CKDeviceOrientation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2737,6 +2744,7 @@
 				B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */,
 				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
 				962347D11577FF5B0036002C /* CKSectionViews.m in Sources */,
+				9623481A157D6A770036002C /* UIViewController+CKDeviceOrientation.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
