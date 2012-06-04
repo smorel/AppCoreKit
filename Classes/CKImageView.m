@@ -285,30 +285,54 @@
         _currentState = CKImageViewStateDefaultImage;
 	}
 	else {//image or button
-        if(animated){
-            [UIView beginAnimations:[NSString stringWithFormat:@"<%p>",self] context:nil];
-            [UIView setAnimationDuration:_fadeInDuration];
-        }
-        
-        [self.defaultImageView removeFromSuperview];
-        [self.activityIndicator stopAnimating];
-        [self.activityIndicator removeFromSuperview];
-        
-        if(_interactive){
-            [self.imageView removeFromSuperview];
-            self.button.frame = self.bounds;
-            [self addSubview:self.button];
-        }
-        else{
-            if(self.button){
-                [self.button removeFromSuperview];
+        if (animated) {
+            if(_interactive){
+                self.button.frame = self.bounds;
+                [self addSubview:self.button];
+                self.button.alpha = 0;
             }
-            self.imageView.frame = self.bounds;
-            [self addSubview:self.imageView];
+            else{
+                self.imageView.frame = self.bounds;
+                [self addSubview:self.imageView];
+                self.imageView.alpha = 0;
+            }
+            
+            if (self.superview != nil) {
+                [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                    self.imageView.alpha = 1;
+                    self.button.alpha = 1;
+                    self.defaultImageView.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [self.defaultImageView removeFromSuperview];
+                    [self.activityIndicator stopAnimating];
+                    [self.activityIndicator removeFromSuperview];
+                    
+                    if(_interactive){
+                        [self.imageView removeFromSuperview];
+                    }
+                    else{
+                        if(self.button)
+                            [self.button removeFromSuperview];
+                    }
+                }];
+            }
         }
-        
-        if(animated){
-            [UIView commitAnimations];
+        else {
+            [self.defaultImageView removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+            [self.activityIndicator removeFromSuperview];
+            
+            if(_interactive){
+                [self.imageView removeFromSuperview];
+                self.button.frame = self.bounds;
+                [self addSubview:self.button];
+            }
+            else{
+                if(self.button)
+                    [self.button removeFromSuperview];
+                self.imageView.frame = self.bounds;
+                [self addSubview:self.imageView];
+            }
         }
         
         _currentState = CKImageViewStateImage;
