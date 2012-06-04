@@ -10,11 +10,11 @@
 
 @implementation NSURLRequest (Upload)
 
-+ (id)requestWithURL:(NSURL *)URL toUploadData:(NSData *)data {
++ (id)requestWithURL:(NSURL *)URL body:(NSData *)body {
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:URL] autorelease];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:data];
-    [request setValue:[NSString stringWithFormat:@"%d", [data length]] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:body];
+    [request setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
     return request;
 }
 

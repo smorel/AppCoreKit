@@ -10,6 +10,6 @@
 
 @interface NSURLRequest (Upload)
 
-+ (id)requestWithURL:(NSURL *)URL toUploadData:(NSData*)data;
++ (id)requestWithURL:(NSURL *)URL body:(NSData*)body;
 
 @end
