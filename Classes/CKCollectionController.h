@@ -19,7 +19,7 @@
 	BOOL observing;
 	BOOL animateInsertionsOnReload;
 	BOOL appendCollectionCellControllerAsFooterCell;
-	NSInteger numberOfFeedObjectsLimit;
+	NSInteger maximumNumberOfObjectsToDisplay;
 	BOOL locked;
 	BOOL changedWhileLocked;
 }
@@ -33,6 +33,6 @@
 //FIXME : review those names ...
 @property (nonatomic, assign) BOOL animateInsertionsOnReload;
 @property (nonatomic, assign) BOOL appendCollectionCellControllerAsFooterCell;
-@property (nonatomic, assign) NSInteger numberOfFeedObjectsLimit;
+@property (nonatomic, assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 @end
