@@ -221,8 +221,11 @@
             }
         }
     }
+    
+    [self onBeginUpdates];
+    [self onEndUpdates];
 
-    [self reload];
+   // [self reload];
     
 	[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 
