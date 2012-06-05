@@ -460,6 +460,8 @@
 		9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */; };
 		9600B8F01545D88F00F07C5A /* CKDownloadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */; };
+		960CAED6157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */; };
+		960CAED7157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9622AAFC1501395E00AEF369 /* UIView+CKDragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */; };
 		962347D01577FF5B0036002C /* CKSectionViews.h in Headers */ = {isa = PBXBuildFile; fileRef = 962347CE1577FF5B0036002C /* CKSectionViews.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1002,6 +1004,8 @@
 		9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDownloadManager.h; path = Classes/CKDownloadManager.h; sourceTree = "<group>"; };
 		9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDownloadManager.m; path = Classes/CKDownloadManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
+		960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIGestureRecognizer+CKBlockBasedInterface.h"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
+		960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+CKBlockBasedInterface.m"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
 		9622AAFA1501395E00AEF369 /* UIView+CKDragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKDragNDrop.m"; path = "Classes/UIView+CKDragNDrop.m"; sourceTree = "<group>"; };
 		962347CE1577FF5B0036002C /* CKSectionViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSectionViews.h; path = Classes/CKSectionViews.h; sourceTree = "<group>"; };
@@ -1318,6 +1322,7 @@
 				75C6DF6313FECA9F00E4AE4F /* UI.h */,
 				7506E40413B8FF6700EE1471 /* Views */,
 				9638264D147FE53F00A9C98B /* Controllers */,
+				960CAED2157E50DB00F6C887 /* Gestures */,
 				7506E40513B8FF7A00EE1471 /* ItemContainers */,
 				7506E3FD13B8FDD300EE1471 /* Carousel */,
 				7506E40213B8FE6100EE1471 /* Tables */,
@@ -2020,6 +2025,15 @@
 			name = Documentation;
 			sourceTree = "<group>";
 		};
+		960CAED2157E50DB00F6C887 /* Gestures */ = {
+			isa = PBXGroup;
+			children = (
+				960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */,
+				960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */,
+			);
+			name = Gestures;
+			sourceTree = "<group>";
+		};
 		9638264D147FE53F00A9C98B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2392,6 +2406,7 @@
 				B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */,
 				962347D01577FF5B0036002C /* CKSectionViews.h in Headers */,
 				96234819157D6A770036002C /* UIViewController+CKDeviceOrientation.h in Headers */,
+				960CAED6157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2745,6 +2760,7 @@
 				962840901570391E00160955 /* CloudKit.xcdatamodeld in Sources */,
 				962347D11577FF5B0036002C /* CKSectionViews.m in Sources */,
 				9623481A157D6A770036002C /* UIViewController+CKDeviceOrientation.mm in Sources */,
+				960CAED7157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

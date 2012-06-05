@@ -155,19 +155,34 @@
             
             UIButton* button = (UIButton*)[subcell viewWithTag:InteractionButtonTag];
             button.backgroundColor = [UIColor clearColor];
+            
             if([controller flags] & CKItemViewFlagSelectable){
-                [button bindEvent:UIControlEventTouchDown | UIControlEventTouchDragInside withBlock:^{
+                [button bindEvent:UIControlEventTouchDown withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
                         [controller.tableViewCell setSelected:YES animated:NO];
                         [controller.tableViewCell setHighlighted:YES animated:NO];
                     }
                 }];
+                [button bindEvent:UIControlEventTouchDragInside withBlock:^{
+                    //FIXME : THIS IS TOO MUCH SENSIBLE : As table views, we should disable if drag 5px up or down from the original touch ...
+                    button.enabled = NO;
+                    if([[controller willSelect] isEqual:[controller indexPath]]){
+                        [controller.tableViewCell setSelected:NO animated:NO];
+                        [controller.tableViewCell setHighlighted:NO animated:NO];
+                    }
+                }];
                 [button bindEvent:UIControlEventTouchUpInside withBlock:^{
-                    [controller didSelect]; 
+                    if(button.enabled){
+                        [controller didSelect];
+                    }
+                    button.enabled = YES; 
                 }];
                 [button bindEvent:UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragOutside withBlock:^{
-                    [controller.tableViewCell setSelected:NO animated:YES];
-                    [controller.tableViewCell setHighlighted:NO animated:YES];
+                    if(button.enabled){
+                        [controller.tableViewCell setSelected:NO animated:NO];
+                        [controller.tableViewCell setHighlighted:NO animated:NO];
+                    }
+                    button.enabled = YES;
                 }];
             }
             
