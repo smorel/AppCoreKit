@@ -10,6 +10,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKContainerViewController.h"
 #import <objc/runtime.h>
+#import "UIViewController+CKDeviceOrientation.h"
 
 
 @interface UIViewController ()
@@ -29,7 +30,8 @@
 - (void)postInit{
     [self.contentViewController setIsInPopover:YES];
     self.autoDismissOnInterfaceOrientation = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:CKUIDeviceOrientationWillChangeNotification object:nil];
 }
 
 - (id)initWithContentViewController:(UIViewController *)viewController{
@@ -67,7 +69,7 @@
 }
 
 - (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKUIDeviceOrientationWillChangeNotification object:nil];
     [self clearBindingsContext];
     [_didDismissPopoverBlock release];
     [super dealloc];
@@ -94,6 +96,7 @@
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
+    [self.contentViewController setIsInPopover:NO];
     if(_didDismissPopoverBlock){
         _didDismissPopoverBlock(self);
     }
@@ -101,7 +104,8 @@
 }
 
 - (void)dismissPopoverAnimated:(BOOL)animated{
-    [super dismissPopoverAnimated:YES];
+    [super dismissPopoverAnimated:animated];
+    [self.contentViewController setIsInPopover:NO];
     if(_didDismissPopoverBlock){
         _didDismissPopoverBlock(self);
     }
@@ -111,7 +115,7 @@
 - (void)orientationChanged:(NSNotification*)notif{
     BOOL shouldDismiss = NO;
     
-    UIDeviceOrientation o = [[UIDevice currentDevice]orientation];
+    UIInterfaceOrientation o = [[[notif userInfo]objectForKey:@"orientation"]intValue];
     switch(self.orientation){
         case UIInterfaceOrientationPortrait:
         case UIInterfaceOrientationPortraitUpsideDown:{
@@ -130,7 +134,7 @@
     }
     
     if(shouldDismiss && autoDismissOnInterfaceOrientation){
-        [self dismissPopoverAnimated:YES];
+        [self dismissPopoverAnimated:NO];
     }
 }
 

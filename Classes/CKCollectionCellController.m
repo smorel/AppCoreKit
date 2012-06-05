@@ -16,6 +16,9 @@
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellController+Style.h"
 
+#import "CKFormTableViewController.h"
+#import "CKFormBindedCollectionSection.h"
+
 #import "CKStyleManager.h"
 
 #define ACTIVITY_INDICATOR_TAG 98634
@@ -80,11 +83,23 @@
 	}
 	
 	NSMutableDictionary* theStyle = [self controllerStyle];
+    
+    NSInteger count = [collection count];
+    if([self.containerController isKindOfClass:[CKFormTableViewController class]]){
+        CKFormTableViewController* form = (CKFormTableViewController*)self.containerController;
+        CKFormSectionBase* section = [form sectionAtIndex:self.indexPath.section];
+        if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+            CKFormBindedCollectionSection* collectionSection = (CKFormBindedCollectionSection*)section;
+            CKCollectionController* collectionController = collectionSection.objectController;
+            
+            count = (collectionController.maximumNumberOfObjectsToDisplay > 0) ? MIN(collectionController.maximumNumberOfObjectsToDisplay,count) : count;
+        }
+    }
 	
     view.textLabel.textAlignment = UITextAlignmentCenter;
     view.textLabel.backgroundColor = [UIColor clearColor];
     if(activityIndicator.hidden){
-        switch([collection count]){
+        switch(count){
             case 0:{
                 self.text = _(theStyle.noItemsMessage);
                 break;
@@ -94,7 +109,7 @@
                 break;
             }
             default:{
-                self.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),[collection count]];
+                self.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),count];
                 break;
             }
         }

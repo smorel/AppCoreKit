@@ -16,7 +16,7 @@
 @synthesize collection = _collection;
 @synthesize delegate = _delegate;
 @synthesize appendCollectionCellControllerAsFooterCell;
-@synthesize numberOfFeedObjectsLimit;
+@synthesize maximumNumberOfObjectsToDisplay;
 @synthesize animateInsertionsOnReload;
 
 - (void)dealloc{
@@ -41,7 +41,7 @@
 
 - (id)initWithCollection:(CKCollection*)theCollection{
     if (self = [super init]) {
-        self.numberOfFeedObjectsLimit = 0;
+        self.maximumNumberOfObjectsToDisplay = 0;
         self.collection = theCollection;
         
         if(theCollection){
@@ -94,12 +94,12 @@
 		range.location--;
 	}*/
     
-    if(self.numberOfFeedObjectsLimit > 0 && [_collection count] > self.numberOfFeedObjectsLimit)
+    if(self.maximumNumberOfObjectsToDisplay > 0 && [_collection count] > self.maximumNumberOfObjectsToDisplay)
         return;
 			
 	//Adjust range using limit
-	range.location = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,range.location) : range.location;
-	range.length = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit - range.location,range.length - range.location) : range.length;
+	range.location = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,range.location) : range.location;
+	range.length = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay - range.location,range.length - range.location) : range.length;
 	[_collection fetchRange:range];
 }
 
@@ -108,7 +108,7 @@
 }
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
-	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
+	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
 	if(appendCollectionCellControllerAsFooterCell && _collection.feedSource){
 		return count + 1;
 	}
@@ -123,7 +123,7 @@
 	if(indexPath.length != 2)
 		return nil;
 	
-	NSInteger count = (numberOfFeedObjectsLimit > 0) ? MIN(numberOfFeedObjectsLimit,[_collection count]) : [_collection count];
+	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
 	if(indexPath.row < count){
 		NSInteger index = indexPath.row;
 		return [_collection objectAtIndex:index];
@@ -209,12 +209,12 @@
 	
 	switch(kind){
 		case NSKeyValueChangeInsertion:{
-			if(numberOfFeedObjectsLimit > 0) {
+			if(maximumNumberOfObjectsToDisplay > 0) {
 				NSMutableArray* limitedIndexPaths = [NSMutableArray array];
 				NSMutableArray* limitedObjects = [NSMutableArray array];
 				for(int i=0;i<[indexPaths count];++i){
 					NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
-					if(indexpath.row < numberOfFeedObjectsLimit){
+					if(indexpath.row < maximumNumberOfObjectsToDisplay){
 						[limitedIndexPaths addObject:indexpath];
 						id object = [newModels objectAtIndex:i];
 						[limitedObjects addObject:object];
