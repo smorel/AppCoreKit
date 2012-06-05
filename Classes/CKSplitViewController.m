@@ -29,26 +29,29 @@
 
 - (void)typeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKSplitViewConstraintsType", 
-                                               CKSplitViewConstraintsTypeFlexibleSize,
-                                               CKSplitViewConstraintsTypeFixedSizeInPixels,
-                                               CKSplitViewConstraintsTypeFixedSizeRatio);
+                                                 CKSplitViewConstraintsTypeFlexibleSize,
+                                                 CKSplitViewConstraintsTypeFixedSizeInPixels,
+                                                 CKSplitViewConstraintsTypeFixedSizeRatio);
 }
 
 @end
 
 @interface CKSplitView()
 @property (nonatomic,retain)NSMutableArray* controllerViews;
+@property (nonatomic, copy) void (^addOrRemoveBlock)(UIView* view, BOOL removing);
 @end
 
 @implementation CKSplitView
 @synthesize delegate;
 @synthesize controllerViews = _controllerViews;
 @synthesize orientation;
+@synthesize addOrRemoveBlock;
 
 - (void)dealloc{
     [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"CKSplitView<%p>",self]];
     [_controllerViews release];
     _controllerViews = nil;
+    self.addOrRemoveBlock = nil;
     [super dealloc];
 }
 
@@ -59,9 +62,6 @@
         self.controllerViews = [NSMutableArray array];
     }
     else{
-        for(UIView* view in _controllerViews){
-            [view removeFromSuperview];
-        }
         [self.controllerViews removeAllObjects];
     }
     
@@ -151,7 +151,7 @@
     }
     
     //set frames
-
+    
     i = 0;
     CGRect newFrame = CGRectMake(0,0,0,0);
     for(UIView* view in self.controllerViews){
@@ -216,6 +216,7 @@
 @synthesize viewControllers = _viewControllers;
 @synthesize splitView = _splitView;
 @synthesize hasBeenReloaded;
+@synthesize addOrRemoveAnimationBlock;
 
 - (void)postInit{
     [super postInit];
@@ -227,26 +228,51 @@
     _splitView = nil;
     [_viewControllers release];
     _viewControllers = nil;
+    self.addOrRemoveBlock = nil;
     [super dealloc];
 }
 
 
 - (id)initWithViewControllers:(NSArray*)theViewControllers{
     self = [super init];
-     self.viewControllers = theViewControllers;
-     return self;
+    self.viewControllers = theViewControllers;
+    return self;
 }
 
-- (void)setViewControllers:(NSArray *)theViewControllers{
+- (void)setViewControllers:(NSArray *)viewControllers {
+    [self setViewControllers:viewControllers animated:NO];
+}
+
+- (void)setViewControllers:(NSArray *)theViewControllers animated:(BOOL)animated {
+    NSArray * oldViewControllers = [[_viewControllers retain] autorelease];
     for(UIViewController* controller in _viewControllers){
-        [controller setContainerViewController:nil];
+        controller.view.alpha = 1.0;
+        if (![theViewControllers containsObject:controller] && controller.view.frame.size.width > 2) {
+            [UIView animateWithDuration:0.4 animations:^{
+                if (self.addOrRemoveAnimationBlock)
+                    self.addOrRemoveAnimationBlock(controller.view, YES);
+            } completion:^(BOOL finished) {
+                [controller setContainerViewController:nil];
+            }];
+        }
     }
     
     [_viewControllers release];
     _viewControllers = [theViewControllers retain];
     
     for(UIViewController* controller in _viewControllers){
-        [controller setContainerViewController:self];
+        if (![oldViewControllers containsObject:controller]) {
+            [controller setContainerViewController:self];
+            controller.view.alpha = 0.0;
+            [UIView animateWithDuration:animated ? 0.4 : 0.0 animations:^{
+                if (self.addOrRemoveAnimationBlock)
+                    self.addOrRemoveAnimationBlock(controller.view, NO);
+                else
+                    controller.view.alpha = 1.0;
+            } completion:^(BOOL finished) {
+                
+            }];
+        }
     }
     
     if(self.viewIsOnScreen){
@@ -274,6 +300,7 @@
         self.splitView = [[[CKSplitView alloc]initWithFrame:self.view.bounds]autorelease];
         _splitView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _splitView.clipsToBounds = YES;
+        _splitView.addOrRemoveBlock = self.addOrRemoveAnimationBlock;
         [self.view addSubview:_splitView];
     }
     
@@ -385,6 +412,11 @@
             [controller  willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
         }
     }
+}
+
+- (void)setAddOrRemoveBlock:(void (^)(UIView *, BOOL))anAddOrRemoveBlock {
+    addOrRemoveAnimationBlock = anAddOrRemoveBlock;
+    self.splitView.addOrRemoveBlock = anAddOrRemoveBlock;
 }
 
 @end

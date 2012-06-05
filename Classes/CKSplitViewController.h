@@ -57,7 +57,10 @@ typedef enum CKSplitViewOrientation{
 @property (nonatomic, copy) NSArray* viewControllers;
 @property (nonatomic, retain, readonly) CKSplitView* splitView;
 
+@property (nonatomic, copy) void (^addOrRemoveAnimationBlock)(UIView* view, BOOL removing);
+
 - (id)initWithViewControllers:(NSArray*)viewControllers;
+- (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated;
 
 @end
 
