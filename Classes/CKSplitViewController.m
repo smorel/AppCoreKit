@@ -251,6 +251,8 @@
             [UIView animateWithDuration:0.4 animations:^{
                 if (self.addOrRemoveAnimationBlock)
                     self.addOrRemoveAnimationBlock(controller.view, YES);
+                else
+                    controller.view.alpha = 0.0;
             } completion:^(BOOL finished) {
                 [controller setContainerViewController:nil];
             }];
