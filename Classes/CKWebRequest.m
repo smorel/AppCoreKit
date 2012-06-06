@@ -12,6 +12,7 @@
 #import "CKWebRequest.h"
 #import "CKWebRequestManager.h"
 #import "CKWebDataConverter.h"
+#import <CloudKit/CKNetworkActivityManager.h>
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
@@ -138,7 +139,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             self.connection = [[[NSURLConnection alloc] initWithRequest:self.request delegate:self startImmediately:NO] autorelease];
             
             [self.connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
-            [self.connection start];  
+            [self.connection start];
+            
+            [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:self];
         }
     });
 }
@@ -149,6 +152,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             [self.connection cancel];
             self.connection = nil;
             self.cancelled = YES;
+            
+            [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
             
             if (self.cancelBlock)
                 self.cancelBlock();
@@ -213,6 +218,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
     dispatch_group_async(self.operationsGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         id object = self.isCancelled ? nil : [CKWebDataConverter convertData:self.data fromResponse:self.response];
         
+        if (aConnection)
+            [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
+        
         if (self.transformBlock && !self.isCancelled) {
             id transformedObject = transformBlock(object);
             if (transformedObject)
@@ -252,6 +260,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
                     if(self.completionBlock){
                         self.completionBlock(nil, self.response, error);
                     }
+                    
+                    if (aConnection)
+                        [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:self];
                     
                     if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)]){
                         [self.delegate connection:aConnection didFailWithError:error];
