@@ -266,6 +266,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 	[aCoder encodeObject:names forKey:CKObjectAllPropertyNamesKey];
 }
 
+/*
 - (NSUInteger)hash {
 	NSMutableArray* allValues = [NSMutableArray array];
 	NSArray* allProperties = [self allPropertyDescriptors];
@@ -279,7 +280,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 		}
 	}
 	return (NSUInteger)[allValues hash];
-}
+}*/
 
 
 //For Migration

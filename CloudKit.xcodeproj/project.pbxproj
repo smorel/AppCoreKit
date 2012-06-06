@@ -525,7 +525,7 @@
 		96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */; };
 		96E4D4671540918800CCF421 /* UnitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D40215407D8600CCF421 /* UnitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B01481171566A8FD000C1E1C /* CKWebRequestManager.h */; };
+		B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B01481171566A8FD000C1E1C /* CKWebRequestManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */; };
