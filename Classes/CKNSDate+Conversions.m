@@ -6,6 +6,7 @@
 //
 
 #import "CKNSDate+Conversions.h"
+#import "CKLocalizationManager.h"
 
 @implementation NSDate (CKNSDateConversionsAdditions)
 
@@ -49,7 +50,7 @@
 }
 
 + (NSDate *)dateFromString:(NSString *)string withDateFormat:(NSString *)dateFormat {
-	return [NSDate dateFromString:string withDateFormat:dateFormat forLocaleIdentifier:nil];
+	return [NSDate dateFromString:string withDateFormat:dateFormat forLocaleIdentifier:[[CKLocalizationManager sharedManager]language] ];
 }
 
 + (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
@@ -57,7 +58,7 @@
 }
 
 + (NSString *)stringFromDate:(NSDate *)date withDateFormat:(NSString *)dateFormat {
-	return [NSDate stringFromDate:date withDateFormat:dateFormat forLocaleIdentifier:nil];
+	return [NSDate stringFromDate:date withDateFormat:dateFormat forLocaleIdentifier:[[CKLocalizationManager sharedManager]language] ];
 }
 
 - (NSString *)stringWithDateFormat:(NSString *)dateFormat forLocaleIdentifier:(NSString *)localeIdentifier {
