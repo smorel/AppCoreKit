@@ -18,6 +18,11 @@
 #import "CKCarouselView.h"
 #import "CKBindedCarouselViewController.h"
 
+#import "CKLayoutManager.h"
+#import "CKLayout.h"
+#import "CKLayoutView.h"
+#import "CKGridLayout.h"
+
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKTableViewCellController+CKBlockBasedInterface.h"
