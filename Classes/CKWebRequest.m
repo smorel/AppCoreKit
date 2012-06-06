@@ -231,6 +231,10 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
             dispatch_group_async(self.operationsGroup, dispatch_get_main_queue(), ^(void) {
                 if (!self.isCancelled) {
                     self.cancelled = YES;
+                    
+                    if (aConnection == nil)
+                        self.response = nil;
+                    
                     if (self.completionBlock)
                         self.completionBlock(object, self.response, nil);
                     
