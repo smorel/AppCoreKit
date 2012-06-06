@@ -17,7 +17,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 @interface CKImageLoader ()
 @property (nonatomic, retain) CKWebRequest *request;
 
-- (void)didReceiveValue:(UIImage*)image error:(NSError*)error;
+- (void)didReceiveValue:(UIImage*)image error:(NSError*)error cached:(BOOL)cached;
 @end
 
 //
@@ -78,7 +78,7 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
     else if([[self.imageURL scheme] isMatchedByRegex:@"^(http|https)$"]){
         //__block CKImageLoader *bSelf = self;
         self.request = [CKWebRequest scheduledRequestWithURL:url completion:^(id object, NSURLResponse *response, NSError * error) {
-            [self didReceiveValue:object error:error];
+            [self didReceiveValue:object error:error cached:!response];
             self.request = nil;
         }];
     }
@@ -89,13 +89,13 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
     self.request = nil;
 }
 
-- (void)didReceiveValue:(UIImage*)image error:(NSError*)error {
+- (void)didReceiveValue:(UIImage*)image error:(NSError*)error cached:(BOOL)cached {
 	if ([image isKindOfClass:[UIImage class]]) {
         if(_completionBlock){
             _completionBlock(self, image, YES);
         }
 		if (self.delegate && [self.delegate respondsToSelector:@selector(imageLoader:didLoadImage:cached:)]) {
-			[self.delegate imageLoader:self didLoadImage:image cached:NO];
+			[self.delegate imageLoader:self didLoadImage:image cached:cached];
 		}
 	} 
     else if (error) {
