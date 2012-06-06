@@ -32,6 +32,7 @@
     self.webView = nil;
     self.completionBlock = nil;
     self.reachability = nil;
+    self.webView.delegate = nil;
     
     [super dealloc];
 }

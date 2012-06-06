@@ -131,8 +131,6 @@
         NSRunLoop *loop = self.runLoop;
         [request startOnRunLoop:loop];
         [self.runningRequests addObject:request];
-        
-        [[CKNetworkActivityManager defaultManager] addNetworkActivityForObject:request];
     }
     else
         [self.waitingRequests addObject:request];
@@ -142,7 +140,6 @@
 
 - (void)requestDidFinish:(CKWebRequest*)request {//Start a new one if some are waiting
     [self.runningRequests removeObject:request];
-    [[CKNetworkActivityManager defaultManager] removeNetworkActivityForObject:request];
     
     if (self.waitingRequests.count != 0) {
         CKWebRequest *newRequest = [[self.waitingRequests objectAtIndex:0]retain];
