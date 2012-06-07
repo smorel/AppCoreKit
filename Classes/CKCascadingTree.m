@@ -716,7 +716,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         
 #if TARGET_IPHONE_SIMULATOR
         self.lastUpdateDate = [NSDate date];
-        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(updateStyleSheets) userInfo:nil repeats:YES];
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateStyleSheets) userInfo:nil repeats:YES];
 #endif
     }
 	return self;
@@ -754,6 +754,10 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 - (BOOL)importContentOfFile:(NSString*)path{
     if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
+    
+#if TARGET_IPHONE_SIMULATOR
+    path = [self localURLForResourcePath:path].path;
+#endif
 	
     //TODO
     NSString* fileAndExtension = [path lastPathComponent];
@@ -839,47 +843,51 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 }
 
 #if TARGET_IPHONE_SIMULATOR
+- (NSURL*)localURLForResourcePath:(NSString*)resourcePath {
+    NSString* sourcePath = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SRC_ROOT"];
+
+    if (sourcePath == nil)
+        return [NSURL fileURLWithPath:resourcePath];
+    
+    NSString *fileName = [resourcePath lastPathComponent];
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
+                                                             includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
+    for (NSURL *file in enumerator) {
+        if ([[file lastPathComponent] isEqualToString:fileName]) {
+            return file;
+        }
+    }
+    
+    return [NSURL fileURLWithPath:resourcePath];;
+}
+
 - (void) updateStyleSheets {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
-        NSString* sourcePath = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SRC_ROOT"];
-        NSMutableArray *updatedFiles = [NSMutableArray array];
-        NSMutableArray *projectFiles = [NSMutableArray array];
+    NSMutableArray *updatedFiles = [NSMutableArray array];
+    
+    for (NSString *path in _loadedFiles) {
+        NSURL *localURL = [self localURLForResourcePath:path];
+        NSDate *updateDate;
+        [localURL getResourceValue:&updateDate forKey:NSURLContentModificationDateKey error:nil];
         
-        for (NSString *path in _loadedFiles) {
-            NSString *fileName = [path lastPathComponent];
-            
-            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
-                                                                     includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
-            for (NSURL *file in enumerator) {
-                if ([[file lastPathComponent] isEqualToString:fileName]) {
-                    NSDate *updateDate;
-                    [file getResourceValue:&updateDate forKey:NSURLContentModificationDateKey error:nil];
-                    
-                    if ([updateDate timeIntervalSinceDate:lastUpdateDate] >= 0) {
-                        NSLog(@"Updated file %@", file);
-                        [updatedFiles addObject:file];
-                    }
-                    
-                    [projectFiles addObject:file];
-                    
-                    break;
-                }
-            }
+        if ([updateDate timeIntervalSinceDate:lastUpdateDate] >= -3) {
+            NSLog(@"Updated file %@", localURL);
+            [updatedFiles addObject:localURL];
         }
-        
-        if (updatedFiles.count != 0) {
-            [_loadedFiles removeAllObjects];
-            [_tree removeAllObjects];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                for (NSURL *fileURL in projectFiles) {
-                    [self loadContentOfFile:fileURL.path];
-                }
-                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self userInfo:[NSDictionary dictionaryWithObject:updatedFiles forKey:@"updatedFiles"]];
-            });
+    }
+    
+    if (updatedFiles.count != 0) {
+        NSSet *toLoadFiles = _loadedFiles.copy;
+        [_loadedFiles removeAllObjects];
+        [_tree removeAllObjects];
+        for (NSString * path in toLoadFiles) {
+            [self loadContentOfFile:path];
         }
-        
-        self.lastUpdateDate = [NSDate date];
-    });
+        [toLoadFiles release];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self userInfo:[NSDictionary dictionaryWithObject:updatedFiles forKey:@"updatedFiles"]];
+    }
+    
+    self.lastUpdateDate = [NSDate date];
+    
 }
 #endif
 

@@ -71,20 +71,20 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
-                                               CKInterfaceOrientationPortrait,
-                                               CKInterfaceOrientationLandscape,
-                                               CKInterfaceOrientationAll);
+                                                 CKInterfaceOrientationPortrait,
+                                                 CKInterfaceOrientationLandscape,
+                                                 CKInterfaceOrientationAll);
 }
 
 - (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"CKUIViewControllerState", 
-                                               CKUIViewControllerStateNone,
-                                               CKUIViewControllerStateWillAppear,
-                                               CKUIViewControllerStateDidAppear,
-                                               CKUIViewControllerStateWillDisappear,
-                                               CKUIViewControllerStateDidDisappear,
-                                               CKUIViewControllerStateDidUnload,
-                                               CKUIViewControllerStateDidLoad);
+                                                 CKUIViewControllerStateNone,
+                                                 CKUIViewControllerStateWillAppear,
+                                                 CKUIViewControllerStateDidAppear,
+                                                 CKUIViewControllerStateWillDisappear,
+                                                 CKUIViewControllerStateDidDisappear,
+                                                 CKUIViewControllerStateDidUnload,
+                                                 CKUIViewControllerStateDidLoad);
 }
 
 - (void)postInit {	
@@ -92,6 +92,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
+    
+#if TARGET_IPHONE_SIMULATOR
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+#endif
 }
 
 - (id)init {
@@ -154,7 +158,18 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_inlineDebuggerController = nil;
 #endif
     
+#if TARGET_IPHONE_SIMULATOR
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+#endif
+    
 	[super dealloc];
+}
+
+- (void)updateStylesheets {
+    if ([self isViewLoaded]) {
+        self.styleHasBeenApplied = NO;
+        [self applyStyleForNavigation];
+    }
 }
 
 + (id)controller{
@@ -166,30 +181,30 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 - (void)observerNavigationChanges:(BOOL)bo{
     /*if(bo){
-        [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
-        [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
-        [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
-        [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
-        [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
-        [NSObject endBindingsContext];
-    }
-    else{
-        [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
-    }
-    
-    UIViewController* container = self;
-    if([container respondsToSelector:@selector(containerViewController)]){
-        container = [container performSelector:@selector(containerViewController)];
-    }
-    
-    while(container){
-        if([container isKindOfClass:[CKUIViewController class]]){
-            [(CKUIViewController*)container observerNavigationChanges:bo];
-        }
-        if([container respondsToSelector:@selector(containerViewController)]){
-            container = [container performSelector:@selector(containerViewController)];
-        }
-    }*/
+     [NSObject beginBindingsContext:self.navigationItemsBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
+     [self.navigationItem bind:@"leftBarButtonItem" target:self action:@selector(leftItemChanged:)];
+     [self.navigationItem bind:@"rightBarButtonItem" target:self action:@selector(rightItemChanged:)];
+     [self.navigationItem bind:@"backBarButtonItem" target:self action:@selector(backItemChanged:)];
+     [self.navigationItem bind:@"titleView" target:self action:@selector(titleViewChanged:)];
+     [NSObject endBindingsContext];
+     }
+     else{
+     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
+     }
+     
+     UIViewController* container = self;
+     if([container respondsToSelector:@selector(containerViewController)]){
+     container = [container performSelector:@selector(containerViewController)];
+     }
+     
+     while(container){
+     if([container isKindOfClass:[CKUIViewController class]]){
+     [(CKUIViewController*)container observerNavigationChanges:bo];
+     }
+     if([container respondsToSelector:@selector(containerViewController)]){
+     container = [container performSelector:@selector(containerViewController)];
+     }
+     }*/
 }
 
 - (void)applyStyleForLeftBarButtonItem{
@@ -321,8 +336,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
      forKey: kCATransactionDisableActions];
-
-
+    
+    
     NSMutableDictionary* controllerStyle = nil;
     if(!self.styleHasBeenApplied){
         controllerStyle = [self applyStyle];
@@ -577,7 +592,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(self.viewIsOnScreen){
         [self applyStyleForLeftBarButtonItem];
         
-            //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
             self.navigationItem.leftBarButtonItem = nil;
             [self.navigationItem setLeftBarButtonItem:theleftButton animated:YES];
@@ -593,7 +608,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     if(self.viewIsOnScreen){
         [self applyStyleForRightBarButtonItem];
         
-            //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
         if([CKOSVersion() floatValue]< 4.2){
             self.navigationItem.rightBarButtonItem = nil;
             [self.navigationItem setRightBarButtonItem:theRightButton animated:YES];
