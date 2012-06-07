@@ -844,7 +844,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 
 #if TARGET_IPHONE_SIMULATOR
 - (NSURL*)localURLForResourcePath:(NSString*)resourcePath {
-    NSString* sourcePath = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SRC_ROOT"];
+    NSString* sourcePath = [[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
 
     if (sourcePath == nil)
         return [NSURL fileURLWithPath:resourcePath];
