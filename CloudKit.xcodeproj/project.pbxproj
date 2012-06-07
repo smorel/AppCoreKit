@@ -2168,6 +2168,17 @@
 			name = UnitTests;
 			sourceTree = "<group>";
 		};
+		B0271D0B15814C04006992D7 /* LayoutManagers */ = {
+			isa = PBXGroup;
+			children = (
+				B0AA8898157FCD000006CA5A /* CKGridLayout.h */,
+				B0AA8899157FCD000006CA5A /* CKGridLayout.m */,
+				B09D1E111580012E00E13B00 /* CKFlexibleGridLayout.h */,
+				B09D1E121580012E00E13B00 /* CKFlexibleGridLayout.m */,
+			);
+			name = LayoutManagers;
+			sourceTree = "<group>";
+		};
 		B03A8429157FC4F80039DE45 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
@@ -2176,10 +2187,7 @@
 				B0DF970A157FDB6A001A3708 /* UIView+LayoutHelper.m */,
 				B03A842F157FC7490039DE45 /* CKLayoutView.h */,
 				B03A8430157FC7490039DE45 /* CKLayoutView.m */,
-				B0AA8898157FCD000006CA5A /* CKGridLayout.h */,
-				B0AA8899157FCD000006CA5A /* CKGridLayout.m */,
-				B09D1E111580012E00E13B00 /* CKFlexibleGridLayout.h */,
-				B09D1E121580012E00E13B00 /* CKFlexibleGridLayout.m */,
+				B0271D0B15814C04006992D7 /* LayoutManagers */,
 			);
 			name = Layout;
 			sourceTree = "<group>";

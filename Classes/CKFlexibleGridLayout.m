@@ -46,12 +46,14 @@
     //TODO take into account grid constraints in gridSize
     NSUInteger viewIndex = 0;
     CGFloat currentHeight = self.inset.top;
-    while (currentHeight < height && subviewCount > viewIndex) {
+    NSUInteger rows = 0;
+    while (currentHeight < height && subviewCount > viewIndex && rows < self.gridSize.height) {
         CGFloat currentWidth = 0;
         CGFloat contentWidth = 0;
         CGFloat bestHeight = 0;
         NSUInteger initialViewIndex = viewIndex;
-        while (currentWidth < width && subviewCount > viewIndex) {
+        NSUInteger column = 0;
+        while (currentWidth < width && subviewCount > viewIndex  && column < self.gridSize.width) {
             UIView *view = [self.layoutView.subviews objectAtIndex:viewIndex];
             if (currentWidth + view.preferedSize.width + self.minMarginSize < width) {
                 currentWidth += view.preferedSize.width;
@@ -60,6 +62,7 @@
                 
                 bestHeight = MAX(bestHeight, view.preferedSize.height);
                 viewIndex ++;
+                column ++;
             }
             else
                 break;
@@ -75,7 +78,13 @@
             currentWidth += view.frame.size.width + marginSize + self.minMarginSize;
         }
         
+        rows ++;
         currentHeight += bestHeight + self.minMarginSize;
+    }
+    
+    for (NSUInteger index = viewIndex; index < self.layoutView.subviews.count ; index ++) {
+        UIView *viewToHide = [self.layoutView.subviews objectAtIndex:index];
+        viewToHide.hidden = YES;
     }
 }
 
