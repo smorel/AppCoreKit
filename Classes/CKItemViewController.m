@@ -77,10 +77,6 @@
 	
 	_containerController = nil;
     
-#if TARGET_IPHONE_SIMULATOR
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
-    
 	[super dealloc];
 }
 
@@ -92,21 +88,10 @@
 	return self;
 }
 
-- (void)updateStylesheets {
-    if (self.view.superview != nil){
-        [self setAppliedStyle:nil];
-        [self applyStyle];
-    }
-}
-
 - (void)postInit{
     _flags = CKItemViewFlagAll;
     _size = CGSizeMake(320,44);
     _isViewAppeared = NO;
-    
-#if TARGET_IPHONE_SIMULATOR
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
 }
 
 - (void)setSize:(CGSize)s{
