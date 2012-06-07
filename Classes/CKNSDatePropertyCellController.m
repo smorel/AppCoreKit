@@ -95,7 +95,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];
             if(date){
-                [_datePicker setDate:[self.property value] animated:NO];
+                [_datePicker setDate:date animated:NO];
             }
             else{
                 [_datePicker setDate:[NSDate date] animated:NO];
@@ -131,6 +131,19 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             _pickerView.showsSelectionIndicator = YES;
             _pickerView.dataSource = self;
             _pickerView.delegate = self;
+            
+            NSDate* date = [self.property value];
+            if(!date){
+                date = [NSDate date];
+            }
+            
+            NSDateComponents* comp2 = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear fromDate:[NSDate date]];
+            NSDateComponents* comp = [[NSCalendar currentCalendar]components:kCFCalendarUnitYear|kCFCalendarUnitMonth fromDate:date];
+            NSInteger yearRow = [comp year] - [comp2 year];
+            NSInteger monthRow = [comp month] - 1;
+            
+            [_pickerView selectRow:monthRow inComponent:0 animated:NO];
+            [_pickerView selectRow:yearRow inComponent:1 animated:NO];
             
             //Adjust if navigationController with transparent toolbar
             CGFloat y = self.view.frame.size.height - self.pickerView.frame.size.height;

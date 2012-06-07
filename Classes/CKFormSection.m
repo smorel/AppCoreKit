@@ -50,7 +50,6 @@
 
 - (id)initWithCellControllers:(NSArray*)theCellControllers{
 	if (self = [super init]) {
-      	self.headerTitle = @"";
         self.cellControllers = [NSMutableArray arrayWithArray:theCellControllers];
     }
 	return self;
