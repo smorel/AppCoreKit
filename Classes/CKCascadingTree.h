@@ -18,6 +18,8 @@ extern NSString* const CKCascadingTreeImport;
 extern NSString* const CKCascadingTreeIPad;
 extern NSString* const CKCascadingTreeIPhone;
 
+extern NSString * const CKCascadingTreeFilesDidUpdateNotification;
+
 /** TODO
  */
 @interface CKCascadingTree : NSObject {

@@ -14,6 +14,8 @@
 #import "CKDebug.h"
 #import <objc/runtime.h>
 
+NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
+
 //CKCascadingTreeItemFormat
 
 @interface CKCascadingTreeItemFormat : NSObject{
@@ -418,7 +420,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             }
         }
 		else if([object isKindOfClass:[NSDictionary class]]
-		   && (![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode])){
+                && (![key hasPrefix:CKCascadingTreePrefix] || [key isEqualToString:CKCascadingTreeNode])){
 			NSArray* fromatGroups = [self parseFormatGroups:key];
 			[self removeObjectForKey:key];
 			
@@ -444,7 +446,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             }
         }
         else if([object isKindOfClass:[NSDictionary class]]
-		   && ![key hasPrefix:CKCascadingTreePrefix]){
+                && ![key hasPrefix:CKCascadingTreePrefix]){
 			[object setObject:[NSValue valueWithNonretainedObject:self] forKey:CKCascadingTreeParent];
 		}
     }];
@@ -464,7 +466,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
             }
         }
 		else if([object isKindOfClass:[NSDictionary class]]
-		   && ![key hasPrefix:CKCascadingTreePrefix]){
+                && ![key hasPrefix:CKCascadingTreePrefix]){
 			CKCascadingTreeItemFormat* format = [[[CKCascadingTreeItemFormat alloc]initFormatWithFormat:key]autorelease];
 			[self setFormat:format];
 			
@@ -480,30 +482,30 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (void)validation{
-/*    for(id key in [self allKeys]){
-		id object = [self objectForKey:key];
-		if([object isKindOfClass:[NSDictionary class]]
-		   && [key isEqual:CKCascadingTreeFormats] == NO
-		   && [key isEqual:CKCascadingTreeParent] == NO
-		   && [key isEqual:CKCascadingTreeEmpty] == NO
-           && [key isEqual:CKCascadingTreeNode] == NO){
-            id parent = [[object objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
-            NSAssert(parent == self,@"Invalid parent !");
-            
-			[object validation];
-        }
-        else if([object isKindOfClass:[NSArray class]]){
-            for(id subObject in object){
-                if([subObject isKindOfClass:[NSDictionary class]]){
-                    id parent = [[subObject objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
-                    NSAssert(parent == self,@"Invalid parent !");
-                    
-                    [subObject validation];
-                }
-            }
-        }
-	}
- */
+    /*    for(id key in [self allKeys]){
+     id object = [self objectForKey:key];
+     if([object isKindOfClass:[NSDictionary class]]
+     && [key isEqual:CKCascadingTreeFormats] == NO
+     && [key isEqual:CKCascadingTreeParent] == NO
+     && [key isEqual:CKCascadingTreeEmpty] == NO
+     && [key isEqual:CKCascadingTreeNode] == NO){
+     id parent = [[object objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+     NSAssert(parent == self,@"Invalid parent !");
+     
+     [object validation];
+     }
+     else if([object isKindOfClass:[NSArray class]]){
+     for(id subObject in object){
+     if([subObject isKindOfClass:[NSDictionary class]]){
+     id parent = [[subObject objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
+     NSAssert(parent == self,@"Invalid parent !");
+     
+     [subObject validation];
+     }
+     }
+     }
+     }
+     */
 }
 
 @end
@@ -632,7 +634,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 			return foundDico;
 		}
 	}
-
+    
     return nil;
 }
 
@@ -691,6 +693,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 @interface CKCascadingTree()
 @property (nonatomic,retain,readwrite) NSMutableDictionary* tree;
 @property (nonatomic,retain) NSMutableSet* loadedFiles;
+@property (nonatomic, retain) NSDate *lastUpdateDate;
 - (void)processImportsForDictionary:(NSMutableDictionary*)dictionary withMainExtension:(NSString*)mainExtension;
 - (BOOL)importContentOfFile:(NSString*)path;
 @end
@@ -698,16 +701,23 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 @implementation CKCascadingTree
 @synthesize tree = _tree;
 @synthesize loadedFiles = _loadedFiles;
+@synthesize lastUpdateDate;
 
 - (void)dealloc{
 	[_tree release];
 	[_loadedFiles release];
+    self.lastUpdateDate = nil;
 	[super dealloc];
 }
 
 - (id)init{
 	if (self = [super init]) {
-      self.loadedFiles = [NSMutableSet set];
+        self.loadedFiles = [NSMutableSet set];
+        
+#if TARGET_IPHONE_SIMULATOR
+        self.lastUpdateDate = [NSDate date];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(updateStyleSheets) userInfo:nil repeats:YES];
+#endif
     }
 	return self;
 }
@@ -754,8 +764,10 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	NSData* fileData = [NSData dataWithContentsOfFile:path];
 	NSError* error = nil;
     id result = [fileData mutableObjectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:&error];
-	NSAssert(result != nil,@"invalid format in style file '%@'\nat line : '%@'\nwith error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
-             [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
+    
+    if (error)
+        NSLog(@"**** Parsing error : invalid format in style file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
+              [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
 	
     //Post process
     [_loadedFiles addObject:path];
@@ -826,5 +838,49 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	return [_tree description];
 }
 
+#if TARGET_IPHONE_SIMULATOR
+- (void) updateStyleSheets {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^(void) {
+        NSString* sourcePath = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SRC_ROOT"];
+        NSMutableArray *updatedFiles = [NSMutableArray array];
+        NSMutableArray *projectFiles = [NSMutableArray array];
+        
+        for (NSString *path in _loadedFiles) {
+            NSString *fileName = [path lastPathComponent];
+            
+            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
+                                                                     includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
+            for (NSURL *file in enumerator) {
+                if ([[file lastPathComponent] isEqualToString:fileName]) {
+                    NSDate *updateDate;
+                    [file getResourceValue:&updateDate forKey:NSURLContentModificationDateKey error:nil];
+                    
+                    if ([updateDate timeIntervalSinceDate:lastUpdateDate] >= 0) {
+                        NSLog(@"Updated file %@", file);
+                        [updatedFiles addObject:file];
+                    }
+                    
+                    [projectFiles addObject:file];
+                    
+                    break;
+                }
+            }
+        }
+        
+        if (updatedFiles.count != 0) {
+            [_loadedFiles removeAllObjects];
+            [_tree removeAllObjects];
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                for (NSURL *fileURL in projectFiles) {
+                    [self loadContentOfFile:fileURL.path];
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self userInfo:[NSDictionary dictionaryWithObject:updatedFiles forKey:@"updatedFiles"]];
+            });
+        }
+        
+        self.lastUpdateDate = [NSDate date];
+    });
+}
+#endif
 
 @end
