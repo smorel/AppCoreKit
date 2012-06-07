@@ -22,6 +22,7 @@
 #import "CKLayout.h"
 #import "CKLayoutView.h"
 #import "CKGridLayout.h"
+#import "CKFlexibleGridLayout.h"
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"

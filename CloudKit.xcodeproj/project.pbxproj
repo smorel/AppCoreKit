@@ -535,6 +535,8 @@
 		B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
 		B09D1E0F157FF9B300E13B00 /* CKLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B03A8433157FC7660039DE45 /* CKLayoutManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B09D1E131580012E00E13B00 /* CKFlexibleGridLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = B09D1E111580012E00E13B00 /* CKFlexibleGridLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B09D1E141580012E00E13B00 /* CKFlexibleGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B09D1E121580012E00E13B00 /* CKFlexibleGridLayout.m */; };
 		B0AA889A157FCD000006CA5A /* CKGridLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = B0AA8898157FCD000006CA5A /* CKGridLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0AA889B157FCD000006CA5A /* CKGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AA8899157FCD000006CA5A /* CKGridLayout.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1084,6 +1086,8 @@
 		B03A8433157FC7660039DE45 /* CKLayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CKLayoutManager.h; path = Classes/CKLayoutManager.h; sourceTree = "<group>"; };
 		B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKWebRequest+Initialization.h"; sourceTree = "<group>"; };
 		B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKWebRequest+Initialization.m"; sourceTree = "<group>"; };
+		B09D1E111580012E00E13B00 /* CKFlexibleGridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFlexibleGridLayout.h; path = Classes/CKFlexibleGridLayout.h; sourceTree = "<group>"; };
+		B09D1E121580012E00E13B00 /* CKFlexibleGridLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKFlexibleGridLayout.m; path = Classes/CKFlexibleGridLayout.m; sourceTree = "<group>"; };
 		B0AA8898157FCD000006CA5A /* CKGridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKGridLayout.h; sourceTree = "<group>"; };
 		B0AA8899157FCD000006CA5A /* CKGridLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKGridLayout.m; sourceTree = "<group>"; };
 		B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebDataConverter.h; path = Classes/CKWebDataConverter.h; sourceTree = "<group>"; };
@@ -2180,6 +2184,8 @@
 				B03A8430157FC7490039DE45 /* CKLayoutView.m */,
 				B0AA8898157FCD000006CA5A /* CKGridLayout.h */,
 				B0AA8899157FCD000006CA5A /* CKGridLayout.m */,
+				B09D1E111580012E00E13B00 /* CKFlexibleGridLayout.h */,
+				B09D1E121580012E00E13B00 /* CKFlexibleGridLayout.m */,
 			);
 			name = Layout;
 			sourceTree = "<group>";
@@ -2440,6 +2446,7 @@
 				B0AA889A157FCD000006CA5A /* CKGridLayout.h in Headers */,
 				B0DF970B157FDB6A001A3708 /* UIView+LayoutHelper.h in Headers */,
 				B09D1E0F157FF9B300E13B00 /* CKLayoutManager.h in Headers */,
+				B09D1E131580012E00E13B00 /* CKFlexibleGridLayout.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2797,6 +2804,7 @@
 				B03A8432157FC7490039DE45 /* CKLayoutView.m in Sources */,
 				B0AA889B157FCD000006CA5A /* CKGridLayout.m in Sources */,
 				B0DF970C157FDB6A001A3708 /* UIView+LayoutHelper.m in Sources */,
+				B09D1E141580012E00E13B00 /* CKFlexibleGridLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
