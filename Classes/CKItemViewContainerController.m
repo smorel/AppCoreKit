@@ -587,11 +587,11 @@
 }
 
 - (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self objectController:controller insertObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
+	[self objectController:controller insertObjects:[NSArray arrayWithObject:object ? object : [NSNull null]] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-	[self objectController:controller removeObjects:[NSArray arrayWithObject:object] atIndexPaths:[NSArray arrayWithObject:indexPath]];
+	[self objectController:controller removeObjects:[NSArray arrayWithObject:object ? object : [NSNull null]] atIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{

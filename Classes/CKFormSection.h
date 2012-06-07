@@ -15,6 +15,7 @@
 @interface CKFormSection : CKFormSectionBase{
 	NSMutableArray* _cellControllers;
 }
+@property (nonatomic,retain, readonly) NSArray* cellControllers;
 
 - (NSInteger)count;
 

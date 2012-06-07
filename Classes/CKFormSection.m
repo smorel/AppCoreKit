@@ -22,7 +22,7 @@
 //CKFormSection
 
 @interface CKFormSection()
-@property (nonatomic,retain) NSArray* cellControllers;
+@property (nonatomic,retain,readwrite) NSArray* cellControllers;
 @end
 
 @implementation CKFormSection
@@ -102,7 +102,7 @@
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellController.value,theIndexPath,nil]];
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellController.value ? cellController.value : [NSNull null],theIndexPath,nil]];
         [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
     }
 }
@@ -117,7 +117,7 @@
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellControllers count] -1 inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellController.value,theIndexPath,nil]];
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,cellController.value ? cellController.value : [NSNull null],theIndexPath,nil]];
         [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
     }
 }
@@ -131,7 +131,7 @@
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,controller.value,theIndexPath,nil]];
+                                   withObjects:[NSArray arrayWithObjects:self.parentController.objectController,controller.value ? controller.value : [NSNull null],theIndexPath,nil]];
         [self.parentController performSelector:@selector(objectControllerDidEndUpdating:) withObject:self];
     }
 }
