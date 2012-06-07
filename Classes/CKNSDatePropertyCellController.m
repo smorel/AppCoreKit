@@ -124,6 +124,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         }
         case CKDatePickerModeCreditCardExpirationDate:{
             self.pickerView = [[[UIPickerView alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
+            _pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             /*_pickerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             [[self view]addSubview:_pickerView];
             
