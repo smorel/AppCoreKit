@@ -76,6 +76,7 @@
     [_deallocCallback release];
 	
 	_containerController = nil;
+    
 	[super dealloc];
 }
 
