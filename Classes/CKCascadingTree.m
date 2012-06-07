@@ -869,7 +869,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         NSDate *updateDate;
         [localURL getResourceValue:&updateDate forKey:NSURLContentModificationDateKey error:nil];
         
-        if ([updateDate timeIntervalSinceDate:lastUpdateDate] >= -3) {
+        if ([updateDate timeIntervalSinceDate:lastUpdateDate] >= -1) {
             NSLog(@"Updated file %@", localURL);
             [updatedFiles addObject:localURL];
         }
