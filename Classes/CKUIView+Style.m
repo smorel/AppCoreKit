@@ -430,12 +430,12 @@ static char NSObjectAppliedStyleObjectKey;
 @dynamic appliedStyle;
 
 - (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
-#if !TARGET_IPHONE_SIMULATOR
+//#if !TARGET_IPHONE_SIMULATOR
     objc_setAssociatedObject(self, 
                              &NSObjectAppliedStyleObjectKey,
                              appliedStyle,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#endif
+//#endif
 }
 
 - (NSMutableDictionary*)appliedStyle{
