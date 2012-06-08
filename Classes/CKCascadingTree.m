@@ -13,6 +13,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
+#import <CloudKit/CKLiveProjectFileUpdateManager.h>
 
 NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
@@ -693,7 +694,6 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 @interface CKCascadingTree()
 @property (nonatomic,retain,readwrite) NSMutableDictionary* tree;
 @property (nonatomic,retain) NSMutableSet* loadedFiles;
-@property (nonatomic, retain) NSDate *lastUpdateDate;
 - (void)processImportsForDictionary:(NSMutableDictionary*)dictionary withMainExtension:(NSString*)mainExtension;
 - (BOOL)importContentOfFile:(NSString*)path;
 @end
@@ -701,23 +701,16 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 @implementation CKCascadingTree
 @synthesize tree = _tree;
 @synthesize loadedFiles = _loadedFiles;
-@synthesize lastUpdateDate;
 
 - (void)dealloc{
 	[_tree release];
 	[_loadedFiles release];
-    self.lastUpdateDate = nil;
 	[super dealloc];
 }
 
 - (id)init{
 	if (self = [super init]) {
         self.loadedFiles = [NSMutableSet set];
-        
-#if TARGET_IPHONE_SIMULATOR
-        self.lastUpdateDate = [NSDate date];
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateStyleSheets) userInfo:nil repeats:YES];
-#endif
     }
 	return self;
 }
@@ -756,7 +749,17 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 		return NO;
     
 #if TARGET_IPHONE_SIMULATOR
-    path = [self localURLForResourcePath:path].path;
+    path = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+        NSSet *toLoadFiles = _loadedFiles.copy;
+        [_loadedFiles removeAllObjects];
+        [_tree removeAllObjects];
+        for (NSString * path in toLoadFiles) {
+            [self loadContentOfFile:path];
+        }
+        [toLoadFiles release];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+    }];
 #endif
 	
     //TODO
@@ -841,54 +844,5 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 - (NSString*)description{
 	return [_tree description];
 }
-
-#if TARGET_IPHONE_SIMULATOR
-- (NSURL*)localURLForResourcePath:(NSString*)resourcePath {
-    NSString* sourcePath = [[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
-
-    if (sourcePath == nil)
-        return [NSURL fileURLWithPath:resourcePath];
-    
-    NSString *fileName = [resourcePath lastPathComponent];
-    NSDirectoryEnumerator *enumerator = [[[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
-                                                             includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil]retain];
-    for (NSURL *file in enumerator) {
-        if ([[file lastPathComponent] isEqualToString:fileName]) {
-            return file;
-        }
-    }
-    
-    return [NSURL fileURLWithPath:resourcePath];;
-}
-
-- (void) updateStyleSheets {
-    NSMutableArray *updatedFiles = [NSMutableArray array];
-    
-    for (NSString *path in _loadedFiles) {
-        NSURL *localURL = [self localURLForResourcePath:path];
-        NSDate *updateDate;
-        [localURL getResourceValue:&updateDate forKey:NSURLContentModificationDateKey error:nil];
-        
-        if (updateDate && [updateDate timeIntervalSinceDate:lastUpdateDate] >= -1) {
-            NSLog(@"Updated file %@", localURL);
-            [updatedFiles addObject:localURL];
-        }
-    }
-    
-    if (updatedFiles.count != 0) {
-        NSSet *toLoadFiles = _loadedFiles.copy;
-        [_loadedFiles removeAllObjects];
-        [_tree removeAllObjects];
-        for (NSString * path in toLoadFiles) {
-            [self loadContentOfFile:path];
-        }
-        [toLoadFiles release];
-        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self userInfo:[NSDictionary dictionaryWithObject:updatedFiles forKey:@"updatedFiles"]];
-    }
-    
-    self.lastUpdateDate = [NSDate date];
-    
-}
-#endif
 
 @end

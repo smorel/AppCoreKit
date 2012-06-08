@@ -13,11 +13,17 @@
 #import "CKDebug.h"
 
 @interface CKLocalizationManager()
-- (void)refreshUI;
+#if TARGET_IPHONE_SIMULATOR
+@property (nonatomic, assign) BOOL needsRefresh;
+#endif
 @end
 
 @implementation CKLocalizationManager
 @synthesize language = _language;
+
+#if TARGET_IPHONE_SIMULATOR
+@synthesize needsRefresh;
+#endif
 
 //Current application bungle to get the languages.
 static NSBundle *bundle = nil;
@@ -37,6 +43,10 @@ static CKLocalizationManager *sharedInstance = nil;
     if ((self = [super init])) 
     {
 		bundle = [NSBundle mainBundle];
+        
+#if TARGET_IPHONE_SIMULATOR
+        self.needsRefresh = NO;
+#endif
         
         //Do not trigger KVO in init when setting the language value
         NSString *deviceLang = [[NSLocale preferredLanguages] objectAtIndex:0];
@@ -132,6 +142,10 @@ static CKLocalizationManager *sharedInstance = nil;
 }
 
 - (void)refreshUI{
+#if TARGET_IPHONE_SIMULATOR
+    self.needsRefresh = YES;
+#endif
+    
     NSMutableSet* controllerStack = [NSMutableSet set];
     NSMutableSet* viewStack = [NSMutableSet set];
     NSArray* windows = [[UIApplication sharedApplication]windows];
@@ -140,6 +154,14 @@ static CKLocalizationManager *sharedInstance = nil;
         [self refreshViewController:c controllerStack:controllerStack viewStack:viewStack];
         [self refreshView:window viewStack:viewStack];
     }
+    
+#if TARGET_IPHONE_SIMULATOR
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.needsRefresh = NO;
+    });
+#endif
 }
 
 @end

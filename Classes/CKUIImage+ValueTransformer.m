@@ -9,9 +9,42 @@
 #import "CKUIImage+ValueTransformer.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSValueTransformer+CGTypes.h"
+#import "CKLiveProjectFileUpdateManager.h"
+#import <CloudKit/CKLocalizationManager.h>
+#import "CKCascadingTree.h"
 
 
 @implementation UIImage (CKValueTransformer)
+
+#if TARGET_IPHONE_SIMULATOR
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
++(UIImage *)imageNamed:(NSString *)name {
+    NSURL *imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:[name pathExtension]];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:@"png"];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:nil];
+    
+    if (imageURL == nil)
+        return nil;
+    
+    return [[[UIImage alloc] initWithContentsOfFile:imageURL.path] autorelease];
+}
+
+- (id)initWithContentsOfFile:(NSString *)path {
+    if (path.length == 0)
+        return nil;
+    
+    NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+        [[CKLocalizationManager sharedManager] refreshUI];
+    }];
+    
+    return [self initWithData:[NSData dataWithContentsOfFile:localPath]];
+}
+#pragma clang diagnostic pop
+#endif
 
 + (UIImage*)convertFromNSString:(NSString*)str{
 	UIImage* image = [UIImage imageNamed:str];
