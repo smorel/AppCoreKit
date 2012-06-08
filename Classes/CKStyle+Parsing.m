@@ -56,9 +56,12 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return object;
 	}
 	id result = [NSValueTransformer transform:object toClass:[UIImage class]];
-	if(result){
+#if !TARGET_IPHONE_SIMULATOR
+    if(result){
 		[self setObject:result forKey:key];
-	}	return result;
+	}
+#endif
+    return result;
 }
 
 - (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
