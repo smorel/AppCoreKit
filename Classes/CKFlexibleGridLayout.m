@@ -14,6 +14,7 @@
 
 @synthesize inset, layoutView;
 @synthesize gridSize, minMarginSize;
+@synthesize horizontalLayout;
 
 + (CKFlexibleGridLayout *)horizontalGridLayout {
     return [self gridLayoutWithGridSize:CGSizeMake(CGFLOAT_MAX, 1)];
@@ -30,6 +31,8 @@
     gridLayout.minMarginSize = 5;
     gridLayout.inset = UIEdgeInsetsMake(5, 5, 5, 5);
     
+    gridLayout.horizontalLayout = CKFlexibleGridRightHorizontalLayout;
+    
     NSAssert(aGridSize.height != 0 && aGridSize.width != 0, @"0-size grid not supported");
     
     return gridLayout;
@@ -43,7 +46,6 @@
     NSUInteger subviewCount = self.layoutView.subviews.count;
     
     //TODO allow frame changes
-    //TODO take into account grid constraints in gridSize
     NSUInteger viewIndex = 0;
     CGFloat currentHeight = self.inset.top;
     NSUInteger rows = 0;
@@ -73,9 +75,20 @@
         currentWidth = self.inset.left + marginSize;
         for (NSUInteger index = initialViewIndex; index < viewIndex ; index ++) {
             UIView *view = [self.layoutView.subviews objectAtIndex:index];
-            view.center = CGPointMake(currentWidth + view.frame.size.width / 2,  currentHeight + bestHeight / 2);
             
-            currentWidth += view.frame.size.width + marginSize + self.minMarginSize;
+            CGFloat alignmentDelta = 0;
+            switch (self.horizontalLayout) {
+                case CKFlexibleGridLeftHorizontalLayout:
+                    alignmentDelta = -marginSize;
+                    break;
+                case CKFlexibleGridRightHorizontalLayout:
+                    alignmentDelta = marginSize;
+                    break;
+            }
+            
+            view.center = CGPointMake(currentWidth + view.frame.size.width / 2 + alignmentDelta,  currentHeight + bestHeight / 2);
+            
+            currentWidth += view.frame.size.width + marginSize + self.minMarginSize - alignmentDelta;
         }
         
         rows ++;

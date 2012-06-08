@@ -10,6 +10,12 @@
 #import <UIKit/UIKit.h>
 #import "CKLayoutManager.h"
 
+typedef enum CKFlexibleGridHorizontalLayout {
+    CKFlexibleGridLeftHorizontalLayout,
+    CKFlexibleGridMiddleHorizontalLayout,
+    CKFlexibleGridRightHorizontalLayout
+} CKFlexibleGridHorizontalLayout;
+
 @class CKLayoutView;
 @interface CKFlexibleGridLayout : NSObject <CKLayoutManager>
 
@@ -26,6 +32,7 @@
 @property (nonatomic, assign) CGSize gridSize;
 @property (nonatomic, assign) CGFloat minMarginSize;
 @property (nonatomic, assign) BOOL changeSubviewSize;
+@property (nonatomic, assign) CKFlexibleGridHorizontalLayout horizontalLayout;
 
 + (CKFlexibleGridLayout*)horizontalGridLayout;
 + (CKFlexibleGridLayout*)verticalGridLayout;
