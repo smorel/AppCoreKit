@@ -78,14 +78,14 @@
     
 }
 
-+ (CKWebRequest*)getRequestForObject:(id)object
-                                 url:(NSURL*)url
-                              params:(NSDictionary*)params
-                                body:(NSData*)body
-            mappingContextIdentifier:(NSString*)identifier
-                    transformRawData:(NSDictionary*(^)(id value))transformRawDataBlock
-                          completion:(void(^)(id object))completionBlock 
-                               error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
++ (CKWebRequest*)requestForObject:(id)object
+                              url:(NSURL*)url
+                           params:(NSDictionary*)params
+                             body:(NSData*)body
+         mappingContextIdentifier:(NSString*)identifier
+                 transformRawData:(NSDictionary*(^)(id value))transformRawDataBlock
+                       completion:(void(^)(id object))completionBlock 
+                            error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
     NSAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
     
     CKWebRequest* request = nil;
