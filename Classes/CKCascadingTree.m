@@ -850,8 +850,8 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         return [NSURL fileURLWithPath:resourcePath];
     
     NSString *fileName = [resourcePath lastPathComponent];
-    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
-                                                             includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil];
+    NSDirectoryEnumerator *enumerator = [[[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:sourcePath]
+                                                             includingPropertiesForKeys:[NSArray arrayWithObject:NSURLContentModificationDateKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler:nil]retain];
     for (NSURL *file in enumerator) {
         if ([[file lastPathComponent] isEqualToString:fileName]) {
             return file;
