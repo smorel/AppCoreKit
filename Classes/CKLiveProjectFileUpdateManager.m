@@ -51,7 +51,7 @@
     NSString* sourcePath = [[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
     
     if (sourcePath == nil)
-        return [NSURL fileURLWithPath:resourcePath];
+        return resourcePath;
     
     NSString *fileName = [resourcePath lastPathComponent];
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
