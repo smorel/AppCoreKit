@@ -51,7 +51,7 @@
     NSString* sourcePath = [[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
     
     if (sourcePath == nil)
-        return [NSURL fileURLWithPath:resourcePath];
+        return resourcePath;
     
     NSString *fileName = [resourcePath lastPathComponent];
     NSFileManager *fileManager = [[[NSFileManager alloc] init] autorelease];
@@ -80,10 +80,11 @@
 - (void)checkForUpdate {
     [self.projectPaths enumerateKeysAndObjectsUsingBlock:^(NSString *resourcePath, NSString *localPath, BOOL *stop) {
         NSDate *oldModificationDate = [self.modificationDate objectForKey:resourcePath];
-        if (![[self modificationDateForFileAtPath:localPath] isEqualToDate:oldModificationDate]) {
+        NSDate *newModificationDate = [self modificationDateForFileAtPath:localPath];
+        if (![newModificationDate isEqualToDate:oldModificationDate] && newModificationDate != nil) {
             NSLog(@"Update File : %@", localPath);
             
-            [self.modificationDate setObject:[self modificationDateForFileAtPath:localPath] forKey:resourcePath];
+            [self.modificationDate setObject:newModificationDate forKey:resourcePath];
             
             void (^handleBlock)(NSString* localPath) = [self.handles objectForKey:resourcePath];
             if (handleBlock)

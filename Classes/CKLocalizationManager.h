@@ -22,5 +22,6 @@
 - (void) resetToSystemDefaultLanguage;
 
 - (void)refreshUI;
+- (void)reloadBundleAtPath:(NSString*)path;
 
 @end

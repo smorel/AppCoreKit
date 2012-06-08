@@ -9,6 +9,7 @@
 #import "CKLocalization.h"
 #import "CKLiveProjectFileUpdateManager.h"
 #import <CloudKit/CKNSObject+CKSingleton.h>
+#import "CKCascadingTree.h"
 
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
@@ -21,16 +22,28 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
     //Find all localization tables
     if(CKLocalizationStringTableNames == nil){
         NSMutableArray* files = [[NSMutableArray alloc]init];
-        NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
         
-#if TARGET_IPHONE_SIMULATOR
+        NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
+#if TARGET_IPHONE_SIMULATOR        
         NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
         for (NSURL *filePathURL in stringsURLs) {
             NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
-                [[NSFileManager defaultManager] removeItemAtURL:filePathURL error:nil];
-                [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:filePathURL.path error:nil];
+                NSString *tempPath = NSTemporaryDirectory();
+                tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
                 
-                CKLocalizationStringTableNames = nil;
+                [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
+                
+                for (NSURL *URL in newStringsURL) {
+                    NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
+                    [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+                    
+                    NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
+                    [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:lastPath error:nil];
+                }
+                
+                [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
                 [[CKLocalizationManager sharedManager] refreshUI];
             }];
             
