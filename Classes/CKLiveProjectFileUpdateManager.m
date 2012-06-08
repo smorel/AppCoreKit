@@ -18,6 +18,7 @@
 @end
 
 @implementation CKLiveProjectFileUpdateManager
+@synthesize handles,projectPaths,modificationDate;
 
 - (id)init {
     if (self = [super init]) {
