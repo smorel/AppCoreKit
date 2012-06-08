@@ -41,6 +41,8 @@
         [self.projectPaths setObject:localPath forKey:path];
         [self.modificationDate setObject:[self modificationDateForFileAtPath:localPath] forKey:path];
     }
+    else
+        localPath = path;
     
     return localPath;
 }
@@ -67,7 +69,7 @@
         }
     }
     
-    return resourcePath;
+    return nil;
 }
 
 - (NSDate*)modificationDateForFileAtPath:(NSString*)path {
