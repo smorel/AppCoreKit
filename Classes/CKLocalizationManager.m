@@ -12,7 +12,9 @@
 #import "CKNSObject+CKRuntime.h"
 #import "CKDebug.h"
 
-@interface CKLocalizationManager()
+@interface CKLocalizationManager() {
+    NSBundle *bundle;
+}
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic, assign) BOOL needsRefresh;
 #endif
@@ -26,7 +28,6 @@
 #endif
 
 //Current application bungle to get the languages.
-static NSBundle *bundle = nil;
 static CKLocalizationManager *sharedInstance = nil;
 
 + (CKLocalizationManager *)sharedManager
@@ -42,11 +43,10 @@ static CKLocalizationManager *sharedInstance = nil;
 {
     if ((self = [super init])) 
     {
-		bundle = [NSBundle mainBundle];
-        
 #if TARGET_IPHONE_SIMULATOR
         self.needsRefresh = NO;
 #endif
+        bundle = [NSBundle mainBundle];
         
         //Do not trigger KVO in init when setting the language value
         NSString *deviceLang = [[NSLocale preferredLanguages] objectAtIndex:0];
@@ -60,8 +60,7 @@ static CKLocalizationManager *sharedInstance = nil;
 //
 // example calls:
 // AMLocalizedString(@"Text to localize",@"Alternative text, in case hte other is not find");
-- (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value
-{
+- (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value {
     return CKGetLocalizedString(bundle,key,value);
 }
 
@@ -161,6 +160,12 @@ static CKLocalizationManager *sharedInstance = nil;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         self.needsRefresh = NO;
     });
+#endif
+}
+
+- (void)reloadBundleAtPath:(NSString *)path {
+#if TARGET_IPHONE_SIMULATOR
+    bundle = [NSBundle bundleWithPath:path];
 #endif
 }
 
