@@ -297,6 +297,14 @@
 
 @property (nonatomic, assign) BOOL invalidatedSize;
 @property (nonatomic, assign) BOOL isInSetup;
+@property (nonatomic, retain) NSString* identifier;
+
+@property (nonatomic, assign) BOOL hasCheckedStyleToReapply;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForBackgroundView;
+@property(nonatomic,retain,readwrite) NSMutableDictionary* styleForSelectedBackgroundView;
+
+@property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
+@property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 - (UITableViewCell *)loadCell;
@@ -323,6 +331,12 @@
 @synthesize parentCellController = _parentCellController;
 @synthesize parentCellControllerRef = _parentCellControllerRef;
 @synthesize isInSetup = _isInSetup;
+@synthesize identifier = _identifier;
+@synthesize styleForBackgroundView = _styleForBackgroundView;
+@synthesize styleForSelectedBackgroundView = _styleForSelectedBackgroundView;
+@synthesize hasCheckedStyleToReapply = _hasCheckedStyleToReapply;
+@synthesize textLabelStyle = _textLabelStyle;
+@synthesize detailTextLabelStyle = _detailTextLabelStyle;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -351,6 +365,7 @@
     
     _invalidatedSize = YES;
     _sizeHasBeenQueriedByTableView = NO;
+    _hasCheckedStyleToReapply = NO;
 }
 
 - (void)dealloc {
@@ -374,6 +389,16 @@
     _sizeBlock = nil;
     [_parentCellControllerRef release];
     _parentCellControllerRef = nil;
+    [_identifier release];
+    _identifier = nil;
+    [_styleForBackgroundView release];
+    _styleForBackgroundView = nil;
+    [_styleForSelectedBackgroundView release];
+    _styleForSelectedBackgroundView = nil;
+    [_textLabelStyle release];
+    _textLabelStyle = nil;
+    [_detailTextLabelStyle release];
+    _detailTextLabelStyle = nil;
     
 	[super dealloc];
 }
@@ -404,30 +429,52 @@
 }
 
 - (void)reapplyStyleForBackgroundViews{
+    //WE SHOULD OPTIMALLY DO THIS ONLY WHEN INDEXPATH CHANGE FROM FIRST/MIDDLE/LAST
     if(self.tableViewCell){
-        CKStyleView* backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
+        CKStyleView* backgroundStyleView = nil;
+        CKStyleView* selectedBackgroundStyleView = nil;
+        
+        if(!_hasCheckedStyleToReapply){
+            
+            backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
             ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
-        CKStyleView* selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
+            selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
             ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
-        if(backgroundStyleView || selectedBackgroundStyleView){
             
-            NSMutableDictionary* style = [self controllerStyle];
-            NSMutableDictionary* tableViewCellStyle = [style styleForObject:self.tableViewCell  propertyName:@"tableViewCell"];
+            if(backgroundStyleView || selectedBackgroundStyleView){
+                
+                NSMutableDictionary* style = [self controllerStyle];
+                NSMutableDictionary* tableViewCellStyle = [style styleForObject:self.tableViewCell  propertyName:@"tableViewCell"];
+                
+                if(backgroundStyleView){
+                    self.styleForBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.backgroundView  propertyName:@"backgroundView"];
+                }
+                if(selectedBackgroundStyleView){
+                    self.styleForSelectedBackgroundView = [tableViewCellStyle styleForObject:self.tableViewCell.selectedBackgroundView  propertyName:@"selectedBackgroundView"];
+                }
+            }
             
-            if(backgroundStyleView){
-                NSMutableDictionary* backgroundViewStyle = [tableViewCellStyle styleForObject:self.tableViewCell.backgroundView  propertyName:@"backgroundView"];
-                
-                backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:backgroundViewStyle];
-                backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:backgroundViewStyle];
-                backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:backgroundViewStyle];
+            _hasCheckedStyleToReapply = YES;
+        }
+        
+        if(_styleForBackgroundView){
+            if(!backgroundStyleView){
+                backgroundStyleView = (self.tableViewCell.backgroundView && [self.tableViewCell.backgroundView isKindOfClass:[CKStyleView class]]) 
+                ? (CKStyleView*)self.tableViewCell.backgroundView : nil;
             }
-            if(selectedBackgroundStyleView){
-                NSMutableDictionary* selectedBackgroundViewStyle = [tableViewCellStyle styleForObject:self.tableViewCell.selectedBackgroundView  propertyName:@"selectedBackgroundView"];
-                
-                selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:selectedBackgroundViewStyle];
-                selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:selectedBackgroundViewStyle];
-                selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:selectedBackgroundViewStyle];
+            backgroundStyleView.corners = [self view:self.tableViewCell.backgroundView cornerStyleWithStyle:_styleForBackgroundView];
+            backgroundStyleView.borderLocation = [self view:self.tableViewCell.backgroundView borderStyleWithStyle:_styleForBackgroundView];
+            backgroundStyleView.separatorLocation = [self view:self.tableViewCell.backgroundView separatorStyleWithStyle:_styleForBackgroundView];
+        }
+        
+        if(_styleForSelectedBackgroundView){
+            if(!selectedBackgroundStyleView){
+                selectedBackgroundStyleView = (self.tableViewCell.selectedBackgroundView && [self.tableViewCell.selectedBackgroundView isKindOfClass:[CKStyleView class]]) 
+                ? (CKStyleView*)self.tableViewCell.selectedBackgroundView : nil;
             }
+            selectedBackgroundStyleView.corners = [self view:self.tableViewCell.selectedBackgroundView cornerStyleWithStyle:_styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.borderLocation = [self view:self.tableViewCell.selectedBackgroundView borderStyleWithStyle:_styleForSelectedBackgroundView];
+            selectedBackgroundStyleView.separatorLocation = [self view:self.tableViewCell.selectedBackgroundView separatorStyleWithStyle:_styleForSelectedBackgroundView];
         }
     }
 }
@@ -522,21 +569,31 @@
     else if(toUseCellStyle == CKTableViewCellStyleSubtitle2){
 		toUseCellStyle = CKTableViewCellStyleSubtitle;
     }
+    
 	CKUITableViewCell *cell = [[[CKUITableViewCell alloc] initWithStyle:(UITableViewCellStyle)toUseCellStyle reuseIdentifier:[self identifier] delegate:self] autorelease];
 	
 	return cell;
 }
 
 - (NSString *)identifier {
-    NSMutableDictionary* controllerStyle = [self controllerStyle];
-    if(self.createCallback){
-        [self.createCallback execute:self];
-        if([controllerStyle containsObjectForKey:CKStyleCellType]){
-            self.cellStyle = [controllerStyle cellStyle];
+#if !TARGET_IPHONE_SIMULATOR
+    if(_identifier == nil){
+#endif
+        NSMutableDictionary* controllerStyle = [self controllerStyle];
+        if(self.createCallback){
+            [self.createCallback execute:self];
+            if([controllerStyle containsObjectForKey:CKStyleCellType]){
+                self.cellStyle = [controllerStyle cellStyle];
+            }
         }
+        
+        [_identifier release];
+        _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle]retain];
+        
+#if !TARGET_IPHONE_SIMULATOR
     }
-	
-	return [NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle];
+#endif
+    return _identifier;
 }
 
 - (UITableViewCell *)loadCell {
@@ -822,10 +879,10 @@
     cell.editingAccessoryView = self.editingAccessoryView;
     if(!self.editingAccessoryView) cell.editingAccessoryType = self.editingAccessoryType;
     
-	[view beginBindingsContextByRemovingPreviousBindings];
+	//[view beginBindingsContextByRemovingPreviousBindings];
 	[self setupCell:cell];
 	[super setupView:view];
-	[view endBindingsContext];
+	//[view endBindingsContext];
     
     
     //TODO : Check if necessary as setting values on controller or cell will invalidate the size
@@ -843,15 +900,17 @@
     
     [CATransaction commit];
     
-    self.isInSetup = NO;
     
-    CGSize size;
+   /* CGSize size;
     if(self.sizeBlock){
         size = self.sizeBlock(self);
     }else{
         size = [self computeSize];
     }
     self.size = size;
+    */
+    
+    self.isInSetup = NO;
 }
 
 - (void)rotateView:(UIView*)view animated:(BOOL)animated{

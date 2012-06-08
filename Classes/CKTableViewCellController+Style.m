@@ -128,7 +128,6 @@ NSString* CKStyleCellFlags = @"flags";
 
 @end
 
-
 @implementation CKItemViewController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view{
@@ -192,21 +191,18 @@ NSString* CKStyleCellFlags = @"flags";
 		case CKViewCornerStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
-				UIView* parentView = [self parentControllerView];
-				if([parentView isKindOfClass:[UITableView class]]){
-					UITableView* tableView = (UITableView*)parentView;
-					if(tableView.style == UITableViewStyleGrouped){
-						NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-						if(self.indexPath.row == 0 && numberOfRows > 1){
-							roundedCornerType = CKRoundedCornerViewTypeTop;
-						}
-						else if(self.indexPath.row == 0){
-							roundedCornerType = CKRoundedCornerViewTypeAll;
-						}
-						else if(self.indexPath.row == numberOfRows-1){
-							roundedCornerType = CKRoundedCornerViewTypeBottom;
-						}
-					}
+				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                if(tableView.style == UITableViewStyleGrouped){
+                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                    if(self.indexPath.row == 0 && numberOfRows > 1){
+                        roundedCornerType = CKRoundedCornerViewTypeTop;
+                    }
+                    else if(self.indexPath.row == 0){
+                        roundedCornerType = CKRoundedCornerViewTypeAll;
+                    }
+                    else if(self.indexPath.row == numberOfRows-1){
+                        roundedCornerType = CKRoundedCornerViewTypeBottom;
+                    }
 				}
 			}
 			break;
@@ -240,23 +236,20 @@ NSString* CKStyleCellFlags = @"flags";
 		case CKViewBorderStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
-				UIView* parentView = [self parentControllerView];
-				if([parentView isKindOfClass:[UITableView class]]){
-					UITableView* tableView = (UITableView*)parentView;
-                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-                    if(numberOfRows > 1){
-                        if(self.indexPath.row == 0){
-                            return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
-                        }else if(self.indexPath.row == numberOfRows-1){
-                            return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
-                        }else{
-                            return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
-                        }
+				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                if(numberOfRows > 1){
+                    if(self.indexPath.row == 0){
+                        return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
+                    }else if(self.indexPath.row == numberOfRows-1){
+                        return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
+                    }else{
+                        return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
                     }
-                    else{
-                        return CKStyleViewBorderLocationAll;
-                    }
-				}
+                }
+                else{
+                    return CKStyleViewBorderLocationAll;
+                }
 			}
 			break;
 		}
@@ -279,17 +272,14 @@ NSString* CKStyleCellFlags = @"flags";
 		case CKViewSeparatorStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
 			   || view == self.tableViewCell.selectedBackgroundView){
-				UIView* parentView = [self parentControllerView];
-				if([parentView isKindOfClass:[UITableView class]]){
-					UITableView* tableView = (UITableView*)parentView;
-                    NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-                    if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
-                        return CKStyleViewSeparatorLocationBottom;
-                    }
-                    else{
-                        return CKStyleViewSeparatorLocationNone;
-                    }
-				}
+				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+                NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+                if(numberOfRows > 1 && self.indexPath.row != numberOfRows-1){
+                    return CKStyleViewSeparatorLocationBottom;
+                }
+                else{
+                    return CKStyleViewSeparatorLocationNone;
+                }
 			}
 			break;
 		}

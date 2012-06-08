@@ -76,12 +76,36 @@
 @dynamic selectedIndexPath;
 @dynamic tableViewHasBeenReloaded;
 
+- (void)rowInsertAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
+                                                 UITableViewRowAnimationFade,
+                                                 UITableViewRowAnimationRight,
+                                                 UITableViewRowAnimationLeft,
+                                                 UITableViewRowAnimationTop,
+                                                 UITableViewRowAnimationBottom,
+                                                 UITableViewRowAnimationNone,     
+                                                 UITableViewRowAnimationMiddle,          
+                                                 UITableViewRowAnimationAutomatic);
+}
+
+- (void)rowRemoveAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
+                                                 UITableViewRowAnimationFade,
+                                                 UITableViewRowAnimationRight,
+                                                 UITableViewRowAnimationLeft,
+                                                 UITableViewRowAnimationTop,
+                                                 UITableViewRowAnimationBottom,
+                                                 UITableViewRowAnimationNone,     
+                                                 UITableViewRowAnimationMiddle,          
+                                                 UITableViewRowAnimationAutomatic);
+}
+
 #pragma mark Initialization
 
 - (void)postInit{
 	[super postInit];
-	_rowInsertAnimation = UITableViewRowAnimationFade;
-	_rowRemoveAnimation = UITableViewRowAnimationFade;
+	_rowInsertAnimation = UITableViewRowAnimationTop;
+	_rowRemoveAnimation = UITableViewRowAnimationTop;
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
