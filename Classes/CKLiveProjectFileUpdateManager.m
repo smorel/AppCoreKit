@@ -35,16 +35,16 @@
     NSString *localPath = [self.projectPaths objectForKey:path];
     
     if (!localPath) {
-        [self.handles setObject:[[updateHandle copy] autorelease] forKey:path];
-        
         localPath = [self localPathForResourcePath:path];
-        [self.projectPaths setObject:localPath forKey:path];
-        [self.modificationDate setObject:[self modificationDateForFileAtPath:localPath] forKey:path];
+        if(localPath){
+            [self.handles setObject:[[updateHandle copy] autorelease] forKey:path];
+            
+            [self.projectPaths setObject:localPath forKey:path];
+            [self.modificationDate setObject:[self modificationDateForFileAtPath:localPath] forKey:path];
+        }
     }
-    else
-        localPath = path;
     
-    return localPath;
+    return localPath ? localPath : path;
 }
 
 - (NSString*)localPathForResourcePath:(NSString*)resourcePath {
