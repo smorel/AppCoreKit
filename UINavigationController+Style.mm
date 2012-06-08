@@ -16,6 +16,8 @@ bool swizzle_UINavigationControllerStyle();
 @implementation UINavigationController (Style)
 
 - (void)UINavigationControllerStyle_setToolbarHidden:(BOOL)hidden animated:(BOOL)animated {
+    [self UINavigationControllerStyle_setToolbarHidden:hidden animated:animated];
+    
     if (hidden == NO) {
         [CATransaction begin];
         [CATransaction 
@@ -29,8 +31,6 @@ bool swizzle_UINavigationControllerStyle();
                 
         [CATransaction commit];  
     }
-    
-    [self UINavigationControllerStyle_setToolbarHidden:hidden animated:animated];
 }
 
 @end

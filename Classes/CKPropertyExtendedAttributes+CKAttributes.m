@@ -106,7 +106,7 @@
 
 - (NSString*)dateFormat{
     id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKObject_dateFormat"];
-    return value;
+    return value ? value : @"yyyy-MM-dd";
 }
 
 
