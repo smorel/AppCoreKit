@@ -27,6 +27,10 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
         NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
         for (NSURL *filePathURL in stringsURLs) {
             NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
+                [[NSFileManager defaultManager] removeItemAtURL:filePathURL error:nil];
+                [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:filePathURL.path error:nil];
+                
+                CKLocalizationStringTableNames = nil;
                 [[CKLocalizationManager sharedManager] refreshUI];
             }];
             
