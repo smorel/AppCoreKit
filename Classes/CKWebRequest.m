@@ -13,6 +13,7 @@
 #import "CKWebRequestManager.h"
 #import "CKWebDataConverter.h"
 #import <CloudKit/CKNetworkActivityManager.h>
+#import "CKVersion.h"
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
@@ -178,7 +179,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         }
     }
     
-    [[challenge sender] cancelAuthenticationChallenge:challenge];
+    if([CKOSVersion() floatValue] < 5){
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+    }
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
