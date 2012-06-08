@@ -7,6 +7,8 @@
 //
 
 #import "CKLocalization.h"
+#import "CKLiveProjectFileUpdateManager.h"
+#import <CloudKit/CKNSObject+CKSingleton.h>
 
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
@@ -20,6 +22,20 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
     if(CKLocalizationStringTableNames == nil){
         NSMutableArray* files = [[NSMutableArray alloc]init];
         NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
+        
+#if TARGET_IPHONE_SIMULATOR
+        NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
+        for (NSURL *filePathURL in stringsURLs) {
+            NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
+                [[CKLocalizationManager sharedManager] refreshUI];
+            }];
+            
+            [newStringsURL addObject:[NSURL fileURLWithPath:localPath]];
+        }
+        
+        stringsURLs = newStringsURL;
+#endif
+        
         for(NSURL* stringsURL in stringsURLs){
             NSString* fileName = [[stringsURL absoluteString]lastPathComponent];
             NSRange range = [fileName rangeOfString:@"."];

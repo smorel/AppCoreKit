@@ -56,7 +56,13 @@
     
     for (NSString *file in enumerator) {
         if ([[file lastPathComponent] isEqualToString:fileName]) {
-            return [sourcePath stringByAppendingPathComponent: file];
+            if ([[[resourcePath stringByDeletingLastPathComponent] pathExtension] isEqualToString:@"lproj"]) {
+                if ([[[file stringByDeletingLastPathComponent] lastPathComponent] isEqualToString:[[resourcePath stringByDeletingLastPathComponent] lastPathComponent]]) {
+                    return [sourcePath stringByAppendingPathComponent:file];
+                }
+            }
+            else
+                return [sourcePath stringByAppendingPathComponent:file];
         }
     }
     

@@ -13,7 +13,7 @@
 #import "CKDebug.h"
 
 @interface CKLocalizationManager()
-- (void)refreshUI;
+
 @end
 
 @implementation CKLocalizationManager
