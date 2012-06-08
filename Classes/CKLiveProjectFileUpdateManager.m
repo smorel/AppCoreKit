@@ -81,7 +81,7 @@
     [self.projectPaths enumerateKeysAndObjectsUsingBlock:^(NSString *resourcePath, NSString *localPath, BOOL *stop) {
         NSDate *oldModificationDate = [self.modificationDate objectForKey:resourcePath];
         NSDate *newModificationDate = [self modificationDateForFileAtPath:localPath];
-        if (![newModificationDate isEqualToDate:oldModificationDate]) {
+        if (![newModificationDate isEqualToDate:oldModificationDate] && newModificationDate != nil) {
             NSLog(@"Update File : %@", localPath);
             
             [self.modificationDate setObject:newModificationDate forKey:resourcePath];
