@@ -10,6 +10,12 @@
 #import "CKLocalizationManager.h"
 #import "CKNSObject+Bindings.h"
 
+@interface CKLocalizationManager()
+#if TARGET_IPHONE_SIMULATOR
+@property (nonatomic, assign) BOOL needsRefresh;
+#endif
+@end
+
 @interface CKLocalizedString()
 @property(nonatomic,retain)NSString* currentLanguage;
 @property(nonatomic,retain)NSString* currentValue;
@@ -62,8 +68,13 @@
 
 - (NSString*)localizedString{
     NSString* lng = [[CKLocalizationManager sharedManager]language];
+    BOOL needRefresh = ![_currentLanguage isEqualToString:lng];
     
-    if(![_currentLanguage isEqualToString:lng]){
+#if TARGET_IPHONE_SIMULATOR
+    needRefresh = [[CKLocalizationManager sharedManager] needsRefresh] || needRefresh;
+#endif
+    
+    if(needRefresh){
         self.currentLanguage = lng;
         if(_localizedStrings){
             self.currentValue = [_localizedStrings objectForKey:lng];
