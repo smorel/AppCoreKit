@@ -169,20 +169,21 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
 #pragma mark - NSURLConnectionDataDelegate
 
+/*
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    if ([challenge previousFailureCount] == 0) {
-        NSURLCredential *aCredential = self.credential ? self.credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
-        
-        if (aCredential) {
-            [[challenge sender] useCredential:aCredential forAuthenticationChallenge:challenge];
-            return;
-        }
-    }
-    
     if([CKOSVersion() floatValue] < 5){
+        if ([challenge previousFailureCount] == 0) {
+            NSURLCredential *aCredential = self.credential ? self.credential : [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+            
+            if (aCredential) {
+                [[challenge sender] useCredential:aCredential forAuthenticationChallenge:challenge];
+                return;
+            }
+        }
+        
         [[challenge sender] cancelAuthenticationChallenge:challenge];
     }
-}
+}*/
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSHTTPURLResponse *)aResponse {
     if (!self.isCancelled) {
