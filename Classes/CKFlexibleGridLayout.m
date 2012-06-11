@@ -12,7 +12,7 @@
 
 @implementation CKFlexibleGridLayout
 
-@synthesize inset, layoutView;
+@synthesize inset, layoutContainer;
 @synthesize gridSize, minMarginSize;
 @synthesize horizontalLayout;
 

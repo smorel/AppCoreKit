@@ -11,7 +11,7 @@
 
 @implementation CKGridLayout
 
-@synthesize inset, layoutView;
+@synthesize inset, layoutContainer;
 @synthesize gridSize, minMarginSize;
 
 + (CKGridLayout *)horizontalGridLayout {
@@ -36,12 +36,12 @@
 - (void)layout {
     CGFloat x = self.inset.left;
     CGFloat y = self.inset.top;
-    CGFloat width = (self.layoutView.bounds.size.width - (self.inset.left + self.inset.right) - (self.gridSize.width - 1) * self.minMarginSize) / self.gridSize.width;
-    CGFloat height = (self.layoutView.bounds.size.height - (self.inset.top + self.inset.bottom) - (self.gridSize.height - 1) * self.minMarginSize) / self.gridSize.height;
+    CGFloat width = (self.layoutContainer.bounds.size.width - (self.inset.left + self.inset.right) - (self.gridSize.width - 1) * self.minMarginSize) / self.gridSize.width;
+    CGFloat height = (self.layoutContainer.bounds.size.height - (self.inset.top + self.inset.bottom) - (self.gridSize.height - 1) * self.minMarginSize) / self.gridSize.height;
     
     NSUInteger i, j;
-    for (i = 0,  j = 1; i < self.layoutView.subviews.count; i += 1, j += 1) {
-        UIView *aView = [self.layoutView.subviews objectAtIndex:i];
+    for (i = 0,  j = 1; i < self.layoutContainer.subviews.count; i += 1, j += 1) {
+        UIView *aView = [self.layoutContainer.subviews objectAtIndex:i];
         aView.center = CGPointMake(x + width / 2, y + height / 2);
         
         if (j >= self.gridSize.width) {
@@ -53,8 +53,8 @@
             x += width + self.minMarginSize;
     }
     
-    for (NSUInteger index = (self.gridSize.width * self.gridSize.height); index < self.layoutView.subviews.count ; index ++) {
-        UIView *viewToHide = [self.layoutView.subviews objectAtIndex:index];
+    for (NSUInteger index = (self.gridSize.width * self.gridSize.height); index < self.layoutContainer.subviews.count ; index ++) {
+        UIView *viewToHide = [self.layoutContainer.subviews objectAtIndex:index];
         viewToHide.hidden = YES;
     }
 }

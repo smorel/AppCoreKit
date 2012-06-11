@@ -17,6 +17,9 @@
 @property (nonatomic, retain) id <CKLayoutManager> layoutManager;
 - (void)setNeedsAutomaticLayout;
 
+@property(nonatomic) CGRect bounds;
+@property(nonatomic, readonly, copy) NSArray *subviews;
+
 @optional
 @property (nonatomic, readonly) CGSize preferedSize;
 @property (nonatomic, readonly) CGSize minimumSize;
@@ -27,7 +30,7 @@
 @protocol CKLayoutManager <NSObject>
 
 @required
-@property (nonatomic, assign) id<CKLayoutManager> layoutView;
+@property (nonatomic, assign) id<CKLayoutContainer> layoutContainer;
 @property (nonatomic, assign) UIEdgeInsets inset;
 - (void)layout;
 

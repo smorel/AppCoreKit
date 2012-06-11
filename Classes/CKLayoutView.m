@@ -16,11 +16,12 @@
 
 @implementation CKLayoutView
 
+@dynamic subviews, bounds;
 @synthesize layoutManager;
 
 - (void)setLayoutManager:(id<CKLayoutManager>)aLayoutManager {
     if (layoutManager != aLayoutManager) {
-        aLayoutManager.layoutView = self;
+        aLayoutManager.layoutContainer = self;
         
         [layoutManager release];
         layoutManager = [aLayoutManager retain];

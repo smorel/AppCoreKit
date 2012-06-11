@@ -13,7 +13,7 @@
 @interface CKGridLayout : NSObject <CKLayoutManager>
 
 ////Layout Manager
-@property (nonatomic, assign) CKLayoutView *layoutView;
+@property (nonatomic, assign) id<CKLayoutContainer> layoutContainer;
 @property (nonatomic, assign) UIEdgeInsets inset;
 - (void)layout;
 
