@@ -41,9 +41,9 @@
 #pragma mark - Layout
 
 - (void)layout {
-    CGFloat width = self.layoutView.bounds.size.width - (self.inset.left + self.inset.right);
-    CGFloat height = self.layoutView.bounds.size.height - (self.inset.top + self.inset.bottom);
-    NSUInteger subviewCount = self.layoutView.subviews.count;
+    CGFloat width = self.layoutContainer.bounds.size.width - (self.inset.left + self.inset.right);
+    CGFloat height = self.layoutContainer.bounds.size.height - (self.inset.top + self.inset.bottom);
+    NSUInteger subviewCount = self.layoutContainer.subviews.count;
     
     //TODO allow frame changes
     NSUInteger viewIndex = 0;
@@ -56,7 +56,7 @@
         NSUInteger initialViewIndex = viewIndex;
         NSUInteger column = 0;
         while (currentWidth < width && subviewCount > viewIndex  && column < self.gridSize.width) {
-            UIView *view = [self.layoutView.subviews objectAtIndex:viewIndex];
+            UIView *view = [self.layoutContainer.subviews objectAtIndex:viewIndex];
             if (currentWidth + view.preferedSize.width + self.minMarginSize < width) {
                 currentWidth += view.preferedSize.width;
                 currentWidth += self.minMarginSize;
@@ -85,7 +85,7 @@
             currentWidth = self.inset.left + (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout) * marginSize;
         
         for (NSUInteger index = initialViewIndex; index < viewIndex ; index ++) {
-            UIView *view = [self.layoutView.subviews objectAtIndex:index];
+            UIView *view = [self.layoutContainer.subviews objectAtIndex:index];
             
             switch (self.horizontalLayout) {
                 case CKFlexibleGridLeftHorizontalLayout:
@@ -115,8 +115,8 @@
         currentHeight += bestHeight + self.minMarginSize;
     }
     
-    for (NSUInteger index = viewIndex; index < self.layoutView.subviews.count ; index ++) {
-        UIView *viewToHide = [self.layoutView.subviews objectAtIndex:index];
+    for (NSUInteger index = viewIndex; index < self.layoutContainer.subviews.count ; index ++) {
+        UIView *viewToHide = [self.layoutContainer.subviews objectAtIndex:index];
         viewToHide.hidden = YES;
     }
 }
