@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CKLayoutManager.h"
 
-@interface CKLayoutView : UIView
+@interface CKLayoutView : UIView <CKLayoutContainer>
 
 @property (nonatomic, retain) id <CKLayoutManager> layoutManager;
 

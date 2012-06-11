@@ -10,10 +10,24 @@
 #import <UIKit/UIKit.h>
 
 @class CKLayoutView;
+@protocol CKLayoutManager;
+@protocol CKLayoutContainer <NSObject>
+
+@required
+@property (nonatomic, retain) id <CKLayoutManager> layoutManager;
+- (void)setNeedsAutomaticLayout;
+
+@optional
+@property (nonatomic, readonly) CGSize preferedSize;
+@property (nonatomic, readonly) CGSize minimumSize;
+@property (nonatomic, readonly) CGSize maximumSize;
+
+@end
+
 @protocol CKLayoutManager <NSObject>
 
 @required
-@property (nonatomic, assign) CKLayoutView *layoutView;
+@property (nonatomic, assign) id<CKLayoutManager> layoutView;
 @property (nonatomic, assign) UIEdgeInsets inset;
 - (void)layout;
 

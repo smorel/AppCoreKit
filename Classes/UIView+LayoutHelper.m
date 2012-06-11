@@ -12,8 +12,8 @@
 @implementation UIView (LayoutHelper)
 
 - (CGSize)preferedSize {
-    if ([self isKindOfClass:[CKLayoutView class]]) {
-        id <CKLayoutManager> manager = [(CKLayoutView*) self layoutManager];
+    if ([self conformsToProtocol:@protocol(CKLayoutContainer)]) {
+        id <CKLayoutManager> manager = [(id<CKLayoutContainer>) self layoutManager];
         if (manager) {
             if ([manager respondsToSelector:@selector(preferedSize)])
                 return manager.preferedSize;
@@ -24,8 +24,8 @@
 }
 
 - (CGSize)minimumSize {
-    if ([self isKindOfClass:[CKLayoutView class]]) {
-        id <CKLayoutManager> manager = [(CKLayoutView*) self layoutManager];
+    if ([self conformsToProtocol:@protocol(CKLayoutContainer)]) {
+        id <CKLayoutManager> manager = [(id<CKLayoutContainer>) self layoutManager];
         if (manager) {
             if ([manager respondsToSelector:@selector(minimumSize)])
                 return manager.minimumSize;
@@ -36,8 +36,8 @@
 }
 
 - (CGSize)maximumSize {
-    if ([self isKindOfClass:[CKLayoutView class]]) {
-        id <CKLayoutManager> manager = [(CKLayoutView*) self layoutManager];
+    if ([self conformsToProtocol:@protocol(CKLayoutContainer)]) {
+        id <CKLayoutManager> manager = [(id<CKLayoutContainer>) self layoutManager];
         if (manager) {
             if ([manager respondsToSelector:@selector(maximumSize)])
                 return manager.maximumSize;
