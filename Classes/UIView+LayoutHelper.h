@@ -10,8 +10,8 @@
 
 @interface UIView (LayoutHelper)
 
-@property (nonatomic, readonly) CGSize preferedSize;
-@property (nonatomic, readonly) CGSize minimumSize;
-@property (nonatomic, readonly) CGSize maximumSize;
+@property (nonatomic, assign) CGSize preferedSize;
+@property (nonatomic, assign) CGSize minimumSize;
+@property (nonatomic, assign) CGSize maximumSize;
 
 @end
