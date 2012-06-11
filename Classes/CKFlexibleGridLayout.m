@@ -71,24 +71,33 @@
         }
         
         NSUInteger numberOfViews = (viewIndex - initialViewIndex);
-        CGFloat marginSize = (width - contentWidth - (numberOfViews - 1) * self.minMarginSize) / (numberOfViews + 1);
-        currentWidth = self.inset.left + marginSize;
+        CGFloat marginSize;
+        if (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout)
+            marginSize = (width - contentWidth - (numberOfViews - 1) * self.minMarginSize) / (numberOfViews + 1);
+        else
+            marginSize = width / numberOfViews;
+        
+        currentWidth = self.inset.left + (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout) * marginSize;
+        
         for (NSUInteger index = initialViewIndex; index < viewIndex ; index ++) {
             UIView *view = [self.layoutView.subviews objectAtIndex:index];
             
-            CGFloat alignmentDelta = 0;
             switch (self.horizontalLayout) {
                 case CKFlexibleGridLeftHorizontalLayout:
-                    alignmentDelta = -marginSize;
+                    view.center = CGPointMake(currentWidth + view.frame.size.width / 2,  currentHeight + bestHeight / 2);
+                    break;
+                case CKFlexibleGridMiddleHorizontalLayout:
+                    view.center = CGPointMake(currentWidth + view.frame.size.width / 2,  currentHeight + bestHeight / 2);
                     break;
                 case CKFlexibleGridRightHorizontalLayout:
-                    alignmentDelta = marginSize;
+                    view.center = CGPointMake(currentWidth + marginSize - view.frame.size.width / 2,  currentHeight + bestHeight / 2);
                     break;
             }
             
-            view.center = CGPointMake(currentWidth + view.frame.size.width / 2 + alignmentDelta,  currentHeight + bestHeight / 2);
-            
-            currentWidth += view.frame.size.width + marginSize + self.minMarginSize - alignmentDelta;
+            if (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout)
+                currentWidth += view.frame.size.width + marginSize + self.minMarginSize;
+            else
+                currentWidth += marginSize;
         }
         
         rows ++;
