@@ -14,7 +14,8 @@ typedef enum CKFlexibleGridHorizontalLayout {
     CKFlexibleGridLeftHorizontalLayout,
     CKFlexibleGridMiddleHorizontalLayout,
     CKFlexibleGridRightHorizontalLayout,
-    CKFlexibleGridQueueHorizontalLayout
+    CKFlexibleGridQueueFromLeftHorizontalLayout,
+    CKFlexibleGridQueueFromRightHorizontalLayout
 } CKFlexibleGridHorizontalLayout;
 
 @class CKLayoutView;
