@@ -172,79 +172,81 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-	
-	if(locked){
-		changedWhileLocked = YES;
-		return;
-	}
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(locked){
+            changedWhileLocked = YES;
+            return;
+        }
 		
-	NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
-	NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
-	NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
-	
-	NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
-	
-	if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
-		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate objectControllerReloadData:self];
-			return;
-		}
-	}
-	
-	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-	if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-		[_delegate objectControllerDidBeginUpdating:self];
-	}
-	//}
-	
-	int count = 0;
-	unsigned currentIndex = [indexs firstIndex];
-	NSMutableArray* indexPaths = [NSMutableArray array];
-	while (currentIndex != NSNotFound) {
-		//Do not notify add if currentIndex > limit
-		[indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-		currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-		++count;
-	}
-	
-	switch(kind){
-		case NSKeyValueChangeInsertion:{
-			if(maximumNumberOfObjectsToDisplay > 0) {
-				NSMutableArray* limitedIndexPaths = [NSMutableArray array];
-				NSMutableArray* limitedObjects = [NSMutableArray array];
-				for(int i=0;i<[indexPaths count];++i){
-					NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
-					if(indexpath.row < maximumNumberOfObjectsToDisplay){
-						[limitedIndexPaths addObject:indexpath];
-						id object = [newModels objectAtIndex:i];
-						[limitedObjects addObject:object];
-					}
-				}
-				
-				if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-					[_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
-				}
-				break;
-			}
-			
-			if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-				[_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
-			}
-			break;
-		}
-		case NSKeyValueChangeRemoval:{
-			if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-				[_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
-			}
-			break;
-		}
-	}
-	
-	//if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-	if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-		[_delegate objectControllerDidEndUpdating:self];
-	}
-	//}
+        NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
+        NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
+        NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
+        
+        NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+        
+        if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
+            if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+                [_delegate objectControllerReloadData:self];
+                return;
+            }
+        }
+        
+        //if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+        if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
+            [_delegate objectControllerDidBeginUpdating:self];
+        }
+        //}
+        
+        int count = 0;
+        unsigned currentIndex = [indexs firstIndex];
+        NSMutableArray* indexPaths = [NSMutableArray array];
+        while (currentIndex != NSNotFound) {
+            //Do not notify add if currentIndex > limit
+            [indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+            currentIndex = [indexs indexGreaterThanIndex: currentIndex];
+            ++count;
+        }
+        
+        switch(kind){
+            case NSKeyValueChangeInsertion:{
+                if(maximumNumberOfObjectsToDisplay > 0) {
+                    NSMutableArray* limitedIndexPaths = [NSMutableArray array];
+                    NSMutableArray* limitedObjects = [NSMutableArray array];
+                    for(int i=0;i<[indexPaths count];++i){
+                        NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
+                        if(indexpath.row < maximumNumberOfObjectsToDisplay){
+                            [limitedIndexPaths addObject:indexpath];
+                            id object = [newModels objectAtIndex:i];
+                            [limitedObjects addObject:object];
+                        }
+                    }
+                    
+                    if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                        [_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+                    }
+                    break;
+                }
+                
+                if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                    [_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
+                }
+                break;
+            }
+            case NSKeyValueChangeRemoval:{
+                if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
+                    [_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
+                }
+                break;
+            }
+        }
+        
+        //if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+        if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
+            [_delegate objectControllerDidEndUpdating:self];
+        }
+        //}
+    });
 }
 
 - (void)lock{

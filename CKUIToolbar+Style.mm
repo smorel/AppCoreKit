@@ -61,7 +61,7 @@
     }
     [super insertSubview:view atIndex:index];
 }
-
+/*
 
 - (void)UIToolbar_CKStyleManager_setItems:(NSArray *)items{
     [self UIToolbar_CKStyleManager_setItems:items];
@@ -86,10 +86,11 @@
         }
     }
 }
+*/
 
 @end
 
-
+/*
 
 bool swizzle_UIToolbar_CKStyleManager(){
     CKSwizzleSelector([UIToolbar class],@selector(setItems:),@selector(UIToolbar_CKStyleManager_setItems:));
@@ -98,3 +99,4 @@ bool swizzle_UIToolbar_CKStyleManager(){
 }
 
 static bool bo_swizzle_UIToolbar_CKStyleManager = swizzle_UIToolbar_CKStyleManager();
+*/

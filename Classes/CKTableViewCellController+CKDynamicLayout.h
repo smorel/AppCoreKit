@@ -10,6 +10,9 @@
 
 @interface CKTableViewCellController (CKDynamicLayout)
 
+@property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
+@property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
+
 @property (nonatomic, assign) CGFloat componentsRatio;
 @property (nonatomic, assign) CGFloat componentsSpace;
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
@@ -44,12 +47,12 @@ extern NSString* CKDynamicLayoutLineBreakMode;
 - (CGRect)propertyGridDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image;
 
 - (CGRect)subtitleTextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image;
-- (CGRect)subtitleDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image;
+- (CGRect)subtitleDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image textFrame:(CGRect)textFrame;
 
 //Retrieving Data to compute cell height wether or not the tableViewCell exists
 //It will query the stylesheets if the view do not exists when getting the value.
 
-- (NSDictionary*)styleForViewWithKeyPath:(NSString*)keyPath defaultStyle:(NSDictionary*)defaultStyle;
+- (NSMutableDictionary*)styleForViewWithKeyPath:(NSString*)keyPath defaultStyle:(NSDictionary*)defaultStyle;
 
 - (NSDictionary*)textStyle;
 - (NSDictionary*)detailTextStyle;

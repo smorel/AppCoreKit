@@ -40,7 +40,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @implementation CKTableViewCellController (CKDynamicLayout)
 
-@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController, isInSetup;
+@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController, isInSetup,textLabelStyle,detailTextLabelStyle;
 
 + (CGFloat)computeTableViewCellViewSizeUsingTableView:(UITableView*)tableView{
     CGFloat rowWidth = 0;
@@ -322,14 +322,12 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 }
 
 
-- (CGRect)subtitleDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+- (CGRect)subtitleDetailFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image textFrame:(CGRect)textFrame{
     /*
     TODO : Take care of indentation level !
     Take care of image
     */
-    
-    CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
-    
+
     CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
@@ -343,7 +341,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     return detailFrame;
 }
 
-- (NSDictionary*)styleForViewWithKeyPath:(NSString*)keyPath defaultStyle:(NSDictionary*)defaultStyle{
+- (NSMutableDictionary*)styleForViewWithKeyPath:(NSString*)keyPath defaultStyle:(NSDictionary*)defaultStyle{
     if(!defaultStyle){
         NSMutableDictionary * def = [NSMutableDictionary dictionary];
         [def setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
@@ -470,67 +468,77 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 }
 
 - (NSDictionary*)textStyle{
-     //INIT DEAFAULT VALUES
-    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
-    [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
-    [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
-    
-    if(self.cellStyle == CKTableViewCellStyleIPadForm){
-        [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
-    }
-    else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
-        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(!self.textLabelStyle){
+        CKTableViewCellStyle cellStyle = self.cellStyle;
+        //INIT DEAFAULT VALUES
+        NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
+        [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+        [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+        
+        if(cellStyle == CKTableViewCellStyleIPadForm){
+            [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
+        }
+        else if(cellStyle == CKTableViewCellStyleIPhoneForm){
+            //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
             [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
-        //}
-        //else{
-        //    [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        //    [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
-        //}
+            //}
+            //else{
+            //    [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            //    [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
+            //}
+        }
+        else if(cellStyle == CKTableViewCellStyleSubtitle2){
+            [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        }
+        
+        self.textLabelStyle = [self styleForViewWithKeyPath:@"tableViewCell.textLabel" defaultStyle:defaultStyle];
     }
-    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        [defaultStyle setObject:[UIFont boldSystemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
-    }
-    
-    return [self styleForViewWithKeyPath:@"tableViewCell.textLabel" defaultStyle:defaultStyle];
+    return self.textLabelStyle;
 }
 
 - (NSDictionary*)detailTextStyle{
-    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
-    [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
-    [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
-    
-    if(self.cellStyle == CKTableViewCellStyleIPadForm){
-        [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
-    }
-    else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
-        //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(!self.detailTextLabelStyle){
+        NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionary];
+        [defaultStyle setObject:[NSNumber numberWithInt:UILineBreakModeWordWrap] forKey:CKDynamicLayoutLineBreakMode];
+        [defaultStyle setObject:[NSNumber numberWithInt:0] forKey:CKDynamicLayoutNumberOfLines];
+        
+        CKTableViewCellStyle cellStyle = self.cellStyle;
+        
+        if(cellStyle == CKTableViewCellStyleIPadForm){
+            [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        }
+        else if(cellStyle == CKTableViewCellStyleIPhoneForm){
+            //if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
             [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
             [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentRight] forKey:CKDynamicLayoutTextAlignment];
-        //}
-        //else{
-        //    [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
-        //    [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
-        //}
+            //}
+            //else{
+            //    [defaultStyle setObject:[UIFont systemFontOfSize:17] forKey:CKDynamicLayoutFont];
+            //    [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+            //}
+        }
+        else if(cellStyle == CKTableViewCellStyleSubtitle2){
+            [defaultStyle setObject:[UIFont systemFontOfSize:14] forKey:CKDynamicLayoutFont];
+            [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
+        }
+        
+        self.detailTextLabelStyle = [self styleForViewWithKeyPath:@"tableViewCell.detailTextLabel" defaultStyle:defaultStyle];
     }
-    else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-        [defaultStyle setObject:[UIFont systemFontOfSize:14] forKey:CKDynamicLayoutFont];
-        [defaultStyle setObject:[NSNumber numberWithInt:UITextAlignmentLeft] forKey:CKDynamicLayoutTextAlignment];
-    }
-    
-    return [self styleForViewWithKeyPath:@"tableViewCell.detailTextLabel" defaultStyle:defaultStyle];
+    return self.detailTextLabelStyle;
 }
 
 - (void)invalidateSize{
     if(self.isInSetup)
         return;
     
-	if(self.cellStyle == CKTableViewCellStyleIPadForm
-       || self.cellStyle == CKTableViewCellStyleIPhoneForm
-       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+    CKTableViewCellStyle cellStyle = self.cellStyle;
+	if(cellStyle == CKTableViewCellStyleIPadForm
+       || cellStyle == CKTableViewCellStyleIPhoneForm
+       || cellStyle == CKTableViewCellStyleSubtitle2){
         
         //When tableView will wuery for the first time the size, it will set sizeHasBeenQueriedByTableView to YES and call invalidateSize for a first computation
         //after what, each time invalidateSize is called, the size will get recomputed.
@@ -556,9 +564,9 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         return;
     
     [super setSize:s notifyingContainerForUpdate:notifyingContainerForUpdate];
-    if(self.tableViewCell){
+    /*if(self.tableViewCell){
         [self performLayout];
-    }
+    }*/
 }
 
 - (CGSize)computeSize{
@@ -568,9 +576,10 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (CGSize)computeSizeUsingText:(NSString*)text detailText:(NSString*)detailText image:(UIImage*)image{
-    if(self.cellStyle == CKTableViewCellStyleIPadForm
-       || self.cellStyle == CKTableViewCellStyleIPhoneForm
-       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+    CKTableViewCellStyle cellStyle = self.cellStyle;
+    if(cellStyle == CKTableViewCellStyleIPadForm
+       || cellStyle == CKTableViewCellStyleIPhoneForm
+       || cellStyle == CKTableViewCellStyleSubtitle2){
         /*
          TODO : Take care of indentation level !
          Take care of image
@@ -580,19 +589,19 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         NSDictionary* detailStyle = [self detailTextStyle];
         
         CGFloat height = 0;
-        if(self.cellStyle == CKTableViewCellStyleIPadForm){
+        if(cellStyle == CKTableViewCellStyleIPadForm){
             CGRect detailTextFrame = [self value3DetailFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
             CGRect textFrame = [self value3TextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
             height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
         }
-        else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        else if(cellStyle == CKTableViewCellStyleIPhoneForm){
             CGRect detailTextFrame = [self propertyGridDetailFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
             CGRect textFrame = [self propertyGridTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
             height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
         }
-        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
-            CGRect detailTextFrame = [self subtitleDetailFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
+        else if(cellStyle == CKTableViewCellStyleSubtitle2){
             CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image];
+            CGRect detailTextFrame = [self subtitleDetailFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailStyle image:self.image textFrame:textFrame];
             height = MAX(detailTextFrame.origin.y + detailTextFrame.size.height,textFrame.origin.y + textFrame.size.height) + self.contentInsets.bottom;
             
             CGFloat imageHeight = (image ? (image.size.height + self.contentInsets.top + self.contentInsets.bottom) : 0);
@@ -607,9 +616,10 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (void)performLayout{
-    if(self.cellStyle == CKTableViewCellStyleIPadForm
-       || self.cellStyle == CKTableViewCellStyleIPhoneForm
-       || self.cellStyle == CKTableViewCellStyleSubtitle2){
+    CKTableViewCellStyle cellStyle = self.cellStyle;
+    if(cellStyle == CKTableViewCellStyleIPadForm
+       || cellStyle == CKTableViewCellStyleIPhoneForm
+       || cellStyle == CKTableViewCellStyleSubtitle2){
         UITableViewCell* cell = self.tableViewCell;
         
         NSDictionary* textStyle = [self textStyle];
@@ -621,7 +631,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
          */
         
         
-        if(self.cellStyle == CKTableViewCellStyleIPadForm){
+        if(cellStyle == CKTableViewCellStyleIPadForm){
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
                 cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
                 cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -635,7 +645,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 cell.textLabel.frame = textFrame;
             }
         }
-        else if(self.cellStyle == CKTableViewCellStyleIPhoneForm){
+        else if(cellStyle == CKTableViewCellStyleIPhoneForm){
             cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
             cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
             if(cell.detailTextLabel != nil){
@@ -646,18 +656,18 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
                 cell.textLabel.frame = textFrame;
             }
         }
-        else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
+        else if(cellStyle == CKTableViewCellStyleSubtitle2){
             cell.detailTextLabel.autoresizingMask = UIViewAutoresizingNone;
             cell.textLabel.autoresizingMask = UIViewAutoresizingNone;
             
             //ADJUST FRAMES HERE DEPENDING ON CELL SIZE THAT COULD BE DIFFERENT THAN THE 'IDEAL' SIZE
             
             CGRect textFrame = [self subtitleTextFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
-            CGRect detailFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image];
+            CGRect detailFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image textFrame:textFrame];
             
             if(!([self isKindOfClass:[CKNSStringPropertyCellController class] ] || [self isKindOfClass:[CKNSNumberPropertyCellController class] ] || [self isKindOfClass:[CKMultilineNSStringPropertyCellController class] ])){
-                CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y;
-                CGFloat yoffset = ((cell.contentView.height - textsHeight) / 2) -  textFrame.origin.y;
+                CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y + self.contentInsets.top + self.contentInsets.bottom;
+                CGFloat yoffset = ((cell.contentView.height - textsHeight) / 2);
                 textFrame.origin.y += yoffset;
                 detailFrame.origin.y += yoffset;
             }

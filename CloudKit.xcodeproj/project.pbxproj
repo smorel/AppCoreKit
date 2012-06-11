@@ -241,7 +241,7 @@
 		7560DD2B13B8ED3600268D13 /* CKArrayProxyCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBDE13B8ED3600268D13 /* CKArrayProxyCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBDF13B8ED3600268D13 /* CKArrayProxyCollection.m */; };
 		7560DD2D13B8ED3600268D13 /* CKBindedTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE113B8ED3600268D13 /* CKBindedTableViewController.mm */; };
+		7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */; };
 		7560DD2F13B8ED3600268D13 /* CKItemViewControllerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */; };
 		7560DD3313B8ED3600268D13 /* CKOptionTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -491,6 +491,10 @@
 		967C51821538BD4E00B3F785 /* CKNSObject+CKSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */; };
 		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51861538BE8200B3F785 /* CKDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51841538BE8200B3F785 /* CKDocument.m */; };
+		967CD1F715814048007F16D7 /* CKMockManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 967CD1F515814048007F16D7 /* CKMockManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 967CD1F615814048007F16D7 /* CKMockManager.mm */; };
+		9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */; };
 		969AFE6B1561506B00CFE27A /* CKBindedGridViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE691561506B00CFE27A /* CKBindedGridViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		969AFE6C1561506B00CFE27A /* CKBindedGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6A1561506B00CFE27A /* CKBindedGridViewController.m */; };
 		969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -525,6 +529,8 @@
 		96E4D4671540918800CCF421 /* UnitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D40215407D8600CCF421 /* UnitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B01481171566A8FD000C1E1C /* CKWebRequestManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
+		B02925D115824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B02925CF15824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h */; };
+		B02925D215824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B02925D015824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B02B1F30156C424E00A1C16A /* NSURLRequest+Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */; };
 		B03A8431157FC7490039DE45 /* CKLayoutView.h in Headers */ = {isa = PBXBuildFile; fileRef = B03A842F157FC7490039DE45 /* CKLayoutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -789,7 +795,7 @@
 		7560DBDE13B8ED3600268D13 /* CKArrayProxyCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKArrayProxyCollection.h; path = Classes/CKArrayProxyCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7560DBDF13B8ED3600268D13 /* CKArrayProxyCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKArrayProxyCollection.m; path = Classes/CKArrayProxyCollection.m; sourceTree = "<group>"; };
 		7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKBindedTableViewController.h; path = Classes/CKBindedTableViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DBE113B8ED3600268D13 /* CKBindedTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKBindedTableViewController.mm; path = Classes/CKBindedTableViewController.mm; sourceTree = "<group>"; };
+		7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedTableViewController.m; path = Classes/CKBindedTableViewController.m; sourceTree = "<group>"; };
 		7560DBE213B8ED3600268D13 /* CKItemViewControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKItemViewControllerFactory.h; path = Classes/CKItemViewControllerFactory.h; sourceTree = "<group>"; };
 		7560DBE313B8ED3600268D13 /* CKItemViewControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKItemViewControllerFactory.m; path = Classes/CKItemViewControllerFactory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBE613B8ED3600268D13 /* CKOptionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKOptionTableViewController.h; path = Classes/CKOptionTableViewController.h; sourceTree = "<group>"; };
@@ -1043,6 +1049,10 @@
 		967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+CKSingleton.m"; path = "Classes/CKNSObject+CKSingleton.m"; sourceTree = "<group>"; };
 		967C51831538BE8100B3F785 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocument.h; path = Classes/CKDocument.h; sourceTree = "<group>"; };
 		967C51841538BE8200B3F785 /* CKDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocument.m; path = Classes/CKDocument.m; sourceTree = "<group>"; };
+		967CD1F515814048007F16D7 /* CKMockManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMockManager.h; path = Classes/CKMockManager.h; sourceTree = "<group>"; };
+		967CD1F615814048007F16D7 /* CKMockManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKMockManager.mm; path = Classes/CKMockManager.mm; sourceTree = "<group>"; };
+		9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKWebRequest+Mapping.h"; path = "Classes/CKWebRequest+Mapping.h"; sourceTree = "<group>"; };
+		9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKWebRequest+Mapping.m"; path = "Classes/CKWebRequest+Mapping.m"; sourceTree = "<group>"; };
 		969AFE691561506B00CFE27A /* CKBindedGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBindedGridViewController.h; path = Classes/CKBindedGridViewController.h; sourceTree = "<group>"; };
 		969AFE6A1561506B00CFE27A /* CKBindedGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBindedGridViewController.m; path = Classes/CKBindedGridViewController.m; sourceTree = "<group>"; };
 		969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKGridTableViewCellController.h; path = Classes/CKGridTableViewCellController.h; sourceTree = "<group>"; };
@@ -1077,6 +1087,8 @@
 		96E4D40215407D8600CCF421 /* UnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests.h; path = Classes/UnitTests.h; sourceTree = "<group>"; };
 		B01481171566A8FD000C1E1C /* CKWebRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequestManager.h; path = Classes/CKWebRequestManager.h; sourceTree = "<group>"; };
 		B01481181566A8FD000C1E1C /* CKWebRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequestManager.m; path = Classes/CKWebRequestManager.m; sourceTree = "<group>"; };
+		B02925CF15824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLiveProjectFileUpdateManager.h; path = Classes/CKLiveProjectFileUpdateManager.h; sourceTree = "<group>"; };
+		B02925D015824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLiveProjectFileUpdateManager.m; path = Classes/CKLiveProjectFileUpdateManager.m; sourceTree = "<group>"; };
 		B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+Upload.h"; path = "Classes/NSURLRequest+Upload.h"; sourceTree = "<group>"; };
 		B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLRequest+Upload.m"; path = "Classes/NSURLRequest+Upload.m"; sourceTree = "<group>"; };
 		B03A842F157FC7490039DE45 /* CKLayoutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutView.h; path = Classes/CKLayoutView.h; sourceTree = "<group>"; };
@@ -1367,7 +1379,7 @@
 				7560DC1613B8ED3600268D13 /* CKTableViewController.h */,
 				7560DC1713B8ED3600268D13 /* CKTableViewController.m */,
 				7560DBE013B8ED3600268D13 /* CKBindedTableViewController.h */,
-				7560DBE113B8ED3600268D13 /* CKBindedTableViewController.mm */,
+				7560DBE113B8ED3600268D13 /* CKBindedTableViewController.m */,
 				7528070913D4B35F0010A300 /* CellControllers */,
 				7577DFE813E2EE4E0065E098 /* Form */,
 			);
@@ -1537,6 +1549,8 @@
 				7560DB6813B8ED3600268D13 /* CKHost.m */,
 				9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */,
 				9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */,
+				9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */,
+				9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -1766,6 +1780,7 @@
 				7506E3F113B8FAE400EE1471 /* Styles */,
 				B03A8429157FC4F80039DE45 /* Layout */,
 				7506E3FC13B8FDC700EE1471 /* UI */,
+				967CD1F315814011007F16D7 /* Mock */,
 				7506E40A13B9009400EE1471 /* CoreData */,
 				7506E40D13B9014100EE1471 /* Network */,
 				7506E40F13B9022700EE1471 /* Support */,
@@ -1908,6 +1923,8 @@
 				B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */,
 				75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */,
 				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
+				B02925CF15824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h */,
+				B02925D015824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m */,
 			);
 			name = CascadingTree;
 			sourceTree = "<group>";
@@ -2123,6 +2140,15 @@
 				96CADE371486BDFD008A23E4 /* CKNSObject+Validation.m */,
 			);
 			name = "Object Extension";
+			sourceTree = "<group>";
+		};
+		967CD1F315814011007F16D7 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				967CD1F515814048007F16D7 /* CKMockManager.h */,
+				967CD1F615814048007F16D7 /* CKMockManager.mm */,
+			);
+			name = Mock;
 			sourceTree = "<group>";
 		};
 		969892761559999100763F50 /* Views */ = {
@@ -2455,6 +2481,9 @@
 				B09D1E0F157FF9B300E13B00 /* CKLayoutManager.h in Headers */,
 				B09D1E131580012E00E13B00 /* CKFlexibleGridLayout.h in Headers */,
 				B0A46C9B1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.h in Headers */,
+				B02925D115824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h in Headers */,
+				967CD1F715814048007F16D7 /* CKMockManager.h in Headers */,
+				9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2661,7 +2690,7 @@
 				7560DD2713B8ED3600268D13 /* CKBindedCarouselViewController.m in Sources */,
 				7560DD2A13B8ED3600268D13 /* CKProperty.m in Sources */,
 				7560DD2C13B8ED3600268D13 /* CKArrayProxyCollection.m in Sources */,
-				7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.mm in Sources */,
+				7560DD2E13B8ED3600268D13 /* CKBindedTableViewController.m in Sources */,
 				7560DD3013B8ED3600268D13 /* CKItemViewControllerFactory.m in Sources */,
 				7560DD3413B8ED3600268D13 /* CKOptionTableViewController.m in Sources */,
 				7560DD3C13B8ED3600268D13 /* CKPickerView.m in Sources */,
@@ -2813,6 +2842,8 @@
 				B0DF970C157FDB6A001A3708 /* UIView+LayoutHelper.m in Sources */,
 				B09D1E141580012E00E13B00 /* CKFlexibleGridLayout.m in Sources */,
 				B0A46C9C1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.m in Sources */,
+				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
+				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,8 @@
 //
 
 #import "CKPropertyExtendedAttributes.h"
+#import "CKCollection.h"
+#import "CKPropertyExtendedAttributes+CKAttributes.h"
 
 #include <ext/hash_map>
 
@@ -51,6 +53,10 @@ static __gnu_cxx::hash_map<NSThread*, CKPropertyExtendedAttributes*> CKPropertyE
     }
     
 	[attributes reset];
+    
+    if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+        attributes.creatable = YES;
+    }
 	
 	SEL extendedAttributesSelector = property.extendedAttributesSelector;
 	if([object respondsToSelector:extendedAttributesSelector]){

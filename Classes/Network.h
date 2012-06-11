@@ -21,3 +21,4 @@
 #import "CKWebDataConverter.h"
 
 #import "CKWebRequestManager.h"
+#import "CKWebRequest+Mapping.h"

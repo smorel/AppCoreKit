@@ -168,10 +168,12 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 - (void)updateStylesheets {
     if ([self isViewLoaded]) {
         self.styleHasBeenApplied = NO;
-        [self applyStyleForNavigation];
         
-        if ([self respondsToSelector:@selector(reload)])
+        if ([self respondsToSelector:@selector(reload)]){
             [self performSelector:@selector(reload)];
+        }
+        
+        [self applyStyleForNavigation];
     }
 }
 
