@@ -31,7 +31,7 @@
     gridLayout.minMarginSize = 5;
     gridLayout.inset = UIEdgeInsetsMake(5, 5, 5, 5);
     
-    gridLayout.horizontalLayout = CKFlexibleGridRightHorizontalLayout;
+    gridLayout.horizontalLayout = CKFlexibleGridQueueHorizontalLayout;
     
     NSAssert(aGridSize.height != 0 && aGridSize.width != 0, @"0-size grid not supported");
     
@@ -74,6 +74,8 @@
         CGFloat marginSize;
         if (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout)
             marginSize = (width - contentWidth - (numberOfViews - 1) * self.minMarginSize) / (numberOfViews + 1);
+        else if (self.horizontalLayout = CKFlexibleGridQueueHorizontalLayout)
+            marginSize = self.minMarginSize;
         else
             marginSize = width / numberOfViews;
         
@@ -92,10 +94,15 @@
                 case CKFlexibleGridRightHorizontalLayout:
                     view.center = CGPointMake(currentWidth + marginSize - view.frame.size.width / 2,  currentHeight + bestHeight / 2);
                     break;
+                case CKFlexibleGridQueueHorizontalLayout:
+                    view.center = CGPointMake(currentWidth + view.frame.size.width / 2, currentHeight + bestHeight / 2);
+                    break;
             }
             
             if (self.horizontalLayout == CKFlexibleGridMiddleHorizontalLayout)
                 currentWidth += view.frame.size.width + marginSize + self.minMarginSize;
+            else if (self.horizontalLayout == CKFlexibleGridQueueHorizontalLayout)
+                currentWidth += view.preferedSize.width + self.minMarginSize;
             else
                 currentWidth += marginSize;
         }
