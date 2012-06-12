@@ -7,7 +7,6 @@
 //
 
 #import "CKGridLayout.h"
-#import "CKLayoutView.h"
 
 @implementation CKGridLayout
 

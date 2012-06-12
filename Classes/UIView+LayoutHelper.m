@@ -7,14 +7,43 @@
 //
 
 #import "UIView+LayoutHelper.h"
-#import "CKLayoutView.h"
+#import "CKBinding.h"
 #import <objc/runtime.h>
 
 static char UIViewLayoutHelperPreferedSizeKey;
 static char UIViewLayoutHelperMinimumSizeKey;
 static char UIViewLayoutHelperMaximumSizeKey;
+static char UIViewLayoutHelperLayoutManagerKey;
 
 @implementation UIView (LayoutHelper)
+
+@dynamic bounds, subviews;
+
+- (void)setLayoutManager:(id<CKLayoutManager>)aLayoutManager {
+    objc_setAssociatedObject(self, &UIViewLayoutHelperLayoutManagerKey, aLayoutManager, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    aLayoutManager.layoutContainer = self;
+    
+    [self beginBindingsContextByRemovingPreviousBindings];
+    [self bind:@"frame" executeBlockImmediatly:NO withBlock:^(id value) {
+        [self setNeedsAutomaticLayout];
+    }];
+    [self endBindingsContext];
+}
+
+- (id<CKLayoutManager>)layoutManager {
+    return objc_getAssociatedObject(self, &UIViewLayoutHelperLayoutManagerKey);
+}
+
+- (void)setNeedsAutomaticLayout {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(performLayout) object:nil]; //Perform the layout only once at the end of the runloop
+    [self performSelector:@selector(performLayout) withObject:nil afterDelay:0];
+}
+
+- (void)performLayout {
+    [self.layoutManager layout];
+}
+
+#pragma mark - Size
 
 - (CGSize)preferedSize {
     NSValue *preferedSize = objc_getAssociatedObject(self, &UIViewLayoutHelperPreferedSizeKey);

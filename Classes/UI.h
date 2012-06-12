@@ -20,7 +20,7 @@
 
 #import "CKLayoutManager.h"
 #import "CKLayout.h"
-#import "CKLayoutView.h"
+#import "UIView+LayoutHelper.h"
 #import "CKGridLayout.h"
 #import "CKFlexibleGridLayout.h"
 

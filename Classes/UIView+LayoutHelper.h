@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CKLayoutManager.h"
 
-@interface UIView (LayoutHelper)
+@interface UIView (LayoutHelper) <CKLayoutContainer>
+
+@property (nonatomic, retain) id <CKLayoutManager> layoutManager;
+- (void)setNeedsAutomaticLayout;
 
 @property (nonatomic, assign) CGSize preferedSize;
 @property (nonatomic, assign) CGSize minimumSize;

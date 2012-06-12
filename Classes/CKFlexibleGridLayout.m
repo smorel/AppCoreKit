@@ -7,7 +7,6 @@
 //
 
 #import "CKFlexibleGridLayout.h"
-#import "CKLayoutView.h"
 #import <CloudKit/UIView+LayoutHelper.h>
 
 @implementation CKFlexibleGridLayout
