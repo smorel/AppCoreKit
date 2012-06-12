@@ -36,7 +36,7 @@ static char UIViewLayoutHelperLayoutManagerKey;
 
 - (void)setNeedsAutomaticLayout {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(performLayout) object:nil]; //Perform the layout only once at the end of the runloop
-    [self performSelector:@selector(performLayout) withObject:nil afterDelay:0];
+    [self performSelector:@selector(performLayout)];
 }
 
 - (void)performLayout {
