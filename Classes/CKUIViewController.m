@@ -415,10 +415,16 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         self.navigationItem.titleView = view;
         
         if([view isKindOfClass:[UILabel class]]){
+            
+            UILabel* label = (UILabel*)view;
+            [label sizeToFit];
+            
             [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
             [self bind:@"title" withBlock:^(id value) {
-                UILabel* label = (UILabel*)view;
                 label.text = [value isKindOfClass:[NSString class]] ? value : nil;
+                [label sizeToFit];
+            }];
+            [view bind:@"text" withBlock:^(id value) {
                 [label sizeToFit];
             }];
             [NSObject endBindingsContext];
@@ -437,6 +443,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         [NSObject beginBindingsContext:_navigationTitleBindingContext policy:CKBindingsContextPolicyRemovePreviousBindings];
         [self bind:@"title" withBlock:^(id value) {
             label.text = [value isKindOfClass:[NSString class]] ? value : nil;
+            [label sizeToFit];
+        }];
+        [label bind:@"text" withBlock:^(id value) {
             [label sizeToFit];
         }];
         [NSObject endBindingsContext];

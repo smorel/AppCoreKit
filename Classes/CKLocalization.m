@@ -43,8 +43,8 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
                 
                 [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
                 [[CKLocalizationManager sharedManager] refreshUI];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
             }];
             
             [newStringsURL addObject:[NSURL fileURLWithPath:localPath]];
