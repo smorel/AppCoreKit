@@ -9,6 +9,7 @@
 #import "CKTableViewCellController+FlatHierarchy.h"
 
 static char CKTableViewCellControllerOriginalViewKey;
+static char CKTableViewCellControllerImageViewsKey;
 static char CKTableViewCellControllerWantsFlatHierarchyKey;
 
 const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
@@ -16,10 +17,22 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
 @interface CKTableViewCellController (FlatHierarchyPrivate)
 
 @property (nonatomic, retain) UIView *oldView;
+@property (nonatomic, retain, readonly) NSMutableArray *imageViews;
 
 @end
 
 @implementation CKTableViewCellController (FlatHierarchy)
+
+- (NSMutableArray *)imageViews {
+    NSMutableArray *array = objc_getAssociatedObject(self, &CKTableViewCellControllerImageViewsKey);
+    
+    if (array == nil) {
+        array = [NSMutableArray array];
+        objc_setAssociatedObject(self, &CKTableViewCellControllerImageViewsKey, array, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    return array;
+}
 
 - (UIView *)oldView {
     return objc_getAssociatedObject(self, &CKTableViewCellControllerOriginalViewKey);
@@ -47,7 +60,10 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             self.oldView = oldView;
             
             for (UIView * subview in self.tableViewCell.contentView.subviews) {
-                if (![subview isKindOfClass:[UIActivityIndicatorView class]])
+                if ([subview isKindOfClass:[UIImageView class]]) {
+                    [self.imageViews addObject:subview];
+                }
+                else if (![subview isKindOfClass:[UIActivityIndicatorView class]])
                     [oldView addSubview:subview];
             }
         }
@@ -66,6 +82,10 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             [self.tableViewCell.backgroundView.layer renderInContext:context];
         
         [oldView.layer renderInContext:context];
+        
+        for (UIImageView *imageView in self.imageViews) {
+            [imageView.image drawAtPoint:imageView.frame.origin];
+        }
         
         UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
         
