@@ -53,54 +53,57 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
 }
 
 - (void)flattenHierarchyHighlighted:(BOOL)highlighted {
-    if (self.tableViewCell.superview != nil) {
-        UIView * oldView = self.oldView;
-        if (oldView == nil) {
-            oldView = [[[UIView alloc] initWithFrame:self.tableViewCell.contentView.frame] autorelease];
-            self.oldView = oldView;
-            
-            for (UIView * subview in self.tableViewCell.contentView.subviews) {
-                if ([subview isKindOfClass:[UIImageView class]]) {
-                    [self.imageViews addObject:subview];
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        if (self.tableViewCell.superview != nil) {
+            UIView * oldView = self.oldView;
+            if (oldView == nil) {
+                oldView = [[[UIView alloc] initWithFrame:self.tableViewCell.contentView.frame] autorelease];
+                self.oldView = oldView;
+                
+                for (UIView * subview in self.tableViewCell.contentView.subviews) {
+                    if ([subview isKindOfClass:[UIImageView class]]) {
+                        [self.imageViews addObject:subview];
+                        [subview removeFromSuperview];
+                    }
+                    else if (![subview isKindOfClass:[UIActivityIndicatorView class]])
+                        [oldView addSubview:subview];
                 }
-                else if (![subview isKindOfClass:[UIActivityIndicatorView class]])
-                    [oldView addSubview:subview];
             }
+            
+            [self setHighlighted:highlighted inView:self.oldView];
+            [self setHighlighted:highlighted inView:self.tableViewCell.backgroundView];
+            [self setHighlighted:highlighted inView:self.tableViewCell.selectedBackgroundView];
+            
+            UIGraphicsBeginImageContextWithOptions(self.tableViewCell.backgroundView.bounds.size,
+                                                   self.tableViewCell.backgroundView.isOpaque, 0);
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            
+            if (highlighted)
+                [self.tableViewCell.selectedBackgroundView.layer renderInContext:context];
+            else
+                [self.tableViewCell.backgroundView.layer renderInContext:context];
+            
+            [oldView.layer renderInContext:context];
+            
+            for (UIImageView *imageView in self.imageViews) {
+                [imageView.image drawAtPoint:imageView.frame.origin];
+            }
+            
+            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+            
+            UIGraphicsEndImageContext();
+            
+            UIImageView *imageView = (UIImageView*) [self.tableViewCell viewWithTag:CKTableViewCellControllerFlatImageViewTag];
+            if (imageView == nil) {
+                imageView = [[[UIImageView alloc] initWithFrame:self.tableViewCell.backgroundView.frame] autorelease];
+                imageView.tag = CKTableViewCellControllerFlatImageViewTag;
+                imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                [self.tableViewCell insertSubview:imageView belowSubview:self.tableViewCell.contentView];
+            }
+            
+            imageView.image = image;
         }
-        
-        [self setHighlighted:highlighted inView:self.oldView];
-        [self setHighlighted:highlighted inView:self.tableViewCell.backgroundView];
-        [self setHighlighted:highlighted inView:self.tableViewCell.selectedBackgroundView];
-        
-        UIGraphicsBeginImageContextWithOptions(self.tableViewCell.backgroundView.bounds.size,
-                                               self.tableViewCell.backgroundView.isOpaque, 0);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        if (highlighted)
-            [self.tableViewCell.selectedBackgroundView.layer renderInContext:context];
-        else
-            [self.tableViewCell.backgroundView.layer renderInContext:context];
-        
-        [oldView.layer renderInContext:context];
-        
-        for (UIImageView *imageView in self.imageViews) {
-            [imageView.image drawAtPoint:imageView.frame.origin];
-        }
-        
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
-        
-        UIImageView *imageView = (UIImageView*) [self.tableViewCell viewWithTag:CKTableViewCellControllerFlatImageViewTag];
-        if (imageView == nil) {
-            imageView = [[[UIImageView alloc] initWithFrame:self.tableViewCell.backgroundView.frame] autorelease];
-            imageView.tag = CKTableViewCellControllerFlatImageViewTag;
-            imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.tableViewCell insertSubview:imageView belowSubview:self.tableViewCell.contentView];
-        }
-        
-        imageView.image = image;
-    }
+    });
 }
 
 - (void)setHighlighted:(BOOL)highlighted inView:(UIView*)view {
