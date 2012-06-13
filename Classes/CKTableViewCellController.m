@@ -297,6 +297,12 @@
     [self.delegate restoreViews];
 }
 
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    [self.delegate flattenHierarchyHighlighted:self.isHighlighted];
+}
+
 @end
 
 @interface CKTableViewCellController ()
