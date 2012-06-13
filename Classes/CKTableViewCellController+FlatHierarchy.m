@@ -17,7 +17,7 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
 @interface CKTableViewCellController (FlatHierarchyPrivate)
 
 @property (nonatomic, retain) UIView *oldView;
-@property (nonatomic, retain, readonly) NSMutableArray *imageViews;
+@property (nonatomic, retain) NSMutableArray *imageViews;
 
 @end
 
@@ -32,6 +32,10 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
     }
     
     return array;
+}
+
+- (void)setImageViews:(NSMutableArray *)imageViews {
+    objc_setAssociatedObject(self, &CKTableViewCellControllerImageViewsKey, imageViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *)oldView {
@@ -124,6 +128,11 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
     for (UIView * subview in self.oldView.subviews) {
         [self.tableViewCell.contentView addSubview:subview];
     }
+    for (UIView * subview in self.imageViews) {
+        [self.tableViewCell.contentView addSubview:subview];
+    }
+    
+    self.imageViews = nil;
     self.oldView = nil;
 }
 
