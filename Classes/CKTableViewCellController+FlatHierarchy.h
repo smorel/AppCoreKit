@@ -12,5 +12,6 @@
 
 @property (nonatomic, assign) BOOL wantFlatHierarchy;
 - (void)flattenHierarchyHighlighted:(BOOL)highlighted;
+- (void)restoreViews;
 
 @end

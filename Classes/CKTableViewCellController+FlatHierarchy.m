@@ -93,4 +93,14 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
         [self setHighlighted:highlighted inView:subview];
 }
 
+- (void)restoreViews {
+    UIImageView *imageView = (UIImageView*) [self.tableViewCell viewWithTag:CKTableViewCellControllerFlatImageViewTag];
+    [imageView removeFromSuperview];
+    
+    for (UIView * subview in self.oldView.subviews) {
+        [self.tableViewCell.contentView addSubview:subview];
+    }
+    self.oldView = nil;
+}
+
 @end

@@ -291,6 +291,12 @@
         [self.delegate flattenHierarchyHighlighted:highlighted];
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    [self.delegate restoreViews];
+}
+
 @end
 
 @interface CKTableViewCellController ()
@@ -685,7 +691,6 @@
 }
 
 - (void)cellDidDisappear {
-	return;
 }
 
 - (void)rotateCell:(UITableViewCell*)cell animated:(BOOL)animated{
