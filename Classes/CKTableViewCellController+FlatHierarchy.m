@@ -47,7 +47,8 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             self.oldView = oldView;
             
             for (UIView * subview in self.tableViewCell.contentView.subviews) {
-                [oldView addSubview:subview];
+                if (![subview isKindOfClass:[UIActivityIndicatorView class]])
+                    [oldView addSubview:subview];
             }
         }
         
@@ -75,7 +76,7 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             imageView = [[[UIImageView alloc] initWithFrame:self.tableViewCell.backgroundView.frame] autorelease];
             imageView.tag = CKTableViewCellControllerFlatImageViewTag;
             imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.tableViewCell addSubview:imageView];
+            [self.tableViewCell insertSubview:imageView belowSubview:self.tableViewCell.contentView];
         }
         
         imageView.image = image;
