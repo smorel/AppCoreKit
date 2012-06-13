@@ -178,6 +178,13 @@
 }
 
 
+
+- (void)updateStylesheets{
+    //NSIndexPath* indexPath = [[self visibleIndexPaths]objectAtIndex:0];
+    [super updateStylesheets];
+    //[self scrollToRowAtIndexPath:indexPath animated:NO];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     CKUIViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
     self.viewWillAppearEndBlock = nil;

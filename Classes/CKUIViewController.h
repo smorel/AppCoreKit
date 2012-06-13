@@ -173,6 +173,9 @@ typedef enum CKUIViewControllerState{
 - (void)applyStyleForRightBarButtonItem;
 - (void)applyStyleForNavigation;
 
+
+- (void)updateStylesheets;
+
 @end
 
 

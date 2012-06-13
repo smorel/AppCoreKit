@@ -78,7 +78,9 @@
 }
 
 - (void)checkForUpdate {
-    [self.projectPaths enumerateKeysAndObjectsUsingBlock:^(NSString *resourcePath, NSString *localPath, BOOL *stop) {
+    NSDictionary* pathsCopy = [self.projectPaths copy];
+    
+    [pathsCopy enumerateKeysAndObjectsUsingBlock:^(NSString *resourcePath, NSString *localPath, BOOL *stop) {
         NSDate *oldModificationDate = [self.modificationDate objectForKey:resourcePath];
         NSDate *newModificationDate = [self modificationDateForFileAtPath:localPath];
         if (![newModificationDate isEqualToDate:oldModificationDate] && newModificationDate != nil) {

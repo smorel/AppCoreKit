@@ -117,16 +117,16 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    [CATransaction begin];
+    /*[CATransaction begin];
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+     forKey: kCATransactionDisableActions];*/
     
     if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
 		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
     
-    [CATransaction commit];
+    //[CATransaction commit];
 }
 
 - (void)setDisclosureIndicatorImage:(UIImage*)img{
@@ -710,10 +710,10 @@
 #pragma mark CKItemViewController Implementation
 
 - (UIView *)loadView{
-    [CATransaction begin];
+    /*[CATransaction begin];
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+     forKey: kCATransactionDisableActions];*/
     
 	UITableViewCell* cell = [self loadCell];
     self.view = cell;
@@ -721,7 +721,7 @@
 	[self initView:cell];
 	[self layoutCell:cell];
     
-    [CATransaction commit];
+    //[CATransaction commit];
 	
 	return cell;
 }
@@ -859,10 +859,10 @@
         }];
     }
         
-    [CATransaction begin];
+    /*[CATransaction begin];
     [CATransaction 
      setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];
+     forKey: kCATransactionDisableActions];*/
     
     //Setup the tableViewCell using internal values.
     //Those values can then be overloaded by setup block
@@ -898,7 +898,7 @@
     }
      */
     
-    [CATransaction commit];
+    //[CATransaction commit];
     
     
    /* CGSize size;
