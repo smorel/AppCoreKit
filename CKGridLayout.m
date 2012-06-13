@@ -12,6 +12,7 @@
 
 @synthesize inset, layoutContainer;
 @synthesize gridSize, minMarginSize;
+@synthesize preferedSize, maximumSize, minimumSize;
 
 + (CKGridLayout *)horizontalGridLayout {
     return [self gridLayoutWithGridSize:CGSizeMake(CGFLOAT_MAX, 1)];

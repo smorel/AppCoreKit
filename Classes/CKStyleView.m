@@ -159,9 +159,11 @@
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
     if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
         [super setBackgroundColor:[UIColor blackColor]];
+        self.opaque = YES;
     }
     else{
         [super setBackgroundColor:[UIColor clearColor]];
+        self.opaque = NO;
     }
 }
 

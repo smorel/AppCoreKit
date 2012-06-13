@@ -15,6 +15,7 @@
 #import "CKBindedTableViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKTableViewCellController+FlatHierarchy.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
@@ -283,6 +284,13 @@
     }*/
 }
 
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (self.delegate.wantFlatHierarchy)
+        [self.delegate flattenHierarchyHighlighted:highlighted];
+}
+
 @end
 
 @interface CKTableViewCellController ()
@@ -359,6 +367,7 @@
     self.accessoryType = UITableViewCellAccessoryNone;
     self.editingAccessoryType = UITableViewCellAccessoryNone;
     self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    self.wantFlatHierarchy = YES;
     
     self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
     _indentationLevel = 0;
@@ -673,7 +682,6 @@
 
 
 - (void)cellDidAppear:(UITableViewCell *)cell {
-	return;
 }
 
 - (void)cellDidDisappear {
