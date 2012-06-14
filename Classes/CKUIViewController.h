@@ -50,6 +50,10 @@ typedef enum CKUIViewControllerState{
  This returns an autorelease view controller of the calling class.
  */
 + (id)controller;
+/** 
+ This returns an autorelease view controller of the calling class by initializing its name property with the specified name.
+ */
++ (id)controllerWithName:(NSString*)name;
 
 ///-----------------------------------
 /// @name Identification

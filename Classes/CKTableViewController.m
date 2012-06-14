@@ -13,6 +13,7 @@
 #import "CKStyle+Parsing.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKDebug.h"
 
 @interface CKItemViewContainerController ()
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
@@ -76,7 +77,9 @@
 
 - (void)layoutSubviews{
     self.isLayouting = YES;
+
     [super layoutSubviews];
+    
     self.isLayouting = NO;
     
     if(self.sizeChangedWhileReloading){

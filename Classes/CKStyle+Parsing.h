@@ -19,6 +19,7 @@
 - (NSArray*) cgFloatArrayForKey:(NSString*)key;
 - (UIImage*) imageForKey:(NSString*)key;
 - (NSInteger) enumValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor;
+- (NSInteger) bitMaskValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor;
 - (CGSize) cgSizeForKey:(NSString*)key;
 - (CGFloat) cgFloatForKey:(NSString*)key;
 - (NSString*) stringForKey:(NSString*)key;

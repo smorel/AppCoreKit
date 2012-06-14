@@ -26,6 +26,9 @@
 #import "CKUIView+Positioning.h"
 #import "CKProperty.h"
 #import "CKNSObject+CKSingleton.h"
+#import "CKDebug.h"
+
+#import "CKVersion.h"
 
 //#import <objc/runtime.h>
 
@@ -42,6 +45,17 @@
 @property (nonatomic,retain) CKWeakRef* delegateRef;
 @property (nonatomic,assign,readwrite) CKTableViewCellController* delegate;
 @property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
+@end
+
+@interface UITableViewCell (CKAutoLayoutCompatibility)
+@end
+
+@implementation UITableViewCell(CKAutoLayoutCompatibility)
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+}
+
 @end
 
 @implementation CKUITableViewCell
@@ -114,19 +128,13 @@
     [NSObject endBindingsContext];	*/
 }
 
+
 - (void)layoutSubviews{
     [super layoutSubviews];
-    
-    /*[CATransaction begin];
-    [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];*/
-    
+
     if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
 		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
 	}
-    
-    //[CATransaction commit];
 }
 
 - (void)setDisclosureIndicatorImage:(UIImage*)img{
@@ -663,6 +671,39 @@
         cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
+    }
+
+    NSMutableDictionary* style = [self controllerStyle];
+    
+    NSArray* views = [style instanceOfViews];
+    if(views){
+        for(UIView* view in views){
+            [cell.contentView addSubview:view];
+        }
+    }
+    
+    if([CKOSVersion() floatValue] >= 6){
+        NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
+        [cell populateViewDictionaryForVisualFormat:viewsDictionary];
+        
+        if(cell.imageView){
+            [viewsDictionary setObject:cell.imageView forKey:@"imageView"];
+        }
+        if(cell.textLabel){
+            [viewsDictionary setObject:cell.textLabel forKey:@"textLabel"];
+        }
+        if(cell.detailTextLabel ){
+            [viewsDictionary setObject:cell.detailTextLabel forKey:@"detailTextLabel"];
+        }
+        
+        NSArray* constraints = [style autoLayoutConstraintsUsingViews:viewsDictionary];
+        if(constraints && [constraints count] > 0){
+            for(UIView* view in views){
+                [cell.contentView addSubview:view];
+            }
+            [cell setTranslatesAutoresizingMaskIntoConstraints:NO recursive:YES];
+            [cell.contentView addConstraints:constraints];
+        }
     }
 }
 

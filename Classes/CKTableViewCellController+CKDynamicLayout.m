@@ -27,6 +27,9 @@
 #import "CKProperty.h"
 #import "CKNSObject+CKSingleton.h"
 #import "CKStyle+Parsing.h"
+#import "CKVersion.h"
+
+#import "CKTableViewCellCache.h"
 
 
 #import "CKNSStringPropertyCellController.h"
@@ -571,7 +574,27 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 - (CGSize)computeSize{
     self.invalidatedSize = NO;
-    return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
+    
+    //Using autolayout
+    if([CKOSVersion() floatValue] >= 6
+       && ![self.view translatesAutoresizingMaskIntoConstraints]){
+        UITableViewCell* view = (UITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+        if(!view){
+            view = [[[UITableViewCell alloc]initWithStyle:self.cellStyle reuseIdentifier:[self identifier]]autorelease];
+            view.width = self.parentTableView.width;
+            
+            [self initView:view];
+            [[CKTableViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+        }
+        
+        [self setupView:view];
+        
+        view.contentView.height = 100;
+        view.contentView.width = [self contentViewWidth];
+        return [view.contentView systemLayoutSizeFittingSize:CGSizeMake(view.contentView.width,60)];
+    }else{
+        return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
+    }
 }
 
 
@@ -616,6 +639,12 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (void)performLayout{
+    //Using autolayout
+    if([CKOSVersion() floatValue] >= 6
+       && ![self.view translatesAutoresizingMaskIntoConstraints])
+        return;
+    
+    
     CKTableViewCellStyle cellStyle = self.cellStyle;
     if(cellStyle == CKTableViewCellStyleIPadForm
        || cellStyle == CKTableViewCellStyleIPhoneForm

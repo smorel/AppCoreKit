@@ -181,6 +181,12 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	return [[[[self class]alloc]init]autorelease];
 }
 
++ (id)controllerWithName:(NSString*)name{
+	CKUIViewController* controller = [[[[self class]alloc]init]autorelease];
+    controller.name = name;
+    return controller;
+}
+
 #pragma mark - Style Management
 
 

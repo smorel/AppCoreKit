@@ -96,6 +96,14 @@ extern NSString* CKStyleSeparatorWidth;
 extern NSString* CKStyleSeparatorStyle;
 
 
+extern NSString* CKStyleViewDescription;
+extern NSString* CKStyleAutoLayoutConstraints;
+extern NSString* CKStyleAutoLayoutFormatOption;
+extern NSString* CKStyleAutoLayoutFormat;
+extern NSString* CKStyleAutoLayoutHugging;
+extern NSString* CKStyleAutoLayoutCompression;
+
+
 /** TODO
  */
 @interface NSMutableDictionary (CKViewStyle)
@@ -115,6 +123,10 @@ extern NSString* CKStyleSeparatorStyle;
 - (CGFloat)separatorWidth;
 - (CKViewSeparatorStyle)separatorStyle;
 
+
+- (NSArray*)instanceOfViews;
+- (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views;
+
 @end
 
 
@@ -122,7 +134,8 @@ extern NSString* CKStyleSeparatorStyle;
 
 /** TODO
  */
-@interface UIView (CKStyle) 
+@interface UIView (CKStyle)
+@property (nonatomic,copy) NSString* name;
 
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style;
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
@@ -131,6 +144,11 @@ extern NSString* CKStyleSeparatorStyle;
 
 //private
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
+
+- (UIView*)viewWithKeyPath:(NSString*)keyPath;
+- (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico;
+
+- (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive NS_AVAILABLE_IOS(6_0);
 
 @end
 

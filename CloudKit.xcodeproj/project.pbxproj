@@ -460,6 +460,8 @@
 		9600B8E91545CD1F00F07C5A /* CKSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */; };
 		9600B8F01545D88F00F07C5A /* CKDownloadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */; };
+		9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 9601521A15892CBE00333DC4 /* CKTableViewCellCache.h */; };
+		9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9601521B15892CBE00333DC4 /* CKTableViewCellCache.mm */; };
 		960CAED6157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */; };
 		960CAED7157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1007,6 +1009,8 @@
 		9600B8E71545CD1E00F07C5A /* CKSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKSegmentedViewController.m; path = Classes/CKSegmentedViewController.m; sourceTree = "<group>"; };
 		9600B8EC1545D88F00F07C5A /* CKDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDownloadManager.h; path = Classes/CKDownloadManager.h; sourceTree = "<group>"; };
 		9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDownloadManager.m; path = Classes/CKDownloadManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		9601521A15892CBE00333DC4 /* CKTableViewCellCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewCellCache.h; path = Classes/CKTableViewCellCache.h; sourceTree = "<group>"; };
+		9601521B15892CBE00333DC4 /* CKTableViewCellCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKTableViewCellCache.mm; path = Classes/CKTableViewCellCache.mm; sourceTree = "<group>"; };
 		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
 		960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIGestureRecognizer+CKBlockBasedInterface.h"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
 		960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+CKBlockBasedInterface.m"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
@@ -2161,6 +2165,8 @@
 				96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+CKDynamicLayout.m */,
 				96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.h */,
 				96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+CKDynamicLayout.m */,
+				9601521A15892CBE00333DC4 /* CKTableViewCellCache.h */,
+				9601521B15892CBE00333DC4 /* CKTableViewCellCache.mm */,
 			);
 			name = "Dynamic Layouts";
 			sourceTree = "<group>";
@@ -2429,6 +2435,7 @@
 				B02925D115824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h in Headers */,
 				967CD1F715814048007F16D7 /* CKMockManager.h in Headers */,
 				9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */,
+				9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2785,6 +2792,7 @@
 				B02925D215824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m in Sources */,
 				967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */,
 				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
+				9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

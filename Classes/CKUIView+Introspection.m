@@ -10,6 +10,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import "CKUIViewAutoresizing+Additions.h"
+#import "CKVersion.h"
 
 @implementation UIView (CKIntrospectionAdditions)
 
@@ -47,6 +48,21 @@
 	for(UIView* view in views){
 		[view removeFromSuperview];
 	}
+}
+
+- (void)setSubviews:(NSArray *)subviews{
+    [self removeAllSubviewsObjects];
+    for(id object in subviews){
+        UIView* view = nil;
+        if([object isKindOfClass:[UIView class]]){
+            view = (UIView*)object;
+        }else if([object isKindOfClass:[NSDictionary class]]){
+            view = [NSValueTransformer objectFromDictionary:object];
+        }else{
+            NSAssert(NO,@"Non supported format");
+        }
+        [self addSubview:view];
+    }
 }
 
 - (void)autoresizingMaskExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -111,6 +127,10 @@
 																		   readOnly:NO]];
 	[properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"clipsToBounds"
 																		   readOnly:NO]];
+    if([CKOSVersion() floatValue] >= 6){
+        [properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"hidden"
+                                                                               readOnly:NO]];
+    }
 	[properties addObject:[CKClassPropertyDescriptor intDescriptorForPropertyNamed:@"contentMode"
 																		  readOnly:NO]];
 	[properties addObject:[CKClassPropertyDescriptor floatDescriptorForPropertyNamed:@"contentScaleFactor"

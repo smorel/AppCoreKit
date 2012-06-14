@@ -17,6 +17,7 @@
 #import "CKTextView.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
+#import "CKVersion.h"
 
 
 //NSMutableSet* reserverKeyWords = nil;
@@ -38,6 +39,14 @@ NSString* CKStyleBorderStyle = @"borderStyle";
 NSString* CKStyleSeparatorColor = @"separatorColor";
 NSString* CKStyleSeparatorWidth = @"separatorWidth";
 NSString* CKStyleSeparatorStyle = @"separatorStyle";
+
+
+NSString* CKStyleViewDescription = @"@views";
+NSString* CKStyleAutoLayoutConstraints = @"@constraints";
+NSString* CKStyleAutoLayoutFormatOption = @"@options";
+NSString* CKStyleAutoLayoutFormat = @"@format";
+NSString* CKStyleAutoLayoutHugging = @"@hugging";
+NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 
 @implementation NSMutableDictionary (CKViewStyle)
@@ -157,9 +166,141 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
     return str;
 }
 
+- (NSLayoutFormatOptions)layoutFormatOption{
+    return (NSLayoutFormatOptions)[self bitMaskValueForKey:CKStyleAutoLayoutFormatOption
+                                    withEnumDescriptor:CKEnumDefinition(@"NSLayoutFormatOptions",
+                                                                        NSLayoutFormatAlignAllLeft,
+                                                                        NSLayoutFormatAlignAllRight,
+                                                                        NSLayoutFormatAlignAllTop,
+                                                                        NSLayoutFormatAlignAllBottom,
+                                                                        NSLayoutFormatAlignAllLeading,
+                                                                        NSLayoutFormatAlignAllTrailing,
+                                                                        NSLayoutFormatAlignAllCenterX,
+                                                                        NSLayoutFormatAlignAllCenterY,
+                                                                        NSLayoutFormatAlignAllBaseline,
+                                                                        NSLayoutFormatAlignmentMask,
+                                                                        NSLayoutFormatDirectionLeadingToTrailing ,
+                                                                        NSLayoutFormatDirectionLeftToRight,
+                                                                        NSLayoutFormatDirectionRightToLeft,  
+                                                                        NSLayoutFormatDirectionMask)];
+}
+
+- (NSArray*)instanceOfViews{
+    //TODO
+    if([self containsObjectForKey:CKStyleViewDescription]){
+        NSArray* ar = [self objectForKey:CKStyleViewDescription];
+        NSMutableArray* views = [NSMutableArray array];
+        for(id object in ar){
+            UIView* view = nil;
+            if([object isKindOfClass:[UIView class]]){
+                view = (UIView*)object;
+            }else if([object isKindOfClass:[NSDictionary class]]){
+                view = [NSValueTransformer objectFromDictionary:object];
+            }else{
+                NSAssert(NO,@"Non supported format");
+            }
+            [views addObject:view];
+        }
+        return views;
+    }
+    return nil;
+}
+
+- (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views{
+    @try{
+    if([self containsObjectForKey:CKStyleAutoLayoutConstraints]){
+        NSMutableArray* constraints = [NSMutableArray array];
+        NSArray* constraintsDefinition = [self objectForKey:CKStyleAutoLayoutConstraints];
+        for(id visualFormatObject in constraintsDefinition){
+            if([visualFormatObject isKindOfClass:[NSString class]]){
+                NSString* format = visualFormatObject;
+                NSArray* c = [NSLayoutConstraint constraintsWithVisualFormat:format options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views];
+                [constraints addObjectsFromArray:c];
+            }else if([visualFormatObject isKindOfClass:[NSDictionary class]]){
+                if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutFormat]){
+                    NSLayoutFormatOptions options = NSLayoutFormatDirectionLeadingToTrailing;
+                    NSString* format = nil;
+                    
+                    if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutFormatOption]){
+                        options = [visualFormatObject layoutFormatOption];
+                    }
+                    format = [visualFormatObject objectForKey:CKStyleAutoLayoutFormat];
+                    
+                    NSArray* c = [NSLayoutConstraint constraintsWithVisualFormat:format options:options metrics:nil views:views];
+                    [constraints addObjectsFromArray:c];
+                }else if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutHugging]){
+                    NSArray* ar = [visualFormatObject objectForKey:CKStyleAutoLayoutHugging];
+                    
+                    NSString* viewName = [ar objectAtIndex:0];
+                    UILayoutPriority priority = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:1]
+                                                                       withEnumDescriptor:CKEnumDefinition(@"UILayoutPriority",UILayoutPriorityRequired,                    UILayoutPriorityDefaultHigh,                           UILayoutPriorityDefaultLow,                          UILayoutPriorityFittingSizeLevel)
+                                                                                  bitMask:YES];
+                    
+                    UILayoutConstraintAxis axis = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:2]
+                                                                         withEnumDescriptor:CKEnumDefinition(@"UILayoutConstraintAxis",
+                                                                                                             UILayoutConstraintAxisHorizontal,UILayoutConstraintAxisVertical)
+                                                                                    bitMask:YES];
+                    [[views objectForKey:viewName] setContentHuggingPriority:priority forAxis:axis];
+                }
+                else if([visualFormatObject containsObjectForKey:CKStyleAutoLayoutCompression]){
+                    NSArray* ar = [visualFormatObject objectForKey:CKStyleAutoLayoutCompression];
+                    
+                    NSString* viewName = [ar objectAtIndex:0];
+                    UILayoutPriority priority = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:1]
+                                                                       withEnumDescriptor:CKEnumDefinition(@"UILayoutPriority",UILayoutPriorityRequired,                    UILayoutPriorityDefaultHigh,                           UILayoutPriorityDefaultLow,                          UILayoutPriorityFittingSizeLevel)
+                                                                                  bitMask:YES];
+                    
+                    UILayoutConstraintAxis axis = [NSValueTransformer convertEnumFromObject:[ar objectAtIndex:2]
+                                                                         withEnumDescriptor:CKEnumDefinition(@"UILayoutConstraintAxis",
+                                                                                                             UILayoutConstraintAxisHorizontal,UILayoutConstraintAxisVertical)
+                                                                                    bitMask:YES];
+                    [[views objectForKey:viewName] setContentCompressionResistancePriority:priority forAxis:axis];
+                }
+            }
+            
+        }
+        
+        return constraints;
+    }
+    }
+    @catch (NSException* exception) {
+        CKDebugLog(@"%@",exception);
+    }
+    return nil;
+}
+
 @end
 
+static char kUIViewNameKey;
+
 @implementation UIView (CKStyle)
+@dynamic name;
+
+/*
+- (BOOL)translatesAutoresizingMaskIntoConstraints{
+    return NO;
+}*/
+
+- (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive{
+    [self setTranslatesAutoresizingMaskIntoConstraints:flag];
+    if(recursive){
+        for(UIView* view in [self subviews]){
+            [view setTranslatesAutoresizingMaskIntoConstraints:flag recursive:recursive];
+        }
+    }
+}
+
+- (void)setName:(NSString *)name{
+    objc_setAssociatedObject(self, 
+                             &kUIViewNameKey,
+                             name,
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString*)name{
+    return objc_getAssociatedObject(self, &kUIViewNameKey);
+}
+
 
 + (CKStyleView*)gradientView:(UIView*)view{
 	if([view isKindOfClass:[CKStyleView class]])
@@ -221,6 +362,7 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 			if([myViewStyle isEmpty] == NO){
 				UIView* backgroundView = view;
 				BOOL opaque = YES;
+
 				
 				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
 				CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
@@ -421,6 +563,42 @@ NSString* CKStyleSeparatorStyle = @"separatorStyle";
 	return NO;
 }
 
+
+- (UIView*)viewWithKeyPath:(NSString*)keyPath{
+    NSArray* ar = [keyPath componentsSeparatedByString:@"."];
+    UIView* currentView = self;
+    for(NSString* key in ar){
+        UIView* oldCurrentView = currentView;
+        
+        NSArray* propertyNames = [currentView allPropertyNames];
+        if([propertyNames indexOfObject:key] != NSNotFound){
+            currentView = [currentView valueForKey:key];
+        }else{
+            for(UIView* view in [currentView subviews]){
+                if([[view name]isEqualToString:key]){
+                    currentView = view;
+                    break;
+                }
+            }
+        }
+        
+        NSAssert(currentView != oldCurrentView, @"Could not find view for keypath : %@ in %@",keyPath,self);
+    }
+    
+    return currentView;
+}
+
+
+- (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico{
+    if([self name]){
+        [dico setObject:self forKey:[self name]];
+    }
+    
+    for(UIView* subview in [self subviews]){
+        [subview populateViewDictionaryForVisualFormat:dico];
+    }
+}
+
 @end
 
 
@@ -522,6 +700,11 @@ static char NSObjectAppliedStyleObjectKey;
             continue;
         }
         
+        //Handle special cases for view property in CKItemViewController !
+        if([self isKindOfClass:[CKItemViewController class]] &&
+           [descriptor.name isEqualToString:@"view"]){
+            continue;
+        }
         
 		UIView* view = nil;
         if([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){

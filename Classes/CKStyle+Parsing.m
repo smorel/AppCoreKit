@@ -75,6 +75,17 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	return result;
 }
 
+- (NSInteger) bitMaskValueForKey:(NSString*)key withEnumDescriptor:(CKEnumDescriptor*)enumDescriptor{
+	id object = [self objectForKey:key];
+    if(!object) return 0;
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object intValue];
+	}
+	NSInteger result = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:enumDescriptor bitMask:YES];
+	[self setObject:[NSNumber numberWithInt:result] forKey:key];
+	return result;
+}
+
 - (CGSize) cgSizeForKey:(NSString*)key{
 	id object = [self objectForKey:key];
     if(!object) return CGSizeMake(0,0);
