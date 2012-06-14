@@ -76,7 +76,6 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             
             [self setHighlighted:highlighted inView:self.oldView];
             [self setHighlighted:highlighted inView:self.tableViewCell.backgroundView];
-            [self setHighlighted:highlighted inView:self.tableViewCell.selectedBackgroundView];
             
             UIGraphicsBeginImageContextWithOptions(self.tableViewCell.backgroundView.bounds.size,
                                                    self.tableViewCell.backgroundView.isOpaque, 0);
