@@ -20,6 +20,16 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 +(UIImage *)imageNamed:(NSString *)name {
+    if ([[UIScreen mainScreen] scale] == 2) {
+        if (![[name pathExtension] isEqualToString:@""]) {
+            NSString *pathExtension = [name pathExtension];
+            name = [[[name stringByDeletingPathExtension] stringByAppendingString:@"@2x"] stringByAppendingPathExtension:pathExtension];
+        }
+        else
+            name = [name stringByAppendingString:@"@2x"];
+    }
+    
+    
     NSURL *imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:[name pathExtension]];
     if (!imageURL)
         imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:@"png"];
@@ -29,7 +39,8 @@
     if (imageURL == nil)
         return nil;
     
-    return [[[UIImage alloc] initWithContentsOfFile:imageURL.path] autorelease];
+    UIImage *image = [[[UIImage alloc] initWithContentsOfFile:imageURL.path] autorelease];
+    return image;
 }
 
 - (id)initWithContentsOfFile:(NSString *)path {
@@ -41,7 +52,25 @@
         [[CKLocalizationManager sharedManager] refreshUI];
     }];
     
-    return [self initWithData:[NSData dataWithContentsOfFile:localPath]];
+    CGDataProviderRef ref = CGDataProviderCreateWithCFData((CFDataRef) [NSData dataWithContentsOfFile:localPath]);
+    
+    CGImageRef imageRef = nil;
+    if ([[path pathExtension] compare:@"png" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        imageRef = CGImageCreateWithPNGDataProvider(ref, NULL, NO, kCGRenderingIntentDefault);
+    }
+    else if ([[path pathExtension] compare:@"png" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        imageRef = CGImageCreateWithJPEGDataProvider(ref, NULL, NO, kCGRenderingIntentDefault);
+    }
+    
+    CGFloat scale = 1;
+    if ([[UIScreen mainScreen] scale] == 2) {
+        if ([[path lastPathComponent] rangeOfString:@"@2x"].location != NSNotFound)
+            scale = 2;
+    }
+    
+    UIImage * anImage = [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+    
+    return anImage;
 }
 #pragma clang diagnostic pop
 #endif
