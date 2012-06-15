@@ -1081,8 +1081,6 @@
 		96E4D40215407D8600CCF421 /* UnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests.h; path = Classes/UnitTests.h; sourceTree = "<group>"; };
 		B01481171566A8FD000C1E1C /* CKWebRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequestManager.h; path = Classes/CKWebRequestManager.h; sourceTree = "<group>"; };
 		B01481181566A8FD000C1E1C /* CKWebRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequestManager.m; path = Classes/CKWebRequestManager.m; sourceTree = "<group>"; };
-		B02925CF15824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLiveProjectFileUpdateManager.h; path = Classes/CKLiveProjectFileUpdateManager.h; sourceTree = "<group>"; };
-		B02925D015824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLiveProjectFileUpdateManager.m; path = Classes/CKLiveProjectFileUpdateManager.m; sourceTree = "<group>"; };
 		B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+Upload.h"; path = "Classes/NSURLRequest+Upload.h"; sourceTree = "<group>"; };
 		B02B1F2E156C424E00A1C16A /* NSURLRequest+Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLRequest+Upload.m"; path = "Classes/NSURLRequest+Upload.m"; sourceTree = "<group>"; };
 		B02E75D31587E2B200A59A5A /* CKTableViewCellController+FlatHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+FlatHierarchy.h"; path = "Classes/CKTableViewCellController+FlatHierarchy.h"; sourceTree = "<group>"; };
@@ -1909,8 +1907,6 @@
 				B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */,
 				75A405ED13D8B6A300D932B0 /* CKCascadingTree.h */,
 				75A405EE13D8B6A300D932B0 /* CKCascadingTree.m */,
-				B02925CF15824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.h */,
-				B02925D015824E7A00DF9A76 /* CKLiveProjectFileUpdateManager.m */,
 			);
 			name = CascadingTree;
 			sourceTree = "<group>";
