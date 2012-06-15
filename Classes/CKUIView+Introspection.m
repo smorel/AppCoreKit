@@ -88,7 +88,12 @@
 																		   withClass:[UIColor class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
 																			readOnly:NO]];
-	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:@"appliedStyle"
+#if !TARGET_IPHONE_SIMULATOR
+    NSString *appliedStyleDescription = @"appliedStyle";
+#else
+    NSString *appliedStyleDescription = @"debugAppliedStyle";
+#endif
+	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:appliedStyleDescription
 																		   withClass:[NSMutableDictionary class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeRetain
 																			readOnly:YES]];

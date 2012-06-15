@@ -180,8 +180,8 @@
 
 - (void)viewDidLoad{
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
-    if([controllerStyle containsObjectForKey:@"tableViewStyle"]){
-        self.style = [controllerStyle enumValueForKey:@"tableViewStyle" 
+    if([controllerStyle containsObjectForKey:@"style"]){
+        self.style = [controllerStyle enumValueForKey:@"style" 
                                    withEnumDescriptor:CKEnumDefinition(@"UITableViewStyle",
                                                                        UITableViewStylePlain, 
                                                                        UITableViewStyleGrouped)];
@@ -243,6 +243,13 @@
     _tableViewContainer = nil;
     
     [super viewDidUnload];
+}
+
+
+- (void)updateStylesheets{
+    [self viewDidUnload];
+    [self viewDidLoad];
+    [self viewWillAppear:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
