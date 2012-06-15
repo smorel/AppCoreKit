@@ -119,7 +119,11 @@
 }
 
 + (CKTableViewCellController*)cellControllerForStylesheetInObject:(id)object{
+#if TARGET_IPHONE_SIMULATOR
+    NSMutableDictionary* styleSheet = [object debugAppliedStyle];
+#else
     NSMutableDictionary* styleSheet = [object appliedStyle];
+#endif
     if(styleSheet){
         NSString* title = [[[object appliedStylePath]componentsSeparatedByString:@"/"]componentsJoinedByString:@"\n"];
         CKTableViewCellController* cellController = [CKTableViewCellController cellControllerWithTitle:nil subtitle:title action:^(CKTableViewCellController* controller){
@@ -152,7 +156,12 @@
     [sectionIdentification insertCellController:[CKTableViewCellController cellControllerWithTitle:@"class" subtitle:[[object class]description] action:nil] atIndex:0];
     
     //SECTION FOR STYLESHEET
-    CKFormSection* styleSection = [object appliedStyle] ? [CKFormSection sectionWithCellControllers:
+#if TARGET_IPHONE_SIMULATOR
+    NSMutableDictionary* styleSheet = [object debugAppliedStyle];
+#else
+    NSMutableDictionary* styleSheet = [object appliedStyle];
+#endif
+    CKFormSection* styleSection = styleSheet ? [CKFormSection sectionWithCellControllers:
                                                            [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"] : nil;
     
     //SECTION FOR CLASS HIERARCHY

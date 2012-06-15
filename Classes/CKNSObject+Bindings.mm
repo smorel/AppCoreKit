@@ -183,7 +183,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	binder.keyPath1 = keyPath;
 	[binder setInstance2:object];
 	binder.keyPath2 = keyPath2;
-	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
+	[[CKBindingsManager defaultManager] bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
 }
 
@@ -199,7 +199,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	[binder setInstance:self];
 	binder.keyPath = keyPath;
 	binder.block = block;
-	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
+	[[CKBindingsManager defaultManager] bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
     
     if(execute){
