@@ -562,7 +562,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 			NSString* className = [CKCascadingTreeClassNamesCache objectForKey:type];
 			if(className == nil){
 				className = [type description];
-				[CKCascadingTreeClassNamesCache setObject:className forKey:[type copy]];
+				[CKCascadingTreeClassNamesCache setObject:className forKey:[[type copy] autorelease]];
 			}
 			
 			NSArray* formats = [allFormats objectForKey:type];
@@ -617,7 +617,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
         NSString* className = [CKCascadingTreeClassNamesCache objectForKey:type];
         if(className == nil){
             className = [type description];
-            [CKCascadingTreeClassNamesCache setObject:className forKey:[type copy]];
+            [CKCascadingTreeClassNamesCache setObject:className forKey:[[type copy] autorelease]];
         }
         
         id foundDico = [self objectForKey:className];
