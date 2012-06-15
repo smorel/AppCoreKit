@@ -197,10 +197,6 @@
             
             if([filter length] > 0 && [newObjectSection count] > 0){
                 [bController.view endEditing:YES];
-                
-                [bController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index] 
-                                      atScrollPosition:UITableViewScrollPositionTop
-                                              animated:YES];
             }
             
             [propertiesSection release];
