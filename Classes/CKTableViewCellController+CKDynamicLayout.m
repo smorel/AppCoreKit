@@ -575,7 +575,6 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 - (CGSize)computeSize{
     self.invalidatedSize = NO;
     
-    
 #ifdef __IPHONE_6_0
     //Using autolayout
     if([CKOSVersion() floatValue] >= 6 && ![self.view translatesAutoresizingMaskIntoConstraints]){
@@ -595,12 +594,12 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         return [view.contentView systemLayoutSizeFittingSize:CGSizeMake(view.contentView.width,60)];
     }else{
 #endif
-        
         return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
-        
+
 #ifdef __IPHONE_6_0
     }
 #endif
+    
 }
 
 

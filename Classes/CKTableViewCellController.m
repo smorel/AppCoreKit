@@ -48,17 +48,6 @@
 @property (nonatomic, retain) NSString* syncControllerViewBindingContextId;
 @end
 
-@interface UITableViewCell (CKAutoLayoutCompatibility)
-@end
-
-@implementation UITableViewCell(CKAutoLayoutCompatibility)
-
-- (void)layoutSubviews{
-    [super layoutSubviews];
-}
-
-@end
-
 @implementation CKUITableViewCell
 @synthesize delegate;
 @synthesize delegateRef = _delegateRef;
@@ -701,6 +690,7 @@
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     }
 
+    
     NSMutableDictionary* style = [self controllerStyle];
     
 #ifdef __IPHONE_6_0
@@ -720,8 +710,9 @@
         }
     }
     self.dataDrivenViews = views;
+     
     
-    #ifdef __IPHONE_6_0
+#ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
         [cell populateViewDictionaryForVisualFormat:viewsDictionary];

@@ -572,7 +572,7 @@ static char kUIViewNameKey;
 }
 
 
-- (UIView*)viewWithKeyPath:(NSString*)keyPath{
+- (id)viewWithKeyPath:(NSString*)keyPath{
     NSArray* ar = [keyPath componentsSeparatedByString:@"."];
     UIView* currentView = self;
     for(NSString* key in ar){

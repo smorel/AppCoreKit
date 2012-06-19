@@ -148,7 +148,7 @@ extern NSString* CKStyleAutoLayoutCompression;
 //private
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
 
-- (UIView*)viewWithKeyPath:(NSString*)keyPath;
+- (id)viewWithKeyPath:(NSString*)keyPath;
 - (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico;
 
 #ifdef __IPHONE_6_0
