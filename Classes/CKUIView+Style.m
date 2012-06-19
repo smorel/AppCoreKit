@@ -166,6 +166,8 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return str;
 }
 
+
+#ifdef __IPHONE_6_0
 - (NSLayoutFormatOptions)layoutFormatOption{
     return (NSLayoutFormatOptions)[self bitMaskValueForKey:CKStyleAutoLayoutFormatOption
                                     withEnumDescriptor:CKEnumDefinition(@"NSLayoutFormatOptions",
@@ -184,6 +186,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                                                                         NSLayoutFormatDirectionRightToLeft,  
                                                                         NSLayoutFormatDirectionMask)];
 }
+#endif
 
 - (NSArray*)instanceOfViews{
     //TODO
