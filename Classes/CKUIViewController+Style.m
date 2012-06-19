@@ -72,9 +72,11 @@ static char UIViewControllerDataDrivenViewsKey;
     
     NSMutableDictionary* style = [self controllerStyle];
     
+#ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         [self.view removeConstraints:[self.view constraints]];
     }
+#endif
     
     for(UIView* subview in self.dataDrivenViews){
         [subview removeFromSuperview];

@@ -338,6 +338,9 @@
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 - (UITableViewCell *)loadCell;
 
+
+@property(nonatomic,retain) NSArray* dataDrivenViews;
+
 @end
 
 @implementation CKTableViewCellController
@@ -366,6 +369,7 @@
 @synthesize hasCheckedStyleToReapply = _hasCheckedStyleToReapply;
 @synthesize textLabelStyle = _textLabelStyle;
 @synthesize detailTextLabelStyle = _detailTextLabelStyle;
+@synthesize dataDrivenViews = _dataDrivenViews;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -429,6 +433,8 @@
     _textLabelStyle = nil;
     [_detailTextLabelStyle release];
     _detailTextLabelStyle = nil;
+    [_dataDrivenViews release];
+    _dataDrivenViews = nil;
     
 	[super dealloc];
 }
@@ -697,12 +703,23 @@
 
     NSMutableDictionary* style = [self controllerStyle];
     
+#ifdef __IPHONE_6_0
+    if([CKOSVersion() floatValue] >= 6){
+        [cell.contentView removeConstraints:[self.view constraints]];
+    }
+#endif
+    
+    for(UIView* subview in self.dataDrivenViews){
+        [subview removeFromSuperview];
+    }
+    
     NSArray* views = [style instanceOfViews];
     if(views){
-        for(UIView* view in views){
-            [cell.contentView addSubview:view];
+        for(UIView* subview in views){
+            [cell.contentView addSubview:subview];
         }
     }
+    self.dataDrivenViews = views;
     
     #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
