@@ -30,8 +30,8 @@ typedef BOOL(^UIGestureRecognizerShouldBeginBlock)(UIGestureRecognizer* gestureR
 - (void)setBlock:(UIGestureRecognizerBlock)block{
     objc_setAssociatedObject(self, 
                              &UIGestureRecognizerBlockKey,
-                             [block copy],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                             block,
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (UIGestureRecognizerBlock)block{
@@ -41,8 +41,8 @@ typedef BOOL(^UIGestureRecognizerShouldBeginBlock)(UIGestureRecognizer* gestureR
 - (void)setShouldBeginBlock:(UIGestureRecognizerShouldBeginBlock)block{
     objc_setAssociatedObject(self, 
                              &UIGestureRecognizerShouldBeginBlockKey,
-                             [block copy],
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                             block,
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
     
     NSAssert(self.delegate == nil || self.delegate == self,@"We need to be our own delegate to manage this property");
     self.delegate = self;

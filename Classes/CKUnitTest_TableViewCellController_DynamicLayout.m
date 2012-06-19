@@ -76,7 +76,7 @@
         }
     }
     [form addSections:[NSArray arrayWithObject:section]];
-
+    
     return form;
 }
 
@@ -88,7 +88,7 @@
     CKFormSection* section = [CKFormSection section];
     
     CKEnumDescriptor* cellStylesEnumDescriptor = [CKUnitTest_TableViewCellController_DynamicLayout cellStylesEnumDescriptor];
-
+    
     CKUnitTest_TableViewCellController_DynamicLayout_Object *object = [[CKUnitTest_TableViewCellController_DynamicLayout_Object object]retain];//if not it will get killed !
     
     //Editable cells
@@ -133,6 +133,7 @@
     }
     
     [form addSections:[NSArray arrayWithObject:section]];
+    [object release];
     
     return form;
 }

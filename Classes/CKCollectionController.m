@@ -173,7 +173,7 @@
 						change:(NSDictionary *)change
 					   context:(void *)context {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         if(locked){
             changedWhileLocked = YES;
             return;
@@ -246,7 +246,7 @@
             [_delegate objectControllerDidEndUpdating:self];
         }
         //}
-    });
+        //});
 }
 
 - (void)lock{

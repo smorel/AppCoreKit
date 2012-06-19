@@ -120,7 +120,7 @@ NSMutableDictionary* CKObjectManager = nil;
 		//CKDebugLog(@"Warning : %@ object(s) found in domain '%@' with uniqueId '%@'",(([res count]==0) ? @"no" : "Several"),domain,theUniqueId);
 		return nil;
 	}
-	return [[res lastObject]item];	
+	return [(CKAttribute*)[res lastObject]item];	
 }
 
 + (id)releaseObject:(CKWeakRef*)weakRef{
@@ -146,7 +146,7 @@ NSMutableDictionary* CKObjectManager = nil;
 	CKStore* store = [CKStore storeWithDomainName:@"whatever"];
 	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",uniqueId] arguments:nil];
 	if([res count] == 1){
-		CKItem* item = (CKItem*)[[res lastObject]item];
+		CKItem* item = (CKItem*)[(CKAttribute*) [res lastObject]item];
 		return [NSObject objectFromDictionary:[item propertyListRepresentation]];
 	}
 	return nil;

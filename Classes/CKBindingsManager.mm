@@ -127,7 +127,6 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsForContext removeObjectForKey:context];
         if ([context isKindOfClass:[CKWeakRef class]]) {
             weakRefContext.erase([context object]);
-            [context release];
         }
 	}	
     

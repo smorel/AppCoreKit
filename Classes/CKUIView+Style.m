@@ -608,14 +608,21 @@ static char kUIViewNameKey;
 
 
 static char NSObjectAppliedStyleObjectKey;
+static char NSObjectDebugAppliedStyleObjectKey;
 
 @implementation NSObject (CKStyle)
 @dynamic appliedStyle;
+@dynamic debugAppliedStyle;
 
 - (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
 #if !TARGET_IPHONE_SIMULATOR
     objc_setAssociatedObject(self, 
                              &NSObjectAppliedStyleObjectKey,
+                             appliedStyle,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+#else
+    objc_setAssociatedObject(self, 
+                             &NSObjectDebugAppliedStyleObjectKey,
                              appliedStyle,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 #endif
@@ -625,8 +632,23 @@ static char NSObjectAppliedStyleObjectKey;
     return objc_getAssociatedObject(self, &NSObjectAppliedStyleObjectKey);
 }
 
+- (void)setDebugAppliedStyle:(NSMutableDictionary *)debugAppliedStyle {
+    objc_setAssociatedObject(self, 
+                             &NSObjectDebugAppliedStyleObjectKey,
+                             debugAppliedStyle,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableDictionary *)debugAppliedStyle {
+    return objc_getAssociatedObject(self, &NSObjectDebugAppliedStyleObjectKey);
+}
+
 - (NSString*)appliedStylePath{
+#if TARGET_IPHONE_SIMULATOR
+    NSMutableDictionary* style = [self debugAppliedStyle];
+#else
     NSMutableDictionary* style = [self appliedStyle];
+#endif
     return [style path];
 }
 
