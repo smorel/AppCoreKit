@@ -206,6 +206,8 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return nil;
 }
 
+
+#ifdef __IPHONE_6_0
 - (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views{
     @try{
     if([self containsObjectForKey:CKStyleAutoLayoutConstraints]){
@@ -268,6 +270,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     }
     return nil;
 }
+#endif
 
 @end
 
@@ -281,6 +284,7 @@ static char kUIViewNameKey;
     return NO;
 }*/
 
+#ifdef __IPHONE_6_0
 - (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive{
     [self setTranslatesAutoresizingMaskIntoConstraints:flag];
     if(recursive){
@@ -289,6 +293,7 @@ static char kUIViewNameKey;
         }
     }
 }
+#endif
 
 - (void)setName:(NSString *)name{
     objc_setAssociatedObject(self, 

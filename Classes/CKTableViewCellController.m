@@ -682,6 +682,7 @@
         }
     }
     
+    #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
         [cell populateViewDictionaryForVisualFormat:viewsDictionary];
@@ -705,6 +706,7 @@
             [cell.contentView addConstraints:constraints];
         }
     }
+    #endif
 }
 
 - (void)updateLayout:(id)value{

@@ -125,7 +125,10 @@ extern NSString* CKStyleAutoLayoutCompression;
 
 
 - (NSArray*)instanceOfViews;
+
+#ifdef __IPHONE_6_0
 - (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views;
+#endif
 
 @end
 
@@ -148,7 +151,9 @@ extern NSString* CKStyleAutoLayoutCompression;
 - (UIView*)viewWithKeyPath:(NSString*)keyPath;
 - (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico;
 
-- (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive NS_AVAILABLE_IOS(6_0);
+#ifdef __IPHONE_6_0
+- (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive;
+#endif
 
 @end
 

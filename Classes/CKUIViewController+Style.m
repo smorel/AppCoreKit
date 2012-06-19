@@ -88,6 +88,8 @@ static char UIViewControllerDataDrivenViewsKey;
     }
     self.dataDrivenViews = views;
     
+    
+#ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
         [self.view populateViewDictionaryForVisualFormat:viewsDictionary];
@@ -102,6 +104,7 @@ static char UIViewControllerDataDrivenViewsKey;
         }
         [self.view setNeedsUpdateConstraints];
     }
+#endif
     
     NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
