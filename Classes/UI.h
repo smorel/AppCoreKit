@@ -90,3 +90,4 @@
 #import "CKSegmentedViewController.h"
 
 #import "UIViewController+CKDeviceOrientation.h"
+#import "UIGestureRecognizer+CKBlockBasedInterface.h"
