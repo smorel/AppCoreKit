@@ -575,9 +575,10 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 - (CGSize)computeSize{
     self.invalidatedSize = NO;
     
+    
+#ifdef __IPHONE_6_0
     //Using autolayout
-    if([CKOSVersion() floatValue] >= 6
-       && ![self.view translatesAutoresizingMaskIntoConstraints]){
+    if([CKOSVersion() floatValue] >= 6 && ![self.view translatesAutoresizingMaskIntoConstraints]){
         UITableViewCell* view = (UITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
         if(!view){
             view = [[[UITableViewCell alloc]initWithStyle:self.cellStyle reuseIdentifier:[self identifier]]autorelease];
@@ -593,8 +594,13 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         view.contentView.width = [self contentViewWidth];
         return [view.contentView systemLayoutSizeFittingSize:CGSizeMake(view.contentView.width,60)];
     }else{
+#endif
+        
         return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
+        
+#ifdef __IPHONE_6_0
     }
+#endif
 }
 
 
