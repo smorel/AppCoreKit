@@ -645,10 +645,12 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (void)performLayout{
+#ifdef __IPHONE_6_0
     //Using autolayout
     if([CKOSVersion() floatValue] >= 6
        && ![self.view translatesAutoresizingMaskIntoConstraints])
         return;
+#endif
     
     
     CKTableViewCellStyle cellStyle = self.cellStyle;
