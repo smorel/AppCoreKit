@@ -63,13 +63,15 @@ static char NSTimerBlockPerformerKey;
 
 + (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti repeats:(BOOL)yesOrNo block:(void(^)(NSTimer* timer))block{
     NSTimerBlockPerformer* blockPerformer = [[[NSTimerBlockPerformer alloc]init]autorelease];
+    blockPerformer.block = block;
     NSTimer* timer = [NSTimer timerWithTimeInterval:ti target:blockPerformer selector:@selector(execute:) userInfo:nil repeats:yesOrNo];
     timer.blockPerformer = blockPerformer;
     return timer;
 }
-
+ 
 + (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)ti repeats:(BOOL)yesOrNo block:(void(^)(NSTimer* timer))block{
     NSTimerBlockPerformer* blockPerformer = [[[NSTimerBlockPerformer alloc]init]autorelease];
+    blockPerformer.block = block;
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:ti target:blockPerformer selector:@selector(execute:) userInfo:nil repeats:yesOrNo];
     timer.blockPerformer = blockPerformer;
     return timer;
