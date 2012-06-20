@@ -10,6 +10,7 @@
 
 @interface NSObject (CKSingleton)
 
++ (id)newSharedInstance;
 + (id)sharedInstance;
 
 @end

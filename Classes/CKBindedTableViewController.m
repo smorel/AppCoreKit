@@ -628,9 +628,9 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.editableType == CKBindedTableViewControllerEditingTypeNone
+    /*if(self.editableType == CKBindedTableViewControllerEditingTypeNone
        || self.editing == NO)
-        return NO;
+        return NO;*/
     
 	return [self isViewEditableAtIndexPath:indexPath];
 }

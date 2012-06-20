@@ -590,7 +590,9 @@ static char kUIViewNameKey;
             }
         }
         
-        NSAssert(currentView != oldCurrentView, @"Could not find view for keypath : %@ in %@",keyPath,self);
+        if(currentView == oldCurrentView){
+            CKDebugLog( @"Could not find view for keypath : %@ in %@",keyPath,self);
+        }
     }
     
     return currentView;
