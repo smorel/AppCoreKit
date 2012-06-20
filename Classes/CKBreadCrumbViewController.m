@@ -8,10 +8,6 @@
 
 #import "CKBreadCrumbViewController.h"
 
-@interface CKContainerViewController ()
-@property (nonatomic, readwrite) NSUInteger selectedIndex;
-@end
-
 @interface CKTabViewController ()
 @property (nonatomic, retain, readwrite) CKTabView *tabBar;
 @end

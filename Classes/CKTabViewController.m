@@ -16,11 +16,6 @@
 #import <objc/runtime.h>
 
 
-@interface CKContainerViewController ()
-@property (nonatomic, readwrite) NSUInteger selectedIndex;
-@end
-
-
 #define kCKTabViewDefaultHeight 49
 
 @implementation CKTabView

@@ -51,7 +51,6 @@ typedef void(^CKTransitionBlock)();
 @end
 
 @interface CKContainerViewController ()
-@property (nonatomic, readwrite) NSUInteger selectedIndex;
 @property (nonatomic, retain) UIView *containerView;
 @property (nonatomic, assign) BOOL needsToCallViewDidAppearOnSelectedController;
 @end
@@ -101,6 +100,19 @@ typedef void(^CKTransitionBlock)();
     
     if(self.viewIsOnScreen){
         [self showViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
+    }
+}
+
+- (void)setSelectedIndex:(NSUInteger)selectedIndex{
+    [self setSelectedIndex:selectedIndex withTransition:CKTransitionNone];
+}
+
+- (void)setSelectedIndex:(NSUInteger)theselectedIndex withTransition:(CKTransitionType)transition{
+    if(theselectedIndex < [self.viewControllers count]){
+        _selectedIndex = theselectedIndex;
+        if(self.viewIsOnScreen){
+            [self showViewControllerAtIndex:_selectedIndex withTransition:transition];
+        }
     }
 }
 
