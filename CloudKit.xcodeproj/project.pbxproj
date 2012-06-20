@@ -512,6 +512,8 @@
 		96CADE351486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE341486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h */; };
 		96CADE381486BDFF008A23E4 /* CKNSObject+Validation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE361486BDFC008A23E4 /* CKNSObject+Validation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CADE391486BDFF008A23E4 /* CKNSObject+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CADE371486BDFD008A23E4 /* CKNSObject+Validation.m */; };
+		96D2674215923B7700840A7F /* NSTimer+CKBlockBaseInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D2674015923B7700840A7F /* NSTimer+CKBlockBaseInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96D2674315923B7700840A7F /* NSTimer+CKBlockBaseInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2674115923B7700840A7F /* NSTimer+CKBlockBaseInterface.m */; };
 		96D4B83515125FD200B517A5 /* CKUIBarButtonItem+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D4B83315125FD200B517A5 /* CKUIBarButtonItem+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D4B83615125FD200B517A5 /* CKUIBarButtonItem+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* CKUIBarButtonItem+Additions.m */; };
 		96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1068,6 +1070,8 @@
 		96CADE341486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+CKRuntime_private.h"; path = "Classes/CKNSObject+CKRuntime_private.h"; sourceTree = "<group>"; };
 		96CADE361486BDFC008A23E4 /* CKNSObject+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+Validation.h"; path = "Classes/CKNSObject+Validation.h"; sourceTree = "<group>"; };
 		96CADE371486BDFD008A23E4 /* CKNSObject+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+Validation.m"; path = "Classes/CKNSObject+Validation.m"; sourceTree = "<group>"; };
+		96D2674015923B7700840A7F /* NSTimer+CKBlockBaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTimer+CKBlockBaseInterface.h"; path = "Classes/NSTimer+CKBlockBaseInterface.h"; sourceTree = "<group>"; };
+		96D2674115923B7700840A7F /* NSTimer+CKBlockBaseInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTimer+CKBlockBaseInterface.m"; path = "Classes/NSTimer+CKBlockBaseInterface.m"; sourceTree = "<group>"; };
 		96D4B83315125FD200B517A5 /* CKUIBarButtonItem+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUIBarButtonItem+Additions.h"; path = "Classes/CKUIBarButtonItem+Additions.h"; sourceTree = "<group>"; };
 		96D4B83415125FD200B517A5 /* CKUIBarButtonItem+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUIBarButtonItem+Additions.m"; path = "Classes/CKUIBarButtonItem+Additions.m"; sourceTree = "<group>"; };
 		96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFilteredCollection.h; path = Classes/CKFilteredCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1612,6 +1616,8 @@
 				7560DB3E13B8ED3600268D13 /* CKUIViewAutoresizing+Additions.h */,
 				7560DB4113B8ED3600268D13 /* CKCoreGraphics+Additions.h */,
 				7560DB4213B8ED3600268D13 /* CKCoreGraphics+Additions.m */,
+				96D2674015923B7700840A7F /* NSTimer+CKBlockBaseInterface.h */,
+				96D2674115923B7700840A7F /* NSTimer+CKBlockBaseInterface.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -2469,6 +2475,7 @@
 				9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */,
 				9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */,
 				B02E75D51587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.h in Headers */,
+				96D2674215923B7700840A7F /* NSTimer+CKBlockBaseInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2829,6 +2836,7 @@
 				9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */,
 				9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */,
 				B02E75D61587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.m in Sources */,
+				96D2674315923B7700840A7F /* NSTimer+CKBlockBaseInterface.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
