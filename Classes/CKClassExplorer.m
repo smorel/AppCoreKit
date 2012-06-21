@@ -116,9 +116,9 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-    CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
     
-    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;
@@ -126,7 +126,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
         return controller;
     }];
     
-    [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+    [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;
@@ -168,9 +168,9 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	
 	[_classesCollection addObjectsFromArray: [ar sortedArrayUsingFunction:&compareStrings context:nil] ];
 	
-	CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+	CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
     
-    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+    [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKClassExplorerCell";
         controller.flags = CKItemViewFlagSelectable;

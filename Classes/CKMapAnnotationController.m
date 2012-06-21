@@ -14,7 +14,7 @@
 #import <objc/runtime.h>
 #import "CKRuntime.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKBindedMapViewController.h"
+#import "CKMapCollectionViewController.h"
 
 @interface CKCalloutView : UIView
 @property (nonatomic,retain) UIView* calloutView;
@@ -100,8 +100,8 @@
     [super dealloc];
 }
 
-- (CKBindedMapViewController*)mapController{
-    return (CKBindedMapViewController*)[_annotationController containerController];
+- (CKMapCollectionViewController*)mapController{
+    return (CKMapCollectionViewController*)[_annotationController containerController];
 }
 
 - (MKMapView*)mapView{
@@ -197,7 +197,7 @@
 	return theView;
 }
 
-#pragma mark CKItemViewController Implementation
+#pragma mark CKCollectionCellController Implementation
 
 - (UIView *)loadView{
 	MKAnnotationView* view = [self loadAnnotationView];

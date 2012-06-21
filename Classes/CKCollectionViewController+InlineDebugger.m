@@ -1,5 +1,5 @@
 //
-//  CKItemViewContainerController+InlineDebugger.m
+//  CKCollectionViewController+InlineDebugger.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-10-17.
@@ -8,10 +8,10 @@
 
 #ifdef DEBUG
 
-#import "CKItemViewContainerController+InlineDebugger.h"
+#import "CKCollectionViewController+InlineDebugger.h"
 #import "CKGridTableViewCellController.h"
 
-@implementation CKItemViewContainerController (CKInlineDebugger)
+@implementation CKCollectionViewController (CKInlineDebugger)
 
 - (id)itemControllerForSubView:(UIView*)view{
     UIView* v = view;
@@ -82,12 +82,12 @@
 
 @end
 
-@implementation CKBindedGridViewController (CKInlineDebugger)
+@implementation CKGridCollectionViewController (CKInlineDebugger)
 
 - (id)subItemControllerForSubView:(UIView*)view inControllers:(NSArray*)itemViewControllers{
     UIView* v = view;
     while(v){
-        for(CKItemViewController* controller in itemViewControllers){
+        for(CKCollectionCellController* controller in itemViewControllers){
             UIView* controllerView = [controller view];
             if(controllerView == v){
                 return controller;

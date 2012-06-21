@@ -11,7 +11,7 @@
 #import "CKFormSectionBase_private.h"
 #import "CKFormBindedCollectionSection_private.h"
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
@@ -21,13 +21,13 @@
 
 //private interfaces
 
-@interface CKItemViewContainerController(CKItemViewControllerManagement)
+@interface CKCollectionViewController(CKCollectionCellControllerManagement)
 - (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
 
-@interface CKItemViewControllerFactory ()
+@interface CKCollectionCellControllerFactory ()
 @property (nonatomic, assign) id objectController;
-- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (CKItemViewFlags)flagsForControllerIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (CGSize)sizeForControllerAtIndexPath:(NSIndexPath*)indexPath params:(NSMutableDictionary*)params;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
@@ -141,7 +141,7 @@
 
 //CKFormObjectControllerFactory
 
-@interface CKFormObjectControllerFactory : CKItemViewControllerFactory{
+@interface CKFormObjectControllerFactory : CKCollectionCellControllerFactory{
 }
 @end
 
@@ -176,7 +176,7 @@
 	_autoHideSectionHeaders = NO;
     _validationEnabled = NO;
     self.style = UITableViewStyleGrouped;
-    _scrollingPolicy = CKBindedTableViewControllerScrollingPolicyResignResponder;
+    _scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyResignResponder;
 }
 
 - (void)setValidationEnabled:(BOOL)validationEnabled{

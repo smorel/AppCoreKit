@@ -14,7 +14,7 @@
 
 /** TODO
  */
-extern NSString* CKStyleCellType;
+extern NSString* CKStyleCellStyle;
 
 /** TODO
  */
@@ -60,7 +60,7 @@ extern NSString* CKStyleCellFlags;
 
 /** TODO
  */
-@interface CKItemViewController (CKStyle)
+@interface CKCollectionCellController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view;
 - (NSMutableDictionary*)controllerStyle;

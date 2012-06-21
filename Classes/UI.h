@@ -12,18 +12,19 @@
 #import "CKUIViewController.h"
 #import "UINavigationController+CKBlockBasedDelegate.h"
 
-#import "CKItemViewController.h"
-#import "CKItemViewContainerController.h"
+#import "CKCollectionCellController.h"
+#import "CKCollectionCellControllerFactory.h"
+#import "CKCollectionViewController.h"
 
 #import "CKCarouselView.h"
-#import "CKBindedCarouselViewController.h"
+#import "CKCarouselCollectionViewController.h"
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKTableViewCellController+CKBlockBasedInterface.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableViewController.h"
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKOptionTableViewController.h"
 #import "CKClassExplorer.h"
 
@@ -33,7 +34,7 @@
 #import "CKTableViewCellController+Menus.h"
 #import "CKViewControllerCellController.h"
 
-#import "CKCollectionCellController.h"
+#import "CKCollectionTableViewCellController.h"
 
 #import "CKPropertyGridCellController.h"
 #import "CKNSDatePropertyCellController.h"
@@ -47,8 +48,8 @@
 #import "CKUIColorPropertyCellController.h"
 #import "CKUIImagePropertyCellController.h"
 
-#import "CKBindedMapViewController.h"
-#import "CKBindedGridViewController.h"
+#import "CKMapCollectionViewController.h"
+#import "CKGridCollectionViewController.h"
 #import "CKGridTableViewCellController.h"
 
 #import "CKActionSheet.h"

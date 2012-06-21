@@ -10,8 +10,8 @@
 #import "CKUIView+Positioning.h"
 #import "CKContainerViewController.h"
 
-@interface CKItemViewController()
-@property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
+@interface CKCollectionCellController()
+@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
 @property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
@@ -102,7 +102,7 @@
     [_viewController setContainerViewController:self.containerController];
 }
 
-- (void)setContainerController:(CKItemViewContainerController *)containerController{
+- (void)setContainerController:(CKCollectionViewController *)containerController{
     [super setContainerController:containerController];
     [_viewController setContainerViewController:containerController];
 }

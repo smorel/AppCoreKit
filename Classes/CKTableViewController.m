@@ -15,7 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
 
-@interface CKItemViewContainerController ()
+@interface CKCollectionViewController ()
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 @end
 
@@ -378,7 +378,7 @@
 	self.selectedIndexPath = indexPath;
 }
 
-#pragma mark CKItemViewContainerController Implementation
+#pragma mark CKCollectionViewController Implementation
 
 - (NSArray*)visibleIndexPaths{
 	return [self.tableView indexPathsForVisibleRows];

@@ -2,137 +2,241 @@
 //  CKCollectionCellController.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-03-23.
+//  Created by Sebastien Morel on 11-05-25.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCollectionCellController.h"
-#import "CKFeedSource.h"
-#import "CKNSObject+Bindings.h"
-#import "CKLocalization.h"
-#import "CKBindedCarouselViewController.h"
-#import "CKCollection.h"
-#import "CKCollectionCellController+Style.h"
-#import "CKNSNotificationCenter+Edition.h"
+#import "CKCollectionViewController.h"
 #import "CKTableViewCellController+Style.h"
 
-#import "CKFormTableViewController.h"
-#import "CKFormBindedCollectionSection.h"
-
 #import "CKStyleManager.h"
+#import "CKNSObject+Bindings.h"
+#import "CKDebug.h"
 
-#define ACTIVITY_INDICATOR_TAG 98634
-
-@interface CKItemViewController()
-- (void)setContainerController:(CKItemViewContainerController*)c;
+@interface CKCollectionCellController()
+@property (nonatomic, retain) CKWeakRef *viewRef;
+@property (nonatomic, retain) CKWeakRef *weakParentController;
+@property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
+@property (nonatomic, retain) CKWeakRef *targetRef;
+@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@property (nonatomic, assign) BOOL isViewAppeared;
 @end
 
 
 @implementation CKCollectionCellController
 
-- (void)postInit{
-    [super postInit];
-    self.flags = CKItemViewFlagNone;
-}
+@synthesize name = _name;
+@synthesize value = _value;
+@synthesize indexPath = _indexPath;
+@synthesize containerController = _containerController;
+@synthesize view = _view;
+@synthesize createCallback = _createCallback;
+@synthesize initCallback = _initCallback;
+@synthesize setupCallback = _setupCallback;
+@synthesize selectionCallback = _selectionCallback;
+@synthesize accessorySelectionCallback = _accessorySelectionCallback;
+@synthesize becomeFirstResponderCallback = _becomeFirstResponderCallback;
+@synthesize resignFirstResponderCallback = _resignFirstResponderCallback;
+@synthesize layoutCallback = _layoutCallback;
+@synthesize viewRef = _viewRef;
+@synthesize weakParentController = _weakParentController;
+@synthesize viewDidAppearCallback = _viewDidAppearCallback;
+@synthesize viewDidDisappearCallback = _viewDidDisappearCallback;
+@synthesize targetRef = _targetRef;
+@synthesize isViewAppeared = _isViewAppeared;
+@synthesize deallocCallback = _deallocCallback;
 
-- (void)setContainerController:(CKItemViewContainerController*)c{
-    [super setContainerController:c];
-    if(self.parentTableView.pagingEnabled){
-        self.size = CGSizeMake(-1,-1);
-        return;
+@synthesize flags = _flags;
+@synthesize size = _size;
+
+- (void)dealloc {
+    if(_deallocCallback){
+        [_deallocCallback execute:self];
     }
-    self.size = CGSizeMake(320,44);
-}
-
-- (void)initTableViewCell:(UITableViewCell*)cell{
-	NSMutableDictionary* theStyle = [self controllerStyle];
+	[self clearBindingsContext];
 	
-	UIActivityIndicatorView* activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:theStyle.indicatorStyle] autorelease];
-	activityIndicator.center = cell.contentView.center;
-	activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    activityIndicator.tag = ACTIVITY_INDICATOR_TAG;
-	activityIndicator.hidden = YES;
+	[_value release];
+	[_indexPath release];
+	[_name release];
 	
-	[cell.contentView addSubview:activityIndicator];
-}
-
-//FIXME : UGLY TEMPORARY HACK
-- (BOOL)forceHidden{
-	if([self.containerController isKindOfClass:[CKBindedCarouselViewController class]])
-		return YES;
-	else if([self.containerController isKindOfClass:[CKTableViewController class]]){
-		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController ;
-		return tableViewController.tableView.pagingEnabled;
-	}
-	return NO;
-}
-
-- (void)update:(UITableViewCell*)view{
-	if(view == nil)
-		return;
+	[_accessorySelectionCallback release];
+	[_initCallback release];
+	[_setupCallback release];
+	[_selectionCallback release];
+	[_becomeFirstResponderCallback release];
+	[_resignFirstResponderCallback release];
+	[_createCallback release];
+	[_layoutCallback release];
+	[_viewRef release];
+	[_weakParentController release];
+	[_viewDidAppearCallback release];
+	[_viewDidDisappearCallback release];
+	[_targetRef release];
+    [_deallocCallback release];
 	
-	CKCollection* collection = (CKCollection*)self.value;
-	
-    UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[view.contentView viewWithTag:ACTIVITY_INDICATOR_TAG];
-	activityIndicator.hidden = [self forceHidden] || !collection.isFetching || view.frame.size.width <= 0 || view.frame.size.height <= 0;
-	if(!activityIndicator.hidden){
-		[activityIndicator startAnimating];
-	}
-	else{
-		[activityIndicator stopAnimating];
-	}
-	
-	NSMutableDictionary* theStyle = [self controllerStyle];
+	_containerController = nil;
     
-    NSInteger count = [collection count];
-    if([self.containerController isKindOfClass:[CKFormTableViewController class]]){
-        CKFormTableViewController* form = (CKFormTableViewController*)self.containerController;
-        CKFormSectionBase* section = [form sectionAtIndex:self.indexPath.section];
-        if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
-            CKFormBindedCollectionSection* collectionSection = (CKFormBindedCollectionSection*)section;
-            CKCollectionController* collectionController = collectionSection.objectController;
-            
-            count = (collectionController.maximumNumberOfObjectsToDisplay > 0) ? MIN(collectionController.maximumNumberOfObjectsToDisplay,count) : count;
-        }
+	[super dealloc];
+}
+
+- (id)init {
+	self = [super init];
+	if (self) {
+		[self postInit];
+	}
+	return self;
+}
+
+- (void)postInit{
+    _flags = CKItemViewFlagAll;
+    _size = CGSizeMake(320,44);
+    _isViewAppeared = NO;
+}
+
+- (void)setSize:(CGSize)s{
+    [self setSize:s notifyingContainerForUpdate:YES];
+}
+
+- (void)setSize:(CGSize)s notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate{
+    if(CGSizeEqualToSize(_size, s))
+        return;
+    
+    [self willChangeValueForKey:@"size"];
+    _size = s;
+    //this will tell the controller it needs to update without computing a new size.
+    if(notifyingContainerForUpdate && self.containerController){
+        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
     }
-	
-    view.textLabel.textAlignment = UITextAlignmentCenter;
-    view.textLabel.backgroundColor = [UIColor clearColor];
-    if(activityIndicator.hidden){
-        switch(count){
-            case 0:{
-                self.text = _(theStyle.noItemsMessage);
-                break;
-            }
-            case 1:{
-                self.text = _(theStyle.oneItemMessage);
-                break;
-            }
-            default:{
-                self.text = [NSString stringWithFormat:_(theStyle.manyItemsMessage),count];
-                break;
-            }
-        }
-    }else{
-       self.text = @" ";
+    [self didChangeValueForKey:@"size"];
+}
+
+//this will tell the controller it needs to update by computing a new size.
+- (void)invalidateSize{
+    if(self.containerController){
+        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
     }
 }
 
-- (void)internalUpdate:(id)value{
-	[self performSelectorOnMainThread:@selector(update:) withObject:self.tableViewCell waitUntilDone:NO];
+- (void)setView:(UIView *)view{
+	self.viewRef = [CKWeakRef weakRefWithObject:view];
 }
 
-- (void)setupCell:(UITableViewCell *)cell{
-	[super setupCell:cell];
-	
-	CKCollection* collection = (CKCollection*)self.value;
-	
-	[self update:cell];
-	
-	[cell beginBindingsContextByRemovingPreviousBindings];
-	[collection bind:@"isFetching" target:self action:@selector(internalUpdate:)];
-	[collection bind:@"count" target:self action:@selector(internalUpdate:)];
-	[cell endBindingsContext];
+- (UIView*)view{
+	return [_viewRef object];
+}
+
+- (void)setContainerController:(CKCollectionViewController *)c{
+	self.weakParentController = [CKWeakRef weakRefWithObject:c];
+}
+
+- (CKCollectionViewController*)containerController{
+	return (CKCollectionViewController*)[_weakParentController object];
+}
+
+//sequence : loadView, initView, applyStyle
+//when reusing : setupView
+
+- (UIView *)loadView{
+	NSAssert(NO,@"To implement in subclass");
+	return nil;
+}
+
+- (void)applyStyle{
+	[self applyStyle:[self controllerStyle] forView:self.view];
+}
+
+- (void)setupView:(UIView *)view{
+	if(_setupCallback != nil){
+		[_setupCallback execute:self];
+	}
+	//To implement in subclass
+}
+
+- (void)initView:(UIView*)view{
+	if(_initCallback != nil){
+		[_initCallback execute:self];
+	}
+    
+	[self applyStyle];
+}
+
+- (void)rotateView:(UIView*)view animated:(BOOL)animated{
+	//To implement in subclass
+}
+
+- (void)viewDidAppear:(UIView *)view{
+    if(!self.isViewAppeared){
+        if(_viewDidAppearCallback){
+            [_viewDidAppearCallback execute:self];
+        }
+        self.isViewAppeared = YES;
+    }
+}
+
+- (void)viewDidDisappear{
+    if(self.isViewAppeared){
+        if(_viewDidDisappearCallback){
+            [_viewDidDisappearCallback execute:self];
+        }
+        self.isViewAppeared = YES;
+    }
+}
+
+- (NSIndexPath *)willSelect{
+	return self.indexPath;
+}
+
+- (void)setTarget:(id)target{
+    if(!_targetRef){
+        self.targetRef = [CKWeakRef weakRefWithObject:target];
+    }
+    else{
+        _targetRef.object = target;
+    }
+}
+
+- (id)target{
+    return [_targetRef object];
+}
+
+- (void)didSelect{
+	if(_selectionCallback != nil){
+		[_selectionCallback execute:self];
+	}
+}
+
+- (void)didSelectAccessoryView{
+	if(_accessorySelectionCallback != nil){
+		[_accessorySelectionCallback execute:self];
+	}
+}
+
+- (NSString *)identifier {
+    if(_createCallback){
+        [_createCallback execute:self];
+    }
+	NSMutableDictionary* controllerStyle = [self controllerStyle];
+	return [NSString stringWithFormat:@"%@-<%p>",[[self class] description],controllerStyle];
+}
+
+- (void)didBecomeFirstResponder{
+	if(_becomeFirstResponderCallback != nil){
+		[_becomeFirstResponderCallback execute:self];
+	}
+}
+
+- (void)didResignFirstResponder{
+	if(_resignFirstResponderCallback != nil){
+		[_resignFirstResponderCallback execute:self];
+	}
+}
+
+
+- (void)setIndexPath:(NSIndexPath*)theindexPath{
+    [_indexPath release];
+    _indexPath = [[NSIndexPath indexPathForRow:[theindexPath row] inSection:[theindexPath section]]retain];
 }
 
 @end
+

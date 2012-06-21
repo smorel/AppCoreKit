@@ -12,7 +12,7 @@
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKUILabel+Style.h"
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import <objc/runtime.h>

@@ -137,8 +137,8 @@
     return nil;
 }
 
-+ (CKItemViewControllerFactoryItem*)factoryItemForClass{
-    return [CKItemViewControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithValue:YES] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
++ (CKCollectionCellControllerFactoryItem*)factoryItemForClass{
+    return [CKCollectionCellControllerFactoryItem itemForObjectWithPredicate:[NSPredicate predicateWithValue:YES] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.selectionStyle = UITableViewCellSelectionStyleNone;
         controller.text = [object description];
@@ -165,7 +165,7 @@
                                                            [NSArray arrayWithObject:[[object class]cellControllerForStylesheetInObject:object]] headerTitle:@"StyleSheet"] : nil;
     
     //SECTION FOR CLASS HIERARCHY
-    CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
     [factory addItem:[NSObject factoryItemForClass]];
     
     NSArray* inheritingClasses = [[NSObject superClassesForClass:[object class]]retain];//release in the debugger dealloc block.

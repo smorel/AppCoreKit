@@ -16,4 +16,3 @@
 #import "CKArrayCollection.h"
 #import "CKArrayProxyCollection.h"
 #import "CKUserDefaults.h"
-#import "CKItemViewControllerFactory.h"

@@ -7,7 +7,7 @@
 //
 
 #import "CKTableViewCellController+Responder.h"
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKNSObject+Invocation.h"
 
 
@@ -15,15 +15,15 @@
 
 @implementation CKTableViewCellController(CKResponder)
 
-+ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKItemViewContainerController*)controller{
-    if([controller isKindOfClass:[CKBindedTableViewController class]]){
-        CKBindedTableViewController* tableViewController = (CKBindedTableViewController*)controller;
++ (BOOL)hasResponderAtIndexPath:(NSIndexPath*)indexPath controller:(CKCollectionViewController*)controller{
+    if([controller isKindOfClass:[CKTableCollectionViewController class]]){
+        CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller;
         CKTableViewCellController* cellController = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
         if([cellController hasResponder] == YES)
             return YES;
     }
     else{
-        NSAssert(NO,@"CKTableViewCellNextResponder is supported only for CKBindedTableViewController yet");
+        NSAssert(NO,@"CKTableViewCellNextResponder is supported only for CKTableCollectionViewController yet");
     }
     return NO;
 }
@@ -31,7 +31,7 @@
 
 - (NSIndexPath*)findNextResponderWithScrollEnabled:(BOOL)enableScroll{
 	if([self.containerController isKindOfClass:[CKTableViewController class]]){
-        CKItemViewContainerController* parentController = (CKItemViewContainerController*)self.containerController;
+        CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;
 		NSInteger section = indexPath.section;
@@ -63,7 +63,7 @@
 
 - (NSIndexPath*)findPreviousResponderWithScrollEnabled:(BOOL)enableScroll{
 	if([self.containerController isKindOfClass:[CKTableViewController class]]){
-        CKItemViewContainerController* parentController = (CKItemViewContainerController*)self.containerController;
+        CKCollectionViewController* parentController = (CKCollectionViewController*)self.containerController;
         
 		NSIndexPath* indexPath = self.indexPath;
 		NSInteger section = indexPath.section;
@@ -93,8 +93,8 @@
 
 
 + (void)activateAfterDelay:(CKTableViewCellController*)controller indexPath:(NSIndexPath*)indexPath{
-	if([controller.containerController isKindOfClass:[CKBindedTableViewController class]]){
-		CKBindedTableViewController* tableViewController = (CKBindedTableViewController*)controller.containerController;
+	if([controller.containerController isKindOfClass:[CKTableCollectionViewController class]]){
+		CKTableCollectionViewController* tableViewController = (CKTableCollectionViewController*)controller.containerController;
 	
 		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
 		if(controllerNew != nil){

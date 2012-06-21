@@ -10,7 +10,7 @@
 #import "CKFormSectionBase_private.h"
 #import "CKFormTableViewController.h"
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
@@ -58,7 +58,7 @@
 }
 
 
-- (CKItemViewControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
+- (CKCollectionCellControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
     NSAssert(FALSE,@"Should not be called !");
     return nil;
 }

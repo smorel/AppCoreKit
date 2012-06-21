@@ -732,8 +732,8 @@ static char NSObjectDebugAppliedStyleObjectKey;
             continue;
         }
         
-        //Handle special cases for view property in CKItemViewController !
-        if([self isKindOfClass:[CKItemViewController class]] &&
+        //Handle special cases for view property in CKCollectionCellController !
+        if([self isKindOfClass:[CKCollectionCellController class]] &&
            [descriptor.name isEqualToString:@"view"]){
             continue;
         }

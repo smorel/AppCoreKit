@@ -12,7 +12,7 @@
 #import "CKFormTableViewController_private.h"
 #import "CKFormSectionBase_private.h"
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKNSObject+Invocation.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
@@ -23,10 +23,10 @@
 
 //Private interfaces
 
-@interface CKItemViewControllerFactory ()
+@interface CKCollectionCellControllerFactory ()
 
 @property (nonatomic, assign) id objectController;
-- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
 
@@ -311,7 +311,7 @@
     [cellController autorelease];
 }
 
-- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     if (self = [super init]) {
         self.objectController = [CKCollectionController controllerWithCollection:collection];
         self.controllerFactory = factory;
@@ -333,24 +333,24 @@
 	return self;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
 	CKFormBindedCollectionSection* section = [[[CKFormBindedCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 	return section;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title{
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title{
 	CKFormBindedCollectionSection* section = [[[CKFormBindedCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 	section.headerTitle = title;
 	return section;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
 	CKFormBindedCollectionSection* section = [[[CKFormBindedCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
 	section.objectController.appendCollectionCellControllerAsFooterCell = appendCollectionCellControllerAsFooterCell;
 	return section;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
 	CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory appendCollectionCellControllerAsFooterCell:appendCollectionCellControllerAsFooterCell];
 	section.headerTitle = title;
 	return section;

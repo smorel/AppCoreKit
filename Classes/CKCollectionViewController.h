@@ -1,5 +1,5 @@
 //
-//  CKItemViewContainerController.h
+//  CKCollectionViewController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-05-25.
@@ -10,9 +10,9 @@
 #import "CKUIViewController.h"
 
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKCollection.h"
-#import "CKItemViewController.h"
+#import "CKCollectionCellController.h"
 #import "CKCollectionController.h"
 
 /* This controller implements the logic to deals with objects via objectcontroller and controllerfactory.
@@ -20,11 +20,11 @@
    and manage the item controller flags/selection/remove, ...
  
    By derivating this controller, you'll just have to implement the UIKit specific delegates and view creation and redirect
-   to the basic implementation of CKItemViewContainerController
+   to the basic implementation of CKCollectionViewController
  
    By this way we centralize all the document/viewcontroller logic taht is redondant in this class
  
-   For some specific implementations see : CKBindedTableViewController, CKBindedCarouselViewController and CKBindedMapViewController
+   For some specific implementations see : CKTableCollectionViewController, CKCarouselCollectionViewController and CKMapCollectionViewController
  
  
   *  derivating this controller means
@@ -48,33 +48,33 @@
 
 /** TODO
  */
-@interface CKItemViewContainerController : CKUIViewController<CKObjectControllerDelegate> {
+@interface CKCollectionViewController : CKUIViewController<CKObjectControllerDelegate> {
 	id _objectController;
-	CKItemViewControllerFactory* _controllerFactory;
+	CKCollectionCellControllerFactory* _controllerFactory;
 	
 	//Internal view/controller management
 	NSMutableDictionary* _viewsToControllers;
 	NSMutableDictionary* _viewsToIndexPath;
 	NSMutableDictionary* _indexPathToViews;
 	NSMutableArray* _weakViews;
-    NSMutableArray* _sectionsToControllers; //containing NSMutableArray of CKItemViewController
+    NSMutableArray* _sectionsToControllers; //containing NSMutableArray of CKCollectionCellController
 	
 	id _delegate;
 	int _numberOfObjectsToprefetch;
 }
 
 @property (nonatomic, retain) id objectController;
-@property (nonatomic, retain) CKItemViewControllerFactory* controllerFactory;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, assign) int numberOfObjectsToprefetch;
 
 @property (nonatomic, assign, readonly) BOOL rotating;
 
 //init
-- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
+- (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
 //setup
-- (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory;
+- (void)setupWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
 //update
 - (void)updateVisibleViewsIndexPath;
@@ -82,7 +82,7 @@
 - (void)updateViewsVisibility:(BOOL)visible;
 
 //view representation management
-- (CKItemViewController*)controllerAtIndexPath:(NSIndexPath *)indexPath;
+- (CKCollectionCellController*)controllerAtIndexPath:(NSIndexPath *)indexPath;
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath*)indexPathForView:(UIView*)view;
 - (NSArray*)visibleIndexPaths;
@@ -141,8 +141,8 @@
 
 /** TODO
  */
-@protocol CKItemViewContainerControllerDelegate
+@protocol CKCollectionViewControllerDelegate
 @optional
-- (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
-- (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectAccessoryViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)itemViewContainerController:(CKCollectionViewController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+- (void)itemViewContainerController:(CKCollectionViewController*)controller didSelectAccessoryViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
 @end

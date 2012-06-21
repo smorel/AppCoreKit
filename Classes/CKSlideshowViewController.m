@@ -13,13 +13,13 @@
 #import "CKBundle.h"
 
 //CKObjectTableViewController private interface
-@interface CKBindedTableViewController ()
+@interface CKTableCollectionViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @end
 
 
 @interface CKSlideShowViewController ()
-- (CKItemViewControllerFactoryItem*)defaultItemForURL;
+- (CKCollectionCellControllerFactoryItem*)defaultItemForURL;
 @property (nonatomic, assign) BOOL controlsAreDisplayed;
 - (void)updateTitle;
 
@@ -54,12 +54,12 @@
 }
 
 - (id)initWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex{
-    CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+    CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
     [factory addItem:[self defaultItemForURL]];
     return [self initWithCollection:collection factory:factory startAtIndex:startIndex];
 }
 
-- (id)initWithCollection:(CKCollection *)collection factory:(CKItemViewControllerFactory*)factory startAtIndex:(NSInteger)startIndex{
+- (id)initWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex{
     self = [self initWithCollection:collection factory:factory];
     self.indexPathToReachAfterRotation = [NSIndexPath indexPathForRow:startIndex inSection:0];
     return self;
@@ -81,10 +81,10 @@
     return [self initWithCollection:collection startAtIndex:startIndex];
 }
 
-- (CKItemViewControllerFactoryItem*)defaultItemForURL{
+- (CKCollectionCellControllerFactoryItem*)defaultItemForURL{
 #define ImageViewTag 55534
     
-    CKItemViewControllerFactoryItem* item = [CKItemViewControllerFactoryItem itemForObjectOfClass:[NSURL class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+    CKCollectionCellControllerFactoryItem* item = [CKCollectionCellControllerFactoryItem itemForObjectOfClass:[NSURL class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* controller = [CKTableViewCellController cellController];
         controller.name = @"CKSlideshowControllerURLCell";
         controller.flags = CKItemViewFlagNone;
@@ -109,7 +109,7 @@
         
         [controller setSizeBlock:^CGSize(CKTableViewCellController *controller) {
             CGSize tableViewSize = [controller parentTableView].frame.size;
-            if([(CKBindedTableViewController*)[controller parentTableViewController] orientation] == CKTableViewOrientationPortrait){
+            if([(CKTableCollectionViewController*)[controller parentTableViewController] orientation] == CKTableViewOrientationPortrait){
                 return CGSizeMake(tableViewSize.width, tableViewSize.height);
             }
             else{

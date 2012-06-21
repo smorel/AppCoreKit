@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "CKItemViewController.h"
+#import "CKCollectionCellController.h"
 #import "CKUIViewController.h"
 
 /** TODO
@@ -31,7 +31,7 @@ typedef enum CKMapAnnotationStyle{
 
 /** TODO
  */
-@interface CKMapAnnotationController : CKItemViewController {
+@interface CKMapAnnotationController : CKCollectionCellController {
 	CKMapAnnotationStyle _style;
 }
 

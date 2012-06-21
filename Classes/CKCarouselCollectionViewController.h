@@ -1,5 +1,5 @@
 //
-//  CKBindedCarouselViewController.h
+//  CKCarouselCollectionViewController.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-07.
@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKItemViewContainerController.h"
+#import "CKCollectionViewController.h"
 #import "CKCarouselView.h"
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKCollection.h"
 
 
 /** TODO
  */
-@interface CKBindedCarouselViewController : CKItemViewContainerController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
+@interface CKCarouselCollectionViewController : CKCollectionViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
 	CKCarouselView* _carouselView;
 	
 	NSMutableDictionary* _headerViewsForSections;

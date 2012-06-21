@@ -92,8 +92,8 @@
         return subTitle;
     }
     
-    + (CKItemViewControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
-        return [CKItemViewControllerFactoryItem itemForObjectOfClass:[UIView class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+    + (CKCollectionCellControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
+        return [CKCollectionCellControllerFactoryItem itemForObjectOfClass:[UIView class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
             CKTableViewCellController* controller = [CKTableViewCellController cellController];
             
             controller.text = [UIView titleForView:object];
@@ -184,7 +184,7 @@
         CKArrayCollection* collection = [CKArrayCollection object];
         [UIView addView:view toCollection:collection];
         
-        CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
+        CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
         [factory addItem:[UIView factoryItemForSubViewInView:view]];
         
         CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];

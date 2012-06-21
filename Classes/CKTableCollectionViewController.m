@@ -1,12 +1,12 @@
 //
-//  CKBindedTableViewController.m
+//  CKTableCollectionViewController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-03-16.
 //  Copyright Wherecloud 2011. All rights reserved.
 //
 
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKNSDate+Conversions.h"
 #import "CKNSDate+Calculations.h"
 #import <objc/runtime.h>
@@ -24,10 +24,10 @@
 #import "CKRuntime.h"
 
 
-/********************************* CKBindedTableViewController  *********************************
+/********************************* CKTableCollectionViewController  *********************************
  */
 
-@interface CKBindedTableViewController ()
+@interface CKTableCollectionViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 @property (nonatomic, retain) NSIndexPath* selectedIndexPath;
 @property (nonatomic, assign, readwrite) int currentPage;
@@ -43,13 +43,13 @@
 - (void)adjustTableView;
 - (void)tableViewFrameChanged:(id)value;
 
-- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditingType)type animated:(BOOL)animated;
+- (void)createsAndDisplayEditableButtonsWithType:(CKTableCollectionViewControllerEditingType)type animated:(BOOL)animated;
 
 @end
 
 
 
-@implementation CKBindedTableViewController
+@implementation CKTableCollectionViewController
 @synthesize currentPage = _currentPage;
 @synthesize numberOfPages = _numberOfPages;
 @synthesize orientation = _orientation;
@@ -111,12 +111,12 @@
 	_currentPage = 0;
 	_numberOfPages = 0;
 	_scrolling = NO;
-	_editableType = CKBindedTableViewControllerEditingTypeNone;
+	_editableType = CKTableCollectionViewControllerEditingTypeNone;
 	_searchEnabled = NO;
 	_liveSearchDelay = 0.5;
 	_tableMaximumWidth = 0;
-    _scrollingPolicy = CKBindedTableViewControllerScrollingPolicyNone;
-    _snapPolicy = CKBindedTableViewControllerSnappingPolicyNone;
+    _scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyNone;
+    _snapPolicy = CKTableCollectionViewControllerSnappingPolicyNone;
     
     self.bindingContextForTableView = [NSString stringWithFormat:@"TableVisibility_<%p>",self];
 }
@@ -472,7 +472,7 @@
 	
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 		[self rotateSubViewsForCell:(UITableViewCell*)controller.view];
 	}
 }
@@ -628,7 +628,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    /*if(self.editableType == CKBindedTableViewControllerEditingTypeNone
+    /*if(self.editableType == CKTableCollectionViewControllerEditingTypeNone
        || self.editing == NO)
         return NO;*/
     
@@ -636,7 +636,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.editableType == CKBindedTableViewControllerEditingTypeNone
+    if(self.editableType == CKTableCollectionViewControllerEditingTypeNone
        || self.editing == NO)
         return NO;
     
@@ -740,13 +740,13 @@
 	return nil;
 }
 
-#pragma mark CKItemViewContainerController Implementation
+#pragma mark CKCollectionViewController Implementation
 
 - (void)updateVisibleViewsRotation{
     //Rotate views for visible controllers.
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:animated:)]){
 			[controller rotateView:controller.view animated:YES];
 			
@@ -954,26 +954,26 @@
 
 #pragma mark Edit Button Management
 
-- (void)createsAndDisplayEditableButtonsWithType:(CKBindedTableViewControllerEditingType)type animated:(BOOL)animated{
+- (void)createsAndDisplayEditableButtonsWithType:(CKTableCollectionViewControllerEditingType)type animated:(BOOL)animated{
     switch(type){
-        case CKBindedTableViewControllerEditingTypeLeft:{
+        case CKTableCollectionViewControllerEditingTypeLeft:{
             self.leftButton = self.navigationItem.leftBarButtonItem;
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
-        case CKBindedTableViewControllerEditingTypeRight:{
+        case CKTableCollectionViewControllerEditingTypeRight:{
             self.rightButton = self.navigationItem.rightBarButtonItem;
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
-        case CKBindedTableViewControllerEditingTypeNone:break;
+        case CKTableCollectionViewControllerEditingTypeNone:break;
 	}
 }
 
-- (void)setEditableType:(CKBindedTableViewControllerEditingType)theEditableType{
+- (void)setEditableType:(CKTableCollectionViewControllerEditingType)theEditableType{
     if(theEditableType != _editableType && self.viewIsOnScreen){
         switch(_editableType){
-            case CKBindedTableViewControllerEditingTypeLeft:{
+            case CKTableCollectionViewControllerEditingTypeLeft:{
                 if(self.leftButton){
                     [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
                 }
@@ -982,7 +982,7 @@
                 }
                 break;
             }
-            case CKBindedTableViewControllerEditingTypeRight:{
+            case CKTableCollectionViewControllerEditingTypeRight:{
                 if(self.rightButton){
                     [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
                 }
@@ -991,13 +991,13 @@
                 }
                 break;
             }
-            case CKBindedTableViewControllerEditingTypeNone:break;
+            case CKTableCollectionViewControllerEditingTypeNone:break;
         }
         
-        if(theEditableType != CKBindedTableViewControllerEditingTypeNone){
+        if(theEditableType != CKTableCollectionViewControllerEditingTypeNone){
             [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
         }
-        else if(theEditableType == CKBindedTableViewControllerEditingTypeNone){
+        else if(theEditableType == CKTableCollectionViewControllerEditingTypeNone){
             if([self isEditing]){
                 [self setEditing:NO animated:YES];
             }
@@ -1008,17 +1008,17 @@
 
 - (IBAction)edit:(id)sender{
     switch(_editableType){
-        case CKBindedTableViewControllerEditingTypeLeft:{
+        case CKTableCollectionViewControllerEditingTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
-        case CKBindedTableViewControllerEditingTypeRight:{
+        case CKTableCollectionViewControllerEditingTypeRight:{
             [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
             break;
         }
-        case CKBindedTableViewControllerEditingTypeNone:break;
+        case CKTableCollectionViewControllerEditingTypeNone:break;
 	}
 }
 
@@ -1137,10 +1137,10 @@
 
 - (void)executeScrollingPolicy{
     switch(_scrollingPolicy){
-        case CKBindedTableViewControllerScrollingPolicyNone:{
+        case CKTableCollectionViewControllerScrollingPolicyNone:{
             break;
         }
-        case CKBindedTableViewControllerScrollingPolicyResignResponder:{
+        case CKTableCollectionViewControllerScrollingPolicyResignResponder:{
             [self.view endEditing:YES];
             [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
             break;
@@ -1168,10 +1168,10 @@
 
 - (void)executeSnapPolicy{
     switch(_snapPolicy){
-        case CKBindedTableViewControllerSnappingPolicyNone:{
+        case CKTableCollectionViewControllerSnappingPolicyNone:{
             break;
         }
-        case CKBindedTableViewControllerSnappingPolicyCenter:{
+        case CKTableCollectionViewControllerSnappingPolicyCenter:{
             NSIndexPath* indexPath = [self snapIndexPath];
             if(indexPath != nil){
                 NSIndexPath * indexPath2 = [self tableView:self.tableView willSelectRowAtIndexPath:indexPath];
@@ -1186,16 +1186,16 @@
 
 - (void)tableViewFrameChanged:(id)value{
     switch(_snapPolicy){
-        case CKBindedTableViewControllerSnappingPolicyNone:{
+        case CKTableCollectionViewControllerSnappingPolicyNone:{
             break;
         }
-        case CKBindedTableViewControllerSnappingPolicyCenter:{
+        case CKTableCollectionViewControllerSnappingPolicyCenter:{
                 //FIXME : we do not take self.tableViewInsets in account here
             self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0,0);
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
-                && self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
+                && self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
                 [self selectRowAtIndexPath:self.selectedIndexPath animated:(self.state == CKUIViewControllerStateDidAppear) ? YES : NO];
             }
             
@@ -1247,7 +1247,7 @@
         if(self.state == CKUIViewControllerStateDidAppear ||
            self.state == CKUIViewControllerStateWillAppear){
             
-            if(self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
+            if(self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
                 CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
                 CGFloat offset = r.origin.y + (r.size.height / 2.0);
                 offset -= self.tableView.contentInset.top;
@@ -1267,7 +1267,7 @@
     if([self isValidIndexPath:indexPath]){
         if(self.state == CKUIViewControllerStateDidAppear ||
            self.state == CKUIViewControllerStateWillAppear){
-            if(self.snapPolicy == CKBindedTableViewControllerSnappingPolicyCenter){
+            if(self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
                 CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
                 CGFloat offset = r.origin.y + (r.size.height / 2.0);
                 offset -= self.tableView.contentInset.top;

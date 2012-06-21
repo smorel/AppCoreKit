@@ -153,12 +153,12 @@
 	}
 	
 	if([thevalue isKindOfClass:[CKCollection class]]){
-        CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
-        [factory addItemForObjectOfClass:[NSNumber class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSNumberPropertyCellController cellController];}];
-        [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSStringPropertyCellController cellController];}];
-        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {return [CKNSObjectPropertyCellController cellController];}];
+        CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
+        [factory addItemForObjectOfClass:[NSNumber class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {return [CKNSNumberPropertyCellController cellController];}];
+        [factory addItemForObjectOfClass:[NSString class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {return [CKNSStringPropertyCellController cellController];}];
+        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {return [CKNSObjectPropertyCellController cellController];}];
         
-        CKBindedTableViewController* controller = [[[CKBindedTableViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
+        CKTableCollectionViewController* controller = [[[CKTableCollectionViewController alloc]initWithCollection:thevalue factory:factory]autorelease];
         controller.style = [[(CKTableViewController*)self.containerController tableView]style];
         controller.name = @"CKInlineDebugger";
 		controller.title = self.tableViewCell.textLabel.text;
@@ -207,7 +207,7 @@
 	[property setValue:nil];
 }
 
-- (void)itemViewContainerController:(CKItemViewContainerController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
+- (void)itemViewContainerController:(CKCollectionViewController*)controller didSelectViewAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object{
 	CKClassExplorer* classExplorer = (CKClassExplorer*)controller;
 	
 	

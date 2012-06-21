@@ -11,12 +11,12 @@
 #import "CKStyleView.h"
 #import "CKNSObject+Bindings.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKBindedGridViewController.h"
+#import "CKGridCollectionViewController.h"
 
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
 
-@interface CKItemViewController()
+@interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @end
 
@@ -69,7 +69,7 @@
             
             NSIndexPath* indexPath = self.indexPath;
             
-            CKItemViewController* controller = [self.cellControllers objectAtIndex:i];
+            CKCollectionCellController* controller = [self.cellControllers objectAtIndex:i];
             [controller setIndexPath:indexPath];
         }
     }
@@ -204,7 +204,7 @@
 - (void)updateViewControllers{
     NSMutableArray* controllers = [NSMutableArray array];
     
-    CKBindedGridViewController* parentGrid = (CKBindedGridViewController*)self.containerController;
+    CKGridCollectionViewController* parentGrid = (CKGridCollectionViewController*)self.containerController;
     
     NSArray* objects = (NSArray*)self.value;
     int i =0;
@@ -238,14 +238,14 @@
 
 - (void)viewDidAppear:(UIView *)view{
     [super viewDidAppear:view];
-    for(CKItemViewController* controller in self.cellControllers){
+    for(CKCollectionCellController* controller in self.cellControllers){
         [controller viewDidAppear:view];
     }
 }
 
 - (void)viewDidDisappear{
     [super viewDidDisappear];
-    for(CKItemViewController* controller in self.cellControllers){
+    for(CKCollectionCellController* controller in self.cellControllers){
         [controller viewDidDisappear];
     }
 }

@@ -9,7 +9,7 @@
 //  Copyright 2009 toxicsoftware.com. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#import "CKItemViewContainerController.h"
+#import "CKCollectionViewController.h"
 
 @interface CKTableView : UITableView
 @property(nonatomic,assign) BOOL sizeChangedWhileReloading;
@@ -30,7 +30,7 @@ typedef enum {
 
 /** TODO
  */
-@interface CKTableViewController : CKItemViewContainerController <UITableViewDataSource, UITableViewDelegate> {
+@interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> {
 	UIView *_backgroundView;
 	UIView *_tableViewContainer;
 	CKTableView *_tableView;

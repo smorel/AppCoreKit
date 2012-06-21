@@ -12,7 +12,7 @@
 #import "CKTableViewCellController+CKDynamicLayout.h"
 
 #import "CKUILabel+Style.h"
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import "CKTableViewCellController+FlatHierarchy.h"
@@ -36,7 +36,7 @@
 #define DisclosureImageViewTag  8888991
 #define CheckmarkImageViewTag   8888992
 
-@interface CKItemViewController()
+@interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
 @property (nonatomic, assign) BOOL isViewAppeared;
 @end
@@ -446,7 +446,7 @@
 - (CKTableViewCellStyle)cellStyle{
     NSMutableDictionary* style = [self controllerStyle];
     if(style && ![style isEmpty]){
-        if([style containsObjectForKey:CKStyleCellType]){
+        if([style containsObjectForKey:CKStyleCellStyle]){
             return [style cellStyle];
         }
     }
@@ -578,7 +578,7 @@
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style {
 	NSMutableDictionary* controllerStyle = [self controllerStyle];
 	CKTableViewCellStyle thecellStyle = style;
-	if([controllerStyle containsObjectForKey:CKStyleCellType]){
+	if([controllerStyle containsObjectForKey:CKStyleCellStyle]){
 		thecellStyle = [controllerStyle cellStyle];
     }
     
@@ -607,7 +607,7 @@
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         if(self.createCallback){
             [self.createCallback execute:self];
-            if([controllerStyle containsObjectForKey:CKStyleCellType]){
+            if([controllerStyle containsObjectForKey:CKStyleCellStyle]){
                 self.cellStyle = [controllerStyle cellStyle];
             }
         }
@@ -778,7 +778,7 @@
 }
 
 
-#pragma mark CKItemViewController Implementation
+#pragma mark CKCollectionCellController Implementation
 
 - (UIView *)loadView{
     /*[CATransaction begin];

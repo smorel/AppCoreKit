@@ -1,12 +1,12 @@
 //
-//  CKCollectionCellController+Style.m
+//  CKCollectionTableViewCellController+Style.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-27.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKCollectionCellController+Style.h"
+#import "CKCollectionTableViewCellController+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKLocalization.h"
@@ -16,7 +16,7 @@ NSString* CKStyleOneItemMessage = @"oneItemMessage";
 NSString* CKStyleManyItemsMessage = @"manyItemsMessage";
 NSString* CKStyleIndicatorStyle = @"indicatorStyle";
 
-@implementation NSMutableDictionary (CKCollectionCellControllerStyle)
+@implementation NSMutableDictionary (CKCollectionTableViewCellControllerStyle)
 
 - (NSString*)noItemsMessage{
 	NSString* str = [self stringForKey:CKStyleNoItemsMessage];

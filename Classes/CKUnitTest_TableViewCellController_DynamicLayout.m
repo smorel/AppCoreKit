@@ -83,7 +83,7 @@
 
 + (CKUIViewController*)viewControllerToTestPropertyCellControllers{
     CKFormTableViewController* form = [CKFormTableViewController controller];
-    form.editableType = CKBindedTableViewControllerEditingTypeRight;
+    form.editableType = CKTableCollectionViewControllerEditingTypeRight;
     
     CKFormSection* section = [CKFormSection section];
     

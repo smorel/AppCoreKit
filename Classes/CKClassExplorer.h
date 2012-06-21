@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKArrayCollection.h"
 #import "CKCallback.h"
 
@@ -23,7 +23,7 @@ typedef enum CKClassExplorerType{
 
 /** TODO
  */
-@interface CKClassExplorer : CKBindedTableViewController {
+@interface CKClassExplorer : CKTableCollectionViewController {
 	CKArrayCollection* _classesCollection;
 	id _userInfo;
 	NSString* _className;

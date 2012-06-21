@@ -1,24 +1,24 @@
 //
-//  CKItemViewContainerController.m
+//  CKCollectionViewController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-05-25.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKItemViewContainerController.h"
+#import "CKCollectionViewController.h"
 
 #import "CKWeakRef.h"
 #import "CKFormTableViewController.h"
 
 //private interfaces
 
-@interface CKItemViewController()
+@interface CKCollectionCellController()
 @property (nonatomic, copy, readwrite) NSIndexPath *indexPath;
-@property (nonatomic, assign, readwrite) CKItemViewContainerController* containerController;
+@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
 @end
 
-@interface CKItemViewContainerController ()
+@interface CKCollectionViewController ()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
 @property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
@@ -30,29 +30,29 @@
 
 @end
 
-@interface CKItemViewControllerFactory ()
+@interface CKCollectionCellControllerFactory ()
 
-- (CKItemViewControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+- (CKCollectionCellControllerFactoryItem*)factoryItemForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
 
-@interface CKItemViewContainerController(CKItemViewControllerManagement)
-- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@interface CKCollectionViewController(CKCollectionCellControllerManagement)
+- (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 - (void) createsItemViewControllers;
 - (void) insertItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void) removeItemViewControllersForObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths;
 - (void) updateItemViewControllersVisibleViewsIndexPath;
 - (void) updateItemViewControllersVisibility:(BOOL)visible;
-- (CKItemViewController*) itemViewControllerAtIndexPath:(NSIndexPath*)indexPath;
+- (CKCollectionCellController*) itemViewControllerAtIndexPath:(NSIndexPath*)indexPath;
 - (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
 - (void) removeItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
 
-//CKItemViewContainerController
+//CKCollectionViewController
 
-@implementation CKItemViewContainerController
+@implementation CKCollectionViewController
 
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
@@ -80,13 +80,13 @@
 	return self;
 }
 
-- (id)initWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     self = [self init];
 	[self setupWithCollection:collection factory:factory];
 	return self;
 }
 
-- (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (void)setupWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
 	self.controllerFactory = factory;
     self.objectController = [[[CKCollectionController alloc]initWithCollection:collection]autorelease];
 }
@@ -246,7 +246,7 @@
 - (void)updateVisibleViewsRotation{
 	NSArray *visibleIndexPaths = [self visibleIndexPaths];
 	for (NSIndexPath *indexPath in visibleIndexPaths) {
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 		if([controller respondsToSelector:@selector(rotateView:animated:)]){
 			[controller rotateView:controller.view animated:YES];
 		}
@@ -278,7 +278,7 @@
 
 #pragma mark IndexPath/View/Controller management
 
-- (CKItemViewController*)controllerAtIndexPath:(NSIndexPath *)indexPath{
+- (CKCollectionCellController*)controllerAtIndexPath:(NSIndexPath *)indexPath{
     return [self itemViewControllerAtIndexPath:indexPath];
 }
 
@@ -313,12 +313,12 @@
 }
 
 - (CGSize)sizeForViewAtIndexPath:(NSIndexPath *)indexPath{
-    CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
     return controller.size;
 }
 
 - (CKItemViewFlags)flagsForViewAtIndexPath:(NSIndexPath*)indexPath{
-    CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+    CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
     return controller.flags;
 }
 
@@ -431,7 +431,7 @@
             [_viewsToIndexPath removeObjectForKey:[NSValue valueWithNonretainedObject:previousView]];
         }
 		
-        CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+        CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
         
         NSString* identifier = [controller identifier];
         UIView *view = [self dequeueReusableViewWithIdentifier:identifier];
@@ -456,7 +456,7 @@
         }
         else{
             //Reset state
-            CKItemViewController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
+            CKCollectionCellController* previousController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:view]];
             if(previousController && [previousController view] == view){
                 [previousController setView:nil];
             }
@@ -499,7 +499,7 @@
 	CKItemViewFlags flags = [self flagsForViewAtIndexPath:indexPath];
 	BOOL bo = flags & CKItemViewFlagSelectable;
 	if(bo){
-		CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+		CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 		if(controller != nil){
 			[controller willSelect];
 		}
@@ -508,7 +508,7 @@
 }
 
 - (void)didSelectViewAtIndexPath:(NSIndexPath *)indexPath{
-	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelect];
 		if(_delegate && [_delegate respondsToSelector:@selector(itemViewContainerController:didSelectViewAtIndexPath:withObject:)]){
@@ -518,7 +518,7 @@
 }
 
 - (void)didSelectAccessoryViewAtIndexPath:(NSIndexPath *)indexPath{
-	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelectAccessoryView];
 		if(_delegate && [_delegate respondsToSelector:@selector(itemViewContainerController:didSelectAccessoryViewAtIndexPath:withObject:)]){
@@ -668,7 +668,7 @@
 @end
 
 
-//CKItemViewContainerController(CKItemViewControllerManagement)
+//CKCollectionViewController(CKCollectionCellControllerManagement)
 
 
 /* All the methods manipulating itemViewControllers are grouped in this extension.
@@ -679,14 +679,14 @@
  It could be improved to create them on-demand by inserting NSNull objects in creates and insert methods, 
  and creating the controller only in itemViewControllerAtIndexPath method.
  */
-@implementation CKItemViewContainerController(CKItemViewControllerManagement)
+@implementation CKCollectionViewController(CKCollectionCellControllerManagement)
 
-- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-    CKItemViewController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
+- (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+    CKCollectionCellController* controller = [_controllerFactory controllerForObject:object  atIndexPath:indexPath];
     return controller;
 }
 
-- (CKItemViewController*)itemViewControllerAtIndexPath:(NSIndexPath*)indexPath{
+- (CKCollectionCellController*)itemViewControllerAtIndexPath:(NSIndexPath*)indexPath{
     if(_sectionsToControllers == nil){
         self.sectionsToControllers = [NSMutableArray array];
     }
@@ -694,14 +694,14 @@
     if([indexPath section] < [self.sectionsToControllers count]){
         NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
         if([indexPath row] < [controllers count]){
-            CKItemViewController* controller = [controllers objectAtIndex:[indexPath row]];
+            CKCollectionCellController* controller = [controllers objectAtIndex:[indexPath row]];
             return controller;
         }
     }
     
     id object = [self objectAtIndexPath:indexPath];
-    CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
-    //NSAssert(controller, @"Unable to create CKItemViewController for object : %@",[object description]);
+    CKCollectionCellController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
+    //NSAssert(controller, @"Unable to create CKCollectionCellController for object : %@",[object description]);
     if(!controller)
         return nil;
     
@@ -746,7 +746,7 @@
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             id object = [self objectAtIndexPath:indexPath];
-            CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
+            CKCollectionCellController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
             [controller performSelector:@selector(setContainerController:) withObject:self];
             [controller performSelector:@selector(setValue:) withObject:object];
             [controller performSelector:@selector(setIndexPath:) withObject:indexPath];
@@ -764,7 +764,7 @@
     for(NSInteger i = 0; i<[indexPaths count];++i){
         NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
         NSIndexPath* object = [objects objectAtIndex:i];
-        CKItemViewController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
+        CKCollectionCellController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
         
         //If this update appears before we updated the orther sections :
         for(int j = 0; j <= [indexPath section]; ++ j){
@@ -838,7 +838,7 @@
     for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
         NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
         for(int row =0;row<[controllers count];++row){
-            CKItemViewController* controller = [controllers objectAtIndex:row];
+            CKCollectionCellController* controller = [controllers objectAtIndex:row];
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             [controller setIndexPath:indexPath];
         }
@@ -852,7 +852,7 @@
         if([indexPath section] < [self.sectionsToControllers count]){
             NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
             if([indexPath row] < [controllers count]){
-                CKItemViewController* controller = [controllers objectAtIndex:[indexPath row]];
+                CKCollectionCellController* controller = [controllers objectAtIndex:[indexPath row]];
                 if([controller view]){
                     if(visible){
                         [controller viewDidAppear:controller.view];

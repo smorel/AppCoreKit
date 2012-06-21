@@ -1,12 +1,12 @@
 //
-//  CKBindedCarouselViewController.m
+//  CKCarouselCollectionViewController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-07.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKBindedCarouselViewController.h"
+#import "CKCarouselCollectionViewController.h"
 #import "CKTableViewCellController.h"
 #import "CKNSObject+Bindings.h"
 #import "CKCollectionController.h"
@@ -24,11 +24,11 @@
 @end
 
 
-@interface CKBindedCarouselViewController ()
+@interface CKCarouselCollectionViewController ()
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @end
 
-@implementation CKBindedCarouselViewController
+@implementation CKCarouselCollectionViewController
 @synthesize carouselView = _carouselView;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;
@@ -170,14 +170,14 @@
 }
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidDisappearAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	 CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller && [controller respondsToSelector:@selector(viewDidDisappear)]){
 		[controller viewDidDisappear];
 	}
 }
 
 - (void) carouselView:(CKCarouselView*)carouselView viewDidAppearAtIndexPath:(NSIndexPath*)indexPath{
-	CKItemViewController* controller = [self controllerAtIndexPath:indexPath];
+	 CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller && [controller respondsToSelector:@selector(viewDidAppear:)]){
 		UIView* view = [self.carouselView viewAtIndexPath:indexPath];
 		[controller viewDidAppear:view];
@@ -213,7 +213,7 @@
 	[self.carouselView setContentOffset:offset animated:animated];
 }
 
-#pragma mark CKBindedCarouselViewController
+#pragma mark CKCarouselCollectionViewController
 
 /*
 - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath{

@@ -1,12 +1,12 @@
 //
-//  CKBindedMapViewController.m
+//  CKMapCollectionViewController.m
 //  CloudKit
 //
 //  Created by Olivier Collet on 10-08-20.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKBindedMapViewController.h"
+#import "CKMapCollectionViewController.h"
 
 #import "CKLocalization.h"
 #import "CKUIViewAutoresizing+Additions.h"
@@ -93,7 +93,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 
 //
-@interface CKBindedMapViewController()
+@interface CKMapCollectionViewController()
 - (void)onPropertyChanged:(NSNotification*)notification;
 - (void)zoom:(BOOL)animated;
 @property (nonatomic, retain) id nearestAnnotation;
@@ -101,7 +101,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @end
 
 
-@implementation CKBindedMapViewController
+@implementation CKMapCollectionViewController
 
 @synthesize centerCoordinate = _centerCoordinate;
 @synthesize mapView = _mapView;
@@ -122,16 +122,16 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
 	
-	_zoomStrategy = CKBindedMapViewControllerZoomStrategyEnclosing;
-    _selectionStrategy = CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations;
+	_zoomStrategy = CKMapCollectionViewControllerZoomStrategyEnclosing;
+    _selectionStrategy = CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations;
 	_smartZoomMinimumNumberOfAnnotations = 3;
 	_smartZoomDefaultRadius = 1000;
     _includeUserLocationWhenZooming = YES;
     _mapViewHasBeenReloaded = NO;
     
     if(!self.controllerFactory){
-        CKItemViewControllerFactory* factory = [CKItemViewControllerFactory factory];
-        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKItemViewController *(id object, NSIndexPath *indexPath) {
+        CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
+        [factory addItemForObjectOfClass:[NSObject class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
             CKMapAnnotationController* controller = [[[CKMapAnnotationController alloc]init]autorelease];
             [controller setSetupCallback:[CKCallback callbackWithBlock:^id(id value) {
                 CKMapAnnotationController* controller = (CKMapAnnotationController*)value;
@@ -373,7 +373,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 
-- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKBindedMapViewControllerZoomStrategy)strategy animated:(BOOL)animated{
+- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapCollectionViewControllerZoomStrategy)strategy animated:(BOOL)animated{
     NSMutableArray* theAnnotations = [NSMutableArray arrayWithArray:annotations];
     if(!self.includeUserLocationWhenZooming && self.mapView.userLocation){
         NSInteger index = [theAnnotations indexOfObjectIdenticalTo:self.mapView.userLocation];
@@ -384,11 +384,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
     
 	switch(strategy){
-		case CKBindedMapViewControllerZoomStrategySmart:{
+		case CKMapCollectionViewControllerZoomStrategySmart:{
 			[self smartZoomWithAnnotations:theAnnotations animated:animated];
 			break;
 		}
-		case CKBindedMapViewControllerZoomStrategyEnclosing:{
+		case CKMapCollectionViewControllerZoomStrategyEnclosing:{
 			[self zoomToRegionEnclosingAnnotations:theAnnotations animated:animated];
 			break;
 		}
@@ -472,7 +472,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
 	// If displaying only one entry, select it
-    if(_selectionStrategy == CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations){
+    if(_selectionStrategy == CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations){
         if (self.annotations && self.annotations.count == 1) {
             [self performSelector:@selector(selectLastAnnotation) withObject:nil afterDelay:0.0];
         }	

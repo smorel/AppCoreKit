@@ -13,7 +13,7 @@
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"
 

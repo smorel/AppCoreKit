@@ -10,16 +10,16 @@
 #import "CKStyleManager.h"
 
 //HACK : here to know the context of the parent controller ...
-#import "CKBindedCarouselViewController.h"
+#import "CKCarouselCollectionViewController.h"
 #import "CKTableViewController.h"
-#import "CKBindedMapViewController.h"
+#import "CKMapCollectionViewController.h"
 
 #import "CKStyleView.h"
 #import "CKNSArray+Additions.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
 
-NSString* CKStyleCellType = @"cellType";
+NSString* CKStyleCellStyle = @"cellStyle";
 NSString* CKStyleAccessoryImage = @"accessoryImage";
 NSString* CKStyleCellSize = @"size";
 NSString* CKStyleCellFlags = @"flags";
@@ -27,7 +27,7 @@ NSString* CKStyleCellFlags = @"flags";
 @implementation NSMutableDictionary (CKTableViewCellControllerStyle)
 
 - (CKTableViewCellStyle)cellStyle{
-	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellType 
+	return (CKTableViewCellStyle)[self enumValueForKey:CKStyleCellStyle 
                                     withEnumDescriptor:CKEnumDefinition(@"CKTableViewCellStyle",
                                                                         CKTableViewCellStyleDefault,
                                                                         UITableViewCellStyleDefault,
@@ -128,10 +128,10 @@ NSString* CKStyleCellFlags = @"flags";
 
 @end
 
-@implementation CKItemViewController (CKStyle)
+@implementation CKCollectionCellController (CKStyle)
 
 - (void)applyStyle:(NSMutableDictionary*)style forView:(UIView*)view{
-    //NSLog(@"apply style on CKItemViewController : %@",self);
+    //NSLog(@"apply style on CKCollectionCellController : %@",self);
 	NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:style appliedStack:appliedStack delegate:self];
 }
@@ -166,12 +166,12 @@ NSString* CKStyleCellFlags = @"flags";
 
 - (UIView*)parentControllerView{
 	UIView* view = nil;
-	if([self.containerController isKindOfClass:[CKBindedCarouselViewController class]] == YES) 
-		view = (UIView*)((CKBindedCarouselViewController*)self.containerController).carouselView;
+	if([self.containerController isKindOfClass:[CKCarouselCollectionViewController class]] == YES) 
+		view = (UIView*)((CKCarouselCollectionViewController*)self.containerController).carouselView;
 	else if([self.containerController isKindOfClass:[CKTableViewController class]] == YES) 
 		view = (UIView*)((CKTableViewController*)self.containerController).tableView;
-	else if([self.containerController isKindOfClass:[CKBindedMapViewController class]] == YES) 
-		view = (UIView*)((CKBindedMapViewController*)self.containerController).mapView;
+	else if([self.containerController isKindOfClass:[CKMapCollectionViewController class]] == YES) 
+		view = (UIView*)((CKMapCollectionViewController*)self.containerController).mapView;
 	return view;
 }
 

@@ -6,14 +6,14 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKBindedTableViewController.h"
+#import "CKTableCollectionViewController.h"
 #import "CKFormSectionBase.h"
 #import "CKFormSection.h"
 #import "CKFormBindedCollectionSection.h"
 
 /** TODO
  */
-@interface CKFormTableViewController : CKBindedTableViewController {
+@interface CKFormTableViewController : CKTableCollectionViewController {
 	NSMutableArray* _sections;
 	BOOL _autoHideSections;
 	BOOL _autoHideSectionHeaders;

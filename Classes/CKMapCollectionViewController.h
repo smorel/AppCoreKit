@@ -1,5 +1,5 @@
 //
-//  CKBindedMapViewController.h
+//  CKMapCollectionViewController.h
 //  CloudKit
 //
 //  Created by Olivier Collet on 10-08-20.
@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "CKItemViewContainerController.h"
+#import "CKCollectionViewController.h"
 #import "CKObjectController.h"
-#import "CKItemViewControllerFactory.h"
+#import "CKCollectionCellControllerFactory.h"
 #import "CKCollection.h"
 
 #import "CKMapAnnotationController.h"
@@ -22,30 +22,30 @@
 
 /** TODO
  */
-typedef enum CKBindedMapViewControllerZoomStrategy{
-    CKBindedMapViewControllerZoomStrategyManual,
-	CKBindedMapViewControllerZoomStrategyEnclosing,
-	CKBindedMapViewControllerZoomStrategySmart
-}CKBindedMapViewControllerZoomStrategy;
+typedef enum CKMapCollectionViewControllerZoomStrategy{
+    CKMapCollectionViewControllerZoomStrategyManual,
+	CKMapCollectionViewControllerZoomStrategyEnclosing,
+	CKMapCollectionViewControllerZoomStrategySmart
+}CKMapCollectionViewControllerZoomStrategy;
 
 
-typedef enum CKBindedMapViewControllerSelectionStrategy{
-    CKBindedMapViewControllerSelectionStrategyManual,
-    CKBindedMapViewControllerSelectionStrategyAutoSelectAloneAnnotations
-}CKBindedMapViewControllerSelectionStrategy;
+typedef enum CKMapCollectionViewControllerSelectionStrategy{
+    CKMapCollectionViewControllerSelectionStrategyManual,
+    CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations
+}CKMapCollectionViewControllerSelectionStrategy;
 
-@class CKBindedMapViewController;
-typedef void(^CKBindedMapViewControllerSelectionBlock)(CKBindedMapViewController* controller, CKMapAnnotationController* annotationController);
-typedef void(^CKBindedMapViewControllerScrollBlock)(CKBindedMapViewController* controller,BOOL animated);
+@class CKMapCollectionViewController;
+typedef void(^CKMapCollectionViewControllerSelectionBlock)(CKMapCollectionViewController* controller, CKMapAnnotationController* annotationController);
+typedef void(^CKMapCollectionViewControllerScrollBlock)(CKMapCollectionViewController* controller,BOOL animated);
 
 
 /** TODO
  */
-@interface CKBindedMapViewController : CKItemViewContainerController <MKMapViewDelegate> {
+@interface CKMapCollectionViewController : CKCollectionViewController <MKMapViewDelegate> {
 	CLLocationCoordinate2D _centerCoordinate;
 	MKMapView *_mapView;
 	
-	CKBindedMapViewControllerZoomStrategy _zoomStrategy;
+	CKMapCollectionViewControllerZoomStrategy _zoomStrategy;
     BOOL _includeUserLocationWhenZooming;
 	CGFloat _smartZoomDefaultRadius;
 	NSInteger _smartZoomMinimumNumberOfAnnotations;
@@ -58,16 +58,16 @@ typedef void(^CKBindedMapViewControllerScrollBlock)(CKBindedMapViewController* c
 @property (nonatomic, assign, readwrite) NSArray *annotations;
 @property (nonatomic, assign) CLLocationCoordinate2D centerCoordinate;
 
-@property (nonatomic, assign) CKBindedMapViewControllerZoomStrategy zoomStrategy;
-@property (nonatomic, assign) CKBindedMapViewControllerSelectionStrategy selectionStrategy;
+@property (nonatomic, assign) CKMapCollectionViewControllerZoomStrategy zoomStrategy;
+@property (nonatomic, assign) CKMapCollectionViewControllerSelectionStrategy selectionStrategy;
 @property (nonatomic, assign) CGFloat smartZoomDefaultRadius;
 @property (nonatomic, assign) NSInteger smartZoomMinimumNumberOfAnnotations;
 @property (nonatomic, assign) BOOL includeUserLocationWhenZooming;
 @property (nonatomic, retain) id annotationToSelect;
 
-@property (nonatomic, copy) CKBindedMapViewControllerSelectionBlock selectionBlock;
-@property (nonatomic, copy) CKBindedMapViewControllerSelectionBlock deselectionBlock;
-@property (nonatomic, copy) CKBindedMapViewControllerScrollBlock didScrollBlock;
+@property (nonatomic, copy) CKMapCollectionViewControllerSelectionBlock selectionBlock;
+@property (nonatomic, copy) CKMapCollectionViewControllerSelectionBlock deselectionBlock;
+@property (nonatomic, copy) CKMapCollectionViewControllerScrollBlock didScrollBlock;
 
 
 - (id)initWithAnnotations:(NSArray *)annotations atCoordinate:(CLLocationCoordinate2D)centerCoordinate;
@@ -84,7 +84,7 @@ typedef void(^CKBindedMapViewControllerScrollBlock)(CKBindedMapViewController* c
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)annotations animated:(BOOL)animated;
 - (void)smartZoomWithAnnotations:(NSArray *)annotations animated:(BOOL)animated;
-- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKBindedMapViewControllerZoomStrategy)strategy animated:(BOOL)animated;
+- (void)zoomOnAnnotations:(NSArray *)annotations withStrategy:(CKMapCollectionViewControllerZoomStrategy)strategy animated:(BOOL)animated;
 
 - (BOOL)reloadData;
 

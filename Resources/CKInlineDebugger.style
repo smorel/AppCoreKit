@@ -82,12 +82,12 @@
         
         "CKTableViewCellController" : {
             "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
-            "cellType" : "CKTableViewCellStyleSubtitle2"
+            "cellStyle" : "CKTableViewCellStyleSubtitle2"
         },
         
         "CKNSNumberPropertyCellController" : {
             "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
-            "cellType" : "CKTableViewCellStyleIPhoneForm"
+            "cellStyle" : "CKTableViewCellStyleIPhoneForm"
         },
         
         "sectionHeaderView" : {
@@ -115,7 +115,7 @@
             "@inherits" : [ "$CKInlineDebugger_tableViewController" ],
             "CKTableViewCellController" : {
                 "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
-                "cellType" : "CKTableViewCellStyleSubtitle" //for indentation level
+                "cellStyle" : "CKTableViewCellStyleSubtitle" //for indentation level
             }
         }
     }

@@ -10,7 +10,7 @@
 
 @interface CKFormBindedCollectionSection()
 @property (nonatomic,retain) CKCollectionController* objectController;
-@property (nonatomic,retain) CKItemViewControllerFactory* controllerFactory;
+@property (nonatomic,retain) CKCollectionCellControllerFactory* controllerFactory;
 
 @property (nonatomic,retain,readwrite) NSMutableArray* headerCellControllers;
 @property (nonatomic,retain,readwrite) NSMutableArray* footerCellControllers;

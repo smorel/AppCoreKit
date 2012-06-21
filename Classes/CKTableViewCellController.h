@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKItemViewController.h"
+#import "CKCollectionCellController.h"
 #import "CKTableViewController.h"
 #import "CKObject.h"
 #import "CKCallback.h"
@@ -15,7 +15,7 @@
 
 /********************************************** CKUITableViewCell *************************************/
 
-@class CKBindedTableViewController;
+@class CKTableCollectionViewController;
 @class CKTableViewCellController;
 @class CKTableViewController;
 
@@ -85,7 +85,7 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
 
 /** TODO
  */
-@interface CKTableViewCellController : CKItemViewController
+@interface CKTableViewCellController : CKCollectionCellController
 
 + (id)cellController;
 

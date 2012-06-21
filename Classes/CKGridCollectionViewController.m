@@ -1,12 +1,12 @@
 //
-//  CKBindedGridViewController.m
+//  CKGridCollectionViewController.m
 //  CloudKit
 //
 //  Created by Martin Dufort on 12-05-14.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKBindedGridViewController.h"
+#import "CKGridCollectionViewController.h"
 #import "CKGridTableViewCellController.h"
 #import "CKArrayProxyCollection.h"
 
@@ -15,26 +15,26 @@
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
 @end
 
-@interface CKItemViewContainerController(CKItemViewControllerManagement)
-- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
+@interface CKCollectionViewController(CKCollectionCellControllerManagement)
+- (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 @end
 
 
-@interface CKBindedTableViewController ()
+@interface CKTableCollectionViewController ()
 @property (nonatomic, retain) NSIndexPath* indexPathToReachAfterRotation;
 - (void)updateGridArray;
 @end
 
 
-@interface CKBindedGridViewController ()
+@interface CKGridCollectionViewController ()
 @property(nonatomic,retain) NSMutableArray* subControllers;
 @property(nonatomic,retain) NSMutableArray* objectsAsGrid;
 @property(nonatomic,retain) CKCollection* linearCollection;
-@property(nonatomic,retain) CKItemViewControllerFactory* subControllersFactory;
+@property(nonatomic,retain) CKCollectionCellControllerFactory* subControllersFactory;
 @property(nonatomic,retain) CKCollectionController* linearCollectionController;
 @end
 
-@implementation CKBindedGridViewController
+@implementation CKGridCollectionViewController
 @synthesize size = _size;
 @synthesize subControllers = _subControllers;
 @synthesize linearCollection = _linearCollection;
@@ -55,7 +55,7 @@
     [super dealloc];
 }
 
-- (void)setupWithCollection:(CKCollection*)collection factory:(CKItemViewControllerFactory*)factory{
+- (void)setupWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory{
     [_linearCollectionController setDelegate:nil];
     self.linearCollection = collection;
     self.subControllersFactory = factory;
@@ -182,7 +182,7 @@
     return 0;
 }
 
-- (CKItemViewController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
+- (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
     NSAssert([object isKindOfClass:[NSArray class]],@"invalid object class");
               
     CKGridTableViewCellController* controller = [CKGridTableViewCellController cellController];
@@ -232,7 +232,7 @@
         int i =0;
         for(id object in objects){
             NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
-            CKItemViewController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
+            CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
             [self.subControllers insertObject:subcontroller atIndex:indexPath.row];
             
             [subcontroller performSelector:@selector(setContainerController:) withObject:self];
@@ -261,7 +261,7 @@
     [super objectController:controller removeObjects:objects atIndexPaths:indexPaths];
 }
 
-- (CKItemViewController*)subControllerForRow:(NSInteger)row column:(NSInteger)column{
+- (CKCollectionCellController*)subControllerForRow:(NSInteger)row column:(NSInteger)column{
     NSInteger index = 0;
     switch(self.orientation){
         case CKTableViewOrientationLandscape:{
