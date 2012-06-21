@@ -37,9 +37,18 @@
 @synthesize controllerFactory = _controllerFactory;
 @synthesize headerCellControllers = _headerCellControllers;
 @synthesize footerCellControllers = _footerCellControllers;
+@synthesize maximumNumberOfObjectsToDisplay;
 
 - (void)dealloc{
     [super dealloc];
+}
+
+- (void)setMaximumNumberOfObjectsToDisplay:(NSInteger)themaximumNumberOfObjectsToDisplay{
+    [_objectController setMaximumNumberOfObjectsToDisplay:themaximumNumberOfObjectsToDisplay];
+}
+
+- (NSInteger)maximumNumberOfObjectsToDisplay{
+    return [_objectController maximumNumberOfObjectsToDisplay];
 }
 
 - (void)start{

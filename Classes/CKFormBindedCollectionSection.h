@@ -19,6 +19,7 @@
 
 @property (nonatomic,retain,readonly) NSMutableArray* headerCellControllers;
 @property (nonatomic,retain,readonly) NSMutableArray* footerCellControllers;
+@property (nonatomic,assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 //Initialization and constructors
 - (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
