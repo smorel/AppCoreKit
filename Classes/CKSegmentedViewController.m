@@ -172,7 +172,7 @@
 
 - (void)changeList:(id)sender {
     BOOL animated = (self.state == CKViewControllerStateDidAppear);
-    [self showViewControllerAtIndex:self.segmentedControl.selectedSegmentIndex withTransition:animated ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationTransitionNone];
+    [self presentViewControllerAtIndex:self.segmentedControl.selectedSegmentIndex withTransition:animated ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationTransitionNone];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

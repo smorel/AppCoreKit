@@ -21,19 +21,20 @@ typedef enum CKTransitionType{
     CKTransitionPop             = 9 << 20,
 }CKTransitionType;
 
-@interface CKContainerViewController : CKViewController {
-}
+@interface CKContainerViewController : CKViewController
 
 @property (nonatomic, retain) NSArray* viewControllers;
 @property (nonatomic, assign) NSUInteger selectedIndex;
+
+@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInNavigationBar) BOOL presentsSelectedViewControllerItemsInNavigationBar;
+@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInToolbar) BOOL presentsSelectedViewControllerItemsInToolbar;
 
 @property (nonatomic, readonly) UIViewController* selectedViewController;
 @property (nonatomic, retain, readonly) UIView *containerView;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
-- (void)showViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
-- (void)setSelectedIndex:(NSUInteger)selectedIndex withTransition:(CKTransitionType)transition;
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
 
 @end
 

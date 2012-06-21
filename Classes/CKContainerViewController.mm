@@ -63,10 +63,14 @@ typedef void(^CKTransitionBlock)();
 @synthesize selectedIndex = _selectedIndex;
 @synthesize containerView = _containerView;
 @synthesize needsToCallViewDidAppearOnSelectedController;
+@synthesize presentsSelectedViewControllerItemsInNavigationBar = _presentsSelectedViewControllerItemsInNavigationBar;
+@synthesize presentsSelectedViewControllerItemsInToolbar = _presentsSelectedViewControllerItemsInToolbar;
 
 - (void)postInit{
     [super postInit];
     self.needsToCallViewDidAppearOnSelectedController = NO;
+    _presentsSelectedViewControllerItemsInNavigationBar = YES;
+    _presentsSelectedViewControllerItemsInToolbar = YES;
 }
 
 - (id)initWithViewControllers:(NSArray *)viewControllers {
@@ -99,19 +103,15 @@ typedef void(^CKTransitionBlock)();
 	}
     
     if(self.isViewDisplayed){
-        [self showViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
+        [self presentViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
     }
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex{
-    [self setSelectedIndex:selectedIndex withTransition:CKTransitionNone];
-}
-
-- (void)setSelectedIndex:(NSUInteger)theselectedIndex withTransition:(CKTransitionType)transition{
+- (void)setSelectedIndex:(NSUInteger)theselectedIndex{
     if(theselectedIndex < [self.viewControllers count]){
         _selectedIndex = theselectedIndex;
         if(self.isViewDisplayed){
-            [self showViewControllerAtIndex:_selectedIndex withTransition:transition];
+            [self presentViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
         }
     }
 }
@@ -149,7 +149,7 @@ typedef void(^CKTransitionBlock)();
         }
     }
     else{
-        [self showViewControllerAtIndex:self.selectedIndex withTransition:CKTransitionNone];
+        [self presentViewControllerAtIndex:self.selectedIndex withTransition:CKTransitionNone];
     }
     
     [UIView setAnimationsEnabled:YES];
@@ -194,19 +194,24 @@ typedef void(^CKTransitionBlock)();
         container = [container containerViewController];
     }
     
-	container.title = viewController.title;
-    [container.navigationItem setLeftBarButtonItem:viewController.navigationItem.leftBarButtonItem animated:YES];
-	[container.navigationItem setRightBarButtonItem:viewController.navigationItem.rightBarButtonItem animated:YES];
-	container.navigationItem.backBarButtonItem = viewController.navigationItem.backBarButtonItem;	
-	container.navigationItem.title = viewController.navigationItem.title;
-	container.navigationItem.prompt = viewController.navigationItem.prompt;
-	container.navigationItem.titleView = viewController.navigationItem.titleView;
-    container.toolbarItems = viewController.toolbarItems;
+    if(_presentsSelectedViewControllerItemsInNavigationBar){
+        container.title = viewController.title;
+        [container.navigationItem setLeftBarButtonItem:viewController.navigationItem.leftBarButtonItem animated:YES];
+        [container.navigationItem setRightBarButtonItem:viewController.navigationItem.rightBarButtonItem animated:YES];
+        container.navigationItem.backBarButtonItem = viewController.navigationItem.backBarButtonItem;	
+        container.navigationItem.title = viewController.navigationItem.title;
+        container.navigationItem.prompt = viewController.navigationItem.prompt;
+        container.navigationItem.titleView = viewController.navigationItem.titleView;
+    }
+    
+    if(_presentsSelectedViewControllerItemsInToolbar){
+        container.toolbarItems = viewController.toolbarItems;
+    }
 }
 
 //
 
-- (void)showViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
     if([self isViewLoaded]){
 	//NSAssert(index < [self.viewControllers count], @"No viewController at index: %d", index);
         if(index >= [self.viewControllers count] )

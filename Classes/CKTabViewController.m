@@ -404,15 +404,15 @@
     if(_willSelectViewControllerBlock){
         _willSelectViewControllerBlock(self,index);
     }
-	[self showViewControllerAtIndex:index withTransition:CKTransitionNone];
+	[self presentViewControllerAtIndex:index withTransition:CKTransitionNone];
     if(_didSelectViewControllerBlock){
         _didSelectViewControllerBlock(self,index);
     }
 }
 
 
-- (void)showViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
-    [super showViewControllerAtIndex:index withTransition:transition];
+- (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
+    [super presentViewControllerAtIndex:index withTransition:transition];
     if(_tabBar){
         _tabBar.selectedIndex = self.selectedIndex;
     }

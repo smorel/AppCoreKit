@@ -35,13 +35,13 @@
     self.viewControllers = newControllers;
     self.selectedIndex = current;
     
-    [self showViewControllerAtIndex:[newControllers count] - 1 withTransition:animated ? CKTransitionPush : CKTransitionNone ];
+    [self presentViewControllerAtIndex:[newControllers count] - 1 withTransition:animated ? CKTransitionPush : CKTransitionNone ];
 }
 
 - (void)popViewControllerAnimated:(BOOL)animated{
     if(self.selectedIndex > 0){
         NSInteger index = self.selectedIndex - 1;
-        [self showViewControllerAtIndex:index withTransition:animated ? CKTransitionPop : CKTransitionNone ];
+        [self presentViewControllerAtIndex:index withTransition:animated ? CKTransitionPop : CKTransitionNone ];
         
         NSMutableArray* newControllers = [NSMutableArray arrayWithArray:[self.viewControllers objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,index)]]];
         self.viewControllers = newControllers;
@@ -50,7 +50,7 @@
 
 - (void)popToRootViewControllerAnimated:(BOOL)animated{
     if(self.selectedIndex > 0){
-        [self showViewControllerAtIndex:0 withTransition:animated ? CKTransitionPop : CKTransitionNone ];
+        [self presentViewControllerAtIndex:0 withTransition:animated ? CKTransitionPop : CKTransitionNone ];
         
         NSMutableArray* newControllers = [NSMutableArray arrayWithObject:[self.viewControllers objectAtIndex:0]];
         self.viewControllers = newControllers;
@@ -76,7 +76,7 @@
         NSMutableArray* newControllers = [NSMutableArray arrayWithArray:[self.viewControllers objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,index + 1)]]];
         self.viewControllers = newControllers;
         
-        [self showViewControllerAtIndex:index withTransition:transition];
+        [self presentViewControllerAtIndex:index withTransition:transition];
         
         if(self.didSelectViewControllerBlock){
             self.didSelectViewControllerBlock(self,index);
