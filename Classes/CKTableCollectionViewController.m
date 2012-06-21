@@ -18,11 +18,28 @@
 #include "CKSheetController.h"
 #import "CKStyleManager.h"
 #import "CKUIView+Style.h"
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 #import "CKLocalization.h"
 #import "CKNSObject+Invocation.h"
 #import "CKRuntime.h"
 
+
+@interface CKCollectionViewController()
+
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
+@property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
+@property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
 
 /********************************* CKTableCollectionViewController  *********************************
  */
@@ -163,10 +180,10 @@
 }
 
 - (void)viewDidUnload{
-    [_weakViews removeAllObjects];
-    [_viewsToControllers removeAllObjects];
-    [_viewsToIndexPath removeAllObjects];
-    [_indexPathToViews removeAllObjects];
+    [self.weakViews removeAllObjects];
+    [self.viewsToControllers removeAllObjects];
+    [self.viewsToIndexPath removeAllObjects];
+    [self.indexPathToViews removeAllObjects];
     
     [_searchBar release];
     _searchBar = nil;
@@ -186,7 +203,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    CKUIViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
+    CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
     self.viewWillAppearEndBlock = nil;
     
     
@@ -339,12 +356,11 @@
 	}
 	
 	[self updateNumberOfPages];
-	//[self updateVisibleViewsIndexPath];
 	
 	[self.objectController unlock];
 	
 	for(int i =0; i< [self numberOfSections];++i){
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
     
     [self tableViewFrameChanged:nil];
@@ -596,7 +612,6 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //[self updateVisibleViewsIndexPath];
 	if([self willSelectViewAtIndexPath:indexPath]){
         [self selectRowAtIndexPath:indexPath animated:YES];
 		return indexPath;
@@ -623,7 +638,7 @@
 	if (editingStyle == UITableViewCellEditingStyleDelete){
 		[self didRemoveViewAtIndexPath:indexPath];
         //[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:self.rowRemoveAnimation];
-		[self fetchMoreIfNeededAtIndexPath:indexPath];
+		[self fetchMoreIfNeededFromIndexPath:indexPath];
 	}
 }
 
@@ -659,8 +674,8 @@
 	if(view){
         return nil;
     }
-    if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
-        return [_objectController headerTitleForSection:section];
+    if([self.objectController respondsToSelector:@selector(headerTitleForSection:)]){
+        return [self.objectController headerTitleForSection:section];
     }
 	return nil;
 }
@@ -673,8 +688,8 @@
 	}
 	
 	if(height <= 0){
-        if([_objectController respondsToSelector:@selector(headerTitleForSection:)]){
-            NSString* title = [_objectController headerTitleForSection:section];
+        if([self.objectController respondsToSelector:@selector(headerTitleForSection:)]){
+            NSString* title = [self.objectController headerTitleForSection:section];
             if( title != nil ){
                 return -1;
             }
@@ -685,8 +700,8 @@
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-        UIView* view = [_objectController headerViewForSection:section];
+    if([self.objectController respondsToSelector:@selector(headerViewForSection:)]){
+        UIView* view = [self.objectController headerViewForSection:section];
         if(view && [view appliedStyle] == nil){
             NSMutableDictionary* style = [self controllerStyle];
             [view applyStyle:style propertyName:@"sectionHeaderView"];
@@ -703,8 +718,8 @@
 	if(view){
         return nil;
     }
-    if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
-        return [_objectController footerTitleForSection:section];
+    if([self.objectController respondsToSelector:@selector(footerTitleForSection:)]){
+        return [self.objectController footerTitleForSection:section];
     }
 	return nil;
 }
@@ -718,8 +733,8 @@
 	}
 	
 	if(height <= 0){
-        if([_objectController respondsToSelector:@selector(footerTitleForSection:)]){
-            NSString* title = [_objectController footerTitleForSection:section];
+        if([self.objectController respondsToSelector:@selector(footerTitleForSection:)]){
+            NSString* title = [self.objectController footerTitleForSection:section];
             if( title != nil ){
                 return -1;
             }
@@ -729,8 +744,8 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if([_objectController respondsToSelector:@selector(footerViewForSection:)]){
-        UIView* view = [_objectController footerViewForSection:section];
+    if([self.objectController respondsToSelector:@selector(footerViewForSection:)]){
+        UIView* view = [self.objectController footerViewForSection:section];
         if(view && [view appliedStyle] == nil){
             NSMutableDictionary* style = [self controllerStyle];
             [view applyStyle:style propertyName:@"sectionFooterView"];
@@ -757,7 +772,7 @@
 	}	
 }
 
-- (void)onBeginUpdates{
+- (void)didBeginUpdates{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
@@ -765,16 +780,16 @@
 	
         [self.tableView beginUpdates];
     
-    //NSLog(@"onBeginUpdates <%@>",self);
+    //NSLog(@"didBeginUpdates <%@>",self);
 }
 
-- (void)onEndUpdates{
+- (void)didEndUpdates{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
 	
-    //NSLog(@"onEndUpdates <%@>",self);
+    //NSLog(@"didEndUpdates <%@>",self);
         [self.tableView endUpdates];
     
 	
@@ -784,14 +799,14 @@
 	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
 }
 
-- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"onInsertObjects <%@>",self);
+    //NSLog(@"didInsertObjects <%@>",self);
 	
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -807,14 +822,14 @@
 	}
 }
 
-- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"onRemoveObjects <%@>",self);
+    //NSLog(@"didRemoveObjects <%@>",self);
 	
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -838,13 +853,13 @@
 	}
 }
 
-- (void)onInsertSectionAtIndex:(NSInteger)index{
+- (void)didInsertSectionAtIndex:(NSInteger)index{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"onInsertSectionAtIndex <%@>",self);
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+    //NSLog(@"didInsertSectionAtIndex <%@>",self);
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
@@ -852,13 +867,13 @@
 	}
 }
 
-- (void)onRemoveSectionAtIndex:(NSInteger)index{
+- (void)didRemoveSectionAtIndex:(NSInteger)index{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"onRemoveSectionAtIndex <%@>",self);
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKUIViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+    //NSLog(@"didRemoveSectionAtIndex <%@>",self);
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
@@ -868,8 +883,8 @@
 
 - (void)setObjectController:(id)controller{
 	[super setObjectController:controller];
-	if(_objectController != nil && [_objectController respondsToSelector:@selector(setAppendCollectionCellControllerAsFooterCell:)]){
-		[_objectController setAppendCollectionCellControllerAsFooterCell:YES];
+	if(self.objectController != nil && [self.objectController respondsToSelector:@selector(setAppendSpinnerAsFooterCell:)]){
+		[self.objectController setAppendSpinnerAsFooterCell:YES];
 	}
 }
 
@@ -888,8 +903,8 @@
 	[self.searchBar resignFirstResponder];
 	
 	if ([searchBar.text isEqualToString:@""] == NO){
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-			[_delegate objectTableViewController:self didSearch:searchBar.text];
+		if(self.delegate && [self.delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[self.delegate objectTableViewController:self didSearch:searchBar.text];
 		}
         if(_searchBlock){
             _searchBlock(searchBar.text);
@@ -901,8 +916,8 @@
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
 	/*[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	if ([searchBar.text isEqualToString:@""] == YES){
-		if(_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-			[_delegate objectTableViewController:self didSearch:@""];
+		if(self.delegate && [self.delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+			[self.delegate objectTableViewController:self didSearch:@""];
 		}
         
         if(_searchBlock){
@@ -913,8 +928,8 @@
 }
 
 - (void)delayedSearchWithText:(NSString*)str{
-	if (_delegate && [_delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
-		[_delegate objectTableViewController:self didSearch:str];
+	if (self.delegate && [self.delegate respondsToSelector:@selector(objectTableViewController:didSearch:)]) {
+		[self.delegate objectTableViewController:self didSearch:str];
 	}
     
     if(_searchBlock){
@@ -1196,7 +1211,7 @@
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
                 && self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
-                [self selectRowAtIndexPath:self.selectedIndexPath animated:(self.state == CKUIViewControllerStateDidAppear) ? YES : NO];
+                [self selectRowAtIndexPath:self.selectedIndexPath animated:(self.state == CKViewControllerStateDidAppear) ? YES : NO];
             }
             
             break;
@@ -1244,8 +1259,8 @@
 
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
     if([self isValidIndexPath:indexPath]){
-        if(self.state == CKUIViewControllerStateDidAppear ||
-           self.state == CKUIViewControllerStateWillAppear){
+        if(self.state == CKViewControllerStateDidAppear ||
+           self.state == CKViewControllerStateWillAppear){
             
             if(self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
                 CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
@@ -1265,8 +1280,8 @@
 
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated{
     if([self isValidIndexPath:indexPath]){
-        if(self.state == CKUIViewControllerStateDidAppear ||
-           self.state == CKUIViewControllerStateWillAppear){
+        if(self.state == CKViewControllerStateDidAppear ||
+           self.state == CKViewControllerStateWillAppear){
             if(self.snapPolicy == CKTableCollectionViewControllerSnappingPolicyCenter){
                 CGRect r = [self.tableView rectForRowAtIndexPath:indexPath];
                 CGFloat offset = r.origin.y + (r.size.height / 2.0);

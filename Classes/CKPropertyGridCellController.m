@@ -246,7 +246,7 @@
         _navigationToolbar = [toolbar retain];
     }
     
-    if(self.containerController.state == CKUIViewControllerStateDidAppear){
+    if(self.containerController.state == CKViewControllerStateDidAppear){
         BOOL hasNextResponder = [self hasNextResponder];
         BOOL hasPreviousResponder = [self hasPreviousResponder];
         NSMutableArray* buttons = [NSMutableArray array];

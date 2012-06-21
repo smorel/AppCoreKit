@@ -1,12 +1,12 @@
 //
-//  CKUIViewController+Style.m
+//  CKViewController+Style.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-21.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"

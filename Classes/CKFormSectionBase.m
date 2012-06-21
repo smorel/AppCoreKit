@@ -162,7 +162,7 @@
 - (void)setCollapsed:(BOOL)bo withRowAnimation:(UITableViewRowAnimation)animation{
     if(_collapsed != bo){
         self.collapsed = bo;
-        if(_parentController.state == CKUIViewControllerStateDidAppear){
+        if(_parentController.state == CKViewControllerStateDidAppear){
             NSInteger section = [_parentController indexOfSection:self];
             NSMutableArray* indexPaths = [NSMutableArray array];
             for(int i =0;i<[self numberOfObjects];++i){

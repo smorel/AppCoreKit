@@ -12,10 +12,25 @@
 #import "CKNSObject+Invocation.h"
 #import "CKVersion.h"
 
-@implementation CKCollectionController
+@interface CKCollectionController()
+@property (nonatomic, retain,readwrite) CKCollection* collection;
+@property (nonatomic, assign) BOOL animateInsertionsOnReload;
+@end
+
+@implementation CKCollectionController{
+	CKCollection* _collection;
+	id _delegate;
+	BOOL observing;
+	BOOL animateInsertionsOnReload;
+	BOOL appendSpinnerAsFooterCell;
+	NSInteger maximumNumberOfObjectsToDisplay;
+	BOOL locked;
+	BOOL changedWhileLocked;
+}
+
 @synthesize collection = _collection;
 @synthesize delegate = _delegate;
-@synthesize appendCollectionCellControllerAsFooterCell;
+@synthesize appendSpinnerAsFooterCell;
 @synthesize maximumNumberOfObjectsToDisplay;
 @synthesize animateInsertionsOnReload;
 
@@ -49,7 +64,7 @@
         }
         observing = NO;
         
-        appendCollectionCellControllerAsFooterCell = NO;
+        appendSpinnerAsFooterCell = NO;
         animateInsertionsOnReload = ([CKOSVersion() floatValue] < 3.2) ? NO : YES;
         locked = NO;
         changedWhileLocked = NO;
@@ -109,7 +124,7 @@
 
 - (NSInteger)numberOfObjectsForSection:(NSInteger)section{
 	NSInteger count = (maximumNumberOfObjectsToDisplay > 0) ? MIN(maximumNumberOfObjectsToDisplay,[_collection count]) : [_collection count];
-	if(appendCollectionCellControllerAsFooterCell && _collection.feedSource){
+	if(appendSpinnerAsFooterCell && _collection.feedSource){
 		return count + 1;
 	}
 	else {
@@ -128,7 +143,7 @@
 		NSInteger index = indexPath.row;
 		return [_collection objectAtIndex:index];
 	}
-	else if(appendCollectionCellControllerAsFooterCell && _collection.feedSource){
+	else if(appendSpinnerAsFooterCell && _collection.feedSource){
 		return _collection;
 	}
 

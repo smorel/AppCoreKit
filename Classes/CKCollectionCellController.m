@@ -106,7 +106,7 @@
     _size = s;
     //this will tell the controller it needs to update without computing a new size.
     if(notifyingContainerForUpdate && self.containerController){
-        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
+        [self.containerController updateSizeForControllerAtIndexPath:self.indexPath];
     }
     [self didChangeValueForKey:@"size"];
 }
@@ -114,7 +114,7 @@
 //this will tell the controller it needs to update by computing a new size.
 - (void)invalidateSize{
     if(self.containerController){
-        [self.containerController onSizeChangeAtIndexPath:self.indexPath];
+        [self.containerController updateSizeForControllerAtIndexPath:self.indexPath];
     }
 }
 

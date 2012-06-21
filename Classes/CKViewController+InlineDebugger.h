@@ -1,5 +1,5 @@
 //
-//  CKUIViewController+InlineDebugger.h
+//  CKViewController+InlineDebugger.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-10-17.
@@ -8,7 +8,7 @@
 
 #ifdef DEBUG
 
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 #import "CKNSObject+InlineDebugger.h"
 
 @class CKFormTableViewController;

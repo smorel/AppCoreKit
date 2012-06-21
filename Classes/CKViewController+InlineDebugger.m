@@ -1,5 +1,5 @@
 //
-//  CKUIViewController+InlineDebugger.m
+//  CKViewController+InlineDebugger.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-10-17.
@@ -8,7 +8,7 @@
 
 #ifdef DEBUG
 
-#import "CKUIViewController+InlineDebugger.h"
+#import "CKViewController+InlineDebugger.h"
 #import "CKNSObject+InlineDebugger.h"
 
 @implementation UIViewController (CKInlineDebugger)
@@ -49,7 +49,7 @@
     NSMutableArray* cellControllers = [NSMutableArray array];
     UIViewController* c = self;
     while(c){
-        [cellControllers insertObject:[CKUIViewController cellControllerForViewController:c withDebugger:debugger] atIndex:0];
+        [cellControllers insertObject:[CKViewController cellControllerForViewController:c withDebugger:debugger] atIndex:0];
         if([c respondsToSelector:@selector(containerViewController)]){
             c = [c performSelector:@selector(containerViewController)];
         }
@@ -58,7 +58,7 @@
         }
     }
     
-    [cellControllers insertObject:[CKUIViewController cellControllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
+    [cellControllers insertObject:[CKViewController cellControllerForViewController:self.navigationController withDebugger:debugger] atIndex:0];
     
     CKFormSection* section = [CKFormSection sectionWithCellControllers:cellControllers headerTitle:@"Controller Hierarchy"];
     

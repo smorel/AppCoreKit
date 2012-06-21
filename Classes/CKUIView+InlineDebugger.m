@@ -144,8 +144,8 @@
             [controller setSelectionBlock:^(CKTableViewCellController *controller) {
                 UIView* subView = (UIView*)controller.value;
                 
-                CKUIViewController* slideshow = [CKUIViewController controller];
-                slideshow.viewDidLoadBlock = ^(CKUIViewController* controller){
+                CKViewController* slideshow = [CKViewController controller];
+                slideshow.viewDidLoadBlock = ^(CKViewController* controller){
                     UIImageView* imageView = [[[UIImageView alloc]initWithFrame:controller.view.bounds]autorelease];
                     imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                     imageView.image = [UIView createsImageForView:subView];

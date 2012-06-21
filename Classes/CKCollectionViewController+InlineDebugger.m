@@ -11,12 +11,29 @@
 #import "CKCollectionViewController+InlineDebugger.h"
 #import "CKGridTableViewCellController.h"
 
+@interface CKCollectionViewController()
+
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
+@property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
+@property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
+
 @implementation CKCollectionViewController (CKInlineDebugger)
 
 - (id)itemControllerForSubView:(UIView*)view{
     UIView* v = view;
     while(v){
-        id itemController = [_viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:v]];
+        id itemController = [self.viewsToControllers objectForKey:[NSValue valueWithNonretainedObject:v]];
         if(itemController){
             return itemController;
         }

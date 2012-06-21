@@ -1,5 +1,5 @@
 //
-//  CKUIViewController+Introspection.m
+//  CKViewController+Introspection.m
 //  CloudKit
 //
 //  Created by Antoine Lamy on 11-09-30.

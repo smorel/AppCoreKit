@@ -26,7 +26,14 @@
 @property (nonatomic, retain) NSMutableArray* weakViews;
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
 
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
 @property (nonatomic, assign) BOOL rotating;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
 
 @end
 
@@ -52,7 +59,20 @@
 
 //CKCollectionViewController
 
-@implementation CKCollectionViewController
+@implementation CKCollectionViewController{
+    id _objectController;
+    CKCollectionCellControllerFactory* _controllerFactory;
+    
+    //Internal view/controller management
+    NSMutableDictionary* _viewsToControllers;
+    NSMutableDictionary* _viewsToIndexPath;
+    NSMutableDictionary* _indexPathToViews;
+    NSMutableArray* _weakViews;
+    NSMutableArray* _sectionsToControllers; //containing NSMutableArray of CKCollectionCellController
+    
+    id _delegate;
+    int _numberOfObjectsToprefetch;
+}
 
 @synthesize objectController = _objectController;
 @synthesize controllerFactory = _controllerFactory;
@@ -61,7 +81,7 @@
 @synthesize indexPathToViews = _indexPathToViews;
 @synthesize weakViews = _weakViews;
 @synthesize delegate = _delegate;
-@synthesize numberOfObjectsToprefetch = _numberOfObjectsToprefetch;
+@synthesize minimumNumberOfSupplementaryObjectsInSections = _numberOfObjectsToprefetch;
 @synthesize sectionsToControllers = _sectionsToControllers;
 @synthesize rotating = _rotating;
 
@@ -115,7 +135,7 @@
 
 - (void)reload{
     [self createsItemViewControllers];
-    [self onReload];
+    [self didReload];
 }
 
 - (void)setObjectController:(id)controller{
@@ -134,11 +154,11 @@
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
 	
-	if(([self state] & CKUIViewControllerStateDidAppear) && [controller respondsToSelector:@selector(setDelegate:)]){
+	if(([self state] & CKViewControllerStateDidAppear) && [controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
         [self reload];
         for(int i =0; i< [self numberOfSections];++i){
-            [self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+            [self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
         }
 	}
 }
@@ -197,7 +217,7 @@
     /*[UIView setAnimationsEnabled:NO];
     
     
-    [self onBeginUpdates];
+    [self didBeginUpdates];
     if([self isKindOfClass:[CKTableViewController class]]){
         //Invalidate all controller's size !
         for(int i =0; i< [self numberOfSections];++i){
@@ -208,7 +228,7 @@
             }
         }
     }
-    [self onEndUpdates];
+    [self didEndUpdates];
     [UIView setAnimationsEnabled:YES];*/
     
     if([self isKindOfClass:[CKTableViewController class]]){
@@ -222,8 +242,8 @@
         }
     }
     
-    [self onBeginUpdates];
-    [self onEndUpdates];
+    [self didBeginUpdates];
+    [self didEndUpdates];
 
    // [self reload];
     
@@ -349,16 +369,16 @@
 		NSNumber* sectionNumber = [NSNumber numberWithInt:i];
 		id maxRowNumber = [maxIndexPaths objectForKey:sectionNumber];
 		NSInteger maxRow = maxRowNumber ? [maxRowNumber intValue] : 0;
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:maxRow inSection:i]];
+		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:maxRow inSection:i]];
 	}
 }
 
-- (void)fetchMoreIfNeededAtIndexPath:(NSIndexPath*)indexPath{
-    BOOL appendCollectionCellControllerAsFooterCell = NO;
-    if([_objectController respondsToSelector:@selector(appendCollectionCellControllerAsFooterCell)]){
-        appendCollectionCellControllerAsFooterCell = [_objectController appendCollectionCellControllerAsFooterCell];
+- (void)fetchMoreIfNeededFromIndexPath:(NSIndexPath*)indexPath{
+    BOOL appendSpinnerAsFooterCell = NO;
+    if([_objectController respondsToSelector:@selector(appendSpinnerAsFooterCell)]){
+        appendSpinnerAsFooterCell = [_objectController appendSpinnerAsFooterCell];
     }
-	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (appendCollectionCellControllerAsFooterCell ? 1 : 0);
+	int numberOfRows = [self numberOfObjectsForSection:indexPath.section] - (appendSpinnerAsFooterCell ? 1 : 0);
 	if(_numberOfObjectsToprefetch + indexPath.row > numberOfRows){
 		[self fetchObjectsInRange:NSMakeRange(numberOfRows, _numberOfObjectsToprefetch) forSection:indexPath.section];
 	}
@@ -511,8 +531,8 @@
 	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelect];
-		if(_delegate && [_delegate respondsToSelector:@selector(itemViewContainerController:didSelectViewAtIndexPath:withObject:)]){
-			[_delegate itemViewContainerController:self didSelectViewAtIndexPath:indexPath withObject:controller.value];
+		if(_delegate && [_delegate respondsToSelector:@selector(collectionViewController:didSelectViewAtIndexPath:withObject:)]){
+			[_delegate collectionViewController:self didSelectViewAtIndexPath:indexPath withObject:controller.value];
 		}
 	}
 }
@@ -521,8 +541,8 @@
 	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
 	if(controller != nil){
 		[controller didSelectAccessoryView];
-		if(_delegate && [_delegate respondsToSelector:@selector(itemViewContainerController:didSelectAccessoryViewAtIndexPath:withObject:)]){
-			[_delegate itemViewContainerController:self didSelectAccessoryViewAtIndexPath:indexPath withObject:controller.value];
+		if(_delegate && [_delegate respondsToSelector:@selector(collectionViewController:didSelectAccessoryViewAtIndexPath:withObject:)]){
+			[_delegate collectionViewController:self didSelectAccessoryViewAtIndexPath:indexPath withObject:controller.value];
 		}
 	}
 }
@@ -573,11 +593,11 @@
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[self onBeginUpdates];
+	[self didBeginUpdates];
 }
 
 - (void)objectControllerDidEndUpdating:(id)controller{
-	[self onEndUpdates];
+	[self didEndUpdates];
 	[self updateVisibleViewsIndexPath];
 	
 	//bad solution because the contentsize is updated at the end of insert animation ....
@@ -596,63 +616,55 @@
 
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     [self insertItemViewControllersForObjects:objects atIndexPaths:indexPaths]; 
-	[self onInsertObjects:objects atIndexPaths:indexPaths];
+	[self didInsertObjects:objects atIndexPaths:indexPaths];
 }
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	[self onRemoveObjects:objects atIndexPaths:indexPaths];
+	[self didRemoveObjects:objects atIndexPaths:indexPaths];
     [self removeItemViewControllersForObjects:objects atIndexPaths:indexPaths];    
 }
 
 - (void)objectController:(id)controller insertSectionAtIndex:(NSInteger)index{
     [self insertItemViewControllersSectionAtIndex:index];   
-	[self onInsertSectionAtIndex:index];
+	[self didInsertSectionAtIndex:index];
 }
 
 - (void)objectController:(id)controller removeSectionAtIndex:(NSInteger)index{  
-	[self onRemoveSectionAtIndex:index];
+	[self didRemoveSectionAtIndex:index];
     [self removeItemViewControllersSectionAtIndex:index]; 
 }
 
-- (void)onReload{
+- (void)didReload{
 	//To implement in inherited class
 }
 
-- (void)onBeginUpdates{
+- (void)didBeginUpdates{
 	//To implement in inherited class
 }
 
-- (void)onEndUpdates{
+- (void)didEndUpdates{
 	//To implement in inherited class
 }
 
-- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	//To implement in inherited class
 }
 
-- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
 	//To implement in inherited class
 }
 
-- (void)onInsertSectionAtIndex:(NSInteger)index{
+- (void)didInsertSectionAtIndex:(NSInteger)index{
 	//To implement in inherited class
 }
 
-- (void)onRemoveSectionAtIndex:(NSInteger)index{
+- (void)didRemoveSectionAtIndex:(NSInteger)index{
 	//To implement in inherited class
 }
 
-- (void)onSizeChangeAtIndexPath:(NSIndexPath*)index{
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
 	//To implement in inherited class
     NSAssert(NO,@"Implements this in tables by performing intelligently beginUpdate/endUpdate!");
-}
-
-- (CKFeedSource*)collectionDataSource{
-	if([self.objectController isKindOfClass:[CKCollectionController class]]){
-		CKCollectionController* documentController = (CKCollectionController*)self.objectController;
-		return documentController.collection.feedSource;
-	}
-	return nil;
 }
 
 - (NSIndexPath*)indexPathForObject:(id)object{

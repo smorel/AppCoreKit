@@ -13,26 +13,15 @@
 
 /** TODO
  */
-@interface CKCollectionController : NSObject<CKObjectController> {
-	CKCollection* _collection;
-	id _delegate;
-	BOOL observing;
-	BOOL animateInsertionsOnReload;
-	BOOL appendCollectionCellControllerAsFooterCell;
-	NSInteger maximumNumberOfObjectsToDisplay;
-	BOOL locked;
-	BOOL changedWhileLocked;
-}
+@interface CKCollectionController : NSObject<CKObjectController> 
 
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, retain) CKCollection* collection;
+@property (nonatomic, retain,readonly) CKCollection* collection;
 
 - (id)initWithCollection:(CKCollection*)collection;
 + (CKCollectionController*) controllerWithCollection:(CKCollection*)collection;
 
-//FIXME : review those names ...
-@property (nonatomic, assign) BOOL animateInsertionsOnReload;
-@property (nonatomic, assign) BOOL appendCollectionCellControllerAsFooterCell;
+@property (nonatomic, assign) BOOL appendSpinnerAsFooterCell;
 @property (nonatomic, assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 @end

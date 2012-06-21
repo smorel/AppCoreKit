@@ -1,13 +1,13 @@
 //
-//  CKUIViewController.m
+//  CKViewController.m
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-21.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKUIViewController.h"
-#import "CKUIViewController+Style.h"
+#import "CKViewController.h"
+#import "CKViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKDebug.h"
 #include <execinfo.h>
@@ -28,11 +28,11 @@ typedef enum CKDebugCheckState{
 
 static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
 
-@interface CKUIViewController()
+@interface CKViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
-@property (nonatomic, assign, readwrite) CKUIViewControllerState state;
+@property (nonatomic, assign, readwrite) CKViewControllerState state;
 
 #ifdef DEBUG
 @property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
@@ -40,7 +40,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 
 @end
 
-@implementation CKUIViewController
+@implementation CKViewController
 
 @synthesize name = _name;
 @synthesize viewWillAppearBlock = _viewWillAppearBlock;
@@ -77,14 +77,14 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKUIViewControllerState", 
-                                                 CKUIViewControllerStateNone,
-                                                 CKUIViewControllerStateWillAppear,
-                                                 CKUIViewControllerStateDidAppear,
-                                                 CKUIViewControllerStateWillDisappear,
-                                                 CKUIViewControllerStateDidDisappear,
-                                                 CKUIViewControllerStateDidUnload,
-                                                 CKUIViewControllerStateDidLoad);
+    attributes.enumDescriptor = CKEnumDefinition(@"CKViewControllerState", 
+                                                 CKViewControllerStateNone,
+                                                 CKViewControllerStateWillAppear,
+                                                 CKViewControllerStateDidAppear,
+                                                 CKViewControllerStateWillDisappear,
+                                                 CKViewControllerStateDidDisappear,
+                                                 CKViewControllerStateDidUnload,
+                                                 CKViewControllerStateDidLoad);
 }
 
 - (void)postInit {	
@@ -182,7 +182,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 + (id)controllerWithName:(NSString*)name{
-	CKUIViewController* controller = [[[[self class]alloc]init]autorelease];
+	CKViewController* controller = [[[[self class]alloc]init]autorelease];
     controller.name = name;
     return controller;
 }
@@ -209,8 +209,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
      }
      
      while(container){
-     if([container isKindOfClass:[CKUIViewController class]]){
-     [(CKUIViewController*)container observerNavigationChanges:bo];
+     if([container isKindOfClass:[CKViewController class]]){
+     [(CKViewController*)container observerNavigationChanges:bo];
      }
      if([container respondsToSelector:@selector(containerViewController)]){
      container = [container performSelector:@selector(containerViewController)];
@@ -466,7 +466,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 #pragma mark - View lifecycle
 
 - (void)viewWillAppear:(BOOL)animated{
-    self.state = CKUIViewControllerStateWillAppear;
+    self.state = CKViewControllerStateWillAppear;
     if(_viewWillAppearBlock){
         _viewWillAppearBlock(self,animated);
     }
@@ -505,7 +505,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    self.state = CKUIViewControllerStateWillDisappear;
+    self.state = CKViewControllerStateWillDisappear;
     [super viewWillDisappear:animated];
     if(_viewWillDisappearBlock){
         _viewWillDisappearBlock(self,animated);
@@ -513,7 +513,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    self.state = CKUIViewControllerStateDidAppear;
+    self.state = CKViewControllerStateDidAppear;
     [super viewDidAppear:animated];
     if(_viewDidAppearBlock){
         _viewDidAppearBlock(self,animated);
@@ -521,7 +521,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-    self.state = CKUIViewControllerStateDidDisappear;
+    self.state = CKViewControllerStateDidDisappear;
     [super viewDidDisappear:animated];
     if(_viewDidDisappearBlock){
         _viewDidDisappearBlock(self,animated);
@@ -535,7 +535,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 -(void) viewDidLoad{
-    self.state = CKUIViewControllerStateDidLoad;
+    self.state = CKViewControllerStateDidLoad;
 	[super viewDidLoad];
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);
@@ -554,7 +554,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 -(void) viewDidUnload{
-    self.state = CKUIViewControllerStateDidUnload;
+    self.state = CKViewControllerStateDidUnload;
 	[super viewDidUnload];
     if(_viewDidUnloadBlock){
         _viewDidUnloadBlock(self);
@@ -600,7 +600,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (BOOL)viewIsOnScreen{
-    return (self.state & CKUIViewControllerStateWillAppear) || (self.state & CKUIViewControllerStateDidAppear);
+    return (self.state & CKViewControllerStateWillAppear) || (self.state & CKViewControllerStateDidAppear);
 }
 
 #pragma mark - Buttons Management

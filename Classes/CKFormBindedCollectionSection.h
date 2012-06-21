@@ -15,21 +15,18 @@
 
 /** TODO
  */
-@interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>{
-	BOOL _sectionUpdate;
-}
+@interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>
 
 @property (nonatomic,retain,readonly) NSMutableArray* headerCellControllers;
 @property (nonatomic,retain,readonly) NSMutableArray* footerCellControllers;
-@property (nonatomic,retain,readonly) CKCollectionController* objectController;
 
 //Initialization and constructors
 - (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title;
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell;
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell;
 
 //Cell Controller API
 - (void)addFooterCellController:(CKTableViewCellController*)controller;

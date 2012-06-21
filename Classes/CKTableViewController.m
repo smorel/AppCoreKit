@@ -15,9 +15,24 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
 
-@interface CKCollectionViewController ()
+@interface CKCollectionViewController()
+
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
+@property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
+@property (nonatomic, retain) NSMutableArray* weakViews;
 @property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
 @end
+
+
 
 @interface CKTableView()
 @property (nonatomic,assign) NSInteger numberOfUpdates;
@@ -308,13 +323,13 @@
 }
 
 - (void)reload {
-    [super reload];//onReload gets called by super class
+    [super reload];//didReload gets called by super class
 	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
 		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
 }
 
-- (void)onReload{
+- (void)didReload{
 	if(!self.viewIsOnScreen){
         self.tableViewHasBeenReloaded = NO;
 		return;
@@ -412,7 +427,7 @@
 /* here we have to be VERY intelligent as several rows can change their size in the "same scope" wich is not really accessible
  
  we should invalidate this if we already are in a beginUpdates scope
- we should delay the endUpdate to handle all the onSizeChangeAtIndexPath from several controllers
+ we should delay the endUpdate to handle all the updateSizeForControllerAtIndexPath from several controllers
  if we are in viewWillAppear, we should not call this !
  */
 
@@ -424,8 +439,8 @@
     self.sizeIsAlreadyInvalidated = NO;
 }
 
-- (void)onSizeChangeAtIndexPath:(NSIndexPath *)index{
-    if(self.state != CKUIViewControllerStateDidAppear || self.tableView.isLayouting || self.lockSizeChange){
+- (void)updateSizeForControllerAtIndexPath:(NSIndexPath *)index{
+    if(self.state != CKViewControllerStateDidAppear || self.tableView.isLayouting || self.lockSizeChange){
         self.tableView.sizeChangedWhileReloading = YES;
         return;
     }

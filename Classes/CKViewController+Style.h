@@ -1,5 +1,5 @@
 //
-//  CKUIViewController+Style.h
+//  CKViewController+Style.h
 //  CloudKit
 //
 //  Created by Sebastien Morel on 11-04-21.

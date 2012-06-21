@@ -21,6 +21,11 @@
 
 //private interfaces
 
+@interface CKCollectionViewController()
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+@end
+
 @interface CKCollectionViewController(CKCollectionCellControllerManagement)
 - (void) insertItemViewControllersSectionAtIndex:(NSInteger)index;
 @end
@@ -215,7 +220,7 @@
 
 - (void)reload{
 	self.reloading = YES;
-	if(self.state & CKUIViewControllerStateDidAppear){
+	if(self.state & CKViewControllerStateDidAppear){
 		for(CKFormSectionBase* section in _sections){
 			[section start];
 			
@@ -223,7 +228,7 @@
 				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
 					CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-					[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+					[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
 				}
 			}
 		}
@@ -249,7 +254,7 @@
 		if(section.hidden == YES){
 			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
 				CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-				[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+				[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
 			}
 		}
 	}
@@ -272,12 +277,12 @@
         }
         if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
 			CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.numberOfObjectsToprefetch)];
+			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
 		}
     }
     
     if(indexSet && self.viewIsOnScreen){
-        if((self.state & CKUIViewControllerStateDidAppear)){
+        if((self.state & CKViewControllerStateDidAppear)){
             UITableViewRowAnimation anim = self.rowInsertAnimation;
             
             NSInteger currentIndex = [indexSet firstIndex];

@@ -19,6 +19,23 @@
 
 #import "CKDebug.h"
 
+@interface CKCollectionViewController()
+
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
+@property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
+@property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
+
 //CKFormSection
 
 @interface CKFormSection()

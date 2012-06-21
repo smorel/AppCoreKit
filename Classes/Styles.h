@@ -7,5 +7,5 @@
 //
 
 #import "CKStyleManager.h"
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 #import "CKUIView+Style.h"

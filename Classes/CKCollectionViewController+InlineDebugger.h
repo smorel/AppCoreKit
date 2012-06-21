@@ -9,7 +9,7 @@
 #ifdef DEBUG
 
 #import "CKCollectionViewController.h"
-#import "CKUIViewController+InlineDebugger.h"
+#import "CKViewController+InlineDebugger.h"
 #import "CKGridCollectionViewController.h"
 
 @interface CKCollectionViewController (CKInlineDebugger)

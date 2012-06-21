@@ -8,7 +8,10 @@
 
 #import "CKFormBindedCollectionSection.h"
 
-@interface CKFormBindedCollectionSection()
+@interface CKFormBindedCollectionSection(){
+	BOOL _sectionUpdate;
+}
+
 @property (nonatomic,retain) CKCollectionController* objectController;
 @property (nonatomic,retain) CKCollectionCellControllerFactory* controllerFactory;
 

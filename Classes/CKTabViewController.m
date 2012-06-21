@@ -7,7 +7,7 @@
 //
 
 #import "CKTabViewController.h"
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 #import "CKStyleManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKRuntime.h"
@@ -329,7 +329,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    CKUIViewControllerAnimatedBlock appearEndBlock = [self.viewWillAppearEndBlock copy];
+    CKViewControllerAnimatedBlock appearEndBlock = [self.viewWillAppearEndBlock copy];
     self.viewWillAppearEndBlock = nil;
     
     //disable animations 
@@ -431,7 +431,7 @@
 
 @implementation UIViewController (CKTabViewItem)
 
-static char CKUIViewControllerTabViewItemKey;
+static char CKViewControllerTabViewItemKey;
 
 - (void)CKTabViewItem_UIViewController_dealloc{
     [[self tabViewItem]clearBindingsContext];
@@ -440,13 +440,13 @@ static char CKUIViewControllerTabViewItemKey;
 
 - (void)setTabViewItem:(CKTabViewItem *)tabViewItem {
     objc_setAssociatedObject(self, 
-                             &CKUIViewControllerTabViewItemKey,
+                             &CKViewControllerTabViewItemKey,
                              tabViewItem,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CKTabViewItem *)tabViewItem {
-    id item = objc_getAssociatedObject(self, &CKUIViewControllerTabViewItemKey);
+    id item = objc_getAssociatedObject(self, &CKViewControllerTabViewItemKey);
 	if (item) return item;
 	
 	CKTabViewItem *newItem = [[[CKTabViewItem alloc] initWithFrame:CGRectZero] autorelease];

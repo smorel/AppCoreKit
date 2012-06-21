@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout : NSObject
 
-+ (CKUIViewController*)viewControllerToTestBasicCellControllers;
-+ (CKUIViewController*)viewControllerToTestPropertyCellControllers;
++ (CKViewController*)viewControllerToTestBasicCellControllers;
++ (CKViewController*)viewControllerToTestPropertyCellControllers;
 
 @end

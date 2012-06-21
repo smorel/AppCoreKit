@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 
 /** TODO
  */
@@ -21,7 +21,7 @@ typedef enum {
 
 /** TODO
  */
-@interface CKWebBrowserViewController : CKUIViewController
+@interface CKWebBrowserViewController : CKViewController
 
 @property (nonatomic, readonly, retain) NSURL *homeURL;
 @property (nonatomic, readonly, retain) NSURL *currentURL;

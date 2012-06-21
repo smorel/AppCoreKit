@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 #import "CKObject.h"
 
 //CKSplitViewConstraints
@@ -53,7 +53,7 @@ typedef enum CKSplitViewOrientation{
 
 //CKSplitViewController
 
-@interface CKSplitViewController : CKUIViewController
+@interface CKSplitViewController : CKViewController
 @property (nonatomic, copy) NSArray* viewControllers;
 @property (nonatomic, retain, readonly) CKSplitView* splitView;
 

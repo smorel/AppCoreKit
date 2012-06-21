@@ -92,6 +92,17 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @end
 
 
+
+@interface CKCollectionViewController()
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
+
 //
 @interface CKMapCollectionViewController()
 - (void)onPropertyChanged:(NSNotification*)notification;
@@ -223,7 +234,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
 	
 	for(int i =0; i< [self numberOfSections];++i){
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
 }
 
@@ -541,16 +552,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 #pragma mark CKObjectControllerDelegate
 
-- (void)onReload{
+- (void)didReload{
     if(!self.viewIsOnScreen){
         self.mapViewHasBeenReloaded = NO;
 		return;
     }
-    
-	CKFeedSource* source = [self collectionDataSource];
-	if ((source != nil) && source.isFetching) {
-            //return NO;
-	}
     
     NSArray* selected = self.mapView.selectedAnnotations;
     for(id<MKAnnotation> annotation in selected){
@@ -581,14 +587,14 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     }
 }
 
-- (void)onBeginUpdates{
+- (void)didBeginUpdates{
 	//To implement in inherited class
 }
 
-- (void)onEndUpdates{
+- (void)didEndUpdates{
 }
 
-- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(!self.viewIsOnScreen){
         self.mapViewHasBeenReloaded = NO;
 		return;
@@ -598,7 +604,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	[self zoom:YES];
 }
 
-- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(!self.viewIsOnScreen){
         self.mapViewHasBeenReloaded = NO;
 		return;

@@ -341,17 +341,17 @@ typedef void(^CKTransitionBlock)();
 
 @implementation UIViewController (CKContainerViewController)
 
-static char CKUIViewControllerContainerViewControllerKey;
+static char CKViewControllerContainerViewControllerKey;
 
 - (void)setContainerViewControllerRef:(CKWeakRef *)ref {
     objc_setAssociatedObject(self, 
-                             &CKUIViewControllerContainerViewControllerKey,
+                             &CKViewControllerContainerViewControllerKey,
                              ref,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CKWeakRef *)containerViewControllerRef {
-    return objc_getAssociatedObject(self, &CKUIViewControllerContainerViewControllerKey);
+    return objc_getAssociatedObject(self, &CKViewControllerContainerViewControllerKey);
 }
 
 
@@ -370,7 +370,7 @@ static char CKUIViewControllerContainerViewControllerKey;
     if(!ref){
         ref = [CKWeakRef weakRefWithObject:viewController];
         objc_setAssociatedObject(self, 
-                                 &CKUIViewControllerContainerViewControllerKey,
+                                 &CKViewControllerContainerViewControllerKey,
                                  ref,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -403,9 +403,9 @@ static char CKUIViewControllerContainerViewControllerKey;
 
 @end
 
-#pragma mark - CKUIViewController Additions
+#pragma mark - CKViewController Additions
 
-@implementation CKUIViewController (CKContainerViewController)
+@implementation CKViewController (CKContainerViewController)
 
 - (UINavigationController *)navigationController {
 	return (self.containerViewController && self.containerViewController.navigationController) ? self.containerViewController.navigationController : [super navigationController];

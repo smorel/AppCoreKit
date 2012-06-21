@@ -344,14 +344,14 @@
 	return section;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell{
 	CKFormBindedCollectionSection* section = [[[CKFormBindedCollectionSection alloc]initWithCollection:collection factory:factory]autorelease];
-	section.objectController.appendCollectionCellControllerAsFooterCell = appendCollectionCellControllerAsFooterCell;
+	section.objectController.appendSpinnerAsFooterCell = appendSpinnerAsFooterCell;
 	return section;
 }
 
-+ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendCollectionCellControllerAsFooterCell:(BOOL)appendCollectionCellControllerAsFooterCell{
-	CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory appendCollectionCellControllerAsFooterCell:appendCollectionCellControllerAsFooterCell];
++ (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell{
+	CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory appendSpinnerAsFooterCell:appendSpinnerAsFooterCell];
 	section.headerTitle = title;
 	return section;
 }

@@ -10,7 +10,7 @@
 #import "CKLocalization.h"
 #import "CKNSObject+Bindings.h"
 
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKPopoverController.h"
 

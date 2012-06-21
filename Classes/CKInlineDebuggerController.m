@@ -10,7 +10,7 @@
 
 #import "CKInlineDebuggerController.h"
 #import "CKWeakRef.h"
-#import "CKUIViewController+InlineDebugger.h"
+#import "CKViewController+InlineDebugger.h"
 #import "CKLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKUIView+Positioning.h"

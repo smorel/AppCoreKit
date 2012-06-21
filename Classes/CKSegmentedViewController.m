@@ -10,7 +10,7 @@
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
 #import "CKNSObject+Bindings.h"
 #import "CKUIView+Positioning.h"
-#import "CKUIViewController+Style.h"
+#import "CKViewController+Style.h"
 
 @interface CKSegmentedViewController() 
 - (void)updateSegmentPositionUsingPosition:(CKSegmentedViewControllerPosition)position;
@@ -137,8 +137,8 @@
 
 
 - (void)updateSegmentUsingViewControllers:(NSArray*)controllers{
-    if(self.state == CKUIViewControllerStateWillAppear ||
-       self.state == CKUIViewControllerStateDidAppear){
+    if(self.state == CKViewControllerStateWillAppear ||
+       self.state == CKViewControllerStateDidAppear){
         
         if(_segmentedControl){
             [_segmentedControl removeFromSuperview];
@@ -171,7 +171,7 @@
 }
 
 - (void)changeList:(id)sender {
-    BOOL animated = (self.state == CKUIViewControllerStateDidAppear);
+    BOOL animated = (self.state == CKViewControllerStateDidAppear);
     [self showViewControllerAtIndex:self.segmentedControl.selectedSegmentIndex withTransition:animated ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationTransitionNone];
 }
 

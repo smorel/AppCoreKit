@@ -107,7 +107,7 @@
     "CKFormTableViewController[name=CKInlineDebugger]" : {
         "@inherits" : [  "$CKInlineDebugger_tableViewController" ],
                 
-        "CKTableViewController,CKOptionTableViewController,CKFormTableViewController,CKUIViewController" : {//controller pushed by a debugger take the same style.
+        "CKTableViewController,CKOptionTableViewController,CKFormTableViewController,CKViewController" : {//controller pushed by a debugger take the same style.
             "@inherits" : [  "$CKInlineDebugger_tableViewController" ]
         },
         

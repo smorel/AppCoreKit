@@ -426,17 +426,17 @@
 //UIViewController(CKSplitView)
 
 @implementation UIViewController(CKSplitView)
-static char CKUIViewControllerSplitViewConstraintsKey;
+static char CKViewControllerSplitViewConstraintsKey;
 
 - (void)setSplitViewConstraints:(CKSplitViewConstraints *)constraints {
     objc_setAssociatedObject(self, 
-                             &CKUIViewControllerSplitViewConstraintsKey,
+                             &CKViewControllerSplitViewConstraintsKey,
                              constraints,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CKSplitViewConstraints *)splitViewConstraints {
-    CKSplitViewConstraints* constraints = objc_getAssociatedObject(self, &CKUIViewControllerSplitViewConstraintsKey);
+    CKSplitViewConstraints* constraints = objc_getAssociatedObject(self, &CKViewControllerSplitViewConstraintsKey);
     if(constraints == nil){
         constraints = [CKSplitViewConstraints constraints];
         [self setSplitViewConstraints:constraints];

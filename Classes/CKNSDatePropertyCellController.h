@@ -18,7 +18,7 @@ typedef enum CKDatePickerMode{
     CKDatePickerModeCreditCardExpirationDate
 } CKDatePickerMode;
 
-@interface CKNSDateViewController : CKUIViewController<UIPickerViewDataSource,UIPickerViewDelegate>{
+@interface CKNSDateViewController : CKViewController<UIPickerViewDataSource,UIPickerViewDelegate>{
     CKProperty* _property;
     UIDatePicker* _datePicker;
     UIPickerView* _pickerView;

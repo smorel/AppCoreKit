@@ -7,6 +7,7 @@
 //
 
 #import "CKCollectionTableViewCellController.h"
+#import "CKFormBindedCollectionSection_private.h"
 #import "CKFeedSource.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"

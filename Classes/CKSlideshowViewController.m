@@ -234,8 +234,8 @@
     return [super tableView:tableView willSelectRowAtIndexPath:indexPath];
 }
 
-- (void)onEndUpdates{
-    [super onEndUpdates];
+- (void)didEndUpdates{
+    [super didEndUpdates];
     if ([self numberOfObjectsForSection:0] > 1) { 
 		[self.navigationController setToolbarHidden:NO animated:YES];
 	}

@@ -6,7 +6,7 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 
 typedef enum CKTransitionType{
     CKTransitionNone = UIViewAnimationOptionTransitionNone,
@@ -21,7 +21,7 @@ typedef enum CKTransitionType{
     CKTransitionPop             = 9 << 20,
 }CKTransitionType;
 
-@interface CKContainerViewController : CKUIViewController {
+@interface CKContainerViewController : CKViewController {
 }
 
 @property (nonatomic, retain) NSArray* viewControllers;

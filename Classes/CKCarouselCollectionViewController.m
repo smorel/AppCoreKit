@@ -12,6 +12,19 @@
 #import "CKCollectionController.h"
 
 
+
+@interface CKCollectionViewController()
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
+
+
+
 @interface UIViewWithIdentifier : UIView{
 	id reuseIdentifier;
 }
@@ -109,7 +122,7 @@
 	[self reload];
     
 	for(int i =0; i< [self numberOfSections];++i){
-		[self fetchMoreIfNeededAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+		[self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
 	}
 }
 
@@ -143,7 +156,7 @@
 
 - (UIView*)carouselView:(CKCarouselView*)carouselView viewForRowAtIndexPath:(NSIndexPath*)indexPath{
 	UIView* view = [self createViewAtIndexPath:indexPath];
-	[self fetchMoreIfNeededAtIndexPath:indexPath];
+	[self fetchMoreIfNeededFromIndexPath:indexPath];
 	return view;
 }
 
@@ -156,8 +169,8 @@
 	}
 	
 	//if([_objectController conformsToProtocol:@protocol(CKObjectController) ]){
-	if([_objectController respondsToSelector:@selector(headerViewForSection:)]){
-		view = [_objectController headerViewForSection:section];
+	if([self.objectController respondsToSelector:@selector(headerViewForSection:)]){
+		view = [self.objectController headerViewForSection:section];
 		if(_headerViewsForSections == nil){
 			self.headerViewsForSections = [NSMutableDictionary dictionary];
 		}
@@ -189,22 +202,22 @@
 
 #pragma mark CKObjectControllerDelegate
 
-- (void)onReload{
+- (void)didReload{
 	[self.carouselView reloadData];
 }
 
-- (void)onBeginUpdates{
+- (void)didBeginUpdates{
 }
 
-- (void)onEndUpdates{
+- (void)didEndUpdates{
 	[self.carouselView reloadData];
 }
 
-- (void)onInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     //implement animations
 }
 
-- (void)onRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
+- (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     //implement animations
 }
 

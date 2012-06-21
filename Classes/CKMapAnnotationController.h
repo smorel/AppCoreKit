@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 #import "CKCollectionCellController.h"
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 
 /** TODO
  */

@@ -49,7 +49,7 @@
     return [[cellStyleProperty extendedAttributes]enumDescriptor];
 }
 
-+ (CKUIViewController*)viewControllerToTestBasicCellControllers{
++ (CKViewController*)viewControllerToTestBasicCellControllers{
     CKFormTableViewController* form = [CKFormTableViewController controller];
     
     CKFormSection* section = [CKFormSection section];
@@ -81,7 +81,7 @@
 }
 
 
-+ (CKUIViewController*)viewControllerToTestPropertyCellControllers{
++ (CKViewController*)viewControllerToTestPropertyCellControllers{
     CKFormTableViewController* form = [CKFormTableViewController controller];
     form.editableType = CKTableCollectionViewControllerEditingTypeRight;
     

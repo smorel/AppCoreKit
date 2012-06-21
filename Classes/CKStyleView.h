@@ -68,7 +68,9 @@ typedef enum {
 
 @property (nonatomic, retain) NSArray *gradientColors;
 @property (nonatomic, retain) NSArray *gradientColorLocations;
+
 @property (nonatomic, retain) UIImage *image;
+@property (nonatomic, assign) UIViewContentMode imageContentMode;
 
 @property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, assign) CGFloat borderWidth;
@@ -78,7 +80,6 @@ typedef enum {
 @property (nonatomic, assign) CGFloat separatorWidth;
 @property (nonatomic, assign) NSInteger separatorLocation;
 
-@property (nonatomic, assign) UIViewContentMode imageContentMode;
 @property (nonatomic, retain) UIColor *embossTopColor;
 @property (nonatomic, retain) UIColor *embossBottomColor;
 

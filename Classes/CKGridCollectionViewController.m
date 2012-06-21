@@ -10,6 +10,23 @@
 #import "CKGridTableViewCellController.h"
 #import "CKArrayProxyCollection.h"
 
+@interface CKCollectionViewController()
+
+@property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
+@property (nonatomic, retain) NSMutableDictionary* viewsToIndexPath;
+@property (nonatomic, retain) NSMutableDictionary* indexPathToViews;
+@property (nonatomic, retain) NSMutableArray* weakViews;
+@property (nonatomic, retain) NSMutableArray* sectionsToControllers;
+
+@property (nonatomic, retain) id objectController;
+@property (nonatomic, retain) CKCollectionCellControllerFactory* controllerFactory;
+
+- (void)updateVisibleViewsIndexPath;
+- (void)updateVisibleViewsRotation;
+- (void)updateViewsVisibility:(BOOL)visible;
+
+@end
+
 
 @interface CKTableViewController ()
 @property (nonatomic, assign) BOOL tableViewHasBeenReloaded;
@@ -160,7 +177,7 @@
         self.indexPathToReachAfterRotation = newIndexPath;
         
         
-        if(self.state != CKUIViewControllerStateDidAppear){
+        if(self.state != CKViewControllerStateDidAppear){
             self.tableViewHasBeenReloaded = NO;
         }else{
             [self scrollToRowAtIndexPath:newIndexPath animated:YES];
@@ -196,7 +213,7 @@
             break;
         }
     }
-    controller.controllerFactory = _controllerFactory;
+    controller.controllerFactory = self.controllerFactory;
     return controller;
 }
 

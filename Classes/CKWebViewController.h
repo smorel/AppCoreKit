@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "CKUIViewController.h"
+#import "CKViewController.h"
 
 /** TODO
  */
-@interface CKWebViewController : CKUIViewController
+@interface CKWebViewController : CKViewController
 
 @property (readonly, nonatomic) NSURL *currentURL;
 @property (nonatomic, readonly, retain) UIWebView *webView;
