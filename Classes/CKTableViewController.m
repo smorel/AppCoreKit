@@ -126,10 +126,9 @@
 
 @implementation CKTableViewController
 
-@synthesize backgroundView = _backgroundView;
 @synthesize tableView = _tableView;
 @synthesize style = _style;
-@synthesize stickySelection = _stickySelection;
+@synthesize stickySelectionEnabled = _stickySelection;
 @synthesize selectedIndexPath = _selectedIndexPath;
 @synthesize tableViewContainer = _tableViewContainer;
 @synthesize tableViewInsets = _tableViewInsets;
@@ -167,7 +166,6 @@
 
 - (void)dealloc {
 	self.selectedIndexPath = nil;
-	self.backgroundView = nil;
     if(_tableView){
         self.tableView.delegate = nil;
         self.tableView.dataSource = nil;
@@ -222,6 +220,7 @@
         
 		UIView *containerView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
 		containerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        containerView.backgroundColor = [UIColor clearColor];
 		self.tableViewContainer = containerView;
         [self.view  addSubview:containerView];
         
@@ -291,7 +290,7 @@
         [self.tableView endUpdates];
     }
     
-	if (self.stickySelection == NO){
+	if (self.stickySelectionEnabled == NO){
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
 		if([self isValidIndexPath:indexPath]){
 			[self.tableView deselectRowAtIndexPath:indexPath animated:animated];
@@ -309,7 +308,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	if (self.stickySelection == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
+	if (self.stickySelectionEnabled == NO) [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:animated];
 	else self.selectedIndexPath = [self.tableView indexPathForSelectedRow];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onSizeChangeEnd) object:nil];
@@ -324,13 +323,13 @@
 
 - (void)reload {
     [super reload];//didReload gets called by super class
-	if (self.stickySelection == YES && [self isValidIndexPath:self.selectedIndexPath]) {
+	if (self.stickySelectionEnabled == YES && [self isValidIndexPath:self.selectedIndexPath]) {
 		[self.tableView selectRowAtIndexPath:_selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
 }
 
 - (void)didReload{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -344,7 +343,7 @@
     [super setObjectController:controller];
     
     //This force a reload for the next viewWillAppear call.
-    if(![self viewIsOnScreen]){
+    if(![self isViewDisplayed]){
         self.tableViewHasBeenReloaded = NO;
     }
 }
@@ -366,17 +365,6 @@
     
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
-}
-
-- (void)setBackgroundView:(UIView *)backgroundView {
-	[_backgroundView removeFromSuperview];
-	[_backgroundView release];
-	if (backgroundView) {
-		_backgroundView = [backgroundView retain];
-		[self.view insertSubview:backgroundView belowSubview:self.tableView];
-		self.tableView.backgroundColor = [UIColor clearColor];
-	}
-	else _backgroundView = nil;
 }
 
 #pragma mark UITableView Delegate

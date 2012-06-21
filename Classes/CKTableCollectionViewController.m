@@ -66,7 +66,45 @@
 
 
 
-@implementation CKTableCollectionViewController
+@implementation CKTableCollectionViewController{
+	CKTableViewOrientation _orientation;
+	BOOL _resizeOnKeyboardNotification;
+	
+	int _currentPage;
+	int _numberOfPages;
+	
+	BOOL _scrolling;
+    CKTableCollectionViewControllerScrollingPolicy _scrollingPolicy;
+    
+    CKTableCollectionViewControllerEditingType _editableType;
+    
+	UITableViewRowAnimation _rowInsertAnimation;
+	UITableViewRowAnimation _rowRemoveAnimation;
+	
+	//for editable tables
+	UIBarButtonItem *editButton;
+	UIBarButtonItem *doneButton;
+	
+	//internal
+	NSIndexPath* _indexPathToReachAfterRotation;
+	
+	//search
+	BOOL _searchEnabled;
+	UISearchBar* _searchBar;
+	CGFloat _liveSearchDelay;
+	UISegmentedControl* _segmentedControl;
+	NSDictionary* _searchScopeDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
+	id _defaultSearchScope;
+	
+    int _modalViewCount;
+    
+	
+	CGFloat _tableMaximumWidth;
+    
+    id _storedTableDelegate;
+    id _storedTableDataSource;
+}
+
 @synthesize currentPage = _currentPage;
 @synthesize numberOfPages = _numberOfPages;
 @synthesize orientation = _orientation;
@@ -436,7 +474,7 @@
 
 
 - (void)reload{
-	if(self.viewIsOnScreen){
+	if(self.isViewDisplayed){
 		[super reload];
 		[self fetchMoreData];
 	}
@@ -773,7 +811,7 @@
 }
 
 - (void)didBeginUpdates{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -784,7 +822,7 @@
 }
 
 - (void)didEndUpdates{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -800,7 +838,7 @@
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -823,7 +861,7 @@
 }
 
 - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -854,7 +892,7 @@
 }
 
 - (void)didInsertSectionAtIndex:(NSInteger)index{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -868,7 +906,7 @@
 }
 
 - (void)didRemoveSectionAtIndex:(NSInteger)index{
-	if(!self.viewIsOnScreen){
+	if(!self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
@@ -986,7 +1024,7 @@
 }
 
 - (void)setEditableType:(CKTableCollectionViewControllerEditingType)theEditableType{
-    if(theEditableType != _editableType && self.viewIsOnScreen){
+    if(theEditableType != _editableType && self.isViewDisplayed){
         switch(_editableType){
             case CKTableCollectionViewControllerEditingTypeLeft:{
                 if(self.leftButton){

@@ -43,8 +43,7 @@ typedef enum {
 @property (nonatomic, retain) IBOutlet CKTableView *tableView;
 @property (nonatomic, retain) IBOutlet UIView *tableViewContainer;
 @property (nonatomic, assign) UITableViewStyle style;
-@property (nonatomic, retain) UIView *backgroundView;
-@property (nonatomic, assign) BOOL stickySelection;
+@property (nonatomic, assign, getter = isStickySelection) BOOL stickySelectionEnabled;
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
 - (id)initWithStyle:(UITableViewStyle)style;

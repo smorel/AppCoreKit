@@ -385,7 +385,7 @@
                 item.position = CKTabViewItemPositionMiddle;
             }
             
-            if(self.viewIsOnScreen){
+            if(self.isViewDisplayed){
                 NSMutableDictionary* itemStyle = [tabBarStyle styleForObject:item  propertyName:nil];
                 [[item class] applyStyle:itemStyle toView:item appliedStack:[NSMutableSet set] delegate:nil];
                 [item sizeToFit];

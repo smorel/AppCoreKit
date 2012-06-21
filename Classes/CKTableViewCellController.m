@@ -1013,7 +1013,7 @@
 - (void)didSelect{
 	if([self.containerController isKindOfClass:[CKTableViewController class]]){
 		CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
-		if (tableViewController.stickySelection == NO){
+		if (tableViewController.stickySelectionEnabled == NO){
             if(self.parentCellController){
                 [self.tableViewCell setHighlighted:NO animated:NO];
                 [self.tableViewCell setSelected:NO animated:NO];

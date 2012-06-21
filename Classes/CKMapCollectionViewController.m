@@ -553,7 +553,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 #pragma mark CKObjectControllerDelegate
 
 - (void)didReload{
-    if(!self.viewIsOnScreen){
+    if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
     }
@@ -595,7 +595,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-    if(!self.viewIsOnScreen){
+    if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
     }
@@ -605,7 +605,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 }
 
 - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
-    if(!self.viewIsOnScreen){
+    if(!self.isViewDisplayed){
         self.mapViewHasBeenReloaded = NO;
 		return;
     }

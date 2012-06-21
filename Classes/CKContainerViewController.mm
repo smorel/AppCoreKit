@@ -98,7 +98,7 @@ typedef void(^CKTransitionBlock)();
 		_selectedIndex = 0;
 	}
     
-    if(self.viewIsOnScreen){
+    if(self.isViewDisplayed){
         [self showViewControllerAtIndex:_selectedIndex withTransition:CKTransitionNone];
     }
 }
@@ -110,7 +110,7 @@ typedef void(^CKTransitionBlock)();
 - (void)setSelectedIndex:(NSUInteger)theselectedIndex withTransition:(CKTransitionType)transition{
     if(theselectedIndex < [self.viewControllers count]){
         _selectedIndex = theselectedIndex;
-        if(self.viewIsOnScreen){
+        if(self.isViewDisplayed){
             [self showViewControllerAtIndex:_selectedIndex withTransition:transition];
         }
     }

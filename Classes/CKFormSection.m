@@ -114,7 +114,7 @@
 	}
 	[_cellControllers insertObject:cellController atIndex:index];
     
-    if([self.parentController viewIsOnScreen] && !self.collapsed){
+    if([self.parentController isViewDisplayed] && !self.collapsed){
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
@@ -129,7 +129,7 @@
 	}
 	[_cellControllers addObject:cellController];
     
-    if([self.parentController viewIsOnScreen] && !self.collapsed){
+    if([self.parentController isViewDisplayed] && !self.collapsed){
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:[_cellControllers count] -1 inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
@@ -143,7 +143,7 @@
     
 	[_cellControllers removeObjectAtIndex:index];
     
-    if([self.parentController viewIsOnScreen] && !self.collapsed){
+    if([self.parentController isViewDisplayed] && !self.collapsed){
         [self.parentController performSelector:@selector(objectControllerDidBeginUpdating:) withObject:self];
         NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex];
         [self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 

@@ -277,7 +277,7 @@
         }
     }
     
-    if(self.viewIsOnScreen){
+    if(self.isViewDisplayed){
         if([CKOSVersion() floatValue] < 5){
             for(UIViewController* controller in _viewControllers){
                 [controller view];//force to load view now

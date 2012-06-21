@@ -34,44 +34,7 @@ typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
 
 /** TODO
  */
-@interface CKTableCollectionViewController : CKTableViewController<UISearchBarDelegate> {
-	CKTableViewOrientation _orientation;
-	BOOL _resizeOnKeyboardNotification;
-	
-	int _currentPage;
-	int _numberOfPages;
-	
-	BOOL _scrolling;
-    CKTableCollectionViewControllerScrollingPolicy _scrollingPolicy;
-    
-    CKTableCollectionViewControllerEditingType _editableType;
-    
-	UITableViewRowAnimation _rowInsertAnimation;
-	UITableViewRowAnimation _rowRemoveAnimation;
-	
-	//for editable tables
-	UIBarButtonItem *editButton;
-	UIBarButtonItem *doneButton;
-	
-	//internal
-	NSIndexPath* _indexPathToReachAfterRotation;
-	
-	//search
-	BOOL _searchEnabled;
-	UISearchBar* _searchBar;
-	CGFloat _liveSearchDelay;
-	UISegmentedControl* _segmentedControl;
-	NSDictionary* _searchScopeDefinition;//dico of with [object:CKCallback key:localized label or uiimage]
-	id _defaultSearchScope;
-	
-    int _modalViewCount;
-    
-	
-	CGFloat _tableMaximumWidth;
-    
-    id _storedTableDelegate;
-    id _storedTableDataSource;
-}
+@interface CKTableCollectionViewController : CKTableViewController<UISearchBarDelegate> 
 
 ///-----------------------------------
 /// @name Current State

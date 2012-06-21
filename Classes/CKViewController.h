@@ -161,7 +161,7 @@ typedef enum CKViewControllerState{
 /** 
  Returns whether the view is currently displayed on screen or not
  */
-@property (nonatomic, assign,readonly)  BOOL viewIsOnScreen;
+@property (nonatomic, assign,readonly)  BOOL isViewDisplayed;
 
 ///-----------------------------------
 /// @name Private

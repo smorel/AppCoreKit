@@ -25,8 +25,9 @@ typedef enum CKTransitionType{
 }
 
 @property (nonatomic, retain) NSArray* viewControllers;
-@property (nonatomic, readonly) UIViewController* selectedViewController;
 @property (nonatomic, assign) NSUInteger selectedIndex;
+
+@property (nonatomic, readonly) UIViewController* selectedViewController;
 @property (nonatomic, retain, readonly) UIView *containerView;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;

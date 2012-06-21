@@ -41,7 +41,7 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
 		self.labels = labels;
-		self.stickySelection = YES;
+		self.stickySelectionEnabled = YES;
 		self.multiSelectionEnabled = NO;
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
@@ -55,7 +55,7 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
 		self.labels = labels;
-		self.stickySelection = !multiSelect;
+		self.stickySelectionEnabled = !multiSelect;
 		self.multiSelectionEnabled = multiSelect;
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;
@@ -69,7 +69,7 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
 		self.labels = labels;
-		self.stickySelection = YES;
+		self.stickySelectionEnabled = YES;
 		self.multiSelectionEnabled = NO;
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
@@ -84,7 +84,7 @@
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
 		self.labels = labels;
-		self.stickySelection = !multiSelect;
+		self.stickySelectionEnabled = !multiSelect;
 		self.multiSelectionEnabled = multiSelect;
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;

@@ -181,7 +181,7 @@
 	_autoHideSectionHeaders = NO;
     _validationEnabled = NO;
     self.style = UITableViewStyleGrouped;
-    _scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyResignResponder;
+    self.scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyResignResponder;
 }
 
 - (void)setValidationEnabled:(BOOL)validationEnabled{
@@ -281,7 +281,7 @@
 		}
     }
     
-    if(indexSet && self.viewIsOnScreen){
+    if(indexSet && self.isViewDisplayed){
         if((self.state & CKViewControllerStateDidAppear)){
             UITableViewRowAnimation anim = self.rowInsertAnimation;
             
@@ -300,7 +300,7 @@
             [super reload];
         }
     }
-    else if(indexSet && !self.viewIsOnScreen){
+    else if(indexSet && !self.isViewDisplayed){
         self.tableViewHasBeenReloaded = NO;
     }
     

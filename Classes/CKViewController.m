@@ -59,7 +59,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize deallocBlock = _deallocBlock;
 @synthesize styleHasBeenApplied;
 @synthesize state;
-@synthesize viewIsOnScreen;
+@synthesize isViewDisplayed;
 
 #ifdef DEBUG
 @synthesize inlineDebuggerController = _inlineDebuggerController;
@@ -599,7 +599,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self applyStyleForNavigation];
 }
 
-- (BOOL)viewIsOnScreen{
+- (BOOL)isViewDisplayed{
     return (self.state & CKViewControllerStateWillAppear) || (self.state & CKViewControllerStateDidAppear);
 }
 
@@ -608,8 +608,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 - (void)setLeftButton:(UIBarButtonItem *)theleftButton{
     [_leftButton release];
     _leftButton = [theleftButton retain];
-    [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.viewIsOnScreen];
-    if(self.viewIsOnScreen){
+    [self.navigationItem setLeftBarButtonItem:theleftButton animated:self.isViewDisplayed];
+    if(self.isViewDisplayed){
         [self applyStyleForLeftBarButtonItem];
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
@@ -624,8 +624,8 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [_rightButton release];
     _rightButton = [theRightButton retain];
     
-    [self.navigationItem setRightBarButtonItem:theRightButton animated:(self.viewIsOnScreen)];
-    if(self.viewIsOnScreen){
+    [self.navigationItem setRightBarButtonItem:theRightButton animated:(self.isViewDisplayed)];
+    if(self.isViewDisplayed){
         [self applyStyleForRightBarButtonItem];
         
         //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
