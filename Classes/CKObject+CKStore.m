@@ -7,6 +7,7 @@
 //
 
 #import "CKObject+CKStore.h"
+#import "CKObject+CKStore_Private.h"
 
 #import "CKStoreDataSource.h"
 #import "CKItem.h"
@@ -26,20 +27,11 @@ NSMutableDictionary* CKObjectManager = nil;
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive;
 @end
 
-@implementation CKObject (CKStoreAddition)
+
+@implementation CKObject (CKStoreAddition_private)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
 	return [self attributesDictionaryForDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:NO];
-}
-
-- (void)deleteFromDomainNamed:(NSString*)domain{
-	NSAssert(!_loading, @"cannot delete an object while loading it !");
-	
-	CKItem* item = [CKObject itemWithObject:self inDomainNamed:domain];
-	if(item){
-		CKStore* store = [CKStore storeWithDomainName:domain];
-		[store deleteItems:[NSArray arrayWithObject:item]];
-	}
 }
 
 + (CKItem *)createItemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
@@ -129,28 +121,6 @@ NSMutableDictionary* CKObjectManager = nil;
 	return nil;
 }
 
-+ (CKObject*)objectWithUniqueId:(NSString*)uniqueId{
-	CKWeakRef* objectRef = [CKObjectManager objectForKey:uniqueId];
-	id object = [objectRef object];
-	if(objectRef != nil){
-		//CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
-	}
-	return object;
-}
-
-+ (CKObject*)loadObjectWithUniqueId:(NSString*)uniqueId{
-	CKObject* obj = [self objectWithUniqueId:uniqueId];
-	if(obj != nil)
-		return obj;
-	
-	CKStore* store = [CKStore storeWithDomainName:@"whatever"];
-	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",uniqueId] arguments:nil];
-	if([res count] == 1){
-		CKItem* item = (CKItem*)[(CKAttribute*) [res lastObject]item];
-		return [NSObject objectFromDictionary:[item propertyListRepresentation]];
-	}
-	return nil;
-}
 
 + (void)registerObject:(CKObject*)object withUniqueId:(NSString*)uniqueId{
 	if(uniqueId == nil){
@@ -178,6 +148,53 @@ NSMutableDictionary* CKObjectManager = nil;
 		[predicate appendFormat:@"AND (ANY attributes.name == '%@') AND (ANY attributes.value == '%@')",propertyName,attributeStr];
 	}
 	return [store fetchItemsWithPredicateFormat:predicate arguments:nil];
+}
+
+
+@end
+
+@implementation CKObject (CKStoreAddition)
+
+
+- (void)removeObjectFromDomainNamed:(NSString*)domain{
+	NSAssert(!_loading, @"cannot delete an object while loading it !");
+	
+	CKItem* item = [CKObject itemWithObject:self inDomainNamed:domain];
+	if(item){
+		CKStore* store = [CKStore storeWithDomainName:domain];
+		[store deleteItems:[NSArray arrayWithObject:item]];
+	}
+}
++ (CKObject*)objectWithUniqueId:(NSString*)uniqueId{
+	CKWeakRef* objectRef = [CKObjectManager objectForKey:uniqueId];
+	id object = [objectRef object];
+	if(objectRef != nil){
+		//CKDebugLog(@"Found registered object <%p> of type <%@> with uniqueId : %@",object,[object class],uniqueId);
+	}
+	return object;
+}
+
++ (CKObject*)loadObjectWithUniqueId:(NSString*)uniqueId{
+	CKObject* obj = [self objectWithUniqueId:uniqueId];
+	if(obj != nil)
+		return obj;
+	
+	CKStore* store = [CKStore storeWithDomainName:@"whatever"];
+	NSArray *res = [store fetchAttributesWithFormat:[NSString stringWithFormat:@"(name == 'uniqueId' AND value == '%@')",uniqueId] arguments:nil];
+	if([res count] == 1){
+		CKItem* item = (CKItem*)[(CKAttribute*) [res lastObject]item];
+		return [NSObject objectFromDictionary:[item propertyListRepresentation]];
+	}
+	return nil;
+}
+
+
+- (void)saveObjectToDomainNamed:(NSString*)domain{
+    [self saveToDomainNamed:domain];
+}
+
+- (void)saveObjectToDomainNamed:(NSString*)domain recursive:(BOOL)recursive{
+    [self saveToDomainNamed:domain recursive:recursive];
 }
 
 @end

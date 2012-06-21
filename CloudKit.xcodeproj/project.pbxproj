@@ -1026,6 +1026,7 @@
 		964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormSection+PropertyGrid.h"; path = "Classes/CKFormSection+PropertyGrid.h"; sourceTree = "<group>"; };
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
 		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.x/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
+		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* CKNSObject+CKSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+CKSingleton.h"; path = "Classes/CKNSObject+CKSingleton.h"; sourceTree = "<group>"; };
 		967C51801538BD4E00B3F785 /* CKNSObject+CKSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSObject+CKSingleton.m"; path = "Classes/CKNSObject+CKSingleton.m"; sourceTree = "<group>"; };
 		967C51831538BE8100B3F785 /* CKDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKDocument.h; path = Classes/CKDocument.h; sourceTree = "<group>"; };
@@ -1450,6 +1451,7 @@
 				75C6DF6513FEE8B100E4AE4F /* CoreData.h */,
 				7560DB9313B8ED3600268D13 /* CKObject+CKStore.h */,
 				7560DB9413B8ED3600268D13 /* CKObject+CKStore.m */,
+				966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */,
 				7506E40B13B900A000EE1471 /* Helpers */,
 				7506E40C13B900A800EE1471 /* CKStore */,
 			);

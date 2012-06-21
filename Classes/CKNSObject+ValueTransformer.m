@@ -7,6 +7,7 @@
 //
 
 #import "CKNSObject+ValueTransformer.h"
+#import "CKObject+CKStore_Private.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKObject+CKStore.h"
 

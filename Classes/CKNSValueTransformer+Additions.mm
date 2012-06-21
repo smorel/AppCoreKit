@@ -8,6 +8,7 @@
 //
 
 #import "CKNSValueTransformer+Additions.h"
+#import "CKObject+CKStore_Private.h"
 #import <objc/runtime.h>
 #import "CKLocalization.h"
 #import <ext/hash_map>
