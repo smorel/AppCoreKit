@@ -8,7 +8,6 @@
 
 #import "CKClassExplorer.h"
 #import <objc/runtime.h>
-#import "CKStoreDataSource.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKTableViewCellController+CKBlockBasedInterface.h"
 
@@ -188,6 +187,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 	[self didSearch:CKClassExplorerFilter];
 }
 
+/*
 + (CKStoreRequest*)localRequestForClassNamed:(NSString*)className range:(NSRange)range filter:(NSString*)filter domain:(NSString*)domain{
 	//TODO : append all the inherited types in the request !
 	NSString* predicate = nil;
@@ -204,6 +204,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 																   store:[CKStore storeWithDomainName:domain]];
 	return request;
 }
+ */
 
 - (void)didSearch:(NSString*)text{
 	NSString* theFilter = [text retain];
@@ -241,6 +242,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 		}
 		
 		if(domain){
+            /* FIXME Without CKStoreDataSource
 			CKStoreDataSource* source = [CKStoreDataSource synchronousDataSource];
 			source.requestBlock = ^(NSRange range){
 				return [[self class] localRequestForClassNamed:self.className range:range filter:text domain:domain];
@@ -249,6 +251,7 @@ CKClassExplorerType CKClassExplorerCurrentType = CKClassExplorerTypeClasses;
 				return (id) [NSArray objectArrayFromDictionaryArray:value];
 			};		
 			collection = [[[CKArrayCollection alloc]initWithFeedSource:source]autorelease];
+             */
 		}
 	}
 	self.objectController = [CKCollectionController controllerWithCollection:collection];

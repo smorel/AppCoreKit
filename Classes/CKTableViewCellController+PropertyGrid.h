@@ -9,11 +9,28 @@
 #import "CKTableViewCellController.h"
 #import "CKProperty.h"
 
+/** TODO
+ */
 @interface CKTableViewCellController(CKPropertyGrid)
 
+///-----------------------------------
+/// @name Creating initialized TableViewCell Controllers
+///-----------------------------------
+
+/**
+ */
 + (CKTableViewCellController*)cellControllerWithObject:(id)object keyPath:(NSString*)keyPath;
+
+/**
+ */
 + (CKTableViewCellController*)cellControllerWithObject:(id)object keyPath:(NSString*)keyPath readOnly:(BOOL)readOnly;
+
+/**
+ */
 + (CKTableViewCellController*)cellControllerWithProperty:(CKProperty*)property;
+
+/**
+ */
 + (CKTableViewCellController*)cellControllerWithProperty:(CKProperty*)property readOnly:(BOOL)readOnly;
 
 @end

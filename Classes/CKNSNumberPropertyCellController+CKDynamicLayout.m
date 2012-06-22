@@ -22,6 +22,35 @@
 
 @implementation CKNSNumberPropertyCellController(CKDynamicLayout)
 
+- (BOOL)isNumber{
+	CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    switch(descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeInt:
+		case CKClassPropertyDescriptorTypeShort:
+		case CKClassPropertyDescriptorTypeLong:
+		case CKClassPropertyDescriptorTypeLongLong:
+		case CKClassPropertyDescriptorTypeUnsignedChar:
+		case CKClassPropertyDescriptorTypeUnsignedInt:
+		case CKClassPropertyDescriptorTypeUnsignedShort:
+		case CKClassPropertyDescriptorTypeUnsignedLong:
+		case CKClassPropertyDescriptorTypeUnsignedLongLong:
+		case CKClassPropertyDescriptorTypeFloat:
+		case CKClassPropertyDescriptorTypeDouble:
+            return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isBOOL{
+    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
+    switch(descriptor.propertyType){
+        case CKClassPropertyDescriptorTypeChar:
+		case CKClassPropertyDescriptorTypeCppBool:
+            return YES;
+    }
+    return NO;
+}
+
 - (CGRect)value3SwitchFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
     CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;

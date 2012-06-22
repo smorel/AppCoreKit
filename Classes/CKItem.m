@@ -12,6 +12,23 @@
 #import "CKDomain.h"
 #import "CKItemAttributeReference.h"
 
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+
+/** TODO
+ */
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
+
+@end
+
 @implementation CKItem
 
 @dynamic name;

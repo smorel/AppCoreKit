@@ -15,14 +15,28 @@
 
 /** TODO
  */
-@interface CKInetEndPoint : NSObject {
-	NSString *_inetAddressRepresentation;
-	NSUInteger _port;
-}
+@interface CKInetEndPoint : NSObject 
 
+///-----------------------------------
+/// @name Initializing an InetEndPoint Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCSockAddr:(const struct sockaddr_in *)addr;
+
+
+///-----------------------------------
+/// @name Accessing an InetEndPoint Attributes
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, readonly) NSString *inetAddressRepresentation;
+
+/**
+ */
 @property (nonatomic, readonly) NSUInteger port;
 
-- (id)initWithCSockAddr:(const struct sockaddr_in *)addr;
 
 @end

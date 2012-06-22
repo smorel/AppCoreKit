@@ -14,17 +14,23 @@
 //FIXME :
    //on rotation, resizer la search bar si besoin !
 
+/** TODO
+ */
 typedef enum CKTableCollectionViewControllerEditingType{
     CKTableCollectionViewControllerEditingTypeNone,
     CKTableCollectionViewControllerEditingTypeLeft,
     CKTableCollectionViewControllerEditingTypeRight
 }CKTableCollectionViewControllerEditingType;
 
+/** TODO
+ */
 typedef enum CKTableCollectionViewControllerScrollingPolicy{
     CKTableCollectionViewControllerScrollingPolicyNone,
     CKTableCollectionViewControllerScrollingPolicyResignResponder
 }CKTableCollectionViewControllerScrollingPolicy;
 
+/** TODO
+ */
 typedef enum CKTableCollectionViewControllerSnappingPolicy{
     CKTableCollectionViewControllerSnappingPolicyNone,
     CKTableCollectionViewControllerSnappingPolicyCenter
@@ -37,7 +43,7 @@ typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
 @interface CKTableCollectionViewController : CKTableViewController<UISearchBarDelegate> 
 
 ///-----------------------------------
-/// @name Current State
+/// @name Getting the Controller status
 ///-----------------------------------
 /** 
  Returns the current page computed using tableView height or width depending on the orientation
@@ -64,18 +70,24 @@ typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
  */
 @property (nonatomic, assign) CKTableCollectionViewControllerSnappingPolicy snapPolicy;
 
+/**
+ */
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 ///-----------------------------------
-/// @name Selection
+/// @name Managing the Selection
 ///-----------------------------------
 
+/**
+ */
 - (void)selectRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
+/**
+ */
 @property (nonatomic, retain,readonly) NSIndexPath* selectedIndexPath;
 
 ///-----------------------------------
-/// @name Layout
+/// @name Customizing the Appearance
 ///-----------------------------------
 /** 
  Specify if the scrolling interactions should be horizontal or vertical
@@ -91,7 +103,7 @@ typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
 @property (nonatomic, assign) CGFloat tableMaximumWidth;
 
 ///-----------------------------------
-/// @name Animation
+/// @name Animating
 ///-----------------------------------
 /** 
 Specify the animations that should be launch on row and sections insertion
@@ -103,18 +115,23 @@ Specify the animations that should be launch on row and sections insertion
 @property (nonatomic, assign) UITableViewRowAnimation rowRemoveAnimation;
 
 ///-----------------------------------
-/// @name Edition
+/// @name Editing
 ///-----------------------------------
 /** 
 Specify if the table is editable. If yes, an edit/done button is automatically added to the left/right of the navigation bar.
 */
 @property (nonatomic, assign) CKTableCollectionViewControllerEditingType editableType;
 
+/**
+ */
 @property (nonatomic, retain) UIBarButtonItem *editButton;
+
+/**
+ */
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
 ///-----------------------------------
-/// @name Search
+/// @name Searching
 ///-----------------------------------
 /** 
  Specify if search is enabled. It will add a search bar at the top of the view and call objectTableViewController:(CKTableCollectionViewController*)controller didSearch:(NSString*)filter on the delegate and didSearch:(NSString*)text; on itself for inherited view controllers.
@@ -159,8 +176,25 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
  */
 @protocol CKTableCollectionViewControllerDelegate
 @optional
+
+///-----------------------------------
+/// @name Managing the Selection
+///-----------------------------------
+
+/**
+ */
 - (void)objectTableViewController:(CKTableCollectionViewController*)controller didSelectRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+
+/**
+ */
 - (void)objectTableViewController:(CKTableCollectionViewController*)controller didSelectAccessoryViewRowAtIndexPath:(NSIndexPath*)indexPath withObject:(id)object;
+
+///-----------------------------------
+/// @name Searching
+///-----------------------------------
+
+/**
+ */
 - (void)objectTableViewController:(CKTableCollectionViewController*)controller didSearch:(NSString*)filter;
 @end
 

@@ -27,7 +27,10 @@
 @property (nonatomic,retain,readwrite) UITextField* textField;
 @end
 
-@implementation CKNSStringPropertyCellController
+@implementation CKNSStringPropertyCellController{
+	UITextField* _textField;
+}
+
 @synthesize textField = _textField;
 
 -(void)dealloc{

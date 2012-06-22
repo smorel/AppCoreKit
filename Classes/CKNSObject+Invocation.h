@@ -12,14 +12,37 @@
  */
 @interface NSObject (CKNSObjectInvocation)
 
+///-----------------------------------
+/// @name Sending Messages
+///-----------------------------------
+
+/** 
+ */
 - (id)performSelector:(SEL)selector withObjects:(NSArray*)objects;
+
+/** 
+ */
 - (void)performSelector:(SEL)selector withObject:(id)arg withObject:(id)arg2 afterDelay:(NSTimeInterval)delay;
+
+/** 
+ */
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 waitUntilDone:(BOOL)wait;
+
+/** 
+ */
 - (void)performSelectorOnMainThread:(SEL)selector withObject:(id)arg withObject:(id)arg2 withObject:(id)arg3 waitUntilDone:(BOOL)wait;
 
+
+/** 
+ */
 - (id)performSelector:(SEL)selector onThread:(NSThread *)thread withObjects:(NSArray *)args waitUntilDone:(BOOL)wait;
 
-- (void)cancelPeformBlock;
+/** 
+ */
 - (void)performBlock:(void (^)())block afterDelay:(NSTimeInterval)delay;
+
+/** 
+ */
+- (void)cancelPeformBlock;
 
 @end

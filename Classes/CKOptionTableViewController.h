@@ -18,33 +18,84 @@
 /** TODO
  */
 @protocol CKOptionTableViewControllerDelegate
+
+///-----------------------------------
+/// @name Managing the selection
+///-----------------------------------
+
+/**
+ */
 - (void)optionTableViewController:(CKOptionTableViewController *)tableViewController didSelectValueAtIndex:(NSInteger)index;
+
 @end
+
+
+
+
 
 typedef void(^CKOptionTableViewControllerSelectionBlock)(CKOptionTableViewController* tableViewController,NSInteger index);
 
 
 /** TODO
  */
-@interface CKOptionTableViewController : CKFormTableViewController {
-	id _optionTableDelegate;
-	NSArray *_values;
-	NSArray *_labels;
-	NSMutableArray* _selectedIndexes;
-	BOOL _multiSelectionEnabled;
-}
+@interface CKOptionTableViewController : CKFormTableViewController 
 
-@property (nonatomic, assign) id optionTableDelegate;
-@property (nonatomic, readonly) NSInteger selectedIndex;
-@property (nonatomic, retain,readonly) NSMutableArray* selectedIndexes;
-@property (nonatomic, assign) BOOL multiSelectionEnabled;
-@property (nonatomic, assign) CKTableViewCellStyle optionCellStyle;
-@property (nonatomic, copy ) CKOptionTableViewControllerSelectionBlock selectionBlock;
+///-----------------------------------
+/// @name Initializing CKOptionTableViewController Objects
+///-----------------------------------
 
+/**
+ */
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index;
+
+/**
+ */
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled;
 
+/**
+ */
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index style:(UITableViewStyle)style;
+
+/**
+ */
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelectionEnabled style:(UITableViewStyle)style;
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) id optionTableDelegate;
+
+///-----------------------------------
+/// @name Managing the selection
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, readonly) NSInteger selectedIndex;
+
+/**
+ */
+@property (nonatomic, retain,readonly) NSMutableArray* selectedIndexes;
+
+/**
+ */
+@property (nonatomic, copy ) CKOptionTableViewControllerSelectionBlock selectionBlock;
+
+/**
+ */
+@property (nonatomic, assign) BOOL multiSelectionEnabled;
+
+
+///-----------------------------------
+/// @name Managing the apperance
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) CKTableViewCellStyle optionCellStyle;
+
 
 @end

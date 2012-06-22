@@ -43,7 +43,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 @implementation CKTableViewCellController (CKDynamicLayout)
 
-@dynamic componentsRatio, componentsSpace, contentInsets, invalidatedSize, parentCellController, isInSetup,textLabelStyle,detailTextLabelStyle;
+@dynamic invalidatedSize, parentCellController, isInSetup,textLabelStyle,detailTextLabelStyle,sizeHasBeenQueriedByTableView;
 
 + (CGFloat)computeTableViewCellViewSizeUsingTableView:(UITableView*)tableView{
     CGFloat rowWidth = 0;
@@ -641,6 +641,17 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     return self.size;
 }
+
+
+- (void)onValueChanged{
+    
+}
+
+@end
+
+
+
+@implementation CKTableViewCellController(CKLayout)
 
 
 - (void)performLayout{

@@ -10,4 +10,7 @@
 
 @interface CKNSNumberPropertyCellController (CKDynamicLayout)
 
+- (BOOL)isBOOL;
+- (BOOL)isNumber;
+
 @end

@@ -11,10 +11,17 @@
 #import <UIKit/UIKit.h>
 #import "CKNSObject+InlineDebugger.h"
 
+/** TODO
+ */
 @interface UIView (CKInlineDebugger)
 
+///-----------------------------------
+/// @name Creating a Debugger for view hierarchy
+///-----------------------------------
+
+/**
+ */
 + (CKFormTableViewController*)inlineDebuggerForSubViewsOfView:(UIView*)view;
-+ (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end
 

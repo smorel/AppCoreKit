@@ -11,8 +11,16 @@
 #import <Foundation/Foundation.h>
 #import "CKFormTableViewController.h"
 
+/** TODO
+ */
 @interface NSObject (CKInlineDebugger)
 
+///-----------------------------------
+/// @name Creating a Debugger
+///-----------------------------------
+
+/**
+ */
 + (CKFormTableViewController*)inlineDebuggerForObject:(id)object;
 
 @end

@@ -19,7 +19,11 @@
 @property (nonatomic,retain,readwrite) UISwitch* toggleSwitch;
 @end
 
-@implementation CKNSNumberPropertyCellController
+@implementation CKNSNumberPropertyCellController{	
+	UITextField* _textField;
+	UISwitch* _toggleSwitch;
+}
+
 @synthesize textField = _textField;
 @synthesize toggleSwitch = _toggleSwitch;
 
@@ -111,37 +115,6 @@
 
     _toggleSwitch.tag = 500002;
     */
-}
-
-
-- (BOOL)isNumber{
-	CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    switch(descriptor.propertyType){
-        case CKClassPropertyDescriptorTypeInt:
-		case CKClassPropertyDescriptorTypeShort:
-		case CKClassPropertyDescriptorTypeLong:
-		case CKClassPropertyDescriptorTypeLongLong:
-		case CKClassPropertyDescriptorTypeUnsignedChar:
-		case CKClassPropertyDescriptorTypeUnsignedInt:
-		case CKClassPropertyDescriptorTypeUnsignedShort:
-		case CKClassPropertyDescriptorTypeUnsignedLong:
-		case CKClassPropertyDescriptorTypeUnsignedLongLong:
-		case CKClassPropertyDescriptorTypeFloat:
-		case CKClassPropertyDescriptorTypeDouble:
-            return YES;
-    }
-    return NO;
-}
-
-- (BOOL)isBOOL{
-    
-    CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    switch(descriptor.propertyType){
-        case CKClassPropertyDescriptorTypeChar:
-		case CKClassPropertyDescriptorTypeCppBool:
-            return YES;
-    }
-    return NO;
 }
 
 - (void)setupCell:(UITableViewCell *)cell {

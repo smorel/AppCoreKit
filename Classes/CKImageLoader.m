@@ -22,7 +22,11 @@ NSString * const CKImageLoaderErrorDomain = @"CKImageLoaderErrorDomain";
 
 //
 
-@implementation CKImageLoader
+@implementation CKImageLoader {
+	id _delegate;
+	CKWebRequest *_request;
+	NSURL *_imageURL;
+}
 
 @synthesize delegate = _delegate;
 @synthesize request = _request;

@@ -8,7 +8,10 @@
 
 #import "CKInetEndPoint.h"
 
-@implementation CKInetEndPoint
+@implementation CKInetEndPoint{
+	NSString *_inetAddressRepresentation;
+	NSUInteger _port;
+}
 
 @synthesize inetAddressRepresentation = _inetAddressRepresentation;
 @synthesize port = _port;

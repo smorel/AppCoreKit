@@ -12,15 +12,22 @@
 
 /** TODO
  */
-@interface CKNSNumberPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate>{	
-	UITextField* _textField;
-	UISwitch* _toggleSwitch;
-}
+@interface CKNSNumberPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate>
 
+///-----------------------------------
+/// @name Getting the Controls
+///-----------------------------------
+
+/** textField is a weak reference to the view currently associated to this controller if the property represents a number.
+ As tableViewCell are reused, this property will be null when the controller is not displayed on screen.
+ Do not keep any other reference between the textField and the controller to avoid problem with the reuse system.
+ */
 @property (nonatomic,retain,readonly) UITextField* textField;
-@property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
 
-- (BOOL)isBOOL;
-- (BOOL)isNumber;
+/** toggleSwitch is a weak reference to the view currently associated to this controller if the property represents a 'char'.
+ As tableViewCell are reused, this property will be null when the controller is not displayed on screen.
+ Do not keep any other reference between the toggleSwitch and the controller to avoid problem with the reuse system.
+ */
+@property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
 
 @end

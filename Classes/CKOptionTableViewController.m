@@ -23,7 +23,13 @@
 @end
 
 
-@implementation CKOptionTableViewController
+@implementation CKOptionTableViewController{
+	id _optionTableDelegate;
+	NSArray *_values;
+	NSArray *_labels;
+	NSMutableArray* _selectedIndexes;
+	BOOL _multiSelectionEnabled;
+}
 
 @synthesize optionTableDelegate = _optionTableDelegate;
 @synthesize values = _values;

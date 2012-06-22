@@ -29,7 +29,15 @@
 
 // Implementation
 
-@implementation CKCoreDataManager
+@implementation CKCoreDataManager{
+	NSURL *_storeURL;
+    NSURL *_modelURL;
+	NSString *_storeType;
+	NSDictionary *_storeOptions;
+    NSManagedObjectModel *_objectModel;
+    NSManagedObjectContext *_objectContext;	    
+    NSPersistentStoreCoordinator *_persistentStoreCoordinator;	
+}
 
 @synthesize storeURL = _storeURL;
 @synthesize modelURL = _modelURL;

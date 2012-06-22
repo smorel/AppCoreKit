@@ -20,10 +20,28 @@ typedef enum CKMapAnnotationStyle{
 
 @class CKMapAnnotationController;
 
+/** TODO
+ */
 @interface CKAnnotationView : MKAnnotationView
+
+///-----------------------------------
+/// @name Customizing callout content
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,retain)UIViewController* calloutViewController;
+
+///-----------------------------------
+/// @name Accessing the parent controllers and views
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign)CKMapAnnotationController* annotationController;
 
+/**
+ */
 - (MKMapView*)mapView;
 
 @end
@@ -31,17 +49,36 @@ typedef enum CKMapAnnotationStyle{
 
 /** TODO
  */
-@interface CKMapAnnotationController : CKCollectionCellController {
-	CKMapAnnotationStyle _style;
-}
+@interface CKMapAnnotationController : CKCollectionCellController
 
+///-----------------------------------
+/// @name Customizing the Appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign) CKMapAnnotationStyle style;
-@property (nonatomic, retain) CKCallback* deselectionCallback;
 
+/** When inheriting CKMapAnnotationController you can override this method to return your own custom intitialized MKAnnotationView.
+ */
 - (MKAnnotationView*)loadAnnotationView;
+
+/** When inheriting CKMapAnnotationController you can override this method to return your own custom intitialized MKAnnotationView using the specified style.
+ */
 - (MKAnnotationView*)viewWithStyle:(CKMapAnnotationStyle)style;
 
+///-----------------------------------
+/// @name Customizing the Selection behaviour
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) CKCallback* deselectionCallback;
+/**
+ */
 - (void)didDeselect;
+
+
 
 @end
 

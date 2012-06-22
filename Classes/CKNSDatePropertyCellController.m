@@ -23,7 +23,15 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 @property(nonatomic,retain) CKWeakRef* delegateRef;
 @end
 
-@implementation CKNSDateViewController
+@implementation CKNSDateViewController{
+    CKProperty* _property;
+    UIDatePicker* _datePicker;
+    UIPickerView* _pickerView;
+    CKDatePickerMode _datePickerMode;
+    id _delegate;
+}
+
+
 @synthesize pickerView = _pickerView;
 @synthesize property = _property;
 @synthesize datePicker = _datePicker;
@@ -261,10 +269,17 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 @end
 
-@implementation CKNSDatePropertyCellController
+
+
+@implementation CKNSDatePropertyCellController {
+    CKCallback* _onBeginEditingCallback;
+    CKCallback* _onEndEditingCallback;
+    BOOL _enableAccessoryView;
+    CKDatePickerMode _datePickerMode;
+}
+
 @synthesize onBeginEditingCallback = _onBeginEditingCallback;
 @synthesize onEndEditingCallback = _onEndEditingCallback;
-@synthesize enableAccessoryView = _enableAccessoryView;
 @synthesize datePickerMode = _datePickerMode;
 
 - (void)datePickerModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{

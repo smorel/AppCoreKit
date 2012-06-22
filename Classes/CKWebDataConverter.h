@@ -8,10 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface CKWebDataConverter : NSObject
 
+///-----------------------------------
+/// @name Registering Converter
+///-----------------------------------
+
+/**
+ */
 + (void)addConverter:(id (^)(NSData *data, NSURLResponse *response))converter forMIMEPredicate:(NSPredicate*)predicate;
 
+///-----------------------------------
+/// @name Converting Data
+///-----------------------------------
+
+/**
+ */
 +(id)convertData:(NSData*)data fromResponse:(NSURLResponse*)response;
 
 @end

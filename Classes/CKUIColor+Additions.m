@@ -17,9 +17,6 @@
 						   alpha:1.0];
 }
 
-+ (UIColor *)blueTextColor {
-	return [UIColor colorWithRGBValue:0x385487];
-}
 
 - (UIColor *)RGBColor {
 	CGColorSpaceModel model = CGColorSpaceGetModel(CGColorGetColorSpace(self.CGColor));
@@ -42,44 +39,7 @@
 	return nil;
 }
 
-+ (UIColor *)colorWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size {	
-	return [UIColor colorWithPatternImage:[UIColor imageWithGradientWithColors:colors colorLocations:locations size:size]];
-}
-
-+ (UIColor *)colorWithGradientFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor size:(CGSize)size {
-	CGFloat colorLocations[2];
-	colorLocations[0] = 0.0f;
-	colorLocations[1] = 1.0f;	
-	return [UIColor colorWithGradientWithColors:[NSArray arrayWithObjects:fromColor, toColor, nil] colorLocations:colorLocations size:size];
-}
-
-+ (UIColor *)colorWithVerticalGradientFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor height:(CGFloat)height {
-	return [UIColor colorWithGradientFromColor:fromColor toColor:toColor size:CGSizeMake(1, height)];
-}
-
-+ (UIImage *)imageWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size {
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef bitmapContext = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4 * size.width, colorSpace, kCGImageAlphaNoneSkipFirst);
-	
-	NSMutableArray *gradientColors = [NSMutableArray array];
-	for (UIColor *color in colors) {
-		[gradientColors addObject:(id)([color RGBColor].CGColor)];
-	}
-	
-	CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)gradientColors, locations);
-	
-	CGContextDrawLinearGradient(bitmapContext, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, size.height), 0);
-	CGImageRef cgImage = CGBitmapContextCreateImage(bitmapContext);
-	UIImage *gradientImage = [UIImage imageWithCGImage:cgImage];
-	CGImageRelease(cgImage);
-	CGContextRelease(bitmapContext);
-    CGGradientRelease(gradient);
-    CGColorSpaceRelease(colorSpace);
-	
-	return gradientImage;
-}
-
-+ (UIColor *)colorWithIntegerRed:(NSUInteger)red green:(NSUInteger)green blue:(NSUInteger)blue alpha:(NSUInteger)alpha{
++ (UIColor *)colorWithRedInt:(NSUInteger)red greenInt:(NSUInteger)green blueInt:(NSUInteger)blue alphaInt:(NSUInteger)alpha{
     return [UIColor colorWithRed:(red / 255.0) green:(green / 255.0) blue:(blue / 255.0) alpha:(alpha / 255.0)];
 }
 

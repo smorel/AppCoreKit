@@ -13,6 +13,12 @@
  */
 @interface NSString (Parsing) 
 
+///-----------------------------------
+/// @name Parsing String Content
+///-----------------------------------
+
+/** 
+ */
 - (NSString *)stringByDeletingHTMLTags;
 
 @end

@@ -10,7 +10,13 @@
 
 #import "CKNSArray+Additions.h"
 
-@implementation CKAddressBookPerson
+@implementation CKAddressBookPerson {
+	ABRecordRef _record;
+	NSString *_fullName;
+	NSString *_email;
+	UIImage *_image;
+	NSArray *_phoneNumbers;
+}
 
 + (id)personWithRecord:(ABRecordRef)record {
 	return [[[CKAddressBookPerson alloc] initWithRecord:record] autorelease];
@@ -208,7 +214,9 @@
 
 //
 
-@implementation CKAddressBook
+@implementation CKAddressBook {
+	ABAddressBookRef _addressBook;
+}
 
 + (CKAddressBook *)defaultAddressBook {
 	static CKAddressBook *_instance = nil;

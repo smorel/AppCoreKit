@@ -180,7 +180,7 @@
 
 //
 
-- (void)deleteObjects:(NSArray *)objects {
+- (void)removeObjects:(NSArray *)objects {
 	for (NSManagedObject *object in objects) { [self deleteObject:object]; }
 }
 

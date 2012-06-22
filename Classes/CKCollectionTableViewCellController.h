@@ -10,9 +10,9 @@
 #import "CKTableViewCellController.h"
 
 
-/** TODO
+/** This class allow to bind a collection with feedsource to an activity indicator/number of results view.
+    It value MUST be a CKProperty object initialized with an object/keypath pointing to a CKCollection instance.
  */
-@interface CKCollectionTableViewCellController : CKTableViewCellController {
-}
+@interface CKCollectionTableViewCellController : CKTableViewCellController 
 
 @end

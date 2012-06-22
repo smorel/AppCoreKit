@@ -19,13 +19,35 @@
 static CKCoreDataManager* CKStoreCoreDataManager = nil;
 static NSMutableDictionary* CKStoreCache = nil;
 
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+
+/** TODO
+ */
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
+
+@end
+
+
+
 @interface CKStore ()
 
 @property (retain, readwrite) CKDomain *domain;
 
 @end
 
-@implementation CKStore
+@implementation CKStore{
+	CKDomain *_domain;
+}
 
 @synthesize domain = _domain;
 
@@ -161,12 +183,12 @@ static NSMutableDictionary* CKStoreCache = nil;
 
 #pragma mark CKStore Delete Items
 
-- (void)deleteItems:(NSArray *)items {
-	[[self context] deleteObjects:items];
+- (void)removeItems:(NSArray *)items {
+	[[self context] removeObjects:items];
 }
 
-- (void)deleteItemsWithNames:(NSArray *)names {
-	[self deleteItems:[self fetchItemsWithNames:names]];
+- (void)removeItemsWithNames:(NSArray *)names {
+	[self removeItems:[self fetchItemsWithNames:names]];
 }
 
 #pragma mark CKStore Insert Attributes

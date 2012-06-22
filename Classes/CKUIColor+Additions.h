@@ -13,16 +13,25 @@
  */
 @interface UIColor (CKUIColorAdditions)
 
+///-----------------------------------
+/// @name Creating a UIColor Object from Component Values
+///-----------------------------------
+
+/** 
+ */
 + (UIColor *)colorWithRGBValue:(NSUInteger)value;
-+ (UIColor *)colorWithIntegerRed:(NSUInteger)red green:(NSUInteger)green blue:(NSUInteger)blue alpha:(NSUInteger)alpha;
-+ (UIColor *)blueTextColor;
 
+/** 
+ */
++ (UIColor *)colorWithRedInt:(NSUInteger)red greenInt:(NSUInteger)green blueInt:(NSUInteger)blue alphaInt:(NSUInteger)alpha;
+
+
+///-----------------------------------
+/// @name Retrieving Color Information
+///-----------------------------------
+
+/** 
+ */
 - (UIColor *)RGBColor;
-+ (UIColor *)colorWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size;
-+ (UIColor *)colorWithGradientFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor size:(CGSize)size;
-+ (UIColor *)colorWithVerticalGradientFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor height:(CGFloat)height;
-
-
-+ (UIImage *)imageWithGradientWithColors:(NSArray *)colors colorLocations:(CGFloat *)locations size:(CGSize)size;
 
 @end

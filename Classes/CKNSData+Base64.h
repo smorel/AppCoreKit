@@ -17,7 +17,20 @@
  */
 @interface NSData (CKNSDataBase64Additions)
 
+///-----------------------------------
+/// @name Creating and Initializing Encoded Data Objects
+///-----------------------------------
+
+/** 
+ */
 + (NSData *)dataWithBase64EncodedString:(NSString *)aString;
+
+///-----------------------------------
+/// @name Representing Data as Strings
+///-----------------------------------
+
+/** 
+ */
 - (NSString *)base64EncodedString;
 
 @end

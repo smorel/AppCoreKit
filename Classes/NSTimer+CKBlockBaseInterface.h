@@ -8,9 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+
+/** 
+ */
 @interface NSTimer (CKBlockBaseInterface)
 
+///-----------------------------------
+/// @name Creating a Timer
+///-----------------------------------
+
+/** 
+ */
 + (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti repeats:(BOOL)yesOrNo block:(void(^)(NSTimer* timer))block;
+
+/** 
+ */
 + (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)ti repeats:(BOOL)yesOrNo block:(void(^)(NSTimer* timer))block;
 
 @end

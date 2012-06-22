@@ -21,19 +21,45 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
 
 /** TODO
  */
-@interface CKImageLoader : NSObject {
-	id _delegate;
-	CKWebRequest *_request;
-	NSURL *_imageURL;
-}
+@interface CKImageLoader : NSObject
 
+///-----------------------------------
+/// @name Managing the Delegate 
+///-----------------------------------
+
+/** 
+ */
 @property (nonatomic, assign) id delegate;
-@property (nonatomic, retain) NSURL *imageURL;
+
+/** 
+ */
+- (id)initWithDelegate:(id)delegate;
+
+///-----------------------------------
+/// @name Reacting to ImageLoader events 
+///-----------------------------------
+
+/** 
+ */
 @property (nonatomic, copy) CKImageLoaderCompletionBlock completionBlock;
+/** 
+ */
 @property (nonatomic, copy) CKImageLoaderErrorBlock errorBlock;
 
-- (id)initWithDelegate:(id)delegate;
+///-----------------------------------
+/// @name Managing the URL and Requests
+///-----------------------------------
+
+/** 
+ */
+@property (nonatomic, retain) NSURL *imageURL;
+
+/** 
+ */
 - (void)loadImageWithContentOfURL:(NSURL *)url;
+
+/** 
+ */
 - (void)cancel;
 
 @end
@@ -44,7 +70,16 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
  */
 @protocol CKImageLoaderDelegate
 
+///-----------------------------------
+/// @name Reacting to ImageLoader events 
+///-----------------------------------
+
+/** 
+ */
 - (void)imageLoader:(CKImageLoader *)imageLoader didLoadImage:(UIImage *)image cached:(BOOL)cached;
+
+/** 
+ */
 - (void)imageLoader:(CKImageLoader *)imageLoader didFailWithError:(NSError *)error;
 
 @end

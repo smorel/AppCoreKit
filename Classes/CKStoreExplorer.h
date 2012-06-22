@@ -16,7 +16,15 @@
 /** TODO
  */
 @interface CKStoreExplorer : CKFormTableViewController
+
+///-----------------------------------
+/// @name Initializing a CKStore Explorer
+///-----------------------------------
+
+/**
+ */
 - (id)initWithDomains:(NSArray *)domains;
+
 @end
 
 
@@ -25,7 +33,16 @@
  */
 @interface CKStoreDomainExplorer : CKFormTableViewController 
 
+///-----------------------------------
+/// @name Initializing a CKStore Domain Explorer
+///-----------------------------------
+
+/**
+ */
 - (id)initWithDomain:(NSString *)domain;
+
+/**
+ */
 - (id)initWithItems:(NSMutableArray *)items;
 
 @end
@@ -35,5 +52,13 @@
 /** TODO
  */
 @interface CKStoreItemExplorer : CKFormTableViewController 
+
+///-----------------------------------
+/// @name Initializing a CKStore item Explorer
+///-----------------------------------
+
+/**
+ */
 - (id)initWithItem:(CKItem *)item;
+
 @end

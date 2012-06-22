@@ -6,36 +6,53 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-//  Parse a MIME multipart message (eg. form-data), but 
-//  does not parse the individual chunks more than necessary.
-//
-//  BOOL nextChunk = [parser skipPreamble];
-//  while (nextChunk) {
-//	  NSData *headerChunk = [parser readHeadersData];
-//	  NSData *bodyChunk = [parser readBodyData];
-//	  nextChunk = [parser readBoundary];
-//  }
+
 
 #import <Foundation/Foundation.h>
 
 
-/** TODO
+/**  Parse a MIME multipart message (eg. form-data), but 
+   does not parse the individual chunks more than necessary.
+ 
+       BOOL nextChunk = [parser skipPreamble];
+       while (nextChunk) {
+ 	      NSData *headerChunk = [parser readHeadersData];
+ 	      NSData *bodyChunk = [parser readBodyData];
+ 	      nextChunk = [parser readBoundary];
+       }
  */
-@interface CKMultipartParser : NSObject {
-	NSData *buffer;
-	NSData *headerSeparator;
-	NSData *fieldSeparator;
-	NSData *streamTerminator;
-	NSData *boundarySeparator;
-	NSUInteger head;
-}
+@interface CKMultipartParser : NSObject 
 
+///-----------------------------------
+/// @name Creating Multipart Parser Objects
+///-----------------------------------
+
+/**
+ */
 - (id)initWithData:(NSData *)data boundary:(NSString *)boundary;
 
+///-----------------------------------
+/// @name Accessing Multipart Parsed Content
+///-----------------------------------
+
+/**
+ */
 - (BOOL)skipPreamble;
+
+/**
+ */
 - (BOOL)readBoundary;
+
+/**
+ */
 - (NSData *)readHeadersData;
+
+/**
+ */
 - (NSDictionary *)readHeaders;
+
+/**
+ */
 - (NSData *)readBodyData;
 
 @end

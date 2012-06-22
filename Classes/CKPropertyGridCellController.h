@@ -16,27 +16,33 @@
  CKPropertyGridCellController is a base class for cell controllers working with a CKProperty value.
  This provides the base value for the mecanisms that should be implemented in subclasses like readonly, or value validation.
  */
-@interface CKPropertyGridCellController : CKTableViewCellController {
-    UIButton* _validationButton;
-    UIImageView* _validationImageView;
-    UIView* _oldAccessoryView;
-    UITableViewCellAccessoryType _oldAccessoryType;
-    BOOL _validationDisplayed;
-    NSString* _validationBindingContext;
+@interface CKPropertyGridCellController : CKTableViewCellController 
 
-    BOOL _fixedSize;
-}
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
 /** 
  Specify whether the cell should be editable or readonly. Depending on this value, the detail ui view should change.
  */
 @property(nonatomic,assign)BOOL readOnly;
 
-//this will avoid to call begin/endUpdates on tableView when the validity state change
+/** this will avoid to call begin/endUpdates on tableView when the validity state change
+ */
 @property(nonatomic,assign)BOOL fixedSize;
 
+///-----------------------------------
+/// @name Customizing the Toolbar for editing
+///-----------------------------------
 
+/**
+ */
 @property(nonatomic,assign)BOOL enableNavigationToolbar;
+
+/**
+ */
 @property(nonatomic,retain)UIToolbar* navigationToolbar;
+
 
 ///-----------------------------------
 /// @name Accessing Object Property
@@ -63,10 +69,5 @@
  */
 - (void)setValueInObjectProperty:(id)value;
 
-
-//Private
-- (void)setInvalidButtonVisible:(BOOL)visible;
-
-- (UIToolbar*)navigationToolbar;
 
 @end

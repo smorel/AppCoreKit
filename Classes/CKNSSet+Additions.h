@@ -11,7 +11,12 @@
  */
 @interface NSSet (CKNSSetAdditions)
 
-// Returns true is an object of the array validate the given predicate
+///-----------------------------------
+/// @name Accessing Set Members
+///-----------------------------------
+
+/** Returns true is an object of the array validate the given predicate
+ */
 - (BOOL)containsObjectWithPredicate:(NSPredicate *)predicate;
 
 @end

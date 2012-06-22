@@ -14,27 +14,52 @@
 
 /** TODO
  */
-@interface CKWebService : NSObject {
-	Reachability *_reachability;
-	NSURL *_baseURL;
-	NSMutableDictionary *_defaultParams;
-	NSMutableDictionary *_defaultHeaders;
-}
+@interface CKWebService : NSObject
 
-@property (nonatomic, retain, readwrite) NSURL *baseURL;
-@property (nonatomic, retain, readonly) NSMutableDictionary *defaultParams;
-@property (nonatomic, retain, readonly) NSMutableDictionary *defaultHeaders;
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
 
-//
-
+/**
+ */
 + (id)sharedWebService;
+
+/**
+ */
 + (void)setSharedWebService:(id)sharedWebService;
 
-//
+///-----------------------------------
+/// @name Configuring WebService
+///-----------------------------------
 
+/**
+ */
+@property (nonatomic, retain, readwrite) NSURL *baseURL;
+
+/**
+ */
+@property (nonatomic, retain, readonly) NSMutableDictionary *defaultParams;
+
+/**
+ */
+@property (nonatomic, retain, readonly) NSMutableDictionary *defaultHeaders;
+
+
+///-----------------------------------
+/// @name Creating an initialized Web Request
+///-----------------------------------
+
+/**
+ */
+- (CKWebRequest*)requestForPath:(NSString *)path params:(NSDictionary *)params;
+
+///-----------------------------------
+/// @name Executing a managed Web Request
+///-----------------------------------
+
+/**
+ */
 - (id)performRequest:(CKWebRequest *)request;
 
-- (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params;
-- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate;
 
 @end

@@ -12,9 +12,26 @@
  */
 @interface NSObject (CKNSObjectJSON) 
 
+///-----------------------------------
+/// @name Parsing JSON Data
+///-----------------------------------
+
+/** 
+ */
++ (id)objectFromJSONData:(NSData *)data;
+
+/** 
+ */
++ (id)objectFromJSONData:(NSData *)data error:(NSError **)error;
+
+
+///-----------------------------------
+/// @name Generating JSON Representation
+///-----------------------------------
+
+/** 
+ */
 - (id)JSONRepresentation;
 
-+ (id)objectFromJSONData:(NSData *)data;
-+ (id)objectFromJSONData:(NSData *)data error:(NSError **)error;
 
 @end

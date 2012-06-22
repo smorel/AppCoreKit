@@ -28,9 +28,21 @@
 @property(nonatomic,assign)UITableViewCellAccessoryType oldAccessoryType;
 @property(nonatomic,retain)NSString* validationBindingContext;
 
+- (void)setInvalidButtonVisible:(BOOL)visible;
+
 @end
 
-@implementation CKPropertyGridCellController
+@implementation CKPropertyGridCellController{
+    UIButton* _validationButton;
+    UIImageView* _validationImageView;
+    UIView* _oldAccessoryView;
+    UITableViewCellAccessoryType _oldAccessoryType;
+    BOOL _validationDisplayed;
+    NSString* _validationBindingContext;
+    
+    BOOL _fixedSize;
+}
+
 @synthesize readOnly = _readOnly;
 @synthesize validationButton = _validationButton;
 @synthesize oldAccessoryView = _oldAccessoryView;

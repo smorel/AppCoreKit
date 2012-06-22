@@ -12,22 +12,57 @@
 
 /** TODO
  */
-@interface CKStyleManager : CKCascadingTree {
-}
+@interface CKStyleManager : CKCascadingTree 
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/**
+ */
 + (CKStyleManager*)defaultManager;
 
-- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
+///-----------------------------------
+/// @name Importing .style files content
+///-----------------------------------
 
+/**
+ */
 - (void)loadContentOfFileNamed:(NSString*)name;
+
+/**
+ */
 - (BOOL)importContentOfFileNamed:(NSString*)name;
 
+///-----------------------------------
+/// @name Querying Style
+///-----------------------------------
+
+/**
+ */
+- (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
+
+///-----------------------------------
+/// @name Accessing Debug Attributes
+///-----------------------------------
+
+/**
+ */
 + (BOOL)logEnabled;
 
 @end
 
+
+/** TODO
+ */
 @interface NSMutableDictionary (CKStyleManager)
 
+///-----------------------------------
+/// @name Querying Style
+///-----------------------------------
+
+/**
+ */
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
 
 @end

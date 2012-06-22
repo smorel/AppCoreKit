@@ -13,9 +13,6 @@
 @property (nonatomic, retain) NSMutableDictionary* textLabelStyle;
 @property (nonatomic, retain) NSMutableDictionary* detailTextLabelStyle;
 
-@property (nonatomic, assign) CGFloat componentsRatio;
-@property (nonatomic, assign) CGFloat componentsSpace;
-@property (nonatomic, assign) UIEdgeInsets contentInsets;
 @property (nonatomic, assign) BOOL isInSetup;
 
 @property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
@@ -27,7 +24,9 @@ extern NSString* CKDynamicLayoutLineBreakMode;
 
 @property (nonatomic, assign) BOOL invalidatedSize;
 
-- (void)performLayout;
+@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
+- (void)onValueChanged;
+
 - (CGSize)computeSize;
 
 + (CGFloat)computeTableViewCellViewSizeUsingTableView:(UITableView*)tableView;

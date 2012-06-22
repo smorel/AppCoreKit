@@ -10,7 +10,13 @@
 #import "CKMultipartEncoder.h"
 #import "CKNSString+Additions.h"
 
-@implementation CKMultipartEncoder
+@implementation CKMultipartEncoder {
+	NSString *_contentType;
+	NSString *_boundary;
+	NSData *_partBoundary;
+	NSData *_endBoundary;
+	NSMutableData *_bodyData;
+}
 
 - (void)dealloc {
 	[_bodyData release];

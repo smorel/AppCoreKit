@@ -12,6 +12,12 @@
  */
 @interface NSData (CKNSDataMatching)
 
+///-----------------------------------
+/// @name Finding Data in a Data
+///-----------------------------------
+
+/** 
+ */
 - (NSUInteger)indexOfData:(NSData *)data searchRange:(NSRange)searchRange;
 
 @end

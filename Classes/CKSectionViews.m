@@ -90,15 +90,15 @@
         }else{
             self.label.font = [UIFont boldSystemFontOfSize:18];
             self.label.shadowOffset = CGSizeMake(0, 1);
-            self.label.shadowColor = [UIColor colorWithRed:0.44 green:0.44 blue:0.44 alpha:1];
+            self.label.shadowColor = [UIColor colorWithRedInt:0.44 greenInt:0.44 blueInt:0.44 alphaInt:1];
             self.label.textColor = [UIColor whiteColor];
-            self.embossTopColor = [UIColor colorWithIntegerRed:165 green:177 blue:186 alpha:255];
-            self.borderColor = [UIColor colorWithIntegerRed:113 green:125 blue:133 alpha:255];
+            self.embossTopColor = [UIColor colorWithRedInt:165 greenInt:177 blueInt:186 alphaInt:255];
+            self.borderColor = [UIColor colorWithRedInt:113 greenInt:125 blueInt:133 alphaInt:255];
             self.borderWidth = 1;
             self.borderLocation = CKStyleViewBorderLocationTop | CKStyleViewBorderLocationBottom;
             self.gradientColors = [NSArray arrayWithObjects:
-                                   [UIColor colorWithIntegerRed:144 green:159 blue:170 alpha:255],
-                                   [UIColor colorWithIntegerRed:183 green:192 blue:199 alpha:255], 
+                                   [UIColor colorWithRedInt:144 greenInt:159 blueInt:170 alphaInt:255],
+                                   [UIColor colorWithRedInt:183 greenInt:192 blueInt:199 alphaInt:255], 
                                    nil];
             self.gradientColorLocations = [NSArray arrayWithObjects:
                                            [NSNumber numberWithFloat:0],
@@ -186,7 +186,7 @@
             self.label.font = [UIFont systemFontOfSize:15];
             self.label.shadowOffset = CGSizeMake(0, 1);
             self.label.shadowColor = [UIColor whiteColor];
-            self.label.textColor = [UIColor colorWithIntegerRed:69 green:79 blue:99 alpha:255];
+            self.label.textColor = [UIColor colorWithRedInt:69 greenInt:79 blueInt:99 alphaInt:255];
             self.label.numberOfLines = 0;
             self.label.textAlignment = UITextAlignmentCenter;
             self.backgroundColor = [UIColor clearColor];
@@ -205,13 +205,13 @@
             self.label.textAlignment = UITextAlignmentLeft;
             
             
-            self.embossTopColor = [UIColor colorWithIntegerRed:165 green:177 blue:186 alpha:255];
-            self.borderColor = [UIColor colorWithIntegerRed:113 green:125 blue:133 alpha:255];
+            self.embossTopColor = [UIColor colorWithRedInt:165 greenInt:177 blueInt:186 alphaInt:255];
+            self.borderColor = [UIColor colorWithRedInt:113 greenInt:125 blueInt:133 alphaInt:255];
             self.borderWidth = 1;
             self.borderLocation = CKStyleViewBorderLocationTop | CKStyleViewBorderLocationBottom;
             self.gradientColors = [NSArray arrayWithObjects:
-                                   [UIColor colorWithIntegerRed:144 green:159 blue:170 alpha:255],
-                                   [UIColor colorWithIntegerRed:183 green:192 blue:199 alpha:255], 
+                                   [UIColor colorWithRedInt:144 greenInt:159 blueInt:170 alphaInt:255],
+                                   [UIColor colorWithRedInt:183 greenInt:192 blueInt:199 alphaInt:255], 
                                    nil];
             self.gradientColorLocations = [NSArray arrayWithObjects:
                                            [NSNumber numberWithFloat:0],

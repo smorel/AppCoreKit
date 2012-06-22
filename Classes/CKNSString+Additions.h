@@ -15,13 +15,28 @@
  */
 @interface NSString (CKNSStringAdditions)
 
-// Returns a new string containing an UUID
+///-----------------------------------
+/// @name Creating and Initializing Strings
+///-----------------------------------
+
+/** Returns a new string containing an UUID
+ */
 + (NSString *)stringWithNewUUID;
 
-// Returns a new string truncated to a specified length, adding an ellipsis at the end
+///-----------------------------------
+/// @name Dividing Strings
+///-----------------------------------
+
+/** Returns a new string truncated to a specified length, adding an ellipsis at the end
+ */
 - (NSString *)stringByTruncatingToLength:(NSUInteger)length withEllipsisString:(NSString *)ellipsis;
 
-// Returns a new string using a lossy convertion of the receiver to ASCIIStringEncoding
+
+///-----------------------------------
+/// @name Converting Strings
+///-----------------------------------
+/** Returns a new string using a lossy convertion of the receiver to ASCIIStringEncoding
+  */
 - (NSString *)stringUsingASCIIEncoding;
 
 @end

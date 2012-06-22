@@ -151,7 +151,9 @@
 @end
 
 
-@implementation CKMapAnnotationController
+@implementation CKMapAnnotationController {
+	CKMapAnnotationStyle _style;
+}
 
 @synthesize style = _style;
 @synthesize deselectionCallback = _deselectionCallback;

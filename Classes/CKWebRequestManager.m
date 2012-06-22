@@ -72,7 +72,7 @@
         
         __block CKWebRequestManager *bself = self;
         self.disconnectBlock = ^{
-            [bself pauseAllOperation];
+            [bself pauseAllRequests];
             
             CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"You don't seems to have Internet access right now, do you want to try again?")] autorelease];
 			[alertView addButtonWithTitle:_(@"Dismiss") action:^{
@@ -80,7 +80,7 @@
             }];
 			[alertView addButtonWithTitle:_(@"Retry") action:^{
                 [bself didHandleDisconnect];
-                [bself retryAllOperation];
+                [bself retryAllRequests];
 			}];
 			[alertView show];
         };
@@ -155,19 +155,19 @@
 
 #pragma mark - Cancel Request
 
-- (void)cancelAllOperation {
+- (void)cancelAllRequests {
     [self.waitingRequests removeAllObjects];
     [self.runningRequests makeObjectsPerformSelector:@selector(cancel)];
 }
 
-- (void)cancelOperationsConformingToPredicate:(NSPredicate *)predicate {
+- (void)cancelRequestsMatchingToPredicate:(NSPredicate *)predicate {
     [[self.runningRequests filteredArrayUsingPredicate:predicate] makeObjectsPerformSelector:@selector(cancel)];
     
     NSPredicate *notPredicate = [NSCompoundPredicate notPredicateWithSubpredicate:predicate];
     [self.waitingRequests filterUsingPredicate:notPredicate];
 }
 
-- (void)pauseAllOperation {
+- (void)pauseAllRequests {
     for (CKWebRequest *request in self.runningRequests) {
         __block CKWebRequest *bRequest = request;
         void (^oldCancelBlock)() = request.cancelBlock;
@@ -179,7 +179,7 @@
     }
 }
 
-- (void)retryAllOperation {
+- (void)retryAllRequests {
     [self.runningRequests makeObjectsPerformSelector:@selector(startOnRunLoop:) withObject:self.runLoop];
     [self reachabilityDidChange];
 }

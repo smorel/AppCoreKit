@@ -13,6 +13,7 @@
 #import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKNSValueTransformer+Additions.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 
 #define BASE_TAG 8723
 

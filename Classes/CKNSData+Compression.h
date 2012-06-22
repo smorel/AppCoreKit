@@ -12,6 +12,12 @@
  */
 @interface NSData (CKNSDataCompression)
 
+///-----------------------------------
+/// @name Compressing Data
+///-----------------------------------
+
+/** 
+ */
 - (NSData *)inflatedData;
 
 @end

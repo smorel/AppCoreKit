@@ -112,7 +112,18 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 @end
 
 
-@implementation CKMapCollectionViewController
+@implementation CKMapCollectionViewController{
+	CLLocationCoordinate2D _centerCoordinate;
+	MKMapView *_mapView;
+	
+	CKMapCollectionViewControllerZoomStrategy _zoomStrategy;
+    BOOL _includeUserLocationWhenZooming;
+	CGFloat _smartZoomDefaultRadius;
+	NSInteger _smartZoomMinimumNumberOfAnnotations;
+	
+	id _annotationToSelect;
+	id _nearestAnnotation;
+}
 
 @synthesize centerCoordinate = _centerCoordinate;
 @synthesize mapView = _mapView;
@@ -230,7 +241,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     
     if(!self.mapViewHasBeenReloaded){
         self.mapViewHasBeenReloaded = YES;
-        [self reloadData];
+        [self reload];
     }
 	
 	for(int i =0; i< [self numberOfSections];++i){
@@ -632,16 +643,11 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	return array;
 }
 
-- (BOOL)reloadData{
-    [super reload];
-    return YES;
-}
-
 - (void)onPropertyChanged:(NSNotification*)notification{
 	NSArray* objects = [self objectsForSection:0];
 	CKProperty* property = [notification objectProperty];
 	if([objects containsObject:property.object] == YES){
-		[self reloadData];
+		[self reload];
 		return;
 	}
 }

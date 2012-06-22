@@ -11,37 +11,65 @@
  */
 @interface NSDate (NSDateCalculationsAdditions)
 
-// Returns a copy of the date with the time set to midnight on the same day.
+///-----------------------------------
+/// @name Creating and Initializing Date Objects
+///-----------------------------------
+
+/** Returns a copy of the date with the time set to midnight on the same day.
+ */
 - (NSDate *)dateAtBeginningOfDay;
 
-// Returns a copy of the date with the time set to 24h earlier.
+/** Returns a copy of the date with the time set to 24h earlier.
+ */
 - (NSDate *)dateAtYesterday;
 
-// Returns a copy of the date with the time set to 24h later.
+/** Returns a copy of the date with the time set to 24h later.
+ */
 - (NSDate *)dateAtTomorrow;
 
-// Returns a copy of the date with the time set to 1 week earlier.
+/** Returns a copy of the date with the time set to 1 week earlier.
+ */
 - (NSDate *)dateAtLastWeek;
 
-// Returns a copy of the date with the time set to 1 week later.
+/** Returns a copy of the date with the time set to 1 week later.
+ */
 - (NSDate *)dateAtNextWeek;
 
-// Returns a copy of the date with days added
+/** Returns a copy of the date with days added
+ */
 - (NSDate *)dateByAdvancingDays:(NSInteger)days;
 
-// Returns a copy of the date with weeks added
+/** Returns a copy of the date with weeks added
+ */
 - (NSDate *)dateByAdvancingWeeks:(NSInteger)weeks;
 
-// Returns TRUE is the date time is set at midnight
+///-----------------------------------
+/// @name Accessing date components
+///-----------------------------------
+
+/** Returns TRUE is the date time is set at midnight
+ */
 - (BOOL)isAtBeginningOfDay;
 
-// Returns TRUE if the receiver is before another given date
+///-----------------------------------
+/// @name Comparing Dates
+///-----------------------------------
+
+/** Returns TRUE if the receiver is before another given date
+ */
 - (BOOL)isBefore:(NSDate *)date;
 
-// Returns the interval between the receiver and another given date expressed in hours.
+/** Returns TRUE if the receiver is between to dates
+ */
+- (BOOL)isBetweenDate:(NSDate *)startDate andDate:(NSDate *)endDate;
+
+///-----------------------------------
+/// @name Getting Time Intervals
+///-----------------------------------
+
+/** Returns the interval between the receiver and another given date expressed in hours.
+ */
 - (double)timeIntervalSinceDateInHours:(NSDate *)anotherDate;
 
-// Returns TRUE if the receiver is between to dates
-- (BOOL)isBetweenDate:(NSDate *)startDate andDate:(NSDate *)endDate;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "CKTableCollectionViewController.h"
+#import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKNSDate+Conversions.h"
 #import "CKNSDate+Calculations.h"
 #import <objc/runtime.h>

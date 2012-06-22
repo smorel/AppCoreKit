@@ -14,15 +14,36 @@
  */
 @interface CKTableViewCellController(CKResponder)
 
+///-----------------------------------
+/// @name Managing UIResponder Chain
+///-----------------------------------
+
+/**
+ */
 - (BOOL)hasNextResponder;
+
+/**
+ */
 - (BOOL)hasPreviousResponder;
 
+/**
+ */
 - (BOOL)activateNextResponder;
+
+/**
+ */
 - (BOOL)activatePreviousResponder;
 
-//Responder Protocol to implements in CKTableViewCellController
+/** If you override CKTableViewCellController, you should implement this method if you need integration with the responder chain.
+ */
 - (BOOL)hasResponder;
+
+/** If you override CKTableViewCellController, you should implement this method if you need integration with the responder chain.
+ */
 - (void)becomeFirstResponder;
+
+/** If you override CKTableViewCellController, you should implement this method if you need integration with the responder chain.
+ */
 - (UIView*)nextResponder:(UIView*)view;
 
 @end

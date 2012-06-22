@@ -18,7 +18,16 @@ static void CKCGAddRoundedRectToPath(CGContextRef gc, CGRect rect, CGFloat radiu
  */
 @interface UIImage (CKUIImageTransformationsAdditions)
 
+///-----------------------------------
+/// @name Transforming an Image
+///-----------------------------------
+
+/** 
+ */
 - (UIImage *)imageThatFits:(CGSize)size crop:(BOOL)crop;
+
+/** 
+ */
 - (UIImage *)imageByAddingBorderWithColor:(UIColor *)color cornerRadius:(CGFloat)cornerRadius;
 
 @end

@@ -8,11 +8,28 @@
 
 #import "CKCascadingTree.h"
 
+/** TODO
+ */
 @interface CKMockManager : CKCascadingTree
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/**
+ */
 + (CKMockManager*)defaultManager;
 
+///-----------------------------------
+/// @name Importing .mock files content
+///-----------------------------------
+
+/**
+ */
 - (void)loadContentOfFileNamed:(NSString*)name;
+
+/**
+ */
 - (BOOL)importContentOfFileNamed:(NSString*)name;
 
 @end

@@ -307,15 +307,13 @@
 
 @property (nonatomic, retain) NSString* cacheLayoutBindingContextId;
 
-@property (nonatomic, assign) CGFloat componentsRatio;
-@property (nonatomic, assign) CGFloat componentsSpace;
-@property (nonatomic, assign) UIEdgeInsets contentInsets;
 @property (nonatomic, assign) CKTableViewCellController* parentCellController;//In case of grids, ...
 @property (nonatomic, retain) CKWeakRef* parentCellControllerRef;//In case of grids, ...
 
 @property (nonatomic, assign) BOOL invalidatedSize;
 @property (nonatomic, assign) BOOL isInSetup;
 @property (nonatomic, retain) NSString* identifier;
+@property (nonatomic, assign) BOOL sizeHasBeenQueriedByTableView;
 
 @property (nonatomic, assign) BOOL hasCheckedStyleToReapply;
 @property(nonatomic,retain,readwrite) NSMutableDictionary* styleForBackgroundView;
@@ -529,10 +527,6 @@
             [self invalidateSize];
         }
     }
-}
-
-- (void)onValueChanged{
-    
 }
 
 + (id)cellController{

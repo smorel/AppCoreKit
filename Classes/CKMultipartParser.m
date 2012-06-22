@@ -9,7 +9,14 @@
 #import "CKMultipartParser.h"
 #import "CKNSData+Matching.h"
 
-@implementation CKMultipartParser
+@implementation CKMultipartParser{
+	NSData *buffer;
+	NSData *headerSeparator;
+	NSData *fieldSeparator;
+	NSData *streamTerminator;
+	NSData *boundarySeparator;
+	NSUInteger head;
+}
 
 - (id)initWithData:(NSData *)data boundary:(NSString *)boundary {
 	if (self = [super init]) {

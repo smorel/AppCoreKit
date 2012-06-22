@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+/** TODO
+ */
 @interface NSURLRequest (Upload)
 
+///-----------------------------------
+/// @name Creating an URL Request
+///-----------------------------------
+
+/**
+ */
 + (id)requestWithURL:(NSURL *)URL body:(NSData*)body;
 
 @end

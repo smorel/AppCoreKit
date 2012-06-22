@@ -27,7 +27,10 @@
 @property(nonatomic,retain,readwrite)CKTextView* textView;
 @end
 
-@implementation CKMultilineNSStringPropertyCellController
+@implementation CKMultilineNSStringPropertyCellController {
+    CKTextView* _textView;
+}
+
 @synthesize textView = _textView;
 
 - (void)dealloc {

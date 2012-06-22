@@ -23,7 +23,12 @@ static NSString * const CKUBWebServiceAlertTypeNetworkReachability = @"CKWebServ
 
 //
 
-@implementation CKWebService
+@implementation CKWebService {
+	Reachability *_reachability;
+	NSURL *_baseURL;
+	NSMutableDictionary *_defaultParams;
+	NSMutableDictionary *_defaultHeaders;
+}
 
 @synthesize baseURL = _baseURL;
 @synthesize defaultParams = _defaultParams;
@@ -77,7 +82,7 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
 
 #pragma mark Request Facade
 
-- (id)getRequestForPath:(NSString *)path params:(NSDictionary *)params {
+- (CKWebRequest*)requestForPath:(NSString *)path params:(NSDictionary *)params {
 	NSString *theURL = self.baseURL ? [[self.baseURL absoluteString] stringByAppendingString:path] : path;
 	
 	NSDictionary *theParams = nil;
@@ -95,11 +100,6 @@ static NSMutableDictionary* CKWebServiceSharedInstances = nil;
     }];
 	
     return [[[CKWebRequest alloc] initWithURLRequest:request parameters:theParams completion:nil] autorelease];
-}
-
-- (id)getPath:(NSString *)path params:(NSDictionary *)params delegate:(id)delegate {
-	CKWebRequest *request = [self getRequestForPath:path params:params];
-	return [self performRequest:request];
 }
 
 @end

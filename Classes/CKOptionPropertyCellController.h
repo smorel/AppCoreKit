@@ -9,14 +9,28 @@
 #import "CKPropertyGridCellController.h"
 #import "CKOptionTableViewController.h"
 
+/** TODO
+ */
+@interface CKOptionPropertyCellController : CKPropertyGridCellController 
 
-@interface CKOptionPropertyCellController : CKPropertyGridCellController {
-}
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
 
+/**
+ */
 @property (nonatomic,assign) CKTableViewCellStyle optionCellStyle;
-@property (nonatomic,retain,readonly) CKOptionTableViewController* optionsViewController;
+
+/**
+ */
 @property (nonatomic,assign) BOOL presentsOptionsAsPopover;
 
+///-----------------------------------
+/// @name Getting the optionsViewController representing the options on selection
+///-----------------------------------
 
+/**
+ */
+@property (nonatomic,retain,readonly) CKOptionTableViewController* optionsViewController;
 
 @end

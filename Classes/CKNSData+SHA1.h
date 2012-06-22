@@ -15,8 +15,24 @@
  */
 @interface NSData (CKNSDataSHA1Additions)
 
+///-----------------------------------
+/// @name Creating and Initializing Encoded Data Objects
+///-----------------------------------
+
+/** 
+ */
 + (NSData *)dataWithSHA1EncodedString:(NSString *)string;
+
+/** 
+ */
 + (NSData *)dataWithMD5EncodedString:(NSString *)string;
+
+///-----------------------------------
+/// @name Representing Data as Strings
+///-----------------------------------
+
+/** 
+ */
 - (NSString *)hexadecimalRepresentation;
 
 @end

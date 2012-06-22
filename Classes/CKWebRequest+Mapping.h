@@ -8,8 +8,16 @@
 
 #import "CKWebRequest.h"
 
+/** TODO
+ */
 @interface CKWebRequest (StandardRequests)
 
+///-----------------------------------
+/// @name Creating Initialized WebRequests
+///-----------------------------------
+
+/**
+ */
 + (CKWebRequest*) requestForObjectsWithUrl:(NSURL*)url
                                     params:(NSDictionary*)params
                                       body:(NSData*)body
@@ -18,6 +26,8 @@
                                 completion:(void(^)(NSArray* objects))completionBlock 
                                      error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock;
 
+/**
+ */
 + (CKWebRequest*)requestForObject:(id)object
                               url:(NSURL*)url
                            params:(NSDictionary*)params

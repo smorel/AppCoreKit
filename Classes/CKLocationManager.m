@@ -27,7 +27,15 @@ NSString * const CKLocationManagerServiceDidDisableNotification = @"CKLocationMa
 
 //
 
-@implementation CKLocationManager
+@implementation CKLocationManager {
+	NSMutableSet *_delegates;
+	CLLocationManager *_locationManager;
+	CLHeading *_heading;
+	BOOL _updating;
+	BOOL _locationAvailable;
+	BOOL _shouldDisplayHeadingCalibration;
+	BOOL _shouldDisplayLocationServicesAlert;
+}
 
 @synthesize delegates = _delegates;
 @synthesize locationManager = _locationManager;

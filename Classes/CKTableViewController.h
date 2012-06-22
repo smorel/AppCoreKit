@@ -11,11 +11,8 @@
 #import <Foundation/Foundation.h>
 #import "CKCollectionViewController.h"
 
-@interface CKTableView : UITableView
-@property(nonatomic,assign) BOOL sizeChangedWhileReloading;
-@property(nonatomic,assign) BOOL isLayouting;
-@end
-
+/** TODO
+ */
 typedef enum {
 	CKTableViewOrientationPortrait,
 	CKTableViewOrientationLandscape
@@ -30,27 +27,66 @@ typedef enum {
 
 /** TODO
  */
-@interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> {
-	UIView *_backgroundView;
-	UIView *_tableViewContainer;
-	CKTableView *_tableView;
-	UITableViewStyle _style;
-	BOOL _stickySelection;
-	NSIndexPath *_selectedIndexPath;
-    UIEdgeInsets _tableViewInsets;
-}
+@interface CKTableView : UITableView
+@end
 
-@property (nonatomic, retain) IBOutlet CKTableView *tableView;
-@property (nonatomic, retain) IBOutlet UIView *tableViewContainer;
+/** TODO
+ */
+@interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> 
+
+///-----------------------------------
+/// @name Initializing a TableView Controller Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithStyle:(UITableViewStyle)style;
+
+///-----------------------------------
+/// @name Getting the Table View
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) CKTableView *tableView;
+
+/** tableView is a subview of tableViewContainer. tableViewContainer allow us to rotate the whole content in portrait or landscape correctly.
+ */
+@property (nonatomic, retain) UIView *tableViewContainer;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, assign) UITableViewStyle style;
-@property (nonatomic, assign, getter = isStickySelection) BOOL stickySelectionEnabled;
+
+/**
+ */
 @property (nonatomic, assign) UIEdgeInsets tableViewInsets;
 
-- (id)initWithStyle:(UITableViewStyle)style;
+
+///-----------------------------------
+/// @name Managing Selection
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign, getter = isStickySelection) BOOL stickySelectionEnabled;
+
+/**
+ */
 - (void)clearSelection:(BOOL)animated;
+
+
+///-----------------------------------
+/// @name Reloading the TableView Controller
+///-----------------------------------
+
+/**
+ */
 - (void)reload;
 
-//this will resize the tableViewContainer and the tableView contentOffset using the view frame and the tableViewInsets
-- (void)sizeToFit;
 
 @end

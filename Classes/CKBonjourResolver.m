@@ -18,7 +18,13 @@
 
 //
 
-@implementation CKBonjourResolver
+@implementation CKBonjourResolver{
+	NSNetServiceBrowser *_netServiceBrowser;
+	NSMutableArray *_unresolvedServices;
+	id<CKBonjourResolverDelegate> _delegate;
+	BOOL _searching;
+	NSString *_nameRegex;
+}
 
 @synthesize delegate = _delegate;
 @synthesize nameRegex = _nameRegex;
@@ -53,7 +59,7 @@
 	}
 }
 
-- (void)stop {
+- (void)cancel {
 	[_netServiceBrowser stop];
 	[_unresolvedServices removeAllObjects];
 }

@@ -20,17 +20,25 @@ typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
 
 /** TODO
  */
-@interface CKWebSource : CKFeedSource {
-	CKWebRequest *_request;
-	NSUInteger _requestedBatchSize;
-	CKWebSourceRequestBlock _requestBlock;
-    CKWebSourceCompletionBlock _completionBlock;
-	
-	id _webSourceDelegate;
-}
+@interface CKWebSource : CKFeedSource 
 
+///-----------------------------------
+/// @name Customizing the WebSource Behaviour
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, copy) CKWebSourceRequestBlock requestBlock;
+
+/**
+ */
 @property (nonatomic, copy) CKWebSourceCompletionBlock completionBlock;
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+/**
+ */
 @property (nonatomic, assign) id webSourceDelegate;
 
 
@@ -42,12 +50,27 @@ typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
  */
 @protocol CKWebSourceDelegate
 
+///-----------------------------------
+/// @name Customizing the WebSource Behaviour
+///-----------------------------------
+
 @required
+/**
+ */
 - (CKWebRequest*)webSource:(CKWebSource*)webSource requestForRange:(NSRange)range;
+
+/**
+ */
 - (id)webSource:(CKWebSource*)webSource transform:(id)value;
+
+/**
+ */
 - (id)webSourceDidSuccess:(CKWebSource*)webSource;
 
 @optional
+
+/**
+ */
 - (void)webSource:(CKWebSource*)webSource didFailWithError:(NSError*)error;
 
 @end

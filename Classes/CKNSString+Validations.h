@@ -12,10 +12,16 @@
  */
 @interface NSString (CKNSStringValidationsAdditions)
 
-// Returns TRUE if the string is compliant with a specified regex
+///-----------------------------------
+/// @name Validating String content
+///-----------------------------------
+
+/** Returns TRUE if the string is compliant with a specified regex
+ */
 - (BOOL)isValidFormat:(NSString *)format;
 
-// Returns TRUE if the string is compliant with an email format
+/** Returns TRUE if the string is compliant with an email format
+ */
 - (BOOL)isValidEmail;
 
 @end

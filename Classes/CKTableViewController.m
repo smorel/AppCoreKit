@@ -33,9 +33,10 @@
 @end
 
 
-
 @interface CKTableView()
 @property (nonatomic,assign) NSInteger numberOfUpdates;
+@property(nonatomic,assign) BOOL sizeChangedWhileReloading;
+@property(nonatomic,assign) BOOL isLayouting;
 @end
 
 
@@ -121,10 +122,21 @@
 @property (nonatomic, assign) BOOL sizeIsAlreadyInvalidated;
 @property (nonatomic, assign) BOOL lockSizeChange;
 @property (nonatomic, assign) BOOL isReloading;
+
+- (void)sizeToFit;
+
 @end
 
 
-@implementation CKTableViewController
+@implementation CKTableViewController{
+	UIView *_backgroundView;
+	UIView *_tableViewContainer;
+	CKTableView *_tableView;
+	UITableViewStyle _style;
+	BOOL _stickySelection;
+	NSIndexPath *_selectedIndexPath;
+    UIEdgeInsets _tableViewInsets;
+}
 
 @synthesize tableView = _tableView;
 @synthesize style = _style;

@@ -9,7 +9,6 @@
 #import "CKObject+CKStore.h"
 #import "CKObject+CKStore_Private.h"
 
-#import "CKStoreDataSource.h"
 #import "CKItem.h"
 #import "CKStore.h"
 #import "CKAttribute.h"
@@ -20,6 +19,24 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSString+Additions.h"
 #import "CKWeakRef.h"
+
+
+//SEB : FIXME To move in a private file
+
+@class CKAttribute;
+@class CKItem;
+
+
+/** TODO
+ */
+@interface CKStore (CKStorePrivateAddition)
+@property (retain, readwrite) CKDomain *domain;
+
+- (CKAttribute*)fetchAttributeWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (CKItem*)fetchItemWithPredicate:(NSPredicate*)predicate createIfNotFound:(BOOL)createIfNotFound wasCreated:(BOOL*)wasCreated;
+- (id)insertNewObjectForEntityForName:(NSString *)entityName;
+
+@end
 
 NSMutableDictionary* CKObjectManager = nil;
 
@@ -162,7 +179,7 @@ NSMutableDictionary* CKObjectManager = nil;
 	CKItem* item = [CKObject itemWithObject:self inDomainNamed:domain];
 	if(item){
 		CKStore* store = [CKStore storeWithDomainName:domain];
-		[store deleteItems:[NSArray arrayWithObject:item]];
+		[store removeItems:[NSArray arrayWithObject:item]];
 	}
 }
 + (CKObject*)objectWithUniqueId:(NSString*)uniqueId{

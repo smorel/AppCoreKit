@@ -9,24 +9,76 @@
 #import <Foundation/Foundation.h>
 @class CKWebRequest;
 
+/** TODO
+ */
 @interface CKWebRequestManager : NSObject
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/**
+ */
 + (CKWebRequestManager*)sharedManager;
 
-@property (nonatomic, assign) NSUInteger maxCurrentRequest; //Default 10
+///-----------------------------------
+/// @name Configuring the WebRequest Manager
+///-----------------------------------
+
+/** Default is 10
+ */
+@property (nonatomic, assign) NSUInteger maxCurrentRequest;
+
+/**
+ */
 @property (nonatomic, readonly) NSUInteger numberOfRunningRequest;
+
+/**
+ */
 @property (nonatomic, readonly) NSUInteger numberOfWaitingRequest;
 
-@property (nonatomic, copy) void (^disconnectBlock)(void); //Called when there's no more Internet connectivity still with running request
-                                                           //By default, pause all operation and show an alert with the option to retry all requests
-                                                           //When handling of the disconnect is done, the block should call - (void)didHandleDisconnect (after an alert is dismissed for example)
+
+///-----------------------------------
+/// @name Handling Network Connection Accessibility
+///-----------------------------------
+
+/** Called when there's no more Internet connectivity still with running request
+    By default, pause all operation and show an alert with the option to retry all requests
+    When handling of the disconnect is done, the block must call - (void)didHandleDisconnect (after an alert is dismissed for example)
+ */
+@property (nonatomic, copy) void (^disconnectBlock)(void); 
+
+/**
+ */
 - (void)didHandleDisconnect;
 
+
+///-----------------------------------
+/// @name Executing WebRequests
+///-----------------------------------
+
+/**
+ */
 - (void)scheduleRequest:(CKWebRequest*)request;
 
-- (void)cancelAllOperation; //Stop and remove all operations
-- (void)cancelOperationsConformingToPredicate:(NSPredicate*)predicate;
-- (void)pauseAllOperation; //Stop operations
-- (void)retryAllOperation; //Retry stopped operations
+/** Retry paused requests
+ */
+- (void)retryAllRequests;
+
+///-----------------------------------
+/// @name Cancelling/Pausing WebRequests
+///-----------------------------------
+
+/** Stop and remove all requests
+ */
+- (void)cancelAllRequests; 
+
+/**
+ */
+- (void)cancelRequestsMatchingToPredicate:(NSPredicate*)predicate;
+
+/**
+ */
+- (void)pauseAllRequests; 
 
 @end

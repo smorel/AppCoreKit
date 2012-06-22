@@ -22,7 +22,14 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 @property (nonatomic, assign) NSRange range;
 @end
 
-@implementation CKWebSource
+@implementation CKWebSource{
+	CKWebRequest *_request;
+	NSUInteger _requestedBatchSize;
+	CKWebSourceRequestBlock _requestBlock;
+    CKWebSourceCompletionBlock _completionBlock;
+	
+	id _webSourceDelegate;
+}
 
 @synthesize request = _request;
 @synthesize requestBlock = _requestBlock;

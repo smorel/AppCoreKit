@@ -15,8 +15,20 @@
 	NSMutableSet *_objects;
 }
 
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
+
+/** 
+ */
 + (CKNetworkActivityManager*)defaultManager;
 
+///-----------------------------------
+/// @name Managing Activity Indicator
+///-----------------------------------
+
+/** 
+ */
 - (void)addNetworkActivityForObject:(id)object;
 - (void)removeNetworkActivityForObject:(id)object;
 
