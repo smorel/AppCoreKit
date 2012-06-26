@@ -194,7 +194,12 @@
 <h2>Customizing the appearance</h2>
 
 <p><b>AppCoreKit</b> provides a CSS like technology based on runtime and our conversion system. This allow to target and customize any controllers and views and customize any of their properties that are KVC complient. This system allow to define template that can be inherited by specific selector targeting you objects. Objects can be targetted using their class name, property name and specialized using any of their proerty values. You don't need to write code as any of the <b>AppCoreKit</b> controllers and views are able to find their specific style and apply it to their properties, controller view hierarchy. Style definition repect the controller hierachy wich allow you to specify specific style for controllers that contained by other controllers and specific style for views that are contained in views and controllers. This is a very powerfull tool!</p>
+<p>As we want to target our view controller specifically in stylesheets, we'll set its name property that we generally use for this purpose</p>
 
+<i>ViewControllers.m</i>
+
+    CKFormTableViewController* form = [CKFormTableViewController controller];
+    form.name = @"Timeline";
     
 <i>TwitterTimeline.style</i>
 
