@@ -379,7 +379,7 @@
 		75C3497613BA6D6200736D02 /* CKRoundedCornerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C3497713BA6D6200736D02 /* CKRoundedCornerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */; };
 		75C6DF5813FEC5BD00E4AE4F /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5713FEC5BC00E4AE4F /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75C6DF5A13FEC7AD00E4AE4F /* CloudKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5913FEC7A800E4AE4F /* CloudKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75C6DF5A13FEC7AD00E4AE4F /* AppCoreKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5913FEC7A800E4AE4F /* AppCoreKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C6DF5C13FEC7E100E4AE4F /* Document.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5B13FEC7E100E4AE4F /* Document.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C6DF5E13FEC9AA00E4AE4F /* Bindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5D13FEC9AA00E4AE4F /* Bindings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75C6DF6013FEC9E600E4AE4F /* Mappings.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF5F13FEC9E600E4AE4F /* Mappings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -917,7 +917,7 @@
 		75C3497413BA6D5A00736D02 /* CKRoundedCornerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRoundedCornerView.h; path = Classes/CKRoundedCornerView.h; sourceTree = "<group>"; };
 		75C3497513BA6D5D00736D02 /* CKRoundedCornerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKRoundedCornerView.m; path = Classes/CKRoundedCornerView.m; sourceTree = "<group>"; };
 		75C6DF5713FEC5BC00E4AE4F /* Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Foundation.h; path = Classes/Foundation.h; sourceTree = "<group>"; };
-		75C6DF5913FEC7A800E4AE4F /* CloudKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CloudKit.h; path = Classes/CloudKit.h; sourceTree = "<group>"; };
+		75C6DF5913FEC7A800E4AE4F /* AppCoreKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCoreKit.h; path = Classes/AppCoreKit.h; sourceTree = "<group>"; };
 		75C6DF5B13FEC7E100E4AE4F /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Document.h; path = Classes/Document.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		75C6DF5D13FEC9AA00E4AE4F /* Bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bindings.h; path = Classes/Bindings.h; sourceTree = "<group>"; };
 		75C6DF5F13FEC9E600E4AE4F /* Mappings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mappings.h; path = Classes/Mappings.h; sourceTree = "<group>"; };
@@ -1707,7 +1707,7 @@
 		7560DDB713B8EDA300268D13 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				75C6DF5913FEC7A800E4AE4F /* CloudKit.h */,
+				75C6DF5913FEC7A800E4AE4F /* AppCoreKit.h */,
 				7506E3ED13B8FA4F00EE1471 /* Foundation */,
 				7506E3F913B8FD5500EE1471 /* Bindings */,
 				7506E3FB13B8FD9A00EE1471 /* Mappings */,
@@ -2318,7 +2318,7 @@
 				758523EB13FAEF7E00EE75CE /* CKUIFont+ValueTransformer.h in Headers */,
 				750A157813FD50FB008BC41F /* CKBinding.h in Headers */,
 				75C6DF5813FEC5BD00E4AE4F /* Foundation.h in Headers */,
-				75C6DF5A13FEC7AD00E4AE4F /* CloudKit.h in Headers */,
+				75C6DF5A13FEC7AD00E4AE4F /* AppCoreKit.h in Headers */,
 				75C6DF5C13FEC7E100E4AE4F /* Document.h in Headers */,
 				75C6DF5E13FEC9AA00E4AE4F /* Bindings.h in Headers */,
 				75C6DF6013FEC9E600E4AE4F /* Mappings.h in Headers */,

@@ -9,7 +9,8 @@
 #import "UINavigationController+Style.h"
 #import "CKViewController+Style.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CloudKit.h"
+#import "CKRuntime.h"
+#import "CKStyleManager.h"
 
 
 bool swizzle_UINavigationControllerStyle();
