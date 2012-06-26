@@ -11,7 +11,7 @@
 #import "CKCollection.h"
 
 
-/**
+/** @see CKObjectController, CKObjectControllerDelegate
  */
 @interface CKCollectionController : NSObject<CKObjectController> 
 
