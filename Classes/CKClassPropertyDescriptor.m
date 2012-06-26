@@ -492,4 +492,35 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 
 @end
 
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitMask,NSString* strValues, ...) {
+	NSArray* components = [strValues componentsSeparatedByString:@","];
+	
+	va_list ArgumentList;
+	va_start(ArgumentList,strValues);
+	
+	int i = 0;
+	NSMutableDictionary* valuesAndLabels = [NSMutableDictionary dictionary];
+	while (i < [components count]){
+		int value = va_arg(ArgumentList, int);
+        [valuesAndLabels setObject:[NSNumber numberWithInt:value] 
+                            forKey:[[components objectAtIndex:i]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+		++i;
+    }
+    va_end(ArgumentList);
+	
+    CKEnumDescriptor* descriptor = [[[CKEnumDescriptor alloc]init]autorelease];
+    descriptor.name = name;
+    descriptor.valuesAndLabels = valuesAndLabels;
+    descriptor.isBitMask = bitMask;
+	return descriptor;
+}
+
+@implementation CKEnumDescriptor
+@synthesize name,valuesAndLabels,isBitMask;
+-(void)dealloc{
+    self.name = nil;
+    self.valuesAndLabels = nil;
+    [super dealloc];
+}
+@end
 

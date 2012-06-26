@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import <CloudKit/CloudKit.h>
+#import "CKTableViewCellController.h"
 
 @interface CKTableViewCellController (FlatHierarchy)
 

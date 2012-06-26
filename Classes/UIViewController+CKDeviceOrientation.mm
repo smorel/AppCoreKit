@@ -7,7 +7,7 @@
 //
 
 #import "UIViewController+CKDeviceOrientation.h"
-#import <CloudKit/CloudKit.h>
+#import "CKRuntime.h"
 
 NSString* CKUIDeviceOrientationWillChangeNotification = @"CKUIDeviceOrientationWillChangeNotification";
 

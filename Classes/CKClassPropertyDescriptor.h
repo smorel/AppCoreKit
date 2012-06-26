@@ -147,3 +147,19 @@ typedef enum{
 
 @end
 
+
+@interface CKEnumDescriptor : NSObject{}
+@property(nonatomic,assign)BOOL isBitMask;
+@property(nonatomic,retain)NSString* name;
+@property(nonatomic,retain)NSDictionary* valuesAndLabels;
+@end
+
+
+/**
+ */
+CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+
+/**
+ */
+#define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
+#define CKBitMaskDefinition(name,...) CKEnumDefinitionFunc(name,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)

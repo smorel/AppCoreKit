@@ -7,7 +7,8 @@
 //
 
 #import "UINavigationController+CKBlockBasedDelegate.h"
-#import <CloudKit/CloudKit.h>
+#import <objc/runtime.h>
+#import "CKRuntime.h"
 
 bool swizzle_UINavigationController();
 

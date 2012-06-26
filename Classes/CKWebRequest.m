@@ -12,7 +12,7 @@
 #import "CKWebRequest.h"
 #import "CKWebRequestManager.h"
 #import "CKWebDataConverter.h"
-#import <CloudKit/CKNetworkActivityManager.h>
+#import "CKNetworkActivityManager.h"
 #import "CKVersion.h"
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";

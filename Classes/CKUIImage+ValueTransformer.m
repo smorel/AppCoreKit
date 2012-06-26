@@ -10,7 +10,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKNSValueTransformer+CGTypes.h"
 #import "CKLiveProjectFileUpdateManager.h"
-#import <CloudKit/CKLocalizationManager.h>
+#import "CKLocalizationManager.h"
 #import "CKCascadingTree.h"
 #import "CKLocalizationManager_Private.h"
 

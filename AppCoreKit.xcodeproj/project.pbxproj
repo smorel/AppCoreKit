@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		7561645313BA527A00330BF0 /* CloudKit Documentation */ = {
+		7561645313BA527A00330BF0 /* AppCoreKit Documentation */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 7561645513BA527A00330BF0 /* Build configuration list for PBXAggregateTarget "CloudKit Documentation" */;
+			buildConfigurationList = 7561645513BA527A00330BF0 /* Build configuration list for PBXAggregateTarget "AppCoreKit Documentation" */;
 			buildPhases = (
 				7561645413BA527A00330BF0 /* ShellScript */,
 			);
 			dependencies = (
 				960A2D34150575A100D30AB4 /* PBXTargetDependency */,
 			);
-			name = "CloudKit Documentation";
+			name = "AppCoreKit Documentation";
 			productName = Universal_Framework;
 		};
 /* End PBXAggregateTarget section */
@@ -43,7 +43,7 @@
 		750A157813FD50FB008BC41F /* CKBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 750A157713FD50FA008BC41F /* CKBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EFE13D0E95B0041900C /* CKUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = 751F1EFC13D0E95B0041900C /* CKUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		751F1EFF13D0E95B0041900C /* CKUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 751F1EFD13D0E95B0041900C /* CKUserDefaults.m */; };
-		7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */; };
+		7521E31E14520BBE000AEED8 /* AppCoreKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */; };
 		75305B7314228D0E0003EBB6 /* UITextInputTraits+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7114228D0D0003EBB6 /* UITextInputTraits+Introspection.h */; };
 		75305B7414228D0E0003EBB6 /* UITextInputTraits+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 75305B7214228D0E0003EBB6 /* UITextInputTraits+Introspection.m */; };
 		75305B7814228EC20003EBB6 /* UITextView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 75305B7614228EC10003EBB6 /* UITextView+Introspection.h */; };
@@ -570,7 +570,7 @@
 		4F689A6413CF2A4E000CE416 /* CKDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDebug.m; path = Classes/CKDebug.m; sourceTree = "<group>"; };
 		75043E631404327500C7685D /* CKPropertyExtendedAttributes+CKAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKPropertyExtendedAttributes+CKAttributes.h"; path = "Classes/CKPropertyExtendedAttributes+CKAttributes.h"; sourceTree = "<group>"; };
 		75043E641404327500C7685D /* CKPropertyExtendedAttributes+CKAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKPropertyExtendedAttributes+CKAttributes.m"; path = "Classes/CKPropertyExtendedAttributes+CKAttributes.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7506E3E913B8FA0500EE1471 /* CloudKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = CloudKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = AppCoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750A157513FD50E6008BC41F /* CKBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBinding.m; path = Classes/CKBinding.m; sourceTree = "<group>"; };
 		750A157713FD50FA008BC41F /* CKBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBinding.h; path = Classes/CKBinding.h; sourceTree = "<group>"; };
 		751F1EFC13D0E95B0041900C /* CKUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUserDefaults.h; path = Classes/CKUserDefaults.h; sourceTree = "<group>"; };
@@ -607,9 +607,9 @@
 		7536F9DF13CE0BE900720C17 /* CKWebViewControllerGoForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CKWebViewControllerGoForward.png; sourceTree = "<group>"; };
 		7539FF90142CE94700688E2D /* CKNSError+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSError+Additions.h"; path = "Classes/CKNSError+Additions.h"; sourceTree = "<group>"; };
 		7539FF91142CE94700688E2D /* CKNSError+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSError+Additions.m"; path = "Classes/CKNSError+Additions.m"; sourceTree = "<group>"; };
-		7550153913B8EA08002DAE8B /* CloudKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CloudKit-Info.plist"; sourceTree = "<group>"; };
+		7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCoreKit-Info.plist"; sourceTree = "<group>"; };
 		7550153B13B8EA08002DAE8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CloudKit-Prefix.pch"; sourceTree = "<group>"; };
+		7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCoreKit-Prefix.pch"; sourceTree = "<group>"; };
 		755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizationManager.h; path = Classes/CKLocalizationManager.h; sourceTree = "<group>"; };
 		755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKLocalizationManager.m; path = Classes/CKLocalizationManager.m; sourceTree = "<group>"; };
 		755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLocalizedString.h; path = Classes/CKLocalizedString.h; sourceTree = "<group>"; };
@@ -1656,7 +1656,7 @@
 		7550153113B8EA08002DAE8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7506E3E913B8FA0500EE1471 /* CloudKit.framework */,
+				7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1697,9 +1697,9 @@
 		7550153813B8EA08002DAE8B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7550153913B8EA08002DAE8B /* CloudKit-Info.plist */,
+				7550153913B8EA08002DAE8B /* AppCoreKit-Info.plist */,
 				7550153A13B8EA08002DAE8B /* InfoPlist.strings */,
-				7550153D13B8EA08002DAE8B /* CloudKit-Prefix.pch */,
+				7550153D13B8EA08002DAE8B /* AppCoreKit-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2349,7 +2349,7 @@
 				B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */,
 				75AD5DA4144C73290008F53A /* CKCollectionViewController+InlineDebugger.h in Headers */,
 				757D06E4144DAD9A00A83128 /* CKInlineDebuggerController.h in Headers */,
-				7521E31E14520BBE000AEED8 /* CloudKit-Prefix.pch in Headers */,
+				7521E31E14520BBE000AEED8 /* AppCoreKit-Prefix.pch in Headers */,
 				755CEE19146C8C2E0052B1FF /* CKLocalizationManager.h in Headers */,
 				755CEE1E146C8C7E0052B1FF /* CKLocalizedString.h in Headers */,
 				963826541484011700A9C98B /* CKFormSectionBase.h in Headers */,
@@ -2410,9 +2410,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		7550152F13B8EA08002DAE8B /* CloudKit */ = {
+		7550152F13B8EA08002DAE8B /* AppCoreKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7550154013B8EA08002DAE8B /* Build configuration list for PBXNativeTarget "CloudKit" */;
+			buildConfigurationList = 7550154013B8EA08002DAE8B /* Build configuration list for PBXNativeTarget "AppCoreKit" */;
 			buildPhases = (
 				7550152B13B8EA08002DAE8B /* Sources */,
 				7550152C13B8EA08002DAE8B /* Frameworks */,
@@ -2424,9 +2424,9 @@
 			);
 			dependencies = (
 			);
-			name = CloudKit;
+			name = AppCoreKit;
 			productName = CloudKit;
-			productReference = 7506E3E913B8FA0500EE1471 /* CloudKit.framework */;
+			productReference = 7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
 /* End PBXNativeTarget section */
@@ -2438,7 +2438,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = Wherecloud;
 			};
-			buildConfigurationList = 7550152913B8EA08002DAE8B /* Build configuration list for PBXProject "CloudKit" */;
+			buildConfigurationList = 7550152913B8EA08002DAE8B /* Build configuration list for PBXProject "AppCoreKit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -2451,8 +2451,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7550152F13B8EA08002DAE8B /* CloudKit */,
-				7561645313BA527A00330BF0 /* CloudKit Documentation */,
+				7550152F13B8EA08002DAE8B /* AppCoreKit */,
+				7561645313BA527A00330BF0 /* AppCoreKit Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -2763,7 +2763,7 @@
 /* Begin PBXTargetDependency section */
 		960A2D34150575A100D30AB4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7550152F13B8EA08002DAE8B /* CloudKit */;
+			target = 7550152F13B8EA08002DAE8B /* AppCoreKit */;
 			targetProxy = 960A2D33150575A100D30AB4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2878,7 +2878,7 @@
 					"\"${CloudKitFrameworks}/VendorsKit/1.0.x/\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2888,8 +2888,8 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "CloudKit/AppCoreKit-Info.plist";
+				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = framework;
@@ -2905,7 +2905,7 @@
 					"\"${CloudKitFrameworks}/VendorsKit/1.0.x/\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CloudKit/CloudKit-Prefix.pch";
+				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2915,8 +2915,8 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				INFOPLIST_FILE = "CloudKit/CloudKit-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "CloudKit/AppCoreKit-Info.plist";
+				PRODUCT_NAME = AppCoreKit;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = framework;
@@ -2928,7 +2928,7 @@
 			buildSettings = {
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				PRODUCT_NAME = "CloudKit Install copy";
+				PRODUCT_NAME = "AppCoreKit Install copy";
 			};
 			name = Debug;
 		};
@@ -2937,14 +2937,14 @@
 			buildSettings = {
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				PRODUCT_NAME = "CloudKit Install copy";
+				PRODUCT_NAME = "AppCoreKit Install copy";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7550152913B8EA08002DAE8B /* Build configuration list for PBXProject "CloudKit" */ = {
+		7550152913B8EA08002DAE8B /* Build configuration list for PBXProject "AppCoreKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7550153E13B8EA08002DAE8B /* Debug */,
@@ -2953,7 +2953,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7550154013B8EA08002DAE8B /* Build configuration list for PBXNativeTarget "CloudKit" */ = {
+		7550154013B8EA08002DAE8B /* Build configuration list for PBXNativeTarget "AppCoreKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7550154113B8EA08002DAE8B /* Debug */,
@@ -2962,7 +2962,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7561645513BA527A00330BF0 /* Build configuration list for PBXAggregateTarget "CloudKit Documentation" */ = {
+		7561645513BA527A00330BF0 /* Build configuration list for PBXAggregateTarget "AppCoreKit Documentation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7561645613BA527A00330BF0 /* Debug */,

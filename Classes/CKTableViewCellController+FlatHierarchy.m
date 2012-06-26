@@ -7,6 +7,9 @@
 //
 
 #import "CKTableViewCellController+FlatHierarchy.h"
+#import "CKRuntime.h"
+#import <objc/runtime.h>
+#import <QuartzCore/QuartzCore.h>
 
 static char CKTableViewCellControllerOriginalViewKey;
 static char CKTableViewCellControllerImageViewsKey;

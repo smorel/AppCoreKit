@@ -13,7 +13,7 @@
 #import "CKNSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
-#import <CloudKit/CKLiveProjectFileUpdateManager.h>
+#import "CKLiveProjectFileUpdateManager.h"
 
 NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 

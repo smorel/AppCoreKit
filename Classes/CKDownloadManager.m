@@ -9,8 +9,8 @@
 #import "CKDownloadManager.h"
 #import "CKWebRequest.h"
 
-#import <CloudKit/CKNSObject+JSON.h>
-#import <CloudKit/CKDebug.h>
+#import "CKNSObject+JSON.h"
+#import "CKDebug.h"
 
 //
 

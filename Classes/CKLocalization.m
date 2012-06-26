@@ -9,7 +9,7 @@
 #import "CKLocalization.h"
 #import "CKLocalizationManager_Private.h"
 #import "CKLiveProjectFileUpdateManager.h"
-#import <CloudKit/CKNSObject+CKSingleton.h>
+#import "CKNSObject+CKSingleton.h"
 #import "CKCascadingTree.h"
 
 NSString *CKLocalizationCurrentLocalization(void) {
