@@ -6,6 +6,7 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
+#import "UIView+CKName.h"
 #import "CKPopoverController.h"
 #import "CKSheetController.h"
 

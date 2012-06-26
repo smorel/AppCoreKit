@@ -138,8 +138,6 @@ extern NSString* CKStyleAutoLayoutCompression;
 /**
  */
 @interface UIView (CKStyle)
-@property (nonatomic,copy) NSString* name;
-
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style;
 - (NSMutableDictionary*)applyStyle:(NSMutableDictionary*)style propertyName:(NSString*)propertyName;
 
@@ -148,7 +146,6 @@ extern NSString* CKStyleAutoLayoutCompression;
 //private
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view;
 
-- (id)viewWithKeyPath:(NSString*)keyPath;
 - (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico;
 
 #ifdef __IPHONE_6_0

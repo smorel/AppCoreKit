@@ -514,6 +514,8 @@
 		96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */; };
 		96E4D4671540918800CCF421 /* UnitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D40215407D8600CCF421 /* UnitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96EBE433159A43AB00E0F209 /* UIView+CKName.h in Headers */ = {isa = PBXBuildFile; fileRef = 96EBE431159A43AB00E0F209 /* UIView+CKName.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96EBE434159A43AB00E0F209 /* UIView+CKName.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBE432159A43AB00E0F209 /* UIView+CKName.m */; };
 		B01481191566A8FD000C1E1C /* CKWebRequestManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B01481171566A8FD000C1E1C /* CKWebRequestManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B014811A1566A8FD000C1E1C /* CKWebRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B01481181566A8FD000C1E1C /* CKWebRequestManager.m */; };
 		B02B1F2F156C424E00A1C16A /* NSURLRequest+Upload.h in Headers */ = {isa = PBXBuildFile; fileRef = B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1053,6 +1055,8 @@
 		96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUnitTest_TableViewCellController_DynamicLayout.h; path = Classes/CKUnitTest_TableViewCellController_DynamicLayout.h; sourceTree = "<group>"; };
 		96E4D3FF15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKUnitTest_TableViewCellController_DynamicLayout.m; path = Classes/CKUnitTest_TableViewCellController_DynamicLayout.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96E4D40215407D8600CCF421 /* UnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests.h; path = Classes/UnitTests.h; sourceTree = "<group>"; };
+		96EBE431159A43AB00E0F209 /* UIView+CKName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKName.h"; path = "Classes/UIView+CKName.h"; sourceTree = "<group>"; };
+		96EBE432159A43AB00E0F209 /* UIView+CKName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CKName.m"; path = "Classes/UIView+CKName.m"; sourceTree = "<group>"; };
 		B01481171566A8FD000C1E1C /* CKWebRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequestManager.h; path = Classes/CKWebRequestManager.h; sourceTree = "<group>"; };
 		B01481181566A8FD000C1E1C /* CKWebRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequestManager.m; path = Classes/CKWebRequestManager.m; sourceTree = "<group>"; };
 		B02B1F2D156C424E00A1C16A /* NSURLRequest+Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLRequest+Upload.h"; path = "Classes/NSURLRequest+Upload.h"; sourceTree = "<group>"; };
@@ -1340,6 +1344,8 @@
 		7506E40413B8FF6700EE1471 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				96EBE431159A43AB00E0F209 /* UIView+CKName.h */,
+				96EBE432159A43AB00E0F209 /* UIView+CKName.m */,
 				7595696F144626530092F317 /* CKSegmentedControl.h */,
 				75956971144626670092F317 /* CKSegmentedControl.m */,
 				9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */,
@@ -2397,6 +2403,7 @@
 				B02E75D51587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.h in Headers */,
 				96D2674215923B7700840A7F /* NSTimer+CKBlockBaseInterface.h in Headers */,
 				96812C6B159A2E67002160C1 /* CKClassPropertyDescriptor_private.h in Headers */,
+				96EBE433159A43AB00E0F209 /* UIView+CKName.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2747,6 +2754,7 @@
 				9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */,
 				B02E75D61587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.m in Sources */,
 				96D2674315923B7700840A7F /* NSTimer+CKBlockBaseInterface.m in Sources */,
+				96EBE434159A43AB00E0F209 /* UIView+CKName.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

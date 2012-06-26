@@ -18,6 +18,7 @@
 #import "CKDebug.h"
 #import <objc/runtime.h>
 #import "CKVersion.h"
+#import "UIView+CKName.h"
 
 
 //NSMutableSet* reserverKeyWords = nil;
@@ -277,10 +278,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 @end
 
-static char kUIViewNameKey;
-
 @implementation UIView (CKStyle)
-@dynamic name;
 
 /*
 - (BOOL)translatesAutoresizingMaskIntoConstraints{
@@ -297,17 +295,6 @@ static char kUIViewNameKey;
     }
 }
 #endif
-
-- (void)setName:(NSString *)name{
-    objc_setAssociatedObject(self, 
-                             &kUIViewNameKey,
-                             name,
-                             OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (NSString*)name{
-    return objc_getAssociatedObject(self, &kUIViewNameKey);
-}
 
 
 + (CKStyleView*)gradientView:(UIView*)view{
@@ -572,31 +559,6 @@ static char kUIViewNameKey;
 }
 
 
-- (id)viewWithKeyPath:(NSString*)keyPath{
-    NSArray* ar = [keyPath componentsSeparatedByString:@"."];
-    UIView* currentView = self;
-    for(NSString* key in ar){
-        UIView* oldCurrentView = currentView;
-        
-        NSArray* propertyNames = [currentView allPropertyNames];
-        if([propertyNames indexOfObject:key] != NSNotFound){
-            currentView = [currentView valueForKey:key];
-        }else{
-            for(UIView* view in [currentView subviews]){
-                if([[view name]isEqualToString:key]){
-                    currentView = view;
-                    break;
-                }
-            }
-        }
-        
-        if(currentView == oldCurrentView){
-            CKDebugLog( @"Could not find view for keypath : %@ in %@",keyPath,self);
-        }
-    }
-    
-    return currentView;
-}
 
 
 - (void)populateViewDictionaryForVisualFormat:(NSMutableDictionary*)dico{
