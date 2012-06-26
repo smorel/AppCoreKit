@@ -254,10 +254,11 @@
         }
     }
 
-    <p>We also need to load this file in the Style manager. We generally do this when the appDelegate gets created</p>
+
+<p>We also need to load this file in the Style manager. We generally do this when the appDelegate gets created</p>
     
     
-    <i>AppDelegate.m</i>
+<i>AppDelegate.m</i>
     
     - (id)init{
         self = [super init];

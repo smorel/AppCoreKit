@@ -153,7 +153,7 @@
 
 <p><b>AppCoreKit</b> provides helpers to easilly manage redondant tasks. Here is a summary on how things can be assembled together to manage complex behaviour such as displaying a collection of objects that is asynchronously populated from the web. You just need to assemble (describe) how the objects should be represented and all the updates will get done automatically as described bellow:
 
-<img src="CloudKitApplicationArchitecture.png"  WIDTH="1309" HEIGHT="600" />
+<img src="CloudKitApplicationArchitecture.png"  WIDTH="1745" HEIGHT="800" />
 
 <p>Here is a Sample code illustrating this architecture</p>
 
