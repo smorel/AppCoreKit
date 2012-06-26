@@ -20,6 +20,19 @@
 #import "CKNSString+Additions.h"
 #import "CKWeakRef.h"
 
+#import "CKUIColor+ValueTransformer.h"
+#import "CKUIImage+ValueTransformer.h"
+#import "CKNSNumber+ValueTransformer.h"
+#import "CKNSURL+ValueTransformer.h"
+#import "CKNSDate+ValueTransformer.h"
+#import "CKNSArray+ValueTransformer.h"
+#import "CKCollection+ValueTransformer.h"
+#import "CKNSIndexPath+ValueTransformer.h"
+#import "CKNSObject+ValueTransformer.h"
+#import "CKNSValueTransformer+NativeTypes.h"
+#import "CKNSValueTransformer+CGTypes.h"
+
+
 @interface CKObject()
 @property (nonatomic,readwrite) BOOL isSaving;
 @property (nonatomic,readwrite) BOOL isLoading;

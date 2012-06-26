@@ -11,6 +11,7 @@
 #import "CKRuntime.h"
 #import "CKObject.h"
 #import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKBindingsManager.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>

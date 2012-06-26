@@ -14,6 +14,19 @@
 #import <ext/hash_map>
 #import "CKObject+CKStore.h"
 
+#import "CKUIColor+ValueTransformer.h"
+#import "CKUIImage+ValueTransformer.h"
+#import "CKNSNumber+ValueTransformer.h"
+#import "CKNSURL+ValueTransformer.h"
+#import "CKNSDate+ValueTransformer.h"
+#import "CKNSArray+ValueTransformer.h"
+#import "CKCollection+ValueTransformer.h"
+#import "CKNSIndexPath+ValueTransformer.h"
+#import "CKNSObject+ValueTransformer.h"
+#import "CKNSValueTransformer+NativeTypes.h"
+#import "CKNSValueTransformer+CGTypes.h"
+
+
 #define AUTO_LOCALIZATION 0
 
 typedef struct CKNSValueTransformerIdentifier {

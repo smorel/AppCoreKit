@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "CKFormSectionBase.h"
 
 @class CKTableViewCellController;

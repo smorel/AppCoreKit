@@ -11,6 +11,18 @@
 #import "CKObject.h"
 #import "CKNSValueTransformer+Additions.h"
 
+#import "CKUIColor+ValueTransformer.h"
+#import "CKUIImage+ValueTransformer.h"
+#import "CKNSNumber+ValueTransformer.h"
+#import "CKNSURL+ValueTransformer.h"
+#import "CKNSDate+ValueTransformer.h"
+#import "CKNSArray+ValueTransformer.h"
+#import "CKCollection+ValueTransformer.h"
+#import "CKNSIndexPath+ValueTransformer.h"
+#import "CKNSObject+ValueTransformer.h"
+#import "CKNSValueTransformer+NativeTypes.h"
+#import "CKNSValueTransformer+CGTypes.h"
+
 
 NSString* CKObjectGraphObjectKey    = @"@object";
 NSString* CKObjectGraphClassKey     = @"@class";

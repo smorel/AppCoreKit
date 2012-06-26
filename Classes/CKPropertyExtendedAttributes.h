@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "CKNSValueTransformer+NativeTypes.h"//for CKEnumDescriptor
 #import "CKNSObject+CKRuntime.h"
 
 /** Extended Attributes is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
