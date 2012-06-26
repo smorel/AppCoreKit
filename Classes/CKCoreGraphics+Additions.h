@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-/** TODO
+/**
  */
 CGPoint CGPointOffset(CGPoint point, CGFloat x, CGFloat y);
 

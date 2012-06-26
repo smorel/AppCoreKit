@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** TODO
+/**
  */
 @interface NSIndexPath (CKValueTransformer)
 + (NSIndexPath*)convertFromNSString:(NSString*)str;

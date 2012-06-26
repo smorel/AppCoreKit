@@ -33,7 +33,28 @@
 @end
 
 
-@implementation CKGridView
+@implementation CKGridView{
+	id<CKGridViewDataSource> _dataSource;
+	id<CKGridViewDelegate> _delegate;
+    
+	NSUInteger _rows;
+	NSUInteger _columns;
+	NSMutableArray *_views;
+    
+	UIView *_draggedView;
+	CGFloat _draggedViewScale;
+	NSIndexPath *_fromIndexPath;
+	NSIndexPath *_toIndexPath;
+    
+	BOOL _editing;
+	unsigned int _needsLayout:1;
+	unsigned int _animating:1;
+	CFTimeInterval _minimumPressDuration;
+    
+	// Gesture Compatibilty with iOS 3.x
+	unsigned int _longPressRecognized:1;
+	NSTimeInterval _longPressStartTime;
+}
 
 @synthesize dataSource = _dataSource;
 @synthesize delegate = _delegate;

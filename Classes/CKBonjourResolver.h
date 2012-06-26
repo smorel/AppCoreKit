@@ -10,7 +10,7 @@
 
 @class CKBonjourResolver;
 
-/** TODO
+/**
  */
 @protocol CKBonjourResolverDelegate
 
@@ -30,7 +30,7 @@
 
 //
 
-/** TODO
+/**
  */
 @interface CKBonjourResolver : NSObject <NSNetServiceBrowserDelegate, NSNetServiceDelegate> 
 

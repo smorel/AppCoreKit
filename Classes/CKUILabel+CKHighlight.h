@@ -8,7 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ */
 @interface UILabel (CKHighlight)
+
+///-----------------------------------
+/// @name Managing Highlight Values
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,retain) UIColor* highlightedShadowColor;
+
+/**
+ */
 @property(nonatomic,retain) UIColor* highlightedBackgroundColor;
+
 @end

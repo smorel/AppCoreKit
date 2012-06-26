@@ -19,7 +19,15 @@
 
 //
 
-@implementation CKTextView
+@implementation CKTextView{
+	UILabel *_placeholderLabel;
+	CGFloat _maxStretchableHeight;
+	CGFloat _minHeight;
+    CGPoint _placeholderOffset;
+    CGRect _oldFrame;
+    NSInteger _numberOfExtraLines;
+    id _frameChangeDelegate;
+}
 
 @synthesize placeholderLabel = _placeholderLabel;
 @synthesize maxStretchableHeight = _maxStretchableHeight;

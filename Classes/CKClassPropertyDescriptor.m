@@ -7,6 +7,7 @@
 //
 
 #import "CKClassPropertyDescriptor.h"
+#import "CKClassPropertyDescriptor_private.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSObject+CKRuntime_private.h"
@@ -82,7 +83,24 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 }
 
 
-@implementation CKClassPropertyDescriptor
+@implementation CKClassPropertyDescriptor{
+	NSString* name;
+	NSString* className;
+	NSString* encoding;
+	NSInteger typeSize;
+	Class type;
+	NSString* attributes;
+	CKClassPropertyDescriptorType propertyType;
+	CKClassPropertyDescriptorAssignementType assignementType;
+	BOOL isReadOnly;
+	
+	SEL extendedAttributesSelector;
+	SEL insertSelector;
+	SEL removeSelector;
+	SEL removeAllSelector;
+}
+
+
 @synthesize name;
 @synthesize type;
 @synthesize attributes;
@@ -355,7 +373,13 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
 @end
 
 static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefault = nil;
-@implementation CKClassPropertyDescriptorManager
+@implementation CKClassPropertyDescriptorManager{
+	NSMutableDictionary* _propertiesByClassName;
+	NSMutableDictionary* propertiesByClassNameByName;
+	NSMutableDictionary* _viewPropertiesByClassName;
+	NSMutableDictionary* _propertyNamesByClassName;
+}
+
 @synthesize propertiesByClassName = _propertiesByClassName;
 @synthesize propertiesByClassNameByName = _propertiesByClassNameByName;
 @synthesize propertyNamesByClassName = _propertyNamesByClassName;

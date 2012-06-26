@@ -18,12 +18,16 @@ typedef void(^CKViewControllerAnimatedBlock)(CKViewController* controller,BOOL a
 typedef void(^CKViewControllerBlock)(CKViewController* controller);
 typedef void(^CKViewControllerOrientationBlock)(CKViewController* controller, UIInterfaceOrientation orientation);
 
+/**
+ */
 typedef enum CKInterfaceOrientation{
     CKInterfaceOrientationPortrait  = 1 << 0,
     CKInterfaceOrientationLandscape = 1 << 1,
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
 }CKInterfaceOrientation;
 
+/**
+ */
 typedef enum CKViewControllerState{
     CKViewControllerStateNone           = 1 << 0,
     CKViewControllerStateWillAppear     = 1 << 1,
@@ -44,7 +48,7 @@ typedef enum CKViewControllerState{
 }
 
 ///-----------------------------------
-/// @name Constructor
+/// @name Creating Controller Objects
 ///-----------------------------------
 /** 
  This returns an autorelease view controller of the calling class.

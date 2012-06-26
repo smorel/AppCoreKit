@@ -10,7 +10,7 @@
 #import "CKNSValueTransformer+Additions.h"
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKStyleParsing)
 

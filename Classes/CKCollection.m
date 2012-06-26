@@ -17,7 +17,12 @@
 @property (nonatomic,assign,readwrite) BOOL isFetching;
 @end
 
-@implementation CKCollection
+@implementation CKCollection{
+	CKFeedSource* _feedSource;
+	id _delegate;
+	NSInteger _count;
+}
+
 @synthesize feedSource = _feedSource;
 @synthesize delegate = _delegate;
 @synthesize count = _count;
@@ -64,6 +69,15 @@
     [_endFetchingBlock release];
     _endFetchingBlock = nil;
     [super dealloc];
+}
+
+
++ (id)collection{
+	return [[[[self class]alloc]init]autorelease];
+}
+
++ (id)collectionWithFeedSource:(CKFeedSource*)source{
+    return [[[[self class]alloc]initWithFeedSource:source]autorelease];
 }
 
 - (id)initWithFeedSource:(CKFeedSource*)source{
@@ -151,7 +165,7 @@
 	NSAssert(NO,@"Abstract Implementation");
 }
 
-- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
+- (NSArray*)objectsMatchingPredicate:(NSPredicate*)predicate{
 	NSAssert(NO,@"Abstract Implementation");
 	return nil;
 }
@@ -203,10 +217,6 @@
 	}
 }
 
-
-+ (id)object{
-	return [[[[self class]alloc]init]autorelease];
-}
 
 - (id) copyWithZone:(NSZone *)zone{
 	id copied = [[[self class] alloc] init];

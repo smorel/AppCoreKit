@@ -10,7 +10,7 @@
 #import "CKTextView.h"
 
 
-/** TODO
+/**
  */
 @interface CKMultilineNSStringPropertyCellController : CKPropertyGridCellController<UITextViewDelegate>
 

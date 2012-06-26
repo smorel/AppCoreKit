@@ -8,7 +8,7 @@
 
 #import "CKMapAnnotationController.h"
 
-/** TODO
+/**
  */
 @interface CKMapAnnotationController (CKBlockBasedInterface)
 

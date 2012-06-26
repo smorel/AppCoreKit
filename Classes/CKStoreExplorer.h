@@ -9,11 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "CKStore.h"
-#import "CKItem.h"
 #import "CKFormTableViewController.h"
 
-
-/** TODO
+/**
  */
 @interface CKStoreExplorer : CKFormTableViewController
 
@@ -28,37 +26,3 @@
 @end
 
 
-
-/** TODO
- */
-@interface CKStoreDomainExplorer : CKFormTableViewController 
-
-///-----------------------------------
-/// @name Initializing a CKStore Domain Explorer
-///-----------------------------------
-
-/**
- */
-- (id)initWithDomain:(NSString *)domain;
-
-/**
- */
-- (id)initWithItems:(NSMutableArray *)items;
-
-@end
-
-
-
-/** TODO
- */
-@interface CKStoreItemExplorer : CKFormTableViewController 
-
-///-----------------------------------
-/// @name Initializing a CKStore item Explorer
-///-----------------------------------
-
-/**
- */
-- (id)initWithItem:(CKItem *)item;
-
-@end

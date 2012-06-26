@@ -9,11 +9,15 @@
 #import "CKLocalizedString.h"
 #import "CKLocalizationManager.h"
 #import "CKNSObject+Bindings.h"
+#import "CKLocalization.h"
 
 @interface CKLocalizationManager()
+
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic, assign) BOOL needsRefresh;
 #endif
+
+- (NSString*)localizedString;
 @end
 
 @interface CKLocalizedString()
@@ -91,4 +95,20 @@
     return [self localizedString];
 }
  
+@end
+
+
+
+
+@implementation NSString (CKLocalization)
+
+
++ (NSString*)stringWithLocalizedStrings:(NSDictionary*)localizedStrings{
+    return [[[CKLocalizedString alloc]initWithLocalizedStrings:localizedStrings]autorelease];
+}
+
++ (NSString*)stringWithLocalizedKey:(NSString*)localizedKey{
+    return _(localizedKey);
+}
+
 @end

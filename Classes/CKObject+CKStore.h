@@ -10,7 +10,7 @@
 #import "CKObject.h"
 
 
-/** TODO
+/**
  */
 @interface CKObject (CKStoreAddition)
 

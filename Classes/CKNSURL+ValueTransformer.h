@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-/** TODO
+/**
  */
 @interface NSURL (CKValueTransformer)
 + (NSURL*)convertFromNSString:(NSString*)str;

@@ -24,9 +24,15 @@ NSString *const CKSheetKeyboardWillShowInfoKey      = @"CKSheetKeyboardWillShowI
 @property(nonatomic,assign, readwrite) BOOL visible;
 @property(nonatomic,assign) BOOL registeredToNotifications;
 @property(nonatomic,retain) CKWeakRef* delegateRef;
+@property(nonatomic,retain,readwrite) UIViewController* contentViewController;
 @end
 
-@implementation CKSheetController
+@implementation CKSheetController{
+    id _delegate;
+    UIViewController* _contentViewController;
+    UIView* _sheetView;
+}
+
 @synthesize delegate = _delegate;
 @synthesize contentViewController = _contentViewController;
 @synthesize sheetView = _sheetView;

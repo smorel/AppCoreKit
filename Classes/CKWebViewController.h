@@ -11,18 +11,57 @@
 
 #import "CKViewController.h"
 
-/** TODO
+/**
  */
 @interface CKWebViewController : CKViewController
 
-@property (readonly, nonatomic) NSURL *currentURL;
-@property (nonatomic, readonly, retain) UIWebView *webView;
-@property (nonatomic, assign) id<UIWebViewDelegate> delegate; //Forward UIWebViewDelegate events
-@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
+///-----------------------------------
+/// @name Initializing a CKWebBrowserViewController
+///-----------------------------------
 
+/**
+ */
 - (id)initWithURL:(NSURL*)URL;
+
+/**
+ */
 - (id)initWithURL:(NSURL*)URL withCompletionBlock:(void (^)(UIWebView *webView, NSError *error))completion;
 
+///-----------------------------------
+/// @name Getting the web view status
+///-----------------------------------
+
+/**
+ */
+@property (readonly, nonatomic) NSURL *currentURL;
+
+/**
+ */
+@property (nonatomic, copy) void (^completionBlock)(UIWebView *webView, NSError *error);
+
+///-----------------------------------
+/// @name Loading an URL
+///-----------------------------------
+
+/**
+ */
 - (void)loadURL:(NSURL*)URL;
+
+///-----------------------------------
+/// @name Getting the web view
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIWebView *webView;
+
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** /Forward UIWebViewDelegate events
+ */
+@property (nonatomic, assign) id<UIWebViewDelegate> delegate;
 
 @end

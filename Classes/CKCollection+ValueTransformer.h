@@ -9,7 +9,7 @@
 #import "CKCollection.h"
 
 
-/** TODO
+/**
  */
 @interface CKCollection (CKValueTransformer)
 

@@ -13,7 +13,7 @@
 
 @class CKTableViewCellController;
 
-/** TODO
+/**
  */
 @interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>
 

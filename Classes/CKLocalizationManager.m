@@ -10,6 +10,7 @@
 #import "CKLocalization.h"
 #import <UIKit/UIKit.h>
 #import "CKNSObject+CKRuntime.h"
+#import "CKLocalizationManager_Private.h"
 #import "CKDebug.h"
 
 @interface CKLocalizationManager() {
@@ -94,6 +95,12 @@ static CKLocalizationManager *sharedInstance = nil;
         [self refreshUI];
     }
 }
+
+@end
+
+
+
+@implementation CKLocalizationManager(CKPrivate)
 
 // Resets the localization system, so it uses the OS default language.
 //

@@ -18,55 +18,154 @@ typedef enum CKSplitViewConstraintsType{
     CKSplitViewConstraintsTypeFixedSizeRatio
 }CKSplitViewConstraintsType;
 
+/**
+ */
 @interface CKSplitViewConstraints : CKObject
-@property(nonatomic,assign)CKSplitViewConstraintsType type;
-@property(nonatomic,assign)CGFloat size;//in pixel or ratio
+
+///-----------------------------------
+/// @name Creating SplitView Constraints Object
+///-----------------------------------
+
+/**
+ */
 + (CKSplitViewConstraints*)constraints;
 
+///-----------------------------------
+/// @name Configuring the constraint
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign)CKSplitViewConstraintsType type;
+
+/** in pixel or ratio depending on the specified type
+ */
+@property(nonatomic,assign)CGFloat size;
+
 @end
 
-//CKSplitViewDelegate
+
+
 
 @class CKSplitView;
+
+/**
+ */
 @protocol CKSplitViewDelegate
 @optional
+
+///-----------------------------------
+/// @name Customizing the split view behaviour
+///-----------------------------------
+
+/**
+ */
 - (NSInteger)numberOfViewsInSplitView:(CKSplitView*)view;
+
+/**
+ */
 - (UIView*)splitView:(CKSplitView*)view viewAtIndex:(NSInteger)index;
+
+/**
+ */
 - (CKSplitViewConstraints*)splitView:(CKSplitView*)view constraintsForViewAtIndex:(NSInteger)index;
+
 @end
 
-//CKSplitView
 
+/**
+ */
 typedef enum CKSplitViewOrientation{
     CKSplitViewOrientationHorizontal,
     CKSplitViewOrientationVertical
 }CKSplitViewOrientation;
 
 
+/**
+ */
 @interface CKSplitView : UIView
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign)id delegate;
+
+///-----------------------------------
+/// @name Customizing the split view
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign)CKSplitViewOrientation orientation;
 
+///-----------------------------------
+/// @name Reloading the split view
+///-----------------------------------
+
+/**
+ */
 - (void)reloadData;
 
 @end
 
 //CKSplitViewController
 
+/**
+ */
 @interface CKSplitViewController : CKViewController
-@property (nonatomic, copy) NSArray* viewControllers;
+
+///-----------------------------------
+/// @name Initializing SplitViewController Objects
+///-----------------------------------
+
+/**
+ */
+- (id)initWithViewControllers:(NSArray*)viewControllers;
+
+///-----------------------------------
+/// @name Getting the Split View
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, retain, readonly) CKSplitView* splitView;
 
+///-----------------------------------
+/// @name Managing animations
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, copy) void (^addOrRemoveAnimationBlock)(UIView* view, BOOL removing);
 
-- (id)initWithViewControllers:(NSArray*)viewControllers;
+///-----------------------------------
+/// @name Managing the view controllers
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, copy) NSArray* viewControllers;
+
+/**
+ */
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated;
 
 @end
 
 
-//UIViewController(CKSplitView)
 
+/**
+ */
 @interface UIViewController(CKSplitView)
+
+///-----------------------------------
+/// @name Customizing the split view constraints
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,retain)CKSplitViewConstraints* splitViewConstraints;
 @end

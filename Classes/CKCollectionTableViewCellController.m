@@ -14,7 +14,6 @@
 #import "CKCarouselCollectionViewController.h"
 #import "CKCollection.h"
 #import "CKCollectionTableViewCellController+Style.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellController+Style.h"
 
 #import "CKFormTableViewController.h"

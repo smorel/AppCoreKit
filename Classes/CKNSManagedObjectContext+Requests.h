@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-/** TODO
+/**
  */
 @interface NSManagedObject (CKNSManagedObjectPropertiesAdditions)
 
@@ -32,7 +32,7 @@
 
 //
 
-/** TODO
+/**
  */
 @interface NSManagedObjectContext (CKNSManagedObjectContextRequestsAdditions)
 

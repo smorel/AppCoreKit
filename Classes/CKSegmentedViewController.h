@@ -9,6 +9,9 @@
 #import "CKContainerViewController.h"
 #import "CKSegmentedControl.h"
 
+
+/**
+ */
 typedef enum CKSegmentedViewControllerPosition{
     CKSegmentedViewControllerPositionTop,
     CKSegmentedViewControllerPositionBottom,
@@ -16,7 +19,25 @@ typedef enum CKSegmentedViewControllerPosition{
     CKSegmentedViewControllerPositionToolBar
 }CKSegmentedViewControllerPosition;
 
+
+/**
+ */
 @interface CKSegmentedViewController : CKContainerViewController
-@property(nonatomic,assign) CKSegmentedViewControllerPosition segmentPosition;
+
+///-----------------------------------
+/// @name Getting the segmented control
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,retain,readonly) CKSegmentedControl* segmentedControl;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign) CKSegmentedViewControllerPosition segmentPosition;
+
 @end

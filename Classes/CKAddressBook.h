@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 
-/** TODO
+/**
  */
 @interface CKAddressBookPerson : NSObject
 
@@ -82,7 +82,7 @@
 
 
 
-/** TODO
+/**
  */
 @interface CKAddressBook : NSObject
 

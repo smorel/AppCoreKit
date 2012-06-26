@@ -24,7 +24,6 @@
 #import "CKMultilineNSStringPropertyCellController.h"
 
 #import "CKNSObject+CKRuntime.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKFormSectionBase_private.h"
 #import "CKTableViewCellController+Menus.h"
 

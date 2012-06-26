@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ */
 typedef enum {
 	CKRoundedCornerViewTypeNone = 0,
 	CKRoundedCornerViewTypeTop,
@@ -15,12 +17,21 @@ typedef enum {
 	CKRoundedCornerViewTypeAll
 } CKRoundedCornerViewType;
 
-@interface CKRoundedCornerView : UIView {
-	CKRoundedCornerViewType _corners;
-	CGFloat _roundedCornerSize;
-}
 
+/**
+ */
+@interface CKRoundedCornerView : UIView
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign) CKRoundedCornerViewType corners;
+
+/**
+ */
 @property (nonatomic,assign) CGFloat roundedCornerSize;
 
 @end

@@ -17,12 +17,13 @@
         }];
  
  */
-@interface CKWeakRef : NSObject <NSCopying> {
-	id _object;
-	CKCallback* _callback;
-}
+@interface CKWeakRef : NSObject <NSCopying> 
 
-/** property test
+///-----------------------------------
+/// @name Managing the referenced object
+///-----------------------------------
+
+/** 
  */
 @property(nonatomic,assign)id object;
 

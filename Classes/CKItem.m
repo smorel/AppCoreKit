@@ -18,7 +18,7 @@
 @class CKItem;
 
 
-/** TODO
+/**
  */
 @interface CKStore (CKStorePrivateAddition)
 @property (retain, readwrite) CKDomain *domain;

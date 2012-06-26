@@ -12,7 +12,7 @@
 #import "CKWeakRef.h"
 
 
-/** TODO
+/**
  */
 enum{
 	CKItemViewFlagNone = 1UL << 0,
@@ -27,7 +27,7 @@ typedef NSUInteger CKItemViewFlags;
 
 @class CKCollectionViewController;
 
-/** TODO
+/**
  */
 @interface CKCollectionCellController : NSObject
 
@@ -36,36 +36,88 @@ typedef NSUInteger CKItemViewFlags;
 /// @name Identifying the Controller at runtime
 ///-----------------------------------
 
+/**
+ */
 @property (nonatomic, retain) NSString *name;
+
+/**
+ */
 @property (nonatomic, copy, readonly) NSIndexPath *indexPath;
 
+/**
+ */
 - (NSString*)identifier;
 
 ///-----------------------------------
 /// @name Managing Content
 ///-----------------------------------
 
+/**
+ */
 @property (nonatomic, assign, readonly) CKCollectionViewController* containerController;
+
+/**
+ */
 @property (nonatomic, retain) id value;
+
+/**
+ */
 @property (nonatomic, assign) UIView *view;
 
 ///-----------------------------------
 /// @name Customizing the Controller Interactions And Visual Appearance
 ///-----------------------------------
 
+/**
+ */
 @property (nonatomic, assign) CKItemViewFlags flags;
+
+/**
+ */
 @property (nonatomic, assign) CGSize size;
 
+/**
+ */
 @property (nonatomic, retain) CKCallback* deallocCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* createCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* initCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* setupCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* selectionCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* accessorySelectionCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* becomeFirstResponderCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* resignFirstResponderCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* viewDidAppearCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* viewDidDisappearCallback;
+
+/**
+ */
 @property (nonatomic, retain) CKCallback* layoutCallback;
 
 
@@ -73,19 +125,48 @@ typedef NSUInteger CKItemViewFlags;
 /// @name Responding to ContainerController Events
 ///-----------------------------------
 
+/**
+ */
 - (void)viewDidAppear:(UIView *)view;
+
+/**
+ */
 - (void)viewDidDisappear;
 
+/**
+ */
 - (UIView *)loadView;
+
+/**
+ */
 - (void)initView:(UIView*)view;
+
+/**
+ */
 - (void)setupView:(UIView *)view;
+
+/**
+ */
 - (void)rotateView:(UIView*)view animated:(BOOL)animated;
 
+/**
+ */
 - (NSIndexPath *)willSelect;
+
+/**
+ */
 - (void)didSelect;
+
+/**
+ */
 - (void)didSelectAccessoryView;
 
+/**
+ */
 - (void)didBecomeFirstResponder;
+
+/**
+ */
 - (void)didResignFirstResponder;
 
 
@@ -93,14 +174,24 @@ typedef NSUInteger CKItemViewFlags;
 /// @name Managing Stylesheets
 ///-----------------------------------
 
+/**
+ */
 - (void)applyStyle;
 
 ///-----------------------------------
 /// @name Initializing a Controller
 ///-----------------------------------
 
+/**
+ */
 - (void)postInit;
+
+/**
+ */
 - (void)invalidateSize;
+
+/**
+ */
 - (void)setSize:(CGSize)size notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate;
 
 @end

@@ -2,7 +2,7 @@
 //  UIGestureRecognizer+CKBlockBasedInterface.m
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-06-05.
+//  Created by Sebastien Morel on 12-06-05.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

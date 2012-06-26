@@ -17,8 +17,6 @@
 #import "CKCollectionController.h"
 #import "CKArrayCollection.h"
 
-#import "CKNSNotificationCenter+Edition.h"
-
 
 NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *context)
 {
@@ -105,7 +103,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 //
 @interface CKMapCollectionViewController()
-- (void)onPropertyChanged:(NSNotification*)notification;
 - (void)zoom:(BOOL)animated;
 @property (nonatomic, retain) id nearestAnnotation;
 @property (nonatomic, assign) BOOL mapViewHasBeenReloaded;
@@ -141,8 +138,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 
 - (void)postInit {
 	[super postInit];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPropertyChanged:) name:CKEditionPropertyChangedNotification object:nil];
+
 	
 	_zoomStrategy = CKMapCollectionViewControllerZoomStrategyEnclosing;
     _selectionStrategy = CKMapCollectionViewControllerSelectionStrategyAutoSelectAloneAnnotations;
@@ -641,15 +637,6 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
         [array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 	}
 	return array;
-}
-
-- (void)onPropertyChanged:(NSNotification*)notification{
-	NSArray* objects = [self objectsForSection:0];
-	CKProperty* property = [notification objectProperty];
-	if([objects containsObject:property.object] == YES){
-		[self reload];
-		return;
-	}
 }
 
 @end

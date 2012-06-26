@@ -8,6 +8,8 @@
 
 #import "CKViewController.h"
 
+/**
+ */
 typedef enum CKTransitionType{
     CKTransitionNone = UIViewAnimationOptionTransitionNone,
     CKTransitionFlipFromLeft    = UIViewAnimationOptionTransitionFlipFromLeft,
@@ -21,27 +23,76 @@ typedef enum CKTransitionType{
     CKTransitionPop             = 9 << 20,
 }CKTransitionType;
 
+/**
+ */
 @interface CKContainerViewController : CKViewController
 
-@property (nonatomic, retain) NSArray* viewControllers;
-@property (nonatomic, assign) NSUInteger selectedIndex;
+///-----------------------------------
+/// @name Initializing Container Controller Objects
+///-----------------------------------
 
-@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInNavigationBar) BOOL presentsSelectedViewControllerItemsInNavigationBar;
-@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInToolbar) BOOL presentsSelectedViewControllerItemsInToolbar;
-
-@property (nonatomic, readonly) UIViewController* selectedViewController;
-@property (nonatomic, retain, readonly) UIView *containerView;
-
+/**
+ */
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
+///-----------------------------------
+/// @name Getting the Container View
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain, readonly) UIView *containerView;
+
+///-----------------------------------
+/// @name Accessing Container Controller attributes
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) NSArray* viewControllers;
+
+/**
+ */
+@property (nonatomic, assign) NSUInteger selectedIndex;
+
+/**
+ */
+@property (nonatomic, readonly) UIViewController* selectedViewController;
+
+///-----------------------------------
+/// @name Customizing the navigation bar content
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInNavigationBar) BOOL presentsSelectedViewControllerItemsInNavigationBar;
+
+/**
+ */
+@property (nonatomic, assign, getter = doesPresentsSelectedViewControllerItemsInToolbar) BOOL presentsSelectedViewControllerItemsInToolbar;
+
+
+///-----------------------------------
+/// @name Presenting view controllers
+///-----------------------------------
+
+/**
+ */
 - (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition;
 
 @end
 
-//
 
+/**
+ */
 @interface UIViewController (CKContainerViewController)
 
+///-----------------------------------
+/// @name Accessing the Container Controller=
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign) UIViewController *containerViewController;
 
 @end

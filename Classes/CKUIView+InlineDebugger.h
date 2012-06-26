@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "CKNSObject+InlineDebugger.h"
 
-/** TODO
+/**
  */
 @interface UIView (CKInlineDebugger)
 

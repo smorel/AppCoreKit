@@ -13,7 +13,7 @@
 typedef void(^CKNotificationExecutionBlock)(NSNotification* notification);
 
 
-/** TODO
+/**
  */
 @interface CKNotificationBlockBinder : CKBinding {
 	NSString* notificationName;

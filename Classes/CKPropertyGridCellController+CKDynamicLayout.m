@@ -7,13 +7,12 @@
 //
 
 #import "CKPropertyGridCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
-#import "CKBundle.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKSheetController.h"
 

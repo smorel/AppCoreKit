@@ -11,7 +11,6 @@
 #import "CKNSObject+CKRuntime_private.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+Bindings.h"
-#import "CKNSNotificationCenter+Edition.h"
 
 /* TODO : see how we could integrate our validation predicates from attributes in the KVO validation methods.
         by swizzling for example ...
@@ -39,31 +38,11 @@
 	return results;
 }
 
-- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock{
-        //Register on property edition to send validation status when editing properties
-    [[NSNotificationCenter defaultCenter]bindNotificationName:CKEditionPropertyChangedNotification withBlock:^(NSNotification *notification) {
-        CKProperty* property = [notification objectProperty];
-        if(property.object == self){
-            CKObjectValidationResults* validationResults = [self validate];
-            validationResults.modifiedKeyPath = property.keyPath;
-            if(validationBlock){
-                validationBlock(validationResults);
-            }
-        }
-    }];
-    
-        //Sends validation status synchronously
-    CKObjectValidationResults* validationResults = [self validate];
-    if(validationBlock){
-        validationBlock(validationResults);
-    }
-}
-
 @end
 
 
 @implementation CKObjectValidationResults
-@synthesize modifiedKeyPath,invalidProperties;
+@synthesize invalidProperties;
 
 - (id)init{
     self = [super init];
@@ -72,7 +51,6 @@
 }
 
 - (void)dealloc{
-    self.modifiedKeyPath = nil;
     self.invalidProperties = nil;
     [super dealloc];
 }

@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** TODO
+/**
  */
 @interface NSDate (CKNSDateConversionsAdditions)
 

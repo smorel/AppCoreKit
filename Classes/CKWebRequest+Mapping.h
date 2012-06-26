@@ -2,13 +2,13 @@
 //  CKWebRequest+Mapping.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-06-08.
+//  Created by Sebastien Morel on 12-06-08.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKWebRequest.h"
 
-/** TODO
+/**
  */
 @interface CKWebRequest (StandardRequests)
 

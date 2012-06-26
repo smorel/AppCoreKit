@@ -24,33 +24,88 @@ extern NSString *const CKSheetAnimationDurationUserInfoKey;
 extern NSString *const CKSheetAnimationCurveUserInfoKey;
 extern NSString *const CKSheetKeyboardWillShowInfoKey;
     
-    
 #ifdef __cplusplus
 }
 #endif
 
-@interface CKSheetController : NSObject{
-    id _delegate;
-    UIViewController* _contentViewController;
-    UIView* _sheetView;
-}
+/**
+ */
+@interface CKSheetController : NSObject
 
+///-----------------------------------
+/// @name Initializing a CKSheetController Object
+///-----------------------------------
+
+/** 
+ */
+- (id)initWithContentViewController:(UIViewController *)viewController;
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** 
+ */
 @property(nonatomic,assign) id delegate;
-@property(nonatomic,retain) UIViewController* contentViewController;
+
+///-----------------------------------
+/// @name Getting the sheetView and contentViewController
+///-----------------------------------
+
+/** 
+ */
+@property(nonatomic,retain,readonly) UIViewController* contentViewController;
+
+/** 
+ */
 @property(nonatomic,retain, readonly) UIView* sheetView;
+
+///-----------------------------------
+/// @name Getting the sheetView status
+///-----------------------------------
+
+/** 
+ */
 @property(nonatomic,assign, readonly) BOOL visible;
 
-- (id)initWithContentViewController:(UIViewController *)viewController;
+///-----------------------------------
+/// @name Presenting a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Dismissing a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)dismissSheetAnimated:(BOOL)animated;
 
 @end
 
 @protocol CKSheetControllerDelegate
 @optional
+///-----------------------------------
+/// @name Dismissing/Presenting a sheetViewController
+///-----------------------------------
+
+/** 
+ */
 - (void)sheetControllerWillShowSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerDidShowSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerWillDismissSheet:(CKSheetController*)sheetController;
+
+/** 
+ */
 - (void)sheetControllerDidDismissSheet:(CKSheetController*)sheetController;
 
 @end

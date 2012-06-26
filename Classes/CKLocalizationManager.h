@@ -8,20 +8,33 @@
 
 #import "CKLocalizedString.h"
 
-
+/**
+ */
 @interface CKLocalizationManager : NSObject 
 
-@property(nonatomic,retain)NSString* language;
+///-----------------------------------
+/// @name Singleton
+///-----------------------------------
 
+/**
+ */
 + (CKLocalizationManager *)sharedManager;
 
-//gets the string localized
+///-----------------------------------
+/// @name Getting the current language
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,retain)NSString* language;
+
+
+///-----------------------------------
+/// @name Querying strings
+///-----------------------------------
+
+/**
+ */
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value;
-
-//resets this system.
-- (void) resetToSystemDefaultLanguage;
-
-- (void)refreshUI;
-- (void)reloadBundleAtPath:(NSString*)path;
 
 @end

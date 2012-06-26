@@ -10,7 +10,6 @@
 #import "CKNSObject+Bindings.h"
 #import "CKArrayCollection.h"
 #import "CKImageView.h"
-#import "CKBundle.h"
 
 //CKObjectTableViewController private interface
 @interface CKTableCollectionViewController ()
@@ -131,8 +130,8 @@
     self.tableView.pagingEnabled = YES;
     self.tableView.showsVerticalScrollIndicator = NO;
     
-    UIBarButtonItem* previousButton = [[UIBarButtonItem alloc] initWithImage:[CKBundle imageForName:@"CKSlideShowViewControllerArrowLeft.png"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage:)];
-	UIBarButtonItem* nextButton = [[UIBarButtonItem alloc] initWithImage:[CKBundle imageForName:@"CKSlideShowViewControllerArrowRight.png"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage:)];
+    UIBarButtonItem* previousButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"CKSlideShowViewControllerArrowLeft.png"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage:)];
+	UIBarButtonItem* nextButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"CKSlideShowViewControllerArrowRight.png"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage:)];
 	[self setToolbarItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
 						   previousButton,
 						   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],

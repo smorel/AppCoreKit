@@ -8,6 +8,7 @@
 
 #import "CKRuntime.h"
 #import "CKNSObject+CKRuntime.h"
+#import "CKClassPropertyDescriptor_private.h"
 #import <objc/runtime.h>
 #import "CKVersion.h"
 

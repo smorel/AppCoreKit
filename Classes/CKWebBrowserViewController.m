@@ -8,7 +8,6 @@
 
 #import "CKWebBrowserViewController.h"
 #import "CKUIViewAutoresizing+Additions.h"
-#import "CKBundle.h"
 #import "CKWebViewController.h"
 
 @interface CKWebBrowserViewController () <UIWebViewDelegate>
@@ -75,8 +74,8 @@
 
 	// Setup the bar button items
 	
-	[self setButtonItemWithImage:[CKBundle imageForName:@"CKWebViewControllerGoBack.png"] type:CKWebViewControllerButtonItemBack target:nil action:nil];
-	[self setButtonItemWithImage:[CKBundle imageForName:@"CKWebViewControllerGoForward.png"] type:CKWebViewControllerButtonItemForward target:nil action:nil];
+	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoBack.png"] type:CKWebViewControllerButtonItemBack target:nil action:nil];
+	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoForward.png"] type:CKWebViewControllerButtonItemForward target:nil action:nil];
 	[self setButtonItemWithSystemItem:UIBarButtonSystemItemRefresh type:CKWebViewControllerButtonItemRefresh target:nil action:nil];
 	
 	UIActivityIndicatorView *activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];

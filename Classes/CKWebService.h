@@ -12,7 +12,7 @@
 @class Reachability;
 
 
-/** TODO
+/**
  */
 @interface CKWebService : NSObject
 

@@ -18,7 +18,7 @@ typedef CKWebRequest *(^CKWebSourceRequestBlock)(NSRange range);
 typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
 
 
-/** TODO
+/**
  */
 @interface CKWebSource : CKFeedSource 
 
@@ -46,7 +46,7 @@ typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
 
 
 
-/** TODO
+/**
  */
 @protocol CKWebSourceDelegate
 

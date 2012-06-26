@@ -12,7 +12,7 @@
 
 @class CKFormTableViewController;
 
-/** TODO
+/**
  */
 @interface CKFormSectionBase : CKObject
 {

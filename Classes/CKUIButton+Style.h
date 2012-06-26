@@ -15,20 +15,20 @@
  */
 
 
-/** TODO
+/**
  */
 extern NSString *CKStyleDefaultBackgroundImage;
 
-/** TODO
+/**
  */
 extern NSString *CKStyleDefaultImage;
 
-/** TODO
+/**
  */
 extern NSString *CKStyleDefaultTextColor;
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKUIButtonStyle)
 
@@ -55,7 +55,7 @@ extern NSString *CKStyleDefaultTextColor;
 @end
 
 
-/** TODO
+/**
  */
 @interface UIButton (CKStyle)
 

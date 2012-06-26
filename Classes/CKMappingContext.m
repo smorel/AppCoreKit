@@ -39,6 +39,13 @@ NSString* CKMappingTransformCallbackKey = @"@transformCallback";
 NSString* CKMappingClearContainerKey = @"@clearContent";
 NSString* CKMappingInsertAtBeginKey = @"@insertContentAtBegin";
 
+
+/**
+ */
+@interface NSDictionary ()
+- (BOOL)isReservedKeyWord:(NSString*)key;
+@end
+
 //CKMappingManager
 
 @interface CKMappingManager : CKCascadingTree {
@@ -562,7 +569,11 @@ static CKMappingManager* CKMappingManagerDefault = nil;
 @end
 
 
-@implementation CKMappingContext
+@implementation CKMappingContext{
+    NSMutableDictionary* _dictionary;
+    id _identifier;
+}
+
 @synthesize  dictionary = _dictionary;
 @synthesize  identifier = _identifier;
 

@@ -11,7 +11,7 @@
 // should be on NSString instead.
 // Another interface should provide a way to do string -> string.
 
-/** TODO
+/**
  */
 @interface NSData (CKNSDataSHA1Additions)
 

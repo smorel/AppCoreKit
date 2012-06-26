@@ -7,13 +7,15 @@
 //
 
 #import "CKArrayCollection.h"
-#import "CKNSNotificationCenter+Edition.h"
 
 @interface CKArrayCollection()
 @property (nonatomic,copy) NSMutableArray* collectionObjects;
 @end
 
-@implementation CKArrayCollection
+@implementation CKArrayCollection {
+	NSMutableArray* _collectionObjects;
+}
+
 @synthesize collectionObjects = _collectionObjects;
 
 - (void)postInit{

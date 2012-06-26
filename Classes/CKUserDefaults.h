@@ -41,7 +41,5 @@
  
  @see CKObject
  */
-@interface CKUserDefaults : CKObject {
-}
-
+@interface CKUserDefaults : CKObject
 @end

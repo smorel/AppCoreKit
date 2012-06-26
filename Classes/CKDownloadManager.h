@@ -20,7 +20,7 @@ extern NSString *CKDownloadManagerDownloadDidFailNotification;
 @class CKDownloader;
 
 
-/** TODO
+/**
  */
 @interface CKDownloadManager : NSObject
 

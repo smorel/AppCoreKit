@@ -8,7 +8,7 @@
 
 #import "CKTableViewCellController.h"
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController (CKBlockBasedInterface)
 

@@ -12,6 +12,7 @@
 #import "CKLiveProjectFileUpdateManager.h"
 #import <CloudKit/CKLocalizationManager.h>
 #import "CKCascadingTree.h"
+#import "CKLocalizationManager_Private.h"
 
 
 @implementation UIImage (CKValueTransformer)

@@ -8,15 +8,50 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ */
 @interface CKLocalizedString : NSString
 
-//You can set either key or localizedStrings but not both
-@property(nonatomic,retain)NSString* key;
-@property(nonatomic,retain)NSDictionary* localizedStrings;
+///-----------------------------------
+/// @name Initializing Localized String objects
+///-----------------------------------
 
+/**
+ */
 - (id)initWithLocalizedKey:(NSString*)key;
+
+/**
+ */
 - (id)initWithLocalizedStrings:(NSDictionary*)strings;
 
-- (NSString*)localizedString;
+///-----------------------------------
+/// @name Setuping Localized String
+///-----------------------------------
+
+/** You can set either key or localizedStrings but not both
+ */
+@property(nonatomic,retain)NSString* key;
+
+/** You can set either key or localizedStrings but not both
+ */
+@property(nonatomic,retain)NSDictionary* localizedStrings;
+
+@end
+
+
+
+@interface NSString(CKLocalization)
+
+///-----------------------------------
+/// @name Creating Localized String Objects
+///-----------------------------------
+
+/**
+ */
++ (NSString*)stringWithLocalizedStrings:(NSDictionary*)localizedStrings;
+
+/**
+ */
++ (NSString*)stringWithLocalizedKey:(NSString*)localizedKey;
 
 @end

@@ -19,6 +19,16 @@ NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFi
 
 //CKCascadingTreeItemFormat
 
+
+/**
+ */
+@interface NSDictionary (CKCascadingTree)
+- (BOOL)isReservedKeyWord:(NSString*)key;
+@end
+
+
+
+
 @interface CKCascadingTreeItemFormat : NSObject{
 }
 @property(nonatomic,retain) NSString* format;
@@ -698,7 +708,11 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 - (BOOL)importContentOfFile:(NSString*)path;
 @end
 
-@implementation CKCascadingTree
+@implementation CKCascadingTree{
+	NSMutableDictionary* _tree;
+	NSMutableSet* _loadedFiles;
+}
+
 @synthesize tree = _tree;
 @synthesize loadedFiles = _loadedFiles;
 
@@ -818,10 +832,6 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 }
 
 - (NSMutableDictionary*)dictionaryForKey:(id)key{
-    return [_tree objectForKey:key];
-}
-
-- (NSArray*)arrayForKey:(id)key{
     return [_tree objectForKey:key];
 }
 

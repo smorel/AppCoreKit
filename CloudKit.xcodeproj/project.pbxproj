@@ -88,12 +88,10 @@
 		7560DC6F13B8ED3600268D13 /* CKAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2213B8ED3600268D13 /* CKAttribute.m */; };
 		7560DC7013B8ED3600268D13 /* CKAttributesDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2313B8ED3600268D13 /* CKAttributesDictionary.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2413B8ED3600268D13 /* CKAttributesDictionary.m */; };
-		7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2613B8ED3600268D13 /* CKBindingsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2613B8ED3600268D13 /* CKBindingsManager.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2713B8ED3600268D13 /* CKBindingsManager.mm */; };
 		7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */; };
-		7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2A13B8ED3600268D13 /* CKBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DC7813B8ED3600268D13 /* CKBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2B13B8ED3600268D13 /* CKBundle.m */; };
 		7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB2E13B8ED3600268D13 /* CKCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC7C13B8ED3600268D13 /* CKCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB2F13B8ED3600268D13 /* CKCallback.m */; };
 		7560DC7F13B8ED3600268D13 /* CKCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB3213B8ED3600268D13 /* CKCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -113,9 +111,9 @@
 		7560DC8F13B8ED3600268D13 /* CKCoreGraphics+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4213B8ED3600268D13 /* CKCoreGraphics+Additions.m */; };
 		7560DC9013B8ED3600268D13 /* CKCreditsFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC9113B8ED3600268D13 /* CKCreditsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */; };
-		7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4513B8ED3600268D13 /* CKDataBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DC9213B8ED3600268D13 /* CKDataBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4513B8ED3600268D13 /* CKDataBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC9313B8ED3600268D13 /* CKDataBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4613B8ED3600268D13 /* CKDataBinder.m */; };
-		7560DC9413B8ED3600268D13 /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DC9413B8ED3600268D13 /* CKDataBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4713B8ED3600268D13 /* CKDataBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DC9513B8ED3600268D13 /* CKDataBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB4813B8ED3600268D13 /* CKDataBlockBinder.m */; };
 		7560DC9613B8ED3600268D13 /* CKDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4913B8ED3600268D13 /* CKDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DC9713B8ED3600268D13 /* CKDictionaryFromAttributesTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB4A13B8ED3600268D13 /* CKDictionaryFromAttributesTransformer.h */; settings = {ATTRIBUTES = (); }; };
@@ -126,7 +124,7 @@
 		7560DC9E13B8ED3600268D13 /* CKCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB5113B8ED3600268D13 /* CKCollection.m */; };
 		7560DC9F13B8ED3600268D13 /* CKCollectionTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB5213B8ED3600268D13 /* CKCollectionTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCA013B8ED3600268D13 /* CKCollectionTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB5313B8ED3600268D13 /* CKCollectionTableViewCellController.m */; };
-		7560DCA113B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB5413B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCA113B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB5413B8ED3600268D13 /* CKCollectionTableViewCellController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCA213B8ED3600268D13 /* CKCollectionTableViewCellController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB5513B8ED3600268D13 /* CKCollectionTableViewCellController+Style.m */; };
 		7560DCA313B8ED3600268D13 /* CKCollectionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB5613B8ED3600268D13 /* CKCollectionController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCA413B8ED3600268D13 /* CKCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB5713B8ED3600268D13 /* CKCollectionController.m */; };
@@ -138,7 +136,7 @@
 		7560DCAE13B8ED3600268D13 /* CKFormTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6113B8ED3600268D13 /* CKFormTableViewController.m */; };
 		7560DCAF13B8ED3600268D13 /* CKStyleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6213B8ED3600268D13 /* CKStyleView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCB013B8ED3600268D13 /* CKStyleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6313B8ED3600268D13 /* CKStyleView.m */; };
-		7560DCB113B8ED3600268D13 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6413B8ED3600268D13 /* CKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCB113B8ED3600268D13 /* CKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6413B8ED3600268D13 /* CKGridView.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCB213B8ED3600268D13 /* CKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6513B8ED3600268D13 /* CKGridView.m */; };
 		7560DCB313B8ED3600268D13 /* CKGridView+NSIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */; };
 		7560DCB413B8ED3600268D13 /* CKHost.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB6713B8ED3600268D13 /* CKHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -157,7 +155,7 @@
 		7560DCC513B8ED3600268D13 /* CKCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7813B8ED3600268D13 /* CKCollectionViewController.m */; };
 		7560DCC613B8ED3600268D13 /* CKCollectionCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7913B8ED3600268D13 /* CKCollectionCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCC713B8ED3600268D13 /* CKCollectionCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7A13B8ED3600268D13 /* CKCollectionCellController.m */; };
-		7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7B13B8ED3600268D13 /* CKKeypadView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCC813B8ED3600268D13 /* CKKeypadView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7B13B8ED3600268D13 /* CKKeypadView.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCC913B8ED3600268D13 /* CKKeypadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB7C13B8ED3600268D13 /* CKKeypadView.m */; };
 		7560DCCC13B8ED3600268D13 /* CKLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB7F13B8ED3600268D13 /* CKLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCCD13B8ED3600268D13 /* CKLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8013B8ED3600268D13 /* CKLocalization.m */; };
@@ -167,7 +165,7 @@
 		7560DCD513B8ED3600268D13 /* CKMapAnnotationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8813B8ED3600268D13 /* CKMapAnnotationController.m */; };
 		7560DCDA13B8ED3600268D13 /* CKMapCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8D13B8ED3600268D13 /* CKMapCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCDB13B8ED3600268D13 /* CKMapCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB8E13B8ED3600268D13 /* CKMapCollectionViewController.m */; };
-		7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCDC13B8ED3600268D13 /* CKMKMapView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB8F13B8ED3600268D13 /* CKMKMapView+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCDD13B8ED3600268D13 /* CKMKMapView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9013B8ED3600268D13 /* CKMKMapView+Introspection.m */; };
 		7560DCDE13B8ED3600268D13 /* CKObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9113B8ED3600268D13 /* CKObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCDF13B8ED3600268D13 /* CKObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9213B8ED3600268D13 /* CKObject.m */; };
@@ -181,7 +179,7 @@
 		7560DCE913B8ED3600268D13 /* CKMultipartParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9C13B8ED3600268D13 /* CKMultipartParser.m */; };
 		7560DCEA13B8ED3600268D13 /* CKNetworkActivityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DB9D13B8ED3600268D13 /* CKNetworkActivityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCEB13B8ED3600268D13 /* CKNetworkActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DB9E13B8ED3600268D13 /* CKNetworkActivityManager.m */; };
-		7560DCEE13B8ED3600268D13 /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA113B8ED3600268D13 /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DCEE13B8ED3600268D13 /* CKNotificationBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA113B8ED3600268D13 /* CKNotificationBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DCEF13B8ED3600268D13 /* CKNotificationBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA213B8ED3600268D13 /* CKNotificationBlockBinder.m */; };
 		7560DCF013B8ED3600268D13 /* CKNSArray+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBA313B8ED3600268D13 /* CKNSArray+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DCF113B8ED3600268D13 /* CKNSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBA413B8ED3600268D13 /* CKNSArray+Additions.m */; };
@@ -201,8 +199,6 @@
 		7560DD0113B8ED3600268D13 /* CKNSDatePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */; };
 		7560DD0613B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBB913B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0713B8ED3600268D13 /* CKNSManagedObjectContext+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBBA13B8ED3600268D13 /* CKNSManagedObjectContext+Requests.m */; };
-		7560DD0813B8ED3600268D13 /* CKNSNotificationCenter+Edition.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBBB13B8ED3600268D13 /* CKNSNotificationCenter+Edition.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DD0913B8ED3600268D13 /* CKNSNotificationCenter+Edition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBBC13B8ED3600268D13 /* CKNSNotificationCenter+Edition.m */; };
 		7560DD0A13B8ED3600268D13 /* CKNSNumberPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */; };
 		7560DD0C13B8ED3600268D13 /* CKNSObject+Bindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DBBF13B8ED3600268D13 /* CKNSObject+Bindings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -248,13 +244,13 @@
 		7560DD4C13B8ED3600268D13 /* CKStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBFF13B8ED3600268D13 /* CKStore.m */; };
 		7560DD5113B8ED3600268D13 /* CKStoreExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0413B8ED3600268D13 /* CKStoreExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5213B8ED3600268D13 /* CKStoreExplorer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0513B8ED3600268D13 /* CKStoreExplorer.m */; };
-		7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD5513B8ED3600268D13 /* CKStyle+Parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0813B8ED3600268D13 /* CKStyle+Parsing.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD5613B8ED3600268D13 /* CKStyle+Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0913B8ED3600268D13 /* CKStyle+Parsing.m */; };
 		7560DD5713B8ED3600268D13 /* CKStyleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0A13B8ED3600268D13 /* CKStyleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5813B8ED3600268D13 /* CKStyleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0B13B8ED3600268D13 /* CKStyleManager.m */; };
 		7560DD5B13B8ED3600268D13 /* CKTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC0E13B8ED3600268D13 /* CKTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD5C13B8ED3600268D13 /* CKTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC0F13B8ED3600268D13 /* CKTableViewCellController.m */; };
-		7560DD5D13B8ED3600268D13 /* CKTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD5D13B8ED3600268D13 /* CKTableViewCellController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1013B8ED3600268D13 /* CKTableViewCellController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD5E13B8ED3600268D13 /* CKTableViewCellController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1113B8ED3600268D13 /* CKTableViewCellController+Style.m */; };
 		7560DD6113B8ED3600268D13 /* CKTableViewCellController+Responder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1413B8ED3600268D13 /* CKTableViewCellController+Responder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD6213B8ED3600268D13 /* CKTableViewCellController+Responder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1513B8ED3600268D13 /* CKTableViewCellController+Responder.m */; };
@@ -262,13 +258,13 @@
 		7560DD6413B8ED3600268D13 /* CKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1713B8ED3600268D13 /* CKTableViewController.m */; };
 		7560DD6713B8ED3600268D13 /* CKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC1A13B8ED3600268D13 /* CKTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD6813B8ED3600268D13 /* CKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC1B13B8ED3600268D13 /* CKTextView.m */; };
-		7560DD6F13B8ED3600268D13 /* CKUIButton+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2213B8ED3600268D13 /* CKUIButton+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD6F13B8ED3600268D13 /* CKUIButton+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2213B8ED3600268D13 /* CKUIButton+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD7013B8ED3600268D13 /* CKUIButton+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2313B8ED3600268D13 /* CKUIButton+Style.m */; };
 		7560DD7113B8ED3600268D13 /* CKUIColor+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2413B8ED3600268D13 /* CKUIColor+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD7213B8ED3600268D13 /* CKUIColor+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2513B8ED3600268D13 /* CKUIColor+Additions.m */; };
 		7560DD7313B8ED3600268D13 /* CKUIColorPropertyCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2613B8ED3600268D13 /* CKUIColorPropertyCellController.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD7413B8ED3600268D13 /* CKUIColorPropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2713B8ED3600268D13 /* CKUIColorPropertyCellController.m */; };
-		7560DD7513B8ED3600268D13 /* CKUIControlBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2813B8ED3600268D13 /* CKUIControlBlockBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD7513B8ED3600268D13 /* CKUIControlBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2813B8ED3600268D13 /* CKUIControlBlockBinder.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD7613B8ED3600268D13 /* CKUIControlBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2913B8ED3600268D13 /* CKUIControlBlockBinder.m */; };
 		7560DD7913B8ED3600268D13 /* CKUIImage+Transformations.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC2C13B8ED3600268D13 /* CKUIImage+Transformations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD7A13B8ED3600268D13 /* CKUIImage+Transformations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2D13B8ED3600268D13 /* CKUIImage+Transformations.m */; };
@@ -276,21 +272,21 @@
 		7560DD7C13B8ED3600268D13 /* CKUIImagePropertyCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC2F13B8ED3600268D13 /* CKUIImagePropertyCellController.m */; };
 		7560DD7F13B8ED3600268D13 /* CKUIKeyboardInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3213B8ED3600268D13 /* CKUIKeyboardInformation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD8013B8ED3600268D13 /* CKUIKeyboardInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3313B8ED3600268D13 /* CKUIKeyboardInformation.m */; };
-		7560DD8113B8ED3600268D13 /* CKUILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3413B8ED3600268D13 /* CKUILabel+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD8113B8ED3600268D13 /* CKUILabel+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3413B8ED3600268D13 /* CKUILabel+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD8213B8ED3600268D13 /* CKUILabel+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3513B8ED3600268D13 /* CKUILabel+Style.m */; };
-		7560DD8513B8ED3600268D13 /* CKUITableView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3813B8ED3600268D13 /* CKUITableView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD8513B8ED3600268D13 /* CKUITableView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3813B8ED3600268D13 /* CKUITableView+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD8613B8ED3600268D13 /* CKUITableView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3913B8ED3600268D13 /* CKUITableView+Introspection.m */; };
-		7560DD8713B8ED3600268D13 /* CKUITableViewCell+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3A13B8ED3600268D13 /* CKUITableViewCell+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD8713B8ED3600268D13 /* CKUITableViewCell+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3A13B8ED3600268D13 /* CKUITableViewCell+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD8813B8ED3600268D13 /* CKUITableViewCell+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3B13B8ED3600268D13 /* CKUITableViewCell+Introspection.m */; };
-		7560DD8B13B8ED3600268D13 /* CKUITextField+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD8B13B8ED3600268D13 /* CKUITextField+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC3E13B8ED3600268D13 /* CKUITextField+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD8C13B8ED3600268D13 /* CKUITextField+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC3F13B8ED3600268D13 /* CKUITextField+Introspection.m */; };
-		7560DD9113B8ED3600268D13 /* CKUIView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD9113B8ED3600268D13 /* CKUIView+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4413B8ED3600268D13 /* CKUIView+Introspection.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD9213B8ED3600268D13 /* CKUIView+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4513B8ED3600268D13 /* CKUIView+Introspection.m */; };
-		7560DD9513B8ED3600268D13 /* CKUIView+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4813B8ED3600268D13 /* CKUIView+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD9513B8ED3600268D13 /* CKUIView+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4813B8ED3600268D13 /* CKUIView+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD9613B8ED3600268D13 /* CKUIView+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4913B8ED3600268D13 /* CKUIView+Style.m */; };
 		7560DD9713B8ED3600268D13 /* CKViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4A13B8ED3600268D13 /* CKViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD9813B8ED3600268D13 /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4B13B8ED3600268D13 /* CKViewController.m */; };
-		7560DD9913B8ED3600268D13 /* CKViewController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4C13B8ED3600268D13 /* CKViewController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7560DD9913B8ED3600268D13 /* CKViewController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC4C13B8ED3600268D13 /* CKViewController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		7560DD9A13B8ED3600268D13 /* CKViewController+Style.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC4D13B8ED3600268D13 /* CKViewController+Style.m */; };
 		7560DD9D13B8ED3600268D13 /* CKUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5013B8ED3600268D13 /* CKUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5113B8ED3600268D13 /* CKUnit.m */; };
@@ -394,27 +390,27 @@
 		75C6DF6A13FEE9D200E4AE4F /* Support.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C6DF6913FEE9D200E4AE4F /* Support.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16BF13F32B4500835FE3 /* CKPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC16C013F32B4500835FE3 /* CKPopoverController.m */; };
-		75CC170113F46E3900835FE3 /* CKUIColor+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16FF13F46E3900835FE3 /* CKUIColor+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC170113F46E3900835FE3 /* CKUIColor+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC16FF13F46E3900835FE3 /* CKUIColor+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC170213F46E3900835FE3 /* CKUIColor+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC170013F46E3900835FE3 /* CKUIColor+ValueTransformer.m */; };
-		75CC170513F46E5500835FE3 /* CKUIImage+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170313F46E5500835FE3 /* CKUIImage+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC170513F46E5500835FE3 /* CKUIImage+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170313F46E5500835FE3 /* CKUIImage+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC170613F46E5500835FE3 /* CKUIImage+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC170413F46E5500835FE3 /* CKUIImage+ValueTransformer.m */; };
-		75CC170913F46E6C00835FE3 /* CKNSNumber+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170713F46E6B00835FE3 /* CKNSNumber+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC170913F46E6C00835FE3 /* CKNSNumber+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170713F46E6B00835FE3 /* CKNSNumber+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC170A13F46E6C00835FE3 /* CKNSNumber+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC170813F46E6B00835FE3 /* CKNSNumber+ValueTransformer.m */; };
-		75CC170D13F46E8200835FE3 /* CKNSURL+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170B13F46E8100835FE3 /* CKNSURL+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC170D13F46E8200835FE3 /* CKNSURL+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170B13F46E8100835FE3 /* CKNSURL+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC170E13F46E8200835FE3 /* CKNSURL+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC170C13F46E8200835FE3 /* CKNSURL+ValueTransformer.m */; };
-		75CC171113F46E9800835FE3 /* CKNSDate+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170F13F46E9700835FE3 /* CKNSDate+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC171113F46E9800835FE3 /* CKNSDate+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC170F13F46E9700835FE3 /* CKNSDate+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC171213F46E9800835FE3 /* CKNSDate+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171013F46E9800835FE3 /* CKNSDate+ValueTransformer.m */; };
-		75CC171513F46EAF00835FE3 /* CKNSArray+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171313F46EAD00835FE3 /* CKNSArray+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC171513F46EAF00835FE3 /* CKNSArray+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171313F46EAD00835FE3 /* CKNSArray+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC171613F46EAF00835FE3 /* CKNSArray+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171413F46EAE00835FE3 /* CKNSArray+ValueTransformer.m */; };
-		75CC171913F46EC800835FE3 /* CKCollection+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171713F46EC700835FE3 /* CKCollection+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC171913F46EC800835FE3 /* CKCollection+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171713F46EC700835FE3 /* CKCollection+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC171A13F46EC800835FE3 /* CKCollection+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171813F46EC700835FE3 /* CKCollection+ValueTransformer.m */; };
-		75CC171D13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171B13F46EF600835FE3 /* CKNSIndexPath+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC171D13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171B13F46EF600835FE3 /* CKNSIndexPath+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC171E13F46EF900835FE3 /* CKNSIndexPath+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC171C13F46EF700835FE3 /* CKNSIndexPath+ValueTransformer.m */; };
-		75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC172113F4705A00835FE3 /* CKNSObject+ValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC171F13F4705300835FE3 /* CKNSObject+ValueTransformer.h */; settings = {ATTRIBUTES = (); }; };
 		75CC172213F4705A00835FE3 /* CKNSObject+ValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC172013F4705700835FE3 /* CKNSObject+ValueTransformer.m */; };
-		75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC172313F472B600835FE3 /* CKNSValueTransformer+NativeTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC172513F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC172313F472B600835FE3 /* CKNSValueTransformer+NativeTypes.h */; settings = {ATTRIBUTES = (); }; };
 		75CC172613F472BB00835FE3 /* CKNSValueTransformer+NativeTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC172413F472B900835FE3 /* CKNSValueTransformer+NativeTypes.m */; };
-		75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC172713F4757000835FE3 /* CKNSValueTransformer+CGTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75CC172913F4757700835FE3 /* CKNSValueTransformer+CGTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CC172713F4757000835FE3 /* CKNSValueTransformer+CGTypes.h */; settings = {ATTRIBUTES = (); }; };
 		75CC172A13F4757700835FE3 /* CKNSValueTransformer+CGTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC172813F4757300835FE3 /* CKNSValueTransformer+CGTypes.m */; };
 		75F295DE13EB0089009CCC70 /* CKTableViewCellController+Menus.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F295DC13EB0088009CCC70 /* CKTableViewCellController+Menus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F295DF13EB0089009CCC70 /* CKTableViewCellController+Menus.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */; };
@@ -468,7 +464,7 @@
 		96382666148406F400A9C98B /* CKFormSectionBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96382665148406ED00A9C98B /* CKFormSectionBase_private.h */; };
 		96445943154869170054F907 /* CKViewControllerCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 96445941154869170054F907 /* CKViewControllerCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96445944154869170054F907 /* CKViewControllerCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96445942154869170054F907 /* CKViewControllerCellController.m */; };
-		964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */; settings = {ATTRIBUTES = (); }; };
+		964C2080153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2081153DD82800398E0F /* CKTableViewCellController+CKDynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */; };
 		964C2084153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C2082153DD92B00398E0F /* CKTableViewCellController+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C2085153DD93200398E0F /* CKTableViewCellController+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C2083153DD92E00398E0F /* CKTableViewCellController+CKBlockBasedInterface.m */; };
@@ -481,6 +477,7 @@
 		967C51861538BE8200B3F785 /* CKDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51841538BE8200B3F785 /* CKDocument.m */; };
 		967CD1F715814048007F16D7 /* CKMockManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 967CD1F515814048007F16D7 /* CKMockManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967CD1F815814048007F16D7 /* CKMockManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 967CD1F615814048007F16D7 /* CKMockManager.mm */; };
+		96812C6B159A2E67002160C1 /* CKClassPropertyDescriptor_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96812C6A159A2E28002160C1 /* CKClassPropertyDescriptor_private.h */; };
 		9691A53B1582575900E4E6E8 /* CKWebRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */; };
 		969AFE6B1561506B00CFE27A /* CKGridCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE691561506B00CFE27A /* CKGridCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -532,7 +529,7 @@
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
 		B0EA78A6156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A4156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0EA78A7156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78A5156EDD5500CD5264 /* UINavigationController+CKBlockBasedDelegate.mm */; };
-		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B0EA78AB156EDEAC00CD5264 /* UINavigationController+Style.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EA78A9156EDEAC00CD5264 /* UINavigationController+Style.h */; settings = {ATTRIBUTES = (); }; };
 		B0EA78AC156EDEAC00CD5264 /* UINavigationController+Style.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0EA78AA156EDEAC00CD5264 /* UINavigationController+Style.mm */; };
 		EDD9E7E31436166D00E104D9 /* CKUIViewController+Introspection.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD9E7E11436166D00E104D9 /* CKUIViewController+Introspection.h */; };
 		EDD9E7E41436166D00E104D9 /* CKUIViewController+Introspection.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD9E7E21436166D00E104D9 /* CKUIViewController+Introspection.m */; };
@@ -627,8 +624,6 @@
 		7560DB2713B8ED3600268D13 /* CKBindingsManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKBindingsManager.mm; path = Classes/CKBindingsManager.mm; sourceTree = "<group>"; };
 		7560DB2813B8ED3600268D13 /* CKBonjourResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBonjourResolver.h; path = Classes/CKBonjourResolver.h; sourceTree = "<group>"; };
 		7560DB2913B8ED3600268D13 /* CKBonjourResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBonjourResolver.m; path = Classes/CKBonjourResolver.m; sourceTree = "<group>"; };
-		7560DB2A13B8ED3600268D13 /* CKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKBundle.h; path = Classes/CKBundle.h; sourceTree = "<group>"; };
-		7560DB2B13B8ED3600268D13 /* CKBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKBundle.m; path = Classes/CKBundle.m; sourceTree = "<group>"; };
 		7560DB2E13B8ED3600268D13 /* CKCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCallback.h; path = Classes/CKCallback.h; sourceTree = "<group>"; };
 		7560DB2F13B8ED3600268D13 /* CKCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCallback.m; path = Classes/CKCallback.m; sourceTree = "<group>"; };
 		7560DB3213B8ED3600268D13 /* CKCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCarouselView.h; path = Classes/CKCarouselView.h; sourceTree = "<group>"; };
@@ -736,8 +731,6 @@
 		7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSDatePropertyCellController.m; path = Classes/CKNSDatePropertyCellController.m; sourceTree = "<group>"; };
 		7560DBB913B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSManagedObjectContext+Requests.h"; path = "Classes/CKNSManagedObjectContext+Requests.h"; sourceTree = "<group>"; };
 		7560DBBA13B8ED3600268D13 /* CKNSManagedObjectContext+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSManagedObjectContext+Requests.m"; path = "Classes/CKNSManagedObjectContext+Requests.m"; sourceTree = "<group>"; };
-		7560DBBB13B8ED3600268D13 /* CKNSNotificationCenter+Edition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "CKNSNotificationCenter+Edition.h"; path = "Classes/CKNSNotificationCenter+Edition.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		7560DBBC13B8ED3600268D13 /* CKNSNotificationCenter+Edition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKNSNotificationCenter+Edition.m"; path = "Classes/CKNSNotificationCenter+Edition.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKNSNumberPropertyCellController.h; path = Classes/CKNSNumberPropertyCellController.h; sourceTree = "<group>"; };
 		7560DBBE13B8ED3600268D13 /* CKNSNumberPropertyCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKNSNumberPropertyCellController.m; path = Classes/CKNSNumberPropertyCellController.m; sourceTree = "<group>"; };
 		7560DBBF13B8ED3600268D13 /* CKNSObject+Bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+Bindings.h"; path = "Classes/CKNSObject+Bindings.h"; sourceTree = "<group>"; };
@@ -1013,6 +1006,7 @@
 		964C2083153DD92E00398E0F /* CKTableViewCellController+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+CKBlockBasedInterface.m"; path = "Classes/CKTableViewCellController+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
 		964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormSection+PropertyGrid.h"; path = "Classes/CKFormSection+PropertyGrid.h"; sourceTree = "<group>"; };
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
+		964DD44F1599F93C00169B64 /* CKTableViewCellController+CKDynamicLayout_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CKTableViewCellController+CKDynamicLayout_Private.h"; sourceTree = "<group>"; };
 		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.x/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
 		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* CKNSObject+CKSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSObject+CKSingleton.h"; path = "Classes/CKNSObject+CKSingleton.h"; sourceTree = "<group>"; };
@@ -1021,6 +1015,8 @@
 		967C51841538BE8200B3F785 /* CKDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKDocument.m; path = Classes/CKDocument.m; sourceTree = "<group>"; };
 		967CD1F515814048007F16D7 /* CKMockManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKMockManager.h; path = Classes/CKMockManager.h; sourceTree = "<group>"; };
 		967CD1F615814048007F16D7 /* CKMockManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKMockManager.mm; path = Classes/CKMockManager.mm; sourceTree = "<group>"; };
+		96812C6A159A2E28002160C1 /* CKClassPropertyDescriptor_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CKClassPropertyDescriptor_private.h; path = Classes/CKClassPropertyDescriptor_private.h; sourceTree = "<group>"; };
+		96812C6C159A3FA0002160C1 /* CKLocalizationManager_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CKLocalizationManager_Private.h; path = Classes/CKLocalizationManager_Private.h; sourceTree = "<group>"; };
 		9691A5391582575900E4E6E8 /* CKWebRequest+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKWebRequest+Mapping.h"; path = "Classes/CKWebRequest+Mapping.h"; sourceTree = "<group>"; };
 		9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKWebRequest+Mapping.m"; path = "Classes/CKWebRequest+Mapping.m"; sourceTree = "<group>"; };
 		969AFE691561506B00CFE27A /* CKGridCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKGridCollectionViewController.h; path = Classes/CKGridCollectionViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1122,13 +1118,10 @@
 				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
 				7560DC5B13B8ED3600268D13 /* CKWeakRef.m */,
-				7560DB2A13B8ED3600268D13 /* CKBundle.h */,
-				7560DB2B13B8ED3600268D13 /* CKBundle.m */,
 				7560DB2E13B8ED3600268D13 /* CKCallback.h */,
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
 				966B00C51538884200360C0F /* Object Extension */,
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
-				7506E3F013B8FABB00EE1471 /* Edition */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
 				75A405EC13D8B66E00D932B0 /* CascadingTree */,
 				9600B8BC1545C40200F07C5A /* SuffixTree */,
@@ -1147,15 +1140,6 @@
 				7560DBD813B8ED3600268D13 /* CKNSValueTransformer+Additions.mm */,
 			);
 			name = Conversion;
-			sourceTree = "<group>";
-		};
-		7506E3F013B8FABB00EE1471 /* Edition */ = {
-			isa = PBXGroup;
-			children = (
-				7560DBBB13B8ED3600268D13 /* CKNSNotificationCenter+Edition.h */,
-				7560DBBC13B8ED3600268D13 /* CKNSNotificationCenter+Edition.m */,
-			);
-			name = Edition;
 			sourceTree = "<group>";
 		};
 		7506E3F113B8FAE400EE1471 /* Styles */ = {
@@ -1253,6 +1237,7 @@
 				96CADE341486B6F6008A23E4 /* CKNSObject+CKRuntime_private.h */,
 				7560DB3813B8ED3600268D13 /* CKClassPropertyDescriptor.h */,
 				7560DB3913B8ED3600268D13 /* CKClassPropertyDescriptor.m */,
+				96812C6A159A2E28002160C1 /* CKClassPropertyDescriptor_private.h */,
 				7560DBDC13B8ED3600268D13 /* CKProperty.h */,
 				7560DBDD13B8ED3600268D13 /* CKProperty.m */,
 				75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */,
@@ -1371,17 +1356,13 @@
 				7560DB2013B8ED3600268D13 /* CKAlertView.m */,
 				7560DB4313B8ED3600268D13 /* CKCreditsFooterView.h */,
 				7560DB4413B8ED3600268D13 /* CKCreditsFooterView.m */,
-				7560DB6413B8ED3600268D13 /* CKGridView.h */,
-				7560DB6513B8ED3600268D13 /* CKGridView.m */,
-				7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */,
 				7560DB6F13B8ED3600268D13 /* CKImageView.h */,
 				7560DB7013B8ED3600268D13 /* CKImageView.m */,
-				7560DB7B13B8ED3600268D13 /* CKKeypadView.h */,
-				7560DB7C13B8ED3600268D13 /* CKKeypadView.m */,
 				7560DC1A13B8ED3600268D13 /* CKTextView.h */,
 				7560DC1B13B8ED3600268D13 /* CKTextView.m */,
 				96D4B83315125FD200B517A5 /* CKUIBarButtonItem+Additions.h */,
 				96D4B83415125FD200B517A5 /* CKUIBarButtonItem+Additions.m */,
+				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2012,6 +1993,7 @@
 				7560DB8013B8ED3600268D13 /* CKLocalization.m */,
 				755CEE17146C8C2E0052B1FF /* CKLocalizationManager.h */,
 				755CEE18146C8C2E0052B1FF /* CKLocalizationManager.m */,
+				96812C6C159A3FA0002160C1 /* CKLocalizationManager_Private.h */,
 				755CEE1C146C8C7E0052B1FF /* CKLocalizedString.h */,
 				755CEE1D146C8C7E0052B1FF /* CKLocalizedString.m */,
 			);
@@ -2040,6 +2022,18 @@
 				75AD5DA3144C73290008F53A /* CKCollectionViewController+InlineDebugger.m */,
 			);
 			name = Additions;
+			sourceTree = "<group>";
+		};
+		964DD44D1599F42600169B64 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				7560DB7B13B8ED3600268D13 /* CKKeypadView.h */,
+				7560DB7C13B8ED3600268D13 /* CKKeypadView.m */,
+				7560DB6413B8ED3600268D13 /* CKGridView.h */,
+				7560DB6513B8ED3600268D13 /* CKGridView.m */,
+				7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */,
+			);
+			name = Private;
 			sourceTree = "<group>";
 		};
 		966B00C51538884200360C0F /* Object Extension */ = {
@@ -2129,6 +2123,7 @@
 				B02E75D41587E2B200A59A5A /* CKTableViewCellController+FlatHierarchy.m */,
 				964C207E153DD82600398E0F /* CKTableViewCellController+CKDynamicLayout.h */,
 				964C207F153DD82700398E0F /* CKTableViewCellController+CKDynamicLayout.m */,
+				964DD44F1599F93C00169B64 /* CKTableViewCellController+CKDynamicLayout_Private.h */,
 				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+CKDynamicLayout.h */,
 				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+CKDynamicLayout.m */,
 				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+CKDynamicLayout.h */,
@@ -2168,7 +2163,6 @@
 				7560DC7313B8ED3600268D13 /* CKBindingsManager.h in Headers */,
 				7560DC7513B8ED3600268D13 /* CKBonjourResolver.h in Headers */,
 				B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */,
-				7560DC7713B8ED3600268D13 /* CKBundle.h in Headers */,
 				7560DC7B13B8ED3600268D13 /* CKCallback.h in Headers */,
 				7560DC7F13B8ED3600268D13 /* CKCarouselView.h in Headers */,
 				7560DC8113B8ED3600268D13 /* CKCGPropertyCellControllers.h in Headers */,
@@ -2224,7 +2218,6 @@
 				7560DCFD13B8ED3600268D13 /* CKNSDate+Conversions.h in Headers */,
 				7560DD0013B8ED3600268D13 /* CKNSDatePropertyCellController.h in Headers */,
 				7560DD0613B8ED3600268D13 /* CKNSManagedObjectContext+Requests.h in Headers */,
-				7560DD0813B8ED3600268D13 /* CKNSNotificationCenter+Edition.h in Headers */,
 				7560DD0A13B8ED3600268D13 /* CKNSNumberPropertyCellController.h in Headers */,
 				7560DD0C13B8ED3600268D13 /* CKNSObject+Bindings.h in Headers */,
 				7560DD0E13B8ED3600268D13 /* CKNSObject+CKRuntime.h in Headers */,
@@ -2403,6 +2396,7 @@
 				9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */,
 				B02E75D51587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.h in Headers */,
 				96D2674215923B7700840A7F /* NSTimer+CKBlockBaseInterface.h in Headers */,
+				96812C6B159A2E67002160C1 /* CKClassPropertyDescriptor_private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2536,7 +2530,6 @@
 				7560DC7113B8ED3600268D13 /* CKAttributesDictionary.m in Sources */,
 				7560DC7413B8ED3600268D13 /* CKBindingsManager.mm in Sources */,
 				7560DC7613B8ED3600268D13 /* CKBonjourResolver.m in Sources */,
-				7560DC7813B8ED3600268D13 /* CKBundle.m in Sources */,
 				7560DC7C13B8ED3600268D13 /* CKCallback.m in Sources */,
 				7560DC8013B8ED3600268D13 /* CKCarouselView.m in Sources */,
 				7560DC8213B8ED3600268D13 /* CKCGPropertyCellControllers.m in Sources */,
@@ -2590,7 +2583,6 @@
 				7560DCFE13B8ED3600268D13 /* CKNSDate+Conversions.m in Sources */,
 				7560DD0113B8ED3600268D13 /* CKNSDatePropertyCellController.m in Sources */,
 				7560DD0713B8ED3600268D13 /* CKNSManagedObjectContext+Requests.m in Sources */,
-				7560DD0913B8ED3600268D13 /* CKNSNotificationCenter+Edition.m in Sources */,
 				7560DD0B13B8ED3600268D13 /* CKNSNumberPropertyCellController.m in Sources */,
 				7560DD0D13B8ED3600268D13 /* CKNSObject+Bindings.mm in Sources */,
 				7560DD0F13B8ED3600268D13 /* CKNSObject+CKRuntime.m in Sources */,

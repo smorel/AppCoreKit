@@ -8,10 +8,24 @@
 
 #import "CKTabViewController.h"
 
+/**
+ */
 @interface CKBreadCrumbViewController : CKTabViewController
 
+///-----------------------------------
+/// @name Pushing and Popping Stack Items
+///-----------------------------------
+
+/**
+ */
 - (void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated;
+
+/**
+ */
 - (void)popViewControllerAnimated:(BOOL)animated;
+
+/**
+ */
 - (void)popToRootViewControllerAnimated:(BOOL)animated;
 
 @end

@@ -9,7 +9,7 @@
 #import "CKTableViewCellController.h"
 #import "CKProperty.h"
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController(CKPropertyGrid)
 

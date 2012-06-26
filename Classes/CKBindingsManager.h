@@ -10,7 +10,7 @@
 #import "CKBinding.h"
 
 
-/** TODO
+/**
  */
 @interface CKBindingsManager : NSObject {
 	NSMutableDictionary* _bindingsForContext;

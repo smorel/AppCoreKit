@@ -10,10 +10,10 @@
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKNSValueTransformer+Additions.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 
 #define BASE_TAG 8723
 

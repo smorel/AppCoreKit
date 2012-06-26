@@ -15,7 +15,7 @@
 @class CKOptionTableViewController;
 
 
-/** TODO
+/**
  */
 @protocol CKOptionTableViewControllerDelegate
 
@@ -36,7 +36,7 @@
 typedef void(^CKOptionTableViewControllerSelectionBlock)(CKOptionTableViewController* tableViewController,NSInteger index);
 
 
-/** TODO
+/**
  */
 @interface CKOptionTableViewController : CKFormTableViewController 
 

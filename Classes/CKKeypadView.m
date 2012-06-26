@@ -7,10 +7,9 @@
 //
 
 #import "CKKeypadView.h"
-#import "CKBundle.h"
 
 
-/** TODO
+/**
  */
 @interface CKLayoutBlock : NSObject {
 	NSString *_name;
@@ -26,7 +25,7 @@
 
 //
 
-/** TODO
+/**
  */
 typedef enum {
 	CKLayoutAlignmentNone = 0,
@@ -34,7 +33,7 @@ typedef enum {
 } CKLayoutAlignment;
 
 
-/** TODO
+/**
  */
 @interface CKLayout : NSObject {
 	// No properties.
@@ -264,10 +263,10 @@ typedef enum {
 	[button addTarget:self action:@selector(keyPressed:) forControlEvents:UIControlEventTouchUpInside];
 
 	// Theming
-	[button setBackgroundImage:[CKBundle imageForName:@"CKKeypadViewButtonBackground.png"] forState:UIControlStateNormal];
-	[button setBackgroundImage:[CKBundle imageForName:@"CKKeypadViewButtonBackground.png"] forState:UIControlStateDisabled];
-	[button setBackgroundImage:[CKBundle imageForName:@"CKKeypadViewButtonBackground-Highlighted.png"] forState:UIControlStateHighlighted];
-	[button setBackgroundImage:[CKBundle imageForName:@"CKKeypadViewButtonBackground-Selected.png"] forState:UIControlStateSelected];
+	[button setBackgroundImage:[UIImage imageNamed:@"CKKeypadViewButtonBackground.png"] forState:UIControlStateNormal];
+	[button setBackgroundImage:[UIImage imageNamed:@"CKKeypadViewButtonBackground.png"] forState:UIControlStateDisabled];
+	[button setBackgroundImage:[UIImage imageNamed:@"CKKeypadViewButtonBackground-Highlighted.png"] forState:UIControlStateHighlighted];
+	[button setBackgroundImage:[UIImage imageNamed:@"CKKeypadViewButtonBackground-Selected.png"] forState:UIControlStateSelected];
 	[button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
@@ -278,9 +277,9 @@ typedef enum {
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:40];
 	
 	if (key == CKKeypadViewKeyBackspace) {
-		[button setImage:[CKBundle imageForName:@"CKKeypadViewBackspaceButton.png"] forState:UIControlStateNormal];
-		[button setImage:[CKBundle imageForName:@"CKKeypadViewBackspaceButton-Highlighted.png"] forState:UIControlStateHighlighted];
-		[button setImage:[CKBundle imageForName:@"CKKeypadViewBackspaceButton-Selected.png"] forState:UIControlStateSelected];
+		[button setImage:[UIImage imageNamed:@"CKKeypadViewBackspaceButton.png"] forState:UIControlStateNormal];
+		[button setImage:[UIImage imageNamed:@"CKKeypadViewBackspaceButton-Highlighted.png"] forState:UIControlStateHighlighted];
+		[button setImage:[UIImage imageNamed:@"CKKeypadViewBackspaceButton-Selected.png"] forState:UIControlStateSelected];
 	}
 	if (key == CKKeypadViewKeyNone) button.enabled = NO;
 

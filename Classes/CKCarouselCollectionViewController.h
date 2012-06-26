@@ -14,19 +14,28 @@
 #import "CKCollection.h"
 
 
-/** TODO
+/**
  */
-@interface CKCarouselCollectionViewController : CKCollectionViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> {
-	CKCarouselView* _carouselView;
-	
-	NSMutableDictionary* _headerViewsForSections;
-	
-	UIPageControl* _pageControl;
-}
+@interface CKCarouselCollectionViewController : CKCollectionViewController<CKCarouselViewDataSource,CKCarouselViewDelegate,UIScrollViewDelegate> 
 
+///-----------------------------------
+/// @name Getting/Setting the carousel and pageControl Views
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,retain) IBOutlet CKCarouselView* carouselView;
+
+/**
+ */
 @property (nonatomic,retain) IBOutlet UIPageControl* pageControl;
 
+///-----------------------------------
+/// @name Scrolling
+///-----------------------------------
+
+/**
+ */
 - (void)scrollToRowAtIndexPath:(NSIndexPath*)indexPath animated:(BOOL)animated;
 
 @end

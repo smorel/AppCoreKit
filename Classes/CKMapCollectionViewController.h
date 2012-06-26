@@ -16,7 +16,7 @@
 
 #import "CKMapAnnotationController.h"
 
-/** TODO
+/**
  */
 typedef enum CKMapCollectionViewControllerZoomStrategy{
     CKMapCollectionViewControllerZoomStrategyManual,
@@ -24,7 +24,7 @@ typedef enum CKMapCollectionViewControllerZoomStrategy{
 	CKMapCollectionViewControllerZoomStrategySmart
 }CKMapCollectionViewControllerZoomStrategy;
 
-/** TODO
+/**
  */
 typedef enum CKMapCollectionViewControllerSelectionStrategy{
     CKMapCollectionViewControllerSelectionStrategyManual,
@@ -37,7 +37,7 @@ typedef void(^CKMapCollectionViewControllerSelectionBlock)(CKMapCollectionViewCo
 typedef void(^CKMapCollectionViewControllerScrollBlock)(CKMapCollectionViewController* controller,BOOL animated);
 
 
-/** TODO
+/**
  */
 @interface CKMapCollectionViewController : CKCollectionViewController <MKMapViewDelegate> 
 

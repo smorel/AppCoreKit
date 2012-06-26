@@ -8,7 +8,6 @@
 
 #import "CKCreditsFooterView.h"
 #import "CKUIColor+Additions.h"
-#import "CKBundle.h"
 #import "CKLocalization.h"
 
 @interface UIImageView (CKCreditsView)

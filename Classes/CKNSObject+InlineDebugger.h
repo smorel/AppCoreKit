@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "CKFormTableViewController.h"
 
-/** TODO
+/**
  */
 @interface NSObject (CKInlineDebugger)
 

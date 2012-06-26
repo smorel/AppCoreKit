@@ -6,7 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-/** TODO
+/**
  */
 const static NSUInteger UIViewAutoresizingFlexibleAll =  
   UIViewAutoresizingFlexibleWidth | 

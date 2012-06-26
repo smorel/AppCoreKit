@@ -11,16 +11,33 @@
 #import "CKProperty.h"
 
 
-/** TODO
+/**
  */
-@interface CKArrayProxyCollection : CKCollection {
-	CKProperty* _property;
-}
+@interface CKArrayProxyCollection : CKCollection 
 
-@property (nonatomic,retain) CKProperty* property;
+///-----------------------------------
+/// @name Creating an array proxy collection
+///-----------------------------------
 
+/**
+ */
 + (CKArrayProxyCollection*)collectionWithArrayProperty:(CKProperty*)property;
 
+///-----------------------------------
+/// @name Initializing an array proxy collection
+///-----------------------------------
+
+/**
+ */
 - (id)initWithArrayProperty:(CKProperty*)property;
+
+///-----------------------------------
+/// @name Getting the array property
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,retain) CKProperty* property;
+
 
 @end

@@ -16,11 +16,11 @@
 @end
 
 
-/** TODO
+/**
  */
 CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
 
-/** TODO
+/**
  */
 #define CKEnumDefinition(name,...) CKEnumDefinitionFunc(name,NO,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)
 #define CKBitMaskDefinition(name,...) CKEnumDefinitionFunc(name,YES,[NSString stringWithUTF8String:#__VA_ARGS__],__VA_ARGS__)

@@ -19,15 +19,25 @@
  
  propertyCellControllerClass will get used as the top priority. after, we'll use enumDescriptor or valuesAndLabels that should be used independently depending whether your represent an enum property or something else. and finally, property grids will automatically choose a controller class depending on the property type automatically.
  */
-@interface CKPropertyExtendedAttributes : NSObject{
-}
+@interface CKPropertyExtendedAttributes : NSObject
+
+///-----------------------------------
+/// @name Accessing extended attribute for property at runtime
+///-----------------------------------
+
+/**
+ */
++ (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property;
+
+
+///-----------------------------------
+/// @name Manipulating extended attributes
+///-----------------------------------
 
 /** 
  Specify options that could be used by various behaviours in app or in the cloudkit.
  */
 @property (nonatomic, retain) NSMutableDictionary* attributes;
-
-+ (CKPropertyExtendedAttributes*)extendedAttributesForObject:(id)object property:(CKClassPropertyDescriptor*)property;
 
 @end
 

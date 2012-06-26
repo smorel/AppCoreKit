@@ -12,6 +12,7 @@
 #import "CKStyleManager.h"
 #import "CKStyle+Parsing.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
 

@@ -7,6 +7,7 @@
 //
 
 #import "CKNSNumberPropertyCellController.h"
+#import "CKNSNumberPropertyCellController+CKDynamicLayout.h"
 #import "CKProperty.h"
 #import "CKNSObject+bindings.h"
 #import "CKLocalization.h"

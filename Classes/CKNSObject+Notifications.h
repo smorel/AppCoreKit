@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** TODO
+/**
  */
 @interface NSObject (CKNSObjectNotifications)
 

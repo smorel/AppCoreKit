@@ -9,7 +9,7 @@
 #import <CoreData/CoreData.h>
 #import "CKNSManagedObjectContext+Requests.h"
 
-/** TODO
+/**
  */
 @interface CKCoreDataManager : NSObject 
 

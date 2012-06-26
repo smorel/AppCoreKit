@@ -14,6 +14,42 @@
 #import "CKLocalization.h"
 #import "CKCoreDataManager.h"
 #import "CKDomain.h"
+#import "CKItem.h"
+
+
+/**
+ */
+@interface CKStoreDomainExplorer : CKFormTableViewController 
+
+///-----------------------------------
+/// @name Initializing a CKStore Domain Explorer
+///-----------------------------------
+
+/**
+ */
+- (id)initWithDomain:(NSString *)domain;
+
+/**
+ */
+- (id)initWithItems:(NSMutableArray *)items;
+
+@end
+
+
+
+/**
+ */
+@interface CKStoreItemExplorer : CKFormTableViewController 
+
+///-----------------------------------
+/// @name Initializing a CKStore item Explorer
+///-----------------------------------
+
+/**
+ */
+- (id)initWithItem:(CKItem *)item;
+
+@end
 
 
 @implementation CKStoreExplorer

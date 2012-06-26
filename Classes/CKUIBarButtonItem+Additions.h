@@ -11,15 +11,54 @@
 
 typedef void(^UIBarButtonItemExecutionBlock)();
 
-@interface UIBarButtonItem (CKAdditions)
-@property(nonatomic,copy) UIBarButtonItemExecutionBlock block;
-@property(nonatomic,retain) id userData;
 
+/** 
+ */
+@interface UIBarButtonItem (CKAdditions)
+
+///-----------------------------------
+/// @name Initializing Bar Button Item Objects
+///-----------------------------------
+
+/**
+ */
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
 - (id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
 - (id)initWithTag:(NSInteger)tag style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
 - (id)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem block:(void(^)())block;
 
+///-----------------------------------
+/// @name Managing execution block
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,copy) UIBarButtonItemExecutionBlock block;
+
+///-----------------------------------
+/// @name Getting Bar Button Item Information
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,retain) id userData;
+
+
+///-----------------------------------
+/// @name Bindings
+///-----------------------------------
+
+/**
+ */
 - (void)bindEventWithBlock:(void(^)())block;
 
 @end

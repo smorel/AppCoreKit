@@ -11,7 +11,7 @@
 @class CKItem;
 
 
-/** TODO
+/**
  */
 @interface CKAttributesDictionary : NSDictionary {
 	CKItem *_item;

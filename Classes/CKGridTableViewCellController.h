@@ -2,7 +2,7 @@
 //  CKGridTableViewCellController.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-05-14.
+//  Created by Sebastien Morel on 12-05-14.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

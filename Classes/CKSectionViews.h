@@ -2,7 +2,7 @@
 //  CKSectionViews.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-05-31.
+//  Created by Sebastien Morel on 12-05-31.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

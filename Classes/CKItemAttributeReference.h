@@ -13,7 +13,7 @@
 @class CKAttribute;
 
 
-/** TODO
+/**
  */
 @interface CKItemAttributeReference : NSManagedObject {
 }

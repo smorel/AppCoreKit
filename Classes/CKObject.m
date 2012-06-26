@@ -13,7 +13,6 @@
 #import "CKDebug.h"
 #import "CKCollection.h"
 #import "CKNSObject+Bindings.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKNSObject+CKRuntime_private.h"
 #import <objc/runtime.h>
@@ -27,10 +26,22 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 - (void)uninitializeProperties;
 - (void)initializeKVO;
 - (void)uninitializeKVO;
+
+
+@property (nonatomic,readwrite) BOOL isSaving;
+@property (nonatomic,readwrite) BOOL isLoading;
+
 @end
 
-@implementation CKObject
+
+@implementation CKObject{
+	BOOL _saving;
+	BOOL _loading;
+}
+
 @synthesize uniqueId,objectName;
+@synthesize isSaving = _isSaving;
+@synthesize isLoading = _isLoading;
 
 - (void)uniqueIdExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 	attributes.editable = NO;

@@ -7,5 +7,3 @@
 //
 
 #import "CKNSObject+Bindings.h"
-#import "CKObjectController.h"
-#import "CKCollectionController.h"

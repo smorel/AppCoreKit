@@ -10,7 +10,7 @@
 #import "CKPropertyGridCellController.h"
 #include "CKSheetController.h"
 
-/** TODO
+/**
  */
 typedef enum CKDatePickerMode{
     CKDatePickerModeTime = UIDatePickerModeTime,   
@@ -21,7 +21,7 @@ typedef enum CKDatePickerMode{
 } CKDatePickerMode;
 
 
-/** TODO
+/**
  */
 @interface CKNSDateViewController : CKViewController<UIPickerViewDataSource,UIPickerViewDelegate>
 
@@ -74,7 +74,7 @@ typedef enum CKDatePickerMode{
 
 
 
-/** TODO
+/**
  */
 @interface CKNSDatePropertyCellController : CKPropertyGridCellController<CKSheetControllerDelegate>
 

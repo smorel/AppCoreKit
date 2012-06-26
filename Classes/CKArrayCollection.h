@@ -10,10 +10,8 @@
 #import "CKArrayProxyCollection.h"
 
 
-/** TODO
+/**
  */
-@interface CKArrayCollection : CKArrayProxyCollection {
-	NSMutableArray* _collectionObjects;
-}
+@interface CKArrayCollection : CKArrayProxyCollection
 
 @end

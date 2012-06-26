@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-/** TODO
+/**
  */
 @interface NSDate (CKValueTransformer)
 + (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format;

@@ -9,24 +9,36 @@
 #import "CKObject.h"
 
 
-/** TODO
+/**
  */
-@interface CKObjectValidationResults : NSObject{
-}
-@property(nonatomic,copy)NSString* modifiedKeyPath;
+@interface CKObjectValidationResults : NSObject
+
+///-----------------------------------
+/// @name Accessing validation result status
+///-----------------------------------
+
+/** Return the names of the invalid properties
+ */
 @property(nonatomic,retain)NSMutableArray* invalidProperties;
 
+/**
+ */
 - (BOOL)isValid;
 
 @end
 
 
-/** TODO
+/**
  */
 @interface NSObject (CKValidation)
 
+///-----------------------------------
+/// @name Validating an instance
+///-----------------------------------
+
+/** This method iterates on properties and call the predicates defined as extended attributes
+ */
 - (CKObjectValidationResults*)validate;
-- (void)bindValidationWithBlock:(void(^)(CKObjectValidationResults* validationResults))validationBlock;
 
 @end
 

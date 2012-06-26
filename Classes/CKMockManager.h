@@ -2,13 +2,13 @@
 //  CKMockManager.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-06-07.
+//  Created by Sebastien Morel on 12-06-07.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKCascadingTree.h"
 
-/** TODO
+/**
  */
 @interface CKMockManager : CKCascadingTree
 

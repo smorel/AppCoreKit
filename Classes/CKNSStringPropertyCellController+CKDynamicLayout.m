@@ -7,6 +7,7 @@
 //
 
 #import "CKNSStringPropertyCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 #import "CKNSStringPropertyCellController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
 #import "CKProperty.h"

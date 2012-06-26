@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-/** TODO
+/**
  */
 @interface CLLocation (Additions)
 

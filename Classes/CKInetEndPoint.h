@@ -13,7 +13,7 @@
 #import <arpa/inet.h>
 
 
-/** TODO
+/**
  */
 @interface CKInetEndPoint : NSObject 
 

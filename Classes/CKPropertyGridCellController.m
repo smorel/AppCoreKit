@@ -8,12 +8,10 @@
 
 #import "CKPropertyGridCellController.h"
 #import "CKPropertyGridCellController+CKDynamicLayout.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKNSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
 #import "CKFormTableViewController.h"
-#import "CKBundle.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKSheetController.h"
 
@@ -160,7 +158,6 @@
     
     CKProperty* property = [self objectProperty];
     [property setValue:value];
-    [[NSNotificationCenter defaultCenter]notifyPropertyChange:property];
 }
 
 - (void)setInvalidButtonVisible:(BOOL)visible{
@@ -174,7 +171,7 @@
                                            || [self parentTableView].style == UITableViewStylePlain );
         
         if(visible && !_validationDisplayed){
-            UIImage* image = [CKBundle imageForName:@"form-icon-invalid"];
+            UIImage* image = [UIImage imageNamed:@"form-icon-invalid"];
             if(CLICKABLE_VALIDATION_INFO && _validationButton == nil){
                 self.validationButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 _validationButton.frame = CGRectMake(0,0,image.size.width,image.size.height);

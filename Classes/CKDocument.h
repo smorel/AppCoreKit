@@ -8,6 +8,8 @@
 
 #import "CKObject.h"
 
+/**
+ */
 @interface CKDocument : CKObject
 
 @end

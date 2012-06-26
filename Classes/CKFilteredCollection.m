@@ -75,6 +75,13 @@
     [self updateFilteredArray];
 }
 
+- (void)setPredicate:(NSPredicate *)thepredicate{
+    [_predicate release];
+    _predicate = [thepredicate retain];
+    
+    [self updateFilteredArray];
+}
+
 - (void)observeValueForKeyPath:(NSString *)theKeyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change

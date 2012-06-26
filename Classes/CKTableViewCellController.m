@@ -10,6 +10,7 @@
 #import "CKTableViewCellController+Style.h"
 #import "CKUIView+Style.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 
 #import "CKUILabel+Style.h"
 #import "CKTableCollectionViewController.h"

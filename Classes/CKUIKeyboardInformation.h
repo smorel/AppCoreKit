@@ -8,22 +8,22 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-/** TODO
+/**
  */
 CGRect CKUIKeyboardInformationFrameEnd(NSDictionary *keyboardUserInfo);
 
-/** TODO
+/**
  */
 CGRect CKUIKeyboardInformationBounds(NSDictionary *keyboardUserInfo);
 
-/** TODO
+/**
  */
 CGPoint CKUIKeyboardInformationCenterEnd(NSDictionary *keyboardUserInfo);
 
-/** TODO
+/**
  */
 CGFloat CKUIKeyboardInformationAnimationDuration(NSDictionary *keyboardUserInfo);
 
-/** TODO
+/**
  */
 UIViewAnimationCurve CKUIKeyboardInformationAnimationCurve(NSDictionary *keyboardUserInfo);

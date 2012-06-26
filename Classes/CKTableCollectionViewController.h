@@ -14,7 +14,7 @@
 //FIXME :
    //on rotation, resizer la search bar si besoin !
 
-/** TODO
+/**
  */
 typedef enum CKTableCollectionViewControllerEditingType{
     CKTableCollectionViewControllerEditingTypeNone,
@@ -22,14 +22,14 @@ typedef enum CKTableCollectionViewControllerEditingType{
     CKTableCollectionViewControllerEditingTypeRight
 }CKTableCollectionViewControllerEditingType;
 
-/** TODO
+/**
  */
 typedef enum CKTableCollectionViewControllerScrollingPolicy{
     CKTableCollectionViewControllerScrollingPolicyNone,
     CKTableCollectionViewControllerScrollingPolicyResignResponder
 }CKTableCollectionViewControllerScrollingPolicy;
 
-/** TODO
+/**
  */
 typedef enum CKTableCollectionViewControllerSnappingPolicy{
     CKTableCollectionViewControllerSnappingPolicyNone,
@@ -38,7 +38,7 @@ typedef enum CKTableCollectionViewControllerSnappingPolicy{
 
 typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
 
-/** TODO
+/**
  */
 @interface CKTableCollectionViewController : CKTableViewController<UISearchBarDelegate> 
 
@@ -172,7 +172,7 @@ Specify if the table is editable. If yes, an edit/done button is automatically a
 /********************************* CKTableCollectionViewControllerDelegate *********************************
  */
 
-/** TODO
+/**
  */
 @protocol CKTableCollectionViewControllerDelegate
 @optional

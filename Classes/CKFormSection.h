@@ -10,7 +10,7 @@
 
 @class CKTableViewCellController;
 
-/** TODO
+/**
  */
 @interface CKFormSection : CKFormSectionBase{
 	NSMutableArray* _cellControllers;

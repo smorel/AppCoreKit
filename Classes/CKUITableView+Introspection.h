@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-/** TODO
+/**
  */
 @interface UITableView (CKIntrospectionAdditions)
 

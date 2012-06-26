@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CKUIView+Style.h"
 
-/** TODO
+/**
  */
 @interface UIViewController (CKStyle)
 

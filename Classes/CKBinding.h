@@ -14,17 +14,40 @@
 
 #define ENABLE_WEAK_REF_PROTECTION
 
-/** TODO
+/** 
  */
-@interface CKBinding : NSObject{
-    CKBindingsContextOptions _contextOptions;
-}
+@interface CKBinding : NSObject
 
+///-----------------------------------
+/// @name Managing the context
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign)   id context;
+
+/**
+ */
 @property(nonatomic,assign)   CKBindingsContextOptions contextOptions;
 
+///-----------------------------------
+/// @name Executing the binding
+///-----------------------------------
+
+/**
+ */
 - (void)bind;
+
+/**
+ */
 - (void)unbind;
+
+///-----------------------------------
+/// @name Reusing the binding
+///-----------------------------------
+
+/**
+ */
 - (void)reset;
 
 @end

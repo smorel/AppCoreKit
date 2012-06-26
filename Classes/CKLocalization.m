@@ -7,6 +7,7 @@
 //
 
 #import "CKLocalization.h"
+#import "CKLocalizationManager_Private.h"
 #import "CKLiveProjectFileUpdateManager.h"
 #import <CloudKit/CKNSObject+CKSingleton.h>
 #import "CKCascadingTree.h"
@@ -24,6 +25,7 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
         NSMutableArray* files = [[NSMutableArray alloc]init];
         
         NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
+        
 #if TARGET_IPHONE_SIMULATOR        
         NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
         for (NSURL *filePathURL in stringsURLs) {

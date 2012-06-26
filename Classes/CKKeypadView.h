@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-/** TODO
+/**
  */
 typedef enum {
 	CKKeypadViewKeyZero = 0,
@@ -32,7 +32,7 @@ typedef enum {
 
 // CKKeypadViewDelegate
 
-/** TODO
+/**
  */
 @protocol CKKeypadViewDelegate
 @optional
@@ -43,7 +43,7 @@ typedef enum {
 
 // CKKeypadView
 
-/** TODO
+/**
  */
 @interface CKKeypadView : UIView {
 	NSString *_value;

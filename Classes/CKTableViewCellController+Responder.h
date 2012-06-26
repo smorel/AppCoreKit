@@ -10,7 +10,7 @@
 #import "CKTableViewCellController.h"
 
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController(CKResponder)
 

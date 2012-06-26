@@ -9,7 +9,13 @@
 #import "CKCallback.h"
 
 
-@implementation  CKCallback
+@implementation  CKCallback{
+	id _target;
+	SEL _action;
+	CKCallbackBlock _block;
+	NSArray* _params;
+}
+
 @synthesize target = _target;
 @synthesize action = _action;
 @synthesize block = _block;

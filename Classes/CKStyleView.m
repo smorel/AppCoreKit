@@ -15,7 +15,19 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@implementation CKStyleViewUpdater
+
+@interface CKStyleViewUpdater : NSObject
+
+@property(nonatomic,assign)UIView* view;
+- (id)initWithView:(UIView*)view;
+@end
+
+
+@implementation CKStyleViewUpdater{
+	UIView* _view;
+	CGSize _size;
+}
+
 @synthesize view = _view;
 
 - (void)frameChanged:(id)value{
@@ -51,7 +63,26 @@
 
 
 
-@implementation CKStyleView
+@implementation CKStyleView{
+	NSArray *_gradientColors;
+	NSArray *_gradientColorLocations;
+	UIImage *_image;
+	UIViewContentMode _imageContentMode;
+    
+	NSInteger _borderLocation;
+	UIColor* _borderColor;
+	CGFloat _borderWidth;
+    
+	NSInteger _separatorLocation;
+	UIColor* _separatorColor;
+	CGFloat _separatorWidth;
+	
+	CKStyleViewUpdater* _updater;
+	
+	UIColor* _fillColor;
+	UIColor *_embossTopColor;
+	UIColor *_embossBottomColor;
+}
 
 @synthesize gradientColors = _gradientColors;
 @synthesize gradientColorLocations = _gradientColorLocations;
@@ -155,7 +186,8 @@
 }
 
 - (void)setCorners:(CKRoundedCornerViewType)corners{
-    _corners = corners;
+    [super setCorners:corners];
+    
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
     if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
         [super setBackgroundColor:[UIColor blackColor]];

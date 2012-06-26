@@ -9,16 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "CKLocalizationManager.h"
 
-
+/**
+ */
 extern NSMutableArray* CKLocalizationStringTableNames;
 
-/** TODO
+/**
  */
 NSString *CKLocalizationCurrentLocalization(void);
+
+/**
+ */
 NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
 
 
-/** TODO
+/**
  */
 #if __has_feature(objc_arc)
 #define _(key) [[CKLocalizedString alloc]initWithLocalizedKey:key]

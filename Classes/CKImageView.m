@@ -27,7 +27,25 @@
 
 //
 
-@implementation CKImageView
+@implementation CKImageView{
+	//Image Management
+	CKImageLoader *_imageLoader;
+	NSURL *_imageURL;
+	id<CKImageViewDelegate> _delegate;
+	
+	//Background View Management
+	UIImage *_defaultImage;	
+	UIView* _defaultImageView;
+	UIActivityIndicatorView* _activityIndicator;
+	CKImageViewSpinnerStyle _spinnerStyle;
+	
+	//View Management
+	UIImageView* _imageView;
+	BOOL _interactive;
+	
+	NSTimeInterval _fadeInDuration;
+	CKImageViewState _currentState;
+}
 
 @synthesize imageLoader = _imageLoader;
 @synthesize imageURL = _imageURL;

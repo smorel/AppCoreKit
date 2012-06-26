@@ -181,7 +181,7 @@
         CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
         debugger.name = @"CKInlineDebuggerForSubViews";
         
-        CKArrayCollection* collection = [CKArrayCollection object];
+        CKArrayCollection* collection = [CKArrayCollection collection];
         [UIView addView:view toCollection:collection];
         
         CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];

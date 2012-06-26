@@ -11,7 +11,7 @@
 
 @class CKCarouselView;
 
-/** TODO
+/**
  */
 @protocol CKCarouselViewDataSource
 - (NSInteger)numberOfSectionsInCarouselView:(CKCarouselView*)carouselView;
@@ -20,7 +20,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @protocol CKCarouselViewDelegate
 - (UIView*) carouselView:(CKCarouselView*)carouselView viewForHeaderInSection:(NSInteger)section;
@@ -31,61 +31,104 @@
 @end
 
 
-/** TODO
+/**
  */
 typedef enum{
 	CKCarouselViewDisplayTypeHorizontal
 }CKCarouselViewDisplayType;
 
 
-/** TODO
+/**
  */
-@interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> {
-	NSMutableArray* _rowSizes;
-	CGFloat _internalContentOffset;
-	NSInteger _numberOfPages;
-	NSInteger _currentPage;
-	NSInteger _currentSection;
-	
-	CGFloat _spacing;
-	
-	UIView* _headerViewToRemove;
-	UIView* _visibleHeaderView;
-	NSMutableDictionary* _visibleViewsForIndexPaths;
-	
-	id _dataSource;
-	//id _delegate;
-	
-	NSMutableDictionary* _reusableViews;
-	CKCarouselViewDisplayType _displayType;
-	
-	CGFloat _contentOffsetWhenStartPanning;
-}
+@interface CKCarouselView : UIScrollView<UIGestureRecognizerDelegate> 
 
+///-----------------------------------
+/// @name Getting the carousel view status
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign,readonly) NSInteger numberOfPages;
+
+/**
+ */
 @property (nonatomic,assign,readonly) NSInteger currentPage;
+
+/**
+ */
 @property (nonatomic,assign,readonly) NSInteger currentSection;
+
+/**
+ */
 @property (nonatomic,assign,readonly) CGFloat internalContentOffset;
 
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign) CGFloat spacing;
-@property (nonatomic,assign) IBOutlet id dataSource;
+
+/**
+ */
 @property (nonatomic,assign) CKCarouselViewDisplayType displayType;
 
+///-----------------------------------
+/// @name Managing the Data Source
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) IBOutlet id dataSource;
+
+///-----------------------------------
+/// @name Updating the Carousel View
+///-----------------------------------
+
+/**
+ */
 - (void)reloadData;
+
+/**
+ */
+- (void)updateViewsAnimated:(BOOL)animated;
+
+///-----------------------------------
+/// @name Configuring a Table View
+///-----------------------------------
+
+/**
+ */
 - (UIView*)dequeueReusableViewWithIdentifier:(id)identifier;
 
-//Offset is normalized between 0 & numberOfPages
-//contentOffset represents the center of the carousel
+/** Offset is normalized between 0 & numberOfPages
+    contentOffset represents the center of the carousel
+ */
 - (void)setContentOffset:(CGFloat)offset animated:(BOOL)animated;
 
 - (NSIndexPath*)indexPathForPage:(NSInteger)page;
 - (NSInteger)pageForIndexPath:(NSIndexPath*)indexPath;
 
+///-----------------------------------
+/// @name Accessing Cells and Sections
+///-----------------------------------
+
+/**
+ */
 - (NSArray*)visibleIndexPaths;
+
+/**
+ */
 - (NSArray*)visibleViews;
+
+/**
+ */
 - (UIView*)viewAtIndexPath:(NSIndexPath*)indexPath;
 
+/**
+ */
 - (CGRect)rectForRowAtIndexPath:(NSIndexPath*)indexPath;
-- (void)updateViewsAnimated:(BOOL)animated;
+
 
 @end

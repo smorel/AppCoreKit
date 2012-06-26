@@ -11,7 +11,10 @@
 #import "CKWeakRef.h"
 
 
-@implementation CKBinding
+@implementation CKBinding{
+    CKBindingsContextOptions _contextOptions;
+}
+
 @synthesize context = _context;
 @synthesize contextOptions = _contextOptions;
 

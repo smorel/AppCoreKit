@@ -12,7 +12,7 @@
 @class CKAttribute;
 
 
-/** TODO
+/**
  */
 @interface CKItem : NSManagedObject {
 }
@@ -31,7 +31,7 @@
 
 //
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemAccessors)
 
@@ -53,7 +53,7 @@
 
 //
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemRepresentations)
 
@@ -63,7 +63,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @interface CKItem (CKItemModification)
 
@@ -73,7 +73,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @interface CKItem (CKOptimizedItemModification)
 

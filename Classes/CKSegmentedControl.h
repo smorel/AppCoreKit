@@ -31,7 +31,8 @@
 }
 */
  
-
+/**
+ */
 typedef enum CKSegmentedControlButtonPosition{
     CKSegmentedControlButtonPositionFirst  = 1 << 0,
     CKSegmentedControlButtonPositionMiddle = 1 << 1,
@@ -39,47 +40,144 @@ typedef enum CKSegmentedControlButtonPosition{
     CKSegmentedControlButtonPositionAlone  = 1 << 3
 }CKSegmentedControlButtonPosition;
 
+/**
+ */
 @interface CKSegmentedControlButton : UIButton 
+
+///-----------------------------------
+/// @name Accessing the segemented control button status
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign,readonly)CKSegmentedControlButtonPosition position;
+
 @end
 
+
+/**
+ */
 @interface CKSegmentedControl : UIControl 
 
-#pragma mark UISegmentedControl API
+///-----------------------------------
+/// @name Initializing a Segmented Control
+///-----------------------------------
 
-@property(nonatomic,assign)BOOL momentary;
-@property(nonatomic,readonly)NSInteger numberOfSegments;
-@property(nonatomic,assign)NSInteger selectedSegmentIndex;
-
-//An array of NSString objects (for segment titles) or UIImage objects (for segment images).
+/** An array of NSString objects (for segment titles) or UIImage objects (for segment images).
+ */
 - (id)initWithItems:(NSArray *)items;
 
-- (CGSize)contentOffsetForSegmentAtIndex:(NSUInteger)segment;
-- (void)setContentOffset:(CGSize)offset forSegmentAtIndex:(NSUInteger)segment;
+///-----------------------------------
+/// @name Managing Segment Content
+///-----------------------------------
+
+/**
+ */
 - (UIImage *)imageForSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
 - (void)setImage:(UIImage *)image forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
 - (NSString *)titleForSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
 - (void)setTitle:(NSString *)title forSegmentAtIndex:(NSUInteger)segment;
+
+///-----------------------------------
+/// @name Managing Segments
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,readonly)NSInteger numberOfSegments;
+
+/**
+ */
+@property(nonatomic,assign)NSInteger selectedSegmentIndex;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithImage:(UIImage *)image atIndex:(NSUInteger)segment animated:(BOOL)animated;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated;
-- (BOOL)isEnabledForSegmentAtIndex:(NSUInteger)segment;
-- (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
 - (void)removeAllSegments;
+
+/**
+ */
 - (void)removeSegmentAtIndex:(NSUInteger)segment animated:(BOOL)animated;
-- (CGFloat)widthForSegmentAtIndex:(NSUInteger)segment;
-- (void)setWidth:(CGFloat)width forSegmentAtIndex:(NSUInteger)segment;
 
-#pragma mark CKSegmentedControl API
-
+/**
+ */
 - (CKSegmentedControlButton*)segmentAtIndex:(NSInteger)index;
+
+/**
+ */
 - (void)setSelectedSegment:(CKSegmentedControlButton*)segment;
 
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithImage:(UIImage *)image atIndex:(NSUInteger)segment animated:(BOOL)animated action:(void(^)())action;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated action:(void(^)())action;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithTitle:(NSString *)title image:(UIImage*)image atIndex:(NSUInteger)segment animated:(BOOL)animated action:(void(^)())action;
 
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithImage:(UIImage *)image atIndex:(NSUInteger)segment animated:(BOOL)animated target:(id)target action:(SEL)action;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithTitle:(NSString *)title atIndex:(NSUInteger)segment animated:(BOOL)animated target:(id)target action:(SEL)action;
+
+/**
+ */
 - (CKSegmentedControlButton*)insertSegmentWithTitle:(NSString *)title image:(UIImage*)image atIndex:(NSUInteger)segment animated:(BOOL)animated target:(id)target action:(SEL)action;
+
+
+///-----------------------------------
+/// @name Managing Segment Behavior and Appearance
+///-----------------------------------
+
+/**
+ */
+@property(nonatomic,assign)BOOL momentary;
+
+/**
+ */
+- (BOOL)isEnabledForSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
+- (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
+- (CGSize)contentOffsetForSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
+- (void)setContentOffset:(CGSize)offset forSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
+- (CGFloat)widthForSegmentAtIndex:(NSUInteger)segment;
+
+/**
+ */
+- (void)setWidth:(CGFloat)width forSegmentAtIndex:(NSUInteger)segment;
 
 @end

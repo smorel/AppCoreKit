@@ -20,6 +20,12 @@
 #import "CKNSString+Additions.h"
 #import "CKWeakRef.h"
 
+@interface CKObject()
+@property (nonatomic,readwrite) BOOL isSaving;
+@property (nonatomic,readwrite) BOOL isLoading;
+
+@end
+
 
 //SEB : FIXME To move in a private file
 
@@ -27,7 +33,7 @@
 @class CKItem;
 
 
-/** TODO
+/**
  */
 @interface CKStore (CKStorePrivateAddition)
 @property (retain, readwrite) CKDomain *domain;
@@ -69,10 +75,10 @@ NSMutableDictionary* CKObjectManager = nil;
 }
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
-	if(_saving || _loading)
+	if(self.isSaving || self.isLoading)
 		return nil;
 	
-	_saving = YES;
+	self.isSaving = YES;
 	CKItem* item = nil;
 	if(self.uniqueId == nil){
 		self.uniqueId = [NSString stringWithNewUUID];
@@ -94,7 +100,7 @@ NSMutableDictionary* CKObjectManager = nil;
 	}		
 	
 	[alreadySaved addObject:self];
-	_saving = NO;
+	self.isSaving = NO;
 	return item;
 }
 
@@ -174,7 +180,7 @@ NSMutableDictionary* CKObjectManager = nil;
 
 
 - (void)removeObjectFromDomainNamed:(NSString*)domain{
-	NSAssert(!_loading, @"cannot delete an object while loading it !");
+	NSAssert(!self.isLoading, @"cannot delete an object while loading it !");
 	
 	CKItem* item = [CKObject itemWithObject:self inDomainNamed:domain];
 	if(item){

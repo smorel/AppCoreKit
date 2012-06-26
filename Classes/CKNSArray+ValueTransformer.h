@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-/** TODO
+/**
  */
 @interface NSArray (CKValueTransformer)
 

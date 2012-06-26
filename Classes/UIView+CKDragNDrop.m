@@ -404,7 +404,7 @@ static BOOL UIControlSwizzlingDone = NO;
 
 typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents event);
 
-/** TODO
+/**
  */
 @interface UIViewDragDropBlockBinder : CKBinding{
 	UIViewDragDropBlock block;

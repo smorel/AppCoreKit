@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "CKWebRequest.h"
 
-/** TODO
+/**
  */
 extern NSString * const CKImageLoaderErrorDomain;
 
@@ -19,7 +19,7 @@ typedef void(^CKImageLoaderCompletionBlock)(CKImageLoader* imageLoader, UIImage*
 typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* error);
 
 
-/** TODO
+/**
  */
 @interface CKImageLoader : NSObject
 
@@ -66,7 +66,7 @@ typedef void(^CKImageLoaderErrorBlock)(CKImageLoader* imageLoader, NSError* erro
 
 //
 
-/** TODO
+/**
  */
 @protocol CKImageLoaderDelegate
 

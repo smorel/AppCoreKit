@@ -11,6 +11,7 @@
 #import "CKWeakRef.h"
 #import "CKFormTableViewController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 
 //private interfaces
 

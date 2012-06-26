@@ -8,6 +8,7 @@
 
 #import "CKNSObject+CKRuntime.h"
 #import "CKNSObject+CKRuntime_private.h"
+#import "CKClassPropertyDescriptor_private.h"
 #import <objc/runtime.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <malloc/malloc.h>

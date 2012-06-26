@@ -11,7 +11,7 @@
 #import "CKWeakRef.h"
 
 
-/** TODO
+/**
  */
 @interface CKDataBinder : CKBinding {
 	NSString* keyPath1;

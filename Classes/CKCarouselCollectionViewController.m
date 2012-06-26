@@ -41,7 +41,15 @@
 @property (nonatomic, retain) NSMutableDictionary* headerViewsForSections;
 @end
 
-@implementation CKCarouselCollectionViewController
+@implementation CKCarouselCollectionViewController{
+	CKCarouselView* _carouselView;
+	
+	NSMutableDictionary* _headerViewsForSections;
+	
+	UIPageControl* _pageControl;
+}
+
+
 @synthesize carouselView = _carouselView;
 @synthesize headerViewsForSections = _headerViewsForSections;
 @synthesize pageControl = _pageControl;

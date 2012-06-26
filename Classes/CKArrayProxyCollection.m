@@ -7,7 +7,6 @@
 //
 
 #import "CKArrayProxyCollection.h"
-#import "CKNSNotificationCenter+Edition.h"
 #import "CKDebug.h"
 
 
@@ -16,7 +15,10 @@
 @property (nonatomic,assign,readwrite) BOOL isFetching;
 @end
 
-@implementation CKArrayProxyCollection
+@implementation CKArrayProxyCollection{
+	CKProperty* _property;
+}
+
 @synthesize property = _property;
 
 + (CKArrayProxyCollection*)collectionWithArrayProperty:(CKProperty*)property{
@@ -52,8 +54,6 @@
     [_property insertObjects:theObjects atIndexes:indexes];
 	self.count = [[_property value] count];
 	
-	[[NSNotificationCenter defaultCenter]notifyObjectsAdded:theObjects atIndexes:indexes inCollection:self];
-	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
@@ -69,8 +69,6 @@
 	[_property removeObjectsAtIndexes:indexSet];
 	self.count = [[_property value] count];
 	
-	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:toRemove atIndexes:indexSet inCollection:self];
-	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
 	}
@@ -81,14 +79,8 @@
 }
 
 - (void)removeAllObjects{
-	NSArray* theObjects = [NSArray arrayWithArray: [_property value]];
-	
-	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[_property value] count])];
-	
 	[_property removeAllObjects];
 	self.count = [[_property value] count];
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectsRemoved:theObjects atIndexes:indexSet inCollection:self];
 	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];
@@ -121,7 +113,7 @@
     }
 }
 
-- (NSArray*)objectsWithPredicate:(NSPredicate*)predicate{
+- (NSArray*)objectsMatchingPredicate:(NSPredicate*)predicate{
 	return [[_property value] filteredArrayUsingPredicate:predicate];
 }
 
@@ -130,8 +122,6 @@
 	[[_property value] removeObjectAtIndex:index];
 	[[_property value] insertObject:other atIndex:index];
 	self.count = [[_property value] count];	
-	
-	[[NSNotificationCenter defaultCenter]notifyObjectReplaced:object byObject:other atIndex:index inCollection:self];
 	
 	if(self.delegate != nil && [self.delegate respondsToSelector:@selector(documentCollectionDidChange:)]){
 		[self.delegate documentCollectionDidChange:self];

@@ -226,7 +226,10 @@ static CKSuffixTreeStreamReaderManager* CKSuffixTreeStreamReaderDefaultManager =
 
 
 static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
-@implementation CKSuffixTree
+@implementation CKSuffixTree{
+	NSString* name;
+}
+
 @synthesize name;
 
 - (void)dealloc{

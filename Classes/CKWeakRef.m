@@ -114,7 +114,12 @@ static char NSObjectWeakRefObjectKey;
 
 static BOOL swizzlingDone = NO;
 
-@implementation CKWeakRef
+@implementation CKWeakRef{
+	id _object;
+	CKCallback* _callback;
+}
+
+
 @synthesize object = _object;
 @synthesize callback = _callback;
 

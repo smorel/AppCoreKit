@@ -11,7 +11,7 @@
 #import "CKNSObjectPropertyCellController.h"
 
 
-/** TODO
+/**
  */
 @interface CKUIImagePropertyCellController : CKNSObjectPropertyCellController/*CKPropertyGridCellController*/ {
 

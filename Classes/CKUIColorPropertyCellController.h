@@ -10,7 +10,7 @@
 #import "CKMultiFloatPropertyCellController.h"
 
 
-/** TODO
+/**
  */
 @interface CKUIColorPropertyCellController : CKMultiFloatPropertyCellController {
 

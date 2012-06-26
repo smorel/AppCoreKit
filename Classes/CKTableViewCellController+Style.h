@@ -12,25 +12,25 @@
 #import "CKViewController+Style.h"
 
 
-/** TODO
+/**
  */
 extern NSString* CKStyleCellStyle;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleAccessoryImage;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleCellSize;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleCellFlags;
 
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKTableViewCellControllerStyle)
 
@@ -42,7 +42,7 @@ extern NSString* CKStyleCellFlags;
 @end
 
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController (CKStyle)
 
@@ -52,13 +52,13 @@ extern NSString* CKStyleCellFlags;
 
 @end
 
-/** TODO
+/**
  */
 @interface CKTableViewController (CKStyle)
 @end
 
 
-/** TODO
+/**
  */
 @interface CKCollectionCellController (CKStyle)
 
@@ -69,7 +69,7 @@ extern NSString* CKStyleCellFlags;
 @end
 
 
-/** TODO
+/**
  */
 @interface UITableView (CKStyle)
 @end

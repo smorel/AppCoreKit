@@ -11,17 +11,53 @@
 #import "CKCollection.h"
 
 
-/** TODO
+/**
  */
 @interface CKCollectionController : NSObject<CKObjectController> 
 
-@property (nonatomic, assign) id delegate;
-@property (nonatomic, retain,readonly) CKCollection* collection;
+///-----------------------------------
+/// @name Creating an initialized CKCollectionController Object
+///-----------------------------------
 
-- (id)initWithCollection:(CKCollection*)collection;
+/**
+ */
 + (CKCollectionController*) controllerWithCollection:(CKCollection*)collection;
 
+///-----------------------------------
+/// @name Initializing a CKCollectionController Object
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCollection:(CKCollection*)collection;
+
+///-----------------------------------
+/// @name Managing the delegate
+///-----------------------------------
+
+/** CKObjectControllerDelegate (Usually a CKCollectionViewController)
+ */
+@property (nonatomic, assign) id delegate;
+
+///-----------------------------------
+/// @name Getting the collection
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain,readonly) CKCollection* collection;
+
+
+///-----------------------------------
+/// @name Customizing the model representation
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic, assign) BOOL appendSpinnerAsFooterCell;
+
+/**
+ */
 @property (nonatomic, assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 @end

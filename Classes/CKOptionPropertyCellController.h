@@ -9,7 +9,7 @@
 #import "CKPropertyGridCellController.h"
 #import "CKOptionTableViewController.h"
 
-/** TODO
+/**
  */
 @interface CKOptionPropertyCellController : CKPropertyGridCellController 
 

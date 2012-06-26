@@ -14,35 +14,103 @@
 
 /** CKProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access attributes and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
  */
-@interface CKProperty : NSObject<NSCopying> {
-}
+@interface CKProperty : NSObject<NSCopying> 
 
-@property (nonatomic,retain,readonly) id object;
-@property (nonatomic,retain,readonly) id keyPath;
+///-----------------------------------
+/// @name Creating property objects
+///-----------------------------------
 
-@property (nonatomic,assign) id value;
-@property (nonatomic,readonly) NSString* name;
-@property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
-
+/**
+ */
 + (CKProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
+
+/**
+ */
 + (CKProperty*)propertyWithObject:(id)object;
+
+/**
+ */
 + (CKProperty*)propertyWithDictionary:(id)dictionary key:(id)key;
 
+///-----------------------------------
+/// @name Initializing property objects
+///-----------------------------------
+
+/**
+ */
 - (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
+
+/**
+ */
 - (id)initWithObject:(id)object;
+
+/**
+ */
 - (id)initWithDictionary:(NSDictionary*)dictionary key:(id)key;
 
-- (CKPropertyExtendedAttributes*)extendedAttributes;
-- (id)value;
-- (void)setValue:(id)value;
+
+///-----------------------------------
+/// @name Accessing property attributes 
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,retain,readonly) id object;
+
+/**
+ */
+@property (nonatomic,retain,readonly) id keyPath;
+
+/**
+ */
+@property (nonatomic,readonly) NSString* name;
+
+/**
+ */
+@property (nonatomic,retain,readonly) CKClassPropertyDescriptor* descriptor;
+
+/**
+ */
 - (Class)type;
 
+/**
+ */
 - (BOOL)isReadOnly;
 
-//For properties pointing on NSArray value
+///-----------------------------------
+/// @name Accessing property extended attributes 
+///-----------------------------------
+
+/**
+ */
+- (CKPropertyExtendedAttributes*)extendedAttributes;
+
+///-----------------------------------
+/// @name Manipulating property value
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) id value;
+
+///-----------------------------------
+/// @name Manipulating Container property
+///-----------------------------------
+
+/**
+ */
 - (void)insertObjects:(NSArray*)objects atIndexes:(NSIndexSet*)indexes;
+
+/**
+ */
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexes;
+
+/**
+ */
 - (void)removeAllObjects;
+
+/**
+ */
 - (NSInteger)count;
 
 @end

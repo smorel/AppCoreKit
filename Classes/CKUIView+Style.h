@@ -10,7 +10,7 @@
 #import "CKStyleView.h"
 #import "CKNSObject+CKRuntime.h"
 
-/** TODO
+/**
  */
 typedef enum{
 	CKViewCornerStyleTableViewCell,//in this case, we set the corner style of the parent controller (table plain or grouped)
@@ -22,7 +22,7 @@ typedef enum{
 }CKViewCornerStyle;
 
 
-/** TODO
+/**
  */
 typedef enum{
 	CKViewBorderStyleTableViewCell,
@@ -39,59 +39,59 @@ typedef enum{
 }CKViewSeparatorStyle;
 
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBackgroundColor;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBackgroundGradientColors;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBackgroundGradientLocations;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBackgroundImage;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBackgroundImageContentMode;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleCornerStyle;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleCornerSize;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleAlpha;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBorderColor;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBorderWidth;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleBorderStyle;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleSeparatorColor;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleSeparatorWidth;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleSeparatorStyle;
 
@@ -104,7 +104,7 @@ extern NSString* CKStyleAutoLayoutHugging;
 extern NSString* CKStyleAutoLayoutCompression;
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKViewStyle)
 
@@ -135,7 +135,7 @@ extern NSString* CKStyleAutoLayoutCompression;
 
 //TODO : rename style by parentStyle in some APIs
 
-/** TODO
+/**
  */
 @interface UIView (CKStyle)
 @property (nonatomic,copy) NSString* name;
@@ -158,7 +158,7 @@ extern NSString* CKStyleAutoLayoutCompression;
 @end
 
 
-/** TODO
+/**
  */
 @interface NSObject (CKStyle)
 @property(nonatomic,retain)NSMutableDictionary* appliedStyle;
@@ -177,7 +177,7 @@ extern NSString* CKStyleAutoLayoutCompression;
 @end
 
 
-/** TODO
+/**
  */
 @protocol CKStyleDelegate
 @optional

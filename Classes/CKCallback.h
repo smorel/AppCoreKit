@@ -23,12 +23,11 @@ typedef id(^CKCallbackBlock)(id value);
         [callback execute:someObject];
  
  */
-@interface CKCallback : NSObject{
-	id _target;
-	SEL _action;
-	CKCallbackBlock _block;
-	NSArray* _params;
-}
+@interface CKCallback : NSObject
+
+///-----------------------------------
+/// @name Setuping the callback
+///-----------------------------------
 
 /** target
  */

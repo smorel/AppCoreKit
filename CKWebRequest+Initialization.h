@@ -8,7 +8,7 @@
 
 #import "CKWebRequest.h"
 
-/** TODO
+/**
  */
 @interface CKWebRequest (Initialization)
 

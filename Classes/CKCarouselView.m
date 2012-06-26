@@ -80,7 +80,28 @@ double round(double x)
 
 @end
 
-@implementation CKCarouselView
+@implementation CKCarouselView{
+	NSMutableArray* _rowSizes;
+	CGFloat _internalContentOffset;
+	NSInteger _numberOfPages;
+	NSInteger _currentPage;
+	NSInteger _currentSection;
+	
+	CGFloat _spacing;
+	
+	UIView* _headerViewToRemove;
+	UIView* _visibleHeaderView;
+	NSMutableDictionary* _visibleViewsForIndexPaths;
+	
+	id _dataSource;
+	//id _delegate;
+	
+	NSMutableDictionary* _reusableViews;
+	CKCarouselViewDisplayType _displayType;
+	
+	CGFloat _contentOffsetWhenStartPanning;
+}
+
 @synthesize internalContentOffset = _internalContentOffset;
 @synthesize visibleHeaderView = _visibleHeaderView;
 @synthesize headerViewToRemove = _headerViewToRemove;

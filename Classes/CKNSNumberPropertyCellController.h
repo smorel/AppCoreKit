@@ -10,7 +10,7 @@
 #import "CKPropertyGridCellController.h"
 
 
-/** TODO
+/**
  */
 @interface CKNSNumberPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate>
 

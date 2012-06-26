@@ -2,7 +2,7 @@
 //  UINavigationController+CKBlockBasedDelegate.m
 //  VoyageARabais
 //
-//  Created by Martin Dufort on 12-05-15.
+//  Created by Sebastien Morel on 12-05-15.
 //  Copyright (c) 2012 WhereCloud Inc. All rights reserved.
 //
 

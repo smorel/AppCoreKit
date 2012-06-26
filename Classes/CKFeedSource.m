@@ -14,7 +14,12 @@
 @property (nonatomic, assign) NSRange range;
 @end
 
-@implementation CKFeedSource
+@implementation CKFeedSource {
+	id _delegate;
+	BOOL _hasMore;
+	BOOL _isFetching;
+	NSRange _range;
+}
 
 @synthesize delegate = _delegate;
 @synthesize hasMore = _hasMore;

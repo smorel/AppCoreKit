@@ -11,7 +11,7 @@
 #import "CKFormSection.h"
 #import "CKFormBindedCollectionSection.h"
 
-/** TODO
+/**
  */
 @interface CKFormTableViewController : CKTableCollectionViewController {
 	NSMutableArray* _sections;

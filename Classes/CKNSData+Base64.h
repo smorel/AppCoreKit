@@ -13,7 +13,7 @@
 
 #import <Foundation/Foundation.h>
 
-/** TODO
+/**
  */
 @interface NSData (CKNSDataBase64Additions)
 

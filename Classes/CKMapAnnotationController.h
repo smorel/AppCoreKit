@@ -11,7 +11,7 @@
 #import "CKCollectionCellController.h"
 #import "CKViewController.h"
 
-/** TODO
+/**
  */
 typedef enum CKMapAnnotationStyle{
 	CKMapAnnotationCustom,
@@ -20,7 +20,7 @@ typedef enum CKMapAnnotationStyle{
 
 @class CKMapAnnotationController;
 
-/** TODO
+/**
  */
 @interface CKAnnotationView : MKAnnotationView
 
@@ -47,7 +47,7 @@ typedef enum CKMapAnnotationStyle{
 @end
 
 
-/** TODO
+/**
  */
 @interface CKMapAnnotationController : CKCollectionCellController
 

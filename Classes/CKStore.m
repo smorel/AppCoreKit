@@ -26,7 +26,7 @@ static NSMutableDictionary* CKStoreCache = nil;
 @class CKItem;
 
 
-/** TODO
+/**
  */
 @interface CKStore (CKStorePrivateAddition)
 @property (retain, readwrite) CKDomain *domain;

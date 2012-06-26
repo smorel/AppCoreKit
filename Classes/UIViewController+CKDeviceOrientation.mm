@@ -2,7 +2,7 @@
 //  UIViewController+CKDeviceOrientation.m
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-06-04.
+//  Created by Sebastien Morel on 12-06-04.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

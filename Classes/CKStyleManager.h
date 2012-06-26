@@ -10,7 +10,7 @@
 #import "CKCascadingTree.h"
 
 
-/** TODO
+/**
  */
 @interface CKStyleManager : CKCascadingTree 
 
@@ -53,7 +53,7 @@
 @end
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKStyleManager)
 

@@ -8,6 +8,7 @@
 
 #import "CKTableCollectionViewController.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_Private.h"
 #import "CKNSDate+Conversions.h"
 #import "CKNSDate+Calculations.h"
 #import <objc/runtime.h>

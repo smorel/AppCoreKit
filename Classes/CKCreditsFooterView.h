@@ -9,16 +9,23 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** 
+ */
 typedef enum {
 	CKCreditsViewStyleLight = 0,
 	CKCreditsViewStyleDark
 } CKCreditsViewStyle;
 
-/** TODO
+/** 
  */
-@interface CKCreditsFooterView : UIView {
-}
+@interface CKCreditsFooterView : UIView 
 
+///-----------------------------------
+/// @name Creating Credits Footer View
+///-----------------------------------
+
+/**
+ */
 + (id)creditsViewWithStyle:(CKCreditsViewStyle)style;
 
 @end

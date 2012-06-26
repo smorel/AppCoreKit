@@ -19,7 +19,7 @@
 @class CKTableViewCellController;
 @class CKTableViewController;
 
-/** TODO
+/**
  */
 @interface CKUITableViewCell : UITableViewCell
 
@@ -79,7 +79,7 @@
 
 /********************************************** CKTableViewCellController *************************************/
 
-/** TODO
+/**
  */
 enum{
 	CKTableViewCellFlagNone = CKItemViewFlagNone,
@@ -92,7 +92,7 @@ enum{
 typedef NSUInteger CKTableViewCellFlags;
 
 
-/** TODO
+/**
  */
 typedef enum CKTableViewCellStyle {
     CKTableViewCellStyleDefault = UITableViewCellStyleDefault,	
@@ -108,7 +108,7 @@ typedef enum CKTableViewCellStyle {
 
 typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* controller);
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController : CKCollectionCellController
 
@@ -262,7 +262,7 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
 
 
 
-/** TODO
+/**
  */
 @interface CKTableViewCellController(CKLayout)
 

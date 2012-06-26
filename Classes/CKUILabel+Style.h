@@ -9,16 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "CKUIView+Style.h"
 
-/** TODO
+/**
  */
 extern NSString* CKStyleFontSize;
 
-/** TODO
+/**
  */
 extern NSString* CKStyleFontName;
 
 
-/** TODO
+/**
  */
 @interface NSMutableDictionary (CKUILabelStyle)
 - (CGFloat)fontSize;
@@ -26,7 +26,7 @@ extern NSString* CKStyleFontName;
 @end
 
 
-/** TODO
+/**
  */
 @interface UILabel (CKStyle)
 

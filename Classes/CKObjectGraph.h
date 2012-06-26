@@ -8,10 +8,24 @@
 
 #import "CKCascadingTree.h"
 
-
+/**
+ */
 @interface CKObjectGraph : CKCascadingTree
 
+///-----------------------------------
+/// @name Creating object graph objects
+///-----------------------------------
+
+/**
+ */
 + (CKObjectGraph*)objectGraphWithContentOfFileNamed:(NSString*)name;
+
+///-----------------------------------
+/// @name Querying object graph
+///-----------------------------------
+
+/**
+ */
 - (id)objectWithUniqueId:(NSString*)uniqueId;
 
 @end

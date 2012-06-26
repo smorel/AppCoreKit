@@ -10,10 +10,12 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/**
+ */
 extern NSString* cleanString(NSString* str);
 
 #ifdef DEBUG
-  /** TODO
+  /**
    */
   #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, cleanString([NSString stringWithFormat:(s), ##__VA_ARGS__]))
 #else
@@ -22,13 +24,29 @@ extern NSString* cleanString(NSString* str);
 
 
 // UIView
+/**
+ */
 @interface UIView (CKDebug)
 
+///-----------------------------------
+/// @name Debugging view hierarchy
+///-----------------------------------
+
+/**
+ */
 - (void)printViewHierarchy;
+
+/**
+ */
 - (NSString*)viewHierarchy;
 
 @end
 
 // CallStack
+/**
+ */
 NSString* CKDebugGetCallStack();
+
+/**
+ */
 void CKDebugPrintCallStack();

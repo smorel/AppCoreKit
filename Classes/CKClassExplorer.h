@@ -13,7 +13,7 @@
 #import "CKCallback.h"
 
 
-/** TODO
+/**
  */
 typedef enum CKClassExplorerType{
 	CKClassExplorerTypeClasses,
@@ -21,7 +21,7 @@ typedef enum CKClassExplorerType{
 }CKClassExplorerType;
 
 
-/** TODO
+/**
  */
 @interface CKClassExplorer : CKTableCollectionViewController {
 	CKArrayCollection* _classesCollection;

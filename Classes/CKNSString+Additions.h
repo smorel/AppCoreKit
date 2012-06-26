@@ -11,7 +11,7 @@
 #import "CKNSString+Validations.h"
 #import "CKNSString+Parsing.h"
 
-/** TODO
+/**
  */
 @interface NSString (CKNSStringAdditions)
 

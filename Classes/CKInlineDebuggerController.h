@@ -18,7 +18,7 @@ typedef enum CKInlineDebuggerControllerState{
     CKInlineDebuggerControllerStateDebugging
 }CKInlineDebuggerControllerState;
 
-/** TODO
+/**
  */
 @interface CKInlineDebuggerController : NSObject
 

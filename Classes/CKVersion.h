@@ -12,11 +12,11 @@
 extern "C" {
 #endif
     
-/** TODO
+/**
  */
 NSString *CKApplicationVersion();
 
-/** TODO
+/**
  */
 NSString *CKOSVersion();
 

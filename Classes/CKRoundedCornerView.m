@@ -10,7 +10,10 @@
 #import "CKUIColor+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation CKRoundedCornerView
+@implementation CKRoundedCornerView {
+	CKRoundedCornerViewType _corners;
+	CGFloat _roundedCornerSize;
+}
 
 @synthesize corners = _corners;
 @synthesize roundedCornerSize = _roundedCornerSize;

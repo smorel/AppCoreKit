@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "CKCollectionViewController.h"
 
-/** TODO
+/**
  */
 typedef enum {
 	CKTableViewOrientationPortrait,
@@ -25,12 +25,12 @@ typedef enum {
 // Implements -setEditing:animated: to toggle the editing state of the table.
 
 
-/** TODO
+/**
  */
 @interface CKTableView : UITableView
 @end
 
-/** TODO
+/**
  */
 @interface CKTableViewController : CKCollectionViewController <UITableViewDataSource, UITableViewDelegate> 
 

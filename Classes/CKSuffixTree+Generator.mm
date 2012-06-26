@@ -138,10 +138,10 @@ typedef hash_map<size_t,unsigned int> FatType;
 }
 
 + (void)generateSuffixTreeWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path{
-	[CKSuffixTree generateSuffixTreeWithContentOfFile:fileName writeToPath:path indexLimit:0];
+	[CKSuffixTree generateSuffixTreeWithContentOfFile:fileName writeToPath:path maximumNumberOfObjectsPerIndex:0];
 }
 
-+ (void)generateSuffixTreeWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path indexLimit:(NSUInteger)indexLimit{
++ (void)generateSuffixTreeWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit{
 	NSString* wordsFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"txt"];
 	std::ifstream wordsFile;
 	wordsFile.open([wordsFilePath UTF8String], std::ios_base::in);

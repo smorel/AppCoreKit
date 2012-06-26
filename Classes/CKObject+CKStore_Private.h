@@ -2,7 +2,7 @@
 //  CKObject+CKStore_Private.h
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-06-21.
+//  Created by Sebastien Morel on 12-06-21.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 extern NSMutableDictionary* CKObjectManager;
 
 
-/** TODO : clean this API to make public only the strict necessary methods for less confusion
+/** 
  */
 @interface CKObject (CKStoreAddition_private)
 

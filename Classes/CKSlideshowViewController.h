@@ -6,12 +6,16 @@
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
-/* StyleSheet example for CKSlideshowController2 :
+
+#import "CKTableCollectionViewController.h"
+
+
+/* StyleSheet example for CKSlideShowViewController :
 
 "CKSlideShowViewController" : {
     "UINavigationController" : {
         "navigationBar" : {
-            "backgroundImage" : "CRAP", //this force to have no background image if 1 has been previously set on the navigation bar
+            "backgroundImage" : "NONE", //this force to have no background image if 1 has been previously set on the navigation bar
             "barStyle" : "UIBarStyleBlackTranslucent",
             "backBarButtonItem" : {
                 "@inherits" : [ "UIBarButtonItem" ],
@@ -26,7 +30,7 @@
         },
         
         "UIToolbar" : {
-            "backgroundImage" : "CRAP", //this force to have no background image if 1 has been previously set on the toolbar
+            "backgroundImage" : "NONE", //this force to have no background image if 1 has been previously set on the toolbar
             "barStyle" : "UIBarStyleBlackTranslucent"
         }
     },
@@ -36,17 +40,39 @@
     }
 }
 */
-
-#import "CKTableCollectionViewController.h"
-
 @interface CKSlideShowViewController : CKTableCollectionViewController
-@property (nonatomic, assign) BOOL shouldHideControls;
 
+///-----------------------------------
+/// @name Initializing CKSlideShowViewController Object
+///-----------------------------------
+
+/**
+ */
 - (id)initWithCollection:(CKCollection *)collection;
+
+/**
+ */
 - (id)initWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
 - (id)initWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex;
 
+/**
+ */
 - (id)initWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
 - (id)initWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex;
+
+///-----------------------------------
+/// @name Customizing the appearance
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign) BOOL shouldHideControls;
+
 
 @end

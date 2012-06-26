@@ -13,7 +13,7 @@
 typedef void(^CKDataBlockBinderExecutionBlock)(id value);
 
 
-/** TODO
+/**
  */
 @interface CKDataBlockBinder : CKBinding {
 	NSString* keyPath;

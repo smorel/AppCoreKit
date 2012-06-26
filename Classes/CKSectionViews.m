@@ -2,7 +2,7 @@
 //  CKSectionViews.m
 //  CloudKit
 //
-//  Created by Martin Dufort on 12-05-31.
+//  Created by Sebastien Morel on 12-05-31.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 #import "CKStyleManager.h"
 #import "CKUIColor+Additions.h"
 #import "CKTableViewCellController+CKDynamicLayout.h"
+#import "CKTableViewCellController+CKDynamicLayout_private.h"
 #import "CKUIView+Positioning.h"
 
 

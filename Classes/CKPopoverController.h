@@ -18,22 +18,59 @@ typedef void(^CKPopoverControllerDismissBlock)(CKPopoverController* popover);
  */
 @interface CKPopoverController : UIPopoverController<UIPopoverControllerDelegate> {}
 
-//default value is YES
-@property (nonatomic,assign)BOOL autoDismissOnInterfaceOrientation;
+///-----------------------------------
+/// @name Initializing a CKPopoverController
+///-----------------------------------
 
-@property (nonatomic,copy) CKPopoverControllerDismissBlock didDismissPopoverBlock;
-
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController contentSize:(CGSize)contentSize;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController inNavigationController:(BOOL)navigationController;
+
+/**
+ */
 - (id)initWithContentViewController:(UIViewController *)viewController contentSize:(CGSize)contentSize inNavigationController:(BOOL)navigationController;
 
-//private
+/**
+ */
 - (void)postInit;
+
+///-----------------------------------
+/// @name Configuring a CKPopoverController
+///-----------------------------------
+
+/** default value is YES
+ */
+@property (nonatomic,assign)BOOL autoDismissOnInterfaceOrientation;
+
+///-----------------------------------
+/// @name Reacting to CKPopoverController events
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,copy) CKPopoverControllerDismissBlock didDismissPopoverBlock;
+
 
 @end
 
-
+/**
+ */
 @interface UIViewController (CKPopoverController)
+
+///-----------------------------------
+/// @name Popover
+///-----------------------------------
+
+/**
+ */
 @property(nonatomic,assign,readonly) BOOL isInPopover;
+
 @end
