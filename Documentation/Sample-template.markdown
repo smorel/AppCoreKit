@@ -36,7 +36,10 @@
 <h2>Setuping the Collection View Controller</h2>
 
 <p>Using the <b>AppCoreKit</b> advanced collection view controllers, we can display a collection of objects easilly. Each object in this collection is backed-up by a cell controller that manages the connection between the document models and the collection view cells. We dont need to do extra management for asynchronous updates as collection view controllers embbed a mechanism that watches changes in this collection and automatically updates their content.</p>
-<p>What we need is basically creating the collection view controller, passing the collection of objects and a factory allowing to create cell controllers at runtime when the collection gets updated.</p>
+<p>We need to create the collection view controller with:</p>
+ - The collection of objects.
+ - A factory allowing to create cell controllers at runtime when the collection gets updated.
+
 <p>In this particular case, we want to display our collection using a table view controller. We'll use a form wich allow to manage sections with TableViewCellControllers. <b>AppCoreKit</b> provides a lot of helpers to create standards cell controllers wich appearance can be customized using stylesheets or programatically.</p>
 
 <i>ViewControllers.h</i>
@@ -77,7 +80,7 @@
 
     @end
 
-<p><b>Note:</b><i>AppCoreKit offers extremelly customizable views and cell controllers that can be setup using blocks wich avoids inheritance. As a good practice, we prefer using factory methods to setup view controllers instead of inheritance. That limits the developper to respect the scope offered by the controller class. It avoids errors and hacks. For example, the developper will not be able to add a bunch of booleans or properties that polute the code and creates connection between components that should be independant.</i></p>
+<p><b>Note:</b><i> AppCoreKit offers extremelly customizable views and cell controllers that can be setup using blocks wich avoids inheritance. As a good practice, we prefer using factory methods to setup view controllers instead of inheritance. That limits the developper to respect the scope offered by the controller class. It avoids errors and hacks. For example, the developper will not be able to add a bunch of booleans or properties that polute the code and creates connection between components that should be independant.</i></p>
 
 <h2>Displaying the view controller</h2>
 
@@ -322,19 +325,19 @@
 
 <p><b>AppCoreKit</b> provides helpers to localize your application easilly. There are two really nice features when using this system.</p>
 
-- First, when running the app in the simulator, as soon as you change and save a .string file, your application is automatically updated at runtime. This avoid to change/compile/Run and saves a LOT of time especially when you're debugging a view controller that is deep in that navigation workflow. This mechanism is also integrated in any of our technologies based on CascadingTree and images.
-- Second, our system allows to change the language at runtime just by setting the language property of the CKLocalizationManager.
+ - First, when running the app in the simulator, as soon as you change and save a .string file, your application is automatically updated at runtime. This avoid to change/compile/Run and saves a LOT of time especially when you're debugging a view controller that is deep in that navigation workflow. This mechanism is also integrated in any of our technologies based on CascadingTree and images.
+ - Second, our system allows to change the language at runtime just by setting the language property of the CKLocalizationManager.
 
 <p>Lets add a localized title to our view controller</p>
 
 <i>ViewControllers.m</i>
 
-CKFormTableViewController* form = [CKFormTableViewController controller];
-form.title = _(@"kTimelineTitle");
+    CKFormTableViewController* form = [CKFormTableViewController controller];
+    form.title = _(@"kTimelineTitle");
 
 <i>TwitterTimeline.strings</i>
 
-"kTimelineTitle" = "Timeline  Public";
+    "kTimelineTitle" = "Timeline  Public";
 
 
 <img src="Twitter-sample-localization.png"/>
