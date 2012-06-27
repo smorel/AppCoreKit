@@ -171,19 +171,19 @@
 }
 
 - (void)objectControllerDidBeginUpdating:(id)controller{
-	if(_hidden && _parentController.autoHideSections){
+	if(self.hidden && self.parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount > 0 ){
-            [_parentController setSections:[NSArray arrayWithObject:self] hidden:NO];
+            [self.parentController setSections:[NSArray arrayWithObject:self] hidden:NO];
 			_sectionUpdate = YES;
 			return;
 		}
 	}
 	
-	if(!_hidden && _parentController.autoHideSections){
+	if(!self.hidden && self.parentController.autoHideSections){
 		NSInteger objectCount = [self numberOfObjects];
 		if(objectCount <= 0 ){
-            [_parentController setSections:[NSArray arrayWithObject:self] hidden:YES];
+            [self.parentController setSections:[NSArray arrayWithObject:self] hidden:YES];
 			_sectionUpdate = YES;
 			return;
 		}
@@ -266,7 +266,7 @@
 	
 	[self.footerCellControllers addObject:cellController];
 	
-	if(![_parentController reloading] && !self.collapsed){
+	if(![self.parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController insertObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -279,7 +279,7 @@
 	
 	[self.headerCellControllers addObject:cellController];
 	
-	if(![_parentController reloading] && !self.collapsed){
+	if(![self.parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController insertObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -297,7 +297,7 @@
     [cellController retain];
 	[self.footerCellControllers removeObjectAtIndex:footerIndex];
 	
-	if(![_parentController reloading] && !self.collapsed){
+	if(![self.parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController removeObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -312,7 +312,7 @@
     [cellController retain];
 	[self.headerCellControllers removeObjectAtIndex:headerIndex];
 	
-	if(![_parentController reloading] && !self.collapsed){
+	if(![self.parentController reloading] && !self.collapsed){
 		[self objectControllerDidBeginUpdating:self.objectController];
 		[self objectController:self.objectController removeObject:cellController.value atIndexPath:[NSIndexPath indexPathForRow:index inSection:self.sectionVisibleIndex]];
 		[self objectControllerDidEndUpdating:self.objectController];
@@ -329,7 +329,7 @@
             [_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
         }
         
-        if(_parentController.autoHideSections && (collection.count <= 0)) {
+        if(self.parentController.autoHideSections && (collection.count <= 0)) {
             self.hidden = YES;
         }
         

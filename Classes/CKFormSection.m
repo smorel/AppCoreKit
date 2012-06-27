@@ -42,7 +42,10 @@
 @property (nonatomic,retain,readwrite) NSArray* cellControllers;
 @end
 
-@implementation CKFormSection
+@implementation CKFormSection{
+	NSMutableArray* _cellControllers;
+}
+
 @synthesize cellControllers = _cellControllers;
 
 - (NSInteger)count{
