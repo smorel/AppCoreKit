@@ -1,10 +1,13 @@
 <h2>Summary</h2>
 
-<p>This sample illustrate how we can create a Twitter client displaying the public time that is fetched from the web asynchronously.</p>
+<p>This sample illustrates how to create a simple Twitter client displaying the public timeline.</p>
+
+ - The data is fetched from the web asynchronously. 
+ - The results are displayed in a table view with custom appearance.
 
 <h2>Defining the Document</h2>
 
-<p>First, we need to define our document models that will represents our data. Our client will represent a timeline that is a collection of Tweets displaying the avatar image, the name of the user and its message.</p>
+<p>First, we need to define our UI document models that will help representing our data. Our client is a timeline with a collection of Tweets displaying the avatar image, the name of the user and its message.</p>
 
 <i>Document.h</i>
 
@@ -14,7 +17,7 @@
     @property(nonatomic,copy) NSString* message;
     @end
 
-    @interface Timeline : CKObject
+    @interface Timeline : CKDocument
     @property(nonatomic,retain) CKArrayCollection* tweets;
     @end
 
@@ -30,13 +33,13 @@
     @end
 
 
-<h2>Setupping the Collection View Controller</h2>
+<h2>Setuping the Collection View Controller</h2>
 
-<p>Using the <b>AppCoreKit</b> advanced collection view controllers, we can display a collection of objects easilly. Each object in this collection be get backuped by a cell controller that will manage the connection between the document object and the collection cell. We dont need to do extra management for updates in the collection as collection view controllers embbed a mechanism that watches changes in this collection and automatically updates its content reflecting this changes.</p>
-<p>What we need to do is basically create the collection view controller passing the collection of objects and a factory that allow to create cell controllers at runtime when updates are catched by the controller.</p>
-<p><b>AppCoreKit</b> offers extremelly customizable view controllers that can be setupped using blocks and avoid to inheritance. As a good practice, we prefer using factory methods steupping view controllers instead of inheritance. That limits the developper to respect the scope that is offered by the controller class. It avoid errors and hacks. For example, the developper will not be able to add a bunch of booleans or properties that polute the code.</b>
+<p>Using the <b>AppCoreKit</b> advanced collection view controllers, we can display a collection of objects easilly. Each object in this collection is backuped by a cell controller that manages the connection between the document models and the collection view cells. We dont need to do extra management for asynchronous updates as collection view controllers embbed a mechanism that watches changes in this collection and automatically updates their content.</p>
+<p>What we need is basically creating the collection view controller, passing the collection of objects and a factory allowing to create cell controllers at runtime when the collection gets updated.</p>
+<p><b>AppCoreKit</b> offers extremelly customizable views and cell controllers that can be setuped using blocks wich avoids inheritance. As a good practice, we prefer using factory methods to setup view controllers instead of inheritance. That limits the developper to respect the scope offered by the controller class. It avoids errors and hacks. For example, the developper will not be able to add a bunch of booleans or properties that polute the code and creates connection between components that should be independant.</b>
 <p></p>
-<p>In this particular case, we want to display our collection using a table view controller. We'll use a form that allow to manage sections manages TableViewCellControllers. <b>AppCoreKit</b> provides a lot of helpers to create standards cell controllers that can be visually customized using stylesheets or programatically.</p>
+<p>In this particular case, we want to display our collection using a table view controller. We'll use a form wich allow to manage sections with TableViewCellControllers. <b>AppCoreKit</b> provides a lot of helpers to create standards cell controllers wich appearance can be customized using stylesheets or programatically.</p>
 
 <i>ViewControllers.h</i>
 
@@ -50,17 +53,26 @@
     @implementation ViewControllers
 
     + (CKViewController*)viewControllerForTimeline:(Timeline*)timeline{
+        UIImage* default_avatar = [UIImage imageNamed:@"default_avatar"] ;
 
         CKCollectionCellControllerFactory* tweetsFactory = [CKCollectionCellControllerFactory factory];
-        [tweetsFactory addItemForObjectOfClass:[Tweet class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
+        [tweetsFactory addItemForObjectOfClass:[Tweet class] withControllerCreationBlock:
+            ^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
             Tweet* tweet = (Tweet*)object;
-            CKTableViewCellController* cellController =  [CKTableViewCellController cellControllerWithTitle:tweet.name subtitle:tweet.message defaultImage:[UIImage imageNamed:@"default_avatar"] imageURL:tweet.imageUrl imageSize:CGSizeMake(40,40) action:nil];
+            CKTableViewCellController* cellController =  [CKTableViewCellController cellControllerWithTitle:tweet.name 
+                                                                                                   subtitle:tweet.message 
+                                                                                               defaultImage:default_avatar
+                                                                                                   imageURL:tweet.imageUrl 
+                                                                                                  imageSize:CGSizeMake(40,40) 
+                                                                                                     action:nil];
             return cellController;
         }];
 
         CKFormTableViewController* form = [CKFormTableViewController controller];
 
-        CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:timeline.tweets factory:tweetsFactory appendSpinnerAsFooterCell:YES];
+        CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:timeline.tweets 
+                                                                                              factory:tweetsFactory 
+                                                                            appendSpinnerAsFooterCell:YES];
         [form addSections:[NSArray arrayWithObject:section]];
         return form;
     }
@@ -71,7 +83,7 @@
 
 <h2>Displaying the view controller</h2>
 
-<p>In this sample, we'll only display this view controller in a navigation controller in the main window of the application. Here, we'll create a timeline singleton and a view controller displaying this timeline. Lets setup the Application delegate to do so:</b>
+<p>In this sample, we'll only display this view controller in a navigation controller in the main window of the application. We create a Timeline singleton and the view controller displaying this timeline. Lets setup the Application delegate to do so:</b>
 
 <i>AppDelegate.h</i>
 
@@ -81,38 +93,31 @@
         
 <i>AppDelegate.m</i>
 
-    #import "AppDelegate.h"
-    #import "ViewControllers.h"
-        
     @implementation AppDelegate
-        
-    - (void)dealloc{
-        [_window release];
-        [super dealloc];
-    }
         
     - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
         Timeline* timeline = [Timeline sharedInstance];
         
         self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-        self.window.rootViewController = [[[UINavigationController alloc]initWithRootViewController:[ViewControllers viewControllerForTimeline:timeline]]autorelease];
+        self.window.rootViewController = [[[UINavigationController alloc]initWithRootViewController:
+             [ViewControllers viewControllerForTimeline:timeline]]autorelease];
         [self.window makeKeyAndVisible];
         return YES;
     }
         
     @end
         
-<p>Here we're done for the first part of the sample. We have a fully functionnal document and a form that can display the twitter timeline content asynchronously. We now need to get some data from the web.</b>
+<p>We're done for the first part of the sample! We have a fully functionnal document and a form displaying the twitter timeline content asynchronously. We now need to get some data from the web.</b>
 
 
 <h2>Fetching data from the web</h2>
 
-<p><b>AppCoreKit</b> provides the FeedSource mechanism. Connected to a Collection, collection view controller will be able to fetch range of data as needed when scrolling for example. FeedSource provides an easy way to define Web API with paging that will automatically populate a document's collection when they are connected together. That means, if your collection view controller display a collection associated to a feed source, the UI Interface and your document collection will automatically get synched at any time and get as much data as your FeedSource can provide automatically and asynchronously.<p>
-<p>WebSource is a particular FeedSource allowing data to be fetched using WebRequests. WebRequests are fully multi-threaded using GCD that allow non bloquant web requests.<p>
-<p>Lets implements your first WebSource for the twitter public timeline. Like viewControllers, we like to create FeedSources using factory methods instead of inheritance as it provides block based interface.</p>
+<p><b>AppCoreKit</b> provides a FeedSource mechanism. Connected to a Collection, collection view controllers are able to fetch range of data as needed (when scrolling for example). FeedSources provide an easy way to define where and how to retrieve our data with paging, and automatically populate document collections when they are connected together. That means, if your collection view controller displays a collection associated to a FeedSource, the UI Interface and your document collections will get synched at any time and get as much data as your FeedSource can provide, automatically and asynchronously.<p>
+<p>WebSource is a particular FeedSource allowing data to be fetched using WebRequests. WebRequests are fully multi-threaded using GCD wich allow non-blocking requests.<p>
+<p>Lets implements your first WebSource for the twitter public timeline. Like view controllers, we like to create FeedSources using factory methods instead inheritance using their block based interface.</p>
 <p></p>
-<p>Like cell controllers, <b>AppCoreKit</b> provides factory method to build advanced WebRequests. We'll use one of these in this sample that use our Mappings system to convert the received JSON payload to an array of instance defined in our document. This method will fetch the paged data from twitter. When the data will get received, it will automatically transform the data as a dictionary by parsing the JSON content. This dictionary is named rawData. We specify that the data that has to be transformed by mappings is the array that we received. The mappingContextIdentifier is an id that we'll define in a .mappings file describing how each dictionary in the array must be transform to a Tweet instance.</p>
-
+<p><b>AppCoreKit</b> provides helpers to build advanced WebRequests. We'll use one of these in this sample wich uses our Mappings system to convert the received JSON payload to an array of models defined in our document. This method will fetch the paged data from twitter. When the data gets received, it will automatically transform the data as a dictionary by parsing the JSON content. This dictionary is named rawData. We specify that the array of data we want to transform using mappings is the rawData itself. The mappingContextIdentifier represents a collection of keypath to keypath conversions and class name for the instances we want to create.</p>
+<p>Mappings can be defined in a .mappings file based on CascadingTree. CascadingTree is JSON file format allowing template definition, inheritance, imports and more. This is the base file format for mappings, stylesheets, object graphs and mock objects definition.</p>
 
 
 <i>FeedSources.h</i>
@@ -129,7 +134,10 @@
         CKWebSource* webSource = [[[CKWebSource alloc]init]autorelease];
         webSource.requestBlock = ^(NSRange range){
             NSURL* tweetsAPIUrl = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/public_timeline.json"];
-            NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",range.length],@"count",@"true",@"include_entities", nil];
+            NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
+                [NSString stringWithFormat:@"%d",range.length],@"count",
+                @"true",@"include_entities", 
+                nil];
 
             CKWebRequest* request = [CKWebRequest requestForObjectsWithUrl:tweetsAPIUrl
                                                                     params:(NSDictionary*)params
@@ -147,7 +155,7 @@
 
 
 <p>Now lets define the mappings.</b>
-<p>The mapping system is based on runtime and our conversion technology. It allow to define keypath to keypath conversion and specifying the class of instances we want to create. Here we have a simple example but this system allow much more complex transformations using templates, inheritance, custom transformer methods and more.</p>
+<p>The mapping system is based on runtime and our conversion technology. As we said previously, it allows to define keypath to keypath conversions and specify the class of instances we want to create. Here we have a simple example but this system allows much more complex transformations using custom transformer methods, objects and collection properties mapping and more.</p>
 
 <i>TwitterTimeline.mappings</i>
 
@@ -161,7 +169,7 @@
         }
     }
 
-<p>We also need to load this file in the Mapping context manager. We generally do this when the appDelegate gets created</p>
+<p>We now need to load this file in the Mapping context manager. We generally do this when the appDelegate gets created</p>
 
 
 <i>AppDelegate.m</i>
@@ -173,12 +181,16 @@
     }
 
 
-<p>Here we have a fully functional twitter client application. The public timeline is displayed in subtitle style table view cell that are asynchronously created when data is fetched from the web using paging. It's time to add some eye candy and localization.</b>
+<p>We now have a fully functional twitter client application. The public timeline is displayed in subtitle style table view cells that are asynchronously created when data gets fetched from the web using paging. It's time to add localization and customize the appearance.</b>
 
 
 <h2>Localizing your Application</h2>
 
-<p><b>AppCoreKit</b> provides helpers to localize your application easilly. There are two cool features with this system. First, when running the app in the simulator, as soon as you change and save a .string file, your application is automatically updated at runtime. This avoid to change/compile and run that saves a LOT of time expecially when your debugging a view that is deep in that navigation workflow. Second, our system allow to change the language at runtime just by setiing the language property of the CKLocalizationManager.</p>
+<p><b>AppCoreKit</b> provides helpers to localize your application easilly. There are two really nice features when using this system.</p>
+
+ - First, when running the app in the simulator, as soon as you change and save a .string file, your application is automatically updated at runtime. This avoid to change/compile/Run and saves a LOT of time expecially when you're debugging a view controller that is deep in that navigation workflow. This mechanism is also integrated in any of our technologies based on CascadingTree and images.
+ - Second, our system allows to change the language at runtime just by setting the language property of the CKLocalizationManager.
+
 <p>Lets add a localized title to our view controller</p>
 
 <i>ViewControllers.m</i>
@@ -193,8 +205,8 @@
 
 <h2>Customizing the appearance</h2>
 
-<p><b>AppCoreKit</b> provides a CSS like technology based on runtime and our conversion system. This allow to target and customize any controllers and views and customize any of their properties that are KVC complient. This system allow to define template that can be inherited by specific selector targeting you objects. Objects can be targetted using their class name, property name and specialized using any of their proerty values. You don't need to write code as any of the <b>AppCoreKit</b> controllers and views are able to find their specific style and apply it to their properties, controller view hierarchy. Style definition repect the controller hierachy wich allow you to specify specific style for controllers that contained by other controllers and specific style for views that are contained in views and controllers. This is a very powerfull tool!</p>
-<p>As we want to target our view controller specifically in stylesheets, we'll set its name property that we generally use for this purpose</p>
+<p><b>AppCoreKit</b> provides a CSS like technology based on runtime, our conversion system and CascadingTree. This allows to target and customize any controllers, views and any of their properties that are KVC complient. You can define templates that can be inherited by specific selectors targeting you objects. Objects can be targetted using class name or property name, and specialized using any of their property values. You don't need to write code as any of the <b>AppCoreKit</b> controllers and views are able to find their specific style and apply it to their hierarchy when needed.</p>
+<p>As we want to target our view controller specifically in stylesheets, we'll set its name property that we generally use for this purpose.</p>
 
 <i>ViewControllers.m</i>
 
@@ -227,8 +239,7 @@
                         "backgroundColor" : "blueColor"
                     },
                     "textLabel,detailTextLabel" : {
-                        "@inherits" : [ "$big_font", "$background" ],
-                        "backgroundColor" : "whiteColor",
+                        "@inherits" : [ "$big_font", "$background" ]
                     },
                     "imageView" : {
                         "@inherits" : [ "$background" ],
@@ -244,13 +255,17 @@
                 }
             }
         },
+
+        "$navigation_title_label" : {
+             "fontName" : "Helvetica-Bold",
+             "fontSize" : "18",
+             "textColor" : "whiteColor",
+        },
     
         "UINavigationController" : {
             "navigationBar" : {
                 "titleView" : {
-                    "fontName" : "Helvetica-Bold",
-                    "fontSize" : "18",
-                    "textColor" : "whiteColor",
+                    "@inherits" : [ "$navigation_title_label" ],
                     "backgroundColor" : "clearColor",
                     "shadowColor" : "darkGrayColor",
                     "shadowOffset" : "0 -1"
@@ -260,7 +275,7 @@
     }
 
 
-<p>We also need to load this file in the Style manager. We generally do this when the appDelegate gets created</p>
+<p>Lets load this file in the Style manager. We generally do this when the appDelegate gets created</p>
     
     
 <i>AppDelegate.m</i>
@@ -271,3 +286,21 @@
         [[CKStyleManager defaultManager]loadContentOfFileNamed:@"TwitterTimeline"];
         return self;
     }
+
+
+
+<h2>Refining the layout</h2>
+
+<p>We'd like to refine the layout now: We'd like to have the image aligned on top left of the cells like classical twitter clients. <b>AppCoreKit</b> provides block based interface to customize layouts of cell controllers, compute its size dynamically, creates and setup its view hierarchy and more. In our previous viewController factory, lets add a piece of code when creating the table view cell controller as follow:</b>
+
+
+<i>ViewControllers.m</i>
+
+    [cellController setLayoutBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
+        //This calls the standard layout method of cell controller.
+        [controller performLayout]; 
+
+        //This overrides the imageview frame.
+        cell.imageView.frame = CGRectMake(controller.contentInsets.left,controller.contentInsets.top,40,40);
+    }];
+
