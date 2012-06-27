@@ -88,7 +88,7 @@
 
 <i>AppDelegate.h</i>
 
-    @interface AppDelegate : UIResponder <code>&lt;ApplicationDelegate&gt;</code>
+    @interface AppDelegate : UIResponder < ApplicationDelegate >
     @property (strong, nonatomic) UIWindow *window;
     @end
         
@@ -108,7 +108,7 @@
         
     @end
         
-<p>We're done for the first part of the sample! We have a fully functionnal document and a form displaying the twitter timeline content asynchronously. We now need to get some data from the web.</b>
+<p>We're done for the first part of the sample! We have a fully functionnal document and a form displaying the twitter timeline content asynchronously but we see nothing in the table view... Our document is empty, we need to get some data from the web.</b>
 
 
 <img src="Twitter-sample-document-view.png"/>
@@ -137,14 +137,14 @@
     + (CKFeedSource*)feedSourceForTweets{
         CKWebSource* webSource = [[[CKWebSource alloc]init]autorelease];
         webSource.requestBlock = ^(NSRange range){
-            NSURL* tweetsAPIUrl = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/public_timeline.json"];
+            NSURL* tweetsAPIUrl = [NSURL URLWithString: @"https://api.twitter.com/1/statuses/public_timeline.json" ];
             NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:
                 [NSString stringWithFormat:@"%d",range.length],@"count",
                 @"true",@"include_entities", 
                 nil];
 
             CKWebRequest* request = [CKWebRequest requestForObjectsWithUrl:tweetsAPIUrl
-                                                                    params:(NSDictionary*)params
+                                                                    params:params
                                                                       body:nil
                                                   mappingContextIdentifier:@"$Tweet"
                                                           transformRawData:nil
@@ -173,7 +173,7 @@
         }
     }
 
-<p>We now need to load this file in the Mapping context manager. We generally do this when the appDelegate gets created. We also need to associate this FeedSource to our timeline tweets collection.</p>
+<p>We now need to load this file in the Mapping context manager. We generally do this when the appDelegate gets created. We also need to associate this FeedSource to our Timeline's Tweets collection.</p>
 
 
 <i>AppDelegate.m</i>
@@ -189,7 +189,7 @@
     timeline.tweets.feedSource = [FeedSources feedSourceForTweets];
 
 
-<p>We now have a fully functional twitter client application. The public timeline is displayed in subtitle style table view cells that are asynchronously created when data gets fetched from the web using paging. It's time to customize the appearance.</b>
+<p>We now have a fully functional twitter client application. The public timeline is displayed in subtitle style table view cells that are asynchronously created when data gets fetched from the web using paging. It's time to customize the appearance.</p>
 
 
 <img src="Twitter-sample-web-source.png"/>
@@ -197,7 +197,8 @@
 
 <h2>Customizing the appearance</h2>
 
-<p><b>AppCoreKit</b> provides a CSS like technology based on runtime, our conversion system and CascadingTree. This allows to target and customize any controllers, views and any of their properties that are KVC compliant. You can define templates that can be inherited by specific selectors targeting you objects. Objects can be targetted using class name or property name, and specialized using any of their property values. You don't need to write code as any of the <b>AppCoreKit</b> controllers and views are able to find their specific style and apply it to their hierarchy when needed.</p>
+<p><b>AppCoreKit</b> provides a CSS-like technology based on runtime, our conversion system and CascadingTree. This allows to target and customize any controllers, views and any of their properties that are KVC compliant. You can define templates that can be inherited by specific selectors targeting you objects. Objects can be targetted using class name or property name, and specialized using any of their property values. You don't need to write code as any of the <b>AppCoreKit</b> controllers and views are able to find their specific style and apply it to their hierarchy when needed.</p>
+<p>When running the app in the simulator, as soon as you change and save a .style file, your application is automatically updated at runtime. This avoid to change/compile/run and saves a LOT of time especially when you're debugging a view controller that is deep in that navigation workflow. This mechanism is also integrated in any of our technologies based on CascadingTree, .string files and images loaded with imageNamed:.</p>
 <p>As we want to target our view controller specifically in stylesheets, we'll set its name property that we generally use for this purpose.</p>
 
 <i>ViewControllers.m</i>
@@ -212,7 +213,7 @@
             "fontSize" : 20
         },
     
-        "$background" : {
+        "$transparent" : {
             "backgroundColor" : "clearColor"
         },
     
@@ -241,7 +242,7 @@
                         "borderWidth" : 2
                     },
                     "textLabel,detailTextLabel" : {
-                        "@inherits" : [ "$big_font", "$background" ]
+                        "@inherits" : [ "$big_font", "$transparent" ]
                     },
                     "imageView" : {
                         "backgroundColor" : "blackColor",
@@ -304,7 +305,7 @@
 
 <h2>Refining the layout</h2>
 
-<p>We'd like to refine the layout now: We'd like to have the image aligned on top left of the cells like classical twitter clients. <b>AppCoreKit</b> provides block based interface to customize layouts of cell controllers, compute its size dynamically, creates and setup its view hierarchy and more. In our previous viewController factory, lets add a piece of code when creating the table view cell controller as follow:</b>
+<p>We'd like to have the image aligned on top left of the cells like classical twitter clients. <b>AppCoreKit</b> provides block based interface to customize layouts of cell controllers, compute its size dynamically, creates and setup its view hierarchy and more. In our previous viewController factory, lets add a piece of code when creating the table view cell controller as follow:</b>
 
 
 <i>ViewControllers.m</i>
@@ -325,7 +326,7 @@
 
 <p><b>AppCoreKit</b> provides helpers to localize your application easilly. There are two really nice features when using this system.</p>
 
- - First, when running the app in the simulator, as soon as you change and save a .string file, your application is automatically updated at runtime. This avoid to change/compile/Run and saves a LOT of time especially when you're debugging a view controller that is deep in that navigation workflow. This mechanism is also integrated in any of our technologies based on CascadingTree and images.
+ - First, .string files are also reloaded at runtime when you save it. Like stylesheets, mappings, object graphs or mock files, you can run the app in the simulator, edit your files in XCode and see the changes instantaneously at runtime.
  - Second, our system allows to change the language at runtime just by setting the language property of the CKLocalizationManager.
 
 <p>Lets add a localized title to our view controller</p>
