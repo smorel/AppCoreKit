@@ -13,37 +13,112 @@
 
 /**
  */
-@interface CKFormSection : CKFormSectionBase{
-	NSMutableArray* _cellControllers;
-}
-@property (nonatomic,retain, readonly) NSArray* cellControllers;
+@interface CKFormSection : CKFormSectionBase
 
-- (NSInteger)count;
+///-----------------------------------
+/// @name Creating Section Objects
+///-----------------------------------
 
-- (id)initWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
-- (id)initWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
-- (id)initWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
-- (id)initWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
-- (id)initWithCellControllers:(NSArray*)cellcontrollers;
-
-+ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers;
-+ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
-+ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
-+ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
-+ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
-
-- (void)insertCellController:(CKTableViewCellController *)controller atIndex:(NSUInteger)index;
-- (void)addCellController:(CKTableViewCellController *)controller;
-- (void)removeCellController:(CKTableViewCellController *)controller;
-- (void)removeCellControllerAtIndex:(NSUInteger)index;
-
-
+/**
+ */
 + (CKFormSection*)section;
+
+/**
+ */
 + (CKFormSection*)sectionWithHeaderTitle:(NSString*)title;
+
+/**
+ */
 + (CKFormSection*)sectionWithHeaderView:(UIView*)view;
+
+/**
+ */
 + (CKFormSection*)sectionWithFooterTitle:(NSString*)title;
+
+/**
+ */
 + (CKFormSection*)sectionWithFooterView:(UIView*)view;
 
+/**
+ */
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers;
+
+/**
+ */
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
+
+/**
+ */
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
+
+/**
+ */
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
+
+/**
+ */
++ (CKFormSection*)sectionWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
+
+
+///-----------------------------------
+/// @name Initializing Section Objects
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerTitle:(NSString*)title;
+
+/**
+ */
+- (id)initWithCellControllers:(NSArray*)cellcontrollers headerView:(UIView*)view;
+
+/**
+ */
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerTitle:(NSString*)title;
+
+/**
+ */
+- (id)initWithCellControllers:(NSArray*)cellcontrollers footerView:(UIView*)view;
+
+/**
+ */
+- (id)initWithCellControllers:(NSArray*)cellcontrollers;
+
+///-----------------------------------
+/// @name Querying the Section
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,retain, readonly) NSArray* cellControllers;
+
+/**
+ */
+- (NSInteger)count;
+
+///-----------------------------------
+/// @name Inserting Cell Controllers
+///-----------------------------------
+
+/**
+ */
+- (void)insertCellController:(CKTableViewCellController *)controller atIndex:(NSUInteger)index;
+
+/**
+ */
+- (void)addCellController:(CKTableViewCellController *)controller;
+
+///-----------------------------------
+/// @name Removing Cell Controllers
+///-----------------------------------
+
+/**
+ */
+- (void)removeCellController:(CKTableViewCellController *)controller;
+
+/**
+ */
+- (void)removeCellControllerAtIndex:(NSUInteger)index;
 
 @end
 

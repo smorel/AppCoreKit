@@ -24,23 +24,23 @@
  
    By this way we centralize all the document/cellcontroller logic that is redondant in this class
  
-   For some specific implementations see : CKTableCollectionViewController, CKCarouselCollectionViewController and CKMapCollectionViewController
+   For some specific implementations see : CKFormTableViewController, CKTableCollectionViewController, CKCarouselCollectionViewController, CKMapCollectionViewController and CKGridCollectionViewController
  
   *  derivating this controller means
  
    you MUST implement :
  
- - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath
- - (NSIndexPath*)indexPathForView:(UIView*)view
- - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier
+     - (UIView*)viewAtIndexPath:(NSIndexPath *)indexPath
+     - (NSIndexPath*)indexPathForView:(UIView*)view
+     - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier
  
    you SHOULD implement :
  
- - (void)didReload
- - (void)didBeginUpdates
- - (void)didEndUpdates
- - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths
- - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths
+     - (void)didReload
+     - (void)didBeginUpdates
+     - (void)didEndUpdates
+     - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths
+     - (void)didRemoveObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths
 */
 @interface CKCollectionViewController : CKViewController<CKObjectControllerDelegate>
 

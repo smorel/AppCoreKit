@@ -27,6 +27,15 @@
 //CKFormSectionBase
 
 @implementation CKFormSectionBase
+{
+	NSString* _headerTitle;
+	UIView* _headerView;
+	NSString* _footerTitle;
+	UIView* _footerView;
+	CKFormTableViewController* _parentController;
+	BOOL _hidden;
+}
+
 @synthesize headerTitle = _headerTitle;
 @synthesize headerView = _headerView;
 @synthesize footerTitle = _footerTitle;

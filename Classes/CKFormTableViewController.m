@@ -164,7 +164,14 @@
 
 //CKFormTableViewController
 
-@implementation CKFormTableViewController
+@implementation CKFormTableViewController{
+	NSMutableArray* _sections;
+	BOOL _autoHideSections;
+	BOOL _autoHideSectionHeaders;
+	BOOL reloading;
+    BOOL _validationEnabled;
+}
+
 @synthesize sections = _sections;
 @synthesize autoHideSections = _autoHideSections;
 @synthesize autoHideSectionHeaders = _autoHideSectionHeaders;

@@ -17,23 +17,72 @@
  */
 @interface CKFormBindedCollectionSection : CKFormSectionBase<CKObjectControllerDelegate>
 
-@property (nonatomic,retain,readonly) NSMutableArray* headerCellControllers;
-@property (nonatomic,retain,readonly) NSMutableArray* footerCellControllers;
-@property (nonatomic,assign) NSInteger maximumNumberOfObjectsToDisplay;
+///-----------------------------------
+/// @name Creating Section Objects
+///-----------------------------------
 
-//Initialization and constructors
-- (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
-
+/**
+ */
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+
+/**
+ */
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title;
+
+/**
+ */
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell;
+
+/**
+ */
 + (CKFormBindedCollectionSection*)sectionWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory headerTitle:(NSString*)title appendSpinnerAsFooterCell:(BOOL)appendSpinnerAsFooterCell;
 
-//Cell Controller API
+///-----------------------------------
+/// @name Initializing Section Objects
+///-----------------------------------
+
+/**
+ */
+- (id)initWithCollection:(CKCollection*)collection factory:(CKCollectionCellControllerFactory*)factory;
+
+///-----------------------------------
+/// @name Managing footer cell controllers
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,retain,readonly) NSMutableArray* footerCellControllers;
+
+/**
+ */
 - (void)addFooterCellController:(CKTableViewCellController*)controller;
+
+/**
+ */
 - (void)removeFooterCellController:(CKTableViewCellController*)controller;
 
+///-----------------------------------
+/// @name Managing header cell controllers
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,retain,readonly) NSMutableArray* headerCellControllers;
+
+/**
+ */
 - (void)addHeaderCellController:(CKTableViewCellController*)controller;
+
+/**
+ */
 - (void)removeHeaderCellController:(CKTableViewCellController*)controller;
+
+///-----------------------------------
+/// @name Customizing the display
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) NSInteger maximumNumberOfObjectsToDisplay;
 
 @end

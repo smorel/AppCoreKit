@@ -15,28 +15,77 @@
 /**
  */
 @interface CKFormSectionBase : CKObject
-{
-	NSString* _headerTitle;
-	UIView* _headerView;
-	NSString* _footerTitle;
-	UIView* _footerView;
-	CKFormTableViewController* _parentController;
-	BOOL _hidden;
-}
 
+///-----------------------------------
+/// @name Customizing Section
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,retain) NSString* headerTitle;
+
+/**
+ */
 @property (nonatomic,retain) UIView* headerView;
+
+/**
+ */
 @property (nonatomic,retain) NSString* footerTitle;
+
+/**
+ */
 @property (nonatomic,retain) UIView* footerView;
-@property (nonatomic,readonly) NSInteger sectionIndex;
-@property (nonatomic,readonly) NSInteger sectionVisibleIndex;
-@property (nonatomic,readonly) BOOL hidden;
-@property (nonatomic, assign, readonly) BOOL collapsed;
+
+///-----------------------------------
+/// @name Getting the parent form controller
+///-----------------------------------
+
+/**
+ */
 @property (nonatomic,assign,readonly) CKFormTableViewController* parentController;
 
+///-----------------------------------
+/// @name Getting the index in parent form controller
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,readonly) NSInteger sectionIndex;
+
+/**
+ */
+@property (nonatomic,readonly) NSInteger sectionVisibleIndex;
+
+///-----------------------------------
+/// @name Hiding the Section
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,readonly) BOOL hidden;
+
+///-----------------------------------
+/// @name Collapsing the section
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, assign, readonly) BOOL collapsed;
+
+/**
+ */
 - (void)setCollapsed:(BOOL)collapsed withRowAnimation:(UITableViewRowAnimation)animation;
 
+///-----------------------------------
+/// @name Querying the section
+///-----------------------------------
+
+/**
+ */
 - (NSInteger)numberOfObjects;
+
+/**
+ */
 - (id)objectAtIndex:(NSInteger)index;
 
 @end

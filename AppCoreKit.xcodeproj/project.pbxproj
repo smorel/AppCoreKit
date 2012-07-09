@@ -444,6 +444,7 @@
 		9600B8F11545D88F00F07C5A /* CKDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */; };
 		9601521C15892CBE00333DC4 /* CKTableViewCellCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 9601521A15892CBE00333DC4 /* CKTableViewCellCache.h */; };
 		9601521D15892CBE00333DC4 /* CKTableViewCellCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9601521B15892CBE00333DC4 /* CKTableViewCellCache.mm */; };
+		96063592159A60E6007F3F2F /* Sample-template.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 96063591159A60E6007F3F2F /* Sample-template.markdown */; };
 		960CAED6157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		960CAED7157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */; };
 		9622AAFB1501395E00AEF369 /* UIView+CKDragNDrop.h in Headers */ = {isa = PBXBuildFile; fileRef = 9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -982,7 +983,10 @@
 		9600B8ED1545D88F00F07C5A /* CKDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKDownloadManager.m; path = Classes/CKDownloadManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9601521A15892CBE00333DC4 /* CKTableViewCellCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTableViewCellCache.h; path = Classes/CKTableViewCellCache.h; sourceTree = "<group>"; };
 		9601521B15892CBE00333DC4 /* CKTableViewCellCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKTableViewCellCache.mm; path = Classes/CKTableViewCellCache.mm; sourceTree = "<group>"; };
-		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; };
+		9606358B159A532F007F3F2F /* CloudKitArchitecture102011.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloudKitArchitecture102011.png; path = Documentation/CloudKitArchitecture102011.png; sourceTree = "<group>"; };
+		9606358D159A5876007F3F2F /* CloudKitApplicationArchitecture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloudKitApplicationArchitecture.png; path = Documentation/CloudKitApplicationArchitecture.png; sourceTree = "<group>"; };
+		96063591159A60E6007F3F2F /* Sample-template.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sample-template.markdown"; path = "Documentation/Sample-template.markdown"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.html; };
+		960A2D31150572D100D30AB4 /* index.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = index.markdown; path = Documentation/index.markdown; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.html; };
 		960CAED4157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIGestureRecognizer+CKBlockBasedInterface.h"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.h"; sourceTree = "<group>"; };
 		960CAED5157E50F500F6C887 /* UIGestureRecognizer+CKBlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+CKBlockBasedInterface.m"; path = "Classes/UIGestureRecognizer+CKBlockBasedInterface.m"; sourceTree = "<group>"; };
 		9622AAF91501395E00AEF369 /* UIView+CKDragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CKDragNDrop.h"; path = "Classes/UIView+CKDragNDrop.h"; sourceTree = "<group>"; };
@@ -1029,6 +1033,11 @@
 		969FA53C14966CD90095C61E /* CKUILabel+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUILabel+CKHighlight.m"; path = "Classes/CKUILabel+CKHighlight.m"; sourceTree = "<group>"; };
 		969FA53D14966CD90095C61E /* CKUITableViewCell+CKHighlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKUITableViewCell+CKHighlight.h"; path = "Classes/CKUITableViewCell+CKHighlight.h"; sourceTree = "<group>"; };
 		969FA53E14966CD90095C61E /* CKUITableViewCell+CKHighlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKUITableViewCell+CKHighlight.m"; path = "Classes/CKUITableViewCell+CKHighlight.m"; sourceTree = "<group>"; };
+		96A087AF159B638A00BCBBBF /* Twitter-sample-document-view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-document-view.png"; path = "Documentation/Twitter-sample-document-view.png"; sourceTree = "<group>"; };
+		96A087B0159B638A00BCBBBF /* Twitter-sample-layout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-layout.png"; path = "Documentation/Twitter-sample-layout.png"; sourceTree = "<group>"; };
+		96A087B1159B638A00BCBBBF /* Twitter-sample-localization.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-localization.png"; path = "Documentation/Twitter-sample-localization.png"; sourceTree = "<group>"; };
+		96A087B2159B638A00BCBBBF /* Twitter-sample-stylesheet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-stylesheet.png"; path = "Documentation/Twitter-sample-stylesheet.png"; sourceTree = "<group>"; };
+		96A087B3159B638A00BCBBBF /* Twitter-sample-web-source.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-web-source.png"; path = "Documentation/Twitter-sample-web-source.png"; sourceTree = "<group>"; };
 		96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormBindedCollectionSection_private.h; path = Classes/CKFormBindedCollectionSection_private.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
 		96C78A51155C6C9600A1120B /* CKAggregateCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAggregateCollection.h; path = Classes/CKAggregateCollection.h; sourceTree = "<group>"; };
@@ -1955,6 +1964,14 @@
 			isa = PBXGroup;
 			children = (
 				960A2D31150572D100D30AB4 /* index.markdown */,
+				96063591159A60E6007F3F2F /* Sample-template.markdown */,
+				9606358B159A532F007F3F2F /* CloudKitArchitecture102011.png */,
+				9606358D159A5876007F3F2F /* CloudKitApplicationArchitecture.png */,
+				96A087AF159B638A00BCBBBF /* Twitter-sample-document-view.png */,
+				96A087B0159B638A00BCBBBF /* Twitter-sample-layout.png */,
+				96A087B1159B638A00BCBBBF /* Twitter-sample-localization.png */,
+				96A087B2159B638A00BCBBBF /* Twitter-sample-stylesheet.png */,
+				96A087B3159B638A00BCBBBF /* Twitter-sample-web-source.png */,
 			);
 			name = Documentation;
 			sourceTree = "<group>";
@@ -2492,6 +2509,7 @@
 				75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */,
 				75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */,
 				7580AFF0144F59C3004DCF7A /* CKInlineDebugger.style in Resources */,
+				96063592159A60E6007F3F2F /* Sample-template.markdown in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,49 +13,95 @@
 
 /**
  */
-@interface CKFormTableViewController : CKTableCollectionViewController {
-	NSMutableArray* _sections;
-	BOOL _autoHideSections;
-	BOOL _autoHideSectionHeaders;
-	BOOL reloading;
-    BOOL _validationEnabled;
-}
-@property (nonatomic,retain, readonly) NSMutableArray* sections;
-@property (nonatomic,assign) BOOL autoHideSections;
-@property (nonatomic,assign) BOOL autoHideSectionHeaders;
-@property (nonatomic,assign) BOOL validationEnabled;
+@interface CKFormTableViewController : CKTableCollectionViewController 
 
 ///-----------------------------------
-/// @name Initializing CKFormTableViewController
+/// @name Initializing CKFormTableViewController Objects
 ///-----------------------------------
 
+/**
+ */
 - (id)initWithSections:(NSArray*)sections;
 
 ///-----------------------------------
 /// @name Clearing CKFormTableViewController
 ///-----------------------------------
 
+/**
+ */
 - (void)clear;
 
 ///-----------------------------------
-/// @name Creating or inserting the sections
+/// @name Inserting sections
 ///-----------------------------------
 
+/**
+ */
 - (NSArray*)addSections:(NSArray *)sections;
+
+/**
+ */
 - (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index;
+
+///-----------------------------------
+/// @name Removing sections
+///-----------------------------------
+
+/**
+ */
 - (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index;
 
+///-----------------------------------
+/// @name Hiding/Showing Sections
+///-----------------------------------
+
+/**
+ */
 - (void)setSections:(NSArray*)sections hidden:(BOOL)hidden;
 
+/** Enabling this flag will hides the section if there is no cell controller in it.
+ */
+@property (nonatomic,assign) BOOL autoHideSections;
+
+
+/** Enabling this flag will hides the section header if there is less than 2 cell controllers in it.
+ */
+@property (nonatomic,assign) BOOL autoHideSectionHeaders;
+
 ///-----------------------------------
-/// @name Accessing the sections
+/// @name Querying Sections
 ///-----------------------------------
 
+/**
+ */
+@property (nonatomic,retain, readonly) NSMutableArray* sections;
+
+/**
+ */
 - (CKFormSectionBase *)sectionAtIndex:(NSUInteger)index;
+
+/**
+ */
 - (NSInteger)indexOfSection:(CKFormSectionBase *)section;
 
+/**
+ */
 - (NSInteger)numberOfVisibleSections;
+
+/**
+ */
 - (CKFormSectionBase*)visibleSectionAtIndex:(NSInteger)index;
+
+/**
+ */
 - (NSInteger)indexOfVisibleSection:(CKFormSectionBase*)section;
+
+///-----------------------------------
+/// @name Validating forms
+///-----------------------------------
+
+/** Enabling this flag will be propagated to any cell controller representing CKProperty and display a red arrow on the right for any property that is not valid.
+ */
+@property (nonatomic,assign) BOOL validationEnabled;
 
 @end
