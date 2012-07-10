@@ -286,10 +286,10 @@
 	[super viewWillAppear:animated];
     [self sizeToFit];
     
-    //if(self.tableViewHasBeenReloaded == NO){
+    if(self.tableViewHasBeenReloaded == NO){
         self.tableViewHasBeenReloaded = YES;
         [self reload];
-   /* }else{
+    }else{
         
         for(NSInteger section=0;section<[self.sectionsToControllers count];++section){
             NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:section];
@@ -301,7 +301,7 @@
         
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
-    }*/
+    }
     
 	if (self.stickySelectionEnabled == NO){
 		NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
