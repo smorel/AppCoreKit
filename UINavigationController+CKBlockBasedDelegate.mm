@@ -110,6 +110,11 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
     return result;
 }
 
+//This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
+- (BOOL)disablesAutomaticKeyboardDismissal {
+    return NO;
+}
+
 @end
 
 

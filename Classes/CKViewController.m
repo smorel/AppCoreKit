@@ -681,5 +681,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self didChangeValueForKey:@"editing"];
 }
 
+//This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
+- (BOOL)disablesAutomaticKeyboardDismissal {
+    return NO;
+}
+
 @end
 

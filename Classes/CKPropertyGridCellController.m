@@ -241,7 +241,7 @@
 }
 
 - (void)done:(id)sender{
-    [self.containerController.view endEditing:YES];
+    [self.view endEditing:YES];
     [[NSNotificationCenter defaultCenter]postNotificationName:CKSheetResignNotification object:nil];
 }
 

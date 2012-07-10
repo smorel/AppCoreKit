@@ -74,7 +74,8 @@
 
 - (NSDate*)modificationDateForFileAtPath:(NSString*)path {
     NSDictionary* fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
-    return [fileAttributes fileModificationDate];
+    NSDate* date = [fileAttributes fileModificationDate];
+    return date ? date : [NSDate date];
 }
 
 - (void)checkForUpdate {
