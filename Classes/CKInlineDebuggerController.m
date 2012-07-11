@@ -22,6 +22,146 @@
 #import "CKNSObject+Bindings.h"
 
 
+
+@interface UIView(CKViewController)
+@end
+
+
+@interface UIViewController (CKViewController)
+
++ (void)findControllersDisplayedInWidow:(UIWindow*)window controllers:(NSMutableArray*)controllers views:(NSMutableArray*)views;
+
+@end
+
+@implementation UIView(CKViewController)
+
++ (void)createsPathRecursivelyForView:(UIView*)view inString:(NSMutableString*)string{
+    UIView* parentView = [view superview];
+    if(parentView){
+        NSInteger index = [[parentView subviews]indexOfObjectIdenticalTo:view];
+        if([string length] > 0){
+            [string insertString:@"/" atIndex:0];
+        }
+        [string insertString:[NSString stringWithFormat:@"%d",index] atIndex:0];
+        
+        [UIControl createsPathRecursivelyForView:parentView inString:string];
+    }
+}
+
+- (NSString*)computeMetricsPath{
+    NSMutableString* string = [NSMutableString string];
+    [UIControl createsPathRecursivelyForView:self inString:string];
+    return string;
+}
+
++ (void)appendViewHierarchyForView:(UIView*)view inArray:(NSMutableArray*)views{
+    if(!view) return;
+    
+    [views addObject:view];
+    [UIControl appendViewHierarchyForView:[view superview] inArray:views];
+}
+
+- (UIViewController*)findParentActivity{
+    NSMutableArray* controllers = [NSMutableArray array];
+    NSMutableArray* views = [NSMutableArray array];
+    [UIViewController findControllersDisplayedInWidow:self.window controllers:controllers views:views];
+    
+    NSMutableArray* viewHierarchy = [NSMutableArray array];
+    [UIControl appendViewHierarchyForView:self inArray:viewHierarchy];
+    
+    for(UIView* view in viewHierarchy){
+        NSInteger index = [views indexOfObjectIdenticalTo:view];
+        if(index != NSNotFound){
+            UIViewController* viewController = [controllers objectAtIndex:index];
+            return viewController;
+        }
+    }
+    
+    return nil;
+}
+
+@end
+
+
+
+@implementation UIViewController (CKViewController)
+
+- (void)registerToControllers:(NSMutableArray*)controllers views:(NSMutableArray*)views{
+    [controllers addObject:self];
+    [views addObject:self.view];
+    
+    if([self isKindOfClass:[UINavigationController class]]){
+        UINavigationController* navigationController = (UINavigationController*)self;
+        [navigationController.topViewController registerToControllers:controllers views:views];
+    }
+    else if ([self isKindOfClass:[UISplitViewController class]]) {
+        UISplitViewController* splitViewController = (UISplitViewController*)self;
+        for (UIViewController *controller in splitViewController.viewControllers) {
+            [controller registerToControllers:controllers views:views];
+        }
+    }
+    else if ([self isKindOfClass:[UITabBarController class]]) {
+        UITabBarController* tabBarController = (UITabBarController*)self;
+        for (UIViewController *controller in tabBarController.viewControllers) {
+            [controller registerToControllers:controllers views:views];
+        }
+    }
+    else{
+        Class UIPageViewControllerClass = NSClassFromString(@"UIPageViewController");
+        if (UIPageViewControllerClass) {
+            if ([self isKindOfClass:UIPageViewControllerClass]) {
+                NSArray *viewController = [self performSelector:@selector(viewControllers)];
+                for (UIViewController *controller in viewController) {
+                    [controller registerToControllers:controllers views:views];
+                }
+            }
+        }
+        
+        Class CKContainerViewControllerClass = NSClassFromString(@"CKContainerViewController");
+        if(CKContainerViewControllerClass){
+            if([self isKindOfClass:CKContainerViewControllerClass] && [self respondsToSelector:@selector(selectedViewController)]){
+                UIViewController* selectedController = [self performSelector:@selector(selectedViewController)];
+                [selectedController registerToControllers:controllers views:views];
+            }
+        }
+        
+        Class CKSplitViewControllerClass = NSClassFromString(@"CKSplitViewController");
+        if(CKSplitViewControllerClass){
+            if([self isKindOfClass:CKSplitViewControllerClass]){
+                NSArray* viewControllers = [self performSelector:@selector(viewControllers)];
+                for(UIViewController* viewController in viewControllers){
+                    [viewController registerToControllers:controllers views:views];
+                }
+            }
+        }
+    }
+    
+    if(self.modalViewController){
+        [self.modalViewController registerToControllers:controllers views:views];
+    }
+    
+    //TODO : POPOVERS !
+}
+
++ (void)findControllersDisplayedInWidow:(UIWindow*)window controllers:(NSMutableArray*)controllers views:(NSMutableArray*)views{
+    UIViewController* controller = [window rootViewController];
+    if (controller == nil) {
+        NSArray *windowSubview = window.subviews;
+        if (windowSubview.count != 0)
+            controller = [[windowSubview objectAtIndex:0] valueForKey:@"_viewDelegate"];
+    }
+    
+    [controller registerToControllers:controllers views:views];
+}
+
+@end
+
+
+
+
+
+
+
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
     CKDebugCheckState_NO,
@@ -206,7 +346,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
  */
 
 - (void)presentInlineDebuggerForSubView:(UIView*)view fromParentController:(UIViewController*)controller{
-    CKFormTableViewController* debugger = [self.viewController inlineDebuggerForSubView:view];
+    CKFormTableViewController* debugger = [[view findParentActivity] inlineDebuggerForSubView:view];
     
     debugger.title = [NSString stringWithFormat:@"%@ <%p>",[view class],view];
     UIBarButtonItem* close = [[[UIBarButtonItem alloc] initWithTitle:_(@"Done") style:UIBarButtonItemStyleBordered target:self action:@selector(closeDebug:)]autorelease];

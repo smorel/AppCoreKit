@@ -93,6 +93,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     self.navigationItemsBindingContext = [NSString stringWithFormat:@"<%p>_navigationItems",self];
     self.navigationTitleBindingContext = [NSString stringWithFormat:@"<%p>_navigationTitle",self];
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
+    self.state = CKViewControllerStateNone;
     
 #if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
