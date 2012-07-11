@@ -19,6 +19,7 @@
 #import "CKStyle+Parsing.h"
 #import "CKUIView+Style.h"
 #import "CKRuntime.h"
+#import "CKContainerViewController.h"
 
 typedef enum CKDebugCheckState{
     CKDebugCheckState_none,
@@ -500,7 +501,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     }
     
 #ifdef DEBUG
-    [self.inlineDebuggerController start];
+    if([self containerViewController] == nil){
+        [self.inlineDebuggerController start];
+    }
 #endif
 }
 
@@ -530,7 +533,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     
 #ifdef DEBUG
-    [self.inlineDebuggerController stop];
+    if([self containerViewController] == nil){
+        [self.inlineDebuggerController stop];
+    }
 #endif
 }
 

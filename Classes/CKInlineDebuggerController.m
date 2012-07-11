@@ -173,11 +173,11 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         
         if([view pointInside:point withEvent:nil]){
             [stack insertObject:view atIndex:0];
+            
+            for(UIView* v in view.subviews){
+                [self hitTest:point currentOrigin:origin inView:v stack:stack];
+            }
         }
-    }
-    
-    for(UIView* v in view.subviews){
-        [self hitTest:point currentOrigin:origin inView:v stack:stack];
     }
 }
 

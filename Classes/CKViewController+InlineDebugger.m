@@ -46,6 +46,8 @@
 - (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view{
     CKFormTableViewController* debugger = [[view class]inlineDebuggerForObject:view];
     
+    //TODO : Fixme use view to find controller and cell controller hierarchy !
+    
     NSMutableArray* cellControllers = [NSMutableArray array];
     UIViewController* c = self;
     while(c){
