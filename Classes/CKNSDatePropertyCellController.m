@@ -100,6 +100,12 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             self.datePicker = [[[UIDatePicker alloc]initWithFrame:CGRectIntegral(theFrame)]autorelease];
             _datePicker.datePickerMode = UIDatePickerModeDate;
             _datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+            
+            CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+            if(attributes.minimumDate){
+                _datePicker.minimumDate = attributes.minimumDate;
+            }
+            
             /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];
             if(date){

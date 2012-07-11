@@ -253,3 +253,18 @@
 }
 
 @end
+
+
+
+@implementation CKPropertyExtendedAttributes (CKNSDateViewController)
+@dynamic minimumDate;
+
+- (void)setMinimumDate:(NSDate *)minimumDate{
+    [self.attributes setObject:minimumDate forKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minimumDate"];
+}
+
+- (NSDate*)minimumDate{
+    return [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minimumDate"];
+}
+
+@end

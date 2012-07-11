@@ -182,3 +182,18 @@ typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value
 @property (nonatomic, copy) CKOptionPropertyCellControllerSortingBlock sortingBlock;
 
 @end
+
+
+/**
+ */
+@interface CKPropertyExtendedAttributes (CKNSDateViewController)
+
+///-----------------------------------
+/// @name Extended attributes
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, retain) NSDate* minimumDate;
+
+@end
