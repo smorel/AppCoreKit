@@ -226,7 +226,7 @@ static BOOL swizzlingDone = NO;
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-    return [[CKWeakRef alloc]initWithObject:self.object callback:self.callback];
+    return [[CKWeakRef allocWithZone:zone]initWithObject:self.object callback:self.callback];
 }
 
 - (NSUInteger)hash {

@@ -83,3 +83,9 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
     return value;
 }
 
+CKLocalizedString* CKLocalizedStringWithString(NSString* string){
+    if([string isKindOfClass:[CKLocalizedString class]]){
+        return (CKLocalizedString*)string;
+    }
+    return [[[CKLocalizedString alloc]initWithLocalizedKey:string]autorelease];
+}

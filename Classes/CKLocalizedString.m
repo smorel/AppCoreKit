@@ -64,7 +64,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone{
-	CKLocalizedString *newString = [[[self class] alloc] init];
+	CKLocalizedString *newString = [[CKLocalizedString allocWithZone:zone]init];
     newString.key = self.key;
     newString.localizedStrings = self.localizedStrings;
     return newString;

@@ -21,13 +21,13 @@
 - (void)postInit{
 	[super postInit];
     self.collectionObjects = [NSMutableArray array];
-	self.property = [CKProperty propertyWithObject:self keyPath:@"collectionObjects"];
+	self.property = [CKProperty weakPropertyWithObject:self keyPath:@"collectionObjects"];
 }
 
 - (void)setObjects:(NSMutableArray *)theobjects{
     [_collectionObjects release];
     _collectionObjects = [[NSMutableArray arrayWithArray:theobjects]retain];
-	self.property = [CKProperty propertyWithObject:self keyPath:@"collectionObjects"];
+	self.property = [CKProperty weakPropertyWithObject:self keyPath:@"collectionObjects"];
 }
 
 - (void)setCollectionObjects:(NSMutableArray *)collectionObjects{
@@ -37,7 +37,7 @@
 
 - (id) copyWithZone:(NSZone *)zone {
     CKArrayCollection* collection = [super copyWithZone:zone];
-    collection.property = [CKProperty propertyWithObject:collection keyPath:@"collectionObjects"];
+    collection.property = [CKProperty weakPropertyWithObject:collection keyPath:@"collectionObjects"];
     return collection;
 }
 

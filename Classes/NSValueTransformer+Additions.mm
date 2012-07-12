@@ -488,7 +488,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	for(CKClassPropertyDescriptor* descriptor in descriptors){
 		id object = [source objectForKey:descriptor.name];
 		if(object != nil){
-			CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name];
+			CKProperty* property = [[CKProperty alloc]initWithObject:target keyPath:descriptor.name weak:NO];
 			[NSValueTransformer transform:object inProperty:property];
 			[property autorelease];
 		}

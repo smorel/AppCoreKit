@@ -14,6 +14,7 @@
 #import "NSObject+Runtime_private.h"
 
 @interface CKProperty()
+@property (nonatomic,assign,readwrite) BOOL weak;
 @property (nonatomic,retain) id subObject;
 @property (nonatomic,retain) NSString* subKeyPath;
 @property (nonatomic,retain,readwrite) id object;
@@ -23,9 +24,10 @@
 @end
 
 @implementation CKProperty
-@synthesize object,keyPath;
-@synthesize subObject,subKeyPath;
+@synthesize object = _object,keyPath;
+@synthesize subObject = _subObject,subKeyPath;
 @synthesize descriptor;
+@synthesize weak;
 
 - (void)dealloc{
     self.object = nil;
@@ -36,13 +38,23 @@
 	[super dealloc];
 }
 
++ (CKProperty*)weakPropertyWithObject:(id)object keyPath:(NSString*)keyPath{
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object keyPath:keyPath weak:YES]autorelease];
+	return p;
+}
+
++ (CKProperty*)weakPropertyWithObject:(id)object{
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object weak:YES]autorelease];
+	return p;
+}
+
 + (CKProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath{
-	CKProperty* p = [[[CKProperty alloc]initWithObject:object keyPath:keyPath]autorelease];
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object keyPath:keyPath weak:NO]autorelease];
 	return p;
 }
 
 + (CKProperty*)propertyWithObject:(id)object{
-	CKProperty* p = [[[CKProperty alloc]initWithObject:object]autorelease];
+	CKProperty* p = [[[CKProperty alloc]initWithObject:object weak:NO]autorelease];
 	return p;
 }
 
@@ -51,8 +63,27 @@
 	return p;
 }
 
-- (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath{
+- (void)setObject:(id)theobject{
+    if(self.weak){
+        _object = theobject;
+    }else{
+        [_object release];
+        _object = [theobject retain];
+    }
+}
+
+- (void)setSubObject:(id)thesubObject{
+    if(self.weak){
+        _subObject = thesubObject;
+    }else{
+        [_subObject release];
+        _subObject = [thesubObject retain];
+    }
+}
+
+- (id)initWithObject:(id)theobject keyPath:(NSString*)thekeyPath weak:(BOOL)boweak{
 	if (self = [super init]) {
+        self.weak = boweak;
         self.object = theobject;
         if([thekeyPath length] > 0){
             self.keyPath = thekeyPath;
@@ -71,8 +102,9 @@
 	return self;
 }
 
-- (id)initWithObject:(id)theobject{
+- (id)initWithObject:(id)theobject weak:(BOOL)boweak{
 	if (self = [super init]) {
+        self.weak = boweak;
         self.object = theobject;
         [self postInit];
     }
@@ -258,7 +290,7 @@
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-    return [[CKProperty alloc]initWithObject:self.object keyPath:self.keyPath];
+    return [[CKProperty alloc]initWithObject:self.object keyPath:self.keyPath weak:self.weak];
 }
 
 @end

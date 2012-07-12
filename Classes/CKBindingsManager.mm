@@ -84,8 +84,11 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings){
         if ([context isKindOfClass:[CKWeakRef class]]) {
-            weakRefContext[[context object]] = context;
-            [context retain];
+            //hash_map<id, CKWeakRef*>::iterator itFound = weakRefContext.find([context object]);
+            //if(itFound == weakRefContext.end()){
+                weakRefContext[[context object]] = context;
+                [context retain];
+            //}
         }
 		bindings = [NSMutableSet setWithCapacity:50];
 		[_bindingsForContext setObject:bindings forKey:context];
@@ -127,6 +130,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 		[_bindingsForContext removeObjectForKey:context];
         if ([context isKindOfClass:[CKWeakRef class]]) {
             weakRefContext.erase([context object]);
+            [context release];
         }
 	}	
     

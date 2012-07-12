@@ -199,7 +199,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	CKObject* copied = [[[self class] alloc] init];
+	CKObject* copied = [[[self class] allocWithZone:zone] init];
     [copied copyPropertiesFromObject:self];
 	return copied;
 }

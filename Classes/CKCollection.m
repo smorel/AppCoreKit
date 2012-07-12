@@ -219,7 +219,7 @@
 
 
 - (id) copyWithZone:(NSZone *)zone{
-	id copied = [[[self class] alloc] init];
+	id copied = [[[self class] allocWithZone:zone] init];
     [copied copyPropertiesFromObject:self];
 	return copied;
 }

@@ -21,11 +21,11 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
  */
 void CKResetLanguageFileCache();
 
+/**
+ */
+CKLocalizedString* CKLocalizedStringWithString(NSString* string);
+
 
 /**
  */
-#if __has_feature(objc_arc)
-#define _(key) [[CKLocalizedString alloc]initWithLocalizedKey:key]
-#else
-#define _(key) [[[CKLocalizedString alloc]initWithLocalizedKey:key]autorelease]
-#endif
+#define _(key) CKLocalizedStringWithString(key)

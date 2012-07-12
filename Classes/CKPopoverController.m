@@ -84,11 +84,8 @@
 }
 
 - (void)presentPopoverFromBarButtonItem:(UIBarButtonItem *)item permittedArrowDirections:(UIPopoverArrowDirection)arrowDirections animated:(BOOL)animated{
-    self.delegate = self;
-    [self retain];
     [super presentPopoverFromBarButtonItem:item permittedArrowDirections:arrowDirections animated:animated];
-    
-    self.orientation = self.contentViewController.interfaceOrientation;
+    //This calls presentPopoverFromRect:
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController{

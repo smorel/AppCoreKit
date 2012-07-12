@@ -22,6 +22,14 @@
 
 /**
  */
++ (CKProperty*)weakPropertyWithObject:(id)object keyPath:(NSString*)keyPath;
+
+/**
+ */
++ (CKProperty*)weakPropertyWithObject:(id)object;
+
+/**
+ */
 + (CKProperty*)propertyWithObject:(id)object keyPath:(NSString*)keyPath;
 
 /**
@@ -38,11 +46,11 @@
 
 /**
  */
-- (id)initWithObject:(id)object keyPath:(NSString*)keyPath;
+- (id)initWithObject:(id)object keyPath:(NSString*)keyPath weak:(BOOL)weak;
 
 /**
  */
-- (id)initWithObject:(id)object;
+- (id)initWithObject:(id)object weak:(BOOL)weak;
 
 /**
  */
@@ -52,6 +60,10 @@
 ///-----------------------------------
 /// @name Accessing property attributes 
 ///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign,readonly,getter = isWeak) BOOL weak;
 
 /**
  */
