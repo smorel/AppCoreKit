@@ -1,14 +1,14 @@
 //
 //  CKPropertyGridCellController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-08.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKTableViewCellController.h"
 #import "CKProperty.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 #define CLICKABLE_VALIDATION_INFO 0
 

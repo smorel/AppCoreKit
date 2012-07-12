@@ -1,15 +1,15 @@
 //
 //  CKUIColorPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKUIColorPropertyCellController.h"
-#import "CKUIColor+Additions.h"
+#import "UIColor+Additions.h"
 #import "CKProperty.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface CGUIColorWrapper : NSObject{}

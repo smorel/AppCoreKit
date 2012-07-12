@@ -1,13 +1,13 @@
 //
 //  CKWebViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-02-03.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKWebBrowserViewController.h"
-#import "CKUIViewAutoresizing+Additions.h"
+#import "UIView+AutoresizingMasks.h"
 #import "CKWebViewController.h"
 
 @interface CKWebBrowserViewController () <UIWebViewDelegate>

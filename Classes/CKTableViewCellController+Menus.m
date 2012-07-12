@@ -1,16 +1,16 @@
 //
 //  CKTableViewCellController+Menus.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-04.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKTableViewCellController+Menus.h"
-#import "CKTableViewCellController+CKBlockBasedInterface.h"
+#import "CKTableViewCellController+BlockBasedInterface.h"
 #import "CKTableViewCellController.h"
 #import "CKImageLoader.h"
-#import "CKUIImage+Transformations.h"
+#import "UIImage+Transformations.h"
 
 
 @implementation CKTableViewCellController (CKMenus)

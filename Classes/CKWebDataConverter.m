@@ -1,8 +1,8 @@
 //
 //  CKWebDataConverter.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Guillaume Campagna on 12-05-18.
+//  Created by Guillaume Campagna.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

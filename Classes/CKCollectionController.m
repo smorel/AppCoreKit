@@ -1,15 +1,15 @@
 //
 //  CKCollectionController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-16.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCollectionController.h"
 #import "CKDocument.h"
 #import <UIKit/UITableView.h>
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import "CKVersion.h"
 
 @interface CKCollectionController()

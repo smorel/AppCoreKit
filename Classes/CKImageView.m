@@ -1,17 +1,17 @@
 //
 //  CKImageView.m
-//  iPadSlideShow
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-05-20.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKImageView.h"
-#import "CKUIImage+Transformations.h"
+#import "UIImage+Transformations.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 
 @interface CKImageView ()
 

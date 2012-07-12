@@ -1,14 +1,14 @@
 //
 //  VVLocalizedString.m
-//  Volvo
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-11-10.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKLocalizedString.h"
 #import "CKLocalizationManager.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 
 @interface CKLocalizationManager()

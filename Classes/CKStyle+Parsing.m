@@ -1,27 +1,27 @@
 //
 //  CKStyle+Parsing.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-20.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStyle+Parsing.h"
-#import "CKUIColor+Additions.h"
+#import "UIColor+Additions.h"
 #import "CKLocalization.h"
 
 
-#import "CKUIColor+ValueTransformer.h"
-#import "CKUIImage+ValueTransformer.h"
-#import "CKNSNumber+ValueTransformer.h"
-#import "CKNSURL+ValueTransformer.h"
-#import "CKNSDate+ValueTransformer.h"
-#import "CKNSArray+ValueTransformer.h"
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
 #import "CKCollection+ValueTransformer.h"
-#import "CKNSIndexPath+ValueTransformer.h"
-#import "CKNSObject+ValueTransformer.h"
-#import "CKNSValueTransformer+NativeTypes.h"
-#import "CKNSValueTransformer+CGTypes.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
 
 
 //TODO : HERE store the converted data in the key to convert only once !

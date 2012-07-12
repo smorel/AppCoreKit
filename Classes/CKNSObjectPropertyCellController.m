@@ -1,8 +1,8 @@
 //
 //  CKNSObjectPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,12 +10,12 @@
 
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKArrayProxyCollection.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
-#import "CKNSObject+InlineDebugger.h"
+#import "NSObject+InlineDebugger.h"
 
 #import "CKClassExplorer.h"
 

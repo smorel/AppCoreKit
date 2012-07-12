@@ -1,16 +1,16 @@
 //
 //  CKPopoverController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKPopoverController.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKContainerViewController.h"
 #import <objc/runtime.h>
-#import "UIViewController+CKDeviceOrientation.h"
+#import "UIViewController+DeviceOrientation.h"
 
 
 @interface UIViewController ()

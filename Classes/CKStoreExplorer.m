@@ -1,9 +1,9 @@
 //
 //  CKStoreExplorer.m
-//  Express
+//  AppCoreKit
 //
-//  Created by Oli Kenobi on 10-01-24.
-//  Copyright 2010 Kenobi Studios. All rights reserved.
+//  Created by Oli Kenobi.
+//  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStoreExplorer.h"

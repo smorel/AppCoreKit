@@ -1,15 +1,15 @@
 //
 //  CKObject.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CKClassPropertyDescriptor.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 
 /**
  */
@@ -107,5 +107,5 @@
 
 @end
 
-#import "CKNSObject+Validation.h"
-#import "CKNSObject+CKSingleton.h"
+#import "NSObject+Validation.h"
+#import "NSObject+Singleton.h"

@@ -1,13 +1,13 @@
 //
 //  CKMultipartParser.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-07-21.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKMultipartParser.h"
-#import "CKNSData+Matching.h"
+#import "NSData+Matching.h"
 
 @implementation CKMultipartParser{
 	NSData *buffer;

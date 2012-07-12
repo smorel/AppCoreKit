@@ -1,19 +1,19 @@
 //
 //  CKMultiFloatPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKMultiFloatPropertyCellController.h"
 #import "CKProperty.h"
-#import "CKNSObject+bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_Private.h"
+#import "NSValueTransformer+Additions.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
 
 #define BASE_TAG 8723
 

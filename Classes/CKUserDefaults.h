@@ -1,8 +1,8 @@
 //
 //  CKUserDefaults.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

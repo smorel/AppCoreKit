@@ -1,12 +1,9 @@
 //
 //  CKTableViewController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-02-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
-//
-//  Initial code created by Jonathan Wight on 2/25/09.
-//  Copyright 2009 toxicsoftware.com. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "CKCollectionViewController.h"

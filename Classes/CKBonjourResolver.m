@@ -1,15 +1,15 @@
 //
 //  CKBonjourResolver.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-12-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKBonjourResolver.h"
 #import "CKInetEndPoint.h"
 
-#import "CKNSString+Validations.h"
+#import "NSString+Validations.h"
 #import "CKDebug.h"
 
 @interface CKBonjourResolver ()

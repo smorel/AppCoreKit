@@ -1,20 +1,20 @@
 //
 //  CKSectionViews.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-05-31.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKSectionViews.h"
-#import "CKNSObject+Bindings.h"
-#import "CKUIViewAutoresizing+Additions.h"
-#import "CKUIView+Style.h"
+#import "NSObject+Bindings.h"
+#import "UIView+AutoresizingMasks.h"
+#import "UIView+Style.h"
 #import "CKStyleManager.h"
-#import "CKUIColor+Additions.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_private.h"
-#import "CKUIView+Positioning.h"
+#import "UIColor+Additions.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_private.h"
+#import "UIView+Positioning.h"
 
 
 @interface CKSectionHeaderView()

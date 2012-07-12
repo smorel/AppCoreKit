@@ -1,8 +1,8 @@
 //
-//  CKMapping2.h
-//  CloudKit
+//  CKMappingContext.h
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

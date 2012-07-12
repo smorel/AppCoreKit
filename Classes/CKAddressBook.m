@@ -1,14 +1,14 @@
 //
 //  CKAddressBook.m
 //
-//  Created by Fred Brunel on 07/08/09.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKAddressBook.h"
 #import <AddressBook/AddressBook.h>
 
-#import "CKNSArray+Additions.h"
+#import "NSArray+Additions.h"
 
 @implementation CKAddressBookPerson {
 	ABRecordRef _record;

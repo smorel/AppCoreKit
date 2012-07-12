@@ -1,14 +1,14 @@
 //
 //  CKCollection+ValueTransformer.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-11.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKCollection+ValueTransformer.h"
-#import "CKNSArray+ValueTransformer.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSArray+ValueTransformer.h"
+#import "NSValueTransformer+Additions.h"
 
 
 @implementation CKCollection (CKValueTransformer)

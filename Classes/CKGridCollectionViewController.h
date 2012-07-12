@@ -1,8 +1,8 @@
 //
 //  CKGridCollectionViewController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-05-14.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

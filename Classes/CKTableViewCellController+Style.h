@@ -1,15 +1,15 @@
 //
 //  CKTableViewCellController+Style.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CKTableViewCellController.h"
 #import "CKTableViewController.h"
-#import "CKViewController+Style.h"
+#import "UIViewController+Style.h"
 
 
 /**

@@ -1,13 +1,13 @@
  //
 //  CKRuntime.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-11-30.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKRuntime.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKClassPropertyDescriptor_private.h"
 #import <objc/runtime.h>
 #import "CKVersion.h"

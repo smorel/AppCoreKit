@@ -1,14 +1,14 @@
 //
 //  UITextInputTraits+Introspection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-09-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "UITextInputTraits+Introspection.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "NSValueTransformer+Additions.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 NSMutableSet *textInputTraitsProperties = nil;
 

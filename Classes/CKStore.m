@@ -1,7 +1,7 @@
 //
 //  CKStore.m
 //
-//  Created by Fred Brunel on 10-01-07.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 #import "CKItem.h"
 #import "CKAttribute.h"
 
-#import "CKNSString+Additions.h"
+#import "NSString+Additions.h"
 
 static CKCoreDataManager* CKStoreCoreDataManager = nil;
 static NSMutableDictionary* CKStoreCache = nil;

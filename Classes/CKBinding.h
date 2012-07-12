@@ -1,15 +1,15 @@
 //
 //  CKBinding.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-11.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKWeakRef.h"
 
 #define ENABLE_WEAK_REF_PROTECTION

@@ -1,14 +1,14 @@
 //
 //  CKTableViewCellController+Responder.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableCollectionViewController.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 
 
 //CKTableViewCellController+Responder

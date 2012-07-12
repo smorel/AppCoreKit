@@ -1,8 +1,8 @@
 //
 //  CKTableViewCellController+FlatHierarchy.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Guillaume Campagna on 12-06-12.
+//  Created by Guillaume Campagna.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

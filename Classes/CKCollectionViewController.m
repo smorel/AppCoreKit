@@ -1,8 +1,8 @@
 //
 //  CKCollectionViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-25.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -10,8 +10,8 @@
 
 #import "CKWeakRef.h"
 #import "CKFormTableViewController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_Private.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
 
 //private interfaces
 

@@ -1,14 +1,14 @@
 //
 //  CKWebRequest+Mapping.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-06-08.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKWebRequest+Mapping.h"
 #import "CKMappingContext.h"
-#import "CKNSObject+JSON.h"
+#import "NSObject+JSON.h"
 #import "CKDebug.h"
 #import "CKAlertView.h"
 #import "NSURLRequest+Upload.h"

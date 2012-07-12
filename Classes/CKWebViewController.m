@@ -1,13 +1,13 @@
 //
 //  CKWebViewController.m
-//  YellowPages
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-02-03.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKWebViewController.h"
-#import "CKUIViewAutoresizing+Additions.h"
+#import "UIView+AutoresizingMasks.h"
 #import <VendorsKit/Reachability.h>
 
 #define CKBarButtonItemFlexibleSpace [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]

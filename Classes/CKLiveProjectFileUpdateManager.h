@@ -1,8 +1,8 @@
 //
 //  CKLiveUpdateManager.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Guillaume Campagna on 12-06-08.
+//  Created by Guillaume Campagna.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

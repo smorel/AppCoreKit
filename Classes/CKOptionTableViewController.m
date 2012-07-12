@@ -1,14 +1,14 @@
     //
 //  CKOptionTableViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-06-11.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKOptionTableViewController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKBlockBasedInterface.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+BlockBasedInterface.h"
 #import "CKLocalization.h"
 
 

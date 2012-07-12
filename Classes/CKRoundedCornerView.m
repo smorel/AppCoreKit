@@ -1,13 +1,13 @@
 //
-//  BackgroundView.m
-//  GroupedTableStyled
+//  CKRoundedCornerView.m
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-04-08.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKRoundedCornerView.h"
-#import "CKUIColor+Additions.h"
+#import "UIColor+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation CKRoundedCornerView {

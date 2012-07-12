@@ -1,8 +1,8 @@
 //
 //  CKTableViewCellCache.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-06-13.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

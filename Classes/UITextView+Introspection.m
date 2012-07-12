@@ -1,16 +1,16 @@
 //
 //  UITextView+Introspection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-09-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "UITextView+Introspection.h"
 #import "UITextInputTraits+Introspection.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKObject.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 @implementation UITextView (CKIntrospectionAdditions)
 

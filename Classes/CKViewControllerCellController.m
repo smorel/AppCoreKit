@@ -1,13 +1,13 @@
 //
 //  CKViewControllerCellController.m
-//  YellowPages
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-12-05.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKViewControllerCellController.h"
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 #import "CKContainerViewController.h"
 
 @interface CKCollectionCellController()

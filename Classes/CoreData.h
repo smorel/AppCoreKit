@@ -1,13 +1,13 @@
 //
 //  Data.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKCoreDataManager.h"
-#import "CKNSManagedObjectContext+Requests.h"
+#import "NSManagedObjectContext+Requests.h"
 #import "CKStore.h"
 
 #import "CKStoreExplorer.h"

@@ -1,8 +1,8 @@
 //
 //  CKTableCollectionViewController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-16.
+//  Created by Sebastien Morel.
 //  Copyright Wherecloud 2011. All rights reserved.
 //
 

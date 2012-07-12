@@ -1,8 +1,8 @@
 //
 //  CKSuffixTree.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 #include <fstream>
 #include <ext/hash_map>
 
-#import "CKNSString+Additions.h"
+#import "NSString+Additions.h"
 
 // magic numbers from http://www.isthe.com/chongo/tech/comp/fnv/ 
 static const size_t InitialFNV = 2166136261U;

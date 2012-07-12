@@ -1,33 +1,33 @@
 //
-//  CKBasicCellController.m
-//  CloudKit
+//  CKTableViewCellController.m
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-12-15.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
-#import "CKUIView+Style.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_Private.h"
+#import "UIView+Style.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
 
-#import "CKUILabel+Style.h"
+#import "UILabel+Style.h"
 #import "CKTableCollectionViewController.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 #import "CKTableViewCellController+FlatHierarchy.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
 #import "CKLocalization.h"
 
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 #import "CKProperty.h"
-#import "CKNSObject+CKSingleton.h"
+#import "NSObject+Singleton.h"
 #import "CKDebug.h"
 
 #import "CKVersion.h"

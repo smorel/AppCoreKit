@@ -1,8 +1,8 @@
 //
 //  CKCollectionViewController+InlineDebugger.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-10-17.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 

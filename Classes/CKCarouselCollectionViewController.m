@@ -1,14 +1,14 @@
 //
 //  CKCarouselCollectionViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-07.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCarouselCollectionViewController.h"
 #import "CKTableViewCellController.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKCollectionController.h"
 
 

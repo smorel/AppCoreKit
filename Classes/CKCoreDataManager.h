@@ -1,13 +1,13 @@
 //
 //  CKCoreDataManager.h
 //
-//  Created by Fred Brunel on 2010/01/05.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "CKNSManagedObjectContext+Requests.h"
+#import "NSManagedObjectContext+Requests.h"
 
 /**
  */

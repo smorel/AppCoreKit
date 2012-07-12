@@ -1,15 +1,15 @@
 //
 //  CKMockManager.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-06-07.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKMockManager.h"
 #import "CKObject.h"
 #import "CKRuntime.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 
 static CKMockManager* CKMockManagerDefault = nil;
 

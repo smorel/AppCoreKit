@@ -1,15 +1,15 @@
 //
 //  CKGridView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-01-19.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKGridView.h"
-#import "CKCoreGraphics+Additions.h"
+#import "CoreGraphics+Additions.h"
 #import "CKVersion.h"
-#import "CKUIViewAutoresizing+Additions.h"
+#import "UIView+AutoresizingMasks.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define DEFAULT_DRAGGEDVIEW_SCALE 2

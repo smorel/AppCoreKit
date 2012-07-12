@@ -1,8 +1,8 @@
 //
 //  CKTableViewCellController+PropertyGrid.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-29.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
@@ -12,9 +12,9 @@
 
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKArrayProxyCollection.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKNSObjectPropertyCellController.h"
 #import "CKUIColorPropertyCellController.h"
 #import "CKNSDatePropertyCellController.h"
@@ -23,7 +23,7 @@
 #import "CKOptionPropertyCellController.h"
 #import "CKMultilineNSStringPropertyCellController.h"
 
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKFormSectionBase_private.h"
 #import "CKTableViewCellController+Menus.h"
 

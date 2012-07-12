@@ -1,15 +1,15 @@
 //
 //  CKDownloadManager.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-11-23.
+//  Created by Fred Brunel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKDownloadManager.h"
 #import "CKWebRequest.h"
 
-#import "CKNSObject+JSON.h"
+#import "NSObject+JSON.h"
 #import "CKDebug.h"
 
 //

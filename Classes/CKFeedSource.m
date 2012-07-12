@@ -1,13 +1,13 @@
 //
 //  CKFeedSource.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-01-14.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKFeedSource.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 
 @interface CKFeedSource ()
 @property (nonatomic, assign) BOOL isFetching;

@@ -1,16 +1,16 @@
 //
 //  CKMapCollectionViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-08-20.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKMapCollectionViewController.h"
 
 #import "CKLocalization.h"
-#import "CKUIViewAutoresizing+Additions.h"
-#import "CKUIColor+Additions.h"
+#import "UIView+AutoresizingMasks.h"
+#import "UIColor+Additions.h"
 #import "CKDebug.h"
 
 #import "CKTableViewCellController.h"

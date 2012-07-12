@@ -1,28 +1,28 @@
 //
 //  CKTableCollectionViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-16.
+//  Created by Sebastien Morel.
 //  Copyright Wherecloud 2011. All rights reserved.
 //
 
 #import "CKTableCollectionViewController.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_Private.h"
-#import "CKNSDate+Conversions.h"
-#import "CKNSDate+Calculations.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_Private.h"
+#import "NSDate+Conversions.h"
+#import "NSDate+Calculations.h"
 #import <objc/runtime.h>
-#import "CKUIKeyboardInformation.h"
+#import "UIKeyboard+Information.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKVersion.h"
 #import "CKCollectionController.h"
-#import "CKNSObject+bindings.h"
+#import "NSObject+Bindings.h"
 #include "CKSheetController.h"
 #import "CKStyleManager.h"
-#import "CKUIView+Style.h"
-#import "CKViewController+Style.h"
+#import "UIView+Style.h"
+#import "UIViewController+Style.h"
 #import "CKLocalization.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import "CKRuntime.h"
 
 

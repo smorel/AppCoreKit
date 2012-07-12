@@ -1,8 +1,8 @@
 //
 //  CKActionSheet.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-07-07.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud. All rights reserved.
 //
 

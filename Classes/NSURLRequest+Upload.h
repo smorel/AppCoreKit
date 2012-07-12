@@ -1,8 +1,8 @@
 //
 //  NSURLRequest+Upload.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Guillaume Campagna on 12-05-22.
+//  Created by Guillaume Campagna.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  CKDownloadManager.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-11-23.
+//  Created by Fred Brunel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 

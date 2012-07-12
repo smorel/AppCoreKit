@@ -1,13 +1,13 @@
 //
 //  CKUIControlBlockBinder.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-01-26.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKUIControlBlockBinder.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKImageView.h"
 #import "CKBindingsManager.h"
 

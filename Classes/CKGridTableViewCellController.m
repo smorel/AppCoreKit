@@ -1,17 +1,17 @@
 //
 //  CKGridTableViewCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-05-14.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKGridTableViewCellController.h"
 #import "CKGridView.h"
 #import "CKStyleView.h"
-#import "CKNSObject+Bindings.h"
-#import "CKTableViewCellController+CKDynamicLayout.h"
-#import "CKTableViewCellController+CKDynamicLayout_private.h"
+#import "NSObject+Bindings.h"
+#import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+DynamicLayout_private.h"
 #import "CKGridCollectionViewController.h"
 
 #define InteractionButtonTag 3457

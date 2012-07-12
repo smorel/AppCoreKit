@@ -1,15 +1,15 @@
 //
 //  CKClassExplorer.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-10.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKClassExplorer.h"
 #import <objc/runtime.h>
-#import "CKNSValueTransformer+Additions.h"
-#import "CKTableViewCellController+CKBlockBasedInterface.h"
+#import "NSValueTransformer+Additions.h"
+#import "CKTableViewCellController+BlockBasedInterface.h"
 
 NSInteger compareStrings(NSString* obj1, NSString* obj2, void *context)
 {

@@ -1,16 +1,16 @@
 //
 //  CKClassPropertyDescriptor.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKClassPropertyDescriptor.h"
 #import "CKClassPropertyDescriptor_private.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKNSObject+CKRuntime.h"
-#import "CKNSObject+CKRuntime_private.h"
+#import "NSObject+Runtime.h"
+#import "NSObject+Runtime_private.h"
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
 

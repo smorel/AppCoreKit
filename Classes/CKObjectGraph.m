@@ -1,27 +1,27 @@
 //
 //  CKObjectGraph.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-09-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKObjectGraph.h"
 #import "CKProperty.h"
 #import "CKObject.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 
-#import "CKUIColor+ValueTransformer.h"
-#import "CKUIImage+ValueTransformer.h"
-#import "CKNSNumber+ValueTransformer.h"
-#import "CKNSURL+ValueTransformer.h"
-#import "CKNSDate+ValueTransformer.h"
-#import "CKNSArray+ValueTransformer.h"
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
 #import "CKCollection+ValueTransformer.h"
-#import "CKNSIndexPath+ValueTransformer.h"
-#import "CKNSObject+ValueTransformer.h"
-#import "CKNSValueTransformer+NativeTypes.h"
-#import "CKNSValueTransformer+CGTypes.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
 
 
 NSString* CKObjectGraphObjectKey    = @"@object";

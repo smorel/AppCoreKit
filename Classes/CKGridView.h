@@ -1,8 +1,8 @@
 //
 //  CKGridView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-01-19.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

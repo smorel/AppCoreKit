@@ -1,8 +1,8 @@
 //
 //  CKSectionViews.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-05-31.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

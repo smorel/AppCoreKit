@@ -1,13 +1,13 @@
 //
 //  Document.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-19.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKObject.h"
-#import "CKNSObject+CKSingleton.h"
+#import "NSObject+Singleton.h"
 #import "CKDocument.h"
 #import "CKFeedSource.h"
 #import "CKCollection.h"

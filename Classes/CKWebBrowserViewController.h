@@ -1,8 +1,8 @@
 //
 //  CKWebViewController.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet, Fred Brunel on 10-02-03.
+//  Created by Olivier Collet, Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

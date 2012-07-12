@@ -1,17 +1,17 @@
 //
 //  CKStyleView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 11-04-07.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKStyleView.h"
-#import "CKUIColor+Additions.h"
-#import "CKUIImage+Transformations.h"
-#import "CKNSObject+Bindings.h"
-#import "CKNSArray+Additions.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "UIColor+Additions.h"
+#import "UIImage+Transformations.h"
+#import "NSObject+Bindings.h"
+#import "NSArray+Additions.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 #import <QuartzCore/QuartzCore.h>
 

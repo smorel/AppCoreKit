@@ -1,16 +1,16 @@
 //
 //  CKSegmentedViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-12-08.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKSegmentedViewController.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
-#import "CKNSObject+Bindings.h"
-#import "CKUIView+Positioning.h"
-#import "CKViewController+Style.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
+#import "NSObject+Bindings.h"
+#import "UIView+Positioning.h"
+#import "UIViewController+Style.h"
 
 @interface CKSegmentedViewController() 
 - (void)updateSegmentPositionUsingPosition:(CKSegmentedViewControllerPosition)position;

@@ -1,16 +1,16 @@
 //
 //  CKCollection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-18.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCollection.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
-#import "CKNSObject+Bindings.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
+#import "NSObject+Bindings.h"
 
 @interface CKCollection()
 @property (nonatomic,assign,readwrite) NSInteger count;

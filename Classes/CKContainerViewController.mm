@@ -1,7 +1,7 @@
 //  CKContainerViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-11.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 #import "CKWeakRef.h"
 #import <objc/runtime.h>
 #import "CKRuntime.h"
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 
 typedef void(^CKTransitionBlock)();
 

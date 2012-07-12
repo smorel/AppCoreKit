@@ -1,13 +1,13 @@
 //
 //  CKDataBlockBinder.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-17.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKDataBlockBinder.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKBindingsManager.h"
 
 @interface CKDataBlockBinder ()

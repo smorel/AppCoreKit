@@ -1,8 +1,8 @@
 //
 //  CKObject+CKStore_Private.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-06-21.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  CKFormTableViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-06.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -12,9 +12,9 @@
 #import "CKFormBindedCollectionSection_private.h"
 #import "CKObjectController.h"
 #import "CKCollectionCellControllerFactory.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import "CKStyleManager.h"
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
 #import "CKTableViewCellController+Style.h"
 
 #import "CKDebug.h"

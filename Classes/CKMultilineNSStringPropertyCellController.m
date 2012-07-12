@@ -1,19 +1,19 @@
 //
 //  CKNSStringMultilinePropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-03.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKMultilineNSStringPropertyCellController.h"
 #import "CKProperty.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableCollectionViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 

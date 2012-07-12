@@ -1,8 +1,8 @@
 //
 //  CKCascadingTree.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #import <VendorsKit/VendorsKit.h>
 
 #import "CKProperty.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKDebug.h"
 #import <objc/runtime.h>
 #import "CKLiveProjectFileUpdateManager.h"

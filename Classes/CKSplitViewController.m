@@ -1,14 +1,14 @@
 //
 //  CKSplitViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-10-25.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKSplitViewController.h"
 #import "CKContainerViewController.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKVersion.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>

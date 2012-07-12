@@ -1,15 +1,15 @@
 //
 //  CKFormSection+PropertyGrid.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 12-04-18.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
 #import "CKFormSection+PropertyGrid.h"
 #import "CKProperty.h"
 #import "CKTableViewCellController+PropertyGrid.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKFormSectionBase_private.h"
 
 

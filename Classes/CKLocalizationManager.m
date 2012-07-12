@@ -1,15 +1,15 @@
 //
 //  CKLocalizationManager.m
-//  Volvo
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-11-10.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKLocalizationManager.h"
 #import "CKLocalization.h"
 #import <UIKit/UIKit.h>
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKLocalizationManager_Private.h"
 #import "CKDebug.h"
 

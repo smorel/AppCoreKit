@@ -1,8 +1,8 @@
 //
 //  CKAlertView.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 10-09-06.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

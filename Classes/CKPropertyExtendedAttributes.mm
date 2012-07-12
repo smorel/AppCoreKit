@@ -1,14 +1,14 @@
 //
 //  CKPropertyExtendedAttributes.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-12.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKPropertyExtendedAttributes.h"
 #import "CKCollection.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 #include <ext/hash_map>
 

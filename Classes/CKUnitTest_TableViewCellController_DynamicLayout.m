@@ -1,6 +1,6 @@
 //
 //  CKUnitTest_TableViewCellController_DynamicLayout.m
-//  CloudKit
+//  AppCoreKit
 //
 //  Created by Sebastien Morel on 12-04-19.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
@@ -9,7 +9,7 @@
 #import "CKUnitTest_TableViewCellController_DynamicLayout.h"
 #import "CKFormTableViewController.h"
 #import "CKObject.h"
-#import "CKNSObject+CKSingleton.h"
+#import "NSObject+Singleton.h"
 
 @interface CKUnitTest_TableViewCellController_DynamicLayout_Object : CKObject
 @property (nonatomic,retain) NSString* multiline;

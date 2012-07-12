@@ -1,8 +1,8 @@
 //
 //  CKKeypadView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-05-26.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

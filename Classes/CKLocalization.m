@@ -1,15 +1,15 @@
 //
 //  CKLocalization.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-06-15.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKLocalization.h"
 #import "CKLocalizationManager_Private.h"
 #import "CKLiveProjectFileUpdateManager.h"
-#import "CKNSObject+CKSingleton.h"
+#import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
 
 NSString *CKLocalizationCurrentLocalization(void) {

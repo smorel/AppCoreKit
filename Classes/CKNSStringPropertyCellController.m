@@ -1,21 +1,21 @@
 //
 //  CKNSStringPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 
 #import "CKNSStringPropertyCellController.h"
 #import "CKProperty.h"
-#import "CKNSObject+bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 
 #import "CKSheetController.h"
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 
 #define TEXTFIELD_TAG 50000
 

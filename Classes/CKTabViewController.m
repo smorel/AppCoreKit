@@ -1,18 +1,18 @@
 //
 //  CKTabViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-18.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKTabViewController.h"
-#import "CKViewController+Style.h"
+#import "UIViewController+Style.h"
 #import "CKStyleManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKRuntime.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
-#import "CKNSObject+Bindings.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
+#import "NSObject+Bindings.h"
 #import <objc/runtime.h>
 
 

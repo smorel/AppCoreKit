@@ -1,13 +1,13 @@
 //
 //  CKWebRequest.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-01-05.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "CKNSString+URIQuery.h"
+#import "NSString+URIQuery.h"
 #import "CKWebRequest+Initialization.h"
 #import "CKWebRequest.h"
 #import "CKWebRequestManager.h"

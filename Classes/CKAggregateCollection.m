@@ -1,13 +1,13 @@
 //
 //  CKAggregateCollection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-12-08.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKAggregateCollection.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 
 @interface CKCollection()
 @property (nonatomic,assign,readwrite) NSInteger count;

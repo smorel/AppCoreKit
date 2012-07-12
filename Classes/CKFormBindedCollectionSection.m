@@ -1,8 +1,8 @@
 //
 //  CKFormBindedCollectionSection.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-11-28.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
@@ -13,9 +13,9 @@
 #import "CKFormSectionBase_private.h"
 #import "CKObjectController.h"
 #import "CKCollectionCellControllerFactory.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import "CKStyleManager.h"
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKTableViewCellController.h"
 

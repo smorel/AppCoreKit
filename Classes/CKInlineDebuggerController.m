@@ -1,8 +1,8 @@
 //
 //  CKInlineDebuggerController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-10-18.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
@@ -10,16 +10,16 @@
 
 #import "CKInlineDebuggerController.h"
 #import "CKWeakRef.h"
-#import "CKViewController+InlineDebugger.h"
+#import "UIViewController+InlineDebugger.h"
 #import "CKLocalization.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CKUIView+Positioning.h"
+#import "UIView+Positioning.h"
 #import "CKStoreExplorer.h"
 #import "CKDocument.h"
 #import "CKUserDefaults.h"
 #import "CKStyleManager.h"
 #import <objc/runtime.h>
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 
 
 

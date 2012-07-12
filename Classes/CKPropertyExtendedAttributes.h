@@ -1,13 +1,13 @@
 //
 //  CKPropertyExtendedAttributes.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-12.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 
 /** Extended Attributes is a way to extend how an object's property will react with several behaviours of the ClouKit like serialization, creation, data migration, property grid display, and conversions.
  
@@ -40,4 +40,4 @@
 @end
 
 
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"

@@ -1,15 +1,15 @@
 //
 //  CKCollectionTableViewCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-03-23.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCollectionTableViewCellController.h"
 #import "CKFormBindedCollectionSection_private.h"
 #import "CKFeedSource.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKCarouselCollectionViewController.h"
 #import "CKCollection.h"

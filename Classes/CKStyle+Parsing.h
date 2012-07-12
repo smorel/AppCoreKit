@@ -1,13 +1,13 @@
 //
 //  CKStyle+Parsing.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-20.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 
 
 /**

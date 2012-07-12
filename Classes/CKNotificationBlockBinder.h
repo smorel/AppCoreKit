@@ -1,8 +1,8 @@
 //
 //  CKNotificationBlockBinder.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-02-03.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

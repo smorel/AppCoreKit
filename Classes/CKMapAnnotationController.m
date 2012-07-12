@@ -1,16 +1,16 @@
 //
 //  CKMapAnnotationController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-05-25.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKMapAnnotationController.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKUIView+Positioning.h"
+#import "NSValueTransformer+Additions.h"
+#import "UIView+Positioning.h"
 
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Invocation.h"
 #import <objc/runtime.h>
 #import "CKRuntime.h"
 #import <QuartzCore/QuartzCore.h>

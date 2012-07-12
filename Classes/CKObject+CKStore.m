@@ -1,8 +1,8 @@
 //
-//  CKNSObject+CKStore.m
-//  StoreTest
+//  CKObject+CKStore.m
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-03.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
@@ -16,21 +16,21 @@
 #import "CKDebug.h"
 #import "CKObject.h"
 #import "CKProperty.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKNSString+Additions.h"
+#import "NSValueTransformer+Additions.h"
+#import "NSString+Additions.h"
 #import "CKWeakRef.h"
 
-#import "CKUIColor+ValueTransformer.h"
-#import "CKUIImage+ValueTransformer.h"
-#import "CKNSNumber+ValueTransformer.h"
-#import "CKNSURL+ValueTransformer.h"
-#import "CKNSDate+ValueTransformer.h"
-#import "CKNSArray+ValueTransformer.h"
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
 #import "CKCollection+ValueTransformer.h"
-#import "CKNSIndexPath+ValueTransformer.h"
-#import "CKNSObject+ValueTransformer.h"
-#import "CKNSValueTransformer+NativeTypes.h"
-#import "CKNSValueTransformer+CGTypes.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
 
 
 @interface CKObject()

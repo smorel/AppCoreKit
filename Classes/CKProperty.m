@@ -1,17 +1,17 @@
 //
 //  CKProperty.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKProperty.h"
-#import "CKNSValueTransformer+Additions.h"
+#import "NSValueTransformer+Additions.h"
 #import "CKCollection.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKDebug.h"
-#import "CKNSObject+CKRuntime_private.h"
+#import "NSObject+Runtime_private.h"
 
 @interface CKProperty()
 @property (nonatomic,retain) id subObject;

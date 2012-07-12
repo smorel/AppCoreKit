@@ -1,13 +1,13 @@
 //
 //  CKUserDefaults.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKUserDefaults.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 
 @interface CKUserDefaults()
 - (void)initFromPlist;

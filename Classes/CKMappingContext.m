@@ -1,35 +1,35 @@
 //
-//  CKMapping2.m
-//  CloudKit
+//  CKMappingContext.m
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-07-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKMappingContext.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKNSObject+CKRuntime.h"
+#import "NSValueTransformer+Additions.h"
+#import "NSObject+Runtime.h"
 #import "CKProperty.h"
 #import "CKCollection.h"
 #import "CKCallback.h"
 #import <VendorsKit/VendorsKit.h>
 #import <objc/runtime.h>
-#import "CKNSError+Additions.h"
-#import "CKNSObject+Invocation.h"
+#import "NSError+Additions.h"
+#import "NSObject+Invocation.h"
 
 
 
-#import "CKUIColor+ValueTransformer.h"
-#import "CKUIImage+ValueTransformer.h"
-#import "CKNSNumber+ValueTransformer.h"
-#import "CKNSURL+ValueTransformer.h"
-#import "CKNSDate+ValueTransformer.h"
-#import "CKNSArray+ValueTransformer.h"
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
 #import "CKCollection+ValueTransformer.h"
-#import "CKNSIndexPath+ValueTransformer.h"
-#import "CKNSObject+ValueTransformer.h"
-#import "CKNSValueTransformer+NativeTypes.h"
-#import "CKNSValueTransformer+CGTypes.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
 
 NSString * const CKMappingErrorDomain = @"CKMappingErrorDomain";
 

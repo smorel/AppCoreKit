@@ -1,13 +1,13 @@
 //
 //  CKImageLoader.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-07-20.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKImageLoader.h"
-#import "CKUIImage+Transformations.h"
+#import "UIImage+Transformations.h"
 #import "CKLocalization.h"
 #import "CKDebug.h"
 #import "RegexKitLite.h"

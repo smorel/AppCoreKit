@@ -1,13 +1,13 @@
 //
 //  CKCreditsFooterView.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 10-09-08.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKCreditsFooterView.h"
-#import "CKUIColor+Additions.h"
+#import "UIColor+Additions.h"
 #import "CKLocalization.h"
 
 @interface UIImageView (CKCreditsView)

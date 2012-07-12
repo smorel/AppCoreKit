@@ -1,19 +1,19 @@
 //
 //  CKNSNumberPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKNSNumberPropertyCellController.h"
-#import "CKNSNumberPropertyCellController+CKDynamicLayout.h"
+#import "CKNSNumberPropertyCellController+DynamicLayout.h"
 #import "CKProperty.h"
-#import "CKNSObject+bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKTableViewCellController+Responder.h"
-#import "CKNSValueTransformer+Additions.h"
-#import "CKUIView+Positioning.h"
+#import "NSValueTransformer+Additions.h"
+#import "UIView+Positioning.h"
 
 @interface CKNSNumberPropertyCellController()
 @property (nonatomic,retain,readwrite) UITextField* textField;

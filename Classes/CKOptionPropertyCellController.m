@@ -1,16 +1,16 @@
 //
 //  CKOptionPropertyCellController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-08-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
 #import "CKOptionPropertyCellController.h"
 #import "CKLocalization.h"
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 
-#import "CKViewController+Style.h"
+#import "UIViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKPopoverController.h"
 

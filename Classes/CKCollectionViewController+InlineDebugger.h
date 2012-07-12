@@ -1,15 +1,15 @@
 //
 //  CKCollectionViewController+InlineDebugger.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-10-17.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
 #ifdef DEBUG
 
 #import "CKCollectionViewController.h"
-#import "CKViewController+InlineDebugger.h"
+#import "UIViewController+InlineDebugger.h"
 #import "CKGridCollectionViewController.h"
 
 @interface CKCollectionViewController (CKInlineDebugger)

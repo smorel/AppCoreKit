@@ -1,23 +1,23 @@
 //
 //  CKViewController.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-21.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKViewController.h"
-#import "CKViewController+Style.h"
+#import "UIViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKDebug.h"
 #include <execinfo.h>
-#import "CKNSObject+Bindings.h"
+#import "NSObject+Bindings.h"
 #import "CKObject.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKFormTableViewController.h"
 #import "CKVersion.h"
 #import "CKStyle+Parsing.h"
-#import "CKUIView+Style.h"
+#import "UIView+Style.h"
 #import "CKRuntime.h"
 #import "CKContainerViewController.h"
 

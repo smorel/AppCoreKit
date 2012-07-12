@@ -1,8 +1,8 @@
 //
 //  CKMultipartEncoder.h
-//  CKMultipartEncoder
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-06-14.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

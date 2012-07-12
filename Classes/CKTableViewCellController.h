@@ -1,8 +1,8 @@
 //
-//  CKBasicCellController.h
-//  CloudKit
+//  CKTableViewCellController.h
+//  AppCoreKit
 //
-//  Created by Olivier Collet on 09-12-15.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 
@@ -277,7 +277,7 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
 @end
 
 
-#import "CKTableViewCellController+CKBlockBasedInterface.h"
+#import "CKTableViewCellController+BlockBasedInterface.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableViewCellController+PropertyGrid.h"
 #import "CKTableViewCellController+Menus.h"

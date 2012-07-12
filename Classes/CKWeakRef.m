@@ -1,14 +1,14 @@
 //
 //  CKWeakRef.m
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-06-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import "CKWeakRef.h"
-#import "CKNSObject+Bindings.h"
-#import "CKNSObject+Invocation.h"
+#import "NSObject+Bindings.h"
+#import "NSObject+Invocation.h"
 #import <objc/runtime.h>
 
 static char NSObjectWeakRefObjectKey;

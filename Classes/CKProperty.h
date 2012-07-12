@@ -1,16 +1,16 @@
 //
 //  CKProperty.h
-//  CloudKit
+//  AppCoreKit
 //
-//  Created by Sebastien Morel on 11-04-01.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CKNSObject+CKRuntime.h"
+#import "NSObject+Runtime.h"
 #import "CKClassPropertyDescriptor.h"
 #import "CKPropertyExtendedAttributes.h"
-#import "CKPropertyExtendedAttributes+CKAttributes.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 /** CKProperty is a wrapper around key-value coding. It allow to set/get value for an object/dictionary keypath and manage some introspection calls to provides an easy interface to access attributes and class property descriptors. Moreover it provides some methods to work with NSArray properties (insertObjects/removeObjectsAtIndexes/removeAllObjects/count).
  */

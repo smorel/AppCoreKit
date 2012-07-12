@@ -1,14 +1,14 @@
 //
 //  CKMultipartEncoder.m
-//  CKMultipartEncoder
+//  AppCoreKit
 //
-//  Created by Fred Brunel on 11-06-14.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CKMultipartEncoder.h"
-#import "CKNSString+Additions.h"
+#import "NSString+Additions.h"
 
 @implementation CKMultipartEncoder {
 	NSString *_contentType;
