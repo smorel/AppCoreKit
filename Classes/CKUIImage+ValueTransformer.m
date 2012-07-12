@@ -71,6 +71,8 @@
     
     UIImage * anImage = [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
     
+    CGImageRelease(imageRef);
+    
     return anImage;
 }
 #pragma clang diagnostic pop
