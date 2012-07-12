@@ -11,15 +11,15 @@
 
 /**
  */
-extern NSMutableArray* CKLocalizationStringTableNames;
-
-/**
- */
 NSString *CKLocalizationCurrentLocalization(void);
 
 /**
  */
 NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value);
+
+/**
+ */
+void CKResetLanguageFileCache();
 
 
 /**

@@ -78,8 +78,7 @@ static CKLocalizationManager *sharedInstance = nil;
     if(![l isEqualToString:_language]){
         CKDebugLog(@"preferredLang: %@", l);
         
-        [CKLocalizationStringTableNames release];
-        CKLocalizationStringTableNames = nil;
+        CKResetLanguageFileCache();
         
         NSString *path = [[ NSBundle mainBundle ] pathForResource:l ofType:@"lproj" ];
         

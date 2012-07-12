@@ -17,12 +17,17 @@ NSString *CKLocalizationCurrentLocalization(void) {
 	return [l18n objectAtIndex:0];
 }
 
-NSMutableArray* CKLocalizationStringTableNames = nil;
+static NSMutableArray* kLocalizationStringTableNames = nil;
+
+void CKResetLanguageFileCache(){
+    [kLocalizationStringTableNames release];
+    kLocalizationStringTableNames = nil;
+}
 
 NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
     //Find all localization tables
-    if(CKLocalizationStringTableNames == nil){
-        NSMutableArray* files = [[NSMutableArray alloc]init];
+    if(kLocalizationStringTableNames == nil){
+        NSMutableArray* files = [NSMutableArray array];
         
         NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
         
@@ -67,10 +72,10 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
                 [files addObject:file];
             }
         }
-        CKLocalizationStringTableNames = files;
+        kLocalizationStringTableNames = [files retain];
     }
     
-    for(NSString* tableName in CKLocalizationStringTableNames){
+    for(NSString* tableName in kLocalizationStringTableNames){
         NSString* result =  [bundle localizedStringForKey:key value:value table:tableName];
         if(![result isEqualToString:key])
             return result;
