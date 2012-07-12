@@ -662,6 +662,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[self.searchBar resignFirstResponder];
 	[self didSelectViewAtIndexPath:indexPath];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(objectTableViewController:didSelectRowAtIndexPath:withObject:)]) {
+        [self.delegate objectTableViewController:self didSelectRowAtIndexPath:indexPath withObject:[self objectAtIndexPath:indexPath] ];
+    }
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -672,6 +675,9 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
 	[self didSelectAccessoryViewAtIndexPath:indexPath];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(objectTableViewController:didSelectAccessoryViewRowAtIndexPath:withObject:)]) {
+        [self.delegate objectTableViewController:self didSelectAccessoryViewRowAtIndexPath:indexPath withObject:[self objectAtIndexPath:indexPath] ];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
