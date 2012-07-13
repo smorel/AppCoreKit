@@ -307,39 +307,32 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)zoomToRegionEnclosingAnnotations:(NSArray *)theAnnotations animated:(BOOL)animated {
 	if (theAnnotations.count == 0) return;
 	
-	CLLocationCoordinate2D topLeft, bottomRight;
-	topLeft.latitude = topLeft.longitude = bottomRight.latitude = bottomRight.longitude = 0;
-	for (NSObject<MKAnnotation> *annotation in theAnnotations) {
-		if (annotation.coordinate.latitude < topLeft.latitude || topLeft.latitude == 0) topLeft.latitude = annotation.coordinate.latitude;
-		if (annotation.coordinate.longitude < topLeft.longitude || topLeft.longitude == 0) topLeft.longitude = annotation.coordinate.longitude;
-		if (annotation.coordinate.latitude > bottomRight.latitude || bottomRight.latitude == 0) bottomRight.latitude = annotation.coordinate.latitude;
-		if (annotation.coordinate.longitude > bottomRight.longitude || bottomRight.longitude == 0) bottomRight.longitude = annotation.coordinate.longitude;
-	}
+	CLLocationCoordinate2D topLeftCoord;
+    topLeftCoord.latitude = -90;
+    topLeftCoord.longitude = 180;
+    
+    CLLocationCoordinate2D bottomRightCoord;
+    bottomRightCoord.latitude = 90;
+    bottomRightCoord.longitude = -180;
+    
+    for(id<MKAnnotation> annotation in theAnnotations)
+    {
+        topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude);
+        topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude);
+        
+        bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude);
+        bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
+    }	
 	
-	CLLocationCoordinate2D southWest;
-	CLLocationCoordinate2D northEast;
-	
-	southWest.latitude = MIN(topLeft.latitude, bottomRight.latitude);
-	southWest.longitude = MIN(topLeft.longitude, bottomRight.longitude);
-	northEast.latitude = MAX(topLeft.latitude, bottomRight.latitude);
-	northEast.longitude = MAX(topLeft.longitude, bottomRight.longitude);
-	
-	CLLocation *locSouthWest = [[CLLocation alloc] initWithLatitude:southWest.latitude longitude:southWest.longitude];
-	CLLocation *locNorthEast = [[CLLocation alloc] initWithLatitude:northEast.latitude longitude:northEast.longitude];	
-	
-	// This is a diag distance (if you wanted tighter you could do NE-NW or NE-SE)
-	CLLocationDistance meters = [locSouthWest distanceFromLocation:locNorthEast];
-	MKCoordinateRegion region;
-	region.center.latitude = (southWest.latitude + northEast.latitude) / 2.0;
-	region.center.longitude = (southWest.longitude + northEast.longitude) / 2.0;
-	region.span.latitudeDelta = meters / 111319.5;
-	region.span.longitudeDelta = 0.009;
+    
+    MKCoordinateRegion region;
+    region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5;
+    region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5;
+    region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.1; // Add a little extra space on the sides
+    region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.1; // Add a little extra space on the sides
 
 	region = [self.mapView regionThatFits:region];
 	[self.mapView setRegion:region animated:animated];
-	
-	[locSouthWest release];
-	[locNorthEast release];	
 }
 
 
