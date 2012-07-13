@@ -13,6 +13,7 @@
 #import "UIViewController+Style.h"
 #import "CKStyleManager.h"
 #import "CKPopoverController.h"
+#import "UIBarButtonItem+BlockBasedInterface.h"
 
 
 @interface CKOptionPropertyCellController ()
@@ -31,7 +32,7 @@
 @synthesize multiSelectionEnabled;
 @synthesize optionsViewController = _optionsViewController;
 @synthesize internalBindingContext = _internalBindingContext;
-@synthesize presentsOptionsAsPopover = _presentsOptionsAsPopover;
+@synthesize presentationStyle = _presentationStyle;
 
 
 - (void)postInit{
@@ -41,7 +42,7 @@
     self.optionCellStyle = CKTableViewCellStyleIPhoneForm;
     self.internalBindingContext = [NSString stringWithFormat:@"<%p>_CKOptionPropertyCellController",self];
     self.flags = CKItemViewFlagNone;
-    _presentsOptionsAsPopover = NO;
+    _presentationStyle = CKOptionPropertyCellControllerPresentationStyleDefault;
 }
 
 
@@ -240,8 +241,14 @@
     
     CKPopoverController* popover = nil;
     
+    //USE PRESENTATION STYLE
     CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
-    if((attributes.presentsOptionsAsPopover || self.presentsOptionsAsPopover) && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ){
+    CKOptionPropertyCellControllerPresentationStyle presentationStyle = self.presentationStyle;
+    if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleDefault){
+        presentationStyle = attributes.presentationStyle;
+    }
+
+    if((presentationStyle == CKOptionPropertyCellControllerPresentationStylePopover) && [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad ){
         popover = [[CKPopoverController alloc]initWithContentViewController:self.optionsViewController];
     }
     
@@ -286,7 +293,19 @@
         [popover presentPopoverFromRect:self.view.frame inView:[self.view superview] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
     else{
-        [self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
+        if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleModal){
+            __block CKOptionTableViewController* bcontroller = self.optionsViewController;
+            self.optionsViewController.leftButton = [[[UIBarButtonItem alloc]initWithTitle:_(@"Close") style:UIBarButtonItemStyleBordered block:^{
+                [bcontroller dismissModalViewControllerAnimated:YES];
+            }]autorelease];
+            
+            UINavigationController* nav = [[[UINavigationController alloc]initWithRootViewController:self.optionsViewController]autorelease];
+            nav.modalPresentationStyle = UIModalPresentationFormSheet;
+            
+            [self.containerController presentModalViewController:nav animated:YES];
+        }else{
+            [self.containerController.navigationController pushViewController:self.optionsViewController animated:YES];
+        }
     }
 }
 

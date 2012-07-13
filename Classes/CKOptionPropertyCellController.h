@@ -23,7 +23,7 @@
 
 /**
  */
-@property (nonatomic,assign) BOOL presentsOptionsAsPopover;
+@property (nonatomic,assign) CKOptionPropertyCellControllerPresentationStyle presentationStyle;
 
 ///-----------------------------------
 /// @name Getting the optionsViewController representing the options on selection

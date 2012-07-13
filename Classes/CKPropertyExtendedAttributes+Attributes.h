@@ -161,6 +161,13 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
 
 typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value1, NSString* label1,id value2, NSString* label2);
 
+typedef enum CKOptionPropertyCellControllerPresentationStyle{
+    CKOptionPropertyCellControllerPresentationStyleDefault,
+    CKOptionPropertyCellControllerPresentationStylePush,
+    CKOptionPropertyCellControllerPresentationStylePopover,
+    CKOptionPropertyCellControllerPresentationStyleModal
+}CKOptionPropertyCellControllerPresentationStyle;
+
 /**
  */
 @interface CKPropertyExtendedAttributes (CKOptionPropertyCellController)
@@ -175,7 +182,7 @@ typedef NSComparisonResult(^CKOptionPropertyCellControllerSortingBlock)(id value
 
 /**
  */
-@property (nonatomic, assign) BOOL presentsOptionsAsPopover;
+@property (nonatomic, assign) CKOptionPropertyCellControllerPresentationStyle presentationStyle;
 
 /**
  */

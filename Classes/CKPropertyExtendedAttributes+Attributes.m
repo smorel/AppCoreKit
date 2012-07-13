@@ -222,7 +222,7 @@
 @implementation CKPropertyExtendedAttributes (CKOptionPropertyCellController)
 @dynamic multiSelectionEnabled;
 @dynamic sortingBlock;
-@dynamic presentsOptionsAsPopover;
+@dynamic presentationStyle;
 
 - (void)setMultiSelectionEnabled:(BOOL)multiSelectionEnabled{
     [self.attributes setObject:[NSNumber numberWithBool:multiSelectionEnabled] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_multiSelectionEnabled"];
@@ -234,14 +234,14 @@
     return NO;
 }
 
-- (void)setPresentsOptionsAsPopover:(BOOL)presentsOptionsAsPopover{
-    [self.attributes setObject:[NSNumber numberWithBool:presentsOptionsAsPopover] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentsOptionsAsPopover"];
+- (void)setPresentationStyle:(CKOptionPropertyCellControllerPresentationStyle)presentationStyle{
+    [self.attributes setObject:[NSNumber numberWithInt:presentationStyle] forKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentationStyle"];
 }
 
-- (BOOL)presentsOptionsAsPopover{
-    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentsOptionsAsPopover"];
-    if(value) return [value boolValue];
-    return NO;
+- (CKOptionPropertyCellControllerPresentationStyle)presentationStyle{
+    id value = [self.attributes objectForKey:@"CKPropertyExtendedAttributes_CKOptionPropertyCellController_presentationStyle"];
+    if(value) return (CKOptionPropertyCellControllerPresentationStyle)[value intValue];
+    return CKOptionPropertyCellControllerPresentationStyleDefault;
 }
 
 - (void)setSortingBlock:(CKOptionPropertyCellControllerSortingBlock)block{
