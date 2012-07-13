@@ -66,7 +66,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		CKDebugLog(NO,@"Invalid WebSource Definition : Needs to define _requestBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
     
-    void (^oldCompletionBlock)(id response, NSHTTPURLResponse *urlResponse, NSError *error) = [self.request.completionBlock copy];
+    void (^oldCompletionBlock)(id response, NSHTTPURLResponse *urlResponse, NSError *error) = self.request.completionBlock;
     self.request.completionBlock = ^(id value, NSHTTPURLResponse *response, NSError *error){
         if(oldCompletionBlock){
             oldCompletionBlock(value,response,error);

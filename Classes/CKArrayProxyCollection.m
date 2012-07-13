@@ -21,6 +21,12 @@
 
 @synthesize property = _property;
 
+- (void)dealloc{
+    [_property release];
+    _property = nil;
+    [super dealloc];
+}
+
 + (CKArrayProxyCollection*)collectionWithArrayProperty:(CKProperty*)property{
 	return [[[CKArrayProxyCollection alloc]initWithArrayProperty:property]autorelease];
 }

@@ -26,8 +26,9 @@
         for(CKCollection* collection in _collections){
             [collection removeObserver:self];
         }
+        [_collections release];
+        _collections = nil;
     }
-    //Do not release objects as collections inherits CKObject
     [super dealloc];
 }
 

@@ -51,8 +51,6 @@
 
 - (void)dealloc {
     [_collectionObjects release];
-    self.property = nil;
-    
     [super dealloc];
 }
 

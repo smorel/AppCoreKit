@@ -24,8 +24,11 @@
 - (void)dealloc{
     if(_collection){
         [_collection removeObserver:self];
+        [_collection release];
+        _collection = nil;
     }
-    //Do not release objects as collections inherits CKObject
+    [_predicate release];
+    _predicate = nil;
     [super dealloc];
 }
 
