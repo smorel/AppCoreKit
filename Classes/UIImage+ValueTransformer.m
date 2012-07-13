@@ -72,6 +72,7 @@
     UIImage * anImage = [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
     
     CGImageRelease(imageRef);
+    CGDataProviderRelease(ref);
     
     return anImage;
 }

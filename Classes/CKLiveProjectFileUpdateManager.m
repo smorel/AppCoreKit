@@ -94,6 +94,8 @@
                 handleBlock(localPath);
         }
     }];
+    
+    [pathsCopy release];
 }
 
 @end
