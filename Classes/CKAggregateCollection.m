@@ -38,6 +38,9 @@
 - (id)initWithCollections:(NSArray*)thecollections{
     self = [super init];
     self.collections = thecollections;
+    
+    [self updateArray];
+    
     return self; 
 }
 
@@ -70,6 +73,8 @@
     [_collections release];
     _collections = [theCollections retain];
     
+    [self updateArray];
+    
     BOOL bo = [self allCollections_isFetching];
     self.isFetching = bo;
     
@@ -83,8 +88,6 @@
         }];
     }
     [self endBindingsContext];
-    
-    [self updateArray];
 }
 
 - (void)observeValueForKeyPath:(NSString *)theKeyPath

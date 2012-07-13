@@ -101,11 +101,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        [self postInit];
-    }
-    return self;
+    return [self initWithNibName:nil bundle:nil];
 }
 
 

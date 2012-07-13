@@ -39,6 +39,10 @@
     if(_calloutView){
         self.clipsToBounds = NO;
         
+        for(int i =4; i< 8; ++i){
+            UIView* view = [[self subviews]objectAtIndex:i];
+            view.hidden = YES;
+        }
         
         UIImageView* arrowTop = (UIImageView*)[[self subviews]objectAtIndex:2];
         arrowTop.hidden = YES;
@@ -89,14 +93,20 @@
 
 @end
 
+@interface CKAnnotationView()
+@property(nonatomic,retain)UIViewController* calloutViewController;
+@end
 
 @implementation CKAnnotationView
 @synthesize calloutViewController = _calloutViewController;
 @synthesize annotationController = _annotationController;
+@synthesize calloutViewControllerCreationBlock = _calloutViewControllerCreationBlock;
 
 - (void)dealloc{
     [_calloutViewController release];
     _calloutViewController = nil;
+    [_calloutViewControllerCreationBlock release];
+    _calloutViewControllerCreationBlock = nil;
     [super dealloc];
 }
 
@@ -119,31 +129,36 @@
             [_calloutViewController viewWillDisappear:YES];
             [_calloutViewController.view removeFromSuperview];
             [_calloutViewController viewDidDisappear:YES];
+            
+            self.calloutViewController = nil;
         }
     }
 }
 
 - (void)didAddSubview:(UIView *)subview{
-    if(_calloutViewController){
+    if(_calloutViewControllerCreationBlock){
         if ([[[subview class] description] isEqualToString:@"UICalloutView"]) {
             object_setClass(subview,[CKCalloutView class]);
             
             CKCalloutView* v = (CKCalloutView*)subview;
             
-            UIView* view = [_calloutViewController view];
-            CGSize size = _calloutViewController.contentSizeForViewInPopover;
-            if([_calloutViewController isKindOfClass:[UINavigationController class]]){
-                UINavigationController* nav = (UINavigationController*)_calloutViewController;
-                size = nav.topViewController.contentSizeForViewInPopover;
+            self.calloutViewController = _calloutViewControllerCreationBlock(self.annotationController,self);
+            if(_calloutViewController){
+                UIView* view = [_calloutViewController view];
+                CGSize size = _calloutViewController.contentSizeForViewInPopover;
+                if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+                    UINavigationController* nav = (UINavigationController*)_calloutViewController;
+                    size = nav.topViewController.contentSizeForViewInPopover;
+                }
+                view.width = size.width;
+                view.height = size.height;
+                
+                v.calloutView = view;
+                
+                [_calloutViewController viewWillAppear:YES];
+                [subview addSubview:view];
+                [_calloutViewController viewDidAppear:YES];
             }
-            view.width = size.width;
-            view.height = size.height;
-            
-            v.calloutView = view;
-            
-            [_calloutViewController viewWillAppear:YES];
-            [subview addSubview:view];
-            [_calloutViewController viewDidAppear:YES];
         }
     }
 }

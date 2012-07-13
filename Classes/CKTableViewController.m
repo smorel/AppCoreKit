@@ -394,6 +394,8 @@
 #pragma mark CKCollectionViewController Implementation
 
 - (NSArray*)visibleIndexPaths{
+    if(self.tableViewHasBeenReloaded == NO)
+        return nil;
 	return [self.tableView indexPathsForVisibleRows];
 }
 

@@ -155,9 +155,12 @@
 	if([_controllerFactory respondsToSelector:@selector(setObjectController:)]){
 		[_controllerFactory performSelector:@selector(setObjectController:) withObject:_objectController];
 	}
-	
-	if(([self state] & CKViewControllerStateDidAppear) && [controller respondsToSelector:@selector(setDelegate:)]){
+    
+    if([controller respondsToSelector:@selector(setDelegate:)]){
 		[controller performSelector:@selector(setDelegate:) withObject:self];
+    }
+	
+	if(([self state] & CKViewControllerStateDidAppear)){
         [self reload];
         for(int i =0; i< [self numberOfSections];++i){
             [self fetchMoreIfNeededFromIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
@@ -183,17 +186,10 @@
 - (void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
 	[self updateViewsVisibility:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	if([_objectController respondsToSelector:@selector(setDelegate:)]){
-		[_objectController performSelector:@selector(setDelegate:) withObject:self];
-	}
-    
     [super viewDidAppear:animated];
 }
 
@@ -812,9 +808,11 @@
             [indexsToRemove setObject:indexSet forKey:[NSNumber numberWithInt:[indexPath section]]];
         }
         
-        NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
-        if([indexPath row] < [controllers count]){
-            [indexSet addIndex:[indexPath row]];
+        if([self.sectionsToControllers count] > [indexPath section]){
+            NSMutableArray* controllers = [self.sectionsToControllers objectAtIndex:[indexPath section]];
+            if([indexPath row] < [controllers count]){
+                [indexSet addIndex:[indexPath row]];
+            }
         }
     }
     

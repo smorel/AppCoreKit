@@ -160,7 +160,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 	
 	int i =0;
 	for(NSString* subPropertyName in properties){
-		CKProperty* property = [CKProperty propertyWithObject:object keyPath:subPropertyName];
+		CKProperty* property = [CKProperty weakPropertyWithObject:object keyPath:subPropertyName];
         if([property descriptor]){
             id value = [property value];
             NSString* valueString = value ? [NSValueTransformer transformProperty:property toClass:[NSString class]] : @"null";

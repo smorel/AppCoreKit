@@ -75,7 +75,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     BOOL delayedCallToSuper = NO;
     if([view isKindOfClass:[CKAnnotationView class]]){
         CKAnnotationView* customView = (CKAnnotationView*)view;
-        if(customView.calloutViewController){
+        if(customView.calloutViewControllerCreationBlock){
             delayedCallToSuper = YES;
             self.annotationToSelectAfterScrolling = annotation;
             [self setCenterCoordinate:annotation.coordinate animated:YES];
@@ -504,7 +504,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     if([view isKindOfClass:[CKAnnotationView class]]){
         CKAnnotationView* customView = (CKAnnotationView*)view;
-        if(customView.calloutViewController){
+        if(customView.calloutViewControllerCreationBlock){
             CKMapView* ckMapView = (CKMapView*)mapView;
             ckMapView.annotationToSelectAfterScrolling = customView.annotation;
             [self.mapView setCenterCoordinate:customView.annotation.coordinate animated:YES];

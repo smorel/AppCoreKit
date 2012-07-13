@@ -19,6 +19,10 @@ typedef enum CKMapAnnotationStyle{
 }CKMapAnnotationStyle;
 
 @class CKMapAnnotationController;
+@class CKAnnotationView;
+
+typedef UIViewController*(^CKAnnotationCalloutViewControllerCreationBlock)(CKMapAnnotationController* annotationController, CKAnnotationView* annotationView);
+
 
 /**
  */
@@ -30,7 +34,7 @@ typedef enum CKMapAnnotationStyle{
 
 /**
  */
-@property(nonatomic,retain)UIViewController* calloutViewController;
+@property(nonatomic,copy) CKAnnotationCalloutViewControllerCreationBlock calloutViewControllerCreationBlock;
 
 ///-----------------------------------
 /// @name Accessing the parent controllers and views

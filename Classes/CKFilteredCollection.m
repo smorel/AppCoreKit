@@ -39,6 +39,8 @@
     self.predicate = thepredicate;
     self.collection = theCollection;
     
+    [self updateFilteredArray];
+    
     BOOL bo = [theCollection isFetching];
     self.isFetching =  bo;
     
@@ -49,6 +51,7 @@
         bself.isFetching =  bo;
     }];
     [self endBindingsContext];
+    
     
     return self;
 }
