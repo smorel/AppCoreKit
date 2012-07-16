@@ -2,7 +2,7 @@
 //  CKConnections.m
 //  CloudKitApp
 //
-//  Created by Sebastien Morel on 11-01-22.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

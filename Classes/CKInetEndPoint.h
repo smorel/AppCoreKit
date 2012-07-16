@@ -2,7 +2,7 @@
 //  CKInetEndPoint.h
 //  CloudKit
 //
-//  Created by Fred Brunel on 10-12-15.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 //  Represents a network endpoint as an IP address and a port number.

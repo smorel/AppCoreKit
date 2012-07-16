@@ -2,7 +2,7 @@
 //  CKSlideshowViewController.m
 //  CloudKit
 //
-//  Created by Olivier Collet on 09-12-01.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

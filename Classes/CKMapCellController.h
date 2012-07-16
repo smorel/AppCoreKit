@@ -2,7 +2,7 @@
 //  CKMapCellController.h
 //  CloudKit
 //
-//  Created by Fred Brunel on 10-05-26.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

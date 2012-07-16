@@ -2,7 +2,7 @@
 //  CKUIKeyboardInformation.h
 //  CloudKit
 //
-//  Created by Olivier Collet on 10-09-17.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

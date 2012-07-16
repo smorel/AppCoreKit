@@ -2,7 +2,7 @@
 //  CKSlotView.m
 //  CloudKit
 //
-//  Created by Fred Brunel on 16/04/09.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

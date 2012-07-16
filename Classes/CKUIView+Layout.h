@@ -1,8 +1,8 @@
 //
 //  CKUIView+Layout.h
-//  YellowPages
+//  CloudKit
 //
-//  Created by Olivier Collet on 10-05-20.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

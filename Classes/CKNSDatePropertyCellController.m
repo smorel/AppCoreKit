@@ -2,7 +2,7 @@
 //  CKNSDatePropertyCellController.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-06-09.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

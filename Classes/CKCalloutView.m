@@ -1,8 +1,8 @@
 //
 //  CKCalloutView.m
-//  YellowPages
+//  CloudKit
 //
-//  Created by Olivier Collet on 10-06-16.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

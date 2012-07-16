@@ -2,7 +2,7 @@
 //  CKNetworkActivityManager.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-02-22.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

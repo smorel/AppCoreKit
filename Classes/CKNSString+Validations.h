@@ -2,7 +2,7 @@
 //  CKNSString+Validations.h
 //  CloudKit
 //
-//  Created by Fred Brunel on 09-12-17.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

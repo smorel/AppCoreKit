@@ -2,7 +2,7 @@
 //  CKBasicCellController.h
 //  CloudKit
 //
-//  Created by Olivier Collet on 09-12-15.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  CKAttributesDictionary.m
 //  CloudKit
 //
-//  Created by Fred Brunel on 10-02-11.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

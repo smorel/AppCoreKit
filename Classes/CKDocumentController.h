@@ -2,7 +2,7 @@
 //  CKFeedController.h
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-03-16.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

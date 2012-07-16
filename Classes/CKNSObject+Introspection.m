@@ -1,8 +1,8 @@
 //
 //  ObjectIntrospection.m
-//  CloudKitApp
+//  CloudKit
 //
-//  Created by Sebastien Morel on 11-01-18.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

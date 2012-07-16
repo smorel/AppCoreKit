@@ -1,8 +1,8 @@
 //
 //  UIView+CKDragNDrop.m
-//  AnimKit
+//  CloudKit
 //
-//  Created by Sebastien Morel on 12-02-21.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 WhereCloud Inc. All rights reserved.
 //
 

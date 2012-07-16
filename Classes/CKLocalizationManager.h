@@ -1,8 +1,8 @@
 //
 //  CKLocalizationManager.h
-//  Volvo
+//  CloudKit
 //
-//  Created by Sebastien Morel on 11-11-10.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 

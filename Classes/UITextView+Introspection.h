@@ -2,7 +2,7 @@
 //  UITextView+Introspection.h
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-09-15.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

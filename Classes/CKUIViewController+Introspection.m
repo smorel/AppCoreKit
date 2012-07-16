@@ -2,7 +2,7 @@
 //  CKUIViewController+Introspection.m
 //  CloudKit
 //
-//  Created by Antoine Lamy on 11-09-30.
+//  Created by Antoine Lamy.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

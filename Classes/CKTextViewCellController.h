@@ -2,7 +2,7 @@
 //  CKTextViewCellController.h
 //  CloudKit
 //
-//  Created by Olivier Collet on 10-11-26.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

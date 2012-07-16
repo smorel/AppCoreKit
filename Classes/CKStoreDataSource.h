@@ -1,8 +1,8 @@
 //
 //  CKStoreDataSource.h
-//  StoreTest
+//  CloudKit
 //
-//  Created by Sebastien Morel on 11-06-02.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

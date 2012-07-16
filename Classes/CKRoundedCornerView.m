@@ -2,7 +2,7 @@
 //  BackgroundView.m
 //  GroupedTableStyled
 //
-//  Created by Olivier Collet on 11-04-08.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  CKStoreExplorer.m
-//  Express
+//  CloudKit
 //
-//  Created by Oli Kenobi on 10-01-24.
+//  Created by Oli Kenobi.
 //  Copyright 2010 Kenobi Studios. All rights reserved.
 //
 

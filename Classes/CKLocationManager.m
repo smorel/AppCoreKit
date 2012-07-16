@@ -2,7 +2,7 @@
 //  CKLocation.m
 //  CloudKit
 //
-//  Created by Olivier Collet on 09-11-19.
+//  Created by Olivier Collet.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

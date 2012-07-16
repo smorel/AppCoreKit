@@ -2,7 +2,7 @@
 //  CKFormTableViewController+Menus.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-08-04.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

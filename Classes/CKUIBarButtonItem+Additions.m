@@ -2,7 +2,7 @@
 //  CKUIBarButtonItem+Additions.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 12-03-15.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 

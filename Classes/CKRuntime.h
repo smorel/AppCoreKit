@@ -2,7 +2,7 @@
 //  CKRuntime.h
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-11-30.
+//  Created by Sebastien Morel.
 //  Copyright (c) 2011 WhereCloud Inc. All rights reserved.
 //
 

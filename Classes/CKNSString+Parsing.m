@@ -2,7 +2,7 @@
 //  NSString+Parsing.m
 //  CloudKit
 //
-//  Created by Jean-Philippe Martin on 11-02-04.
+//  Created by Jean-Philippe Martin.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

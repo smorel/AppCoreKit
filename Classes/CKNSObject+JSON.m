@@ -2,7 +2,7 @@
 //  CKNSObject+JSON.m
 //  CloudKit
 //
-//  Created by Fred Brunel on 11-01-10.
+//  Created by Fred Brunel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

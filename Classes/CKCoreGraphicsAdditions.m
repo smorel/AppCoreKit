@@ -2,7 +2,7 @@
 //  CKCoreGraphicsAdditions.m
 //  CloudKit
 //
-//  Created by Olivier Collet on 11-01-20.
+//  Created by Olivier Collet.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

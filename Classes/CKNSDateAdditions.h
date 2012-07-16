@@ -1,7 +1,7 @@
 //
 //  CKNSDateAdditions.h
 //
-//  Created by Fred Brunel on 04/08/09.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

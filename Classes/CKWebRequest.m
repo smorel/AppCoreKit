@@ -2,7 +2,7 @@
 //  CKWebRequest.m
 //  CloudKit
 //
-//  Created by Fred Brunel on 09-11-09.
+//  Created by Fred Brunel.
 //  Copyright 2009 WhereCloud Inc. All rights reserved.
 //
 

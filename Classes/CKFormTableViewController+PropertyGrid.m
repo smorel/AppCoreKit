@@ -2,7 +2,7 @@
 //  CKFormTableViewController+PropertyGrid.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-07-29.
+//  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 

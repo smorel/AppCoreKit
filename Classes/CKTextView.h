@@ -2,7 +2,7 @@
 //  CKTextView.h
 //  CloudKit
 //
-//  Created by Olivier Collet on 10-11-24.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

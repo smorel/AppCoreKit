@@ -1,7 +1,7 @@
 //
 //  CKNSManagedObjectContext+Request.h
 //
-//  Created by Fred Brunel on 2010/01/05.
+//  Created by Fred Brunel.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

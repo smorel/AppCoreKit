@@ -2,7 +2,7 @@
 //  CKThumbnailImageTransformer.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-02-08.
+//  Created by Sebastien Morel8.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  CKWebViewController.m
 //  CloudKit
 //
-//  Created by Olivier Collet on 10-02-03.
+//  Created by Olivier Collet.
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 

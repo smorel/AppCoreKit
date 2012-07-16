@@ -2,7 +2,7 @@
 //  CKUIView+Factory.h
 //  CloudKit
 //
-//  Created by Jean-Philippe Martin on 11-01-26.
+//  Created by Jean-Philippe Martin.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 

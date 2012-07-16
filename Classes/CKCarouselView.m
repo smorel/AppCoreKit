@@ -2,7 +2,7 @@
 //  CKCarouselView.m
 //  CloudKit
 //
-//  Created by Sebastien Morel on 11-04-07.
+//  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
