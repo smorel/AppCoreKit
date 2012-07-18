@@ -111,6 +111,10 @@ typedef CKTableViewCellController*(^CKCellControllerCreationBlock)(CKProperty* p
  */
 @property (nonatomic, retain) NSNumber* maximumValue;
 
+/**
+ */
+@property (nonatomic, retain) NSNumber* placeholderValue;
+
 @end
 
 

@@ -160,9 +160,16 @@
             
             [cell beginBindingsContextByRemovingPreviousBindings];
             [model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
-                NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
-                if(![bself.textField.text isEqualToString:str]){
-                    bself.textField.text = str;
+                CKPropertyExtendedAttributes* attributes = [model extendedAttributes];
+                if(attributes.placeholderValue && [attributes.placeholderValue isEqualToNumber:[model value]]){
+                    if(bself.textField.text != nil){
+                        bself.textField.text = nil;
+                    }
+                }else{
+                    NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
+                    if(![bself.textField.text isEqualToString:str]){
+                        bself.textField.text = str;
+                    }
                 }
             }];
             [cell endBindingsContext];
