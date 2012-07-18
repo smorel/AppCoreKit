@@ -730,10 +730,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
             CGRect detailFrame = [self subtitleDetailFrameUsingText:self.text textStyle:textStyle detailText:self.detailText detailTextStyle:detailStyle image:self.image textFrame:textFrame];
             
             if(!([self isKindOfClass:[CKNSStringPropertyCellController class] ] || [self isKindOfClass:[CKNSNumberPropertyCellController class] ] || [self isKindOfClass:[CKMultilineNSStringPropertyCellController class] ])){
-                CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y + self.contentInsets.top + self.contentInsets.bottom;
-                CGFloat yoffset = ((cell.contentView.height - textsHeight) / 2);
-                textFrame.origin.y += yoffset;
-                detailFrame.origin.y += yoffset;
+                CGFloat textsHeight = detailFrame.origin.y + detailFrame.size.height - textFrame.origin.y;
+                CGFloat y = ((cell.contentView.height - textsHeight) / 2);
+                CGFloat yOffset = y - textFrame.origin.y;
+                textFrame.origin.y += yOffset;
+                detailFrame.origin.y += yOffset;
             }
             
             if(cell.textLabel != nil){
