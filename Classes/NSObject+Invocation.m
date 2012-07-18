@@ -23,19 +23,24 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 @synthesize block = _block;
 @synthesize objectRef = _objectRef;
 
-- (void)dealloc{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    
-    NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
-    if(ar){
-        [ar removeObject:[NSValue valueWithNonretainedObject:self]];
-        if([ar count] <= 0){
-            [CKInvokationRegistry removeObjectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
+- (void)unregister{
+    if(_objectRef){
+        NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
+        if(ar){
+            [ar removeObject:[NSValue valueWithNonretainedObject:self]];
+            if([ar count] <= 0){
+                [CKInvokationRegistry removeObjectForKey:[NSValue valueWithNonretainedObject:self.objectRef.object]];
+            }
         }
+        self.objectRef = nil;
     }
-    
+}
+
+- (void)dealloc{
+    [self unregister];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        
     [_block release];
-    [_objectRef release];
     [super dealloc];
 }
 
@@ -58,8 +63,8 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
-        [CKInvokationRegistry removeObjectForKey:[NSValue valueWithNonretainedObject:weakRef.object]];
         [NSObject cancelPreviousPerformRequestsWithTarget:bself];
+        [bself unregister];
         [bself autorelease];
     }];
     
@@ -68,11 +73,12 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     return self;
 }
 
+
 - (void)execute{
     if(_block){
         _block();
     }
-    
+    [self unregister];
     [self autorelease];
 }
 

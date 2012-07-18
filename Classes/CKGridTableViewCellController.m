@@ -13,6 +13,7 @@
 #import "CKTableViewCellController+DynamicLayout.h"
 #import "CKTableViewCellController+DynamicLayout_private.h"
 #import "CKGridCollectionViewController.h"
+#import "CKTableViewCellController+Style.h"
 
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
@@ -37,6 +38,7 @@
     [super postInit];
     _numberOfColumns = 2;
     self.flags = CKItemViewFlagNone;
+    self.contentInsets = UIEdgeInsetsMake(10, 10, 0, 10);
 }
 
 - (void)dealloc{

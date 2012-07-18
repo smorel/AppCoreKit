@@ -379,7 +379,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleBlue;
     self.accessoryType = UITableViewCellAccessoryNone;
     self.editingAccessoryType = UITableViewCellAccessoryNone;
-    self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    _contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     self.wantFlatHierarchy = NO;
     
     self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
@@ -425,6 +425,10 @@
     _dataDrivenViews = nil;
     
 	[super dealloc];
+}
+
+- (void)setContentInsets:(UIEdgeInsets)contentInsets{
+    _contentInsets = contentInsets;
 }
 
 - (void)setParentCellController:(CKTableViewCellController *)parentCellController{

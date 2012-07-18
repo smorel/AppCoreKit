@@ -17,6 +17,7 @@
 #import "CKTableViewCellController.h"
 #import "CKTableViewCellController+Style.h"
 #import "CKSectionViews.h"
+#import "NSObject+Bindings.h"
 
 #import "CKDebug.h"
 
@@ -50,6 +51,11 @@
         _collapsed = NO;
     }
 	return self;
+}
+
+- (void)dealloc{
+    [self clearBindingsContext];
+    [super dealloc];
 }
 
 - (NSInteger)sectionIndex{
