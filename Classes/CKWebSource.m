@@ -71,6 +71,11 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
         if(oldCompletionBlock){
             oldCompletionBlock(value,response,error);
         }
+        
+        if(![value isKindOfClass:[NSArray class]]){
+            error = [NSError errorWithDomain:@"CKWebSourceErrorDomain" code:-1 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Result value isn't an array",@"cause", value,@"result", nil]];
+        }
+        
         if (error) {
             [self didFailWithError:error];
         }
