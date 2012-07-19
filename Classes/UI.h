@@ -36,7 +36,7 @@
 
 #import "CKCollectionTableViewCellController.h"
 
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 #import "CKNSDatePropertyCellController.h"
 #import "CKNSNumberPropertyCellController.h"
 #import "CKNSStringPropertyCellController.h"

@@ -6,12 +6,12 @@
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 #import "CKOptionTableViewController.h"
 
 /**
  */
-@interface CKOptionPropertyCellController : CKPropertyGridCellController 
+@interface CKOptionPropertyCellController : CKPropertyTableViewCellController 
 
 ///-----------------------------------
 /// @name Customizing the appearance

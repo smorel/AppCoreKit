@@ -414,8 +414,8 @@
 		75CC172A13F4757700835FE3 /* NSValueTransformer+CGTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC172813F4757300835FE3 /* NSValueTransformer+CGTypes.m */; };
 		75F295DE13EB0089009CCC70 /* CKTableViewCellController+Menus.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F295DC13EB0088009CCC70 /* CKTableViewCellController+Menus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F295DF13EB0089009CCC70 /* CKTableViewCellController+Menus.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */; };
-		75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75F2960613F04490009CCC70 /* CKPropertyGridCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */; };
+		75F2960513F04490009CCC70 /* CKPropertyTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2960313F04490009CCC70 /* CKPropertyTableViewCellController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75F2960613F04490009CCC70 /* CKPropertyTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2960413F04490009CCC70 /* CKPropertyTableViewCellController.m */; };
 		75F2961213F196F9009CCC70 /* NSPredicate+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F2961013F196F9009CCC70 /* NSPredicate+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75F2961313F196F9009CCC70 /* NSPredicate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F2961113F196F9009CCC70 /* NSPredicate+Additions.m */; };
 		75FB52AF13F5D5F30053BD4A /* form-icon-invalid.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */; };
@@ -509,8 +509,8 @@
 		96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m */; };
 		96E4D3F315406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+DynamicLayout.h */; };
 		96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m */; };
-		96E4D3F715406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+DynamicLayout.h */; };
-		96E4D3F815406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.m */; };
+		96E4D3F715406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F515406FC000CCF421 /* CKPropertyTableViewCellController+DynamicLayout.h */; };
+		96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3F615406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m */; };
 		96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h */; };
 		96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m */; };
 		96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -954,8 +954,8 @@
 		75CC172813F4757300835FE3 /* NSValueTransformer+CGTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+CGTypes.m"; path = "Classes/NSValueTransformer+CGTypes.m"; sourceTree = "<group>"; };
 		75F295DC13EB0088009CCC70 /* CKTableViewCellController+Menus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTableViewCellController+Menus.h"; path = "Classes/CKTableViewCellController+Menus.h"; sourceTree = "<group>"; };
 		75F295DD13EB0088009CCC70 /* CKTableViewCellController+Menus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+Menus.m"; path = "Classes/CKTableViewCellController+Menus.m"; sourceTree = "<group>"; };
-		75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyGridCellController.h; path = Classes/CKPropertyGridCellController.h; sourceTree = "<group>"; };
-		75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKPropertyGridCellController.m; path = Classes/CKPropertyGridCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		75F2960313F04490009CCC70 /* CKPropertyTableViewCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKPropertyTableViewCellController.h; path = Classes/CKPropertyTableViewCellController.h; sourceTree = "<group>"; };
+		75F2960413F04490009CCC70 /* CKPropertyTableViewCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKPropertyTableViewCellController.m; path = Classes/CKPropertyTableViewCellController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		75F2961013F196F9009CCC70 /* NSPredicate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSPredicate+Additions.h"; path = "Classes/NSPredicate+Additions.h"; sourceTree = "<group>"; };
 		75F2961113F196F9009CCC70 /* NSPredicate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSPredicate+Additions.m"; path = "Classes/NSPredicate+Additions.m"; sourceTree = "<group>"; };
 		75FB52AD13F5D5F30053BD4A /* form-icon-invalid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid.png"; sourceTree = "<group>"; };
@@ -1058,8 +1058,8 @@
 		96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "CKMultilineNSStringPropertyCellController+DynamicLayout.m"; path = "Classes/CKMultilineNSStringPropertyCellController+DynamicLayout.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96E4D3F115406F5400CCF421 /* CKNSStringPropertyCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSStringPropertyCellController+DynamicLayout.h"; path = "Classes/CKNSStringPropertyCellController+DynamicLayout.h"; sourceTree = "<group>"; };
 		96E4D3F215406F5400CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSStringPropertyCellController+DynamicLayout.m"; path = "Classes/CKNSStringPropertyCellController+DynamicLayout.m"; sourceTree = "<group>"; };
-		96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKPropertyGridCellController+DynamicLayout.h"; path = "Classes/CKPropertyGridCellController+DynamicLayout.h"; sourceTree = "<group>"; };
-		96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKPropertyGridCellController+DynamicLayout.m"; path = "Classes/CKPropertyGridCellController+DynamicLayout.m"; sourceTree = "<group>"; };
+		96E4D3F515406FC000CCF421 /* CKPropertyTableViewCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKPropertyTableViewCellController+DynamicLayout.h"; path = "Classes/CKPropertyTableViewCellController+DynamicLayout.h"; sourceTree = "<group>"; };
+		96E4D3F615406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKPropertyTableViewCellController+DynamicLayout.m"; path = "Classes/CKPropertyTableViewCellController+DynamicLayout.m"; sourceTree = "<group>"; };
 		96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKNSNumberPropertyCellController+DynamicLayout.h"; path = "Classes/CKNSNumberPropertyCellController+DynamicLayout.h"; sourceTree = "<group>"; };
 		96E4D3FA1540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKNSNumberPropertyCellController+DynamicLayout.m"; path = "Classes/CKNSNumberPropertyCellController+DynamicLayout.m"; sourceTree = "<group>"; };
 		96E4D3FE15407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKUnitTest_TableViewCellController_DynamicLayout.h; path = Classes/CKUnitTest_TableViewCellController_DynamicLayout.h; sourceTree = "<group>"; };
@@ -1906,8 +1906,8 @@
 			isa = PBXGroup;
 			children = (
 				966B51E71594FAAC00311735 /* Private */,
-				75F2960313F04490009CCC70 /* CKPropertyGridCellController.h */,
-				75F2960413F04490009CCC70 /* CKPropertyGridCellController.m */,
+				75F2960313F04490009CCC70 /* CKPropertyTableViewCellController.h */,
+				75F2960413F04490009CCC70 /* CKPropertyTableViewCellController.m */,
 				7560DBB313B8ED3600268D13 /* CKNSDatePropertyCellController.h */,
 				7560DBB413B8ED3600268D13 /* CKNSDatePropertyCellController.m */,
 				7560DBBD13B8ED3600268D13 /* CKNSNumberPropertyCellController.h */,
@@ -2148,8 +2148,8 @@
 				964C207E153DD82600398E0F /* CKTableViewCellController+DynamicLayout.h */,
 				964C207F153DD82700398E0F /* CKTableViewCellController+DynamicLayout.m */,
 				963833BB15AF61D40089B86E /* CKTableViewCellController+DynamicLayout_Private.h */,
-				96E4D3F515406FC000CCF421 /* CKPropertyGridCellController+DynamicLayout.h */,
-				96E4D3F615406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.m */,
+				96E4D3F515406FC000CCF421 /* CKPropertyTableViewCellController+DynamicLayout.h */,
+				96E4D3F615406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m */,
 				96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h */,
 				96E4D3ED15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m */,
 				96E4D3F91540708900CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h */,
@@ -2316,7 +2316,7 @@
 				757578FB13E71C000082C247 /* CKSheetController.h in Headers */,
 				75B03FC313E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.h in Headers */,
 				75F295DE13EB0089009CCC70 /* CKTableViewCellController+Menus.h in Headers */,
-				75F2960513F04490009CCC70 /* CKPropertyGridCellController.h in Headers */,
+				75F2960513F04490009CCC70 /* CKPropertyTableViewCellController.h in Headers */,
 				75F2961213F196F9009CCC70 /* NSPredicate+Additions.h in Headers */,
 				75CC16C113F32B4500835FE3 /* CKPopoverController.h in Headers */,
 				75CC170113F46E3900835FE3 /* UIColor+ValueTransformer.h in Headers */,
@@ -2391,7 +2391,7 @@
 				964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */,
 				96E4D3EE15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h in Headers */,
 				96E4D3F315406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.h in Headers */,
-				96E4D3F715406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.h in Headers */,
+				96E4D3F715406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.h in Headers */,
 				96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h in Headers */,
 				96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */,
 				96E4D4671540918800CCF421 /* UnitTests.h in Headers */,
@@ -2683,7 +2683,7 @@
 				757578FC13E71C000082C247 /* CKSheetController.m in Sources */,
 				75B03FC413E9A8A100830B62 /* CKMultilineNSStringPropertyCellController.m in Sources */,
 				75F295DF13EB0089009CCC70 /* CKTableViewCellController+Menus.m in Sources */,
-				75F2960613F04490009CCC70 /* CKPropertyGridCellController.m in Sources */,
+				75F2960613F04490009CCC70 /* CKPropertyTableViewCellController.m in Sources */,
 				75F2961313F196F9009CCC70 /* NSPredicate+Additions.m in Sources */,
 				75CC16C213F32B4500835FE3 /* CKPopoverController.m in Sources */,
 				75CC170213F46E3900835FE3 /* UIColor+ValueTransformer.m in Sources */,
@@ -2740,7 +2740,7 @@
 				964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */,
 				96E4D3EF15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D3F415406F5500CCF421 /* CKNSStringPropertyCellController+DynamicLayout.m in Sources */,
-				96E4D3F815406FC100CCF421 /* CKPropertyGridCellController+DynamicLayout.m in Sources */,
+				96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */,
 				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */,
 				9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */,

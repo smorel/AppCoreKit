@@ -1,13 +1,13 @@
 //
-//  CKPropertyGridCellController.m
+//  CKPropertyTableViewCellController.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright 2011 Wherecloud. All rights reserved.
 //
 
-#import "CKPropertyGridCellController.h"
-#import "CKPropertyGridCellController+DynamicLayout.h"
+#import "CKPropertyTableViewCellController.h"
+#import "CKPropertyTableViewCellController+DynamicLayout.h"
 #import "NSObject+Bindings.h"
 #import "CKLocalization.h"
 #import "CKAlertView.h"
@@ -19,7 +19,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface CKPropertyGridCellController () 
+@interface CKPropertyTableViewCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
 @property(nonatomic,retain)UIImageView* validationImageView;
 @property(nonatomic,retain)UIView* oldAccessoryView;
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation CKPropertyGridCellController{
+@implementation CKPropertyTableViewCellController{
     UIButton* _validationButton;
     UIImageView* _validationImageView;
     UIView* _oldAccessoryView;

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 
 
 /**

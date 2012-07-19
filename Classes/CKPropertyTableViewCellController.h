@@ -1,5 +1,5 @@
 //
-//  CKPropertyGridCellController.h
+//  CKPropertyTableViewCellController.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
@@ -13,10 +13,10 @@
 #define CLICKABLE_VALIDATION_INFO 0
 
 /** 
- CKPropertyGridCellController is a base class for cell controllers working with a CKProperty value.
+ CKPropertyTableViewCellController is a base class for cell controllers working with a CKProperty value.
  This provides the base value for the mecanisms that should be implemented in subclasses like readonly, or value validation.
  */
-@interface CKPropertyGridCellController : CKTableViewCellController 
+@interface CKPropertyTableViewCellController : CKTableViewCellController 
 
 ///-----------------------------------
 /// @name Customizing the appearance

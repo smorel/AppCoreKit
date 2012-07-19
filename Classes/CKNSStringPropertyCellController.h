@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 
 
 /**
  */
-@interface CKNSStringPropertyCellController : CKPropertyGridCellController<UITextFieldDelegate> 
+@interface CKNSStringPropertyCellController : CKPropertyTableViewCellController<UITextFieldDelegate> 
 
 ///-----------------------------------
 /// @name Getting the Controls

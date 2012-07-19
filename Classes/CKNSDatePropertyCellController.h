@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 #include "CKSheetController.h"
 
 /**
@@ -76,7 +76,7 @@ typedef enum CKDatePickerMode{
 
 /**
  */
-@interface CKNSDatePropertyCellController : CKPropertyGridCellController<CKSheetControllerDelegate>
+@interface CKNSDatePropertyCellController : CKPropertyTableViewCellController<CKSheetControllerDelegate>
 
 ///-----------------------------------
 /// @name Editing

@@ -1,14 +1,14 @@
 //
-//  CKPropertyGridCellController+DynamicLayout.h
+//  CKPropertyTableViewCellController+DynamicLayout.h
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 
-@interface CKPropertyGridCellController (CKDynamicLayout)
+@interface CKPropertyTableViewCellController (CKDynamicLayout)
 
 - (void)performValidationLayout;
 - (CGRect)rectForValidationButtonWithCell:(UITableViewCell*)cell;

@@ -1,12 +1,12 @@
 //
-//  CKPropertyGridCellController+DynamicLayout.m
+//  CKPropertyTableViewCellController+DynamicLayout.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright (c) 2012 Wherecloud. All rights reserved.
 //
 
-#import "CKPropertyGridCellController+DynamicLayout.h"
+#import "CKPropertyTableViewCellController+DynamicLayout.h"
 #import "CKTableViewCellController+DynamicLayout_Private.h"
 #import "CKTableViewCellController+DynamicLayout.h"
 #import "NSObject+Bindings.h"
@@ -18,7 +18,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface CKPropertyGridCellController () 
+@interface CKPropertyTableViewCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
 @property(nonatomic,retain)UIImageView* validationImageView;
 @property(nonatomic,retain)UIView* oldAccessoryView;
@@ -26,7 +26,7 @@
 @property(nonatomic,retain)NSString* validationBindingContext;
 @end
 
-@implementation CKPropertyGridCellController(CKDynamicLayout)
+@implementation CKPropertyTableViewCellController(CKDynamicLayout)
 
 - (void)performLayout{
     [super performLayout];

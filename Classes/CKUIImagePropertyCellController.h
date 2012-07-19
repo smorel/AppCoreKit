@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CKPropertyGridCellController.h"
+#import "CKPropertyTableViewCellController.h"
 #import "CKNSObjectPropertyCellController.h"
 
 
 /**
  */
-@interface CKUIImagePropertyCellController : CKNSObjectPropertyCellController/*CKPropertyGridCellController*/ {
+@interface CKUIImagePropertyCellController : CKNSObjectPropertyCellController/*CKPropertyTableViewCellController*/ {
 
 }
 
