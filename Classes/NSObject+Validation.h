@@ -19,7 +19,7 @@
 
 /** Return the names of the invalid properties
  */
-@property(nonatomic,retain)NSMutableArray* invalidProperties;
+@property(nonatomic,retain) NSSet* invalidProperties;
 
 /**
  */

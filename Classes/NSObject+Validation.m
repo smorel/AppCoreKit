@@ -11,6 +11,7 @@
 #import "NSObject+Runtime_private.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "NSObject+Bindings.h"
+#import "CKProperty.h"
 
 /* TODO : see how we could integrate our validation predicates from attributes in the KVO validation methods.
         by swizzling for example ...
@@ -30,7 +31,7 @@
         if(attributes.validationPredicate){
             id object = [self valueForKey:property.name];
             if(![attributes.validationPredicate evaluateWithObject:object]){
-                [results.invalidProperties addObject:property.name];
+                [(NSMutableSet*)results.invalidProperties addObject:[CKProperty propertyWithObject:self keyPath:property.name]];
             }
         }
             //}
@@ -46,7 +47,7 @@
 
 - (id)init{
     self = [super init];
-    self.invalidProperties = [NSMutableArray array];
+    self.invalidProperties = [NSMutableSet set];
     return self;
 }
 

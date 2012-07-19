@@ -20,6 +20,7 @@
 @property (nonatomic,retain,readwrite) id object;
 @property (nonatomic,retain,readwrite) id keyPath;
 @property (nonatomic,retain,readwrite) CKClassPropertyDescriptor* descriptor;
+@property (nonatomic,retain) NSString* hashValue;
 - (void)postInit;
 @end
 
@@ -28,6 +29,7 @@
 @synthesize subObject = _subObject,subKeyPath;
 @synthesize descriptor;
 @synthesize weak;
+@synthesize hashValue;
 
 - (void)dealloc{
     self.object = nil;
@@ -35,6 +37,7 @@
     self.subObject = nil;
     self.subKeyPath = nil;
     self.descriptor = nil;
+    self.hashValue = nil;
 	[super dealloc];
 }
 
@@ -291,6 +294,22 @@
 
 - (id) copyWithZone:(NSZone *)zone {
     return [[CKProperty alloc]initWithObject:self.object keyPath:self.keyPath weak:self.weak];
+}
+
+- (BOOL)isEqual:(id)object{
+    if([object isKindOfClass:[CKProperty class]]){
+        CKProperty* other = (CKProperty*)object;
+        BOOL bo = (other.subObject == self.subObject) && [other.subKeyPath isEqualToString:self.subKeyPath];
+        return bo;
+    }
+    return NO;
+}
+
+- (NSUInteger)hash{
+    if(!self.hashValue){
+        self.hashValue = [NSString stringWithFormat:@"<%p>_%@",self.subObject,self.subKeyPath];
+    }
+    return [self.hashValue hash];
 }
 
 @end

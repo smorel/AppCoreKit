@@ -16,6 +16,7 @@
 #import "CKStyleManager.h"
 #import "UIView+Style.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKPropertyTableViewCellController.h"
 
 #import "CKDebug.h"
 
@@ -447,6 +448,23 @@
         }
     }
     [self objectControllerDidEndUpdating:self.objectController];
+}
+
+
+- (NSSet*)allEditingProperties{
+    NSMutableSet* set = [NSMutableSet set];
+    for(int section=0; section < [self numberOfSections];++section){
+        NSInteger rowCount = [self numberOfObjectsForSection:section];
+        for(int row=0;row < rowCount;++row){
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            CKCollectionCellController* cellController = [self controllerAtIndexPath:indexPath];
+            if([cellController isKindOfClass:[CKPropertyTableViewCellController class]]){
+                CKPropertyTableViewCellController* propertyCell = (CKPropertyTableViewCellController*)cellController;
+                [set addObject:propertyCell.value];
+            }
+        }
+    }
+    return set;
 }
 
 @end

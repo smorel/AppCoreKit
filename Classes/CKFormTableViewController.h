@@ -104,4 +104,8 @@
  */
 @property (nonatomic,assign) BOOL validationEnabled;
 
+/**
+ */
+- (NSSet*)allEditingProperties;
+
 @end
