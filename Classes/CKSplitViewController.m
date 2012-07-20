@@ -323,20 +323,19 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [UIView setAnimationsEnabled:NO];
     
     if(!self.hasBeenReloaded){
         self.hasBeenReloaded = YES;
         [_splitView reloadData];
     }
     
+    [UIView setAnimationsEnabled:NO];
+    [_splitView layoutSubviews];
+    [UIView setAnimationsEnabled:YES];
+    
     for(UIViewController* controller in self.viewControllers){
         [controller viewWillAppear:animated];
     }
-    
-    [_splitView setNeedsLayout];
-    
-    [UIView setAnimationsEnabled:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
