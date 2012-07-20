@@ -450,6 +450,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             }
             else{
                 dateController = (CKNSDateViewController*)[sheetController contentViewController];
+                if(self.enableNavigationToolbar){
+                    dateController.navigationItem.titleView = [self navigationToolbar];
+                }
             }
             dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
