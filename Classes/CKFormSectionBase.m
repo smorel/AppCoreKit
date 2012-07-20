@@ -110,8 +110,8 @@
         v.tableViewController = _parentController;
     }
     
-    if([_footerView isKindOfClass:[CKSectionHeaderView class]]){
-        CKSectionHeaderView* v = (CKSectionHeaderView*)_footerView;
+    if([_footerView isKindOfClass:[CKSectionFooterView class]]){
+        CKSectionFooterView* v = (CKSectionFooterView*)_footerView;
         v.tableViewController = _parentController;
     }
 }
@@ -150,13 +150,13 @@
     _footerTitle = [footerTitle retain];
     
     if(!_footerView){
-        CKSectionHeaderView* v = [[[CKSectionHeaderView alloc]init]autorelease];
-        v.text = _headerTitle;
+        CKSectionFooterView* v = [[[CKSectionFooterView alloc]init]autorelease];
+        v.text = _footerTitle;
         [self setFooterView:v];
     }else{
-        if([_footerView isKindOfClass:[CKSectionHeaderView class]]){
-            CKSectionHeaderView* v = (CKSectionHeaderView*)_headerView;
-            v.text = _headerTitle;
+        if([_footerView isKindOfClass:[CKSectionFooterView class]]){
+            CKSectionFooterView* v = (CKSectionFooterView*)_headerView;
+            v.text = _footerTitle;
         }
         [[_parentController tableView] reloadSections:[NSIndexSet indexSetWithIndex:[self sectionVisibleIndex]] withRowAnimation:UITableViewRowAnimationNone];
     }
@@ -166,8 +166,8 @@
     [_footerView release];
     _footerView = [footerView retain];
     
-    if([footerView isKindOfClass:[CKSectionHeaderView class]]){
-        CKSectionHeaderView* v = (CKSectionHeaderView*)footerView;
+    if([footerView isKindOfClass:[CKSectionFooterView class]]){
+        CKSectionFooterView* v = (CKSectionFooterView*)footerView;
         v.tableViewController = _parentController;
     }
     
