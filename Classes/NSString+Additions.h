@@ -39,4 +39,8 @@
   */
 - (NSString *)stringUsingASCIIEncoding;
 
+/**
+ */
+- (NSString*)stringByTrimmingLeadingAndEndingSpaces;
+
 @end

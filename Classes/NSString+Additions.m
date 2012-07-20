@@ -27,4 +27,10 @@
 	return [[[NSString alloc] initWithData:[self dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES] encoding:NSASCIIStringEncoding] autorelease];
 }
 
+- (NSString*)stringByTrimmingLeadingAndEndingSpaces{
+    NSRange range = [self rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
+    NSString *result = [self stringByReplacingCharactersInRange:range withString:@""];
+    return result;
+}
+
 @end
