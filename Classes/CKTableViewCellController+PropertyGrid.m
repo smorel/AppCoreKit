@@ -141,9 +141,8 @@
     }
     
     if(cellController){
-        cellController.value = property;
-        cellController.cellStyle = CKTableViewCellStyleIPhoneForm;
         
+        cellController.cellStyle = CKTableViewCellStyleIPhoneForm;
         if([cellController respondsToSelector:@selector(setOptionCellStyle:)]){
             CKTableViewCellStyle subStyle = CKTableViewCellStyleIPhoneForm;
             
@@ -165,6 +164,8 @@
                             atIndex:2];
             [invocation invoke];
         }
+        
+        cellController.value = property;
     }
     
     return cellController;
