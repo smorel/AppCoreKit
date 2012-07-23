@@ -65,6 +65,7 @@
     if(!_label){
         self.label = [[[UILabel alloc]initWithFrame:self.frame]autorelease];
         _label.autoresizingMask = UIViewAutoresizingFlexibleSize;
+        _label.backgroundColor = [UIColor clearColor];
         [self addSubview:_label];
     }
 }
