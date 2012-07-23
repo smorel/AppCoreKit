@@ -289,21 +289,21 @@
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     [super setHighlighted:highlighted animated:animated];
     
-    if (self.delegate.wantFlatHierarchy)
-        [self.delegate flattenHierarchyHighlighted:highlighted];
+    //if (self.delegate.wantFlatHierarchy)
+    //    [self.delegate flattenHierarchyHighlighted:highlighted];
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
     
-    [self.delegate restoreViews];
+    //[self.delegate restoreViews];
 }
 
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     
-    if (self.delegate.wantFlatHierarchy)
-        [self.delegate flattenHierarchyHighlighted:self.isHighlighted];
+    //if (self.delegate.wantFlatHierarchy)
+    //    [self.delegate flattenHierarchyHighlighted:self.isHighlighted];
 }
 
 @end
@@ -384,7 +384,7 @@
     self.accessoryType = UITableViewCellAccessoryNone;
     self.editingAccessoryType = UITableViewCellAccessoryNone;
     _contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.wantFlatHierarchy = NO;
+    //self.wantFlatHierarchy = NO;
     
     self.cacheLayoutBindingContextId = [NSString stringWithFormat:@"<%p>_SpecialStyleLayout",self];
     _indentationLevel = 0;

@@ -8,6 +8,8 @@
 
 #import "CKTableViewCellController.h"
 
+
+/*
 @interface CKTableViewCellController (FlatHierarchy)
 
 @property (nonatomic, assign) BOOL wantFlatHierarchy;
@@ -15,3 +17,4 @@
 - (void)restoreViews;
 
 @end
+*/

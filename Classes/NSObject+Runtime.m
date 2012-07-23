@@ -213,10 +213,14 @@ void introspectTextInputsProperties(){
 
 + (BOOL)isClass:(Class)type exactKindOfClass:(Class)parentType{
 	if(parentType){
-		const char* t1 = class_getName(type);
-		const char* t2 = class_getName(parentType);
-		if(strcmp(t1,t2) == 0)
-			return YES;
+        if(type == parentType)
+            return YES;
+        
+		//const char* t1 = class_getName(type);
+		//const char* t2 = class_getName(parentType);
+		//if(strcmp(t1,t2) == 0)
+		//	return YES;
+        
 		return NO;
 	}
 	return YES;
@@ -224,14 +228,17 @@ void introspectTextInputsProperties(){
 
 
 + (BOOL)isClass:(Class)type exactKindOfClassNamed:(NSString*)parentClassName{
-    if(parentClassName){
+    Class parentType = NSClassFromString(parentClassName);
+    return [self isClass:type exactKindOfClass:parentType];
+    
+    /*if(parentClassName){
 		const char* t1 = class_getName(type);
 		const char* t2 = [parentClassName UTF8String];
 		if(strcmp(t1,t2) == 0)
 			return YES;
 		return NO;
 	}
-	return YES;
+	return YES;*/
 }
 
 + (NSArray*)allClasses{

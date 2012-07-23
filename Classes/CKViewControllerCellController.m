@@ -52,11 +52,14 @@
     [super setupCell:cell];
     
 	UIView* controllerView = [_viewController view];
-    controllerView.frame = cell.contentView.bounds;
-    controllerView.x += self.contentInsets.left;
-    controllerView.y += self.contentInsets.top;
-    controllerView.width -= self.contentInsets.left + self.contentInsets.right;
-    controllerView.height -= self.contentInsets.top + self.contentInsets.bottom;
+    controllerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    CGRect frame = cell.contentView.bounds;
+    frame.origin.x += self.contentInsets.left;
+    frame.origin.y += self.contentInsets.top;
+    frame.size.width -= self.contentInsets.left + self.contentInsets.right;
+    frame.size.height -= self.contentInsets.top + self.contentInsets.bottom;
+    controllerView.frame = frame;
     [cell.contentView addSubview:controllerView];
     
     [self setupViewControllerView:controllerView];

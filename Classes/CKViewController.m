@@ -469,27 +469,46 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         _viewWillAppearBlock(self,animated);
     }
     
-    if(self.rightButton){
-		[self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
-	}
-	
-	if(self.leftButton){
-		[self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
-	}
-    
-    [self applyStyleForNavigation];
-    
-    //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
-    if([CKOSVersion() floatValue]< 4.2){
-        UIBarButtonItem* left = self.navigationItem.leftBarButtonItem;
-        UIBarButtonItem* right = self.navigationItem.rightBarButtonItem;
-        self.navigationItem.leftBarButtonItem = nil;
-        self.navigationItem.rightBarButtonItem = nil;
-		[self.navigationItem setLeftBarButtonItem:left animated:animated];
-		[self.navigationItem setRightBarButtonItem:right animated:animated];
+    if([[self containerViewController]isKindOfClass:[CKCollectionViewController class]]){
+        //skip style for navigation as we are contained by a collection view cell
+               
+        NSMutableDictionary* controllerStyle = nil;
+        if(!self.styleHasBeenApplied){ 
+            [CATransaction begin];
+            [CATransaction 
+             setValue: [NSNumber numberWithBool: YES]
+             forKey: kCATransactionDisableActions];
+            
+            controllerStyle = [self applyStyle];
+            self.styleHasBeenApplied = YES;
+            
+            [CATransaction commit];
+        }
+        
+    }else{
+        
+        if(self.rightButton){
+            [self.navigationItem setRightBarButtonItem:self.rightButton animated:animated];
+        }
+        
+        if(self.leftButton){
+            [self.navigationItem setLeftBarButtonItem:self.leftButton animated:animated];
+        }
+        
+        [self applyStyleForNavigation];
+        
+        //HACK for versions before 4.2 due to the fact that setting a custom view on a UIBarButtonItem after it has been set in the navigationItem do not work.
+        if([CKOSVersion() floatValue]< 4.2){
+            UIBarButtonItem* left = self.navigationItem.leftBarButtonItem;
+            UIBarButtonItem* right = self.navigationItem.rightBarButtonItem;
+            self.navigationItem.leftBarButtonItem = nil;
+            self.navigationItem.rightBarButtonItem = nil;
+            [self.navigationItem setLeftBarButtonItem:left animated:animated];
+            [self.navigationItem setRightBarButtonItem:right animated:animated];
+        }
+        
+        [self observerNavigationChanges:YES];
     }
-    
-    [self observerNavigationChanges:YES];
     
     [super viewWillAppear:animated];
     

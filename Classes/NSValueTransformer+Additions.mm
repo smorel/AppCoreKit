@@ -451,12 +451,12 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 
 
 + (id)transformProperty:(CKProperty*)property toClass:(Class)type{
-    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 	if([NSObject isClass:type kindOfClass:[NSString class]]
 	   && [[property value]isKindOfClass:[NSNumber class]]){
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
 		switch(descriptor.propertyType){
 			case CKClassPropertyDescriptorTypeInt:{
+                CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
 				if(attributes.enumDescriptor != nil){
 					return [NSValueTransformer convertEnumToString:[[property value]intValue] withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
 				}
@@ -465,15 +465,19 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 		}
 	}
 	//special case for date ...
-    else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSDate class]]
-            && [property.value isKindOfClass:[NSString class]]){
-		id result = [NSDate convertFromNSString:property.value withFormat:attributes.dateFormat];
-		return result;
+    else if([NSObject isClass:type kindOfClass:[NSDate class]] && [property.value isKindOfClass:[NSString class]]){
+        CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+        if(attributes.dateFormat != nil){
+            id result = [NSDate convertFromNSString:property.value withFormat:attributes.dateFormat];
+            return result;
+        }
 	}
-	else if(attributes.dateFormat != nil && [NSObject isClass:type kindOfClass:[NSString class]]
-			&& [property.value isKindOfClass:[NSDate class]]){
-		id result = [NSDate convertToNSString:property.value withFormat:attributes.dateFormat];
-		return result;
+	else if([NSObject isClass:type kindOfClass:[NSString class]] && [property.value isKindOfClass:[NSDate class]]){
+        CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+        if(attributes.dateFormat != nil){
+            id result = [NSDate convertToNSString:property.value withFormat:attributes.dateFormat];
+            return result;
+        }
 	}
     
 	return [NSValueTransformer transform:[property value] toClass:type];

@@ -11,6 +11,8 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
+/*
+
 static char CKTableViewCellControllerOriginalViewKey;
 static char CKTableViewCellControllerImageViewsKey;
 static char CKTableViewCellControllerWantsFlatHierarchyKey;
@@ -110,6 +112,7 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
             imageView.image = image;
         }
     });
+ 
 }
 
 - (void)setHighlighted:(BOOL)highlighted inView:(UIView*)view {
@@ -124,7 +127,7 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
 }
 
 - (void)restoreViews {
-    UIImageView *imageView = (UIImageView*) [self.tableViewCell viewWithTag:CKTableViewCellControllerFlatImageViewTag];
+   UIImageView *imageView = (UIImageView*) [self.tableViewCell viewWithTag:CKTableViewCellControllerFlatImageViewTag];
     [imageView removeFromSuperview];
     
     for (UIView * subview in self.oldView.subviews) {
@@ -136,6 +139,9 @@ const NSUInteger CKTableViewCellControllerFlatImageViewTag = 168;
     
     self.imageViews = nil;
     self.oldView = nil;
+ 
 }
 
 @end
+
+*/
