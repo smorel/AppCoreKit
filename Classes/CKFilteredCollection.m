@@ -103,6 +103,11 @@
 	[self.collection fetchRange:range];
 }
 
+
+- (void)cancelFetch{
+    [self.collection cancelFetch];
+}
+
 - (NSIndexSet*)filteredIndexSet:(NSIndexSet*)indexes{
     NSMutableIndexSet* nonFilteredIndexPaths = [NSMutableIndexSet indexSet];
     

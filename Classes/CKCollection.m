@@ -193,6 +193,12 @@
 	}
 }
 
+- (void)cancelFetch{
+    if(_feedSource == nil)
+		return;
+    [_feedSource cancelFetch];
+}
+
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
 	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
 	

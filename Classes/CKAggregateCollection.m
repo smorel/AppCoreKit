@@ -103,7 +103,15 @@
 //Forward to the non filtered collection
 
 - (void)fetchRange:(NSRange)range{
-	//TODO ! TO IMPLEMENT
+	for(CKCollection* collection in _collections){
+        [collection fetchRange:range];
+    }
+}
+
+- (void)cancelFetch{
+    for(CKCollection* collection in _collections){
+        [collection cancelFetch];
+    }
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{

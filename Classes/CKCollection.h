@@ -172,6 +172,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
  */
 - (void)fetchRange:(NSRange)range;
 
+/**
+ */
+- (void)cancelFetch;
+
 @end
 
 
