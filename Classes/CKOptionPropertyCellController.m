@@ -277,7 +277,11 @@
             if(popover){
                 [popover dismissPopoverAnimated:YES];
             }else{
-                [bself.containerController.navigationController popViewControllerAnimated:YES];
+                if(presentationStyle == CKOptionPropertyCellControllerPresentationStyleModal){
+                    [bself.containerController dismissModalViewControllerAnimated:YES];
+                }else{
+                    [bself.containerController.navigationController popViewControllerAnimated:YES];
+                }
             }
         }
         
