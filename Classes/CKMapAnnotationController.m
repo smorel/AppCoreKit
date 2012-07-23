@@ -49,7 +49,7 @@
         
         UIImageView* arrowBottom = (UIImageView*)[[self subviews]objectAtIndex:3];
         
-        _calloutView.y = floorf(- _calloutView.height + self.height - [self superview].height);
+        _calloutView.y = floorf(- _calloutView.height + self.height - 36);
         _calloutView.x = floorf(arrowBottom.x + (arrowBottom.width / 2) - (_calloutView.width / 2));
         _calloutView.autoresizingMask = UIViewAutoresizingNone;
         _calloutView.layer.cornerRadius = 5;
