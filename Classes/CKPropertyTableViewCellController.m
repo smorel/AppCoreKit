@@ -14,7 +14,7 @@
 #import "CKFormTableViewController.h"
 #import "CKTableViewCellController+Responder.h"
 #import "CKSheetController.h"
-
+#import "UIView+Name.h"
 #import "CKTableViewCellController+Style.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -280,6 +280,7 @@
         NSString* title = _(str);
         if([title isKindOfClass:[NSString class]] && [title length] > 0){
             UILabel* titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0,0,200,44)]autorelease];
+            titleLabel.name = @"PropertyNavigationBarLabel";
             titleLabel.text = title;
             titleLabel.textColor = [UIColor whiteColor];
             titleLabel.backgroundColor = [UIColor clearColor];
