@@ -116,6 +116,7 @@
 
 - (void)postInit{
     id target = self.object;
+    
     if([target isKindOfClass:[NSDictionary class]]){
         id value = [target objectForKey:self.keyPath];
         NSString* name = [NSValueTransformer transform:self.keyPath toClass:[NSString class]];
@@ -123,12 +124,16 @@
     }
     else{
         if(self.keyPath){
-            NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
-            for(int i=0;i<[ar count]-1;++i){
-                NSString* path = [ar objectAtIndex:i];
-                target = [target valueForKey:path];
+            if([self.keyPath rangeOfString:@"."].location != NSNotFound){
+                NSArray * ar = [self.keyPath componentsSeparatedByString:@"."];
+                for(int i=0;i<[ar count]-1;++i){
+                    NSString* path = [ar objectAtIndex:i];
+                    target = [target valueForKey:path];
+                }
+                self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
+            }else{
+                self.subKeyPath = self.keyPath;
             }
-            self.subKeyPath = ([ar count] > 0) ? [ar objectAtIndex:[ar count] -1 ] : nil;
         }
         else{
             self.subKeyPath = nil;
@@ -136,6 +141,7 @@
         
         
         self.subObject = target;
+        
         if(self.subObject && self.subKeyPath){
             self.descriptor = [NSObject propertyDescriptorForClass:[self.subObject class] key:self.subKeyPath];
         }

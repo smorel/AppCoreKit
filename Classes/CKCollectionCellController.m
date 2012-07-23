@@ -119,7 +119,11 @@
 }
 
 - (void)setView:(UIView *)view{
-	self.viewRef = [CKWeakRef weakRefWithObject:view];
+    if(_viewRef){
+        [_viewRef setObject:view];
+    }else{
+        self.viewRef = [CKWeakRef weakRefWithObject:view];
+    }
 }
 
 - (UIView*)view{
@@ -127,7 +131,11 @@
 }
 
 - (void)setContainerController:(CKCollectionViewController *)c{
-	self.weakParentController = [CKWeakRef weakRefWithObject:c];
+    if(_weakParentController){
+        [_weakParentController setObject:c];
+    }else{
+        self.weakParentController = [CKWeakRef weakRefWithObject:c];
+    }
 }
 
 - (CKCollectionViewController*)containerController{

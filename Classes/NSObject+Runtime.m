@@ -107,20 +107,24 @@ void introspectTextInputsProperties(){
 + (CKClassPropertyDescriptor*)propertyDescriptorForObject:(id)object keyPath:(NSString*)keyPath{
 	id subObject = object;
 	
-	NSArray * ar = [keyPath componentsSeparatedByString:@"."];
-	for(int i=0;i<[ar count]-1;++i){
-		NSString* path = [ar objectAtIndex:i];
-        if(!class_getProperty([subObject class],[path UTF8String])){
+    if([keyPath rangeOfString:@"."].location != NSNotFound){
+        NSArray * ar = [keyPath componentsSeparatedByString:@"."];
+        for(int i=0;i<[ar count]-1;++i){
+            NSString* path = [ar objectAtIndex:i];
+            if(!class_getProperty([subObject class],[path UTF8String])){
+                return nil;
+            }
+            //NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
+            subObject = [subObject valueForKey:path];
+        }
+        if(subObject == nil){
+            CKDebugLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
             return nil;
         }
-            //NSLog(@"\tsub finding property:'%@' in '%@'",path,subObject);
-		subObject = [subObject valueForKey:path];
-	}
-	if(subObject == nil){
-		CKDebugLog(subObject,@"unable to find property '%@' in '%@'",keyPath,object);
-		return nil;
-	}
-	return [self propertyDescriptorForClass:[subObject class] key:[ar objectAtIndex:[ar count] -1 ]];
+        return [self propertyDescriptorForClass:[subObject class] key:[ar objectAtIndex:[ar count] -1 ]];
+    }
+    
+    return [self propertyDescriptorForClass:[subObject class] key:keyPath];
 }
 
 

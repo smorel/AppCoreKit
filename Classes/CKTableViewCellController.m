@@ -103,7 +103,11 @@
 }
 
 - (void)setDelegate:(CKTableViewCellController *)thedelegate{
-	self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
+    if(_delegateRef){
+        [_delegateRef setObject:thedelegate];
+    }else{
+        self.delegateRef = [CKWeakRef weakRefWithObject:thedelegate];
+    }
     
     //Keeps controller in sync for size updates if user sets or bind data directly to the cell !
     /*[NSObject beginBindingsContext:_syncControllerViewBindingContextId options:CKBindingsContextPolicyRemovePreviousBindings];

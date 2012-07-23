@@ -154,7 +154,6 @@ static BOOL swizzlingDone = NO;
     [[self class] executeSwizzling];
     if (self = [self init]) {
         self.object = theObject;
-        [self registerToObject:theObject];
     }
     return self;
 }
@@ -164,7 +163,6 @@ static BOOL swizzlingDone = NO;
 	if (self = [super init]) {
         self.object = theObject;
         self.callback = callback;
-        [self registerToObject:theObject];
     }
 	return self;
 }
@@ -204,9 +202,16 @@ static BOOL swizzlingDone = NO;
 }
 
 - (void)setObject:(id)theobject{
-    [self unregisterToObject:_object];
+    if(_object == theobject)
+        return;
+    
+    if(_object){
+        [self unregisterToObject:_object];
+    }
     _object = theobject;
-    [self registerToObject:_object];
+    if(_object){
+        [self registerToObject:_object];
+    }
 }
 
 + (CKWeakRef*)weakRefWithObject:(id)object{
