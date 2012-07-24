@@ -7,8 +7,103 @@
 //
 
 #import "CKLiveProjectFileUpdateManager.h"
+#import <UIKit/UIKit.h>
+
+#import "CKLiveProjectFileUpdateManager.h"
+#import "CKLocalizationManager.h"
+#import "CKCascadingTree.h"
+#import "CKLocalizationManager_Private.h"
+
+#import "NSObject+Singleton.h"
+#import <objc/runtime.h>
+
+#import "CKDebug.h"
 
 #if TARGET_IPHONE_SIMULATOR
+
+static char UIImageImageNameKey;
+
+@interface UIImage(CKLiveProjectFileUpdateManager)
+@property(nonatomic,copy) NSString* imageName;
+@end
+
+@implementation UIImage(CKLiveProjectFileUpdateManager)
+
+- (void)setImageName:(NSString *)name{
+    objc_setAssociatedObject(self, 
+                             &UIImageImageNameKey,
+                             name,
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString*)imageName{
+    return objc_getAssociatedObject(self, &UIImageImageNameKey);
+}
+
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
++(UIImage *)imageNamed:(NSString *)name {
+    if ([[UIScreen mainScreen] scale] == 2) {
+        if (![[name pathExtension] isEqualToString:@""]) {
+            NSString *pathExtension = [name pathExtension];
+            name = [[[name stringByDeletingPathExtension] stringByAppendingString:@"@2x"] stringByAppendingPathExtension:pathExtension];
+        }
+        else
+            name = [name stringByAppendingString:@"@2x"];
+    }
+    
+    
+    NSURL *imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:[name pathExtension]];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:@"png"];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:nil];
+    
+    if (imageURL == nil)
+        return nil;
+    
+    UIImage *image = [[[UIImage alloc] initWithContentsOfFile:imageURL.path] autorelease];
+    [image setImageName:name];
+    return image;
+}
+
+- (id)initWithContentsOfFile:(NSString *)path {
+    if (path.length == 0)
+        return nil;
+    
+    NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+        [[CKLocalizationManager sharedManager] refreshUI];
+    }];
+    
+    CGDataProviderRef ref = CGDataProviderCreateWithCFData((CFDataRef) [NSData dataWithContentsOfFile:localPath]);
+    
+    CGImageRef imageRef = nil;
+    if ([[path pathExtension] compare:@"png" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        imageRef = CGImageCreateWithPNGDataProvider(ref, NULL, NO, kCGRenderingIntentDefault);
+    }
+    else if ([[path pathExtension] compare:@"png" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+        imageRef = CGImageCreateWithJPEGDataProvider(ref, NULL, NO, kCGRenderingIntentDefault);
+    }
+    
+    CGFloat scale = 1;
+    if ([[UIScreen mainScreen] scale] == 2) {
+        if ([[path lastPathComponent] rangeOfString:@"@2x"].location != NSNotFound)
+            scale = 2;
+    }
+    
+    UIImage * anImage = [self initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+    
+    CGImageRelease(imageRef);
+    CGDataProviderRelease(ref);
+    
+    return anImage;
+}
+#pragma clang diagnostic pop
+
+@end
+
 @interface CKLiveProjectFileUpdateManager ()
 
 @property (retain) NSMutableDictionary*handles;

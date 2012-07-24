@@ -105,6 +105,8 @@
     
     id _storedTableDelegate;
     id _storedTableDataSource;
+    
+    BOOL _registeredToContentSize;
 }
 
 @synthesize currentPage = _currentPage;
@@ -174,11 +176,17 @@
 	_tableMaximumWidth = 0;
     _scrollingPolicy = CKTableCollectionViewControllerScrollingPolicyNone;
     _snapPolicy = CKTableCollectionViewControllerSnappingPolicyNone;
+    _registeredToContentSize = NO;
     
     self.bindingContextForTableView = [NSString stringWithFormat:@"TableVisibility_<%p>",self];
 }
 
 - (void)dealloc {
+    if(_registeredToContentSize){
+        [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+        _registeredToContentSize = NO;
+    }
+    
 	[NSObject removeAllBindingsForContext:_bindingContextForTableView];
     
 	[_bindingContextForTableView release];
@@ -217,6 +225,11 @@
     }
     
     [self adjustTableView];
+    
+    if(!_registeredToContentSize){
+        [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        _registeredToContentSize = YES;
+    }
 }
 
 - (void)viewDidUnload{
@@ -230,6 +243,11 @@
     
     [_segmentedControl release];
     _segmentedControl = nil;
+    
+    if(_registeredToContentSize){
+        [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+        _registeredToContentSize = NO;
+    }
 
     [super viewDidUnload];
 }
@@ -418,7 +436,6 @@
         self.viewWillAppearEndBlock = [oldViewWillAppearEndBlock autorelease];
     }
     
-    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
 }
 
 - (void)tableViewVisibilityChanged:(NSNumber*)hidden{
@@ -445,8 +462,6 @@
 	}
 	 
 	[super viewWillDisappear:animated];
-    
-    [self.tableView removeObserver:self forKeyPath:@"contentSize" context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{

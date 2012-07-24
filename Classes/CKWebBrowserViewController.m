@@ -62,16 +62,13 @@
 
 #pragma mark View Management
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     
     self.webController = [[[CKWebViewController alloc] init] autorelease];
     self.webController.view.frame = self.view.bounds;
+    self.webController.view.autoresizingMask = UIViewAutoresizingFlexibleSize;
     [self.view addSubview:self.webController.view];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
 
 	// Setup the bar button items
 	
@@ -84,8 +81,18 @@
 	self.spinnerItem = [[[UIBarButtonItem alloc] initWithCustomView:activityView] autorelease];
     self.spinnerItem.name = @"spinnerItem";
 	self.spinnerItem.tag = CKWebViewControllerButtonItemRefresh;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
     
-	[self.webController loadURL:self.homeURL];
+    [self.webController viewWillAppear:animated];
+    self.webController.delegate = self;
+    
+    self.wasUsingToolbar = !self.navigationController.toolbarHidden;
+    self.wasUsingNavigationbar = !self.navigationController.navigationBarHidden;
+    
+    [self.webController loadURL:self.homeURL];
     
     // Setup the toolbar
 	
@@ -102,16 +109,6 @@
 	}
 	
 	[self setToolbarItems:items animated:NO];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-    
-    [self.webController viewWillAppear:animated];
-    self.webController.delegate = self;
-    
-    self.wasUsingToolbar = !self.navigationController.toolbarHidden;
-    self.wasUsingNavigationbar = !self.navigationController.navigationBarHidden;
     
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	[self.navigationController setToolbarHidden:NO animated:animated];
