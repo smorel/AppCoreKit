@@ -11,16 +11,33 @@
 #import "NSObject+Invocation.h"
 #import <objc/runtime.h>
 
+#include <ext/hash_set>
+
+using namespace std;
+using namespace __gnu_cxx;
+
+namespace __gnu_cxx{
+template<> struct hash< CKWeakRef* >
+{
+    size_t operator()( CKWeakRef* x ) const{
+        return (size_t)x;
+    }
+};
+}
+
+
+typedef hash_set<CKWeakRef*> CKWeakRefSet;
+
 static char NSObjectWeakRefObjectKey;
 
 //CKWeakRefAssociatedObject
 
 @interface CKWeakRefAssociatedObject : NSObject{
-	NSMutableSet* _weakRefs;
+    CKWeakRefSet _weakRefSet;
 }
-@property(nonatomic,retain)NSMutableSet* weakRefs;
 - (void)registerWeakRef:(CKWeakRef*)ref;
 - (void)unregisterWeakRef:(CKWeakRef*)ref;
+- (void)flushUsingObject:(id)object;
 @end
 
 //CKWeakRef PRIVATE
@@ -33,27 +50,31 @@ static char NSObjectWeakRefObjectKey;
 //CKWeakRefAssociatedObject
 
 @implementation CKWeakRefAssociatedObject
-@synthesize weakRefs = _weakRefs;
-
-- (id)init{
-	if (self = [super init]) {
-        self.weakRefs = [NSMutableSet set];
-    }
-	return self;
-}
 
 - (void)dealloc{
-	[_weakRefs release];
-	_weakRefs = nil;
+	_weakRefSet.clear();
 	[super dealloc];
 }
 
 - (void)registerWeakRef:(CKWeakRef*)ref{
-	[_weakRefs addObject:[NSValue valueWithNonretainedObject:ref]];
+	_weakRefSet.insert(ref);
 }
 
 - (void)unregisterWeakRef:(CKWeakRef*)ref{
-	[_weakRefs removeObject:[NSValue valueWithNonretainedObject:ref]];
+	_weakRefSet.erase(ref);
+}
+
+- (void)flushUsingObject:(id)object{
+    while(_weakRefSet.begin() !=  _weakRefSet.end()){
+        CKWeakRef* ref = [*_weakRefSet.begin() retain];
+        if(ref.callback){
+            [ref.callback execute:ref];
+        }
+        
+        ref.object = nil;//this will call unregister ...
+        [ref release];
+    }
+    _weakRefSet.clear();
 }
 
 @end
@@ -83,17 +104,7 @@ static char NSObjectWeakRefObjectKey;
 - (void) weakRef_dealloc {
 	CKWeakRefAssociatedObject* weakRefObj = [self weakRefObject];
 	if(weakRefObj){
-		while([weakRefObj.weakRefs count] > 0){
-			NSValue* refValue = [weakRefObj.weakRefs anyObject];
-			CKWeakRef* ref = [[refValue nonretainedObjectValue]retain];
-			if(ref.callback){
-				[ref.callback execute:ref];
-			}
-			
-			ref.object = nil;//this will call unregister ...
-			[ref release];
-		}
-		
+        [weakRefObj flushUsingObject:self];
 		objc_setAssociatedObject(self, 
 								 &NSObjectWeakRefObjectKey,
 								 nil,

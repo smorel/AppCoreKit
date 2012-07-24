@@ -293,7 +293,7 @@
 		7560DDA113B8ED3600268D13 /* CKVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5413B8ED3600268D13 /* CKVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5513B8ED3600268D13 /* CKVersion.m */; };
 		7560DDA713B8ED3600268D13 /* CKWeakRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5A13B8ED3600268D13 /* CKWeakRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5B13B8ED3600268D13 /* CKWeakRef.m */; };
+		7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5B13B8ED3600268D13 /* CKWeakRef.mm */; };
 		7560DDAB13B8ED3600268D13 /* CKWebRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC5E13B8ED3600268D13 /* CKWebRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DC5F13B8ED3600268D13 /* CKWebRequest.m */; };
 		7560DDAF13B8ED3600268D13 /* CKWebService.h in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6213B8ED3600268D13 /* CKWebService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -829,7 +829,7 @@
 		7560DC5413B8ED3600268D13 /* CKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKVersion.h; path = Classes/CKVersion.h; sourceTree = "<group>"; };
 		7560DC5513B8ED3600268D13 /* CKVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKVersion.m; path = Classes/CKVersion.m; sourceTree = "<group>"; };
 		7560DC5A13B8ED3600268D13 /* CKWeakRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWeakRef.h; path = Classes/CKWeakRef.h; sourceTree = "<group>"; };
-		7560DC5B13B8ED3600268D13 /* CKWeakRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWeakRef.m; path = Classes/CKWeakRef.m; sourceTree = "<group>"; };
+		7560DC5B13B8ED3600268D13 /* CKWeakRef.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKWeakRef.mm; path = Classes/CKWeakRef.mm; sourceTree = "<group>"; };
 		7560DC5E13B8ED3600268D13 /* CKWebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebRequest.h; path = Classes/CKWebRequest.h; sourceTree = "<group>"; };
 		7560DC5F13B8ED3600268D13 /* CKWebRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKWebRequest.m; path = Classes/CKWebRequest.m; sourceTree = "<group>"; };
 		7560DC6213B8ED3600268D13 /* CKWebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKWebService.h; path = Classes/CKWebService.h; sourceTree = "<group>"; };
@@ -1131,7 +1131,7 @@
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
 				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
-				7560DC5B13B8ED3600268D13 /* CKWeakRef.m */,
+				7560DC5B13B8ED3600268D13 /* CKWeakRef.mm */,
 				7560DB2E13B8ED3600268D13 /* CKCallback.h */,
 				7560DB2F13B8ED3600268D13 /* CKCallback.m */,
 				966B00C51538884200360C0F /* Object Extension */,
@@ -2656,7 +2656,7 @@
 				7560DD9A13B8ED3600268D13 /* UIViewController+Style.m in Sources */,
 				7560DD9E13B8ED3600268D13 /* CKUnit.m in Sources */,
 				7560DDA213B8ED3600268D13 /* CKVersion.m in Sources */,
-				7560DDA813B8ED3600268D13 /* CKWeakRef.m in Sources */,
+				7560DDA813B8ED3600268D13 /* CKWeakRef.mm in Sources */,
 				7560DDAC13B8ED3600268D13 /* CKWebRequest.m in Sources */,
 				7560DDB013B8ED3600268D13 /* CKWebService.m in Sources */,
 				7560DDB213B8ED3600268D13 /* CKWebSource.m in Sources */,
