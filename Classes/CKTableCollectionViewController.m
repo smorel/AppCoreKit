@@ -417,6 +417,8 @@
         oldViewWillAppearEndBlock(self,animated);
         self.viewWillAppearEndBlock = [oldViewWillAppearEndBlock autorelease];
     }
+    
+    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
 }
 
 - (void)tableViewVisibilityChanged:(NSNumber*)hidden{
@@ -443,6 +445,14 @@
 	}
 	 
 	[super viewWillDisappear:animated];
+    
+    [self.tableView removeObserver:self forKeyPath:@"contentSize" context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if(object == self.tableView && [keyPath isEqualToString:@"contentSize"]){
+        [self updateNumberOfPages];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -535,6 +545,11 @@
 
 - (void)setOrientation:(CKTableViewOrientation)orientation {
 	_orientation = orientation;
+    
+    if(self.objectController != nil && [self.objectController respondsToSelector:@selector(setAppendSpinnerAsFooterCell:)]){
+		[self.objectController setAppendSpinnerAsFooterCell:(self.orientation == CKTableViewOrientationPortrait)];
+	}
+    
 	[self adjustView];
 }
 
@@ -636,7 +651,6 @@
     
     if (![view isKindOfClass:[UITableViewCell class]])
         [NSException raise:NSGenericException format:@"invalid type for view"];
-	[self updateNumberOfPages];
 	
 	return (UITableViewCell*)view;
 }
@@ -648,7 +662,6 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
 	[self rotateSubViewsForCell:cell];
-	[self updateNumberOfPages];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -837,12 +850,6 @@
 	
     //NSLog(@"didEndUpdates <%@>",self);
         [self.tableView endUpdates];
-    
-	
-	//bad solution because the contentsize is updated at the end of insert animation ....
-	//could be better if we could observe or be notified that the contentSize has changed.
-	NSTimeInterval delay = 0.4;
-	[self performSelector:@selector(updateNumberOfPages) withObject:nil afterDelay:delay];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -930,7 +937,7 @@
 - (void)setObjectController:(id)controller{
 	[super setObjectController:controller];
 	if(self.objectController != nil && [self.objectController respondsToSelector:@selector(setAppendSpinnerAsFooterCell:)]){
-		[self.objectController setAppendSpinnerAsFooterCell:YES];
+		[self.objectController setAppendSpinnerAsFooterCell:(self.orientation == CKTableViewOrientationPortrait)];
 	}
 }
 
