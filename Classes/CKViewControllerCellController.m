@@ -59,7 +59,7 @@
     frame.origin.y += self.contentInsets.top;
     frame.size.width -= self.contentInsets.left + self.contentInsets.right;
     frame.size.height -= self.contentInsets.top + self.contentInsets.bottom;
-    controllerView.frame = frame;
+    controllerView.frame = CGRectIntegral(frame);
     [cell.contentView addSubview:controllerView];
     
     [self setupViewControllerView:controllerView];
