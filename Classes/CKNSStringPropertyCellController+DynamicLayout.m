@@ -18,6 +18,7 @@
 
 #import "CKSheetController.h"
 #import "UIView+Positioning.h"
+#import "CKDebug.h"
 
 #define TEXTFIELDINSETS 8
 
@@ -97,7 +98,7 @@
                 return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
     return size;
@@ -145,7 +146,7 @@
                 }
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");
         }
     }
 }

@@ -10,6 +10,7 @@
 #import "NSObject+ValueTransformer.h"
 #import "NSValueTransformer+Additions.h"
 
+#import "CKDebug.h"
 
 @implementation NSArray (CKValueTransformer)
 
@@ -30,7 +31,7 @@
                 [results addObject:result];
             }
             else{
-                NSAssert(NO,@"no convertion function found");
+                CKAssert(NO,@"no convertion function found");
             }
 		}
 	}
@@ -49,7 +50,7 @@
                 [results addObject:result];
             }
             else{
-                NSAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the attributes",content);
+                CKAssert(NO,@"No @class defined in %@. cannot resolve the type automatically. Please define @class in the dictionary or specify contentType in the attributes",content);
             }
         }
         else{
@@ -62,7 +63,7 @@
 + (id)objectArrayFromDictionaryArray:(NSArray*)array{
 	NSMutableArray* results = [NSMutableArray array];
 	for(id o in array){
-		NSAssert([o isKindOfClass:[NSDictionary class]],@"invalid object type in array");
+		CKAssert([o isKindOfClass:[NSDictionary class]],@"invalid object type in array");
 		id object = [NSObject objectFromDictionary:o];
 		if(object){
 			[results addObject:object];

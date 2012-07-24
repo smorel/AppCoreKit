@@ -213,7 +213,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
             }else if([object isKindOfClass:[NSDictionary class]]){
                 view = [NSValueTransformer objectFromDictionary:object];
             }else{
-                NSAssert(NO,@"Non supported format");
+                CKAssert(NO,@"Non supported format");
             }
             [views addObject:view];
         }

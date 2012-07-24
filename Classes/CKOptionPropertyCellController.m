@@ -14,6 +14,7 @@
 #import "CKStyleManager.h"
 #import "CKPopoverController.h"
 #import "UIBarButtonItem+BlockBasedInterface.h"
+#import "CKDebug.h"
 
 
 @interface CKOptionPropertyCellController ()
@@ -63,7 +64,7 @@
     if(attributes.valuesAndLabels) valuesAndLabels = attributes.valuesAndLabels;
     else if(attributes.enumDescriptor) valuesAndLabels = attributes.enumDescriptor.valuesAndLabels;
 
-    NSAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
+    CKAssert(valuesAndLabels != nil,@"No valuesAndLabels or EnumDefinition declared for property %@",property);
     CKOptionPropertyCellControllerSortingBlock sortingBlock = attributes.sortingBlock;
     NSArray* orderedLabels = nil;
     if(sortingBlock){

@@ -173,7 +173,7 @@ static CKDownloadManager *CKSharedDownloadManager;
         NSError* error = nil;
         [[NSFileManager defaultManager] removeItemAtPath:inProgressPath error:&error];
         
-        NSAssert(error == nil, @"Could not delete file");
+        CKAssert(error == nil, @"Could not delete file");
     }
     
     NSString* metaDataPath = [NSString stringWithFormat:@"%@.md",path];
@@ -182,7 +182,7 @@ static CKDownloadManager *CKSharedDownloadManager;
         NSError* error = nil;
         [[NSFileManager defaultManager] removeItemAtPath:metaDataPath error:&error];
         
-        NSAssert(error == nil, @"Could not delete file");
+        CKAssert(error == nil, @"Could not delete file");
     }
     
     [self.downloaders removeObjectForKey:downloader.downloadName];

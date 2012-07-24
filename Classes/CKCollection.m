@@ -11,6 +11,7 @@
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+Attributes.h"
 #import "NSObject+Bindings.h"
+#import "CKDebug.h"
 
 @interface CKCollection()
 @property (nonatomic,assign,readwrite) NSInteger count;
@@ -127,12 +128,12 @@
 }
 
 - (NSArray*)allObjects{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 	return nil;
 }
 
 - (id)objectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 	return nil;
 }
 
@@ -145,38 +146,38 @@
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 - (void)removeAllObjects{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 
 - (void)addObserver:(id)object{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 - (void)removeObserver:(id)object{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 - (NSArray*)objectsMatchingPredicate:(NSPredicate*)predicate{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 	return nil;
 }
 
 - (BOOL)containsObject:(id)object{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 	return NO;
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-	NSAssert(NO,@"Abstract Implementation");
+	CKAssert(NO,@"Abstract Implementation");
 }
 
 - (void)fetchRange:(NSRange)range{
@@ -200,7 +201,7 @@
 }
 
 - (void)feedSource:(CKFeedSource *)feedSource didFetchItems:(NSArray *)items range:(NSRange)range{
-	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
+	CKAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
 	
 	//execute on main thread !
 	//[self performSelectorOnMainThread:@selector(insertObjects:atIndexes:) withObject:items withObject:[NSIndexSet indexSetWithIndexesInRange:range] waitUntilDone:NO];
@@ -216,7 +217,7 @@
 }
 
 - (void)feedSource:(CKFeedSource *)feedSource didFailWithError:(NSError *)error {
-	NSAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
+	CKAssert(feedSource == _feedSource,@"Not registered on the right feedSource");
 
 	if (_delegate && [_delegate respondsToSelector:@selector(documentCollection:fetchDidFailWithError:)]) {
 		[_delegate documentCollection:self fetchDidFailWithError:error];

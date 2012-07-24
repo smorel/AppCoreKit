@@ -205,7 +205,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
-	NSAssert([aDecoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
+	CKAssert([aDecoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
     if (self = [super init]) {
 		[self initializeProperties];
 		[self initializeKVO];
@@ -259,7 +259,7 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
-	NSAssert([aCoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
+	CKAssert([aCoder allowsKeyedCoding],@"CKObject does not support sequential archiving.");
 	NSMutableArray* names = [NSMutableArray arrayWithArray:[self allPropertyNames]];
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){

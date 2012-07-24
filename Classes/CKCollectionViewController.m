@@ -12,6 +12,7 @@
 #import "CKFormTableViewController.h"
 #import "CKTableViewCellController+DynamicLayout.h"
 #import "CKTableViewCellController+DynamicLayout_Private.h"
+#import "CKDebug.h"
 
 //private interfaces
 
@@ -310,7 +311,7 @@
 }
 
 - (NSArray*)visibleIndexPaths{
-	NSAssert(NO,@"Implement in inheriting class");
+	CKAssert(NO,@"Implement in inheriting class");
 	return nil;
 }
 
@@ -391,7 +392,7 @@
 #pragma mark View/Controller life management
 
 - (id)releaseView:(CKWeakRef*)weakref{
-    NSAssert(weakref,@"Weird ... Should never happend");
+    CKAssert(weakref,@"Weird ... Should never happend");
     NSValue* weakViewValue = [NSValue valueWithNonretainedObject:weakref.object];
 	NSIndexPath* previousPath = [_viewsToIndexPath objectForKey:weakViewValue];
     if(previousPath){
@@ -405,7 +406,7 @@
 
 
 - (UIView*)dequeueReusableViewWithIdentifier:(NSString*)identifier{
-	NSAssert(NO,@"Implement in inheriting class");
+	CKAssert(NO,@"Implement in inheriting class");
 	return nil;
 }
 
@@ -489,7 +490,7 @@
         if(_viewsToControllers == nil){ self.viewsToControllers = [NSMutableDictionary dictionary]; }
         [_viewsToControllers setObject:controller forKey:[NSValue valueWithNonretainedObject:view]];
         
-        NSAssert(view != nil,@"The view has not been created");
+        CKAssert(view != nil,@"The view has not been created");
         
         [controller setView:view];
         
@@ -506,7 +507,7 @@
         return view;
     }
     else{
-        NSAssert(NO,@"WTF");
+        CKAssert(NO,@"WTF");
     }
 	
 	return nil;
@@ -662,7 +663,7 @@
 
 - (void)updateSizeForControllerAtIndexPath:(NSIndexPath*)index{
 	//To implement in inherited class
-    NSAssert(NO,@"Implements this in tables by performing intelligently beginUpdate/endUpdate!");
+    CKAssert(NO,@"Implements this in tables by performing intelligently beginUpdate/endUpdate!");
 }
 
 - (NSIndexPath*)indexPathForObject:(id)object{
@@ -711,7 +712,7 @@
     
     id object = [self objectAtIndexPath:indexPath];
     CKCollectionCellController* controller = [self createsControllerForObject:object atIndexPath:indexPath];
-    //NSAssert(controller, @"Unable to create CKCollectionCellController for object : %@",[object description]);
+    //CKAssert(controller, @"Unable to create CKCollectionCellController for object : %@",[object description]);
     if(!controller)
         return nil;
     
@@ -722,7 +723,7 @@
         }
     }
     
-    NSAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
+    CKAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
     
     NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
     [controllers insertObject:controller atIndex:[indexPath row]];
@@ -749,7 +750,7 @@
             }
         }
         
-        NSAssert(section < [_sectionsToControllers count],@"There is a problem");
+        CKAssert(section < [_sectionsToControllers count],@"There is a problem");
         NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:section];
         
         for(int row =0;row<rowCount;++row){
@@ -783,7 +784,7 @@
             }
         }
         
-        NSAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
+        CKAssert([indexPath section] < [_sectionsToControllers count],@"There is a problem");
         
         NSMutableArray* controllers = [_sectionsToControllers objectAtIndex:[indexPath section]];
         [controllers insertObject:controller atIndex:[indexPath row]];

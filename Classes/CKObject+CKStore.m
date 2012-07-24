@@ -193,7 +193,7 @@ NSMutableDictionary* CKObjectManager = nil;
 
 
 - (void)removeObjectFromDomainNamed:(NSString*)domain{
-	NSAssert(!self.isLoading, @"cannot delete an object while loading it !");
+	CKAssert(!self.isLoading, @"cannot delete an object while loading it !");
 	
 	CKItem* item = [CKObject itemWithObject:self inDomainNamed:domain];
 	if(item){
@@ -239,7 +239,7 @@ NSMutableDictionary* CKObjectManager = nil;
 @implementation CKObject (CKStoreAdditionPrivate)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
-	NSAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
+	CKAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	
 	NSString* className = [[self class] description];
@@ -262,7 +262,7 @@ NSMutableDictionary* CKObjectManager = nil;
 				}
 				NSMutableArray* result = [NSMutableArray array];
 				for(id subObject in allObjects){
-					NSAssert([subObject isKindOfClass:[CKObject class]],@"Supports only auto serialization on CKObject");
+					CKAssert([subObject isKindOfClass:[CKObject class]],@"Supports only auto serialization on CKObject");
 					CKObject* model = (CKObject*)subObject;
 					CKItem* item = nil;
 					if(model.uniqueId != nil){

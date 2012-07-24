@@ -213,7 +213,7 @@ typedef void(^CKTransitionBlock)();
 
 - (void)presentViewControllerAtIndex:(NSUInteger)index withTransition:(CKTransitionType)transition {
     if([self isViewLoaded]){
-	//NSAssert(index < [self.viewControllers count], @"No viewController at index: %d", index);
+	//CKAssert(index < [self.viewControllers count], @"No viewController at index: %d", index);
         if(index >= [self.viewControllers count] )
             return;
         

@@ -571,7 +571,7 @@
 
 - (UITableViewCell *)tableViewCell {
 	if(self.view){
-		NSAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+		CKAssert([self.view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 		return (UITableViewCell*)self.view;
 	}
 	return nil;
@@ -803,7 +803,7 @@
 - (void)initView:(UIView*)view{
     [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
     
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
 	[self initTableViewCell:(UITableViewCell*)view];
 	[super initView:view];
 }
@@ -940,7 +940,7 @@
     
     //Setup the tableViewCell using internal values.
     //Those values can then be overloaded by setup block
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
     
     UITableViewCell* cell = (UITableViewCell*)view;
     cell.indentationLevel = self.indentationLevel;
@@ -994,7 +994,7 @@
 }
 
 - (void)viewDidAppear:(UIView *)view{
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
     if(!self.isViewAppeared){
         [self cellDidAppear:(UITableViewCell*)view];
     }
@@ -1036,7 +1036,7 @@
 }
 
 - (void)scrollToRow{
-    NSAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
+    CKAssert([self.containerController isKindOfClass:[CKTableViewController class]],@"invalid parent controller class");
     CKTableViewController* tableViewController = (CKTableViewController*)self.containerController;
     [tableViewController.tableView scrollToRowAtIndexPath:self.indexPath 
                                          atScrollPosition:UITableViewScrollPositionNone 

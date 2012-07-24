@@ -8,6 +8,7 @@
 //
 
 #import "NSString+URIQuery.h"
+#import "CKDebug.h"
 
 NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 
@@ -52,7 +53,7 @@ NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 	NSUInteger countdown = [dictionary count] ;
 	for (NSString* key in dictionary) {
 		id value = [dictionary valueForKey:key];
-		NSAssert(([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]]), @"Parameter type not supported: %@", [value class]);
+		CKAssert(([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]]), @"Parameter type not supported: %@", [value class]);
 
 		if ([value isKindOfClass:[NSString class]]) {
 			[string appendFormat:@"%@=%@",
@@ -63,7 +64,7 @@ NSString * const CKSpecialURLCharacters = @"!*'();:@&=+$,/?%#[]";
 		if ([value isKindOfClass:[NSArray class]]) {
 			NSUInteger count = [value count];
 			for (id arrayValue in value) {
-				NSAssert([arrayValue isKindOfClass:[NSString class]], @"Array value not supported: %@", [arrayValue class]);
+				CKAssert([arrayValue isKindOfClass:[NSString class]], @"Array value not supported: %@", [arrayValue class]);
 				[string appendFormat:@"%@=%@",
 				 [key encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters],
 				 [arrayValue encodePercentEscapesPerRFC2396ButNot:nil butAlso:CKSpecialURLCharacters]

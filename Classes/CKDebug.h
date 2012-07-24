@@ -23,6 +23,13 @@ extern NSString* cleanString(NSString* str);
 #endif
 
 
+#ifdef DEBUG
+   #define CKAssert(condition, desc, ...) NSAssert(condition,desc,##__VA_ARGS__)
+#else
+   #define CKAssert(condition, desc, ...)
+#endif
+
+
 // UIView
 /**
  */

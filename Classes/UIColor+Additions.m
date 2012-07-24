@@ -8,6 +8,8 @@
 
 #import "UIColor+Additions.h"
 
+#import "CKDebug.h"
+
 @implementation UIColor (CKUIColorAdditions)
 
 + (UIColor *)colorWithRGBValue:(NSUInteger)value {
@@ -32,7 +34,7 @@
 		}
 			
 		default:
-			NSAssert(FALSE, @"CGColorSpaceModel (%d) not supported.", model);
+			CKAssert(FALSE, @"CGColorSpaceModel (%d) not supported.", model);
 			break;
 	}	
 	

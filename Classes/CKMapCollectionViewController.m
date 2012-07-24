@@ -471,7 +471,7 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		return annView;
 	}
 	
-	NSAssert([view isKindOfClass:[MKAnnotationView class]],@"invalid type for view");
+	CKAssert([view isKindOfClass:[MKAnnotationView class]],@"invalid type for view");
 	return (MKAnnotationView*)view;
 }
 

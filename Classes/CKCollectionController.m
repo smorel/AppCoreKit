@@ -11,6 +11,7 @@
 #import <UIKit/UITableView.h>
 #import "NSObject+Invocation.h"
 #import "CKVersion.h"
+#import "CKDebug.h"
 
 @interface CKCollectionController()
 @property (nonatomic, retain,readwrite) CKCollection* collection;
@@ -104,7 +105,7 @@
 
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
-	NSAssert(section == 0,@"Invalid section");
+	CKAssert(section == 0,@"Invalid section");
 	/*if(_collection && _collection.feedSource){
 		range.location--;
 	}*/

@@ -15,6 +15,7 @@
 #import "CKTableViewCellController+Responder.h"
 #import "NSValueTransformer+Additions.h"
 #import "UIView+Positioning.h"
+#import "CKDebug.h"
 
 
 #define TEXTFIELDINSETS 8
@@ -153,7 +154,7 @@
                 return CGSizeMake(320,MAX(size.height,frame.origin.y + frame.size.height + self.contentInsets.bottom));
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
         }
     }
     return size;
@@ -202,7 +203,7 @@
                 s.frame = [self value3SwitchFrameUsingText:text textStyle:textStyle detailText:nil detailTextStyle:nil image:self.image];
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSNumberPropertyCellController");
         }
     }
 }

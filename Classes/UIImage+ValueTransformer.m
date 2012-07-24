@@ -14,6 +14,7 @@
 #import "CKCascadingTree.h"
 #import "CKLocalizationManager_Private.h"
 
+#import "CKDebug.h"
 
 @implementation UIImage (CKValueTransformer)
 
@@ -89,12 +90,12 @@
 		UIImage* image = [UIImage imageWithContentsOfFile:[url path]];
 		return image;
 	}
-	NSAssert(NO,@"Styles only supports file url yet");
+	CKAssert(NO,@"Styles only supports file url yet");
 	return nil;
 }
 
 + (UIImage*)convertFromNSArray:(NSArray*)components{
-	NSAssert([components count] == 2,@"invalid format for image");
+	CKAssert([components count] == 2,@"invalid format for image");
 	NSString* name = [components objectAtIndex:0];
 	
 	UIImage* image = [UIImage imageNamed:name];

@@ -22,12 +22,14 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKDebug.h"
+
 @implementation NSValueTransformer (CKCGTypes)
 
 
 + (CGSize)parseStringToCGSize:(NSString*)str{
 	NSArray* components = [str componentsSeparatedByString:@" "];
-	NSAssert([components count] == 2,@"invalid size format");
+	CKAssert([components count] == 2,@"invalid size format");
 	return CGSizeMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue]);
 }
 
@@ -37,13 +39,13 @@
 		CGSize size = [NSValueTransformer parseStringToCGSize:object];
 		return size;
 	}
-	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	CKAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
 	return (object == nil) ? CGSizeMake(10,10) : [object CGSizeValue];
 }
 
 + (CGRect)parseStringToCGRect:(NSString*)str{
 	NSArray* components = [str componentsSeparatedByString:@" "];
-	NSAssert([components count] == 4,@"invalid rect format");
+	CKAssert([components count] == 4,@"invalid rect format");
 	return CGRectMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue],[[components objectAtIndex:2]floatValue],[[components objectAtIndex:3]floatValue]);
 }
 
@@ -52,13 +54,13 @@
 		CGRect rect = [NSValueTransformer parseStringToCGRect:object];
 		return rect;
 	}
-	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	CKAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
 	return (object == nil) ? CGRectMake(0,0,10,10) : [object CGRectValue];
 }
 
 + (CGPoint)parseStringToCGPoint:(NSString*)str{
 	NSArray* components = [str componentsSeparatedByString:@" "];
-	NSAssert([components count] == 2,@"invalid point format");
+	CKAssert([components count] == 2,@"invalid point format");
 	return CGPointMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue]);
 }
 
@@ -67,13 +69,13 @@
 		CGPoint point = [NSValueTransformer parseStringToCGPoint:object];
 		return point;
 	}
-	NSAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
+	CKAssert(object == nil || [object isKindOfClass:[NSValue class]],@"invalid class for cgsize");
 	return (object == nil) ? CGPointMake(10,10) : [object CGPointValue];
 }
 
 + (UIEdgeInsets)parseStringToUIEdgeInsets:(NSString*)str{
     NSArray* components = [str componentsSeparatedByString:@" "];
-	NSAssert([components count] == 4,@"invalid insets format");
+	CKAssert([components count] == 4,@"invalid insets format");
 	return UIEdgeInsetsMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue],[[components objectAtIndex:2]floatValue],[[components objectAtIndex:3]floatValue]);
 }
 

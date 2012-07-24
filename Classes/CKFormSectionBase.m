@@ -63,28 +63,28 @@
 }
 
 - (NSInteger)numberOfObjects{
-	NSAssert(NO,@"Base Implementation");
+	CKAssert(NO,@"Base Implementation");
 	return 0;
 }
 
 - (id)objectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
+	CKAssert(NO,@"Base Implementation");
 	return nil;
 }
 
 
 - (CKCollectionCellControllerFactoryItem*)factoryItemForIndex:(NSInteger)index{
-    NSAssert(FALSE,@"Should not be called !");
+    CKAssert(FALSE,@"Should not be called !");
     return nil;
 }
 
 - (id)controllerForObject:(id)object atIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
+	CKAssert(NO,@"Base Implementation");
 	return nil;
 }
 
 - (void)removeObjectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"Base Implementation");
+	CKAssert(NO,@"Base Implementation");
 }
 
 - (void)lock{

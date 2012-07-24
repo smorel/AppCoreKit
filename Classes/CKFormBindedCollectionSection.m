@@ -150,7 +150,7 @@
     
 	int headerCount = [_headerCellControllers count];
 	if((NSInteger)index < (NSInteger)headerCount){
-		NSAssert(NO,@"NOT IMPLEMENTED");
+		CKAssert(NO,@"NOT IMPLEMENTED");
 	}
 	
 	int count = [_objectController numberOfObjectsForSection:0];
@@ -162,7 +162,7 @@
 	
 	int footerCount = [_footerCellControllers count];
 	if((NSInteger)index < (NSInteger)(count + headerCount + footerCount)){
-		NSAssert(NO,@"NOT IMPLEMENTED");
+		CKAssert(NO,@"NOT IMPLEMENTED");
 	}
 }
 
@@ -288,7 +288,7 @@
 
 - (void)removeFooterCellController:(CKTableViewCellController*)cellController{
     NSInteger footerIndex = [_footerCellControllers indexOfObjectIdenticalTo:cellController];
-    NSAssert(footerIndex != NSNotFound,@"cannot find %@",cellController);
+    CKAssert(footerIndex != NSNotFound,@"cannot find %@",cellController);
     
     int headerCount = [_headerCellControllers count];
 	int count = [_objectController numberOfObjectsForSection:0];

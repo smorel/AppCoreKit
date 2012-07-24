@@ -499,7 +499,7 @@ typedef void(^UIViewDragDropBlock)(UIView* view, UITouch* touch, CKDragEvents ev
                   withObjects:[NSArray arrayWithObjects:view,touch,event,nil]];
 	}
 	else{
-		//NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
+		//CKAssert(NO,@"CKUIControlBlockBinder no action plugged");
 	}
 }
 

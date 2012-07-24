@@ -8,6 +8,7 @@
 
 #import "CKFilteredCollection.h"
 #import "NSObject+Bindings.h"
+#import "CKDebug.h"
 
 @interface CKCollection()
 @property (nonatomic,assign,readwrite) BOOL isFetching;
@@ -119,7 +120,7 @@
         else{
             id currentObject = [self objectAtIndex:currentIndex];
             NSInteger index = [[self.collection allObjects]indexOfObjectIdenticalTo:currentObject];
-            NSAssert(index != NSNotFound,@"Should not happend !");
+            CKAssert(index != NSNotFound,@"Should not happend !");
             [nonFilteredIndexPaths addIndex:index];
         }
         currentIndex = [indexes indexGreaterThanIndex: currentIndex];

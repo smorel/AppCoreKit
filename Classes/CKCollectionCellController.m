@@ -146,7 +146,7 @@
 //when reusing : setupView
 
 - (UIView *)loadView{
-	NSAssert(NO,@"To implement in subclass");
+	CKAssert(NO,@"To implement in subclass");
 	return nil;
 }
 

@@ -107,7 +107,7 @@
 		[self.target performSelector:self.selector];
 	}
 	else{
-		//NSAssert(NO,@"CKUIControlBlockBinder no action plugged");
+		//CKAssert(NO,@"CKUIControlBlockBinder no action plugged");
 	}
 }
 

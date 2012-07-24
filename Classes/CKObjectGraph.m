@@ -22,6 +22,7 @@
 #import "NSObject+ValueTransformer.h"
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
+#import "CKDebug.h"
 
 
 NSString* CKObjectGraphObjectKey    = @"@object";
@@ -117,7 +118,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
         NSString* uniqueId = [refDico objectForKey:@"id"];
         NSMutableDictionary* dico = [[refDico objectForKey:@"dico"]nonretainedObjectValue];
         id object = [self instanceWithUniqueId:uniqueId fromDictionary:dico];
-        NSAssert(object,@"object not found");
+        CKAssert(object,@"object not found");
         [property setValue:object];
     }
 }
@@ -146,7 +147,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
         if([value isKindOfClass:[NSMutableDictionary class]] && [value containsObjectForKey:CKObjectGraphVariableKey]){
             NSString* varName = [value objectForKey:CKObjectGraphVariableKey];
             value = [self variableNamed:varName fromDictionary:dico];
-            NSAssert(value,@"variable not found");
+            CKAssert(value,@"variable not found");
             [dico setObject:value forKey:key];
         }
         
@@ -158,7 +159,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
                 
                 if([NSObject isClass:propertyType kindOfClass:[NSArray class]]
                    || [NSObject isClass:propertyType kindOfClass:[CKCollection class]]){
-                    NSAssert([value isKindOfClass:[NSArray class]],@"invalid type");
+                    CKAssert([value isKindOfClass:[NSArray class]],@"invalid type");
                     if([NSObject isClass:propertyType kindOfClass:[NSArray class]]){
                         id propertyValue = [property value];
                         if(!propertyValue){
@@ -167,7 +168,7 @@ NSString* CKObjectGraphVariableKey  = @"@var";
                     }
                     NSMutableArray* array = [NSMutableArray array];
                     for(id subValue in value){
-                        NSAssert([subValue isKindOfClass:[NSMutableDictionary class]],@"invalid value type");
+                        CKAssert([subValue isKindOfClass:[NSMutableDictionary class]],@"invalid value type");
                         id subObject = [self createObjectFromDictionary:subValue withUniqueId:nil];
                         if(subObject){
                             [array addObject:subObject];
@@ -195,14 +196,14 @@ NSString* CKObjectGraphVariableKey  = @"@var";
                         }
                         
                         if(referenceObject){
-                            NSAssert([referenceObject isKindOfClass:[NSString class]],@"invalid value type");
+                            CKAssert([referenceObject isKindOfClass:[NSString class]],@"invalid value type");
                             [self createObjectFromDictionary:value withUniqueId:nil]; //If inherited objects, create that objects
                             [self registerReferenceForProperty:property withUniqueId:referenceObject forDictionary:value];
                             handled = YES;
                         }
                         else{
                             id subObject = [self createObjectFromDictionary:value withUniqueId:key];
-                            NSAssert([NSObject isClass:[subObject class] kindOfClass:propertyType],@"invalid value type");
+                            CKAssert([NSObject isClass:[subObject class] kindOfClass:propertyType],@"invalid value type");
                             [property setValue:subObject];
                             handled = YES;
                         }

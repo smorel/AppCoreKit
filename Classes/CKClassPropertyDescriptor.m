@@ -14,6 +14,8 @@
 #import <objc/runtime.h>
 #import <MapKit/MapKit.h>
 
+#import "CKDebug.h"
+
 typedef struct CKStructParsedAttributes{
 	NSString* className;
 	NSString* encoding;
@@ -56,7 +58,7 @@ CKStructParsedAttributes parseStructAttributes(NSString* attributes){
 	else{
 		results.encoding = nil;
 		results.size = 0;
-		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+		//CKAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
     results.pointer = NO;
 	return results;
@@ -76,7 +78,7 @@ CKStructParsedAttributes parseStructPointerAttributes(NSString* attributes){
     else{
 		results.encoding = nil;
 		results.size = 0;
-		//NSAssert(NO,@"type '%@' not supported yet !",results.className);
+		//CKAssert(NO,@"type '%@' not supported yet !",results.className);
 	}
     results.pointer = YES;
 	return results;
@@ -441,7 +443,7 @@ static CKClassPropertyDescriptorManager* CCKClassPropertyDescriptorManagerDefaul
 - (void)addPropertyDescriptor:(CKClassPropertyDescriptor*)descriptor forClass:(Class)c{
    // @synchronized(self){
         NSString* className = [NSString stringWithUTF8String:class_getName(c)];
-        NSAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
+        CKAssert([_propertiesByClassName objectForKey:className],@"Could not add properties to non introspected class");
         NSMutableArray* allProperties = [_propertiesByClassName objectForKey:className];
         [allProperties addObject:descriptor];
         

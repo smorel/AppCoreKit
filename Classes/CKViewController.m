@@ -675,7 +675,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         NSString* string = [NSString stringWithUTF8String:symbols[i]];
         NSRange range = [string rangeOfString:@"__copy_helper_block_"];
         if(range.location != NSNotFound){
-            NSAssert(NO,@"You are retaining an object in a block copy !\nPlease define a variable with __block %@* bYourVar = yourVar; outside the scope of the block and use bYourVar in your block instead of yourVar.",[self class]);
+            CKAssert(NO,@"You are retaining an object in a block copy !\nPlease define a variable with __block %@* bYourVar = yourVar; outside the scope of the block and use bYourVar in your block instead of yourVar.",[self class]);
         }
     }
     free(symbols);

@@ -218,7 +218,7 @@
         [[self value]insertObjects:objects atIndexes:indexes];
         return;
     }
-	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+	CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
     if([NSObject isClass:selfClass kindOfClass:[NSArray class]]){
         if(self.descriptor && self.descriptor.insertSelector && [self.object respondsToSelector:self.descriptor.insertSelector]){
@@ -245,7 +245,7 @@
 		[[self value]removeObjectsAtIndexes:indexes];
         return;
     }
-	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+	CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
 	if(self.descriptor && self.descriptor.removeSelector && [self.object respondsToSelector:self.descriptor.removeSelector]){
 		[self.object willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:self.keyPath];
@@ -270,7 +270,7 @@
         [[self value]removeAllObjects];
         return;
     }
-	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
+	CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]],@"invalid property type");
 	
 	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,[[self value] count])];
 	    
@@ -293,7 +293,7 @@
 
 - (NSInteger)count{
 	Class selfClass = [self type];
-	NSAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]]
+	CKAssert([NSObject isClass:selfClass kindOfClass:[NSArray class]]
              ||[NSObject isClass:selfClass kindOfClass:[CKCollection class]],@"invalid property type");
     return [[self value]count];
 }

@@ -8,6 +8,7 @@
 
 #import "CKMultipartParser.h"
 #import "NSData+Matching.h"
+#import "CKDebug.h"
 
 @implementation CKMultipartParser{
 	NSData *buffer;
@@ -97,7 +98,7 @@
 		return YES;
 	}
 	
-	NSAssert(nil, @"Error");
+	CKAssert(nil, @"Error");
 	return NO;
 }
 
@@ -122,7 +123,7 @@
 
 - (NSData *)readBodyData {
 	NSInteger location = [self findBoundarySeparator];
-	NSAssert(location != NSNotFound, @"Error");
+	CKAssert(location != NSNotFound, @"Error");
 	NSRange range = { head, location - head };
 	NSData *body = [buffer subdataWithRange:range];
 	head += body.length;

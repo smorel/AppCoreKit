@@ -9,6 +9,8 @@
 #import "UIGestureRecognizer+BlockBasedInterface.h"
 #import <objc/runtime.h>
 
+#import "CKDebug.h"
+
 static char UIGestureRecognizerBlockKey;
 static char UIGestureRecognizerShouldBeginBlockKey;
 static char UIGestureRecognizerAllowedSimultaneousRecognizersKey;
@@ -44,7 +46,7 @@ typedef BOOL(^UIGestureRecognizerShouldBeginBlock)(UIGestureRecognizer* gestureR
                              block,
                              OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    NSAssert(self.delegate == nil || self.delegate == self,@"We need to be our own delegate to manage this property");
+    CKAssert(self.delegate == nil || self.delegate == self,@"We need to be our own delegate to manage this property");
     self.delegate = self;
 }
 
@@ -71,7 +73,7 @@ typedef BOOL(^UIGestureRecognizerShouldBeginBlock)(UIGestureRecognizer* gestureR
                              allowedSimultaneousRecognizers,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    NSAssert(self.delegate == nil || self.delegate == self,@"We need to be our own delegate to manage this property");
+    CKAssert(self.delegate == nil || self.delegate == self,@"We need to be our own delegate to manage this property");
     self.delegate = self;
 }
 

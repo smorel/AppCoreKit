@@ -9,6 +9,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+Additions.h"
 
+#import "CKDebug.h"
+
 @implementation NSValueTransformer (CKNativeTypes)
 
 
@@ -35,7 +37,7 @@
 		NSInteger result = [NSValueTransformer parseString:object toEnum:enumDefinition bitMask:bitMask];
 		return result;
 	}
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for enum");
 	return (object == nil) ? 0 : [object intValue];
 }
 
@@ -77,7 +79,7 @@
 		return [object charValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for char");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for char");
 	return (object == nil) ? ' ' : [object charValue];
 }
 
@@ -86,7 +88,7 @@
 		return [object intValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for int");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for int");
 	return (object == nil) ? 0 : [object intValue];
 }
 
@@ -95,7 +97,7 @@
 		return (short)[object intValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for short");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for short");
 	return (object == nil) ? 0 : (short)[object intValue];
 }
 
@@ -104,7 +106,7 @@
 		return (long)[object longLongValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long");
 	return (object == nil) ? 0 : (long)[object longValue];
 }
 
@@ -113,7 +115,7 @@
 		return (long long)[object longLongValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long long");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for long long");
 	return (object == nil) ? 0 : (long long)[object longLongValue];
 }
 
@@ -129,7 +131,7 @@
 		return (unsigned char)[object charValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned char");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned char");
 	return (object == nil) ? ' ' : [object unsignedCharValue];
 }
 
@@ -138,7 +140,7 @@
 		return (NSUInteger)[object intValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned int");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned int");
 	return (object == nil) ? 0 : [object unsignedIntValue];
 }
 
@@ -147,7 +149,7 @@
 		return (unsigned short)[object intValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned short");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned short");
 	return (object == nil) ? 0 : (unsigned short)[object intValue];
 }
 
@@ -156,7 +158,7 @@
 		return (unsigned long)[object longLongValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long");
 	return (object == nil) ? 0 : (unsigned long)[object longValue];
 }
 
@@ -165,7 +167,7 @@
 		return (unsigned long long)[object longLongValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long long");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for unsigned long long");
 	return (object == nil) ? 0 : (unsigned long long)[object longLongValue];
 }
 
@@ -174,7 +176,7 @@
 		return (CGFloat)[object floatValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for float");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for float");
 	return (object == nil) ? 0.0f : (CGFloat)[object floatValue];
 }
 
@@ -183,7 +185,7 @@
 		return (double)[object doubleValue];
 	}
 	
-	NSAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for double");
+	CKAssert(object == nil || [object isKindOfClass:[NSNumber class]],@"invalid class for double");
 	return (object == nil) ? 0.0 : (double)[object doubleValue];
 }
 
@@ -196,7 +198,7 @@
 		return NSClassFromString(object);
 	}
 	
-	NSAssert(NO,@"invalid class for Class");
+	CKAssert(NO,@"invalid class for Class");
 	return nil;
 }
 
@@ -205,7 +207,7 @@
 		return NSSelectorFromString(object);
 	}
 	
-	NSAssert(NO,@"invalid class for selector");
+	CKAssert(NO,@"invalid class for selector");
 	return nil;
 }
 

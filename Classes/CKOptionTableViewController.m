@@ -10,6 +10,7 @@
 #import "CKTableViewCellController+DynamicLayout.h"
 #import "CKTableViewCellController+BlockBasedInterface.h"
 #import "CKLocalization.h"
+#import "CKDebug.h"
 
 
 @interface CKOptionTableViewController ()
@@ -42,7 +43,7 @@
 
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index {
-	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	if (labels) {CKAssert(labels.count == values.count, @"labels.count != values.count");}
 	
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
@@ -56,7 +57,7 @@
 }
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelect{
-	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	if (labels) {CKAssert(labels.count == values.count, @"labels.count != values.count");}
 	
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
@@ -70,7 +71,7 @@
 }
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSInteger)index style:(UITableViewStyle)thestyle{
-	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	if (labels) {CKAssert(labels.count == values.count, @"labels.count != values.count");}
 	
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
@@ -85,7 +86,7 @@
 }
 
 - (id)initWithValues:(NSArray *)values labels:(NSArray *)labels selected:(NSArray*)selected multiSelectionEnabled:(BOOL)multiSelect style:(UITableViewStyle)thestyle{
-	if (labels) NSAssert(labels.count == values.count, @"labels.count != values.count");
+	if (labels) {CKAssert(labels.count == values.count, @"labels.count != values.count");}
 	
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		self.values = values;
@@ -201,7 +202,7 @@
 }
 
 - (NSInteger)selectedIndex{
-	//NSAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
+	//CKAssert([self.selectedIndexes count] == 1,@"multiselection => multiple indexes");
 	return [[self.selectedIndexes lastObject]intValue];
 }
 

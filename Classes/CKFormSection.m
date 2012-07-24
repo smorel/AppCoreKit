@@ -157,7 +157,7 @@
 
 - (void)removeCellController:(CKTableViewCellController *)cellController{
     NSInteger index = [_cellControllers indexOfObjectIdenticalTo:cellController];
-    NSAssert(index != NSNotFound,@"cannot find %@",cellController);
+    CKAssert(index != NSNotFound,@"cannot find %@",cellController);
     [self removeCellControllerAtIndex:index];
 }
 
@@ -204,7 +204,7 @@
 
 
 - (void)removeObjectAtIndex:(NSInteger)index{
-	NSAssert(NO,@"NOT IMPLEMENTED");
+	CKAssert(NO,@"NOT IMPLEMENTED");
 }
 
 @end

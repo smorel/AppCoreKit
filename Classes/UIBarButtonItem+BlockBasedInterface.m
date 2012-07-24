@@ -11,6 +11,7 @@
 #import "CKBinding.h"
 #import "CKBindingsManager.h"
 
+#import "CKDebug.h"
 
 @interface CKUIBarButtonItemBinder : CKBinding {
 	//We can use block or target/selector
@@ -107,7 +108,7 @@
 	[self unbind];
     
 	if(self.barButtonItem){
-        NSAssert(self.barButtonItem.target == nil,@"This button has already been binded or initialized with target action. Unfortunatly, UIBarButtonITem only support 1 target/action");
+        CKAssert(self.barButtonItem.target == nil,@"This button has already been binded or initialized with target action. Unfortunatly, UIBarButtonITem only support 1 target/action");
 		self.barButtonItem.target = self;
         self.barButtonItem.action = @selector(buttonClicked);
 	}

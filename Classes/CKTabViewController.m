@@ -14,6 +14,7 @@
 #import "CKPropertyExtendedAttributes+Attributes.h"
 #import "NSObject+Bindings.h"
 #import <objc/runtime.h>
+#import "CKDebug.h"
 
 
 #define kCKTabViewDefaultHeight 49
@@ -160,7 +161,7 @@
 	_items = [items copy];
 	int index = 0;
 	for (CKTabViewItem *item in _items) {
-		NSAssert([item isKindOfClass:[CKTabViewItem class]], @"Items must be of class CKTabViewItem.");
+		CKAssert([item isKindOfClass:[CKTabViewItem class]], @"Items must be of class CKTabViewItem.");
         [item addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:item];
 		[(CKTabViewItem *)item setSelected:(index++ == _selectedIndex)];

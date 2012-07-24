@@ -336,5 +336,5 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 /*id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
  id controlId = (keyPath == nil || [keyPath isEqualToString:@""]) ? subView : [subView valueForKeyPath:keyPath];
  if(!controlId){
- NSAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
+ CKAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
  }*/

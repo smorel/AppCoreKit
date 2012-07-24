@@ -23,6 +23,7 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKDebug.h"
 
 //TODO : HERE store the converted data in the key to convert only once !
 
@@ -126,7 +127,7 @@ static NSSet* CKStyleResourceTypeSet = nil;
 - (NSString*) stringForKey:(NSString*)key{
 	id object = [self objectForKey:key];
     if(!object) return nil;
-	NSAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
+	CKAssert(object == nil || [object isKindOfClass:[NSString class]],@"invalid class for string");
 	return _((NSString*)object);
 }
 

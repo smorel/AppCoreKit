@@ -23,7 +23,7 @@
                           transformRawData:(NSArray*(^)(id value))transformRawDataBlock
                                 completion:(void(^)(NSArray* objects))completionBlock 
                                      error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
-    NSAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
+    CKAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
     
     CKWebRequest* request = nil;
     if(body){
@@ -68,7 +68,7 @@
             }
             
             if(completionBlock){
-                NSAssert([value isKindOfClass:[NSArray class]],@"Invalid request transformation");
+                CKAssert([value isKindOfClass:[NSArray class]],@"Invalid request transformation");
                 completionBlock((NSArray*)value);
             }
         }
@@ -86,7 +86,7 @@
                  transformRawData:(NSDictionary*(^)(id value))transformRawDataBlock
                        completion:(void(^)(id object))completionBlock 
                             error:(void(^)(id value, NSHTTPURLResponse* response, NSError* error))errorBlock{
-    NSAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
+    CKAssert((params && !body) || (body && ! params),@"Our standard request is compatible with only params or body");
     
     CKWebRequest* request = nil;
     if(body){
@@ -123,7 +123,7 @@
         }
         else{
             if(completionBlock){
-                NSAssert(value == object,@"Invalid request transformation");
+                CKAssert(value == object,@"Invalid request transformation");
                 completionBlock(value);
             }
         }

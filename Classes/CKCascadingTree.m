@@ -69,7 +69,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 			NSArray* propertyValuePairComponents = [allPropertyValuePairs componentsSeparatedByString:@";"];
 			for(NSString* propetyValuePair in propertyValuePairComponents){
 				NSArray* propertyValueComponents = [propetyValuePair componentsSeparatedByString:@"="];
-				NSAssert([propertyValueComponents count] == 2,@"Invalid format for '%@' : invalid property value pair '%@'",format,propetyValuePair);
+				CKAssert([propertyValueComponents count] == 2,@"Invalid format for '%@' : invalid property value pair '%@'",format,propetyValuePair);
 				
 				NSString* propertyName = [propertyValueComponents objectAtIndex:0];
 				propertyName = [propertyName stringByReplacingOccurrencesOfString:@"'" withString:@""];
@@ -91,7 +91,7 @@ static NSMutableDictionary* CKCascadingTreeClassNamesCache = nil;
 }
 
 + (NSString*)formatFromSplittedFormat:(NSArray*)splittedFormat{
-	NSAssert([splittedFormat count] >= 1,@"no identifier for format");
+	CKAssert([splittedFormat count] >= 1,@"no identifier for format");
 	NSMutableString* str = [NSMutableString stringWithString:[splittedFormat objectAtIndex:0]];
 	
 	if([splittedFormat count] > 1){
@@ -292,7 +292,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 					[mutableTarget setObject:[NSMutableDictionary dictionaryWithDictionary:sourceObject] forKey:key];
 				}
                 else if([sourceObject isKindOfClass:[NSDictionary class]]){
-                    NSAssert(NO,@"Should have been read as a mutable dico !");
+                    CKAssert(NO,@"Should have been read as a mutable dico !");
                 }
 				else{
 					[mutableTarget setObject:sourceObject forKey:key];
@@ -501,7 +501,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
      && [key isEqual:CKCascadingTreeEmpty] == NO
      && [key isEqual:CKCascadingTreeNode] == NO){
      id parent = [[object objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
-     NSAssert(parent == self,@"Invalid parent !");
+     CKAssert(parent == self,@"Invalid parent !");
      
      [object validation];
      }
@@ -509,7 +509,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
      for(id subObject in object){
      if([subObject isKindOfClass:[NSDictionary class]]){
      id parent = [[subObject objectForKey:CKCascadingTreeParent]nonretainedObjectValue];
-     NSAssert(parent == self,@"Invalid parent !");
+     CKAssert(parent == self,@"Invalid parent !");
      
      [subObject validation];
      }
@@ -842,7 +842,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 - (void)addDictionary:(NSMutableDictionary*)dictionary forKey:(id)key{
     id object = [_tree objectForKey:key];
     if(object){
-        NSAssert(NO,@"tree already contains an object for key '%@'",key);
+        CKAssert(NO,@"tree already contains an object for key '%@'",key);
     }
     [_tree setObject:dictionary forKey:key];
 }

@@ -400,7 +400,7 @@
 }
 
 - (NSIndexPath*)indexPathForView:(UIView*)view{
-	NSAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
+	CKAssert([view isKindOfClass:[UITableViewCell class]],@"invalid view type");
     if([view superview] == nil)
         return nil;
     

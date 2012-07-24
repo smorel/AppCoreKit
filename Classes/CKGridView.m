@@ -11,6 +11,7 @@
 #import "CKVersion.h"
 #import "UIView+AutoresizingMasks.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CKDebug.h"
 
 #define DEFAULT_DRAGGEDVIEW_SCALE 2
 
@@ -193,7 +194,7 @@
 			[previousView removeFromSuperview];
 		[self.views removeObjectAtIndex:index];
 	}
-	NSAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
+	CKAssert(index <= [self.views count],@"invalid view insertion order in CKGridView");
 	[self.views insertObject:(view ? (id)view : (id)[NSNull null]) atIndex:index];
 
 	[self setNeedsLayout];
@@ -230,7 +231,7 @@
 - (NSIndexPath *)indexPathForIndex:(NSInteger)index {
 	int r = index / _columns;
 	int c = index - r * _columns;
-	NSAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
+	CKAssert(r>= 0 && r<_rows && c>=0 && c<_columns,@"invalid row column");
 	return [NSIndexPath indexPathForRow:r column:c];
 }
 

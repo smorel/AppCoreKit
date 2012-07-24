@@ -8,7 +8,7 @@
 
 #import "UILabel+Highlight.h"
 #import "CKRuntime.h"
-
+#import "CKDebug.h"
 
 @implementation UILabel (CKHighlight)
 @dynamic highlightedShadowColor,highlightedBackgroundColor;
@@ -46,16 +46,16 @@
 + (void)load{
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     BOOL result = CKClassAddProperty([UILabel class],@"highlightedShadowColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    NSAssert(result, @"Unable to add highlightedShadowColor property");
+    CKAssert(result, @"Unable to add highlightedShadowColor property");
     
     result = CKClassAddProperty([UILabel class],@"highlightedBackgroundColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    NSAssert(result, @"Unable to add highlightedBackgroundColor property");
+    CKAssert(result, @"Unable to add highlightedBackgroundColor property");
     
     result = CKClassAddProperty([UILabel class],@"internalCopyOfShadowColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    NSAssert(result, @"Unable to add internalCopyOfShadowColor property");
+    CKAssert(result, @"Unable to add internalCopyOfShadowColor property");
     
     result = CKClassAddProperty([UILabel class],@"internalCopyOfBackgroundColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    NSAssert(result, @"Unable to add internalCopyOfBackgroundColor property");
+    CKAssert(result, @"Unable to add internalCopyOfBackgroundColor property");
     
     CKSwizzleSelector([UILabel class],@selector(setHighlighted:),@selector(ckSetHighlighted:));
     [pool release];

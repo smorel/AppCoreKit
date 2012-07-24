@@ -11,6 +11,8 @@
 #import "NSValueTransformer+Additions.h"
 #import "CKObject+CKStore.h"
 
+#import "CKDebug.h"
+
 //Implemented in NSValueTransformer+Additions.m
 @interface NSObject (CKValueTransformerSelectors)
 + (SEL)convertFromObjectSelector:(id)object;
@@ -78,7 +80,7 @@
 		return [NSObject objectFromDictionary:[array objectAtIndex:0]];
 	}
 	else{
-		NSAssert(NO,@"too much elements in array");
+		CKAssert(NO,@"too much elements in array");
 	}
 	return (id)nil;
 }

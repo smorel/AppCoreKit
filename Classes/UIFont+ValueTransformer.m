@@ -7,12 +7,12 @@
 //
 
 #import "UIFont+ValueTransformer.h"
-
+#import "CKDebug.h"
 
 @implementation UIFont (CKValueTransformer)
 
 + (UIFont*)convertFromNSString:(NSString*)str{
-    NSAssert(NO,@"Not implemented");
+    CKAssert(NO,@"Not implemented");
     return nil;
     
 	/*NSArray* components = [str componentsSeparatedByString:@" "];
@@ -22,12 +22,12 @@
 }
 
 + (UIFont*)convertFromNSNumber:(NSNumber*)n{
-    NSAssert(NO,@"Not implemented");
+    CKAssert(NO,@"Not implemented");
     return nil;
 }
 
 + (NSString*)convertToNSString:(UIFont*)color{
-    NSAssert(NO,@"Not implemented");
+    CKAssert(NO,@"Not implemented");
     return nil;
 }
 

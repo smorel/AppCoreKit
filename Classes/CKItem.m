@@ -11,6 +11,7 @@
 #import "CKStore.h"
 #import "CKDomain.h"
 #import "CKItemAttributeReference.h"
+#import "CKDebug.h"
 
 //SEB : FIXME To move in a private file
 
@@ -62,7 +63,7 @@
 - (void)updateAttributes:(NSDictionary*)attributes{
 	NSDictionary* indexedAttributes = [self attributesIndexedByName];
 	for (id key in [attributes allKeys]) {
-		NSAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
+		CKAssert([key isKindOfClass:[NSString class]], @"Attribute key must be of class NSString");
 		id value = [attributes objectForKey:key];
 		if(value != nil){
 			CKAttribute* attribute = [self findOrCreateAttributeInDictionary:indexedAttributes withName:key];

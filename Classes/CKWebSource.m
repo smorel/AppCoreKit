@@ -114,7 +114,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	}
 	else{
         newItems = value;
-		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+		//CKAssert(NO,@"Invalid WebSource Definition : Needs to define _transformBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	self.hasMore = self.hasMore && (([newItems count] < _requestedBatchSize) ? NO : YES);
@@ -122,7 +122,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	self.request = nil;
     
     if (newItems) {	
-		NSAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
+		CKAssert([newItems isKindOfClass:[NSArray class]], @"Transformed value should be an array of items");
 		[self performSelector:@selector(addItems:) withObject:newItems];
 	}
 	
@@ -147,7 +147,7 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 		_completionBlock(nil, error);
 	}
 	else{
-		//NSAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
+		//CKAssert(NO,@"Invalid WebSource Definition : Needs to define _failureBlock (OS4) or set a delegate with protocol CKWebSourceDelegate (OS3)");
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:CKWebSourceErrorNotification object:self];

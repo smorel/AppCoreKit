@@ -34,7 +34,7 @@
 - (id)initWithArrayProperty:(CKProperty*)theProperty{
 	if (self = [super init]) {
       	CKClassPropertyDescriptor* desc = [theProperty descriptor];
-        NSAssert([NSObject isClass:desc.type kindOfClass:[NSArray class]] || [[theProperty value]isKindOfClass:[NSArray class]],@"invalid property");
+        CKAssert([NSObject isClass:desc.type kindOfClass:[NSArray class]] || [[theProperty value]isKindOfClass:[NSArray class]],@"invalid property");
         self.property = theProperty;
     }
 	return self;

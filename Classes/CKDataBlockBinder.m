@@ -105,7 +105,7 @@
 		[self.target performSelector:self.selector withObject:value];
 	}
 	else{
-		//NSAssert(NO,@"CKDataBlockBinder no action plugged");
+		//CKAssert(NO,@"CKDataBlockBinder no action plugged");
 	}
 }
 

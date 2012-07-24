@@ -9,6 +9,7 @@
 #import "CKBinding.h"
 #import "CKBindingsManager.h"
 #import "CKWeakRef.h"
+#import "CKDebug.h"
 
 
 @implementation CKBinding{
@@ -19,11 +20,11 @@
 @synthesize contextOptions = _contextOptions;
 
 - (void)bind{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    CKAssert(NO,@"Should be implemented in inherited class");
 }
 
 - (void)unbind{
-    NSAssert(NO,@"Should be implemented in inherited class");
+    CKAssert(NO,@"Should be implemented in inherited class");
 }
 
 

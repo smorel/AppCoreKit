@@ -14,6 +14,7 @@
 #import "CKWebDataConverter.h"
 #import "CKNetworkActivityManager.h"
 #import "CKVersion.h"
+#import "CKDebug.h"
 
 NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 
@@ -117,7 +118,7 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (void)startOnRunLoop:(NSRunLoop *)runLoop {
-    NSAssert(self.connection == nil, @"Connection already started");
+    CKAssert(self.connection == nil, @"Connection already started");
     
     if (self.startGroup)
         dispatch_release(self.startGroup);

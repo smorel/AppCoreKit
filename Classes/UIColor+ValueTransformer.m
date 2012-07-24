@@ -10,6 +10,7 @@
 #import "NSValueTransformer+Additions.h"
 #import "UIColor+Additions.h"
 
+#import "CKDebug.h"
 
 @implementation UIColor (CKUIColor_ValueTransformer)
 
@@ -24,7 +25,7 @@
 	else {
 		if([str hasPrefix:@"0x"]){
 			NSArray* components = [str componentsSeparatedByString:@" "];
-			NSAssert([components count] >= 1,@"Invalid format for color");
+			CKAssert([components count] >= 1,@"Invalid format for color");
 			unsigned outVal;
 			NSScanner* scanner = [NSScanner scannerWithString:[components objectAtIndex:0]];
 			[scanner scanHexInt:&outVal];
@@ -48,7 +49,7 @@
                     return color;
                 }
                 else{
-                    NSAssert(NO,@"invalid format for color with text : %@",str);
+                    CKAssert(NO,@"invalid format for color with text : %@",str);
                 }
 			}
 		}

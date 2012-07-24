@@ -14,6 +14,7 @@
 #import "CKTableViewCellController+DynamicLayout_private.h"
 #import "CKGridCollectionViewController.h"
 #import "CKTableViewCellController+Style.h"
+#import "CKDebug.h"
 
 #define InteractionButtonTag 3457
 #define ControllerViewBaseTag 3458
@@ -48,7 +49,7 @@
 }
 
 - (void)setValue:(id)value{
-    NSAssert([value isKindOfClass:[NSArray class]],@"invalid value");
+    CKAssert([value isKindOfClass:[NSArray class]],@"invalid value");
     [super setValue:value];
     
     [self updateViewControllers];
@@ -114,7 +115,7 @@
     for(int i =0; i< _numberOfColumns; ++i){
         NSInteger viewTag = ControllerViewBaseTag + i;
         UIView* view = [cell.contentView viewWithTag:viewTag];
-        NSAssert(!view || [view isKindOfClass:[CKUITableViewCell class]],@"Invalid view class");
+        CKAssert(!view || [view isKindOfClass:[CKUITableViewCell class]],@"Invalid view class");
         
         CKUITableViewCell* subcell = (CKUITableViewCell*)view;
         if(i < [self.cellControllers count]){

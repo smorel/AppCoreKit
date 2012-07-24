@@ -17,6 +17,7 @@
 #import "CKTableCollectionViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Positioning.h"
+#import "CKDebug.h"
 
 #define TEXTVIEWINSETS 8
 
@@ -131,7 +132,7 @@
             
             return CGSizeMake(320,height);
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
     return size;
@@ -172,7 +173,7 @@
                 textView.frame = [self subtitleTextViewFrameUsingText:text textStyle:textStyle textViewText:textViewText textViewStyle:textViewStyle image:self.image];
             }
         }else{
-            NSAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
+            CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKMultilineNSStringPropertyCellController");
         }
     }
 }

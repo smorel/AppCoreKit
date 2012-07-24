@@ -9,6 +9,7 @@
 #import "CKGridCollectionViewController.h"
 #import "CKGridTableViewCellController.h"
 #import "CKArrayProxyCollection.h"
+#import "CKDebug.h"
 
 @interface CKCollectionViewController()
 
@@ -200,7 +201,7 @@
 }
 
 - (CKCollectionCellController*)createsControllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
-    NSAssert([object isKindOfClass:[NSArray class]],@"invalid object class");
+    CKAssert([object isKindOfClass:[NSArray class]],@"invalid object class");
               
     CKGridTableViewCellController* controller = [CKGridTableViewCellController cellController];
     switch(self.orientation){
@@ -235,7 +236,7 @@
 
 - (void)objectControllerReloadData:(id)controller{
     if(controller == self.linearCollectionController){
-        NSAssert(NO,@"NOT IMPLEMENTED");
+        CKAssert(NO,@"NOT IMPLEMENTED");
         
         [self updateGridArray];
         return;
@@ -268,7 +269,7 @@
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(controller == self.linearCollectionController){
-        NSAssert(NO,@"NOT IMPLEMENTED");
+        CKAssert(NO,@"NOT IMPLEMENTED");
         
         [self updateGridArray];
         

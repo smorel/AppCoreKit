@@ -107,7 +107,7 @@
 		[self.target performSelector:self.selector withObject:thenotification];
 	}
 	else{
-		//NSAssert(NO,@"CKNotificationBlockBinder no action plugged");
+		//CKAssert(NO,@"CKNotificationBlockBinder no action plugged");
 	}
 }
 

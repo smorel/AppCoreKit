@@ -18,6 +18,7 @@
 #import "CKTableViewCellController+Style.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "CKDebug.h"
 
 @interface CKPropertyTableViewCellController () 
 @property(nonatomic,retain)UIButton* validationButton;
@@ -78,13 +79,13 @@
 }
 
 - (CKProperty*)objectProperty{
-    NSAssert(self.value == nil || [self.value isKindOfClass:[CKProperty class]],@"Invalid value type");
+    CKAssert(self.value == nil || [self.value isKindOfClass:[CKProperty class]],@"Invalid value type");
     return (CKProperty*)self.value;
 }
 
 - (void)setValue:(id)value{
     if(![self.value isEqual:value]){
-        NSAssert(value == nil || [value isKindOfClass:[CKProperty class]],@"Invalid value type");
+        CKAssert(value == nil || [value isKindOfClass:[CKProperty class]],@"Invalid value type");
         [super setValue:value];
     }
 }

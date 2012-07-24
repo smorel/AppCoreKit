@@ -24,6 +24,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKDebug.h"
+
 @implementation UIView (CKIntrospectionAdditions)
 
 - (void)subviewsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -71,7 +73,7 @@
         }else if([object isKindOfClass:[NSDictionary class]]){
             view = [NSValueTransformer objectFromDictionary:object];
         }else{
-            NSAssert(NO,@"Non supported format");
+            CKAssert(NO,@"Non supported format");
         }
         [self addSubview:view];
     }

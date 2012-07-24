@@ -9,6 +9,7 @@
 #import "CKTableViewCellController+Responder.h"
 #import "CKTableCollectionViewController.h"
 #import "NSObject+Invocation.h"
+#import "CKDebug.h"
 
 
 //CKTableViewCellController+Responder
@@ -23,7 +24,7 @@
             return YES;
     }
     else{
-        NSAssert(NO,@"CKTableViewCellNextResponder is supported only for CKTableCollectionViewController yet");
+        CKAssert(NO,@"CKTableViewCellNextResponder is supported only for CKTableCollectionViewController yet");
     }
     return NO;
 }

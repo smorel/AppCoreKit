@@ -122,7 +122,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
     if(_segments && index >= 0 && index < [_segments count]){
         return [_segments objectAtIndex:index];
     }
-    NSAssert(NO,@"Trying to access to a non valid segment");
+    CKAssert(NO,@"Trying to access to a non valid segment");
     return nil;
 }
 
@@ -317,7 +317,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
     }
     
     NSInteger index = [_segments indexOfObjectIdenticalTo:segment];
-    NSAssert(index != NSNotFound,@"Trying to select a segment that is not in the segmentedControl");
+    CKAssert(index != NSNotFound,@"Trying to select a segment that is not in the segmentedControl");
     _selectedSegmentIndex = index;
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];
