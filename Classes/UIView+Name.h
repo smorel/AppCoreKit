@@ -29,3 +29,16 @@
 - (id)viewWithKeyPath:(NSString*)keyPath;
 
 @end
+
+
+@interface UIBarButtonItem (CKName)
+
+///-----------------------------------
+/// @name Identifying Bar button item at runtime
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic,copy) NSString* name;
+
+@end

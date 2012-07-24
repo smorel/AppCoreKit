@@ -59,4 +59,24 @@ typedef enum {
  */
 - (void)setButtonItemWithImage:(UIImage *)image type:(CKWebViewControllerButtonItemType)type target:(id)target action:(SEL)action;
 
+/**
+ */
+@property (nonatomic, readonly, retain) UIBarButtonItem *backButtonItem;
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIBarButtonItem *forwardButtonItem;
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIBarButtonItem *refreshButtonItem;
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIBarButtonItem *actionButtonItem;
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIBarButtonItem *spinnerItem;
+
 @end

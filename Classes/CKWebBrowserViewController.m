@@ -9,6 +9,7 @@
 #import "CKWebBrowserViewController.h"
 #import "UIView+AutoresizingMasks.h"
 #import "CKWebViewController.h"
+#import "UIView+Name.h"
 
 @interface CKWebBrowserViewController () <UIWebViewDelegate>
 
@@ -74,13 +75,14 @@
 
 	// Setup the bar button items
 	
-	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoBack.png"] type:CKWebViewControllerButtonItemBack target:nil action:nil];
-	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoForward.png"] type:CKWebViewControllerButtonItemForward target:nil action:nil];
+	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoBack"] type:CKWebViewControllerButtonItemBack target:nil action:nil];
+	[self setButtonItemWithImage:[UIImage imageNamed:@"CKWebViewControllerGoForward"] type:CKWebViewControllerButtonItemForward target:nil action:nil];
 	[self setButtonItemWithSystemItem:UIBarButtonSystemItemRefresh type:CKWebViewControllerButtonItemRefresh target:nil action:nil];
 	
 	UIActivityIndicatorView *activityView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
 	[activityView startAnimating];
 	self.spinnerItem = [[[UIBarButtonItem alloc] initWithCustomView:activityView] autorelease];
+    self.spinnerItem.name = @"spinnerItem";
 	self.spinnerItem.tag = CKWebViewControllerButtonItemRefresh;
     
 	[self.webController loadURL:self.homeURL];
@@ -151,8 +153,8 @@
 }
 
 - (void)setButtonItemWithImage:(UIImage *)image type:(CKWebViewControllerButtonItemType)type target:(id)target action:(SEL)action {
-	if (image == nil)
-		return;
+	//if (image == nil)
+	//	return;
 	UIBarButtonItem *item = [[[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:action] autorelease];
 	[self setBarButtonItem:item forItemType:type target:target action:action];
 }
@@ -167,24 +169,28 @@
 	switch (type) {
 		case CKWebViewControllerButtonItemBack:
 			self.backButtonItem = buttonItem;
+            self.backButtonItem.name = @"backButtonItem";
 			self.backButtonItem.target = self;
 			self.backButtonItem.action = @selector(actionGoBack);
 			self.backButtonItem.enabled = NO;
 			break;
 		case CKWebViewControllerButtonItemForward:
 			self.forwardButtonItem = buttonItem;
+            self.forwardButtonItem.name = @"forwardButtonItem";
 			self.forwardButtonItem.target = self;
 			self.forwardButtonItem.action = @selector(actionGoForward);
 			self.forwardButtonItem.enabled = NO;
 			break;
 		case CKWebViewControllerButtonItemRefresh:
 			self.refreshButtonItem = buttonItem;
+            self.refreshButtonItem.name = @"refreshButtonItem";
 			self.refreshButtonItem.target = self;
 			self.refreshButtonItem.action = @selector(actionRefresh);
 			self.refreshButtonItem.enabled = YES;
 			break;
 		case CKWebViewControllerButtonItemAction:
 			self.actionButtonItem = buttonItem;
+            self.actionButtonItem.name = @"actionButtonItem";
 			self.actionButtonItem.enabled = YES;
 		default:
 			break;
@@ -194,9 +200,15 @@
 
 - (void)actionGoBack {
 	[self.webController.webView goBack];
+    
+	self.backButtonItem.enabled = self.webController.webView.canGoBack;
+	self.forwardButtonItem.enabled = self.webController.webView.canGoForward;	
 }
 - (void)actionGoForward {
 	[self.webController.webView goForward];
+    
+	self.backButtonItem.enabled = self.webController.webView.canGoBack;
+	self.forwardButtonItem.enabled = self.webController.webView.canGoForward;	
 }
 - (void)actionRefresh {
 	[self.webController.webView reload];

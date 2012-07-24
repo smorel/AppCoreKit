@@ -29,7 +29,10 @@
 
 - (void)update{
     [self setTitle:self.barButtonItem.title forState:UIControlStateNormal];
-    [self setImage:self.barButtonItem.image forState:UIControlStateNormal];
+
+    if(self.barButtonItem.image){
+        [self setImage:self.barButtonItem.image forState:UIControlStateNormal];
+    }
     [self addTarget:self.barButtonItem.target action:self.barButtonItem.action forControlEvents:UIControlEventTouchUpInside];
     self.enabled = self.barButtonItem.enabled;
     

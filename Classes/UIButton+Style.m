@@ -126,7 +126,11 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
 
 + (void)updateReservedKeyWords:(NSMutableSet*)keyWords{
     [super updateReservedKeyWords:keyWords];
-	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,nil]];
+	[keyWords addObjectsFromArray:[NSArray arrayWithObjects:CKStyleDefaultBackgroundImage,CKStyleDefaultImage,CKStyleDefaultTextColor,CKStyleDefaultTitle,CKStyleDefaultShadowColor,
+                                   CKStyleHighlightedBackgroundImage,CKStyleHighlightedImage,CKStyleHighlightedTextColor,CKStyleHighlightedTitle,CKStyleHighlightedShadowColor,
+                                   CKStyleDisabledBackgroundImage,CKStyleDisabledImage,CKStyleDisabledTextColor,CKStyleDisabledTitle,CKStyleDisabledShadowColor,
+                                   CKStyleSelectedBackgroundImage,CKStyleSelectedImage,CKStyleSelectedTextColor,CKStyleSelectedTitle,CKStyleSelectedShadowColor,
+                                   nil]];
 }
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toView:(UIView*)view appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
@@ -214,7 +218,7 @@ NSString *CKStyleSelectedTitle = @"selectedTitle";
             CGFloat height = button.bounds.size.height;
             CGFloat width = button.bounds.size.width;
             [button sizeToFit];
-            button.frame = CGRectMake(button.frame.origin.x,button.frame.origin.y,MAX(width,button.frame.size.width),height);
+            button.frame = CGRectMake(button.frame.origin.x,button.frame.origin.y,MAX(width,button.frame.size.width),(height <= 0) ? MAX(height,button.frame.size.height) : height);
             
 			return YES;
 		}

@@ -57,3 +57,20 @@ static char kUIViewNameKey;
 
 
 @end
+
+
+@implementation UIBarButtonItem (CKName)
+@dynamic name;
+
+- (void)setName:(NSString *)name{
+    objc_setAssociatedObject(self, 
+                             &kUIViewNameKey,
+                             name,
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString*)name{
+    return objc_getAssociatedObject(self, &kUIViewNameKey);
+}
+
+@end
