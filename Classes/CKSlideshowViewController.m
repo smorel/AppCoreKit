@@ -158,6 +158,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+    self.navigationController.navigationBar.alpha = 1;
     [self.navigationController setToolbarHidden:YES animated:animated];
 }
 
