@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKPropertyTableViewCellController.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 
 /**
@@ -23,5 +24,9 @@
  Do not keep any other reference between the textField and the controller to avoid problem with the reuse system.
  */
 @property (nonatomic,retain,readonly) UITextField* textField;
+
+/**
+ */
+@property (nonatomic,copy) CKInputTextFormatterBlock textInputFormatterBlock;
 
 @end

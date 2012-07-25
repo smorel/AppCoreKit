@@ -27,10 +27,12 @@
 
 @synthesize textField = _textField;
 @synthesize toggleSwitch = _toggleSwitch;
+@synthesize textInputFormatterBlock = _textInputFormatterBlock;
 
 -(void)dealloc{
 	[_textField release];
 	[_toggleSwitch release];
+    [_textInputFormatterBlock release];
 	[super dealloc];
 }
 
@@ -268,6 +270,16 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
+    
+    CKInputTextFormatterBlock formatterBlock = self.textInputFormatterBlock;
+    if(!formatterBlock){
+        formatterBlock = [attributes textInputFormatterBlock];
+    }
+    
+    if(formatterBlock){
+        return formatterBlock(textField,range,string);
+    }
+    
     NSInteger min = [attributes minimumLength];
     NSInteger max = [attributes maximumLength];
 	if (range.length>0) {

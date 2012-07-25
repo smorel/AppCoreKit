@@ -8,6 +8,7 @@
 
 #import "CKPropertyTableViewCellController.h"
 #import "CKTextView.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 
 /**
@@ -23,5 +24,9 @@
  Do not keep any other reference between the textView and the controller to avoid problem with the reuse system.
  */
 @property(nonatomic,retain,readonly)CKTextView* textView;
+
+/**
+ */
+@property (nonatomic,copy) CKInputTextFormatterBlock textInputFormatterBlock;
 
 @end

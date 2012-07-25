@@ -33,10 +33,13 @@
 }
 
 @synthesize textView = _textView;
+@synthesize textInputFormatterBlock = _textInputFormatterBlock;
+
 
 - (void)dealloc {
 	[_textView release];
     _textView = nil;
+    [_textInputFormatterBlock release];
 	[super dealloc];
 }
 
@@ -181,6 +184,16 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     CKPropertyExtendedAttributes* attributes = [[self objectProperty]extendedAttributes];
+    
+    CKInputTextFormatterBlock formatterBlock = self.textInputFormatterBlock;
+    if(!formatterBlock){
+        formatterBlock = [attributes textInputFormatterBlock];
+    }
+    
+    if(formatterBlock){
+        return formatterBlock(textView,range,text);
+    }
+    
     NSInteger min = [attributes minimumLength];
     NSInteger max = [attributes maximumLength];
 	if (range.length>0) {

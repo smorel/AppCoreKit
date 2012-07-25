@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
 /**
@@ -20,5 +21,9 @@
 /** 
  */
 - (NSString *)stringByDeletingHTMLTags;
+
+/** This works only for US phone numbers
+ */
++ (BOOL)formatAsPhoneNumberUsingTextFied:(UITextField*)textfield range:(NSRange)range replacementString:(NSString*)string;
 
 @end

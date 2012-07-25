@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CKPropertyTableViewCellController.h"
+#import "CKPropertyExtendedAttributes+Attributes.h"
 
 
 /**
@@ -29,5 +30,9 @@
  Do not keep any other reference between the toggleSwitch and the controller to avoid problem with the reuse system.
  */
 @property (nonatomic,retain,readonly) UISwitch* toggleSwitch;
+
+/**
+ */
+@property (nonatomic,copy) CKInputTextFormatterBlock textInputFormatterBlock;
 
 @end
