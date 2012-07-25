@@ -146,7 +146,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    self.navigationItem.titleView = nil;
+//    self.navigationItem.titleView = nil;
     
     self.controlsAreDisplayed = YES;
     if ([self numberOfObjectsForSection:0] > 1) { 
