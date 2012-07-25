@@ -267,13 +267,18 @@
 
 - (void)updateViews:(BOOL)animated{
 	UIImage* image = [self image];
-	if(!_defaultImage && !image && self.imageLoader){//spinner
+	if(!image && self.imageLoader){//spinner
+        if(_defaultImage){
+            [self createsDefaultImageView];
+            self.defaultImageView.alpha = 1;
+            self.defaultImageView.frame = self.bounds;
+        }
+        
 		if(_currentState != CKImageViewStateSpinner){
 			[self.layer removeAnimationForKey:[NSString stringWithFormat:@"CKImageView<%p>",self]];
             
 			[self.imageView removeFromSuperview];
 			[self.button removeFromSuperview];
-			[self.defaultImageView removeFromSuperview];
 			
 			if(self.imageLoader){
 				if(self.activityIndicator){
