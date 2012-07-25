@@ -52,7 +52,7 @@ static char kUIViewNameKey;
         }
     }
     
-    return currentView;
+    return (currentView == self) ? nil : currentView;
 }
 
 
