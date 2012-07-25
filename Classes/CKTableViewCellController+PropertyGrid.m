@@ -83,6 +83,9 @@
                     }else{
                         cellController = [CKNSStringPropertyCellController cellController];
                     }
+                }else if([NSObject isClass:propertyType kindOfClass:[NSURL class]]){
+                    cellController = [CKMultilineNSStringPropertyCellController cellController];
+                    cellController.text = _(descriptor.name);
                 }
                 else if([NSObject isClass:propertyType kindOfClass:[NSNumber class]]){
                     cellController = [CKNSNumberPropertyCellController cellController];

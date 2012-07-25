@@ -18,6 +18,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Positioning.h"
 #import "CKDebug.h"
+#import "NSValueTransformer+Additions.h"
 
 #define TEXTVIEWINSETS 8
 
@@ -94,14 +95,15 @@
 }
 
 - (CGSize)computeSize{
-    NSString* text = nil;
+    NSString* text = self.text;
     CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
     if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
        || self.cellStyle == CKTableViewCellStyleIPhoneForm){
         text = _(descriptor.name);
     }
     
-    CGSize size = [self computeSizeUsingText:text detailText:[[self objectProperty]value] image:self.image];
+    NSString* result = [NSValueTransformer transformProperty:[self objectProperty] toClass:[NSString class]];
+    CGSize size = [self computeSizeUsingText:text detailText:result image:self.image];
     self.invalidatedSize = NO;
     
     BOOL readonly = [[self objectProperty] isReadOnly] || self.readOnly;
@@ -113,7 +115,7 @@
             NSDictionary* textViewStyle = [self textViewStyle];
             NSDictionary* textStyle = [self detailTextStyle];
             
-            NSString* textViewText = [NSString stringWithFormat:@"%@a",[[self objectProperty]value]]; 
+            NSString* textViewText = [NSString stringWithFormat:@"%@a",result]; 
             //we append 'a' here to manage extra return spaces in text not taken in account when computing text size.
             
             CGFloat height = 0;
@@ -150,14 +152,15 @@
             NSDictionary* textViewStyle = [self textViewStyle];
             NSDictionary* textStyle = [self detailTextStyle];
             
-            NSString* text = nil;
+            NSString* text = self.text;
             CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
             if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
                || self.cellStyle == CKTableViewCellStyleIPadForm){
                 text = _(descriptor.name);
             }
             
-            NSString* textViewText = [NSString stringWithFormat:@"%@a",[[self objectProperty]value]]; 
+            NSString* result = [NSValueTransformer transformProperty:[self objectProperty] toClass:[NSString class]];
+            NSString* textViewText = [NSString stringWithFormat:@"%@a",result]; 
             //we append 'a' here to manage extra return spaces in text not taken in account when computing text size.
             
             UITableViewCell* cell = self.tableViewCell;

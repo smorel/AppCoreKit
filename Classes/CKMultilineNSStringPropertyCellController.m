@@ -14,6 +14,7 @@
 #import "CKTableCollectionViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Positioning.h"
+#import "NSValueTransformer+Additions.h"
 
 #define CKNSStringMultilinePropertyCellControllerDefaultHeight 60
 
@@ -83,7 +84,9 @@
 }
 
 - (void)textViewChanged:(id)value{
-    [self setValueInObjectProperty:value];
+    CKProperty* property = (CKProperty*)self.value;
+    id result = [NSValueTransformer transform:value toClass:property.type];
+    [self setValueInObjectProperty:result];
 }
 
 - (void)setupCell:(UITableViewCell *)cell {
@@ -113,7 +116,9 @@
         _textView.placeholder =  _(placeholerText);
         _textView.frameChangeDelegate = nil;
         _textView.delegate = nil;
-        [_textView setText:[property value] animated:NO];
+        
+        id result = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+        [_textView setText:result animated:NO];
         _textView.delegate = self;
         
         __block CKMultilineNSStringPropertyCellController* bself = self;
@@ -124,7 +129,8 @@
                 if(!_textView.frameChangeDelegate){//that means we are not currently editing the value
                     _textView.frameChangeDelegate = bself;
                     _textView.delegate = nil;
-                    [_textView setText:[property value] animated:YES];
+                    id result = [NSValueTransformer transformProperty:property toClass:[NSString class]];
+                    [_textView setText:result animated:YES];
                     _textView.delegate = bself;
                     _textView.frameChangeDelegate = nil;
                 }
