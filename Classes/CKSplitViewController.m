@@ -323,15 +323,17 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    BOOL enable = [UIView areAnimationsEnabled];
+    [UIView setAnimationsEnabled:NO];
     
     if(!self.hasBeenReloaded){
         self.hasBeenReloaded = YES;
         [_splitView reloadData];
     }
     
-    [UIView setAnimationsEnabled:NO];
     [_splitView layoutSubviews];
-    [UIView setAnimationsEnabled:YES];
+    
+    [UIView setAnimationsEnabled:enable];
     
     for(UIViewController* controller in self.viewControllers){
         [controller viewWillAppear:animated];

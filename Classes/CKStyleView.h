@@ -6,8 +6,16 @@
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "CKRoundedCornerView.h"
+#import <UIKit/UIKit.h>
+
+/**
+ */
+typedef enum {
+	CKStyleViewCornerTypeNone = 0,
+	CKStyleViewCornerTypeTop,
+	CKStyleViewCornerTypeBottom,
+	CKStyleViewCornerTypeAll
+} CKStyleViewCornerType;
 
 /**
  */
@@ -35,11 +43,19 @@ typedef enum {
 
 /**
  */
-@interface CKStyleView : CKRoundedCornerView 
+@interface CKStyleView : UIView 
 
 ///-----------------------------------
 /// @name Customizing the appearance
 ///-----------------------------------
+
+/**
+ */
+@property (nonatomic,assign) CKStyleViewCornerType corners;
+
+/**
+ */
+@property (nonatomic,assign) CGFloat roundedCornerSize;
 
 /**
  */

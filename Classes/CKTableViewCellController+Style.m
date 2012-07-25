@@ -180,13 +180,13 @@ NSString* CKStyleCellFlags = @"flags";
 //delegate for tableViewCell styles
 @implementation CKTableViewCellController (CKStyle)
 
-- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
+- (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
     CKViewCornerStyle cornerStyle = CKViewBorderStyleTableViewCell;
     if([style containsObjectForKey:CKStyleCornerStyle]){
         cornerStyle = [style cornerStyle];
     }
     
-	CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
+	CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
 	switch(cornerStyle){
 		case CKViewCornerStyleTableViewCell:{
 			if(view == self.tableViewCell.backgroundView
@@ -195,28 +195,28 @@ NSString* CKStyleCellFlags = @"flags";
                 if(tableView.style == UITableViewStyleGrouped){
                     NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
                     if(self.indexPath.row == 0 && numberOfRows > 1){
-                        roundedCornerType = CKRoundedCornerViewTypeTop;
+                        roundedCornerType = CKStyleViewCornerTypeTop;
                     }
                     else if(self.indexPath.row == 0){
-                        roundedCornerType = CKRoundedCornerViewTypeAll;
+                        roundedCornerType = CKStyleViewCornerTypeAll;
                     }
                     else if(self.indexPath.row == numberOfRows-1){
-                        roundedCornerType = CKRoundedCornerViewTypeBottom;
+                        roundedCornerType = CKStyleViewCornerTypeBottom;
                     }
 				}
 			}
 			break;
 		}
         case CKViewCornerStyleRounded:{
-            roundedCornerType = CKRoundedCornerViewTypeAll;
+            roundedCornerType = CKStyleViewCornerTypeAll;
             break;
         }
         case CKViewCornerStyleRoundedTop:{
-            roundedCornerType = CKRoundedCornerViewTypeTop;
+            roundedCornerType = CKStyleViewCornerTypeTop;
             break;
         }
         case CKViewCornerStyleRoundedBottom:{
-            roundedCornerType = CKRoundedCornerViewTypeBottom;
+            roundedCornerType = CKStyleViewCornerTypeBottom;
             break;
         }
 	}

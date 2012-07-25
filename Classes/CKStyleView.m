@@ -15,7 +15,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-
+/*
 @interface CKStyleViewUpdater : NSObject
 
 @property(nonatomic,assign)UIView* view;
@@ -34,7 +34,7 @@
 	if(_size.width != self.view.bounds.size.width
 	   || _size.height != self.view.bounds.size.height){
 		_size = self.view.bounds.size;
-		[self.view setNeedsDisplay];
+		//[self.view setNeedsDisplay];
 	}
 }
 
@@ -54,10 +54,10 @@
 	[super dealloc];
 }
 
-@end
+@end*/
 
 @interface CKStyleView () 
-@property(nonatomic,retain)CKStyleViewUpdater* updater;
+//@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
 @end
 
@@ -77,7 +77,7 @@
 	UIColor* _separatorColor;
 	CGFloat _separatorWidth;
 	
-	CKStyleViewUpdater* _updater;
+	//CKStyleViewUpdater* _updater;
 	
 	UIColor* _fillColor;
 	UIColor *_embossTopColor;
@@ -93,11 +93,17 @@
 @synthesize separatorLocation = _separatorLocation;
 @synthesize separatorColor = _separatorColor;
 @synthesize separatorWidth = _separatorWidth;
-@synthesize updater = _updater;
+//@synthesize updater = _updater;
 @synthesize fillColor = _fillColor;
 @synthesize imageContentMode = _imageContentMode;
 @synthesize embossTopColor = _embossTopColor;
 @synthesize embossBottomColor = _embossBottomColor;
+@synthesize corners = _corners;
+@synthesize roundedCornerSize = _roundedCornerSize;
+
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+}
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
@@ -108,10 +114,34 @@
 	self.separatorWidth = 1;
 	self.separatorLocation = CKStyleViewSeparatorLocationNone;
     
-	self.updater = [[[CKStyleViewUpdater alloc]initWithView:self]autorelease];
+//	self.updater = [[[CKStyleViewUpdater alloc]initWithView:self]autorelease];
 	self.fillColor = [UIColor clearColor];
 	self.imageContentMode = UIViewContentModeScaleToFill;
+    
+    self.corners = CKStyleViewCornerTypeNone;
+    self.roundedCornerSize = 10;
+    
+    self.contentMode = UIViewContentModeTopLeft;
+    self.clipsToBounds = 0;
 }
+
+- (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIViewContentMode",
+                                                    UIViewContentModeScaleToFill,
+                                                    UIViewContentModeScaleAspectFit,      
+                                                    UIViewContentModeScaleAspectFill,    
+                                                    UIViewContentModeRedraw,              
+                                                    UIViewContentModeCenter,             
+                                                    UIViewContentModeTop,
+                                                    UIViewContentModeBottom,
+                                                    UIViewContentModeLeft,
+                                                    UIViewContentModeRight,
+                                                    UIViewContentModeTopLeft,
+                                                    UIViewContentModeTopRight,
+                                                    UIViewContentModeBottomLeft,
+                                                    UIViewContentModeBottomRight);
+}
+
 
 - (void)borderLocationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKBitMaskDefinition(@"CKStyleViewBorderLocation",
@@ -163,7 +193,7 @@
     
 	self.fillColor = color;
     CGFloat alpha = CGColorGetAlpha([color CGColor]);
-    if(self.corners == CKRoundedCornerViewTypeNone && alpha >= 1){
+    if(self.corners == CKStyleViewCornerTypeNone && alpha >= 1){
         [super setBackgroundColor:[UIColor blackColor]];
     }
     else{
@@ -185,11 +215,11 @@
     }
 }
 
-- (void)setCorners:(CKRoundedCornerViewType)corners{
-    [super setCorners:corners];
+- (void)setCorners:(CKStyleViewCornerType)newCorners{
+	_corners = newCorners;
     
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
-    if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
+    if(newCorners == CKStyleViewCornerTypeNone && alpha >= 1){
         [super setBackgroundColor:[UIColor blackColor]];
         self.opaque = YES;
     }
@@ -197,6 +227,7 @@
         [super setBackgroundColor:[UIColor clearColor]];
         self.opaque = NO;
     }
+	[self setNeedsDisplay];
 }
 
 - (void)setBorderWidth:(CGFloat)width {
@@ -206,7 +237,7 @@
 }
 
 - (void)dealloc {
-	[_updater release]; _updater = nil;
+//	[_updater release]; _updater = nil;
 	[_image release]; _image = nil;
 	[_gradientColors release]; _gradientColors = nil;
 	[_gradientColorLocations release]; _gradientColorLocations = nil;
@@ -223,13 +254,13 @@
 - (void)generateTopEmbossPath:(CGMutablePathRef)path {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
-		case CKRoundedCornerViewTypeTop:
+		case CKStyleViewCornerTypeTop:
 			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
 			break;
-		case CKRoundedCornerViewTypeBottom:
+		case CKStyleViewCornerTypeBottom:
 			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
 			break;
-		case CKRoundedCornerViewTypeNone:
+		case CKStyleViewCornerTypeNone:
 			roundedCorners = 0;
 			break;
 		default:
@@ -267,13 +298,13 @@
 - (void)generateBottomEmbossPath:(CGMutablePathRef)path {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
-		case CKRoundedCornerViewTypeTop:
+		case CKStyleViewCornerTypeTop:
 			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
 			break;
-		case CKRoundedCornerViewTypeBottom:
+		case CKStyleViewCornerTypeBottom:
 			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
 			break;
-		case CKRoundedCornerViewTypeNone:
+		case CKStyleViewCornerTypeNone:
 			roundedCorners = 0;
 			break;
 		default:
@@ -313,13 +344,13 @@
 - (void)generateBorderPath:(CGMutablePathRef)path withStyle:(CKStyleViewBorderLocation)borderStyle width:(CGFloat)borderWidth{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
-		case CKRoundedCornerViewTypeTop:
+		case CKStyleViewCornerTypeTop:
 			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
 			break;
-		case CKRoundedCornerViewTypeBottom:
+		case CKStyleViewCornerTypeBottom:
 			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
 			break;
-		case CKRoundedCornerViewTypeNone:
+		case CKStyleViewCornerTypeNone:
 			roundedCorners = 0;
 			break;
 		default:
@@ -389,14 +420,16 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    self.layer.needsDisplayOnBoundsChange = YES;
+    
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
-		case CKRoundedCornerViewTypeTop:
+		case CKStyleViewCornerTypeTop:
 			roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
 			break;
-		case CKRoundedCornerViewTypeBottom:
+		case CKStyleViewCornerTypeBottom:
 			roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
 			break;
 			
@@ -405,7 +438,7 @@
 	}
 	
 	CGPathRef clippingPath = nil;
-	if (self.corners != CKRoundedCornerViewTypeNone) {
+	if (self.corners != CKStyleViewCornerTypeNone) {
 		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
 	}
 	
@@ -435,52 +468,53 @@
 		//[_image drawInRect:self.bounds];
 		
 		BOOL clip = NO;
-		CGRect originalRect = rect;
+		CGRect originalRect = self.bounds;
 		if (_image.size.width != rect.size.width || _image.size.height != rect.size.height) {
 			if (_imageContentMode == UIViewContentModeLeft) {
 				rect = CGRectMake(rect.origin.x,
 								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeRight) {
 				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
 								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeTop) {
 				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
 								  rect.origin.y,
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeBottom) {
 				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
 								  rect.origin.y + floor(rect.size.height - _image.size.height),
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeCenter) {
 				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - _image.size.width/2),
 								  rect.origin.y + floor(rect.size.height/2 - _image.size.height/2),
 								  _image.size.width, _image.size.height);
+                clip = NO;
 			} else if (_imageContentMode == UIViewContentModeBottomLeft) {
 				rect = CGRectMake(rect.origin.x,
 								  rect.origin.y + floor(rect.size.height - _image.size.height),
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeBottomRight) {
 				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
 								  rect.origin.y + (rect.size.height - _image.size.height),
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeTopLeft) {
 				rect = CGRectMake(rect.origin.x,
 								  rect.origin.y,
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeTopRight) {
 				rect = CGRectMake(rect.origin.x + (rect.size.width - _image.size.width),
 								  rect.origin.y,
 								  _image.size.width, _image.size.height);
-				clip = YES;
+				clip = NO;
 			} else if (_imageContentMode == UIViewContentModeScaleAspectFill) {
 				CGSize imageSize = _image.size;
 				if (imageSize.height < imageSize.width) {
@@ -493,6 +527,7 @@
 				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
 								  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
 								  imageSize.width, imageSize.height);
+                clip = YES;
 			} else if (_imageContentMode == UIViewContentModeScaleAspectFit) {
 				CGSize imageSize = _image.size;
 				if (imageSize.height < imageSize.width) {
@@ -505,6 +540,7 @@
 				rect = CGRectMake(rect.origin.x + floor(rect.size.width/2 - imageSize.width/2),
 								  rect.origin.y + floor(rect.size.height/2 - imageSize.height/2),
 								  imageSize.width, imageSize.height);
+                clip = YES;
 			}
 		}
 		

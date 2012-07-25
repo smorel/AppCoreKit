@@ -142,6 +142,17 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	return result;	
 }
 
+- (BOOL) boolForKey:(NSString*)key{
+    id object = [self objectForKey:key];
+    if(!object) return 0;
+	if([object isKindOfClass:[NSNumber class]]){
+		return [object boolValue];
+	}
+	BOOL result = [NSValueTransformer convertBoolFromObject:object];
+	[self setObject:[NSNumber numberWithBool:result] forKey:key];
+	return result;
+}
+
 + (NSSet*)resourceTypes{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

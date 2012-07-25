@@ -21,17 +21,17 @@ bool swizzle_UINavigationControllerStyle();
     [self UINavigationControllerStyle_setToolbarHidden:hidden animated:animated];
     
     if (hidden == NO) {
-        [CATransaction begin];
-        [CATransaction 
-         setValue: [NSNumber numberWithBool: YES]
-         forKey: kCATransactionDisableActions];
+        //[CATransaction begin];
+        //[CATransaction 
+        // setValue: [NSNumber numberWithBool: YES]
+         //forKey: kCATransactionDisableActions];
         
         NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
         
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self  propertyName:@"navigationController"];
         [self.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
                 
-        [CATransaction commit];  
+       // [CATransaction commit];  
     }
 }
 

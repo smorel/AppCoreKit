@@ -122,7 +122,8 @@ extern NSString* CKStyleAutoLayoutCompression;
 - (UIColor*)separatorColor;
 - (CGFloat)separatorWidth;
 - (CKViewSeparatorStyle)separatorStyle;
-
+- (UIViewContentMode)contentMode;
+- (BOOL)clipsToBounds;
 
 - (NSArray*)instanceOfViews;
 
@@ -179,7 +180,7 @@ extern NSString* CKStyleAutoLayoutCompression;
 @protocol CKStyleDelegate
 @optional
 
-- (CKRoundedCornerViewType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
+- (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style;
 - (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style;
 - (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style;
 - (UIColor*)separatorColorForView:(UIView*)view withStyle:(NSMutableDictionary*)style;

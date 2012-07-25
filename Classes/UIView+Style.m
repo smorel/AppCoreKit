@@ -42,6 +42,8 @@ NSString* CKStyleBackgroundImage = @"backgroundImage";
 NSString* CKStyleCornerStyle = @"cornerStyle";
 NSString* CKStyleCornerSize = @"cornerSize";
 NSString* CKStyleAlpha = @"alpha";
+NSString* CKStyleContentMode = @"contentMode";
+NSString* CKStyleClipsToBounds = @"clipsToBounds";
 NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 
 
@@ -80,6 +82,25 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	return [self imageForKey:CKStyleBackgroundImage];
 } 
 
+- (UIViewContentMode)contentMode{
+	return (UIViewContentMode)[self enumValueForKey:CKStyleContentMode 
+                                 withEnumDescriptor:CKEnumDefinition(@"UIViewContentMode",
+                                                                     UIViewContentModeScaleToFill,
+																	 UIViewContentModeScaleAspectFit,
+																	 UIViewContentModeScaleAspectFill,
+																	 UIViewContentModeRedraw,
+																	 UIViewContentModeCenter,
+																	 UIViewContentModeTop,
+																	 UIViewContentModeBottom,
+																	 UIViewContentModeLeft,
+																	 UIViewContentModeRight,
+																	 UIViewContentModeTopLeft,
+																	 UIViewContentModeTopRight,
+																	 UIViewContentModeBottomLeft,
+																	 UIViewContentModeBottomRight)];
+    
+}
+
 - (UIViewContentMode)backgroundImageContentMode{
 	return (UIViewContentMode)[self enumValueForKey:CKStyleBackgroundImageContentMode 
 									 withEnumDescriptor:CKEnumDefinition(@"UIViewContentMode",
@@ -107,6 +128,10 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 																	 CKViewCornerStyleRoundedTop,
 																	 CKViewCornerStyleRoundedBottom, 
 																	 CKViewCornerStylePlain)];
+}
+
+- (BOOL)clipsToBounds{
+	return [self boolForKey:CKStyleClipsToBounds];
 }
 
 - (CGFloat)cornerSize{
@@ -371,7 +396,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 				BOOL opaque = YES;
 
 				
-				CKRoundedCornerViewType roundedCornerType = CKRoundedCornerViewTypeNone;
+				CKStyleViewCornerType roundedCornerType = CKStyleViewCornerTypeNone;
 				CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
 				CKStyleViewSeparatorLocation viewSeparatorType = CKStyleViewSeparatorLocationNone;
 				
@@ -402,6 +427,14 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImage]){
 						gradientView.image = [myViewStyle backgroundImage];
 						//opaque = NO;
+					}
+                    
+					if([myViewStyle containsObjectForKey:CKStyleContentMode]){
+						gradientView.contentMode = [myViewStyle contentMode];
+					}
+                    
+					if([myViewStyle containsObjectForKey:CKStyleClipsToBounds]){
+						gradientView.clipsToBounds = [myViewStyle clipsToBounds];
 					}
 					
 					if([myViewStyle containsObjectForKey:CKStyleBackgroundImageContentMode]){
@@ -435,15 +468,15 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                             }
 							switch(cornerStyle){
 								case CKViewCornerStyleRounded:{
-									roundedCornerType = CKRoundedCornerViewTypeAll;
+									roundedCornerType = CKStyleViewCornerTypeAll;
 									break;
 								}
 								case CKViewCornerStyleRoundedTop:{
-									roundedCornerType = CKRoundedCornerViewTypeTop;
+									roundedCornerType = CKStyleViewCornerTypeTop;
 									break;
 								}
 								case CKViewCornerStyleRoundedBottom:{
-									roundedCornerType = CKRoundedCornerViewTypeBottom;
+									roundedCornerType = CKStyleViewCornerTypeBottom;
 									break;
 								}
 							}
@@ -542,7 +575,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                     backColor = [myViewStyle backgroundColor];
 				}
 				
-				if(dontTouchBackgroundColor == NO && (roundedCornerType != CKRoundedCornerViewTypeNone)){
+				if(dontTouchBackgroundColor == NO && (roundedCornerType != CKStyleViewCornerTypeNone)){
                     backColor = [UIColor clearColor];
 				}
                 
@@ -552,7 +585,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                 
                 backgroundView.opaque = opaque;
 				
-				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKRoundedCornerViewTypeNone));
+				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKStyleViewCornerTypeNone));
 				if(dontTouchBackgroundColor == NO){
 					//backgroundView.backgroundColor = [UIColor clearColor];
 					backgroundView.backgroundColor = [UIColor redColor];

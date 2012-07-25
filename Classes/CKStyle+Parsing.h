@@ -24,6 +24,7 @@
 - (CGFloat) cgFloatForKey:(NSString*)key;
 - (NSString*) stringForKey:(NSString*)key;
 - (NSInteger) integerForKey:(NSString*)key;
+- (BOOL) boolForKey:(NSString*)key;
 
 - (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property;
 

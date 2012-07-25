@@ -7,6 +7,4 @@
 //
 
 #import "CKStyleManager.h"
-
-#import "CKRoundedCornerView.h"
 #import "CKStyleView.h"
