@@ -82,6 +82,8 @@
     if(view.tag != 0){
         [subTitle appendFormat:@"%@(tag:%d)",([subTitle length] > 0) ? @"," : @"",view.tag];
     }
+    [subTitle appendFormat:@"%@(frame:%@)",([subTitle length] > 0) ? @"," : @"",NSStringFromCGRect(view.frame)];
+    
 #if !TARGET_IPHONE_SIMULATOR
     if([view appliedStyle] == nil || [[view appliedStyle]isEmpty]){
 #else
@@ -92,7 +94,7 @@
         return subTitle;
     }
     
-    + (CKCollectionCellControllerFactoryItem*)factoryItemForSubViewInView:(UIView*)view{
+    + (CKCollectionCellControllerFactoryItem*)factoryItemForViewInView:(UIView*)view subView:(BOOL)subview{
         return [CKCollectionCellControllerFactoryItem itemForObjectOfClass:[UIView class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
             CKTableViewCellController* controller = [CKTableViewCellController cellController];
             
@@ -123,10 +125,18 @@
             
             NSInteger indent = 0;
             
-            UIView* v = object;
-            while(v && v != view){
-                indent++;
-                v = [v superview];
+            if(subview){
+                UIView* v = object;
+                while(v && v != view){
+                    indent++;
+                    v = [v superview];
+                }
+            }else{
+                UIView* v = view;
+                while(v && v != object){
+                    indent++;
+                    v = [v superview];
+                }
             }
             
             controller.indentationLevel = indent;
@@ -185,12 +195,32 @@
         [UIView addView:view toCollection:collection];
         
         CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
-        [factory addItem:[UIView factoryItemForSubViewInView:view]];
+        [factory addItem:[UIView factoryItemForViewInView:view subView:YES]];
         
         CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];
         [debugger addSections:[NSArray arrayWithObject:section]];
         return debugger;
     }
+    
+    + (CKFormTableViewController*)inlineDebuggerForSuperViewsOfView:(UIView*)view{
+        CKFormTableViewController* debugger = [[[CKFormTableViewController alloc]initWithStyle:UITableViewStylePlain]autorelease];
+        debugger.name = @"CKInlineDebuggerForSuperViews";
+        
+        CKArrayCollection* collection = [CKArrayCollection collection];
+        UIView* v = view;
+        while(v){
+            [collection addObject:v];
+            v = [v superview];
+        }
+        
+        CKCollectionCellControllerFactory* factory = [CKCollectionCellControllerFactory factory];
+        [factory addItem:[UIView factoryItemForViewInView:view subView:NO]];
+        
+        CKFormBindedCollectionSection* section = [CKFormBindedCollectionSection sectionWithCollection:collection factory:factory];
+        [debugger addSections:[NSArray arrayWithObject:section]];
+        return debugger;
+    }
+
     
     + (CKFormTableViewController*)inlineDebuggerForObject:(id)object{
         CKFormTableViewController* debugger = [NSObject inlineDebuggerForObject:object];
@@ -211,12 +241,19 @@
             [superViewSection addCellController:superViewCell];
         }
         
-        CKTableViewCellController* hierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Subviews Hierarchy" action:^(CKTableViewCellController* controller){
+        CKTableViewCellController* subhierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Subviews Hierarchy" action:^(CKTableViewCellController* controller){
             CKFormTableViewController* hierarchyController = [UIView inlineDebuggerForSubViewsOfView:(UIView*)object];
-            hierarchyController.title = @"Hierarchy";
+            hierarchyController.title = @"Subviews Hierarchy";
             [bController.navigationController pushViewController:hierarchyController animated:YES];
         }];
-        [superViewSection addCellController:hierarchyCell];
+        [superViewSection addCellController:subhierarchyCell];
+        
+        CKTableViewCellController* superhierarchyCell = [CKTableViewCellController cellControllerWithTitle:@"Superviews Hierarchy" action:^(CKTableViewCellController* controller){
+            CKFormTableViewController* hierarchyController = [UIView inlineDebuggerForSuperViewsOfView:(UIView*)object];
+            hierarchyController.title = @"Superviews Hierarchy";
+            [bController.navigationController pushViewController:hierarchyController animated:YES];
+        }];
+        [superViewSection addCellController:superhierarchyCell];
         
         int i =0;
         for(CKFormSectionBase* section in debugger.sections){

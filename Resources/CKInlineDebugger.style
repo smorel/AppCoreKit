@@ -52,7 +52,7 @@
     },
     
     "$CKInlineDebugger_tableViewController" : {
-        "supportedInterfaceOrientations" : "CKInterfaceOrientationPortrait",
+        "supportedInterfaceOrientations" : "CKInterfaceOrientationAll",
         "UISearchBar" : {
             "tintColor" : "blackColor"
         },
@@ -111,7 +111,7 @@
             "@inherits" : [  "$CKInlineDebugger_tableViewController" ]
         },
         
-        "CKFormTableViewController[name=CKInlineDebuggerForSubViews]"  : {
+        "CKFormTableViewController[name=CKInlineDebuggerForSubViews],CKFormTableViewController[name=CKInlineDebuggerForSuperViews]"  : {
             "@inherits" : [ "$CKInlineDebugger_tableViewController" ],
             "CKTableViewCellController" : {
                 "@inherits" : [ "$CKInlineDebugger_baseGrayCellController" ],
