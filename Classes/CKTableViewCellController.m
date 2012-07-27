@@ -367,6 +367,14 @@
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
 
+- (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
+- (void)detailTextExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
 - (void)postInit {
 	[super postInit];
     self.cellStyle = CKTableViewCellStyleDefault;

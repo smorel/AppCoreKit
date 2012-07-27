@@ -37,4 +37,8 @@
 											   UIBaselineAdjustmentNone);
 }
 
+- (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
 @end

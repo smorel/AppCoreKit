@@ -58,6 +58,10 @@
                                                );
 }
 
+- (void)textExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.multiLineEnabled = YES;
+}
+
 UITEXTINPUTTRAITS_IMPLEMENTATION;
 
 @end
