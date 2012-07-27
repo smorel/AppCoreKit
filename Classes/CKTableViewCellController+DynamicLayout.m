@@ -371,8 +371,8 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     }
     
     
-    CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
-    return CGRectIntegral(CGRectMake(x,self.contentInsets.top + yOffset, width, size.height));
+    //CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
+    return CGRectIntegral(CGRectMake(x,self.contentInsets.top + yOffset, width, textHeight));
 }
 
 

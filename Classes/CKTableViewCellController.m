@@ -29,6 +29,7 @@
 #import "CKProperty.h"
 #import "NSObject+Singleton.h"
 #import "CKDebug.h"
+#import "UIView+Name.h"
 
 #import "CKVersion.h"
 
@@ -193,9 +194,14 @@
     switch (theAccessoryType) {
         case UITableViewCellAccessoryDisclosureIndicator:{
             if(_disclosureIndicatorImage){
-                UIImageView* view = [[[UIImageView alloc]initWithImage:_disclosureIndicatorImage]autorelease];
+                UIImageView* view = (UIImageView*)[self viewWithTag:DisclosureImageViewTag];
+                if(!view){
+                    view = [[[UIImageView alloc]init]autorelease];
+                    view.tag = DisclosureImageViewTag;
+                }
+                view.image = _disclosureIndicatorImage;
                 view.highlightedImage = _highlightedDisclosureIndicatorImage;
-                view.tag = DisclosureImageViewTag;
+                [view sizeToFit];
                 self.accessoryView = view;
             }
             break;
@@ -207,9 +213,14 @@
             break;        }
         case UITableViewCellAccessoryCheckmark:{
             if(_checkMarkImage){
-                UIImageView* view = [[[UIImageView alloc]initWithImage:_checkMarkImage]autorelease];
+                UIImageView* view = (UIImageView*)[self viewWithTag:DisclosureImageViewTag];
+                if(!view){
+                    view = [[[UIImageView alloc]init]autorelease];
+                    view.tag = DisclosureImageViewTag;
+                }
+                view.image = _checkMarkImage;
                 view.highlightedImage = _highlightedCheckMarkImage;
-                view.tag = CheckmarkImageViewTag;
+                [view sizeToFit];
                 self.accessoryView = view;
             }
             break;

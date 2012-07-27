@@ -146,7 +146,7 @@
             
             UITableViewCell* cell = [bself tableViewCell];
             if(cell){
-                UIActivityIndicatorView* activityIndicator = [cell.contentView viewWithKeyPath:@"CKTableViewCellController_CKMenu_Spinner"];
+                UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:9823659235];
                 [activityIndicator stopAnimating];
                 [activityIndicator removeFromSuperview];
             }
@@ -162,14 +162,14 @@
     }];
     
     [cellController setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
-        UIActivityIndicatorView* activityIndicator = [cell.contentView viewWithKeyPath:@"CKTableViewCellController_CKMenu_Spinner"];
+        UIActivityIndicatorView* activityIndicator = (UIActivityIndicatorView*)[cell.contentView viewWithTag:9823659235];
         [activityIndicator stopAnimating];
         [activityIndicator removeFromSuperview];
         
         if(!remoteImage){
             if(spinnerStyle != CKImageViewSpinnerStyleNone){
                 activityIndicator = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:spinnerStyle]autorelease];
-                activityIndicator.name = @"CKTableViewCellController_CKMenu_Spinner"; 
+                activityIndicator.tag = 9823659235;
                 activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleAllMargins;
                 activityIndicator.center = CGPointMake(cell.contentView.width / 2,cell.contentView.height / 2);
                 [activityIndicator startAnimating];
