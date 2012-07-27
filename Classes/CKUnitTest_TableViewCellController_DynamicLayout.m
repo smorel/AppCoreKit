@@ -68,7 +68,7 @@
             CKTableViewCellStyle style = [[[cellStylesEnumDescriptor valuesAndLabels]objectForKey:cellStyleName]intValue];
             cellController.cellStyle = style;
             cellController.componentsRatio = 0.5;
-            cellController.componentsSpace = 30;
+            cellController.horizontalSpace = 30;
             cellController.contentInsets = UIEdgeInsetsMake(5, 5, 40, 30);
             cellController.accessoryType = UITableViewCellAccessoryCheckmark;
             

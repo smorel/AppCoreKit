@@ -228,13 +228,13 @@
     //switch(self.parentTableViewController.orientation){
     //}
     
-    CGFloat viewWidth = (cell.contentView.frame.size.width - self.contentInsets.left - self.contentInsets.right - ((_numberOfColumns - 1) * self.componentsSpace)) / (CGFloat)_numberOfColumns;
+    CGFloat viewWidth = (cell.contentView.frame.size.width - self.contentInsets.left - self.contentInsets.right - ((_numberOfColumns - 1) * self.horizontalSpace)) / (CGFloat)_numberOfColumns;
     for(int i =0; i< _numberOfColumns; ++i){
         NSInteger viewTag = ControllerViewBaseTag + i;
         UIView* view = [cell.contentView viewWithTag:viewTag];
         if(view){
             view.hidden = (i >= [self.cellControllers count]);
-            CGFloat x = self.contentInsets.left + (i * (viewWidth + self.componentsSpace));
+            CGFloat x = self.contentInsets.left + (i * (viewWidth + self.horizontalSpace));
             view.frame = CGRectIntegral(CGRectMake(x,self.contentInsets.top,viewWidth,cell.frame.size.height - (self.contentInsets.top + self.contentInsets.bottom)));
         }
     }
@@ -257,7 +257,7 @@
 - (CGFloat)computeContentViewSizeForSubCellController{
     CGFloat contentWidth = [self computeContentViewSize];
     
-    CGFloat viewWidth = (contentWidth - self.contentInsets.left - self.contentInsets.right - ((_numberOfColumns - 1) * self.componentsSpace)) / (CGFloat)_numberOfColumns;
+    CGFloat viewWidth = (contentWidth - self.contentInsets.left - self.contentInsets.right - ((_numberOfColumns - 1) * self.horizontalSpace)) / (CGFloat)_numberOfColumns;
     return viewWidth;
 }
 

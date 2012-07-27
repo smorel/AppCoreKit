@@ -158,7 +158,10 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
 
 /**
  */
-@property (nonatomic, assign) CGFloat componentsSpace;
+@property (nonatomic, assign) CGFloat horizontalSpace;
+/**
+ */
+@property (nonatomic, assign) CGFloat verticalSpace;
 
 /**
  */

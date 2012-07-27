@@ -29,7 +29,7 @@
     CGFloat realWidth = rowWidth;
     CGFloat width = (text == nil) ? realWidth : (realWidth * self.componentsRatio);
     
-    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.componentsSpace));
+    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.horizontalSpace));
     CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
     
     CGSize textViewTextSize = [self sizeForText:textFieldText withStyle:textFieldStyle constraintToWidth:textFieldWidth];
@@ -43,14 +43,14 @@
 
 - (CGRect)subtitleTextFieldFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textFieldText:(NSString*)textFieldText textFieldStyle:(NSDictionary*)textFieldStyle  image:(UIImage*)image{
     CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:textFieldText detailTextStyle:textFieldStyle image:image];
-    CGFloat width = [self contentViewWidth] - (image.size.width + self.componentsSpace + self.contentInsets.left + self.contentInsets.right);
+    CGFloat width = [self contentViewWidth] - (image.size.width + self.horizontalSpace + self.contentInsets.left + self.contentInsets.right);
 
     CGSize textViewTextSize = [self sizeForText:textFieldText withStyle:textFieldStyle constraintToWidth:width];
     textViewTextSize.height += 2 * TEXTFIELDINSETS;
     
     UIFont* font = [textFieldStyle objectForKey:CKDynamicLayoutFont];
     CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,textFrame.origin.x),
-                                      MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.componentsSpace) : 0),
+                                      MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.verticalSpace) : 0),
                                       width,
                                       MAX(textViewTextSize.height,font.lineHeight + 2 * TEXTFIELDINSETS));
     return textViewFrame;
@@ -92,10 +92,10 @@
             if(self.cellStyle == CKTableViewCellStyleIPadForm
                || self.cellStyle == CKTableViewCellStyleIPhoneForm){
                 CGRect frame = [self value3TextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
-                return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
+                return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom - TEXTFIELDINSETS);
             }else if(self.cellStyle == CKTableViewCellStyleSubtitle2){
                 CGRect frame = [self subtitleTextFieldFrameUsingText:text textStyle:textStyle textFieldText:textFieldText textFieldStyle:textFieldStyle image:self.image];
-                return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom);
+                return CGSizeMake(320,frame.origin.y + frame.size.height + self.contentInsets.bottom - TEXTFIELDINSETS);
             }
         }else{
             CKAssert(NO,@"only CKTableViewCellStyleIPadForm, CKTableViewCellStyleIPhoneForm, CKTableViewCellStyleSubtitle2 are supported for CKNSStringPropertyCellController");

@@ -209,7 +209,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     CGSize detailsize = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
     BOOL detailOn1Line = (detailsize.height == detailTextFont.lineHeight);
     
-    CGFloat maxWidth = realWidth - width - self.componentsSpace;
+    CGFloat maxWidth = realWidth - width - self.horizontalSpace;
     
     CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
     BOOL textOn1Line = (size.height == textFont.lineHeight);
@@ -246,7 +246,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     
     CGFloat rowWidth = [self contentViewWidth];
     CGFloat realWidth = rowWidth;
-    CGFloat width = (realWidth * self.componentsRatio) - (self.contentInsets.right + self.componentsSpace);
+    CGFloat width = (realWidth * self.componentsRatio) - (self.contentInsets.right + self.horizontalSpace);
     
     CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
     
@@ -262,7 +262,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     // CGFloat maxHeight = MAX(textFrame.origin.y + textFrame.size.height,size.height + self.contentInsets.top) + self.contentInsets.bottom;
     // CGFloat y = isIphone ? ((maxHeight / 2.0) - (MAX(detailTextFont.lineHeight,size.height) / 2.0)) : self.contentInsets.top;
     
-	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.componentsSpace, y, 
+	return CGRectIntegral(CGRectMake((textFrame.origin.x + textFrame.size.width) + self.horizontalSpace, y, 
                                      MIN(size.width,width) , size.height));
 }
 
@@ -285,7 +285,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         CGFloat realWidth = rowWidth;
         CGFloat width = (detailText == nil) ? 0 : realWidth * self.componentsRatio;
         
-        CGFloat maxWidth = realWidth - width - self.contentInsets.left - ((detailText == nil) ? self.contentInsets.right : self.componentsSpace);
+        CGFloat maxWidth = realWidth - width - self.contentInsets.left - ((detailText == nil) ? self.contentInsets.right : self.horizontalSpace);
         CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:maxWidth];
         return CGRectIntegral(CGRectMake(self.contentInsets.left,self.contentInsets.top, size.width, size.height));
     }
@@ -318,7 +318,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     }
     else{
         CGRect textFrame = [self propertyGridTextFrameUsingText:text textStyle:textStyle detailText:detailText detailTextStyle:detailTextStyle image:image];
-        CGFloat x = textFrame.origin.x + textFrame.size.width + self.componentsSpace;
+        CGFloat x = textFrame.origin.x + textFrame.size.width + self.horizontalSpace;
         CGFloat width = realWidth - self.contentInsets.right - x;
         if(width > 0 ){
             CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
@@ -337,7 +337,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 //CKTableViewCellStyleSubtitle2
 
 - (CGFloat)subtitleHeightForText:(NSString*)text textStyle:(NSDictionary*)textStyle image:(UIImage*)image{
-    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
+    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.horizontalSpace) : 0);
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
@@ -345,10 +345,16 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 }
 
 - (CGRect)subtitleTextFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle detailText:(NSString*)detailText detailTextStyle:(NSDictionary*)detailTextStyle image:(UIImage*)image{
+    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.horizontalSpace) : 0);
+    CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
+    
     /*
      TODO : Take care of indentation level !
      Take care of image
      */
+    if(!text || [text length] <= 0){
+        return CGRectMake(x,self.contentInsets.top,width,0);
+    }
     
     CGFloat textHeight = [self subtitleHeightForText:text textStyle:textStyle image:image];
     CGFloat detailTextHeight = [self subtitleHeightForText:detailText textStyle:detailTextStyle image:image];
@@ -356,7 +362,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     BOOL hasText = !(text == nil || [text isKindOfClass:[NSNull class]] || [text length] <= 0);
     BOOL hasDetailText = !(detailText == nil || [detailText isKindOfClass:[NSNull class]] || [detailText length] <= 0);
     
-    CGFloat textGlobalHeight = self.contentInsets.top + (hasText ? (textHeight + self.componentsSpace) : 0) + (hasDetailText ? detailTextHeight : 0) + self.contentInsets.bottom;
+    CGFloat textGlobalHeight = self.contentInsets.top + (hasText ? (textHeight + self.verticalSpace) : 0) + (hasDetailText ? detailTextHeight : 0) + self.contentInsets.bottom;
     CGFloat imageGlobalHeight = image ? (image.size.height + self.contentInsets.top + self.contentInsets.bottom) : 0;
     
     CGFloat yOffset = 0;
@@ -364,8 +370,6 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         yOffset = (imageGlobalHeight - textGlobalHeight) / 2;
     }
     
-    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
-    CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     CGSize size = [self sizeForText:text withStyle:textStyle constraintToWidth:width];
     return CGRectIntegral(CGRectMake(x,self.contentInsets.top + yOffset, width, size.height));
@@ -378,7 +382,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
      Take care of image
      */
     
-    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.componentsSpace) : 0);
+    CGFloat x = self.contentInsets.left + (image ? (image.size.width + self.horizontalSpace) : 0);
     CGFloat width = [self contentViewWidth] - x  - self.contentInsets.right;
     
     if(detailText == nil || [detailText isKindOfClass:[NSNull class]] || [detailText length] <= 0){
@@ -386,7 +390,7 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     }
     
     CGSize size = [self sizeForText:detailText withStyle:detailTextStyle constraintToWidth:width];
-    CGRect detailFrame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + self.componentsSpace, width/*size.width*/, size.height));
+    CGRect detailFrame = CGRectIntegral(CGRectMake(x,textFrame.origin.y + textFrame.size.height + ((textFrame.size.height > 0) ? self.verticalSpace : 0), width/*size.width*/, size.height));
     
     return detailFrame;
 }

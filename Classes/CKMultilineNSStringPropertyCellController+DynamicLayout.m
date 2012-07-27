@@ -30,7 +30,7 @@
     CGFloat realWidth = rowWidth;
     CGFloat width = (text == nil) ? realWidth : (realWidth * self.componentsRatio);
     
-    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.componentsSpace));
+    CGFloat textFieldWidth = width - (self.contentInsets.right + ((text == nil) ? self.contentInsets.left : self.horizontalSpace));
     CGFloat textFieldX = self.contentInsets.left + (realWidth - (self.contentInsets.right + self.contentInsets.left) - textFieldWidth);
     
     CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:textFieldWidth];
@@ -44,7 +44,7 @@
 
 - (CGRect)subtitleTextViewFrameUsingText:(NSString*)text textStyle:(NSDictionary*)textStyle textViewText:(NSString*)textViewText textViewStyle:(NSDictionary*)textViewStyle  image:(UIImage*)image{
     CGRect textFrame = [self subtitleTextFrameUsingText:text textStyle:textStyle detailText:textViewText detailTextStyle:textViewStyle image:image];
-    CGFloat width = [self contentViewWidth] - (image.size.width + self.componentsSpace + self.contentInsets.left + self.contentInsets.right);
+    CGFloat width = [self contentViewWidth] - (image.size.width + self.horizontalSpace + self.contentInsets.left + self.contentInsets.right);
     
     CGSize textViewTextSize = [self sizeForText:textViewText withStyle:textViewStyle constraintToWidth:width];
     textViewTextSize.height += 2 * TEXTVIEWINSETS;
@@ -52,7 +52,7 @@
     UIFont* font = [textViewStyle objectForKey:CKDynamicLayoutFont];
     
     CGRect textViewFrame = CGRectMake(MAX(self.contentInsets.left,textFrame.origin.x) - TEXTVIEWINSETS,
-                                      MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.componentsSpace) : 0),
+                                      MAX(self.contentInsets.top,text ? (textFrame.origin.y + textFrame.size.height + self.verticalSpace) : 0),
                                       width + 2 * TEXTVIEWINSETS,
                                       MAX(textViewTextSize.height,font.lineHeight));
     return textViewFrame;
@@ -97,8 +97,8 @@
 - (CGSize)computeSize{
     NSString* text = self.text;
     CKClassPropertyDescriptor* descriptor = [[self objectProperty] descriptor];
-    if(([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad && self.cellStyle == CKTableViewCellStyleIPadForm)
-       || self.cellStyle == CKTableViewCellStyleIPhoneForm){
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
+        || self.cellStyle == CKTableViewCellStyleIPadForm){
         text = _(descriptor.name);
     }
     

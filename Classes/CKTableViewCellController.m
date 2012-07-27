@@ -338,7 +338,8 @@
 @implementation CKTableViewCellController
 @synthesize cellStyle = _cellStyle;
 @synthesize componentsRatio = _componentsRatio;
-@synthesize componentsSpace = _componentsSpace;
+@synthesize horizontalSpace = _horizontalSpace;
+@synthesize verticalSpace = _verticalSpace;
 @synthesize cacheLayoutBindingContextId = _cacheLayoutBindingContextId;
 @synthesize contentInsets = _contentInsets;
 @synthesize indentationLevel = _indentationLevel;
@@ -377,7 +378,9 @@
         self.componentsRatio = 2.0 / 3.0;
     }
     
-    self.componentsSpace = 10;
+    self.horizontalSpace = 10;
+    self.verticalSpace = 5;
+    
     self.size = CGSizeMake(320,44);
     self.flags = CKItemViewFlagSelectable | CKItemViewFlagEditable;
     self.selectionStyle = UITableViewCellSelectionStyleBlue;
