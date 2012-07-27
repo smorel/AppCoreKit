@@ -258,6 +258,7 @@
 }
 
 - (void)dealloc {
+    [_tabBar setDelegate : nil];
     [_tabBar release]; 
     _tabBar = nil;
     [_willSelectViewControllerBlock release]; 
@@ -326,6 +327,7 @@
 
 - (void)viewDidUnload{
     [super viewDidUnload];
+    [_tabBar setDelegate : nil];
 	self.tabBar = nil;
 }
 

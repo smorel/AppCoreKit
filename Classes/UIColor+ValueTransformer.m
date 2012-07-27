@@ -23,6 +23,8 @@
 							   alpha:[[components objectAtIndex:3]floatValue]];
 	}
 	else {
+		str = [str stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
+        
 		if([str hasPrefix:@"0x"]){
 			NSArray* components = [str componentsSeparatedByString:@" "];
 			CKAssert([components count] >= 1,@"Invalid format for color");
