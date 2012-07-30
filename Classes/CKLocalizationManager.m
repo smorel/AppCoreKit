@@ -13,16 +13,18 @@
 #import "CKLocalizationManager_Private.h"
 #import "CKDebug.h"
 
-@interface CKLocalizationManager() {
-    NSBundle *bundle;
-}
+@interface CKLocalizationManager() 
+@property(nonatomic,retain,readwrite)NSBundle* localizedBundle;
+
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic, assign) BOOL needsRefresh;
 #endif
+
 @end
 
 @implementation CKLocalizationManager
 @synthesize language = _language;
+@synthesize localizedBundle = _localizedBundle;
 
 #if TARGET_IPHONE_SIMULATOR
 @synthesize needsRefresh;
@@ -47,7 +49,7 @@ static CKLocalizationManager *sharedInstance = nil;
 #if TARGET_IPHONE_SIMULATOR
         self.needsRefresh = NO;
 #endif
-        bundle = [NSBundle mainBundle];
+        self.localizedBundle = [NSBundle mainBundle];
         
         //Do not trigger KVO in init when setting the language value
         NSString *deviceLang = [[NSLocale preferredLanguages] objectAtIndex:0];
@@ -62,7 +64,7 @@ static CKLocalizationManager *sharedInstance = nil;
 // example calls:
 // AMLocalizedString(@"Text to localize",@"Alternative text, in case hte other is not find");
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value {
-    return CKGetLocalizedString(bundle,key,value);
+    return CKGetLocalizedString(self.localizedBundle,key,value);
 }
 
 
@@ -86,7 +88,7 @@ static CKLocalizationManager *sharedInstance = nil;
             //in case the language does not exists
             [self resetToSystemDefaultLanguage];
         else
-            bundle = [[NSBundle bundleWithPath:path] retain];
+            self.localizedBundle = [[NSBundle bundleWithPath:path] retain];
         
         [_language release];
         _language = [l retain];
@@ -171,7 +173,7 @@ static CKLocalizationManager *sharedInstance = nil;
 
 - (void)reloadBundleAtPath:(NSString *)path {
 #if TARGET_IPHONE_SIMULATOR
-    bundle = [NSBundle bundleWithPath:path];
+    self.localizedBundle = [NSBundle bundleWithPath:path];
 #endif
 }
 

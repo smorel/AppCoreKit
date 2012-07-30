@@ -6,7 +6,7 @@
 //  Copyright 2010 WhereCloud Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "CKLocalizationManager.h"
 
 /**
@@ -28,4 +28,13 @@ CKLocalizedString* CKLocalizedStringWithString(NSString* string);
 
 /**
  */
+UIImage* CKLocalizedImageNamed(NSString* imageNamed);
+
+
+/**
+ */
 #define _(key) CKLocalizedStringWithString(key)
+
+/**
+ */
+#define _img(imageName) CKLocalizedImageNamed(imageName)

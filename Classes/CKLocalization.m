@@ -89,3 +89,39 @@ CKLocalizedString* CKLocalizedStringWithString(NSString* string){
     }
     return [[[CKLocalizedString alloc]initWithLocalizedKey:string]autorelease];
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
+UIImage* CKLocalizedImageNamed(NSString* name){
+    if ([[UIScreen mainScreen] scale] == 2) {
+        if (![[name pathExtension] isEqualToString:@""]) {
+            NSString *pathExtension = [name pathExtension];
+            name = [[[name stringByDeletingPathExtension] stringByAppendingString:@"@2x"] stringByAppendingPathExtension:pathExtension];
+        }
+        else
+            name = [name stringByAppendingString:@"@2x"];
+    }
+    
+    NSBundle* localizedBundle = [[CKLocalizationManager sharedManager]localizedBundle];
+    
+    NSURL *imageURL = [localizedBundle URLForResource:[name stringByDeletingPathExtension] withExtension:[name pathExtension]];
+    if (!imageURL)
+        imageURL = [localizedBundle URLForResource:[name stringByDeletingPathExtension] withExtension:@"png"];
+    if (!imageURL)
+        imageURL = [localizedBundle URLForResource:[name stringByDeletingPathExtension] withExtension:nil];
+    
+    
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:[name pathExtension]];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:@"png"];
+    if (!imageURL)
+        imageURL = [[NSBundle mainBundle] URLForResource:[name stringByDeletingPathExtension] withExtension:nil];
+    
+    if (imageURL == nil)
+        return nil;
+    
+    UIImage *image = [[[UIImage alloc] initWithContentsOfFile:imageURL.path] autorelease];
+    return image;
+}
+#pragma clang diagnostic pop

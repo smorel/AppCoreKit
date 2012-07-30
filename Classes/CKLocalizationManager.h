@@ -28,6 +28,10 @@
  */
 @property(nonatomic,retain)NSString* language;
 
+/**
+ */
+@property(nonatomic,retain,readonly)NSBundle* localizedBundle;
+
 
 ///-----------------------------------
 /// @name Querying strings

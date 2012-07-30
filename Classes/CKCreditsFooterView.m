@@ -19,7 +19,7 @@
 @implementation UIImageView (CKCreditsView)
 
 + (UIImageView *)imageViewWithImageNamed:(NSString *)imageName {
-	return [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
+	return [[[UIImageView alloc] initWithImage:_img(imageName)] autorelease];
 }
 
 @end
