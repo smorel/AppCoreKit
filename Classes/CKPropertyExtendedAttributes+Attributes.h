@@ -208,4 +208,8 @@ typedef enum CKOptionPropertyCellControllerPresentationStyle{
  */
 @property (nonatomic, retain) NSDate* minimumDate;
 
+/**
+ */
+@property (nonatomic, retain) NSDate* maximumDate;
+
 @end

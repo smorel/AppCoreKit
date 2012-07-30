@@ -44,6 +44,13 @@
 	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self options:0];
 }
 
+- (NSDate *)dateByAdvancingYears:(NSInteger)years{
+    NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
+	[comps setYear:years];
+	return [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:self options:0];
+
+}
+
 - (BOOL)isAtBeginningOfDay {
 	NSString *time = [self stringWithDateFormat:@"HHmmss"];
 	return [time isEqualToString:@"000000"];

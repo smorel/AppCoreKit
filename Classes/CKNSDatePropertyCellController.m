@@ -105,6 +105,9 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             if(attributes.minimumDate){
                 _datePicker.minimumDate = attributes.minimumDate;
             }
+            if(attributes.maximumDate){
+                _datePicker.maximumDate = attributes.maximumDate;
+            }
             
             /*_datePicker.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;*/
             NSDate* date = [self.property value];

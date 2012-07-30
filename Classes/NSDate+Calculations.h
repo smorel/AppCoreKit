@@ -43,6 +43,10 @@
  */
 - (NSDate *)dateByAdvancingWeeks:(NSInteger)weeks;
 
+/** Returns a copy of the date with years added
+ */
+- (NSDate *)dateByAdvancingYears:(NSInteger)years;
+
 ///-----------------------------------
 /// @name Accessing date components
 ///-----------------------------------

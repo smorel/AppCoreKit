@@ -242,7 +242,7 @@
 
 
 @implementation CKPropertyExtendedAttributes (CKNSDateViewController)
-@dynamic minimumDate;
+@dynamic minimumDate,maximumDate;
 
 - (void)setMinimumDate:(NSDate *)minimumDate{
     [self.attributes setObject:minimumDate forKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minimumDate"];
@@ -250,6 +250,14 @@
 
 - (NSDate*)minimumDate{
     return [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_minimumDate"];
+}
+
+- (void)setMaximumDate:(NSDate *)maximumDate{
+    [self.attributes setObject:maximumDate forKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_maximumDate"];
+}
+
+- (NSDate*)maximumDate{
+    return [self.attributes valueForKey:@"CKPropertyExtendedAttributes_CKNSDateViewController_maximumDate"];
 }
 
 @end
