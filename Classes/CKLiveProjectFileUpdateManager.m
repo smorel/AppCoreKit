@@ -45,7 +45,9 @@ static char UIImageImageNameKey;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 +(UIImage *)imageNamed:(NSString *)name {
-    return _img(name);
+    UIImage* image =  _img(name);
+    if(image) image.imageName = name;
+    return image;
 }
 
 - (id)initWithContentsOfFile:(NSString *)path {
