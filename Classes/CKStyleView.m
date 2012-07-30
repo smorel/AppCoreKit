@@ -121,7 +121,7 @@
     self.corners = CKStyleViewCornerTypeNone;
     self.roundedCornerSize = 10;
     
-    self.contentMode = UIViewContentModeTopLeft;
+   // self.contentMode = UIViewContentModeTopLeft;
     self.clipsToBounds = 0;
     self.userInteractionEnabled = NO;
 }
