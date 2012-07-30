@@ -126,9 +126,17 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedInt:{
-			NSUInteger ui = [NSValueTransformer convertUnsignedIntFromObject:object];
-			[property setValue:[NSNumber numberWithUnsignedInt:ui]];
-			return [NSNumber numberWithUnsignedInt:ui];
+            CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+			NSUInteger i = 0;
+			if(attributes.enumDescriptor != nil){
+				i = [NSValueTransformer convertEnumFromObject:object withEnumDescriptor:attributes.enumDescriptor bitMask:attributes.enumDescriptor.isBitMask];
+			}
+			else{
+				i = [NSValueTransformer convertUnsignedIntFromObject:object];
+			}
+        
+			[property setValue:[NSNumber numberWithUnsignedInt:i]];
+			return [NSNumber numberWithUnsignedInt:i];
 			break;
 		}
 		case CKClassPropertyDescriptorTypeUnsignedShort:{

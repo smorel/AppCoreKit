@@ -123,6 +123,7 @@
     
     self.contentMode = UIViewContentModeTopLeft;
     self.clipsToBounds = 0;
+    self.userInteractionEnabled = NO;
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{

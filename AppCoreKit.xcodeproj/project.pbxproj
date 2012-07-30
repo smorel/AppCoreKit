@@ -1158,7 +1158,8 @@
 				75C6DF6113FECA2F00E4AE4F /* Styles.h */,
 				7560DC0A13B8ED3600268D13 /* CKStyleManager.h */,
 				7560DC0B13B8ED3600268D13 /* CKStyleManager.m */,
-				969892761559999100763F50 /* Views */,
+				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
+				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
 				7506E3F213B8FB1000EE1471 /* Additions */,
 			);
 			name = Styles;
@@ -2112,15 +2113,6 @@
 				967CD1F615814048007F16D7 /* CKMockManager.mm */,
 			);
 			name = Mock;
-			sourceTree = "<group>";
-		};
-		969892761559999100763F50 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				7560DB6213B8ED3600268D13 /* CKStyleView.h */,
-				7560DB6313B8ED3600268D13 /* CKStyleView.m */,
-			);
-			name = Views;
 			sourceTree = "<group>";
 		};
 		969AFE671561504700CFE27A /* Grid */ = {

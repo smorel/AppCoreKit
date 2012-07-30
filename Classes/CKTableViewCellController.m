@@ -297,8 +297,16 @@
      }*/
 }
 
+- (void)setHighlighted:(BOOL)highlighted{
+    //[self willChangeValueForKey:@"highlighted"];
+    [super setHighlighted:highlighted];
+    //[self didChangeValueForKey:@"highlighted"];
+}
+
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [self willChangeValueForKey:@"highlighted"];
     [super setHighlighted:highlighted animated:animated];
+    [self didChangeValueForKey:@"highlighted"];
     
     //if (self.delegate.wantFlatHierarchy)
     //    [self.delegate flattenHierarchyHighlighted:highlighted];
@@ -384,6 +392,52 @@
 
 - (void)detailTextExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.multiLineEnabled = YES;
+}
+
+- (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
+                                                 CKTableViewCellStyleDefault,
+                                                 UITableViewCellStyleDefault,
+                                                 CKTableViewCellStyleValue1,
+                                                 UITableViewCellStyleValue1,
+                                                 CKTableViewCellStyleValue2,
+                                                 UITableViewCellStyleValue2,
+                                                 CKTableViewCellStyleSubtitle,
+                                                 UITableViewCellStyleSubtitle,
+                                                 CKTableViewCellStyleIPadForm,
+                                                 CKTableViewCellStyleIPhoneForm,
+                                                 CKTableViewCellStyleSubtitle2
+                                                 );
+}
+
+- (void)accessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                 UITableViewCellAccessoryNone, 
+                                                 UITableViewCellAccessoryDisclosureIndicator, 
+                                                 UITableViewCellAccessoryDetailDisclosureButton,
+                                                 UITableViewCellAccessoryCheckmark);
+}
+
+- (void)editingAccessoryTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellAccessoryType",
+                                                 UITableViewCellAccessoryNone, 
+                                                 UITableViewCellAccessoryDisclosureIndicator, 
+                                                 UITableViewCellAccessoryDetailDisclosureButton,
+                                                 UITableViewCellAccessoryCheckmark);
+}
+
+- (void)selectionStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellSelectionStyle",
+                                                 UITableViewCellSelectionStyleNone,
+                                                 UITableViewCellSelectionStyleBlue,
+                                                 UITableViewCellSelectionStyleGray);
+}
+
+- (void)editingStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+	attributes.enumDescriptor = CKEnumDefinition(@"UITableViewCellEditingStyle",
+                                                 UITableViewCellEditingStyleNone,
+                                                 UITableViewCellEditingStyleDelete,
+                                                 UITableViewCellEditingStyleInsert);
 }
 
 - (void)postInit {
@@ -564,21 +618,6 @@
     return [[[[self class]alloc]init]autorelease];
 }
 
-- (void)cellStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKTableViewCellStyle", 
-                                                 CKTableViewCellStyleDefault,
-                                                 UITableViewCellStyleDefault,
-                                                 CKTableViewCellStyleValue1,
-                                                 UITableViewCellStyleValue1,
-                                                 CKTableViewCellStyleValue2,
-                                                 UITableViewCellStyleValue2,
-                                                 CKTableViewCellStyleSubtitle,
-                                                 UITableViewCellStyleSubtitle,
-                                                 CKTableViewCellStyleIPadForm,
-                                                 CKTableViewCellStyleIPhoneForm,
-                                                 CKTableViewCellStyleSubtitle2
-                                                 );
-}
 
 
 #pragma mark TableViewCell Setter getter

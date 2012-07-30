@@ -348,13 +348,17 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 + (BOOL)needSubView:(NSMutableDictionary*)style forView:(UIView*)view{
 	if(style == nil || [style isEmpty] == YES)
 		return NO;
-	
-    //TODO : check if colors in style are clear color ... or image is nil ...
+
 	if([style containsObjectForKey:CKStyleBackgroundGradientColors]
 	   || [style containsObjectForKey:CKStyleCornerStyle]
 	   || [style containsObjectForKey:CKStyleCornerSize]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
 	   || [style containsObjectForKey:CKStyleBorderColor]
+       //|| [style containsObjectForKey:CKStyleBorderWidth]
+       //|| [style containsObjectForKey:CKStyleBorderStyle]
+	   //|| [style containsObjectForKey:CKStyleSeparatorColor]
+       //|| [style containsObjectForKey:CKStyleSeparatorWidth]
+       //|| [style containsObjectForKey:CKStyleSeparatorStyle]
 	   || ([style containsObjectForKey:CKStyleSeparatorColor] && ![view isKindOfClass:[UITableView class]])){
 		return YES;
 	}

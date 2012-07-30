@@ -91,10 +91,6 @@
     }
 }
 
-+ (CKItemViewFlags)flagsForObject:(id)object withParams:(NSDictionary*)params{
-	return CKItemViewFlagNone;
-}
-
 - (void)setupViewControllerView:(UIView*)view{
     
 }

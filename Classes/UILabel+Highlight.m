@@ -9,56 +9,140 @@
 #import "UILabel+Highlight.h"
 #import "CKRuntime.h"
 #import "CKDebug.h"
+#import <objc/runtime.h>
+
+static char internalCopyOfShadowColorKey;
+static char internalCopyOfBackgroundColorKey;
+static char highlightedShadowColorKey;
+static char highlightedBackgroundColorKey;
+static char shadowColorAppliedKey;
+static char backgroundColorAppliedKey;
+
+
+@interface UILabel (CKHighlight_Private)
+@property(nonatomic,retain) UIColor* internalCopyOfShadowColor;
+@property(nonatomic,retain) UIColor* internalCopyOfBackgroundColor;
+@property(nonatomic,assign) BOOL shadowColorApplied;
+@property(nonatomic,assign) BOOL backgroundColorApplied;
+@end
+
+@implementation UILabel(CKHighlight_Private)
+@dynamic internalCopyOfShadowColor,internalCopyOfBackgroundColor,shadowColorApplied,backgroundColorApplied;
+
+- (void)setInternalCopyOfShadowColor:(UIColor *)internalCopyOfShadowColor{
+    objc_setAssociatedObject(self, 
+                             &internalCopyOfShadowColorKey,
+                             internalCopyOfShadowColor,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIColor*)internalCopyOfShadowColor{
+    return objc_getAssociatedObject(self, &internalCopyOfShadowColorKey);
+}
+
+- (void)setInternalCopyOfBackgroundColor:(UIColor *)internalCopyOfBackgroundColor{
+    objc_setAssociatedObject(self, 
+                             &internalCopyOfBackgroundColorKey,
+                             internalCopyOfBackgroundColor,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
+- (UIColor*)internalCopyOfBackgroundColor{
+    return objc_getAssociatedObject(self, &internalCopyOfBackgroundColorKey);
+}
+
+- (void)setShadowColorApplied:(BOOL)shadowColorApplied{
+    objc_setAssociatedObject(self, 
+                             &shadowColorAppliedKey,
+                             [NSNumber numberWithBool:shadowColorApplied],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)shadowColorApplied{
+    NSNumber* n = objc_getAssociatedObject(self, &shadowColorAppliedKey);
+    return n? [n boolValue] : NO;
+}
+
+- (void)setBackgroundColorApplied:(BOOL)backgroundColorApplied{
+    objc_setAssociatedObject(self, 
+                             &backgroundColorAppliedKey,
+                             [NSNumber numberWithBool:backgroundColorApplied],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)backgroundColorApplied{
+    NSNumber* n = objc_getAssociatedObject(self, &backgroundColorAppliedKey);
+    return n? [n boolValue] : NO;
+}
+
+@end
 
 @implementation UILabel (CKHighlight)
 @dynamic highlightedShadowColor,highlightedBackgroundColor;
 
+- (void)setHighlightedShadowColor:(UIColor *)highlightedShadowColor{
+    [self willChangeValueForKey:@"highlightedShadowColor"];
+    objc_setAssociatedObject(self, 
+                             &highlightedShadowColorKey,
+                             highlightedShadowColor,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"highlightedShadowColor"];
+}
+
+- (UIColor*)highlightedShadowColor{
+    return objc_getAssociatedObject(self, &highlightedShadowColorKey);
+}
+
+- (void)setHighlightedBackgroundColor:(UIColor *)highlightedBackgroundColor{
+    [self willChangeValueForKey:@"highlightedBackgroundColor"];
+    objc_setAssociatedObject(self, 
+                             &highlightedBackgroundColorKey,
+                             highlightedBackgroundColor,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self didChangeValueForKey:@"highlightedBackgroundColor"];
+}
+
+- (UIColor*)highlightedBackgroundColor{
+    return objc_getAssociatedObject(self, &highlightedBackgroundColorKey);
+}
+
 - (void)ckSetHighlighted:(BOOL)highlighted{
     if(highlighted){
-        UIColor* highlightedShadowColor = [self valueForKey:@"highlightedShadowColor"];
-        if(highlightedShadowColor){
-            [self setValue:[self valueForKey:@"shadowColor"] forKey:@"internalCopyOfShadowColor"];
-            [self setValue:highlightedShadowColor forKey:@"shadowColor"];
+        if(self.highlightedShadowColor){
+            if(!self.shadowColorApplied){
+                self.internalCopyOfShadowColor = self.shadowColor;
+                self.shadowColorApplied = YES;
+            }
+            self.shadowColor = self.highlightedShadowColor;
         }
         
-        UIColor* highlightedBackgroundColor = [self valueForKey:@"highlightedBackgroundColor"];
-        if(highlightedBackgroundColor){
-            [self setValue:[self valueForKey:@"backgroundColor"] forKey:@"internalCopyOfBackgroundColor"];
-            [self setValue:highlightedBackgroundColor forKey:@"backgroundColor"];
+        if(self.highlightedBackgroundColor){
+            if(!self.backgroundColorApplied){
+                self.internalCopyOfBackgroundColor = self.backgroundColor;
+                self.backgroundColorApplied = YES;
+            }
+            self.backgroundColor = self.highlightedBackgroundColor;
         }
     }
     else{
-        UIColor* copyOfShadowColor = [self valueForKey:@"internalCopyOfShadowColor"];
-        if(copyOfShadowColor){
-            [self setValue:copyOfShadowColor forKey:@"shadowColor"];
-            [self setValue:nil forKey:@"internalCopyOfShadowColor"];
+        if(self.shadowColorApplied){
+            self.shadowColor = self.internalCopyOfShadowColor;
+            self.internalCopyOfShadowColor = nil;
+            self.shadowColorApplied = NO;
         }
         
-        UIColor* copyOfBackgroundColor = [self valueForKey:@"internalCopyOfBackgroundColor"];
-        if(copyOfBackgroundColor){
-            [self setValue:copyOfBackgroundColor forKey:@"backgroundColor"];
-            [self setValue:nil forKey:@"internalCopyOfBackgroundColor"];
+        if(self.backgroundColorApplied){
+            self.backgroundColor = self.internalCopyOfBackgroundColor;
+            self.internalCopyOfBackgroundColor = nil;
+            self.backgroundColorApplied = NO;
         }
     }
     [self ckSetHighlighted:highlighted];
 }
 
 + (void)load{
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    BOOL result = CKClassAddProperty([UILabel class],@"highlightedShadowColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    CKAssert(result, @"Unable to add highlightedShadowColor property");
-    
-    result = CKClassAddProperty([UILabel class],@"highlightedBackgroundColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    CKAssert(result, @"Unable to add highlightedBackgroundColor property");
-    
-    result = CKClassAddProperty([UILabel class],@"internalCopyOfShadowColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    CKAssert(result, @"Unable to add internalCopyOfShadowColor property");
-    
-    result = CKClassAddProperty([UILabel class],@"internalCopyOfBackgroundColor", [UIColor class], CKClassPropertyDescriptorAssignementTypeRetain, YES);
-    CKAssert(result, @"Unable to add internalCopyOfBackgroundColor property");
-    
     CKSwizzleSelector([UILabel class],@selector(setHighlighted:),@selector(ckSetHighlighted:));
-    [pool release];
 }
 
 @end

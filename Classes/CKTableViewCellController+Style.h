@@ -20,13 +20,6 @@ extern NSString* CKStyleCellStyle;
  */
 extern NSString* CKStyleAccessoryImage;
 
-/**
- */
-extern NSString* CKStyleCellSize;
-
-/**
- */
-extern NSString* CKStyleCellFlags;
 
 
 
@@ -36,8 +29,6 @@ extern NSString* CKStyleCellFlags;
 
 - (CKTableViewCellStyle)cellStyle;
 - (UIImage*)accessoryImage;
-- (CGSize)cellSize;
-- (CKItemViewFlags)cellFlags;
 
 @end
 

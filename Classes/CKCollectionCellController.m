@@ -94,6 +94,22 @@
     _isViewAppeared = NO;
 }
 
+- (void)flagsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKItemViewFlags",
+                                                 CKItemViewFlagNone,
+                                                 CKItemViewFlagSelectable,
+                                                 CKItemViewFlagEditable,
+                                                 CKItemViewFlagRemovable,
+                                                 CKItemViewFlagMovable,
+                                                 CKItemViewFlagAll,
+                                                 CKTableViewCellFlagNone,
+                                                 CKTableViewCellFlagSelectable,
+                                                 CKTableViewCellFlagEditable,
+                                                 CKTableViewCellFlagRemovable,
+                                                 CKTableViewCellFlagMovable,
+                                                 CKTableViewCellFlagAll);
+}
+
 - (void)setSize:(CGSize)s{
     [self setSize:s notifyingContainerForUpdate:YES];
 }

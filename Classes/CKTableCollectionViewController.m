@@ -1197,7 +1197,18 @@
 - (void)updateCurrentPage{
 	CGFloat scrollPosition = self.tableView.contentOffset.y;
 	CGFloat height = self.tableView.bounds.size.height;
-	int page = (height != 0) ? scrollPosition / height : 0;
+    
+    NSInteger intTmp = 0;
+    if(height != 0){
+        CGFloat tmp = scrollPosition / height ;
+        intTmp = (NSInteger)tmp;
+        CGFloat tmpdiff = tmp - intTmp;
+        if(fabs(tmpdiff) > 0.5){
+            ++intTmp;
+        }
+    }
+    
+	int page = intTmp;
 	if(page < 0) 
 		page = 0;
 	
