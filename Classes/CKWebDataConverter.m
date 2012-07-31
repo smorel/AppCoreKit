@@ -40,7 +40,7 @@ static dispatch_group_t group;
         
         [self addConverter:^id(NSData *data, NSURLResponse *response) {
             UIImage* temp =  [UIImage imageWithData:data];
-            return [[UIImage alloc]initWithCGImage:temp.CGImage scale:[[UIScreen mainScreen]scale] orientation:temp.imageOrientation];
+            return [[[UIImage alloc]initWithCGImage:temp.CGImage scale:[[UIScreen mainScreen]scale] orientation:temp.imageOrientation]autorelease];
         } forMIMEPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             return [evaluatedObject hasPrefix:@"image/"];
         }]];
