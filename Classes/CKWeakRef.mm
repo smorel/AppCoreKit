@@ -179,8 +179,8 @@ static BOOL swizzlingDone = NO;
 }
 
 - (id)initWithObject:(id)object block:(void (^)(CKWeakRef* weakRef))block{
-    self = [self initWithObject:object callback:[CKCallback callbackWithBlock:^(id object){
-		block((CKWeakRef*)object);
+    self = [self initWithObject:object callback:[CKCallback callbackWithBlock:^(id callbackObject){
+		block((CKWeakRef*)callbackObject);
 		return (id)nil;
 	}]];
 	return self;

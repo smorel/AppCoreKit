@@ -137,7 +137,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
                 return;
             }
             
-            CKDebugLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
+            //This retains self : CKDebugLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
             [NSObject removeAllBindingsForContext:ref];
         }];
     }
