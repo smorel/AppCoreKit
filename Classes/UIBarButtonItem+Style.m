@@ -60,8 +60,9 @@
 
 + (BOOL)applyStyle:(NSMutableDictionary*)style toObject:(id)object appliedStack:(NSMutableSet*)appliedStack  delegate:(id)delegate{
     UIBarButtonItem* barButtonItem = (UIBarButtonItem*)object;
+    BOOL systemButton = [[barButtonItem valueForKey:@"isSystemItem"]boolValue];
     
-    if(style && [style isEmpty] == NO){
+    if(!systemButton && style && [style isEmpty] == NO){
         [barButtonItem setAppliedStyle:style];
         
         UIButton* button = nil;
