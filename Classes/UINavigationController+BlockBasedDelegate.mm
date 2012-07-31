@@ -110,6 +110,23 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
     return result;
 }
 
+//Ensuring KVC Complience for the dynamic properties
+- (id)CKBlockBasedDelegate_valueForKey:(NSString *)key{
+    if([key isEqualToString:@"willPushViewControllerBlock"]){ return self.willPushViewControllerBlock; }
+    if([key isEqualToString:@"willPopViewControllerBlock"]){ return self.willPopViewControllerBlock; }
+    if([key isEqualToString:@"didPushViewControllerBlock"]){ return self.didPushViewControllerBlock; }
+    if([key isEqualToString:@"didPopViewControllerBlock"]){ return self.didPopViewControllerBlock; }
+    return [self CKBlockBasedDelegate_valueForKey:key];
+}
+
+- (void)CKBlockBasedDelegate_setValue:(id)value forKey:(NSString *)key{
+    if([key isEqualToString:@"willPushViewControllerBlock"]){ self.willPushViewControllerBlock = value; }
+    if([key isEqualToString:@"willPopViewControllerBlock"]){ self.willPopViewControllerBlock = value; }
+    if([key isEqualToString:@"didPushViewControllerBlock"]){ self.didPushViewControllerBlock = value; }
+    if([key isEqualToString:@"didPopViewControllerBlock"]){ self.didPopViewControllerBlock = value; }
+    [self CKBlockBasedDelegate_setValue:value forKey:key];
+}
+
 //This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
 - (BOOL)disablesAutomaticKeyboardDismissal {
     return NO;
@@ -123,6 +140,8 @@ bool swizzle_UINavigationController(){
     CKSwizzleSelector([UINavigationController class],@selector(popViewControllerAnimated:),@selector(CKBlockBasedDelegate_popViewControllerAnimated:));
     CKSwizzleSelector([UINavigationController class],@selector(popToViewController:animated:),@selector(CKBlockBasedDelegate_popToViewController:animated:));
     CKSwizzleSelector([UINavigationController class],@selector(popToRootViewControllerAnimated:),@selector(CKBlockBasedDelegate_popToRootViewControllerAnimated:));
+    CKSwizzleSelector([UINavigationController class],@selector(valueForKey:),@selector(CKBlockBasedDelegate_valueForKey:));
+    CKSwizzleSelector([UINavigationController class],@selector(setValue:forKey:),@selector(CKBlockBasedDelegate_setValue:forKey:));
     return 1;
 }
 

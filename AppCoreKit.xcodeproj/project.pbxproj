@@ -500,7 +500,7 @@
 		96D2674215923B7700840A7F /* NSTimer+BlockBaseInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */; };
 		96D4B83515125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.m */; };
+		96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */; };
 		96DAFCF414F8161600D71FEB /* CKFilteredCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */; };
 		96E4D3EE15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h */; };
@@ -1047,7 +1047,7 @@
 		96D2674015923B7700840A7F /* NSTimer+BlockBaseInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTimer+BlockBaseInterface.h"; path = "Classes/NSTimer+BlockBaseInterface.h"; sourceTree = "<group>"; };
 		96D2674115923B7700840A7F /* NSTimer+BlockBaseInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTimer+BlockBaseInterface.m"; path = "Classes/NSTimer+BlockBaseInterface.m"; sourceTree = "<group>"; };
 		96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIBarButtonItem+BlockBasedInterface.h"; path = "Classes/UIBarButtonItem+BlockBasedInterface.h"; sourceTree = "<group>"; };
-		96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIBarButtonItem+BlockBasedInterface.m"; path = "Classes/UIBarButtonItem+BlockBasedInterface.m"; sourceTree = "<group>"; };
+		96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIBarButtonItem+BlockBasedInterface.mm"; path = "Classes/UIBarButtonItem+BlockBasedInterface.mm"; sourceTree = "<group>"; };
 		96DAFCF214F8161600D71FEB /* CKFilteredCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFilteredCollection.h; path = Classes/CKFilteredCollection.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96DAFCF314F8161600D71FEB /* CKFilteredCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = CKFilteredCollection.m; path = Classes/CKFilteredCollection.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96E4D3EC15406CEB00CCF421 /* CKMultilineNSStringPropertyCellController+DynamicLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKMultilineNSStringPropertyCellController+DynamicLayout.h"; path = "Classes/CKMultilineNSStringPropertyCellController+DynamicLayout.h"; sourceTree = "<group>"; };
@@ -1374,7 +1374,7 @@
 				7560DC1A13B8ED3600268D13 /* CKTextView.h */,
 				7560DC1B13B8ED3600268D13 /* CKTextView.m */,
 				96D4B83315125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.h */,
-				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.m */,
+				96D4B83415125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm */,
 				964DD44D1599F42600169B64 /* Private */,
 			);
 			name = Views;
@@ -2716,7 +2716,7 @@
 				969FA54214966CD90095C61E /* UITableViewCell+Highlight.m in Sources */,
 				96DAFCF514F8161600D71FEB /* CKFilteredCollection.m in Sources */,
 				9622AAFC1501395E00AEF369 /* UIView+DragNDrop.m in Sources */,
-				96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.m in Sources */,
+				96D4B83615125FD200B517A5 /* UIBarButtonItem+BlockBasedInterface.mm in Sources */,
 				967C51821538BD4E00B3F785 /* NSObject+Singleton.m in Sources */,
 				967C51861538BE8200B3F785 /* CKDocument.m in Sources */,
 				964C2081153DD82800398E0F /* CKTableViewCellController+DynamicLayout.m in Sources */,

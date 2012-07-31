@@ -12,6 +12,8 @@
 #import "CKBindingsManager.h"
 
 #import "CKDebug.h"
+#import <objc/runtime.h>
+#import "CKRuntime.h"
 
 @interface CKUIBarButtonItemBinder : CKBinding {
 	//We can use block or target/selector
@@ -207,4 +209,26 @@ static char UIBarButtonItemExecutionBlockKey;
     }
 }
 
+//Ensuring KVC Complience for the dynamic properties
+- (id)CKBlockBasedDelegate_valueForKey:(NSString *)key{
+    if([key isEqualToString:@"block"]){ return self.block; }
+    if([key isEqualToString:@"userData"]){ return self.userData; }
+    return [self CKBlockBasedDelegate_valueForKey:key];
+}
+
+- (void)CKBlockBasedDelegate_setValue:(id)value forKey:(NSString *)key{
+    if([key isEqualToString:@"block"]){ self.block = value; }
+    if([key isEqualToString:@"userData"]){ self.userData = value; }
+    [self CKBlockBasedDelegate_setValue:value forKey:key];
+}
+
 @end
+
+
+bool swizzle_UIBarButtonItem(){
+    CKSwizzleSelector([UIBarButtonItem class],@selector(valueForKey:),@selector(CKBlockBasedDelegate_valueForKey:));
+    CKSwizzleSelector([UIBarButtonItem class],@selector(setValue:forKey:),@selector(CKBlockBasedDelegate_setValue:forKey:));
+    return 1;
+}
+
+static bool bo_swizzle_UIBarButtonItem = swizzle_UIBarButtonItem();
