@@ -247,6 +247,17 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     _property = [property retain];
     NSDate* date = [_property value];
     if(_datePicker){
+        _datePicker.minimumDate = nil;
+        _datePicker.maximumDate = nil;
+        
+        CKPropertyExtendedAttributes* attributes = [self.property extendedAttributes];
+        if(attributes.minimumDate){
+            _datePicker.minimumDate = attributes.minimumDate;
+        }
+        if(attributes.maximumDate){
+            _datePicker.maximumDate = attributes.maximumDate;
+        }
+        
         [_datePicker setDate:(date ? date : [NSDate date])];
     }
     else{
