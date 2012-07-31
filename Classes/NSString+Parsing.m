@@ -60,7 +60,18 @@
 }
 
 + (BOOL)formatAsPhoneNumberUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string{
-    int length = [self getLength:textField.text];
+    if([string length] <= 0)
+        return YES;
+    
+    NSMutableCharacterSet *phoneNumberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
+    NSString* filteredReplacement = [string stringByTrimmingCharactersInSet:[phoneNumberSet invertedSet]];
+    if([filteredReplacement length] <= 0)
+        return NO;
+    
+    [phoneNumberSet addCharactersInString:@"() _+"];
+    NSString* text = [textField.text stringByTrimmingCharactersInSet:[phoneNumberSet invertedSet]];
+    
+    int length = [self getLength:text];
     
     if(length == 10)
     {
@@ -70,17 +81,20 @@
     
     if(length == 3)
     {
-        NSString *num = [self formatNumber:textField.text];
+        NSString *num = [self formatNumber:text];
         textField.text = [NSString stringWithFormat:@"(%@) ",num];
         if(range.length > 0)
             textField.text = [NSString stringWithFormat:@"%@",[num substringToIndex:3]];
     }
     else if(length == 6)
     {
-        NSString *num = [self formatNumber:textField.text];
+        NSString *num = [self formatNumber:text];
         textField.text = [NSString stringWithFormat:@"(%@) %@-",[num  substringToIndex:3],[num substringFromIndex:3]];
         if(range.length > 0)
             textField.text = [NSString stringWithFormat:@"(%@) %@",[num substringToIndex:3],[num substringFromIndex:3]];
+    }
+    else {
+        textField.text = text;
     }
     
     return YES;
