@@ -40,17 +40,15 @@
     return str;
 }
 
-
++ (void)setCursorPosition:(NSInteger)position inTextField:(UITextField*)textField{
+    UITextPosition *start = [textField positionFromPosition:[textField beginningOfDocument] 
+                                                     offset:position];
+    UITextPosition *end = [textField positionFromPosition:start
+                                                   offset:0];
+    [textField setSelectedTextRange:[textField textRangeFromPosition:start toPosition:end]];
+}
 
 + (BOOL)formatAsPhoneNumberUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string{
-    if([string length] <= 0)
-        return YES;
-    
-    NSMutableCharacterSet *phoneNumberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
-    NSString* filteredReplacement = [string stringByRemovingCharactersInSet:[phoneNumberSet invertedSet]];
-    if([filteredReplacement length] <= 0)
-        return NO;
-    
     NSMutableCharacterSet* formattingCharacterSet = [[[NSMutableCharacterSet alloc]init]autorelease];
     [formattingCharacterSet addCharactersInString:@"("];
     [formattingCharacterSet addCharactersInString:@")"];
@@ -58,22 +56,68 @@
     [formattingCharacterSet addCharactersInString:@"+"];
     
     NSMutableString* textFieldText = [NSMutableString stringWithString:textField.text];
-    [textFieldText insertString:filteredReplacement atIndex:range.location];
-    NSString* text = [[textFieldText stringByRemovingCharactersInSet:[NSMutableCharacterSet whitespaceCharacterSet] ]
-                                     stringByRemovingCharactersInSet:formattingCharacterSet];
+    
+    
+    NSInteger offset = 0;
+    NSString* text = nil;
+    
+    if([string length] <= 0){ //this means delete
+        
+        [textFieldText deleteCharactersInRange:range];
+        text = [[textFieldText stringByRemovingCharactersInSet:[NSMutableCharacterSet whitespaceCharacterSet] ]
+                stringByRemovingCharactersInSet:formattingCharacterSet];
+        
+        switch(range.location){
+            case 0: case 1: offset = 1; break;
+            case 2: offset = 2; break;
+            case 3: offset = 3; break;
+            case 4: offset = 4; break;
+            case 5: case 6: offset = 4; break;
+            case 7: offset = 7; break;
+            case 8: offset = 8; break;
+            case 9: case 10: offset = 9; break;
+            case 11: offset = 11; break;
+            case 12: offset = 12; break;
+            case 13: offset = 13; break;
+        }
+    }else{
+        NSMutableCharacterSet *phoneNumberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
+        NSString* filteredReplacement = [string stringByRemovingCharactersInSet:[phoneNumberSet invertedSet]];
+        if([filteredReplacement length] <= 0)
+            return NO;
+        
+        [textFieldText insertString:filteredReplacement atIndex:range.location];
+        text = [[textFieldText stringByRemovingCharactersInSet:[NSMutableCharacterSet whitespaceCharacterSet] ]
+                          stringByRemovingCharactersInSet:formattingCharacterSet];
+        
+        switch(range.location){
+            case 0: case 1:offset = 2; break;
+            case 2: offset = 3; break;
+            case 3: offset = 6; break;
+            case 4:case 5: case 6: offset = 7; break;
+            case 7: offset = 8; break;
+            case 8: offset = 9; break;
+            case 9: case 10: offset = 11; break;
+            case 11: offset = 12; break;
+            case 12: offset = 13; break;
+            case 13: offset = 14; break;
+        }
+    }
     
     int length = [text length];
-    
-    if(length > 10)
-    {
+    if(length > 10){
         return NO;
     }
     
     NSString* newText = text;
-    if(length < 3)
+    if(length <= 0){
+        offset = 0;
+        newText = nil;
+    }
+    else if(length < 3)
         newText = [NSString stringWithFormat:@"(%@",
                           text];
-    else if(length < 6){
+    else if(length <= 6){
         newText = [NSString stringWithFormat:@"(%@) %@",
                           [text substringWithRange:NSMakeRange(0, 3)],
                           [text substringWithRange:NSMakeRange(3, [text length] - 3)]];
@@ -86,25 +130,7 @@
     }
     textField.text = newText;
     
-    NSInteger offset = 0;
-    switch(range.location){
-        case 0: case 1:offset = 2; break;
-        case 2: offset = 3; break;
-        case 3: offset = 6; break;
-        case 4:case 5: case 6: offset = 7; break;
-        case 7: offset = 8; break;
-        case 8:case 9: offset = 10; break;
-        case 10: offset = 11; break;
-        case 11: offset = 12; break;
-        case 12: offset = 13; break;
-        case 13: offset = 14; break;
-    }
-    
-    UITextPosition *start = [textField positionFromPosition:[textField beginningOfDocument] 
-                                                 offset:offset];
-    UITextPosition *end = [textField positionFromPosition:start
-                                               offset:0];
-    [textField setSelectedTextRange:[textField textRangeFromPosition:start toPosition:end]];
+    [self setCursorPosition:offset inTextField:textField];
     
     return NO;
 }
