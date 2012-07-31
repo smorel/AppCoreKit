@@ -59,7 +59,7 @@
     return length;
 }
 
-+ (BOOL)formatAsPhoneNumberUsingTextFied:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string{
++ (BOOL)formatAsPhoneNumberUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string{
     int length = [self getLength:textField.text];
     
     if(length == 10)
@@ -84,6 +84,41 @@
     }
     
     return YES;
+}
+
++ (BOOL)formatAsAlphanumericUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string allowingFloatingSeparators:(BOOL)allowingFloatingSeparators{
+    return [self formatAsAlphanumericUsingTextField:textField range:range replacementString:string minimumLength:-1 maximumLength:-1 allowingFloatingSeparators:allowingFloatingSeparators];
+}
+
+
++ (BOOL)formatAsAlphanumericUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string minimumLength:(NSInteger)min allowingFloatingSeparators:(BOOL)allowingFloatingSeparators{
+    return [self formatAsAlphanumericUsingTextField:textField range:range replacementString:string minimumLength:min maximumLength:-1 allowingFloatingSeparators:allowingFloatingSeparators];
+}
+
++ (BOOL)formatAsAlphanumericUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string maximumLength:(NSInteger)max allowingFloatingSeparators:(BOOL)allowingFloatingSeparators{
+    return [self formatAsAlphanumericUsingTextField:textField range:range replacementString:string minimumLength:-1 maximumLength:max allowingFloatingSeparators:allowingFloatingSeparators];
+}
+
++ (BOOL)formatAsAlphanumericUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string minimumLength:(NSInteger)min maximumLength:(NSInteger)max allowingFloatingSeparators:(BOOL)allowingFloatingSeparators{
+    if (range.length>0) {
+        if(min >= 0 && range.location < min){
+            return NO;
+        }
+        return YES;
+    } else {
+        if(max >= 0 && range.location >= max){
+            return NO;
+        }    
+        NSMutableCharacterSet *numberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
+        
+        if(allowingFloatingSeparators){
+            [numberSet addCharactersInString:@".,"];
+        }
+        
+        return ([string stringByTrimmingCharactersInSet:[numberSet invertedSet]].length > 0);
+    }
+    return YES;
+    
 }
 
 @end
