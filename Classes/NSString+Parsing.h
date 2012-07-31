@@ -22,6 +22,10 @@
  */
 - (NSString *)stringByDeletingHTMLTags;
 
+/** 
+ */
+- (NSString *)stringByRemovingCharactersInSet:(NSCharacterSet*)set;
+
 /** This works only for US phone numbers
  */
 + (BOOL)formatAsPhoneNumberUsingTextField:(UITextField*)textfield range:(NSRange)range replacementString:(NSString*)string;

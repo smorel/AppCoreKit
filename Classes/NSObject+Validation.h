@@ -40,5 +40,9 @@
  */
 - (CKObjectValidationResults*)validate;
 
+/** This method iterates on specified properties and call the predicates defined as extended attributes
+ */
+- (CKObjectValidationResults*)validatePropertiesNamed:(NSArray*)propertyNames;
+
 @end
 

@@ -28,76 +28,85 @@
 	return parsedText;
 }
 
-+(NSString*)formatNumber:(NSString*)mobileNumber
-{
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = [mobileNumber length];
-    if(length > 10)
-    {
-        mobileNumber = [mobileNumber substringFromIndex: length-10];
+
+- (NSString *)stringByRemovingCharactersInSet:(NSCharacterSet*)set{
+    NSMutableString* str = [NSMutableString string];
+    for(int i =0;i<[self length];++i){
+        unichar c = [self characterAtIndex:i]; 
+        if(![set characterIsMember:c]){
+            [str appendFormat:@"%c",c];
+        }
     }
-    
-    return mobileNumber;
+    return str;
 }
 
 
-+(int)getLength:(NSString*)mobileNumber
-{
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"(" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@")" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    mobileNumber = [mobileNumber stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    
-    int length = [mobileNumber length];
-    
-    return length;
-}
 
 + (BOOL)formatAsPhoneNumberUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string{
     if([string length] <= 0)
         return YES;
     
     NSMutableCharacterSet *phoneNumberSet = [NSMutableCharacterSet decimalDigitCharacterSet] ;
-    NSString* filteredReplacement = [string stringByTrimmingCharactersInSet:[phoneNumberSet invertedSet]];
+    NSString* filteredReplacement = [string stringByRemovingCharactersInSet:[phoneNumberSet invertedSet]];
     if([filteredReplacement length] <= 0)
         return NO;
     
-    [phoneNumberSet addCharactersInString:@"() _+"];
-    NSString* text = [textField.text stringByTrimmingCharactersInSet:[phoneNumberSet invertedSet]];
+    NSMutableCharacterSet* formattingCharacterSet = [[[NSMutableCharacterSet alloc]init]autorelease];
+    [formattingCharacterSet addCharactersInString:@"("];
+    [formattingCharacterSet addCharactersInString:@")"];
+    [formattingCharacterSet addCharactersInString:@"-"];
+    [formattingCharacterSet addCharactersInString:@"+"];
     
-    int length = [self getLength:text];
+    NSMutableString* textFieldText = [NSMutableString stringWithString:textField.text];
+    [textFieldText insertString:filteredReplacement atIndex:range.location];
+    NSString* text = [[textFieldText stringByRemovingCharactersInSet:[NSMutableCharacterSet whitespaceCharacterSet] ]
+                                     stringByRemovingCharactersInSet:formattingCharacterSet];
     
-    if(length == 10)
+    int length = [text length];
+    
+    if(length > 10)
     {
-        if(range.length == 0)
-            return NO;
+        return NO;
     }
     
-    if(length == 3)
-    {
-        NSString *num = [self formatNumber:text];
-        textField.text = [NSString stringWithFormat:@"(%@) ",num];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"%@",[num substringToIndex:3]];
+    NSString* newText = text;
+    if(length < 3)
+        newText = [NSString stringWithFormat:@"(%@",
+                          text];
+    else if(length < 6){
+        newText = [NSString stringWithFormat:@"(%@) %@",
+                          [text substringWithRange:NSMakeRange(0, 3)],
+                          [text substringWithRange:NSMakeRange(3, [text length] - 3)]];
     }
-    else if(length == 6)
-    {
-        NSString *num = [self formatNumber:text];
-        textField.text = [NSString stringWithFormat:@"(%@) %@-",[num  substringToIndex:3],[num substringFromIndex:3]];
-        if(range.length > 0)
-            textField.text = [NSString stringWithFormat:@"(%@) %@",[num substringToIndex:3],[num substringFromIndex:3]];
+    else{
+        newText = [NSString stringWithFormat:@"(%@) %@-%@",
+                          [text substringWithRange:NSMakeRange(0, 3)],
+                          [text substringWithRange:NSMakeRange(3, 3)],
+                          [text substringWithRange:NSMakeRange(6, [text length] - 6)]];
     }
-    else {
-        textField.text = text;
+    textField.text = newText;
+    
+    NSInteger offset = 0;
+    switch(range.location){
+        case 0: case 1:offset = 2; break;
+        case 2: offset = 3; break;
+        case 3: offset = 6; break;
+        case 4:case 5: case 6: offset = 7; break;
+        case 7: offset = 8; break;
+        case 8:case 9: offset = 10; break;
+        case 10: offset = 11; break;
+        case 11: offset = 12; break;
+        case 12: offset = 13; break;
+        case 13: offset = 14; break;
     }
     
-    return YES;
+    UITextPosition *start = [textField positionFromPosition:[textField beginningOfDocument] 
+                                                 offset:offset];
+    UITextPosition *end = [textField positionFromPosition:start
+                                               offset:0];
+    [textField setSelectedTextRange:[textField textRangeFromPosition:start toPosition:end]];
+    
+    return NO;
 }
 
 + (BOOL)formatAsAlphanumericUsingTextField:(UITextField*)textField range:(NSRange)range replacementString:(NSString*)string allowingFloatingSeparators:(BOOL)allowingFloatingSeparators{

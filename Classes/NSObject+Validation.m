@@ -25,16 +25,31 @@
 - (CKObjectValidationResults*)validate{
     CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
 	NSArray* allProperties = [self allPropertyDescriptors];
-    for(CKClassPropertyDescriptor* property in allProperties){
-            // if(property.isReadOnly == NO){
-        CKPropertyExtendedAttributes* attributes = [property extendedAttributesForInstance:self];
+    for(CKClassPropertyDescriptor* descriptor in allProperties){
+        CKPropertyExtendedAttributes* attributes = [descriptor extendedAttributesForInstance:self];
         if(attributes.validationPredicate){
-            id object = [self valueForKey:property.name];
+            id object = [self valueForKey:descriptor.name];
             if(![attributes.validationPredicate evaluateWithObject:object]){
-                [(NSMutableSet*)results.invalidProperties addObject:[CKProperty propertyWithObject:self keyPath:property.name]];
+                [(NSMutableSet*)results.invalidProperties addObject:[CKProperty propertyWithObject:self keyPath:descriptor.name]];
             }
         }
-            //}
+    }
+	return results;
+}
+
+- (CKObjectValidationResults*)validatePropertiesNamed:(NSArray*)propertyNames{
+    CKObjectValidationResults* results = [[[CKObjectValidationResults alloc]init]autorelease];
+    for(NSString* propertyName in propertyNames){
+        CKClassPropertyDescriptor* descriptor = [self propertyDescriptorForKeyPath:propertyName];
+        if(descriptor){
+            CKPropertyExtendedAttributes* attributes = [descriptor extendedAttributesForInstance:self];
+            if(attributes.validationPredicate){
+                id object = [self valueForKey:descriptor.name];
+                if(![attributes.validationPredicate evaluateWithObject:object]){
+                    [(NSMutableSet*)results.invalidProperties addObject:[CKProperty propertyWithObject:self keyPath:descriptor.name]];
+                }
+            }
+        }
     }
 	return results;
 }
