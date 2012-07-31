@@ -12,12 +12,6 @@
 #import "UIView+Style.h"
 #import "NSObject+Bindings.h"
 
-@interface CKBarButtonItemButton : UIButton
-@property (nonatomic,assign)UIBarButtonItem* barButtonItem;
-- (id)initWithBarButtonItem:(UIBarButtonItem*)barButtonItem;
-
-@end
-
 @implementation CKBarButtonItemButton
 @synthesize barButtonItem = _barButtonItem;
 

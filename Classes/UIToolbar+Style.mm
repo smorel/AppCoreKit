@@ -12,6 +12,7 @@
 #import "UIView+Style.h"
 #import "CKVersion.h"
 #import "CKRuntime.h"
+#import "UIBarButtonItem+Style.h"
 
 
 @implementation UIToolbar (CKStyleManager)
@@ -23,6 +24,13 @@
             for(UIBarButtonItem* item in toolbar.items){
                 NSMutableDictionary* itemStyle = [style styleForObject:item propertyName:nil];
                 [item applyStyle:itemStyle];
+                
+                if([CKOSVersion() floatValue] < 4.2){
+                    //Handle this manually here as there is a bug in the framework for versions < 4.2
+                    if([item.customView isKindOfClass:[CKBarButtonItemButton class]]){
+                        [toolbar addSubview:item.customView];
+                    }
+                }
             }
             return YES;
         }

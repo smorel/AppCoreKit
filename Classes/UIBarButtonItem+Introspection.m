@@ -20,4 +20,33 @@
                                                UIBarButtonItemStyleDone);
 }
 
+- (void)systemItemExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKEnumDefinition(@"UIBarButtonSystemItem",
+                                                 UIBarButtonSystemItemDone,
+                                                 UIBarButtonSystemItemCancel,
+                                                 UIBarButtonSystemItemEdit,  
+                                                 UIBarButtonSystemItemSave,  
+                                                 UIBarButtonSystemItemAdd,
+                                                 UIBarButtonSystemItemFlexibleSpace,
+                                                 UIBarButtonSystemItemFixedSpace,
+                                                 UIBarButtonSystemItemCompose,
+                                                 UIBarButtonSystemItemReply,
+                                                 UIBarButtonSystemItemAction,
+                                                 UIBarButtonSystemItemOrganize,
+                                                 UIBarButtonSystemItemBookmarks,
+                                                 UIBarButtonSystemItemSearch,
+                                                 UIBarButtonSystemItemRefresh,
+                                                 UIBarButtonSystemItemStop,
+                                                 UIBarButtonSystemItemCamera,
+                                                 UIBarButtonSystemItemTrash,
+                                                 UIBarButtonSystemItemPlay,
+                                                 UIBarButtonSystemItemPause,
+                                                 UIBarButtonSystemItemRewind,
+                                                 UIBarButtonSystemItemFastForward,
+                                                 UIBarButtonSystemItemUndo,
+                                                 UIBarButtonSystemItemRedo,
+                                                 UIBarButtonSystemItemPageCurl
+                                                 );
+}
+
 @end
