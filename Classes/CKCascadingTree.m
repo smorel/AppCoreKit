@@ -671,6 +671,7 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	if([self containsObjectForKey:CKCascadingTreeFormats]) --count;
 	if([self containsObjectForKey:CKCascadingTreeParent]) --count;
 	if([self containsObjectForKey:CKCascadingTreeEmpty]) --count;
+	if([self containsObjectForKey:CKCascadingTreeNode]) --count;
 	return count == 0;
 }
 
