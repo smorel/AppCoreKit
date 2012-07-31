@@ -12,8 +12,21 @@
 /**
  */
 @interface UIImage (CKValueTransformer)
+
+/**
+ */
 + (UIImage*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (UIImage*)convertFromNSURL:(NSURL*)url;
+
+/**
+ */
 + (UIImage*)convertFromNSArray:(NSArray*)array;
+
+/**
+ */
 + (NSString*)convertToNSString:(UIImage*)image;
+
 @end

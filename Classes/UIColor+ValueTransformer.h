@@ -13,7 +13,17 @@
 /**
  */
 @interface UIColor (CKValueTransformer)
+
+/**
+ */
 + (UIColor*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (UIColor*)convertFromNSNumber:(NSNumber*)n;
+
+/**
+ */
 + (NSString*)convertToNSString:(UIColor*)color;
+
 @end

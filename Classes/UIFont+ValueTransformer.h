@@ -10,8 +10,20 @@
 #import <UIKit/UIKit.h>
 
 
+/**
+ */
 @interface UIFont (CKValueTransformer)
+
+/**
+ */
 + (UIFont*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (UIFont*)convertFromNSNumber:(NSNumber*)n;
+
+/**
+ */
 + (NSString*)convertToNSString:(UIFont*)color;
+
 @end

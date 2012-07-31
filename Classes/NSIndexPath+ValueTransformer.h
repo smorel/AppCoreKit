@@ -11,6 +11,13 @@
 /**
  */
 @interface NSIndexPath (CKValueTransformer)
+
+/**
+ */
 + (NSIndexPath*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (NSString*)convertToNSString:(NSIndexPath*)indexPath;
+
 @end

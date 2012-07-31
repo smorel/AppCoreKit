@@ -12,6 +12,13 @@
 /**
  */
 @interface NSURL (CKValueTransformer)
+
+/**
+ */
 + (NSURL*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (NSString*)convertToNSString:(NSURL*)n;
+
 @end

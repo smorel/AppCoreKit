@@ -787,9 +787,10 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
 	NSError* error = nil;
     id result = [fileData mutableObjectFromJSONDataWithParseOptions:JKParseOptionValidFlags error:&error];
     
-    if (error)
-        NSLog(@"**** Parsing error : invalid format in style file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
+    if (error){
+        CKDebugLog(@"**** Parsing error : invalid format in style file '%@' at line : '%@' with error : '%@'",[path lastPathComponent],[[error userInfo]objectForKey:@"JKLineNumberKey"],
               [[error userInfo]objectForKey:@"NSLocalizedDescription"]);
+    }
 	
     //Post process
     [_loadedFiles addObject:path];

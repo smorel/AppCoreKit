@@ -13,7 +13,12 @@
  */
 @interface CKCollection (CKValueTransformer)
 
+/**
+ */
 + (CKCollection*)convertFromNSArray:(NSArray*)array withContentClassName:(NSString*)className;
+
+/**
+ */
 + (id)convertFromNSArray:(NSArray*)array;
 
 @end

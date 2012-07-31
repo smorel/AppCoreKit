@@ -13,6 +13,19 @@
 #import "NSObject+Validation.h"
 
 #import "NSValueTransformer+Additions.h"
+#import "NSValueTransformer+NativeTypes.h"
+#import "NSValueTransformer+CGTypes.h"
+#import "UIColor+ValueTransformer.h"
+#import "UIImage+ValueTransformer.h"
+#import "NSNumber+ValueTransformer.h"
+#import "NSURL+ValueTransformer.h"
+#import "NSDate+ValueTransformer.h"
+#import "NSArray+ValueTransformer.h"
+#import "CKCollection+ValueTransformer.h"
+#import "NSIndexPath+ValueTransformer.h"
+#import "NSObject+ValueTransformer.h"
+#import "UIFont+ValueTransformer.h"
+
 #import "CKCallback.h"
 #import "CKCascadingTree.h"
 

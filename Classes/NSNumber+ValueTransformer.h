@@ -11,6 +11,13 @@
 /**
  */
 @interface NSNumber (CKValueTransformer)
+
+/**
+ */
 + (NSNumber*)convertFromNSString:(NSString*)str;
+
+/**
+ */
 + (NSString*)convertToNSString:(NSNumber*)n;
+
 @end

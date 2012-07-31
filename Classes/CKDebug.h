@@ -10,24 +10,26 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /**
  */
 extern NSString* cleanString(NSString* str);
-
-#ifdef DEBUG
-  /**
-   */
-  #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, cleanString([NSString stringWithFormat:(s), ##__VA_ARGS__]))
-#else
-  #define CKDebugLog(s, ...)
+    
+#ifdef __cplusplus
+}
 #endif
 
-
 #ifdef DEBUG
-   #define CKAssert(condition, desc, ...) NSAssert(condition,desc,##__VA_ARGS__)
+    #define CKDebugLog(s, ...) NSLog(@"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, cleanString([NSString stringWithFormat:(s), ##__VA_ARGS__]))
+    #define CKAssert(condition, desc, ...) NSAssert(condition,desc,##__VA_ARGS__)
 #else
-   #define CKAssert(condition, desc, ...)
+    #define CKDebugLog(s, ...)
+    #define CKAssert(condition, desc, ...)
 #endif
+
 
 
 // UIView

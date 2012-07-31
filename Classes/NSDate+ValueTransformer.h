@@ -12,6 +12,13 @@
 /**
  */
 @interface NSDate (CKValueTransformer)
+
+/**
+ */
 + (NSDate*)convertFromNSString:(NSString*)str withFormat:(NSString*)format;
+
+/**
+ */
 + (NSString*)convertToNSString:(NSDate*)n withFormat:(NSString*)format;
+
 @end

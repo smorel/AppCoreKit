@@ -12,6 +12,7 @@
 #import "CKDataBinder.h"
 #import "CKNotificationBlockBinder.h"
 #import "CKDataBlockBinder.h"
+#import "CKDebug.h"
 #include <ext/hash_map>
 
 using namespace __gnu_cxx;
@@ -136,7 +137,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
                 return;
             }
             
-            NSLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
+            CKDebugLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
             [NSObject removeAllBindingsForContext:ref];
         }];
     }
