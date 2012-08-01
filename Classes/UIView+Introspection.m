@@ -150,6 +150,10 @@
         [properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"hidden"
                                                                                readOnly:NO]];
     }
+    
+	[properties addObject:[CKClassPropertyDescriptor floatDescriptorForPropertyNamed:@"alpha"
+																			readOnly:NO]];
+    
 	[properties addObject:[CKClassPropertyDescriptor intDescriptorForPropertyNamed:@"contentMode"
 																		  readOnly:NO]];
 	[properties addObject:[CKClassPropertyDescriptor floatDescriptorForPropertyNamed:@"contentScaleFactor"

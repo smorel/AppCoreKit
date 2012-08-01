@@ -11,6 +11,31 @@
 #import "CKContainerViewController.h"
 #import <objc/runtime.h>
 #import "UIViewController+DeviceOrientation.h"
+#import "NSObject+Singleton.h"
+
+
+@implementation CKPopoverManager
+@synthesize nonRetainedPopoverControllerValues = _nonRetainedPopoverControllerValues;
+
+- (void)dealloc{
+    [_nonRetainedPopoverControllerValues release];
+    _nonRetainedPopoverControllerValues = nil;
+    [super dealloc];
+}
+
+- (void)registerController:(CKPopoverController*)controller{
+    if(!_nonRetainedPopoverControllerValues){
+        self.nonRetainedPopoverControllerValues = [NSMutableSet set];
+    }
+    
+    [(NSMutableSet*)_nonRetainedPopoverControllerValues addObject:[NSValue valueWithNonretainedObject:controller]];
+}
+
+- (void)unregisterController:(CKPopoverController*)controller{
+    [(NSMutableSet*)_nonRetainedPopoverControllerValues removeObject:[NSValue valueWithNonretainedObject:controller]];
+}
+
+@end
 
 
 @interface UIViewController ()
@@ -28,6 +53,7 @@
 @synthesize orientation = _orientation;
 
 - (void)postInit{
+    [[CKPopoverManager sharedInstance]registerController:self];
     [self.contentViewController setIsInPopover:YES];
     self.autoDismissOnInterfaceOrientation = YES;
     
@@ -69,6 +95,7 @@
 }
 
 - (void)dealloc{
+    [[CKPopoverManager sharedInstance]unregisterController:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKUIDeviceOrientationWillChangeNotification object:nil];
     [self clearBindingsContext];
     [_didDismissPopoverBlock release];

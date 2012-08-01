@@ -149,6 +149,7 @@
                 controller.tableViewCell.imageView.layer.cornerRadius = 3;
                 controller.tableViewCell.imageView.layer.borderWidth = 0.5;
                 controller.tableViewCell.imageView.layer.borderColor = [[UIColor convertFromNSString:@"0.7 0.7 0.7 1"]CGColor];
+                controller.tableViewCell.alpha = view.alpha;
             }];
             
             [controller setSelectionBlock:^(CKTableViewCellController *controller) {

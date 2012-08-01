@@ -10,6 +10,12 @@
 #import <UIKit/UIKit.h>
 
 @class CKPopoverController;
+
+@interface CKPopoverManager : NSObject
+@property(nonatomic,retain) NSSet* nonRetainedPopoverControllerValues;
+@end
+
+
 typedef void(^CKPopoverControllerDismissBlock)(CKPopoverController* popover);
 
 /** 

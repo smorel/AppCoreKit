@@ -20,6 +20,8 @@
 #import "CKStyleManager.h"
 #import <objc/runtime.h>
 #import "NSObject+Bindings.h"
+#import "CKPopoverController.h"
+#import "NSObject+Singleton.h"
 
 
 
@@ -139,8 +141,6 @@
     if(self.modalViewController){
         [self.modalViewController registerToControllers:controllers views:views];
     }
-    
-    //TODO : POPOVERS !
 }
 
 + (void)findControllersDisplayedInWidow:(UIWindow*)window controllers:(NSMutableArray*)controllers views:(NSMutableArray*)views{
@@ -152,6 +152,12 @@
     }
     
     [controller registerToControllers:controllers views:views];
+    
+    NSSet* popovers = [[CKPopoverManager sharedInstance]nonRetainedPopoverControllerValues];
+    for(NSValue* v in popovers){
+        CKPopoverController* popoverController = [v nonretainedObjectValue];
+        [popoverController.contentViewController registerToControllers:controllers views:views];
+    }
 }
 
 @end
