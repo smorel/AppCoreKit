@@ -101,10 +101,6 @@
 @synthesize corners = _corners;
 @synthesize roundedCornerSize = _roundedCornerSize;
 
-- (void)setFrame:(CGRect)frame{
-    [super setFrame:frame];
-}
-
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
@@ -217,18 +213,20 @@
 }
 
 - (void)setCorners:(CKStyleViewCornerType)newCorners{
-	_corners = newCorners;
-    
-    CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
-    if(newCorners == CKStyleViewCornerTypeNone && alpha >= 1){
-        [super setBackgroundColor:[UIColor blackColor]];
-        self.opaque = YES;
+    if(_corners != newCorners){
+        _corners = newCorners;
+        
+        CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
+        if(newCorners == CKStyleViewCornerTypeNone && alpha >= 1){
+            [super setBackgroundColor:[UIColor blackColor]];
+            self.opaque = YES;
+        }
+        else{
+            [super setBackgroundColor:[UIColor clearColor]];
+            self.opaque = NO;
+        }
+        [self setNeedsDisplay];
     }
-    else{
-        [super setBackgroundColor:[UIColor clearColor]];
-        self.opaque = NO;
-    }
-	[self setNeedsDisplay];
 }
 
 - (void)setBorderWidth:(CGFloat)width {
