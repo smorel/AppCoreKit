@@ -23,6 +23,6 @@
 - (void)bind:(CKBinding*)binding withContext:(id)context;
 - (void)unbind:(CKBinding*)binding;
 - (void)unregister:(CKBinding*)binding;
-- (void)unbindAllBindingsWithContext:(id)context;
+- (void)unbindAllBindingsWithContext:(id)context doNotUnbindBecauseObjectIsDeallocated:(BOOL)doNotUnbindBecauseObjectIsDeallocated;
 
 @end

@@ -248,13 +248,14 @@
     for(UIViewController* controller in _viewControllers){
         controller.view.alpha = 1.0;
         if (![theViewControllers containsObject:controller] && controller.view.frame.size.width > 2) {
+            __block UIViewController* bController = controller;
             [UIView animateWithDuration:0.4 animations:^{
                 if (self.addOrRemoveAnimationBlock)
                     self.addOrRemoveAnimationBlock(controller.view, YES);
                 else
-                    controller.view.alpha = 0.0;
+                    bController.view.alpha = 0.0;
             } completion:^(BOOL finished) {
-                [controller setContainerViewController:nil];
+                [bController setContainerViewController:nil];
             }];
         }
     }
@@ -264,13 +265,14 @@
     
     for(UIViewController* controller in _viewControllers){
         if (![oldViewControllers containsObject:controller]) {
+            __block UIViewController* bController = controller;
             [controller setContainerViewController:self];
             controller.view.alpha = 0.0;
             [UIView animateWithDuration:animated ? 0.4 : 0.0 animations:^{
                 if (self.addOrRemoveAnimationBlock)
-                    self.addOrRemoveAnimationBlock(controller.view, NO);
+                    self.addOrRemoveAnimationBlock(bController.view, NO);
                 else
-                    controller.view.alpha = 1.0;
+                    bController.view.alpha = 1.0;
             } completion:^(BOOL finished) {
                 
             }];

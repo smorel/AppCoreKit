@@ -142,7 +142,7 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
 	[self unregister:binding];
 }
 
-- (void)unbindAllBindingsWithContext:(id)context{
+- (void)unbindAllBindingsWithContext:(id)context doNotUnbindBecauseObjectIsDeallocated:(BOOL)doNotUnbindBecauseObjectIsDeallocated{
 	NSMutableSet* bindings = [_bindingsForContext objectForKey:context];
 	if(!bindings || [bindings count] <= 0){
 		return;
@@ -156,7 +156,9 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     }
     
     for(CKBinding* binding in bindings){
-        [binding unbind];
+        if(!doNotUnbindBecauseObjectIsDeallocated){
+            [binding unbind];
+        }
 		
 		NSString* className = NSStringFromClass([binding class]);//[NSString stringWithUTF8String:class_getName([binding class])];
 		NSMutableArray* queuedBindings = [_bindingsPoolForClass valueForKey:className];

@@ -71,8 +71,11 @@ static char NSObjectWeakRefObjectKey;
             [ref.callback execute:ref];
         }
         
-        ref.object = nil;//this will call unregister ...
-        [ref release];
+        //In case it has been unregistered in callback
+        if(_weakRefSet.find(ref) != _weakRefSet.end()){
+            ref.object = nil;//this will call unregister ...
+            [ref release];
+        }
     }
     _weakRefSet.clear();
 }

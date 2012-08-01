@@ -93,7 +93,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 	[CKBindingsContextStack addObject:[NSDictionary dictionaryWithObjectsAndKeys:context,@"context",[NSNumber numberWithInt:options],@"options",nil]];
 	
 	if(policy == CKBindingsContextPolicyRemovePreviousBindings){
-		[[CKBindingsManager defaultManager] unbindAllBindingsWithContext:context];
+		[[CKBindingsManager defaultManager] unbindAllBindingsWithContext:context doNotUnbindBecauseObjectIsDeallocated:NO];
 	}
 }
 
@@ -104,8 +104,13 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 }
 
 + (void)removeAllBindingsForContext:(id)context{
-	[[CKBindingsManager defaultManager]unbindAllBindingsWithContext:context];
+    [self removeAllBindingsForContext:context doNotUnbindBecauseObjectIsDeallocated:NO];
 }
+
++ (void)removeAllBindingsForContext:(id)context doNotUnbindBecauseObjectIsDeallocated:(BOOL)doNotUnbindBecauseObjectIsDeallocated{
+	[[CKBindingsManager defaultManager]unbindAllBindingsWithContext:context doNotUnbindBecauseObjectIsDeallocated:doNotUnbindBecauseObjectIsDeallocated];
+}
+
 
 + (void)validateCurrentBindingsContext{
 #ifdef DEBUG
@@ -138,7 +143,7 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
             }
             
             //This retains self : CKDebugLog(@"WARNING : the following context is beeing cleared as it's object is deallocated : {context : %@\n}",ref);
-            [NSObject removeAllBindingsForContext:ref];
+            [NSObject removeAllBindingsForContext:ref doNotUnbindBecauseObjectIsDeallocated:YES];
         }];
     }
 	[NSObject beginBindingsContext:weakRef policy:policy options:options];
