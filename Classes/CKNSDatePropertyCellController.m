@@ -455,6 +455,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
                 CKNSDateSheetControllersSingleton = [[NSMutableDictionary dictionary]retain];
             });
             [CKNSDateSheetControllersSingleton setObject:sheetController forKey:dateSheetControllerKey];
+            
+            [self scrollToRow];
         }
         else{
             CKNSDateViewController* dateController = nil;
@@ -476,14 +478,15 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             sheetController.delegate = self;
             [dateController setProperty:self.value];
             
-            [self scrollToRow];
             
-            //if(!sheetController.visible){
+            if(!sheetController.visible){
                 UIView* parentView = self.containerController.view;
                 [sheetController showFromRect:[parentView bounds] 
                                        inView:parentView 
                                      animated:YES];
-            //}
+            }
+            
+            [self scrollToRow];
         }
     }
     else{
