@@ -55,6 +55,7 @@ NSString* CKStyleSeparatorColor = @"separatorColor";
 NSString* CKStyleSeparatorWidth = @"separatorWidth";
 NSString* CKStyleSeparatorStyle = @"separatorStyle";
 
+NSString* CKStyleBorderShadowColor = @"borderShadowColor";
 
 NSString* CKStyleViewDescription = @"@views";
 NSString* CKStyleAutoLayoutConstraints = @"@constraints";
@@ -354,6 +355,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 	   || [style containsObjectForKey:CKStyleCornerSize]
 	   || [style containsObjectForKey:CKStyleBackgroundImage]
 	   || [style containsObjectForKey:CKStyleBorderColor]
+       || [style containsObjectForKey:CKStyleBorderShadowColor]
        //|| [style containsObjectForKey:CKStyleBorderWidth]
        //|| [style containsObjectForKey:CKStyleBorderStyle]
 	   //|| [style containsObjectForKey:CKStyleSeparatorColor]

@@ -163,8 +163,8 @@
 
 - (void)postInit{
 	[super postInit];
-	_rowInsertAnimation = UITableViewRowAnimationTop;
-	_rowRemoveAnimation = UITableViewRowAnimationTop;
+	_rowInsertAnimation = UITableViewRowAnimationFade;
+	_rowRemoveAnimation = UITableViewRowAnimationFade;
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;

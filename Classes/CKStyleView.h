@@ -39,8 +39,6 @@ typedef enum {
 	CKStyleViewSeparatorLocationAll = CKStyleViewBorderLocationAll
 } CKStyleViewSeparatorLocation;
 
-
-
 /**
  */
 @interface CKStyleView : UIView 
@@ -104,5 +102,15 @@ typedef enum {
 /**
  */
 @property (nonatomic, retain) UIColor *embossBottomColor;
+
+
+/**
+ */
+@property (nonatomic, retain) UIColor *borderShadowColor;
+
+/**
+ */
+@property (nonatomic, assign) CGFloat borderShadowRadius;
+
 
 @end

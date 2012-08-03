@@ -59,6 +59,7 @@
 @interface CKStyleView () 
 //@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
+@property (nonatomic, assign) CGSize borderShadowOffset;
 @end
 
 
@@ -101,6 +102,10 @@
 @synthesize corners = _corners;
 @synthesize roundedCornerSize = _roundedCornerSize;
 
+@synthesize borderShadowColor = _borderShadowColor;
+@synthesize borderShadowRadius = _borderShadowRadius;
+@synthesize borderShadowOffset = _borderShadowOffset;
+
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
 	self.borderWidth = 1;
@@ -120,6 +125,9 @@
    // self.contentMode = UIViewContentModeTopLeft;
     self.clipsToBounds = 0;
     self.userInteractionEnabled = NO;
+    
+    _borderShadowRadius = 2;
+    _borderShadowOffset = CGSizeMake(0,0);
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -183,6 +191,19 @@
 	}
 	return self;
 }
+- (void)dealloc {
+    //	[_updater release]; _updater = nil;
+	[_image release]; _image = nil;
+	[_gradientColors release]; _gradientColors = nil;
+	[_gradientColorLocations release]; _gradientColorLocations = nil;
+	[_borderColor release]; _borderColor = nil;
+	[_separatorColor release]; _separatorColor = nil;
+	[_fillColor release]; _fillColor = nil;
+	[_embossTopColor release]; _embossTopColor = nil;
+	[_embossBottomColor release]; _embossBottomColor = nil;
+    [_borderShadowColor release]; _borderShadowColor = nil;
+	[super dealloc];
+}
 
 //HACK to control how to paint using the background color !
 - (void)setBackgroundColor:(UIColor *)color{
@@ -209,6 +230,7 @@
         
         self.opaque = YES;
         self.backgroundColor = [UIColor blackColor];
+        [self.layer setShouldRasterize:NO];
     }
 }
 
@@ -225,7 +247,21 @@
             [super setBackgroundColor:[UIColor clearColor]];
             self.opaque = NO;
         }
-        [self setNeedsDisplay];
+        [self.layer setShouldRasterize:NO];
+    }
+}
+
+- (void)setBorderLocation:(NSInteger)theborderLocation{
+    if(_borderLocation != theborderLocation){
+        _borderLocation = theborderLocation;
+        [self.layer setShouldRasterize:NO];
+    }
+}
+
+- (void)setSeparatorLocation:(NSInteger)theseparatorLocation{
+    if(_separatorLocation != theseparatorLocation){
+        _separatorLocation = theseparatorLocation;
+        [self.layer setShouldRasterize:NO];
     }
 }
 
@@ -235,18 +271,7 @@
     _borderWidth = width;
 }
 
-- (void)dealloc {
-//	[_updater release]; _updater = nil;
-	[_image release]; _image = nil;
-	[_gradientColors release]; _gradientColors = nil;
-	[_gradientColorLocations release]; _gradientColorLocations = nil;
-	[_borderColor release]; _borderColor = nil;
-	[_separatorColor release]; _separatorColor = nil;
-	[_fillColor release]; _fillColor = nil;
-	[_embossTopColor release]; _embossTopColor = nil;
-	[_embossBottomColor release]; _embossBottomColor = nil;
-	[super dealloc];
-}
+
 
 #pragma mark - Emboss Paths
 
@@ -418,8 +443,100 @@
 	}
 }
 
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions: YES];
+    
+    if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
+        CALayer* mask = self.layer.mask;
+        if(mask){
+            //generate size content image using _borderLocation _borderShadowRadius _borderShadowOffset
+            //compute anchor point !
+            
+            CGPoint offset = CGPointMake(MIN(0,-_borderShadowRadius + _borderShadowOffset.width),MIN(0,-_borderShadowRadius + _borderShadowOffset.height));
+            //limit offset if no border top or bottom
+            
+            CGSize size = self.bounds.size;
+            size.width += 2 * _borderShadowRadius + fabs(_borderShadowOffset.width);
+            size.height += 2 * _borderShadowRadius + fabs(_borderShadowOffset.height); //to crop if no border top or bottom
+            
+            if(!(_borderLocation & CKStyleViewBorderLocationBottom)){
+                if(size.height > self.bounds.size.height){
+                    size.height = fabs(offset.y) + self.bounds.size.height;
+                }
+            }
+            
+            if(!(_borderLocation & CKStyleViewBorderLocationTop)){
+                if(offset.y < 0){
+                    size.height -= fabs(offset.y);
+                    offset.y = 0;
+                }
+            }
+            
+            mask.frame = CGRectMake(offset.x,offset.y,size.width,size.height);
+        }
+    }
+    [CATransaction commit];
+}
+
 - (void)drawRect:(CGRect)rect {
     self.layer.needsDisplayOnBoundsChange = YES;
+    
+    if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
+        
+        [CATransaction begin];
+        [CATransaction setDisableActions: YES];
+        
+        self.layer.shadowColor = [self.borderShadowColor CGColor];
+        self.layer.shadowOffset = self.borderShadowOffset;
+        self.layer.shadowRadius = self.borderShadowRadius;
+        self.layer.shadowOpacity = 1;
+        self.clipsToBounds = NO;
+        
+        CALayer* mask = self.layer.mask;
+        if(!mask){
+            mask = [[[CALayer alloc]init]autorelease];
+            self.layer.mask = mask;
+        }
+        
+        //generate size content image using _borderLocation _borderShadowRadius _borderShadowOffset
+        //compute anchor point !
+        
+        CGPoint offset = CGPointMake(MIN(0,(-2 * _borderShadowRadius) + _borderShadowOffset.width),MIN(0,(-2 * _borderShadowRadius) + _borderShadowOffset.height));
+        //limit offset if no border top or bottom
+        
+        CGSize size = self.bounds.size;
+        size.width += 4 * _borderShadowRadius + fabs(_borderShadowOffset.width);
+        size.height += 4 * _borderShadowRadius + fabs(_borderShadowOffset.height); //to crop if no border top or bottom
+        
+        
+        CGRect shadowFrame = self.layer.bounds;
+        if(!(_borderLocation & CKStyleViewBorderLocationBottom)){
+            if(size.height > self.bounds.size.height){
+                size.height = fabs(offset.y) + self.bounds.size.height;
+            }
+            shadowFrame.size.height += _borderShadowRadius;
+        }
+        
+        if(!(_borderLocation & CKStyleViewBorderLocationTop)){
+            if(offset.y < 0){
+                size.height -= fabs(offset.y);
+                offset.y = 0;
+            }
+            shadowFrame.origin.y = -_borderShadowRadius;
+            shadowFrame.size.height += _borderShadowRadius;
+        }
+        
+        
+        self.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
+        
+        mask.backgroundColor = [[UIColor whiteColor]CGColor];
+        mask.frame = CGRectMake(offset.x,offset.y,size.width,size.height);
+        
+        [CATransaction commit];
+    }
     
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
@@ -642,15 +759,18 @@
 	// Border
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor] && _borderWidth > 0 && _borderLocation != CKStyleViewBorderLocationNone){
 		CGContextSaveGState(gc);
+        
 		[_borderColor setStroke];
 		CGContextSetLineWidth(gc, self.borderWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
 		[self generateBorderPath:borderPath withStyle:_borderLocation width:_borderWidth];
+        
 		CGContextAddPath(gc, borderPath);
 		CFRelease(borderPath);
 		CGContextStrokePath(gc);
 		CGContextRestoreGState(gc);
 	}
+    [self.layer setShouldRasterize:YES];
 }
 
 @end

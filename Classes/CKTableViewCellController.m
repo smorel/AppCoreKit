@@ -977,11 +977,6 @@
 }
 
 - (void)setupView:(UIView *)view{
-    /*if(self.cellStyle == CKTableViewCellStyleIPadForm
-     || self.cellStyle == CKTableViewCellStyleIPhoneForm
-     || self.cellStyle == CKTableViewCellStyleSubtitle2){
-     [NSObject removeAllBindingsForContext:_cacheLayoutBindingContextId];
-     }*/
     self.isInSetup = YES;
     
     [self reapplyStyleForBackgroundViews];
@@ -994,13 +989,6 @@
         }];
     }
     
-    /*[CATransaction begin];
-     [CATransaction 
-     setValue: [NSNumber numberWithBool: YES]
-     forKey: kCATransactionDisableActions];*/
-    
-    //Setup the tableViewCell using internal values.
-    //Those values can then be overloaded by setup block
 	CKAssert([view isKindOfClass:[UITableViewCell class]],@"Invalid view type");
     
     UITableViewCell* cell = (UITableViewCell*)view;
@@ -1014,36 +1002,8 @@
     cell.editingAccessoryView = self.editingAccessoryView;
     if(!self.editingAccessoryView) cell.editingAccessoryType = self.editingAccessoryType;
     
-	//[view beginBindingsContextByRemovingPreviousBindings];
 	[self setupCell:cell];
 	[super setupView:view];
-	//[view endBindingsContext];
-    
-    
-    //TODO : Check if necessary as setting values on controller or cell will invalidate the size
-    //and as a side effect tell the table to refresh the view with this new size !
-    /*
-     if(self.cellStyle == CKTableViewCellStyleIPadForm
-     || self.cellStyle == CKTableViewCellStyleIPhoneForm
-     || self.cellStyle == CKTableViewCellStyleSubtitle2){
-     [NSObject beginBindingsContext:_cacheLayoutBindingContextId policy:CKBindingsContextPolicyRemovePreviousBindings];
-     [cell.detailTextLabel bind:@"text" target:self action:@selector(updateLayout:)];
-     [cell.textLabel bind:@"text" target:self action:@selector(updateLayout:)];
-     [NSObject endBindingsContext];	
-     }
-     */
-    
-    //[CATransaction commit];
-    
-    
-    /* CGSize size;
-     if(self.sizeBlock){
-     size = self.sizeBlock(self);
-     }else{
-     size = [self computeSize];
-     }
-     self.size = size;
-     */
     
     self.isInSetup = NO;
 }
