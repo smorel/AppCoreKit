@@ -1010,7 +1010,7 @@
 		964C2083153DD92E00398E0F /* CKTableViewCellController+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+BlockBasedInterface.m"; path = "Classes/CKTableViewCellController+BlockBasedInterface.m"; sourceTree = "<group>"; };
 		964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormSection+PropertyGrid.h"; path = "Classes/CKFormSection+PropertyGrid.h"; sourceTree = "<group>"; };
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
-		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.x/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
+		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.0/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
 		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Singleton.h"; path = "Classes/NSObject+Singleton.h"; sourceTree = "<group>"; };
 		967C51801538BD4E00B3F785 /* NSObject+Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Singleton.m"; path = "Classes/NSObject+Singleton.m"; sourceTree = "<group>"; };
@@ -2879,7 +2879,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${CloudKitFrameworks}/VendorsKit/1.0.x/\"",
+					"\"${CloudKitFrameworks}/VendorsKit/1.0.0/\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
@@ -2906,7 +2906,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${CloudKitFrameworks}/VendorsKit/1.0.x/\"",
+					"\"${CloudKitFrameworks}/VendorsKit/1.0.0/\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CloudKit/AppCoreKit-Prefix.pch";
