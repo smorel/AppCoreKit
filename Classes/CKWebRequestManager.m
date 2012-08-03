@@ -70,19 +70,25 @@
         self.runningRequests = [NSMutableArray array];
         self.waitingRequests = [NSMutableArray array];
         
+        __block BOOL alertDisplayed = NO;
         __block CKWebRequestManager *bself = self;
         self.disconnectBlock = ^{
             [bself pauseAllRequests];
             
-            CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"You don't seems to have Internet access right now, do you want to try again?")] autorelease];
-			[alertView addButtonWithTitle:_(@"Dismiss") action:^{
-                [bself didHandleDisconnect];
-            }];
-			[alertView addButtonWithTitle:_(@"Retry") action:^{
-                [bself didHandleDisconnect];
-                [bself retryAllRequests];
-			}];
-			[alertView show];
+            if(!alertDisplayed){
+                CKAlertView *alertView = [[[CKAlertView alloc] initWithTitle:_(@"No Internet Connection") message:_(@"You don't seems to have Internet access right now, do you want to try again?")] autorelease];
+                [alertView addButtonWithTitle:_(@"Dismiss") action:^{
+                    alertDisplayed = NO;
+                    [bself didHandleDisconnect];
+                }];
+                [alertView addButtonWithTitle:_(@"Retry") action:^{
+                    alertDisplayed = NO;
+                    [bself didHandleDisconnect];
+                    [bself retryAllRequests];
+                }];
+                alertDisplayed = YES;
+                [alertView show];
+            }
         };
         
         self.reachability = [Reachability reachabilityForInternetConnection];
