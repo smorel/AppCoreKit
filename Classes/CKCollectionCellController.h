@@ -178,6 +178,10 @@ typedef NSUInteger CKItemViewFlags;
  */
 - (void)applyStyle;
 
+/**
+ */
+- (NSMutableDictionary*)stylesheet;
+
 ///-----------------------------------
 /// @name Initializing a Controller
 ///-----------------------------------
@@ -195,3 +199,4 @@ typedef NSUInteger CKItemViewFlags;
 - (void)setSize:(CGSize)size notifyingContainerForUpdate:(BOOL)notifyingContainerForUpdate;
 
 @end
+

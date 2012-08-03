@@ -262,5 +262,9 @@
     _indexPath = [[NSIndexPath indexPathForRow:[theindexPath row] inSection:[theindexPath section]]retain];
 }
 
+- (NSMutableDictionary*)stylesheet{
+    return [self controllerStyle];
+}
+
 @end
 
