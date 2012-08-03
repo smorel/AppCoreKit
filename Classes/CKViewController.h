@@ -48,7 +48,7 @@ typedef enum CKViewControllerState{
 }
 
 ///-----------------------------------
-/// @name Creating Controller Objects
+/// @name Creating initialized View Controller Objects
 ///-----------------------------------
 /** 
  This returns an autorelease view controller of the calling class.
@@ -60,7 +60,7 @@ typedef enum CKViewControllerState{
 + (id)controllerWithName:(NSString*)name;
 
 ///-----------------------------------
-/// @name Identification
+/// @name Identifying View Controller at runtime
 ///-----------------------------------
 /** 
  Setting a name is almost only used for stylesheets.
@@ -69,7 +69,7 @@ typedef enum CKViewControllerState{
 @property (nonatomic,retain) NSString* name;
 
 ///-----------------------------------
-/// @name View Controller Definition
+/// @name Customizing View Controller behaviour
 ///-----------------------------------
 /** 
  This block is called at the begining of viewWillAppear
@@ -121,7 +121,7 @@ typedef enum CKViewControllerState{
 @property (nonatomic, copy) CKViewControllerOrientationBlock orientationChangeBlock;
 
 ///-----------------------------------
-/// @name Interface Orientation
+/// @name Managing Interface Orientation
 ///-----------------------------------
 
 /** 
@@ -130,18 +130,19 @@ typedef enum CKViewControllerState{
 @property (nonatomic,assign) CKInterfaceOrientation supportedInterfaceOrientations;
 
 ///-----------------------------------
-/// @name Inline Debugger
+/// @name Managing the Inline Debugger
 ///-----------------------------------
 
 /** 
  This is an access to the inline debugger for this view controller.
+ @warning This property is only available in DEBUG.
  */
 #ifdef DEBUG
 @property(nonatomic,retain,readonly)CKInlineDebuggerController* inlineDebuggerController;
 #endif
 
 ///-----------------------------------
-/// @name Navigation
+/// @name Managing Navigation Bar Button Items
 ///-----------------------------------
 /** 
  Specify the bar button item that should be displayed at the right of the navigation bar.
@@ -155,7 +156,7 @@ typedef enum CKViewControllerState{
 
 
 ///-----------------------------------
-/// @name State
+/// @name Getting the View Controller State
 ///-----------------------------------
 /** 
  Specify the bar button item that should be displayed at the left of the navigation bar.
@@ -167,6 +168,30 @@ typedef enum CKViewControllerState{
  */
 @property (nonatomic, assign,readonly)  BOOL isViewDisplayed;
 
+
+///-----------------------------------
+/// @name Managing Stylesheets
+///-----------------------------------
+
+/** 
+ This method find the left style for the left bar button and apply this style on it.
+ */
+- (void)applyStyleForLeftBarButtonItem;
+
+/** 
+ This method find the right style for the left bar button and apply this style on it.
+ */
+- (void)applyStyleForRightBarButtonItem;
+
+/** 
+ This method applies style on the navigation controller, its navigationbar and toolbar and bar buttons.
+ */
+- (void)applyStyleForNavigation;
+
+/** 
+ */
+- (NSMutableDictionary*)stylesheet;
+
 ///-----------------------------------
 /// @name Private
 ///-----------------------------------
@@ -177,12 +202,12 @@ typedef enum CKViewControllerState{
  */
 - (void)postInit;
 
-- (void)applyStyleForLeftBarButtonItem;
-- (void)applyStyleForRightBarButtonItem;
-- (void)applyStyleForNavigation;
 
-
+/** This method forces a complete reload of the view and its style. This is mainly usefull while reloading stylesheet definitions at runtime.
+ @warning In theory you should not need to call this method directly.
+ */
 - (void)updateStylesheets;
+
 
 @end
 

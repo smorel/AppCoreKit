@@ -163,6 +163,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	[super dealloc];
 }
 
+- (NSMutableDictionary*)stylesheet{
+    return [self controllerStyle];
+}
+
 - (void)updateStylesheets {
     if ([self isViewLoaded]) {
         self.styleHasBeenApplied = NO;
