@@ -18,6 +18,8 @@ typedef void(^CKViewControllerAnimatedBlock)(CKViewController* controller,BOOL a
 typedef void(^CKViewControllerBlock)(CKViewController* controller);
 typedef void(^CKViewControllerOrientationBlock)(CKViewController* controller, UIInterfaceOrientation orientation);
 
+typedef void(^CKViewControllerEditingBlock)(BOOL editing);
+
 /**
  */
 typedef enum CKInterfaceOrientation{
@@ -167,6 +169,11 @@ typedef enum CKViewControllerState{
  Returns whether the view is currently displayed on screen or not
  */
 @property (nonatomic, assign,readonly)  BOOL isViewDisplayed;
+
+/**
+ This block is called when the controller editing property changes changes
+ */
+@property (nonatomic, copy) CKViewControllerEditingBlock editingBlock;
 
 
 ///-----------------------------------

@@ -61,6 +61,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 @synthesize styleHasBeenApplied;
 @synthesize state;
 @synthesize isViewDisplayed;
+@synthesize editingBlock = _editingBlock;
 
 #ifdef DEBUG
 @synthesize inlineDebuggerController = _inlineDebuggerController;
@@ -150,6 +151,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     _navigationTitleBindingContext = nil;
     [_orientationChangeBlock release];
     _orientationChangeBlock = nil;
+    
+    [_editingBlock release];
+    _editingBlock = nil;
     
 #ifdef DEBUG
     [_inlineDebuggerController release];
@@ -698,12 +702,20 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self willChangeValueForKey:@"editing"];
     [super setEditing:editing];
     [self didChangeValueForKey:@"editing"];
+    
+    if(_editingBlock){
+        _editingBlock(editing);
+    }
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated{
     [self willChangeValueForKey:@"editing"];
     [super setEditing:editing animated:animated];
     [self didChangeValueForKey:@"editing"];
+    
+    if(_editingBlock){
+        _editingBlock(editing);
+    }
 }
 
 //This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
