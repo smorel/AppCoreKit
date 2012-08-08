@@ -79,6 +79,19 @@
     self.subControllersFactory = factory;
     self.subControllers = [NSMutableArray array];
     
+    int i =0;
+    for(id object in [collection allObjects]){
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
+        [self.subControllers insertObject:subcontroller atIndex:indexPath.row];
+        
+        [subcontroller performSelector:@selector(setContainerController:) withObject:self];
+        [subcontroller performSelector:@selector(setValue:) withObject:object];
+        [subcontroller performSelector:@selector(setIndexPath:) withObject:indexPath];
+        
+        ++i;
+    }
+    
     self.linearCollectionController = [CKCollectionController controllerWithCollection:collection];
     _linearCollectionController.delegate = self;
     
