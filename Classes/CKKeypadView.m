@@ -35,7 +35,7 @@ typedef enum {
 
 /**
  */
-@interface CKLayout : NSObject {
+@interface CKKeyPadLayout : NSObject {
 	// No properties.
 }
 
@@ -92,10 +92,10 @@ typedef enum {
 
 //
 
-@implementation CKLayout
+@implementation CKKeyPadLayout
 
 + (id)layout {
-	return [[[CKLayout alloc] init] autorelease];
+	return [[[CKKeyPadLayout alloc] init] autorelease];
 }
 
 //
@@ -204,7 +204,7 @@ typedef enum {
 	for (count=0 ; count<nbColumns*nbLines ; count++) {
 		[blocks addObject:[CKLayoutBlock blockWithSize:blockSize name:@"GridBlock"]];
 	}
-	NSArray *layoutBlocks = [[CKLayout layout] layoutBlocks:blocks alignement:CKLayoutAlignmentJustify lineWidth:self.bounds.size.width lineHeight:blockSize.height];
+	NSArray *layoutBlocks = [[CKKeyPadLayout layout] layoutBlocks:blocks alignement:CKLayoutAlignmentJustify lineWidth:self.bounds.size.width lineHeight:blockSize.height];
 	
 	count = 0;
 	for (UIView *view in self.subviews) {
