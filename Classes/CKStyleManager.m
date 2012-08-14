@@ -7,6 +7,7 @@
 //
 
 #import "CKStyleManager.h"
+#import "UIView+Style.h"
 
 static CKStyleManager* CKStyleManagerDefault = nil;
 static NSInteger kLogEnabled = -1;
@@ -53,6 +54,24 @@ static NSInteger kLogEnabled = -1;
 
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName{
     return [self dictionaryForObject:object propertyName:propertyName];
+}
+
+@end
+
+
+@implementation NSObject (CKStyleManager)
+
+- (NSMutableDictionary*)stylesheet{
+#if !TARGET_IPHONE_SIMULATOR
+    return [self appliedStyle];
+#else
+    return [self debugAppliedStyle];
+#endif
+}
+
+- (void)findAndApplyStylesheetFromStylesheet:(NSMutableDictionary*)parentStylesheet  propertyName:(NSString*)propertyName{
+    NSMutableDictionary* style = [parentStylesheet styleForObject:self propertyName:propertyName];
+    [self applyStyle:style];
 }
 
 @end

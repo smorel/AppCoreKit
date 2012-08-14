@@ -66,3 +66,11 @@
 - (NSMutableDictionary*)styleForObject:(id)object propertyName:(NSString*)propertyName;
 
 @end
+
+
+@interface NSObject (CKStyleManager)
+
+- (NSMutableDictionary*)stylesheet;
+- (void)findAndApplyStylesheetFromStylesheet:(NSMutableDictionary*)parentStylesheet propertyName:(NSString*)propertyName;
+
+@end
