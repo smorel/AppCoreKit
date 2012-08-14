@@ -345,7 +345,7 @@ NSString* CKNSValueTransformerCacheSelectorTag = @"CKNSValueTransformerCacheSele
 	}
 	
 	//if no conversion requiered, set the property directly
-	if([source isKindOfClass:type]){
+	if(![source isKindOfClass:[NSArray class]] && [source isKindOfClass:type]){
 		id result = source;
 		if(AUTO_LOCALIZATION && [result isKindOfClass:[NSString class]]){
 			result = _(result);
