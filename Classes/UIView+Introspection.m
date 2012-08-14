@@ -146,10 +146,10 @@
 																		   readOnly:NO]];
 	[properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"clipsToBounds"
 																		   readOnly:NO]];
-    if([CKOSVersion() floatValue] >= 6){
+    //if([CKOSVersion() floatValue] >= 6){
         [properties addObject:[CKClassPropertyDescriptor boolDescriptorForPropertyNamed:@"hidden"
                                                                                readOnly:NO]];
-    }
+    //}
     
 	[properties addObject:[CKClassPropertyDescriptor floatDescriptorForPropertyNamed:@"alpha"
 																			readOnly:NO]];
