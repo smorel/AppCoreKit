@@ -154,10 +154,17 @@ typedef enum{
 @property(nonatomic,retain)NSDictionary* valuesAndLabels;
 @end
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /**
  */
 CKEnumDescriptor* CKEnumDefinitionFunc(NSString* name,BOOL bitmask, NSString* strValues, ...);
+    
+#ifdef __cplusplus
+}
+#endif
 
 /**
  */
