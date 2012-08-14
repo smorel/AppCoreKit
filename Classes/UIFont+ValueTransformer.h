@@ -20,10 +20,11 @@
 
 /**
  */
-+ (UIFont*)convertFromNSNumber:(NSNumber*)n;
++ (UIFont*)convertFromNSArray:(NSArray*)ar;
 
 /**
  */
-+ (NSString*)convertToNSString:(UIFont*)color;
++ (NSString*)convertToNSString:(UIFont*)font;
+
 
 @end

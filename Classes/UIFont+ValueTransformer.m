@@ -12,23 +12,19 @@
 @implementation UIFont (CKValueTransformer)
 
 + (UIFont*)convertFromNSString:(NSString*)str{
-    CKAssert(NO,@"Not implemented");
-    return nil;
-    
-	/*NSArray* components = [str componentsSeparatedByString:@" "];
-    if([components count] == 1){
-        NSString* str = [components objectAtIndex:0];
-    }*/
+	NSArray* components = [str componentsSeparatedByString:@" "];
+    return [UIFont convertFromNSArray:components];
 }
 
-+ (UIFont*)convertFromNSNumber:(NSNumber*)n{
-    CKAssert(NO,@"Not implemented");
-    return nil;
++ (UIFont*)convertFromNSArray:(NSArray*)ar{
+    CKAssert([ar count] == 2,@"Invalid font format");
+    NSString* fontName = [ar objectAtIndex:0];
+    CGFloat sizeValue = [[ar objectAtIndex:1]floatValue];
+    return [UIFont fontWithName:fontName size:sizeValue];
 }
 
-+ (NSString*)convertToNSString:(UIFont*)color{
-    CKAssert(NO,@"Not implemented");
-    return nil;
++ (NSString*)convertToNSString:(UIFont*)font{
+    return [NSString stringWithFormat:@"%@,%.0f",font.fontName,font.pointSize];
 }
 
 @end
