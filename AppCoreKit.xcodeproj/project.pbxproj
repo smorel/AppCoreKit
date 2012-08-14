@@ -471,6 +471,8 @@
 		964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */; };
 		9660F472156308F700FE2081 /* VendorsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660F471156308F700FE2081 /* VendorsKit.framework */; };
+		9668B94E15DAFF7100C57715 /* CKLayoutBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 9668B94C15DAFF7100C57715 /* CKLayoutBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9668B94F15DAFF7100C57715 /* CKLayoutBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9668B94D15DAFF7100C57715 /* CKLayoutBox.mm */; };
 		967C51811538BD4E00B3F785 /* NSObject+Singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51821538BD4E00B3F785 /* NSObject+Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* NSObject+Singleton.m */; };
 		967C51851538BE8200B3F785 /* CKDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C51831538BE8100B3F785 /* CKDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1011,6 +1013,8 @@
 		964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormSection+PropertyGrid.h"; path = "Classes/CKFormSection+PropertyGrid.h"; sourceTree = "<group>"; };
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
 		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.0/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
+		9668B94C15DAFF7100C57715 /* CKLayoutBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKLayoutBox.h; path = Classes/CKLayoutBox.h; sourceTree = "<group>"; };
+		9668B94D15DAFF7100C57715 /* CKLayoutBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKLayoutBox.mm; path = Classes/CKLayoutBox.mm; sourceTree = "<group>"; };
 		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Singleton.h"; path = "Classes/NSObject+Singleton.h"; sourceTree = "<group>"; };
 		967C51801538BD4E00B3F785 /* NSObject+Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Singleton.m"; path = "Classes/NSObject+Singleton.m"; sourceTree = "<group>"; };
@@ -1719,6 +1723,7 @@
 				7506E3F913B8FD5500EE1471 /* Bindings */,
 				7506E3FB13B8FD9A00EE1471 /* Mappings */,
 				7506E3F113B8FAE400EE1471 /* Styles */,
+				9668B94A15DAFF5600C57715 /* Layout */,
 				7506E3FC13B8FDC700EE1471 /* UI */,
 				967CD1F315814011007F16D7 /* Mock */,
 				7506E40A13B9009400EE1471 /* CoreData */,
@@ -2055,6 +2060,15 @@
 				7560DB6613B8ED3600268D13 /* CKGridView+NSIndexPath.m */,
 			);
 			name = Private;
+			sourceTree = "<group>";
+		};
+		9668B94A15DAFF5600C57715 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				9668B94C15DAFF7100C57715 /* CKLayoutBox.h */,
+				9668B94D15DAFF7100C57715 /* CKLayoutBox.mm */,
+			);
+			name = Layout;
 			sourceTree = "<group>";
 		};
 		966B00C51538884200360C0F /* Object Extension */ = {
@@ -2408,6 +2422,7 @@
 				96812C6B159A2E67002160C1 /* CKClassPropertyDescriptor_private.h in Headers */,
 				96EBE433159A43AB00E0F209 /* UIView+Name.h in Headers */,
 				963833BC15AF61D40089B86E /* CKTableViewCellController+DynamicLayout_Private.h in Headers */,
+				9668B94E15DAFF7100C57715 /* CKLayoutBox.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2759,6 +2774,7 @@
 				B02E75D61587E2B300A59A5A /* CKTableViewCellController+FlatHierarchy.m in Sources */,
 				96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */,
 				96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */,
+				9668B94F15DAFF7100C57715 /* CKLayoutBox.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
