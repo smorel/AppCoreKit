@@ -109,14 +109,15 @@ lastComputedSize,lastPreferedSize,debugView;
     }
     
     return ret;
+    //return CGSizeMake(ret.width + box.padding.right + box.padding.left,ret.height+box.padding.top + box.padding.bottom);
 }
 
 + (void)performLayoutWithFrame:(CGRect)theframe forBox:(NSObject<CKLayoutBoxProtocol>*)box{
     for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
-        CGRect boxframe = CGRectMake(theframe.origin.x + subbox.padding.left,
-                                     theframe.origin.y + subbox.padding.top,
-                                     MAX(0,theframe.size.width - (subbox.padding.left + subbox.padding.right)),
-                                     MAX(0,theframe.size.height - (subbox.padding.top + subbox.padding.bottom)));
+        CGRect boxframe = CGRectMake(theframe.origin.x/* + subbox.padding.left*/,
+                                     theframe.origin.y/* + subbox.padding.top*/,
+                                     MAX(0,theframe.size.width/* - (subbox.padding.left + subbox.padding.right)*/),
+                                     MAX(0,theframe.size.height/* - (subbox.padding.top + subbox.padding.bottom)*/));
         [subbox performLayoutWithFrame:boxframe];
     }
 }
@@ -283,11 +284,37 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    if(self.layoutBoxes && [self.layoutBoxes count] > 0){
+        CGFloat maxWidth = 0;
+        CGFloat maxHeight = 0;
+        
+        for(NSObject<CKLayoutBoxProtocol>* box in self.layoutBoxes){
+            CGSize constraint = size;
+            
+            CGSize s = [box preferedSizeConstraintToSize:constraint];
+            
+            if(s.width > maxWidth) maxWidth = s.width;
+            if(s.height > maxHeight) maxHeight = s.height;
+        }
+        
+        size = CGSizeMake(maxWidth,maxHeight);
+    }
+    
+    size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    
+    self.lastPreferedSize = CGSizeMake(size.width + self.padding.left + self.padding.right,size.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
-- (void)performLayoutWithFrame:(CGRect)frame{
+- (void)performLayoutWithFrame:(CGRect)theframe{
+    CGSize size = [self preferedSizeConstraintToSize:theframe.size];
+    CGRect frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    
+    //If the view has its own layout, the sub boxes are placed relative to it !
+    if(self.layoutBoxes && [self.layoutBoxes count] > 0){
+        frame = CGRectMake(0,0,frame.size.width,frame.size.height);
+    }
+    
     [CKLayoutBox performLayoutWithFrame:frame forBox:self];
 }
 
@@ -338,6 +365,7 @@ lastComputedSize,lastPreferedSize;
         return CGSizeMake(0,0);
     
     size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
@@ -479,7 +507,9 @@ lastComputedSize,lastPreferedSize;
         }
     }
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width) + self.padding.left + self.padding.right,
+                                                                                 MIN(maxHeight,size.height) + self.padding.bottom + self.padding.top) 
+                                                               forBox:self];
     return self.lastPreferedSize;
 }
 
@@ -491,7 +521,7 @@ lastComputedSize,lastPreferedSize;
     if([self.layoutBoxes count] > 0){
 
         //Compute layout
-        CGFloat y = self.frame.origin.y;
+        CGFloat y = self.frame.origin.y + self.padding.top;
         hash_set<id> appliedMargins;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
@@ -516,24 +546,7 @@ lastComputedSize,lastPreferedSize;
                     
                     CGSize subsize = box.lastPreferedSize;
                     
-                    CGFloat boxX = self.frame.origin.x + box.margins.left;
-                    CGFloat boxY = y;
-                    CGFloat boxWidth = MAX(0,subsize.width);
-                    CGFloat boxHeight = MAX(0,subsize.height);
-                    
-                    if(((boxX - self.frame.origin.x) + subsize.width + box.padding.right + box.margins.right) < size.width){
-                        switch(self.horizontalAlignment){
-                            case CKLayoutHorizontalAlignmentLeft:break; //this is already computed
-                            case CKLayoutHorizontalAlignmentRight: boxX = self.frame.origin.x + (size.width - boxWidth - box.margins.right); break;
-                            case CKLayoutVerticalAlignmentCenter:  boxX = self.frame.origin.x + ((size.width / 2) - (boxWidth / 2)); break; 
-                        }
-                    }
-                    
-                    CGRect boxframe = CGRectMake(boxX + box.padding.left,
-                                                 boxY + box.padding.top,
-                                                 boxWidth -  (box.padding.left + box.padding.right),
-                                                 boxHeight - (box.padding.top + box.padding.bottom));
-                    
+                    CGRect boxframe = CGRectMake(box.margins.left,y,MAX(0,subsize.width),MAX(0,subsize.height));
                     box.frame = CGRectIntegral(boxframe);
                     
                     y += subsize.height;
@@ -542,23 +555,33 @@ lastComputedSize,lastPreferedSize;
         }
         
         NSObject<CKLayoutBoxProtocol>* lastBox = [self previousVisibleBoxFromIndex:[self.layoutBoxes count] - 1];
-        CGFloat totalHeight = y + (lastBox ? lastBox.margins.bottom : 0) - self.frame.origin.y;
+        CGFloat totalHeight = y + (lastBox ? lastBox.margins.bottom : 0) - (self.frame.origin.y);
         
         //Handle Vertical alignment
+        CGFloat totalWidth = (size.width - self.padding.left - self.padding.right);
+        
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i]; 
             if(!box.hidden){
                 if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
-                    if(totalHeight < size.height){
-                        CGFloat offset = 0;
+                    CGFloat offsetX = self.frame.origin.x + self.padding.left;
+                    CGFloat offsetY = 0;
+                    switch(self.horizontalAlignment){
+                        case CKLayoutHorizontalAlignmentLeft:break; //this is already computed
+                        case CKLayoutHorizontalAlignmentRight: offsetX += totalWidth - box.frame.size.width; break;
+                        case CKLayoutVerticalAlignmentCenter:  offsetX += (totalWidth / 2) - (box.frame.size.width / 2); break; 
+                    }
+                    
+                    if(totalHeight < (size.height - self.padding.top - self.padding.bottom)){
                         switch(self.verticalAlignment){
                             case CKLayoutVerticalAlignmentTop: break; //default behaviour
-                            case CKLayoutVerticalAlignmentCenter:  offset = (size.height - totalHeight) / 2; break;
-                            case CKLayoutVerticalAlignmentBottom: offset = size.height - totalHeight; break;
+                            case CKLayoutVerticalAlignmentCenter:  offsetY = (size.height - totalHeight) / 2; break;
+                            case CKLayoutVerticalAlignmentBottom: offsetY = size.height - totalHeight; break;
                         }
-                        box.frame = CGRectMake(box.frame.origin.x,box.frame.origin.y + offset,box.frame.size.width,box.frame.size.height);
                     }
+                    
+                    box.frame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
                     [box performLayoutWithFrame:box.frame];
                 }
             }
@@ -577,6 +600,7 @@ lastComputedSize,lastPreferedSize;
         return CGSizeMake(0,0);
     
     size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    size = CGSizeMake(size.width - self.padding.left - self.padding.right,size.height - self.padding.top - self.padding.bottom);
     
     if(CGSizeEqualToSize(size, self.lastComputedSize))
         return self.lastPreferedSize;
@@ -721,7 +745,9 @@ lastComputedSize,lastPreferedSize;
         }
     }
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width) + self.padding.left + self.padding.right,
+                                                                                 MIN(maxHeight,size.height) + self.padding.bottom + self.padding.top) 
+                                                               forBox:self];
     return self.lastPreferedSize;
 }
 
@@ -731,9 +757,8 @@ lastComputedSize,lastPreferedSize;
     self.debugView.frame = self.frame;
        
     if([self.layoutBoxes count] > 0){
-        
         //Compute layout
-        CGFloat x =  self.frame.origin.x;
+        CGFloat x =  self.frame.origin.x + self.padding.left;
         hash_set<id> appliedMargins;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
@@ -759,24 +784,7 @@ lastComputedSize,lastPreferedSize;
                     
                     CGSize subsize = box.lastPreferedSize;
                     
-                    CGFloat boxX = x;
-                    CGFloat boxY = self.frame.origin.y + box.margins.top;
-                    CGFloat boxWidth = MAX(0,subsize.width);
-                    CGFloat boxHeight = MAX(0,subsize.height);
-                    
-                    if(((boxY - self.frame.origin.y) + subsize.height + box.padding.bottom + box.margins.bottom) < self.frame.size.height){
-                        switch(self.verticalAlignment){
-                            case CKLayoutVerticalAlignmentTop:break; //this is already computed
-                            case CKLayoutVerticalAlignmentBottom: boxY = self.frame.origin.y + (self.frame.size.height - boxHeight - (box.margins.bottom)); break; //this is already computed
-                            case CKLayoutVerticalAlignmentCenter:boxY = self.frame.origin.y + ((self.frame.size.height / 2) - (boxHeight / 2)); break; //this is already computed
-                        }
-                    }
-                    
-                    CGRect boxframe = CGRectMake(boxX + box.padding.left,
-                                                 boxY + box.padding.top,
-                                                 boxWidth -  (box.padding.left + box.padding.right),
-                                                 boxHeight - (box.padding.top + box.padding.bottom));
-                    
+                    CGRect boxframe = CGRectMake(x,box.margins.top,MAX(0,subsize.width),MAX(0,subsize.height));
                     box.frame = CGRectIntegral(boxframe);
                     
                     x += subsize.width;
@@ -789,20 +797,32 @@ lastComputedSize,lastPreferedSize;
         CGFloat totalWidth = x + (lastBox ? lastBox.margins.right : 0) -  self.frame.origin.x;
         
         //Handle Horizontal alignment
+        CGFloat totalHeight = (size.height - self.padding.top - self.padding.bottom);
+        
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
                 if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
-                    if(totalWidth < self.frame.size.width){
-                        CGFloat offset = 0;
+                    
+                    CGFloat offsetX = 0;
+                    CGFloat offsetY = self.frame.origin.y + self.padding.top;
+                    switch(self.verticalAlignment){
+                        case CKLayoutVerticalAlignmentTop:break; //this is already computed
+                        case CKLayoutVerticalAlignmentBottom: offsetY += totalHeight - box.frame.size.height; break; //this is already computed
+                        case CKLayoutVerticalAlignmentCenter: offsetY += (totalHeight  / 2) - (box.frame.size.height / 2); break; //this is already computed
+                    }
+                    
+                    
+                    if(totalWidth < (size.width - self.padding.left - self.padding.right)){
                         switch(self.horizontalAlignment){
                             case CKLayoutHorizontalAlignmentLeft: break; //default behaviour
-                            case CKLayoutHorizontalAlignmentCenter:  offset = (self.frame.size.width - totalWidth) / 2; break;
-                            case CKLayoutHorizontalAlignmentRight:   offset = (self.frame.size.width - totalWidth); break;
+                            case CKLayoutHorizontalAlignmentCenter:  offsetX = (self.frame.size.width - totalWidth) / 2; break;
+                            case CKLayoutHorizontalAlignmentRight:   offsetX = (self.frame.size.width - totalWidth); break;
                         }
-                        box.frame = CGRectMake(box.frame.origin.x + offset,box.frame.origin.y,box.frame.size.width,box.frame.size.height);
                     }
+                    
+                    box.frame = CGRectIntegral(CGRectMake(box.frame.origin.x + offsetX,box.frame.origin.y + offsetY,box.frame.size.width,box.frame.size.height));
                     [box performLayoutWithFrame:box.frame];
                 }
             }
@@ -838,13 +858,18 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    size.width -= self.padding.left + self.padding.right;
+    size.height -= self.padding.top + self.padding.bottom;
+    
     CGSize maxSize = CGSizeMake(size.width, (self.numberOfLines > 0) ? self.numberOfLines * self.font.lineHeight : MAXFLOAT);
     CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize lineBreakMode:self.lineBreakMode];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    
+    self.lastPreferedSize = CGSizeMake(ret.width + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
