@@ -73,6 +73,15 @@
  */
 @property(nonatomic,retain) UIButton*  disclosureButton;
 
+///-----------------------------------
+/// @name Accessing The Layout Prefered Height
+///-----------------------------------
+
+/** Return the contentView Layout prefered height for the specified width
+ Return MAXFLOAT in case no layout applies to the contentView.
+ */
+- (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width;
+
 @end
 
 
@@ -102,7 +111,9 @@ typedef enum CKTableViewCellStyle {
     
 	CKTableViewCellStyleIPadForm,
 	CKTableViewCellStyleIPhoneForm,
-	CKTableViewCellStyleSubtitle2
+	CKTableViewCellStyleSubtitle2,
+    
+	CKTableViewCellStyleCustomLayout
 } CKTableViewCellStyle;           
 
 

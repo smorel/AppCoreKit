@@ -78,15 +78,17 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 - (CGSize)computeSize{
     self.invalidatedSize = NO;
     
-#ifdef __IPHONE_6_0
-    //Using autolayout
-    if([CKOSVersion() floatValue] >= 6 && ![self.view translatesAutoresizingMaskIntoConstraints]){
-        UITableViewCell* view = (UITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+    if(self.cellStyle == CKTableViewCellStyleCustomLayout){
+        CKUITableViewCell* view = (CKUITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
         if(!view){
-            view = [[[UITableViewCell alloc]initWithStyle:self.cellStyle reuseIdentifier:[self identifier]]autorelease];
+            view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
             view.width = self.parentTableView.width;
+           
+            UIView* original = self.view; //For styles to apply correctly on view.
+            self.view = view;
             
             [self initView:view];
+            self.view = original;
             [[CKTableViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
         }
         
@@ -94,15 +96,13 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         
         view.contentView.height = 100;
         view.contentView.width = [self contentViewWidth];
-        return [view.contentView systemLayoutSizeFittingSize:CGSizeMake(view.contentView.width,60)];
-    }else{
-#endif
-        return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
-
-#ifdef __IPHONE_6_0
+        
+        CGFloat height = [view preferedHeightConstraintToWidth:view.contentView.width];
+        return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
     }
-#endif
     
+    return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
+
 }
 
 
@@ -592,7 +592,8 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     CKTableViewCellStyle cellStyle = self.cellStyle;
 	if(cellStyle == CKTableViewCellStyleIPadForm
        || cellStyle == CKTableViewCellStyleIPhoneForm
-       || cellStyle == CKTableViewCellStyleSubtitle2){
+       || cellStyle == CKTableViewCellStyleSubtitle2
+       || cellStyle == CKTableViewCellStyleCustomLayout){
         
         //When tableView will wuery for the first time the size, it will set sizeHasBeenQueriedByTableView to YES and call invalidateSize for a first computation
         //after what, each time invalidateSize is called, the size will get recomputed.
@@ -618,9 +619,6 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         return;
     
     [super setSize:s notifyingContainerForUpdate:notifyingContainerForUpdate];
-    /*if(self.tableViewCell){
-     [self performLayout];
-     }*/
 }
 
 
@@ -676,15 +674,11 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (void)performLayout{
-#ifdef __IPHONE_6_0
-    //Using autolayout
-    if([CKOSVersion() floatValue] >= 6
-       && ![self.view translatesAutoresizingMaskIntoConstraints])
-        return;
-#endif
-    
-    
     CKTableViewCellStyle cellStyle = self.cellStyle;
+    if(cellStyle == CKTableViewCellStyleCustomLayout){
+        return;
+    }
+    
     if(cellStyle == CKTableViewCellStyleIPadForm
        || cellStyle == CKTableViewCellStyleIPhoneForm
        || cellStyle == CKTableViewCellStyleSubtitle2){

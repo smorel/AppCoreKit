@@ -37,7 +37,8 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
                                                                         UITableViewCellStyleSubtitle,
                                                                         CKTableViewCellStyleIPadForm,
                                                                         CKTableViewCellStyleIPhoneForm,
-                                                                        CKTableViewCellStyleSubtitle2)];
+                                                                        CKTableViewCellStyleSubtitle2,
+                                                                        CKTableViewCellStyleCustomLayout)];
 }
 
 - (UIImage*)accessoryImage{
