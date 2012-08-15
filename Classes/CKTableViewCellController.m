@@ -30,6 +30,7 @@
 #import "NSObject+Singleton.h"
 #import "CKDebug.h"
 #import "UIView+Name.h"
+#import "CKLayoutBox.h"
 
 #import "CKVersion.h"
 
@@ -127,6 +128,10 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    
+    if(self.contentView.layoutBoxes && !self.contentView.containerLayoutBox){
+        [self.contentView performLayoutWithFrame:self.contentView.bounds];
+    }
 
     if([self.delegate layoutCallback] != nil && self.delegate && [self.delegate respondsToSelector:@selector(layoutCell:)]){
 		[self.delegate performSelector:@selector(layoutCell:) withObject:self];
@@ -318,11 +323,12 @@
     //[self.delegate restoreViews];
 }
 
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-    
-    //if (self.delegate.wantFlatHierarchy)
-    //    [self.delegate flattenHierarchyHighlighted:self.isHighlighted];
+- (CGFloat)preferedHeightConstraintToWidth:(CGFloat)width{
+    if(self.contentView.layoutBoxes){
+        CGSize size = [self.contentView preferedSizeConstraintToSize:CGSizeMake(width,MAXFLOAT)];
+        return size.height;
+    }
+    return MAXFLOAT;
 }
 
 @end
@@ -348,9 +354,6 @@
 
 - (UITableViewCell *)cellWithStyle:(CKTableViewCellStyle)style;
 - (UITableViewCell *)loadCell;
-
-
-@property(nonatomic,retain) NSArray* dataDrivenViews;
 
 @end
 
@@ -381,7 +384,6 @@
 @synthesize hasCheckedStyleToReapply = _hasCheckedStyleToReapply;
 @synthesize textLabelStyle = _textLabelStyle;
 @synthesize detailTextLabelStyle = _detailTextLabelStyle;
-@synthesize dataDrivenViews = _dataDrivenViews;
 
 //used in cell size invalidation process
 @synthesize sizeHasBeenQueriedByTableView = _sizeHasBeenQueriedByTableView;
@@ -406,7 +408,8 @@
                                                  UITableViewCellStyleSubtitle,
                                                  CKTableViewCellStyleIPadForm,
                                                  CKTableViewCellStyleIPhoneForm,
-                                                 CKTableViewCellStyleSubtitle2
+                                                 CKTableViewCellStyleSubtitle2,
+                                                 CKTableViewCellStyleCustomLayout
                                                  );
 }
 
@@ -468,6 +471,8 @@
     _invalidatedSize = YES;
     _sizeHasBeenQueriedByTableView = NO;
     _hasCheckedStyleToReapply = NO;
+    
+    self.isInSetup = YES;//do not invalidate size until it has been setuped once.
 }
 
 - (void)dealloc {
@@ -501,8 +506,6 @@
     _textLabelStyle = nil;
     [_detailTextLabelStyle release];
     _detailTextLabelStyle = nil;
-    [_dataDrivenViews release];
-    _dataDrivenViews = nil;
     
 	[super dealloc];
 }
@@ -655,7 +658,8 @@
        ||toUseCellStyle == CKTableViewCellStyleIPhoneForm){
 		toUseCellStyle = CKTableViewCellStyleValue1;
 	}
-    else if(toUseCellStyle == CKTableViewCellStyleSubtitle2){
+    else if(toUseCellStyle == CKTableViewCellStyleSubtitle2
+            || toUseCellStyle == CKTableViewCellStyleCustomLayout){
 		toUseCellStyle = CKTableViewCellStyleSubtitle;
     }
     
@@ -753,54 +757,6 @@
         cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     }
-
-    
-    NSMutableDictionary* style = [self controllerStyle];
-    
-#ifdef __IPHONE_6_0
-    if([CKOSVersion() floatValue] >= 6){
-        [cell.contentView removeConstraints:[self.view constraints]];
-    }
-#endif
-    
-    for(UIView* subview in self.dataDrivenViews){
-        [subview removeFromSuperview];
-    }
-    
-    NSArray* views = [style instanceOfViews];
-    if(views){
-        for(UIView* subview in views){
-            [cell.contentView addSubview:subview];
-        }
-    }
-    self.dataDrivenViews = views;
-     
-    
-#ifdef __IPHONE_6_0
-    if([CKOSVersion() floatValue] >= 6){
-        NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
-        [cell populateViewDictionaryForVisualFormat:viewsDictionary];
-        
-        if(cell.imageView){
-            [viewsDictionary setObject:cell.imageView forKey:@"imageView"];
-        }
-        if(cell.textLabel){
-            [viewsDictionary setObject:cell.textLabel forKey:@"textLabel"];
-        }
-        if(cell.detailTextLabel ){
-            [viewsDictionary setObject:cell.detailTextLabel forKey:@"detailTextLabel"];
-        }
-        
-        NSArray* constraints = [style autoLayoutConstraintsUsingViews:viewsDictionary];
-        if(constraints && [constraints count] > 0){
-            for(UIView* view in views){
-                [cell.contentView addSubview:view];
-            }
-            [cell setTranslatesAutoresizingMaskIntoConstraints:NO recursive:YES];
-            [cell.contentView addConstraints:constraints];
-        }
-    }
-    #endif
 }
 
 - (void)updateLayout:(id)value{
