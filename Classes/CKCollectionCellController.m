@@ -166,9 +166,14 @@
 	return nil;
 }
 
+- (void)applyStyleToView:(UIView*)view{
+	[self applyStyle:[self controllerStyle] forView:view];
+}
+
 - (void)applyStyle{
 	[self applyStyle:[self controllerStyle] forView:self.view];
 }
+
 
 - (void)setupView:(UIView *)view{
 	if(_setupCallback != nil){
@@ -182,7 +187,7 @@
 		[_initCallback execute:self];
 	}
     
-	[self applyStyle];
+	[self applyStyleToView:view];
 }
 
 - (void)rotateView:(UIView*)view animated:(BOOL)animated{
