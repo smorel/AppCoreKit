@@ -33,13 +33,19 @@ template<> struct hash< id >
 
 @interface CKLayoutBox()
 @property(nonatomic,assign,readwrite) UIView* containerLayoutView;
+#ifdef LAYOUT_DEBUG_ENABLED
 @property(nonatomic,assign,readwrite) UIView* debugView;
+#endif
 @end
 
 @implementation CKLayoutBox
 @synthesize maximumSize, minimumSize, margins, padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,debugView;
+lastComputedSize,lastPreferedSize;
+
+#ifdef LAYOUT_DEBUG_ENABLED
+@synthesize debugView;
+#endif
 
 - (id)init{
     self = [super init];
@@ -48,18 +54,47 @@ lastComputedSize,lastPreferedSize,debugView;
     self.horizontalAlignment = CKLayoutHorizontalAlignmentCenter;
     self.hidden = NO;
     
+#ifdef LAYOUT_DEBUG_ENABLED  
     self.debugView = [[[UIView alloc]initWithFrame:CGRectMake(0,0,1,1)]autorelease];
     self.debugView.alpha = 0.4;
     self.debugView.backgroundColor = [UIColor redColor];
     self.debugView.layer.borderColor = [[UIColor redColor]CGColor];
     self.debugView.layer.borderWidth = 1;
+#endif
+    
+#if TARGET_IPHONE_SIMULATOR
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+#endif
     
     return self;
 }
 
 - (void)dealloc{
+    
+#if TARGET_IPHONE_SIMULATOR
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+#endif
+    
     [_layoutBoxes release];
     [super dealloc];
+}
+
++ (void)invalidateLayoutBox:(NSObject<CKLayoutBoxProtocol>*)box recursivelly:(BOOL)recursivelly{
+    box.lastComputedSize = CGSizeMake(0,0);
+    box.lastPreferedSize = CGSizeMake(0,0);
+    
+    if(recursivelly){
+        for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
+            [CKLayoutBox invalidateLayoutBox:subbox recursivelly:YES];
+        }
+    }
+}
+
+- (void)updateStylesheets{
+    if(self.containerLayoutBox == nil){
+        [CKLayoutBox invalidateLayoutBox:self recursivelly:YES];
+        [self.containerLayoutView setNeedsLayout];
+    }
 }
 
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index{
@@ -123,9 +158,12 @@ lastComputedSize,lastPreferedSize,debugView;
 }
 
 + (void)addLayoutBoxes:(NSArray*)boxes toBox:(NSObject<CKLayoutBoxProtocol>*)box{
+    
+#ifdef LAYOUT_DEBUG_ENABLED
     if([box isKindOfClass:[CKLayoutBox class]]){
         [[box containerLayoutView] addSubview:((CKLayoutBox*)box).debugView];
     }
+#endif
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in boxes){
         subBox.containerLayoutBox = box;
@@ -146,9 +184,12 @@ lastComputedSize,lastPreferedSize,debugView;
 }
 
 + (void)removeViewsFromBox:(NSObject<CKLayoutBoxProtocol>*)box recursively:(BOOL)recursively{ 
+    
+#ifdef LAYOUT_DEBUG_ENABLED
     if([box isKindOfClass:[CKLayoutBox class]]){
         [((CKLayoutBox*)box).debugView removeFromSuperview];
     }
+#endif
     
     for(NSObject<CKLayoutBoxProtocol>* subBox in [box layoutBoxes]){
         if([subBox isKindOfClass:[CKLayoutBox class]]){
@@ -176,7 +217,9 @@ lastComputedSize,lastPreferedSize,debugView;
     if(_containerLayoutView != view){
         _containerLayoutView = view;
         
+#ifdef LAYOUT_DEBUG_ENABLED
         [_containerLayoutView addSubview:self.debugView];
+#endif
         
         for(NSObject<CKLayoutBoxProtocol>* subBox in self.layoutBoxes){
             if([subBox isKindOfClass:[CKLayoutBox class]]){
@@ -210,7 +253,9 @@ lastComputedSize,lastPreferedSize,debugView;
     
     [CKLayoutBox performLayoutWithFrame:self.frame forBox:self];
     
+#ifdef LAYOUT_DEBUG_ENABLED    
     self.debugView.frame = self.frame;
+#endif
 }
 
 - (void)setLayoutBoxes:(NSArray*)boxes{
@@ -327,9 +372,11 @@ lastComputedSize,lastPreferedSize;
 - (id)init{
     self = [super init];
     
+#ifdef LAYOUT_DEBUG_ENABLED    
     self.debugView.backgroundColor = [UIColor blueColor];
     self.debugView.layer.borderColor = [[UIColor blueColor]CGColor];
     self.debugView.layer.borderWidth = 1;
+#endif
     
     return self;
 }
@@ -350,7 +397,9 @@ lastComputedSize,lastPreferedSize;
 - (void)performLayoutWithFrame:(CGRect)theframe{
     self.frame = theframe;
     
+#ifdef LAYOUT_DEBUG_ENABLED    
     self.debugView.frame = self.frame;
+#endif
 }
 
 @end
@@ -507,8 +556,9 @@ lastComputedSize,lastPreferedSize;
         }
     }
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width) + self.padding.left + self.padding.right,
-                                                                                 MIN(maxHeight,size.height) + self.padding.bottom + self.padding.top) 
+    CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+                                                                                 ret.height + self.padding.bottom + self.padding.top) 
                                                                forBox:self];
     return self.lastPreferedSize;
 }
@@ -516,7 +566,11 @@ lastComputedSize,lastPreferedSize;
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize size = [self preferedSizeConstraintToSize:theframe.size];
     self.frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    
+    
+#ifdef LAYOUT_DEBUG_ENABLED
     self.debugView.frame = self.frame;
+#endif
     
     if([self.layoutBoxes count] > 0){
 
@@ -745,8 +799,10 @@ lastComputedSize,lastPreferedSize;
         }
     }
     
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width) + self.padding.left + self.padding.right,
-                                                                                 MIN(maxHeight,size.height) + self.padding.bottom + self.padding.top) 
+    
+    CGSize ret = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(MIN(maxWidth,size.width),MIN(maxHeight,size.height)) forBox:self];
+    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:CGSizeMake(ret.width + self.padding.left + self.padding.right,
+                                                                                 ret.height + self.padding.bottom + self.padding.top) 
                                                                forBox:self];
     return self.lastPreferedSize;
 }
@@ -754,7 +810,10 @@ lastComputedSize,lastPreferedSize;
 - (void)performLayoutWithFrame:(CGRect)theframe{
     CGSize size = [self preferedSizeConstraintToSize:theframe.size];
     self.frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
+    
+#ifdef LAYOUT_DEBUG_ENABLED
     self.debugView.frame = self.frame;
+#endif
        
     if([self.layoutBoxes count] > 0){
         //Compute layout
@@ -838,6 +897,11 @@ lastComputedSize,lastPreferedSize;
 @interface UILabel (Layout)
 @end
 
+//UIButton
+
+@interface UIButton (Layout)
+@end
+
 //UITextView
 
 @interface UITextView (Layout)
@@ -869,7 +933,7 @@ lastComputedSize,lastPreferedSize;
     
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
-    self.lastPreferedSize = CGSizeMake(ret.width + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
+    self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
@@ -884,14 +948,19 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    size.width -= self.padding.left + self.padding.right;
+    size.height -= self.padding.top + self.padding.bottom;
+    
     CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
     CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    //TODO : adds textViewInsets 8
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    
+    //Adds padding 8
+    self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
@@ -907,21 +976,46 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    size.width -= self.padding.left + self.padding.right;
+    size.height -= self.padding.top + self.padding.bottom;
+    
     CGSize maxSize = CGSizeMake(size.width, MAXFLOAT);
     CGSize ret = [self.text sizeWithFont:self.font constrainedToSize:maxSize];
     
     if([self.containerLayoutBox isKindOfClass:[CKVerticalBoxLayout class]])
         ret.width = size.width;
     
-    //TODO : adds textViewInsets 8
-    self.lastPreferedSize = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    ret = CGSizeMake(MAX(size.width,ret.width) ,MAX(size.height,ret.height));
+    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    
+    //Adds padding 8
+    self.lastPreferedSize = CGSizeMake(ret.width + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
 }
 
 @end
 
 
+//UILabel
 
+@implementation UIButton (Layout)
+
+- (CGSize)preferedSizeConstraintToSize:(CGSize)size{
+    if(CGSizeEqualToSize(size, self.lastComputedSize))
+        return self.lastPreferedSize;
+    self.lastComputedSize = size;
+    
+    size.width -= self.padding.left + self.padding.right;
+    size.height -= self.padding.top + self.padding.bottom;
+    
+    CGSize ret = [self sizeThatFits:size];
+    ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
+    
+    self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
+    return self.lastPreferedSize;
+}
+
+@end
 
 
 

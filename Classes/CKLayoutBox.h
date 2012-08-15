@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+//#define LAYOUT_DEBUG_ENABLED
+
 /**
  */
 @protocol CKLayoutBoxProtocol
