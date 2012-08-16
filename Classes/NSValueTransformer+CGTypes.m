@@ -83,13 +83,34 @@
     if([object isKindOfClass:[NSString class]]){
 		UIEdgeInsets insets = [NSValueTransformer parseStringToUIEdgeInsets:object];
 		return insets;
-	}
+	}else if([object isKindOfClass:[NSValue class]]){
+        return [object UIEdgeInsetsValue];
+    }
 	return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 + (CGColorRef)convertCGColorRefFromObject:(id)object{
     UIColor* color = [UIColor convertFromObject:object];
     return [color CGColor];
+}
+
++ (CLLocationCoordinate2D)parseStringToCLCoordinate2D:(NSString*)str{
+    NSArray* components = [str componentsSeparatedByString:@" "];
+	CKAssert([components count] == 2,@"invalid CLLocationCoordinate2D string format");
+	return CLLocationCoordinate2DMake([[components objectAtIndex:0]floatValue],[[components objectAtIndex:1]floatValue]);
+}
+
++ (CLLocationCoordinate2D)convertCLLocationCoordinate2DFromObject:(id)object{
+    if([object isKindOfClass:[NSString class]]){
+		CLLocationCoordinate2D point = [NSValueTransformer parseStringToCLCoordinate2D:object];
+		return point;
+	}
+    else if([object isKindOfClass:[NSValue class]]){
+        CLLocationCoordinate2D c;
+        [object getValue:&c];
+        return c;
+    }
+	return CLLocationCoordinate2DMake(0,0);
 }
 
 @end
