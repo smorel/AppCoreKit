@@ -171,10 +171,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 
 + (void)performLayoutWithFrame:(CGRect)theframe forBox:(NSObject<CKLayoutBoxProtocol>*)box{
     for(NSObject<CKLayoutBoxProtocol>* subbox in box.layoutBoxes){
-        CGRect boxframe = CGRectMake(theframe.origin.x/* + subbox.padding.left*/,
-                                     theframe.origin.y/* + subbox.padding.top*/,
-                                     MAX(0,theframe.size.width/* - (subbox.padding.left + subbox.padding.right)*/),
-                                     MAX(0,theframe.size.height/* - (subbox.padding.top + subbox.padding.bottom)*/));
+        CGRect boxframe = CGRectMake(theframe.origin.x,
+                                     theframe.origin.y,
+                                     MAX(0,theframe.size.width),
+                                     MAX(0,theframe.size.height));
         [subbox performLayoutWithFrame:boxframe];
     }
 }
@@ -344,7 +344,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
 @implementation UIView (Layout)
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize,invalidatedLayoutBlock;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -374,7 +374,13 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock;
 }
 
 - (void)performLayoutWithFrame:(CGRect)theframe{
-    CGSize size = [self preferedSizeConstraintToSize:theframe.size];
+    CGSize constraint = theframe.size;
+    if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+        constraint.height = MAXFLOAT;
+    }
+    
+    CGSize size = [self preferedSizeConstraintToSize:constraint];
+    
     CGRect frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
     
     //If the view has its own layout, the sub boxes are placed relative to it !
@@ -383,6 +389,35 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock;
     }
     
     [CKLayoutBox performLayoutWithFrame:frame forBox:self];
+    
+    if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
+        CGSize boundingBox = CGSizeMake(0, 0);
+        for(NSObject<CKLayoutBoxProtocol>* subbox in self.layoutBoxes){
+            if((subbox.frame.origin.x + subbox.frame.size.width) > boundingBox.width){
+                boundingBox.width = subbox.frame.origin.x + subbox.frame.size.width;
+            }
+            if((subbox.frame.origin.y + subbox.frame.size.height) > boundingBox.height){
+                boundingBox.height = subbox.frame.origin.y + subbox.frame.size.height;
+            }
+        }
+        
+        CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,boundingBox.width,boundingBox.height);
+        CGRect oldFrame = self.frame;
+        self.frame = newFrame;
+        
+        if(!CGSizeEqualToSize(newFrame.size, oldFrame.size) && [[self superview]isKindOfClass:[UITableView class]]){
+            //tableheaderview || tablefooterview
+            UITableView* superTable = (UITableView*)[self superview];
+            if(superTable.tableHeaderView == self){
+                superTable.tableHeaderView = nil;
+                superTable.tableHeaderView = self;
+            }
+            if(superTable.tableFooterView == self){
+                superTable.tableFooterView = nil;
+                superTable.tableFooterView = self;
+            }
+        }
+    }
 }
 
 - (void)invalidateLayout{
@@ -1144,11 +1179,24 @@ static char UIViewContainerLayoutBoxKey;
 static char UIViewLastComputedSizeKey;
 static char UIViewLastPreferedSizeKey;
 static char UIViewInvalidatedLayoutBlockKey;
+static char UIViewSizeToFitLayoutBoxesKey;
 
 @interface UIView (Layout_Private)
 @end
 
 @implementation UIView (Layout_Private)
+
+- (void)setSizeToFitLayoutBoxes:(BOOL)sizeToFitLayoutBoxes{
+    objc_setAssociatedObject(self, 
+                             &UIViewSizeToFitLayoutBoxesKey,
+                             [NSNumber numberWithBool:sizeToFitLayoutBoxes],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)sizeToFitLayoutBoxes{
+    id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
+    return value ? [value boolValue] : YES;
+}
 
 - (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
     objc_setAssociatedObject(self, 
@@ -1343,6 +1391,26 @@ static char UIViewInvalidatedLayoutBlockKey;
     CKSwizzleSelector([UIView class], @selector(init), @selector(UIView_Layout_init));
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
     CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
+}
+
+@end
+
+
+@interface UIViewController(Layout)
+@end
+
+@implementation UIViewController(Layout)
+
+- (UIView*)UIViewController_Layout_view{
+    UIView* v = [self UIViewController_Layout_view];
+    if(v){
+        v.sizeToFitLayoutBoxes = NO;
+    }
+    return v;
+}
+
++ (void)load{
+    CKSwizzleSelector([UIViewController class], @selector(view), @selector(UIViewController_Layout_view));
 }
 
 @end
