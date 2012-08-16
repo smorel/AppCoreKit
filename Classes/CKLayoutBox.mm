@@ -998,6 +998,10 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 @interface UITextField (Layout)
 @end
 
+//UIImageView
+
+@interface UIImageView (Layout)
+@end
 
 //UILabel
 
@@ -1054,28 +1058,33 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 
 @end
 
-/*
+//UIImageView
 
-//UIButtonLabel
+@implementation UIImageView (Layout)
 
-@interface CKUIButtonLabelLayoutProxy : UILabel
-@end
+- (void)invalidateLayout{
+    if([[self superview] isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)[self superview];
+        [bu invalidateLayout];
+        return;
+    }
+    
+    //Do not invalidate layout here as image view size do not depend on image ...
+    //[super invalidateLayout];
+}
 
-@implementation CKUIButtonLabelLayoutProxy
-
-//Invalidating size when contentView layout boxes are invalidated !
-
-- (void)setText:(NSString *)text{
-    [super setText:text];
+- (void)UIImageView_Layout_setImage:(UIImage*)image{
+    if(![image isEqual:self.image]){
+        [self UIImageView_Layout_setImage:image];
+        [self invalidateLayout];
+    }
 }
 
 + (void)load{
-    Class c = NSClassFromString(@"UIButtonLabel");
-    class_setSuperclass(c,[CKUIButtonLabelLayoutProxy class]);
+    CKSwizzleSelector([UIImageView class], @selector(setImage:), @selector(UIImageView_Layout_setImage:));
 }
 
 @end
- */
 
 //UITextField
 
