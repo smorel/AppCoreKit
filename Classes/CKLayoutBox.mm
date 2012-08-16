@@ -41,7 +41,7 @@ template<> struct hash< id >
 @implementation CKLayoutBox
 @synthesize maximumSize, minimumSize, margins, padding, layoutBoxes = _layoutBoxes,frame,containerLayoutBox,containerLayoutView = _containerLayoutView,verticalAlignment,horizontalAlignment,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlock;
 
 #ifdef LAYOUT_DEBUG_ENABLED
 @synthesize debugView;
@@ -76,6 +76,7 @@ lastComputedSize,lastPreferedSize;
 #endif
     
     [_layoutBoxes release];
+    [_invalidatedLayoutBlock release];
     [super dealloc];
 }
 
@@ -95,6 +96,27 @@ lastComputedSize,lastPreferedSize;
         [CKLayoutBox invalidateLayoutBox:self recursivelly:YES];
         [self.containerLayoutView setNeedsLayout];
     }
+}
+
+- (void)invalidateLayout{
+    NSObject<CKLayoutBoxProtocol>* l = [self rootLayoutBox];
+    if(l && !CGSizeEqualToSize(l.lastComputedSize, CGSizeMake(0,0))){
+        [CKLayoutBox invalidateLayoutBox:l recursivelly:YES];
+        [l.containerLayoutView setNeedsLayout];
+        if(l.invalidatedLayoutBlock){
+            l.invalidatedLayoutBlock(l);
+        }
+    }
+}
+
+- (NSObject<CKLayoutBoxProtocol>*)rootLayoutBox{
+    NSObject<CKLayoutBoxProtocol>* l = self;
+    while(l){
+        if(l.containerLayoutBox){
+            l = l.containerLayoutBox;
+        }else return l;
+    }
+    return nil;
 }
 
 - (NSObject<CKLayoutBoxProtocol>*)previousVisibleBoxFromIndex:(NSInteger)index{
@@ -322,7 +344,7 @@ lastComputedSize,lastPreferedSize;
 @implementation UIView (Layout)
 @dynamic  maximumSize, minimumSize, margins, padding, layoutBoxes,frame,containerLayoutBox,containerLayoutView,fixedSize,hidden,
 maximumWidth,maximumHeight,minimumWidth,minimumHeight,fixedWidth,fixedHeight,marginLeft,marginTop,marginBottom,marginRight,paddingLeft,paddingTop,paddingBottom,paddingRight,
-lastComputedSize,lastPreferedSize;
+lastComputedSize,lastPreferedSize,invalidatedLayoutBlock;
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -361,6 +383,27 @@ lastComputedSize,lastPreferedSize;
     }
     
     [CKLayoutBox performLayoutWithFrame:frame forBox:self];
+}
+
+- (void)invalidateLayout{
+    NSObject<CKLayoutBoxProtocol>* l = [self rootLayoutBox];
+    if(l && !CGSizeEqualToSize(l.lastComputedSize, CGSizeMake(0,0))){
+        [CKLayoutBox invalidateLayoutBox:l recursivelly:YES];
+        [l.containerLayoutView setNeedsLayout];
+        if(l.invalidatedLayoutBlock){
+            l.invalidatedLayoutBlock(l);
+        }
+    }
+}
+
+- (NSObject<CKLayoutBoxProtocol>*)rootLayoutBox{
+    NSObject<CKLayoutBoxProtocol>* l = self;
+    while(l){
+        if(l.containerLayoutBox){
+            l = l.containerLayoutBox;
+        }else return l;
+    }
+    return nil;
 }
 
 @end
@@ -420,6 +463,7 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    BOOL includesFlexispaces = (size.height < MAXFLOAT);
     
     CGFloat maxHeight = 0;
     CGFloat maxWidth = 0;
@@ -434,7 +478,8 @@ lastComputedSize,lastPreferedSize;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
+                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         numberOfFlexiSpaces++;
@@ -513,7 +558,8 @@ lastComputedSize,lastPreferedSize;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
+                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         CGFloat topMargin = 0;
@@ -660,6 +706,9 @@ lastComputedSize,lastPreferedSize;
         return self.lastPreferedSize;
     self.lastComputedSize = size;
     
+    
+    BOOL includesFlexispaces = (size.width < MAXFLOAT);
+    
     CGFloat maxHeight = 0;
     CGFloat maxWidth = 0;
     
@@ -674,7 +723,8 @@ lastComputedSize,lastPreferedSize;
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i]; 
             
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
+                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if([box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         numberOfFlexiSpaces++;
@@ -755,7 +805,8 @@ lastComputedSize,lastPreferedSize;
         for(int i =0;i < [self.layoutBoxes count]; ++i){
             NSObject<CKLayoutBoxProtocol>* box = [self.layoutBoxes objectAtIndex:i];
             if(!box.hidden){
-                if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
+                if([box isKindOfClass:[CKLayoutFlexibleSpace class]] && !includesFlexispaces){}
+                else if([box isKindOfClass:[CKLayoutBox class]] && ![box isKindOfClass:[CKLayoutFlexibleSpace class]] && [[box layoutBoxes]count] <= 0){}
                 else{
                     if(![box isKindOfClass:[CKLayoutFlexibleSpace class]]){
                         CGFloat leftMargin = 0;
@@ -937,6 +988,21 @@ lastComputedSize,lastPreferedSize;
     return self.lastPreferedSize;
 }
 
+- (void)UILabel_Layout_setText:(NSString*)text{
+    [self UILabel_Layout_setText:text];
+    [self invalidateLayout];
+}
+
+- (void)UILabel_Layout_setFont:(UIFont*)font{
+    [self UILabel_Layout_setFont:font];
+    [self invalidateLayout];
+}
+
++ (void)load{
+    CKSwizzleSelector([UILabel class], @selector(setText:), @selector(UILabel_Layout_setText:));
+    CKSwizzleSelector([UILabel class], @selector(setFont:), @selector(UILabel_Layout_setFont:));
+}
+
 @end
 
 //UITextField
@@ -962,6 +1028,31 @@ lastComputedSize,lastPreferedSize;
     //Adds padding 8
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
+}
+
+- (void)invalidateLayout{
+    if([[self superview] isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)[self superview];
+        [bu invalidateLayout];
+        return;
+    }
+        
+    [super invalidateLayout];
+}
+
+- (void)UITextField_Layout_setText:(NSString*)text{
+    [self UITextField_Layout_setText:text];
+    [self invalidateLayout];
+}
+
+- (void)UITextField_Layout_setFont:(UIFont*)font{
+    [self UITextField_Layout_setFont:font];
+    [self invalidateLayout];
+}
+
++ (void)load{
+    CKSwizzleSelector([UITextField class], @selector(setText:), @selector(UITextField_Layout_setText:));
+    CKSwizzleSelector([UITextField class], @selector(setFont:), @selector(UITextField_Layout_setFont:));
 }
 
 @end
@@ -991,6 +1082,21 @@ lastComputedSize,lastPreferedSize;
     //Adds padding 8
     self.lastPreferedSize = CGSizeMake(ret.width + self.padding.left + self.padding.right,ret.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
+}
+
+- (void)UITextView_Layout_setText:(NSString*)text{
+    [self UITextView_Layout_setText:text];
+    [self invalidateLayout];
+}
+
+- (void)UITextView_Layout_setFont:(UIFont*)font{
+    [self UITextView_Layout_setFont:font];
+    [self invalidateLayout];
+}
+
++ (void)load{
+    CKSwizzleSelector([UITextView class], @selector(setText:), @selector(UITextView_Layout_setText:));
+    CKSwizzleSelector([UITextView class], @selector(setFont:), @selector(UITextView_Layout_setFont:));
 }
 
 @end
@@ -1037,11 +1143,23 @@ static char UIViewLayoutBoxesKey;
 static char UIViewContainerLayoutBoxKey;
 static char UIViewLastComputedSizeKey;
 static char UIViewLastPreferedSizeKey;
+static char UIViewInvalidatedLayoutBlockKey;
 
 @interface UIView (Layout_Private)
 @end
 
 @implementation UIView (Layout_Private)
+
+- (void)setInvalidatedLayoutBlock:(CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
+    objc_setAssociatedObject(self, 
+                             &UIViewInvalidatedLayoutBlockKey,
+                             [invalidatedLayoutBlock copy],
+                             OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (CKLayoutBoxInvalidatedBlock)invalidatedLayoutBlock{
+    return objc_getAssociatedObject(self, &UIViewInvalidatedLayoutBlockKey);
+}
 
 - (void)setFixedSize:(CGSize)size{
     self.maximumSize = size;
@@ -1215,10 +1333,16 @@ static char UIViewLastPreferedSizeKey;
     return self;
 }
 
+- (void)UIView_Layout_setHidden:(BOOL)hidden{
+    [self UIView_Layout_setHidden:hidden];
+    [self invalidateLayout];
+}
+
 + (void)load{
     CKSwizzleSelector([UIView class], @selector(layoutSubviews), @selector(UIView_Layout_layoutSubviews));
     CKSwizzleSelector([UIView class], @selector(init), @selector(UIView_Layout_init));
     CKSwizzleSelector([UIView class], @selector(initWithFrame:), @selector(UIView_Layout_initWithFrame:));
+    CKSwizzleSelector([UIView class], @selector(setHidden:), @selector(UIView_Layout_setHidden:));
 }
 
 @end

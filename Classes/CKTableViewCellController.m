@@ -24,6 +24,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Style.h"
 #import "CKLocalization.h"
+#import "CKRuntime.h"
 
 #import "UIView+Positioning.h"
 #import "CKProperty.h"
@@ -124,7 +125,6 @@
      [self bind:@"selectionStyle"  toObject:thedelegate withKeyPath:@"selectionStyle"];
      [NSObject endBindingsContext];	*/
 }
-
 
 - (void)layoutSubviews{
     [super layoutSubviews];
@@ -332,6 +332,44 @@
 }
 
 @end
+
+
+@interface CKTableViewCellContentViewLayoutProxy : UIView
+@end
+
+@implementation CKTableViewCellContentViewLayoutProxy
+
+//Invalidating size when contentView layout boxes are invalidated !
+
+- (void)setLayoutBoxes:(NSArray *)layoutBoxes{
+    UIView* contentView = (UIView*)self;
+    
+    contentView.invalidatedLayoutBlock = nil;
+    
+    [super setLayoutBoxes:layoutBoxes];
+    
+    UITableViewCell* cell = (UITableViewCell*)[contentView superview];
+    if([cell isKindOfClass:[CKUITableViewCell class]]){
+        __block CKUITableViewCell* bcell = (CKUITableViewCell*)cell;
+        self.invalidatedLayoutBlock = ^(NSObject<CKLayoutBoxProtocol>* box){
+            [bcell.delegate invalidateSize];
+        };
+    }
+}
+
++ (void)load{
+    Class c = NSClassFromString(@"UITableViewCellContentView");
+    class_setSuperclass(c,[CKTableViewCellContentViewLayoutProxy class]);
+}
+
+@end
+
+
+
+
+
+
+
 
 @interface CKTableViewCellController ()
 
