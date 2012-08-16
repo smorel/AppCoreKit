@@ -79,26 +79,35 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
     self.invalidatedSize = NO;
     
     if(self.cellStyle == CKTableViewCellStyleCustomLayout){
-        CKUITableViewCell* view = (CKUITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
-        if(!view){
-            view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
-            view.width = self.parentTableView.width;
-           
+        if(self.tableViewCell){
+            CGFloat height = [(CKUITableViewCell*)self.tableViewCell preferedHeightConstraintToWidth:self.tableViewCell.contentView.width];
+            return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
+        }else{
+            CKUITableViewCell* view = (CKUITableViewCell*)[[CKTableViewCellCache sharedInstance]reusableViewWithIdentifier:[self identifier]];
+            
+            if(!view){
+                view = [[[CKUITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[self identifier]]autorelease];
+                view.width = self.parentTableView.width;
+                
+                UIView* original = self.view; //For styles to apply correctly on view.
+                self.view = view;
+                
+                [self initView:view];
+                self.view = original;
+                [[CKTableViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+            }
+            
             UIView* original = self.view; //For styles to apply correctly on view.
             self.view = view;
-            
-            [self initView:view];
+            [self setupView:view];
             self.view = original;
-            [[CKTableViewCellCache sharedInstance]setReusableView:view forIdentifier:[self identifier]];
+            
+            view.contentView.height = 100;
+            view.contentView.width = [self contentViewWidth];
+            
+            CGFloat height = [view preferedHeightConstraintToWidth:view.contentView.width];
+            return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
         }
-        
-        [self setupView:view];
-        
-        view.contentView.height = 100;
-        view.contentView.width = [self contentViewWidth];
-        
-        CGFloat height = [view preferedHeightConstraintToWidth:view.contentView.width];
-        return CGSizeMake([self tableViewCellWidth],(height >= MAXFLOAT) ? 0 : height);
     }
     
     return [self computeSizeUsingText:self.text detailText:self.detailText image:self.image];
