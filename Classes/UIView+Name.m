@@ -44,14 +44,15 @@ static char kUIViewNameKey;
 
 - (id)viewWithKeyPath:(NSString*)keyPath{
     NSArray* ar = [keyPath componentsSeparatedByString:@"."];
-    UIView* currentView = self;
+    
+    id currentView = self;
     for(NSString* key in ar){
-        UIView* oldCurrentView = currentView;
+        id oldCurrentView = currentView;
         
         NSArray* propertyNames = [currentView allPropertyNames];
         if([propertyNames indexOfObject:key] != NSNotFound){
             currentView = [currentView valueForKey:key];
-        }else{
+        }else if([currentView isKindOfClass:[UIView class]]){
             for(UIView* view in [currentView subviews]){
                 if([[view name]isEqualToString:key]){
                     currentView = view;
@@ -66,7 +67,7 @@ static char kUIViewNameKey;
         }
     }
     
-    return (currentView == self) ? nil : currentView;
+    return (currentView == self || ![currentView isKindOfClass:[UIView class]]) ? nil : currentView;
 }
 
 

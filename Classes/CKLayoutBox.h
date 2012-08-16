@@ -10,6 +10,9 @@
 
 //#define LAYOUT_DEBUG_ENABLED
 
+@protocol CKLayoutBoxProtocol;
+typedef void(^CKLayoutBoxInvalidatedBlock)(NSObject<CKLayoutBoxProtocol>* layoutBox);
+
 /**
  */
 @protocol CKLayoutBoxProtocol
@@ -103,6 +106,20 @@
 /** This method performs the layout on the box and its sub boxes
  */
 - (void)performLayoutWithFrame:(CGRect)frame;
+
+/**
+ */
+- (NSObject<CKLayoutBoxProtocol>*)rootLayoutBox;
+
+/**
+ */
+- (void)invalidateLayout;
+
+/**
+ */
+@property(nonatomic,copy) CKLayoutBoxInvalidatedBlock invalidatedLayoutBlock;
+
+///PRIVATE
 
 /**
  */
