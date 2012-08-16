@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
 /**
  */
@@ -48,5 +49,13 @@
 /**
  */
 + (CGColorRef)convertCGColorRefFromObject:(id)object;
+
+/**
+ */
++ (CLLocationCoordinate2D)parseStringToCLCoordinate2D:(NSString*)str;
+
+/**
+ */
++ (CLLocationCoordinate2D)convertCLLocationCoordinate2DFromObject:(id)object;
 
 @end
