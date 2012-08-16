@@ -87,14 +87,16 @@
             
             for(NSString* controlKeyPath in [controlActions allKeys]){
                 UIView* control = [cell viewWithKeyPath:controlKeyPath];
-                CKAssert([control isKindOfClass:[UIControl class]],@"ControlKeyPath '%@' points to a non UIControl view",controlKeyPath);
-                void(^actionBlock)(UIControl* control, CKTableViewCellController* controller) = [[controlActions objectForKey:controlKeyPath]copy];
-                
-                __block CKTableViewCellController* bController = controller;
-                __block UIControl* bControl = (UIControl*)control;
-                [(UIControl*)control bindEvent:UIControlEventTouchUpInside withBlock:^{
-                    actionBlock(bControl,bController);
-                }];
+                if(control){
+                    CKAssert([control isKindOfClass:[UIControl class]],@"ControlKeyPath '%@' points to a non UIControl view",controlKeyPath);
+                    void(^actionBlock)(UIControl* control, CKTableViewCellController* controller) = [[controlActions objectForKey:controlKeyPath]copy];
+                    
+                    __block CKTableViewCellController* bController = controller;
+                    __block UIControl* bControl = (UIControl*)control;
+                    [(UIControl*)control bindEvent:UIControlEventTouchUpInside withBlock:^{
+                        actionBlock(bControl,bController);
+                    }];
+                }
             }
             
             [cell endBindingsContext];

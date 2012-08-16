@@ -172,4 +172,9 @@ typedef enum CKLayoutHorizontalAlignment{
 /**
  */
 @interface UIView (Layout)<CKLayoutBoxProtocol>
+
+/** Default value is YES. that means layoutting the view will automatically shrink or expand its size to fit the layouted content.
+ Views managed by UIViewController are forced to NO as the controller itself or container controller is responsible to manage it's view frame.
+ */
+@property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
 @end

@@ -62,6 +62,7 @@ static char kUIViewNameKey;
         
         if(currentView == oldCurrentView){
             CKDebugLog( @"Could not find view for keypath : %@ in %@",keyPath,self);
+            return nil;
         }
     }
     
