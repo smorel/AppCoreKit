@@ -1023,14 +1023,28 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
     return self.lastPreferedSize;
 }
 
+- (void)invalidateLayout{
+    if([[self superview] isKindOfClass:[UIButton class]]){
+        UIButton* bu = (UIButton*)[self superview];
+        [bu invalidateLayout];
+        return;
+    }
+    
+    [super invalidateLayout];
+}
+
 - (void)UILabel_Layout_setText:(NSString*)text{
-    [self UILabel_Layout_setText:text];
-    [self invalidateLayout];
+    if(![text isEqualToString:self.text]){
+        [self UILabel_Layout_setText:text];
+        [self invalidateLayout];
+    }
 }
 
 - (void)UILabel_Layout_setFont:(UIFont*)font{
-    [self UILabel_Layout_setFont:font];
-    [self invalidateLayout];
+    if(![font isEqual:self.font]){
+        [self UILabel_Layout_setFont:font];
+        [self invalidateLayout];
+    }
 }
 
 + (void)load{
@@ -1039,6 +1053,29 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 }
 
 @end
+
+/*
+
+//UIButtonLabel
+
+@interface CKUIButtonLabelLayoutProxy : UILabel
+@end
+
+@implementation CKUIButtonLabelLayoutProxy
+
+//Invalidating size when contentView layout boxes are invalidated !
+
+- (void)setText:(NSString *)text{
+    [super setText:text];
+}
+
++ (void)load{
+    Class c = NSClassFromString(@"UIButtonLabel");
+    class_setSuperclass(c,[CKUIButtonLabelLayoutProxy class]);
+}
+
+@end
+ */
 
 //UITextField
 
@@ -1065,24 +1102,18 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
     return self.lastPreferedSize;
 }
 
-- (void)invalidateLayout{
-    if([[self superview] isKindOfClass:[UIButton class]]){
-        UIButton* bu = (UIButton*)[self superview];
-        [bu invalidateLayout];
-        return;
-    }
-        
-    [super invalidateLayout];
-}
-
 - (void)UITextField_Layout_setText:(NSString*)text{
-    [self UITextField_Layout_setText:text];
-    [self invalidateLayout];
+    if(![text isEqualToString:self.text]){
+        [self UITextField_Layout_setText:text];
+        [self invalidateLayout];
+    }
 }
 
 - (void)UITextField_Layout_setFont:(UIFont*)font{
-    [self UITextField_Layout_setFont:font];
-    [self invalidateLayout];
+    if(![font isEqual:self.font]){
+        [self UITextField_Layout_setFont:font];
+        [self invalidateLayout];
+    }
 }
 
 + (void)load{
@@ -1120,13 +1151,17 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 }
 
 - (void)UITextView_Layout_setText:(NSString*)text{
-    [self UITextView_Layout_setText:text];
-    [self invalidateLayout];
+    if(![text isEqualToString:self.text]){
+        [self UITextView_Layout_setText:text];
+        [self invalidateLayout];
+    }
 }
 
 - (void)UITextView_Layout_setFont:(UIFont*)font{
-    [self UITextView_Layout_setFont:font];
-    [self invalidateLayout];
+    if(![font isEqual:self.font]){
+        [self UITextView_Layout_setFont:font];
+        [self invalidateLayout];
+    }
 }
 
 + (void)load{
@@ -1194,6 +1229,10 @@ static char UIViewSizeToFitLayoutBoxesKey;
 }
 
 - (BOOL)sizeToFitLayoutBoxes{
+    Class c = NSClassFromString(@"UITableViewCellContentView");
+    if([self isKindOfClass:c]){
+        return NO;
+    }
     id value = objc_getAssociatedObject(self, &UIViewSizeToFitLayoutBoxesKey);
     return value ? [value boolValue] : YES;
 }
@@ -1382,8 +1421,10 @@ static char UIViewSizeToFitLayoutBoxesKey;
 }
 
 - (void)UIView_Layout_setHidden:(BOOL)hidden{
-    [self UIView_Layout_setHidden:hidden];
-    [self invalidateLayout];
+    if(hidden != self.hidden){
+        [self UIView_Layout_setHidden:hidden];
+        [self invalidateLayout];
+    }
 }
 
 + (void)load{

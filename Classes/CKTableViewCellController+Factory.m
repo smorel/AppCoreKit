@@ -48,11 +48,22 @@
                                       controlActions:(NSDictionary*)controlActions 
                                               action:(void(^)(CKTableViewCellController* controller))action{
     
+    //We have to copy controlActions here as we are on the right stack. if not the block will get copied in controller's setup block and crash if local data are referenced in the block.
+    
+    NSMutableDictionary* copiedControlActions = nil;
+    if(controlActions){
+        copiedControlActions = [NSMutableDictionary dictionaryWithCapacity:[controlActions count]];
+        for(NSString* key in [controlActions allKeys]){
+            void(^actionBlock)(UIControl* control, CKTableViewCellController* controller) = [controlActions objectForKey:key];
+            [copiedControlActions setObject:[actionBlock copy] forKey:key];
+        }
+    }
+    
     CKTableViewCellController* controller = [CKTableViewCellController cellController];
     controller.name = name;
     controller.value = value;
     
-    if(value && (bindings || controlActions)){
+    if(value && (bindings || copiedControlActions)){
         [controller setSetupBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
             [cell beginBindingsContextByRemovingPreviousBindings];
             
@@ -85,11 +96,11 @@
                 [controller.value bind:valueKeyPath toObject:view withKeyPath:propertyKeyPath];
             }
             
-            for(NSString* controlKeyPath in [controlActions allKeys]){
+            for(NSString* controlKeyPath in [copiedControlActions allKeys]){
                 UIView* control = [cell viewWithKeyPath:controlKeyPath];
                 if(control){
                     CKAssert([control isKindOfClass:[UIControl class]],@"ControlKeyPath '%@' points to a non UIControl view",controlKeyPath);
-                    void(^actionBlock)(UIControl* control, CKTableViewCellController* controller) = [[controlActions objectForKey:controlKeyPath]copy];
+                    void(^actionBlock)(UIControl* control, CKTableViewCellController* controller) = [copiedControlActions objectForKey:controlKeyPath];
                     
                     __block CKTableViewCellController* bController = controller;
                     __block UIControl* bControl = (UIControl*)control;
@@ -108,6 +119,7 @@
         [controller setSelectionBlock:action];
         controller.flags = CKItemViewFlagSelectable;
     }
+    
     return controller;
     
 }
