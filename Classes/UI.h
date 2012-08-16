@@ -32,6 +32,7 @@
 #import "CKTableViewCellController+PropertyGrid.h"
 #import "CKTableViewCellController+Menus.h"
 #import "CKTableViewCellController+DynamicLayout.h"
+#import "CKTableViewCellController+Factory.h"
 #import "CKViewControllerCellController.h"
 
 #import "CKCollectionTableViewCellController.h"
