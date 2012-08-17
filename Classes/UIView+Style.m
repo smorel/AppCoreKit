@@ -154,9 +154,13 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
 									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
-                                                                     CKViewBorderStyleTableViewCell,
-																	 CKViewBorderStyleAll,
-																	 CKViewBorderStyleNone)];
+                                                                    CKViewBorderStyleTableViewCell,
+                                                                    CKViewBorderStyleAll,
+                                                                    CKViewBorderStyleLeft,
+                                                                    CKViewBorderStyleRight,
+                                                                    CKViewBorderStyleTop,
+                                                                    CKViewBorderStyleBottom,
+                                                                    CKViewBorderStyleNone)];
 }
 
 - (UIColor*)separatorColor{
@@ -504,6 +508,22 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 							switch(borderStyle){
 								case CKViewBorderStyleAll:{
 									viewBorderType = CKStyleViewBorderLocationAll;
+									break;
+								}
+                                case CKViewBorderStyleLeft:{
+									viewBorderType = CKStyleViewBorderLocationLeft;
+									break;
+								}
+                                case CKViewBorderStyleRight:{
+									viewBorderType = CKStyleViewBorderLocationRight;
+									break;
+								}
+                                case CKViewBorderStyleTop:{
+									viewBorderType = CKStyleViewBorderLocationTop;
+									break;
+								}
+                                case CKViewBorderStyleBottom:{
+									viewBorderType = CKStyleViewBorderLocationBottom;
 									break;
 								}
 								case CKViewBorderStyleNone:{

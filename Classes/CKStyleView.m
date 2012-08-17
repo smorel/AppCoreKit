@@ -303,7 +303,7 @@
 	CGFloat x = self.bounds.origin.x + offset-1;
 	CGFloat y = self.bounds.origin.y + offset - 1;
 	CGFloat width = self.bounds.size.width - (2 * (offset - 1));
-	CGFloat radius = self.roundedCornerSize - offset + 2;
+	CGFloat radius = self.roundedCornerSize - offset + 3;
 	
     
     CGPoint startLinePoint = CGPointMake(x, y + ((roundedCorners & UIRectCornerTopLeft) ? radius : 0));
@@ -344,10 +344,10 @@
         offset = MAX(offset,self.separatorWidth);
     }
 	
-	CGFloat x = self.bounds.origin.x + self.borderWidth - 1;
+	CGFloat x = self.bounds.origin.x + offset - 1;
 	CGFloat y = self.bounds.size.height - (offset - 1);
-	CGFloat width = self.bounds.size.width - (2 * (self.borderWidth - 1));
-	CGFloat radius = self.roundedCornerSize - self.borderWidth + 2;
+	CGFloat width = self.bounds.size.width - (2 * (offset - 1)) ;
+	CGFloat radius = self.roundedCornerSize - offset + 2;
     
     
     CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
@@ -381,12 +381,15 @@
 			break;
 	}
 	
-    CGFloat x = 0 + borderWidth / 2.0;
-    CGFloat y = 0 + borderWidth / 2.0;
-	CGFloat width = self.bounds.size.width - borderWidth;
-	CGFloat height = self.bounds.size.height - borderWidth;
+    CGFloat halfBorder = (borderWidth / 2.0);
     
-	CGFloat radius = self.roundedCornerSize - (borderWidth / 2.0);
+    CGFloat x = 0 + ((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
+    CGFloat y = 0 + ((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
+    
+	CGFloat width = self.bounds.size.width - ((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0);
+	CGFloat height = self.bounds.size.height - ((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0);
+    
+	CGFloat radius = (self.roundedCornerSize > 0) ? (self.roundedCornerSize - halfBorder) : 0;
 	
 	if(borderStyle & CKStyleViewBorderLocationLeft){
 		//draw arc from bottom to left or move to bottom left
@@ -485,9 +488,10 @@
     self.layer.needsDisplayOnBoundsChange = YES;
     
     if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
-        
         [CATransaction begin];
-        [CATransaction setDisableActions: YES];
+        [CATransaction 
+         setValue: [NSNumber numberWithBool: YES]
+         forKey: kCATransactionDisableActions];
         
         self.layer.shadowColor = [self.borderShadowColor CGColor];
         self.layer.shadowOffset = self.borderShadowOffset;
