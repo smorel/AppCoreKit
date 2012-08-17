@@ -177,4 +177,20 @@ typedef enum CKLayoutHorizontalAlignment{
  Views managed by UIViewController or UITableViewCellContentView are forced to NO as the controller, container controller or table view cell controller is responsible to manage it's view frame.
  */
 @property(nonatomic,assign) BOOL sizeToFitLayoutBoxes;
+
+@end
+
+
+//UIButton
+
+
+@interface UIButton (Layout)
+
+/**
+ */
+@property(nonatomic,assign) BOOL flexibleWidth;
+
+/**
+ */
+@property(nonatomic,assign) BOOL flexibleHeight;
 @end
