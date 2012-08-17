@@ -36,8 +36,8 @@
 #import "CKProperty.h"
 #import "CKPropertyExtendedAttributes.h"
 
-#import "CKSuffixTree.h"
-#import "CKSuffixTree+Generator.h"
+#import "CKTypeAhead.h"
+#import "CKTypeAhead+Generator.h"
 #import "CKObjectGraph.h"
 
 #import "CKLocalization.h"

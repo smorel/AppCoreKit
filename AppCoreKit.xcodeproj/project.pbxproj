@@ -420,10 +420,10 @@
 		75FB52B013F5D5F30053BD4A /* form-icon-invalid@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */; };
 		75FB52B413F5E2C90053BD4A /* CKPropertyExtendedAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75FB52B513F5E2C90053BD4A /* CKPropertyExtendedAttributes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */; };
-		9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BD1545C41400F07C5A /* CKSuffixTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */; };
-		9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */; };
+		9600B8C11545C41400F07C5A /* CKTypeAhead.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BD1545C41400F07C5A /* CKTypeAhead.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */; };
+		9600B8C31545C41400F07C5A /* CKTypeAhead+Generator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */; };
 		9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8CD1545C56200F07C5A /* CKObjectGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8CE1545C56200F07C5A /* CKObjectGraph.m */; };
 		9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -958,10 +958,10 @@
 		75FB52AE13F5D5F30053BD4A /* form-icon-invalid@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon-invalid@2x.png"; sourceTree = "<group>"; };
 		75FB52B213F5E2C70053BD4A /* CKPropertyExtendedAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKPropertyExtendedAttributes.h; path = Classes/CKPropertyExtendedAttributes.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		75FB52B313F5E2C80053BD4A /* CKPropertyExtendedAttributes.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKPropertyExtendedAttributes.mm; path = Classes/CKPropertyExtendedAttributes.mm; sourceTree = "<group>"; };
-		9600B8BD1545C41400F07C5A /* CKSuffixTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKSuffixTree.h; path = Classes/CKSuffixTree.h; sourceTree = "<group>"; };
-		9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKSuffixTree.mm; path = Classes/CKSuffixTree.mm; sourceTree = "<group>"; };
-		9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKSuffixTree+Generator.h"; path = "Classes/CKSuffixTree+Generator.h"; sourceTree = "<group>"; };
-		9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKSuffixTree+Generator.mm"; path = "Classes/CKSuffixTree+Generator.mm"; sourceTree = "<group>"; };
+		9600B8BD1545C41400F07C5A /* CKTypeAhead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKTypeAhead.h; path = Classes/CKTypeAhead.h; sourceTree = "<group>"; };
+		9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CKTypeAhead.mm; path = Classes/CKTypeAhead.mm; sourceTree = "<group>"; };
+		9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKTypeAhead+Generator.h"; path = "Classes/CKTypeAhead+Generator.h"; sourceTree = "<group>"; };
+		9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "CKTypeAhead+Generator.mm"; path = "Classes/CKTypeAhead+Generator.mm"; sourceTree = "<group>"; };
 		9600B8CD1545C56200F07C5A /* CKObjectGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKObjectGraph.h; path = Classes/CKObjectGraph.h; sourceTree = "<group>"; };
 		9600B8CE1545C56200F07C5A /* CKObjectGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKObjectGraph.m; path = Classes/CKObjectGraph.m; sourceTree = "<group>"; };
 		9600B8D11545C6B000F07C5A /* CKSlideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKSlideShowViewController.h; path = Classes/CKSlideShowViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1134,7 +1134,7 @@
 				7506E3F713B8FCBD00EE1471 /* Runtime */,
 				7506E3EF13B8FA5800EE1471 /* Conversion */,
 				75A405EC13D8B66E00D932B0 /* CascadingTree */,
-				9600B8BC1545C40200F07C5A /* SuffixTree */,
+				9600B8BC1545C40200F07C5A /* TypeAhead */,
 				9600B8CC1545C55200F07C5A /* ObjectGraph */,
 				7506E3F313B8FBB100EE1471 /* Document */,
 				964C207D153DB66A00398E0F /* Localization */,
@@ -1921,15 +1921,15 @@
 			name = "CKProperty CellControllers";
 			sourceTree = "<group>";
 		};
-		9600B8BC1545C40200F07C5A /* SuffixTree */ = {
+		9600B8BC1545C40200F07C5A /* TypeAhead */ = {
 			isa = PBXGroup;
 			children = (
-				9600B8BD1545C41400F07C5A /* CKSuffixTree.h */,
-				9600B8BE1545C41400F07C5A /* CKSuffixTree.mm */,
-				9600B8BF1545C41400F07C5A /* CKSuffixTree+Generator.h */,
-				9600B8C01545C41400F07C5A /* CKSuffixTree+Generator.mm */,
+				9600B8BD1545C41400F07C5A /* CKTypeAhead.h */,
+				9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */,
+				9600B8BF1545C41400F07C5A /* CKTypeAhead+Generator.h */,
+				9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */,
 			);
-			name = SuffixTree;
+			name = TypeAhead;
 			sourceTree = "<group>";
 		};
 		9600B8CC1545C55200F07C5A /* ObjectGraph */ = {
@@ -2380,8 +2380,8 @@
 				96E4D3FB1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.h in Headers */,
 				96E4D40015407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.h in Headers */,
 				96E4D4671540918800CCF421 /* UnitTests.h in Headers */,
-				9600B8C11545C41400F07C5A /* CKSuffixTree.h in Headers */,
-				9600B8C31545C41400F07C5A /* CKSuffixTree+Generator.h in Headers */,
+				9600B8C11545C41400F07C5A /* CKTypeAhead.h in Headers */,
+				9600B8C31545C41400F07C5A /* CKTypeAhead+Generator.h in Headers */,
 				9600B8CF1545C56200F07C5A /* CKObjectGraph.h in Headers */,
 				9600B8D31545C6B000F07C5A /* CKSlideShowViewController.h in Headers */,
 				9600B8DD1545CAFF00F07C5A /* CKBreadCrumbViewController.h in Headers */,
@@ -2727,8 +2727,8 @@
 				96E4D3F815406FC100CCF421 /* CKPropertyTableViewCellController+DynamicLayout.m in Sources */,
 				96E4D3FC1540708A00CCF421 /* CKNSNumberPropertyCellController+DynamicLayout.m in Sources */,
 				96E4D40115407D7000CCF421 /* CKUnitTest_TableViewCellController_DynamicLayout.m in Sources */,
-				9600B8C21545C41400F07C5A /* CKSuffixTree.mm in Sources */,
-				9600B8C41545C41400F07C5A /* CKSuffixTree+Generator.mm in Sources */,
+				9600B8C21545C41400F07C5A /* CKTypeAhead.mm in Sources */,
+				9600B8C41545C41400F07C5A /* CKTypeAhead+Generator.mm in Sources */,
 				9600B8D01545C56200F07C5A /* CKObjectGraph.m in Sources */,
 				9600B8D41545C6B000F07C5A /* CKSlideShowViewController.m in Sources */,
 				9600B8DE1545CAFF00F07C5A /* CKBreadCrumbViewController.m in Sources */,

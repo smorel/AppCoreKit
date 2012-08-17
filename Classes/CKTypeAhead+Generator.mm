@@ -1,12 +1,12 @@
 //
-//  CKSuffixTree+Generator.mm
+//  CKTypeAhead+Generator.mm
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#import "CKSuffixTree+Generator.h"
+#import "CKTypeAhead+Generator.h"
 
 #include <string>
 #include <map>
@@ -84,12 +84,12 @@ extern size_t computeHash(const std::string &s);
 using namespace __gnu_cxx;
 typedef hash_map<size_t,unsigned int> FatType;
 
-@interface CKSuffixTree ()
+@interface CKTypeAhead ()
 + (NSString*)formatStringForIndexation:(NSString*)txt;
 @end
 
 
-@implementation CKSuffixTree(CKSuffixTreeGenerator)
+@implementation CKTypeAhead(CKTypeAheadGenerator)
 
 + (void)saveNode:(TreeNodeStruct*)node parentNode:(TreeNodeStruct*)parentNode withBaseName:(NSString*)baseName indexesFile:(std::ofstream*)indexesFile fat:(FatType*)fat{
 	if(parentNode && node && node->indexes.size() <= 1 && parentNode->indexes.size() <= 1)
@@ -137,11 +137,11 @@ typedef hash_map<size_t,unsigned int> FatType;
 	}
 }
 
-+ (void)generateSuffixTreeWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path{
-	[CKSuffixTree generateSuffixTreeWithContentOfFile:fileName writeToPath:path maximumNumberOfObjectsPerIndex:0];
++ (void)generateTypeAheadWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path{
+	[CKTypeAhead generateTypeAheadWithContentOfFile:fileName writeToPath:path maximumNumberOfObjectsPerIndex:0];
 }
 
-+ (void)generateSuffixTreeWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit{
++ (void)generateTypeAheadWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit{
 	NSString* wordsFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"txt"];
 	std::ifstream wordsFile;
 	wordsFile.open([wordsFilePath UTF8String], std::ios_base::in);
@@ -160,7 +160,7 @@ typedef hash_map<size_t,unsigned int> FatType;
 				exportWordsFile.write((char*)&wordSize, (sizeof(unsigned int)));
 				exportWordsFile.write((char*)buffer, wordSize);
 				
-				NSString* stringToIndex = [CKSuffixTree formatStringForIndexation:[NSString stringWithUTF8String:buffer]];
+				NSString* stringToIndex = [CKTypeAhead formatStringForIndexation:[NSString stringWithUTF8String:buffer]];
 				insertText(tree,[stringToIndex UTF8String],seekIndex,indexLimit);
 			}
 			exportWordsFile.close();

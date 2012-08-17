@@ -1,12 +1,12 @@
 //
-//  CKSuffixTree.m
+//  CKTypeAhead.m
 //  AppCoreKit
 //
 //  Created by Sebastien Morel.
 //  Copyright 2011 WhereCloud Inc. All rights reserved.
 //
 
-#include "CKSuffixTree.h"
+#include "CKTypeAhead.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -47,11 +47,11 @@ struct TimeProfiler{
 using namespace __gnu_cxx;
 typedef hash_map<size_t,unsigned int> FatType;
 
-struct CKSuffixTreeStreamReader{
+struct CKTypeAheadStreamReader{
 	std::ifstream wordsFile,fatFile,indexesFile;
 	FatType fat;
 	
-	CKSuffixTreeStreamReader(const std::string& wordsPath,const std::string& fatPath,const std::string& indexesPath){
+	CKTypeAheadStreamReader(const std::string& wordsPath,const std::string& fatPath,const std::string& indexesPath){
 		wordsFile.open(wordsPath.c_str(), std::ios_base::in);
 		fatFile.open(fatPath.c_str(), std::ios_base::binary | std::ios_base::in);
 		indexesFile.open(indexesPath.c_str(), std::ios_base::binary | std::ios_base::in);
@@ -141,20 +141,20 @@ struct CKSuffixTreeStreamReader{
 };
 
 
-/* CKManagedSuffixTreeStreamReader & CKSuffixTreeStreamReaderManager
-       Those Helpers object will manage sharing readers between multiple instances of CKSuffixTree
+/* CKManagedTypeAheadStreamReader & CKTypeAheadStreamReaderManager
+       Those Helpers object will manage sharing readers between multiple instances of CKTypeAhead
        initialized with the same name. That avoid to load fat for the same files several times ...
  */
 
-struct CKManagedSuffixTreeStreamReader{
-	CKSuffixTreeStreamReader* reader;
+struct CKManagedTypeAheadStreamReader{
+	CKTypeAheadStreamReader* reader;
 	int refCount;
 	
-	CKManagedSuffixTreeStreamReader() : refCount(0),reader(0){}
-	CKManagedSuffixTreeStreamReader(CKSuffixTreeStreamReader* _reader) : refCount(1),reader(_reader){}
-	~CKManagedSuffixTreeStreamReader(){ if(refCount == 0 && reader) delete reader; }
+	CKManagedTypeAheadStreamReader() : refCount(0),reader(0){}
+	CKManagedTypeAheadStreamReader(CKTypeAheadStreamReader* _reader) : refCount(1),reader(_reader){}
+	~CKManagedTypeAheadStreamReader(){ if(refCount == 0 && reader) delete reader; }
 	
-	const CKManagedSuffixTreeStreamReader& operator = (const CKManagedSuffixTreeStreamReader& other){
+	const CKManagedTypeAheadStreamReader& operator = (const CKManagedTypeAheadStreamReader& other){
 		reader = other.reader;
 		refCount = other.refCount;
 		return *this;
@@ -163,42 +163,42 @@ struct CKManagedSuffixTreeStreamReader{
 	void release(){ refCount--; }
 };
 
-@interface CKSuffixTreeStreamReaderManager : NSObject{
-	hash_map<size_t,CKManagedSuffixTreeStreamReader> readers;
+@interface CKTypeAheadStreamReaderManager : NSObject{
+	hash_map<size_t,CKManagedTypeAheadStreamReader> readers;
 }
 
-+ (CKSuffixTreeStreamReaderManager*)defaultManager;
-- (CKSuffixTreeStreamReader*)findOrCreateReaderWithWithName:(NSString*)name wordsPath:(NSString*)words fatPath:(NSString*)fat indexesPath:(NSString*)indexes;
-- (CKSuffixTreeStreamReader*)readerForName:(NSString*)name;
++ (CKTypeAheadStreamReaderManager*)defaultManager;
+- (CKTypeAheadStreamReader*)findOrCreateReaderWithWithName:(NSString*)name wordsPath:(NSString*)words fatPath:(NSString*)fat indexesPath:(NSString*)indexes;
+- (CKTypeAheadStreamReader*)readerForName:(NSString*)name;
 - (void)releaseReaderForName:(NSString*)name;
 
 @end
 
-static CKSuffixTreeStreamReaderManager* CKSuffixTreeStreamReaderDefaultManager = nil;
-@implementation CKSuffixTreeStreamReaderManager
+static CKTypeAheadStreamReaderManager* CKTypeAheadStreamReaderDefaultManager = nil;
+@implementation CKTypeAheadStreamReaderManager
 
-+ (CKSuffixTreeStreamReaderManager*)defaultManager{
++ (CKTypeAheadStreamReaderManager*)defaultManager{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        CKSuffixTreeStreamReaderDefaultManager = [[CKSuffixTreeStreamReaderManager alloc]init];
+        CKTypeAheadStreamReaderDefaultManager = [[CKTypeAheadStreamReaderManager alloc]init];
     });
-	return CKSuffixTreeStreamReaderDefaultManager;
+	return CKTypeAheadStreamReaderDefaultManager;
 }
 
-- (CKSuffixTreeStreamReader*)findOrCreateReaderWithWithName:(NSString*)name wordsPath:(NSString*)words fatPath:(NSString*)fat indexesPath:(NSString*)indexes{
+- (CKTypeAheadStreamReader*)findOrCreateReaderWithWithName:(NSString*)name wordsPath:(NSString*)words fatPath:(NSString*)fat indexesPath:(NSString*)indexes{
 	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedSuffixTreeStreamReader>::iterator it = readers.find(key);
+	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
 		return it->second.reader;
 	}
 	
-	readers[key] = CKManagedSuffixTreeStreamReader(new CKSuffixTreeStreamReader([words UTF8String],[fat UTF8String],[indexes UTF8String]));
+	readers[key] = CKManagedTypeAheadStreamReader(new CKTypeAheadStreamReader([words UTF8String],[fat UTF8String],[indexes UTF8String]));
 	return readers[key].reader;
 }
 
-- (CKSuffixTreeStreamReader*)readerForName:(NSString*)name{
+- (CKTypeAheadStreamReader*)readerForName:(NSString*)name{
 	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedSuffixTreeStreamReader>::iterator it = readers.find(key);
+	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
 		return it->second.reader;
 	}
@@ -207,9 +207,9 @@ static CKSuffixTreeStreamReaderManager* CKSuffixTreeStreamReaderDefaultManager =
 
 - (void)releaseReaderForName:(NSString*)name{
 	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedSuffixTreeStreamReader>::iterator it = readers.find(key);
+	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
-		CKManagedSuffixTreeStreamReader& managedReader = it->second;
+		CKManagedTypeAheadStreamReader& managedReader = it->second;
 		managedReader.release();
 		if(managedReader.refCount == 0){
 			readers.erase(it);
@@ -220,20 +220,20 @@ static CKSuffixTreeStreamReaderManager* CKSuffixTreeStreamReaderDefaultManager =
 @end
 
 
-@interface CKSuffixTree ()
+@interface CKTypeAhead ()
 + (NSString*)formatStringForIndexation:(NSString*)txt;
 @end
 
 
-static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
-@implementation CKSuffixTree{
+static NSMutableCharacterSet* CKTypeAheadFormatingStringCharacterSet = nil;
+@implementation CKTypeAhead{
 	NSString* name;
 }
 
 @synthesize name;
 
 - (void)dealloc{
-	[[CKSuffixTreeStreamReaderManager defaultManager] releaseReaderForName:self.name];
+	[[CKTypeAheadStreamReaderManager defaultManager] releaseReaderForName:self.name];
 	self.name = nil;
 	[super dealloc];
 }
@@ -246,10 +246,10 @@ static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
     dispatch_once(&onceToken, ^{
         NSMutableCharacterSet* set = [NSMutableCharacterSet lowercaseLetterCharacterSet];
         [set formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-        CKSuffixTreeFormatingStringCharacterSet = [set retain];
+        CKTypeAheadFormatingStringCharacterSet = [set retain];
     });
 	
-	NSArray* components = [result componentsSeparatedByCharactersInSet:[CKSuffixTreeFormatingStringCharacterSet invertedSet]];
+	NSArray* components = [result componentsSeparatedByCharactersInSet:[CKTypeAheadFormatingStringCharacterSet invertedSet]];
 	result = [components componentsJoinedByString:@""];
 	
 	return result;
@@ -260,18 +260,18 @@ static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
 	NSString* wordsFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"words"];
 	NSString* fatFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"fat"];
 	NSString* indexesFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"indexes"];
-	[[CKSuffixTreeStreamReaderManager defaultManager] findOrCreateReaderWithWithName:fileName wordsPath:wordsFilePath fatPath:fatFilePath indexesPath:indexesFilePath];
+	[[CKTypeAheadStreamReaderManager defaultManager] findOrCreateReaderWithWithName:fileName wordsPath:wordsFilePath fatPath:fatFilePath indexesPath:indexesFilePath];
 	return self;
 }
 
-- (NSArray*)stringsWithSuffix:(NSString*)suffix{
-	return [self stringsWithSuffix:suffix range:NSMakeRange(0,0)];
+- (NSArray*)stringsWithPrefix:(NSString*)prefix{
+	return [self stringsWithPrefix:prefix range:NSMakeRange(0,0)];
 }
 
-- (NSArray*)stringsWithSuffix:(NSString*)suffix range:(NSRange)range{
-	NSString* search = [CKSuffixTree formatStringForIndexation:suffix];
+- (NSArray*)stringsWithPrefix:(NSString*)prefix range:(NSRange)range{
+	NSString* search = [CKTypeAhead formatStringForIndexation:prefix];
 	
-	CKSuffixTreeStreamReader* streamer = [[CKSuffixTreeStreamReaderManager defaultManager] readerForName:self.name];
+	CKTypeAheadStreamReader* streamer = [[CKTypeAheadStreamReaderManager defaultManager] readerForName:self.name];
 	
 	std::vector<std::string> words;
 	(*streamer).getWordsForText([search UTF8String],words,range.location,range.length);
@@ -279,7 +279,7 @@ static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
 	NSMutableArray* results = [NSMutableArray array];
 	for(int i=0;i<words.size();++i){
 		NSString* word = [NSString stringWithUTF8String:words[i].c_str()];
-		NSString* indexedWord = [CKSuffixTree formatStringForIndexation:word];
+		NSString* indexedWord = [CKTypeAhead formatStringForIndexation:word];
 		if([indexedWord hasPrefix:search]){
 			[results addObject:word];
 		}
@@ -288,11 +288,11 @@ static NSMutableCharacterSet* CKSuffixTreeFormatingStringCharacterSet = nil;
 }
 
 
-- (NSUInteger)countStringsWithSuffix:(NSString*)suffix{
-	NSString* search = [CKSuffixTree formatStringForIndexation:suffix];
+- (NSUInteger)numberOfStringsWithPrefix:(NSString*)prefix{
+	NSString* search = [CKTypeAhead formatStringForIndexation:prefix];
 	unsigned int seekOffset = 0;
 	
-	CKSuffixTreeStreamReader* streamer = [[CKSuffixTreeStreamReaderManager defaultManager] readerForName:self.name];
+	CKTypeAheadStreamReader* streamer = [[CKTypeAheadStreamReaderManager defaultManager] readerForName:self.name];
 	return (*streamer).getWordCountForText([search UTF8String],seekOffset);
 }
 
