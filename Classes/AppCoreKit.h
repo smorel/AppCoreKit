@@ -22,3 +22,4 @@
 #import "UnitTests.h"
 
 #import "CKMockManager.h"
+#import "CKLicense.h"
