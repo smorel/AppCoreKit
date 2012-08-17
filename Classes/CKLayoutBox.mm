@@ -983,10 +983,6 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 @interface UILabel (Layout)
 @end
 
-//UIButton
-
-@interface UIButton (Layout)
-@end
 
 //UITextView
 
@@ -1182,8 +1178,35 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
 
 
 //UILabel
+static char UIButtonFlexibleWidthKey;
+static char UIButtonFlexibleHeightKey;
 
 @implementation UIButton (Layout)
+@dynamic flexibleWidth,flexibleHeight;
+
+- (void)setFlexibleWidth:(BOOL)flexibleWidth{
+    objc_setAssociatedObject(self, 
+                             &UIButtonFlexibleWidthKey,
+                             [NSNumber numberWithBool:flexibleWidth],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)flexibleWidth{
+    id value = objc_getAssociatedObject(self, &UIButtonFlexibleWidthKey);
+    return value ? [value boolValue] : NO;
+}
+
+- (void)setFlexibleHeight:(BOOL)flexibleHeight{
+    objc_setAssociatedObject(self, 
+                             &UIButtonFlexibleHeightKey,
+                             [NSNumber numberWithBool:flexibleHeight],
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)flexibleHeight{
+    id value = objc_getAssociatedObject(self, &UIButtonFlexibleHeightKey);
+    return value ? [value boolValue] : NO;
+}
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
     if(CGSizeEqualToSize(size, self.lastComputedSize))
@@ -1194,6 +1217,12 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
     size.height -= self.padding.top + self.padding.bottom;
     
     CGSize ret = [self sizeThatFits:size];
+    if(self.flexibleWidth){
+        ret.width = size.width;
+    }
+    if(self.flexibleHeight){
+        ret.height = size.height;
+    }
     ret = [CKLayoutBox preferedSizeConstraintToSize:ret forBox:self];
     
     self.lastPreferedSize = CGSizeMake(MIN(size.width,ret.width) + self.padding.left + self.padding.right,MIN(size.height,ret.height) + self.padding.top + self.padding.bottom);
