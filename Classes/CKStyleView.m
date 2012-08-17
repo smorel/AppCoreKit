@@ -383,8 +383,8 @@
 	
     CGFloat halfBorder = (borderWidth / 2.0);
     
-    CGFloat x = 0 + ((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
-    CGFloat y = 0 + ((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
+    CGFloat x = 0 + halfBorder; //((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
+    CGFloat y = 0 + halfBorder; //((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
     
 	CGFloat width = self.bounds.size.width - ((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0);
 	CGFloat height = self.bounds.size.height - ((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0);
