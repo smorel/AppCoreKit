@@ -27,6 +27,10 @@ typedef enum{
 typedef enum{
 	CKViewBorderStyleTableViewCell,
 	CKViewBorderStyleAll,
+	CKViewBorderStyleLeft,
+	CKViewBorderStyleRight,
+	CKViewBorderStyleTop,
+	CKViewBorderStyleBottom,
 	CKViewBorderStyleNone
 }CKViewBorderStyle;
 
