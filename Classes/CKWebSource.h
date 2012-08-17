@@ -23,6 +23,14 @@ typedef void (^CKWebSourceCompletionBlock)(id value, NSError *error);
 @interface CKWebSource : CKFeedSource 
 
 ///-----------------------------------
+/// @name Creating Web Source Objects
+///-----------------------------------
+
+/** Returns an autorealeased web source object.
+ */
++ (CKWebSource*)webSource;
+
+///-----------------------------------
 /// @name Customizing the WebSource Behaviour
 ///-----------------------------------
 

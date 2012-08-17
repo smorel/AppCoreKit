@@ -23,6 +23,10 @@ static char UINavigationControllerDidPopViewControllerBlockBlockKey;
 @dynamic didPushViewControllerBlock;
 @dynamic didPopViewControllerBlock;
 
++ (UINavigationController*)navigationControllerWithRootViewController:(UIViewController*)rootViewController{
+    return [[[UINavigationController alloc]initWithRootViewController:rootViewController]autorelease];
+}
+
 - (void)setWillPopViewControllerBlock:(UINavigationControllerBlock)block{
     objc_setAssociatedObject(self, 
                              &UINavigationControllerWillPopViewControllerBlockBlockKey,

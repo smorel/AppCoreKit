@@ -12,6 +12,19 @@
 #import "CKStyle+Parsing.h"
 #import "CKDebug.h"
 
+@implementation UIView (Factory)
+
++ (id)view{
+    return [[[[self class]alloc]init]autorelease];
+}
+
++ (id)viewWithFrame:(CGRect)frame{
+    return [[[[self class]alloc]initWithFrame:frame]autorelease];
+}
+
+@end
+
+
 static char kUIViewNameKey;
 
 @implementation UIView (CKName)

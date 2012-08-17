@@ -16,6 +16,14 @@ typedef void(^UINavigationControllerBlock)(UINavigationController* navigationCon
 @interface UINavigationController (CKBlockBasedDelegate)<UINavigationControllerDelegate>
 
 ///-----------------------------------
+/// @name Creating UINavigationController objects
+///-----------------------------------
+
+/** Returns an autoreleased UINavigationController object.
+ */
++ (UINavigationController*)navigationControllerWithRootViewController:(UIViewController*)rootViewController;
+
+///-----------------------------------
 /// @name Reacting to UINavigationController events
 ///-----------------------------------
 

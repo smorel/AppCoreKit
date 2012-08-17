@@ -48,6 +48,10 @@ NSString* const CKWebSourceErrorNotification = @"CKWebSourceErrorNotification";
 	[super dealloc];
 }
 
++ (CKWebSource*)webSource{
+    return [[[CKWebSource alloc]init]autorelease];
+}
+
 //
 
 - (BOOL)fetchRange:(NSRange)range {

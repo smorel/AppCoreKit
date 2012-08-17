@@ -10,6 +10,24 @@
 
 /**
  */
+@interface UIView (Factory)
+
+///-----------------------------------
+/// @name Identifying view at runtime
+///-----------------------------------
+
+/** Returns an autoreleased view object
+ */
++ (id)view;
+
+/** Returns an autoreleased view object initialized using the specified frame
+ */
++ (id)viewWithFrame:(CGRect)frame;
+
+@end
+
+/**
+ */
 @interface UIView (CKName)
 
 ///-----------------------------------
