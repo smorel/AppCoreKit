@@ -434,6 +434,7 @@
 
 - (void)onSizeChangeEnd{
     if(self.sizeIsAlreadyInvalidated){
+        [[self tableView]beginUpdates];
         [[self tableView]endUpdates];
     }
     self.sizeIsAlreadyInvalidated = NO;
@@ -446,7 +447,7 @@
     }
     
     if(self.sizeIsAlreadyInvalidated == NO){
-        [[self tableView]beginUpdates];
+        //[[self tableView]beginUpdates];
         //[self.tableView setNeedsLayout];
     }
     self.sizeIsAlreadyInvalidated = YES;

@@ -852,7 +852,7 @@
 		return;
     }
 	
-        [self.tableView beginUpdates];
+   //     [self.tableView beginUpdates];
     
     //NSLog(@"didBeginUpdates <%@>",self);
 }
@@ -864,7 +864,7 @@
     }
 	
     //NSLog(@"didEndUpdates <%@>",self);
-        [self.tableView endUpdates];
+   //     [self.tableView endUpdates];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
