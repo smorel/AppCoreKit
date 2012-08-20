@@ -14,6 +14,7 @@
 #import "CKDebug.h"
 #import <objc/runtime.h>
 #import "CKLiveProjectFileUpdateManager.h"
+#import "CKConfiguration.h"
 
 NSString * const CKCascadingTreeFilesDidUpdateNotification = @"CKCascadingTreeFilesDidUpdate";
 
@@ -763,19 +764,19 @@ NSString* const CKCascadingTreeIPhone   = @"@iphone";
     if(path == nil || [path isKindOfClass:[NSNull class]] || [_loadedFiles containsObject:path])
 		return NO;
     
-#if TARGET_IPHONE_SIMULATOR
-    path = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
-        NSSet *toLoadFiles = _loadedFiles.copy;
-        [_loadedFiles removeAllObjects];
-        [_tree removeAllObjects];
-        for (NSString * path in toLoadFiles) {
-            [self loadContentOfFile:path];
-        }
-        [toLoadFiles release];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
-    }];
-#endif
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        path = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
+            NSSet *toLoadFiles = _loadedFiles.copy;
+            [_loadedFiles removeAllObjects];
+            [_tree removeAllObjects];
+            for (NSString * path in toLoadFiles) {
+                [self loadContentOfFile:path];
+            }
+            [toLoadFiles release];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
+        }];
+    }
 	
     //TODO
     NSString* fileAndExtension = [path lastPathComponent];

@@ -14,13 +14,13 @@
 #import "CKLocalizationManager.h"
 #import "CKCascadingTree.h"
 #import "CKLocalizationManager_Private.h"
+#import "CKConfiguration.h"
 
 #import "NSObject+Singleton.h"
+#import "CKRuntime.h"
 #import <objc/runtime.h>
 
 #import "CKDebug.h"
-
-#if TARGET_IPHONE_SIMULATOR
 
 static char UIImageImageNameKey;
 
@@ -41,18 +41,29 @@ static char UIImageImageNameKey;
     return objc_getAssociatedObject(self, &UIImageImageNameKey);
 }
 
+@end
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
-+(UIImage *)imageNamed:(NSString *)name {
+@interface UIImageLiveUpdateProxy : UIImage
+@end
+
+@implementation UIImageLiveUpdateProxy
+
++ (UIImage*)UIImageLiveUpdateProxy_imageNamed:(NSString *)name{
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        UIImage* img = [self UIImageLiveUpdateProxy_imageNamed:name];
+        img.imageName = name;
+        return img;
+    }
+    
     UIImage* image =  _img(name);
     if(image) image.imageName = name;
     return image;
 }
 
-- (id)initWithContentsOfFile:(NSString *)path {
-    if (path.length == 0)
-        return nil;
+- (id)UIImageLiveUpdateProxy_initWithContentsOfFile:(NSString*)path{
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        return [self UIImageLiveUpdateProxy_initWithContentsOfFile:path];
+    }
     
     NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:path handleUpdate:^(NSString *localPath) {
         [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:self];
@@ -82,9 +93,15 @@ static char UIImageImageNameKey;
     
     return anImage;
 }
-#pragma clang diagnostic pop
+
++ (void)load{
+    CKSwizzleSelector([UIImage class], @selector(imageNamed:), @selector(UIImageLiveUpdateProxy_imageNamed:));
+    CKSwizzleSelector([UIImage class], @selector(initWithContentsOfFile:), @selector(UIImageLiveUpdateProxy_initWithContentsOfFile:));
+}
 
 @end
+
+
 
 @interface CKLiveProjectFileUpdateManager ()
 
@@ -125,7 +142,7 @@ static char UIImageImageNameKey;
 }
 
 - (NSString*)localPathForResourcePath:(NSString*)resourcePath {
-    NSString* sourcePath = [[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
+    NSString* sourcePath = [[CKConfiguration sharedInstance]sourceTreeDirectory];
     
     if (sourcePath == nil)
         return resourcePath;
@@ -176,4 +193,3 @@ static char UIImageImageNameKey;
 }
 
 @end
-#endif

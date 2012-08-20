@@ -22,6 +22,7 @@
 #import "NSObject+ValueTransformer.h"
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
+#import "CKConfiguration.h"
 
 #import "CKDebug.h"
 
@@ -71,11 +72,11 @@ static NSSet* CKStyleResourceTypeSet = nil;
 		return object;
 	}
 	id result = [NSValueTransformer transform:object toClass:[UIImage class]];
-#if !TARGET_IPHONE_SIMULATOR
-    if(result){
-		[self setObject:result forKey:key];
-	}
-#endif
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        if(result){
+            [self setObject:result forKey:key];
+        }
+    }
     return result;
 }
 

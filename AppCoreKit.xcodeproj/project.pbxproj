@@ -472,6 +472,8 @@
 		964C2085153DD93200398E0F /* CKTableViewCellController+BlockBasedInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C2083153DD92E00398E0F /* CKTableViewCellController+BlockBasedInterface.m */; };
 		964DAF7C153F2A2A0024C08F /* CKFormSection+PropertyGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = 964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964DAF7D153F2A2A0024C08F /* CKFormSection+PropertyGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */; };
+		9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9659E34215E274FF00D43C33 /* CKConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9659E34315E274FF00D43C33 /* CKConfiguration.m */; };
 		9660F472156308F700FE2081 /* VendorsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660F471156308F700FE2081 /* VendorsKit.framework */; };
 		967C51811538BD4E00B3F785 /* NSObject+Singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		967C51821538BD4E00B3F785 /* NSObject+Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 967C51801538BD4E00B3F785 /* NSObject+Singleton.m */; };
@@ -1014,6 +1016,8 @@
 		964C2083153DD92E00398E0F /* CKTableViewCellController+BlockBasedInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKTableViewCellController+BlockBasedInterface.m"; path = "Classes/CKTableViewCellController+BlockBasedInterface.m"; sourceTree = "<group>"; };
 		964DAF7A153F2A2A0024C08F /* CKFormSection+PropertyGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKFormSection+PropertyGrid.h"; path = "Classes/CKFormSection+PropertyGrid.h"; sourceTree = "<group>"; };
 		964DAF7B153F2A2A0024C08F /* CKFormSection+PropertyGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKFormSection+PropertyGrid.m"; path = "Classes/CKFormSection+PropertyGrid.m"; sourceTree = "<group>"; };
+		9659E34215E274FF00D43C33 /* CKConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKConfiguration.h; path = Classes/CKConfiguration.h; sourceTree = "<group>"; };
+		9659E34315E274FF00D43C33 /* CKConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKConfiguration.m; path = Classes/CKConfiguration.m; sourceTree = "<group>"; };
 		9660F471156308F700FE2081 /* VendorsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VendorsKit.framework; path = VendorsKit/1.0.0/VendorsKit.framework; sourceTree = CloudKitFrameworks; };
 		966B51E51593CD8300311735 /* CKObject+CKStore_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CKObject+CKStore_Private.h"; path = "Classes/CKObject+CKStore_Private.h"; sourceTree = "<group>"; };
 		967C517F1538BD4E00B3F785 /* NSObject+Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Singleton.h"; path = "Classes/NSObject+Singleton.h"; sourceTree = "<group>"; };
@@ -1128,6 +1132,8 @@
 			isa = PBXGroup;
 			children = (
 				75C6DF5713FEC5BC00E4AE4F /* Foundation.h */,
+				9659E34215E274FF00D43C33 /* CKConfiguration.h */,
+				9659E34315E274FF00D43C33 /* CKConfiguration.m */,
 				7560DB4913B8ED3600268D13 /* CKDebug.h */,
 				4F689A6413CF2A4E000CE416 /* CKDebug.m */,
 				7560DC5A13B8ED3600268D13 /* CKWeakRef.h */,
@@ -2415,6 +2421,7 @@
 				96EBE433159A43AB00E0F209 /* UIView+Name.h in Headers */,
 				963833BC15AF61D40089B86E /* CKTableViewCellController+DynamicLayout_Private.h in Headers */,
 				964AFFCC15DED1C4000C11F9 /* CKLicense.h in Headers */,
+				9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2767,6 +2774,7 @@
 				96D2674315923B7700840A7F /* NSTimer+BlockBaseInterface.m in Sources */,
 				96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */,
 				9621784215DECF6900FB5792 /* CKLicense.mm in Sources */,
+				9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

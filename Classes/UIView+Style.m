@@ -32,6 +32,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKConfiguration.h"
+
 
 //NSMutableSet* reserverKeyWords = nil;
 
@@ -633,17 +635,18 @@ static char NSObjectDebugAppliedStyleObjectKey;
 @dynamic debugAppliedStyle;
 
 - (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
-#if !TARGET_IPHONE_SIMULATOR
-    objc_setAssociatedObject(self, 
-                             &NSObjectAppliedStyleObjectKey,
-                             appliedStyle,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#else
-    objc_setAssociatedObject(self, 
-                             &NSObjectDebugAppliedStyleObjectKey,
-                             appliedStyle,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#endif
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        objc_setAssociatedObject(self, 
+                                 &NSObjectAppliedStyleObjectKey,
+                                 appliedStyle,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    else{
+        objc_setAssociatedObject(self, 
+                                 &NSObjectDebugAppliedStyleObjectKey,
+                                 appliedStyle,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
 }
 
 - (NSMutableDictionary*)appliedStyle{
@@ -662,11 +665,12 @@ static char NSObjectDebugAppliedStyleObjectKey;
 }
 
 - (NSString*)appliedStylePath{
-#if TARGET_IPHONE_SIMULATOR
-    NSMutableDictionary* style = [self debugAppliedStyle];
-#else
-    NSMutableDictionary* style = [self appliedStyle];
-#endif
+    NSMutableDictionary* style = nil;
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        style = [self debugAppliedStyle];
+    }else{
+       style = [self appliedStyle];
+    }
     return [style path];
 }
 

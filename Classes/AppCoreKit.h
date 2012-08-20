@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "CKConfiguration.h"
 #import "Foundation.h"
 #import "Bindings.h"
 #import "Mappings.h"

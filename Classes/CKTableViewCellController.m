@@ -30,6 +30,7 @@
 #import "NSObject+Singleton.h"
 #import "CKDebug.h"
 #import "UIView+Name.h"
+#import "CKConfiguration.h"
 
 #import "CKVersion.h"
 
@@ -665,9 +666,7 @@
 }
 
 - (NSString *)identifier {
-#if !TARGET_IPHONE_SIMULATOR
-    if(_identifier == nil){
-#endif
+    if(_identifier == nil || [[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         if(self.createCallback){
             [self.createCallback execute:self];
@@ -678,10 +677,7 @@
         
         [_identifier release];
         _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle]retain];
-        
-#if !TARGET_IPHONE_SIMULATOR
     }
-#endif
     return _identifier;
 }
 

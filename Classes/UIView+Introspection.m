@@ -23,6 +23,7 @@
 #import "NSObject+ValueTransformer.h"
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
+#import "CKConfiguration.h"
 
 #import "CKDebug.h"
 
@@ -118,11 +119,14 @@
 																		   withClass:[UIColor class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeCopy
 																			readOnly:NO]];
-#if !TARGET_IPHONE_SIMULATOR
-    NSString *appliedStyleDescription = @"appliedStyle";
-#else
-    NSString *appliedStyleDescription = @"debugAppliedStyle";
-#endif
+    
+    NSString *appliedStyleDescription = nil;
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        appliedStyleDescription = @"debugAppliedStyle";
+    }else{
+        appliedStyleDescription = @"appliedStyle";
+    }
+    
 	[properties addObject:[CKClassPropertyDescriptor classDescriptorForPropertyNamed:appliedStyleDescription
 																		   withClass:[NSMutableDictionary class]
 																		  assignment:CKClassPropertyDescriptorAssignementTypeRetain

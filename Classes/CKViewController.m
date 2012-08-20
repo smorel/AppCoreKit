@@ -20,14 +20,8 @@
 #import "UIView+Style.h"
 #import "CKRuntime.h"
 #import "CKContainerViewController.h"
+#import "CKConfiguration.h"
 
-typedef enum CKDebugCheckState{
-    CKDebugCheckState_none,
-    CKDebugCheckState_NO,
-    CKDebugCheckState_YES
-}CKDebugCheckState;
-
-static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
 
 @interface CKViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
@@ -96,9 +90,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.state = CKViewControllerStateNone;
     
-#if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
 }
 
 - (id)init {
@@ -160,9 +152,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_inlineDebuggerController = nil;
 #endif
     
-#if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
     
 	[super dealloc];
 }
@@ -666,15 +656,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 
-#ifdef DEBUG
+//#ifdef DEBUG
 - (void)CheckForBlockCopy{
-    if(CKDebugCheckForBlockCopyCurrentState == CKDebugCheckState_none){
-        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugCheckForBlockCopy"]boolValue];
-        CKDebugCheckForBlockCopyCurrentState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
-    }
-    
-    if(CKDebugCheckForBlockCopyCurrentState != CKDebugCheckState_YES)
-        return;
+   if(![[CKConfiguration sharedInstance]checkViewControllerCopyInBlocks])
+       return;
     
     void *frames[128];
     int len = backtrace(frames, 128);
@@ -694,7 +679,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self CheckForBlockCopy];
     return [super retain];
 }
-#endif
+//#endif
 
 
 
