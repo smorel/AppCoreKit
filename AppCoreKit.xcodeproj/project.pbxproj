@@ -486,7 +486,7 @@
 		9691A53C1582575900E4E6E8 /* CKWebRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 9691A53A1582575900E4E6E8 /* CKWebRequest+Mapping.m */; };
 		969AFE6B1561506B00CFE27A /* CKGridCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE691561506B00CFE27A /* CKGridCollectionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		969AFE6C1561506B00CFE27A /* CKGridCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6A1561506B00CFE27A /* CKGridCollectionViewController.m */; };
-		969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		969AFE6F156151D700CFE27A /* CKGridTableViewCellController.h in Headers */ = {isa = PBXBuildFile; fileRef = 969AFE6D156151D700CFE27A /* CKGridTableViewCellController.h */; settings = {ATTRIBUTES = (); }; };
 		969AFE70156151D700CFE27A /* CKGridTableViewCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AFE6E156151D700CFE27A /* CKGridTableViewCellController.m */; };
 		969FA53F14966CD90095C61E /* UILabel+Highlight.h in Headers */ = {isa = PBXBuildFile; fileRef = 969FA53B14966CD90095C61E /* UILabel+Highlight.h */; };
 		969FA54014966CD90095C61E /* UILabel+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53C14966CD90095C61E /* UILabel+Highlight.m */; };
@@ -529,7 +529,7 @@
 		B084A649156E786D0077AFDE /* CKWebViewController.m in Headers */ = {isa = PBXBuildFile; fileRef = 7560DC6713B8ED3600268D13 /* CKWebViewController.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DE156D5C7C00F7428D /* CKWebRequest+Initialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B096D2DC156D5C7C00F7428D /* CKWebRequest+Initialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B096D2DF156D5C7C00F7428D /* CKWebRequest+Initialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B096D2DD156D5C7C00F7428D /* CKWebRequest+Initialization.m */; };
-		B0A46C9B1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B0A46C991582425900B6D5B3 /* CKLiveProjectFileUpdateManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		B0A46C9B1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = B0A46C991582425900B6D5B3 /* CKLiveProjectFileUpdateManager.h */; settings = {ATTRIBUTES = (); }; };
 		B0A46C9C1582425A00B6D5B3 /* CKLiveProjectFileUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A46C9A1582425900B6D5B3 /* CKLiveProjectFileUpdateManager.m */; };
 		B0D44F671566F03F005B3B09 /* CKWebDataConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B0D44F651566F03F005B3B09 /* CKWebDataConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0D44F681566F03F005B3B09 /* CKWebDataConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D44F661566F03F005B3B09 /* CKWebDataConverter.m */; };
