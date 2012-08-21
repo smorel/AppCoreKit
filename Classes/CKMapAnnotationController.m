@@ -15,6 +15,7 @@
 #import "CKRuntime.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKMapCollectionViewController.h"
+#import "NSObject+Bindings.h"
 
 @interface CKCalloutView : UIView
 @property (nonatomic,retain) UIView* calloutView;
@@ -103,6 +104,7 @@
 @synthesize calloutViewControllerCreationBlock = _calloutViewControllerCreationBlock;
 
 - (void)dealloc{
+    [self clearBindingsContext];
     [_calloutViewController release];
     _calloutViewController = nil;
     [_calloutViewControllerCreationBlock release];
@@ -144,7 +146,10 @@
             
             self.calloutViewController = _calloutViewControllerCreationBlock(self.annotationController,self);
             if(_calloutViewController){
+                
                 UIView* view = [_calloutViewController view];
+                view.autoresizingMask = UIViewAutoresizingNone;
+                
                 CGSize size = _calloutViewController.contentSizeForViewInPopover;
                 if([_calloutViewController isKindOfClass:[UINavigationController class]]){
                     UINavigationController* nav = (UINavigationController*)_calloutViewController;
@@ -154,6 +159,29 @@
                 view.height = size.height;
                 
                 v.calloutView = view;
+                
+                [self beginBindingsContextByRemovingPreviousBindings];
+                if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+                    UINavigationController* nav = (UINavigationController*)_calloutViewController;
+                    [nav bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
+                        CGSize size = _calloutViewController.contentSizeForViewInPopover;
+                        if([_calloutViewController isKindOfClass:[UINavigationController class]]){
+                            UINavigationController* nav = (UINavigationController*)_calloutViewController;
+                            size = nav.topViewController.contentSizeForViewInPopover;
+                        }
+                        
+                        view.width = size.width;
+                        view.height = size.height;
+                    }];
+                }else{
+                    [_calloutViewController bind:@"contentSizeForViewInPopover" withBlock:^(id value) {
+                        CGSize size = _calloutViewController.contentSizeForViewInPopover;
+                        
+                        view.width = size.width;
+                        view.height = size.height;
+                    }];
+                }
+                [self endBindingsContext];
                 
                 [_calloutViewController viewWillAppear:YES];
                 [subview addSubview:view];
