@@ -167,6 +167,9 @@
 }
 
 - (void)applyStyle{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
 	[self applyStyle:[self controllerStyle] forView:self.view];
 }
 

@@ -367,7 +367,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	self.text = _(descriptor.name);
     
-    NSString* placeholderText = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
+    NSString* placeholderText = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
     NSDate* date = [model value];
     if(date){
         self.detailText = [NSValueTransformer transformProperty:model toClass:[NSString class]];

@@ -215,6 +215,9 @@
 }
 
 - (void)applyStyleForLeftBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -240,6 +243,9 @@
 }
 
 - (void)applyStyleForRightBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -266,6 +272,9 @@
 }
 
 - (void)applyStyleForBackBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -294,6 +303,9 @@
 }
 
 - (void)applyStyleForTitleView{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.titleView){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -336,6 +348,9 @@
 }
 
 - (void)applyStyleForNavigation{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     
     //disable animations in case frames are set in stylesheets and currently in animation...

@@ -40,6 +40,10 @@
 
 /**
  */
+- (BOOL)isEmpty;
+
+/**
+ */
 - (NSMutableDictionary*)styleForObject:(id)object  propertyName:(NSString*)propertyName;
 
 ///-----------------------------------

@@ -18,8 +18,12 @@
 
 - (void)setX:(CGFloat)x{
     CGRect theFrame = self.frame;
-    theFrame.origin.x = x;
-    self.frame = theFrame;
+    if(theFrame.origin.x != x){
+        [self willChangeValueForKey:@"frame"];
+        theFrame.origin.x = x;
+        self.frame = theFrame;
+        [self didChangeValueForKey:@"frame"];
+    }
 }
 
 - (CGFloat)y{
@@ -28,8 +32,12 @@
 
 - (void)setY:(CGFloat)y{
     CGRect theFrame = self.frame;
-    theFrame.origin.y = y;
-    self.frame = theFrame;
+    if(theFrame.origin.y != y){
+        [self willChangeValueForKey:@"frame"];
+        theFrame.origin.y = y;
+        self.frame = theFrame;
+        [self didChangeValueForKey:@"frame"];
+    }
 }
 
 - (CGFloat)width{
@@ -38,8 +46,12 @@
 
 - (void)setWidth:(CGFloat)width{
     CGRect theFrame = self.frame;
-    theFrame.size.width = width;
-    self.frame = theFrame;
+    if(theFrame.size.width != width){
+        [self willChangeValueForKey:@"frame"];
+        theFrame.size.width = width;
+        self.frame = theFrame;
+        [self didChangeValueForKey:@"frame"];
+    }
 }
 
 - (CGFloat)height{
@@ -48,8 +60,12 @@
 
 - (void)setHeight:(CGFloat)height{
     CGRect theFrame = self.frame;
-    theFrame.size.height = height;
-    self.frame = theFrame;
+    if(theFrame.size.height != height){
+        [self willChangeValueForKey:@"frame"];
+        theFrame.size.height = height;
+        self.frame = theFrame;
+        [self didChangeValueForKey:@"frame"];
+    }
 }
 
 @end

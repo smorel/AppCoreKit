@@ -13,7 +13,6 @@
 
 @interface CKWebBrowserViewController () <UIWebViewDelegate>
 
-@property (nonatomic, readwrite, retain) NSURL *homeURL;
 @property (nonatomic, readwrite, retain) CKWebViewController *webController;
 
 @property (nonatomic, readwrite, retain) UIBarButtonItem *backButtonItem;
@@ -37,7 +36,7 @@
 
 @implementation CKWebBrowserViewController
 
-@synthesize homeURL, webController;
+@synthesize homeURL = _homeURL, webController;
 @synthesize backButtonItem, forwardButtonItem, refreshButtonItem, actionButtonItem, spinnerItem;
 @synthesize showDocumentTitle;
 @synthesize wasUsingToolbar, wasUsingNavigationbar;
@@ -58,6 +57,10 @@
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
     [super dealloc];
+}
+
++ (CKWebBrowserViewController*)webBrowserWithUrl:(NSURL *)url{
+    return [[[CKWebBrowserViewController alloc]initWithURL:url]autorelease];
 }
 
 #pragma mark View Management
@@ -84,6 +87,9 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    CKViewControllerAnimatedBlock oldViewWillAppearEndBlock = [self.viewWillAppearEndBlock copy];
+    self.viewWillAppearEndBlock = nil;
+    
 	[super viewWillAppear:animated];
     
     [self.webController viewWillAppear:animated];
@@ -112,7 +118,23 @@
     
 	[self.navigationController setNavigationBarHidden:NO animated:animated];
 	[self.navigationController setToolbarHidden:NO animated:animated];
+    
+    if(oldViewWillAppearEndBlock){
+        oldViewWillAppearEndBlock(self,animated);
+    }
+    self.viewWillAppearEndBlock = oldViewWillAppearEndBlock;
+}
 
+- (void)setHomeURL:(NSURL *)thehomeURL{
+    [_homeURL release];
+    _homeURL = [thehomeURL retain];
+    
+    if(self.isViewDisplayed){
+        [self.webController loadURL:self.homeURL];
+        
+        self.backButtonItem.enabled = NO;
+        self.forwardButtonItem.enabled = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

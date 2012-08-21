@@ -217,10 +217,12 @@
 @synthesize splitView = _splitView;
 @synthesize hasBeenReloaded;
 @synthesize addOrRemoveAnimationBlock;
+@synthesize orientation;
 
 - (void)postInit{
     [super postInit];
     self.hasBeenReloaded = NO;
+    self.orientation = CKSplitViewOrientationHorizontal;
 }
 
 - (void)dealloc{
@@ -232,10 +234,29 @@
     [super dealloc];
 }
 
++ (CKSplitViewController*)splitViewControllerWithOrientation:(CKSplitViewOrientation)orientation{
+    CKSplitViewController* controller = [CKSplitViewController controller];
+    controller.orientation = orientation;
+    return controller;
+}
+
++ (CKSplitViewController*)splitViewControllerWithViewControllers:(NSArray*)viewControllers{
+    return [[[CKSplitViewController alloc]initWithViewControllers:viewControllers]autorelease];
+}
+
++ (CKSplitViewController*)splitViewControllerWithViewControllers:(NSArray*)viewControllers orientation:(CKSplitViewOrientation)orientation{
+    return [[[CKSplitViewController alloc]initWithViewControllers:viewControllers orientation:orientation]autorelease];
+}
 
 - (id)initWithViewControllers:(NSArray*)theViewControllers{
     self = [super init];
     self.viewControllers = theViewControllers;
+    return self;
+}
+
+- (id)initWithViewControllers:(NSArray*)viewControllers orientation:(CKSplitViewOrientation)theorientation{
+    self = [self initWithViewControllers:viewControllers];
+    self.orientation = theorientation;
     return self;
 }
 
@@ -312,6 +333,8 @@
         _splitView.addOrRemoveBlock = self.addOrRemoveAnimationBlock;
         [self.view addSubview:_splitView];
     }
+    
+    _splitView.orientation = self.orientation;
     
     if(_splitView.delegate == nil){
         _splitView.delegate = self;

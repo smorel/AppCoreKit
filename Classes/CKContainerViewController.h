@@ -28,6 +28,12 @@ typedef enum CKTransitionType{
 @interface CKContainerViewController : CKViewController
 
 ///-----------------------------------
+/// @name Creating Container Controller Objects
+///-----------------------------------
+
++ (id)controllerWithViewControllers:(NSArray *)viewControllers;
+
+///-----------------------------------
 /// @name Initializing Container Controller Objects
 ///-----------------------------------
 

@@ -58,7 +58,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+
     [self updateSegmentUsingViewControllers:self.viewControllers];
 }
 
@@ -158,6 +158,7 @@
             }];
             ++i;
         }
+        
         [NSObject endBindingsContext];
 
         
@@ -167,6 +168,9 @@
         self.segmentedControl.selectedSegmentIndex = 0;
         
         [self applyStyle];
+        
+        //Style could overload sizes ...
+        [self updateSegmentPositionUsingPosition:self.segmentPosition];
     }
 }
 

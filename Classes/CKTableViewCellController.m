@@ -538,6 +538,9 @@
 }
 
 - (void)reapplyStyleForBackgroundViews{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     //WE SHOULD OPTIMALLY DO THIS ONLY WHEN INDEXPATH CHANGE FROM FIRST/MIDDLE/LAST
     if(self.tableViewCell){
         CKStyleView* backgroundStyleView = nil;
@@ -617,6 +620,12 @@
 
 + (id)cellController{
     return [[[[self class]alloc]init]autorelease];
+}
+
++ (id)cellControllerWithName:(NSString*)name{
+    id controller = [[[[self class]alloc]init]autorelease];
+    [controller setName:name];
+    return controller;
 }
 
 
