@@ -433,8 +433,11 @@
         }
     }else{
         UILabel* label = [[[UILabel alloc]init]autorelease];
+        label.font = [UIFont boldSystemFontOfSize:20];
+        label.textColor = [UIColor whiteColor];
+        label.shadowOffset = CGSizeMake(0,-1);
+        label.shadowColor = [UIColor darkGrayColor];
         label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
         label.text = self.title;
         
         self.navigationItem.titleView = label;
