@@ -9,6 +9,7 @@
 #import "CKConfiguration.h"
 #import "CKCascadingTree.h"
 #import "NSValueTransformer+Additions.h"
+#import "CKVersion.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
@@ -74,6 +75,10 @@
     BOOL simu = [CKConfiguration isSimulator];
     self.sourceTreeDirectory = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SRC_ROOT"];//[[[NSProcessInfo processInfo] environment] objectForKey:@"SRC_ROOT"];
     self.resourcesLiveUpdateEnabled = simu && self.sourceTreeDirectory != nil;
+    
+    if([CKOSVersion() floatValue] >= 5){
+        self.checkViewControllerCopyInBlocks = NO;
+    }
 }
 
 + (CKConfiguration*)initWithContentOfFileNames:(NSString*)fileName type:(CKConfigurationType)type{

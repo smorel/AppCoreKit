@@ -167,6 +167,23 @@ static char UIBarButtonItemExecutionBlockKey;
     return objc_getAssociatedObject(self, &UIBarButtonItemExecutionBlockKey);
 }
 
+
++ (id)barButtonItemWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())block{
+    return [[[UIBarButtonItem alloc]initWithImage:image style:style block:block]autorelease];
+}
+
++ (id)barButtonItemWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style block:(void(^)())block{
+    return [[[UIBarButtonItem alloc]initWithTitle:title style:style block:block]autorelease];
+}
+
++ (id)barButtonItemWithTag:(NSInteger)tag style:(UIBarButtonItemStyle)style block:(void(^)())block{
+    return [[[UIBarButtonItem alloc]initWithTag:tag style:style block:block]autorelease];
+}
+
++ (id)barButtonItemWithSystemItem:(UIBarButtonSystemItem)systemItem block:(void(^)())block{
+    return [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:systemItem block:block]autorelease];
+}
+
 - (id)initWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())theblock{
     self = [self initWithImage:image style:style target:self action:@selector(execute:)];
     self.block = theblock;

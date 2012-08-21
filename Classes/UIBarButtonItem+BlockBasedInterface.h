@@ -16,6 +16,27 @@ typedef void(^UIBarButtonItemExecutionBlock)();
  */
 @interface UIBarButtonItem (CKAdditions)
 
+
+///-----------------------------------
+/// @name Creating Bar Button Item Objects
+///-----------------------------------
+
+/**
+ */
++ (id)barButtonItemWithImage:(UIImage *)image style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
++ (id)barButtonItemWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
++ (id)barButtonItemWithTag:(NSInteger)tag style:(UIBarButtonItemStyle)style block:(void(^)())block;
+
+/**
+ */
++ (id)barButtonItemWithSystemItem:(UIBarButtonSystemItem)systemItem block:(void(^)())block;
+
 ///-----------------------------------
 /// @name Initializing Bar Button Item Objects
 ///-----------------------------------

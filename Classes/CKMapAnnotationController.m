@@ -186,6 +186,16 @@
     [super dealloc];
 }
 
++ (CKMapAnnotationController*)annotationController{
+    return [[[CKMapAnnotationController alloc]init]autorelease];
+}
+
++ (CKMapAnnotationController*)annotationControllerWithName:(NSString*)name{
+    CKMapAnnotationController* controller = [[[CKMapAnnotationController alloc]init]autorelease];
+    controller.name = name;
+    return controller;
+}
+
 - (void)styleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
 	attributes.enumDescriptor = CKEnumDefinition(@"CKMapAnnotationStyle",
                                                CKMapAnnotationCustom,

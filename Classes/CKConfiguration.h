@@ -66,6 +66,7 @@ typedef enum CKConfigurationType{
 @property(nonatomic,assign,readwrite) BOOL checkViewControllerCopyInBlocks;
 
 /** Enabling this flag will assert when a binding is created out of a context (beginBindingsContex/endBindingContext). Context allow to manage the life cycle of a binding. Bindings created out of a context will live forever or beeing killed when one of the referenced objects is beeing deallocated. We prefer to manage their life cycle in contexts as we know exactly when we want to start/end the binding.
+ @warning This flags will be enabled only with IOS 4.3 and earlier because after 5.0, The new view controller hieracrhy from apple copies views controllers in animation blocks.
  */
 @property(nonatomic,assign,readwrite) BOOL assertForBindingsOutOfContext;
 
