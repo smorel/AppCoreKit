@@ -296,8 +296,7 @@
             }
         }
         
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
+        [self.tableView reloadData];
     }
     
 	if (self.stickySelectionEnabled == NO){
