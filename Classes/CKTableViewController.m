@@ -434,8 +434,12 @@
 
 - (void)onSizeChangeEnd{
     if(self.sizeIsAlreadyInvalidated){
-        [[self tableView]beginUpdates];
-        [[self tableView]endUpdates];
+        if(self.tableView.scrollEnabled){
+            [[self tableView]beginUpdates];
+            [[self tableView]endUpdates];
+        }else{
+            [[self tableView]reloadData];
+        }
     }
     self.sizeIsAlreadyInvalidated = NO;
 }
