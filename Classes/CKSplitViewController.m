@@ -313,7 +313,14 @@
             }
         }
         
+        if(animated){
+            [UIView beginAnimations:@"SplitViewControllerChanges" context:nil];
+            [UIView setAnimationDuration:0.4];
+        }
         [_splitView reloadData];
+        if(animated){
+            [UIView commitAnimations];
+        }
         
         if([CKOSVersion() floatValue] < 5){
             for(UIViewController* controller in _viewControllers){
