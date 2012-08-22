@@ -155,10 +155,14 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
-									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
-                                                                     CKViewBorderStyleTableViewCell,
-																	 CKViewBorderStyleAll,
-																	 CKViewBorderStyleNone)];
+									 withEnumDescriptor:CKBitMaskDefinition(@"CKViewBorderStyle",
+                                                                            CKViewBorderStyleTableViewCell,
+                                                                            CKViewBorderStyleAll,
+                                                                            CKViewBorderStyleNone,
+                                                                            CKViewBorderStyleTop,
+                                                                            CKViewBorderStyleBottom,
+                                                                            CKViewBorderStyleLeft,
+                                                                            CKViewBorderStyleRight)];
 }
 
 - (UIColor*)separatorColor{
@@ -499,20 +503,23 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 							borderStyle = [myViewStyle borderStyle];
 						}
 						
-						if(borderStyle == CKViewBorderStyleTableViewCell && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
+						if((borderStyle & CKViewBorderStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
 							viewBorderType = [delegate view:gradientView borderStyleWithStyle:myViewStyle];
 						}
 						else{
-							switch(borderStyle){
-								case CKViewBorderStyleAll:{
-									viewBorderType = CKStyleViewBorderLocationAll;
-									break;
-								}
-								case CKViewBorderStyleNone:{
-									viewBorderType = CKStyleViewBorderLocationNone;
-									break;
-								}
-							}
+                            viewBorderType = CKStyleViewBorderLocationNone;
+                            if(borderStyle & CKViewBorderStyleTop){
+                                viewBorderType |= CKStyleViewBorderLocationTop;
+                            }
+                            if(borderStyle & CKViewBorderStyleLeft){
+                                viewBorderType |= CKStyleViewBorderLocationLeft;
+                            }
+							if(borderStyle & CKViewBorderStyleRight){
+                                viewBorderType |= CKStyleViewBorderLocationRight;
+                            }
+							if(borderStyle & CKViewBorderStyleBottom){
+                                viewBorderType |= CKStyleViewBorderLocationBottom;
+                            }
 						}
 						gradientView.borderLocation = viewBorderType;
                         
