@@ -102,6 +102,7 @@
     //place the segmented control
     switch(self.segmentPosition){
         case CKSegmentedViewControllerPositionTop:{
+            self.segmentedControl.autoResizeToFitContent = NO;
             self.containerView.y = self.segmentedControl.height;
             self.containerView.height = [self.view height] - self.segmentedControl.height;
             self.segmentedControl.y = 0;
@@ -112,6 +113,7 @@
             break;
         }
         case CKSegmentedViewControllerPositionBottom:{
+            self.segmentedControl.autoResizeToFitContent = NO;
             self.containerView.height = [self.view height] - self.segmentedControl.height;
             self.segmentedControl.y = self.containerView.height;
             self.segmentedControl.x = 0;
@@ -121,10 +123,12 @@
             break;
         }
         case CKSegmentedViewControllerPositionNavigationBar:{
+            self.segmentedControl.autoResizeToFitContent = YES;
             self.navigationItem.titleView = self.segmentedControl;
             break;
         }
         case CKSegmentedViewControllerPositionToolBar:{
+            self.segmentedControl.autoResizeToFitContent = YES;
             [self setToolbarItems:[NSArray arrayWithObjects:
                                    [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
                                    [[[UIBarButtonItem alloc] initWithCustomView:self.segmentedControl] autorelease],
