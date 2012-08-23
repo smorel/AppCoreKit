@@ -7,51 +7,18 @@
 //
 
 #import "CKLicense.h"
+#import <VendorsKit/VendorsKit.h>
+#include <string.h>
+
+#import "NSDate+Conversions.h"
 
 
 @implementation CKLicense
 @end
 
-
-//http://stackoverflow.com/questions/10451305/rsa-decryption-with-openssl
-/*
-+(NSString *) rsaDecryptToStringFromText: (NSString *) text
-{
-    //NSLog(@"text - %@", text);
-    
-    NSData *decodedData = [NSData dataWithBase64EncodedString: text];
-    
-    unsigned char* message = (unsigned char*) [decodedData bytes];
-    
-    NSLog(@"decoded string - %s", message);
-    
-    RSA *privKey = NULL;
-    FILE *priv_key_file;
-    unsigned char *ptext;
-    
-    NSString *keyFilePath = [[NSBundle mainBundle] pathForResource:@"privateKeyPair" ofType:@"pem"];
-    
-    priv_key_file = fopen([keyFilePath UTF8String], "rb");
-    
-    ERR_print_errors_fp(priv_key_file);
-    
-    privKey = PEM_read_RSAPrivateKey(priv_key_file, NULL, NULL, NULL);
-    
-    int key_size = RSA_size(privKey);
-    ptext = malloc(key_size);
-    
-    int outlen = RSA_private_decrypt(key_size, (const unsigned char*)message, ptext, privKey, RSA_PKCS1_PADDING);
-    
-    if(outlen < 0) return nil;
-    
-    RSA_free(privKey);
-    
-    return [NSString stringWithUTF8String: (const char *)ptext];
-}*/
-
-
-
 #ifdef DISTRIBUTION
+
+static const char pub_key[] = {"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyjapahE9WLWaumlDcPJJ\nyql1xeMF3IZh123wFLW0E6K5Twgbg7aFzCnZCLj4j6n606m7OWWKNCHEAGO/68e4\nGRL+k2237iCLeDc4cGv94sENiBcJbt0lVTiLZbS8j7P/v58Cc83bXlRIwmKHyS4C\n1JnSeAPLsEbblKsgkEyX/xEgQYK8G2hhpdotMtKM2ltlvSE2PBSSE+61qxRaBQHy\nkgW3JUA9uDcxwXCRLT7AzC8MNqQk89pCPFEk6sgHslrFjQEIj54vEJBbDsbHnjON\n9wE6zAG23H/3i/zmmgWn/ueHmxGkxMbEFmKn8YllUZ3vDA1hffjyxsYv47qhtSye\nkQIDAQAB\n-----END PUBLIC KEY-----"};
 
 bool checkLicense(){
     Class delegateClass = [CKLicense class];
@@ -60,11 +27,49 @@ bool checkLicense(){
         if([licenseKey length] <= 0){
             printf("AppCoreKit : Invalid license key");
             exit(0);
+        }else{
+            unsigned char* str = decodeBase64UsingPublicRSAKey([licenseKey UTF8String],pub_key);
+            if(str){
+                NSError* error = nil;
+                id dico = [[JSONDecoder decoderWithParseOptions:JKParseOptionValidFlags]parseUTF8String:str length:strlen((char*)str) error:&error];
+                if(error){
+                    printf("AppCoreKit : Invalid license key");
+                    exit(0);
+                }
+                
+                NSString* product = [dico objectForKey:@"product"];
+                if(![product isEqualToString:@"AppCoreKit"]){
+                    printf("AppCoreKit : Invalid license key");
+                    exit(0);
+                }
+                
+                NSString* version = [dico objectForKey:@"version"];
+                NSString* bundleVersion = [[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleVersion"];
+                if(![version isEqualToString:bundleVersion]){
+                    printf("AppCoreKit : Invalid license key");
+                    exit(0);
+                }
+                
+                NSTimeInterval interval = [[dico objectForKey:@"exp_date"]doubleValue];
+                NSTimeInterval currentInterval = [[NSDate date]timeIntervalSince1970];
+
+                NSTimeInterval diff = interval - currentInterval;
+                if(diff < 0){
+                    printf("AppCoreKit : Your license has expired.");
+                    exit(0);
+                }
+                
+                free(str);
+            }else{
+                printf("AppCoreKit : Invalid license key");
+                exit(0);
+            }
         }
     }else{
         printf("AppCoreKit : You must return your AppCoreKit license key By adding the following code in one of your .m files :\n\n@implementation CKLicense(YourAppName)\n\n+ (NSString*)licenseKey{\n\t return @\"YourLicenseKey\";\n}\n\n@end ");
         exit(0);
     }
+    
     return true;
 }
 
