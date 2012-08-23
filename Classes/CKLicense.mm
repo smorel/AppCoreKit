@@ -43,22 +43,15 @@ bool checkLicense(){
                     exit(0);
                 }
                 
-                /*
-                NSString* version = [dico objectForKey:@"version"];
-                NSString* bundleVersion = [[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleVersion"];
-                if(![version isEqualToString:bundleVersion]){
-                    printf("AppCoreKit : Invalid license key");
-                    exit(0);
-                }
-                 */
-                
                 NSTimeInterval interval = [[dico objectForKey:@"exp_date"]doubleValue];
-                NSTimeInterval currentInterval = [[NSDate date]timeIntervalSince1970];
-
-                NSTimeInterval diff = interval - currentInterval;
-                if(diff < 0){
-                    printf("AppCoreKit : Your license has expired.");
-                    exit(0);
+                if(interval > 0){
+                    NSTimeInterval currentInterval = [[NSDate date]timeIntervalSince1970];
+                    
+                    NSTimeInterval diff = interval - currentInterval;
+                    if(diff < 0){
+                        printf("AppCoreKit : Your license has expired.");
+                        exit(0);
+                    }
                 }
                 
                 free(str);
