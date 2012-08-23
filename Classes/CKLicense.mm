@@ -33,22 +33,24 @@ bool checkLicense(){
                 NSError* error = nil;
                 id dico = [[JSONDecoder decoderWithParseOptions:JKParseOptionValidFlags]parseUTF8String:str length:strlen((char*)str) error:&error];
                 if(error){
-                    printf("AppCoreKit : Invalid license key");
+                    printf("AppCoreKit : Invalid license format.");
                     exit(0);
                 }
                 
-                NSString* product = [dico objectForKey:@"product"];
-                if(![product isEqualToString:@"AppCoreKit"]){
-                    printf("AppCoreKit : Invalid license key");
+                NSString* product = [[dico objectForKey:@"product"]lowercaseString];
+                if(![product isEqualToString:@"appcorekit"]){
+                    printf("AppCoreKit : Invalid license key product.");
                     exit(0);
                 }
                 
+                /*
                 NSString* version = [dico objectForKey:@"version"];
                 NSString* bundleVersion = [[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleVersion"];
                 if(![version isEqualToString:bundleVersion]){
                     printf("AppCoreKit : Invalid license key");
                     exit(0);
                 }
+                 */
                 
                 NSTimeInterval interval = [[dico objectForKey:@"exp_date"]doubleValue];
                 NSTimeInterval currentInterval = [[NSDate date]timeIntervalSince1970];

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define DISTRIBUTION
+
 /** To be able to use AppCoreKit, you must implement the following code in one of your .m files.
  
      @implementation CKLicense(YourAppName)
