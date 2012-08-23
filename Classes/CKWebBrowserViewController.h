@@ -24,6 +24,14 @@ typedef enum {
 @interface CKWebBrowserViewController : CKViewController
 
 ///-----------------------------------
+/// @name Creating CKWebBrowserViewController Objects
+///-----------------------------------
+
+/**
+ */
++ (CKWebBrowserViewController*)webBrowserWithUrl:(NSURL *)url;
+
+///-----------------------------------
 /// @name Initializing a CKWebBrowserViewController
 ///-----------------------------------
 
@@ -37,7 +45,7 @@ typedef enum {
 
 /**
  */
-@property (nonatomic, readonly, retain) NSURL *homeURL;
+@property (nonatomic, readwrite, retain) NSURL *homeURL;
 
 /**
  */

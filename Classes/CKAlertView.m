@@ -59,6 +59,10 @@
 	return self;
 }
 
++ (id)alertViewWithTitle:(NSString *)title message:(NSString *)message{
+    return [[[CKAlertView alloc]initWithTitle:title message:message]autorelease];
+}
+
 - (id)initWithTitle:(NSString *)title message:(NSString *)message {
 	self = [super init];
 	if (self) {

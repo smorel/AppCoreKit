@@ -107,7 +107,7 @@
 		
 		CKProperty* property = [self objectProperty];
 		CKClassPropertyDescriptor* descriptor = [property descriptor];
-		NSString* str = [NSString stringWithFormat:@"%@_PlaceHolder",descriptor.name];
+		NSString* str = [NSString stringWithFormat:@"%@_Placeholder",descriptor.name];
 		return _(str);
 	}
 	

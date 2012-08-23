@@ -12,23 +12,18 @@
 #import "NSObject+Runtime.h"
 #import "CKLocalizationManager_Private.h"
 #import "CKDebug.h"
+#import "CKConfiguration.h"
 
 @interface CKLocalizationManager() 
 @property(nonatomic,retain,readwrite)NSBundle* localizedBundle;
-
-#if TARGET_IPHONE_SIMULATOR
-@property (nonatomic, assign) BOOL needsRefresh;
-#endif
-
+@property (nonatomic, assign) BOOL needsLiveUpdateRefresh;
 @end
 
 @implementation CKLocalizationManager
 @synthesize language = _language;
 @synthesize localizedBundle = _localizedBundle;
 
-#if TARGET_IPHONE_SIMULATOR
-@synthesize needsRefresh;
-#endif
+@synthesize needsLiveUpdateRefresh;
 
 //Current application bungle to get the languages.
 static CKLocalizationManager *sharedInstance = nil;
@@ -46,9 +41,7 @@ static CKLocalizationManager *sharedInstance = nil;
 {
     if ((self = [super init])) 
     {
-#if TARGET_IPHONE_SIMULATOR
-        self.needsRefresh = NO;
-#endif
+        self.needsLiveUpdateRefresh = NO;
         self.localizedBundle = [NSBundle mainBundle];
         
         //Do not trigger KVO in init when setting the language value
@@ -149,9 +142,7 @@ static CKLocalizationManager *sharedInstance = nil;
 }
 
 - (void)refreshUI{
-#if TARGET_IPHONE_SIMULATOR
-    self.needsRefresh = YES;
-#endif
+    self.needsLiveUpdateRefresh = YES;
     
     NSMutableSet* controllerStack = [NSMutableSet set];
     NSMutableSet* viewStack = [NSMutableSet set];
@@ -162,19 +153,19 @@ static CKLocalizationManager *sharedInstance = nil;
         [self refreshView:window viewStack:viewStack];
     }
     
-#if TARGET_IPHONE_SIMULATOR
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        self.needsRefresh = NO;
-    });
-#endif
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        double delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            self.needsLiveUpdateRefresh = NO;
+        });
+    }
 }
 
 - (void)reloadBundleAtPath:(NSString *)path {
-#if TARGET_IPHONE_SIMULATOR
-    self.localizedBundle = [NSBundle bundleWithPath:path];
-#endif
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        self.localizedBundle = [NSBundle bundleWithPath:path];
+    }
 }
 
 @end

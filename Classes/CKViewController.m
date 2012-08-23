@@ -20,14 +20,8 @@
 #import "UIView+Style.h"
 #import "CKRuntime.h"
 #import "CKContainerViewController.h"
+#import "CKConfiguration.h"
 
-typedef enum CKDebugCheckState{
-    CKDebugCheckState_none,
-    CKDebugCheckState_NO,
-    CKDebugCheckState_YES
-}CKDebugCheckState;
-
-static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckState_none;
 
 @interface CKViewController()
 @property(nonatomic,retain) NSString* navigationItemsBindingContext;
@@ -96,9 +90,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     self.supportedInterfaceOrientations = CKInterfaceOrientationAll;
     self.state = CKViewControllerStateNone;
     
-#if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
 }
 
 - (id)init {
@@ -160,9 +152,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 	_inlineDebuggerController = nil;
 #endif
     
-#if TARGET_IPHONE_SIMULATOR
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
-#endif
     
 	[super dealloc];
 }
@@ -225,6 +215,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForLeftBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.leftBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -250,6 +243,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForRightBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.rightBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -276,6 +272,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForBackBarButtonItem{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.backBarButtonItem){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -304,6 +303,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForTitleView{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     if(self.navigationItem.titleView){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
@@ -346,6 +348,9 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 - (void)applyStyleForNavigation{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     [self observerNavigationChanges:NO];
     
     //disable animations in case frames are set in stylesheets and currently in animation...
@@ -443,8 +448,11 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
         }
     }else{
         UILabel* label = [[[UILabel alloc]init]autorelease];
+        label.font = [UIFont boldSystemFontOfSize:20];
+        label.textColor = [UIColor whiteColor];
+        label.shadowOffset = CGSizeMake(0,-1);
+        label.shadowColor = [UIColor darkGrayColor];
         label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
         label.text = self.title;
         
         self.navigationItem.titleView = label;
@@ -666,15 +674,10 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 
-#ifdef DEBUG
+//#ifdef DEBUG
 - (void)CheckForBlockCopy{
-    if(CKDebugCheckForBlockCopyCurrentState == CKDebugCheckState_none){
-        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugCheckForBlockCopy"]boolValue];
-        CKDebugCheckForBlockCopyCurrentState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
-    }
-    
-    if(CKDebugCheckForBlockCopyCurrentState != CKDebugCheckState_YES)
-        return;
+   if(![[CKConfiguration sharedInstance]checkViewControllerCopyInBlocks])
+       return;
     
     void *frames[128];
     int len = backtrace(frames, 128);
@@ -694,7 +697,7 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
     [self CheckForBlockCopy];
     return [super retain];
 }
-#endif
+//#endif
 
 
 

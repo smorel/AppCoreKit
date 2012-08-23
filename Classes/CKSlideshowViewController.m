@@ -27,12 +27,14 @@
 @implementation CKSlideShowViewController
 @synthesize controlsAreDisplayed = _controlsAreDisplayed;
 @synthesize shouldHideControls = _shouldHideControls;
+@synthesize overrideTitleToDisplayCurrentPage;
 
 - (void)postInit{
     [super postInit];
     self.orientation = CKTableViewOrientationLandscape;
     _controlsAreDisplayed = NO;
     _shouldHideControls = YES;
+    self.overrideTitleToDisplayCurrentPage = YES;
     
     __block CKSlideShowViewController* bself = self;
     [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%@>_internal",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
@@ -43,10 +45,35 @@
 }
 
 - (void)updateTitle {
+    if(!self.overrideTitleToDisplayCurrentPage)
+        return;
+    
     NSUInteger count = [self numberOfObjectsForSection:0];
     NSInteger index = [self currentPage];
     self.title = [NSString stringWithFormat:_(@"%d of %d"), index+1, count];
 } 
+
+
++ (id)slideShowControllerWithCollection:(CKCollection *)collection{
+    return [[[[self class]alloc]initWithCollection:collection]autorelease];
+}
+
++ (id)slideShowControllerWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex{
+    return [[[[self class]alloc]initWithCollection:collection factory:factory startAtIndex:startIndex]autorelease];
+}
+
++ (id)slideShowControllerWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex{
+    return [[[[self class]alloc]initWithCollection:collection startAtIndex:startIndex]autorelease];
+    
+}
+
++ (id)slideShowControllerWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex{
+    return [[[[self class]alloc]initWithImagePaths:imagePaths startAtIndex:startIndex]autorelease];
+}
+
++ (id)slideShowControllerWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex{
+    return [[[[self class]alloc]initWithImageURLs:imageURLs startAtIndex:startIndex]autorelease];
+}
 
 - (id)initWithCollection:(CKCollection *)collection{
     return [self initWithCollection:collection startAtIndex:0];

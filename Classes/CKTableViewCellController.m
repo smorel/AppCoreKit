@@ -31,8 +31,8 @@
 #import "NSObject+Singleton.h"
 #import "CKDebug.h"
 #import "UIView+Name.h"
+#import "CKConfiguration.h"
 #import "CKLayoutBox.h"
-
 #import "CKVersion.h"
 
 //#import <objc/runtime.h>
@@ -578,6 +578,9 @@
 }
 
 - (void)reapplyStyleForBackgroundViews{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
     //WE SHOULD OPTIMALLY DO THIS ONLY WHEN INDEXPATH CHANGE FROM FIRST/MIDDLE/LAST
     if(self.tableViewCell){
         CKStyleView* backgroundStyleView = nil;
@@ -659,6 +662,12 @@
     return [[[[self class]alloc]init]autorelease];
 }
 
++ (id)cellControllerWithName:(NSString*)name{
+    id controller = [[[[self class]alloc]init]autorelease];
+    [controller setName:name];
+    return controller;
+}
+
 
 
 #pragma mark TableViewCell Setter getter
@@ -707,9 +716,7 @@
 }
 
 - (NSString *)identifier {
-#if !TARGET_IPHONE_SIMULATOR
-    if(_identifier == nil){
-#endif
+    if(_identifier == nil || [[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
         NSMutableDictionary* controllerStyle = [self controllerStyle];
         if(self.createCallback){
             [self.createCallback execute:self];
@@ -720,10 +727,7 @@
         
         [_identifier release];
         _identifier =  [[NSString stringWithFormat:@"%@-<%p>-[%@]-<%d>",[[self class] description],controllerStyle,self.name ? self.name : @"", self.cellStyle]retain];
-        
-#if !TARGET_IPHONE_SIMULATOR
     }
-#endif
     return _identifier;
 }
 

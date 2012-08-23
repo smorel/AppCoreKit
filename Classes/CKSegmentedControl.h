@@ -156,6 +156,10 @@ typedef enum CKSegmentedControlButtonPosition{
  */
 @property(nonatomic,assign)BOOL momentary;
 
+/** Default value is YES.
+ */
+@property(nonatomic,assign)BOOL autoResizeToFitContent;
+
 /**
  */
 - (BOOL)isEnabledForSegmentAtIndex:(NSUInteger)segment;

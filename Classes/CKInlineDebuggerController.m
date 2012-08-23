@@ -22,6 +22,7 @@
 #import "NSObject+Bindings.h"
 #import "CKPopoverController.h"
 #import "NSObject+Singleton.h"
+#import "CKConfiguration.h"
 
 
 
@@ -166,16 +167,6 @@
 
 
 
-
-
-typedef enum CKDebugCheckState{
-    CKDebugCheckState_none,
-    CKDebugCheckState_NO,
-    CKDebugCheckState_YES
-}CKDebugCheckState;
-
-static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_none;
-
 @interface CKInlineDebuggerController()
 @property(nonatomic,retain)CKWeakRef* viewControllerRef;
 @property(nonatomic,readonly)UIViewController* viewController;
@@ -191,6 +182,7 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 @property(nonatomic,retain)UITapGestureRecognizer* mainGesture;
 @property(nonatomic,retain)UIBarButtonItem* oldRightButtonItem;
 @property(nonatomic,retain)UIBarButtonItem* oldLeftButtonItem;
+@property(nonatomic,assign)BOOL started;
 
 - (void)highlightView:(UIView*)view;
 
@@ -211,26 +203,36 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
 @synthesize oldLeftButtonItem = _oldLeftButtonItem;
 @synthesize state;
 @synthesize viewController;
+@synthesize started;
 
 - (id)initWithViewController:(UIViewController*)theviewController{
     self = [super init];
     self.state = CKInlineDebuggerControllerStatePending;
     self.viewControllerRef = [CKWeakRef weakRefWithObject:theviewController];
+    self.started = NO;
+    
+    __block CKInlineDebuggerController* bDebugger = self;
+    
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"<%p>_configurationCheck",self]];
+    [[CKConfiguration sharedInstance]bind:@"inlineDebuggerEnabled" withBlock:^(id value) {
+        if([value boolValue] && !bDebugger.started){
+            [bDebugger start];
+        }else if(![value boolValue] && bDebugger.started){
+            [bDebugger stop];
+        }
+    }];
+    [NSObject endBindingsContext];
     
     return self;
 }
 
-- (void)start{
-    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_none){
-        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKInlineDebuggerEnabled"]boolValue];
-        CKDebugInlineDebuggerEnabledState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
-        
-        if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
-            [[CKStyleManager defaultManager]loadContentOfFileNamed:@"CKInlineDebugger"];
-        }
-    }
+- (void)updateConfig{
     
-    if(CKDebugInlineDebuggerEnabledState == CKDebugCheckState_YES){
+}
+
+- (void)start{
+    if([[CKConfiguration sharedInstance]inlineDebuggerEnabled]){
+        self.started = YES;
         self.customGestures = [NSMutableArray array];
         
         self.mainGesture = [[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(twoTapGesture:)]autorelease];
@@ -261,10 +263,13 @@ static CKDebugCheckState CKDebugInlineDebuggerEnabledState = CKDebugCheckState_n
         self.viewController.navigationItem.leftBarButtonItem = self.oldLeftButtonItem;
         self.oldRightButtonItem = nil;
         self.oldLeftButtonItem = nil;
+        self.state = CKInlineDebuggerControllerStatePending;
     }
+    self.started = NO;
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"<%p>_configurationCheck",self]];
     if(self.viewController){
         [self highlightView:nil];
         [self.viewController.navigationController.navigationBar removeGestureRecognizer:self.mainGesture];

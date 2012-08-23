@@ -116,6 +116,9 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (NSMutableDictionary*)controllerStyle{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return nil;
+    
     if(!self.containerController){
         return nil;
     }
@@ -160,7 +163,7 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 @implementation CKTableViewCellController (CKStyle)
 
 - (CKStyleViewCornerType)view:(UIView*)view cornerStyleWithStyle:(NSMutableDictionary*)style{
-    CKViewCornerStyle cornerStyle = CKViewBorderStyleTableViewCell;
+    CKViewCornerStyle cornerStyle = CKViewCornerStyleTableViewCell;
     if([style containsObjectForKey:CKStyleCornerStyle]){
         cornerStyle = [style cornerStyle];
     }
@@ -204,39 +207,47 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 }
 
 - (CKStyleViewBorderLocation)view:(UIView*)view borderStyleWithStyle:(NSMutableDictionary*)style{
-	CKStyleViewBorderLocation borderType = CKStyleViewBorderLocationNone;
-    
     CKViewBorderStyle borderStyle = CKViewBorderStyleTableViewCell;
     if([style containsObjectForKey:CKStyleBorderStyle]){
         borderStyle = [style borderStyle];
     }
 	
-	switch(borderStyle){
-		case CKViewBorderStyleTableViewCell:{
-			if(view == self.tableViewCell.backgroundView
-			   || view == self.tableViewCell.selectedBackgroundView){
-				UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
-                NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
-                if(numberOfRows > 1){
-                    if(self.indexPath.row == 0){
-                        return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
-                    }else if(self.indexPath.row == numberOfRows-1){
-                        return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
-                    }else{
-                        return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
-                    }
+    if(borderStyle & CKViewBorderStyleTableViewCell){
+        if(view == self.tableViewCell.backgroundView
+           || view == self.tableViewCell.selectedBackgroundView){
+            UITableView* tableView = ((CKTableViewController*)self.containerController).tableView;
+            NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
+            if(numberOfRows > 1){
+                if(self.indexPath.row == 0){
+                    return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
+                }else if(self.indexPath.row == numberOfRows-1){
+                    return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
+                }else{
+                    return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
                 }
-                else{
-                    return CKStyleViewBorderLocationAll;
-                }
-			}
-			break;
-		}
-        case CKViewBorderStyleAll: return CKStyleViewBorderLocationAll;
-        case CKViewBorderStyleNone: return CKStyleViewBorderLocationNone;
-	}
+            }
+            else{
+                return CKStyleViewBorderLocationAll;
+            }
+        }
+    }else{
+        CKStyleViewBorderLocation viewBorderType = CKStyleViewBorderLocationNone;
+        if(borderStyle & CKViewBorderStyleTop){
+            viewBorderType |= CKStyleViewBorderLocationTop;
+        }
+        if(borderStyle & CKViewBorderStyleLeft){
+            viewBorderType |= CKStyleViewBorderLocationLeft;
+        }
+        if(borderStyle & CKViewBorderStyleRight){
+            viewBorderType |= CKStyleViewBorderLocationRight;
+        }
+        if(borderStyle & CKViewBorderStyleBottom){
+            viewBorderType |= CKStyleViewBorderLocationBottom;
+        }
+        return viewBorderType;
+    }
 	
-	return borderType;
+	return CKStyleViewBorderLocationNone;
 }
 
 - (CKStyleViewSeparatorLocation)view:(UIView*)view separatorStyleWithStyle:(NSMutableDictionary*)style{

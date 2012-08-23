@@ -11,6 +11,7 @@
 #import "CKLiveProjectFileUpdateManager.h"
 #import "NSObject+Singleton.h"
 #import "CKCascadingTree.h"
+#import "CKConfiguration.h"
 
 NSString *CKLocalizationCurrentLocalization(void) {
 	NSArray *l18n = [[NSBundle mainBundle] preferredLocalizations];
@@ -31,34 +32,34 @@ NSString* CKGetLocalizedString(NSBundle* bundle,NSString* key,NSString* value){
         
         NSArray* stringsURLs = [bundle URLsForResourcesWithExtension:@"strings" subdirectory:nil];
         
-#if TARGET_IPHONE_SIMULATOR        
-        NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
-        for (NSURL *filePathURL in stringsURLs) {
-            NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
-                NSString *tempPath = NSTemporaryDirectory();
-                tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-                
-                [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
-                
-                for (NSURL *URL in newStringsURL) {
-                    NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
-                    [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+        if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+            NSMutableArray *newStringsURL = [NSMutableArray arrayWithCapacity:stringsURLs.count];
+            for (NSURL *filePathURL in stringsURLs) {
+                NSString *localPath = [[CKLiveProjectFileUpdateManager sharedInstance] projectPathOfFileToWatch:filePathURL.path handleUpdate:^(NSString *localPath) {
+                    NSString *tempPath = NSTemporaryDirectory();
+                    tempPath = [tempPath stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
                     
-                    NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
-                    [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:lastPath error:nil];
-                }
+                    [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
+                    
+                    for (NSURL *URL in newStringsURL) {
+                        NSString *localizationPath = [tempPath stringByAppendingPathComponent:URL.path.stringByDeletingLastPathComponent.lastPathComponent];
+                        [[NSFileManager defaultManager] createDirectoryAtPath:localizationPath withIntermediateDirectories:YES attributes:nil error:nil];
+                        
+                        NSString *lastPath = [localizationPath stringByAppendingPathComponent:URL.lastPathComponent];
+                        [[NSFileManager defaultManager] copyItemAtPath:localPath toPath:lastPath error:nil];
+                    }
+                    
+                    [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
+                    
+                    [[CKLocalizationManager sharedManager] refreshUI];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
+                }];
                 
-                [[CKLocalizationManager sharedManager] reloadBundleAtPath:tempPath];
-                
-                [[CKLocalizationManager sharedManager] refreshUI];
-                [[NSNotificationCenter defaultCenter] postNotificationName:CKCascadingTreeFilesDidUpdateNotification object:nil];
-            }];
+                [newStringsURL addObject:[NSURL fileURLWithPath:localPath]];
+            }
             
-            [newStringsURL addObject:[NSURL fileURLWithPath:localPath]];
+            stringsURLs = newStringsURL;
         }
-        
-        stringsURLs = newStringsURL;
-#endif
         
         for(NSURL* stringsURL in stringsURLs){
             NSString* fileName = [[stringsURL absoluteString]lastPathComponent];

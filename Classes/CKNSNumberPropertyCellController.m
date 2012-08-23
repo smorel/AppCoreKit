@@ -58,12 +58,20 @@
     CKProperty* property = (CKProperty*)self.value;
 	NSNumber* number = (NSNumber*)[property value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
+    
 	if(newNumber == nil){
         [self setValueInObjectProperty:[NSNumber numberWithInt:0]];
 	}
 	else if(![number isEqualToNumber:newNumber]){
         [self setValueInObjectProperty:newNumber];
 	}
+    
+    CKPropertyExtendedAttributes* attributes = [property extendedAttributes];
+    if(newNumber && attributes.placeholderValue && [attributes.placeholderValue isEqualToNumber:newNumber]){
+        if(self.textField.text != nil){
+            self.textField.text = nil;
+        }
+    }
 }
 
 - (void)initTableViewCell:(UITableViewCell*)cell{
@@ -252,8 +260,21 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
 	CKProperty* model = self.value;
+    __block CKNSNumberPropertyCellController* bself = self;
     [self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
-	[model.object bind:model.keyPath toObject:self.textField withKeyPath:@"text"];
+	[model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
+        CKPropertyExtendedAttributes* attributes = [model extendedAttributes];
+        if(attributes.placeholderValue && [attributes.placeholderValue isEqualToNumber:[model value]]){
+            if(bself.textField.text != nil){
+                bself.textField.text = nil;
+            }
+        }else{
+            NSString* str = [NSValueTransformer transform:value toClass:[NSString class]];
+            if(![bself.textField.text isEqualToString:str]){
+                bself.textField.text = str;
+            }
+        }
+    }];
 	[self.tableViewCell endBindingsContext];
 }
 

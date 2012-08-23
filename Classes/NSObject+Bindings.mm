@@ -12,6 +12,7 @@
 #import "CKDataBinder.h"
 #import "CKNotificationBlockBinder.h"
 #import "CKDataBlockBinder.h"
+#import "CKConfiguration.h"
 #import "CKDebug.h"
 #include <ext/hash_map>
 
@@ -40,14 +41,6 @@ namespace __gnu_cxx{
 
 static NSMutableArray* CKBindingsContextStack = nil;
 static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
-
-typedef enum CKDebugCheckState{
-    CKDebugCheckState_none,
-    CKDebugCheckState_NO,
-    CKDebugCheckState_YES
-}CKDebugCheckState;
-
-static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugCheckState_none;
 
 
 @implementation NSObject (CKBindingContext)
@@ -113,18 +106,13 @@ static CKDebugCheckState CKDebugAssertForBindingsOutOfContextState = CKDebugChec
 
 
 + (void)validateCurrentBindingsContext{
-#ifdef DEBUG
-    if(CKDebugAssertForBindingsOutOfContextState == CKDebugCheckState_none){
-        BOOL bo = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CKDebugAssertForBindingsOutOfContext"]boolValue];
-        CKDebugAssertForBindingsOutOfContextState = bo ? CKDebugCheckState_YES : CKDebugCheckState_NO;
-    }
-    
-    if(CKDebugAssertForBindingsOutOfContextState != CKDebugCheckState_YES)
+//#ifdef DEBUG
+    if(![[CKConfiguration sharedInstance]assertForBindingsOutOfContext])
         return;
     
     if ([NSObject currentBindingContext] == CKBindingsNoContext)
         [NSException raise:NSGenericException format:@"You're creating a binding without having opened a context !"];
-#endif
+//#endif
 }
 
 //Instance method for bindings management

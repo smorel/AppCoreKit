@@ -16,6 +16,7 @@
 #import "CKTableCollectionViewController.h"
 #import "CKPropertyExtendedAttributes.h"
 #import "CKPropertyExtendedAttributes+Attributes.h"
+#import "UIFont+ValueTransformer.h"
 #import <objc/runtime.h>
 
 #import "CKStyleManager.h"
@@ -489,13 +490,18 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
         if(currentStyle){
             //font
             UIFont* font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            NSString* fontName = font.fontName;
-            if([currentStyle containsObjectForKey:CKStyleFontName])
-                fontName= [currentStyle fontName];
-            CGFloat fontSize = font.pointSize;
-            if([currentStyle containsObjectForKey:CKStyleFontSize])
-                fontSize= [currentStyle fontSize];
-            font = [UIFont fontWithName:fontName size:fontSize];
+            
+            if([currentStyle containsObjectForKey:@"font"]){
+                font = (UIFont*)[NSValueTransformer transform:[currentStyle objectForKey:@"font"] toClass:[UIFont class]];
+            }else{
+                NSString* fontName = font.fontName;
+                if([currentStyle containsObjectForKey:CKStyleFontName])
+                    fontName= [currentStyle fontName];
+                CGFloat fontSize = font.pointSize;
+                if([currentStyle containsObjectForKey:CKStyleFontSize])
+                    fontSize= [currentStyle fontSize];
+                font = [UIFont fontWithName:fontName size:fontSize];
+            }
             [style setObject:font forKey:CKDynamicLayoutFont];
             
             //textAlignment

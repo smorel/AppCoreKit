@@ -13,6 +13,14 @@
 @interface CKFeedSource : NSObject
 
 ///-----------------------------------
+/// @name Creating FeedSource objects
+///-----------------------------------
+
+/**
+ */
++ (id)feedSource;
+
+///-----------------------------------
 /// @name Managing the delegate
 ///-----------------------------------
 
@@ -47,6 +55,10 @@
 /**
  */
 - (void)reset;
+
+/** Notifying the delegate for new fetched items.
+ */
+- (void)addItems:(NSArray *)theItems;
 
 @end
 

@@ -11,13 +11,21 @@
 static NSMutableDictionary* CKObjectSingletons = nil;
 
 @implementation NSObject (CKSingleton)
+static dispatch_once_t onceToken;
 
 + (id)newSharedInstance{
     return [[[self class]alloc]init];
 }
 
++ (void)setSharedInstance:(id)instance{  
+    dispatch_once(&onceToken, ^{
+        CKObjectSingletons = [[NSMutableDictionary alloc]init];
+    });
+    
+    [CKObjectSingletons setObject:instance forKey:(id)[self class]];
+}
+
 + (id)sharedInstance{    
-    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         CKObjectSingletons = [[NSMutableDictionary alloc]init];
     });

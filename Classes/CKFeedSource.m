@@ -28,6 +28,10 @@
 
 #pragma mark Initialization
 
++ (id)feedSource{
+    return [[[[self class]alloc]init]autorelease];
+}
+
 -(void)postInit{
 }
 

@@ -56,6 +56,18 @@ typedef UIViewController*(^CKAnnotationCalloutViewControllerCreationBlock)(CKMap
 @interface CKMapAnnotationController : CKCollectionCellController
 
 ///-----------------------------------
+/// @name Creating Annotation Controller Objects
+///-----------------------------------
+
+/**
+ */
++ (CKMapAnnotationController*)annotationController;
+
+/**
+ */
++ (CKMapAnnotationController*)annotationControllerWithName:(NSString*)name;
+
+///-----------------------------------
 /// @name Customizing the Appearance
 ///-----------------------------------
 

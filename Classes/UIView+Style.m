@@ -32,6 +32,8 @@
 #import "NSValueTransformer+NativeTypes.h"
 #import "NSValueTransformer+CGTypes.h"
 
+#import "CKConfiguration.h"
+
 
 //NSMutableSet* reserverKeyWords = nil;
 
@@ -153,14 +155,14 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 
 - (CKViewBorderStyle)borderStyle{
 	return (CKViewBorderStyle)[self enumValueForKey:CKStyleBorderStyle 
-									 withEnumDescriptor:CKEnumDefinition(@"CKViewBorderStyle",
-                                                                    CKViewBorderStyleTableViewCell,
-                                                                    CKViewBorderStyleAll,
-                                                                    CKViewBorderStyleLeft,
-                                                                    CKViewBorderStyleRight,
-                                                                    CKViewBorderStyleTop,
-                                                                    CKViewBorderStyleBottom,
-                                                                    CKViewBorderStyleNone)];
+									 withEnumDescriptor:CKBitMaskDefinition(@"CKViewBorderStyle",
+                                                                            CKViewBorderStyleTableViewCell,
+                                                                            CKViewBorderStyleAll,
+                                                                            CKViewBorderStyleNone,
+                                                                            CKViewBorderStyleTop,
+                                                                            CKViewBorderStyleBottom,
+                                                                            CKViewBorderStyleLeft,
+                                                                            CKViewBorderStyleRight)];
 }
 
 - (UIColor*)separatorColor{
@@ -501,36 +503,23 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 							borderStyle = [myViewStyle borderStyle];
 						}
 						
-						if(borderStyle == CKViewBorderStyleTableViewCell && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
+						if((borderStyle & CKViewBorderStyleTableViewCell) && delegate && [delegate respondsToSelector:@selector(view:borderStyleWithStyle:)]){
 							viewBorderType = [delegate view:gradientView borderStyleWithStyle:myViewStyle];
 						}
 						else{
-							switch(borderStyle){
-								case CKViewBorderStyleAll:{
-									viewBorderType = CKStyleViewBorderLocationAll;
-									break;
-								}
-                                case CKViewBorderStyleLeft:{
-									viewBorderType = CKStyleViewBorderLocationLeft;
-									break;
-								}
-                                case CKViewBorderStyleRight:{
-									viewBorderType = CKStyleViewBorderLocationRight;
-									break;
-								}
-                                case CKViewBorderStyleTop:{
-									viewBorderType = CKStyleViewBorderLocationTop;
-									break;
-								}
-                                case CKViewBorderStyleBottom:{
-									viewBorderType = CKStyleViewBorderLocationBottom;
-									break;
-								}
-								case CKViewBorderStyleNone:{
-									viewBorderType = CKStyleViewBorderLocationNone;
-									break;
-								}
-							}
+                            viewBorderType = CKStyleViewBorderLocationNone;
+                            if(borderStyle & CKViewBorderStyleTop){
+                                viewBorderType |= CKStyleViewBorderLocationTop;
+                            }
+                            if(borderStyle & CKViewBorderStyleLeft){
+                                viewBorderType |= CKStyleViewBorderLocationLeft;
+                            }
+							if(borderStyle & CKViewBorderStyleRight){
+                                viewBorderType |= CKStyleViewBorderLocationRight;
+                            }
+							if(borderStyle & CKViewBorderStyleBottom){
+                                viewBorderType |= CKStyleViewBorderLocationBottom;
+                            }
 						}
 						gradientView.borderLocation = viewBorderType;
                         
@@ -653,17 +642,18 @@ static char NSObjectDebugAppliedStyleObjectKey;
 @dynamic debugAppliedStyle;
 
 - (void)setAppliedStyle:(NSMutableDictionary*)appliedStyle{
-#if !TARGET_IPHONE_SIMULATOR
-    objc_setAssociatedObject(self, 
-                             &NSObjectAppliedStyleObjectKey,
-                             appliedStyle,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#else
-    objc_setAssociatedObject(self, 
-                             &NSObjectDebugAppliedStyleObjectKey,
-                             appliedStyle,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-#endif
+    if(![[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        objc_setAssociatedObject(self, 
+                                 &NSObjectAppliedStyleObjectKey,
+                                 appliedStyle,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    else{
+        objc_setAssociatedObject(self, 
+                                 &NSObjectDebugAppliedStyleObjectKey,
+                                 appliedStyle,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
 }
 
 - (NSMutableDictionary*)appliedStyle{
@@ -682,11 +672,12 @@ static char NSObjectDebugAppliedStyleObjectKey;
 }
 
 - (NSString*)appliedStylePath{
-#if TARGET_IPHONE_SIMULATOR
-    NSMutableDictionary* style = [self debugAppliedStyle];
-#else
-    NSMutableDictionary* style = [self appliedStyle];
-#endif
+    NSMutableDictionary* style = nil;
+    if([[CKConfiguration sharedInstance]resourcesLiveUpdateEnabled]){
+        style = [self debugAppliedStyle];
+    }else{
+       style = [self appliedStyle];
+    }
     return [style path];
 }
 

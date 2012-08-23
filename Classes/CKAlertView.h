@@ -23,6 +23,14 @@ typedef void (^CKAlertViewActionBlock)();
 ///-----------------------------------
 
 /** 
+ Returns an autoreleased CKAlertView with the specified starting parameters.
+ @param title A string to display in the title area of the alert. Pass `nil` if you do not want to display any text in the title area.
+ @param message A string to display in the message area of the alert. Pass `nil` if you do not want to display any text in the message area.
+ @return A newly initialized CKAlertView.
+ */
++ (id)alertViewWithTitle:(NSString *)title message:(NSString *)message;
+
+/** 
  Initalizes the CKAlertView with the specified starting parameters.
  @param title A string to display in the title area of the alert. Pass `nil` if you do not want to display any text in the title area.
  @param message A string to display in the message area of the alert. Pass `nil` if you do not want to display any text in the message area.

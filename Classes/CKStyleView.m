@@ -105,6 +105,7 @@
 @synthesize borderShadowColor = _borderShadowColor;
 @synthesize borderShadowRadius = _borderShadowRadius;
 @synthesize borderShadowOffset = _borderShadowOffset;
+@synthesize gradientStyle;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
@@ -128,6 +129,8 @@
     
     _borderShadowRadius = 2;
     _borderShadowOffset = CGSizeMake(0,0);
+    
+    self.gradientStyle = CKStyleViewGradientStyleVertical;
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -166,6 +169,12 @@
                                                     CKStyleViewSeparatorLocationRight,
                                                     CKStyleViewSeparatorLocationLeft,
                                                     CKStyleViewSeparatorLocationAll);
+}
+
+- (void)gradientStyleExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKStyleViewGradientStyle",
+                                                    CKStyleViewGradientStyleVertical,
+                                                    CKStyleViewGradientStyleHorizontal);
 }
 
 - (id)init {
@@ -700,8 +709,16 @@
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 		CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)colors, colorLocations);
 		CFRelease(colorSpace);
-
-		CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
+        switch(self.gradientStyle){
+            case CKStyleViewGradientStyleVertical:
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
+                break;
+            case CKStyleViewGradientStyleHorizontal:
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(self.bounds.size.width, 0), 0);
+                break;
+        }
+        //CGContextDrawRadialGradient
+        
 		CGGradientRelease(gradient);
 		CGContextRestoreGState(gc);
 	}

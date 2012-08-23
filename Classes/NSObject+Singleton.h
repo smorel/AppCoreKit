@@ -24,4 +24,8 @@
  */
 + (id)sharedInstance;
 
+/**
+ */
++ (void)setSharedInstance:(id)instance;
+
 @end

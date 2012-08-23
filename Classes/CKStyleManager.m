@@ -47,6 +47,10 @@ static NSInteger kLogEnabled = -1;
     return kLogEnabled;
 }
 
+- (BOOL)isEmpty{
+    return [self.tree count] <= 0;
+}
+
 @end
 
 

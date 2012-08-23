@@ -117,6 +117,23 @@ typedef enum CKSplitViewOrientation{
  */
 @interface CKSplitViewController : CKViewController
 
+
+///-----------------------------------
+/// @name Creating SplitViewController objects
+///-----------------------------------
+
+/**
+ */
++ (CKSplitViewController*)splitViewControllerWithOrientation:(CKSplitViewOrientation)orientation;
+
+/**
+ */
++ (CKSplitViewController*)splitViewControllerWithViewControllers:(NSArray*)viewControllers;
+
+/**
+ */
++ (CKSplitViewController*)splitViewControllerWithViewControllers:(NSArray*)viewControllers orientation:(CKSplitViewOrientation)orientation;
+
 ///-----------------------------------
 /// @name Initializing SplitViewController Objects
 ///-----------------------------------
@@ -125,6 +142,10 @@ typedef enum CKSplitViewOrientation{
  */
 - (id)initWithViewControllers:(NSArray*)viewControllers;
 
+/**
+ */
+- (id)initWithViewControllers:(NSArray*)viewControllers orientation:(CKSplitViewOrientation)orientation;
+
 ///-----------------------------------
 /// @name Getting the Split View
 ///-----------------------------------
@@ -132,6 +153,10 @@ typedef enum CKSplitViewOrientation{
 /**
  */
 @property (nonatomic, retain, readonly) CKSplitView* splitView;
+
+/**
+ */
+@property(nonatomic,assign)CKSplitViewOrientation orientation;
 
 ///-----------------------------------
 /// @name Managing animations

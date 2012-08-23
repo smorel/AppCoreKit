@@ -131,6 +131,10 @@ typedef CGSize(^CKTableViewCellControllerSizeBlock)(CKTableViewCellController* c
  */
 + (id)cellController;
 
+/**
+ */
++ (id)cellControllerWithName:(NSString*)name;
+
 ///-----------------------------------
 /// @name Customizing the appearance
 ///-----------------------------------

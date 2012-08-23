@@ -25,6 +25,9 @@ typedef void(^CKSegmentedControlButtonBlock)();
 
 - (void)postInit{
     [self addTarget:self action:@selector(execute:) forControlEvents:UIControlEventTouchUpInside];
+
+    //self.adjustsImageWhenHighlighted = NO;
+    //self.adjustsImageWhenDisabled = NO;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -72,6 +75,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
 
 @implementation CKSegmentedControl
 @synthesize momentary,numberOfSegments,selectedSegmentIndex = _selectedSegmentIndex,segments = _segments;
+@synthesize autoResizeToFitContent;
 
 - (void)dealloc
 {
@@ -83,6 +87,7 @@ typedef void(^CKSegmentedControlButtonBlock)();
 - (void)postInit{
     self.momentary = YES;
     _selectedSegmentIndex = -1;
+    self.autoResizeToFitContent = YES;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -281,11 +286,20 @@ typedef void(^CKSegmentedControlButtonBlock)();
 }
 
 - (void)layoutSubviews{
-    [self sizeToFit];
     CGFloat x = 0;
+    if(self.autoResizeToFitContent){
+        [self sizeToFit];
+    }else{
+        CGFloat segmentsWidth = 0;
+        for(UIButton* segment in _segments){
+            segmentsWidth += segment.bounds.size.width;
+        }
+        x = (self.bounds.size.width / 2) - (segmentsWidth / 2);
+    }
+    
     for(UIButton* segment in _segments){
         CGFloat y = (self.bounds.size.height / 2.0) - (segment.bounds.size.height / 2.0);
-        segment.frame = CGRectMake(x,y,segment.bounds.size.width,segment.bounds.size.height);
+        segment.frame = CGRectIntegral(CGRectMake(x,y,segment.bounds.size.width,segment.bounds.size.height));
         x += segment.bounds.size.width;
     }
 }
@@ -311,9 +325,11 @@ typedef void(^CKSegmentedControlButtonBlock)();
             return;
         }
         if(oldSegment){
+          //  oldSegment.enabled = YES;
             oldSegment.selected = NO;
         }
         segment.selected = YES;
+       // segment.enabled = NO;
     }
     
     NSInteger index = [_segments indexOfObjectIdenticalTo:segment];

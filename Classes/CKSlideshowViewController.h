@@ -43,6 +43,30 @@
 @interface CKSlideShowViewController : CKTableCollectionViewController
 
 ///-----------------------------------
+/// @name Creating CKSlideShowViewController Object
+///-----------------------------------
+
+/**
+ */
++ (id)slideShowControllerWithCollection:(CKCollection *)collection;
+
+/**
+ */
++ (id)slideShowControllerWithCollection:(CKCollection *)collection factory:(CKCollectionCellControllerFactory*)factory startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
++ (id)slideShowControllerWithCollection:(CKCollection *)collection startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
++ (id)slideShowControllerWithImagePaths:(NSArray*)imagePaths startAtIndex:(NSInteger)startIndex;
+
+/**
+ */
++ (id)slideShowControllerWithImageURLs:(NSArray*)imageURLs startAtIndex:(NSInteger)startIndex;
+
+///-----------------------------------
 /// @name Initializing CKSlideShowViewController Object
 ///-----------------------------------
 
@@ -74,5 +98,8 @@
  */
 @property (nonatomic, assign) BOOL shouldHideControls;
 
+/**
+ */
+@property (nonatomic, assign) BOOL overrideTitleToDisplayCurrentPage;
 
 @end

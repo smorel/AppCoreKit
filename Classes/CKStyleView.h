@@ -39,6 +39,14 @@ typedef enum {
 	CKStyleViewSeparatorLocationAll = CKStyleViewBorderLocationAll
 } CKStyleViewSeparatorLocation;
 
+
+/**
+ */
+typedef enum {
+	CKStyleViewGradientStyleVertical,
+    CKStyleViewGradientStyleHorizontal
+} CKStyleViewGradientStyle;
+
 /**
  */
 @interface CKStyleView : UIView 
@@ -54,6 +62,10 @@ typedef enum {
 /**
  */
 @property (nonatomic,assign) CGFloat roundedCornerSize;
+
+/**
+ */
+@property (nonatomic,assign) CKStyleViewGradientStyle gradientStyle;
 
 /**
  */

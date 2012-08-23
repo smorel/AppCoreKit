@@ -73,6 +73,10 @@ typedef void(^CKTransitionBlock)();
     _presentsSelectedViewControllerItemsInToolbar = YES;
 }
 
++ (id)controllerWithViewControllers:(NSArray *)viewControllers{
+    return [[[[self class]alloc]initWithViewControllers:viewControllers]autorelease];
+}
+
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	self = [super init];
 	if (self) {
