@@ -24,12 +24,10 @@ bool checkLicense(){
         if([delegateClass respondsToSelector:@selector(licenseKey)]){
             NSString* licenseKey = [delegateClass performSelector:@selector(licenseKey)];
             if([licenseKey length] <= 0){
-                printf("AppCoreKit : License key length <= 0");
+                printf("AppCoreKit : Invalid license length.");
                 exit(0);
             }else{
                 unsigned char* decodedLicense = decodeBase64UsingPublicRSAKey([licenseKey UTF8String],pub_key);
-                printf("%s\n",decodedLicense);
-                //char* decodedLicense = "appcorekit*1348336836*2.0.0*dhd*asd*bam@toto.com*test11";
                 if(decodedLicense){
                     std::string str((char*)decodedLicense);
                     std::vector<std::string> strings;
@@ -67,7 +65,7 @@ bool checkLicense(){
                     
                     free(decodedLicense);
                 }else{
-                    printf("AppCoreKit : Not decoded");
+                    printf("AppCoreKit : Invalid license format.");
                     exit(0);
                 }
             }
