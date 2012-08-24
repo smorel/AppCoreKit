@@ -271,9 +271,10 @@
             __block UIViewController* bController = controller;
             
             CGFloat beginAlpha = controller.view.alpha;
+            __block CKSplitViewController* bself = self;
             [UIView animateWithDuration:0.4 animations:^{
-                if (self.addOrRemoveAnimationBlock)
-                    self.addOrRemoveAnimationBlock(controller.view, YES);
+                if (bself.addOrRemoveAnimationBlock)
+                    bself.addOrRemoveAnimationBlock(controller.view, YES);
                 else
                     bController.view.alpha = 0.0;
             } completion:^(BOOL finished) {
