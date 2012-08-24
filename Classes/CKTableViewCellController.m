@@ -31,6 +31,7 @@
 #import "CKDebug.h"
 #import "UIView+Name.h"
 #import "CKConfiguration.h"
+#import "CKStyle+Parsing.h"
 
 #import "CKVersion.h"
 
@@ -510,6 +511,16 @@
 
 - (void)setContentInsets:(UIEdgeInsets)contentInsets{
     _contentInsets = contentInsets;
+}
+
+- (UIEdgeInsets)contentInsets{
+    NSMutableDictionary* style = [self controllerStyle];
+    if(style && ![style isEmpty]){
+        if([style containsObjectForKey:@"contentInsets"]){
+            return [style edgeInsetsForKey:@"contentInsets"];
+        }
+    }
+    return _contentInsets;
 }
 
 - (void)setParentCellController:(CKTableViewCellController *)parentCellController{

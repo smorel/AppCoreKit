@@ -190,6 +190,11 @@
     [NSObject endBindingsContext];
 }
 
+- (void)setupCell:(UITableViewCell *)cell{
+    [self onValueChanged];
+    [super setupCell:cell];
+}
+
 
 - (void)initTableViewCell:(UITableViewCell *)cell{
     [super initTableViewCell:cell];
@@ -221,6 +226,8 @@
 
 - (void)didSelect {
     CKProperty* property = [self objectProperty];
+    
+    [self setupLabelsAndValues];
 	
 	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",property.name];
 	NSString* propertyNavBarTitleLocalized = _(propertyNavBarTitle);

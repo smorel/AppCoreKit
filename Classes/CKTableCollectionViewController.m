@@ -1040,12 +1040,12 @@
 - (void)createsAndDisplayEditableButtonsWithType:(CKTableCollectionViewControllerEditingType)type animated:(BOOL)animated{
     switch(type){
         case CKTableCollectionViewControllerEditingTypeLeft:{
-            self.leftButton = self.navigationItem.leftBarButtonItem;
+            self.leftButton = ((self.navigationItem.leftBarButtonItem != self.editButton) && (self.navigationItem.leftBarButtonItem != self.doneButton)) ?  self.navigationItem.leftBarButtonItem : nil;
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeRight:{
-            self.rightButton = self.navigationItem.rightBarButtonItem;
+            self.rightButton = ((self.navigationItem.rightBarButtonItem != self.editButton) && (self.navigationItem.rightBarButtonItem != self.doneButton)) ?  self.navigationItem.rightBarButtonItem : nil;
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
             break;
         }
