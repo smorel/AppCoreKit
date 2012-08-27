@@ -14,6 +14,7 @@
 #import "CKPropertyExtendedAttributes.h"
 #import "CKStyleManager.h"
 #import "CKRuntime.h"
+#import "UIView+Name.h"
 
 using namespace __gnu_cxx;
 
@@ -368,6 +369,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
     }
     
     size = [CKLayoutBox preferedSizeConstraintToSize:size forBox:self];
+    size = CGSizeMake(size.width - (self.padding.left + self.padding.right), size.height - (self.padding.top + self.padding.bottom));
     
     self.lastPreferedSize = CGSizeMake(size.width + self.padding.left + self.padding.right,size.height + self.padding.top + self.padding.bottom);
     return self.lastPreferedSize;
@@ -383,12 +385,20 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
     
     CGRect frame = CGRectMake(theframe.origin.x,theframe.origin.y,size.width,size.height);
     
+    CGRect subBoxesFrame = frame;
+    
     //If the view has its own layout, the sub boxes are placed relative to it !
-    if(self.layoutBoxes && [self.layoutBoxes count] > 0){
-        frame = CGRectMake(0,0,frame.size.width,frame.size.height);
+    if([self containerLayoutBox] == [self superview] || (self.layoutBoxes && [self.layoutBoxes count] > 0)){
+        subBoxesFrame = CGRectMake(0,0,frame.size.width,frame.size.height);
     }
     
-    [CKLayoutBox performLayoutWithFrame:frame forBox:self];
+    //Apply padding
+    subBoxesFrame = CGRectMake(subBoxesFrame.origin.x + self.padding.left,
+                               subBoxesFrame.origin.y + self.padding.top,
+                               subBoxesFrame.size.width - (self.padding.left + self.padding.right),
+                               subBoxesFrame.size.height - (self.padding.top + self.padding.bottom));
+    
+    [CKLayoutBox performLayoutWithFrame:subBoxesFrame forBox:self];
     
     if(self.sizeToFitLayoutBoxes && self.containerLayoutBox == nil && self.layoutBoxes && [self.layoutBoxes count] > 0){
         CGSize boundingBox = CGSizeMake(0, 0);
@@ -401,7 +411,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
             }
         }
         
-        CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,boundingBox.width,boundingBox.height);
+        CGRect newFrame = CGRectMake(self.frame.origin.x,self.frame.origin.y,boundingBox.width + (self.padding.left + self.padding.right),boundingBox.height + (self.padding.top + self.padding.bottom));
         CGRect oldFrame = self.frame;
         self.frame = newFrame;
         
@@ -417,6 +427,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
                 superTable.tableFooterView = self;
             }
         }
+    }else if([self.containerLayoutBox isKindOfClass:[UIView class]]){
+        self.frame = frame;
     }
 }
 
@@ -571,7 +583,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
                         precomputedSize[box] = CGSizeMake(width,box.minimumSize.height);
                     }else{
                         CGFloat preferedHeight = flexibleHeight / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,preferedHeight)];
+                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,/*(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)*/ MAXFLOAT)];
                         if( numberOfFlexiSpaces > 0
                            || (subsize.height < preferedHeight && box.maximumSize.height == MAXFLOAT)
                            || (subsize.height <= preferedHeight && box.maximumSize.height == subsize.height)){
@@ -621,7 +633,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
                     }else{
                         CGFloat width = MIN(size.width - box.margins.left - box.margins.right,box.maximumSize.width);
                         
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,flexibleHeight / flexibleCount)];
+                        CGFloat preferedHeight = flexibleHeight / flexibleCount;
+                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(width,(size.height >= MAXFLOAT) ? MAXFLOAT : (NSInteger)preferedHeight)];
                         flexibleHeight -= subsize.height;
                         flexibleCount--;
                     }
@@ -816,7 +829,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
                         precomputedSize[box] = CGSizeMake(box.minimumSize.width,height);
                     }else{
                         CGFloat preferedWidth = flexiblewidth / (flexibleCount - numberOfFlexiSpaces);
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(preferedWidth,height)];
+                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(/*(NSInteger)preferedWidth*/ MAXFLOAT,height)];
                         
                         if( numberOfFlexiSpaces > 0
                            || (subsize.width < preferedWidth && box.maximumSize.width == MAXFLOAT)
@@ -869,7 +882,8 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock,sizeToFitLayoutBoxes;
                     }else{
                         CGFloat height = MIN(size.height - box.margins.top - box.margins.bottom,box.maximumSize.height);
                         
-                        subsize = [box preferedSizeConstraintToSize:CGSizeMake(flexiblewidth / flexibleCount,height)];
+                        CGFloat preferedWidth = flexiblewidth / flexibleCount;
+                        subsize = [box preferedSizeConstraintToSize:CGSizeMake((NSInteger)preferedWidth,height)];
                         flexiblewidth -= subsize.width;
                         flexibleCount--;
                     }
@@ -1182,7 +1196,7 @@ static char UIButtonFlexibleWidthKey;
 static char UIButtonFlexibleHeightKey;
 
 @implementation UIButton (Layout)
-@dynamic flexibleWidth,flexibleHeight;
+@dynamic flexibleWidth,flexibleHeight,flexibleSize;
 
 - (void)setFlexibleWidth:(BOOL)flexibleWidth{
     objc_setAssociatedObject(self, 
@@ -1206,6 +1220,15 @@ static char UIButtonFlexibleHeightKey;
 - (BOOL)flexibleHeight{
     id value = objc_getAssociatedObject(self, &UIButtonFlexibleHeightKey);
     return value ? [value boolValue] : NO;
+}
+
+- (void)setFlexibleSize:(BOOL)flexibleSize{
+    [self setFlexibleHeight:flexibleSize];
+    [self setFlexibleWidth:flexibleSize];
+}
+
+- (BOOL)flexibleSize{
+    return self.flexibleHeight && self.flexibleWidth;
 }
 
 - (CGSize)preferedSizeConstraintToSize:(CGSize)size{
