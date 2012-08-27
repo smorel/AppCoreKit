@@ -10,6 +10,8 @@
 #import "UIView+AutoresizingMasks.h"
 #import "CKWebViewController.h"
 #import "UIView+Name.h"
+#import "NSObject+Bindings.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface CKWebBrowserViewController () <UIWebViewDelegate>
 
@@ -20,6 +22,7 @@
 @property (nonatomic, readwrite, retain) UIBarButtonItem *refreshButtonItem;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *actionButtonItem;
 @property (nonatomic, readwrite, retain) UIBarButtonItem *spinnerItem;
+@property (nonatomic, readwrite, retain) UIWebView *webView;
 
 @property (nonatomic, assign) BOOL wasUsingToolbar;
 @property (nonatomic, assign) BOOL wasUsingNavigationbar;
@@ -39,11 +42,13 @@
 @synthesize homeURL = _homeURL, webController;
 @synthesize backButtonItem, forwardButtonItem, refreshButtonItem, actionButtonItem, spinnerItem;
 @synthesize showDocumentTitle;
-@synthesize wasUsingToolbar, wasUsingNavigationbar;
+@synthesize wasUsingToolbar, wasUsingNavigationbar,autoManageNavigationAndToolBar;
+@synthesize webView;
 
 - (id)initWithURL:(NSURL *)url {
 	if (self = [super init]) {
 		self.homeURL = url;
+        self.autoManageNavigationAndToolBar = YES;
 	}
     return self;	
 }
@@ -56,6 +61,7 @@
 	self.refreshButtonItem = nil;
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
+    self.webView = nil;
     [super dealloc];
 }
 
@@ -71,7 +77,8 @@
     self.webController = [[[CKWebViewController alloc] init] autorelease];
     self.webController.view.frame = self.view.bounds;
     self.webController.view.autoresizingMask = UIViewAutoresizingFlexibleSize;
-    [self.view addSubview:self.webController.view];
+    self.webView = self.webController.webView;
+    [self.view addSubview:self.webController.webView];
 
 	// Setup the bar button items
 	
@@ -116,8 +123,10 @@
 	
 	[self setToolbarItems:items animated:NO];
     
-	[self.navigationController setNavigationBarHidden:NO animated:animated];
-	[self.navigationController setToolbarHidden:NO animated:animated];
+    if(self.autoManageNavigationAndToolBar){
+        [self.navigationController setNavigationBarHidden:NO animated:animated];
+        [self.navigationController setToolbarHidden:NO animated:animated];
+    }
     
     if(oldViewWillAppearEndBlock){
         oldViewWillAppearEndBlock(self,animated);
@@ -144,8 +153,10 @@
     [self.webController viewDidAppear:animated];
 	self.webController.delegate = nil;
     
-    [self.navigationController setToolbarHidden:!self.wasUsingToolbar animated:animated];
-    [self.navigationController setNavigationBarHidden:!self.wasUsingNavigationbar animated:animated];
+    if(self.autoManageNavigationAndToolBar){
+        [self.navigationController setToolbarHidden:!self.wasUsingToolbar animated:animated];
+        [self.navigationController setNavigationBarHidden:!self.wasUsingNavigationbar animated:animated];
+    }
 }
 
 - (void)viewDidUnload {
@@ -154,6 +165,7 @@
 	self.refreshButtonItem = nil;
 	self.actionButtonItem = nil;
 	self.spinnerItem = nil;
+    self.webView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

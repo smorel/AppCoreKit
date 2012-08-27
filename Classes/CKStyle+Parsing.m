@@ -113,6 +113,29 @@ static NSSet* CKStyleResourceTypeSet = nil;
 	return result;	
 }
 
+- (CGRect) cgRectForKey:(NSString*)key{
+	id object = [self objectForKey:key];
+    if(!object) return CGRectMake(0,0,0,0);
+	if([object isKindOfClass:[NSValue class]]){
+		return [object CGRectValue];
+	}
+	CGRect result = [NSValueTransformer convertCGRectFromObject:object];
+	[self setObject:[NSValue valueWithCGRect:result] forKey:key];
+	return result;	
+}
+
+
+- (UIEdgeInsets) edgeInsetsForKey:(NSString*)key{
+    id object = [self objectForKey:key];
+    if(!object) return UIEdgeInsetsMake(0,0,0,0);
+	if([object isKindOfClass:[NSValue class]]){
+		return [object UIEdgeInsetsValue];
+	}
+	UIEdgeInsets result = [NSValueTransformer convertUIEdgeInsetsFromObject:object];
+	[self setObject:[NSValue valueWithUIEdgeInsets:result] forKey:key];
+	return result;
+}
+
 - (CGFloat) cgFloatForKey:(NSString*)key{
 	id object = [self objectForKey:key];
     if(!object) return 0;

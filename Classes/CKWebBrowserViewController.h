@@ -55,6 +55,19 @@ typedef enum {
  */
 @property (nonatomic, readwrite, assign) BOOL showDocumentTitle;
 
+/**
+ */
+@property (nonatomic, readwrite, assign) BOOL autoManageNavigationAndToolBar;
+
+
+///-----------------------------------
+/// @name Getting the web view
+///-----------------------------------
+
+/**
+ */
+@property (nonatomic, readonly, retain) UIWebView *webView;
+
 ///-----------------------------------
 /// @name Customizing the toolbar
 ///-----------------------------------

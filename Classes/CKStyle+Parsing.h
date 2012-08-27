@@ -25,6 +25,8 @@
 - (NSString*) stringForKey:(NSString*)key;
 - (NSInteger) integerForKey:(NSString*)key;
 - (BOOL) boolForKey:(NSString*)key;
+- (CGRect) cgRectForKey:(NSString*)key;
+- (UIEdgeInsets) edgeInsetsForKey:(NSString*)key;
 
 - (id)setObjectForKey:(NSString*)key inProperty:(CKProperty*)property;
 

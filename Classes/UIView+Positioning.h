@@ -33,3 +33,13 @@
 @property(nonatomic,assign)CGFloat height;
 
 @end
+
+/**
+ */
+@interface UIView(Snaphot)
+
+/**
+ */
+- (UIImage*)snapshot;
+
+@end

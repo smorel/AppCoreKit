@@ -368,9 +368,16 @@ static char CKViewControllerContainerViewControllerKey;
 - (void)setContainerViewController:(UIViewController *)viewController {
     if([self containerViewController] != nil){
         if([self isViewLoaded] && [[self view]superview] != nil){
-            [self viewWillDisappear:NO];
+            
+            if([CKOSVersion() floatValue] < 5){
+                [self viewWillDisappear:NO];
+            }
+            
             [[self view]removeFromSuperview];
-            [self viewDidDisappear:NO];
+            
+            if([CKOSVersion() floatValue] < 5){
+                [self viewDidDisappear:NO];
+            }
         }
     }
     

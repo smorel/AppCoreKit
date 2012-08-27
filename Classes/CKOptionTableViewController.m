@@ -52,6 +52,8 @@
 		self.multiSelectionEnabled = NO;
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
+        
+        [self setup];
 	}
 	return self;	
 }
@@ -66,6 +68,8 @@
 		self.multiSelectionEnabled = multiSelect;
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;
+        
+        [self setup];
 	}
 	return self;	
 }
@@ -81,6 +85,8 @@
 		self.selectedIndexes = [NSMutableArray arrayWithObject:[NSNumber numberWithInt:index]];
         self.optionCellStyle = CKTableViewCellStyleValue1;
         self.style = thestyle;
+        
+        [self setup];
 	}
 	return self;	
 }
@@ -96,6 +102,8 @@
 		self.selectedIndexes = [NSMutableArray arrayWithArray:selected];
         self.optionCellStyle = CKTableViewCellStyleValue1;
         self.style = thestyle;
+        
+        [self setup];
 	}
 	return self;	
 }
@@ -109,11 +117,6 @@
     [super dealloc];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [self clear];
-    [self setup];
-    [super viewWillAppear:animated];
-}
 
 //
 
@@ -159,6 +162,7 @@
         CKTableViewCellController* cellController = [CKTableViewCellController cellController];
         cellController.value = ([self.selectedIndexes containsObject:index]) ? [NSNumber numberWithInt:1] :[NSNumber numberWithInt:0];
         cellController.cellStyle = self.optionCellStyle;
+        cellController.name = @"OptionCell";
         
         /*
         if(cellController.cellStyle == CKTableViewCellStyleIPadForm

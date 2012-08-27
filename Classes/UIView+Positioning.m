@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Positioning.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @implementation UIView (CKPositioning)
@@ -66,6 +67,20 @@
         self.frame = theFrame;
         [self didChangeValueForKey:@"frame"];
     }
+}
+
+@end
+
+
+@implementation UIView(Snaphot)
+
+- (UIImage*)snapshot{
+    UIGraphicsBeginImageContext(self.frame.size);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return resultingImage;
 }
 
 @end

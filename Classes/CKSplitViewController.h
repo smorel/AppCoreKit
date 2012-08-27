@@ -111,6 +111,12 @@ typedef enum CKSplitViewOrientation{
 
 @end
 
+typedef enum CKSplitViewControllerAnimationState{
+    CKSplitViewControllerAnimationStateRemoving,
+    CKSplitViewControllerAnimationStateAdding,
+    CKSplitViewControllerAnimationStateMoving
+}CKSplitViewControllerAnimationState;
+
 //CKSplitViewController
 
 /**
@@ -158,13 +164,6 @@ typedef enum CKSplitViewOrientation{
  */
 @property(nonatomic,assign)CKSplitViewOrientation orientation;
 
-///-----------------------------------
-/// @name Managing animations
-///-----------------------------------
-
-/**
- */
-@property (nonatomic, copy) void (^addOrRemoveAnimationBlock)(UIView* view, BOOL removing);
 
 ///-----------------------------------
 /// @name Managing the view controllers
@@ -176,7 +175,11 @@ typedef enum CKSplitViewOrientation{
 
 /**
  */
-- (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated;
+- (void)setViewControllers:(NSArray *)viewControllers 
+         animationDuration:(NSTimeInterval)animationDuration
+       startAnimationBlock:(void(^)(UIViewController* controller, CGRect beginFrame, CGRect endFrame, CKSplitViewControllerAnimationState state))startAnimationBlock
+            animationBlock:(void(^)(UIViewController* controller, CGRect beginFrame, CGRect endFrame, CKSplitViewControllerAnimationState state))animationBlock
+         endAnimationBlock:(void(^)(UIViewController* controller, CGRect beginFrame, CGRect endFrame, CKSplitViewControllerAnimationState state))endAnimationBlock;
 
 @end
 
