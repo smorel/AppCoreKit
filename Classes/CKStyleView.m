@@ -15,47 +15,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-/*
-@interface CKStyleViewUpdater : NSObject
-
-@property(nonatomic,assign)UIView* view;
-- (id)initWithView:(UIView*)view;
-@end
-
-
-@implementation CKStyleViewUpdater{
-	UIView* _view;
-	CGSize _size;
-}
-
-@synthesize view = _view;
-
-- (void)frameChanged:(id)value{
-	if(_size.width != self.view.bounds.size.width
-	   || _size.height != self.view.bounds.size.height){
-		_size = self.view.bounds.size;
-		//[self.view setNeedsDisplay];
-	}
-}
-
-- (id)initWithView:(UIView*)theView{
-	if(self = [super init]){
-		self.view = theView;
-		_size = self.view.bounds.size;
-        [self beginBindingsContextByRemovingPreviousBindings];
-		[theView bind:@"frame" target:self action:@selector(frameChanged:)];
-		[self endBindingsContext];
-	}
-	return self;
-}
-
-- (void)dealloc{
-    [self clearBindingsContext];
-	[super dealloc];
-}
-
-@end*/
-
 @interface CKStyleView () 
 //@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
@@ -131,6 +90,7 @@
     _borderShadowOffset = CGSizeMake(0,0);
     
     self.gradientStyle = CKStyleViewGradientStyleVertical;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -221,7 +181,7 @@
 	self.fillColor = color;
     CGFloat alpha = CGColorGetAlpha([color CGColor]);
     if(self.corners == CKStyleViewCornerTypeNone && alpha >= 1){
-        [super setBackgroundColor:[UIColor blackColor]];
+        [super setBackgroundColor:[UIColor clearColor]];
     }
     else{
         [super setBackgroundColor:[UIColor clearColor]];
@@ -284,7 +244,7 @@
 
 #pragma mark - Emboss Paths
 
-- (void)generateTopEmbossPath:(CGMutablePathRef)path {
+- (void)generateTopEmbossPath:(CGMutablePathRef)path  inRect:(CGRect)rect{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKStyleViewCornerTypeTop:
@@ -301,18 +261,18 @@
 	}
     
     CGFloat offset = 0;
-    
+    /*
 	if (self.borderLocation & CKStyleViewBorderLocationTop && self.borderColor && (self.borderColor != [UIColor clearColor])) {
         offset = self.borderWidth;
     }
     if (self.separatorLocation & CKStyleViewSeparatorLocationTop && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
-    }
+    }*/
 	
-	CGFloat x = self.bounds.origin.x + offset-1;
-	CGFloat y = self.bounds.origin.y + offset - 1;
-	CGFloat width = self.bounds.size.width - (2 * (offset - 1));
-	CGFloat radius = self.roundedCornerSize - offset + 3;
+	CGFloat x = rect.origin.x + offset;
+	CGFloat y = rect.origin.y + offset ;
+	CGFloat width = rect.size.width - (2 * (offset));
+	CGFloat radius = self.roundedCornerSize - offset/* - offset + 3*/;
 	
     
     CGPoint startLinePoint = CGPointMake(x, y + ((roundedCorners & UIRectCornerTopLeft) ? radius : 0));
@@ -328,7 +288,7 @@
 	}
 }
 
-- (void)generateBottomEmbossPath:(CGMutablePathRef)path {
+- (void)generateBottomEmbossPath:(CGMutablePathRef)path  inRect:(CGRect)rect{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKStyleViewCornerTypeTop:
@@ -346,17 +306,17 @@
     
     CGFloat offset = 0;
     
-	if (self.borderLocation & CKStyleViewBorderLocationBottom && self.borderColor && (self.borderColor != [UIColor clearColor])) {
+	/*if (self.borderLocation & CKStyleViewBorderLocationBottom && self.borderColor && (self.borderColor != [UIColor clearColor])) {
         offset = self.borderWidth;
     }
     if (self.separatorLocation & CKStyleViewSeparatorLocationBottom && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
-    }
+    }*/
 	
-	CGFloat x = self.bounds.origin.x + offset - 1;
-	CGFloat y = self.bounds.size.height - (offset - 1);
-	CGFloat width = self.bounds.size.width - (2 * (offset - 1)) ;
-	CGFloat radius = self.roundedCornerSize - offset + 2;
+	CGFloat x = rect.origin.x + offset;
+	CGFloat y = rect.origin.y + rect.size.height - offset;
+	CGFloat width = rect.size.width - (2 * (offset));
+	CGFloat radius = self.roundedCornerSize - offset/* - offset + 3*/;
     
     
     CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
@@ -374,7 +334,7 @@
 
 #pragma mark - Border Path
 
-- (void)generateBorderPath:(CGMutablePathRef)path withStyle:(CKStyleViewBorderLocation)borderStyle width:(CGFloat)borderWidth{
+- (void)generateBorderPath:(CGMutablePathRef)path withStyle:(CKStyleViewBorderLocation)borderStyle width:(CGFloat)borderWidth inRect:(CGRect)rect{
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKStyleViewCornerTypeTop:
@@ -390,28 +350,35 @@
 			break;
 	}
 	
-    CGFloat halfBorder = (borderWidth / 2.0);
+    CGFloat halfBorder = 0;//(borderWidth / 2.0);
     
-    CGFloat x = 0 + halfBorder; //((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
-    CGFloat y = 0 + halfBorder; //((self.corners != CKStyleViewCornerTypeNone) ? halfBorder : 0);
+    CGFloat x = rect.origin.x + halfBorder; 
+    CGFloat y = rect.origin.y + halfBorder; 
     
-	CGFloat width = self.bounds.size.width - borderWidth/*((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0)*/;
-	CGFloat height = self.bounds.size.height - borderWidth/*((self.corners != CKStyleViewCornerTypeNone) ? borderWidth : 0)*/;
+	CGFloat width = rect.size.width - (2*halfBorder);
+	CGFloat height = rect.size.height - (2*halfBorder);
     
 	CGFloat radius = (self.roundedCornerSize > 0) ? (self.roundedCornerSize - halfBorder) : 0;
 	
+    BOOL shouldMove = YES;
 	if(borderStyle & CKStyleViewBorderLocationLeft){
 		//draw arc from bottom to left or move to bottom left
 		if((roundedCorners & UIRectCornerBottomLeft) && (borderStyle & CKStyleViewBorderLocationBottom)){
-			CGPathMoveToPoint (path, nil, x + radius, y + height);
+            if(shouldMove){
+                CGPathMoveToPoint (path, nil, x + radius, y + height);
+                shouldMove = NO;
+            }
             CGPathAddArc(path, nil,x + radius,y + height-radius,radius, M_PI / 2,  M_PI ,NO);
 		}
 		else{
-			CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (y + height - radius) : height + borderWidth);
+            if(shouldMove){
+                CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (y + height - radius) : (y + height + borderWidth));
+                shouldMove = NO;
+            }
 		}
 		
 		//draw left line
-		CGPathAddLineToPoint (path, nil, x, (roundedCorners & UIRectCornerTopLeft) ? y + radius : 0);
+		CGPathAddLineToPoint (path, nil, x, (roundedCorners & UIRectCornerTopLeft) ? y + radius : y);
 		
 		//draw arc from left to top
 		if((roundedCorners & UIRectCornerTopLeft) && (borderStyle & CKStyleViewBorderLocationTop)){
@@ -422,137 +389,125 @@
 	
 	//draw top
 	if(borderStyle & CKStyleViewBorderLocationTop){
-		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? x + radius : x, y);
-		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : width + borderWidth, y);
-	}
+        if(shouldMove){
+            CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? x + radius : x, y);
+            shouldMove = NO;
+        }
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : (x + width + borderWidth), y);
+	} else shouldMove = YES;
 	
 	//draw right
 	if(borderStyle & CKStyleViewBorderLocationRight){
 		//draw arc from top to right or move to top right
 		if((roundedCorners & UIRectCornerTopRight) && (borderStyle & CKStyleViewBorderLocationTop)){
-			CGPathMoveToPoint (path, nil, x + width - radius, y);
+            if(shouldMove){
+                CGPathMoveToPoint (path, nil, x + width - radius, y);
+                shouldMove = NO;
+            }
             CGPathAddArc(path, nil,x + width- radius,y + radius,radius, 3 * (M_PI / 2.0),0  ,NO);
 			//CGPathAddArcToPoint (path, nil, width, 0, width, radius, radius);
 		}
 		else{
-			CGPathMoveToPoint (path, nil, x + width, (roundedCorners & UIRectCornerTopRight) ? y + radius : 0);
+            if(shouldMove){
+                CGPathMoveToPoint (path, nil, x + width, (roundedCorners & UIRectCornerTopRight) ? y + radius : y);
+                shouldMove = NO;
+            }
 		}
 		
 		//draw right line
-		CGPathAddLineToPoint (path, nil, x + width, (roundedCorners & UIRectCornerBottomRight) ? (y + height - radius) : height + borderWidth);
+		CGPathAddLineToPoint (path, nil, x + width, (roundedCorners & UIRectCornerBottomRight) ? (y + height - radius) : (y + height + borderWidth));
 		
 		//draw arc from right to bottom
 		if((roundedCorners & UIRectCornerBottomRight) && (borderStyle & CKStyleViewBorderLocationBottom)){
             CGPathAddArc(path, nil,x + width - radius,y + height - radius,radius, 0,  M_PI / 2.0,NO);
 			//CGPathAddArcToPoint (path, nil, width, height, width - radius, height, radius);
 		}
-	}
+	} else shouldMove = YES;
 	
 	//draw bottom
 	if(borderStyle & CKStyleViewBorderLocationBottom){
-		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (x + width - radius) : x + width, y + height);
-		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? x + radius : 0, y + height);
+        if(shouldMove){
+            CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (x + width - radius) : x + width, y + height);
+            shouldMove = NO;
+        }
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? x + radius : x, y + height);
 	}
 }
 
+
+
 - (void)setFrame:(CGRect)frame{
-    [super setFrame:frame];
-    
-    [CATransaction begin];
-    [CATransaction setDisableActions: YES];
-    
     if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
-        CALayer* mask = self.layer.mask;
-        if(mask){
-            //generate size content image using _borderLocation _borderShadowRadius _borderShadowOffset
-            //compute anchor point !
-            
-            CGPoint offset = CGPointMake(MIN(0,-_borderShadowRadius + _borderShadowOffset.width),MIN(0,-_borderShadowRadius + _borderShadowOffset.height));
-            //limit offset if no border top or bottom
-            
-            CGSize size = self.bounds.size;
-            size.width += 2 * _borderShadowRadius + fabs(_borderShadowOffset.width);
-            size.height += 2 * _borderShadowRadius + fabs(_borderShadowOffset.height); //to crop if no border top or bottom
-            
-            if(!(_borderLocation & CKStyleViewBorderLocationBottom)){
-                if(size.height > self.bounds.size.height){
-                    size.height = fabs(offset.y) + self.bounds.size.height;
-                }
-            }
-            
-            if(!(_borderLocation & CKStyleViewBorderLocationTop)){
-                if(offset.y < 0){
-                    size.height -= fabs(offset.y);
-                    offset.y = 0;
-                }
-            }
-            
-            mask.frame = CGRectMake(offset.x,offset.y,size.width,size.height);
+        //Shadow
+        CGSize oldSize = self.frame.size;
+        
+        UIRectCorner roundedCorners = UIRectCornerAllCorners;
+        switch (self.corners) {
+            case CKStyleViewCornerTypeTop:
+                roundedCorners = (UIRectCornerTopLeft | UIRectCornerTopRight);
+                break;
+            case CKStyleViewCornerTypeBottom:
+                roundedCorners = (UIRectCornerBottomLeft | UIRectCornerBottomRight);
+                break;
+                
+            default:
+                break;
         }
+        
+        CGFloat multiplier = 2;
+        CGRect shadowFrame = frame;
+        CGPoint offset = CGPointMake(0,0);
+        
+        if(_borderLocation & CKStyleViewBorderLocationLeft){
+            offset.x += multiplier * self.borderShadowRadius;
+            shadowFrame.size.width += multiplier * self.borderShadowRadius;
+        }
+        if(_borderLocation & CKStyleViewBorderLocationRight){
+            shadowFrame.size.width += multiplier * self.borderShadowRadius;
+        }
+        if(_borderLocation & CKStyleViewBorderLocationTop){
+            offset.y += multiplier * self.borderShadowRadius;
+            shadowFrame.size.height += multiplier * self.borderShadowRadius;
+        }
+        if(_borderLocation & CKStyleViewBorderLocationBottom){
+            shadowFrame.size.height += multiplier * self.borderShadowRadius;
+        }
+        
+        shadowFrame.origin.x -= offset.x;
+        shadowFrame.origin.y -= offset.y;
+        [super setFrame:shadowFrame];
+        
+        UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
+        CGContextRef gc = UIGraphicsGetCurrentContext();
+        
+        CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
+        [self drawInRect:drawRect inContext:gc];
+        
+        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        self.layer.contents = (id)[resultingImage CGImage];
+        self.contentMode = UIViewContentModeScaleToFill;
+        
+    }else{
+        //Draw normally
+        [super setFrame:frame];
+        UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+        CGContextRef gc = UIGraphicsGetCurrentContext();
+        
+        CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
+        [self drawInRect:drawRect inContext:gc];
+        
+        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        self.layer.contents = (id)[resultingImage CGImage];
+        self.contentMode = UIViewContentModeScaleToFill;
     }
-    [CATransaction commit];
 }
 
-- (void)drawRect:(CGRect)rect {
-    self.layer.needsDisplayOnBoundsChange = YES;
-    
-    if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
-        [CATransaction begin];
-        [CATransaction 
-         setValue: [NSNumber numberWithBool: YES]
-         forKey: kCATransactionDisableActions];
-        
-        self.layer.shadowColor = [self.borderShadowColor CGColor];
-        self.layer.shadowOffset = self.borderShadowOffset;
-        self.layer.shadowRadius = self.borderShadowRadius;
-        self.layer.shadowOpacity = 1;
-        self.clipsToBounds = NO;
-        
-        CALayer* mask = self.layer.mask;
-        if(!mask){
-            mask = [[[CALayer alloc]init]autorelease];
-            self.layer.mask = mask;
-        }
-        
-        //generate size content image using _borderLocation _borderShadowRadius _borderShadowOffset
-        //compute anchor point !
-        
-        CGPoint offset = CGPointMake(MIN(0,(-2 * _borderShadowRadius) + _borderShadowOffset.width),MIN(0,(-2 * _borderShadowRadius) + _borderShadowOffset.height));
-        //limit offset if no border top or bottom
-        
-        CGSize size = self.bounds.size;
-        size.width += 4 * _borderShadowRadius + fabs(_borderShadowOffset.width);
-        size.height += 4 * _borderShadowRadius + fabs(_borderShadowOffset.height); //to crop if no border top or bottom
-        
-        
-        CGRect shadowFrame = self.layer.bounds;
-        if(!(_borderLocation & CKStyleViewBorderLocationBottom)){
-            if(size.height > self.bounds.size.height){
-                size.height = fabs(offset.y) + self.bounds.size.height;
-            }
-            shadowFrame.size.height += _borderShadowRadius;
-        }
-        
-        if(!(_borderLocation & CKStyleViewBorderLocationTop)){
-            if(offset.y < 0){
-                size.height -= fabs(offset.y);
-                offset.y = 0;
-            }
-            shadowFrame.origin.y = -_borderShadowRadius;
-            shadowFrame.size.height += _borderShadowRadius;
-        }
-        
-        
-        self.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowFrame].CGPath;
-        
-        mask.backgroundColor = [[UIColor whiteColor]CGColor];
-        mask.frame = CGRectMake(offset.x,offset.y,size.width,size.height);
-        
-        [CATransaction commit];
-    }
-    
-	CGContextRef gc = UIGraphicsGetCurrentContext();
-	
+
+- (void)drawInRect:(CGRect)rect inContext:(CGContextRef)gc {
 	UIRectCorner roundedCorners = UIRectCornerAllCorners;
 	switch (self.corners) {
 		case CKStyleViewCornerTypeTop:
@@ -565,10 +520,31 @@
 		default:
 			break;
 	}
-	
+    
 	CGPathRef clippingPath = nil;
 	if (self.corners != CKStyleViewCornerTypeNone) {
-		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
+		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:rect byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
+	}
+    
+    // Shadow
+	if(_borderColor!= nil && _borderColor != [UIColor clearColor] && _borderWidth > 0 && _borderLocation != CKStyleViewBorderLocationNone){
+		CGContextSaveGState(gc);
+        
+        if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
+            CGContextSetShadowWithColor(gc, self.borderShadowOffset, self.borderShadowRadius, self.borderShadowColor.CGColor);
+            
+            if (self.corners != CKStyleViewCornerTypeNone){
+                [[UIColor blackColor] setStroke];
+                CGContextAddPath(gc, clippingPath);
+                CGContextFillPath(gc);
+            }else{
+                [[UIColor blackColor] setFill];
+                CGContextFillRect(gc, rect);
+            }
+            
+        }
+        
+		CGContextRestoreGState(gc);
 	}
 	
 	if(self.gradientColors == nil && self.image == nil){
@@ -582,7 +558,7 @@
             CGContextFillPath(gc);
         }
         else{
-            CGContextFillRect(gc, self.bounds);
+            CGContextFillRect(gc, rect);
         }
 	}
 	
@@ -594,10 +570,10 @@
 		}
 		
 		//self.imageContentMode
-		//[_image drawInRect:self.bounds];
+		//[_image drawInRect:rect];
 		
 		BOOL clip = NO;
-		CGRect originalRect = self.bounds;
+		CGRect originalRect = rect;
 		if (_image.size.width != rect.size.width || _image.size.height != rect.size.height) {
 			if (_imageContentMode == UIViewContentModeLeft) {
 				rect = CGRectMake(rect.origin.x,
@@ -705,16 +681,16 @@
 		for (UIColor *color in self.gradientColors) {
 			[colors addObject:(id)([[color RGBColor]CGColor])];
 		}
-
+        
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 		CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)colors, colorLocations);
 		CFRelease(colorSpace);
         switch(self.gradientStyle){
             case CKStyleViewGradientStyleVertical:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, self.bounds.size.height), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, rect.size.height), 0);
                 break;
             case CKStyleViewGradientStyleHorizontal:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(self.bounds.size.width, 0), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(rect.size.width, 0), 0);
                 break;
         }
         //CGContextDrawRadialGradient
@@ -726,14 +702,16 @@
 	// Top Emboss
 	if (_embossTopColor && (_embossTopColor != [UIColor clearColor])) {
 		CGContextSaveGState(gc);
-        [[UIColor clearColor]setStroke];
-		CGContextSetLineWidth(gc, 1);
+        
 		CGContextSetShadowWithColor(gc, CGSizeMake(0, 1), 0, _embossTopColor.CGColor);
 		CGMutablePathRef topEmbossPath = CGPathCreateMutable();
-		[self generateTopEmbossPath:topEmbossPath];
+		[self generateTopEmbossPath:topEmbossPath inRect:rect];
 		CGContextAddPath(gc, topEmbossPath);
         
-        UIColor* thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
+        [[UIColor clearColor]setStroke];
+		CGContextSetLineWidth(gc, 1);
+        //UIColor* thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
+        UIColor*thecolor = self.borderColor;
         thecolor = [thecolor colorWithAlphaComponent:1];
 		[thecolor setStroke];
         
@@ -745,21 +723,23 @@
 	// Bottom Emboss
 	if (_embossBottomColor && (_embossBottomColor != [UIColor clearColor])) {
 		CGContextSaveGState(gc);
-		if(clippingPath != nil){
-			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
-		}
+        
 		CGContextSetShadowWithColor(gc, CGSizeMake(0, -1), 0, _embossBottomColor.CGColor);
 		CGMutablePathRef bottomEmbossPath = CGPathCreateMutable();
-		[self generateBottomEmbossPath:bottomEmbossPath];
+		[self generateBottomEmbossPath:bottomEmbossPath inRect:rect];
 		CGContextAddPath(gc, bottomEmbossPath);
-		CFRelease(bottomEmbossPath);
         
-        UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors last] : self.fillColor;
+		CGContextSetLineWidth(gc, 1);
+        [[UIColor clearColor]setStroke];
+        
+        //perhaps use the border color here
+        //UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors last] : self.fillColor;
+        UIColor*thecolor = self.borderColor;
         thecolor = [thecolor colorWithAlphaComponent:1];
 		[thecolor setStroke];
         
 		CGContextStrokePath(gc);
+		CFRelease(bottomEmbossPath);
 		CGContextRestoreGState(gc);
 	}
     
@@ -770,7 +750,8 @@
 		[_separatorColor setStroke];
 		CGContextSetLineWidth(gc, self.separatorWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
-		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth];
+		[self generateBorderPath:borderPath withStyle:(CKStyleViewBorderLocation)_separatorLocation  width:_separatorWidth inRect:rect];
+        
 		CGContextAddPath(gc, borderPath);
 		CFRelease(borderPath);
 		CGContextStrokePath(gc);
@@ -781,17 +762,22 @@
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor] && _borderWidth > 0 && _borderLocation != CKStyleViewBorderLocationNone){
 		CGContextSaveGState(gc);
         
-		[_borderColor setStroke];
 		CGContextSetLineWidth(gc, self.borderWidth);
 		CGMutablePathRef borderPath = CGPathCreateMutable();
-		[self generateBorderPath:borderPath withStyle:_borderLocation width:_borderWidth];
+		[self generateBorderPath:borderPath withStyle:_borderLocation width:_borderWidth inRect:rect];
         
+		[[UIColor whiteColor] setStroke];
 		CGContextAddPath(gc, borderPath);
-		CFRelease(borderPath);
 		CGContextStrokePath(gc);
+        
+		[_borderColor setStroke];
+		CGContextAddPath(gc, borderPath);
+		CGContextStrokePath(gc);
+        
+		CFRelease(borderPath);
 		CGContextRestoreGState(gc);
 	}
-    [self.layer setShouldRasterize:YES];
 }
+
 
 @end
