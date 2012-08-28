@@ -267,9 +267,9 @@
     offset /= 2;
 	
 	CGFloat x = rect.origin.x +  offset;
-	CGFloat y = rect.origin.y + offset ;
+	CGFloat y = rect.origin.y + (2 * offset) ;
 	CGFloat width = rect.size.width - (2 * (offset));
-	CGFloat radius = self.roundedCornerSize + (2 * offset)/* - offset + 3*/;
+	CGFloat radius = self.roundedCornerSize + (0 * offset)/* - offset + 3*/;
 	
     
     CGPoint startLinePoint = CGPointMake(x, y + ((roundedCorners & UIRectCornerTopLeft) ? radius : 0));
@@ -313,9 +313,9 @@
     offset /= 2;
 	
 	CGFloat x = rect.origin.x +  offset;
-	CGFloat y = rect.origin.y + rect.size.height - offset;
+	CGFloat y = rect.origin.y + rect.size.height - (2 * offset);
 	CGFloat width = rect.size.width - (2 * (offset));
-	CGFloat radius = self.roundedCornerSize + (2 * offset) /* - offset + 3*/;
+	CGFloat radius = self.roundedCornerSize + (0 * offset) /* - offset + 3*/;
     
     
     CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
