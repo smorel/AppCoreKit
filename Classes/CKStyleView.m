@@ -454,9 +454,9 @@
 
 
 - (void)setFrame:(CGRect)frame{
+    CGSize oldSize = self.frame.size;
     if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
         //Shadow
-        CGSize oldSize = self.frame.size;
         
         UIRectCorner roundedCorners = UIRectCornerAllCorners;
         switch (self.corners) {
@@ -513,32 +513,38 @@
         shadowFrame.origin.y -= offset.y;
         [super setFrame:shadowFrame];
         
-        UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
-        CGContextRef gc = UIGraphicsGetCurrentContext();
-        
-        CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
-        [self drawInRect:drawRect inContext:gc];
-        
-        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        self.layer.contents = (id)[resultingImage CGImage];
-        self.contentMode = UIViewContentModeScaleToFill;
+        if( !CGSizeEqualToSize(shadowFrame.size, oldSize) ){
+            
+            UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
+            CGContextRef gc = UIGraphicsGetCurrentContext();
+            
+            CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
+            [self drawInRect:drawRect inContext:gc];
+            
+            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            self.layer.contents = (id)[resultingImage CGImage];
+            self.contentMode = UIViewContentModeScaleToFill;
+        }
         
     }else{
         //Draw normally
         [super setFrame:frame];
-        UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
-        CGContextRef gc = UIGraphicsGetCurrentContext();
         
-        CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
-        [self drawInRect:drawRect inContext:gc];
-        
-        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        self.layer.contents = (id)[resultingImage CGImage];
-        self.contentMode = UIViewContentModeScaleToFill;
+        if( !CGSizeEqualToSize(frame.size, oldSize) ){
+            UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+            CGContextRef gc = UIGraphicsGetCurrentContext();
+            
+            CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
+            [self drawInRect:drawRect inContext:gc];
+            
+            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            self.layer.contents = (id)[resultingImage CGImage];
+            self.contentMode = UIViewContentModeScaleToFill;
+        }
     }
 }
 
@@ -606,7 +612,7 @@
                     [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:shadowRect];
                 }
                 
-                [[UIColor yellowColor] setStroke];
+                [[UIColor yellowColor] setFill];
                 CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
                 CFRelease(shadowPath);
