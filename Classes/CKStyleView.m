@@ -612,14 +612,14 @@
                     [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:shadowRect];
                 }
                 
-                [[UIColor yellowColor] setFill];
+                [_borderColor setFill];
                 CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
                 CFRelease(shadowPath);
             }else{
                 
                 //TODO inset the rect to have shadow till the limits of the image !
-                [[UIColor yellowColor] setFill];
+                [_borderColor setFill];
                 CGContextFillRect(gc, shadowRect);
             }
             
@@ -630,7 +630,7 @@
     
     CGMutablePathRef clippingPath = CGPathCreateMutable();;
     //if (self.corners != CKStyleViewCornerTypeNone) {
-		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:rect];
+		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:1 inRect:rect];
 	//}
 	
 	if(self.gradientColors == nil && self.image == nil){
