@@ -597,6 +597,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                 
                 backgroundView.opaque = opaque;
                 backgroundView.frame = view.bounds;
+                [backgroundView setNeedsDisplay];
 				
 				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKStyleViewCornerTypeNone));
 				if(dontTouchBackgroundColor == NO){
@@ -611,6 +612,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
             //Root to leaf instead of leaf to root like before.
             [view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
         }
+        [view setNeedsDisplay];
 		return YES;
 	}
 	return NO;

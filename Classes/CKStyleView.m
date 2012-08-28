@@ -197,8 +197,7 @@
         _image = [anImage retain];
         
         self.opaque = YES;
-        self.backgroundColor = [UIColor blackColor];
-        [self.layer setShouldRasterize:NO];
+        //self.backgroundColor = [UIColor blackColor];
     }
 }
 
@@ -208,28 +207,25 @@
         
         CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
         if(newCorners == CKStyleViewCornerTypeNone && alpha >= 1){
-            [super setBackgroundColor:[UIColor blackColor]];
+            //[super setBackgroundColor:[UIColor blackColor]];
             self.opaque = YES;
         }
         else{
             [super setBackgroundColor:[UIColor clearColor]];
             self.opaque = NO;
         }
-        [self.layer setShouldRasterize:NO];
     }
 }
 
 - (void)setBorderLocation:(NSInteger)theborderLocation{
     if(_borderLocation != theborderLocation){
         _borderLocation = theborderLocation;
-        [self.layer setShouldRasterize:NO];
     }
 }
 
 - (void)setSeparatorLocation:(NSInteger)theseparatorLocation{
     if(_separatorLocation != theseparatorLocation){
         _separatorLocation = theseparatorLocation;
-        [self.layer setShouldRasterize:NO];
     }
 }
 
@@ -260,13 +256,13 @@
 	}
     
     CGFloat offset = 0;
-    /*
+    
 	if (self.borderLocation & CKStyleViewBorderLocationTop && self.borderColor && (self.borderColor != [UIColor clearColor])) {
         offset = self.borderWidth;
     }
     if (self.separatorLocation & CKStyleViewSeparatorLocationTop && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
-    }*/
+    }
 	
 	CGFloat x = rect.origin.x + offset;
 	CGFloat y = rect.origin.y + offset ;
@@ -305,17 +301,17 @@
     
     CGFloat offset = 0;
     
-	/*if (self.borderLocation & CKStyleViewBorderLocationBottom && self.borderColor && (self.borderColor != [UIColor clearColor])) {
+	if (self.borderLocation & CKStyleViewBorderLocationBottom && self.borderColor && (self.borderColor != [UIColor clearColor])) {
         offset = self.borderWidth;
     }
     if (self.separatorLocation & CKStyleViewSeparatorLocationBottom && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
-    }*/
+    }
 	
 	CGFloat x = rect.origin.x + offset;
 	CGFloat y = rect.origin.y + rect.size.height - offset;
 	CGFloat width = rect.size.width - (2 * (offset));
-	CGFloat radius = self.roundedCornerSize - offset/* - offset + 3*/;
+	CGFloat radius = self.roundedCornerSize - offset /* - offset + 3*/;
     
     
     CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
@@ -349,13 +345,31 @@
 			break;
 	}
 	
-    CGFloat halfBorder = 0;//(borderWidth / 2.0);
+    CGFloat halfBorder = (borderWidth / 2.0);
     
     CGFloat x = rect.origin.x + halfBorder; 
     CGFloat y = rect.origin.y + halfBorder; 
     
 	CGFloat width = rect.size.width - (2*halfBorder);
 	CGFloat height = rect.size.height - (2*halfBorder);
+    
+    if(!(borderStyle & CKStyleViewBorderLocationTop)){
+        y -= halfBorder;
+        height += halfBorder;
+    }
+    
+    if(!(borderStyle & CKStyleViewBorderLocationBottom)){
+        height += halfBorder;
+    }
+    
+    if(!(borderStyle & CKStyleViewBorderLocationLeft)){
+        x -= halfBorder;
+        width += halfBorder;
+    }
+    
+    if(!(borderStyle & CKStyleViewBorderLocationRight)){
+        width += halfBorder;
+    }
     
 	CGFloat radius = (self.roundedCornerSize > 0) ? (self.roundedCornerSize - halfBorder) : 0;
 	
@@ -585,17 +599,17 @@
                 //TODO inset the rect to have shadow till the limits of the image !
                 CGMutablePathRef shadowPath = CGPathCreateMutable();
                 if (self.corners != CKStyleViewCornerTypeNone) {
-                    [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:_borderWidth inRect:shadowRect];
+                    [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:shadowRect];
                 }
                 
-                [[UIColor blackColor] setStroke];
+                [[UIColor yellowColor] setStroke];
                 CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
                 CFRelease(shadowPath);
             }else{
                 
                 //TODO inset the rect to have shadow till the limits of the image !
-                [[UIColor blackColor] setFill];
+                [[UIColor yellowColor] setFill];
                 CGContextFillRect(gc, shadowRect);
             }
             
@@ -606,7 +620,7 @@
     
     CGMutablePathRef clippingPath = CGPathCreateMutable();;
     if (self.corners != CKStyleViewCornerTypeNone) {
-		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:_borderWidth inRect:rect];
+		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:rect];
 	}
 	
 	if(self.gradientColors == nil && self.image == nil){
@@ -773,8 +787,10 @@
         [[UIColor clearColor]setStroke];
 		CGContextSetLineWidth(gc, 1);
         //UIColor* thecolor = [self.gradientColors count] > 0 ? [self.gradientColors objectAtIndex:0] : self.fillColor;
-        UIColor*thecolor = self.borderColor;
-        thecolor = [thecolor colorWithAlphaComponent:1];
+        //UIColor*thecolor = self.borderColor;
+        //thecolor = [thecolor colorWithAlphaComponent:1];
+        
+        UIColor*thecolor = _embossTopColor;
 		[thecolor setStroke];
         
 		CGContextStrokePath(gc);
@@ -796,8 +812,10 @@
         
         //perhaps use the border color here
         //UIColor*thecolor = [self.gradientColors count] > 0 ? [self.gradientColors last] : self.fillColor;
-        UIColor*thecolor = self.borderColor;
-        thecolor = [thecolor colorWithAlphaComponent:1];
+        //UIColor*thecolor = self.borderColor;
+        //thecolor = [thecolor colorWithAlphaComponent:1];
+        
+        UIColor*thecolor = _embossBottomColor;
 		[thecolor setStroke];
         
 		CGContextStrokePath(gc);

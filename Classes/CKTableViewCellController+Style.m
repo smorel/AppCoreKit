@@ -225,9 +225,9 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
             NSInteger numberOfRows = [tableView numberOfRowsInSection:self.indexPath.section];
             if(numberOfRows > 1){
                 if(self.indexPath.row == 0){
-                    return  CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationBottom;
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationTop | CKStyleViewBorderLocationRight;
                 }else if(self.indexPath.row == numberOfRows-1){
-                    return CKStyleViewBorderLocationAll &~ CKStyleViewBorderLocationTop;
+                    return  CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationBottom | CKStyleViewBorderLocationRight;
                 }else{
                     return CKStyleViewBorderLocationLeft | CKStyleViewBorderLocationRight;
                 }
