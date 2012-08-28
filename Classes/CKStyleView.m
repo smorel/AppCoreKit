@@ -623,9 +623,9 @@
 	}
     
     CGMutablePathRef clippingPath = CGPathCreateMutable();;
-    if (self.corners != CKStyleViewCornerTypeNone) {
+    //if (self.corners != CKStyleViewCornerTypeNone) {
 		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:rect];
-	}
+	//}
 	
 	if(self.gradientColors == nil && self.image == nil){
 		if(self.fillColor != nil)
@@ -646,7 +646,7 @@
 	if(_image){
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
+            CGContextClip(gc);
 		}
 		
 		//self.imageContentMode
@@ -748,7 +748,7 @@
 		CGContextSaveGState(gc);
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
+            CGContextClip(gc);
 		}
 		
 		CGFloat colorLocations[self.gradientColorLocations.count];
@@ -767,10 +767,10 @@
 		CFRelease(colorSpace);
         switch(self.gradientStyle){
             case CKStyleViewGradientStyleVertical:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, rect.size.height), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x, rect.origin.y + rect.size.height), 0);
                 break;
             case CKStyleViewGradientStyleHorizontal:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(rect.size.width, 0), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x + rect.size.width, rect.origin.y), 0);
                 break;
         }
         //CGContextDrawRadialGradient
