@@ -263,11 +263,13 @@
     if (self.separatorLocation & CKStyleViewSeparatorLocationTop && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
     }
+    
+    offset /= 2;
 	
-	CGFloat x = rect.origin.x + offset;
+	CGFloat x = rect.origin.x +  offset;
 	CGFloat y = rect.origin.y + offset ;
 	CGFloat width = rect.size.width - (2 * (offset));
-	CGFloat radius = self.roundedCornerSize - offset/* - offset + 3*/;
+	CGFloat radius = self.roundedCornerSize + (2 * offset)/* - offset + 3*/;
 	
     
     CGPoint startLinePoint = CGPointMake(x, y + ((roundedCorners & UIRectCornerTopLeft) ? radius : 0));
@@ -307,11 +309,13 @@
     if (self.separatorLocation & CKStyleViewSeparatorLocationBottom && self.separatorColor && (self.separatorColor != [UIColor clearColor])) {
         offset = MAX(offset,self.separatorWidth);
     }
+    
+    offset /= 2;
 	
-	CGFloat x = rect.origin.x + offset;
+	CGFloat x = rect.origin.x +  offset;
 	CGFloat y = rect.origin.y + rect.size.height - offset;
 	CGFloat width = rect.size.width - (2 * (offset));
-	CGFloat radius = self.roundedCornerSize - offset /* - offset + 3*/;
+	CGFloat radius = self.roundedCornerSize + (2 * offset) /* - offset + 3*/;
     
     
     CGPoint startLinePoint = CGPointMake(x, ((roundedCorners & UIRectCornerBottomLeft) ? y - radius : y));
