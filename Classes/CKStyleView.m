@@ -454,9 +454,9 @@
 
 
 - (void)setFrame:(CGRect)frame{
+    CGSize oldSize = self.frame.size;
     if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
         //Shadow
-        CGSize oldSize = self.frame.size;
         
         UIRectCorner roundedCorners = UIRectCornerAllCorners;
         switch (self.corners) {
@@ -513,32 +513,38 @@
         shadowFrame.origin.y -= offset.y;
         [super setFrame:shadowFrame];
         
-        UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
-        CGContextRef gc = UIGraphicsGetCurrentContext();
-        
-        CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
-        [self drawInRect:drawRect inContext:gc];
-        
-        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        self.layer.contents = (id)[resultingImage CGImage];
-        self.contentMode = UIViewContentModeScaleToFill;
+        if( !CGSizeEqualToSize(shadowFrame.size, oldSize) ){
+            
+            UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
+            CGContextRef gc = UIGraphicsGetCurrentContext();
+            
+            CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
+            [self drawInRect:drawRect inContext:gc];
+            
+            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            self.layer.contents = (id)[resultingImage CGImage];
+            self.contentMode = UIViewContentModeScaleToFill;
+        }
         
     }else{
         //Draw normally
         [super setFrame:frame];
-        UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
-        CGContextRef gc = UIGraphicsGetCurrentContext();
         
-        CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
-        [self drawInRect:drawRect inContext:gc];
-        
-        UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        self.layer.contents = (id)[resultingImage CGImage];
-        self.contentMode = UIViewContentModeScaleToFill;
+        if( !CGSizeEqualToSize(frame.size, oldSize) ){
+            UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
+            CGContextRef gc = UIGraphicsGetCurrentContext();
+            
+            CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
+            [self drawInRect:drawRect inContext:gc];
+            
+            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            self.layer.contents = (id)[resultingImage CGImage];
+            self.contentMode = UIViewContentModeScaleToFill;
+        }
     }
 }
 
@@ -606,14 +612,14 @@
                     [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:shadowRect];
                 }
                 
-                [[UIColor yellowColor] setStroke];
+                [_borderColor setFill];
                 CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
                 CFRelease(shadowPath);
             }else{
                 
                 //TODO inset the rect to have shadow till the limits of the image !
-                [[UIColor yellowColor] setFill];
+                [_borderColor setFill];
                 CGContextFillRect(gc, shadowRect);
             }
             
@@ -623,9 +629,9 @@
 	}
     
     CGMutablePathRef clippingPath = CGPathCreateMutable();;
-    if (self.corners != CKStyleViewCornerTypeNone) {
-		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:rect];
-	}
+    //if (self.corners != CKStyleViewCornerTypeNone) {
+		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:1 inRect:rect];
+	//}
 	
 	if(self.gradientColors == nil && self.image == nil){
 		if(self.fillColor != nil)
@@ -646,7 +652,7 @@
 	if(_image){
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
+            CGContextClip(gc);
 		}
 		
 		//self.imageContentMode
@@ -748,7 +754,7 @@
 		CGContextSaveGState(gc);
 		if(clippingPath != nil){
 			CGContextAddPath(gc, clippingPath);
-			CGContextClip(gc);
+            CGContextClip(gc);
 		}
 		
 		CGFloat colorLocations[self.gradientColorLocations.count];
@@ -767,10 +773,10 @@
 		CFRelease(colorSpace);
         switch(self.gradientStyle){
             case CKStyleViewGradientStyleVertical:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0, rect.size.height), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x, rect.origin.y + rect.size.height), 0);
                 break;
             case CKStyleViewGradientStyleHorizontal:
-                CGContextDrawLinearGradient(gc, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(rect.size.width, 0), 0);
+                CGContextDrawLinearGradient(gc, gradient, CGPointMake(rect.origin.x, rect.origin.y), CGPointMake(rect.origin.x + rect.size.width, rect.origin.y), 0);
                 break;
         }
         //CGContextDrawRadialGradient
