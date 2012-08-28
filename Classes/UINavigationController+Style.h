@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+
+extern NSString* UINavigationControllerWillDisplayToolbar;
+extern NSString* UINavigationControllerWillHideToolbar;
+
 @interface UINavigationController (Style)
 
 @end

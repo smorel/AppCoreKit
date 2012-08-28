@@ -12,6 +12,7 @@
 #import "CKTableViewCellController+DynamicLayout_Private.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CKDebug.h"
+#import "UIView+Name.h"
 
 @interface CKCollectionViewController()
 
@@ -213,46 +214,40 @@
                                                                        UITableViewStyleGrouped)];
     }
     
-	if (self.view == nil) {
+    CKTableView* theTableView = nil;
+    if([self.view isKindOfClass:[CKTableView class]]){
+        theTableView = (CKTableView*)self.view;
+        
 		CGRect theViewFrame = [[UIScreen mainScreen] applicationFrame];
 		UIView *theView = [[[CKTableView alloc] initWithFrame:theViewFrame] autorelease];
 		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        theView.name = @"view";
 		self.view = theView;
-	}
-	//self.view.clipsToBounds = YES;
-	
-	if ([self.view isKindOfClass:[CKTableView class]] == NO && self.tableViewContainer == nil) {
-        CKTableView* theTableView = (CKTableView*)self.view;
-        CGRect theViewFrame = self.view.bounds;
-		UIView *theView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
-		theView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.view = theView;
-        
-		UIView *containerView = [[[UIView alloc] initWithFrame:theViewFrame] autorelease];
+    }else{
+        self.view.name = @"view";
+    }
+    
+    UIView *containerView = nil;
+    if(!self.tableViewContainer){
+        containerView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 		containerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         containerView.backgroundColor = [UIColor clearColor];
+        containerView.name = @"tableViewContainer";
 		self.tableViewContainer = containerView;
         [self.view  addSubview:containerView];
+    }
+    
+    if(!theTableView){
+        theTableView = [[[CKTableView alloc] initWithFrame:containerView.bounds style:self.style] autorelease];
+        theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    }
+    
+    theTableView.name = @"tableView";
+    [containerView addSubview:theTableView];
+    theTableView.delegate = self;
+    theTableView.dataSource = self;
+    self.tableView = theTableView;
         
-		[containerView addSubview:theTableView];
-	}
-    
-	if (self.tableView == nil) {
-		if ([self.view isKindOfClass:[CKTableView class]]) {
-			// TODO: Assert - Should not be allowed
-			self.tableView = (CKTableView *)self.view;
-		} else {
-			CGRect theViewFrame = self.view.bounds;
-			CKTableView *theTableView = [[[CKTableView alloc] initWithFrame:theViewFrame style:self.style] autorelease];
-			theTableView.delegate = self;
-			theTableView.dataSource = self;
-			theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-			[self.tableViewContainer addSubview:theTableView];
-			self.tableView = theTableView;
-		}
-	}
-    
-    
     self.insetsApplied = NO;
     self.tableViewHasBeenReloaded = NO;
     

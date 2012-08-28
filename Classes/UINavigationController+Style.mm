@@ -12,6 +12,8 @@
 #import "CKRuntime.h"
 #import "CKStyleManager.h"
 
+NSString* UINavigationControllerWillDisplayToolbar = @"UINavigationControllerWillDisplayToolbar";
+NSString* UINavigationControllerWillHideToolbar = @"UINavigationControllerWillHideToolbar";
 
 bool swizzle_UINavigationControllerStyle();
 
@@ -26,19 +28,47 @@ bool swizzle_UINavigationControllerStyle();
         // setValue: [NSNumber numberWithBool: YES]
          //forKey: kCATransactionDisableActions];
         
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self];
+        
         NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
         
         NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self  propertyName:@"navigationController"];
         [self.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
                 
        // [CATransaction commit];  
+    }else{
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self];
     }
+}
+
+- (void)UINavigationControllerStyle_setToolbarHidden:(BOOL)hidden{
+    [self UINavigationControllerStyle_setToolbarHidden:hidden];
+    
+    if (hidden == NO) {
+        //[CATransaction begin];
+        //[CATransaction 
+        // setValue: [NSNumber numberWithBool: YES]
+        //forKey: kCATransactionDisableActions];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self];
+        
+        NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
+        
+        NSMutableDictionary* navControllerStyle = [controllerStyle styleForObject:self  propertyName:@"navigationController"];
+        [self.toolbar applyStyle:navControllerStyle propertyName:@"toolbar"];
+        
+        // [CATransaction commit];  
+    }else{
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self];
+    }
+
 }
 
 @end
 
 bool swizzle_UINavigationControllerStyle(){
     CKSwizzleSelector([UINavigationController class],@selector(setToolbarHidden:animated:),@selector(UINavigationControllerStyle_setToolbarHidden:animated:));
+    CKSwizzleSelector([UINavigationController class],@selector(setToolbarHidden:),@selector(UINavigationControllerStyle_setToolbarHidden:));
     return 1;
 }
 

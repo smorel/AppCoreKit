@@ -21,6 +21,7 @@
 #import "CKRuntime.h"
 #import "CKContainerViewController.h"
 #import "CKConfiguration.h"
+#import "UINavigationController+Style.h"
 
 
 @interface CKViewController()
@@ -32,6 +33,8 @@
 #ifdef DEBUG
 @property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
 #endif
+
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden;
 
 @end
 
@@ -91,6 +94,8 @@
     self.state = CKViewControllerStateNone;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStylesheets) name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsDisplayed:) name:UINavigationControllerWillDisplayToolbar object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toolbarGetsHidden:) name:UINavigationControllerWillHideToolbar object:nil];
 }
 
 - (id)init {
@@ -153,6 +158,8 @@
 #endif
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillHideToolbar object:nil];
     
 	[super dealloc];
 }
@@ -537,6 +544,8 @@
         [self.inlineDebuggerController start];
     }
 #endif
+    
+    [self adjustStyleViewWithToolbarHidden:[self.navigationController isToolbarHidden]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -634,6 +643,7 @@
     }
     
     [self applyStyleForNavigation];
+    [self adjustStyleViewWithToolbarHidden:self.navigationController.isToolbarHidden];
 }
 
 - (BOOL)isViewDisplayed{
@@ -724,6 +734,33 @@
 //This avoid keyboard to stay on screen in controllers presented as UIModalPresentationFormSheet 
 - (BOOL)disablesAutomaticKeyboardDismissal {
     return NO;
+}
+
+- (void)toolbarGetsDisplayed:(NSNotification*)notif{
+    if(notif.object == self.navigationController){
+        [self adjustStyleViewWithToolbarHidden:NO];
+    }
+}
+
+- (void)toolbarGetsHidden:(NSNotification*)notif{
+    if(notif.object == self.navigationController){
+        [self adjustStyleViewWithToolbarHidden:YES];
+    }
+}
+
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden{
+    if([[self.view subviews]count] <= 0)
+        return;
+    
+    UIView* v0 = [[self.view subviews]objectAtIndex:0];
+    if([v0 isKindOfClass:[CKStyleView class]]){
+        if(hidden){
+            v0.frame = self.view.bounds;
+        }else{
+            CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
+            v0.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height+toolbarHeight);
+        }
+    }
 }
 
 @end
