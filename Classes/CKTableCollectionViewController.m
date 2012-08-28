@@ -601,9 +601,11 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     if([self isValidIndexPath:_indexPathToReachAfterRotation]){
         BOOL pagingEnable = self.tableView.pagingEnabled;
-        self.tableView.pagingEnabled = NO;
-        [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionNone animated:NO];
-        self.tableView.pagingEnabled = pagingEnable;
+        if(pagingEnable){
+            self.tableView.pagingEnabled = NO;
+            [self.tableView scrollToRowAtIndexPath:_indexPathToReachAfterRotation atScrollPosition:UITableViewScrollPositionNone animated:NO];
+            self.tableView.pagingEnabled = pagingEnable;
+        }
     }
 	self.indexPathToReachAfterRotation = nil;
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
@@ -639,22 +641,24 @@
 	CGSize thesize = [self sizeForViewAtIndexPath:indexPath];
 	height = (_orientation == CKTableViewOrientationLandscape) ? thesize.width : thesize.height;
 	
-	NSIndexPath* toReach = [[_indexPathToReachAfterRotation copy]autorelease];
-	if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
-		//that means the view is rotating and needs to be updated with the future cells size
-		self.indexPathToReachAfterRotation = nil;
-		CGFloat offset = 0;
-		if(toReach.row > 0){
-			CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
-			offset = r.origin.y + r.size.height;
-		}
-		else{
-			CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
-			offset = r.origin.y + r.size.height;
-		}
-		self.indexPathToReachAfterRotation = toReach;
-		self.tableView.contentOffset = CGPointMake(0,offset);
-	}
+    if(self.tableView.pagingEnabled){
+        NSIndexPath* toReach = [[_indexPathToReachAfterRotation copy]autorelease];
+        if(_indexPathToReachAfterRotation && [_indexPathToReachAfterRotation isEqual:indexPath]){
+            //that means the view is rotating and needs to be updated with the future cells size
+            self.indexPathToReachAfterRotation = nil;
+            CGFloat offset = 0;
+            if(toReach.row > 0){
+                CGRect r = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:toReach.row-1 inSection:toReach.section]];
+                offset = r.origin.y + r.size.height;
+            }
+            else{
+                CGRect r = [self.tableView rectForHeaderInSection:toReach.section];
+                offset = r.origin.y + r.size.height;
+            }
+            self.indexPathToReachAfterRotation = toReach;
+            self.tableView.contentOffset = CGPointMake(0,offset);
+        }
+    }
 	
 	//NSLog(@"Height for row : %d,%d =%f",indexPath.row,indexPath.section,height);
 	

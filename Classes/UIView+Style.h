@@ -99,6 +99,9 @@ extern NSString* CKStyleSeparatorWidth;
  */
 extern NSString* CKStyleSeparatorStyle;
 
+/**
+ */
+extern NSString* CKStyleBorderShadowColor;
 
 extern NSString* CKStyleViewDescription;
 extern NSString* CKStyleAutoLayoutConstraints;

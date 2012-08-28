@@ -12,6 +12,7 @@
 
 bool swizzle_UINavigationController();
 
+
 static char UINavigationControllerWillPushViewControllerBlockBlockKey;
 static char UINavigationControllerWillPopViewControllerBlockBlockKey;
 static char UINavigationControllerDidPushViewControllerBlockBlockKey;

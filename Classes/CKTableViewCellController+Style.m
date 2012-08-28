@@ -89,7 +89,13 @@ NSString* CKStyleAccessoryImage = @"accessoryImage";
 		return NO;
 	
 	if([object isKindOfClass:[UITableView class]]){
-		if([descriptor.name isEqual:@"backgroundView"] && [style isEmpty] == NO){
+		if([descriptor.name isEqual:@"backgroundView"]
+           && ([style containsObjectForKey:CKStyleBackgroundGradientColors]
+                 || [style containsObjectForKey:CKStyleCornerStyle]
+                 || [style containsObjectForKey:CKStyleCornerSize]
+                 || [style containsObjectForKey:CKStyleBackgroundImage]
+                 || [style containsObjectForKey:CKStyleBorderColor]
+                 || [style containsObjectForKey:CKStyleBorderShadowColor])){
 			return YES;
 		}
 	}

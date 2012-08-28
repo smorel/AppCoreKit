@@ -417,7 +417,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                     [gradientView setAppliedStyle:myViewStyle];
                     
 					if(gradientView == nil){
-						gradientView = [[[CKStyleView alloc]initWithFrame:view.bounds]autorelease];
+						gradientView = [[[CKStyleView alloc]init]autorelease];
 						gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 						view.backgroundColor = [UIColor clearColor];
                         
@@ -572,9 +572,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
 					if([myViewStyle containsObjectForKey:CKStyleBorderColor]){
 						gradientView.borderColor = [myViewStyle borderColor];
 					}	
-					
-					
-					[gradientView setNeedsDisplay];
 				}
 				
 				//Apply transparency
@@ -599,6 +596,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                 opaque = opaque && (alpha >= 1);
                 
                 backgroundView.opaque = opaque;
+                backgroundView.frame = view.bounds;
 				
 				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKStyleViewCornerTypeNone));
 				if(dontTouchBackgroundColor == NO){
