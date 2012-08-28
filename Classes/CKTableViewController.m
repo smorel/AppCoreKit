@@ -214,7 +214,7 @@
                                                                        UITableViewStyleGrouped)];
     }
     
-    CKTableView* theTableView = nil;
+    CKTableView* theTableView = self.tableView;
     if([self.view isKindOfClass:[CKTableView class]]){
         theTableView = (CKTableView*)self.view;
         
@@ -227,7 +227,7 @@
         self.view.name = @"view";
     }
     
-    UIView *containerView = nil;
+    UIView *containerView = self.tableViewContainer;
     if(!self.tableViewContainer){
         containerView = [[[UIView alloc] initWithFrame:self.view.bounds] autorelease];
 		containerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -240,13 +240,13 @@
     if(!theTableView){
         theTableView = [[[CKTableView alloc] initWithFrame:containerView.bounds style:self.style] autorelease];
         theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [containerView addSubview:theTableView];
     }
+    self.tableView = theTableView;
     
     theTableView.name = @"tableView";
-    [containerView addSubview:theTableView];
     theTableView.delegate = self;
     theTableView.dataSource = self;
-    self.tableView = theTableView;
         
     self.insetsApplied = NO;
     self.tableViewHasBeenReloaded = NO;
@@ -256,11 +256,13 @@
 
 - (void)viewDidUnload {
     if(_tableView){
+        [_tableView removeFromSuperview];
         self.tableView.delegate = nil;
         self.tableView.dataSource = nil;
         [_tableView release];
         _tableView = nil;
     }
+    [_tableViewContainer removeFromSuperview];
 	[_tableViewContainer release];
     _tableViewContainer = nil;
     

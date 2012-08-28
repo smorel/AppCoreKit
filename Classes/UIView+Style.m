@@ -612,7 +612,6 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
             //Root to leaf instead of leaf to root like before.
             [view applySubViewsStyle:myViewStyle appliedStack:appliedStack delegate:delegate];
         }
-        [view setNeedsDisplay];
 		return YES;
 	}
 	return NO;
@@ -800,6 +799,8 @@ static char NSObjectDebugAppliedStyleObjectKey;
 				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 			}
 		//}
+        
+        [view setNeedsDisplay];
 	}
 	
     
