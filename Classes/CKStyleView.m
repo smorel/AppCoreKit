@@ -18,7 +18,6 @@
 @interface CKStyleView () 
 //@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
-@property (nonatomic, assign) CGSize borderShadowOffset;
 @end
 
 
@@ -372,7 +371,7 @@
 		}
 		else{
             if(shouldMove){
-                CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (y + height - radius) : (y + height + borderWidth));
+                CGPathMoveToPoint (path, nil, x, (roundedCorners & UIRectCornerBottomLeft) ? (y + height - radius) : (y + height));
                 shouldMove = NO;
             }
 		}
@@ -393,7 +392,7 @@
             CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerTopLeft) ? x + radius : x, y);
             shouldMove = NO;
         }
-		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : (x + width + borderWidth), y);
+		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerTopRight) ? (x + width - radius) : (x + width), y);
 	} else shouldMove = YES;
 	
 	//draw right
@@ -415,7 +414,7 @@
 		}
 		
 		//draw right line
-		CGPathAddLineToPoint (path, nil, x + width, (roundedCorners & UIRectCornerBottomRight) ? (y + height - radius) : (y + height + borderWidth));
+		CGPathAddLineToPoint (path, nil, x + width, (roundedCorners & UIRectCornerBottomRight) ? (y + height - radius) : (y + height));
 		
 		//draw arc from right to bottom
 		if((roundedCorners & UIRectCornerBottomRight) && (borderStyle & CKStyleViewBorderLocationBottom)){
@@ -461,6 +460,7 @@
         if(_borderLocation & CKStyleViewBorderLocationLeft){
             offset.x += multiplier * self.borderShadowRadius;
             shadowFrame.size.width += multiplier * self.borderShadowRadius;
+            
         }
         if(_borderLocation & CKStyleViewBorderLocationRight){
             shadowFrame.size.width += multiplier * self.borderShadowRadius;
@@ -471,6 +471,24 @@
         }
         if(_borderLocation & CKStyleViewBorderLocationBottom){
             shadowFrame.size.height += multiplier * self.borderShadowRadius;
+        }
+        
+        if(self.borderLocation & CKStyleViewBorderLocationBottom && self.borderShadowOffset.height > 0){
+            shadowFrame.size.height += self.borderShadowOffset.height;
+        }
+        
+        if(self.borderLocation & CKStyleViewBorderLocationTop && self.borderShadowOffset.height < 0){
+            offset.y -= self.borderShadowOffset.height;
+            shadowFrame.size.height += -self.borderShadowOffset.height;
+        }
+        
+        if(self.borderLocation & CKStyleViewBorderLocationRight && self.borderShadowOffset.width > 0){
+            shadowFrame.size.width += self.borderShadowOffset.width;
+        }
+        
+        if(self.borderLocation & CKStyleViewBorderLocationLeft && self.borderShadowOffset.width < 0){
+            offset.x -= self.borderShadowOffset.width;
+            shadowFrame.size.width += -self.borderShadowOffset.width;
         }
         
         shadowFrame.origin.x -= offset.x;
@@ -521,10 +539,6 @@
 			break;
 	}
     
-	CGPathRef clippingPath = nil;
-	if (self.corners != CKStyleViewCornerTypeNone) {
-		clippingPath = [[UIBezierPath bezierPathWithRoundedRect:rect byRoundingCorners:roundedCorners cornerRadii:CGSizeMake(self.roundedCornerSize,self.roundedCornerSize)]CGPath];
-	}
     
     // Shadow
 	if(_borderColor!= nil && _borderColor != [UIColor clearColor] && _borderWidth > 0 && _borderLocation != CKStyleViewBorderLocationNone){
@@ -533,18 +547,66 @@
         if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
             CGContextSetShadowWithColor(gc, self.borderShadowOffset, self.borderShadowRadius, self.borderShadowColor.CGColor);
             
+            CGRect shadowRect = rect;
+            if(!(self.borderLocation & CKStyleViewBorderLocationTop)){
+                shadowRect.origin.y -= self.borderShadowRadius;
+                shadowRect.size.height += self.borderShadowRadius;
+            }
+            if(!(self.borderLocation & CKStyleViewBorderLocationBottom)){
+                shadowRect.size.height += self.borderShadowRadius;
+            }
+            if(!(self.borderLocation & CKStyleViewBorderLocationLeft)){
+                shadowRect.origin.x -= self.borderShadowRadius;
+                shadowRect.size.width += self.borderShadowRadius;
+            }
+            if(!(self.borderLocation & CKStyleViewBorderLocationRight)){
+                shadowRect.size.width += self.borderShadowRadius;
+            }
+            
+            if(!(self.borderLocation & CKStyleViewBorderLocationBottom) && self.borderShadowOffset.height < 0){
+                shadowRect.size.height -= self.borderShadowOffset.height;
+            }
+            
+            if(!(self.borderLocation & CKStyleViewBorderLocationTop) && self.borderShadowOffset.height > 0){
+                shadowRect.origin.y -= self.borderShadowOffset.height;
+                shadowRect.size.height += self.borderShadowOffset.height;
+            }
+            
+            if(!(self.borderLocation & CKStyleViewBorderLocationRight) && self.borderShadowOffset.width < 0){
+                shadowRect.size.width -= self.borderShadowOffset.width;
+            }
+            
+            if(!(self.borderLocation & CKStyleViewBorderLocationLeft) && self.borderShadowOffset.width > 0){
+                shadowRect.origin.x -= self.borderShadowOffset.width;
+                shadowRect.size.width += self.borderShadowOffset.width;
+            }
+                    
             if (self.corners != CKStyleViewCornerTypeNone){
+                //TODO inset the rect to have shadow till the limits of the image !
+                CGMutablePathRef shadowPath = CGPathCreateMutable();
+                if (self.corners != CKStyleViewCornerTypeNone) {
+                    [self generateBorderPath:shadowPath withStyle:CKStyleViewBorderLocationAll width:_borderWidth inRect:shadowRect];
+                }
+                
                 [[UIColor blackColor] setStroke];
-                CGContextAddPath(gc, clippingPath);
+                CGContextAddPath(gc, shadowPath);
                 CGContextFillPath(gc);
+                CFRelease(shadowPath);
             }else{
+                
+                //TODO inset the rect to have shadow till the limits of the image !
                 [[UIColor blackColor] setFill];
-                CGContextFillRect(gc, rect);
+                CGContextFillRect(gc, shadowRect);
             }
             
         }
         
 		CGContextRestoreGState(gc);
+	}
+    
+    CGMutablePathRef clippingPath = CGPathCreateMutable();;
+    if (self.corners != CKStyleViewCornerTypeNone) {
+		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:_borderWidth inRect:rect];
 	}
 	
 	if(self.gradientColors == nil && self.image == nil){
@@ -553,7 +615,7 @@
 		else
 			[[UIColor clearColor] setFill];
         
-        if(clippingPath != nil){
+        if (self.corners != CKStyleViewCornerTypeNone){
             CGContextAddPath(gc, clippingPath);
             CGContextFillPath(gc);
         }
@@ -766,10 +828,6 @@
 		CGMutablePathRef borderPath = CGPathCreateMutable();
 		[self generateBorderPath:borderPath withStyle:_borderLocation width:_borderWidth inRect:rect];
         
-		[[UIColor whiteColor] setStroke];
-		CGContextAddPath(gc, borderPath);
-		CGContextStrokePath(gc);
-        
 		[_borderColor setStroke];
 		CGContextAddPath(gc, borderPath);
 		CGContextStrokePath(gc);
@@ -777,6 +835,8 @@
 		CFRelease(borderPath);
 		CGContextRestoreGState(gc);
 	}
+    
+    CFRelease(clippingPath);
 }
 
 

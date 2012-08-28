@@ -124,5 +124,9 @@ typedef enum {
  */
 @property (nonatomic, assign) CGFloat borderShadowRadius;
 
+/**
+ */
+@property (nonatomic, assign) CGSize borderShadowOffset;
+
 
 @end
