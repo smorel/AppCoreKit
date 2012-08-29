@@ -308,8 +308,16 @@
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
-            [self removeFromSuperview];
-            [s addSubview:self];
+            UITableViewCell* lastCell = nil;
+            for(UIView* v in [s subviews]){
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self belowSubview:lastCell];
+            }
         }
     }
 }
@@ -326,8 +334,16 @@
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
-            [self removeFromSuperview];
-            [s addSubview:self];
+            UITableViewCell* lastCell = nil;
+            for(UIView* v in [s subviews]){
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self belowSubview:lastCell];
+            }
         }
     }
 }
