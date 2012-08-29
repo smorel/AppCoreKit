@@ -307,8 +307,10 @@
     if(highlighted){
         //Push on top of the render stack
         UIView* s = [self superview];
-        [self removeFromSuperview];
-        [s addSubview:self];
+        if([s isKindOfClass:[UITableView class]]){
+            [self removeFromSuperview];
+            [s addSubview:self];
+        }
     }
 }
 
@@ -323,8 +325,10 @@
     if(highlighted){
         //Push on top of the render stack
         UIView* s = [self superview];
-        [self removeFromSuperview];
-        [s addSubview:self];
+        if([s isKindOfClass:[UITableView class]]){
+            [self removeFromSuperview];
+            [s addSubview:self];
+        }
     }
 }
 
