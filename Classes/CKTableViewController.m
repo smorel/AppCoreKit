@@ -111,6 +111,10 @@
     }
 }
 
+- (UIView*)backgroundView{
+    return [super backgroundView];
+}
+
 @end
 
 
@@ -251,6 +255,10 @@
     self.insetsApplied = NO;
     self.tableViewHasBeenReloaded = NO;
     
+    
+    [theTableView.backgroundView removeFromSuperview];
+    theTableView.backgroundView = nil;
+    
     [super viewDidLoad];
 }
 
@@ -293,7 +301,9 @@
             }
         }
         
-        [self.tableView reloadData];
+        // [self.tableView reloadData];
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
     }
     
 	if (self.stickySelectionEnabled == NO){
@@ -430,12 +440,12 @@
 
 - (void)onSizeChangeEnd{
     if(self.sizeIsAlreadyInvalidated){
-        if(self.tableView.scrollEnabled){
+        //if(self.tableView.scrollEnabled){
             [[self tableView]beginUpdates];
             [[self tableView]endUpdates];
-        }else{
-            [[self tableView]reloadData];
-        }
+        //}else{
+        //    [[self tableView]reloadData];
+        //}
     }
     self.sizeIsAlreadyInvalidated = NO;
 }
