@@ -303,6 +303,13 @@
     //[self willChangeValueForKey:@"highlighted"];
     [super setHighlighted:highlighted];
     //[self didChangeValueForKey:@"highlighted"];
+    
+    if(highlighted){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        [self removeFromSuperview];
+        [s addSubview:self];
+    }
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
@@ -312,6 +319,13 @@
     
     //if (self.delegate.wantFlatHierarchy)
     //    [self.delegate flattenHierarchyHighlighted:highlighted];
+    
+    if(highlighted){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        [self removeFromSuperview];
+        [s addSubview:self];
+    }
 }
 
 - (void)prepareForReuse {
