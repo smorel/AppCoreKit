@@ -596,8 +596,10 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                 opaque = opaque && (alpha >= 1);
                 
                 backgroundView.opaque = opaque;
-                backgroundView.frame = view.bounds;
-                [backgroundView setNeedsDisplay];
+                
+				if([backgroundView isKindOfClass:[CKStyleView class]]){
+                    backgroundView.frame = view.bounds;
+                }
 				
 				/*BOOL colorOpaque = (opaque == YES && (roundedCornerType == CKStyleViewCornerTypeNone));
 				if(dontTouchBackgroundColor == NO){
@@ -718,7 +720,8 @@ static char NSObjectDebugAppliedStyleObjectKey;
                     [style setObjectForKey:key inProperty:[CKProperty propertyWithObject:object keyPath:key]];
                 }
                 else if(isUIView){
-                    if([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
+                    if(   ([object isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
+                       || ([object isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
                         //DO NOTHING !
                     }
                     else{
@@ -762,7 +765,8 @@ static char NSObjectDebugAppliedStyleObjectKey;
         }
         
 		UIView* view = nil;
-        if([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"]){
+        if(   ([self isKindOfClass:[UITableViewCell class]] && [descriptor.name isEqualToString:@"selectedBackgroundView"])
+           || ([self isKindOfClass:[UITableView class]] && [descriptor.name isEqualToString:@"backgroundView"])){
             //We are supposed to get a nil view here ! but UIKit creates a view when getting selectedBackgroundView wich have not the right class if called here.
         }
         else{

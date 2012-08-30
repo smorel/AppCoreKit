@@ -308,6 +308,23 @@
     //[self willChangeValueForKey:@"highlighted"];
     [super setHighlighted:highlighted];
     //[self didChangeValueForKey:@"highlighted"];
+    
+    if(highlighted){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        if([s isKindOfClass:[UITableView class]]){
+            UITableViewCell* lastCell = nil;
+            for(UIView* v in [s subviews]){
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self belowSubview:lastCell];
+            }
+        }
+    }
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
@@ -317,6 +334,23 @@
     
     //if (self.delegate.wantFlatHierarchy)
     //    [self.delegate flattenHierarchyHighlighted:highlighted];
+    
+    if(highlighted){
+        //Push on top of the render stack
+        UIView* s = [self superview];
+        if([s isKindOfClass:[UITableView class]]){
+            UITableViewCell* lastCell = nil;
+            for(UIView* v in [s subviews]){
+                if([v isKindOfClass:[UITableViewCell class]]){
+                    lastCell = (UITableViewCell*)v;
+                }
+            }
+            if(lastCell != self){
+                [self removeFromSuperview];
+                [s insertSubview:self belowSubview:lastCell];
+            }
+        }
+    }
 }
 
 - (void)prepareForReuse {

@@ -18,6 +18,8 @@
 @interface CKStyleView () 
 //@property(nonatomic,retain)CKStyleViewUpdater* updater;
 @property(nonatomic,retain)UIColor* fillColor;
+@property(nonatomic,assign)CGRect drawFrame;
+@property(nonatomic,assign)CGRect originalFrame;
 @end
 
 
@@ -64,6 +66,7 @@
 @synthesize borderShadowRadius = _borderShadowRadius;
 @synthesize borderShadowOffset = _borderShadowOffset;
 @synthesize gradientStyle;
+@synthesize drawFrame,originalFrame;
 
 - (void)postInit {
 	self.borderColor = [UIColor clearColor];
@@ -90,6 +93,8 @@
     
     self.gradientStyle = CKStyleViewGradientStyleVertical;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    self.drawFrame = CGRectMake(0,0,0,0);
 }
 
 - (void)imageContentModeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -173,6 +178,11 @@
 	[super dealloc];
 }
 
+- (void)updateDisplay{
+    self.frame = self.originalFrame;
+    [self setNeedsDisplay];
+}
+
 //HACK to control how to paint using the background color !
 - (void)setBackgroundColor:(UIColor *)color{
     //self.gradientColors = nil;
@@ -185,6 +195,7 @@
     else{
         [super setBackgroundColor:[UIColor clearColor]];
     }
+    [self updateDisplay];
 }
 
 - (UIColor*)backgroundColor{
@@ -198,6 +209,7 @@
         
         self.opaque = YES;
         //self.backgroundColor = [UIColor blackColor];
+        [self updateDisplay];
     }
 }
 
@@ -207,6 +219,7 @@
         
         CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
         if(newCorners == CKStyleViewCornerTypeNone && alpha >= 1){
+            //TODO : if no shadow set opaque color
             //[super setBackgroundColor:[UIColor blackColor]];
             self.opaque = YES;
         }
@@ -214,27 +227,30 @@
             [super setBackgroundColor:[UIColor clearColor]];
             self.opaque = NO;
         }
+        [self updateDisplay];
     }
 }
 
 - (void)setBorderLocation:(NSInteger)theborderLocation{
     if(_borderLocation != theborderLocation){
         _borderLocation = theborderLocation;
+        [self updateDisplay];
     }
 }
 
 - (void)setSeparatorLocation:(NSInteger)theseparatorLocation{
     if(_separatorLocation != theseparatorLocation){
         _separatorLocation = theseparatorLocation;
+        [self updateDisplay];
     }
 }
 
 - (void)setBorderWidth:(CGFloat)width {
-	//CGFloat scale = [[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1;
-	//_borderWidth = 2 * width * scale;
-    _borderWidth = width;
+    if(width != _borderWidth){
+        _borderWidth = width;
+        [self updateDisplay];
+    }
 }
-
 
 
 #pragma mark - Emboss Paths
@@ -454,6 +470,8 @@
 
 
 - (void)setFrame:(CGRect)frame{
+    self.originalFrame = frame;
+    
     CGSize oldSize = self.frame.size;
     if(_borderShadowColor!= nil && _borderShadowColor != [UIColor clearColor] && _borderShadowRadius > 0){
         //Shadow
@@ -514,38 +532,30 @@
         [super setFrame:shadowFrame];
         
         if( !CGSizeEqualToSize(shadowFrame.size, oldSize) ){
-            
-            UIGraphicsBeginImageContextWithOptions(shadowFrame.size, NO, 0.0);
-            CGContextRef gc = UIGraphicsGetCurrentContext();
-            
-            CGRect drawRect = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
-            [self drawInRect:drawRect inContext:gc];
-            
-            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            self.layer.contents = (id)[resultingImage CGImage];
-            self.contentMode = UIViewContentModeScaleToFill;
+            self.drawFrame = CGRectMake(offset.x,offset.y,frame.size.width,frame.size.height);
+            [self setNeedsDisplay];
         }
-        
     }else{
         //Draw normally
         [super setFrame:frame];
-        
         if( !CGSizeEqualToSize(frame.size, oldSize) ){
-            UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0);
-            CGContextRef gc = UIGraphicsGetCurrentContext();
-            
-            CGRect drawRect = CGRectMake(0,0,frame.size.width,frame.size.height);
-            [self drawInRect:drawRect inContext:gc];
-            
-            UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            self.layer.contents = (id)[resultingImage CGImage];
-            self.contentMode = UIViewContentModeScaleToFill;
+            self.drawFrame = CGRectMake(0,0,frame.size.width,frame.size.height);
+            [self setNeedsDisplay];
         }
     }
+}
+
+- (void)drawRect:(CGRect)rect{
+    //UIGraphicsBeginImageContextWithOptions(self.frame.size, NO, 0.0);
+    CGContextRef gc = UIGraphicsGetCurrentContext();
+    
+    [self drawInRect:self.drawFrame inContext:gc];
+    
+    //UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    //UIGraphicsEndImageContext();
+    
+    //self.layer.contents = (id)[resultingImage CGImage];
+    //self.contentMode = UIViewContentModeScaleToFill;
 }
 
 
@@ -630,7 +640,7 @@
     
     CGMutablePathRef clippingPath = CGPathCreateMutable();;
     //if (self.corners != CKStyleViewCornerTypeNone) {
-		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:1 inRect:rect];
+		[self generateBorderPath:clippingPath withStyle:CKStyleViewBorderLocationAll width:0 inRect:rect];
 	//}
 	
 	if(self.gradientColors == nil && self.image == nil){

@@ -159,6 +159,13 @@
     return -1;
 }
 
+- (void)viewDidAppear:(UIView *)view{
+    [super viewDidAppear:view];
+    if(self.containerController.state != CKViewControllerStateDidAppear){
+        [self onValueChanged];
+    }
+}
+
 //
 
 

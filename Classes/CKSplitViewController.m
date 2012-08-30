@@ -277,6 +277,10 @@
     [_viewControllers release];
     _viewControllers = [theViewControllers retain];
     
+    for(UIViewController* controller in theViewControllers){
+        [controller setContainerViewController:self];
+    }
+    
     if(self.isViewDisplayed){
         NSMutableSet* removedController = [NSMutableSet set];
         NSMutableSet* addedController = [NSMutableSet set];
@@ -292,7 +296,6 @@
                 [beginFrames setObject:[NSValue valueWithCGRect:controller.view.frame] forKey:[NSValue valueWithNonretainedObject:controller]];
             }else{
                 [addedController addObject:controller];
-                [controller setContainerViewController:self];
             }
         }
         
