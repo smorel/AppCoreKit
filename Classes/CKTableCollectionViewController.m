@@ -1288,8 +1288,9 @@
             break;
         }
         case CKTableCollectionViewControllerSnappingPolicyCenter:{
-                //FIXME : we do not take self.tableViewInsets in account here
-            self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0,0);
+            //FIXME : we do not take self.tableViewInsets in account here
+            CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
+            self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height / 2.0,0,self.tableView.bounds.size.height / 2.0 + toolbarHeight,0);
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
             if (self.selectedIndexPath && [self isValidIndexPath:self.selectedIndexPath]
@@ -1383,6 +1384,5 @@
         self.selectedIndexPath = indexPath;
     }
 }
-
 
 @end

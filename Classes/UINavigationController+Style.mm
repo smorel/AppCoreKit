@@ -28,7 +28,7 @@ bool swizzle_UINavigationControllerStyle();
         // setValue: [NSNumber numberWithBool: YES]
          //forKey: kCATransactionDisableActions];
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self];
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:animated] forKey:@"animated"]];
         
         NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
         
@@ -37,7 +37,7 @@ bool swizzle_UINavigationControllerStyle();
                 
        // [CATransaction commit];  
     }else{
-        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self];
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:animated] forKey:@"animated"]];
     }
 }
 
@@ -50,7 +50,7 @@ bool swizzle_UINavigationControllerStyle();
         // setValue: [NSNumber numberWithBool: YES]
         //forKey: kCATransactionDisableActions];
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self];
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillDisplayToolbar object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"animated"]];
         
         NSMutableDictionary* controllerStyle = [self.topViewController controllerStyle];
         
@@ -59,7 +59,7 @@ bool swizzle_UINavigationControllerStyle();
         
         // [CATransaction commit];  
     }else{
-        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self];
+        [[NSNotificationCenter defaultCenter]postNotificationName:UINavigationControllerWillHideToolbar object:self userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"animated"]];;
     }
 
 }

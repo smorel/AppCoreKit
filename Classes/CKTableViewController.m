@@ -197,17 +197,34 @@
 - (void)sizeToFit{
     if(!self.insetsApplied){
         //FIXME : We do not take the table view orientation in account here (Portrait, Landscape)
-        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom,0);
+        
+        CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
+        self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom+toolbarHeight,0);
         self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
         
         CGRect frame = self.tableViewContainer.frame;
+        CGFloat height = frame.size.height + toolbarHeight;
+        if(height > (self.view.bounds.size.height + toolbarHeight)){
+            height = self.view.bounds.size.height + toolbarHeight;
+        }
         self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
                                                                   frame.origin.y/* + self.tableInsets.top*/,
                                                                   frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                                  frame.size.height/* - (self.tableInsets.top + self.tableInsets.bottom)*/));
+                                                                  height) /* - (self.tableInsets.top + self.tableInsets.bottom)*/);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,toolbarHeight,0);
         self.insetsApplied = YES;
     }
 }
+
+
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
+    [super adjustStyleViewWithToolbarHidden:hidden animated:animated];
+    if(self.isViewDisplayed){
+        self.insetsApplied = NO;
+        [self sizeToFit];
+    }
+}
+
 
 - (void)viewDidLoad{
     NSMutableDictionary* controllerStyle = [[CKStyleManager defaultManager] styleForObject:self  propertyName:nil];
