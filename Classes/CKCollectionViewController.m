@@ -87,6 +87,7 @@
 @synthesize minimumNumberOfSupplementaryObjectsInSections = _numberOfObjectsToprefetch;
 @synthesize sectionsToControllers = _sectionsToControllers;
 @synthesize rotating = _rotating;
+@synthesize autoFetchCollections;
 
 
 #pragma mark Initialization
@@ -94,6 +95,7 @@
 	[super postInit];
 	_numberOfObjectsToprefetch = 10;
     _rotating = NO;
+    self.autoFetchCollections = YES;
 }
 
 - (id)init {
@@ -342,8 +344,6 @@
 }
 
 - (void)fetchMoreData{
-    //return;
-    
 	//Fetch data if needed
 	NSInteger minVisibleSectionIndex = INT32_MAX;
 	NSInteger maxVisibleSectionIndex = -1;
@@ -430,7 +430,8 @@
 	NSMutableArray* array = [NSMutableArray array];
 	NSInteger count = [self numberOfObjectsForSection:section];
 	for(int i=0;i<count;++i){
-		[array addObject:[self objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]]];
+        id object = [self objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]];
+		[array addObject:object ? object : [NSNull null]];
 	}
 	return array;
 }

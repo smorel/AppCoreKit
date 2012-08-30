@@ -75,6 +75,6 @@
 @interface NSObject (CKStyleManager)
 
 - (NSMutableDictionary*)stylesheet;
-- (void)findAndApplyStylesheetFromStylesheet:(NSMutableDictionary*)parentStylesheet propertyName:(NSString*)propertyName;
+- (void)findAndApplyStyleFromStylesheet:(NSMutableDictionary*)parentStylesheet propertyName:(NSString*)propertyName;
 
 @end

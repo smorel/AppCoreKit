@@ -236,7 +236,9 @@
 				section.hidden = (self.autoHideSections && [section numberOfObjects] <= 0);
 				if(section.hidden){
 					CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-					[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                    if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                        [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                    }
 				}
 			}
 		}
@@ -262,7 +264,9 @@
 		if(section.hidden == YES){
 			if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
 				CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-				[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                    [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                }
 			}
 		}
 	}
@@ -283,10 +287,14 @@
             NSInteger index = section.sectionVisibleIndex;
             [indexSet addIndex:index];
         }
-        if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
-			CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
-			[collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
-		}
+        if(self.isViewDisplayed){
+            if([section isKindOfClass:[CKFormBindedCollectionSection class]]){
+                CKFormBindedCollectionSection* collecSection = (CKFormBindedCollectionSection*)section;
+                if(self.autoFetchCollections || [collecSection.objectController.collection count] <= 0){
+                    [collecSection.objectController.collection fetchRange:NSMakeRange(0, self.minimumNumberOfSupplementaryObjectsInSections)];
+                }
+            }
+        }
     }
     
     if(indexSet && self.isViewDisplayed){

@@ -165,6 +165,10 @@
  */
 - (void)fetchMoreIfNeededFromIndexPath:(NSIndexPath*)indexPath;
 
+/**
+ */
+@property(nonatomic,assign) BOOL autoFetchCollections;
+
 ////-----------------------------------
 /// @name Managing views interactions
 ///-----------------------------------

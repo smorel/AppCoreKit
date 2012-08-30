@@ -503,7 +503,9 @@
 - (void)reload{
 	if(self.isViewDisplayed){
 		[super reload];
-		[self fetchMoreData];
+        if(self.autoFetchCollections || ([self.objectController isKindOfClass:[CKCollectionController class]] && [((CKCollectionController*)self.objectController).collection count] <= 0) ){
+            [self fetchMoreData];
+        }
 	}
 }
 
@@ -1306,7 +1308,9 @@
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
-	[self fetchMoreData];
+    if(self.autoFetchCollections){
+        [self fetchMoreData];
+    }
     self.scrolling = NO;
 }
 
@@ -1316,7 +1320,9 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
 	[self updateCurrentPage];
-	[self fetchMoreData];
+	if(self.autoFetchCollections){
+        [self fetchMoreData];
+    }
     self.scrolling = NO;
 }
 
@@ -1336,7 +1342,9 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 	[self updateCurrentPage];
 	[self updateViewsVisibility:YES];
-	[self fetchMoreData];
+	if(self.autoFetchCollections){
+        [self fetchMoreData];
+    }
     [self executeSnapPolicy];
     self.scrolling = NO;
 }
