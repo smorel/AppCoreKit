@@ -14,6 +14,10 @@
 #import "CKDebug.h"
 #import "UIView+Name.h"
 
+@interface CKViewController()
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
+@end
+
 @interface CKCollectionViewController()
 
 @property (nonatomic, retain) NSMutableDictionary* viewsToControllers;
@@ -195,25 +199,26 @@
 #pragma mark View Management
 
 - (void)sizeToFit{
-    if(!self.insetsApplied){
+   // if(!self.insetsApplied){
         //FIXME : We do not take the table view orientation in account here (Portrait, Landscape)
         
         CGFloat toolbarHeight = self.navigationController.isToolbarHidden ? 0 : self.navigationController.toolbar.bounds.size.height;
         self.tableView.contentInset = UIEdgeInsetsMake(self.tableViewInsets.top,0,self.tableViewInsets.bottom+toolbarHeight,0);
-        self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
         
-        CGRect frame = self.tableViewContainer.frame;
+        CGRect frame = self.view.bounds;
         CGFloat height = frame.size.height + toolbarHeight;
         if(height > (self.view.bounds.size.height + toolbarHeight)){
             height = self.view.bounds.size.height + toolbarHeight;
         }
-        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(frame.origin.x + self.tableViewInsets.left,
-                                                                  frame.origin.y/* + self.tableInsets.top*/,
-                                                                  frame.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
-                                                                  height) /* - (self.tableInsets.top + self.tableInsets.bottom)*/);
         self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0,0,toolbarHeight,0);
-        self.insetsApplied = YES;
-    }
+        
+        
+        self.tableViewContainer.frame = CGRectIntegral(CGRectMake(self.tableViewInsets.left,
+                                                                  0,
+                                                                  self.view.bounds.size.width - (self.tableViewInsets.left + self.tableViewInsets.right),
+                                                                  height));
+       // self.insetsApplied = YES;
+   // }
 }
 
 
