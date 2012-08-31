@@ -299,14 +299,19 @@
     [super viewDidUnload];
 }
 
-/*
+
 - (void)updateStylesheets{
-    [self viewDidUnload];
-    [self viewDidLoad];
-    [self viewWillAppear:NO];
-    [self viewDidAppear:NO];
+    [UIView setAnimationsEnabled:NO];
+    [super updateStylesheets];
+    if([self isViewDisplayed]){
+        [self viewWillDisappear:NO];
+        [self viewDidDisappear:NO];
+        [self viewWillAppear:NO];
+        [self viewDidAppear:NO];
+    }
+    [UIView setAnimationsEnabled:YES];
 }
-*/
+
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];

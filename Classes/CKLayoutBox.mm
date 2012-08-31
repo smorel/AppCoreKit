@@ -198,7 +198,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
             if([view superview] != [box containerLayoutView]){
                 if([view stylesheet] == nil){
                     NSMutableDictionary* stylesheet = [[box containerLayoutView] stylesheet];
-                    [view findAndApplyStylesheetFromStylesheet:stylesheet propertyName:nil];
+                    [view findAndApplyStyleFromStylesheet:stylesheet propertyName:nil];
                 }
                 [[box containerLayoutView]addSubview:view];
             }
@@ -252,7 +252,7 @@ lastComputedSize,lastPreferedSize,invalidatedLayoutBlock = _invalidatedLayoutBlo
                 if([view superview] != [self containerLayoutView]){
                     if([view stylesheet] == nil){
                         NSMutableDictionary* stylesheet = [[self containerLayoutView] stylesheet];
-                        [view findAndApplyStylesheetFromStylesheet:stylesheet  propertyName:nil];
+                        [view findAndApplyStyleFromStylesheet:stylesheet  propertyName:nil];
                     }
                     [[self containerLayoutView]addSubview:view];
                 }
