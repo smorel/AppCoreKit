@@ -12,15 +12,16 @@
 #import "NSObject+Invocation.h"
 #import "CKVersion.h"
 #import "CKDebug.h"
+#import "CKWeakRef.h"
 
 @interface CKCollectionController()
 @property (nonatomic, retain,readwrite) CKCollection* collection;
+@property (nonatomic, retain,readwrite) CKWeakRef* delegateRef;
 @property (nonatomic, assign) BOOL animateInsertionsOnReload;
 @end
 
 @implementation CKCollectionController{
 	CKCollection* _collection;
-	id _delegate;
 	BOOL observing;
 	BOOL animateInsertionsOnReload;
 	BOOL appendSpinnerAsFooterCell;
@@ -30,10 +31,11 @@
 }
 
 @synthesize collection = _collection;
-@synthesize delegate = _delegate;
+@synthesize delegate;
 @synthesize appendSpinnerAsFooterCell;
 @synthesize maximumNumberOfObjectsToDisplay;
 @synthesize animateInsertionsOnReload;
+@synthesize delegateRef = _delegateRef;
 
 - (void)dealloc{
 	if(_collection){
@@ -45,9 +47,28 @@
 	
 	[_collection release];
 	_collection = nil;
-	_delegate = nil;
+    [_delegateRef release];
+    _delegateRef = nil;
 	
 	[super dealloc];
+}
+
+- (void)setDelegate:(id)theDelegate{
+    __block CKCollectionController* bself = self;
+    self.delegateRef = [CKWeakRef weakRefWithObject:theDelegate block:^(CKWeakRef *weakRef) {
+		[bself stop];
+    }];
+    
+    if(theDelegate){
+		[self start];
+	}
+	else{
+		[self stop];
+	}
+}
+
+- (id)delegate{
+    return self.delegateRef.object;
 }
 
 + (CKCollectionController*) controllerWithCollection:(CKCollection*)collection{
@@ -92,17 +113,6 @@
 		}
 	}
 }
-
-- (void)setDelegate:(id)theDelegate{
-	_delegate = theDelegate;
-	if(theDelegate){
-		[self start];
-	}
-	else{
-		[self stop];
-	}
-}
-
 
 - (void)fetchRange:(NSRange)range forSection:(int)section{
 	CKAssert(section == 0,@"Invalid section");
@@ -188,12 +198,14 @@
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-    
     //dispatch_async(dispatch_get_main_queue(), ^{
         if(locked){
             changedWhileLocked = YES;
             return;
         }
+        
+        if(!self.delegate)
+            return;
 		
         NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
         NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
@@ -202,15 +214,15 @@
         NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
         
         if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
-            if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-                [_delegate objectControllerReloadData:self];
+            if([self.delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+                [self.delegate objectControllerReloadData:self];
                 return;
             }
         }
         
-        //if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-        if([_delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-            [_delegate objectControllerDidBeginUpdating:self];
+        //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+        if([self.delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
+            [self.delegate objectControllerDidBeginUpdating:self];
         }
         //}
         
@@ -238,28 +250,28 @@
                         }
                     }
                     
-                    if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-                        [_delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+                    if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                        [self.delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
                     }
                     break;
                 }
                 
-                if([_delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-                    [_delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
+                if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                    [self.delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
                 }
                 break;
             }
             case NSKeyValueChangeRemoval:{
-                if([_delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-                    [_delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
+                if([self.delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
+                    [self.delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
                 }
                 break;
             }
         }
         
-        //if([_delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-        if([_delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-            [_delegate objectControllerDidEndUpdating:self];
+        //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+        if([self.delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
+            [self.delegate objectControllerDidEndUpdating:self];
         }
         //}
         //});
@@ -273,8 +285,8 @@
 - (void)unlock{
 	locked = NO;
 	if(changedWhileLocked){
-		if([_delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-			[_delegate objectControllerReloadData:self];
+		if([self.delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+			[self.delegate objectControllerReloadData:self];
 		}
 		changedWhileLocked = NO;
 	}

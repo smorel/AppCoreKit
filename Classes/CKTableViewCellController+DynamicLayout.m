@@ -682,10 +682,6 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 
 
 - (void)performLayout{
-    if([self.name isEqualToString:@"optionsCellControler"]){
-        int i =3;
-    }
-    
     CKTableViewCellStyle cellStyle = self.cellStyle;
     if(cellStyle == CKTableViewCellStyleIPadForm
        || cellStyle == CKTableViewCellStyleIPhoneForm

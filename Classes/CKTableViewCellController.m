@@ -304,7 +304,7 @@
     [super setHighlighted:highlighted];
     //[self didChangeValueForKey:@"highlighted"];
     
-    if(highlighted){
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
@@ -332,7 +332,7 @@
     //if (self.delegate.wantFlatHierarchy)
     //    [self.delegate flattenHierarchyHighlighted:highlighted];
     
-    if(highlighted){
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){

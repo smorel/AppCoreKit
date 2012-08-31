@@ -117,6 +117,10 @@
 }
 
 - (void)dealloc {
+    if([_objectController respondsToSelector:@selector(setDelegate:)]){
+        [_objectController performSelector:@selector(setDelegate:) withObject:nil];
+    }
+    
 	[_objectController release];
 	_objectController = nil;
 	[_viewsToControllers release];
