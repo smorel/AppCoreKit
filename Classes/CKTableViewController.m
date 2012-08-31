@@ -299,12 +299,13 @@
     [super viewDidUnload];
 }
 
-
+/*
 - (void)updateStylesheets{
     [self viewDidUnload];
     [self viewDidLoad];
     [self viewWillAppear:NO];
 }
+*/
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
