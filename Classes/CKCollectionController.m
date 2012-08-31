@@ -55,9 +55,9 @@
 
 - (void)setDelegate:(id)theDelegate{
     __block CKCollectionController* bself = self;
-    self.delegateRef = [CKWeakRef weakRefWithObject:theDelegate block:^(CKWeakRef *weakRef) {
+    self.delegateRef = theDelegate ? [CKWeakRef weakRefWithObject:theDelegate block:^(CKWeakRef *weakRef) {
 		[bself stop];
-    }];
+    }] : nil;
     
     if(theDelegate){
 		[self start];
@@ -68,7 +68,7 @@
 }
 
 - (id)delegate{
-    return self.delegateRef.object;
+    return _delegateRef ? self.delegateRef.object : nil;
 }
 
 + (CKCollectionController*) controllerWithCollection:(CKCollection*)collection{
@@ -222,7 +222,11 @@
         
         //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
         if([self.delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-            [self.delegate objectControllerDidBeginUpdating:self];
+            id d = [self delegate];
+            [d retain];//This is a Hack because it happend sometimes that here the delegate is OK, but when calling objectControllerDidBeginUpdating, it has been deallocated.
+                       //This is totally weirdo ...
+            [d objectControllerDidBeginUpdating:self];
+            [d release];
         }
         //}
         

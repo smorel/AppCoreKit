@@ -63,9 +63,11 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:bself];
-        [bself unregister];
-        [bself autorelease];
+        if(weakRef == bself.objectRef){
+            [NSObject cancelPreviousPerformRequestsWithTarget:bself];
+            [bself unregister];
+            [bself autorelease];
+        }
     }];
     
     [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
@@ -75,6 +77,7 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 
 - (void)execute{
+    self.objectRef = nil;
     if(_block){
         _block();
     }
@@ -83,6 +86,7 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 }
 
 - (void)cancel{
+    self.objectRef = nil;
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self autorelease];
 }
