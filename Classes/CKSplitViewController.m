@@ -424,11 +424,9 @@
                     [controller viewDidAppear:NO];
                 }
             }
-            if([CKOSVersion() floatValue] < 5){
-                for(UIViewController* controller in removedController){
-                    [controller.view removeFromSuperview];
-                    [controller setContainerViewController:nil];
-                }
+            for(UIViewController* controller in removedController){
+                [controller.view removeFromSuperview];
+                [controller setContainerViewController:nil];
             }
         }
     }

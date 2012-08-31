@@ -309,19 +309,21 @@
     [super setHighlighted:highlighted];
     //[self didChangeValueForKey:@"highlighted"];
     
-    if(highlighted){
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
             UITableViewCell* lastCell = nil;
-            for(UIView* v in [s subviews]){
+            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+                UIView* v = [[s subviews]objectAtIndex:i];
                 if([v isKindOfClass:[UITableViewCell class]]){
                     lastCell = (UITableViewCell*)v;
+                    break;
                 }
             }
             if(lastCell != self){
                 [self removeFromSuperview];
-                [s insertSubview:self belowSubview:lastCell];
+                [s insertSubview:self aboveSubview:lastCell];
             }
         }
     }
@@ -335,19 +337,21 @@
     //if (self.delegate.wantFlatHierarchy)
     //    [self.delegate flattenHierarchyHighlighted:highlighted];
     
-    if(highlighted){
+    if(highlighted && self.selectionStyle != UITableViewCellSelectionStyleNone){
         //Push on top of the render stack
         UIView* s = [self superview];
         if([s isKindOfClass:[UITableView class]]){
             UITableViewCell* lastCell = nil;
-            for(UIView* v in [s subviews]){
+            for(int i = [[s subviews]count] - 1; i >= 0; --i){
+                UIView* v = [[s subviews]objectAtIndex:i];
                 if([v isKindOfClass:[UITableViewCell class]]){
                     lastCell = (UITableViewCell*)v;
+                    break;
                 }
             }
             if(lastCell != self){
                 [self removeFromSuperview];
-                [s insertSubview:self belowSubview:lastCell];
+                [s insertSubview:self aboveSubview:lastCell];
             }
         }
     }

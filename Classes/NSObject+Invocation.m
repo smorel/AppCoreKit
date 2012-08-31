@@ -63,9 +63,11 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
     
     __block CKInvokationObject* bself = self;
     self.objectRef = [CKWeakRef weakRefWithObject:object block:^(CKWeakRef *weakRef) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:bself];
-        [bself unregister];
-        [bself autorelease];
+        if(weakRef == bself.objectRef){
+            [NSObject cancelPreviousPerformRequestsWithTarget:bself];
+            [bself unregister];
+            [bself autorelease];
+        }
     }];
     
     [self performSelector:@selector(execute) withObject:nil afterDelay:delay];
@@ -75,14 +77,17 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 
 - (void)execute{
+    [self unregister];
+    self.objectRef = nil;
     if(_block){
         _block();
     }
-    [self unregister];
     [self autorelease];
 }
 
 - (void)cancel{
+    [self unregister];
+    self.objectRef = nil;
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self autorelease];
 }
@@ -159,10 +164,13 @@ static NSMutableDictionary* CKInvokationRegistry = nil;
 
 - (void)cancelPeformBlock{
     NSMutableArray* ar = [CKInvokationRegistry objectForKey:[NSValue valueWithNonretainedObject:self]];
-    for(NSValue* v in ar){
+    [ar retain];
+    while([ar count] > 0){
+        NSValue* v = [ar objectAtIndex:0];
         CKInvokationObject* invokation = [v nonretainedObjectValue];
         [invokation cancel];
     }
+    [ar release];
 }
 
 @end

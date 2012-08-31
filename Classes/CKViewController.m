@@ -34,7 +34,7 @@
 @property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
 #endif
 
-- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden;
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
 
 @end
 
@@ -545,7 +545,7 @@
     }
 #endif
     
-    [self adjustStyleViewWithToolbarHidden:[self.navigationController isToolbarHidden]];
+    [self adjustStyleViewWithToolbarHidden:[self.navigationController isToolbarHidden] animated:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -643,7 +643,7 @@
     }
     
     [self applyStyleForNavigation];
-    [self adjustStyleViewWithToolbarHidden:self.navigationController.isToolbarHidden];
+    [self adjustStyleViewWithToolbarHidden:self.navigationController.isToolbarHidden animated:NO];
 }
 
 - (BOOL)isViewDisplayed{
@@ -738,27 +738,31 @@
 
 - (void)toolbarGetsDisplayed:(NSNotification*)notif{
     if(notif.object == self.navigationController){
-        [self adjustStyleViewWithToolbarHidden:NO];
+        NSNumber* animated = [[notif userInfo]objectForKey:@"animated"];
+        [self adjustStyleViewWithToolbarHidden:NO animated:[animated boolValue]];
     }
 }
 
 - (void)toolbarGetsHidden:(NSNotification*)notif{
     if(notif.object == self.navigationController){
-        [self adjustStyleViewWithToolbarHidden:YES];
+        NSNumber* animated = [[notif userInfo]objectForKey:@"animated"];
+        [self adjustStyleViewWithToolbarHidden:YES animated:[animated boolValue]];
     }
 }
 
-- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden{
+- (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated{
     if([[self.view subviews]count] <= 0)
         return;
     
-    UIView* v0 = [[self.view subviews]objectAtIndex:0];
-    if([v0 isKindOfClass:[CKStyleView class]]){
-        if(hidden){
-            v0.frame = self.view.bounds;
-        }else{
-            CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
-            v0.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height+toolbarHeight);
+    if(self.isViewDisplayed){
+        UIView* v0 = [[self.view subviews]objectAtIndex:0];
+        if([v0 isKindOfClass:[CKStyleView class]]){
+            if(hidden && !animated){
+                v0.frame = self.view.bounds;
+            }else{
+                CGFloat toolbarHeight = self.navigationController.toolbar.bounds.size.height;
+                v0.frame = CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height+toolbarHeight);
+            }
         }
     }
 }

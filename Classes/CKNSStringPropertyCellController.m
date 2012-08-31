@@ -130,7 +130,7 @@
             
             [cell beginBindingsContextByRemovingPreviousBindings];
             [model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
-                NSString* str = value;
+                NSString* str = [value isKindOfClass:[NSString class]] ? value : nil;
                 if(![bself.textField.text isEqualToString:str]){
                     bself.textField.text = str;
                 }
