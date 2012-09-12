@@ -77,7 +77,11 @@
 		return nil;
 	}
 	else if([array count] == 1){
-		return [NSObject objectFromDictionary:[array objectAtIndex:0]];
+        id object = [array objectAtIndex:0];
+        if([object isKindOfClass:[NSDictionary class]]){
+            return [NSObject objectFromDictionary:object];
+        }
+        return object;
 	}
 	else{
 		CKAssert(NO,@"too much elements in array");

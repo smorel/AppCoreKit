@@ -32,7 +32,7 @@
 
 - (void)setCollectionObjects:(NSMutableArray *)collectionObjects{
     [_collectionObjects release];
-    _collectionObjects = [collectionObjects mutableCopy];
+    _collectionObjects = [[collectionObjects mutableCopy]retain];
 }
 
 - (id) copyWithZone:(NSZone *)zone {
