@@ -139,9 +139,7 @@ typedef enum CKViewControllerState{
  This is an access to the inline debugger for this view controller.
  @warning This property is only available in DEBUG.
  */
-#ifdef DEBUG
 @property(nonatomic,retain,readonly)CKInlineDebuggerController* inlineDebuggerController;
-#endif
 
 ///-----------------------------------
 /// @name Managing Navigation Bar Button Items
