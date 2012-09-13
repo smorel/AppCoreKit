@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#ifdef DEBUG
 
 #import "UIViewController+InlineDebugger.h"
 #import "NSObject+InlineDebugger.h"
@@ -78,5 +77,3 @@
 }
 
 @end
-
-#endif

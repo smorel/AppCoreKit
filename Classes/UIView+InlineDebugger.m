@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#ifdef DEBUG
 
 #import "UIView+InlineDebugger.h"
 #import "CKTableViewCellController+BlockBasedInterface.h"
@@ -274,5 +273,3 @@
 }
 
 @end
-
-#endif

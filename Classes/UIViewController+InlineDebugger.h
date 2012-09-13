@@ -6,8 +6,6 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#ifdef DEBUG
-
 #import "CKViewController.h"
 #import "NSObject+InlineDebugger.h"
 
@@ -17,5 +15,3 @@
 - (CKFormTableViewController*)inlineDebuggerForSubView:(UIView*)view;
 
 @end
-
-#endif
