@@ -48,6 +48,7 @@
         if(controller.name == nil){
             controller.name = [NSString stringWithFormat:@"<%p>",self];
         }
+        return controller;
     }
    	return nil;
 }

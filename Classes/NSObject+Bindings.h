@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "CKCollection.h"
 
 
 /** 
@@ -201,5 +202,30 @@ typedef enum CKBindingsContextOptions{
 /**
  */
 + (void)bindNotificationName:(NSString *)notification target:(id)target action:(SEL)selector;
+
+@end
+
+
+typedef enum CKCollectionBindingEvents{
+    CKCollectionBindingEventInsertion   = 1 << 0,
+    CKCollectionBindingEventRemoval     = 1 << 1,
+    CKCollectionBindingEventAll = CKCollectionBindingEventInsertion | CKCollectionBindingEventRemoval
+}CKCollectionBindingEvents;
+
+
+/** 
+ */
+@interface CKCollection (CKBindings)
+
+///-----------------------------------
+/// @name Bindings
+///-----------------------------------
+
+/** Events is a bitMask with the following values:
+     * CKCollectionBindingEventInsertion
+     * CKCollectionBindingEventRemoval
+     * CKCollectionBindingEventAll
+ */
+- (void)bindEvent:(CKCollectionBindingEvents)events withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block;
 
 @end

@@ -96,6 +96,8 @@
 /// @name Notifying for document updates
 ///-----------------------------------
 
+@optional
+
 /** 
  */
 - (void)objectControllerReloadData:(id)controller;
@@ -107,14 +109,6 @@
 /** 
  */
 - (void)objectControllerDidEndUpdating:(id)controller;  
-
-/** 
- */
-- (void)objectController:(id)controller insertObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
-
-/** 
- */
-- (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath;
 
 /** 
  */

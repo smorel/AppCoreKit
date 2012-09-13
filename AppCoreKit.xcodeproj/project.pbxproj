@@ -494,6 +494,8 @@
 		969FA54214966CD90095C61E /* UITableViewCell+Highlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 969FA53E14966CD90095C61E /* UITableViewCell+Highlight.m */; };
 		96A642851484125600C06A85 /* CKFormBindedCollectionSection_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */; };
 		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
+		96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 96AC0A7F16021F6100CC3C77 /* CKCollectionBlockBinder.h */; };
+		96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 96AC0A8016021F6100CC3C77 /* CKCollectionBlockBinder.m */; };
 		96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96C78A51155C6C9600A1120B /* CKAggregateCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C78A52155C6C9600A1120B /* CKAggregateCollection.m */; };
 		96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE301486B229008A23E4 /* CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1045,6 +1047,8 @@
 		96A087B3159B638A00BCBBBF /* Twitter-sample-web-source.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Twitter-sample-web-source.png"; path = "Documentation/Twitter-sample-web-source.png"; sourceTree = "<group>"; };
 		96A642841484125600C06A85 /* CKFormBindedCollectionSection_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = CKFormBindedCollectionSection_private.h; path = Classes/CKFormBindedCollectionSection_private.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
+		96AC0A7F16021F6100CC3C77 /* CKCollectionBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionBlockBinder.h; path = Classes/CKCollectionBlockBinder.h; sourceTree = "<group>"; };
+		96AC0A8016021F6100CC3C77 /* CKCollectionBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionBlockBinder.m; path = Classes/CKCollectionBlockBinder.m; sourceTree = "<group>"; };
 		96C78A51155C6C9600A1120B /* CKAggregateCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAggregateCollection.h; path = Classes/CKAggregateCollection.h; sourceTree = "<group>"; };
 		96C78A52155C6C9600A1120B /* CKAggregateCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAggregateCollection.m; path = Classes/CKAggregateCollection.m; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
@@ -1304,6 +1308,8 @@
 				7560DBA213B8ED3600268D13 /* CKNotificationBlockBinder.m */,
 				7560DC2813B8ED3600268D13 /* CKUIControlBlockBinder.h */,
 				7560DC2913B8ED3600268D13 /* CKUIControlBlockBinder.m */,
+				96AC0A7F16021F6100CC3C77 /* CKCollectionBlockBinder.h */,
+				96AC0A8016021F6100CC3C77 /* CKCollectionBlockBinder.m */,
 			);
 			name = Private;
 			sourceTree = "<group>";
@@ -2422,6 +2428,7 @@
 				963833BC15AF61D40089B86E /* CKTableViewCellController+DynamicLayout_Private.h in Headers */,
 				964AFFCC15DED1C4000C11F9 /* CKLicense.h in Headers */,
 				9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */,
+				96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2775,6 +2782,7 @@
 				96EBE434159A43AB00E0F209 /* UIView+Name.m in Sources */,
 				9621784215DECF6900FB5792 /* CKLicense.mm in Sources */,
 				9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */,
+				96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
