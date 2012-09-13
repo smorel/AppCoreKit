@@ -62,8 +62,6 @@ struct CKTypeAheadStreamReader{
 		unsigned int fatSize = 0;
 		fatFile.read((char*)&fatSize, (sizeof(unsigned int)));
 		fat.resize(fatSize);
-        
-        NSLog(@"CKTypeAhead : Read FAT size : %u",fatSize);
 		
 		TimeProfiler profiler("loadFat");
 		unsigned long strHash = 0;
@@ -72,8 +70,6 @@ struct CKTypeAheadStreamReader{
 			fatFile.read((char*)&strHash, 8);
 			fatFile.read((char*)&indexesSeekOffset, (sizeof(unsigned int)));
 			fat[strHash] = indexesSeekOffset;
-            
-            NSLog(@"CKTypeAhead : Read FAT hash : %lu indexesIndex : %u",strHash,indexesSeekOffset);
 		}
 		fatFile.close();
 	}
@@ -82,14 +78,12 @@ struct CKTypeAheadStreamReader{
 		std::string key = txt;
 		
         unsigned long str_hash = computeHash(key);
-        NSLog(@"CKTypeAhead : Looking for words for text : %s hash : %lu",key.c_str(),str_hash);
         
 		FatType::iterator it = fat.find(str_hash);
 		while(it == fat.end() && !key.empty()){
 			key = key.substr(0,key.length()-1);
             
             str_hash = computeHash(key);
-            NSLog(@"CKTypeAhead : Looking for words for text : %s hash : %lu",key.c_str(),str_hash);
 			it = fat.find(str_hash);
 		}
 		
@@ -104,12 +98,9 @@ struct CKTypeAheadStreamReader{
 			
 			seekOffset = indexesFile.tellg();
             
-            NSLog(@"CKTypeAhead : words found for text : %s at seekIndex : %u number of words : %u seekOffset : %u",txt.c_str(),indexesOffset,count,seekOffset);
             
 			return count;
-		}else{
-            NSLog(@"CKTypeAhead : No words found for text : %s",txt.c_str());
-        }
+		}
         
 		return 0;
 	}

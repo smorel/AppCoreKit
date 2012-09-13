@@ -74,11 +74,9 @@ void save(TreeNodeStruct* node,std::ofstream& stream){
 	unsigned int count = node->indexes.size();
 	stream.write((char*)&count, (sizeof(unsigned int)));
     
-    NSLog(@"CKTypeAhead : Save node count : %u",count);
     
 	for(int i = 0;i < node->indexes.size(); ++i){
 		unsigned int v = node->indexes[i];
-        NSLog(@"CKTypeAhead : Save node index : %u",v);
 		stream.write((char*)&v, (sizeof(unsigned int)));
 	}
 }
@@ -107,7 +105,6 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 	(*fat)[strHash] = indexesIndex;
 	save(node,*indexesFile);
     
-    NSLog(@"CKTypeAhead : Save node for text : %@ hash : %lu indexesIndex : %u",name,strHash,indexesIndex);
 	
 	for(std::map<unichar,TreeNodeStruct>::iterator it = node->nodes.begin(); it != node->nodes.end(); ++it){
 		[self saveNode:&it->second parentNode:node withBaseName:name indexesFile:indexesFile fat:fat];
@@ -136,13 +133,11 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 		unsigned int count = fat.size();
 		fatFile.write((char*)&count,sizeof(unsigned int));
         
-        NSLog(@"CKTypeAhead wirte FAT count : %u",count);
         
 		for(FatType::iterator it = fat.begin(); it != fat.end(); ++it){
 			fatFile.write((char*)&it->first, 8);
 			fatFile.write((char*)&it->second, (sizeof(unsigned int)));
-            
-            NSLog(@"CKTypeAhead wirte FAT hash : %lu indexesIndex : %u",it->first,it->second);
+        
 		}
 		fatFile.close();
 	}
@@ -181,7 +176,6 @@ typedef hash_map<unsigned long,unsigned int> FatType;
 				exportWordsFile.write((char*)&wordSize, (sizeof(unsigned int)));
 				exportWordsFile.write((char*)buffer, wordSize);
                 
-                NSLog(@"CKTypeAhead : Save word : %s length : %u seekIndex : %u",buffer,wordSize,seekIndex);
 				
 				NSString* stringToIndex = [CKTypeAhead formatStringForIndexation:[NSString stringWithUTF8String:buffer]];
 				insertText(tree,[stringToIndex UTF8String],seekIndex,indexLimit);
