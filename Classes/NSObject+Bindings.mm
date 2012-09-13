@@ -333,6 +333,11 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 
 
 - (void)bindEvent:(CKCollectionBindingEvents)events withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block{
+    [self bindEvent:events executeBlockImmediatly:NO withBlock:block];
+}
+
+
+- (void)bindEvent:(CKCollectionBindingEvents)events executeBlockImmediatly:(BOOL)executeBlockImmediatly withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block{
     [NSObject validateCurrentBindingsContext];
     
 	CKCollectionBlockBinder* binder = (CKCollectionBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKCollectionBlockBinder class]];
@@ -342,6 +347,10 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 	binder.block = block;
 	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
 	[binder release];
+    
+    if(executeBlockImmediatly){
+        block(CKCollectionBindingEventInsertion,[self allObjects],[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self count])]);
+    }
 }
 
 @end

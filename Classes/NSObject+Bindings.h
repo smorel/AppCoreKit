@@ -228,4 +228,12 @@ typedef enum CKCollectionBindingEvents{
  */
 - (void)bindEvent:(CKCollectionBindingEvents)events withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block;
 
+
+/** Events is a bitMask with the following values:
+ * CKCollectionBindingEventInsertion
+ * CKCollectionBindingEventRemoval
+ * CKCollectionBindingEventAll
+ */
+- (void)bindEvent:(CKCollectionBindingEvents)events executeBlockImmediatly:(BOOL)executeBlockImmediatly withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block;
+
 @end

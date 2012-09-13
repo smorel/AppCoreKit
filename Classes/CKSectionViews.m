@@ -41,6 +41,7 @@
 
 - (void)setTableViewController:(CKTableViewController *)theTableViewController{
     self.tableViewControllerRef = [CKWeakRef weakRefWithObject:theTableViewController];
+    [self setupDefaults];
     
     __block CKSectionHeaderView* bself = self;
     [self beginBindingsContextByRemovingPreviousBindings];

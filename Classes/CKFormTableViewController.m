@@ -325,6 +325,7 @@
 
 - (CKFormSectionBase *)insertSection:(CKFormSectionBase*)section atIndex:(NSInteger)index{
 	section.parentController = self;
+    [section start];
 	[_sections insertObject:section atIndex:index];
     
     if(section.hidden == NO){
@@ -336,6 +337,7 @@
 
 - (CKFormSectionBase *)removeSectionAtIndex:(NSInteger)index{
     CKFormSectionBase* section = (CKFormSectionBase*)[_sections objectAtIndex:index];
+    [section stop];
     NSInteger visibleIndex = section.sectionVisibleIndex;
     
     [section retain];
