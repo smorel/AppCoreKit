@@ -838,7 +838,7 @@
     
     //If this update appears before we updated the orther sections :
     for(int j = 0; j <= index; ++ j){
-        if(j >= [_sectionsToControllers count]){
+        if(j == index || (j >= [_sectionsToControllers count])){
             [_sectionsToControllers insertObject:[NSMutableArray array] atIndex:j];
         }
     }
