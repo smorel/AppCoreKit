@@ -44,7 +44,10 @@
 
 - (id)controllerForObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
     if(_controllerCreateBlock){
-        return _controllerCreateBlock(object,indexPath);
+        CKCollectionCellController* controller = _controllerCreateBlock(object,indexPath);
+        if(controller.name == nil){
+            controller.name = [NSString stringWithFormat:@"<%p>",self];
+        }
     }
    	return nil;
 }
