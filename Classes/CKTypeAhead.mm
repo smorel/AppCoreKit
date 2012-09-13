@@ -15,13 +15,13 @@
 #import "NSString+Additions.h"
 
 // magic numbers from http://www.isthe.com/chongo/tech/comp/fnv/ 
-static const size_t InitialFNV = 2166136261U;
-static const size_t FNVMultiple = 16777619;
+static const unsigned long InitialFNV = 2166136261U;
+static const unsigned long FNVMultiple = 16777619;
 
 // Fowler / Noll / Vo (FNV) Hash 
-size_t computeHash(const std::string &s)
+unsigned long computeHash(const std::string &s)
 {
-    size_t hash = InitialFNV;
+    unsigned long hash = InitialFNV;
     for(size_t i = 0; i < s.length(); i++)
     {
         hash = hash ^ (s[i]);       // xor  the low 8 bits 
@@ -45,7 +45,7 @@ struct TimeProfiler{
 };
 
 using namespace __gnu_cxx;
-typedef hash_map<size_t,unsigned int> FatType;
+typedef hash_map<unsigned long,unsigned int> FatType;
 
 struct CKTypeAheadStreamReader{
 	std::ifstream wordsFile,fatFile,indexesFile;
@@ -62,14 +62,18 @@ struct CKTypeAheadStreamReader{
 		unsigned int fatSize = 0;
 		fatFile.read((char*)&fatSize, (sizeof(unsigned int)));
 		fat.resize(fatSize);
+        
+        NSLog(@"CKTypeAhead : Read FAT size : %u",fatSize);
 		
 		TimeProfiler profiler("loadFat");
-		size_t strHash = 0;
+		unsigned long strHash = 0;
 		unsigned int indexesSeekOffset = 0;
 		while(fatFile.good()){
-			fatFile.read((char*)&strHash, (sizeof(size_t)));
+			fatFile.read((char*)&strHash, 8);
 			fatFile.read((char*)&indexesSeekOffset, (sizeof(unsigned int)));
 			fat[strHash] = indexesSeekOffset;
+            
+            NSLog(@"CKTypeAhead : Read FAT hash : %lu indexesIndex : %u",strHash,indexesSeekOffset);
 		}
 		fatFile.close();
 	}
@@ -77,10 +81,16 @@ struct CKTypeAheadStreamReader{
 	unsigned int getWordCountForText(const std::string& txt, unsigned int& seekOffset){
 		std::string key = txt;
 		
-		FatType::iterator it = fat.find(computeHash(key));
+        unsigned long str_hash = computeHash(key);
+        NSLog(@"CKTypeAhead : Looking for words for text : %s hash : %lu",key.c_str(),str_hash);
+        
+		FatType::iterator it = fat.find(str_hash);
 		while(it == fat.end() && !key.empty()){
 			key = key.substr(0,key.length()-1);
-			it = fat.find(computeHash(key));
+            
+            str_hash = computeHash(key);
+            NSLog(@"CKTypeAhead : Looking for words for text : %s hash : %lu",key.c_str(),str_hash);
+			it = fat.find(str_hash);
 		}
 		
 		if(!key.empty()){
@@ -93,8 +103,14 @@ struct CKTypeAheadStreamReader{
 			indexesFile.read((char*)&count, (sizeof(unsigned int)));
 			
 			seekOffset = indexesFile.tellg();
+            
+            NSLog(@"CKTypeAhead : words found for text : %s at seekIndex : %u number of words : %u seekOffset : %u",txt.c_str(),indexesOffset,count,seekOffset);
+            
 			return count;
-		}
+		}else{
+            NSLog(@"CKTypeAhead : No words found for text : %s",txt.c_str());
+        }
+        
 		return 0;
 	}
 	
@@ -164,7 +180,7 @@ struct CKManagedTypeAheadStreamReader{
 };
 
 @interface CKTypeAheadStreamReaderManager : NSObject{
-	hash_map<size_t,CKManagedTypeAheadStreamReader> readers;
+	hash_map<unsigned long,CKManagedTypeAheadStreamReader> readers;
 }
 
 + (CKTypeAheadStreamReaderManager*)defaultManager;
@@ -186,8 +202,8 @@ static CKTypeAheadStreamReaderManager* CKTypeAheadStreamReaderDefaultManager = n
 }
 
 - (CKTypeAheadStreamReader*)findOrCreateReaderWithWithName:(NSString*)name wordsPath:(NSString*)words fatPath:(NSString*)fat indexesPath:(NSString*)indexes{
-	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
+	unsigned long key = computeHash([name UTF8String]);
+	hash_map<unsigned long,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
 		return it->second.reader;
 	}
@@ -197,8 +213,8 @@ static CKTypeAheadStreamReaderManager* CKTypeAheadStreamReaderDefaultManager = n
 }
 
 - (CKTypeAheadStreamReader*)readerForName:(NSString*)name{
-	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
+	unsigned long key = computeHash([name UTF8String]);
+	hash_map<unsigned long,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
 		return it->second.reader;
 	}
@@ -206,8 +222,8 @@ static CKTypeAheadStreamReaderManager* CKTypeAheadStreamReaderDefaultManager = n
 }
 
 - (void)releaseReaderForName:(NSString*)name{
-	size_t key = computeHash([name UTF8String]);
-	hash_map<size_t,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
+	unsigned long key = computeHash([name UTF8String]);
+	hash_map<unsigned long,CKManagedTypeAheadStreamReader>::iterator it = readers.find(key);
 	if(it != readers.end()){
 		CKManagedTypeAheadStreamReader& managedReader = it->second;
 		managedReader.release();

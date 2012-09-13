@@ -496,6 +496,14 @@
 		96A6428714841BF900C06A85 /* CKFormTableViewController_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */; };
 		96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 96AC0A7F16021F6100CC3C77 /* CKCollectionBlockBinder.h */; };
 		96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 96AC0A8016021F6100CC3C77 /* CKCollectionBlockBinder.m */; };
+		96AC0A9516022A9C00CC3C77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7560DE4813B8F00F00268D13 /* Foundation.framework */; };
+		96AC0A9816022A9C00CC3C77 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96AC0A9716022A9C00CC3C77 /* main.mm */; };
+		96AC0A9C16022A9C00CC3C77 /* TypeAheadCrunch.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 96AC0A9B16022A9C00CC3C77 /* TypeAheadCrunch.1 */; };
+		96AC0AA316022D2300CC3C77 /* CKTypeAhead.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8BE1545C41400F07C5A /* CKTypeAhead.mm */; };
+		96AC0AA416022D2600CC3C77 /* CKTypeAhead+Generator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9600B8C01545C41400F07C5A /* CKTypeAhead+Generator.mm */; };
+		96AC0AA516022D7C00CC3C77 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7560DBD413B8ED3600268D13 /* NSString+Additions.m */; };
+		96AC0AA816022DBC00CC3C77 /* NSString+Formating.h in Headers */ = {isa = PBXBuildFile; fileRef = 96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96AC0AA916022DBC00CC3C77 /* NSString+Formating.m in Sources */ = {isa = PBXBuildFile; fileRef = 96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */; };
 		96C78A53155C6C9600A1120B /* CKAggregateCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 96C78A51155C6C9600A1120B /* CKAggregateCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96C78A54155C6C9600A1120B /* CKAggregateCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C78A52155C6C9600A1120B /* CKAggregateCollection.m */; };
 		96CADE321486B22A008A23E4 /* CKRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 96CADE301486B229008A23E4 /* CKRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -553,6 +561,19 @@
 			remoteInfo = CloudKit;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		96AC0A9116022A9C00CC3C77 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				96AC0A9C16022A9C00CC3C77 /* TypeAheadCrunch.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4F4A912013F03D7B0093293F /* wc-appsignature-dark-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wc-appsignature-dark-back.png"; sourceTree = "<group>"; };
@@ -1049,6 +1070,12 @@
 		96A6428614841BF900C06A85 /* CKFormTableViewController_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKFormTableViewController_private.h; path = Classes/CKFormTableViewController_private.h; sourceTree = "<group>"; };
 		96AC0A7F16021F6100CC3C77 /* CKCollectionBlockBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKCollectionBlockBinder.h; path = Classes/CKCollectionBlockBinder.h; sourceTree = "<group>"; };
 		96AC0A8016021F6100CC3C77 /* CKCollectionBlockBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKCollectionBlockBinder.m; path = Classes/CKCollectionBlockBinder.m; sourceTree = "<group>"; };
+		96AC0A9316022A9C00CC3C77 /* TypeAheadCrunch */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TypeAheadCrunch; sourceTree = BUILT_PRODUCTS_DIR; };
+		96AC0A9716022A9C00CC3C77 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		96AC0A9A16022A9C00CC3C77 /* TypeAheadCrunch-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TypeAheadCrunch-Prefix.pch"; sourceTree = "<group>"; };
+		96AC0A9B16022A9C00CC3C77 /* TypeAheadCrunch.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = TypeAheadCrunch.1; sourceTree = "<group>"; };
+		96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Formating.h"; path = "Classes/NSString+Formating.h"; sourceTree = "<group>"; };
+		96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Formating.m"; path = "Classes/NSString+Formating.m"; sourceTree = "<group>"; };
 		96C78A51155C6C9600A1120B /* CKAggregateCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKAggregateCollection.h; path = Classes/CKAggregateCollection.h; sourceTree = "<group>"; };
 		96C78A52155C6C9600A1120B /* CKAggregateCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CKAggregateCollection.m; path = Classes/CKAggregateCollection.m; sourceTree = "<group>"; };
 		96CADE301486B229008A23E4 /* CKRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CKRuntime.h; path = Classes/CKRuntime.h; sourceTree = "<group>"; };
@@ -1118,6 +1145,14 @@
 				7560DE6013B8F00F00268D13 /* MobileCoreServices.framework in Frameworks */,
 				7560DE6113B8F00F00268D13 /* CoreFoundation.framework in Frameworks */,
 				9660F472156308F700FE2081 /* VendorsKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96AC0A9016022A9C00CC3C77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96AC0A9516022A9C00CC3C77 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1550,6 +1585,8 @@
 				7560DBC813B8ED3600268D13 /* NSObject+Notifications.m */,
 				7560DBCB13B8ED3600268D13 /* NSSet+Additions.h */,
 				7560DBCC13B8ED3600268D13 /* NSSet+Additions.m */,
+				96AC0AA616022DBC00CC3C77 /* NSString+Formating.h */,
+				96AC0AA716022DBC00CC3C77 /* NSString+Formating.m */,
 				7560DBCD13B8ED3600268D13 /* NSString+Parsing.h */,
 				7560DBCE13B8ED3600268D13 /* NSString+Parsing.m */,
 				7560DBCF13B8ED3600268D13 /* NSString+URIQuery.h */,
@@ -1671,6 +1708,7 @@
 				7506E41413B902ED00EE1471 /* Resources */,
 				7550153713B8EA08002DAE8B /* CloudKit */,
 				960A2D30150572C000D30AB4 /* Documentation */,
+				96AC0A9616022A9C00CC3C77 /* TypeAheadCrunch */,
 				7550153213B8EA08002DAE8B /* Frameworks */,
 				7550153113B8EA08002DAE8B /* Products */,
 			);
@@ -1680,6 +1718,7 @@
 			isa = PBXGroup;
 			children = (
 				7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */,
+				96AC0A9316022A9C00CC3C77 /* TypeAheadCrunch */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2144,6 +2183,24 @@
 			name = Grid;
 			sourceTree = "<group>";
 		};
+		96AC0A9616022A9C00CC3C77 /* TypeAheadCrunch */ = {
+			isa = PBXGroup;
+			children = (
+				96AC0A9716022A9C00CC3C77 /* main.mm */,
+				96AC0A9B16022A9C00CC3C77 /* TypeAheadCrunch.1 */,
+				96AC0A9916022A9C00CC3C77 /* Supporting Files */,
+			);
+			path = TypeAheadCrunch;
+			sourceTree = "<group>";
+		};
+		96AC0A9916022A9C00CC3C77 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				96AC0A9A16022A9C00CC3C77 /* TypeAheadCrunch-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		96BF1FAE1540B84C00DDE10E /* Dynamic Layouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -2429,6 +2486,7 @@
 				964AFFCC15DED1C4000C11F9 /* CKLicense.h in Headers */,
 				9659E34415E274FF00D43C33 /* CKConfiguration.h in Headers */,
 				96AC0A8116021F6100CC3C77 /* CKCollectionBlockBinder.h in Headers */,
+				96AC0AA816022DBC00CC3C77 /* NSString+Formating.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2454,6 +2512,23 @@
 			productReference = 7506E3E913B8FA0500EE1471 /* AppCoreKit.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
+		96AC0A9216022A9C00CC3C77 /* TypeAheadCrunch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96AC0A9F16022A9C00CC3C77 /* Build configuration list for PBXNativeTarget "TypeAheadCrunch" */;
+			buildPhases = (
+				96AC0A8F16022A9C00CC3C77 /* Sources */,
+				96AC0A9016022A9C00CC3C77 /* Frameworks */,
+				96AC0A9116022A9C00CC3C77 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TypeAheadCrunch;
+			productName = TypeAheadCrunch;
+			productReference = 96AC0A9316022A9C00CC3C77 /* TypeAheadCrunch */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2478,6 +2553,7 @@
 			targets = (
 				7550152F13B8EA08002DAE8B /* AppCoreKit */,
 				7561645313BA527A00330BF0 /* AppCoreKit Documentation */,
+				96AC0A9216022A9C00CC3C77 /* TypeAheadCrunch */,
 			);
 		};
 /* End PBXProject section */
@@ -2535,7 +2611,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -f \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"";
+			shellScript = "rm -f \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Resources/Info.plist\"\ntouch \"${SRCROOT}/Resources\"\n\nxcodebuild -target \"TypeAheadCrunch\" -configuration ${CONFIGURATION} CODE_SIGN_IDENTITY=\"iPhone Distribution: WhereCloud Inc\" BUILD_DIR=\"${TARGET_BUILD_DIR}/../\"\n\nmkdir -p \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"\ncp \"${TARGET_BUILD_DIR}/../${CONFIGURATION}/TypeAheadCrunch\" \"${TARGET_BUILD_DIR}/${PROJECT}.framework/Tools/\"";
 		};
 		7561645413BA527A00330BF0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2783,6 +2859,18 @@
 				9621784215DECF6900FB5792 /* CKLicense.mm in Sources */,
 				9659E34515E274FF00D43C33 /* CKConfiguration.m in Sources */,
 				96AC0A8216021F6100CC3C77 /* CKCollectionBlockBinder.m in Sources */,
+				96AC0AA916022DBC00CC3C77 /* NSString+Formating.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96AC0A8F16022A9C00CC3C77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96AC0A9816022A9C00CC3C77 /* main.mm in Sources */,
+				96AC0AA316022D2300CC3C77 /* CKTypeAhead.mm in Sources */,
+				96AC0AA416022D2600CC3C77 /* CKTypeAhead+Generator.mm in Sources */,
+				96AC0AA516022D7C00CC3C77 /* NSString+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2977,6 +3065,51 @@
 			};
 			name = Release;
 		};
+		96AC0A9D16022A9C00CC3C77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TypeAheadCrunch/TypeAheadCrunch-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		96AC0A9E16022A9C00CC3C77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TypeAheadCrunch/TypeAheadCrunch-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3006,6 +3139,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		96AC0A9F16022A9C00CC3C77 /* Build configuration list for PBXNativeTarget "TypeAheadCrunch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96AC0A9D16022A9C00CC3C77 /* Debug */,
+				96AC0A9E16022A9C00CC3C77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
