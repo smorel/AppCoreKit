@@ -860,7 +860,7 @@
 	
         [self.tableView beginUpdates];
     
-    NSLog(@"didBeginUpdates <%@>",self);
+   // NSLog(@"didBeginUpdates <%@>",self);
 }
 
 - (void)didEndUpdates{
@@ -869,7 +869,7 @@
 		return;
     }
 	
-    NSLog(@"didEndUpdates <%@>",self);
+  //  NSLog(@"didEndUpdates <%@>",self);
         [self.tableView endUpdates];
 }
 
@@ -878,7 +878,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"didInsertObjects <%@>",self);
+  //  NSLog(@"didInsertObjects <%@>",self);
 	
 	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
@@ -901,7 +901,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"didRemoveObjects <%@>",self);
+ //   NSLog(@"didRemoveObjects <%@>",self);
 	
 	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
@@ -933,7 +933,7 @@
 		return;
     }
     
-    NSLog(@"didInsertSectionAtIndex <%@>",self);
+//    NSLog(@"didInsertSectionAtIndex <%@>",self);
 	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
@@ -947,7 +947,7 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    NSLog(@"didRemoveSectionAtIndex <%@>",self);
+ //   NSLog(@"didRemoveSectionAtIndex <%@>",self);
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
 	
 	//UPDATE STICKY SELECTION INDEX PATH
