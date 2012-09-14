@@ -1113,6 +1113,37 @@
 }
 
 
+- (void)setEditing:(BOOL)editing{
+    [super setEditing:editing];
+    
+    switch(_editableType){
+        case CKTableCollectionViewControllerEditingTypeLeft:{
+            [self.navigationItem setLeftBarButtonItem:(editing) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
+            break;
+        }
+        case CKTableCollectionViewControllerEditingTypeRight:{
+            [self.navigationItem setRightBarButtonItem:(editing) ? self.doneButton : self.editButton  animated:([CKOSVersion() floatValue] >= 5)];
+            break;
+        }
+        case CKTableCollectionViewControllerEditingTypeNone:break;
+	}
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+    [super setEditing:editing animated:animated];
+    switch(_editableType){
+        case CKTableCollectionViewControllerEditingTypeLeft:{
+            [self.navigationItem setLeftBarButtonItem:(editing) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
+            break;
+        }
+        case CKTableCollectionViewControllerEditingTypeRight:{
+            [self.navigationItem setRightBarButtonItem:(editing) ? self.doneButton : self.editButton  animated:([CKOSVersion() floatValue] >= 5)];
+            break;
+        }
+        case CKTableCollectionViewControllerEditingTypeNone:break;
+	}
+}
+
 #pragma mark Keyboard Notifications
 
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
