@@ -51,6 +51,7 @@
 @synthesize fixedSize = _fixedSize;
 @synthesize enableNavigationToolbar;
 @synthesize navigationToolbar = _navigationToolbar;
+@synthesize objectProperty = _objectProperty;
 
 - (id)init{
     if (self = [super init]) {
@@ -75,17 +76,16 @@
     _validationBindingContext = nil;
     [_navigationToolbar release];
     _navigationToolbar = nil;
+    [_objectProperty release];
+    _objectProperty = nil;
     [super dealloc];
-}
-
-- (CKProperty*)objectProperty{
-    CKAssert(self.value == nil || [self.value isKindOfClass:[CKProperty class]],@"Invalid value type");
-    return (CKProperty*)self.value;
 }
 
 - (void)setValue:(id)value{
     if(![self.value isEqual:value]){
-        CKAssert(value == nil || [value isKindOfClass:[CKProperty class]],@"Invalid value type");
+        if([value isKindOfClass:[CKProperty class]]){
+            self.objectProperty = value;        
+        }
         [super setValue:value];
     }
 }
@@ -275,7 +275,7 @@
                                                                   action:hasNextResponder ? @selector(next:) : @selector(done:)]autorelease];
         [buttons addObject:button];
         
-        CKProperty* model = self.value;
+        CKProperty* model = self.objectProperty;
         CKClassPropertyDescriptor* descriptor = [model descriptor];
         NSString* str = [NSString stringWithFormat:@"%@_NavigationBar",descriptor.name];
         NSString* title = _(str);

@@ -48,10 +48,10 @@
 /// @name Accessing Object Property
 ///-----------------------------------
 /** 
- This method checks if the controller's value is a CKProperty and will assert if not valid.
+ This method returns the object property currently used in the controller.
  @return the object property.
- */
-- (CKProperty*)objectProperty;
+*/
+@property(nonatomic,retain)CKProperty* objectProperty;
 
 ///-----------------------------------
 /// @name Validating Value for Object Property

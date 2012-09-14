@@ -331,7 +331,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)updateFlags{
-    CKProperty* model = self.value;
+    CKProperty* model = self.objectProperty;
     if([model isReadOnly] || self.readOnly){
         self.flags = CKItemViewFlagNone;
         return;
@@ -354,7 +354,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)onValueChanged{
-    CKProperty* model = self.value;
+    CKProperty* model = self.objectProperty;
     if([model isReadOnly] || self.readOnly){
         self.fixedSize = YES;
         self.accessoryType = UITableViewCellAccessoryNone;
@@ -411,7 +411,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)becomeFirstResponder{
-    CKProperty* model = self.value;
+    CKProperty* model = self.objectProperty;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	
 	NSString* propertyNavBarTitle = [NSString stringWithFormat:@"%@_NavBarTitle",descriptor.name];
@@ -424,7 +424,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
         CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
         if(sheetController == nil){
-            CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
+            CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.objectProperty mode:self.datePickerMode]autorelease];
             dateController.title = propertyNavBarTitleLocalized;
             dateController.delegate = self;
             
@@ -476,7 +476,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
             [self onBeginEditingUsingViewController:dateController];
             
             sheetController.delegate = self;
-            [dateController setProperty:self.value];
+            [dateController setProperty:self.objectProperty];
             
             
             if(!sheetController.visible){
@@ -492,7 +492,7 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     else{
         [[[self containerController]view]endEditing:YES];//Hides keyboard if needed
         
-        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.value mode:self.datePickerMode]autorelease];
+        CKNSDateViewController* dateController = [[[CKNSDateViewController alloc]initWithProperty:self.objectProperty mode:self.datePickerMode]autorelease];
         dateController.title = propertyNavBarTitleLocalized;
         dateController.delegate = self;
         

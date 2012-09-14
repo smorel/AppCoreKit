@@ -282,7 +282,7 @@
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(controller == self.linearCollectionController){
-        CKAssert(NO,@"NOT IMPLEMENTED");
+   //     CKAssert(NO,@"NOT IMPLEMENTED");
         
         [self updateGridArray];
         

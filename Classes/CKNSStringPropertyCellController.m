@@ -94,7 +94,7 @@
     
     self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     

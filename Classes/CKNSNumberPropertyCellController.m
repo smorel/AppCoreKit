@@ -47,7 +47,7 @@
 }
 
 - (void)onvalue{
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	BOOL bo = [[model value] boolValue];
 	
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:500002];
@@ -55,7 +55,7 @@
 }
 
 - (void)textFieldChanged:(id)thevalue{
-    CKProperty* property = (CKProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.objectProperty;
 	NSNumber* number = (NSNumber*)[property value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
     
@@ -143,7 +143,7 @@
     [theSwitch removeFromSuperview];
 	
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	
 	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
@@ -259,7 +259,7 @@
 	[self didResignFirstResponder];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
     __block CKNSNumberPropertyCellController* bself = self;
     [self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {
