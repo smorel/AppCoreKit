@@ -402,8 +402,10 @@
 	[super setEditing:editing animated:animated];
 	[self.tableView setEditing:editing animated:animated];
     
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+    if(self.isViewDisplayed){
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
 }
 
 #pragma mark UITableView Delegate

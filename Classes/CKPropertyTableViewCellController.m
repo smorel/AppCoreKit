@@ -92,9 +92,12 @@
 
 - (void)setReadOnly:(BOOL)readOnly{
     _readOnly = readOnly;
+    
     if(self.tableViewCell){
         [self setupCell:self.tableViewCell];
+        [self performLayout];
     }
+    
     [self invalidateSize];
 }
 

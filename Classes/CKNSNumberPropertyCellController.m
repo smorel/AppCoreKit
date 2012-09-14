@@ -149,13 +149,16 @@
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	self.text = _(descriptor.name);
     
+    
     __block CKNSNumberPropertyCellController* bself = self;
 	if([self isNumber]){
+        
+        [cell beginBindingsContextByRemovingPreviousBindings];
+        [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
+        [cell endBindingsContext];
+        
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
-            [cell beginBindingsContextByRemovingPreviousBindings];
-            [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
-            [cell endBindingsContext];
             _textField.hidden = YES;
         }
         else{
@@ -191,16 +194,18 @@
     else if([self isBOOL]){
         //Creates the switch
         _textField.hidden = YES;
+        
+        __block CKTableViewCellController* bself = self;
+        [cell beginBindingsContextByRemovingPreviousBindings];
+        self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+        [model.object bind:model.keyPath withBlock:^(id value) {
+            bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+        }];
+        [cell endBindingsContext];
+        
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
             
-            __block CKTableViewCellController* bself = self;
-            [cell beginBindingsContextByRemovingPreviousBindings];
-            self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-            [model.object bind:model.keyPath withBlock:^(id value) {
-                bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-            }];
-            [cell endBindingsContext];
         }
         else{
             if(!theSwitch){
