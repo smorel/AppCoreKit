@@ -411,6 +411,8 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 }
 
 - (void)becomeFirstResponder{
+    [super becomeFirstResponder];
+    
     CKProperty* model = self.objectProperty;
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	

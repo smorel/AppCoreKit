@@ -99,10 +99,6 @@
 	
 		CKTableViewCellController* controllerNew = (CKTableViewCellController*)[tableViewController controllerAtIndexPath:indexPath];
 		if(controllerNew != nil){
-            UIView* responder = [controllerNew nextResponder:nil];
-            if(responder && [responder isKindOfClass:[UIResponder class]]){
-                [responder becomeFirstResponder];
-            }
             [controllerNew becomeFirstResponder];
         }
 	}
@@ -160,7 +156,10 @@
 }
 
 - (void)becomeFirstResponder{
-    
+    UIView* responder = [self nextResponder:nil];
+    if(responder && [responder isKindOfClass:[UIResponder class]]){
+        [responder becomeFirstResponder];
+    }
 }
 
 - (UIView*)nextResponder:(UIView*)view{
