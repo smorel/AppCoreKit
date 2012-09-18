@@ -320,9 +320,20 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     self.flags = CKItemViewFlagNone;
     _enableAccessoryView = NO;
     self.datePickerMode = CKDatePickerModeDate;
+    
+    __block CKNSDatePropertyCellController* bself = self;
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"Resign_<%p>",self]];
+    [self bind:@"containerController.state" withBlock:^(id value) {
+        if(bself.containerController.state == CKViewControllerStateWillDisappear
+           || bself.containerController.state == CKViewControllerStateDidDisappear){
+        [bself resignFirstResponder];
+        }
+    }];
+    [NSObject endBindingsContext];
 }
 
 - (void)dealloc{
+    [NSObject removeAllBindingsForContext:[NSString stringWithFormat:@"Resign_<%p>",self]];
     [_onBeginEditingCallback release];
     _onBeginEditingCallback = nil;
     [_onEndEditingCallback release];
@@ -408,6 +419,14 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
         return self.tableViewCell;
     }
     return nil;
+}
+
+- (void)resignFirstResponder{
+    NSString* dateSheetControllerKey = [NSString stringWithFormat:@"<%d>-<%d>",self.datePickerMode,_enableAccessoryView];
+    CKSheetController*  sheetController = [CKNSDateSheetControllersSingleton objectForKey:dateSheetControllerKey];
+    if(sheetController && sheetController.visible){
+        [sheetController dismissSheetAnimated:YES];
+    }
 }
 
 - (void)becomeFirstResponder{
