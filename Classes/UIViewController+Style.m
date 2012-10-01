@@ -72,11 +72,13 @@ static char UIViewControllerDataDrivenViewsKey;
     
     NSMutableDictionary* style = [self controllerStyle];
     
+    /*
 #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         [self.view removeConstraints:[self.view constraints]];
     }
 #endif
+     */
     
     for(UIView* subview in self.dataDrivenViews){
         [subview removeFromSuperview];
@@ -90,7 +92,7 @@ static char UIViewControllerDataDrivenViewsKey;
     }
     self.dataDrivenViews = views;
     
-    
+    /*
 #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
@@ -107,6 +109,7 @@ static char UIViewControllerDataDrivenViewsKey;
         [self.view setNeedsUpdateConstraints];
     }
 #endif
+     */
     
     NSMutableSet* appliedStack = [NSMutableSet set];
 	[self applySubViewsStyle:controllerStyle appliedStack:appliedStack delegate:nil];
