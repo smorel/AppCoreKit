@@ -24,7 +24,7 @@
  
 
 @implementation CKConfiguration
-@synthesize type,inlineDebuggerEnabled,checkViewControllerCopyInBlocks,assertForBindingsOutOfContext,sourceTreeDirectory,resourcesLiveUpdateEnabled;
+@synthesize type,inlineDebuggerEnabled,checkViewControllerCopyInBlocks,assertForBindingsOutOfContext,sourceTreeDirectory,resourcesLiveUpdateEnabled,usingARC;
 
 - (id)init{
     self = [super init];
