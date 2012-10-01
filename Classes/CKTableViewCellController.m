@@ -811,11 +811,13 @@
     
     NSMutableDictionary* style = [self controllerStyle];
     
+    /*
 #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         [cell.contentView removeConstraints:[self.view constraints]];
     }
 #endif
+     */
     
     for(UIView* subview in self.dataDrivenViews){
         [subview removeFromSuperview];
@@ -829,7 +831,7 @@
     }
     self.dataDrivenViews = views;
      
-    
+    /*
 #ifdef __IPHONE_6_0
     if([CKOSVersion() floatValue] >= 6){
         NSMutableDictionary* viewsDictionary = [NSMutableDictionary dictionary];
@@ -855,6 +857,7 @@
         }
     }
     #endif
+     */
 }
 
 - (void)updateLayout:(id)value{
