@@ -20,13 +20,19 @@ typedef void(^CKViewControllerOrientationBlock)(CKViewController* controller, UI
 
 typedef void(^CKViewControllerEditingBlock)(BOOL editing);
 
-/**
+/** 
  */
 typedef enum CKInterfaceOrientation{
+#ifdef __IPHONE_6_0
+    CKInterfaceOrientationPortrait  = UIInterfaceOrientationMaskPortrait,
+    CKInterfaceOrientationLandscape = UIInterfaceOrientationMaskLandscape,
+#else
     CKInterfaceOrientationPortrait  = 1 << 0,
     CKInterfaceOrientationLandscape = 1 << 1,
+#endif
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
 }CKInterfaceOrientation;
+
 
 /**
  */
@@ -127,8 +133,13 @@ typedef enum CKViewControllerState{
 ///-----------------------------------
 
 /** 
- This property will define the interface orientations supported by this view controller.
- */
+ This bitmask defines the interface orientations supported by this view controller.
+ The possible values are:
+ * CKInterfaceOrientationPortrait
+ * UIInterfaceOrientationMaskPortrait (IOS6 and later)
+ * CKInterfaceOrientationLandscape
+ * UIInterfaceOrientationMaskLandscape (IOS6 and later)
+*/
 @property (nonatomic,assign) CKInterfaceOrientation supportedInterfaceOrientations;
 
 ///-----------------------------------

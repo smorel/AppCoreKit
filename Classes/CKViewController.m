@@ -63,11 +63,27 @@
     
 }
 
+
+#ifdef __IPHONE_6_0
+- (BOOL)shouldAutorotate{
+    return YES;
+}
+#endif
+
 - (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
-                                                 CKInterfaceOrientationPortrait,
-                                                 CKInterfaceOrientationLandscape,
-                                                 CKInterfaceOrientationAll);
+#ifdef __IPHONE_6_0
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKInterfaceOrientation",
+                                                    CKInterfaceOrientationPortrait,
+                                                    CKInterfaceOrientationLandscape,
+                                                    UIInterfaceOrientationMaskPortrait,
+                                                    UIInterfaceOrientationMaskLandscape,
+                                                    CKInterfaceOrientationAll);
+#else
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKInterfaceOrientation",
+                                                    CKInterfaceOrientationPortrait,
+                                                    CKInterfaceOrientationLandscape,
+                                                    CKInterfaceOrientationAll);
+#endif
 }
 
 - (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
