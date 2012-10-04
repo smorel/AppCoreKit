@@ -33,6 +33,12 @@
 /// @name Accessing AdressBookPerson Attributes
 ///-----------------------------------
 
+/**
+ */
+@property (nonatomic, readonly) NSString *firstName;
+/**
+ */
+@property (nonatomic, readonly) NSString *lastName;
 /** 
  */
 @property (nonatomic, readonly) NSString *fullName;
