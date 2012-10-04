@@ -19,7 +19,7 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 
 /** :
  */
-@interface CKCollection : NSObject<NSCopying,CKFeedSourceDelegate> 
+@interface CKCollection : NSObject<NSCopying,CKFeedSourceDelegate,NSFastEnumeration>
 
 ///-----------------------------------
 /// @name Creating collection objects
@@ -33,6 +33,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
  */
 + (id)collectionWithFeedSource:(CKFeedSource*)source;
 
+/**
+ */
++ (id)collectionWithObjectsFromArray:(NSArray*)array;
+
 ///-----------------------------------
 /// @name Initializing collection objects
 ///-----------------------------------
@@ -40,6 +44,10 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 /**
  */
 - (id)initWithFeedSource:(CKFeedSource*)source;
+
+/**
+ */
+- (id)initWithObjectsFromArray:(NSArray*)array;
 
 /** Overload this method to initialize your objects property whatever initializer is called. Do not forget to call the super implementation first.
  */
