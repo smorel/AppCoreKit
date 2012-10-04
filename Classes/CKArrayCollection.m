@@ -41,6 +41,12 @@
     return collection;
 }
 
+- (id) mutableCopyWithZone:(NSZone *)zone{
+    CKArrayCollection* collection = [super copyWithZone:zone];
+    collection.property = [CKProperty weakPropertyWithObject:collection keyPath:@"collectionObjects"];
+    return collection;
+}
+
 - (void)insertCollectionObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
     [self.collectionObjects insertObjects:objects atIndexes:indexes];
 }

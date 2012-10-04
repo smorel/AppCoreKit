@@ -243,6 +243,12 @@
 	return copied;
 }
 
+- (id) mutableCopyWithZone:(NSZone *)zone{
+	id copied = [[[self class] allocWithZone:zone] init];
+    [copied copyPropertiesFromObject:self];
+	return copied;
+}
+
 /*
 - (void)setCount:(NSInteger)c{
 	[self willChangeValueForKey:@"count"];

@@ -19,7 +19,7 @@ typedef void(^CKCollectionFetchBlock)(NSRange range);
 
 /** :
  */
-@interface CKCollection : NSObject<NSCopying,CKFeedSourceDelegate,NSFastEnumeration>
+@interface CKCollection : NSObject<NSCopying,NSMutableCopying,CKFeedSourceDelegate,NSFastEnumeration>
 
 ///-----------------------------------
 /// @name Creating collection objects
