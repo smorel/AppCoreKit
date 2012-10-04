@@ -17,6 +17,7 @@ typedef enum CKFilteredCollectionUpdateType{
 }CKFilteredCollectionUpdateType;
 
 @interface CKCollection()
+@property (nonatomic,assign,readwrite) NSInteger count;
 @property (nonatomic,assign,readwrite) BOOL isFetching;
 @end
 
@@ -78,6 +79,7 @@ typedef enum CKFilteredCollectionUpdateType{
      objectsToInsert:(NSMutableArray*)objectsToInsert
     indexSetToInsert:(NSMutableIndexSet*)indexSetToInsert{
     
+    NSLog(@"COMPARE");
     if(updateType == CKFilteredCollectionUpdateTypeReload){
         [indexSetToRemove addIndexesInRange:NSMakeRange(0,[source count])];
         [objectsToInsert addObjectsFromArray:target];
@@ -95,7 +97,7 @@ typedef enum CKFilteredCollectionUpdateType{
             }
         }
         
-        CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
+        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
     }else if(updateType == CKFilteredCollectionUpdateTypeInsertion){
         //Finds indexs to insert :
         int j=0;
@@ -115,8 +117,10 @@ typedef enum CKFilteredCollectionUpdateType{
             }
         }
         
-        CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
+        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
     }
+    
+    NSLog(@"COMPARE END");
 }
 
 - (void)updateFilteredArray:(CKFilteredCollectionUpdateType)updateType{
@@ -132,10 +136,10 @@ typedef enum CKFilteredCollectionUpdateType{
     [self compareArray:selfObjects withArray:filteredObjects updateType:updateType indexSetToRemove:indexSetToRemove objectsToInsert:objectsToInsert indexSetToInsert:indexSetToInsert];
     
     if([indexSetToRemove count] > 0){
-        [self.collectionObjects removeObjectsAtIndexes:indexSetToRemove];
+        [super removeObjectsAtIndexes:indexSetToRemove];
     }
     if([indexSetToInsert count] > 0){
-        [self.collectionObjects insertObjects:objectsToInsert atIndexes:indexSetToInsert];
+        [super insertObjects:objectsToInsert atIndexes:indexSetToInsert];
     }
 }
 
@@ -180,48 +184,20 @@ typedef enum CKFilteredCollectionUpdateType{
     [self.collection cancelFetch];
 }
 
-- (NSIndexSet*)filteredIndexSet:(NSIndexSet*)indexes{
-    NSMutableIndexSet* nonFilteredIndexPaths = [NSMutableIndexSet indexSet];
-    
-	unsigned currentIndex = [indexes firstIndex];
-	while (currentIndex != NSNotFound) {
-        if(currentIndex >= [self count]){
-            [nonFilteredIndexPaths addIndex:currentIndex];
-        }
-        else{
-            id currentObject = [self objectAtIndex:currentIndex];
-            NSInteger index = [[self.collection allObjects]indexOfObjectIdenticalTo:currentObject];
-            CKAssert(index != NSNotFound,@"Should not happend !");
-            [nonFilteredIndexPaths addIndex:index];
-        }
-        currentIndex = [indexes indexGreaterThanIndex: currentIndex];
-	}
-    return nonFilteredIndexPaths;
-}
-
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-    [self.collection insertObjects:objects atIndexes:[self filteredIndexSet:indexes]];
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    [self.collection removeObjectsAtIndexes:[self filteredIndexSet:indexSet]];
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)removeAllObjects{
-	[self.collection removeAllObjects];
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-	id currentObject = [self objectAtIndex:index];
-    NSInteger theIndex = [[self.collection allObjects]indexOfObjectIdenticalTo:currentObject];
-    [self.collection replaceObjectAtIndex:theIndex byObject:other];
+    NSAssert(NO,@"Not implemented!");
 }
-
-/* TODO find a way for CKItamViewContainerController to work with collectionDataSource ...
- - (CKFeedSource*)feedSource{
- return self.collection.feedSource;
- }
- */
-
 
 @end

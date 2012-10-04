@@ -14,14 +14,25 @@
 @property (nonatomic,assign,readwrite) BOOL isFetching;
 @end
 
-@implementation CKAggregateCollection
+@interface CKArrayCollection()
+@property (nonatomic,copy) NSMutableArray* collectionObjects;
+@end
+
+@implementation CKAggregateCollection{
+    dispatch_queue_t _observerQueue;
+}
+
 @synthesize collections = _collections;
 
 - (void)postInit{
     [super postInit];
+    
+    _observerQueue = dispatch_queue_create("com.appcorekit.CKAggregateCollection", NULL);
 }
 
 - (void)dealloc{
+    dispatch_release(_observerQueue);
+    
     if(_collections){
         for(CKCollection* collection in _collections){
             [collection removeObserver:self];
@@ -91,13 +102,54 @@
     [self endBindingsContext];
 }
 
+- (NSInteger)indexOffsetForCollection:(CKCollection*)collection{
+    int count = 0;
+    for(CKCollection* c in _collections){
+        if(c == collection)
+            return count;
+        else{
+            count += [c count];
+        }
+    }
+    return count;
+}
+
 - (void)observeValueForKeyPath:(NSString *)theKeyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
     
-    //THIS COULD BE OPTIMIZED !!!!
-    [self updateArray];
+    dispatch_sync(_observerQueue, ^{
+        NSLog(@"BEGIN");
+        NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
+        NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
+        
+        NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+        
+        NSInteger offset = [self indexOffsetForCollection:object];
+        NSMutableIndexSet* offsetedIndexes = [NSMutableIndexSet indexSet];
+        if(offset == 0){
+            [offsetedIndexes addIndexes:indexs];
+        }else{
+            unsigned currentIndex = [indexs firstIndex];
+            while (currentIndex != NSNotFound) {
+                [offsetedIndexes addIndex:offset+currentIndex];
+                currentIndex = [indexs indexGreaterThanIndex: currentIndex];
+            }
+        }
+        
+        switch(kind){
+            case NSKeyValueChangeInsertion:{
+                [super insertObjects:newModels atIndexes:offsetedIndexes];
+                break;
+            }
+            case NSKeyValueChangeRemoval:{
+                [super removeObjectsAtIndexes:offsetedIndexes];
+                break;
+            }
+        }
+        NSLog(@"END");
+    });
 }
 
 //Forward to the non filtered collection
@@ -115,26 +167,19 @@
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-    [self updateArray];//THIS COULD BE OPTIMIZED !!!!
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    [self updateArray];//THIS COULD BE OPTIMIZED !!!!
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)removeAllObjects{
-    [self updateArray];//THIS COULD BE OPTIMIZED !!!!
+    NSAssert(NO,@"Not implemented!");
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-    [self updateArray];//THIS COULD BE OPTIMIZED !!!!
+    NSAssert(NO,@"Not implemented!");
 }
-
-/* TODO find a way for CKItamViewContainerController to work with collectionDataSource ...
- - (CKFeedSource*)feedSource{
- return self.collection.feedSource;
- }
- */
-
 
 @end
