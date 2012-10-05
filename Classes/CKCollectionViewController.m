@@ -566,7 +566,11 @@
 #pragma mark parent controller interactions
 
 - (void)didRemoveViewAtIndexPath:(NSIndexPath*)indexPath{
-	if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
+	CKCollectionCellController* controller = [self controllerAtIndexPath:indexPath];
+    if(controller.removeCallback){
+        [controller.removeCallback execute:controller];
+    }
+	else if([_objectController respondsToSelector:@selector(removeObjectAtIndexPath:)]){
 		[_objectController removeObjectAtIndexPath:indexPath];
 	}
 }

@@ -165,7 +165,8 @@
 	if(indexPath.length != 2)
 		return;
 	
-	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:indexPath.row]];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:indexPath.row];
+	[_collection removeObjectsAtIndexes:indexSet];
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{

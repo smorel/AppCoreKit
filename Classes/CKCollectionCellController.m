@@ -46,6 +46,7 @@
 @synthesize targetRef = _targetRef;
 @synthesize isViewAppeared = _isViewAppeared;
 @synthesize deallocCallback = _deallocCallback;
+@synthesize removeCallback = _removeCallback;
 
 @synthesize flags = _flags;
 @synthesize size = _size;
@@ -74,6 +75,7 @@
 	[_viewDidDisappearCallback release];
 	[_targetRef release];
     [_deallocCallback release];
+    [_removeCallback release];
 	
 	_containerController = nil;
     

@@ -56,4 +56,10 @@
  */
 - (void)setLayoutBlock:(void(^)(CKTableViewCellController* controller, UITableViewCell* cell))block;
 
+/** This callback is called when the collection view commits editing changes to this cell controller.
+ By default, removeCallback is nil.
+ If you implements it you will have to manually remove the cell or the object from the binded collections.
+ */
+- (void)setRemoveBlock:(void(^)(CKTableViewCellController* controller))block;
+
 @end
