@@ -79,7 +79,6 @@ typedef enum CKFilteredCollectionUpdateType{
      objectsToInsert:(NSMutableArray*)objectsToInsert
     indexSetToInsert:(NSMutableIndexSet*)indexSetToInsert{
     
-    NSLog(@"COMPARE");
     if(updateType == CKFilteredCollectionUpdateTypeReload){
         [indexSetToRemove addIndexesInRange:NSMakeRange(0,[source count])];
         [objectsToInsert addObjectsFromArray:target];
@@ -119,8 +118,6 @@ typedef enum CKFilteredCollectionUpdateType{
         
         //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
     }
-    
-    NSLog(@"COMPARE END");
 }
 
 - (void)updateFilteredArray:(CKFilteredCollectionUpdateType)updateType{
@@ -185,19 +182,19 @@ typedef enum CKFilteredCollectionUpdateType{
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKFilteredCollection insertObjects Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKFilteredCollection removeObjectsAtIndexes Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)removeAllObjects{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKFilteredCollection removeAllObjects Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKFilteredCollection replaceObjectAtIndex Not Supported! You must insert in the non filtered collection directly.");
 }
 
 @end

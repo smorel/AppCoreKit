@@ -120,7 +120,6 @@
 					   context:(void *)context {
     
     dispatch_sync(_observerQueue, ^{
-        NSLog(@"BEGIN");
         NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
         NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
         
@@ -148,7 +147,6 @@
                 break;
             }
         }
-        NSLog(@"END");
     });
 }
 
@@ -167,19 +165,19 @@
 }
 
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKAggregateCollection insertObjects Not Supported! You must insert in the non aggregated collections directly.");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKAggregateCollection removeObjectsAtIndexes Not Supported! You must insert in the non aggregated collections directly.");
 }
 
 - (void)removeAllObjects{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKAggregateCollection removeAllObjects Not Supported! You must insert in the non aggregated collections directly.");
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-    NSAssert(NO,@"Not implemented!");
+    NSAssert(NO,@"CKAggregateCollection replaceObjectAtIndex Not Supported! You must insert in the non aggregated collections directly.");
 }
 
 @end
