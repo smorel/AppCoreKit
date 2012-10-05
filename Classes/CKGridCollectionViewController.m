@@ -116,7 +116,7 @@
         }
     }
     
-    [self.tableView beginUpdates];
+  //  [self.tableView beginUpdates];
     
     CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
     
@@ -156,7 +156,7 @@
         }
     }
     
-    [self.tableView endUpdates];
+ //   [self.tableView endUpdates];
 }
 
 - (void)setSize:(CGSize)s{
@@ -281,7 +281,9 @@
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(controller == self.linearCollectionController){
         
-        [self.tableView beginUpdates];
+        if(self.state == CKViewControllerStateDidAppear){
+       //     [self.tableView beginUpdates];
+        }
         
         CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
         
@@ -345,7 +347,9 @@
             }
         }
         
-        [self.tableView endUpdates];
+        if(self.state == CKViewControllerStateDidAppear){
+        //    [self.tableView endUpdates];
+        }
         return;
     }
     

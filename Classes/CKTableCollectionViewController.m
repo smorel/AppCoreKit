@@ -135,6 +135,11 @@
 @dynamic selectedIndexPath;
 @dynamic tableViewHasBeenReloaded;
 
+@synthesize rowInsertAnimationBlock = _rowInsertAnimationBlock;
+@synthesize rowRemoveAnimationBlock = _rowRemoveAnimationBlock;
+@synthesize sectionInsertAnimationBlock = _sectionInsertAnimationBlock;
+@synthesize sectionRemoveAnimationBlock = _sectionRemoveAnimationBlock;
+
 - (void)rowInsertAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
                                                  UITableViewRowAnimationFade,
@@ -165,6 +170,23 @@
 	[super postInit];
 	_rowInsertAnimation = UITableViewRowAnimationFade;
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
+    
+    self.rowInsertAnimationBlock = ^(CKTableCollectionViewController* controller, NSArray* objects, NSArray* indexPaths){
+        return (controller.isViewDisplayed) ?  controller.rowInsertAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.rowRemoveAnimationBlock = ^(CKTableCollectionViewController* controller, NSArray* objects, NSArray* indexPaths){
+        return (controller.isViewDisplayed) ?  controller.rowRemoveAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.sectionInsertAnimationBlock = ^(CKTableCollectionViewController* controller, NSInteger index){
+        return (controller.isViewDisplayed) ?  controller.rowInsertAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.sectionRemoveAnimationBlock = ^(CKTableCollectionViewController* controller, NSInteger index){
+        return (controller.isViewDisplayed) ?  controller.rowRemoveAnimation : UITableViewRowAnimationNone;
+    };
+    
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
@@ -208,6 +230,16 @@
 	_defaultSearchScope = nil;
     [_searchBlock release];
     _searchBlock = nil;
+    
+    [_rowInsertAnimationBlock release];
+    _rowInsertAnimationBlock = nil;
+    [_rowRemoveAnimationBlock release];
+    _rowRemoveAnimationBlock = nil;
+    [_sectionInsertAnimationBlock release];
+    _sectionInsertAnimationBlock = nil;
+    [_sectionRemoveAnimationBlock release];
+    _sectionRemoveAnimationBlock = nil;
+    
     [super dealloc];
 }
 
@@ -858,9 +890,7 @@
 		return;
     }
 	
-        [self.tableView beginUpdates];
-    
-   // NSLog(@"didBeginUpdates <%@>",self);
+//    [self.tableView beginUpdates];
 }
 
 - (void)didEndUpdates{
@@ -869,8 +899,7 @@
 		return;
     }
 	
-  //  NSLog(@"didEndUpdates <%@>",self);
-        [self.tableView endUpdates];
+//    [self.tableView endUpdates];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -878,9 +907,15 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-  //  NSLog(@"didInsertObjects <%@>",self);
 	
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+    UITableViewRowAnimation anim = self.rowInsertAnimationBlock(self,objects,indexPaths);
+    if(anim == UITableViewRowAnimationNone){
+        //[self.tableView endUpdates];
+        [self.tableView reloadData];
+        //[self.tableView beginUpdates];
+    }else{
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:anim];
+    }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -903,7 +938,14 @@
     }
  //   NSLog(@"didRemoveObjects <%@>",self);
 	
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+    UITableViewRowAnimation anim = self.rowRemoveAnimationBlock(self,objects,indexPaths);
+    if(anim == UITableViewRowAnimationNone){
+        //[self.tableView endUpdates];
+        [self.tableView reloadData];
+        //[self.tableView beginUpdates];
+    }else{
+        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:anim];
+    }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -933,8 +975,14 @@
 		return;
     }
     
-//    NSLog(@"didInsertSectionAtIndex <%@>",self);
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+    UITableViewRowAnimation anim = self.sectionInsertAnimationBlock(self,index);
+    if(anim == UITableViewRowAnimationNone){
+        //[self.tableView endUpdates];
+        [self.tableView reloadData];
+       //[self.tableView beginUpdates];
+    }else{
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
+    }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
@@ -947,8 +995,15 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
- //   NSLog(@"didRemoveSectionAtIndex <%@>",self);
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+    
+    UITableViewRowAnimation anim = self.sectionRemoveAnimationBlock(self,index);
+    if(anim == UITableViewRowAnimationNone){
+        //[self.tableView endUpdates];
+        [self.tableView reloadData];
+        //[self.tableView beginUpdates];
+    }else{
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
+    }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
