@@ -1104,11 +1104,13 @@
         case CKTableCollectionViewControllerEditingTypeLeft:{
             self.leftButton = ((self.navigationItem.leftBarButtonItem != self.editButton) && (self.navigationItem.leftBarButtonItem != self.doneButton)) ?  self.navigationItem.leftBarButtonItem : nil;
             [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+			[self applyStyleForLeftBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeRight:{
             self.rightButton = ((self.navigationItem.rightBarButtonItem != self.editButton) && (self.navigationItem.rightBarButtonItem != self.doneButton)) ?  self.navigationItem.rightBarButtonItem : nil;
             [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
+			[self applyStyleForRightBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeNone:break;
@@ -1125,6 +1127,7 @@
                 else{
                     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
                 }
+				[self applyStyleForLeftBarButtonItem];
                 break;
             }
             case CKTableCollectionViewControllerEditingTypeRight:{
@@ -1134,6 +1137,7 @@
                 else{
                     [self.navigationItem setRightBarButtonItem:nil animated:YES];
                 }
+				[self applyStyleForRightBarButtonItem];
                 break;
             }
             case CKTableCollectionViewControllerEditingTypeNone:break;
@@ -1156,11 +1160,13 @@
         case CKTableCollectionViewControllerEditingTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
+			[self applyStyleForLeftBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeRight:{
             [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
             [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
+			[self applyStyleForRightBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeNone:break;
@@ -1174,10 +1180,12 @@
     switch(_editableType){
         case CKTableCollectionViewControllerEditingTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(editing) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
+			[self applyStyleForLeftBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeRight:{
             [self.navigationItem setRightBarButtonItem:(editing) ? self.doneButton : self.editButton  animated:([CKOSVersion() floatValue] >= 5)];
+			[self applyStyleForRightBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeNone:break;
@@ -1189,10 +1197,12 @@
     switch(_editableType){
         case CKTableCollectionViewControllerEditingTypeLeft:{
             [self.navigationItem setLeftBarButtonItem:(editing) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
+			[self applyStyleForLeftBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeRight:{
             [self.navigationItem setRightBarButtonItem:(editing) ? self.doneButton : self.editButton  animated:([CKOSVersion() floatValue] >= 5)];
+			[self applyStyleForRightBarButtonItem];
             break;
         }
         case CKTableCollectionViewControllerEditingTypeNone:break;
