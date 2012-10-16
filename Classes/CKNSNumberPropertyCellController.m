@@ -196,16 +196,16 @@
         _textField.hidden = YES;
         
         __block CKTableViewCellController* bself = self;
-        [cell beginBindingsContextByRemovingPreviousBindings];
-        self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-        [model.object bind:model.keyPath withBlock:^(id value) {
-            bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-        }];
-        [cell endBindingsContext];
         
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
-            
+			
+            [cell beginBindingsContextByRemovingPreviousBindings];
+			self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+			[model.object bind:model.keyPath withBlock:^(id value) {
+				bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+			}];
+			[cell endBindingsContext];
         }
         else{
             if(!theSwitch){
