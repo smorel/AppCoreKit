@@ -209,7 +209,7 @@
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
     
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
+							   withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -220,7 +220,7 @@
 	int headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
+                               withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
 }
 
 
