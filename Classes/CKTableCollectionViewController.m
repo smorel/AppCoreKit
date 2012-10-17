@@ -1144,9 +1144,11 @@
         }
         
         if(theEditableType != CKTableCollectionViewControllerEditingTypeNone){
+			_editableType = theEditableType;
             [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
         }
         else if(theEditableType == CKTableCollectionViewControllerEditingTypeNone){
+			_editableType = theEditableType;
             if([self isEditing]){
                 [self setEditing:NO animated:YES];
             }
