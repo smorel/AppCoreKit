@@ -890,7 +890,7 @@
 		return;
     }
 	
-//    [self.tableView beginUpdates];
+   [self.tableView beginUpdates];
 }
 
 - (void)didEndUpdates{
@@ -899,7 +899,7 @@
 		return;
     }
 	
-//    [self.tableView endUpdates];
+   [self.tableView endUpdates];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -909,13 +909,13 @@
     }
 	
     UITableViewRowAnimation anim = self.rowInsertAnimationBlock(self,objects,indexPaths);
-    if(anim == UITableViewRowAnimationNone){
-        //[self.tableView endUpdates];
-        [self.tableView reloadData];
-        //[self.tableView beginUpdates];
-    }else{
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+    //    [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:anim];
-    }
+    //    [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -939,13 +939,13 @@
  //   NSLog(@"didRemoveObjects <%@>",self);
 	
     UITableViewRowAnimation anim = self.rowRemoveAnimationBlock(self,objects,indexPaths);
-    if(anim == UITableViewRowAnimationNone){
-        //[self.tableView endUpdates];
-        [self.tableView reloadData];
-        //[self.tableView beginUpdates];
-    }else{
+  //  if(anim == UITableViewRowAnimationNone){
+  //      [self.tableView reloadData];
+  //  }else{
+   //     [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:anim];
-    }
+   //     [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -976,13 +976,13 @@
     }
     
     UITableViewRowAnimation anim = self.sectionInsertAnimationBlock(self,index);
-    if(anim == UITableViewRowAnimationNone){
-        //[self.tableView endUpdates];
-        [self.tableView reloadData];
-       //[self.tableView beginUpdates];
-    }else{
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+   //     [self.tableView beginUpdates];
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
-    }
+   //     [self.tableView endUpdates];
+    //}
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
@@ -997,13 +997,13 @@
     }
     
     UITableViewRowAnimation anim = self.sectionRemoveAnimationBlock(self,index);
-    if(anim == UITableViewRowAnimationNone){
-        //[self.tableView endUpdates];
-        [self.tableView reloadData];
-        //[self.tableView beginUpdates];
-    }else{
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+   //     [self.tableView beginUpdates];
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
-    }
+   //     [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
