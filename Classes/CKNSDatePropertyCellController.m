@@ -291,6 +291,11 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
 
 
 
+@interface CKCollectionCellController()
+@property (nonatomic, assign, readwrite) CKCollectionViewController* containerController;
+@end
+
+
 @implementation CKNSDatePropertyCellController {
     CKCallback* _onBeginEditingCallback;
     CKCallback* _onEndEditingCallback;
@@ -320,13 +325,17 @@ static NSMutableDictionary* CKNSDateSheetControllersSingleton = nil;
     self.flags = CKItemViewFlagNone;
     _enableAccessoryView = NO;
     self.datePickerMode = CKDatePickerModeDate;
+}
+
+- (void)setContainerController:(CKCollectionViewController *)containerController{
+    [super setContainerController:containerController];
     
     __block CKNSDatePropertyCellController* bself = self;
-    [NSObject beginBindingsContext:[NSString stringWithFormat:@"Resign_<%p>",self]];
-    [self bind:@"containerController.state" withBlock:^(id value) {
+    [NSObject beginBindingsContext:[NSString stringWithFormat:@"Resign_<%p>",self] policy:CKBindingsContextPolicyRemovePreviousBindings];
+    [containerController bind:@"state" withBlock:^(id value) {
         if(bself.containerController.state == CKViewControllerStateWillDisappear
            || bself.containerController.state == CKViewControllerStateDidDisappear){
-        [bself resignFirstResponder];
+            [bself resignFirstResponder];
         }
     }];
     [NSObject endBindingsContext];
