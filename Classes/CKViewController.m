@@ -363,6 +363,22 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+- (void)applyStyleForController{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
+    //disable animations in case frames are set in stylesheets and currently in animation...
+    [CATransaction begin];
+    [CATransaction
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
+    [self applyStyle];
+          
+    [CATransaction commit];
+}
+
 - (void)applyStyleForNavigation{
     if([[CKStyleManager defaultManager]isEmpty])
         return;

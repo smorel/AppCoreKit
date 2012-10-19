@@ -200,9 +200,14 @@ typedef enum CKViewControllerState{
 - (void)applyStyleForRightBarButtonItem;
 
 /** 
- This method applies style on the navigation controller, its navigationbar and toolbar and bar buttons.
+ This method applies style on the view controller and its subview,the navigation controller, its navigationbar and toolbar and bar buttons.
  */
 - (void)applyStyleForNavigation;
+
+/**
+ This method applies style on the view controller and its subviews..
+ */
+- (void)applyStyleForController;
 
 /** 
  */
