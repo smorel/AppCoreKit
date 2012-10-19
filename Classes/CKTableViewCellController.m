@@ -1023,13 +1023,24 @@
     _selectionStyle = selectionStyle;
     if(self.tableViewCell){
         self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? selectionStyle : UITableViewCellSelectionStyleNone;
+        
+        NSMutableDictionary* style = [self stylesheet];
+        NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self.tableViewCell applyStyle:cellStyle];
     }
 }
 
 - (void)setFlags:(CKItemViewFlags)flags{
     [super setFlags:flags];
-    if(self.tableViewCell && ! (flags & CKItemViewFlagSelectable)){
-        self.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if(self.tableViewCell){
+        self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
+    }
+    
+    if(self.tableViewCell){
+        NSMutableDictionary* style = [self stylesheet];
+        NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self.tableViewCell applyStyle:cellStyle];
     }
 }
 

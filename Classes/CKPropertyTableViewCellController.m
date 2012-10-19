@@ -93,6 +93,13 @@
 - (void)setReadOnly:(BOOL)readOnly{
     _readOnly = readOnly;
     
+    if(readOnly){
+        UIView* responderView = [self nextResponder:nil];
+        if(responderView && [responderView isFirstResponder]){
+            [responderView resignFirstResponder];
+        }
+    }
+    
     if(self.tableViewCell){
         [self setupCell:self.tableViewCell];
         [self performLayout];
