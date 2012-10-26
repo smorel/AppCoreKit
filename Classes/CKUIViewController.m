@@ -443,8 +443,6 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
        || self.state == CKUIViewControllerStateDidUnload
        || self.state == CKUIViewControllerStateNone){
         self.state = CKUIViewControllerStateDidLoad;
-    }else{
-        int i =3;
     }
     
 	[super viewDidLoad];

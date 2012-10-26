@@ -48,7 +48,7 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
 	if(controller == nil){
 		controller = [[[theClass alloc]init]autorelease];
         created = YES;
-		[CKTableViewCellControllerInstances setObject:controller forKey:theClass];
+		[CKTableViewCellControllerInstances setObject:controller forKey:(id)theClass];
 	}
 	
 	controller.name = nil;

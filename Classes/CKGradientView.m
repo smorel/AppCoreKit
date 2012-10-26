@@ -308,15 +308,6 @@
 	}
 }
 
-- (void)setFillColor:(UIColor *)thefillColor{
-    [_fillColor release];
-    _fillColor = [thefillColor retain];
-    
-    if([_fillColor isEqual:[UIColor clearColor]]){
-        int i =3;
-    }
-}
-
 - (void)drawRect:(CGRect)rect {
 	CGContextRef gc = UIGraphicsGetCurrentContext();
 	
