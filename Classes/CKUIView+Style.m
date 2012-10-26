@@ -314,6 +314,7 @@ NSString* CKStyleBackgroundImageContentMode = @"backgroundImageContentMode";
 					}
 					
 					[gradientView setNeedsDisplay];
+                    [gradientView setNeedsLayout];
 				}
 				
 				//Apply transparency
@@ -493,10 +494,11 @@ static char NSObjectAppliedStyleObjectKey;
 			if(view){
 				[[view class] applyStyle:myViewStyle toView:view appliedStack:appliedStack delegate:delegate];
 			}
+        [view setNeedsDisplay];
 		//}
 	}
 	
-	if([self isKindOfClass:[UIView class]] == YES){
+    if([self isKindOfClass:[UIView class]] && ![self isKindOfClass:[UITableView class]]){
 		UIView* selfView = (UIView*)self;
 		for(UIView* view in [selfView subviews]){
             if(![appliedStack containsObject:view]){

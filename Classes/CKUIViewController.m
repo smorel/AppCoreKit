@@ -439,7 +439,14 @@ static CKDebugCheckState CKDebugCheckForBlockCopyCurrentState = CKDebugCheckStat
 }
 
 -(void) viewDidLoad{
-    self.state = CKUIViewControllerStateDidLoad;
+    if(self.state ==  0
+       || self.state == CKUIViewControllerStateDidUnload
+       || self.state == CKUIViewControllerStateNone){
+        self.state = CKUIViewControllerStateDidLoad;
+    }else{
+        int i =3;
+    }
+    
 	[super viewDidLoad];
     if(_viewDidLoadBlock){
         _viewDidLoadBlock(self);

@@ -17,11 +17,20 @@
 typedef void(^CKUIViewControllerAnimatedBlock)(CKUIViewController* controller,BOOL animated);
 typedef void(^CKUIViewControllerBlock)(CKUIViewController* controller);
 
+/**
+ */
 typedef enum CKInterfaceOrientation{
+#ifdef __IPHONE_6_0
+    CKInterfaceOrientationPortrait  = UIInterfaceOrientationMaskPortrait,
+    CKInterfaceOrientationLandscape = UIInterfaceOrientationMaskLandscape,
+#else
     CKInterfaceOrientationPortrait  = 1 << 0,
     CKInterfaceOrientationLandscape = 1 << 1,
+#endif
     CKInterfaceOrientationAll       = CKInterfaceOrientationPortrait | CKInterfaceOrientationLandscape
 }CKInterfaceOrientation;
+
+
 
 typedef enum CKUIViewControllerState{
     CKUIViewControllerStateNone           = 1 << 0,

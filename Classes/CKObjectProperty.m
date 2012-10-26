@@ -133,7 +133,13 @@
     if([self.object isKindOfClass:[NSDictionary class]]){
         return [self.object objectForKey:self.keyPath];
     }
-	return (self.subKeyPath != nil) ? [self.subObject.object valueForKey:self.subKeyPath] : self.subObject.object;
+    @try{
+        return (self.subKeyPath != nil) ? [self.subObject.object valueForKey:self.subKeyPath] : self.subObject.object;
+    }
+    @catch (NSException* e) {
+        return nil;
+    }
+    return nil;
 }
 
 - (void)setValue:(id)value{

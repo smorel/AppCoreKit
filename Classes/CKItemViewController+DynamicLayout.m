@@ -89,13 +89,13 @@ static NSMutableDictionary* CKTableViewCellControllerInstances = nil;
                                            withObject:(id)object 
                                         withIndexPath:(NSIndexPath*)indexPath  
                                               forSize:(BOOL)forSize{
-    if([item isKindOfClass:[CKFormCellDescriptor class]]){
+   /* if([item isKindOfClass:[CKFormCellDescriptor class]]){
         CKFormCellDescriptor* cellDescriptor = (CKFormCellDescriptor*)item;
         if(cellDescriptor.cellController && cellDescriptor.cellController.tableViewCell){
             [params setObject:cellDescriptor.cellController forKey:CKTableViewAttributeStaticController];
             return cellDescriptor.cellController;
         }
-    }
+    }*/
     
     
     CKItemViewController* staticController = (CKItemViewController*)[CKItemViewController controllerForItem:item

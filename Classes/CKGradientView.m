@@ -117,10 +117,10 @@
     _corners = corners;
     CGFloat alpha = CGColorGetAlpha([_fillColor CGColor]);
     if(corners == CKRoundedCornerViewTypeNone && alpha >= 1){
-        [self setBackgroundColor:[UIColor blackColor]];
+        [super setBackgroundColor:[UIColor blackColor]];
     }
     else{
-        [self setBackgroundColor:[UIColor clearColor]];
+        [super setBackgroundColor:[UIColor clearColor]];
     }
 }
 
@@ -306,6 +306,15 @@
 		CGPathMoveToPoint (path, nil, (roundedCorners & UIRectCornerBottomRight) ? (width - radius) : width, height);
 		CGPathAddLineToPoint (path, nil, (roundedCorners & UIRectCornerBottomLeft) ? radius : 0, height);
 	}
+}
+
+- (void)setFillColor:(UIColor *)thefillColor{
+    [_fillColor release];
+    _fillColor = [thefillColor retain];
+    
+    if([_fillColor isEqual:[UIColor clearColor]]){
+        int i =3;
+    }
 }
 
 - (void)drawRect:(CGRect)rect {

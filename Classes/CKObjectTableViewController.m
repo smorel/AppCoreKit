@@ -1243,7 +1243,8 @@
  Applying style in this delegate will then not apply anything on the label ...
  */
 - (void)didAddSubview:(UIView *)subview{
-    if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]){
+    if([[[subview class]description]isEqualToString:@"UITableHeaderFooterView"]
+       || [[[subview class]description]isEqualToString:@"UITableViewHeaderFooterView"]){
         if(self.delegate && [self.delegate respondsToSelector:@selector(tableView:willDisplayHeaderView:withTitle:)]){
             BOOL header = [[subview valueForKey:@"sectionHeader"]boolValue];
             NSString* title = nil;
