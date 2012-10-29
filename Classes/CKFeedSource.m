@@ -25,6 +25,7 @@
 @synthesize hasMore = _hasMore;
 @synthesize isFetching = _isFetching;
 @synthesize range = _range;
+@synthesize fetchBlock = _fetchBlock;
 
 #pragma mark Initialization
 
@@ -45,14 +46,26 @@
 
 - (void)dealloc {
 	_delegate = nil;
+    [_fetchBlock release];
+    _fetchBlock = nil;
 	[super dealloc];
 }
 
 #pragma mark Public API
 
 - (BOOL)fetchRange:(NSRange)theRange {
+    if(self.isFetching)
+        return NO;
+    
 	self.hasMore = NO;
 	self.range = theRange;
+	self.isFetching = YES;
+    
+    if(self.fetchBlock){
+        self.fetchBlock(self,theRange);
+        return YES;
+    }
+    
 	return NO;
 }
 
@@ -73,6 +86,7 @@
 		[_delegate feedSource:self didFetchItems:theItems range:NSMakeRange(self.range.location, theItems.count)];
 	}
 	self.hasMore = (theItems.count >= self.range.length);
+	self.isFetching = NO;
 }
 
 @end
