@@ -1024,9 +1024,9 @@
     if(self.tableViewCell){
         self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? selectionStyle : UITableViewCellSelectionStyleNone;
         
-        NSMutableDictionary* style = [self stylesheet];
-        NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
-        [self.tableViewCell applyStyle:cellStyle];
+       // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
     }
 }
 
@@ -1038,9 +1038,9 @@
     }
     
     if(self.tableViewCell){
-        NSMutableDictionary* style = [self stylesheet];
-        NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
-        [self.tableViewCell applyStyle:cellStyle];
+       // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
     }
 }
 

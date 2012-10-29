@@ -129,7 +129,7 @@ static CKDownloadManager *CKSharedDownloadManager;
     NSString *metadataPath = [self metaFilePathForName:name];
     CKWebRequest *downloader = [CKWebRequest scheduledRequestWithURL:URL parameters:nil downloadAtPath:temporaryFilePath completion:^(id object, NSURLResponse *response, NSError *error) {
         [self downloader:[self downloaderForName:name] didReceiveResponse:(NSHTTPURLResponse*)response];
-        
+        //TODO : HANDLE ERRORS HERE !
         if (!error) {
             NSError *error = nil;
             [[NSFileManager defaultManager] moveItemAtPath:temporaryFilePath toPath:filePath error:&error];

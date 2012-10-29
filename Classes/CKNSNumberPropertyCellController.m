@@ -160,8 +160,10 @@
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
             _textField.hidden = YES;
+            cell.detailTextLabel.hidden = NO;
         }
         else{
+            cell.detailTextLabel.hidden = YES;
             if(self.cellStyle == CKTableViewCellStyleIPhoneForm
                /*&& [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone*/){
                 self.fixedSize = YES;
@@ -198,6 +200,7 @@
         __block CKTableViewCellController* bself = self;
         
         if([model isReadOnly] || self.readOnly){
+            cell.detailTextLabel.hidden = NO;
             self.fixedSize = YES;
 			
             [cell beginBindingsContextByRemovingPreviousBindings];
@@ -208,6 +211,7 @@
 			[cell endBindingsContext];
         }
         else{
+            cell.detailTextLabel.hidden = YES;
             if(!theSwitch){
                 theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
                 theSwitch.tag = 500002;
