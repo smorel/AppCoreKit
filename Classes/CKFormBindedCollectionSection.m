@@ -114,8 +114,10 @@
 
 - (void)fetchRange:(NSRange)range{
 	int headerCount = [_headerCellControllers count];
+    
+    NSInteger displaySpinner = (NSInteger)self.objectController.appendSpinnerAsFooterCell;
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		[_objectController fetchRange:NSMakeRange(range.location - headerCount,range.length) forSection:0];
+		[_objectController fetchRange:NSMakeRange(range.location - headerCount - displaySpinner,range.length) forSection:0];
 	}
 }
 

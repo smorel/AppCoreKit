@@ -63,10 +63,9 @@
     
     if(self.fetchBlock){
         self.fetchBlock(self,theRange);
-        return YES;
     }
     
-	return NO;
+	return YES;
 }
 
 - (void)cancelFetch {
