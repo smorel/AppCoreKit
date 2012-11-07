@@ -131,8 +131,8 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
         self.cancelled = NO;
         
         NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:self.request];
-        
-        if (cachedResponse) {
+
+        if (cachedResponse && [(NSHTTPURLResponse*)[cachedResponse response] statusCode] < 400 ) {
             [self connection:nil didReceiveResponse:cachedResponse.response];
             [self connection:nil didReceiveData:cachedResponse.data];
             [self connectionDidFinishLoading:nil];
@@ -249,6 +249,9 @@ NSString * const CKWebRequestHTTPErrorDomain = @"CKWebRequestHTTPErrorDomain";
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    if ([(NSHTTPURLResponse*)[cachedResponse response] statusCode] >= 400)
+        return nil;
+    
     NSCachedURLResponse *onDiskCachedResponse = [[[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data] autorelease];
     [[NSURLCache sharedURLCache] storeCachedResponse:onDiskCachedResponse forRequest:self.request];
     
