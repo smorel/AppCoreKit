@@ -17,9 +17,10 @@
 /**
  */
 typedef enum CKTableCollectionViewControllerEditingType{
-    CKTableCollectionViewControllerEditingTypeNone,
-    CKTableCollectionViewControllerEditingTypeLeft,
-    CKTableCollectionViewControllerEditingTypeRight
+    CKTableCollectionViewControllerEditingTypeNone    = 0,
+    CKTableCollectionViewControllerEditingTypeLeft    = 1 << 1,
+    CKTableCollectionViewControllerEditingTypeRight   = 1 << 2,
+    CKTableCollectionViewControllerEditingTypeAnimateTransition = 1 << 3
 }CKTableCollectionViewControllerEditingType;
 
 /**
