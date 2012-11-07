@@ -134,8 +134,11 @@ static CKDownloadManager *CKSharedDownloadManager;
             NSError *error = nil;
             [[NSFileManager defaultManager] moveItemAtPath:temporaryFilePath toPath:filePath error:&error];
             [[NSFileManager defaultManager] removeItemAtPath:metadataPath error:&error];
-            
-            [self downloaderDidFinish:[self downloaderForName:name]];
+            if(error){
+                [self downloader:[self downloaderForName:name] didFailWithError:error];
+            }else{
+                [self downloaderDidFinish:[self downloaderForName:name]];
+            }
         }
         else 
             [self downloader:[self downloaderForName:name] didFailWithError:error];
