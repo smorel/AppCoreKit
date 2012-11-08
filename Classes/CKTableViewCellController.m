@@ -1043,15 +1043,18 @@
     }
 }
 
-- (void)setFlags:(CKItemViewFlags)flags{
-    [super setFlags:flags];
+- (void)setFlags:(CKItemViewFlags)theflags{
+    if(self.flags == theflags)
+        return;
+    
+    [super setFlags:theflags];
     
     if(self.tableViewCell){
         self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
     }
     
     if(self.tableViewCell){
-       // NSMutableDictionary* style = [self stylesheet];
+        // NSMutableDictionary* style = [self stylesheet];
         //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
         [self applyStyle];
     }
