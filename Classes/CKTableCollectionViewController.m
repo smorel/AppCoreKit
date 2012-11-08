@@ -1169,6 +1169,15 @@
     _editableType = theEditableType;
 }
 
+- (void)tableViewCellController:(CKTableViewCellController*)controller displaysDeletionAtIndexPath:(NSIndexPath*)indexPath{
+    self.editButton.enabled = NO;
+}
+
+- (void)tableViewCellController:(CKTableViewCellController*)controller hidesDeletionAtIndexPath:(NSIndexPath*)indexPath{
+    self.editButton.enabled = YES;
+}
+
+
 #pragma mark Keyboard Notifications
 
 - (void)stretchTableDownUsingRect:(CGRect)endFrame animationCurve:(UIViewAnimationCurve)animationCurve duration:(NSTimeInterval)animationDuration{
