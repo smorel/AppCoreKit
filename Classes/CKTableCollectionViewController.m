@@ -751,6 +751,7 @@
 		[self didRemoveViewAtIndexPath:indexPath];
         //[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:self.rowRemoveAnimation];
 		[self fetchMoreIfNeededFromIndexPath:indexPath];
+        self.editButton.enabled = YES;
 	}
 }
 
