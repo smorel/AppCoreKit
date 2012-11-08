@@ -222,6 +222,10 @@
     }
     
     self.cellControllers = controllers;
+    
+    if(self.tableViewCell){
+        [self layoutCell:self.tableViewCell];
+    }
 }
 
 

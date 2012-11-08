@@ -103,6 +103,48 @@
     [super setupWithCollection:gridCollection factory:factory];
 }
 
+- (void)rebuildGridArray{
+    NSInteger columnCount = 0;
+    switch(self.orientation){
+        case CKTableViewOrientationLandscape:{
+            columnCount = self.size.width;
+            break;
+        }
+        case CKTableViewOrientationPortrait:{
+            columnCount = self.size.height;
+            break;
+        }
+    }
+    
+    CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
+    [theCollection removeAllObjects];
+    
+    NSMutableArray* arrayOfArray = [NSMutableArray array];
+    
+    int column =0, row =0;
+    NSMutableArray* currentArray = nil;
+    for(id object in self.linearCollection){
+        if(column == 0){
+            currentArray = [NSMutableArray array];
+        }
+        
+        [currentArray addObject:object];
+        
+        ++column;
+        
+        if(column >= columnCount){
+            column = 0;
+            [arrayOfArray addObject:currentArray];
+            
+            ++row;
+        }
+    }
+    
+    if([arrayOfArray count] > 0 ){
+        [theCollection addObjectsFromArray:arrayOfArray];
+    }
+}
+
 - (void)updateGridArray{
     NSInteger columnCount = 0;
     switch(self.orientation){
@@ -165,7 +207,7 @@
         CGSize oldSize = _size;
         _size = s;
         
-        [self updateGridArray];
+        [self rebuildGridArray];
         
         for(int i = 0; i < [self numberOfObjectsForSection:0]; ++i){
             CKGridTableViewCellController* controller = (CKGridTableViewCellController*)[self controllerAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
