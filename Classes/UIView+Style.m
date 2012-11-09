@@ -211,7 +211,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return str;
 }
 
-
+/*
 #ifdef __IPHONE_6_0
 - (NSLayoutFormatOptions)layoutFormatOption{
     return (NSLayoutFormatOptions)[self bitMaskValueForKey:CKStyleAutoLayoutFormatOption
@@ -232,6 +232,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
                                                                         NSLayoutFormatDirectionMask)];
 }
 #endif
+ */
 
 - (NSArray*)instanceOfViews{
     //TODO
@@ -254,7 +255,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return nil;
 }
 
-
+/*
 #ifdef __IPHONE_6_0
 - (NSArray*)autoLayoutConstraintsUsingViews:(NSDictionary*)views{
     @try{
@@ -319,6 +320,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return nil;
 }
 #endif
+ */
 
 @end
 
@@ -329,6 +331,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     return NO;
 }*/
 
+/*
 #ifdef __IPHONE_6_0
 - (void)setTranslatesAutoresizingMaskIntoConstraints:(BOOL)flag recursive:(BOOL)recursive{
     [self setTranslatesAutoresizingMaskIntoConstraints:flag];
@@ -339,6 +342,7 @@ NSString* CKStyleAutoLayoutCompression = @"@compression";
     }
 }
 #endif
+ */
 
 
 + (CKStyleView*)gradientView:(UIView*)view{

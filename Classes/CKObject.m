@@ -16,6 +16,7 @@
 #import "CKPropertyExtendedAttributes.h"
 #import "NSObject+Runtime_private.h"
 #import <objc/runtime.h>
+#import "CKConfiguration.h"
 
 //nothing
 
@@ -124,6 +125,9 @@ static NSString* CKObjectAllPropertyNamesKey = @"CKModelObjectAllPropertyNamesKe
 
 
 - (void)uninitializeProperties{
+    if([[CKConfiguration sharedInstance]usingARC])
+        return;
+    
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){

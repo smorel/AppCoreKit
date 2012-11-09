@@ -115,4 +115,14 @@
     }else{ self.layoutCallback = nil; }
 }
 
+- (void)setRemoveBlock:(void(^)(CKTableViewCellController* controller))block{
+    if(block){
+        self.removeCallback = [CKCallback callbackWithBlock:^id(id value) {
+            CKTableViewCellController* controller = (CKTableViewCellController*)value;
+            block(controller);
+            return (id)nil;
+        }];
+    }else{ self.layoutCallback = nil; }
+}
+
 @end

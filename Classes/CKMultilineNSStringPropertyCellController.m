@@ -87,7 +87,7 @@
 }
 
 - (void)textViewChanged:(id)value{
-    CKProperty* property = (CKProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.objectProperty;
     id result = [NSValueTransformer transform:value toClass:property.type];
     [self setValueInObjectProperty:result];
 }
@@ -98,7 +98,7 @@
     
     self.textView = (CKTextView*)[cell.contentView viewWithTag:TEXTVIEW_TAG];
     
-    CKProperty* property = (CKProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.objectProperty;
     CKClassPropertyDescriptor* descriptor = [property descriptor];
     if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPad
        || self.cellStyle == CKTableViewCellStyleIPadForm){

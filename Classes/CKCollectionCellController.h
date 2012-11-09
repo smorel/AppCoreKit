@@ -120,6 +120,12 @@ typedef NSUInteger CKItemViewFlags;
  */
 @property (nonatomic, retain) CKCallback* layoutCallback;
 
+/** This callback is called when the collection view commits editing changes to this cell controller.
+ By default, removeCallback is nil.
+ If you implements it you will have to manually remove the cell or the object from the binded collections.
+ */
+@property (nonatomic, retain) CKCallback* removeCallback;
+
 
 ///-----------------------------------
 /// @name Responding to ContainerController Events

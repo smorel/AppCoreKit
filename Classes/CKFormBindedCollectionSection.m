@@ -114,8 +114,10 @@
 
 - (void)fetchRange:(NSRange)range{
 	int headerCount = [_headerCellControllers count];
+    
+    NSInteger displaySpinner = (NSInteger)self.objectController.appendSpinnerAsFooterCell;
 	if([_objectController respondsToSelector:@selector(objectAtIndexPath:)]){
-		[_objectController fetchRange:NSMakeRange(range.location - headerCount,range.length) forSection:0];
+		[_objectController fetchRange:NSMakeRange(range.location - headerCount - displaySpinner,range.length) forSection:0];
 	}
 }
 
@@ -209,7 +211,7 @@
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
     
 	[self.parentController performSelector:@selector(objectController:insertObject:atIndexPath:) 
-							   withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
+							   withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
 }
 
 - (void)objectController:(id)controller removeObject:(id)object atIndexPath:(NSIndexPath*)indexPath{
@@ -220,7 +222,7 @@
 	int headerCount = [_headerCellControllers count];
 	NSIndexPath* theIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + headerCount) inSection:self.sectionVisibleIndex];
 	[self.parentController performSelector:@selector(objectController:removeObject:atIndexPath:) 
-                               withObjects:[NSArray arrayWithObjects:self.objectController,object,theIndexPath,nil]];
+                               withObjects:[NSArray arrayWithObjects:self.objectController,object ? object : [NSNull null],theIndexPath,nil]];
 }
 
 

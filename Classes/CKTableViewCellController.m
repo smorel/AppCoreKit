@@ -251,7 +251,20 @@
 
 - (void)willTransitionToState:(UITableViewCellStateMask)state{
     [super willTransitionToState:state];
+    
+    if(state == UITableViewCellStateShowingDeleteConfirmationMask){
+        if([self.delegate.containerController respondsToSelector:@selector(tableViewCellController:displaysDeletionAtIndexPath:)]){
+            [self.delegate.containerController performSelector:@selector(tableViewCellController:displaysDeletionAtIndexPath:) withObject:self.delegate withObject:self.delegate.indexPath];
+        }
+    }else if (self.editingMask == UITableViewCellStateShowingDeleteConfirmationMask && state == UITableViewCellStateDefaultMask){
+        if([self.delegate.containerController respondsToSelector:@selector(tableViewCellController:hidesDeletionAtIndexPath:)]){
+            [self.delegate.containerController performSelector:@selector(tableViewCellController:hidesDeletionAtIndexPath:) withObject:self.delegate withObject:self.delegate.indexPath];
+        }
+    }
+    
     self.editingMask = state;
+    
+   
     
     /*NSMutableDictionary* controllerStyle = [self.delegate controllerStyle];
      NSMutableDictionary* myStyle = [controllerStyle styleForObject:self propertyName:@"tableViewCell"];
@@ -1014,13 +1027,27 @@
     _selectionStyle = selectionStyle;
     if(self.tableViewCell){
         self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? selectionStyle : UITableViewCellSelectionStyleNone;
+        
+       // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
     }
 }
 
-- (void)setFlags:(CKItemViewFlags)flags{
-    [super setFlags:flags];
-    if(self.tableViewCell && ! (flags & CKItemViewFlagSelectable)){
-        self.tableViewCell.selectionStyle = UITableViewCellSelectionStyleNone;
+- (void)setFlags:(CKItemViewFlags)theflags{
+    if(self.flags == theflags)
+        return;
+    
+    [super setFlags:theflags];
+    
+    if(self.tableViewCell){
+        self.tableViewCell.selectionStyle = (self.flags & CKItemViewFlagSelectable) ? self.selectionStyle : UITableViewCellSelectionStyleNone;
+    }
+    
+    if(self.tableViewCell){
+        // NSMutableDictionary* style = [self stylesheet];
+        //NSMutableDictionary* cellStyle = [style styleForObject:self.tableViewCell propertyName:@"tableViewCell"];
+        [self applyStyle];
     }
 }
 
@@ -1032,7 +1059,16 @@
     if(self.layoutCallback == nil){
         __block CKTableViewCellController* bself = self;
         self.layoutCallback = [CKCallback callbackWithBlock:^id(id value) {
+            
+            BOOL enabled = [UIView areAnimationsEnabled];
+            [UIView setAnimationsEnabled:NO];
+            
+            //[CATransaction disableActions];
             [bself performLayout];
+ 
+            //[CATransaction commit];
+            [UIView setAnimationsEnabled:enabled];
+            
             return (id)nil;
         }];
     }

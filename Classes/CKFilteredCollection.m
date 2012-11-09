@@ -10,8 +10,20 @@
 #import "NSObject+Bindings.h"
 #import "CKDebug.h"
 
+typedef enum CKFilteredCollectionUpdateType{
+    CKFilteredCollectionUpdateTypeReload,
+    CKFilteredCollectionUpdateTypeInsertion,
+    CKFilteredCollectionUpdateTypeRemoval
+}CKFilteredCollectionUpdateType;
+
 @interface CKCollection()
+@property (nonatomic,assign,readwrite) NSInteger count;
 @property (nonatomic,assign,readwrite) BOOL isFetching;
+@end
+
+
+@interface CKArrayCollection()
+@property (nonatomic,copy) NSMutableArray* collectionObjects;
 @end
 
 @implementation CKFilteredCollection
@@ -40,10 +52,11 @@
 
 - (id)initWithCollection:(CKCollection*)theCollection  usingPredicate:(NSPredicate*)thepredicate{
     self = [super init];
-    self.predicate = thepredicate;
-    self.collection = theCollection;
+    _predicate = [thepredicate retain];
+    _collection = [theCollection retain];
+    [_collection addObserver:self];
     
-    [self updateFilteredArray];
+    [self updateFilteredArray:CKFilteredCollectionUpdateTypeReload];
     
     BOOL bo = [theCollection isFetching];
     self.isFetching =  bo;
@@ -60,13 +73,71 @@
     return self;
 }
 
-- (void)updateFilteredArray{
+- (void)compareArray:(NSArray*)source withArray:(NSArray*)target
+          updateType:(CKFilteredCollectionUpdateType)updateType
+    indexSetToRemove:(NSMutableIndexSet*)indexSetToRemove
+     objectsToInsert:(NSMutableArray*)objectsToInsert
+    indexSetToInsert:(NSMutableIndexSet*)indexSetToInsert{
+    
+    if(updateType == CKFilteredCollectionUpdateTypeReload){
+        [indexSetToRemove addIndexesInRange:NSMakeRange(0,[source count])];
+        [objectsToInsert addObjectsFromArray:target];
+        [indexSetToInsert addIndexesInRange:NSMakeRange(0,[target count])];
+    }else if(updateType == CKFilteredCollectionUpdateTypeRemoval){
+        //Finds indexs to remove :
+        int j=0;
+        int i=0;
+        for(;i<[source count];++i){
+            id src_object = [source objectAtIndex:i];
+            id target_object = [target objectAtIndex:j];
+            if([src_object isEqual:target_object]){ ++j; }
+            else{
+                [indexSetToRemove addIndex:i];
+            }
+        }
+        
+        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
+    }else if(updateType == CKFilteredCollectionUpdateTypeInsertion){
+        //Finds indexs to insert :
+        int j=0;
+        int i=0;
+        for(;j<[target count];++j){
+            id target_object = [target objectAtIndex:j];
+            if(j >= [source count]){
+                [objectsToInsert addObject:target_object];
+                [indexSetToInsert addIndex:j];
+            }else{
+                id src_object = [source objectAtIndex:i];
+                if([src_object isEqual:target_object]){ ++i; }
+                else{
+                    [objectsToInsert addObject:target_object];
+                    [indexSetToInsert addIndex:j];
+                }
+            }
+        }
+        
+        //CKAssert((i == [source count] && j == [target count]), @"PROBLEM !");
+    }
+}
+
+- (void)updateFilteredArray:(CKFilteredCollectionUpdateType)updateType{
     NSArray* filteredObjects = [[self.collection allObjects]filteredArrayUsingPredicate:self.predicate];
     if([filteredObjects isEqualToArray:[self allObjects]])
         return;
     
-    [super removeAllObjects];
-    [super insertObjects:filteredObjects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self count], [filteredObjects count])]];
+    NSArray* selfObjects = [self allObjects];
+
+    NSMutableIndexSet* indexSetToRemove = [NSMutableIndexSet indexSet];
+    NSMutableIndexSet* indexSetToInsert = [NSMutableIndexSet indexSet];
+    NSMutableArray* objectsToInsert = [NSMutableArray array];
+    [self compareArray:selfObjects withArray:filteredObjects updateType:updateType indexSetToRemove:indexSetToRemove objectsToInsert:objectsToInsert indexSetToInsert:indexSetToInsert];
+    
+    if([indexSetToRemove count] > 0){
+        [super removeObjectsAtIndexes:indexSetToRemove];
+    }
+    if([indexSetToInsert count] > 0){
+        [super insertObjects:objectsToInsert atIndexes:indexSetToInsert];
+    }
 }
 
 - (void)setCollection:(CKCollection *)theCollection{
@@ -79,14 +150,14 @@
     
     [_collection addObserver:self];
     
-    [self updateFilteredArray];
+    [self updateFilteredArray:CKFilteredCollectionUpdateTypeReload];
 }
 
 - (void)setPredicate:(NSPredicate *)thepredicate{
     [_predicate release];
     _predicate = [thepredicate retain];
     
-    [self updateFilteredArray];
+    [self updateFilteredArray:CKFilteredCollectionUpdateTypeReload];
 }
 
 - (void)observeValueForKeyPath:(NSString *)theKeyPath
@@ -94,8 +165,9 @@
 						change:(NSDictionary *)change
 					   context:(void *)context {
     
-    //THIS COULD BE OPTIMIZED !!!!
-    [self updateFilteredArray];
+    NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+    
+    [self updateFilteredArray:(kind == NSKeyValueChangeInsertion) ? CKFilteredCollectionUpdateTypeInsertion : CKFilteredCollectionUpdateTypeRemoval];
 }
 
 //Forward to the non filtered collection
@@ -109,48 +181,20 @@
     [self.collection cancelFetch];
 }
 
-- (NSIndexSet*)filteredIndexSet:(NSIndexSet*)indexes{
-    NSMutableIndexSet* nonFilteredIndexPaths = [NSMutableIndexSet indexSet];
-    
-	unsigned currentIndex = [indexes firstIndex];
-	while (currentIndex != NSNotFound) {
-        if(currentIndex >= [self count]){
-            [nonFilteredIndexPaths addIndex:currentIndex];
-        }
-        else{
-            id currentObject = [self objectAtIndex:currentIndex];
-            NSInteger index = [[self.collection allObjects]indexOfObjectIdenticalTo:currentObject];
-            CKAssert(index != NSNotFound,@"Should not happend !");
-            [nonFilteredIndexPaths addIndex:index];
-        }
-        currentIndex = [indexes indexGreaterThanIndex: currentIndex];
-	}
-    return nonFilteredIndexPaths;
-}
-
 - (void)insertObjects:(NSArray *)objects atIndexes:(NSIndexSet *)indexes{
-    [self.collection insertObjects:objects atIndexes:[self filteredIndexSet:indexes]];
+    NSAssert(NO,@"CKFilteredCollection insertObjects Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet*)indexSet{
-    [self.collection removeObjectsAtIndexes:[self filteredIndexSet:indexSet]];
+    NSAssert(NO,@"CKFilteredCollection removeObjectsAtIndexes Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)removeAllObjects{
-	[self.collection removeAllObjects];
+    NSAssert(NO,@"CKFilteredCollection removeAllObjects Not Supported! You must insert in the non filtered collection directly.");
 }
 
 - (void)replaceObjectAtIndex:(NSInteger)index byObject:(id)other{
-	id currentObject = [self objectAtIndex:index];
-    NSInteger theIndex = [[self.collection allObjects]indexOfObjectIdenticalTo:currentObject];
-    [self.collection replaceObjectAtIndex:theIndex byObject:other];
+    NSAssert(NO,@"CKFilteredCollection replaceObjectAtIndex Not Supported! You must insert in the non filtered collection directly.");
 }
-
-/* TODO find a way for CKItamViewContainerController to work with collectionDataSource ...
- - (CKFeedSource*)feedSource{
- return self.collection.feedSource;
- }
- */
-
 
 @end

@@ -74,6 +74,11 @@
         }
         
         if(button){
+            if([style containsObjectForKey:@"title"]){
+                barButtonItem.title = [style objectForKey:@"title"];
+                [button setTitle:[style objectForKey:@"title"] forState:UIControlStateNormal];
+            }
+            
             if([UIButton applyStyle:style toView:button appliedStack:appliedStack delegate:delegate]){
                 return YES;
             }

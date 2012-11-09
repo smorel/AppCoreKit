@@ -165,7 +165,8 @@
 	if(indexPath.length != 2)
 		return;
 	
-	[_collection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:indexPath.row]];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndex:indexPath.row];
+	[_collection removeObjectsAtIndexes:indexSet];
 }
 
 - (NSIndexPath*)targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
@@ -194,91 +195,102 @@
 	return [NSIndexPath indexPathForRow:index inSection:0];
 }
 
+- (void)update:(NSDictionary*)dico{
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    if(locked){
+        changedWhileLocked = YES;
+        return;
+    }
+    
+    if(!self.delegate)
+        return;
+    
+    NSDictionary* change = [dico objectForKey:@"change"];
+    
+    NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
+    NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
+    NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
+    
+    NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
+    
+    if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
+        if([self.delegate respondsToSelector:@selector(objectControllerReloadData:)]){
+            [self.delegate objectControllerReloadData:self];
+            return;
+        }
+    }
+    
+    //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+    if([self.delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
+        id d = [self delegate];
+        [d retain];//This is a Hack because it happend sometimes that here the delegate is OK, but when calling objectControllerDidBeginUpdating, it has been deallocated.
+                   //This is totally weirdo ...
+        [d objectControllerDidBeginUpdating:self];
+        [d release];
+    }
+    //}
+    
+    int count = 0;
+    unsigned currentIndex = [indexs firstIndex];
+    NSMutableArray* indexPaths = [NSMutableArray array];
+    while (currentIndex != NSNotFound) {
+        //Do not notify add if currentIndex > limit
+        [indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
+        currentIndex = [indexs indexGreaterThanIndex: currentIndex];
+        ++count;
+    }
+    
+    switch(kind){
+        case NSKeyValueChangeInsertion:{
+            if(maximumNumberOfObjectsToDisplay > 0) {
+                NSMutableArray* limitedIndexPaths = [NSMutableArray array];
+                NSMutableArray* limitedObjects = [NSMutableArray array];
+                for(int i=0;i<[indexPaths count];++i){
+                    NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
+                    if(indexpath.row < maximumNumberOfObjectsToDisplay){
+                        [limitedIndexPaths addObject:indexpath];
+                        id object = [newModels objectAtIndex:i];
+                        [limitedObjects addObject:object];
+                    }
+                }
+                
+                if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                    [self.delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
+                }
+                break;
+            }
+            
+            if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
+                [self.delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
+            }
+            break;
+        }
+        case NSKeyValueChangeRemoval:{
+            if([self.delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
+                [self.delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
+            }
+            break;
+        }
+    }
+    
+    //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
+    if([self.delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
+        [self.delegate objectControllerDidEndUpdating:self];
+    }
+    //}
+    //});
+}
+
 - (void)observeValueForKeyPath:(NSString *)theKeyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change
 					   context:(void *)context {
-    //dispatch_async(dispatch_get_main_queue(), ^{
-        if(locked){
-            changedWhileLocked = YES;
-            return;
-        }
-        
-        if(!self.delegate)
-            return;
-		
-        NSIndexSet* indexs = [change objectForKey:NSKeyValueChangeIndexesKey];
-        NSArray *oldModels = [change objectForKey: NSKeyValueChangeOldKey];
-        NSArray *newModels = [change objectForKey: NSKeyValueChangeNewKey];
-        
-        NSKeyValueChange kind = [[change objectForKey:NSKeyValueChangeKindKey] unsignedIntValue];
-        
-        if(!animateInsertionsOnReload && kind == NSKeyValueChangeInsertion && ([newModels count] == [_collection count])){
-            if([self.delegate respondsToSelector:@selector(objectControllerReloadData:)]){
-                [self.delegate objectControllerReloadData:self];
-                return;
-            }
-        }
-        
-        //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-        if([self.delegate respondsToSelector:@selector(objectControllerDidBeginUpdating:)]){
-            id d = [self delegate];
-            [d retain];//This is a Hack because it happend sometimes that here the delegate is OK, but when calling objectControllerDidBeginUpdating, it has been deallocated.
-                       //This is totally weirdo ...
-            [d objectControllerDidBeginUpdating:self];
-            [d release];
-        }
-        //}
-        
-        int count = 0;
-        unsigned currentIndex = [indexs firstIndex];
-        NSMutableArray* indexPaths = [NSMutableArray array];
-        while (currentIndex != NSNotFound) {
-            //Do not notify add if currentIndex > limit
-            [indexPaths addObject:[self indexPathForDocumentObjectAtIndex:currentIndex]];
-            currentIndex = [indexs indexGreaterThanIndex: currentIndex];
-            ++count;
-        }
-        
-        switch(kind){
-            case NSKeyValueChangeInsertion:{
-                if(maximumNumberOfObjectsToDisplay > 0) {
-                    NSMutableArray* limitedIndexPaths = [NSMutableArray array];
-                    NSMutableArray* limitedObjects = [NSMutableArray array];
-                    for(int i=0;i<[indexPaths count];++i){
-                        NSIndexPath* indexpath = [indexPaths objectAtIndex:i];
-                        if(indexpath.row < maximumNumberOfObjectsToDisplay){
-                            [limitedIndexPaths addObject:indexpath];
-                            id object = [newModels objectAtIndex:i];
-                            [limitedObjects addObject:object];
-                        }
-                    }
-                    
-                    if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-                        [self.delegate objectController:self insertObjects:limitedObjects atIndexPaths:limitedIndexPaths];
-                    }
-                    break;
-                }
-                
-                if([self.delegate respondsToSelector:@selector(objectController:insertObjects:atIndexPaths:)]){
-                    [self.delegate objectController:self insertObjects:newModels atIndexPaths:indexPaths];
-                }
-                break;
-            }
-            case NSKeyValueChangeRemoval:{
-                if([self.delegate respondsToSelector:@selector(objectController:removeObjects:atIndexPaths:)]){
-                    [self.delegate objectController:self removeObjects:oldModels atIndexPaths:indexPaths];
-                }
-                break;
-            }
-        }
-        
-        //if([self.delegate conformsToProtocol:@protocol(CKObjectControllerDelegate)]){
-        if([self.delegate respondsToSelector:@selector(objectControllerDidEndUpdating:)]){
-            [self.delegate objectControllerDidEndUpdating:self];
-        }
-        //}
-        //});
+    [self performSelector:@selector(update:) onThread:[NSThread mainThread] withObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                                        theKeyPath,@"keyPath",
+                                                                                        object,@"object",
+                                                                                        change,@"change",
+                                                                                        nil]
+            waitUntilDone:YES];
 }
 
 - (void)lock{

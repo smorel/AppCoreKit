@@ -161,7 +161,14 @@
     if([self.object isKindOfClass:[NSDictionary class]]){
         return [self.object objectForKey:self.keyPath];
     }
-	return (self.subKeyPath != nil) ? [self.subObject valueForKey:self.subKeyPath] : self.subObject;
+    
+    @try{
+        return (self.subKeyPath != nil) ? [self.subObject valueForKey:self.subKeyPath] : self.subObject;
+    }
+    @catch (NSException* e) {
+        CKDebugLog(@"%@",e);
+        return nil;
+    }
 }
 
 - (void)setValue:(id)value{
@@ -182,7 +189,12 @@
         [invocation invoke];
     }
 	else if(self.subKeyPath != nil){
-		[self.subObject setValue:value forKey:self.subKeyPath];
+        @try{
+            [self.subObject setValue:value forKey:self.subKeyPath];
+        }
+        @catch (NSException* e) {
+            CKDebugLog(@"%@",e);
+        }
 	}
 	else if(self.subKeyPath == nil){
 		[self.subObject copyPropertiesFromObject:value];

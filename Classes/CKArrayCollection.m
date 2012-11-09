@@ -32,10 +32,16 @@
 
 - (void)setCollectionObjects:(NSMutableArray *)collectionObjects{
     [_collectionObjects release];
-    _collectionObjects = [collectionObjects mutableCopy];
+    _collectionObjects = [[collectionObjects mutableCopy]retain];
 }
 
 - (id) copyWithZone:(NSZone *)zone {
+    CKArrayCollection* collection = [super copyWithZone:zone];
+    collection.property = [CKProperty weakPropertyWithObject:collection keyPath:@"collectionObjects"];
+    return collection;
+}
+
+- (id) mutableCopyWithZone:(NSZone *)zone{
     CKArrayCollection* collection = [super copyWithZone:zone];
     collection.property = [CKProperty weakPropertyWithObject:collection keyPath:@"collectionObjects"];
     return collection;

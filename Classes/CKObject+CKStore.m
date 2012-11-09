@@ -60,17 +60,17 @@
 NSMutableDictionary* CKObjectManager = nil;
 
 @interface CKObject (CKStoreAdditionPrivate)
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive;
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableDictionary*)alreadySaved recursive:(BOOL)recursive;
 @end
 
 
 @implementation CKObject (CKStoreAddition_private)
 
 - (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain{
-	return [self attributesDictionaryForDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:NO];
+	return [self attributesDictionaryForDomainNamed:domain alreadySaved:[NSMutableDictionary dictionary] recursive:NO];
 }
 
-+ (CKItem *)createItemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
++ (CKItem *)createItemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain alreadySaved:(NSMutableDictionary*)alreadySaved recursive:(BOOL)recursive{
 	CKStore* store = [CKStore storeWithDomainName:domain];
 	BOOL created;
 	CKItem *item = [store fetchItemWithPredicate:[NSPredicate predicateWithFormat:@"(name == %@) AND (domain == %@)", object.objectName, domain]
@@ -80,6 +80,9 @@ NSMutableDictionary* CKObjectManager = nil;
 		item.domain = store.domain;
 		[store.domain addItemsObject:item];
 	}
+    
+	[alreadySaved setObject:item forKey:[NSValue valueWithNonretainedObject: object]];
+    
 	NSDictionary* attributes = [object attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 	[item updateAttributes:attributes];
 	
@@ -87,7 +90,7 @@ NSMutableDictionary* CKObjectManager = nil;
 	return item;
 }
 
-- (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
+- (CKItem*)saveToDomainNamed:(NSString*)domain alreadySaved:(NSMutableDictionary*)alreadySaved recursive:(BOOL)recursive{
 	if(self.isSaving || self.isLoading)
 		return nil;
 	
@@ -102,23 +105,26 @@ NSMutableDictionary* CKObjectManager = nil;
 		item = [CKObject itemWithObject:self inDomainNamed:domain];
 		if(item != nil){
 			item.name = self.objectName;
+            
+            [alreadySaved setObject:item forKey:[NSValue valueWithNonretainedObject: self]];
+            
 			NSDictionary* attributes = [self attributesDictionaryForDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 			[item updateAttributes:attributes];
 			//CKDebugLog(@"Updating item <%p> withAttributes:%@",item,attributes);
 		}
 		else{
 			[CKObject registerObject:self withUniqueId:self.uniqueId];
-			item = [CKObject createItemWithObject:self inDomainNamed:domain];
+            item = [CKObject createItemWithObject:self inDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
 		}
-	}		
+	}	
 	
-	[alreadySaved addObject:self];
+    
 	self.isSaving = NO;
 	return item;
 }
 
 + (CKItem *)createItemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain {
-	return [self createItemWithObject:object inDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:NO];
+	return [self createItemWithObject:object inDomainNamed:domain alreadySaved:[NSMutableDictionary dictionary] recursive:NO];
 }
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain{
@@ -126,7 +132,7 @@ NSMutableDictionary* CKObjectManager = nil;
 }
 
 - (CKItem*)saveToDomainNamed:(NSString*)domain recursive:(BOOL)recursive{
-	return [self saveToDomainNamed:domain alreadySaved:[NSMutableSet set] recursive:recursive];
+	return [self saveToDomainNamed:domain alreadySaved:[NSMutableDictionary dictionary] recursive:recursive];
 }
 
 + (CKItem*)itemWithObject:(CKObject*)object inDomainNamed:(NSString*)domain{
@@ -238,7 +244,7 @@ NSMutableDictionary* CKObjectManager = nil;
 
 @implementation CKObject (CKStoreAdditionPrivate)
 
-- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableSet*)alreadySaved recursive:(BOOL)recursive{
+- (NSDictionary*) attributesDictionaryForDomainNamed:(NSString*)domain alreadySaved:(NSMutableDictionary*)alreadySaved recursive:(BOOL)recursive{
 	CKAssert(alreadySaved != nil,@"has to be created to avoid recursive save ...");
 	NSMutableDictionary* dico = [NSMutableDictionary dictionary];
 	
@@ -265,12 +271,15 @@ NSMutableDictionary* CKObjectManager = nil;
 					CKAssert([subObject isKindOfClass:[CKObject class]],@"Supports only auto serialization on CKObject");
 					CKObject* model = (CKObject*)subObject;
 					CKItem* item = nil;
-					if(model.uniqueId != nil){
-                        if([alreadySaved containsObject:model] || !recursive){
-                            item = [CKObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
-                        }
-                        else{
-                            item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                    if(model.uniqueId != nil){
+                        item = [alreadySaved objectForKey:[NSValue valueWithNonretainedObject: model]];
+                        if(item == nil){
+                            if(!recursive){
+                                item = [CKObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+                            }
+                            else{
+                                item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                            }
                         }
 					}else{
 						item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
@@ -285,11 +294,14 @@ NSMutableDictionary* CKObjectManager = nil;
 				NSMutableArray* result = [NSMutableArray array];
 				CKItem* item = nil;
                 if(model.uniqueId != nil){
-                    if([alreadySaved containsObject:model] || !recursive){
-                        item = [CKObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
-                    }
-                    else{
-                        item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                    item = [alreadySaved objectForKey:[NSValue valueWithNonretainedObject: model]];
+                    if(item == nil){
+                        if(!recursive){
+                            item = [CKObject itemWithUniqueId:model.uniqueId inDomainNamed:domain];
+                        }
+                        else{
+                            item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];
+                        }
                     }
                 }else{
                     item = [model saveToDomainNamed:domain alreadySaved:alreadySaved recursive:recursive];

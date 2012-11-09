@@ -8,6 +8,9 @@
 
 #import "CKUserDefaults.h"
 #import "NSObject+Runtime.h"
+#import "CKCollection.h"
+#import "CKDebug.h"
+#import "NSValueTransformer+Additions.h"
 
 @interface CKUserDefaults()
 - (void)initFromPlist;
@@ -20,7 +23,12 @@
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
-            [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+            if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                CKCollection* collection = [self valueForKey:property.name];
+                [collection addObserver:self];
+            }else{
+                [self addObserver:self forKeyPath:property.name options: (NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:self];
+            }
         }
 	}
 }
@@ -29,7 +37,13 @@
 	NSArray* allProperties = [self allPropertyDescriptors];
 	for(CKClassPropertyDescriptor* property in allProperties){
 		if(property.isReadOnly == NO){
-            [self removeObserver:self forKeyPath:property.name];
+            if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                CKCollection* collection = [self valueForKey:property.name];
+                [collection removeObserver:self];
+            }
+            else{
+                [self removeObserver:self forKeyPath:property.name];
+            }
 		}
 	}
 }
@@ -61,7 +75,21 @@
                 NSString* key = [NSString stringWithFormat:@"%@",property.name];
                 id value = [params objectForKey:key];
                 if(value != nil){
-                    [self setValue:value forKeyPath:property.name];
+                    if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                        CKCollection* collection = [self valueForKey:property.name];
+                        NSMutableArray* arrayToSerialize = [NSMutableArray array];
+                        for(id object in value){
+                            if(![object isKindOfClass:[NSString class]]){
+                                CKAssert(NO,@"We only support collection of NSString in CKUserDefaults");
+                            }else{
+                                [arrayToSerialize addObject:object];
+                            }
+                        }
+                        [collection addObjectsFromArray:arrayToSerialize];
+                    }
+                    else{
+                        [self setValue:value forKeyPath:property.name];
+                    }
                 }
             }
         }
@@ -75,7 +103,13 @@
             NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],property.name];
             id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
             if(value != nil){
-                [self setValue:value forKeyPath:property.name];
+                if([NSObject isClass:property.type kindOfClass:[CKCollection class]]){
+                    CKCollection* collection = [self valueForKey:property.name];
+                    [collection addObjectsFromArray:value];
+                }
+                else{
+                    [self setValue:value forKeyPath:property.name];
+                }
             }
         }
     }
@@ -87,13 +121,35 @@
 					   context:(void *)context {
 	[super observeValueForKeyPath:theKeyPath ofObject:object change:change context:context];
     
-    NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],theKeyPath];
-    id value = [self valueForKeyPath:theKeyPath];
-    if(value != nil){
-        [[NSUserDefaults standardUserDefaults]setObject:value forKey:key];
-    }
-    else{
-        [[NSUserDefaults standardUserDefaults]removeObjectForKey:key];
+    if([object isKindOfClass:[CKCollection class]]){
+        NSString* key = nil;
+        for(NSString* pName in [self allPropertyNames]){
+            id p = [self valueForKey:pName];
+            if(p == object){
+                key = [NSString stringWithFormat:@"%@_%@",[[self class]description],pName];
+                break;
+            }
+        }
+        
+        NSMutableArray* arrayToSerialize = [NSMutableArray array];
+        NSArray* ar = [object allObjects];
+        for(id object in ar){
+            if(![object isKindOfClass:[NSString class]]){
+                CKAssert(NO,@"We only support collection of NSString in CKUserDefaults");
+            }else{
+                [arrayToSerialize addObject:object];
+            }
+        }
+        [[NSUserDefaults standardUserDefaults]setObject:arrayToSerialize forKey:key];
+    }else{
+        NSString* key = [NSString stringWithFormat:@"%@_%@",[[self class]description],theKeyPath];
+        id value = [self valueForKeyPath:theKeyPath];
+        if(value != nil){
+            [[NSUserDefaults standardUserDefaults]setObject:value forKey:key];
+        }
+        else{
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:key];
+        }
     }
     [[NSUserDefaults standardUserDefaults]synchronize];
 }

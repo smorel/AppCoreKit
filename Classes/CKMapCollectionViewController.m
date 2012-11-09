@@ -289,15 +289,24 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 	self.centerCoordinate = coordinate;
 	MKCoordinateRegion region = self.mapView.region;
 	region.center = coordinate;
-	region = [self.mapView regionThatFits:region];
-	[self.mapView setRegion:region animated:animated];
+    
+    @try {
+        region = [self.mapView regionThatFits:region];
+        [self.mapView setRegion:region animated:animated];
+    }
+    @catch (NSException *exception) {
+    }
 }
 
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius animated:(BOOL)animated {
 	self.centerCoordinate = coordinate;
 	MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(self.centerCoordinate, radius, radius);
-	region = [self.mapView regionThatFits:region];
-	[self.mapView setRegion:region animated:animated];
+    @try {
+        region = [self.mapView regionThatFits:region];
+        [self.mapView setRegion:region animated:animated];
+    }
+    @catch (NSException *exception) {
+    }
 }
 
 - (void)zoomToCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated {
@@ -331,8 +340,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
     region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.1; // Add a little extra space on the sides
     region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.1; // Add a little extra space on the sides
 
-	region = [self.mapView regionThatFits:region];
-	[self.mapView setRegion:region animated:animated];
+    @try {
+        region = [self.mapView regionThatFits:region];
+        [self.mapView setRegion:region animated:animated];
+    }
+    @catch (NSException *exception) {
+    }
 }
 
 
@@ -378,8 +391,12 @@ NSInteger compareLocations(id <MKAnnotation>obj1, id <MKAnnotation> obj2, void *
 		region.span.latitudeDelta = _smartZoomDefaultRadius / 111319.5;
 		region.span.longitudeDelta = 0.009;
 		
-		region = [self.mapView regionThatFits:region];
-		[self.mapView setRegion:region animated:animated];
+        @try {
+            region = [self.mapView regionThatFits:region];
+            [self.mapView setRegion:region animated:animated];
+        }
+        @catch (NSException *exception) {
+        }
 	}
 }
 

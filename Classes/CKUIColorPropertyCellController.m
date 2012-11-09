@@ -33,7 +33,7 @@
 - (void)initTableViewCell:(UITableViewCell *)cell {
     [super initTableViewCell:cell];
     
-	CKProperty* p = (CKProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.objectProperty;
 	UIColor* color = [p value];
     
     UIView* colorView = [[[UIView alloc]initWithFrame:CGRectMake(10,80,80,80)]autorelease];
@@ -46,7 +46,7 @@
 }
 
 - (void)propertyChanged{
-    CKProperty* p = (CKProperty*)self.value;
+    CKProperty* p = (CKProperty*)self.objectProperty;
 	
 	UIColor* color = [p value];
 	
@@ -65,7 +65,7 @@
 }
 
 - (void)valueChanged{
-	CKProperty* p = (CKProperty*)self.value;
+	CKProperty* p = (CKProperty*)self.objectProperty;
 	CGUIColorWrapper* colorWrapper = (CGUIColorWrapper*)self.multiFloatValue;
 	
 	UIColor* color = [UIColor colorWithRed:colorWrapper.r

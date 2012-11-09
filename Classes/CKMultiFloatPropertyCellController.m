@@ -124,7 +124,7 @@
 
 - (void)rebind{
     [self beginBindingsContextByRemovingPreviousBindings];
-	CKProperty* property = (CKProperty*)self.value;
+	CKProperty* property = (CKProperty*)self.objectProperty;
     [property.object bind:property.keyPath target:self action:@selector(propertyChanged)];
 	if([property isReadOnly] || self.readOnly){
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
@@ -152,7 +152,7 @@
 	[super setupCell:cell];
     [self propertyChanged];
 	
-	CKProperty* property = (CKProperty*)self.value;
+	CKProperty* property = (CKProperty*)self.objectProperty;
 	if([property isReadOnly] || self.readOnly){
         NSArray* properties = [[[self.multiFloatValue allPropertyNames]reverseObjectEnumerator]allObjects];
         int i =0 ;

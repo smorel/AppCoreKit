@@ -30,4 +30,12 @@
  */
 + (void)generateTypeAheadWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path;
 
+/**
+ */
++ (void)generateTypeAheadWithContentOfFileWithPath:(NSString*)filePath writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit;
+
+/**
+ */
++ (void)generateTypeAheadWithContentOfFileWithPath:(NSString*)filePath writeToPath:(NSString*)path;
+
 @end

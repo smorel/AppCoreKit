@@ -98,45 +98,107 @@
     //OBSERVE collection & keeps factory to create/remove controllers in _subControllers
     self.objectsAsGrid = [NSMutableArray array];
     [self updateGridArray];
+    
     CKArrayProxyCollection* gridCollection = [[[CKArrayProxyCollection alloc]initWithArrayProperty:[CKProperty propertyWithObject:self keyPath:@"objectsAsGrid"] ]autorelease];
     [super setupWithCollection:gridCollection factory:factory];
 }
 
-- (void)updateGridArray{
-    NSInteger height = 0;
+- (void)rebuildGridArray{
+    NSInteger columnCount = 0;
     switch(self.orientation){
-        case CKTableViewOrientationPortrait:{
-            height = _size.height;
-            break;
-        }
         case CKTableViewOrientationLandscape:{
-            height = _size.width;
+            columnCount = self.size.width;
             break;
         }
-    }
-    
-    NSMutableArray* objects = [NSMutableArray array];
-    
-    int i =0;
-    NSMutableArray* currentArray = nil;
-    for(id object in [self.linearCollection allObjects]){
-        if(i == 0){
-            currentArray = [NSMutableArray array];
-            [objects addObject:currentArray];
-        }
-        
-        [currentArray addObject:object];
-        
-        ++i;
-        
-        if(i >= height){
-            i = 0;
+        case CKTableViewOrientationPortrait:{
+            columnCount = self.size.height;
+            break;
         }
     }
     
     CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
     [theCollection removeAllObjects];
-    [theCollection addObjectsFromArray:objects];
+    
+    NSMutableArray* arrayOfArray = [NSMutableArray array];
+    
+    int column =0, row =0;
+    NSMutableArray* currentArray = nil;
+    for(id object in self.linearCollection){
+        if(column == 0){
+            currentArray = [NSMutableArray array];
+        }
+        
+        [currentArray addObject:object];
+        
+        ++column;
+        
+        if(column >= columnCount){
+            column = 0;
+            [arrayOfArray addObject:currentArray];
+            
+            ++row;
+        }
+    }
+    
+    if([arrayOfArray count] > 0 ){
+        [theCollection addObjectsFromArray:arrayOfArray];
+    }
+}
+
+- (void)updateGridArray{
+    NSInteger columnCount = 0;
+    switch(self.orientation){
+        case CKTableViewOrientationLandscape:{
+            columnCount = self.size.width;
+            break;
+        }
+        case CKTableViewOrientationPortrait:{
+            columnCount = self.size.height;
+            break;
+        }
+    }
+    
+  //  [self.tableView beginUpdates];
+    
+    CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
+    
+    NSInteger numberOfRows = [self.linearCollection count] / columnCount;
+    if(numberOfRows < [theCollection count]){
+        [theCollection removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(numberOfRows, [theCollection count] - numberOfRows)]];
+    }
+    
+    int column =0, row =0;
+    NSMutableArray* currentArray = nil;
+    for(id object in self.linearCollection){
+        if(column == 0){
+            currentArray = [NSMutableArray array];
+        }
+        
+        [currentArray addObject:object];
+        
+        ++column;
+        
+        if(column >= columnCount){
+            column = 0;
+            if(row < [theCollection count]){
+                [theCollection replaceObjectAtIndex:row byObject:currentArray];
+            }else{
+                [theCollection addObject:currentArray];
+            }
+                
+            ++row;
+        }
+    }
+    
+    if([currentArray count] > 0 && [currentArray count] < columnCount){
+        if([theCollection count] > row){
+            [theCollection replaceObjectAtIndex:row byObject:currentArray];
+        }else{
+            [theCollection addObject:currentArray];
+        }
+    }
+    
+ //   [self.tableView endUpdates];
 }
 
 - (void)setSize:(CGSize)s{
@@ -145,7 +207,7 @@
         CGSize oldSize = _size;
         _size = s;
         
-        [self updateGridArray];
+        [self rebuildGridArray];
         
         for(int i = 0; i < [self numberOfObjectsForSection:0]; ++i){
             CKGridTableViewCellController* controller = (CKGridTableViewCellController*)[self controllerAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -260,7 +322,30 @@
  
 - (void)objectController:(id)controller insertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(controller == self.linearCollectionController){
+        
+        if(self.state == CKViewControllerStateDidAppear){
+       //     [self.tableView beginUpdates];
+        }
+        
+        CKCollection* theCollection = [(CKCollectionController*)self.objectController collection];
+        
+        NSInteger columnCount = 0;
+        switch(self.orientation){
+            case CKTableViewOrientationLandscape:{
+                columnCount = self.size.width;
+                break;
+            }
+            case CKTableViewOrientationPortrait:{
+                columnCount = self.size.height;
+                break;
+            }
+        }
+
+        
         int i =0;
+        NSMutableArray* currentArray = [NSMutableArray array];
+        NSInteger gridRow = 0;
+        
         for(id object in objects){
             NSIndexPath* indexPath = [indexPaths objectAtIndex:i];
             CKCollectionCellController* subcontroller = [self.subControllersFactory controllerForObject:object  atIndexPath:indexPath];
@@ -270,10 +355,43 @@
             [subcontroller performSelector:@selector(setValue:) withObject:object];
             [subcontroller performSelector:@selector(setIndexPath:) withObject:indexPath];
             
+                       
+            NSInteger gridColumn = (indexPath.row % columnCount);
+            gridRow = (indexPath.row - gridColumn) / columnCount;
+            
+            if([theCollection count] > gridRow){
+                currentArray = [theCollection objectAtIndex:gridRow];
+            }
+            
+            if([currentArray count] > gridColumn){
+                [currentArray replaceObjectAtIndex:gridColumn withObject:object];
+            }else{
+                [currentArray addObject:object];
+            }
+            
+            if(gridColumn == columnCount - 1){
+                if([theCollection count] > gridRow){
+                    [theCollection replaceObjectAtIndex:gridRow byObject:currentArray];
+                }else{
+                    [theCollection addObject:currentArray];
+                }
+                currentArray = [NSMutableArray array];
+            }
+
             ++i;
         }
         
-        [self updateGridArray];
+        if([currentArray count] > 0 && [currentArray count] < columnCount){
+            if([theCollection count] > gridRow){
+                [theCollection replaceObjectAtIndex:gridRow byObject:currentArray];
+            }else{
+                [theCollection addObject:currentArray];
+            }
+        }
+        
+        if(self.state == CKViewControllerStateDidAppear){
+        //    [self.tableView endUpdates];
+        }
         return;
     }
     
@@ -282,10 +400,15 @@
 
 - (void)objectController:(id)controller removeObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
     if(controller == self.linearCollectionController){
-        CKAssert(NO,@"NOT IMPLEMENTED");
+   //     CKAssert(NO,@"NOT IMPLEMENTED");
         
+        NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+        for(NSIndexPath* indexPath in indexPaths){
+            [indexSet addIndex:indexPath.row];
+        }
+        
+        [self.subControllers removeObjectsAtIndexes:indexSet];
         [self updateGridArray];
-        
         return;
     }
     

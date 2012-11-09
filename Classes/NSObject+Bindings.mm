@@ -11,6 +11,7 @@
 #import "CKUIControlBlockBinder.h"
 #import "CKDataBinder.h"
 #import "CKNotificationBlockBinder.h"
+#import "CKCollectionBlockBinder.h"
 #import "CKDataBlockBinder.h"
 #import "CKConfiguration.h"
 #import "CKDebug.h"
@@ -327,8 +328,29 @@ static NSString* CKBindingsNoContext = @"CKBindingsNoContext";
 @end
 
 
-/*id subView = (viewTag >= 0) ? [self.view viewWithTag:viewTag] : self.view;
- id controlId = (keyPath == nil || [keyPath isEqualToString:@""]) ? subView : [subView valueForKeyPath:keyPath];
- if(!controlId){
- CKAssert(NO,@"Invalid control object in CKUIControlActionBlockBinder");
- }*/
+
+@implementation CKCollection (CKBindings)
+
+
+- (void)bindEvent:(CKCollectionBindingEvents)events withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block{
+    [self bindEvent:events executeBlockImmediatly:NO withBlock:block];
+}
+
+
+- (void)bindEvent:(CKCollectionBindingEvents)events executeBlockImmediatly:(BOOL)executeBlockImmediatly withBlock:(void(^)(CKCollectionBindingEvents event, NSArray* objects, NSIndexSet* indexes))block{
+    [NSObject validateCurrentBindingsContext];
+    
+	CKCollectionBlockBinder* binder = (CKCollectionBlockBinder*)[[CKBindingsManager defaultManager]newDequeuedReusableBindingWithClass:[CKCollectionBlockBinder class]];
+    binder.contextOptions = [NSObject currentBindingContextOptions];
+	[binder setInstance:self];
+	binder.events = events;
+	binder.block = block;
+	[[CKBindingsManager defaultManager]bind:binder withContext:[NSObject currentBindingContext]];
+	[binder release];
+    
+    if(executeBlockImmediatly){
+        block(CKCollectionBindingEventInsertion,[self allObjects],[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [self count])]);
+    }
+}
+
+@end

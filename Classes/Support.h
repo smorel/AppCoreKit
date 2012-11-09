@@ -28,6 +28,7 @@
 #import "NSString+URIQuery.h"
 #import "NSString+Validations.h"
 #import "NSString+Additions.h"
+#import "NSString+Formating.h"
 #import "UIColor+Additions.h"
 #import "UIImage+Transformations.h"
 #import "UIKeyboard+Information.h"

@@ -64,8 +64,10 @@
 		CGFloat plateVersionMargin = 5;
 		
 		NSString *versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-		NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];		
-		NSString *appVersion = [NSString stringWithFormat:@"Version %@ (%@)", versionNumber, buildNumber];	
+		NSString *buildNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+        
+        Class relayServiceClass = NSClassFromString(@"ARService");
+		NSString *appVersion = (relayServiceClass != nil) ? [NSString stringWithFormat:@"Version %@ [%@]", versionNumber, buildNumber] : [NSString stringWithFormat:@"Version %@ (%@)", versionNumber, buildNumber];
 		
 		self.plateView = nil;
 		switch (self.style) {

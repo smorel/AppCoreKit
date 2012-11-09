@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class CKFeedSource;
+typedef void(^CKFeedSourceFetchBlock)(CKFeedSource* feedSource,NSRange range);
+
 /**
  */
 @interface CKFeedSource : NSObject
@@ -43,6 +46,10 @@
 ///-----------------------------------
 /// @name Executing the Request
 ///-----------------------------------
+
+/** When you asynchronously get your results, calls addItems: on the feedSource to notify the delegate that new objects have been received
+ */
+@property(nonatomic,copy) CKFeedSourceFetchBlock fetchBlock;
 
 /**
  */

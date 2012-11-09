@@ -81,10 +81,22 @@
     return [[[[self class]alloc]initWithFeedSource:source]autorelease];
 }
 
++ (id)collectionWithObjectsFromArray:(NSArray*)array{
+    return [[[[self class]alloc]initWithObjectsFromArray:array]autorelease];
+}
+
 - (id)initWithFeedSource:(CKFeedSource*)source{
 	if (self = [super init]) {
         self.feedSource = source;
         [self postInit];
+    }
+	return self;
+}
+
+- (id)initWithObjectsFromArray:(NSArray*)array{
+    if (self = [super init]) {
+        [self postInit];
+        [self addObjectsFromArray:array];
     }
 	return self;
 }
@@ -231,6 +243,12 @@
 	return copied;
 }
 
+- (id) mutableCopyWithZone:(NSZone *)zone{
+	id copied = [[[self class] allocWithZone:zone] init];
+    [copied copyPropertiesFromObject:self];
+	return copied;
+}
+
 /*
 - (void)setCount:(NSInteger)c{
 	[self willChangeValueForKey:@"count"];
@@ -238,5 +256,9 @@
     [self didChangeValueForKey:@"count"];
 }
  */
+
+-(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len{
+    return [[self allObjects]countByEnumeratingWithState:state objects:stackbuf count:len];
+}
 
 @end

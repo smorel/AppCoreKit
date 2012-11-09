@@ -94,7 +94,7 @@
     
     self.textField = (UITextField*)[cell.contentView viewWithTag:TEXTFIELD_TAG];
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
     
@@ -107,13 +107,14 @@
 	
 	self.detailText = nil;
 	
+    [cell beginBindingsContextByRemovingPreviousBindings];
+    [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
+    [cell endBindingsContext];
+    
 	if([model isReadOnly] || self.readOnly){
         self.textField.hidden = YES;
         
         self.fixedSize = YES;
-        [cell beginBindingsContextByRemovingPreviousBindings];
-		[model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
-		[cell endBindingsContext];
         _textField.delegate = nil;
 	}
 	else{

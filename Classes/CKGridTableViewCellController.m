@@ -110,7 +110,6 @@
     }
 
     
-    [cell beginBindingsContextByRemovingPreviousBindings];
     
     for(int i =0; i< _numberOfColumns; ++i){
         NSInteger viewTag = ControllerViewBaseTag + i;
@@ -160,6 +159,8 @@
             UIButton* button = (UIButton*)[subcell viewWithTag:InteractionButtonTag];
             button.backgroundColor = [UIColor clearColor];
             
+            [button beginBindingsContextByRemovingPreviousBindings];
+            
             if([controller flags] & CKItemViewFlagSelectable){
                 [button bindEvent:UIControlEventTouchDown withBlock:^{
                     if([[controller willSelect] isEqual:[controller indexPath]]){
@@ -190,6 +191,9 @@
                 }];
             }
             
+            
+            [button endBindingsContext];
+            
             subcell.hidden = NO;
             [controller performSelector:@selector(setContainerController:) withObject:self.containerController];
             [controller setupView:subcell];
@@ -197,8 +201,6 @@
             subcell.hidden = YES;
         }
     }
-    
-    [cell endBindingsContext];
     
     [UIView setAnimationsEnabled:NO];
     [self layoutCell:cell];
@@ -220,6 +222,10 @@
     }
     
     self.cellControllers = controllers;
+    
+    if(self.tableViewCell){
+        [self layoutCell:self.tableViewCell];
+    }
 }
 
 

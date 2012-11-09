@@ -46,7 +46,10 @@ NSString* CKDynamicLayoutLineBreakMode = @"CKDynamicLayoutLineBreakMode";
 @implementation CKTableViewCellController (CKDynamicLayout)
 
 - (CGFloat)accessoryWidth{
-    if(self.accessoryView){
+    if(self.containerController.editing){
+        return 0;
+    }
+    else if(self.accessoryView){
         return self.accessoryView.width;
     }
     else if(self.accessoryType == UITableViewCellAccessoryDisclosureIndicator

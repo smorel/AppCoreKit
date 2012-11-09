@@ -89,6 +89,14 @@
 	return _fullName;
 }
 
+- (NSString *)firstName {
+	return ABRecordCopyValue(_record, kABPersonFirstNameProperty);
+}
+
+- (NSString *)lastName {
+	return ABRecordCopyValue(_record, kABPersonLastNameProperty);
+}
+
 - (NSString *)email {
 	if (_email) { return _email; }
 	

@@ -80,7 +80,7 @@
 
 - (void)beginUpdates{
     if(self.numberOfUpdates == 0){
-       // NSLog(@"beginUpdates");
+  //      NSLog(@"beginUpdates");
         [super beginUpdates];
     }
     self.numberOfUpdates++;
@@ -89,7 +89,7 @@
 - (void)endUpdates{
     self.numberOfUpdates--;
     if(self.numberOfUpdates == 0){
-       // NSLog(@"endUpdates");
+ //       NSLog(@"endUpdates");
         [super endUpdates];
     }
 }
@@ -408,8 +408,10 @@
 	[super setEditing:editing animated:animated];
 	[self.tableView setEditing:editing animated:animated];
     
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
+    if(self.isViewDisplayed){
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    }
 }
 
 #pragma mark UITableView Delegate

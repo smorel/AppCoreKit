@@ -73,16 +73,18 @@ void insertText(TreeStruct* tree,const std::string& txt, unsigned int index, uns
 void save(TreeNodeStruct* node,std::ofstream& stream){
 	unsigned int count = node->indexes.size();
 	stream.write((char*)&count, (sizeof(unsigned int)));
+    
+    
 	for(int i = 0;i < node->indexes.size(); ++i){
 		unsigned int v = node->indexes[i];
 		stream.write((char*)&v, (sizeof(unsigned int)));
 	}
 }
 
-extern size_t computeHash(const std::string &s);
+extern unsigned long computeHash(const std::string &s);
 
 using namespace __gnu_cxx;
-typedef hash_map<size_t,unsigned int> FatType;
+typedef hash_map<unsigned long,unsigned int> FatType;
 
 @interface CKTypeAhead ()
 + (NSString*)formatStringForIndexation:(NSString*)txt;
@@ -99,9 +101,10 @@ typedef hash_map<size_t,unsigned int> FatType;
 	
 	unsigned int indexesIndex = (*indexesFile).tellp();
 	std::string str = [name UTF8String];
-	size_t strHash = computeHash(str);
+	unsigned long strHash = computeHash(str);
 	(*fat)[strHash] = indexesIndex;
 	save(node,*indexesFile);
+    
 	
 	for(std::map<unichar,TreeNodeStruct>::iterator it = node->nodes.begin(); it != node->nodes.end(); ++it){
 		[self saveNode:&it->second parentNode:node withBaseName:name indexesFile:indexesFile fat:fat];
@@ -129,9 +132,12 @@ typedef hash_map<size_t,unsigned int> FatType;
 	if(fatFile.is_open()){
 		unsigned int count = fat.size();
 		fatFile.write((char*)&count,sizeof(unsigned int));
+        
+        
 		for(FatType::iterator it = fat.begin(); it != fat.end(); ++it){
-			fatFile.write((char*)&it->first, (sizeof(size_t)));
+			fatFile.write((char*)&it->first, 8);
 			fatFile.write((char*)&it->second, (sizeof(unsigned int)));
+        
 		}
 		fatFile.close();
 	}
@@ -143,7 +149,17 @@ typedef hash_map<size_t,unsigned int> FatType;
 
 + (void)generateTypeAheadWithContentOfFile:(NSString*)fileName writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit{
 	NSString* wordsFilePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"txt"];
-	std::ifstream wordsFile;
+    [self generateTypeAheadWithContentOfFileWithPath:wordsFilePath writeToPath:path maximumNumberOfObjectsPerIndex:indexLimit];
+}
+
++ (void)generateTypeAheadWithContentOfFileWithPath:(NSString*)filePath writeToPath:(NSString*)path{
+	[CKTypeAhead generateTypeAheadWithContentOfFileWithPath:filePath writeToPath:path maximumNumberOfObjectsPerIndex:0];
+}
+
++ (void)generateTypeAheadWithContentOfFileWithPath:(NSString*)wordsFilePath writeToPath:(NSString*)path maximumNumberOfObjectsPerIndex:(NSUInteger)indexLimit{
+    NSString* fileName = [[wordsFilePath lastPathComponent] stringByDeletingPathExtension];
+    
+    std::ifstream wordsFile;
 	wordsFile.open([wordsFilePath UTF8String], std::ios_base::in);
 	if(wordsFile.is_open()){
 		NSString *exportWordsPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.words",fileName]];
@@ -159,6 +175,7 @@ typedef hash_map<size_t,unsigned int> FatType;
 				unsigned int wordSize = strlen(buffer);
 				exportWordsFile.write((char*)&wordSize, (sizeof(unsigned int)));
 				exportWordsFile.write((char*)buffer, wordSize);
+                
 				
 				NSString* stringToIndex = [CKTypeAhead formatStringForIndexation:[NSString stringWithUTF8String:buffer]];
 				insertText(tree,[stringToIndex UTF8String],seekIndex,indexLimit);
@@ -169,24 +186,24 @@ typedef hash_map<size_t,unsigned int> FatType;
 			delete tree;
 		}
 		
-
+        
 		// Validate the words are properly written
-//		std::ifstream exportWordsFileRead;
-//		exportWordsFileRead.open([exportWordsPath UTF8String], std::ios_base::binary | std::ios_base::in);
-//		if(exportWordsFileRead.is_open()){
-//			while(exportWordsFileRead.good()){
-//				unsigned int seekIndex = exportWordsFileRead.tellg();
-//				unsigned int wordSize = 0;
-//				char buffer[1024] = "\0";
-//				
-//				exportWordsFileRead.read((char*)&wordSize, (sizeof(unsigned int)));
-//				exportWordsFileRead.read((char*)buffer, wordSize);
-//			}
-//			exportWordsFileRead.close();
-//		}
-
-			
-			
+        //		std::ifstream exportWordsFileRead;
+        //		exportWordsFileRead.open([exportWordsPath UTF8String], std::ios_base::binary | std::ios_base::in);
+        //		if(exportWordsFileRead.is_open()){
+        //			while(exportWordsFileRead.good()){
+        //				unsigned int seekIndex = exportWordsFileRead.tellg();
+        //				unsigned int wordSize = 0;
+        //				char buffer[1024] = "\0";
+        //				
+        //				exportWordsFileRead.read((char*)&wordSize, (sizeof(unsigned int)));
+        //				exportWordsFileRead.read((char*)buffer, wordSize);
+        //			}
+        //			exportWordsFileRead.close();
+        //		}
+        
+        
+        
 		wordsFile.close();
 	}
 }

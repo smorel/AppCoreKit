@@ -147,10 +147,10 @@ typedef void(^CKTransitionBlock)();
     
     UIViewController *newController = self.selectedViewController;
     if(newController && [newController.view superview] != nil){
-        if([CKOSVersion() floatValue] < 5){
+        //if([CKOSVersion() floatValue] < 5){
             [newController viewWillAppear:animated];
             self.needsToCallViewDidAppearOnSelectedController = YES;
-        }
+        //}
     }
     else{
         [self presentViewControllerAtIndex:self.selectedIndex withTransition:CKTransitionNone];

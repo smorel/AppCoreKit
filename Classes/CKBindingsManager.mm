@@ -172,7 +172,10 @@ static CKBindingsManager* CKBindingsDefauktManager = nil;
     
 	[_bindingsForContext removeObjectForKey:context];
     if ([context isKindOfClass:[CKWeakRef class]]) {
-        weakRefContext.erase([context object]);
+        hash_map<id, CKWeakRef*> ::iterator itFound = weakRefContext.find([context object]);
+        if(itFound != weakRefContext.end()){
+            weakRefContext.erase(itFound);
+        }
         [context release];
     }
 }

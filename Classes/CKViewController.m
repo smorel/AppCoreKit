@@ -29,10 +29,7 @@
 @property(nonatomic,retain) NSString* navigationTitleBindingContext;
 @property(nonatomic,assign) BOOL styleHasBeenApplied;
 @property (nonatomic, assign, readwrite) CKViewControllerState state;
-
-#ifdef DEBUG
 @property(nonatomic,retain,readwrite) CKInlineDebuggerController* inlineDebuggerController;
-#endif
 
 - (void)adjustStyleViewWithToolbarHidden:(BOOL)hidden animated:(BOOL)animated;
 
@@ -60,19 +57,33 @@
 @synthesize isViewDisplayed;
 @synthesize editingBlock = _editingBlock;
 
-#ifdef DEBUG
 @synthesize inlineDebuggerController = _inlineDebuggerController;
-#endif
 
 + (void)load {
     
 }
 
+
+#ifdef __IPHONE_6_0
+- (BOOL)shouldAutorotate{
+    return YES;
+}
+#endif
+
 - (void)supportedInterfaceOrientationsExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
-    attributes.enumDescriptor = CKEnumDefinition(@"CKInterfaceOrientation", 
-                                                 CKInterfaceOrientationPortrait,
-                                                 CKInterfaceOrientationLandscape,
-                                                 CKInterfaceOrientationAll);
+#ifdef __IPHONE_6_0
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKInterfaceOrientation",
+                                                    CKInterfaceOrientationPortrait,
+                                                    CKInterfaceOrientationLandscape,
+                                                    UIInterfaceOrientationMaskPortrait,
+                                                    UIInterfaceOrientationMaskLandscape,
+                                                    CKInterfaceOrientationAll);
+#else
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKInterfaceOrientation",
+                                                    CKInterfaceOrientationPortrait,
+                                                    CKInterfaceOrientationLandscape,
+                                                    CKInterfaceOrientationAll);
+#endif
 }
 
 - (void)stateExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
@@ -152,10 +163,8 @@
     [_editingBlock release];
     _editingBlock = nil;
     
-#ifdef DEBUG
     [_inlineDebuggerController release];
 	_inlineDebuggerController = nil;
-#endif
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CKCascadingTreeFilesDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UINavigationControllerWillDisplayToolbar object:nil];
@@ -354,6 +363,22 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+- (void)applyStyleForController{
+    if([[CKStyleManager defaultManager]isEmpty])
+        return;
+    
+    //disable animations in case frames are set in stylesheets and currently in animation...
+    [CATransaction begin];
+    [CATransaction
+     setValue: [NSNumber numberWithBool: YES]
+     forKey: kCATransactionDisableActions];
+    
+    [self applyStyle];
+          
+    [CATransaction commit];
+}
+
 - (void)applyStyleForNavigation{
     if([[CKStyleManager defaultManager]isEmpty])
         return;
@@ -539,11 +564,9 @@
         _viewWillAppearEndBlock(self,animated);
     }
     
-#ifdef DEBUG
     if([self containerViewController] == nil){
         [self.inlineDebuggerController start];
     }
-#endif
     
     [self adjustStyleViewWithToolbarHidden:[self.navigationController isToolbarHidden] animated:animated];
 }
@@ -573,11 +596,9 @@
     [NSObject removeAllBindingsForContext:self.navigationItemsBindingContext];
     [NSObject removeAllBindingsForContext:self.navigationTitleBindingContext];
     
-#ifdef DEBUG
     if([self containerViewController] == nil){
         [self.inlineDebuggerController stop];
     }
-#endif
 }
 
 -(void) viewDidLoad{
@@ -594,9 +615,7 @@
         self.contentSizeForViewInPopover = [controllerStyle cgSizeForKey:@"contentSizeForViewInPopover"];
     }
     
-#ifdef DEBUG
     self.inlineDebuggerController = [[[CKInlineDebuggerController alloc]initWithViewController:self]autorelease];
-#endif
 }
 
 -(void) viewDidUnload{
@@ -606,10 +625,8 @@
         _viewDidUnloadBlock(self);
     }
     
-#ifdef DEBUG
     [_inlineDebuggerController release];
     _inlineDebuggerController = nil;
-#endif
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -47,7 +47,7 @@
 }
 
 - (void)onvalue{
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	BOOL bo = [[model value] boolValue];
 	
 	UISwitch* s = (UISwitch*)[self.tableViewCell viewWithTag:500002];
@@ -55,7 +55,7 @@
 }
 
 - (void)textFieldChanged:(id)thevalue{
-    CKProperty* property = (CKProperty*)self.value;
+    CKProperty* property = (CKProperty*)self.objectProperty;
 	NSNumber* number = (NSNumber*)[property value];
 	NSNumber* newNumber = [NSValueTransformer transform:self.textField.text toClass:[NSNumber class]];
     
@@ -143,22 +143,27 @@
     [theSwitch removeFromSuperview];
 	
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
 	
 	//build and setup the view
 	CKClassPropertyDescriptor* descriptor = [model descriptor];
 	self.text = _(descriptor.name);
     
+    
     __block CKNSNumberPropertyCellController* bself = self;
 	if([self isNumber]){
+        
+        [cell beginBindingsContextByRemovingPreviousBindings];
+        [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
+        [cell endBindingsContext];
+        
         if([model isReadOnly] || self.readOnly){
             self.fixedSize = YES;
-            [cell beginBindingsContextByRemovingPreviousBindings];
-            [model.object bind:model.keyPath toObject:self withKeyPath:@"detailText"];
-            [cell endBindingsContext];
             _textField.hidden = YES;
+            cell.detailTextLabel.hidden = NO;
         }
         else{
+            cell.detailTextLabel.hidden = YES;
             if(self.cellStyle == CKTableViewCellStyleIPhoneForm
                /*&& [[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone*/){
                 self.fixedSize = YES;
@@ -191,18 +196,22 @@
     else if([self isBOOL]){
         //Creates the switch
         _textField.hidden = YES;
+        
+        __block CKTableViewCellController* bself = self;
+        
         if([model isReadOnly] || self.readOnly){
+            cell.detailTextLabel.hidden = NO;
             self.fixedSize = YES;
-            
-            __block CKTableViewCellController* bself = self;
+			
             [cell beginBindingsContextByRemovingPreviousBindings];
-            self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-            [model.object bind:model.keyPath withBlock:^(id value) {
-                bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
-            }];
-            [cell endBindingsContext];
+			self.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+			[model.object bind:model.keyPath withBlock:^(id value) {
+				bself.detailText = [[model value]boolValue] ? @"YES" : @"NO";
+			}];
+			[cell endBindingsContext];
         }
         else{
+            cell.detailTextLabel.hidden = YES;
             if(!theSwitch){
                 theSwitch = [[[UISwitch alloc] initWithFrame:CGRectMake(0,0,100,100)] autorelease];
                 theSwitch.tag = 500002;
@@ -259,7 +268,7 @@
 	[self didResignFirstResponder];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	
-	CKProperty* model = self.value;
+	CKProperty* model = self.objectProperty;
     __block CKNSNumberPropertyCellController* bself = self;
     [self.tableViewCell beginBindingsContextByRemovingPreviousBindings];
 	[model.object bind:model.keyPath executeBlockImmediatly:YES  withBlock:^(id value) {

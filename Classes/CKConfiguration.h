@@ -82,4 +82,8 @@ typedef enum CKConfigurationType{
  */
 @property(nonatomic,retain,readonly) NSString* sourceTreeDirectory;
 
+/** This flag specify if the application is compiled using ARC. This will bypass some automatic deallocation in AppCoreKit objects.
+ */
+@property(nonatomic,assign,readwrite) BOOL usingARC;
+
 @end

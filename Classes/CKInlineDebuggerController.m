@@ -6,8 +6,6 @@
 //  Copyright (c) 2011 Wherecloud. All rights reserved.
 //
 
-#ifdef DEBUG
-
 #import "CKInlineDebuggerController.h"
 #import "CKWeakRef.h"
 #import "UIViewController+InlineDebugger.h"
@@ -663,5 +661,3 @@
 }
 
 @end
-
-#endif

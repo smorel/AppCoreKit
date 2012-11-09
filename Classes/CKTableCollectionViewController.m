@@ -135,6 +135,11 @@
 @dynamic selectedIndexPath;
 @dynamic tableViewHasBeenReloaded;
 
+@synthesize rowInsertAnimationBlock = _rowInsertAnimationBlock;
+@synthesize rowRemoveAnimationBlock = _rowRemoveAnimationBlock;
+@synthesize sectionInsertAnimationBlock = _sectionInsertAnimationBlock;
+@synthesize sectionRemoveAnimationBlock = _sectionRemoveAnimationBlock;
+
 - (void)rowInsertAnimationExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
     attributes.enumDescriptor = CKEnumDefinition(@"UITableViewRowAnimation",
                                                  UITableViewRowAnimationFade,
@@ -165,6 +170,23 @@
 	[super postInit];
 	_rowInsertAnimation = UITableViewRowAnimationFade;
 	_rowRemoveAnimation = UITableViewRowAnimationFade;
+    
+    self.rowInsertAnimationBlock = ^(CKTableCollectionViewController* controller, NSArray* objects, NSArray* indexPaths){
+        return (controller.isViewDisplayed) ?  controller.rowInsertAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.rowRemoveAnimationBlock = ^(CKTableCollectionViewController* controller, NSArray* objects, NSArray* indexPaths){
+        return (controller.isViewDisplayed) ?  controller.rowRemoveAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.sectionInsertAnimationBlock = ^(CKTableCollectionViewController* controller, NSInteger index){
+        return (controller.isViewDisplayed) ?  controller.rowInsertAnimation : UITableViewRowAnimationNone;
+    };
+    
+    self.sectionRemoveAnimationBlock = ^(CKTableCollectionViewController* controller, NSInteger index){
+        return (controller.isViewDisplayed) ?  controller.rowRemoveAnimation : UITableViewRowAnimationNone;
+    };
+    
 	_orientation = CKTableViewOrientationPortrait;
 	_resizeOnKeyboardNotification = YES;
 	_currentPage = 0;
@@ -208,6 +230,16 @@
 	_defaultSearchScope = nil;
     [_searchBlock release];
     _searchBlock = nil;
+    
+    [_rowInsertAnimationBlock release];
+    _rowInsertAnimationBlock = nil;
+    [_rowRemoveAnimationBlock release];
+    _rowRemoveAnimationBlock = nil;
+    [_sectionInsertAnimationBlock release];
+    _sectionInsertAnimationBlock = nil;
+    [_sectionRemoveAnimationBlock release];
+    _sectionRemoveAnimationBlock = nil;
+    
     [super dealloc];
 }
 
@@ -719,6 +751,7 @@
 		[self didRemoveViewAtIndexPath:indexPath];
         //[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:self.rowRemoveAnimation];
 		[self fetchMoreIfNeededFromIndexPath:indexPath];
+        self.editButton.enabled = YES;
 	}
 }
 
@@ -858,9 +891,7 @@
 		return;
     }
 	
-        [self.tableView beginUpdates];
-    
-    //NSLog(@"didBeginUpdates <%@>",self);
+   [self.tableView beginUpdates];
 }
 
 - (void)didEndUpdates{
@@ -869,8 +900,7 @@
 		return;
     }
 	
-    //NSLog(@"didEndUpdates <%@>",self);
-        [self.tableView endUpdates];
+   [self.tableView endUpdates];
 }
 
 - (void)didInsertObjects:(NSArray*)objects atIndexPaths:(NSArray*)indexPaths{
@@ -878,9 +908,15 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"didInsertObjects <%@>",self);
 	
-	[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+    UITableViewRowAnimation anim = self.rowInsertAnimationBlock(self,objects,indexPaths);
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+    //    [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:anim];
+    //    [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -901,9 +937,16 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"didRemoveObjects <%@>",self);
+ //   NSLog(@"didRemoveObjects <%@>",self);
 	
-	[self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+    UITableViewRowAnimation anim = self.rowRemoveAnimationBlock(self,objects,indexPaths);
+  //  if(anim == UITableViewRowAnimationNone){
+  //      [self.tableView reloadData];
+  //  }else{
+   //     [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:anim];
+   //     [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath){
@@ -932,8 +975,15 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"didInsertSectionAtIndex <%@>",self);
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowInsertAnimation : UITableViewRowAnimationNone];
+    
+    UITableViewRowAnimation anim = self.sectionInsertAnimationBlock(self,index);
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+   //     [self.tableView beginUpdates];
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
+   //     [self.tableView endUpdates];
+    //}
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section >= index){
@@ -946,8 +996,15 @@
         self.tableViewHasBeenReloaded = NO;
 		return;
     }
-    //NSLog(@"didRemoveSectionAtIndex <%@>",self);
-	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(self.state & CKViewControllerStateDidAppear) ? _rowRemoveAnimation : UITableViewRowAnimationNone];
+    
+    UITableViewRowAnimation anim = self.sectionRemoveAnimationBlock(self,index);
+   // if(anim == UITableViewRowAnimationNone){
+   //     [self.tableView reloadData];
+   // }else{
+   //     [self.tableView beginUpdates];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:anim];
+   //     [self.tableView endUpdates];
+   // }
 	
 	//UPDATE STICKY SELECTION INDEX PATH
 	if(self.selectedIndexPath && self.selectedIndexPath.section > index){
@@ -1043,50 +1100,68 @@
 
 #pragma mark Edit Button Management
 
+- (void)editableTypeExtendedAttributes:(CKPropertyExtendedAttributes*)attributes{
+    attributes.enumDescriptor = CKBitMaskDefinition(@"CKTableCollectionViewControllerEditingType",
+                                                    CKTableCollectionViewControllerEditingTypeNone,
+                                                    CKTableCollectionViewControllerEditingTypeLeft,
+                                                    CKTableCollectionViewControllerEditingTypeRight,
+                                                    CKTableCollectionViewControllerEditingTypeAnimateTransition);
+}
+
+- (IBAction)edit:(id)sender{
+    [self setEditing:!self.editing animated:YES];
+}
+
+- (void)setEditing:(BOOL)editing{
+    [super setEditing:editing];
+    [self createsAndDisplayEditableButtonsWithType:_editableType animated:([CKOSVersion() floatValue] >= 5)];
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
+    [super setEditing:editing animated:animated];
+    [self createsAndDisplayEditableButtonsWithType:_editableType animated:([CKOSVersion() floatValue] >= 5)];
+}
+
 - (void)createsAndDisplayEditableButtonsWithType:(CKTableCollectionViewControllerEditingType)type animated:(BOOL)animated{
-    switch(type){
-        case CKTableCollectionViewControllerEditingTypeLeft:{
-            self.leftButton = ((self.navigationItem.leftBarButtonItem != self.editButton) && (self.navigationItem.leftBarButtonItem != self.doneButton)) ?  self.navigationItem.leftBarButtonItem : nil;
-            [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKTableCollectionViewControllerEditingTypeRight:{
-            self.rightButton = ((self.navigationItem.rightBarButtonItem != self.editButton) && (self.navigationItem.rightBarButtonItem != self.doneButton)) ?  self.navigationItem.rightBarButtonItem : nil;
-            [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:animated];
-            break;
-        }
-        case CKTableCollectionViewControllerEditingTypeNone:break;
-	}
+    if(type & CKTableCollectionViewControllerEditingTypeLeft){
+        self.leftButton = ((self.navigationItem.leftBarButtonItem != self.editButton) && (self.navigationItem.leftBarButtonItem != self.doneButton)) ?  self.navigationItem.leftBarButtonItem : nil;
+        [self.navigationItem setLeftBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:(type & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
+        [self applyStyleForLeftBarButtonItem];
+    }
+    else  if(type & CKTableCollectionViewControllerEditingTypeRight){
+        self.rightButton = ((self.navigationItem.rightBarButtonItem != self.editButton) && (self.navigationItem.rightBarButtonItem != self.doneButton)) ?  self.navigationItem.rightBarButtonItem : nil;
+        [self.navigationItem setRightBarButtonItem:(self.editing) ? self.doneButton : self.editButton animated:(type & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
+        [self applyStyleForRightBarButtonItem];
+    }
 }
 
 - (void)setEditableType:(CKTableCollectionViewControllerEditingType)theEditableType{
     if(theEditableType != _editableType && self.isViewDisplayed){
-        switch(_editableType){
-            case CKTableCollectionViewControllerEditingTypeLeft:{
-                if(self.leftButton){
-                    [self.navigationItem setLeftBarButtonItem:self.leftButton animated:YES];
-                }
-                else{
-                    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-                }
-                break;
+        if(_editableType & CKTableCollectionViewControllerEditingTypeLeft){
+            if(self.leftButton){
+                [self.navigationItem setLeftBarButtonItem:self.leftButton animated:(_editableType & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
             }
-            case CKTableCollectionViewControllerEditingTypeRight:{
-                if(self.rightButton){
-                    [self.navigationItem setRightBarButtonItem:self.rightButton animated:YES];
-                }
-                else{
-                    [self.navigationItem setRightBarButtonItem:nil animated:YES];
-                }
-                break;
+            else{
+                [self.navigationItem setLeftBarButtonItem:nil animated:(_editableType & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
             }
-            case CKTableCollectionViewControllerEditingTypeNone:break;
+            [self applyStyleForLeftBarButtonItem];
+        }
+        else if(_editableType & CKTableCollectionViewControllerEditingTypeRight){
+            if(self.rightButton){
+                [self.navigationItem setRightBarButtonItem:self.rightButton animated:(_editableType & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
+            }
+            else{
+                [self.navigationItem setRightBarButtonItem:nil animated:(_editableType & CKTableCollectionViewControllerEditingTypeAnimateTransition)];
+            }
+            [self applyStyleForRightBarButtonItem];
         }
         
-        if(theEditableType != CKTableCollectionViewControllerEditingTypeNone){
+        if((_editableType & CKTableCollectionViewControllerEditingTypeLeft) || (_editableType & CKTableCollectionViewControllerEditingTypeRight)){
+			_editableType = theEditableType;
             [self createsAndDisplayEditableButtonsWithType:theEditableType animated:YES];
         }
-        else if(theEditableType == CKTableCollectionViewControllerEditingTypeNone){
+        else{
+			_editableType = theEditableType;
             if([self isEditing]){
                 [self setEditing:NO animated:YES];
             }
@@ -1095,20 +1170,12 @@
     _editableType = theEditableType;
 }
 
-- (IBAction)edit:(id)sender{
-    switch(_editableType){
-        case CKTableCollectionViewControllerEditingTypeLeft:{
-            [self.navigationItem setLeftBarButtonItem:(self.navigationItem.leftBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
-            [self setEditing: (self.navigationItem.leftBarButtonItem == self.editButton) ? NO : YES animated:YES];
-            break;
-        }
-        case CKTableCollectionViewControllerEditingTypeRight:{
-            [self.navigationItem setRightBarButtonItem:(self.navigationItem.rightBarButtonItem == self.editButton) ? self.doneButton : self.editButton animated:([CKOSVersion() floatValue] >= 5)];
-            [self setEditing: (self.navigationItem.rightBarButtonItem == self.editButton) ? NO : YES animated:YES];
-            break;
-        }
-        case CKTableCollectionViewControllerEditingTypeNone:break;
-	}
+- (void)tableViewCellController:(CKTableViewCellController*)controller displaysDeletionAtIndexPath:(NSIndexPath*)indexPath{
+    self.editButton.enabled = NO;
+}
+
+- (void)tableViewCellController:(CKTableViewCellController*)controller hidesDeletionAtIndexPath:(NSIndexPath*)indexPath{
+    self.editButton.enabled = YES;
 }
 
 

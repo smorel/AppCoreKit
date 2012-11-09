@@ -17,9 +17,10 @@
 /**
  */
 typedef enum CKTableCollectionViewControllerEditingType{
-    CKTableCollectionViewControllerEditingTypeNone,
-    CKTableCollectionViewControllerEditingTypeLeft,
-    CKTableCollectionViewControllerEditingTypeRight
+    CKTableCollectionViewControllerEditingTypeNone    = 0,
+    CKTableCollectionViewControllerEditingTypeLeft    = 1 << 1,
+    CKTableCollectionViewControllerEditingTypeRight   = 1 << 2,
+    CKTableCollectionViewControllerEditingTypeAnimateTransition = 1 << 3
 }CKTableCollectionViewControllerEditingType;
 
 /**
@@ -37,6 +38,9 @@ typedef enum CKTableCollectionViewControllerSnappingPolicy{
 }CKTableCollectionViewControllerSnappingPolicy;
 
 typedef void(^CKTableCollectionViewControllerSearchBlock)(NSString* filter);
+
+typedef UITableViewRowAnimation(^CKTableCollectionViewControllerRowAnimationBlock)(CKTableCollectionViewController* controller, NSArray* objects, NSArray* indexPaths);
+typedef UITableViewRowAnimation(^CKTableCollectionViewControllerSectionAnimationBlock)(CKTableCollectionViewController* controller, NSInteger index);
 
 /**
  */
@@ -113,6 +117,39 @@ Specify the animations that should be launch on row and sections insertion
  Specify the animations that should be launch on row and sections removal
  */
 @property (nonatomic, assign) UITableViewRowAnimation rowRemoveAnimation;
+
+/**
+ This block is called when objects have to be inserted to the table.
+ By default, this block returns the rowInsertAnimation property value.
+ You can overload this block to customize row insertion animation contextually.
+ returning UITableViewRowAnimationNone will reload the tableView to get no animations. 
+ */
+@property (nonatomic, copy) CKTableCollectionViewControllerRowAnimationBlock rowInsertAnimationBlock;
+
+
+/**
+ This block is called when sections have to be inserted to the table.
+ By default, this block returns the rowInsertAnimation property value.
+ You can overload this block to customize section insertion animation contextually.
+ returning UITableViewRowAnimationNone will reload the tableView to get no animations.
+ */
+@property (nonatomic, copy) CKTableCollectionViewControllerSectionAnimationBlock sectionInsertAnimationBlock;
+
+/**
+ This block is called when objects have to be removed from the table.
+ By default, this block returns the rowRemoveAnimation property value.
+ You can overload this block to customize row removal animation contextually.
+ returning UITableViewRowAnimationNone will reload the tableView to get no animations.
+ */
+@property (nonatomic, copy) CKTableCollectionViewControllerRowAnimationBlock rowRemoveAnimationBlock;
+
+/**
+ This block is called when sections have to be removed from the table.
+ By default, this block returns the rowRemoveAnimation property value.
+ You can overload this block to customize section removal animation contextually.
+ returning UITableViewRowAnimationNone will reload the tableView to get no animations.
+ */
+@property (nonatomic, copy) CKTableCollectionViewControllerSectionAnimationBlock sectionRemoveAnimationBlock;
 
 ///-----------------------------------
 /// @name Editing
